@@ -7,7 +7,6 @@ import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.utility.file.ResourceUtility
 import shirates.core.utility.toPath
-import shirates.shirates_core.BuildConfig
 import java.io.File
 import java.nio.file.Files
 
