@@ -1,0 +1,19 @@
+{
+  "key": "[Safari Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[application][TopBrowserBar]",
+
+  "selectors": {
+    "[application]": ".XCUIElementTypeApplication&&#Safari",
+    "[TopBrowserBar]": "#TopBrowserBar",
+
+    "[PageFormatMenuButton]": "#PageFormatMenuButton",
+    "[Address]": "#Address",
+    "[ReloadButton]": "#ReloadButton"
+
+  }
+
+}

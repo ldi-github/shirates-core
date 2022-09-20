@@ -1,0 +1,15 @@
+{
+  "key": "[Search Direction Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[Search Here]",
+
+  "selectors": {
+    "[Search Here]": "#search_omnibox_text_box",
+    "[Enter compass mode]": "@Enter compass mode",
+    "[Directions]": "#on_map_directions_button"
+  }
+
+}

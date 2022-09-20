@@ -1,0 +1,133 @@
+{
+  "testConfigName": "testConfigTestData1",
+
+  "appIconName": "app1",
+
+  "#appiumPath": "/usr/local/bin/appium",
+
+  "autoScreenshot": "false",
+  "onChangedOnly": "false",
+  "onCondition": "false",
+  "onAction": "false",
+  "onExpectation": "false",
+  "onExecOperateCommand": "false",
+  "onCheckCommand": "false",
+  "onScrolling": "false",
+
+  "manualScreenshot": "false",
+
+  "stubServerUrl": "http://stub1",
+
+  "#appiumServerUrl": "http://127.0.0.1:4720/",
+
+  "shortWaitSeconds": "2",
+
+  "waitSecondsOnIsScreen": "21.1",
+
+  "waitSecondsForAnimationComplete": "1.23",
+
+  "swipeDurationSeconds": "3.2",
+
+  "flickDurationSeconds": "0.33",
+
+  "swipeMarginRatio": "0.25",
+
+  "scrollVerticalMarginRatio": "0.15",
+
+  "scrollHorizontalMarginRatio": "0.2",
+
+  "scrollMaxCount": "7",
+
+  "tapHoldSeconds": "0.4",
+
+  "syncWaitSeconds": "0.22",
+
+  "syncMaxLoopCount": "5",
+
+  "syncIntervalSeconds": "1.5",
+
+  "retryMaxCount": "3",
+
+  "retryIntervalSeconds": "3.0",
+
+  "#testResults" : "",
+
+  "#appPackageDir": "",
+
+  "appPackageFile": "app1.apk",
+
+  "packageOrBundleId": "com.example.app1",
+
+  "startupPackageOrBundleId": "com.example.app1",
+  "startupActivity": "com.example.app1.MainActivity",
+
+  "settings": {
+    "development_settings_enabled": "1",
+    "always_finish_activities": "1"
+  },
+
+  "dataset": {
+    "accounts": "unitTestData/testConfig/androidSettings/dataset/accounts.json",
+    "apps": "unitTestData/testConfig/androidSettings/dataset/apps.json",
+    "data": "unitTestData/testConfig/androidSettings/dataset/data.json"
+  },
+
+  "capabilities": {
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "profile1",
+
+      "autoScreenshot": "true",
+      "onChangedOnly": "true",
+      "onCondition": "true",
+      "onAction": "true",
+      "onExpectation": "true",
+      "onExecOperateCommand": "true",
+      "onCheckCommand": "true",
+      "onScrolling": "true",
+
+      "manualScreenshot": "true",
+
+      "specialTags": "Tag1",
+
+      "#shortWaitSeconds": "1",
+
+      "retryMaxCount": "1",
+
+      "retryIntervalSeconds": "3.5",
+
+      "#testResults" : "",
+
+      "capabilities": {
+        "automationName": "UiAutomator2",
+        "platformName": "Android",
+        "platformVersion": "9",
+        "deviceName": "Pixel_2_API_28",
+        "app": "Downloads/hoge.apk"
+      }
+    },
+    {
+      "profileName": "profile2",
+
+      "specialTags": "Tag2",
+
+      "capabilities": {
+        "automationName": "UiAutomator3",
+        "platformName": "Android",
+        "platformVersion": "8.1",
+        "deviceName": "Pixel"
+      }
+    },
+
+    {
+      "profileName": "profile3",
+
+      "name1": "missing property name"
+    }
+  ]
+
+}

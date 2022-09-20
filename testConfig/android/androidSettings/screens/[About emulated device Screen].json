@@ -1,0 +1,18 @@
+{
+  "key": "[About emulated device Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=About emulated device",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[Search Button]": "@Search settings",
+
+    "[Device name]": "",
+    "[Phone number]": "",
+    "[Emergency information]": ""
+  }
+
+}

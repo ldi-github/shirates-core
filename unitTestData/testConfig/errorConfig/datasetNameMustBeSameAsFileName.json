@@ -1,0 +1,10 @@
+{
+  "testConfigName": "datasetNameMustBeSameAsFileName",
+
+  "dataset": {
+    "dataset1": "unitTestData/testConfig/androidSettings/dataset/data.json"
+  },
+
+  "profiles": [
+  ]
+}

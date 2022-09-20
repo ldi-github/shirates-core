@@ -1,0 +1,49 @@
+{
+  "key": "[Network & internet Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Network & internet",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[Network & internet]": "@Network & internet",
+
+    "[Internet]": "",
+    "{Internet}": "[Internet]:label",
+
+    "[Calls & SMS]": "",
+    "{Calls & SMS}": "[Calls & SMS]:label",
+
+    "[SIMs]": "",
+    "{SIMs}": "[SIMs]:label",
+
+    "[Airplane mode]": "",
+    "{Airplane mode switch}": "[Airplane mode]:switch",
+
+    "[Hotspot & tethering]": "",
+    "{Hotspot & tethering}": "[Hotspot & tethering]:label",
+
+    "[Data Saver]": "",
+    "{Data Saver}": "[Data Saver]:label",
+
+    "[VPN]": "",
+    "{VPN}": "[VPN]:label",
+
+    "[Mobile plan]": "",
+    "{Mobile plan}": "[Mobile plan]:label",
+
+    "[Private DNS]": "",
+    "{Private DNS}": "[Private DNS]:label",
+
+    "[Adaptive connectivity]": "",
+    "{Adaptive connectivity}": "[Adaptive connectivity]:label"
+  },
+
+  "scroll": {
+    "start-elements": "",
+    "end-elements": "[Adaptive connectivity]",
+    "overlay-elements": ""
+  }
+}

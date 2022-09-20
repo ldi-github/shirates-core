@@ -1,0 +1,108 @@
+{
+  "testConfigName": "testDriverTestData1",
+
+  "appIconName": "Calculator",
+
+  "#appiumPath": "/usr/local/bin/appium",
+
+  "#appiumServerUrl": "http://127.0.0.1:4720/",
+
+  "shortWaitSeconds": "2.1",
+
+  "#waitSecondsOnIsScreen": "",
+
+  "retryMaxCount": "0",
+
+  "#testResults": "Downloads/TestResults2",
+
+  "packageOrBundleId": "com.google.android.calculator",
+
+  "startupPackageOrBundleId": "com.google.android.calculator",
+  "startupActivity": "com.android.calculator2.Calculator",
+
+
+  "capabilities": {
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    "platformVersion": "12",
+    "deviceName": "Pixel 3a",
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "profile1",
+      "specialTags": "Tag1",
+
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Android/felica",
+      "specialTags": "Tag1",
+
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Android/no felica",
+      "specialTags": "Tag2,Tag3",
+
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "iOS 11.4/iPhone",
+      "specialTags": "Tag2,Tag3",
+
+      "capabilities": {
+        "automationName": "XCUITest",
+        "platformName": "iOS",
+        "platformVersion": "11.4",
+        "deviceName": "iPhone"
+      }
+    },
+    {
+      "profileName": "iOS/iPhone"
+    },
+
+
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-01",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-01",
+        "platformVersion": "12",
+        "chromedriverPort": "8001",
+        "systemPort": "8201"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-02",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-02",
+        "platformVersion": "12",
+        "chromedriverPort": "8002",
+        "systemPort": "8202"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-03",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-03",
+        "platformVersion": "12",
+        "chromedriverPort": "8003",
+        "systemPort": "8203"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-04",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-04",
+        "platformVersion": "12",
+        "chromedriverPort": "8004",
+        "systemPort": "8204"
+      }
+    }
+  ]
+}

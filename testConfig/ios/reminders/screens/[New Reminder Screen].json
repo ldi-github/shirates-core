@@ -1,0 +1,23 @@
+{
+  "key": "[New Reminder Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[Cancel][New Reminder]",
+
+  "selectors": {
+    "[Cancel]": "",
+    "[New Reminder]": "",
+    "[Add]": "",
+
+    "[Title]": "[Add]:nextInput",
+    "[Notes]": "[Title]:nextInput",
+
+    "[Details]": "",
+    "[List]": "",
+    "[Reminders]": ""
+  }
+
+
+}

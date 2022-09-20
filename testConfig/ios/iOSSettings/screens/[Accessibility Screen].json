@@ -1,0 +1,30 @@
+{
+  "key": "[Accessibility Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Accessibility",
+
+  "selectors": {
+    "[<Settings]": "Settings",
+    "[Accessibility]": "",
+
+    "[Accessibility features help you customize your iPhone for your individual needs.]": "",
+
+    "[VISION]": "",
+    "[Display & Text Size]": "#DISPLAY_AND_TEXT",
+    "[Motion]": "#MOTION_TITLE",
+    "[Spoken Content]": "#SPEECH_TITLE",
+
+    "[PHYSICAL AND MOTOR]": "",
+    "[Touch]": "#TOUCH_REACHABILITY_TITLE",
+    "[Face ID & Attention]": "#FACE_ID",
+    "[Keyboards]": "#KEYBOARDS",
+
+    "[HEARING]": "",
+    "[Subtitles & Captioning]": "#SUBTITLES_CAPTIONING"
+
+  }
+
+}

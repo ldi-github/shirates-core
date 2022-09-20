@@ -1,0 +1,54 @@
+{
+  "key": "[A Screen]",
+
+  "include": [
+    "[Common Footer]"
+  ],
+
+  "identity": "[Title][X]",
+
+  "selectors": {
+
+    "[@a and @i]": "@a<#android>,@i<#ios>",
+
+    "[Title]": "",
+    "[Title*]": "",
+    "[X]": "id=close",
+    "[Button A]": "id=idA",
+    "{TextBox A}": "xpath=xpathA",
+    "[Label A]": "text=textA",
+    "[Label A2]": "textStartsWith=textA2",
+    "[Label A3]": "textContains=textA3",
+    "[Label A4]": "textMatches=textA4",
+
+    "[empty]": "",
+    "[by text]": "text=textA",
+    "[by text 2]": "textA2",
+    "[by textContains]": "textContains=textA",
+    "[by textStartsWith]": "textStartsWith=textA",
+    "[by textEndsWith]": "textEndsWith=textA",
+    "[by textMatches]": "textMatches=textA",
+    "[by id]": "id=idA",
+    "[by access]": "access=accessA",
+    "[by access 2]": "@accessA2",
+    "[by accessStartsWith]": "accessStartsWith=accessA",
+    "[by accessStartsWith 2]": "@accessA2*",
+    "[by accessContains]": "accessContains=accessA",
+    "[by accessContains 2]": "@*accessA2*",
+    "[by accessEndsWith]": "accessEndsWith=accessA",
+    "[by accessEndsWith 2]": "@*accessA2",
+    "[by accessMatches]": "accessMatches=accessA",
+    "[by className]": "className=className1",
+    "[by xpath]": "xpath=xpathA",
+
+    "[by access,text,className]": "@access1&&text1&&.className1"
+
+  },
+
+  "scroll": {
+    "start-elements": "[start-elementA][start-elementB]",
+    "end-elements": "[end-elementA][end-elementB]",
+    "overlay-elements": "[overlay-elementA][overlay-elementB]"
+  }
+
+}

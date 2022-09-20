@@ -1,0 +1,21 @@
+{
+  "key": "[About Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=About",
+
+  "selectors": {
+    "[About]": "",
+    "[Name]": "",
+    "[Songs]": "",
+    "[Certificate Trust Settings]": ""
+  },
+
+  "scroll": {
+    "start-elements": "[Name]",
+    "end-elements": "[Certificate Trust Settings]"
+  }
+
+}

@@ -1,0 +1,20 @@
+{
+  "key": "[Reminders Top Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[New Reminder]",
+
+  "selectors": {
+    "[Edit]": "",
+    "[Search]": "",
+
+    "[Reminders]": "",
+
+    "[New Reminder]": "",
+    "[Add List]": ""
+  }
+
+
+}

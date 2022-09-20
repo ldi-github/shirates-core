@@ -1,0 +1,13 @@
+{
+  "[product1]": {
+    "product_name": "Super High Tension",
+    "product_code": "P001",
+    "unit_price": "100"
+  },
+
+  "[product2]": {
+    "product_name": "Ultra High",
+    "product_code": "P002",
+    "unit_price": "200"
+  }
+}

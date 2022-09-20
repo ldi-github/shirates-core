@@ -1,0 +1,110 @@
+{
+  "testConfigName": "chromeConfig",
+
+  "appIconName": "Chrome",
+
+  "packageOrBundleId": "com.android.chrome",
+
+  "startupPackageOrBundleId": "com.android.chrome",
+  "startupActivity": "com.google.android.apps.chrome.IntentDispatcher",
+
+  "screens": {
+    "import": [
+      "testConfig/android/androidSettings/screens",
+      "testConfig/android/calculator/screens",
+      "testConfig/android/maps/screens",
+      "testConfig/android/misc/screens",
+      "testConfig/android/playStore/screen"
+    ]
+  },
+
+  "capabilities": {
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    "platformVersion": "*",
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android *",
+      "capabilities": {
+        "platformVersion": "*"
+      }
+    },
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+
+
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-01",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-01",
+        "platformVersion": "12",
+        "systemPort": "8201"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-02",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-02",
+        "platformVersion": "12",
+        "systemPort": "8202"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-03",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-03",
+        "platformVersion": "12",
+        "systemPort": "8203"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-04",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-04",
+        "platformVersion": "12",
+        "systemPort": "8204"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-05",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-05",
+        "platformVersion": "12",
+        "systemPort": "8205"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-06",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-06",
+        "platformVersion": "12",
+        "systemPort": "8206"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-07",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-07",
+        "platformVersion": "12",
+        "systemPort": "8207"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-08",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-08",
+        "platformVersion": "12",
+        "systemPort": "8208"
+      }
+    }
+  ]
+
+}

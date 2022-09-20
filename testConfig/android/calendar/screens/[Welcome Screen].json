@@ -1,0 +1,13 @@
+{
+  "key": "[Welcome Screen]",
+
+  "identity": "[Google Calendar][Make the most of every day.]",
+
+  "selectors": {
+
+    "[Google Calendar]": "@Welcome to Google Calendar",
+    "[Make the most of every day.]": "",
+    "[>]": "@next page"
+  }
+
+}

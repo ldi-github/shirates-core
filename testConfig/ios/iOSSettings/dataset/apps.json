@@ -1,0 +1,17 @@
+{
+  "[Settings]": {
+    "packageOrBundleId": "com.apple.Preferences"
+  },
+  "[Safari]": {
+    "packageOrBundleId": "com.apple.mobilesafari"
+  },
+  "[Maps]": {
+    "packageOrBundleId": "com.google.Maps"
+  },
+  "[Reminders]": {
+    "packageOrBundleId": "com.apple.reminders"
+  },
+  "[App1]": {
+    "packageOrBundleId": "com.example.app1"
+  }
+}

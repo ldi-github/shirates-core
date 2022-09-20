@@ -1,0 +1,22 @@
+{
+  "key": "[General Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=General",
+
+  "selectors": {
+    "[<Settings]": "Settings&&.XCUIElementTypeButton",
+    "[General]": "",
+
+    "[About]": "",
+    "[Keyboard]": "",
+    "[Game Controller]": "",
+    "[Fonts]": "",
+    "[Language & Region]": "",
+    "[Dictionary]": "",
+    "[Reset]": ""
+  }
+
+}

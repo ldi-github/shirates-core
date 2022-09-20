@@ -1,0 +1,32 @@
+{
+  "testConfigName": "androidSettingsConfig",
+  "appIconName": "Settings",
+  "packageOrBundleId": "com.android.settings",
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+  "settings": {
+    "always_finish_activities": "0"
+  },
+  "capabilities": {
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    "platformVersion": "12",
+    "language": "en",
+    "locale": "US"
+  },
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "specialTags": "Tag1",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Pixel 3a API 31(Android 12)",
+      "specialTags": "Tag2, Tag3",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_"
+      }
+    }
+  ]
+}

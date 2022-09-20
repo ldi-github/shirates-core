@@ -1,0 +1,20 @@
+{
+  "key": "[Safari Search Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[URL][Cancel]",
+
+  "selectors": {
+    "[URL]": "#URL",
+    "[Clear text]": "#Clear text",
+    "[Cancel]": "",
+
+    "[PageFormatMenuButton]": "#PageFormatMenuButton",
+    "[Address]": "#Address",
+    "[ReloadButton]": "#ReloadButton"
+
+  }
+
+}

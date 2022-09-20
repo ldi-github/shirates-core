@@ -1,0 +1,20 @@
+{
+  "key": "[System Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=System",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[System]": "",
+    "[Search Button]": "@Search settings",
+    "[Languages & input]": "",
+    "[Gestures]": "",
+    "[Date & time]": "",
+    "[Backup]": "",
+    "[Advanced]": ""
+  }
+
+}

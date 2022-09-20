@@ -1,0 +1,38 @@
+{
+  "key": "[Relative Command Test Screen1]",
+
+  "include": [
+  ],
+
+  "identity": "[Title]",
+
+  "selectors": {
+    "[Title]": "",
+
+    "[mail address]": "",
+    "[parent of mail address]": "[mail address]:parent()",
+
+    "[child left1]": "<#jp.co.app.android:id/toolbar>:child(1)",
+    "[child left2]": "<#jp.co.app.android:id/toolbar>:child(2)",
+    "[child left3]": "<#jp.co.app.android:id/toolbar>:child(3)",
+    "[child right1]": "<#jp.co.app.android:id/toolbar>:child(-1)",
+    "[child right2]": "<#jp.co.app.android:id/toolbar>:child(-2)",
+    "[child right3]": "<#jp.co.app.android:id/toolbar>:child(-3)",
+
+    "[next of next of mail address]": "[mail address]:next():next()",
+    "{next of next of mail address}": "[mail address]:next:next",
+    "[Complex 1]": "<id=mail-address>:next(scrollable=false):next(focusable=true&&className=android.widget.Switch)",
+    "[Complex 2]": "<id=mail-address>:next(access=search):next(text=buttonA)",
+    "[Complex 3]": "<xpath=//android.widget.Switch[@focusable='true'][2]/following::android.widget.Switch[1]>:next(@send)",
+    "[Complex 4]": "<*containedText*>:next(startText*):next(*endText)",
+
+    "[Password]": "",
+    "{Password}": "[Password]:next(.android.widget.EditText)",
+    "[Show Password]": "{Password}:next(@Show password)",
+
+    "[CAPTCHA]": "",
+    "[CAPTCHA Image]": "[CAPTCHA]:next(.android.widget.ImageView)",
+    "[CAPTCHA Image Refresh Button]": "[CAPTCHA Image]:next()",
+    "{CAPTCHA Text}": "[CAPTCHA]:next(.android.widget.EditText)"
+  }
+}

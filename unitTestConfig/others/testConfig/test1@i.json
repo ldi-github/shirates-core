@@ -1,0 +1,49 @@
+{
+  "testConfigName": "test1@i",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.apple.Preferences",
+
+  "startupPackageOrBundleId": "com.apple.Preferences",
+
+  "capabilities": {
+    "automationName": "XCUITest",
+    "platformName": "iOS",
+    "simpleIsVisibleCheck": true,
+    "useJSONSource": true,
+    "appium:showXcodeLog": true,
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "iPhone 13(15.0)",
+      "capabilities": {
+        "platformVersion": "15.0",
+        "deviceName": "iPhone 13",
+        "bundleId": "com.apple.Preferences"
+      }
+    },
+    {
+      "profileName": "iPhone 12 Pro(14.3)",
+      "capabilities": {
+        "platformVersion": "14.3",
+        "deviceName": "iPhone 12 Pro",
+        "bundleId": "com.apple.Preferences"
+      }
+    },
+    {
+      "profileName": "real device",
+      "capabilities": {
+        "platformVersion": "14.4.1",
+        "deviceName": "",
+        "bundleId": "com.apple.Preferences",
+        "udid": "",
+        "xcodeOrgId": "",
+        "xcodeSigningId": "iPhone Developer"
+      }
+    }
+  ]
+}

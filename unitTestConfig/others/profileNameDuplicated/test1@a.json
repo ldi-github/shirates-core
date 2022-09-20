@@ -1,0 +1,38 @@
+{
+  "testConfigName": "test1@a",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "settings": {
+    "always_finish_activities": "0"
+  },
+
+  "capabilities": {
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    "platformVersion": "12",
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "profile1",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+    {
+      "profileName": "profile2",
+      "capabilities": {
+        "platformVersion": "11"
+      }
+    }
+  ]
+
+}

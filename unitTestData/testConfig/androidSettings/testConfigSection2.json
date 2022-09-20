@@ -1,0 +1,20 @@
+{
+  "testConfigName": "testConfigSection2",
+
+  "settings": {
+  },
+
+  "dataset": {
+  },
+  "screens": {
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    }
+  ]
+}

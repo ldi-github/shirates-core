@@ -1,0 +1,32 @@
+{
+  "key": "[Relative Command Test Screen2]",
+
+  "include": [
+  ],
+
+  "identity": "[Title]",
+
+  "selectors": {
+    "[Title]": "",
+
+    "[First Name]": "",
+    "{First Name}": "[First Name]:rightInput",
+    "[Last Name]": "[First Name]:rightInput:rightLabel",
+    "{Last Name}": "[First Name]:rightInput:rightLabel:rightInput",
+
+    "[:Mail]": ":belowLabel",
+    "{:Mail}": ":belowLabel:rightInput",
+    "[:Phone]": ":belowLabel(2)",
+    "{:Phone}": "[:Phone]:rightInput",
+
+    "[Contact 1]": "",
+    "[Contact 2]": "",
+
+    "[mail address]": "",
+    "[parent of mail address]": "@a[mail address]:parent,@i[mail address]:parent",
+
+    "[:parent]": ":parent",
+    "[:first child]": ":child(1)",
+    "[Sibling of mail address 1]": "[mail address][:parent][:first child]"
+  }
+}

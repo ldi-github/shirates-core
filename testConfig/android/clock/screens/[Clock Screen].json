@@ -1,0 +1,13 @@
+{
+  "key": "[Clock Screen]",
+
+  "include": [
+    "[Clock(shared)]"
+  ],
+
+  "identity": "~title=Clock",
+
+  "selectors": {
+  }
+
+}

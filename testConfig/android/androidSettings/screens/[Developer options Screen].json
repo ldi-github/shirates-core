@@ -1,0 +1,22 @@
+{
+  "key": "[Developer options Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Developer options",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+
+    "[Use developer options bar]": "#switch_bar",
+
+    "[Wireless debugging]": "@Wireless debugging"
+  },
+
+  "scroll": {
+    "start-elements": "",
+    "end-elements": "",
+    "overlay-elements": "[Use developer options bar]"
+  }
+}

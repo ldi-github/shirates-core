@@ -1,0 +1,28 @@
+{
+  "key": "[Calendar Week Screen]",
+
+  "identity": "[Date Picker Arrow][Open Schedule View]",
+
+  "selectors": {
+
+    "[Date Picker Arrow]": "#date_picker_arrow",
+    "[Open Schedule View]": "@*Open Schedule View",
+
+    "[Menu button]": "@Show Calendar List and Settings drawer",
+    "[Date Picker]": "#date_picker_text_view",
+    "[Search button]": "#action_search",
+    "[Today button]": "@Jump to Today",
+
+    "[Create new event]": "@Create new event",
+
+    "[Monday 12 September 2022]": "@Monday 12 September 2022, Open Schedule View",
+    "[Friday 30 September 2022]": "@Friday 30 September 2022, Open Schedule View"
+  },
+
+  "scroll": {
+    "start-elements": "",
+    "end-elements": "",
+    "overlay-elements": ""
+  }
+
+}

@@ -1,0 +1,14 @@
+{
+  "key": "[Android Search Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[googleapp_superg][Search Box]",
+
+  "selectors": {
+    "[googleapp_superg]": "#googleapp_superg",
+    "[Search Box]": "#googleapp_search_box"
+  }
+
+}

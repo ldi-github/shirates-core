@@ -1,0 +1,11 @@
+{
+  "key": "[IncompleteMarkup]",
+
+  "include": [
+  ],
+
+  "selectors": {
+    "[selector1]": "@<text1"
+  }
+
+}

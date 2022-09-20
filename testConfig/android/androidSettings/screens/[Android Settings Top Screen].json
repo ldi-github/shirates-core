@@ -1,0 +1,100 @@
+{
+  "key": "[Android Settings Top Screen]",
+
+  "identity": "#recycler_view",
+  "satellites": ["Battery", "Accessibility", "Passwords & accounts", "Tips & support"],
+
+  "selectors": {
+    "[Account Avatar]": "#account_avatar",
+    "[Settings]": "#homepage_title",
+
+    "[Search Button]": "<#search_action_bar>:inner(1)",
+    "[Search settings]": "#search_action_bar_title",
+
+    "[Network & internet]": "",
+    "{Network & internet}": "[Network & internet]:label",
+    "[Network & internet Icon]": "[Network & internet]:leftImage",
+
+    "[Connected devices]": "",
+    "{Connected devices}": "[Connected devices]:label",
+    "[Connected devices Icon]": "[Connected devices]:leftImage",
+
+    "[Apps]": "",
+    "{Apps}": "[Apps]:label",
+    "[Apps Icon]": "[Apps]:leftImage",
+
+    "[Notifications]": "",
+    "{Notifications}": "[Notifications]:label",
+    "[Notifications Icon]": "[Notifications]:leftImage",
+
+    "[Battery]": "",
+    "{Battery}": "[Battery]:label",
+    "[Battery Icon]": "[Battery]:leftImage",
+
+    "[Storage]": "",
+    "{Storage}": "[Storage]:label",
+    "[Storage Icon]": "[Storage]:leftImage",
+
+    "[Sound & vibration]": "",
+    "{Sound & vibration}": "[Sound & vibration]:label",
+    "[Sound & vibration Icon]": "[Sound & vibration]:leftImage",
+
+    "[Display]": "",
+    "{Display}": "[Display]:label",
+    "[Display Icon]": "[Display]:leftImage",
+
+    "[Wallpaper & style]": "",
+    "{Wallpaper & style}": "[Wallpaper & style]:label",
+    "[Wallpaper & style Icon]": "[Wallpaper & style]:leftImage",
+
+    "[Accessibility]": "",
+    "{Accessibility}": "[Accessibility]:label",
+    "[Accessibility Icon]": "[Accessibility]:leftImage",
+
+    "[Security]": "",
+    "{Security}": "[Security]:label",
+    "[Security Icon]": "[Security]:leftImage",
+
+    "[Privacy]": "",
+    "{Privacy}": "[Privacy]:label",
+    "[Privacy Icon]": "[Privacy]:leftImage",
+
+    "[Location]": "",
+    "{Location}": "[Location]:label",
+    "[Location Icon]": "[Location]:leftImage",
+
+    "[Safety & emergency]": "",
+    "{Safety & emergency}": "[Safety & emergency]:label",
+    "[Safety & emergency Icon]": "[Safety & emergency]:leftImage",
+
+    "[Passwords & accounts]": "",
+    "{Passwords & accounts}": "[Passwords & accounts]:label",
+    "[Passwords & accounts Icon]": "[Passwords & accounts]:leftImage",
+
+    "[Google]": "",
+    "{Google}": "[Google]:label",
+    "[Google Icon]": "[Google]:leftImage",
+
+    "[System]": "",
+    "{System}": "[System]:label",
+    "[System Icon]": "[System]:leftImage",
+
+    "[About emulated device]": "",
+    "{About emulated device}": "[About emulated device]:label",
+    "[About emulated device Icon]": "[About emulated device]:leftImage",
+
+    "[About phone]": "",
+    "{About phone}": "[About phone]:label",
+    "[About phone Icon]": "[About phone]:leftImage",
+
+    "[Tips & support]": "",
+    "{Tips & support}": "[Tips & support]:label",
+    "[Tips & support Icon]": "[Tips & support]:leftImage"
+  },
+
+  "scroll": {
+    "start-elements": "",
+    "end-elements": "{Tips & support}",
+    "overlay-elements": "[Search Button][Search settings]"
+  }
+}

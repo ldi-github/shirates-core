@@ -1,0 +1,14 @@
+{
+  "key": "[Pixel Home Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[launcher][Search Box]",
+
+  "selectors": {
+    "[launcher]": "#launcher",
+    "[Search Box]": "@Search"
+  }
+
+}

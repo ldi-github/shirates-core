@@ -1,0 +1,30 @@
+{
+  "key": "[Developer Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Developer",
+
+  "selectors": {
+    "[<Settings]": "Settings&&.XCUIElementTypeButton",
+    "[Developer]": "",
+
+    "[APPEARANCE]": "",
+    "[Dark Appearance]": "",
+    "[DISPLAY ZOOM]": "",
+    "[UI AUTOMATION]": "",
+    "[PASSKIT TESTING]": "",
+    "[MEDIA SERVICES TESTING]": "",
+    "[AIRPLAY TESTING]": "",
+    "[NEWS TESTING]": "",
+    "[MEDIA PLAYER FRAMEWORK TESTING]": "",
+    "[TV PROVIDER TESTING]": "",
+    "[CORESPOTLIGHT TESTING]": "",
+    "[WIDGET TESTING]": "",
+    "[SHORTCUTS TESTING]": "",
+    "[SIRI EVENT SUGGESTIONS TESTING]": "",
+    "[MIDI-CI TESTING]": ""
+  }
+
+}

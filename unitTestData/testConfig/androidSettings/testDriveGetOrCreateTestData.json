@@ -1,0 +1,32 @@
+{
+  "testConfigName": "testDriveGetOrCreateTestData",
+
+  "appIconName": "Setting",
+
+  "enableTrace": "true",
+
+  "#appiumServerUrl": "http://127.0.0.1:4720/",
+
+  "packageOrBundleId": "com.example.app1",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "capabilities": {
+    "deviceName": "English",
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    "platformVersion": "12",
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "profile1"
+    },
+    {
+      "profileName": "profile2"
+    }
+  ]
+}

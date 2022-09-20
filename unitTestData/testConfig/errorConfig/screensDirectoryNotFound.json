@@ -1,0 +1,12 @@
+{
+  "testConfigName": "screensDirectoryNotFound",
+
+  "screens": {
+    "import": [
+      "not/exist/directory/screens"
+    ]
+  },
+
+  "profiles": [
+  ]
+}

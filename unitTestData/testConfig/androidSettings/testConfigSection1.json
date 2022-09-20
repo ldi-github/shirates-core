@@ -1,0 +1,25 @@
+{
+  "testConfigName": "testConfigSection1",
+
+  "settings": {
+    "always_finish_activities": "0"
+  },
+
+  "dataset": {
+    "accounts": "unitTestData/testConfig/androidSettings/dataset/accounts.json",
+    "apps": "unitTestData/testConfig/androidSettings/dataset/apps.json",
+    "data": "unitTestData/testConfig/androidSettings/dataset/data.json"
+  },
+  "screens": {
+    "import": ["testConfig/android/androidSettings/screens"]
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    }
+  ]
+}

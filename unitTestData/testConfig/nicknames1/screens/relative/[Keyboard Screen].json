@@ -1,0 +1,31 @@
+{
+  "key": "[Keyboard Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[<General][Keyboards][Text Replacement]",
+
+  "selectors": {
+    "[<General]": "General",
+    "[Keyboards]": "",
+
+    "[Text Replacement]": "",
+    "[One-Handed Keyboard]": "",
+
+    "[ALL KEYBOARDS]": "",
+
+    "[Auto-Correction]": "",
+    "[Auto-Correction Switch]": "[Auto-Correction]:switch",
+
+    "[Smart Punctuation]": "",
+    "[Smart Punctuation Switch]": "[Smart Punctuation]:switch",
+
+    "[Character Preview]": "",
+    "[Character Preview Switch]": "[Character Preview]:switch",
+
+    "[Enable Dictation]": "",
+    "[Enable Dictation Switch]": "[Enable Dictation]:switch"
+  }
+
+}

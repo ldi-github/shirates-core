@@ -1,0 +1,13 @@
+{
+  "key": "[Stopwatch Screen]",
+
+  "include": [
+    "[Clock(shared)]"
+  ],
+
+  "identity": "~title=Stopwatch",
+
+  "selectors": {
+  }
+
+}

@@ -1,0 +1,36 @@
+{
+  "key": "[Maps Top Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[Explore Tab][Go Tab][Saved Tab][Contribute Tab][Updates Tab]",
+
+  "selectors": {
+
+    "[map_frame]": "#map_frame",
+    "[search_omnibox_container]": "#search_omnibox_container",
+    "[below_search_omnibox_container]": "#below_search_omnibox_container",
+
+    "[Explore Tab]": "#explore_tab_strip_button",
+    "[Explore Image]": "Explore.png",
+    "[Explore Image(selected)]": "Explore(selected).png",
+
+    "[Go Tab]": "#transportation_tab_strip_button",
+    "[Go Image]": "Go.png",
+    "[Go Image(selected)]": "Go(selected).png",
+
+    "[Saved Tab]": "#saved_tab_strip_button",
+    "[Saved Image]": "Saved.png",
+    "[Saved Image(selected)]": "Saved(selected).png",
+
+    "[Contribute Tab]": "#contribute_tab_strip_button",
+    "[Contribute Image]": "Contribute.png",
+    "[Contribute Image(selected)]": "Contribute(selected).png",
+
+    "[Updates Tab]": "#updates_tab_strip_button",
+    "[Updates Image]": "Updates.png",
+    "[Updates Image(selected)]": "Updates(selected).png"
+  }
+
+}

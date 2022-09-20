@@ -1,0 +1,272 @@
+package shirates.spec.report.models
+
+import org.apache.commons.io.FileUtils
+import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import shirates.spec.report.entity.SpecReportData
+import shirates.spec.report.entity.SummaryLine
+import shirates.spec.utilily.*
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+
+class SummaryReport(
+    val sessionPath: Path
+) {
+    val specReportFiles = mutableListOf<File>()
+    val summaryLines = mutableListOf<SummaryLine>()
+    val worksheetDataList = mutableListOf<SpecReportData>()
+
+    lateinit var templateWorkbook: XSSFWorkbook
+    lateinit var summaryWorksheet: XSSFSheet
+
+    val outputFilePath: Path
+        get() {
+            return summaryDirPath.resolve("_Summary_${sessionPath.parent.fileName}_${sessionPath.fileName}.xlsx")
+        }
+
+    val summaryDirPath: Path
+        get() {
+            return sessionPath.resolve("_Summary")
+        }
+
+    val total: Int
+        get() {
+            return summaryLines.sumOf { it.total }
+        }
+
+    val notApplicable: Int
+        get() {
+            return summaryLines.sumOf { it.notApplicable }
+        }
+
+    val ok: Int
+        get() {
+            return summaryLines.sumOf { it.ok }
+        }
+
+    val ng: Int
+        get() {
+            return summaryLines.sumOf { it.ng }
+        }
+
+    val error: Int
+        get() {
+            return summaryLines.sumOf { it.error }
+        }
+
+    val suspended: Int
+        get() {
+            return summaryLines.sumOf { it.suspended }
+        }
+
+    val manual: Int
+        get() {
+            return summaryLines.sumOf { it.manual }
+        }
+
+    val skip: Int
+        get() {
+            return summaryLines.sumOf { it.skip }
+        }
+
+    val notImpl: Int
+        get() {
+            return summaryLines.sumOf { it.notImpl }
+        }
+
+    val autoPlusManual: Int
+        get() {
+            return summaryLines.sumOf { it.autoPlusManual }
+        }
+
+    val a: Int
+        get() {
+            return summaryLines.sumOf { it.a }
+        }
+
+    val m: Int
+        get() {
+            return summaryLines.sumOf { it.m }
+        }
+
+    val automatedRatio: Double
+        get() {
+            if (autoPlusManual == 0) {
+                return 0.0
+            }
+            return a.toDouble() / autoPlusManual
+        }
+
+
+    init {
+
+    }
+
+    /**
+     * execute
+     */
+    fun execute() {
+
+        cleanup()
+        getSpecReportFiles()
+        for (specReportFile in specReportFiles) {
+            try {
+                val data = getSpecReportData(specReportFile = specReportFile)
+                worksheetDataList.add(data)
+                addSummaryLine(data)
+            } catch (t: Throwable) {
+                println("Invalid file: $specReportFile")
+                println(t)
+            }
+        }
+        if (worksheetDataList.isEmpty()) {
+            println("Spec-Report file not found.")
+            return
+        }
+        setupTemplateWorksheet()
+        createSummarySheet()
+        createWorksheets()
+        templateWorkbook.removeSheet("TestSpec")
+        templateWorkbook.setActiveSheet(0)
+        Files.deleteIfExists(outputFilePath)
+        templateWorkbook.saveAs(outputFilePath)
+        println("Saved: $outputFilePath")
+    }
+
+    private fun createWorksheets() {
+
+        val group = worksheetDataList.groupBy {
+            it.sheetName
+        }
+        for (g in group) {
+            val sheetName = g.key
+            val data1 = g.value.first()
+            for (i in 1 until g.value.count()) {
+                val data = g.value[i]
+                data1.specLines.addAll(data.specLines)
+            }
+            println("Writing sheet: $sheetName")
+            val sheet = templateWorkbook.copySheet(templateSheetName = "TestSpec", newSheetName = sheetName)
+            SpecWriter.outputSpecSheet(templateWorksheet = sheet, worksheetData = data1)
+        }
+    }
+
+    private fun cleanup() {
+
+        FileUtils.deleteDirectory(File(summaryDirPath.toUri()))
+        Files.createDirectory(summaryDirPath)
+    }
+
+    private fun getSpecReportFiles() {
+
+        val files = File(sessionPath.toUri()).walkTopDown()
+            .filter { it.name.startsWith(it.name) && it.name.endsWith(".xlsx") && it.toPath().parent != sessionPath }
+            .toList().sortedBy { it.absolutePath }
+        val groups =
+            files.groupBy {
+                val p = it.toPath()
+                val g = "${p.parent.parent.parent.fileName}/${p.parent.fileName}"
+                g
+            }
+        for (g in groups) {
+            val list = g.value.sortedBy { it.absolutePath }
+            val last = list.last()
+            specReportFiles.add(last)
+        }
+    }
+
+    private fun setupTemplateWorksheet() {
+
+        templateWorkbook = ExcelUtility.getWorkbook(baseName = "TestSpec.xlsx")
+        summaryWorksheet = templateWorkbook.worksheets("Summary")
+
+        templateWorkbook.removeSheet("CommandList")
+    }
+
+    private fun getSpecReportData(specReportFile: File): SpecReportData {
+
+        val data = SpecReportData()
+        val adapter = SpecReportDataAdapter(data)
+        adapter.loadWorkbook(specReportFile.toPath())
+        return data
+    }
+
+    private fun addSummaryLine(data: SpecReportData) {
+        val summaryLine = SummaryLine()
+        with(summaryLine) {
+            workbookPath = data.specReportFile
+            sheetName = data.sheetName
+            testClassName = data.testClassName
+            ok = data.okCount
+            ng = data.ngCount
+            error = data.errorCount
+            suspended = data.suspendedCount
+            manual = data.manualCount
+            skip = data.skipCount
+            notImpl = data.notImplCount
+
+            a = data.specLines.count { it.auto == "A" }
+            m = data.specLines.count { it.auto == "M" }
+        }
+        summaryLines.add(summaryLine)
+    }
+
+    private fun createSummarySheet() {
+
+        val header = 4
+
+        val data = worksheetDataList.first()
+        summaryWorksheet.cells("A1").setCellValue(data.appIconName)
+
+        /**
+         * output lines
+         */
+        for (no in 1..summaryLines.count()) {
+            val s = summaryLines[no - 1]
+            val rowNum = header + no
+            summaryWorksheet.cells(rowNum, 1).setCellValue(no)
+            summaryWorksheet.cells(rowNum, 2).setCellValue(s.sheetName)
+            summaryWorksheet.cells(rowNum, 3).setCellValue(s.testClassName)
+            summaryWorksheet.cells(rowNum, 4).setCellValue(s.total)
+            summaryWorksheet.cells(rowNum, 5).setCellValue(s.notApplicable)
+            summaryWorksheet.cells(rowNum, 6).setCellValue(s.ok)
+            summaryWorksheet.cells(rowNum, 7).setCellValue(s.ng)
+            summaryWorksheet.cells(rowNum, 8).setCellValue(s.error)
+            summaryWorksheet.cells(rowNum, 9).setCellValue(s.suspended)
+            summaryWorksheet.cells(rowNum, 10).setCellValue(s.manual)
+            summaryWorksheet.cells(rowNum, 11).setCellValue(s.skip)
+            summaryWorksheet.cells(rowNum, 12).setCellValue(s.notImpl)
+            summaryWorksheet.cells(rowNum, 13).setCellValue(s.a)
+            summaryWorksheet.cells(rowNum, 14).setCellValue(s.m)
+            summaryWorksheet.cells(rowNum, 15).setCellValue(s.autoPlusManual)
+            summaryWorksheet.cells(rowNum, 16).setCellValue(s.automatedRatio)
+
+        }
+
+        /**
+         * delete rows
+         */
+        for (ix in header + summaryLines.count() + 1..summaryWorksheet.lastRowNum + 1) {
+            summaryWorksheet.removeRow(summaryWorksheet.rows(ix))
+        }
+
+        /**
+         * output header
+         */
+        summaryWorksheet.cells(header, 4).setCellValue(total)
+        summaryWorksheet.cells(header, 5).setCellValue(notApplicable)
+        summaryWorksheet.cells(header, 6).setCellValue(ok)
+        summaryWorksheet.cells(header, 7).setCellValue(ng)
+        summaryWorksheet.cells(header, 8).setCellValue(error)
+        summaryWorksheet.cells(header, 9).setCellValue(suspended)
+        summaryWorksheet.cells(header, 10).setCellValue(manual)
+        summaryWorksheet.cells(header, 11).setCellValue(skip)
+        summaryWorksheet.cells(header, 12).setCellValue(notImpl)
+        summaryWorksheet.cells(header, 13).setCellValue(a)
+        summaryWorksheet.cells(header, 14).setCellValue(m)
+        summaryWorksheet.cells(header, 15).setCellValue(autoPlusManual)
+        summaryWorksheet.cells(header, 16).setCellValue(automatedRatio)
+    }
+
+}

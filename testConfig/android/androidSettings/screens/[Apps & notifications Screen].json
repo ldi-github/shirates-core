@@ -1,0 +1,22 @@
+{
+  "key": "[Apps & notifications Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Apps & notifications",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[Apps & notifications]": "",
+    "[Search Button]": "@Search settings",
+    "[Recently opened apps]": "",
+    "[See all apps]": "id=com.android.settings:id/header_details",
+    "[Notifications]": "",
+    "[Default apps]": "",
+    "[Permission manager]": "",
+    "[Emergency alerts]": "",
+    "[Special app access]": ""
+  }
+
+}

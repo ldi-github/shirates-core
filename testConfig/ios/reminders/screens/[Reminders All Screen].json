@@ -1,0 +1,23 @@
+{
+  "key": "[Reminders All Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[<Lists][All]",
+
+  "selectors": {
+    "[<Lists]": "Lists",
+    "[More]": "",
+    "[All]": "",
+
+    "[Reminders]": "",
+
+    "[CompleteOff]": "",
+    "[title]": "[CompleteOff]:nextInput",
+    "[note]": "",
+    "[reminder cell placeholder indi]": ""
+  }
+
+
+}

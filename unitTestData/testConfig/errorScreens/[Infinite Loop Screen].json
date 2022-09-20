@@ -1,0 +1,16 @@
+{
+  "key": "[Infinite Loop Screen]",
+
+  "identity": "[identity]",
+
+  "selectors": {
+    "[identity]": "",
+
+    "[infinite loop 1]": "[infinite loop 2]:next()",
+    "[infinite loop 2]": "[infinite loop 1]:next()"
+  },
+
+  "scroll": {
+
+  }
+}

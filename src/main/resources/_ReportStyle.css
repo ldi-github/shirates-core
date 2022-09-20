@@ -1,0 +1,325 @@
+/* Shirates (shirates-core) */
+
+* {
+    font-size: 14px;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+    height: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.main {
+    width: 100%;
+    margin-left: 8px;
+    overflow: scroll;
+}
+
+#separator {
+    width: 100%;
+    height: 10px;
+    margin: 0;
+    background: whitesmoke;
+    cursor: ns-resize;
+}
+
+.separator-dragging {
+    background: lightgray !important;
+}
+
+.image-gallery {
+    display: flex;
+    padding: 0;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.image-frame {
+    height: 100%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+}
+
+.image-title {
+    height: 18px;
+    text-align: center;
+    background: gray;
+}
+
+.image-title-text {
+    font-size: 12px;
+    color: white;
+    white-space: nowrap;
+}
+
+.screenshot {
+    height: calc(100% - 18px) !important;
+}
+
+.text-highlighted {
+    color: black !important;
+    background: greenyellow !important;
+}
+
+.row-highlighted {
+    background: greenyellow !important;
+}
+
+.stickey {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+#modal-panel {
+    display: none;
+    z-index: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#modal-background {
+    z-index: 1;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+}
+
+#modal-image-container {
+    z-index: 2;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#modal-image {
+    z-index: 3;
+    height: 80%;
+}
+
+tr {
+    border: solid 0.5px lightgray;
+}
+
+th {
+    border: solid 0.5px lightgray;
+    background-color: teal;
+    color: white;
+    padding: 4px;
+}
+
+td {
+    border: solid 0.5px lightgray;
+    padding: 1px 2px 1px 4px;
+}
+
+.title {
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.noLoadRun {
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.text {
+    font-size: 14px;
+}
+
+.class-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.full-class-name {
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+.section-body {
+    margin-left: 8px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.section-total {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.section-result {
+    width: 40px;
+    text-align: center;
+}
+
+.section-count {
+    width: 40px;
+    text-align: right;
+}
+
+.result-table {
+    display: inline-block;
+    width: 230px;
+}
+
+.lines {
+    border: solid 1px lightgray;
+    border-spacing: 0;
+    min-width: 1400px;
+}
+
+.seq {
+    background-color: cornsilk;
+    text-align: center;
+}
+
+.lineNumber {
+    text-align: center;
+}
+
+.logDateTimeLabel {
+    min-width: 190px;
+}
+
+.testCaseId {
+    background-color: #EEFFFF;
+}
+
+.logType {
+    text-align: center;
+    min-width: 80px;
+}
+
+.command {
+    min-width: 80px;
+}
+
+.description {
+    min-width: 400px;
+}
+
+.resultMessage {
+    min-width: 300px;
+}
+
+.processingTime {
+    text-align: right;
+}
+
+.timeElapsed {
+    text-align: center;
+}
+
+.OK {
+    font-weight: bold;
+    background-color: greenyellow !important;
+}
+
+.NG {
+    font-weight: bold;
+    background-color: orange !important;
+}
+
+.MANUAL {
+    font-weight: bold;
+    background-color: #a0d8ef !important;
+}
+
+.SKIP_SCENARIO {
+    font-weight: bold;
+    background-color: #a0d8ef !important;
+}
+
+.SKIP_CASE {
+    font-weight: bold;
+    background-color: #a0d8ef !important;
+}
+
+.SKIP {
+    font-weight: bold;
+    background-color: #a0d8ef !important;
+}
+
+.NOTIMPL {
+    font-weight: bold;
+    background-color: #a0d8ef !important;
+}
+
+.KNOWNISSUE {
+    font-weight: bold;
+    background-color: #a0d8ef !important;
+}
+
+.ERROR {
+    font-weight: bold;
+    background-color: violet !important;
+}
+
+.ABORT {
+    font-weight: bold;
+    background-color: red !important;
+}
+
+.WARN {
+    font-weight: bold;
+    background-color: yellow !important;
+}
+
+.check {
+    font-weight: bold;
+    background-color: #a0d8ef !important;
+}
+
+.scenario {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.case {
+    color: white;
+    background-color: lightseagreen;
+    font-weight: bold;
+}
+
+.pattern {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.condition {
+    background-color: beige;
+}
+
+.action {
+    background-color: seashell;
+}
+
+.expectation {
+    background-color: honeydew;
+}
+
+.noLoadRunCell {
+    background-color: lightgoldenrodyellow;
+}

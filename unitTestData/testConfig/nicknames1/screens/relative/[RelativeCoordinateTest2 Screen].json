@@ -1,0 +1,10 @@
+{
+  "key": "[RelativeCoordinateTest2 Screen]",
+
+  "identity": "",
+
+  "include": [
+    "[RelativeCoordinateTest Screen]"
+  ]
+
+}

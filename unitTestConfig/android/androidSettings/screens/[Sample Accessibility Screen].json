@@ -1,0 +1,52 @@
+{
+  "key": "[Sample Accessibility Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Accessibility",
+
+  "selectors": {
+    "[Accessibility]": "@Accessibility",
+
+    "[Display]": "",
+
+    "[Text and display]": "",
+
+    "[Dark theme]": "",
+    "{Dark theme}": "[Dark theme]:label",
+    "[Dark theme switch]": "[Dark theme]:switch",
+
+    "[Magnification]": "",
+    "{Magnification}": "[Magnification]:label",
+
+    "[Interaction controls]": "",
+
+    "[Timing controls]": "",
+
+    "[System controls]": "",
+
+    "[Vibration & haptics]": "",
+    "{Vibration & haptics}": "[Vibration & haptics]:label",
+
+    "[Captions]": "",
+
+    "[Caption preferences]": "",
+    "{Caption preferences}": "[Caption preferences]:label",
+
+    "[Audio]": "",
+
+    "[Audio adjustment]": "",
+
+    "[General]": "",
+
+    "[Accessibility shortcuts]": "",
+
+    "[Text-to-speech output]": ""
+  },
+
+  "scroll": {
+    "start-elements": "",
+    "end-elements": ""
+  }
+}

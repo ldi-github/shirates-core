@@ -1,0 +1,27 @@
+{
+  "key": "[Alarm Screen]",
+
+  "include": [
+    "[Clock(shared)]"
+  ],
+
+  "identity": "~title=Alarm",
+
+  "selectors": {
+
+    "[:Expand alarm]": ":flow(1)",
+    "[:Days of week]": ":flow(2)",
+    "[:ON/OFF]": ":flow(3)",
+
+    "[8:30 AM]": "",
+    "[8:30 AM Expand alarm]": "[8:30 AM][:Expand alarm]",
+    "[8:30 AM Days of week]": "[8:30 AM][:Days of week]",
+    "[8:30 AM ON/OFF]": "[8:30 AM][:ON/OFF]",
+
+    "[9:00 AM]": "",
+    "[9:00 AM Expand alarm]": "[9:00 AM][:Expand alarm]",
+    "[9:00 AM Days of week]": "[9:00 AM][:Days of week]",
+    "[9:00 AM ON/OFF]": "[9:00 AM][:ON/OFF]"
+  }
+
+}

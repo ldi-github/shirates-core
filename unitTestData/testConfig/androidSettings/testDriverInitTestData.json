@@ -1,0 +1,72 @@
+{
+  "testConfigName": "testDriverInitTestData",
+
+  "appIconName": "appIcon1",
+
+  "#appiumServerUrl": "http://127.0.0.1:4720/",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "profiles": [
+    {
+      "profileName": "empty"
+    },
+    {
+      "profileName": "withAutomationname",
+      "capabilities": {
+        "automationName": "UiAutomator2"
+      }
+    },
+    {
+      "profileName": "withPlatformName",
+      "capabilities": {
+        "automationName": "UiAutomator2",
+        "platformName": "Android"
+      }
+    },
+    {
+      "profileName": "withPlatformVersion",
+      "capabilities": {
+        "automationName": "UiAutomator2",
+        "platformName": "Android",
+        "platformVersion": "10"
+      }
+    },
+    {
+      "profileName": "withDeviceName",
+      "capabilities": {
+        "automationName": "UiAutomator2",
+        "platformName": "Android",
+        "platformVersion": "10",
+        "deviceName": "Pixel 3a",
+        "appPackage": ""
+      }
+    },
+    {
+      "profileName": "withAppPackage",
+      "capabilities": {
+        "automationName": "UiAutomator2",
+        "platformName": "Android",
+        "platformVersion": "10",
+        "deviceName": "Pixel 3a",
+        "appPackage": "com.android.settings",
+        "appActivity": ""
+      }
+    },
+    {
+      "profileName": "withAppActivity",
+      "capabilities": {
+        "automationName": "UiAutomator2",
+        "platformName": "Android",
+        "platformVersion": "10",
+        "deviceName": "Pixel 3a",
+        "appPackage": "com.android.settings",
+        "appActivity": "com.android.settings.Settings"
+      }
+    }
+
+  ]
+}

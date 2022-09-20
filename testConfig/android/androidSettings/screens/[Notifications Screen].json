@@ -1,0 +1,18 @@
+{
+  "key": "[Notifications Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Notifications",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[Notifications]": "",
+    "[Search Button]": "@Search settings",
+
+    "[RECENTLY SENT]": "",
+    "[LOCK SCREEN]": ""
+  }
+
+}

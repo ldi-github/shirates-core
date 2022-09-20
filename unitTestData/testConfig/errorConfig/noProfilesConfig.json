@@ -1,0 +1,21 @@
+{
+  "testConfigName": "noProfilesConfig",
+
+  "appIconName": "Settings",
+
+  "#appiumServerUrl": "http://127.0.0.1:4720/",
+
+  "shortWaitSeconds": "2",
+
+  "#waitSecondsOnIsScreen": "",
+
+  "testResults" : "Downloads/TestResults",
+
+  "capabilities": {
+    "appPackage": "com.android.settings",
+    "appActivity": "com.android.settings.Settings",
+    "language": "en",
+    "locale": "US"
+  }
+
+}

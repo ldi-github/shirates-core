@@ -1,0 +1,11 @@
+{
+  "testConfigName": "notImplementedPropertyConfig",
+
+  "profiles": [
+    {
+      "profileName": "profile1",
+
+      "property999": "not implemented property"
+    }
+  ]
+}

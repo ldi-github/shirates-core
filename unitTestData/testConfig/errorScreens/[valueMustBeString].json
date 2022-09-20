@@ -1,0 +1,13 @@
+{
+  "key": "[valueMustBeString]",
+
+  "include": [
+  ],
+
+  "identity": "text1",
+  "satellites": ["text2", 3],
+
+  "selectors": {
+
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "key": "[Languages Screen]",
+
+  "identity": "~title=Languages",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[More options]": "@More options",
+    "[Languages]": "@Languages",
+
+    "[n]": "#miniLabel",
+    "[label]": "#label",
+    "[handle]": "#dragHandle",
+    "[=]": "#dragHandle",
+
+    "[Add a language Button]": "#add_language"
+  }
+
+}

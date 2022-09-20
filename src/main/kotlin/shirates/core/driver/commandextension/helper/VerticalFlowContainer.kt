@@ -1,0 +1,158 @@
+package shirates.core.driver.commandextension.helper
+
+import shirates.core.driver.TestElement
+import shirates.core.logging.Message.message
+
+class VerticalFlowContainer {
+
+    class Column(initialElement: TestElement) {
+        internal val verticalBand: VerticalBand
+
+        init {
+            verticalBand = VerticalBand(initialElement)
+        }
+
+        /**
+         * left
+         */
+        val left: Int
+            get() {
+                return verticalBand.left
+            }
+
+        /**
+         * right
+         */
+        val right: Int
+            get() {
+                return verticalBand.right
+            }
+
+        /**
+         * canMerge
+         */
+        fun canMerge(element: TestElement, force: Boolean = false): Boolean {
+
+            if (!force && element.isWidget.not()) {
+                return false
+            }
+            return verticalBand.canMerge(element)
+        }
+
+        /**
+         * merge
+         */
+        fun merge(element: TestElement, force: Boolean = false): Boolean {
+
+            if (canMerge(element = element, force = force).not()) {
+                return false
+            }
+            verticalBand.merge(element)
+            return true
+        }
+
+        /**
+         * members
+         */
+        val members: MutableList<TestElement>
+            get() {
+                return verticalBand.members.toMutableList()
+            }
+    }
+
+    /**
+     * columns
+     */
+    val columns = mutableListOf<Column>()
+
+    private fun addColumn(column: Column) {
+        if (columns.contains(column)) {
+            return
+        }
+        columns.add(column)
+        columns.sortWith(compareBy { it.left })
+    }
+
+    /**
+     * addElement
+     */
+    fun addElement(element: TestElement, force: Boolean = false): Column? {
+
+        if (!force && element.isWidget.not()) {
+            return null
+        }
+
+        try {
+            if (columns.isEmpty()) {
+                val column = Column(initialElement = element)
+                columns.add(column)
+                return column
+            }
+
+            for (column in columns) {
+                if (column.canMerge(element = element, force = force)) {
+                    column.merge(element = element, force = force)
+                    return column
+                }
+            }
+
+            val column = Column(initialElement = element)
+            addColumn(column)
+            return column
+
+        } finally {
+            sortColumns()
+        }
+    }
+
+    /**
+     * addAll
+     */
+    fun addAll(elements: List<TestElement>) {
+
+        for (e in elements) {
+            addElement(e)
+        }
+    }
+
+    /**
+     * sortColumns
+     */
+    fun sortColumns() {
+
+        columns.sortWith(compareBy { it.left })
+    }
+
+    /**
+     * getElements
+     */
+    fun getElements(): MutableList<TestElement> {
+
+        sortColumns()
+
+        val list = mutableListOf<TestElement>()
+        for (column in columns) {
+            list.addAll(column.members)
+        }
+
+        return list
+    }
+
+    /**
+     * element
+     */
+    fun element(pos: Int): TestElement {
+
+        if (pos == 0) {
+            throw IndexOutOfBoundsException(message(id = "posMustBeGreaterThanZero", arg1 = "${pos}"))
+        }
+
+        val elements = getElements()
+        if (pos > elements.count()) {
+            return TestElement()
+        }
+
+        return elements[pos - 1]
+    }
+
+}

@@ -1,0 +1,10 @@
+{
+  "testConfigName": "importMustBeJSONArray",
+
+  "screens": {
+    "import": "testConfig/ios/appleMaps/screens"
+  },
+
+  "profiles": [
+  ]
+}

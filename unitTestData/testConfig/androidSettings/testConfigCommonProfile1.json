@@ -1,0 +1,18 @@
+{
+  "testConfigName": "testConfigCommonProfile1",
+
+  "appiumPath": "appiumPath",
+  "appiumArgs": "appiumArgs",
+  "appiumArgsSeparator": "appiumArgsSeparator",
+  "appiumServerStartupTimeoutSeconds": "appiumServerStartupTimeoutSeconds",
+  "appiumSessionStartupTimeoutSeconds": "appiumSessionStartupTimeoutSeconds",
+
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    }
+  ]
+}

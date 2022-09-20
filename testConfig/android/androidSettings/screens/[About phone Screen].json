@@ -1,0 +1,18 @@
+{
+  "key": "[About phone Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=About phone",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[Search Button]": "@Search settings",
+
+    "[Device name]": "",
+    "[Phone number]": "",
+    "[Emergency information]": ""
+  }
+
+}

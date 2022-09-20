@@ -1,0 +1,106 @@
+{
+  "testConfigName": "appleMapsConfig",
+
+  "appIconName": "Maps",
+
+  "packageOrBundleId": "com.apple.Maps",
+
+  "startupPackageOrBundleId": "com.apple.Maps",
+
+  "dataset": {
+    "apps": "testConfig/ios/appleMaps/dataset/apps.json"
+  },
+
+  "screens": {
+    "import": [
+      "testConfig/ios/misc/screens"
+    ]
+  },
+
+  "capabilities": {
+    "automationName": "XCUITest",
+    "platformName": "iOS",
+    "simpleIsVisibleCheck": true,
+    "useJSONSource": true,
+    "showXcodeLog": true,
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "iPhone 13(15.0)",
+      "capabilities": {
+        "platformVersion": "15.0",
+        "deviceName": "iPhone 13",
+        "bundleId": "com.apple.Preferences"
+      }
+    },
+    {
+      "profileName": "iPhone 12 Pro(14.3)",
+      "capabilities": {
+        "platformVersion": "14.3",
+        "deviceName": "iPhone 12 Pro",
+        "bundleId": "com.apple.Preferences"
+      }
+    },
+    {
+      "profileName": "real device",
+      "capabilities": {
+        "platformVersion": "15.2.1",
+        "deviceName": "iPhone",
+        "bundleId": "com.apple.Preferences",
+        "udid": "375b88762a4a0a015fd8426d1e8222554ac81ef2",
+        "#xcodeOrgId": "",
+        "#xcodeSigningId": "iPhone Developer"
+      }
+    },
+
+    {
+      "profileName": "iPhone 13(iOS 15)-01",
+      "tapAppIconMethod": "",
+      "tapAppIconMacro": "",
+      "capabilities": {
+        "platformVersion": "15.5",
+        "deviceName": "iPhone 13(iOS 15)-01",
+        "udid": "868FB87B-A218-4ED0-8833-9A864532ED12",
+        "wdaLocalPort": "8211"
+      }
+    },
+    {
+      "profileName": "iPhone 13(iOS 15)-02",
+      "tapAppIconMethod": "",
+      "tapAppIconMacro": "",
+      "capabilities": {
+        "platformVersion": "15.5",
+        "deviceName": "iPhone 13(iOS 15)-02",
+        "udid": "FC2695EA-BDF8-4B32-8628-6648C1D5B567",
+        "wdaLocalPort": "8212"
+      }
+    },
+    {
+      "profileName": "iPhone 13(iOS 15)-03",
+      "tapAppIconMethod": "",
+      "tapAppIconMacro": "",
+      "capabilities": {
+        "platformVersion": "15.5",
+        "deviceName": "iPhone 13(iOS 15)-03",
+        "udid": "BD332FA2-D3D3-4A58-A51C-5D09945B730F",
+        "wdaLocalPort": "8213"
+      }
+    },
+    {
+      "profileName": "iPhone 13(iOS 15)-04",
+      "tapAppIconMethod": "",
+      "tapAppIconMacro": "",
+      "capabilities": {
+        "platformVersion": "15.5",
+        "deviceName": "iPhone 13(iOS 15)-04",
+        "udid": "E2AC4280-0A1A-4F25-9E34-8AD43F311A24",
+        "wdaLocalPort": "8214"
+      }
+    }
+
+
+  ]
+}

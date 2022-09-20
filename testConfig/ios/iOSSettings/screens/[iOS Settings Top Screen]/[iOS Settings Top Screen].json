@@ -1,0 +1,37 @@
+{
+  "key": "[iOS Settings Top Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[Settings]",
+
+  "selectors": {
+    "[Settings]": "~title=Settings",
+    "[Profile Icon]": "#SilhouetteMonogram",
+
+    "[General Icon]": "[General]:preImage",
+    "[General Image]": "image=[General Icon].png",
+    "[General]": "",
+
+    "[Accessibility Icon]": "[Accessibility]:preImage",
+    "[Accessibility Image]": "image=[Accessibility Icon].png",
+    "[Accessibility]": "",
+
+    "[Privacy Icon]": "[Privacy]:preImage",
+    "[Privacy Image]": "image=[Privacy Icon].png",
+    "[Privacy]": "",
+
+    "[Passwords Icon]": "[Passwords]:preImage",
+    "[Passwords Image]": "image=[Passwords Icon].png",
+    "[Passwords]": "",
+
+    "[Developer Icon]": "[Developer]:preImage",
+    "[Developer Image]": "image=[Developer Icon].png",
+    "[Developer]": ""
+  },
+
+  "scroll": {
+    "start-elements": "[Profile Icon]"
+  }
+}

@@ -1,0 +1,28 @@
+pages:
+  script:
+
+    # Maven-Publish
+    #- ./gradlew publish
+
+    ## dokka
+    #- ./gradlew dokkaHtml
+
+    # copy repository
+    #- mkdir .public
+    #- cp -r build/repository .public
+
+    ## copy html document
+    #- mkdir -p .public/docs/shirates-core
+    #- cp -r build/doc/html .public/docs/shirates-core
+
+    #- mv .public public
+    # published to
+
+    # file list
+    #- ls -d $(find public)
+
+  artifacts:
+    paths:
+      - public
+  only:
+    - master

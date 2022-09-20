@@ -1,0 +1,10 @@
+{
+  "testConfigName": "datasetFileNotFound",
+
+  "dataset": {
+    "data": "not.exist.json"
+  },
+
+  "profiles": [
+  ]
+}

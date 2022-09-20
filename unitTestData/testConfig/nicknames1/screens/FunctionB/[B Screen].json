@@ -1,0 +1,19 @@
+{
+  "key": "[B Screen]",
+
+  "include": [
+    "[Common Footer]"
+  ],
+
+  "identity": "[Button B][TextBox B]",
+
+  "selectors": {
+
+    "[Button B]": "id=idB",
+    "[TextBox B]": "xpath=xpathB",
+    "[Label B]": "text=textB]",
+    "[Label B2]": "textStartsWith=textB2",
+    "[Label B3]": "textContains=textB3"
+  }
+
+}

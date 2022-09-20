@@ -1,0 +1,231 @@
+# Parameter configuration files
+
+## Overview
+
+You can change running parameters by parameter configuration files.
+
+* **testrun file** (properties file)
+* **testConfig file** (json file)
+
+## testrun.properties
+
+**testrun.properties** file is testrun file that can be placed anywhere in the project and can have an arbitrary name.
+This file should be designated in test setup procedure by [@Testrun](../creating_testclass) annotation.
+
+```kotlin
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class Test1 : UITest() {
+
+}
+```
+
+"**testConfig/testrun.properties**" is default and applied when `@Testrun` is omitted.
+
+```kotlin
+class Test1 : UITest() {
+
+}
+```
+
+The above is equivalent to below.
+
+```kotlin
+@Testrun("testConfig/testrun.properties")
+class Test1 : UITest() {
+
+}
+```
+
+## testrun.global.properties
+
+**testrun.global.properties** file is the testrun file that is placed under the project directory. This file is fixed
+name file and should not be designated by `@Testrun` annotation. The parameters in this file is effective to all tests
+in
+this project, but they can be overridden by other configuration files(`testrun.properties` or `testConfig.json`).
+
+## Example of testrun file
+
+```
+# testrun
+
+## OS --------------------
+#os=ios
+
+## Config --------------------
+## [Android]
+#android.configFile=
+#android.profile=Android *
+android.profile=Android 12
+
+## [iOS]
+#ios.configFile=
+ios.profile=iPhone 13(15.0)
+
+## Stub --------------------
+#stubServerUrl=http://stub1
+
+## Test mode --------------------
+#noLoadRun=true
+
+## Priority filter --------------------
+#must=false
+#should=false
+#want=false
+#none=false
+
+## Log --------------------
+#logLanguage=ja
+#enableSyncLog=false
+#enableTestList=false
+#enableSpecReport=false
+#enableInnerMacroLog=true
+#enableInnerCommandLog=true
+#enableSilentLog=true
+#enableTapElementImageLog=true
+#enableXmlSourceDump=false
+#enableRetryLog=false
+#enableTrace=true
+#enableShellExecLog=true
+#enableTimeMeasureLog=true
+#enableImageMatchDebugLog=true
+#testResults=
+
+## Screenshot --------------------
+#screenshotScale=0.333333
+#autoScreenshot=false
+#onChangedOnly=false
+#onCondition=false
+#onAction=false
+#onExpectation=false
+#onExecOperateCommand=false
+#onCheckCommand=false
+#onScrolling=false
+#manualScreenshot=false
+
+## Image Matching --------------------
+#imageMatchingScale=
+#imageMatchingThreshold=
+#imageMatchingCandidateCount=
+
+## Appium --------------------
+appiumServerUrl=http://127.0.0.1:4720/
+appiumPath=appium
+appiumArgs=--session-override --relaxed-security
+#appiumArgsSeparator=
+#appiumServerStartupTimeoutSeconds=
+#appiumSessionStartupTimeoutSeconds=
+#implicitlyWaitSeconds=
+#appPackageFile=
+#appPackageDir=
+#packageOrBundleId=
+#startupPackageOrBundleId=
+#startupActivity=
+
+## TestDriver --------------------
+#resuseDriver=
+#retryMaxCount=
+#retryTimeoutSeconds=
+#retryIntervalSeconds=
+
+## App operation --------------------
+#appIconName=
+#tapAppIconMethod=
+#tapAppIconMacro=
+#shortWaitSeconds=
+#waitSecondsForAnimationComplete=
+#waitSecondsOnIsScreen=
+#waitSecondsForConnectionEnabled=
+#swipeDurationSeconds=
+#flickDurationSeconds=
+#swipeMarginRatio=
+#scrollVerticalMarginRatio=
+#scrollHorizontalMarginRatio=
+#tapHoldSeconds=
+#syncWaitSeconds=
+
+## Custom --------------------
+#CustomObject.scan.dir=src/test/kotlin
+
+## Macro --------------------
+#MacroObject.scan.dir=src/test/kotlin
+
+## Spec-Report --------------------
+#specReport.replace.MANUAL=
+#specReport.replace.MANUAL.reason=
+#specReport.replace.SKIP=
+#specReport.replace.SKIP.reason=
+
+## misc
+#android.swipeOffsetY=-20
+#ios.swipeOffsetY=-5
+#xmlSourceRemovePattern=
+#boundsToRectRatio=
+#ios.selectIgnoreTypes=XCUIElementTypeCell,XCUIElementTypeApplication
+#android.titleSelector=<#action_bar||#toolbar||#app_bar>:descendant(${title}||@${title})
+#ios.titleSelector=<.XCUIElementTypeNavigationBar>:descendant(.XCUIElementTypeStaticText&&${title})
+#android.webTitleSelector=.android.webkit.WebView&&${webTitle}
+#ios.webTitleSelector=<.XCUIElementTypeWebView>:descendant(${webTitle}&&visible=false)
+#jquerySource=
+```
+
+## testConfig file
+
+**testConfig file** is json file that can be placed anywhere in the project and can have an arbitrary name. This file
+should be designated in test setup procedure by the testrun file.
+
+**testrun file**
+
+```properties
+## OS --------------------
+os=android
+## Config --------------------
+## [Android]
+android.configFile=testConfig/android/androidSettings/androidSettingsConfig.json
+android.profile=Android 12
+```
+
+In **testConfig** file, you can set test **profiles** for test devices and `desired capabilities` of appium.
+
+```
+{
+  "testConfigName": "androidSettingsConfig",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "capabilities": {
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    "platformVersion": "12",
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Pixel 3a API 31(Android 12)",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_"
+      }
+    }
+  ]
+
+}
+```
+
+## Priority
+
+testConfig file > testrun.properties > testrun.global.properties
+
+### Link
+
+- [index](../../index.md)

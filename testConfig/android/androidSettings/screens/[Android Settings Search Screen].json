@@ -1,0 +1,14 @@
+{
+  "key": "[Android Settings Search Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[Search Box]",
+
+  "selectors": {
+    "[<-]": "@Back",
+    "[Search Box]": "#open_search_view_edit_text",
+    "[X]": "@Clear text"
+  }
+}

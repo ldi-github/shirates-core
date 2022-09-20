@@ -1,0 +1,17 @@
+{
+  "key": "[iOS Search Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[SpotlightSearchField]",
+
+  "selectors": {
+    "[SpotlightSearchField]": "#SpotlightSearchField",
+    "[Cancel]": "",
+
+    "[Siri Suggestions]": ""
+
+  }
+
+}

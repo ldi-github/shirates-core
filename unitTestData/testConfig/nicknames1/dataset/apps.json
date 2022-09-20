@@ -1,0 +1,8 @@
+{
+  "[Chrome]": {
+    "packageOrBundleId": "com.android.chrome"
+  },
+  "[Maps]": {
+    "packageOrBundleId": "com.google.android.apps.maps"
+  }
+}

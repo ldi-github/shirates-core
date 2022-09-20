@@ -1,0 +1,23 @@
+{
+  "[Settings]": {
+    "packageOrBundleId": "com.android.settings"
+  },
+  "[Calculator]": {
+    "packageOrBundleId": "com.google.android.calculator"
+  },
+  "[Chrome]": {
+    "packageOrBundleId": "com.android.chrome"
+  },
+  "[Maps]": {
+    "packageOrBundleId": "com.google.android.apps.maps"
+  },
+  "[Play Store]": {
+    "packageOrBundleId": "com.android.vending"
+  },
+  "[Clock]": {
+    "packageOrBundleId": "com.google.android.deskclock"
+  },
+  "[App1]": {
+    "packageOrBundleId": "com.example.app1"
+  }
+}

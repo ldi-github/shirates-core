@@ -1,0 +1,12 @@
+{
+  "testConfigName": "testConfigSection3",
+
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    }
+  ]
+}

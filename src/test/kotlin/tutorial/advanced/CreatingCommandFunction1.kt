@@ -1,0 +1,80 @@
+package tutorial.advanced
+
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.*
+import shirates.core.driver.commandextension.*
+import shirates.core.testcode.UITest
+
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class CreatingCommandFunction1 : UITest() {
+
+    @Test
+    @Order(10)
+    fun scrollToTopAndTapWithScrollDown() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.flickAndGoDown()
+                        .dontExist("[Accessibility]")
+                }.action {
+                    it.scrollToTop()
+                        .tapWithScrollDown("[Accessibility]")
+                }.expectation {
+                    it.screenIs("[Accessibility Screen]")
+                }
+            }
+        }
+    }
+
+    private fun TestDrive?.tapWithScrollDownFromTop(
+        expression: String,
+        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        scrollMaxCount: Int = testContext.scrollMaxCount,
+        holdSeconds: Double = testContext.tapHoldSeconds,
+        tapMethod: TapMethod = TapMethod.auto
+    ): TestElement {
+
+        val testElement = getTestElement()
+
+        val command = "tapWithScrollDownFromTop"
+        val sel = getSelector(expression = expression)
+        val message = "Scroll to top and tap $sel with scrolling down"
+        val context = TestDriverCommandContext(testElement)
+        context.execOperateCommand(command = command, message = message) {
+            scrollToTop()
+            tapWithScrollDown(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                holdSeconds = holdSeconds,
+                tapMethod = tapMethod
+            )
+        }
+
+        return lastElement
+    }
+
+    @Test
+    @Order(20)
+    fun tapWithScrollDownFromTop() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.flickAndGoDown()
+                        .dontExist("[Accessibility]")
+                }.action {
+                    it.tapWithScrollDownFromTop("[Accessibility]")
+                }.expectation {
+                    it.screenIs("[Accessibility Screen]")
+                }
+            }
+        }
+    }
+
+}

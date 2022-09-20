@@ -1,0 +1,86 @@
+{
+  "key": "[Sample Screen]",
+
+  "identity": "[Network & internet][Connected devices]",
+
+  "selectors": {
+
+    "[Search Button]": "#search_action_bar:next",
+    "[Search Settings]": "[Search Button]:next()",
+
+    "[Network & internet Icon]": "[Network & internet]:previous()",
+    "[Network & internet]": "",
+    "[Network & internet Description]": "[Network & internet]:next()",
+
+    "[Connected devices Icon]": "[Connected devices]:previous()",
+    "[Connected devices]": "",
+    "[Connected devices Description]": "[Connected devices]:next()",
+
+    "[Apps & notifications Icon]": "[Apps & notifications]:previous()",
+    "[Apps & notifications]": "",
+    "[Apps & notifications Description]": "[Apps & notifications]:next()",
+
+    "[Battery Icon]": "[Battery]:previous()",
+    "[Battery]": "",
+    "[Battery Description]": "[Battery]:next()",
+
+    "[Display Icon]": "[Display]:previous()",
+    "[Display]": "",
+    "[Display Description]": "[Display]:next()",
+
+    "[Sound Icon]": "[Sound]:previous()",
+    "[Sound]": "",
+    "[Sound Description]": "[Sound]:next()",
+
+    "[Storage Icon]": "[Storage]:previous()",
+    "[Storage]": "",
+    "[Storage Description]": "[Storage]:next()",
+
+    "[Privacy Icon]": "[Privacy]:previous()",
+    "[Privacy]": "",
+    "[Privacy Description]": "[Privacy]:next()",
+
+    "[Location Icon]": "[Location]:previous()",
+    "[Location]": "",
+    "[Location Description]": "[Location]:next()",
+
+    "[Security Icon]": "[Security]:previous()",
+    "[Security]": "",
+    "[Security Description]": "[Security]:next()",
+
+    "[Accounts Icon]": "[Accounts]:previous()",
+    "[Accounts]": "",
+    "[Accounts Description]": "[Accounts]:next()",
+
+    "[Accessibility Icon]": "[Accessibility]:previous()",
+    "[Accessibility]": "",
+    "[Accessibility Description]": "[Accessibility]:next()",
+
+    "[Google Icon]": "[Google]:previous()",
+    "[Google]": "",
+    "[Google Description]": "[Google]:next()",
+
+    "[System Icon]": "[System]:previous()",
+    "[System]": "",
+    "[System Description]": "[System]:next()",
+
+    "[About phone Icon]": "[About phone]:previous()",
+    "[About phone]": "",
+    "[About phone Description]": "[About phone]:next()",
+
+    "[About emulated device Icon]": "[About emulated device]:previous()",
+    "[About emulated device]": "",
+    "[About emulated device Description]": "[About emulated device]:next()",
+
+    "[Tips & support Icon]": "[Tips & support]:previous()",
+    "[Tips & support]": "",
+    "[Tips & support Description]": "[Tips & support]:next()",
+
+    "[About phone (About emulated device)]": "About phone||About emulated device"
+  },
+
+  "scroll": {
+    "start-elements": "",
+    "end-elements": ""
+  }
+}

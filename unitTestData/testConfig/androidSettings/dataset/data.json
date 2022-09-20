@@ -1,0 +1,11 @@
+{
+  "[dataset1]": {
+    "attribute1-1": "value1-1",
+    "attribute1-2": "value1-2"
+  },
+
+  "[dataset2]": {
+    "attribute2-1": "value2-1",
+    "attribute2-2": "value2-2"
+  }
+}

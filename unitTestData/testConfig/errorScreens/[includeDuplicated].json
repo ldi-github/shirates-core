@@ -1,0 +1,16 @@
+{
+  "key": "[includeDuplicated]",
+
+  "include": [
+    "[Common Footer]",
+    "[Common Footer]"
+  ],
+
+  "selectors": {
+
+    "[Button A]": "id=idA",
+    "[TextBox A]": "xpath=xpathA",
+    "[Label A]": "text=textA"
+  }
+
+}

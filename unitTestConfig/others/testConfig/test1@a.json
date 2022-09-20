@@ -1,0 +1,74 @@
+{
+  "testConfigName": "test1@a",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "settings": {
+    "always_finish_activities": "0"
+  },
+
+  "capabilities": {
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    "platformVersion": "12",
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Android 11",
+      "capabilities": {
+        "platformVersion": "11"
+      }
+    },
+    {
+      "profileName": "Pixel 3a API 31(Android 12)",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_"
+      }
+    },
+    {
+      "profileName": "Android/googlePixel",
+      "tapAppIconMethod": "googlePixel",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Android/swipeLeftInHome",
+      "tapAppIconMethod": "swipeLeftInHome",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Android/undefined",
+      "tapAppIconMethod": "undefined",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Android/TapAppIconMacro1",
+      "tapAppIconMacro": "[TapAppIconMacro1]",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "SpecialTagTest1",
+      "specialTags": "Device1, Device2",
+      "capabilities": {
+      }
+    }
+
+  ]
+
+}

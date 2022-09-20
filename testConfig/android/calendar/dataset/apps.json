@@ -1,0 +1,17 @@
+{
+  "[Calculator]": {
+    "packageOrBundleId": "com.google.android.calculator"
+  },
+  "[Calendar]": {
+    "packageOrBundleId": "com.google.android.calendar"
+  },
+  "[Chrome]": {
+    "packageOrBundleId": "com.android.chrome"
+  },
+  "[Maps]": {
+    "packageOrBundleId": "com.google.android.apps.maps"
+  },
+  "[Clock]": {
+    "packageOrBundleId": "com.google.android.deskclock"
+  }
+}

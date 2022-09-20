@@ -1,0 +1,15 @@
+{
+  "key": "[Play Store Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[For you][Top charts]",
+
+  "selectors": {
+    "[For you]": "",
+    "[Top charts]": "",
+    "[New]": ""
+  }
+
+}

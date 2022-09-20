@@ -1,0 +1,14 @@
+{
+  "key": "[Tips Screen]",
+
+  "identity": "[Disclaimer Text][Got it]",
+
+  "selectors": {
+
+    "[Header]": "#header",
+    "[Body Text]": "#body_text_center",
+    "[Disclaimer Text]": "#disclaimer_text",
+    "[Got it]": ""
+  }
+
+}

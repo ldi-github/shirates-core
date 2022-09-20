@@ -1,0 +1,39 @@
+{
+  "key": "[Internet Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Internet",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[Fix connectivity]": "@Fix connectivity",
+    "[Internet]": "@Internet",
+
+    "{Carrier}": "[Internet]:label",
+    "{Network Type}": "{Carrier}:label",
+
+    "[Wi-Fi]": "",
+    "{Wi-Fi}": "[Wi-Fi]:label",
+    "[Wi-Fi Switch]": "[Wi-Fi]:switch",
+
+    "[Network Name]": "{Wi-Fi}:label",
+    "{Network Status}": "[Network Name]:label",
+
+    "[Searching for networks…]": "",
+
+    "[Add network]": "",
+    "[Scan QR code]": "#Scan QR code",
+
+    "[Network preferences]": "",
+    "[Connect to public networks]": "",
+
+    "[Saved networks]": "",
+    "{Saved networks}": "[Saved networks]:label",
+
+    "[Non-carrier data usage]": "",
+    "{Non-carrier data usage}": "[Non-carrier data usage]:label"
+  }
+
+}

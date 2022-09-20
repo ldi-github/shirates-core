@@ -1,0 +1,12 @@
+{
+  "key": "[screen-base]",
+
+  "include": [
+  ],
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[More options]": "@More options"
+
+  }
+}

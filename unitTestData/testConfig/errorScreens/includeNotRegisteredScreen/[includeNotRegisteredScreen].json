@@ -1,0 +1,7 @@
+{
+  "key": "[includeNotRegisteredScreen]",
+
+  "include": [
+    "[not.registered.screen]"
+  ]
+}

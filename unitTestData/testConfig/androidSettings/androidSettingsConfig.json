@@ -1,0 +1,102 @@
+{
+  "testConfigName": "androidSettingsConfig",
+
+  "appIconName": "Settings",
+
+  "#appiumPath": "/usr/local/bin/appium",
+
+  "autoScreenshot": "true",
+  "onCondition": "false",
+  "onAction": "true",
+  "onExpectation": "true",
+
+  "#appiumServerUrl": "http://127.0.0.1:4720/",
+
+  "shortWaitSeconds": "2.0",
+
+  "#waitSecondsOnIsScreen": "",
+
+  "#retryMaxCount": "",
+
+  "#testResults": "",
+
+  "#package or bundleId": "",
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "capabilities": {
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    "platformVersion": "12",
+    "language": "en",
+    "locale": "US"
+  },
+
+  "settings": {
+    "always_finish_activities": "1"
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android *",
+      "capabilities": {
+        "platformVersion": "*"
+      }
+    },
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+    {
+      "profileName": "Pixel 3a API 31(Android 12)",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_"
+      }
+    },
+    {
+      "profileName": "Android 11",
+      "capabilities": {
+        "platformVersion": "11"
+      }
+    },
+
+
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-01",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-01",
+        "platformVersion": "12",
+        "systemPort": "8201"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-02",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-02",
+        "platformVersion": "12",
+        "systemPort": "8202"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-03",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-03",
+        "platformVersion": "12",
+        "systemPort": "8203"
+      }
+    },
+    {
+      "profileName": "Pixel_3a_API_31_Android_12_-04",
+      "capabilities": {
+        "avd": "Pixel_3a_API_31_Android_12_-04",
+        "platformVersion": "12",
+        "systemPort": "8204"
+      }
+    }
+  ]
+
+}

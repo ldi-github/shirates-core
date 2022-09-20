@@ -1,0 +1,15 @@
+{
+  "key": "[Apple Maps Top Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[Application][Search Maps]",
+
+  "selectors": {
+    "[Application]": ".XCUIElementTypeApplication&&Maps",
+    "[Search Maps]": ".XCUIElementTypeSearchField&&Search Maps"
+  }
+
+
+}
