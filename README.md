@@ -29,8 +29,8 @@
 
 ## What and why Shirates?
 
-- The prototype of this framework was named SHIRATAMA Test Framework. We call open source version Shirates.
-- SHIRATAMA is Japanese sweets [Shiratama dango], and it looks like “O” (initial letter of OK)
+- The original of this framework was named **SHIRATAMA Test Framework**. We call this open source version **Shirates**.
+- SHIRATAMA is from Japanese sweets [Shiratama dango], and it looks like “O” (initial letter of OK)
 
 ## Test code development environment
 

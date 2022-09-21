@@ -1,7 +1,7 @@
 package shirates.spec.code.entity
 
-import shirates.spec.code.custom.DefaultTranslator
 import shirates.core.customobject.CustomFunctionRepository
+import shirates.spec.code.custom.DefaultTranslator
 
 class Case(
     var scenario: Scenario,
@@ -36,10 +36,10 @@ class Case(
      */
     fun createTarget(target: String): Target {
 
-        val target = shirates.spec.code.entity.Target(case = this, target = target)
-        targets.add(target)
+        val t = shirates.spec.code.entity.Target(case = this, target = target)
+        targets.add(t)
 
-        return target
+        return t
     }
 
     /**

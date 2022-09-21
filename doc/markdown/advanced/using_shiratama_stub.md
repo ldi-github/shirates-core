@@ -15,7 +15,7 @@ dinamically using management APIs.
 
 ## Setting up shirates-stub
 
-See [shirates-stub](https://xxxxxxxxxx ).
+See [shirates-stub](https://github.com/ldi-github/shirates-stub.git).
 
 ## Starting shirates-stub
 
