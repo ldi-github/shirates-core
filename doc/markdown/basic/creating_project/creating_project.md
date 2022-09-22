@@ -1,5 +1,10 @@
 # Creating project
 
+## Preparation
+
+Currently only local publishing is available (preparing now).
+Setup [Local Publishing](../../advanced/local_publishing.md).
+
 ## Create new project
 
 1. Open IntelliJ IDEA, select `File > New > Project`.
@@ -21,11 +26,11 @@
 
 Append some lines to the file.
 
-### build.gradle.kts (after all)
+### build.gradle.kts (after edit)
 
-![](../_images/build_gradle_kts_after_all.png)
+[//]: # (![]&#40;../_images/build_gradle_kts_after_all.png&#41;)
 
-**build.gradle.kts (after all)**
+[//]: # (**build.gradle.kts &#40;after edit&#41;**)
 
 ```kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -37,13 +42,13 @@ plugins {
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val shiratesCoreVersion = "0.8.0-SNAPSHOT"
+val shiratesCoreVersion = "0.9.0-SNAPSHOT"
 val appiumClientVersion = "8.1.0"
 val userHome = System.getProperty("user.home")
 
 repositories {
     mavenCentral()
-    maven(url = "file:/$userHome/dev/shirates-core/build/repository")
+    maven(url = "file:/$userHome/github/ldi-github/shirates-core/build/repository")
 }
 
 dependencies {
@@ -60,6 +65,12 @@ dependencies {
     // shirates-core
     implementation("shirates:shirates-core:$shiratesCoreVersion")
     testImplementation("shirates:shirates-core:$shiratesCoreVersion")
+
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation("org.apache.logging.log4j:log4j-core:2.18.0")
+
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
+    testImplementation("org.slf4j:slf4j-nop:1.7.36")
 }
 
 tasks.test {

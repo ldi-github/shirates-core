@@ -3,6 +3,7 @@
 ## Overview
 
 - [README](../../README.md)
+- [Environments](environments.md)
 - [Quick start](quick-start.md)
 
 ## Tutorial(Basic)

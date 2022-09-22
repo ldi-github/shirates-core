@@ -139,34 +139,23 @@ buildConfig {
  * publishing
  */
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ldi-github/shirates-core")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("SHIRATES_CORE_GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("SHIRATES_CORE_GITHUB_TOKEN")
+            }
+        }
+    }
     publications {
-        create<MavenPublication>("maven") {
+        register<MavenPublication>("gpr") {
             from(components["kotlin"])
-            artifact(tasks["sourcesJar"])
+//            artifact(tasks["sourcesJar"])
             groupId = "${project.group}"
             artifactId = project.name
             version = "${project.version}"
-        }
-    }
-
-    repositories {
-        maven {
-            url = uri("$buildDir/repository")
-        }
-
-        val jobToken = System.getenv("CI_JOB_TOKEN")
-        if (jobToken.isNullOrBlank().not()) {
-            maven {
-                url = uri("https://git.mgr.ldi.co.jp/api/v4/projects/514/packages/maven")
-                name = "GitLab"
-                credentials(HttpHeaderCredentials::class) {
-                    name = "Job-Token"
-                    value = jobToken
-                }
-                authentication {
-                    create<HttpHeaderAuthentication>("header")
-                }
-            }
         }
     }
 }

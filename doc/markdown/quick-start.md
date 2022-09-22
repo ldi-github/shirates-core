@@ -153,9 +153,11 @@ If you have already installed the driver, uninstall it and install it again.
 ```
 appium driver list
 appium driver uninstall uiautomator2
-appium driver install uiautomator2
+appium driver install uiautomator2@2.4.6
 appium driver list
 ```
+
+See [Tested Environments](environments.md) to get tested version.
 
 <br>
 
@@ -173,9 +175,11 @@ If you have already installed the driver, uninstall it and install it again.
 ```
 appium driver list
 appium driver uninstall xcuitest
-appium driver install xcuitest
+appium driver install xcuitest@4.11.1
 appium driver list
 ```
+
+See [Tested Environments](environments.md) to get tested version.
 
 <br>
 
