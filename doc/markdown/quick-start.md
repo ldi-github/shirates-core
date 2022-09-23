@@ -117,14 +117,14 @@ appium -v
 #### Example
 
 ```
-wave1008@SNB-M1 Downloads % appium -v
+wave1008@SNB-M1 ~ % appium -v
 2.0.0-beta.33
-wave1008@SNB-M1 Downloads % npm uninstall -g appium
+wave1008@SNB-M1 ~ % npm uninstall -g appium
 
 removed 437 packages, and audited 1 package in 816ms
 
 found 0 vulnerabilities
-wave1008@SNB-M1 Downloads % npm install -g appium@next
+wave1008@SNB-M1 ~ % npm install -g appium@next
 
 added 426 packages, and audited 427 packages in 16s
 
@@ -132,9 +132,9 @@ added 426 packages, and audited 427 packages in 16s
   run `npm fund` for details
 
 found 0 vulnerabilities
-wave1008@SNB-M1 Downloads % appium -v                 
+wave1008@SNB-M1 ~ % appium -v                 
 2.0.0-beta.35
-wave1008@SNB-M1 Downloads % 
+wave1008@SNB-M1 ~ % 
 ```
 
 <br>
@@ -194,7 +194,7 @@ export ANDROID_SDK_ROOT=/Users/$USER/Library/Android/sdk
 export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
 ```
 
-**note:** Execute log out/log in to take effect above settings.
+**Note:** Execute log out/log in to take effect above settings.
 
 ### Setting Environment Variables (Windows only)
 

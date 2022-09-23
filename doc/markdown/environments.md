@@ -10,3 +10,5 @@
 - xcuitest@4.11.1
 - Android Emulator Pixel 3a(Android 12)
 - iOS Simulator iPhone 13(15.5)
+- Xcode 13.4.1
+

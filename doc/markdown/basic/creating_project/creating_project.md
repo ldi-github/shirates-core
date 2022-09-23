@@ -2,7 +2,7 @@
 
 ## Preparation
 
-Currently only local publishing is available (preparing now).
+Now preparing remote repository. Currently local publishing is available.
 Setup [Local Publishing](../../advanced/local_publishing.md).
 
 ## Create new project

@@ -141,6 +141,10 @@ buildConfig {
 publishing {
     repositories {
         maven {
+            name = "local"
+            url = uri("$buildDir/repository")
+        }
+        maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/ldi-github/shirates-core")
             credentials {
@@ -150,14 +154,53 @@ publishing {
         }
     }
     publications {
+        create<MavenPublication>("binaryAndSources") {
+            from(components["kotlin"])
+            artifact(tasks["sourcesJar"])
+            groupId = "${project.group}"
+            artifactId = project.name
+            version = "${project.version}"
+        }
+
         register<MavenPublication>("gpr") {
             from(components["kotlin"])
-//            artifact(tasks["sourcesJar"])
+            artifact(tasks["sourcesJar"])
             groupId = "${project.group}"
             artifactId = project.name
             version = "${project.version}"
         }
     }
+}
+
+tasks.withType<PublishToMavenRepository>().configureEach {
+    onlyIf {
+        val r =
+            (repository == publishing.repositories["local"] && publication == publishing.publications["binaryAndSources"]) ||
+                    (repository == publishing.repositories["GitHubPackages"] && publication == publishing.publications["gpr"])
+        r
+    }
+}
+tasks.withType<PublishToMavenLocal>().configureEach {
+    onlyIf {
+        val r = publication == publishing.publications["binaryAndSources"]
+        r
+    }
+}
+
+tasks.register("publishToLocalRepository") {
+    group = "publishing"
+    description = "Publishes to local"
+    dependsOn(tasks.withType<PublishToMavenRepository>().matching {
+        it.repository == publishing.repositories["local"]
+    })
+}
+
+tasks.register("publishToExternalRepository") {
+    group = "publishing"
+    description = "Publishes to external repository"
+    dependsOn(tasks.withType<PublishToMavenRepository>().matching {
+        it.repository == publishing.repositories["GitHubPackages"]
+    })
 }
 
 /**
