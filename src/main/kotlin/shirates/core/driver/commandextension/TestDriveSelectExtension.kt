@@ -63,12 +63,12 @@ fun TestDrive?.select(
             throwsException = throwsException,
             syncCache = syncCache
         )
-        e.selector = sel
     }
     if (func != null) {
         e.func()
     }
 
+    e.selector = sel
     lastElement = e
     return lastElement
 }

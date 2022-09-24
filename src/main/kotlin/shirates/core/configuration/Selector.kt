@@ -566,8 +566,7 @@ class Selector(
 
         val nameAndValues = selectorPart.split("&&")
         for (nameAndValue in nameAndValues.filter { it.isNotBlank() }) {
-            val filter =
-                shirates.core.configuration.Filter(filterExpression = nameAndValue, parseNumberAsPos = parseNumberAsPos)
+            val filter = Filter(filterExpression = nameAndValue, parseNumberAsPos = parseNumberAsPos)
             filterMap[filter.name] = filter
         }
     }
@@ -618,6 +617,9 @@ class Selector(
      */
     override fun toString(): String {
 
+        if (TestMode.isNoLoadRun) {
+            return expression!!
+        }
         val result = getElementFriendlyExpression()
         return result
     }

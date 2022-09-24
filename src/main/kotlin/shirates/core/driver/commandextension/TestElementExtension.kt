@@ -299,7 +299,7 @@ fun TestElement.cropImage(
 ): TestElement {
 
     val subject = this.selector?.nickname ?: this.selector?.originalExpression ?: this.subject
-    if (this.isEmpty) {
+    if (TestMode.isNoLoadRun.not() && this.isEmpty) {
         TestLog.operate(message = subject, scriptCommand = command, subject = subject, log = true)
         return this
     }
