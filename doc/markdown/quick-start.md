@@ -104,6 +104,8 @@ appium -v
 
 **Note:** Appium 2.0 is going to release. "@next" is required to install 2.0
 
+See [Tested Environments](environments.md) to get tested version.
+
 <br>
 If you have already installed appium, uninstall it and install it again.
 
@@ -144,7 +146,7 @@ wave1008@SNB-M1 ~ %
 Install UIAutomator2 driver.
 
 ```
-appium driver install uiautomator2
+appium driver install uiautomator2@2.4.6
 ```
 
 <br>
