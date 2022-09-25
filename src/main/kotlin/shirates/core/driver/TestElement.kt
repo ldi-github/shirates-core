@@ -638,7 +638,7 @@ data class TestElement(
         val command = "click"
         val message = message(id = command, subject = subject)
         val context = TestDriverCommandContext(this)
-        var e = TestElement()
+        var e = TestElement(selector = selector)
         context.execOperateCommand(command = command, message = message, subject = subject) {
             try {
                 getWebElement().click()

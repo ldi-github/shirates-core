@@ -49,8 +49,8 @@ fun TestDrive?.select(
     val testElement = getTestElement()
 
     val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
         val scroll = CodeExecutionContext.withScrollDirection != null
         val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
@@ -67,8 +67,10 @@ fun TestDrive?.select(
     if (func != null) {
         e.func()
     }
+    if (TestMode.isNoLoadRun) {
+        e.selector = sel
+    }
 
-    e.selector = sel
     lastElement = e
     return lastElement
 }
@@ -89,7 +91,7 @@ fun TestDrive?.selectWithScrollDown(
 
     val selector = getSelector(expression = expression)
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
+    var e = TestElement(selector = selector)
     context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
         e = TestDriver.selectWithScroll(
             selector = selector,
@@ -122,8 +124,8 @@ fun TestDrive?.selectWithScrollUp(
     val testElement = getTestElement()
 
     val selector = getSelector(expression = expression)
+    var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
         e = TestDriver.selectWithScroll(
             selector = selector,
@@ -156,8 +158,8 @@ fun TestDrive?.selectWithScrollRight(
     val testElement = getTestElement()
 
     val selector = getSelector(expression = expression)
+    var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
         e = TestDriver.selectWithScroll(
             selector = selector,
@@ -190,8 +192,8 @@ fun TestDrive?.selectWithScrollLeft(
     val testElement = getTestElement()
 
     val selector = getSelector(expression = expression)
+    var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
         e = TestDriver.selectWithScroll(
             selector = selector,
@@ -221,8 +223,8 @@ fun TestDrive?.selectInScanResults(
     val testElement = getTestElement()
 
     val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
 
         for (scanRoot in TestElementCache.scanResults) {

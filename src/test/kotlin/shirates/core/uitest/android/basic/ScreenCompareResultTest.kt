@@ -113,7 +113,7 @@ class ScreenCompareResultTest : UITest() {
                     ifScreenIsNot {
                         NG("Never called")
                     }.ifElse {
-                        OK("Called")
+                        OK("called")
                     }
                 }
             }

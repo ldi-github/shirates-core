@@ -1,64 +1,130 @@
 package shirates.core.uitest.android.basic
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.thisIs
-import shirates.core.driver.commandextension.thisIsEmpty
+import shirates.core.driver.commandextension.describe
+import shirates.core.driver.commandextension.macro
+import shirates.core.driver.commandextension.select
 import shirates.core.driver.function.clearClipboard
 import shirates.core.driver.function.readClipboard
 import shirates.core.driver.function.writeClipboard
 import shirates.core.storage.Clipboard
 import shirates.core.storage.account
 import shirates.core.storage.app
+import shirates.core.storage.data
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.UITest
 
-@NoLoadRun
-@Testrun("testConfig/android/androidSettings/testrun.properties")
+@Testrun("testConfig/android/clock/testrun.properties")
 class NoLoadRunTest : UITest() {
 
+    @NoLoadRun
     @Test
     @Order(10)
-    fun noLoadRun() {
+    fun clipboard() {
 
         scenario {
             case(1) {
                 condition {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.macro("[Alarm Screen]")
                 }.action {
-                    Clipboard.write("clipboard")
+                    describe("Write 'clipboard' to clipboard ")
+                    Clipboard.write("clipboard1")
                 }.expectation {
-                    val text = Clipboard.read()
-                    text.thisIs("clipboard")
+                    describe("Read 'clipboard1' from clipboard")
+                    assertThat(Clipboard.read()).isEqualTo("clipboard1")
                 }
             }
             case(2) {
                 action {
                     writeClipboard("hoge")
                 }.expectation {
-                    val text = readClipboard()
-                    text.thisIs("hoge")
+                    assertThat(readClipboard()).isEqualTo("hoge")
                 }
             }
             case(3) {
                 action {
                     clearClipboard()
                 }.expectation {
-                    readClipboard().thisIsEmpty()
+                    assertThat(readClipboard()).isEmpty()
                 }
             }
-            case(4) {
-                action {
-                    app("[long].key")
-                    app("[long]", "key")
+        }
+    }
+
+    @NoLoadRun
+    @Test
+    @Order(20)
+    fun dataFunctions() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Alarm Screen]")
+                }.expectation {
+                    assertThat(app("[app1].key")).isEqualTo("[app1].key")
+                    assertThat(app("[app1]", "key")).isEqualTo("[app1].key")
+                    assertThat(account("[account1].key")).isEqualTo("[account1].key")
+                    assertThat(account("[account1]", "key")).isEqualTo("[account1].key")
+                    assertThat(data("[data1].key")).isEqualTo("[data1].key")
+                    assertThat(data("[data1]", "key")).isEqualTo("[data1].key")
                 }
             }
-            case(5) {
-                action {
-                    account("[account1].key")
-                    account("[account1]", "key")
+        }
+    }
+
+    private fun assertSelector() {
+
+//        run {
+//            val sel = it.select("[8:30 AM][:Expand alarm]").selector
+//            assertThat(sel.toString()).isEqualTo("[:Expand alarm]")
+//        }
+
+        assertThat(
+            it.select("[8:30 AM]").selector.toString()
+        ).isEqualTo("[8:30 AM]")
+        assertThat(
+            it.select("[8:30 AM]:flow").selector.toString()
+        ).isEqualTo("[8:30 AM]:flow")
+//        assertThat(
+//            it.select("[8:30 AM]:flow").flow(1).selector.toString()
+//        ).isEqualTo("[8:30 AM]:flow(2)")
+//        assertThat(
+//            it.select("[8:30 AM]").below(1).select(":below(1)").selector.toString()
+//        ).isEqualTo("[8:30 AM]:below(2)")
+        assertThat(
+            it.select("[8:30 AM]").select("[:Expand alarm]").selector.toString()
+        ).isEqualTo("[:Expand alarm]")
+    }
+
+    @Test
+    @Order(30)
+    fun select() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Alarm Screen]")
+                }.expectation {
+                    assertSelector()
+                }
+            }
+        }
+    }
+
+    @NoLoadRun
+    @Test
+    @Order(40)
+    fun select_noLoadRun() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Alarm Screen]")
+                }.expectation {
+                    assertSelector()
                 }
             }
         }

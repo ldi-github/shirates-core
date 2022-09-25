@@ -291,16 +291,17 @@ fun TestElement.getUniqueXpath(): String {
  * cropImage
  */
 fun TestElement.cropImage(
-    command: String = "cropImage",
-    save: Boolean = true,
     fileName: String? = null,
+    save: Boolean = true,
     refresh: Boolean = false,
     trim: String? = null
 ): TestElement {
 
+    val command = "cropImage"
     val subject = this.selector?.nickname ?: this.selector?.originalExpression ?: this.subject
+    val message = message(id = command, file = fileName)
     if (TestMode.isNoLoadRun.not() && this.isEmpty) {
-        TestLog.operate(message = subject, scriptCommand = command, subject = subject, log = true)
+        TestLog.operate(message = message, scriptCommand = command, subject = subject, log = true)
         return this
     }
 
@@ -324,7 +325,7 @@ fun TestElement.cropImage(
     context.execOperateCommand(
         command = command,
         scriptCommand = command,
-        message = subject,
+        message = message,
         subject = subject,
         arg1 = trimCondition,
         fileName = croppedImageFile,
@@ -377,7 +378,7 @@ fun TestElement.capture(
         )
     }
 
-    TestDriver.lastElement.cropImage(command = "capture")
+    TestDriver.lastElement.cropImage()
 
     return TestDriver.lastElement
 }

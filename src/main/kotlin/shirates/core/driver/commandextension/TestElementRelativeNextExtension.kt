@@ -12,8 +12,8 @@ internal fun TestElement.next(
     targetElements: List<TestElement>
 ): TestElement {
 
-    val context = TestDriverCommandContext(this)
     var e = TestElement()
+    val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
 
         if (selector.pos != null && selector.pos!! < 0) {
@@ -67,8 +67,8 @@ internal fun TestElement.previous(
     targetElements: List<TestElement>
 ): TestElement {
 
-    val context = TestDriverCommandContext(this)
     var e = TestElement()
+    val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         if (selector.pos != null && selector.pos!! < 0) {
             /**
@@ -159,7 +159,7 @@ internal fun TestElement.execRelativeCommand(
     val newSelector = this.getChainedSelector(relativeSelector = relativeSelector)
 
     val context = TestDriverCommandContext(this)
-    var e = TestElement()
+    var e = TestElement(selector = newSelector)
     context.execRelativeCommand(subject = subject, arg1 = relativeSelector.nickname) {
 
         e = getElement()

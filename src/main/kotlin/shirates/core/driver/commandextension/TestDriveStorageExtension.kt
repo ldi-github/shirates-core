@@ -1,9 +1,6 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.driver.TestDrive
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
-import shirates.core.driver.getTestElement
+import shirates.core.driver.*
 import shirates.core.logging.Message.message
 import shirates.core.storage.Clipboard
 import shirates.core.storage.Memo
@@ -48,6 +45,9 @@ fun TestDrive?.writeMemo(key: String, text: String): TestElement {
     ) {
         Memo.write(key = key, text = text)
     }
+    if (TestMode.isNoLoadRun) {
+        Memo.write(key = key, text = text)
+    }
 
     return testElement
 }
@@ -60,9 +60,13 @@ fun TestDrive?.readMemo(key: String): String {
     val testElement = getTestElement()
 
     val command = "readMemo"
-    val message = message(id = command, key = key)
+    val value = Memo.read(key = key)
+    val message = message(id = command, key = key, value = value)
 
     var result = ""
+    if (TestMode.isNoLoadRun) {
+        result = Memo.read(key = key)
+    }
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(
         command = command,

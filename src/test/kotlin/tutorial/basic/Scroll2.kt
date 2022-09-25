@@ -65,14 +65,14 @@ class Scroll2 : UITest() {
                 }.action {
                     it.scrollToRightEdge(repeat = 1, edgeSelector = "@$endDayLabel")
                 }.expectation {
-                    it.accessIs(endDayLabel)
+                    it.exist("@$endDayLabel")
                 }
             }
             case(2) {
                 action {
                     it.scrollToLeftEdge(repeat = 1, edgeSelector = "@$startDayLabel")
                 }.expectation {
-                    it.accessIs(startDayLabel)
+                    it.exist("@$startDayLabel")
                 }
             }
         }

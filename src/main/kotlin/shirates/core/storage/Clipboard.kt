@@ -1,25 +1,28 @@
 package shirates.core.storage
 
 import shirates.core.driver.TestDriver
-import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isNoLoadRun
+import shirates.core.driver.TestMode.isiOS
 
 object Clipboard {
+
+    internal var clipboardTextForNoLoadRun = ""
 
     /**
      * read
      */
     fun read(): String {
 
-        if (TestMode.isNoLoadRun) {
-            return ""
-        }
-
-        if (isAndroid) {
+        if (isNoLoadRun) {
+            return clipboardTextForNoLoadRun
+        } else if (isAndroid) {
             return TestDriver.androidDriver.clipboardText
-        } else {
+        } else if (isiOS) {
             return TestDriver.iosDriver.clipboardText
         }
+
+        return clipboardTextForNoLoadRun
     }
 
     /**
@@ -27,14 +30,14 @@ object Clipboard {
      */
     fun write(text: String) {
 
-        if (TestMode.isNoLoadRun) {
-            return
-        }
-
-        if (isAndroid) {
+        if (isNoLoadRun) {
+            clipboardTextForNoLoadRun = text
+        } else if (isAndroid) {
             TestDriver.androidDriver.clipboardText = text
-        } else {
+        } else if (isiOS) {
             TestDriver.iosDriver.clipboardText = text
+        } else {
+            clipboardTextForNoLoadRun = text
         }
     }
 }

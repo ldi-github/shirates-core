@@ -41,7 +41,7 @@ internal fun TestElement.relative(
     val targetElements = scopeElements
 
     val context = TestDriverCommandContext(this)
-    var e = TestElement()
+    var e = TestElement(selector = newSelector)
     context.execRelativeCommand("${this.subject}:${relativeSelector}", subject = this.subject) {
 
         when (relativeSelector.command) {
@@ -342,8 +342,8 @@ internal fun TestElement.child(
     selector: Selector
 ): TestElement {
 
+    var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(this)
-    var e = TestElement()
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val te = this
         val children = te.children
@@ -385,8 +385,8 @@ internal fun TestElement.sibling(
     selector: Selector
 ): TestElement {
 
+    var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(this)
-    var e = TestElement()
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val te = this
         val p = te.parentElement
@@ -430,8 +430,8 @@ fun TestElement.sibling(
  */
 fun TestElement.parent(): TestElement {
 
-    val context = TestDriverCommandContext(this)
     var e = TestElement()
+    val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject) {
         val filtered = this.ancestors.reversed()
         e = filtered.firstOrNull() ?: TestElement.emptyElement
@@ -448,8 +448,8 @@ internal fun TestElement.ancestor(
     selector: Selector
 ): TestElement {
 
-    val context = TestDriverCommandContext(this)
     var e = TestElement()
+    val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val filtered = this.ancestors.reversed().filterBySelector(selector = selector, throwsException = false)
         e = filtered.firstOrNull() ?: TestElement.emptyElement
@@ -485,8 +485,8 @@ internal fun TestElement.descendant(
     selector: Selector
 ): TestElement {
 
-    val context = TestDriverCommandContext(this)
     var e = TestElement()
+    val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val filtered = this.descendants.filterBySelector(selector = selector, throwsException = false)
         e = filtered.firstOrNull() ?: TestElement.emptyElement

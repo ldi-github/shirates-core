@@ -23,7 +23,8 @@ fun Any?.thisIsEmpty(
 ): Any? {
 
     val command = "thisIsEmpty"
-    val assertMessage = message ?: message(id = command, subject = this.toString())
+    val subject = if (this is TestElement) this.subject else this.toString()
+    val assertMessage = message ?: message(id = command, subject = subject)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {

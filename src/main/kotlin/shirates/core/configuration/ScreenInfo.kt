@@ -348,23 +348,20 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
         expression: String?
     ): Selector {
 
-        if (TestMode.isNoLoadRun) {
-            val sel = Selector(expression)
-            return sel
-        }
-
         if (expression != null && expression.isValidNickname()) {
             val nickname = expression
             if (selectors.containsKey(nickname)) {
                 val sel = selectors[nickname]!!
                 return sel
             } else {
-                throw TestConfigException(
-                    message(
-                        id = "selectorIsNotRegisteredInScreenFile", subject = nickname,
-                        arg1 = TestDriver.currentScreen, file = this.screenFile
+                if (TestMode.isNoLoadRun.not()) {
+                    throw TestConfigException(
+                        message(
+                            id = "selectorIsNotRegisteredInScreenFile", subject = nickname,
+                            arg1 = TestDriver.currentScreen, file = this.screenFile
+                        )
                     )
-                )
+                }
             }
         }
 

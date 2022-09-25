@@ -20,7 +20,7 @@ class AssertingAnyValue2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformVersion.toInt() != 13) {
+                    if (platformVersion.toIntOrNull() != 13) {
                         SKIP_SCENARIO("This test scenario requires Android 13. (actual=$platformVersion)")
                     }
                     it.macro("[Maps Top Screen]")
@@ -46,7 +46,7 @@ class AssertingAnyValue2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformVersion.toInt() != 13) {
+                    if (platformVersion.toIntOrNull() != 13) {
                         SKIP_SCENARIO("This test scenario requires Android 13. (actual=$platformVersion)")
                     }
                     it.macro("[Maps Top Screen]")
@@ -66,7 +66,7 @@ class AssertingAnyValue2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformVersion.toInt() != 13) {
+                    if (platformVersion.toIntOrNull() != 13) {
                         SKIP_SCENARIO("This test scenario requires Android 13. (actual=$platformVersion)")
                     }
                     it.macro("[Maps Top Screen]")

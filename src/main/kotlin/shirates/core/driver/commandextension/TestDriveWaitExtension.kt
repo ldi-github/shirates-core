@@ -116,7 +116,7 @@ fun TestDrive?.waitForDisplay(
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
-        var element = TestElement()
+        var element = TestElement(selector = sel)
         val actionFunc = {
             element = TestElementCache.select(selector = sel, throwsException = false)
             element.isFound

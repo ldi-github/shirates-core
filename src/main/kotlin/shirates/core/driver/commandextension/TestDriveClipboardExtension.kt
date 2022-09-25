@@ -1,9 +1,6 @@
 package shirates.core.driver.function
 
-import shirates.core.driver.TestDrive
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
-import shirates.core.driver.getTestElement
+import shirates.core.driver.*
 import shirates.core.logging.Message.message
 import shirates.core.storage.Clipboard
 
@@ -19,6 +16,9 @@ fun TestDrive?.clearClipboard(): TestElement {
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message, subject = testElement.subject) {
+        Clipboard.write("")
+    }
+    if (TestMode.isNoLoadRun) {
         Clipboard.write("")
     }
 
@@ -39,6 +39,9 @@ fun TestDrive?.writeClipboard(text: String): TestElement {
     context.execOperateCommand(command = command, message = message, subject = testElement.subject) {
         Clipboard.write(text)
     }
+    if (TestMode.isNoLoadRun) {
+        Clipboard.write(text)
+    }
 
     return testElement
 }
@@ -56,6 +59,9 @@ fun TestDrive?.readClipboard(): String {
     var result = ""
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message, subject = testElement.subject) {
+        result = Clipboard.read()
+    }
+    if (TestMode.isNoLoadRun) {
         result = Clipboard.read()
     }
 

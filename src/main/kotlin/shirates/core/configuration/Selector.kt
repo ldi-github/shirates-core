@@ -617,9 +617,6 @@ class Selector(
      */
     override fun toString(): String {
 
-        if (TestMode.isNoLoadRun) {
-            return expression!!
-        }
         val result = getElementFriendlyExpression()
         return result
     }
@@ -651,13 +648,13 @@ class Selector(
     val basePartFriendlyExpression: String
         get() {
             if (originalExpression != null) {
-                val exp = getCommandList(originalExpression!!).first()
+                val exp = getCommandList(originalExpression!!).firstOrNull() ?: ""
                 if (exp.isValidNickname()) {
                     return exp
                 }
             }
             if (expression != null) {
-                val exp = getCommandList(expression!!).first()
+                val exp = getCommandList(expression!!).firstOrNull() ?: ""
                 if (exp.isValidNickname()) {
                     return exp
                 }
@@ -1193,13 +1190,6 @@ class Selector(
     }
 
     internal fun joinOrMerge(selector: Selector) {
-
-        if (TestMode.isNoLoadRun) {
-            return
-        }
-        if (selector.isRelative.not() && selector.pos == null) {
-            throw IllegalArgumentException("relativeSelector must be relative. (target=$selector)")
-        }
 
         if (isRelative) {
             joinOrMergeCore(selector)

@@ -30,7 +30,7 @@ class AdaptingToChangesInMessage1 : UITest() {
         scenario {
             case(1) {
                 action {
-                    if (platformVersion.toInt() < 11) {
+                    if ((platformVersion.toIntOrNull() ?: 0) < 11) {
                         it.tap("Allow only while using the app")
                     } else {
                         it.tap("While using the app")

@@ -2166,25 +2166,6 @@ class Selector_AndroidTest : UnitTest() {
     }
 
     @Test
-    fun init_noLoadRun() {
-
-        TestMode.runAsNoLoadRunMode {
-            run {
-                // Act
-                val selector = Selector("[nickname1]")
-                // Assert
-                assertThat(selector.nickname).isEqualTo("[nickname1]")
-            }
-            run {
-                // Act
-                val selector = Selector("text1")
-                // Assert
-                assertThat(selector.nickname).isEqualTo(null)
-            }
-        }
-    }
-
-    @Test
     fun init_parseSelector() {
 
         run {

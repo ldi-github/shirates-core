@@ -21,7 +21,7 @@ class SkipAndNotImpl1 : UITest() {
             case(1) {
                 condition {
                     output("platformVersion=$platformVersion")
-                    if (platformVersion.toInt() > 5) {
+                    if ((platformVersion.toIntOrNull() ?: 0) > 5) {
                         SKIP_CASE("case(1) skipped.")   // Skip execution of commands (log only)
                     }
                 }.action {
@@ -49,7 +49,7 @@ class SkipAndNotImpl1 : UITest() {
             case(1) {
                 condition {
                     output("platformVersion=$platformVersion")
-                    if (platformVersion.toInt() > 5) {
+                    if ((platformVersion.toIntOrNull() ?: 0) > 5) {
                         SKIP_SCENARIO()     // Skip execution of commands (log only)
                     }
                 }.action {

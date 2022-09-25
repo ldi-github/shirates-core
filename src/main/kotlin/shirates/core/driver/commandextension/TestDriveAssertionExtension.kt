@@ -400,6 +400,7 @@ fun TestDrive?.exist(
 ): TestElement {
 
     val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
 
     val testElement = getTestElement()
 
@@ -407,7 +408,6 @@ fun TestDrive?.exist(
     val assertMessage = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         val scroll = CodeExecutionContext.withScrollDirection != null
@@ -447,10 +447,10 @@ fun TestDrive?.existWithScrollDown(
 
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
@@ -487,10 +487,10 @@ fun TestDrive?.existWithScrollUp(
 
     val command = "existWithScrollUp"
     val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
@@ -527,10 +527,10 @@ fun TestDrive?.existWithScrollRight(
 
     val command = "existWithScrollRight"
     val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
@@ -567,10 +567,10 @@ fun TestDrive?.existWithScrollLeft(
 
     val command = "existWithScrollLeft"
     val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
@@ -604,10 +604,10 @@ fun TestDrive?.existInScanResults(
 
     val command = "existInScanResults"
     val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         for (scanResult in TestElementCache.scanResults) {
@@ -702,12 +702,12 @@ internal fun TestDrive?.dontExist(
 ): TestElement {
 
     val testElement = getTestElement()
+    var e = TestElement(selector = selector)
 
     val command = "dontExist"
     val assertMessage = message(id = command, subject = "$selector")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$selector") {
         if (selector.isImageSelector) {
             imageAssertionCoreCore(
@@ -834,10 +834,10 @@ fun TestDrive?.dontExistWithScrollDown(
 
     val command = "dontExistWithScrollDown"
     val selector = TestDriver.screenInfo.getSelector(expression = expression)
+    var e = TestElement(selector = selector)
     val assertMessage = message(id = command, "$selector")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$selector") {
         e = dontExistCore(
             message = assertMessage,
@@ -868,10 +868,10 @@ fun TestDrive?.dontExistWithScrollUp(
 
     val command = "dontExistWithScrollUp"
     val selector = TestDriver.screenInfo.getSelector(expression = expression)
+    var e = TestElement(selector = selector)
     val assertMessage = message(id = command, "$selector")
 
     val context = TestDriverCommandContext(testElement)
-    var e = TestElement()
     context.execCheckCommand(command = command, message = assertMessage, subject = "$selector") {
         e = dontExistCore(
             message = assertMessage,

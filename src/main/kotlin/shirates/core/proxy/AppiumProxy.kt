@@ -29,8 +29,6 @@ object AppiumProxy {
      */
     fun getSource(): TestElement {
 
-        TestLog.trace()
-
         if (TestMode.isNoLoadRun) {
             return TestElement()
         }

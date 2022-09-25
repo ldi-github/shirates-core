@@ -684,7 +684,7 @@ fun TestElement.checkedIs(
     val assertMessage = message ?: message(id = command, subject = subject, expected = expected)
 
     val context = TestDriverCommandContext(this)
-    var e = TestElement()
+    var e = this
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
         e = checkedIsCore(
             expected = expected,
