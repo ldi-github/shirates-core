@@ -369,6 +369,13 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
         if (commands.isEmpty()) {
             return Selector()
         }
+        if (TestMode.isNoLoadRun) {
+            val lastCommand = commands.last()
+            if (lastCommand.isValidNickname()) {
+                val sel = Selector(nickname = lastCommand)
+                return sel
+            }
+        }
 
         val firstCommand = commands.first()
         val firstSelector =

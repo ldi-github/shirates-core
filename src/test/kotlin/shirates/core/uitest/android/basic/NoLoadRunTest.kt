@@ -4,9 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.describe
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.select
+import shirates.core.driver.commandextension.*
 import shirates.core.driver.function.clearClipboard
 import shirates.core.driver.function.readClipboard
 import shirates.core.driver.function.writeClipboard
@@ -77,26 +75,26 @@ class NoLoadRunTest : UITest() {
 
     private fun assertSelector() {
 
-//        run {
-//            val sel = it.select("[8:30 AM][:Expand alarm]").selector
-//            assertThat(sel.toString()).isEqualTo("[:Expand alarm]")
-//        }
+        assertThat(it.select("8:30 AM").selector.toString()).isEqualTo("<8:30 AM>")
+        assertThat(
+            it.select("8:30 AM").right(expression = "@Expand alarm").selector.toString()
+        ).isEqualTo("<8:30 AM>:right(@Expand alarm)")
+        assertThat(
+            it.select("<8:30 AM>").right(expression = "#arrow&&@Expand alarm").selector.toString()
+        ).isEqualTo("<8:30 AM>:right(#arrow&&@Expand alarm)")
+        assertThat(it.select("<8:30 AM>:below").below(2).selector.toString()).isEqualTo("<8:30 AM>:below(3)")
+        assertThat(it.select("[8:30 AM]").selector.toString()).isEqualTo("[8:30 AM]")
+        assertThat(it.select("[8:30 AM]:flow").selector.toString()).isEqualTo("[8:30 AM]:flow")
+        assertThat(it.select("[8:30 AM]:flow").flow(1).selector.toString()).isEqualTo("[8:30 AM]:flow(2)")
+        assertThat(
+            it.select("[8:30 AM]").below(1).select(":below(1)").selector.toString()
+        ).isEqualTo("[8:30 AM]:below(2)")
+        assertThat(it.select("[8:30 AM]").select("[:Expand alarm]").selector.toString()).isEqualTo("[:Expand alarm]")
 
-        assertThat(
-            it.select("[8:30 AM]").selector.toString()
-        ).isEqualTo("[8:30 AM]")
-        assertThat(
-            it.select("[8:30 AM]:flow").selector.toString()
-        ).isEqualTo("[8:30 AM]:flow")
-//        assertThat(
-//            it.select("[8:30 AM]:flow").flow(1).selector.toString()
-//        ).isEqualTo("[8:30 AM]:flow(2)")
-//        assertThat(
-//            it.select("[8:30 AM]").below(1).select(":below(1)").selector.toString()
-//        ).isEqualTo("[8:30 AM]:below(2)")
-        assertThat(
-            it.select("[8:30 AM]").select("[:Expand alarm]").selector.toString()
-        ).isEqualTo("[:Expand alarm]")
+        run {
+            val sel = it.select("[8:30 AM][:Expand alarm]").selector
+            assertThat(sel.toString()).isEqualTo("[:Expand alarm]")
+        }
     }
 
     @Test

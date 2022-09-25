@@ -8,6 +8,7 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.Selector.Companion.orValueToList
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.TestMode
+import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.isSame
@@ -1986,16 +1987,41 @@ class Selector_AndroidTest : UnitTest() {
         }
     }
 
+    private fun assert_init_relativeSelector() {
+
+        TestMode.runAsAndroid {
+            run {
+                // Arrange, Act
+                val sel = Selector(":flow")
+                // Assert
+                assertThat(sel.isRelative).isEqualTo(true)
+                assertThat(sel.command).isEqualTo(":flow")
+                assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+            }
+            run {
+                // Arrange, Act
+                val sel = Selector(":parent:descendant(#title)")
+                // Assert
+                assertThat(sel.isRelative).isEqualTo(true)
+                assertThat(sel.command).isEqualTo(":parent")
+                assertThat(sel.relativeSelectors.count()).isEqualTo(1)
+                assertThat(sel.relativeSelectors[0].command).isEqualTo(":descendant")
+                assertThat(sel.relativeSelectors[0].id).isEqualTo("title")
+            }
+        }
+    }
+
     @Test
     fun init_relativeSelector() {
 
-        TestMode.runAsAndroid {
-            // Arrange, Act
-            val sel = Selector(":parent:descendant(#title)")
-            // Assert
-            assertThat(sel.isRelative).isEqualTo(true)
-            assertThat(sel.relativeSelectors.count()).isEqualTo(1)
-        }
+        assert_init_relativeSelector()
+    }
+
+    @NoLoadRun
+    @Test
+    fun init_relativeSelector_noLoadRun() {
+
+        assert_init_relativeSelector()
     }
 
     @Test

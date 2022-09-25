@@ -3,7 +3,6 @@ package shirates.core.configuration
 import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
-import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.rootElement
 import shirates.core.testcode.normalize
@@ -466,15 +465,6 @@ class Selector(
 
         if (expression == null)
             return
-
-        if (TestMode.isNoLoadRun) {
-            if (NicknameUtility.isValidNickname(expression!!)) {
-                nickname = expression
-            } else {
-                setNormalSelector(selectorExpression = expression!!)
-            }
-            return
-        }
 
         val exps = expression!!.split("|||")
         if (exps.any()) {
