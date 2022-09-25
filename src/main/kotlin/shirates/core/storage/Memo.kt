@@ -114,23 +114,4 @@ object Memo {
         return valueHistory
     }
 
-    /**
-     * print
-     */
-    fun print() {
-
-        map.keys.forEach {
-            val key = it
-            val value = getLastValue(key)
-            println("$key=$value")
-        }
-    }
-
-    /**
-     * printHistory
-     */
-    fun printHistory() {
-// TODO implement
-    }
-
 }
