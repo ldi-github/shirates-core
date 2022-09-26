@@ -53,6 +53,6 @@ it.tap("[Network & internet]")
 
 - [Screen nickname](screen_nickname.md)
 
-- [Data nickname](data_nickname.md)
+- [Dataset nickname](dataset_nickname.md)
 
 - [Nickname](nickname.md)

@@ -20,17 +20,50 @@ Setup [Local Publishing](../../advanced/local_publishing.md).
 1. Click `Create`.
 1. Wait for a while until background tasks finish. It may take minutes.
 
+### JVM setting
+
+If you encountered tooltip `Found invalid Gradle JVM configuration`, set JVM version.
+
+![](../_images/invalid_gradle_jvm_configuration.png)
+
+1. `File > Project Structure`
+2. `Project Settings > Project`
+3. Set SDK to compatible one.
+
+![](../_images/project_sdk.png)
+
 ### build.gradle.kts (after created)
 
-![](../_images/build_gradle_kts_after_created.png)
+```kotlin
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    kotlin("jvm") version "1.7.10"
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(kotlin("test"))
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+}
+```
 
 Append some lines to the file.
 
 ### build.gradle.kts (after edit)
-
-[//]: # (![]&#40;../_images/build_gradle_kts_after_all.png&#41;)
-
-[//]: # (**build.gradle.kts &#40;after edit&#41;**)
 
 ```kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile

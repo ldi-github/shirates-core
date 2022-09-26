@@ -4,18 +4,20 @@ You can assert image using these functions.
 
 ## functions
 
-| function             |
-|:---------------------|
-| imageIs              |
-| imageContains        |
-| isImage              |
-| isContainingImage    |
-| exist                |
-| existWithScrollDown  |
-| existWithScrollUp    |
-| existWithScrollRight |
-| existWithScrollLeft  |
-| dontExist            |
+| function                |
+|:------------------------|
+| imageIs                 |
+| imageContains           |
+| isImage                 |
+| isContainingImage       |
+| exist                   |
+| existWithScrollDown     |
+| existWithScrollUp       |
+| existWithScrollRight    |
+| existWithScrollLeft     |
+| dontExist               |
+| dontExistWithScrollDown |
+| dontExistWithScrollUp   |
 
 ## Example
 

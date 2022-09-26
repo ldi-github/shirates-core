@@ -2,27 +2,27 @@
 
 ## Relative selectors
 
-| relative selector | synonym     | description                                 |
-|:------------------|:------------|:--------------------------------------------|
-| :flow             | -           | widget in widget flow                       |
-| :flowLabel        | :label      | label widget in widget flow                 |
-| :flowInput        | :input      | input widget in widget flow                 |
-| :flowImage        | :image      | image widget in widget flow                 |
-| :flowButton       | :button     | button widget in widget flow                |
-| :flowSwitch       | :switch     | switch widget in widget flow                |
-| :innerFlow        | :inner      | inner widget in widget flow                 |
-| :innerLabel       | -           | inner label widget in widget flow           |
-| :innerInput       | -           | inner input widget in widget flow           |
-| :innerImage       | -           | inner image widget in widget flow           |
-| :innerButton      | -           | inner button widget in widget flow          |
-| :innerSwitch      | -           | inner switch widget in widget flow          |
-| :vflow            | -           | widget in vertical widget flow              |
-| :innerV           | :innerVflow | inner widget in vertical widget flow        |
-| :innerVlabel      | -           | inner label widget in vertical widget flow  |
-| :innerVinput      | -           | inner input widget in vertical widget flow  |
-| :innerVimage      | -           | inner image widget in vertical widget flow  |
-| :innerVbutton     | -           | inner button widget in vertical widget flow |
-| :innerVswitch     | -           | inner switch widget in vertical widget flow |
+| relative selector | alias    | description                                 |
+|:------------------|:---------|:--------------------------------------------|
+| :flow             | -        | widget in widget flow                       |
+| :flowLabel        | :label   | label widget in widget flow                 |
+| :flowInput        | :input   | input widget in widget flow                 |
+| :flowImage        | :image   | image widget in widget flow                 |
+| :flowButton       | :button  | button widget in widget flow                |
+| :flowSwitch       | :switch  | switch widget in widget flow                |
+| :innerFlow        | :inner   | inner widget in widget flow                 |
+| :innerLabel       | -        | inner label widget in widget flow           |
+| :innerInput       | -        | inner input widget in widget flow           |
+| :innerImage       | -        | inner image widget in widget flow           |
+| :innerButton      | -        | inner button widget in widget flow          |
+| :innerSwitch      | -        | inner switch widget in widget flow          |
+| :vflow            | -        | widget in vertical widget flow              |
+| :innerVflow       | :innerV  | inner widget in vertical widget flow        |
+| :innerVlabel      | -        | inner label widget in vertical widget flow  |
+| :innerVinput      | -        | inner input widget in vertical widget flow  |
+| :innerVimage      | -        | inner image widget in vertical widget flow  |
+| :innerVbutton     | -        | inner button widget in vertical widget flow |
+| :innerVswitch     | -        | inner switch widget in vertical widget flow |
 
 ## Relative selector examples
 

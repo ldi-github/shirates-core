@@ -7,8 +7,8 @@
 1. Open Preferences window(or Settings window)
     - (Mac) IntelliJ IDEA > Preferences
     - (Windows) File > Settings
-1. Click "Plugins".
-1. Click search box, input "save actions", and press enter.
+1. Click `Plugins`.
+1. Click search box, input `"save actions"`, and press enter.
 1. Install **Save Actions**.
 
 ### Settings recommended

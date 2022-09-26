@@ -8,7 +8,7 @@ Screen nickname is for app views.
 
 ### [Calculator Main Screen].json
 
-testConfig/android/calculator/screens/[Calculator Main Screen].json
+(`testConfig/android/calculator/screens/[Calculator Main Screen].json`)
 
 ```
 {
@@ -35,7 +35,7 @@ testConfig/android/calculator/screens/[Calculator Main Screen].json
     "[-]": "#op_sub",
     "[+]": "#op_add",
     "[=]": "#eq",
-    "[DEL]": "#del",
+    "[⌫]": "#del",
 
     "[0]": "#digit_0",
     "[1]": "#digit_1",
@@ -68,14 +68,20 @@ testConfig/android/calculator/screens/[Calculator Main Screen].json
 
 ### [Android Settings Top Screen].json
 
+(`testConfig/android/androidSettings/screens/[Android Settings Top Screen].json`)
+
 ```
 {
   "key": "[Android Settings Top Screen]",
 
-  "identity": "~title=Settings",
+  "identity": "#recycler_view",
+  "satellites": ["Battery", "Accessibility", "Passwords & accounts", "Tips & support"],
 
   "selectors": {
+    "[Account Avatar]": "#account_avatar",
+    "[Settings]": "#homepage_title",
 
+    "[Search Button]": "<#search_action_bar>:inner(1)",
     "[Search settings]": "#search_action_bar_title",
 
     "[Network & internet]": "",
@@ -161,14 +167,18 @@ testConfig/android/calculator/screens/[Calculator Main Screen].json
 
   "scroll": {
     "start-elements": "",
-    "end-elements": ""
+    "end-elements": "{Tips & support}",
+    "overlay-elements": "[Search Button][Search settings]"
   }
 }
 ```
 
 "**key**" must be equal to file name (without extension).
 
-"**identity**" is unique identifier consists of selectors or nicknames. In the above, **title selector** is used.
+Combination of "**identity**" and "**satellites**" is unique identifier of screen consists of selectors or nicknames.
+In scrolling view, there often is not fixed unique identity for the screen. You can define unique identity using "
+sattelites" on scrolling view. For example, `#recycler_view&&Battery`, `#recycler_view&&Accessibility` are unique
+respectively enough to determine that the screen name is `[Android Settings Top Screen]`.
 
 "**selectors**" section is a set of selector nickname definitions. In the
 above, [Relative selector](../relative_selector/relative_selector.md) is used
@@ -250,6 +260,6 @@ nickname `[Screen A]`.
 
 - [Selector nickname](selector_nickname.md)
 
-- [Data nickname](data_nickname.md)
+- [Dataset nickname](dataset_nickname.md)
 
 - [Nickname](nickname.md)

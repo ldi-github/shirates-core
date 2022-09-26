@@ -329,7 +329,7 @@ AndroidSettingsDemo@a.xlsx
 
 ### Run iOSSettingsDemo
 
-1. Open Xcode and setup iOS Simulator.(iPhone 13, iOS 15.0)
+1. Open Xcode and setup iOS Simulator.(iPhone 13, iOS 15.5)
 
 ![](_images/setup_ios_simulator.png)
 

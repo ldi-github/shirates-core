@@ -4,9 +4,10 @@ It's very important to reuse test code. You can register routine work as macro.
 
 ## Creating macro object/function
 
-1. Create an object class in any place under `src/test/kotlin`.
+1. Create an object class in any place under `src/test/kotlin`. For example, create `macro` directory, then
+   create `MacroObject1`.
    <br>![](../_images/creating_macro_object.png)
-2. Implement test code as follows.
+2. Implement code as follows.
     1. Put **@MacroObject** annotation on the object class.
     2. Inherit from **TestDrive** interface.
     3. Create a function and put **@Macro** annotation on it.
@@ -38,7 +39,7 @@ object MacroObject1 : TestDrive {
 ## Calling macro function
 
 1. Create class `Macro1` under `kotlin/exercise`.
-2. Implement test function as follows.
+2. Implement test code as follows.
 
 ```kotlin
 package exercise

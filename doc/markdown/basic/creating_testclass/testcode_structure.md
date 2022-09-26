@@ -6,6 +6,8 @@ In Shirates, a JUnit 5 test method is an autotest session that includes a scenar
 
 ### TestScenarioAndTestCase1.kt
 
+(`kotlin/tutorial/basic/TestScenarioAndTestCase1.kt`)
+
 ```kotlin
 package tutorial.basic
 
@@ -25,21 +27,38 @@ class TestScenarioAndTestCase1 : UITest() {
 
         scenario {
             case(1) {
-                // TODO: implement condition, action and expectation
+                // TODO: implement action and expectation
             }
 
             case(2) {
-                // TODO: implement condition, action and expectation
+                // TODO: implement action and expectation
             }
         }
     }
 
+    @Test
+    @Order(20)
+    fun caePattern() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    it.tap("[Network & internet]")
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
+                }
+            }
+        }
+
+    }
 }
 ```
 
 ## condition-action-expectation (CAE)
 
-A test case is combination of condition, action and expectation block.
+A test case is combination of `condition`, `action` and `expectation` block.
 
 ### TestScenarioAndTestCase1.kt
 

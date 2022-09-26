@@ -1,8 +1,8 @@
 # Widget
 
-**Widget** is user interface element.
+**Widget** is abstract user interface element.
 
-Built in widget information is as follows.
+Built-in widget information is as follows.
 
 | widget | corresponding (Android)                                                          | corresponding (iOS)                                         |
 |:-------|:---------------------------------------------------------------------------------|:------------------------------------------------------------|
@@ -11,7 +11,7 @@ Built in widget information is as follows.
 | image  | android.widget.ImageView                                                         | XCUIElementTypeImage                                        |
 | button | android.widget.Button<br/>android.widget.ImageButton<br/>android.widget.CheckBox | XCUIElementTypeButton                                       |
 | switch | android.widget.Switch                                                            | XCUIElementTypeSwitch                                       |
-| widget | (all)                                                                            | (all)                                                       |
+| widget | (all of the above)                                                               | (all of the above)                                          |
 
 <br>
 

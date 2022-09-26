@@ -2,8 +2,8 @@
 
 ## What is nickname?
 
-**Nickname** is Shirates's key concept to make auto testing easy and efficient. Nickname is synonym of something
-(selector, screen name, app, user data, etc) that provides a set of data (maybe user data or program meta data). You
+**Nickname** is Shirates's key concept to make auto testing easy and efficient. Nickname is alias of something
+(selector, screen name, app, user data, etc) that provides a set of data (maybe user data or program metadata). You
 can define nicknames and use them in test codes. This mechanism makes it very easy for writing and reading test codes.
 
 ## Nickname files
@@ -18,7 +18,7 @@ These types of nicknames are available.
 
 - [Selector nickname](selector_nickname.md)
 - [Screen nickname](screen_nickname.md)
-- [Data nickname](data_nickname.md)
+- [Dataset nickname](dataset_nickname.md)
 
 ## Nickname declaration (General format)
 
@@ -42,7 +42,7 @@ A nickname is decorated with **"[ ]"**(square brackets) or **"{ }"**(curly brack
 
 - [Screen nickname](screen_nickname.md)
 
-- [Data nickname](screen_nickname.md)
+- [Dataset nickname](dataset_nickname.md)
 
 - [index](../../../index.md)
 

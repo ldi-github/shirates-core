@@ -36,7 +36,7 @@ it.sendKeys(data("[product1].product_code")) // data function returns "P001"
 
 ## account.json
 
-account.json is a special version of data nickname file for accounts.
+account.json is a special version of dataset nickname file for accounts.
 
 ### accounts.json
 
@@ -90,7 +90,7 @@ it.sendKeys(account("[account1].avatar_name"))  // account function returns "Mou
 
 ## apps.json
 
-apps.json is a special version of data nickname file for apps.
+apps.json is a special version of dataset nickname file for apps.
 
 ### app.json
 

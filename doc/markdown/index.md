@@ -40,7 +40,7 @@
 - [Nickname](basic/selector_and_nickname/nickname/nickname.md)
     - [Selector nickname](basic/selector_and_nickname/nickname/selector_nickname.md)
     - [Screen nickname](basic/selector_and_nickname/nickname/screen_nickname.md)
-    - [Data nickname](basic/selector_and_nickname/nickname/data_nickname.md)
+    - [Dataset nickname](basic/selector_and_nickname/nickname/dataset_nickname.md)
 - [Widget](basic/selector_and_nickname/widget/widget.md)
 - [Relative selector](basic/selector_and_nickname/relative_selector/relative_selector.md)
     - [Relative selector(Direction based)](basic/selector_and_nickname/relative_selector/relative_selector_direction.md)

@@ -12,7 +12,7 @@ Shirates outputs test result files at the end of test.
 **Download/TestResults** is default output directory. You can change `testResults` parameter
 in [Parameter](../parameter/parameters.md) file.
 
-![](../_images/testresults1.png)
+![](../../_images/test_results.png)
 
 ## HTML-Report
 
