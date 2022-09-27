@@ -1,13 +1,13 @@
 package macro.ios.macro
 
 import okhttp3.internal.wait
-import shirates.core.driver.TestDriver.it
+import shirates.core.driver.TestDrive
 import shirates.core.driver.commandextension.*
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 
 @MacroObject
-object AppleMapsMacro {
+object AppleMapsMacro : TestDrive {
 
     @Macro("[Apple Maps Top Screen]")
     fun appleMapsToScreen() {
@@ -22,6 +22,9 @@ object AppleMapsMacro {
             .pressHome()
             .tapAppIcon("Maps")
 
+        if (it.canSelect("Get Turn-by-Turn Directions")) {
+            it.tap("Not Now")
+        }
         if (it.canSelect("Cancel")) {
             it.tap()
         }

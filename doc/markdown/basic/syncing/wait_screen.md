@@ -1,6 +1,6 @@
 # waitScreen, waitScreenOf
 
-You can use **waitScreen** function to wait until screen is displayed.
+You can use **waitScreen** function to wait until specified screen is displayed.
 
 To specify multiple candidates of screen names, use **waitScreenOf** instead.
 
@@ -11,6 +11,8 @@ See Also [Parameters](../parameter/parameters.md)
 ## waitScreen
 
 ### WaitScreen1.kt
+
+(`kotlin/tutorial/basic/WaitScreen1.kt`)
 
 ```kotlin
 @Test
@@ -45,6 +47,8 @@ fun waitScreen_ERROR() {
 ## waitScreenOf
 
 ### WaitScreen1.kt
+
+(`kotlin/tutorial/basic/WaitScreen1.kt`)
 
 ```kotlin
 @Test

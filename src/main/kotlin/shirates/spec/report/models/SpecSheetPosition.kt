@@ -177,7 +177,7 @@ class SpecSheetPosition(val sheet: XSSFSheet, val headerFirstColumnName: String)
             } else if (cellValue.isNullOrBlank()) {
                 // do nothing
             } else {
-                println("Warning: \"$cellValue\" is not built in column. Check column name in spec.properties file.")
+                println("Warning: \"$cellValue\" is not built-in column. Check column name in spec.properties file.")
             }
 
         }

@@ -1057,13 +1057,13 @@ class TestElementAssertionExtension_AndroidTest : UnitTest() {
         e.classIs(expected = "android.widget.TextView")
         // Assert
         val log = TestLog.lines.last() { it.scriptCommand == "classIs" }
-        assertThat(log.message).isEqualTo("<Connected devices>.class is \"android.widget.TextView\"")
+        assertThat(log.message).isEqualTo("<Connected devices>.classOrType is \"android.widget.TextView\"")
         assertThat(log.logType).isEqualTo(LogType.ok)
 
         // Act, Assert
         assertThatThrownBy {
             e.classIs(expected = "android.widget.ImageView")
         }.isInstanceOf(TestNGException::class.java)
-            .hasMessage("<Connected devices>.class is \"android.widget.ImageView\" (actual=\"android.widget.TextView\")")
+            .hasMessage("<Connected devices>.classOrType is \"android.widget.ImageView\" (actual=\"android.widget.TextView\")")
     }
 }

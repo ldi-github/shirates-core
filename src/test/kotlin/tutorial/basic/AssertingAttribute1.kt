@@ -122,6 +122,7 @@ class AssertingAttribute1 : UITest() {
                     it.select("@Network & internet", log = true)
                 }.expectation {
                     it.accessIs("Network & internet")
+                        .accessIsNot("System")
                 }
             }
         }
@@ -156,6 +157,7 @@ class AssertingAttribute1 : UITest() {
                     it.select("#account_avatar", log = true)
                 }.expectation {
                     it.classIs("android.widget.ImageView")
+                        .classIsNot("android.widget.TextView")
                 }
             }
         }

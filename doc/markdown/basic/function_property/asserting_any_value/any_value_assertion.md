@@ -6,8 +6,6 @@ You can assert any value using these functions.
 
 | function          | description                                  |
 |:------------------|----------------------------------------------|
-| assertEquals      | Assert that arg1 equals arg2                 |
-| assertEqualsNot   | Assert that arg1 does not equal arg2         |
 | thisIs            | Assert that this value is expected value     |
 | thisIsNot         | Assert that this value is not expected value |
 | thisIsTrue        | Assert that this value is true               |
@@ -16,6 +14,8 @@ You can assert any value using these functions.
 ## Example
 
 ### AssertingAnyValue1.kt
+
+(`kotlin/tutorial/basic/AssertingAnyValue1.kt`)
 
 ```kotlin
 @Test

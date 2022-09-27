@@ -1,10 +1,12 @@
-# silent and procedure function
-
-You can suppress logging using `silent` function.
+# silent, procedure
 
 ## silent function
 
+You can suppress logging using `silent` function.
+
 ### SilentAndProcedure1.kt
+
+(`kotlin/tutorial/basic/SilentAndProcedure1.kt`)
 
 ```kotlin
 @Test
@@ -18,8 +20,8 @@ fun silent1() {
             }.action {
                 describe("Tap [System]")
                 silent {
-                    it.scrollToEnd()
-                        .tapWithScrollUp("[System]")
+                    it.scrollToBottom()
+                        .tap("[System]")
                 }
             }.expectation {
                 it.screenIs("[System Screen]")
@@ -34,7 +36,7 @@ fun silent1() {
 ![](../../_images/silent_and_procedure_1.png)
 
 `describe` is logged.<br>
-`scrollToEnd` and `tapWithScrollUp` are not logged.
+`scrollToEnd` and `tap` are not logged.
 
 <br>
 
@@ -55,8 +57,8 @@ fun procedure1() {
                 macro("[Android Settings Top Screen]")
             }.action {
                 procedure("Tap [System]") {
-                    it.scrollToEnd()
-                        .tapWithScrollUp("[System]")
+                    it.scrollToBottom()
+                        .tap("[System]")
                 }
             }.expectation {
                 it.screenIs("[System Screen]")
@@ -71,7 +73,7 @@ fun procedure1() {
 ![](../../_images/silent_and_procedure_2.png )
 
 `procedure` is logged.<br>
-`scrollToEnd` and `tapWithScrollUp` are not logged.
+`scrollToEnd` and `tap` are not logged.
 
 ### Link
 

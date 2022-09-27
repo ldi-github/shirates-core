@@ -37,7 +37,7 @@ class TestDriveScrollExtensionTest : UITest() {
                     // Assert
                     assertThat(scrollableElements.count()).isGreaterThanOrEqualTo(2)
                     for (e in scrollableElements) {
-                        assertThat(e.isScrollable).isTrue()
+                        e.isScrollable.thisIsTrue()
                     }
                 }
             }

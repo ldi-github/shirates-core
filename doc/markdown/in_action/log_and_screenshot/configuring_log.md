@@ -21,6 +21,7 @@ See also [parameters](../../basic/parameter/parameters.md).
 #enableTimeMeasureLog=true
 #enableImageMatchDebugLog=true
 #testResults=
+#testListDir=
 ```
 
 ## Suppress sync log

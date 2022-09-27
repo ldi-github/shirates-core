@@ -11,6 +11,8 @@ You can use info and warn function to output additional information.
 
 ### InfoAndWarn1.kt
 
+(`kotlin/tutorial/basic/InfoAndWarn1.kt`)
+
 ```kotlin
 package tutorial.basic
 

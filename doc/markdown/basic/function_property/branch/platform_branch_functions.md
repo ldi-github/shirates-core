@@ -16,6 +16,8 @@ Conditional branches are required on specific test situation. You can use platfo
 
 ### BranchFunctions1.kt
 
+(`kotlin/tutorial/basic/BranchFunctions1.kt`)
+
 ```kotlin
 @Test
 @Order(10)
@@ -26,18 +28,18 @@ fun branch_os_platform() {
             action {
                 android {
                     emulator {
-                        output("This is called on android emulator")
+                        describe("This is called on android emulator")
                     }
                     realDevice {
-                        output("This is called on android real device")
+                        describe("This is called on android real device")
                     }
                 }
                 ios {
                     simulator {
-                        output("This is called on iOS Simulator")
+                        describe("This is called on iOS Simulator")
                     }
                     realDevice {
-                        output("This is called on iOS real device")
+                        describe("This is called on iOS real device")
                     }
                 }
             }.expectation {

@@ -92,7 +92,7 @@ it.sendKeys(account("[account1].avatar_name"))  // account function returns "Mou
 
 apps.json is a special version of dataset nickname file for apps.
 
-### app.json
+### apps.json
 
 ```
 {

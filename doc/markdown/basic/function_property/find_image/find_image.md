@@ -4,7 +4,7 @@ You can find an image using these functions.
 
 [Selector expression](../../selector_and_nickname/selector_expression.md) is accepted as argument.
 
-The function returns `TestElement` object.
+The function returns `ImageMatchResult` object instead of TestElement.
 
 ## Functions
 
@@ -20,9 +20,21 @@ The function returns `TestElement` object.
 
 ### FindImage1_prepare.kt
 
+(`kotlin/tutorial/basic/FindImage1_prepare.kt`)
+
 Run `prepareImage()` to create image files for testing.
 
 ```kotlin
+private fun TestElement.cropAndCopy(fileName: String, directory: Path = TestLog.directoryForLog): TestElement {
+
+    this.cropImage(fileName)
+    FileUtils.copyFile(
+        directory.resolve(fileName).toFile(),
+        File("unitTestConfig/android/androidSettings/screens/images/$fileName")
+    )
+    return this
+}
+
 @Test
 fun prepareImage() {
 
@@ -47,6 +59,8 @@ Image files are copied into `unitTestConfig/android/androidSettings/screens/imag
 ![](../../_images/prepare_image.png)
 
 ### FindImage1.kt
+
+(`kotlin/tutorial/basic/FindImage1.kt`)
 
 Run `findImage()` for image matching demonstration.
 

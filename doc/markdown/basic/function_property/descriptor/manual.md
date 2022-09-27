@@ -7,6 +7,8 @@ procedure using **manual** function.
 
 ### Manual1.kt
 
+(`kotlin/tutorial/basic/Manual1.kt`)
+
 ```kotlin
 @Test
 @Order(10)

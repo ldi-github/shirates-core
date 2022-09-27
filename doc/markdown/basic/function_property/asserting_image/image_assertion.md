@@ -21,51 +21,51 @@ You can assert image using these functions.
 
 ## Example
 
-### images directory
+### Getting image files
 
-You can put image files for template matching in images directory. (
-See [Cropping images for template matching](../../../in_action/image_matching/cropping_images_for_template_matching.md))
+Get image files for template matching.
 
-![](../../../in_action/_images/images_directory.png)
+See [Cropping images for template matching](../../../in_action/image_matching/cropping_images_for_template_matching.md).
 
-## Screen nickname file
+### Images directory
 
-You can define nicknames for image. Image file format must be PNG. File name must be unique.
+1. Create image directory under
+   Put images files in images directory.
+
+![cropped images](../../../in_action/_images/put_cropped_images_in_images_directory.png)
+
+### Screen nickname file
+
+Define image nicknames in screen nickname file. File name must be unique.
+
+#### [Clock(shared)].json
+
+(`testConfig/android/clock/screens/[Clock(shared)].json`)
 
 ```
 {
-  "key": "[Maps Top Screen]",
-
-  "include": [
-  ],
-
-  "identity": "[Explore Tab][Go Tab][Saved Tab][Contribute Tab][Updates Tab]",
+  "key": "[Clock(shared)]",
 
   "selectors": {
+    "[Alarm Tab]": "#tab_menu_alarm",
+    "[Alarm Image]": "Alarm.png",
+    "[Alarm Image(selected)]": "Alarm(selected).png",
 
-    "[map_frame]": "#map_frame",
-    "[search_omnibox_container]": "#search_omnibox_container",
-    "[below_search_omnibox_container]": "#below_search_omnibox_container",
+    "[Clock Tab]": "#tab_menu_clock",
+    "[Clock Image]": "Clock.png",
+    "[Clock Image(selected)]": "Clock(selected).png",
 
-    "[Explore Tab]": "#explore_tab_strip_button",
-    "[Explore Image]": "Explore.png",
-    "[Explore Image(selected)]": "Explore(selected).png",
+    "[Timer Tab]": "#tab_menu_timer",
+    "[Timer Image]": "Timer.png",
+    "[Timer Image(selected)]": "Timer(selected).png",
 
-    "[Go Tab]": "#transportation_tab_strip_button",
-    "[Go Image]": "Go.png",
-    "[Go Image(selected)]": "Go(selected).png",
+    "[Stopwatch Tab]": "#tab_menu_stopwatch",
+    "[Stopwatch Image]": "Stopwatch.png",
+    "[Stopwatch Image(selected)]": "Stopwatch(selected).png",
 
-    "[Saved Tab]": "#saved_tab_strip_button",
-    "[Saved Image]": "Saved.png",
-    "[Saved Image(selected)]": "Saved(selected).png",
-
-    "[Contribute Tab]": "#contribute_tab_strip_button",
-    "[Contribute Image]": "Contribute.png",
-    "[Contribute Image(selected)]": "Contribute(selected).png",
-
-    "[Updates Tab]": "#updates_tab_strip_button",
-    "[Updates Image]": "Updates.png",
-    "[Updates Image(selected)]": "Updates(selected).png"
+    "[Bedtime Tab]": "#tab_menu_bedtime",
+    "[Bedtime Image]": "Bedtime.png",
+    "[Bedtime Image(selected)]": "Bedtime(selected).png"
   }
 
 }
@@ -75,16 +75,17 @@ You can define nicknames for image. Image file format must be PNG. File name mus
 
 ### AssertingImage1.kt
 
+(`kotlin/tutorial/basic/AssertingImage1.kt`)
+
 ```kotlin
 package tutorial.basic
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.platformVersion
 import shirates.core.testcode.UITest
 
-@Testrun("testConfig/android/maps/testrun.properties")
+@Testrun("testConfig/android/clock/testrun.properties")
 class AssertingImage1 : UITest() {
 
     @Test
@@ -93,15 +94,15 @@ class AssertingImage1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[Alarm Screen]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image(selected)]")     // OK
-                    it.select("[Explore Tab]").isImage("[Explore Image(selected)]").thisIsTrue()      // OK
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image(selected)]")     // OK
+                    it.select("[Alarm Tab]").isImage("[Alarm Image(selected)]").thisIsTrue()      // OK
                 }
             }
             case(2) {
                 expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")     // NG
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")     // NG
                 }
             }
         }
@@ -113,60 +114,57 @@ class AssertingImage1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformVersion.toInt() != 13) {
-                        SKIP_SCENARIO("This test scenario requires Android 13. (actual=$platformVersion)")
-                    }
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[Alarm Screen]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image(selected)]")
-                    it.select("[Go Tab]").imageIs("[Go Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image(selected)]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image]")
                 }
             }
             case(2) {
                 action {
-                    it.tap("[Go Tab]")
+                    it.tap("[Clock Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")
-                    it.select("[Go Tab]").imageIs("[Go Image(selected)]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image(selected)]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image]")
                 }
             }
             case(3) {
                 action {
-                    it.tap("[Saved Tab]")
+                    it.tap("[Timer Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")
-                    it.select("[Go Tab]").imageIs("[Go Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image(selected)]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image(selected)]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image]")
                 }
             }
             case(4) {
                 action {
-                    it.tap("[Contribute Tab]")
+                    it.tap("[Stopwatch Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")
-                    it.select("[Go Tab]").imageIs("[Go Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image(selected)]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image(selected)]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image]")
                 }
             }
             case(5) {
                 action {
-                    it.tap("[Updates Tab]")
+                    it.tap("[Bedtime Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")
-                    it.select("[Go Tab]").imageIs("[Go Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image(selected)]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image(selected)]")
                 }
             }
         }
@@ -177,7 +175,7 @@ class AssertingImage1 : UITest() {
 
 ### On unexpected NG occurs
 
-You can see the log directory and find files, **template_image.png** and **cropped_image.png**.
+You can see **template_image.png** (expected image) and **cropped_image.png** (actual image) in the log directory.
 
 ### Note
 

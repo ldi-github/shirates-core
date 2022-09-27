@@ -4,7 +4,7 @@
 
 ### RelativeCommand1.kt
 
-kotlin/tutorial/basic/RelativeCommand1.kt
+(`kotlin/tutorial/basic/RelativeCommand1.kt`)
 
 ```kotlin
 @Test

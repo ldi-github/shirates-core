@@ -14,6 +14,8 @@ You can assert showing status of keyboard using these functions.
 
 ### AssertingOthers1.kt
 
+(`kotlin/tutorial/basic/AssertingOthers1.kt`)
+
 ```kotlin
 @Test
 @Order(30)
@@ -23,8 +25,8 @@ fun keyboardIsShown_OK() {
         case(1) {
             condition {
                 it.macro("[Android Settings Top Screen]")
-                output("isKeyboardShown=$isKeyboardShown")
             }.expectation {
+                output("isKeyboardShown=$isKeyboardShown")
                 it.keyboardIsNotShown()
             }
         }

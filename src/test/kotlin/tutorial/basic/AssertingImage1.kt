@@ -3,10 +3,9 @@ package tutorial.basic
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.platformVersion
 import shirates.core.testcode.UITest
 
-@Testrun("testConfig/android/maps/testrun.properties")
+@Testrun("testConfig/android/clock/testrun.properties")
 class AssertingImage1 : UITest() {
 
     @Test
@@ -15,15 +14,15 @@ class AssertingImage1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[Alarm Screen]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image(selected)]")     // OK
-                    it.select("[Explore Tab]").isImage("[Explore Image(selected)]").thisIsTrue()      // OK
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image(selected)]")     // OK
+                    it.select("[Alarm Tab]").isImage("[Alarm Image(selected)]").thisIsTrue()      // OK
                 }
             }
             case(2) {
                 expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")     // NG
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")     // NG
                 }
             }
         }
@@ -35,60 +34,57 @@ class AssertingImage1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformVersion != "13") {
-                        SKIP_SCENARIO("This test scenario requires Android 13. (actual=$platformVersion)")
-                    }
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[Alarm Screen]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image(selected)]")
-                    it.select("[Go Tab]").imageIs("[Go Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image(selected)]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image]")
                 }
             }
             case(2) {
                 action {
-                    it.tap("[Go Tab]")
+                    it.tap("[Clock Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")
-                    it.select("[Go Tab]").imageIs("[Go Image(selected)]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image(selected)]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image]")
                 }
             }
             case(3) {
                 action {
-                    it.tap("[Saved Tab]")
+                    it.tap("[Timer Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")
-                    it.select("[Go Tab]").imageIs("[Go Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image(selected)]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image(selected)]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image]")
                 }
             }
             case(4) {
                 action {
-                    it.tap("[Contribute Tab]")
+                    it.tap("[Stopwatch Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")
-                    it.select("[Go Tab]").imageIs("[Go Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image(selected)]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image(selected)]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image]")
                 }
             }
             case(5) {
                 action {
-                    it.tap("[Updates Tab]")
+                    it.tap("[Bedtime Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Image]")
-                    it.select("[Go Tab]").imageIs("[Go Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Image(selected)]")
+                    it.select("[Alarm Tab]").imageIs("[Alarm Image]")
+                    it.select("[Clock Tab]").imageIs("[Clock Image]")
+                    it.select("[Timer Tab]").imageIs("[Timer Image]")
+                    it.select("[Stopwatch Tab]").imageIs("[Stopwatch Image]")
+                    it.select("[Bedtime Tab]").imageIs("[Bedtime Image(selected)]")
                 }
             }
         }

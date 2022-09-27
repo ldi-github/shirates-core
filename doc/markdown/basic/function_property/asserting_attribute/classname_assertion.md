@@ -12,6 +12,8 @@ You can assert the value of `className` or `type` property of the element using 
 
 ### AssertingAttribute1.kt
 
+(`kotlin/tutorial/basic/AssertingAttribute1.kt`)
+
 ```kotlin
 @Test
 @Order(70)
@@ -25,6 +27,7 @@ fun classNameAssertion_OK() {
                 it.select("#account_avatar", log = true)
             }.expectation {
                 it.classIs("android.widget.ImageView")
+                    .classIsNot("android.widget.TextView")
             }
         }
     }

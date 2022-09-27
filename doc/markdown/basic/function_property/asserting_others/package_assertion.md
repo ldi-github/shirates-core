@@ -12,6 +12,8 @@ You can assert package of current app using these functions.
 
 ### AssertingOthers1.kt
 
+(`kotlin/tutorial/basic/AssertingOthers1.kt`)
+
 ```kotlin
 @Test
 @Order(50)

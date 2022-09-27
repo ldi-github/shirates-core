@@ -1,6 +1,6 @@
 # clipboard
 
-You can write to or read from clipboard using these functions.
+You can write to and read from clipboard using these functions.
 
 ## functions
 
@@ -14,6 +14,8 @@ You can write to or read from clipboard using these functions.
 ## Example
 
 ### Clipboard1.kt
+
+(`kotlin/tutorial/basic/Clipboard1.kt`)
 
 ```kotlin
 @Test
@@ -64,7 +66,6 @@ fun string_clipboard() {
     }
 
 }
-
 ```
 
 ### Link

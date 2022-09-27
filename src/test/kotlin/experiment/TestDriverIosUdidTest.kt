@@ -9,7 +9,7 @@ import shirates.core.utility.tool.SimctlUtility
 
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties", profile = "iOS *")
-class TestDriverAndroidPlatformVersionTest : UITest() {
+class TestDriverIosUdidTest : UITest() {
 
     @Test
     fun firstDeviceUsed() {

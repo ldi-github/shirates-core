@@ -10,8 +10,9 @@
 
 ### androidSettingsConfig.json
 
-In profiles section, each profile has specialTags. "Android 12" has "Tag1". "Pixel 3a API 31(Android 12)" has "Tag2"
-and "Tag3".
+In profiles section, each profile has specialTags. "`Android 12`" has "`Tag1`". "`Pixel 3a API 31(Android 12)`"
+has "`Tag2`"
+and "`Tag3`".
 
 ```
   "profiles": [
@@ -33,46 +34,91 @@ and "Tag3".
 
 ### SpecialTag1.kt
 
+(`kotlin/tutorial/basic/SpecialTag1.kt`)
+
 ```kotlin
-@Test
-@Order(10)
-fun specialTag1() {
+package tutorial.basic
 
-    scenario {
-        case(1) {
-            expectation {
-                output("testProfile.specialTags=${testProfile.specialTags}")
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.branchextension.specialTag
+import shirates.core.driver.commandextension.describe
+import shirates.core.driver.testProfile
+import shirates.core.testcode.UITest
 
-                specialTag("Tag1") {
-                    OK("specialTag(\"Tag1\") called")
-                }
-                specialTag("Tag2") {
-                    OK("specialTag(\"Tag2\") called")
-                }
-                specialTag("Tag3") {
-                    OK("specialTag(\"Tag3\") called")
+@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android 12")
+class SpecialTag1 : UITest() {
+
+    @Test
+    @Order(10)
+    fun specialTag1() {
+
+        scenario {
+            case(1) {
+                condition {
+                    describe("testProfile.specialTags=${testProfile.specialTags}")
+                }.expectation {
+                    specialTag("Tag1") {
+                        OK("specialTag(\"Tag1\") called")
+                    }
+                    specialTag("Tag2") {
+                        OK("specialTag(\"Tag2\") called")
+                    }
+                    specialTag("Tag3") {
+                        OK("specialTag(\"Tag3\") called")
+                    }
                 }
             }
         }
     }
+
+    @Test
+    @Order(20)
+    fun specialTag2() {
+
+        scenario {
+            case(1) {
+                condition {
+                    describe("testProfile.specialTags=${testProfile.specialTags}")
+                }.expectation {
+                    specialTag("Tag1") {
+                        OK("specialTag(\"Tag1\") called")
+                    }.notMatched {
+                        describe("Tag1 not called")
+                    }
+                    specialTag("Tag2") {
+                        OK("specialTag(\"Tag2\") called")
+                    }.notMatched {
+                        describe("Tag2 not called")
+                    }
+                }
+            }
+        }
+    }
+
 }
 ```
 
 ### TestLog(simple)
 
 ```
-117	2022/06/06 23:02:24.407	{specialTag1}	[SCENARIO]	(scenario)	specialTag1()
-118	2022/06/06 23:02:24.407	{specialTag1-1}	[CASE]	(case)	(1)
-119	2022/06/06 23:02:24.408	{specialTag1-1}	[EXPECTATION]	(expectation)	expectation
-120	2022/06/06 23:02:24.906	{specialTag1-1}	[output]	(output)	testProfile.specialTags=Tag1
-121	2022/06/06 23:02:24.908	{specialTag1-1}	[branch]	(special)	Tag1 {
-122	2022/06/06 23:02:24.909	{specialTag1-1}	[OK]	(ok)	specialTag("Tag1") called
-123	2022/06/06 23:02:24.909	{specialTag1-1}	[branch]	(special)	} Tag1
-124	2022/06/06 23:02:24.909	{specialTag1-1}	[info]	()	test finished.
+168	2022/09/27 19:41:36.840	{specialTag2}	[SCENARIO]	(scenario)	specialTag2()
+169	2022/09/27 19:41:36.840	{specialTag2-1}	[CASE]	(case)	(1)
+170	2022/09/27 19:41:36.840	{specialTag2-1}	[CONDITION]	(condition)	condition
+171	2022/09/27 19:41:36.841	{specialTag2-1}	[describe]	(describe)	testProfile.specialTags=Tag1
+172	2022/09/27 19:41:37.101	{specialTag2-1}	[EXPECTATION]	(expectation)	expectation
+173	2022/09/27 19:41:37.361	{specialTag2-1}	[branch]	(special)	Tag1 {
+174	2022/09/27 19:41:37.361	{specialTag2-1}	[OK]	(ok)	specialTag("Tag1") called
+175	2022/09/27 19:41:37.362	{specialTag2-1}	[branch]	(special)	} Tag1
+176	2022/09/27 19:41:37.363	{specialTag2-1}	[branch]	(special)	not(Tag2) {
+177	2022/09/27 19:41:37.363	{specialTag2-1}	[describe]	(describe)	Tag2 not called
+178	2022/09/27 19:41:37.364	{specialTag2-1}	[branch]	(special)	} not(Tag2)
+179	2022/09/27 19:41:37.618	{specialTag2-1}	[info]	()	test finished.
 ```
 
-When initialized with "Android 12" profile, the function for "Tag1" is called. When initialized with "Pixel 3a API 31(
-Android 12)", functions for "Tag2" and "Tag3" are called.
+When initialized with "`Android 12`" profile, the function for "`Tag1`" is called. When initialized
+with "`Pixel 3a API 31(Android 12)`", functions for "`Tag2`" and "`Tag3`" are called.
 
 In this way, you can describe profile specific test code using specialTag function.
 

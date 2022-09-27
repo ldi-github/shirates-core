@@ -4,7 +4,7 @@ You can assert the value of `value` property of the element using these function
 
 ### Note
 
-This is for iOS only.
+This is for **iOS only**.
 
 ## functions
 

@@ -12,6 +12,8 @@ You can skip or abort test using these functions.
 
 ### SkipAndNotImpl1.kt
 
+(`kotlin/tutorial/basic/SkipAndNotImpl1.kt`)
+
 ```kotlin
 @Test
 @Order(10)

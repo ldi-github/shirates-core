@@ -1,7 +1,5 @@
 package shirates.core.logging
 
-import shirates.core.Const
-import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
@@ -14,6 +12,7 @@ import shirates.core.utility.toPath
 import shirates.spec.report.TestListReport
 import shirates.spec.report.models.SpecReportExecutor
 import java.io.File
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.text.SimpleDateFormat
@@ -1383,9 +1382,10 @@ object TestLog {
      */
     fun outputLogSimple(format: LogFileFormat) {
 
+        val simpleLines = lines.filter { it.isForSimple }
         outputLogFile(
             filterName = "simple",
-            logLines = lines,
+            logLines = simpleLines,
             format = format
         )
     }
@@ -1496,7 +1496,10 @@ object TestLog {
          * Copy the TestList to testListDir and merge if testListDir is defined.
          */
         val testListDir = PropertiesManager.testListDir
-        if (testListDir.isNotBlank() && Files.exists(testListDir.toPath())) {
+        if (testListDir.isNotBlank()) {
+            if (Files.exists(testListDir.toPath()).not()) {
+                throw FileNotFoundException(message(id = "testListDirNotFound", file = testListDir))
+            }
             val targetPath = testListDir.toPath().resolve(outputPath.fileName)
             lockFile(targetPath) {
                 TestListReport()

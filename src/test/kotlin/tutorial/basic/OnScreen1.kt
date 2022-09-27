@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.onScreen
+import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.screenName
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -18,20 +20,14 @@ class OnScreen1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.action {
-                    onScreen("[Android Settings Top Screen]") {
-                        it.screenIs("[Android Settings Top Screen]")
-                    }
-                    onScreen("[System Screen]") {
-                        it.screenIs("[System Screen]")
-                    }
+                    it.macro("[System Screen]")
                 }.expectation {
                     onScreen("[Android Settings Top Screen]") {
                         it.screenIs("[Android Settings Top Screen]")
-                    }
-                    onScreen("[System Screen]") {
+                    }.onScreen("[System Screen]") {
                         it.screenIs("[System Screen]")
+                    }.not {
+                        describe("Screen is $screenName")
                     }
                 }
             }

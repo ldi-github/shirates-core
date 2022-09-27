@@ -12,6 +12,8 @@ You can assert the value of `id` or `name` property of the element using these f
 
 ### AssertingAttribute1.kt
 
+(`kotlin/tutorial/basic/AssertingAttribute1.kt`)
+
 ```kotlin
 @Test
 @Order(30)

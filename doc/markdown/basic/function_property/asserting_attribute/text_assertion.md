@@ -23,13 +23,15 @@ You can assert the value of `text` or `label` or `value` property of the element
 
 `text` attribute is for Android.
 
-`label` attribute and `value` attribute are for iOS. `label` attribute is prior to `value` attribute.
+`label` attribute and `value` attribute are for iOS. `value` attribute is applied when `label` attribute is empty.
 
 ![](../../_images/xml_data_text_label_value.png)
 
 ## Example
 
 ### AssertingAttribute1.kt
+
+(`kotlin/tutorial/basic/AssertingAttribute1.kt`)
 
 ```kotlin
 @Test

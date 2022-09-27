@@ -23,6 +23,8 @@ You can assert the value of `access` property of the element using these functio
 
 #### AssertingAttribute1.kt
 
+(`kotlin/tutorial/basic/AssertingAttribute1.kt`)
+
 ```kotlin
 @Test
 @Order(50)
@@ -36,6 +38,7 @@ fun accessAssertion_OK() {
                 it.select("@Network & internet", log = true)
             }.expectation {
                 it.accessIs("Network & internet")
+                    .accessIsNot("System")
             }
         }
     }

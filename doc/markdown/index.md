@@ -99,7 +99,7 @@
     - [Screen branch function (onScreen)](basic/function_property/branch/screen_branch_functions.md)
 - Editing and Keyboard operations
     - [sendKeys](basic/function_property/editing_and_keyboard_operations/sendkeys.md)
-    - [clear](basic/function_property/editing_and_keyboard_operations/clear.md)
+    - [clearInput](basic/function_property/editing_and_keyboard_operations/clearinput.md)
     - [press keys](basic/function_property/editing_and_keyboard_operations/press_keys.md)
     - [hideKeyboard](basic/function_property/editing_and_keyboard_operations/hide_keyboard.md)
 - Syncing
@@ -110,6 +110,7 @@
     - [memoAs, readMemo](basic/function_property/data_storage/memo.md)
     - [clipboard, readClipboard](basic/function_property/data_storage/clipboard.md)
     - [account](basic/function_property/data_storage/account.md)
+    - [app](basic/function_property/data_storage/app.md)
     - [data](basic/function_property/data_storage/data.md)
 - Descriptor
     - [describe, procedure, caption, comment, manual, knownIssue, target, output](basic/function_property/descriptor/descriptors.md)
@@ -122,7 +123,8 @@
     - [silent, procedure](basic/function_property/logging/silent_and_procedure_function.md)
 - Find image
     - [Find image](basic/function_property/find_image/find_image.md)
-    - [Scale and threshold](basic/function_property/find_image/scale_and_threshold.md)
+
+[//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
 
 ### Report
 

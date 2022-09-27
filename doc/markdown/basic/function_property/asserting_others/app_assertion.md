@@ -11,6 +11,8 @@ You can assert app using these functions.
 
 ### AssertingOthers1.kt
 
+(`kotlin/tutorial/basic/AssertingOthers1.kt`)
+
 ```kotlin
 @Test
 @Order(10)
@@ -28,9 +30,9 @@ fun appIs_OK() {
         case(2) {
             condition {
                 it.tapAppIcon("Chrome")
+            }.expectation {
                 val isApp = it.isApp("[Chrome]")
                 output("isApp(\"[Chrome]\")=$isApp")
-            }.expectation {
                 it.appIs("[Chrome]")
             }
         }

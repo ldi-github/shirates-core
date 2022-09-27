@@ -10,6 +10,8 @@ See Also [Parameters](../parameter/parameters.md)
 
 ### Wait1.kt
 
+(`kotlin/tutorial/basic/Wait1.kt`)
+
 ```kotlin
 @Test
 @Order(10)

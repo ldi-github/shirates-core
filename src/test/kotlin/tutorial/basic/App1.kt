@@ -4,15 +4,15 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.storage.account
+import shirates.core.storage.app
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class Account1 : UITest() {
+class App1 : UITest() {
 
     @Test
     @Order(10)
-    fun account() {
+    fun app() {
 
         scenario {
             case(1) {
@@ -22,12 +22,11 @@ class Account1 : UITest() {
                         .screenIs("[Android Settings Search Screen]")
                         .tap("[Search Box]")
                 }.action {
-                    it.sendKeys(account("[account1].id"))
+                    it.sendKeys(app("[Settings].packageOrBundleId"))
                 }.expectation {
-                    it.textIs(account("[account1].id"))
+                    it.textIs(app("[Settings].packageOrBundleId"))
                 }
             }
         }
-
     }
 }

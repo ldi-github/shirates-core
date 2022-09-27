@@ -21,6 +21,8 @@ You can describe your test procedure using these functions. These are for readab
 
 ### Descriptor1.kt
 
+(`kotlin/tutorial/basic/Descriptor1.kt`)
+
 ```kotlin
 @Test
 @Order(10)

@@ -23,7 +23,7 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.screenIsOf("[Android Settings Top Screen]")
-                        .screenIsOf("[Android Settings Top Screen]", "[Network & internet]", "[System Screen]")
+                        .screenIsOf("[Android Settings Top Screen]", "[Network & internet Screen]", "[System Screen]")
                 }
             }
         }
@@ -38,7 +38,7 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.screenIsOf("[Network & internet]", "[System Screen]")
+                    it.screenIsOf("[Network & internet Screen]", "[System Screen]")
                 }
             }
         }
@@ -57,9 +57,9 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
                         .ifTrue {
                             OK("This is [Android Settings Top Screen]")
                         }
-                    it.isScreenOf("[Android Settings Top Screen]", "[Network & internet]", "[System Screen]")
+                    it.isScreenOf("[Android Settings Top Screen]", "[Network & internet Screen]", "[System Screen]")
                         .ifTrue {
-                            OK("This is of [Android Settings Top Screen],[Network & internet],[System Screen]")
+                            OK("This is of [Android Settings Top Screen],[Network & internet Screen],[System Screen]")
                         }
                 }
             }
@@ -75,9 +75,9 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.isScreenOf("[Network & internet]", "[System Screen]")
+                    it.isScreenOf("[Network & internet Screen]", "[System Screen]")
                         .ifFalse {
-                            OK("This is not of [Network & internet],[System Screen]")
+                            OK("This is not of [Network & internet Screen],[System Screen]")
                         }
                 }
             }

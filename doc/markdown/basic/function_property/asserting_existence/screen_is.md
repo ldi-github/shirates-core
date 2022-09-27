@@ -2,7 +2,7 @@
 
 You can assert screen using **screenIs** function.
 
-You can use **isScreen** function for getting whether the screen is displayed or not.
+You can use **isScreen** function to getting whether the screen is displayed or not.
 
 ## functions
 
@@ -15,12 +15,14 @@ You can use **isScreen** function for getting whether the screen is displayed or
 
 ## Screen nickname file
 
-In advance of using those functions, you must
-define [screen nickname file](../../selector_and_nickname/nickname/screen_nickname.md)
+In advance of using these functions, you must
+define [Screen Nickname File](../../selector_and_nickname/nickname/screen_nickname.md)
 
 ## Example
 
 ### ScreenIsAndIsScreen1.kt
+
+(`kotlin/tutorial/basic/ScreenIsAndIsScreen1.kt`)
 
 ```kotlin
 @Test
@@ -94,6 +96,8 @@ fun isScreen_false() {
 
 ### ScreenIsOfAndIsScreenOf1.kt
 
+(`kotlin/tutorial/basic/ScreenIsOfAndIsScreenOf1.kt`)
+
 ```kotlin
 @Test
 @Order(10)
@@ -105,7 +109,7 @@ fun screenIsOf_OK() {
                 it.macro("[Android Settings Top Screen]")
             }.expectation {
                 it.screenIsOf("[Android Settings Top Screen]")
-                    .screenIsOf("[Android Settings Top Screen]", "[Network & internet]", "[System Screen]")
+                    .screenIsOf("[Android Settings Top Screen]", "[Network & internet Screen]", "[System Screen]")
             }
         }
     }
@@ -120,7 +124,7 @@ fun screenIsOf_NG() {
             condition {
                 it.macro("[Android Settings Top Screen]")
             }.expectation {
-                it.screenIsOf("[Network & internet]", "[System Screen]")
+                it.screenIsOf("[Network & internet Screen]", "[System Screen]")
             }
         }
     }
@@ -139,9 +143,9 @@ fun isScreenOf_true() {
                     .ifTrue {
                         OK("This is [Android Settings Top Screen]")
                     }
-                it.isScreenOf("[Android Settings Top Screen]", "[Network & internet]", "[System Screen]")
+                it.isScreenOf("[Android Settings Top Screen]", "[Network & internet Screen]", "[System Screen]")
                     .ifTrue {
-                        OK("This is of [Android Settings Top Screen],[Network & internet],[System Screen]")
+                        OK("This is of [Android Settings Top Screen],[Network & internet Screen],[System Screen]")
                     }
             }
         }
@@ -157,9 +161,9 @@ fun isScreenOf_false() {
             condition {
                 it.macro("[Android Settings Top Screen]")
             }.expectation {
-                it.isScreenOf("[Network & internet]", "[System Screen]")
+                it.isScreenOf("[Network & internet Screen]", "[System Screen]")
                     .ifFalse {
-                        OK("This is not of [Network & internet],[System Screen]")
+                        OK("This is not of [Network & internet Screen],[System Screen]")
                     }
             }
         }

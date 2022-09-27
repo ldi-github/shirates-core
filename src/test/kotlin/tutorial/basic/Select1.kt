@@ -41,12 +41,11 @@ class Select1 : UITest() {
 
         scenario {
             case(1) {
-                condition {
+                action {
                     it.scanElements()
-                }.action {
-                    it.selectInScanResults("Settings", log = true)
-                    it.selectInScanResults("Accessibility", log = true)
-                    it.selectInScanResults("System", log = true)
+                        .selectInScanResults("Settings", log = true)
+                        .selectInScanResults("Accessibility", log = true)
+                        .selectInScanResults("System", log = true)
                 }
             }
         }

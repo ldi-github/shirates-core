@@ -1,10 +1,12 @@
 # sendKeys
 
-You can input text into textbox using **sendKeys** function.
+You can input text into input widget using **sendKeys** function.
 
 ## Example
 
 ### AndroidSendKeys1.kt
+
+(`kotlin/tutorial/basic/AndroidSendKeys1.kt`)
 
 ```kotlin
 @Test
@@ -26,6 +28,8 @@ fun sendKeys() {
 ```
 
 ### iOSSendKeys1.kt
+
+(`kotlin/tutorial/basic/iOSSendKeys1.kt`)
 
 ```kotlin
 @Test

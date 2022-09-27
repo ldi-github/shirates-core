@@ -897,13 +897,13 @@ class TestElementAssertionExtension_IosTest : UnitTest() {
         e.classIs(expected = "XCUIElementTypeStaticText")
         // Assert
         val log = TestLog.lines.last() { it.scriptCommand == "classIs" }
-        assertThat(log.message).isEqualTo("<General>.class is \"XCUIElementTypeStaticText\"")
+        assertThat(log.message).isEqualTo("<General>.classOrType is \"XCUIElementTypeStaticText\"")
         assertThat(log.logType).isEqualTo(LogType.ok)
 
         // Act, Assert
         assertThatThrownBy {
             e.classIs(expected = "XCUIElementTypeOther")
         }.isInstanceOf(TestNGException::class.java)
-            .hasMessage("<General>.class is \"XCUIElementTypeOther\" (actual=\"XCUIElementTypeStaticText\")")
+            .hasMessage("<General>.classOrType is \"XCUIElementTypeOther\" (actual=\"XCUIElementTypeStaticText\")")
     }
 }

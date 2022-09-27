@@ -38,7 +38,7 @@ Command can be chained like this.
 
 ### RelativeSelector1.kt
 
-kotlin/tutorial/basic/RelativeSelector1.kt
+(`kotlin/tutorial/basic/RelativeSelector1.kt`)
 
 ```kotlin
 @Test
@@ -61,7 +61,7 @@ fun select() {
 
 ### [Timer Screen].json
 
-testConfig/android/clock/screens/[Timer Screen].json
+(`testConfig/android/clock/screens/[Timer Screen].json`)
 
 ```
 {
@@ -113,7 +113,7 @@ it.select("<Label1>[:Right button]")
 
 ### RelativeSelector1.kt
 
-kotlin/tutorial/basic/RelativeSelector1.kt
+(`kotlin/tutorial/basic/RelativeSelector1.kt`)
 
 ```kotlin
 @Test
@@ -139,7 +139,7 @@ fun select_with_nickname() {
         }
         case(3) {
             expectation {
-                it.select("[5]") {
+                it.select("[5]").apply {
                     select("[:Right button]").textIs("6")
                     select("[:Below button]").textIs("8")
                     select("[:Left button]").textIs("4")

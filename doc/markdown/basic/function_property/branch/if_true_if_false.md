@@ -11,6 +11,8 @@ You can use branch functions instead of Kotlin if-else statement.
 
 ### IfTrueIfFalse1.kt
 
+(`kotlin/tutorial/basic/IfTrueIfFalse1.kt`)
+
 ```kotlin
 @Test
 @Order(10)
@@ -48,7 +50,7 @@ fun ifTrueIfFalse() {
 
 ## Why use branch function, instead of if-else statements?
 
-It's because of realizing [No-Load-Run mode](../../report/no_load_run_mode.md) to get test specification
+It's because of realizing [No-Load-Run(NLR) mode](../../report/no_load_run_mode.md) to get test specification
 report([Spec-Report](../../report/spec_report.md)). Branch function executes both true block and false block on
 No-Load-Run mode, without executing actual tests, and outputs logs just for describing test specification. You
 should use branch functions instead of if-else statements to get well-formed Spec-Report.

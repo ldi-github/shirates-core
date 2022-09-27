@@ -2,34 +2,34 @@
 
 ## Relative selectors
 
-| relative selector | alias    | description                                 |
-|:------------------|:---------|:--------------------------------------------|
-| :flow             | -        | widget in widget flow                       |
-| :flowLabel        | :label   | label widget in widget flow                 |
-| :flowInput        | :input   | input widget in widget flow                 |
-| :flowImage        | :image   | image widget in widget flow                 |
-| :flowButton       | :button  | button widget in widget flow                |
-| :flowSwitch       | :switch  | switch widget in widget flow                |
-| :innerFlow        | :inner   | inner widget in widget flow                 |
-| :innerLabel       | -        | inner label widget in widget flow           |
-| :innerInput       | -        | inner input widget in widget flow           |
-| :innerImage       | -        | inner image widget in widget flow           |
-| :innerButton      | -        | inner button widget in widget flow          |
-| :innerSwitch      | -        | inner switch widget in widget flow          |
-| :vflow            | -        | widget in vertical widget flow              |
-| :innerVflow       | :innerV  | inner widget in vertical widget flow        |
-| :innerVlabel      | -        | inner label widget in vertical widget flow  |
-| :innerVinput      | -        | inner input widget in vertical widget flow  |
-| :innerVimage      | -        | inner image widget in vertical widget flow  |
-| :innerVbutton     | -        | inner button widget in vertical widget flow |
-| :innerVswitch     | -        | inner switch widget in vertical widget flow |
+| relative selector | alias    | description                          |
+|:------------------|:---------|:-------------------------------------|
+| :flow             | -        | widget in widget flow                |
+| :flowLabel        | :label   | label in widget flow                 |
+| :flowInput        | :input   | input in widget flow                 |
+| :flowImage        | :image   | image in widget flow                 |
+| :flowButton       | :button  | button in widget flow                |
+| :flowSwitch       | :switch  | switch in widget flow                |
+| :innerFlow        | :inner   | inner widget in widget flow          |
+| :innerLabel       | -        | inner label in widget flow           |
+| :innerInput       | -        | inner input in widget flow           |
+| :innerImage       | -        | inner image in widget flow           |
+| :innerButton      | -        | inner button in widget flow          |
+| :innerSwitch      | -        | inner switch in widget flow          |
+| :vflow            | -        | widget in vertical widget flow       |
+| :innerVflow       | :innerV  | inner widget in vertical widget flow |
+| :innerVlabel      | -        | inner label in vertical widget flow  |
+| :innerVinput      | -        | inner input in vertical widget flow  |
+| :innerVimage      | -        | inner image in vertical widget flow  |
+| :innerVbutton     | -        | inner button in vertical widget flow |
+| :innerVswitch     | -        | inner switch in vertical widget flow |
 
 ## Relative selector examples
 
-| example                  | description                                                                                       |
-|:-------------------------|:--------------------------------------------------------------------------------------------------|
-| `<text1>:input`          | Select the first element that text is "text1", then select the first input widget in widget flow. |
-| `<.Class1>:flow(2)`      | Select the first element that type is Class1, then select the second widget in widget flow.       |
+| example                  | description                                                                                  |
+|:-------------------------|:---------------------------------------------------------------------------------------------|
+| `<text1>:input`          | Select the first element that text is "text1", then select the first input in widget flow.   |
+| `<.Class1>:flow(2)`      | Select the first element that type is Class1, then select the second widget in widget flow.  |
 
 <br>
 

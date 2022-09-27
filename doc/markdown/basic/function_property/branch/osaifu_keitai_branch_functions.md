@@ -24,10 +24,10 @@ fun osaifuKeitai1() {
         case(1) {
             action {
                 osaifuKeitai {
-                    output("Osaifu-Keitai is available")
+                    describe("Osaifu-Keitai is available")
                 }
                 osaifuKeitaiNot {
-                    output("Osaifu-Keitai is not available")
+                    describe("Osaifu-Keitai is not available")
                 }
             }
         }

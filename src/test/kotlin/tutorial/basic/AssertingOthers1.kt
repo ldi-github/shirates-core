@@ -25,9 +25,9 @@ class AssertingOthers1 : UITest() {
             case(2) {
                 condition {
                     it.tapAppIcon("Chrome")
+                }.expectation {
                     val isApp = it.isApp("[Chrome]")
                     output("isApp(\"[Chrome]\")=$isApp")
-                }.expectation {
                     it.appIs("[Chrome]")
                 }
             }
@@ -57,8 +57,8 @@ class AssertingOthers1 : UITest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                    output("isKeyboardShown=$isKeyboardShown")
                 }.expectation {
+                    output("isKeyboardShown=$isKeyboardShown")
                     it.keyboardIsNotShown()
                 }
             }

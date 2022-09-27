@@ -448,9 +448,6 @@ abstract class UITest : TestDrive {
             if (isFailing) {
                 throw TestFailException(failMessage)
             }
-            if (TestMode.isNoLoadRun) {
-                throw TestAbortedException("No-Load-Run mode")
-            }
             if (TestLog.lines.any { it.logType == LogType.CASE }.not()) {
                 throw TestAbortedException("No case found in scenario.")
             }
@@ -495,6 +492,10 @@ abstract class UITest : TestDrive {
                     scenarioLog.resultMessage = skipLine.message
                 }
             }
+        }
+
+        if (TestMode.isNoLoadRun) {
+            throw TestAbortedException("No-Load-Run mode")
         }
 
         val lastScenario = TestLog.lastScenarioLog

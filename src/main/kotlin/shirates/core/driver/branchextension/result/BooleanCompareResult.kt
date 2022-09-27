@@ -65,6 +65,11 @@ class BooleanCompareResult(val value: Boolean, val command: String) : CompareRes
         onElse: () -> Unit
     ): BooleanCompareResult {
 
+        if (TestMode.isNoLoadRun) {
+            onElse()
+            return this
+        }
+
         if (command == "onScreen") {
             if (history.isEmpty()) {
                 onElse.invoke()

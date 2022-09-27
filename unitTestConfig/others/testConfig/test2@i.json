@@ -19,9 +19,9 @@
 
   "profiles": [
     {
-      "profileName": "iPhone 13(15.0)",
+      "profileName": "iPhone 13(15.5)",
       "capabilities": {
-        "platformVersion": "15.0",
+        "platformVersion": "15.5",
         "deviceName": "iPhone 13",
         "bundleId": "com.apple.Preferences"
       }

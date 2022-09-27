@@ -988,3 +988,21 @@ fun TestElement.classIs(
 
     return this
 }
+
+/**
+ * classIsNot
+ */
+fun TestElement.classIsNot(
+    expected: String
+): TestElement {
+
+    val command = "classIsNot"
+    val assertMessage = message(id = command, subject = subject, expected = expected)
+
+    val context = TestDriverCommandContext(this)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
+        classOrType.thisIsNot(expected = expected, message = assertMessage)
+    }
+
+    return this
+}

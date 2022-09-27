@@ -89,11 +89,11 @@ This is a sample configuration for iOS apps.
 
   "profiles": [
     {
-      "profileName": "iPhone 13(15.0)",
+      "profileName": "iPhone 13(15.5)",
       "tapAppIconMethod": "",
       "tapAppIconMacro": "",
       "capabilities": {
-        "platformVersion": "15.0",
+        "platformVersion": "15.5",
         "deviceName": "iPhone 13"
       }
     }

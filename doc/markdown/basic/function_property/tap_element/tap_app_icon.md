@@ -4,13 +4,15 @@ You can tap app icon and launch app using **tapAppIcon** function.
 
 ## function
 
-| function   | description                              |
-|:-----------|:-----------------------------------------|
-| tapAppIcon | Tap app icon on home or app launch menu. |
+| function   | description                                |
+|:-----------|:-------------------------------------------|
+| tapAppIcon | Tap app icon on home or app launcher menu. |
 
 ## Example
 
 ### TapAppIcon1.kt
+
+(`kotlin/tutorial/basic/TapAppIcon1.kt`)
 
 ```kotlin
 @Test

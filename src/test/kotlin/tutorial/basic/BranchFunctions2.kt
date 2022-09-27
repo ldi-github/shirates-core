@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.*
-import shirates.core.driver.commandextension.output
+import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.testcode.UITest
 
@@ -20,18 +20,18 @@ class BranchFunctions2 : UITest() {
                 action {
                     android {
                         emulator {
-                            output("This is called on android emulator")
+                            describe("This is called on android emulator")
                         }
                         realDevice {
-                            output("This is called on android real device")
+                            describe("This is called on android real device")
                         }
                     }
                     ios {
                         simulator {
-                            output("This is called on iOS Simulator")
+                            describe("This is called on iOS Simulator")
                         }
                         realDevice {
-                            output("This is called on iOS real device")
+                            describe("This is called on iOS real device")
                         }
                     }
                 }.expectation {

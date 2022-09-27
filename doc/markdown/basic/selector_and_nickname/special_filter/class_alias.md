@@ -9,7 +9,7 @@
 | image       | android.widget.ImageView                                                         | XCUIElementTypeImage                                        |
 | button      | android.widget.Button<br/>android.widget.ImageButton<br/>android.widget.CheckBox | XCUIElementTypeButton                                       |
 | switch      | android.widget.Switch                                                            | XCUIElementTypeSwitch                                       |
-| widget      | (all)                                                                            | (all)                                                       |
+| widget      | (all of the above)                                                               | (all of the above)                                          |
 
 <br>
 
@@ -39,5 +39,6 @@ Using class aliases simplifies the description rather than writing specific clas
 
 ### Link
 
+- [Special filter](../special_filter/special_filter.md)
 - [index](../../../index.md)
 

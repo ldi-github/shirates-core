@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.specialTag
-import shirates.core.driver.commandextension.output
+import shirates.core.driver.commandextension.describe
 import shirates.core.driver.testProfile
 import shirates.core.testcode.UITest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
+@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android 12")
 class SpecialTag1 : UITest() {
 
     @Test
@@ -17,9 +17,9 @@ class SpecialTag1 : UITest() {
 
         scenario {
             case(1) {
-                expectation {
-                    output("testProfile.specialTags=${testProfile.specialTags}")
-
+                condition {
+                    describe("testProfile.specialTags=${testProfile.specialTags}")
+                }.expectation {
                     specialTag("Tag1") {
                         OK("specialTag(\"Tag1\") called")
                     }
@@ -40,18 +40,18 @@ class SpecialTag1 : UITest() {
 
         scenario {
             case(1) {
-                expectation {
-                    output("testProfile.specialTags=${testProfile.specialTags}")
-
+                condition {
+                    describe("testProfile.specialTags=${testProfile.specialTags}")
+                }.expectation {
                     specialTag("Tag1") {
                         OK("specialTag(\"Tag1\") called")
                     }.notMatched {
-                        output("Tag1 not called")
+                        describe("Tag1 not called")
                     }
                     specialTag("Tag2") {
                         OK("specialTag(\"Tag2\") called")
                     }.notMatched {
-                        output("Tag2 not called")
+                        describe("Tag2 not called")
                     }
                 }
             }

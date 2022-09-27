@@ -4,7 +4,7 @@
 
 **webTitle selector** is special selector to identify screen in browser.
 
-Let's see "https://appium.io/" in Google Chrome.
+Let's see "https://appium.io/" in Google Chrome in Appium Inspector.
 
 ![Optimizing end of scroll](../../../basic/_images/webtitle_selector.png)
 

@@ -1,6 +1,6 @@
 # memo
 
-You can write or read memo using these functions.
+You can write and read memo using these functions.
 
 ## functions
 
@@ -14,7 +14,10 @@ You can write or read memo using these functions.
 
 ### Memo1.kt
 
+(`kotlin/tutorial/basic/Memo1.kt`)
+
 ```kotlin
+@Order(10)
 @Test
 fun writeMemo_readMemo() {
 
@@ -46,7 +49,10 @@ fun writeMemo_readMemo() {
 
 ### Memo1.kt
 
+(`kotlin/tutorial/basic/Memo1.kt`)
+
 ```kotlin
+@Order(20)
 @Test
 fun memoTextAs_readMemo() {
 
@@ -71,7 +77,7 @@ fun memoTextAs_readMemo() {
             condition {
                 it.tap("[AC]")
             }.action {
-                readMemo("[result1]")
+                it.readMemo("result1")
                     .forEach { key ->
                         it.tap("[$key]")
                     }

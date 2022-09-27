@@ -2,7 +2,7 @@
 
 **title selector** is special selector to identify screen.
 
-Let's see `Network & internet` screen.
+Let's see `Network & internet` screen in Appium Inspector.
 
 ![Optimizing end of scroll](../../../basic/_images/title_selector.png)
 

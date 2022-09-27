@@ -5,10 +5,21 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
+import shirates.core.utility.tool.AdbUtility
 
 
-@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android emulator-5556")
+@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android *")
 class TestDriverAndroidUdidTest : UITest() {
+
+    @Test
+    fun firstDeviceUsed() {
+
+        val list = AdbUtility.getAndroidDeviceList(log = true)
+        val firstDevice = list.first()
+
+        val udidLine = TestLog.lines.firstOrNull() { it.subject == "deviceUDID" }
+        assertThat(udidLine?.message).isEqualTo("deviceUDID: ${firstDevice.udid}")
+    }
 
     @Test
     fun emulator5556() {
@@ -16,6 +27,4 @@ class TestDriverAndroidUdidTest : UITest() {
         val udidLine = TestLog.lines.firstOrNull() { it.message == "udid: emulator-5556" }
         assertThat(udidLine).isNotNull()
     }
-
-
 }

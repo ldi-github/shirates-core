@@ -19,24 +19,32 @@ You can scroll screen using these functions.
 
 ### Scroll1.kt
 
+(`kotlin/tutorial/basic/Scroll1.kt`)
+
 ```kotlin
 @Test
 @Order(10)
-fun scrollWithoutArgs() {
+fun scrollDown_scrollUp() {
 
     scenario {
         case(1) {
             condition {
-                it.tapWithScrollDown("Accessibility")
-                    .screenIs("[Accessibility Screen]")
+                it.macro("[Android Settings Top Screen]")
             }.action {
                 it
                     .scrollDown()
                     .scrollDown()
                     .scrollUp()
                     .scrollUp()
-                    .scrollToBottom()
-                    .scrollToTop()
+            }
+        }
+        case(2) {
+            action {
+                it
+                    .scrollDown(durationSeconds = 5.0, startMarginRatio = 0.1)
+                    .scrollDown(durationSeconds = 3.0, startMarginRatio = 0.3)
+                    .scrollUp(durationSeconds = 5.0, startMarginRatio = 0.1)
+                    .scrollUp(durationSeconds = 3.0, startMarginRatio = 0.3)
             }
         }
     }
@@ -44,18 +52,23 @@ fun scrollWithoutArgs() {
 
 @Test
 @Order(20)
-fun scrollWithArgs() {
+fun scrollToBottom_scrollToTop() {
 
     scenario {
         case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.scrollToBottom(repeat = 2)
+            }.expectation {
+                it.exist("[Tips & support]")
+            }
+        }
+        case(2) {
             action {
-                it
-                    .scrollDown(durationSeconds = 5.0, startMarginRatio = 0.1)
-                    .scrollDown(durationSeconds = 3.0, startMarginRatio = 0.3)
-                    .scrollUp(durationSeconds = 5.0, startMarginRatio = 0.1)
-                    .scrollUp(durationSeconds = 3.0, startMarginRatio = 0.3)
-                    .scrollToBottom(startMarginRatio = 0.5, repeat = 2)
-                    .scrollToTop(startMarginRatio = 0.5, repeat = 2)
+                it.scrollToTop(repeat = 2)
+            }.expectation {
+                it.exist("Settings")
             }
         }
     }
@@ -63,23 +76,59 @@ fun scrollWithArgs() {
 
 @Test
 @Order(30)
-fun scrollToBottom() {
+fun withScroll() {
 
     scenario {
         case(1) {
             condition {
                 it.macro("[Android Settings Top Screen]")
-            }.action {
-                it.scrollToBottom()
             }.expectation {
-                it.exist("[Tips & support]")
+                withScrollDown {
+                    it
+                        .select("[Notifications]").textIs("Notifications")
+                        .select("[Accessibility]").textIs("Accessibility")
+                        .select("[Tips & support]").textIs("Tips & support")
+                }
+                withScrollUp {
+                    it
+                        .select("[Accessibility]").textIs("Accessibility")
+                        .select("[Notifications]").textIs("Notifications")
+                }
             }
         }
         case(2) {
+            expectation {
+                withScrollDown {
+                    it
+                        .exist("[Notifications]")
+                        .exist("[Accessibility]")
+                        .exist("[Tips & support]")
+                }
+                withScrollUp {
+                    it
+                        .exist("[Tips & support]")
+                        .exist("[Accessibility]")
+                        .exist("[Notifications]")
+                }
+            }
+        }
+        case(3) {
             action {
-                it.scrollToTop()
+                withScrollDown {
+                    it.tap("[Accessibility]")
+                }
             }.expectation {
-                it.exist("Settings")
+                it.screenIs("[Accessibility Screen]")
+            }
+        }
+        case(4) {
+            action {
+                it.tap("[<-]")
+                withScrollUp {
+                    it.tap("[Network & internet]")
+                }
+            }.expectation {
+                it.screenIs("[Network & internet Screen]")
             }
         }
     }

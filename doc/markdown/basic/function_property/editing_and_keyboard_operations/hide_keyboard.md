@@ -6,6 +6,8 @@ To hide software keyboard, you can use **hideKeyboard** function.
 
 #### AndroidKeyboard1.kt
 
+(`kotlin/tutorial/basic/AndroidKeyboard1.kt`)
+
 ```kotlin
 @Test
 @Order(10)
@@ -33,7 +35,7 @@ fun hideKeyboard() {
 }
 ```
 
-####      
+####       
 
 ### Link
 

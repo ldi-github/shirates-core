@@ -40,18 +40,19 @@ Set the path of accounts.json to "**accounts**" in **dataset** section of the te
 
 ### Account1.kt
 
+(`kotlin/tutorial/basic/Account1.kt`)
+
 Use account function.
 
 ```kotlin
 @Test
 @Order(10)
-@DisplayName("account")
 fun account() {
 
     scenario {
         case(1) {
             condition {
-                it.screenIs("[Android Settings Top Screen]")
+                it.macro("[Android Settings Top Screen]")
                     .tap("Search settings")
                     .screenIs("[Android Settings Search Screen]")
                     .tap("[Search Box]")

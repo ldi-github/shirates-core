@@ -59,7 +59,7 @@ android.profile=Android 12
 
 ## [iOS]
 #ios.configFile=
-ios.profile=iPhone 13(15.0)
+ios.profile=iPhone 13(15.5)
 
 ## Stub --------------------
 #stubServerUrl=http://stub1
@@ -89,6 +89,7 @@ ios.profile=iPhone 13(15.0)
 #enableTimeMeasureLog=true
 #enableImageMatchDebugLog=true
 #testResults=
+#testListDir=
 
 ## Screenshot --------------------
 #screenshotScale=0.333333

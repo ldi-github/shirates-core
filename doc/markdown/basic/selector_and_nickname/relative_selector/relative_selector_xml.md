@@ -24,15 +24,15 @@
 
 ## Relative selector examples
 
-| example                 | description                                                                                                                                             |
-|:------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `<.Class1>:child(1)`    | Select the first element that type is Class1, then select the first child.                                                                              |
-| `<#id1>:next`           | Select the first element that resource-id is "id1", then select next element.                                                                           |
-| `<text1>:previous`      | Select the first element that text is "text1", then select previous element.                                                                            |
-| `<@access1>:next:next`  | Select the first element that accessibility(content-desc or name) is "access1", then select next element, then select next element.                     |
-| `<@access1>:next(2)`    | This is equivalent to `<@access1>:next:next`                                                                                                            |
-| `<text1>:next(.Class1)` | Select the first element that text is "text1", then select next element that class is "Class1"                                                          |
-| `<text1>:nextInput`     | Select the first element that text is "text1", then select next input element.                                                                          |
+| example                 | description                                                                                                                         |
+|:------------------------|:------------------------------------------------------------------------------------------------------------------------------------|
+| `<.class1>:child(1)`    | Select the first element that type is class1, then select the first child.                                                          |
+| `<#id1>:next`           | Select the first element that resource-id is "id1", then select next element.                                                       |
+| `<text1>:previous`      | Select the first element that text is "text1", then select previous element.                                                        |
+| `<@access1>:next:next`  | Select the first element that accessibility(content-desc or name) is "access1", then select next element, then select next element. |
+| `<@access1>:next(2)`    | This is equivalent to `<@access1>:next:next`                                                                                        |
+| `<text1>:next(.class1)` | Select the first element that text is "text1", then select next element that class is "class1"                                      |
+| `<text1>:nextInput`     | Select the first element that text is "text1", then select next input element.                                                      |
 
 ### Link
 

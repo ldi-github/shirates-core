@@ -310,13 +310,6 @@ internal fun TestDrive?.screenIsOfCore(
             TestLog.warn(message(id = "checkScreenManually", subject = screenNames.joinToString(",")))
         } else {
             lastElement.lastResult = LogType.NG
-            TestLog.warn(
-                message(
-                    id = "expectedScreenNotDisplayed",
-                    subject = screenName,
-                    submessage = lastElement.lastError?.message
-                )
-            )
         }
 
         val screenIdentities = mutableMapOf<String, String>()

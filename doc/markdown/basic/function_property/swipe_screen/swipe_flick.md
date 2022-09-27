@@ -4,32 +4,34 @@ You can swipe or flick screen using these functions.
 
 ## functions
 
-| swipe function              | description                                                                    | flick function                   |
-|:----------------------------|:-------------------------------------------------------------------------------|:---------------------------------|
-| swipeTo                     | Swipe the element to another element that selected by nickname                 | n/a                              |
-| swipeToAdjust               | Swipe the element to another element that selected by nickname with adjustment | n/a                              |
-| swipeVerticalTo             | Swipe the element to y coordinate vertically                                   | n/a                              |
-| swipeHorizontalTo           | Swipe the element to x coordinate horizontally                                 | n/a                              |
-| swipeToTop                  | Swipe the element to top                                                       | flickToTop                       |
-| swipeToRight                | Swipe the element to right                                                     | flickToRight                     |
-| swipeToBottom               | Swipe the element to bottom                                                    | flickToBottom                    |
-| swipeToLeft                 | Swipe the element to left                                                      | flickToLeft                      |
-| swipeToCenter               | Swipe the element to center                                                    | n/a                              |
-| swipeCenterToTop            | Swipe from center to top                                                       | flickCenterToTop                 |
-| swipeCenterToRight          | Swipe from center to right                                                     | flickCenterToRight               |
-| swipeCenterToBottom         | Swipe from center to bottom                                                    | flickCenterToBottom              |
-| swipeCenterToLeft           | Swipe from center to left                                                      | flickCenterToLeft                |
-| swipeLeftToRight            | Swipe from left to right                                                       | flickLeftToRight                 |
-| swipeRightToLeft            | Swipe from right to left                                                       | flickRightToLeft                 |
-| swipeBottomToTop            | Swipe from bottom to top                                                       | flickBottomToTop, flickAndGoDown |
-| swipeTopToBottom            | Swipe from top to bottom                                                       | flickTopToBottom, flickAndGoUp   |
-| swipePointToPoint           | Swipe from the start coordinate to the end coordinate                          | n/a                              |
-| swipeElementToElement       | Swipe from the start element to the end element                                | n/a                              |
-| swipeElementToElementAdjust | Swipe from the start element to the end element with adjustment                | n/a                              |
+| swipe function              | description                                                     | flick function                   |
+|:----------------------------|:----------------------------------------------------------------|:---------------------------------|
+| swipeTo                     | Swipe the element to another element                            | n/a                              |
+| swipeToAdjust               | Swipe the element to another element, with adjustment           | n/a                              |
+| swipeVerticalTo             | Swipe the element to y coordinate vertically                    | n/a                              |
+| swipeHorizontalTo           | Swipe the element to x coordinate horizontally                  | n/a                              |
+| swipeToTop                  | Swipe the element to top                                        | flickToTop                       |
+| swipeToRight                | Swipe the element to right                                      | flickToRight                     |
+| swipeToBottom               | Swipe the element to bottom                                     | flickToBottom                    |
+| swipeToLeft                 | Swipe the element to left                                       | flickToLeft                      |
+| swipeToCenter               | Swipe the element to center                                     | n/a                              |
+| swipeCenterToTop            | Swipe from center to top                                        | flickCenterToTop                 |
+| swipeCenterToRight          | Swipe from center to right                                      | flickCenterToRight               |
+| swipeCenterToBottom         | Swipe from center to bottom                                     | flickCenterToBottom              |
+| swipeCenterToLeft           | Swipe from center to left                                       | flickCenterToLeft                |
+| swipeLeftToRight            | Swipe from left to right                                        | flickLeftToRight                 |
+| swipeRightToLeft            | Swipe from right to left                                        | flickRightToLeft                 |
+| swipeBottomToTop            | Swipe from bottom to top                                        | flickBottomToTop, flickAndGoDown |
+| swipeTopToBottom            | Swipe from top to bottom                                        | flickTopToBottom, flickAndGoUp   |
+| swipePointToPoint           | Swipe from the start coordinate to the end coordinate           | n/a                              |
+| swipeElementToElement       | Swipe from the start element to the end element                 | n/a                              |
+| swipeElementToElementAdjust | Swipe from the start element to the end element with adjustment | n/a                              |
 
 ## swipeTo, swipeToAdjust
 
 ### Swipe1.kt
+
+(`kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
 @Test
@@ -70,6 +72,8 @@ fun swipeTo_swipeToAdjust() {
 ## swipeToCenter, swipeToTop, swipeToBottom
 
 ### Swipe1.kt
+
+(`kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
 @Test
@@ -114,8 +118,10 @@ fun swipeToCenter_swipeToTop_swipeToBottom() {
 
 ### Swipe1.kt
 
+(`kotlin/tutorial/basic/Swipe1.kt`)
+
 ```kotlin
-    @Test
+@Test
 @Order(30)
 fun swipePointToPoint() {
 

@@ -13,6 +13,8 @@ You can get information of the platform using these properties.
 
 ### PlatformProperties1.kt
 
+(`kotlin/tutorial/basic/PlatformProperties1.kt`)
+
 ```kotlin
 @Test
 @Order(10)

@@ -23,6 +23,8 @@ You can press key using these functions.
 
 #### AndroidPressKey1.kt
 
+(`kotlin/tutorial/basic/AndroidPressKey1.kt`)
+
 ```kotlin
 @Test
 @Order(10)
@@ -46,6 +48,8 @@ fun pressBack() {
 ## pressHome (Android)
 
 #### AndroidPressKey1.kt
+
+(`kotlin/tutorial/basic/AndroidPressKey1.kt`)
 
 ```kotlin
 @Test
@@ -71,6 +75,8 @@ fun pressHome() {
 
 #### AndroidPressKey1.kt
 
+(`kotlin/tutorial/basic/AndroidPressKey1.kt`)
+
 ```kotlin
 @Test
 @Order(30)
@@ -95,6 +101,8 @@ fun pressSearch() {
 ## pressBack (iOS)
 
 #### iOSPressKey1.kt
+
+(`kotlin/tutorial/basic/iOSPressKey1.kt`)
 
 ```kotlin
 @Test
@@ -125,6 +133,8 @@ fun pressBack() {
 
 #### iOSPressKey1.kt
 
+(`kotlin/tutorial/basic/iOSPressKey1.kt`)
+
 ```kotlin
 @Test
 @Order(20)
@@ -148,6 +158,8 @@ fun pressHome() {
 ## pressEnter (iOS)
 
 #### iOSPressKey1.kt
+
+(`kotlin/tutorial/basic/iOSPressKey1.kt`)
 
 ```kotlin
 @Test

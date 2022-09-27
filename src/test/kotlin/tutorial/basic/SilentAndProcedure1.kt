@@ -21,7 +21,7 @@ class SilentAndProcedure1 : UITest() {
                     describe("Tap [System]")
                     silent {
                         it.scrollToBottom()
-                            .tapWithScrollUp("[System]")
+                            .tap("[System]")
                     }
                 }.expectation {
                     it.screenIs("[System Screen]")
@@ -41,7 +41,7 @@ class SilentAndProcedure1 : UITest() {
                 }.action {
                     procedure("Tap [System]") {
                         it.scrollToBottom()
-                            .tapWithScrollUp("[System]")
+                            .tap("[System]")
                     }
                 }.expectation {
                     it.screenIs("[System Screen]")
