@@ -16,7 +16,7 @@ import shirates.spec.code.model.CodeGenerationExecutor
 
 fun main() {
 
-   CodeGenerationExecutor().execute()
+    CodeGenerationExecutor().execute()
 }
 ```
 
@@ -34,99 +34,84 @@ fun main() {
 ```kotlin
 package generated
 
-import shirates.core.driver.branchextension.*
-import shirates.core.driver.commandextension.*
-import shirates.core.driver.*
-import shirates.core.testcode.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.branchextension.*
+import shirates.core.driver.commandextension.*
+import shirates.core.driver.function.*
+import shirates.core.testcode.*
 
 @SheetName("calculator test")
-class CalculatorTestDemo : UITest() {
+class CalculatorDemo : UITest() {
 
-   @Test
-   @DisplayName("calculate 123+456")
-   fun S1010() {
+    @NoLoadRun
+    @Test
+    @DisplayName("calculate 123+456")
+    fun S1010() {
 
-      scenario {
-         case(1) {
-            condition {
-               it
-                  .manual("[Restart Calculator]")
-                  .manual("[Calculator Main Screen] is displayed")
-            }.action {
-               it
-                  .manual("Tap [1]")
-                  .manual("Tap [2]")
-                  .manual("Tap [3]")
-            }.expectation {
-               it
-                  .manual("[formula] is \"123\"")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Restart Calculator]")
+                        .screenIs("[Calculator Main Screen]")
+                }.action {
+                    it.tap("[1]")
+                        .tap("[2]")
+                        .tap("[3]")
+                }.expectation {
+                    it.select("[formula]").textIs("123")
+                }
             }
-         }
-
-         case(2) {
-            action {
-               it
-                  .manual("Tap [+]")
-            }.expectation {
-               it
-                  .manual("[formula] is \"123+\"")
+            case(2) {
+                action {
+                    it.tap("[+]")
+                }.expectation {
+                    it.select("[formula]").textIs("123+")
+                }
             }
-         }
-
-         case(3) {
-            action {
-               it
-                  .manual("Tap [4]")
-                  .manual("Tap [5]")
-                  .manual("Tap [6]")
-            }.expectation {
-               it
-                  .manual("[formula] is \"123+456\"")
-                  .manual("[result preview] is \"579\"")
+            case(3) {
+                action {
+                    it.tap("[4]")
+                        .tap("[5]")
+                        .tap("[6]")
+                }.expectation {
+                    it.select("[formula]").textIs("123+456")
+                        .select("[result preview]").textIs("579")
+                }
             }
-         }
-
-         case(4) {
-            action {
-               it
-                  .manual("Tap [=]")
-            }.expectation {
-               it
-                  .manual("[result final] is \"579\"")
+            case(4) {
+                action {
+                    it.tap("[=]")
+                }.expectation {
+                    it.select("[result final]").textIs("579")
+                }
             }
-         }
+        }
+    }
 
-      }
-   }
+    @NoLoadRun
+    @Test
+    @DisplayName("calculate 1÷0")
+    fun S1020() {
 
-   @Test
-   @DisplayName("calculate 1÷0")
-   fun S1020() {
-
-      scenario {
-         case(1) {
-            condition {
-               it
-                  .manual("[Restart Calculator]")
-                  .manual("[Calculator Main Screen] is displayed")
-            }.action {
-               it
-                  .manual("Tap [1]")
-                  .manual("Tap [÷]")
-                  .manual("Tap [0]")
-                  .manual("Tap [=]")
-            }.expectation {
-               it
-                  .manual("[formula] is \"1÷0\"")
-                  .manual("[result preview] is \"Can't divide by 0\"")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Restart Calculator]")
+                        .screenIs("[Calculator Main Screen]")
+                }.action {
+                    it.tap("[1]")
+                        .tap("[÷]")
+                        .tap("[0]")
+                        .tap("[=]")
+                }.expectation {
+                    it.select("[formula]").textIs("1÷0")
+                        .select("[result preview]").textIs("Can't divide by 0")
+                }
             }
-         }
-
-      }
-   }
+        }
+    }
 
 }
 ```

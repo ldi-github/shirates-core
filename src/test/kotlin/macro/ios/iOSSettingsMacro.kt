@@ -1,4 +1,4 @@
-package macro.ios.macro
+package macro.ios
 
 import shirates.core.driver.TestDriver.it
 import shirates.core.driver.commandextension.*

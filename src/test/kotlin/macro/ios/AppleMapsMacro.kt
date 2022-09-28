@@ -1,4 +1,4 @@
-package macro.ios.macro
+package macro.ios
 
 import okhttp3.internal.wait
 import shirates.core.driver.TestDrive

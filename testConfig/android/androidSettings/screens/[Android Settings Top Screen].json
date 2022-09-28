@@ -93,7 +93,7 @@
   },
 
   "scroll": {
-    "start-elements": "",
+    "start-elements": "[Network & internet]",
     "end-elements": "{Tips & support}",
     "overlay-elements": "[Search Button][Search settings]"
   }

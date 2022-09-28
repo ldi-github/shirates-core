@@ -6,6 +6,8 @@ You can put priority annotations **@Must**,**@Should**,**@Want** on test functio
 
 ### Priority1.kt
 
+(`kotlin/tutorial/inaction/Priority1.kt`)
+
 ```kotlin
 package tutorial.inaction
 
@@ -77,8 +79,8 @@ class Priority1 : UITest() {
 
 ### testrun.properties
 
-You can set filters to determine if the group should(or should not) be executed when the test executed. Set priority
-filter off to skip the priority group. For example, you can set filters as follows.
+You can set filters to determine whether the group should(or should not) be executed when the test executed. Set
+priority filter off to skip the priority group. For example, you can set filters as follows.
 
 ```
 ## Priority filter --------------------
@@ -89,7 +91,7 @@ none=false
 ### Result
 
 - must -> executed
-- should ->executed
+- should -> executed
 - want -> skipped
 - none -> skipped
 

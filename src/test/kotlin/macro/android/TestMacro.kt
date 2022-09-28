@@ -1,4 +1,4 @@
-package macro.android.macro
+package macro.android
 
 import shirates.core.logging.TestLog
 import shirates.core.macro.Macro

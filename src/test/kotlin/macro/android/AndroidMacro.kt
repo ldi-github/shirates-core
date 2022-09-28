@@ -1,4 +1,4 @@
-package macro.android.macro
+package macro.android
 
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid

@@ -1,7 +1,7 @@
 # Optimizing end of scroll
 
 When calling commands with scroll (e.g. scrollToEnd, selectWithScrollDown, canSelectWithScrollDown), Shirates detects
-end of scroll automatically. Moreover, Giving additional information may improve the execution time.
+end of scroll automatically. Moreover, giving additional information may improve the execution time.
 
 ## end-elements
 
@@ -31,21 +31,30 @@ Scrolling commands use these additional information to detect the end of scroll.
     "end-elements": "[Tips & support],[About phone]"
 ```
 
-### Scroll1.kt
+### ScrollToEdge1.kt
+
+(`kotlin/tutorial/inaction/ScrollToEdge1.kt`)
 
 ```kotlin
+@Order(10)
 @Test
-@Order(30)
-fun scrollToEnd() {
+fun scrollToBottom_scrollToTop() {
 
     scenario {
         case(1) {
             condition {
                 it.macro("[Android Settings Top Screen]")
             }.action {
-                it.scrollToEnd()
+                it.scrollToBottom()
             }.expectation {
-                it.exist("[Tips & support]")
+                it.exist("{Tips & support}")
+            }
+        }
+        case(2) {
+            action {
+                it.scrollToTop()
+            }.expectation {
+                it.exist("[Network & internet]")
             }
         }
     }
@@ -62,8 +71,8 @@ fun scrollToEnd() {
 
 ![](../_images/end_elements_comparison_2.png)
 
-- unspecified: 17 sec
-- specified: 15 sec
+- unspecified: 20 sec
+- specified: 17 sec
 
 ### Link
 

@@ -11,7 +11,7 @@ You can open Appium Server log file with Console app and monitor in realtime.
 
 ### Log directory
 
-![](../../basic/_images/testresults1.png)
+![](../../_images/test_results.png)
 
 ### Appium Server log
 

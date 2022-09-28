@@ -1,4 +1,4 @@
-package macro.android.macro
+package macro.android
 
 import shirates.core.driver.TestDrive
 import shirates.core.driver.branchextension.ifScreenIs

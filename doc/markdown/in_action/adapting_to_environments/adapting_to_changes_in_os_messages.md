@@ -2,7 +2,7 @@
 
 After upgrading to a new version of OS, the test code that always succeeds may fail.
 
-Changes in messages may the cause of the issue.
+Changes in messages may the cause of this issue.
 
 ## Example
 

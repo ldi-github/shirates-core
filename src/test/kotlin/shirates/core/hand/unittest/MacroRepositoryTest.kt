@@ -1,7 +1,7 @@
 package shirates.core.hand.unittest
 
-import macro.android.macro.CalculatorMacro
-import macro.android.macro.TutorialMacro
+import macro.android.CalculatorMacro
+import macro.android.TutorialMacro
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

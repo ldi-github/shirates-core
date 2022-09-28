@@ -10,12 +10,11 @@ See also [parameters](../../basic/parameter/parameters.md).
 #enableTestList=false
 #enableSpecReport=false
 #enableInnerMacroLog=true
-#enableSilentLog=true
 #enableInnerCommandLog=true
 #enableSilentLog=true
 #enableTapElementImageLog=true
 #enableXmlSourceDump=false
-#enableRetryLog=true
+#enableRetryLog=false
 #enableTrace=true
 #enableShellExecLog=true
 #enableTimeMeasureLog=true

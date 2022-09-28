@@ -14,7 +14,7 @@ The latter is harder than the former.
 
 Open Android Settings app.
 
-Let's see **Connected devices** screen as example.
+Let's see `[Connected devices Screen]` as example.
 
 ![](../_images/connected_devices_screen_1.png)
 
@@ -90,7 +90,7 @@ Let's see **Connected devices** screen as example.
       <br>So you can define the selector as follows using **text filter**.
       <br>```"[Pair new device]": "Pair new device"```
       <br>
-      <br>In this case, the value can be omitted. (
+      <br>In this case, the value can be omitted because the text is the same as nickname label(without brackets). (
       See [Selector nickname](../../basic/selector_and_nickname/nickname/selector_nickname.md))
       <br>```"[Pair new device]": ""```
       <br>
@@ -108,10 +108,6 @@ Let's see **Connected devices** screen as example.
       <br> ![](../_images/inspect_element_5.png)
       <br>So you can define the selector as follows using **text filter**.
       <br>```"[Connection preferences]": ""```
-      <br>
-      <br>In this case, you can set empty to value. (
-      See [Selector nickname](../../basic/selector_and_nickname/nickname/selector_nickname.md))
-      <br>```"[Pair new device]": ""```
       <br>
       <br>
     - `Bluetooth, Android Auto` is dynamic content of `[Connection preferences]`, and is not filtered uniquely by its
@@ -204,7 +200,7 @@ class ConnectedDevicesTest : UITest() {
                         .exist("[Connection preferences]").textIs("Connection preferences")
                         .exist("{Connection preferences}").textIs("Bluetooth, Android Auto")
                         .exist("[i]").classIs("android.widget.ImageView")
-                        .exist("{Information}").textIs("Visible as “Android 12” to other devices")
+                        .exist("{Information}").textStartsWith("Visible as ")
                 }
             }
             case(2) {
@@ -216,10 +212,11 @@ class ConnectedDevicesTest : UITest() {
             }
         }
     }
+
 }
 ```
 
-9. Run test. You can get a report as follows when configured correctly.
+9. Run test. You can get a Html-report as follows when configured correctly.
    <br>![](../_images/connected_devices_test_result.png)
 
 <br>
@@ -228,7 +225,7 @@ class ConnectedDevicesTest : UITest() {
 
 Open Android Settings app.
 
-Let's see **Network & internet** screen as example.
+Let's see `[Network & internet Screen]` as example.
 
 ![Optimizing end of scroll](../../in_action/_images/screen_nickname_identity_with_fixed_header_1.png)
 ![Optimizing end of scroll](../../in_action/_images/screen_nickname_identity_with_fixed_header_2.png)
@@ -255,7 +252,7 @@ See [title selector](../../basic/selector_and_nickname/special_selector/title_se
 
 <br>
 
-Screen nickname file for `Network & internet Screen` can be described as follows.
+Screen nickname file for `[Network & internet Screen]` can be described as follows.
 
 **[Network & internet Screen].json**
 
@@ -342,7 +339,7 @@ See [Optimizing end of scroll](../../in_action/performance_resource/end_of_scrol
 
 Open Android Settings app.
 
-Let's see **Settings** screen as example.
+Let's see `[Android Settings Top Screen]` as example.
 
 ![](../_images/settings_1.png)
 
@@ -457,9 +454,10 @@ Let's see **Settings** screen as example.
 ### "identity" and "satellites"
 
 If you can always access elements that consist of screen identity, you should use these elements for `identity`.
-**Example 1** and **Example 2** are in this case.
+The former **Example 1** and **Example 2** are in this case.
 
-If you can not always access such elements, you should consider another workaround. In case of **Settings** screen, you
+If you can not always access such elements, you should consider another workaround. In case
+of `[Android Settings Top Screen]`, you
 can scroll up or down.
 
 ![Optimizing end of scroll](../../in_action/_images/screen_nickname_identity_without_fixed_header.png)
@@ -483,9 +481,6 @@ This means that the screen is considered as `"[Android Settings Top Screen]"` wh
 and has at least one of `"Battery"`, `"Accessibility"`
 , `"Passwords & accounts"` or `"Tips & support"`. The complex key(consists of identity and satellite key) must be unique
 over screens.
-
-`:descendant` is relative selector.
-See [Relative selector(XML based)](../../basic/selector_and_nickname/relative_selector/relative_selector_xml.md)
 
 ### Link
 

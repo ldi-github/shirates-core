@@ -1,6 +1,7 @@
 # Using shirates-stub
 
-You can use shirates-stub that provides fake api for testing. You can also change data pattern setting of stub server
+You can use **shirates-stub** that provides fake api for testing. You can also change data pattern setting of stub
+server
 dinamically using management APIs.
 
 ![](_images/shirates_stub_overview.png)

@@ -2,7 +2,8 @@
 
 In smartphone apps, irregular screens are often inserted in the middle of screen transitions.
 
-You may or may not see popup dialog (e.g. Location Permissions, Network Error, ads), tutorials to explain how to use
+You may or may not see popup dialog (e.g. Location Permissions, Network Error, Firebase In-App Messaging, ads),
+tutorials to explain how to use
 features, and notification balloons.
 
 ![](../_images/location_permissions.png)
@@ -63,15 +64,15 @@ fun annoyingEventHandling2() {
 
 You can centralize irregular handling procedure using **irregularHandler**.
 
-To apply to all test functions in the TestClass, override `setEventHandlers` function and set delegate function
+To apply to all test functions in the `TestClass`, override `setEventHandlers` function and set delegate function
 to `context.irregularHandler`.
 
-irregularHandler is invoked every time on command execution. This mechanism is very powerful and makes the test code
+**irregularHandler** is invoked every time on command execution. This mechanism is very powerful and makes the test code
 simple.
 
 ### IrregularHandler1
 
-`kotlin/tutorial/inaction/IrregularHandler1.kt`
+(`kotlin/tutorial/inaction/IrregularHandler1.kt`)
 
 ```kotlin
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -115,6 +116,10 @@ class IrregularHandler1 : UITest() {
 
 You can suppress firing irregularHandler by using **suppressHandler** function.
 
+### IrregularHandler1
+
+(`kotlin/tutorial/inaction/IrregularHandler1.kt`)
+
 ```kotlin
 @Test
 @Order(20)
@@ -143,6 +148,10 @@ fun suppressHandler() {
 ## disableHandler(), enableHandler()
 
 You can disable or enable handler by these functions.
+
+### IrregularHandler1
+
+(`kotlin/tutorial/inaction/IrregularHandler1.kt`)
 
 ```kotlin
 @Test

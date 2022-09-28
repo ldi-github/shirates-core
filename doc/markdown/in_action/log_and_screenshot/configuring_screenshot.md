@@ -25,7 +25,7 @@ See also [parameters](../../basic/parameter/parameters.md).
 screenshotScale=0.333333
 ```
 
-### Screenshot file size
+### Screenshot file size example
 
 ![](../_images/screenshot_scale_and_size.png)
 
@@ -45,7 +45,7 @@ onAction=false
 ```
 
 <br>
-If you don't want screenshots on scrolling, you can suppress.
+If you don't want screenshots on scrolling, you can suppress taking screenshots.
 
 ```
 onScrolling=false

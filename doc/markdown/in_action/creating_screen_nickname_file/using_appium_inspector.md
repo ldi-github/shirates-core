@@ -1,6 +1,6 @@
 # Using Appium Inspector
 
-When you create screen nickname files, use **Appium Inspector** for inspecting element information.
+When you want to create screen nickname files, use **Appium Inspector** for inspecting element information.
 
 ## Install
 
@@ -16,16 +16,17 @@ When you create screen nickname files, use **Appium Inspector** for inspecting e
 2. Start Appium Server process. Type just ```appium``` and enter.
 
 ```
-wave1008@ip-192-168-10-9 ~ % appium
-[Appium] Welcome to Appium v2.0.0-beta.35 (REV 30e3d8883cde265cbc16ff94b49a3ac14137590e)
-[Appium] Attempting to load driver uiautomator2...
-[debug] [Appium] Requiring driver at /Users/wave1008/.appium/node_modules/appium-uiautomator2-driver
+wave1008@SNB-M1 ~ % appium
+info Appium Setting NODE_PATH to '/opt/homebrew/lib/node_modules'
+[Appium] Welcome to Appium v2.0.0-beta.44 (REV 0b030b74e2ac518bd0bc4158f96c449198f9957f)
 [Appium] Attempting to load driver xcuitest...
 [debug] [Appium] Requiring driver at /Users/wave1008/.appium/node_modules/appium-xcuitest-driver
+[Appium] Attempting to load driver uiautomator2...
+[debug] [Appium] Requiring driver at /Users/wave1008/.appium/node_modules/appium-uiautomator2-driver
 [Appium] Appium REST http interface listener started on 0.0.0.0:4723
 [Appium] Available drivers:
-[Appium]   - uiautomator2@2.1.0 (automationName 'UiAutomator2')
-[Appium]   - xcuitest@4.4.6 (automationName 'XCUITest')
+[Appium]   - xcuitest@4.11.1 (automationName 'XCUITest')
+[Appium]   - uiautomator2@2.4.6 (automationName 'UiAutomator2')
 [Appium] No plugins have been installed. Use the "appium plugin" command to install the one(s) you want to use.
 ```
 
@@ -55,9 +56,9 @@ See [Quick Start](../../quick-start.md) to install appium.
 
 ## Finding unique attribute(s)
 
-To identify screen, unique key information is required. You can use external editor.
+To identify screen element, unique key information is required. You can use external editor to examine.
 
-1. Capture the screen you want to inspect in Appium Inspect.
+1. Capture the screen you want to inspect in Appium Inspector.
 2. Click `Copy XML Source to Clipboard`.
    <br>![](../_images/copy_xml_source_to_clipboard.png)
 3. Open your favorite editor and paste it. Now you can search unique attribute(s).

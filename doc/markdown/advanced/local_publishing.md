@@ -63,7 +63,7 @@ repositories {
 }
 ```
 
-4. Click reload on Gradle pane in your project.
+4. Click reload in Gradle pane.
 
 ### Link
 

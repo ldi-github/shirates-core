@@ -4,7 +4,7 @@ You can create your own data function using `DatasetRepositoryManager`.
 
 ## Example
 
-Given if you want to create data function for customer.
+In case you want to create data function for customer.
 
 1. Create a dataset json file `customers.json` under `dataset` directory.
 
@@ -86,6 +86,13 @@ Now you can use customer data function as follows.
 ### CustomerTest.kt
 
 ```kotlin
+package exercise
+
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.output
+import shirates.core.testcode.UITest
+
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class CustomerTest : UITest() {
 
@@ -107,11 +114,11 @@ class CustomerTest : UITest() {
 #### Console
 
 ```
-92	2022/01/23 23:38:59.532	{test}	[SCENARIO]	(scenario)	test()
-93	2022/01/23 23:38:59.533	{test-1}	[CASE]	(case)	(1)
-94	2022/01/23 23:38:59.534	{test-1}	[ACTION]	(action)	action
-95	2022/01/23 23:38:59.536	{test-1}	[output]	(output)	customer1
-96	2022/01/23 23:38:59.537	{test-1}	[output]	(output)	customer1@example.com
+96	2022/09/28 21:16:24.736	{test}	[SCENARIO]	(scenario)	test()
+97	2022/09/28 21:16:24.736	{test-1}	[CASE]	(case)	(1)
+98	2022/09/28 21:16:24.736	{test-1}	[ACTION]	(action)	action
+99	2022/09/28 21:16:24.737	{test-1}	[output]	(output)	customer1
+100	2022/09/28 21:16:24.738	{test-1}	[output]	(output)	customer1@example.com
 ```
 
 ### Link

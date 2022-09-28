@@ -18,6 +18,8 @@ You can change language for logging and reporting using **logLanguage** paramete
 
 ### AndroidSettingsDemo.kt
 
+(`kotlin/demo/AndroidSettingsDemo.kt`)
+
 ```kotlin
 @Test
 fun airplaneModeSwitch() {
