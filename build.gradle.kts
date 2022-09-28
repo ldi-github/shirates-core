@@ -4,6 +4,7 @@ plugins {
 //    kotlin("plugin.serialization") version kotlin_version
     id("idea")
     id("maven-publish")
+    id("signing")
     id("java")
 //    id("java-library")
     id("org.jetbrains.dokka") version "1.6.21"
@@ -11,7 +12,7 @@ plugins {
     jacoco
 }
 
-group = "shirates"
+group = "io.github.ldi-github"
 version = "0.9.0-SNAPSHOT"
 
 val appiumClientVersion = "8.1.1"
@@ -145,6 +146,14 @@ publishing {
             url = uri("$buildDir/repository")
         }
         maven {
+            name = "ossrh-snapshot"
+            url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            credentials {
+                username = System.getenv("SHIRATES_CORE_OSSRH_USERNAME")
+                password = System.getenv("SHIRATES_CORE_OSSRH_PASSWORD")
+            }
+        }
+        maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/ldi-github/shirates-core")
             credentials {
@@ -160,6 +169,26 @@ publishing {
             groupId = "${project.group}"
             artifactId = project.name
             version = "${project.version}"
+            pom {
+                name.set("shirates-core")
+                description.set("Shirates is an integration testing framework that makes it easy and fun to write test code for mobile apps. shirates-core is core library.")
+                url.set("https://github.com/ldi-github/shirates-core")
+                licenses {
+                    name.set("The Apache License, Version 2.0")
+                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                }
+                developers {
+                    developer {
+                        id.set("wave1008")
+                        name.set("Nobuhiro Senba")
+                    }
+                }
+                scm {
+                    connection.set("https://github.com/ldi-github/shirates-core.git")
+                    developerConnection.set("git@github.com:shirates-core.git")
+                    url.set("https://github.com/ldi-github/shirates-core")
+                }
+            }
         }
 
         register<MavenPublication>("gpr") {
@@ -172,10 +201,15 @@ publishing {
     }
 }
 
+signing {
+    sign(publishing.publications["binaryAndSources"])
+}
+
 tasks.withType<PublishToMavenRepository>().configureEach {
     onlyIf {
         val r =
             (repository == publishing.repositories["local"] && publication == publishing.publications["binaryAndSources"]) ||
+                    (repository == publishing.repositories["ossrh-snapshot"] && publication == publishing.publications["binaryAndSources"]) ||
                     (repository == publishing.repositories["GitHubPackages"] && publication == publishing.publications["gpr"])
         r
     }
@@ -199,7 +233,8 @@ tasks.register("publishToExternalRepository") {
     group = "publishing"
     description = "Publishes to external repository"
     dependsOn(tasks.withType<PublishToMavenRepository>().matching {
-        it.repository == publishing.repositories["GitHubPackages"]
+//        it.repository == publishing.repositories["GitHubPackages"]
+        it.repository == publishing.repositories["ossrh-snapshot"]
     })
 }
 

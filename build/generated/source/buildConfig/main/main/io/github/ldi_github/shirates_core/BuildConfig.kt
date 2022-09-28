@@ -1,4 +1,4 @@
-package shirates.shirates_core
+package io.github.ldi_github.shirates_core
 
 import kotlin.String
 
@@ -7,7 +7,7 @@ object BuildConfig {
 
     const val version: String = "0.9.0-SNAPSHOT"
 
-    const val packageName: String = "shirates"
+    const val packageName: String = "io.github.ldi-github"
 
     const val charset: String = "UTF-8"
 

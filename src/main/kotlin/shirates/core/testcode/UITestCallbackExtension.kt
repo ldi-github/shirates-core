@@ -60,8 +60,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         val tc = context.requiredTestClass
         TestLog.currentTestClass = tc
 
-        val version = shirates.shirates_core.BuildConfig.version
-        val appiumClientVersion = shirates.shirates_core.BuildConfig.appiumClientVersion
+        val version = io.github.ldi_github.shirates_core.BuildConfig.version
+        val appiumClientVersion = io.github.ldi_github.shirates_core.BuildConfig.appiumClientVersion
         val sheetNameAnnotation = tc.declaredAnnotations.firstOrNull { it is SheetName } as SheetName?
         val sheetName = sheetNameAnnotation?.sheetname ?: tc.simpleName
 
