@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "0.9.0-SNAPSHOT"
+version = "0.9.2-SNAPSHOT"
 
 val appiumClientVersion = "8.1.1"
 
@@ -111,7 +111,7 @@ tasks {
     }
 }
 
-//// Dokka
+// Dokka
 //tasks.dokkaHtml {
 //    outputDirectory.set(buildDir.resolve("doc/html"))
 //}
@@ -136,6 +136,11 @@ buildConfig {
     buildConfigField("String", "appiumClientVersion", "\"${appiumClientVersion}\"")
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 /**
  * publishing
  */
@@ -146,8 +151,10 @@ publishing {
             url = uri("$buildDir/repository")
         }
         maven {
-            name = "ossrh-snapshot"
-            url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            name = "ossrh"
+            val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
+            val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
             credentials {
                 username = System.getenv("SHIRATES_CORE_OSSRH_USERNAME")
                 password = System.getenv("SHIRATES_CORE_OSSRH_PASSWORD")
@@ -166,6 +173,7 @@ publishing {
         create<MavenPublication>("binaryAndSources") {
             from(components["kotlin"])
             artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
             groupId = "${project.group}"
             artifactId = project.name
             version = "${project.version}"
@@ -174,8 +182,10 @@ publishing {
                 description.set("Shirates is an integration testing framework that makes it easy and fun to write test code for mobile apps. shirates-core is core library.")
                 url.set("https://github.com/ldi-github/shirates-core")
                 licenses {
-                    name.set("The Apache License, Version 2.0")
-                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
                 }
                 developers {
                     developer {
@@ -205,11 +215,17 @@ signing {
     sign(publishing.publications["binaryAndSources"])
 }
 
+tasks.javadoc {
+    if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
+}
+
 tasks.withType<PublishToMavenRepository>().configureEach {
     onlyIf {
         val r =
             (repository == publishing.repositories["local"] && publication == publishing.publications["binaryAndSources"]) ||
-                    (repository == publishing.repositories["ossrh-snapshot"] && publication == publishing.publications["binaryAndSources"]) ||
+                    (repository == publishing.repositories["ossrh"] && publication == publishing.publications["binaryAndSources"]) ||
                     (repository == publishing.repositories["GitHubPackages"] && publication == publishing.publications["gpr"])
         r
     }
@@ -234,7 +250,7 @@ tasks.register("publishToExternalRepository") {
     description = "Publishes to external repository"
     dependsOn(tasks.withType<PublishToMavenRepository>().matching {
 //        it.repository == publishing.repositories["GitHubPackages"]
-        it.repository == publishing.repositories["ossrh-snapshot"]
+        it.repository == publishing.repositories["ossrh"]
     })
 }
 
