@@ -1,10 +1,5 @@
 # Creating project
 
-## Preparation
-
-Now preparing remote repository. Currently local publishing is available.
-Setup [Local Publishing](../../advanced/local_publishing.md).
-
 ## Create new project
 
 1. Open IntelliJ IDEA, select `File > New > Project`.
@@ -77,18 +72,15 @@ version = "1.0-SNAPSHOT"
 
 val shiratesCoreVersion = "0.9.1"
 val appiumClientVersion = "8.1.0"
-val userHome = System.getProperty("user.home")
 
 repositories {
     mavenCentral()
-    maven(url = "file:/$userHome/github/ldi-github/shirates-core/build/repository")
 }
 
 dependencies {
     testImplementation(kotlin("test"))
 
     // JUnit 5
-    // (Required) Writing and executing Unit Tests on the JUnit Platform
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 
@@ -96,11 +88,10 @@ dependencies {
     testImplementation("io.appium:java-client:$appiumClientVersion")
 
     // shirates-core
-    implementation("shirates:shirates-core:$shiratesCoreVersion")
-    testImplementation("shirates:shirates-core:$shiratesCoreVersion")
+    testImplementation("io.github.ldi-github:shirates-core:$shiratesCoreVersion")
 
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    implementation("org.apache.logging.log4j:log4j-core:2.18.0")
+    testImplementation("org.apache.logging.log4j:log4j-core:2.18.0")
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
     testImplementation("org.slf4j:slf4j-nop:1.7.36")
