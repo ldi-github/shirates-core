@@ -9,6 +9,13 @@ import org.openqa.selenium.Capabilities
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.DesiredCapabilities
+import shirates.core.configuration.*
+import shirates.core.configuration.repository.ImageFileRepository
+import shirates.core.configuration.repository.ParameterRepository
+import shirates.core.configuration.repository.ScreenRepository
+import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
@@ -33,13 +40,6 @@ import shirates.core.utility.toBufferedImage
 import shirates.core.utility.tool.AdbUtility
 import shirates.core.utility.tool.AndroidMobileShellUtility
 import shirates.core.utility.tool.SimctlUtility
-import shirates.core.configuration.*
-import shirates.core.configuration.repository.ImageFileRepository
-import shirates.core.configuration.repository.ParameterRepository
-import shirates.core.configuration.repository.ScreenRepository
-import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.commandextension.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -511,22 +511,24 @@ object TestDriver {
         val platformVersion = capabilities.getCapabilityRelaxed("platformVersion")
         if (platformVersion == "*" || platformVersion == "") {
             if (isAndroid) {
-                val deviceInfos = AdbUtility.getAndroidDeviceList()
-                if (deviceInfos.isEmpty()) {
-                    throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
-                }
-                if (deviceInfos.any() { it.udid.isNotBlank() }.not()) {
-                    throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
-                }
+                if (capabilities.getCapabilityRelaxed("avd").isBlank()) {
+                    val deviceInfos = AdbUtility.getAndroidDeviceList()
+                    if (deviceInfos.isEmpty()) {
+                        throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
+                    }
+                    if (deviceInfos.any() { it.udid.isNotBlank() }.not()) {
+                        throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
+                    }
 
-                val udid = capabilities.getCapabilityRelaxed("udid")
-                if (udid.isNotBlank()) {
-                    val deviceInfo = deviceInfos.firstOrNull() { it.udid == udid }
-                        ?: throw TestDriverException(message(id = "deviceNotConnected"))
-                    capabilities.setCapabilityStrict("platformVersion", deviceInfo.version)
-                } else {
-                    val deviceInfo = deviceInfos.first()
-                    capabilities.setCapabilityStrict("platformVersion", deviceInfo.version)
+                    val udid = capabilities.getCapabilityRelaxed("udid")
+                    if (udid.isNotBlank()) {
+                        val deviceInfo = deviceInfos.firstOrNull() { it.udid == udid }
+                            ?: throw TestDriverException(message(id = "deviceNotConnected"))
+                        capabilities.setCapabilityStrict("platformVersion", deviceInfo.version)
+                    } else {
+                        val deviceInfo = deviceInfos.first()
+                        capabilities.setCapabilityStrict("platformVersion", deviceInfo.version)
+                    }
                 }
             } else if (isiOS) {
                 val list = SimctlUtility.getBootedIosDeviceList()
