@@ -5,27 +5,16 @@
 1. Open IntelliJ IDEA, select `File > New > Project`.
 1. In New Project window, select `New Project` tab.
 1. Input fields.
-    - Name
-    - Location
-    - Language (select `Kotlin`)
-    - Build system (select `Gradle`)
-    - JDK
-    - Gradle DSL (select `Kotlin`)
+    - `Name: Practice1`
+    - `Location: (Your location)`
+    - `Language: Kotlin`
+    - `Build system: Gradle`
+    - `JDK: (Your choice)`
+    - `Gradle DSL: Kotlin`
+    - `Add sample code: OFF`
       <br>![](../_images/new_project.png)
 1. Click `Create`.
 1. Wait for a while until background tasks finish. It may take minutes.
-
-### JVM setting
-
-If you encountered tooltip `Found invalid Gradle JVM configuration`, set JVM version.
-
-![](../_images/invalid_gradle_jvm_configuration.png)
-
-1. `File > Project Structure`
-2. `Project Settings > Project`
-3. Set SDK to compatible one.
-
-![](../_images/project_sdk.png)
 
 ### build.gradle.kts (after created)
 
