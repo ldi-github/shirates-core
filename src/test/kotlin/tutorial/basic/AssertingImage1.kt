@@ -5,6 +5,11 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 
+/**
+ * Note:
+ * Setup template image files by executing CroppingImages1.kt(tutorial.inaction.CroppingImages1)
+ * before executing this sample.
+ */
 @Testrun("testConfig/android/clock/testrun.properties")
 class AssertingImage1 : UITest() {
 

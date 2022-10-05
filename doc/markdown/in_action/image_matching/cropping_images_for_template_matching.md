@@ -16,7 +16,11 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
+import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
+import shirates.core.utility.toPath
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 @Testrun("testConfig/android/clock/testrun.properties")
 class CroppingImages1 : UITest() {
@@ -77,7 +81,25 @@ class CroppingImages1 : UITest() {
                     it.select("[Bedtime Tab]").cropImage("Bedtime(selected).png")
                 }
             }
+
+            copy("Alarm.png")
+            copy("Alarm(selected).png")
+            copy("Bedtime.png")
+            copy("Bedtime(selected).png")
+            copy("Clock.png")
+            copy("Clock(selected).png")
+            copy("Stopwatch.png")
+            copy("Stopwatch(selected).png")
+            copy("Timer.png")
+            copy("Timer(selected).png")
         }
+    }
+
+    private fun copy(fileName: String) {
+
+        val source = TestLog.directoryForLog.resolve(fileName)
+        val target = "testConfig/android/clock/screens/images".toPath().resolve(fileName)
+        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
     }
 
 }

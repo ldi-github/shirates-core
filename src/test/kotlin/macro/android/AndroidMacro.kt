@@ -1,11 +1,15 @@
 package macro.android
 
-import shirates.core.driver.*
+import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ifCanSelectNot
 import shirates.core.driver.branchextension.ifStringIs
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.platformVersion
+import shirates.core.driver.viewport
+import shirates.core.exception.TestConfigException
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 import shirates.core.utility.getUdid
@@ -33,14 +37,15 @@ object AndroidMacro : TestDrive {
                 endX = 20,
                 endY = viewport.bottom
             )
-            if (platformVersion.toInt() >= 12) {
-                it.swipePointToPoint(
-                    startX = 20,
-                    startY = 10,
-                    endX = 20,
-                    endY = viewport.bottom
-                )
+            if ((platformVersion.toIntOrNull() ?: 0) < 12) {
+                throw TestConfigException("Use android 12 or greater")
             }
+            it.swipePointToPoint(
+                startX = 20,
+                startY = 10,
+                endX = 20,
+                endY = viewport.bottom
+            )
             it.select("@Airplane mode")
                 .text
                 .ifStringIs("Off") {
@@ -64,14 +69,15 @@ object AndroidMacro : TestDrive {
                 endX = 20,
                 endY = viewport.bottom
             )
-            if (testProfile.platformVersion.toInt() >= 12) {
-                it.swipePointToPoint(
-                    startX = 20,
-                    startY = 10,
-                    endX = 20,
-                    endY = viewport.bottom
-                )
+            if ((platformVersion.toIntOrNull() ?: 0) < 12) {
+                throw TestConfigException("Use android 12 or greater")
             }
+            it.swipePointToPoint(
+                startX = 20,
+                startY = 10,
+                endX = 20,
+                endY = viewport.bottom
+            )
 
             it.select("@Airplane mode")
                 .text

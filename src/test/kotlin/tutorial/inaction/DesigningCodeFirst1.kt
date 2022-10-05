@@ -10,7 +10,7 @@ import shirates.core.driver.commandextension.tap
 import shirates.core.driver.commandextension.textIs
 import shirates.core.testcode.UITest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
+@Testrun("testConfig/android/calculator/testrun.properties")
 class DesigningCodeFirst1 : UITest() {
 
     @Test
@@ -21,7 +21,7 @@ class DesigningCodeFirst1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Calculator Screen]")
+                    it.macro("[Calculator Main Screen]")
                 }.action {
                     it
                         .tap("[1]")
@@ -29,7 +29,7 @@ class DesigningCodeFirst1 : UITest() {
                         .tap("[2]")
                         .tap("[=]")
                 }.expectation {
-                    it.select("[Result final]")
+                    it.select("[result final]")
                         .textIs("3")
                 }
             }
@@ -44,7 +44,7 @@ class DesigningCodeFirst1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Calculator Screen]")
+                    it.macro("[Calculator Main Screen]")
                 }.action {
                     it
                         .tap("[9]")
@@ -52,7 +52,7 @@ class DesigningCodeFirst1 : UITest() {
                         .tap("[3]")
                         .tap("[=]")
                 }.expectation {
-                    it.select("[Result final]")
+                    it.select("[result final]")
                         .textIs("6")
                 }
             }
@@ -67,7 +67,7 @@ class DesigningCodeFirst1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Calculator Screen]")
+                    it.macro("[Calculator Main Screen]")
                 }.action {
                     it
                         .tap("[1]")
@@ -75,7 +75,7 @@ class DesigningCodeFirst1 : UITest() {
                         .tap("[0]")
                         .tap("[=]")
                 }.expectation {
-                    it.select("[Result preview]")
+                    it.select("[result final]")
                         .textIs("Can't divide by 0")
                 }
             }

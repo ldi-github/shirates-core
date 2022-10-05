@@ -1,4 +1,4 @@
-# JVM version
+# JVM version, JDK version
 
 ## IntelliJ IDEA
 

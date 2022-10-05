@@ -7,7 +7,12 @@ import shirates.core.driver.commandextension.exist
 import shirates.core.driver.commandextension.macro
 import shirates.core.testcode.UITest
 
-@Testrun("testConfig/android/maps/testrun.properties")
+/**
+ * Note:
+ * Setup template image files by executing CroppingImages1.kt(tutorial.inaction.CroppingImages1)
+ * before executing this sample.
+ */
+@Testrun("testConfig/android/clock/testrun.properties")
 class ExistDontExist2 : UITest() {
 
     @Test
@@ -16,26 +21,59 @@ class ExistDontExist2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[Alarm Screen]")
                 }.expectation {
                     it
-                        .exist("[Explore Image(selected)]")
-                        .dontExist("[Explore Image]")
+                        .exist("[Alarm Image(selected)]")
+                        .dontExist("[Alarm Image]")
 
-                        .exist("[Go Image]")
-                        .dontExist("[Go Image(selected)]")
+                        .exist("[Clock Image]")
+                        .dontExist("[Clock Image(selected)]")
 
-                        .exist("[Saved Image]")
-                        .dontExist("[Saved Image(selected)]")
+                        .exist("[Timer Image]")
+                        .dontExist("[Timer Image(selected)]")
 
-                        .exist("[Contribute Image]")
-                        .dontExist("[Contribute Image(selected)]")
+                        .exist("[Stopwatch Image]")
+                        .dontExist("[Stopwatch Image(selected)]")
 
-                        .exist("[Updates Image]")
-                        .dontExist("[Updates Image(selected)]")
+                        .exist("[Bedtime Image]")
+                        .dontExist("[Bedtime Image(selected)]")
                 }
             }
         }
 
     }
+
+    @Test
+    fun exist_image_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Alarm Screen]")
+                }.expectation {
+                    it
+                        .dontExist("[Alarm Image]")
+                        .exist("[Alarm Image]")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun dont_exist_image_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Alarm Screen]")
+                }.expectation {
+                    it
+                        .exist("[Alarm Image(selected)]")
+                        .dontExist("[Alarm Image(selected)]")
+                }
+            }
+        }
+    }
+
 }
