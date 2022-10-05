@@ -800,7 +800,7 @@ fun TestDrive?.dontExist(
     if (sel.isImageSelector) {
         val imageInfo = ImageInfo(sel.image)
         sel =
-            getSelector(expression = "${imageInfo.fileName}|s=1.0&t=0.0") // dontExist needs high accuracy comparing
+            getSelector(expression = "${imageInfo.fileName}?s=1.0&t=0.0") // dontExist needs high accuracy comparing
         if (expression.isValidNickname()) {
             sel.nickname = expression
         }

@@ -116,9 +116,11 @@ object BoofCVUtility {
         val sortedMatchList = matchedList.toMutableList().sortedBy { it.score.absoluteValue }
 
         for (m in sortedMatchList) {
+            val startX = (m.x / scale).toInt()
+            val startY = (m.y / scale).toInt()
             val nonScaledImage = img1.cut(
-                x = (m.x / scale).toInt(),
-                y = (m.y / scale).toInt(),
+                x = startX,
+                y = startY,
                 width = nonScaledTemplateImage.width,
                 height = nonScaledTemplateImage.height,
                 margin = 10
@@ -130,18 +132,21 @@ object BoofCVUtility {
              * Cut and reduce the size of image.
              * Get result of template matching in original scale.
              */
-            val match = findMatches(
+            val foundMatches = findMatches(
                 image = nonScaledImage.toGrayF32()!!,
                 templateImage = nonScaledTemplateImage.toGrayF32()!!
-            ).firstOrNull()
+            )
+            val match = foundMatches.firstOrNull()
 
             result =
                 if (match == null) false
                 else (match.score.absoluteValue <= threshold)
+            val resultX = if (match == null) Int.MIN_VALUE else match.x + startX
+            val resultY = if (match == null) Int.MIN_VALUE else match.y + startY
             val imageMatchResult = ImageMatchResult(
                 result = result,
-                x = match?.x ?: Int.MIN_VALUE,
-                y = match?.y ?: Int.MIN_VALUE,
+                x = resultX,
+                y = resultY,
                 score = match?.score ?: Double.MIN_VALUE,
                 scale = scale,
                 threshold = threshold,
