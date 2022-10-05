@@ -402,7 +402,7 @@ class TestProfileTest : UnitTest() {
         val p = TestProfile("profileName1")
         p.appIconName = "appIconName1"
         p.tapAppIconMethod = "auto"
-        p.tapAppIconMacro = "appLancheMacro1"
+        p.tapAppIconMacro = "appLaunchMacro1"
         p.appiumServerUrl = "http://127.0.0.1:4720/"
         p.appPackageFile = null
         p.appPackageDir = null
@@ -440,7 +440,7 @@ class TestProfileTest : UnitTest() {
         val p = TestProfile("profileName1")
         p.appIconName = "appIconName1"
         p.tapAppIconMethod = "auto"
-        p.tapAppIconMacro = "appLancheMacro1"
+        p.tapAppIconMacro = "appLaunchMacro1"
         p.appiumServerUrl = "http://127.0.0.1:4720/"
         p.appPackageFile = null
         p.appPackageDir = null

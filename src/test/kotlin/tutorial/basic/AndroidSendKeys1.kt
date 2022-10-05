@@ -3,10 +3,7 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.clearInput
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.sendKeys
-import shirates.core.driver.commandextension.textIs
+import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -37,13 +34,15 @@ class AndroidSendKeys1 : UITest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Search Screen]")
+                        .select("[Search Box]")
                         .textIs("Search settings")
                         .sendKeys("clock")
                         .textIs("clock")
                 }.action {
                     it.clearInput()
                 }.expectation {
-                    it.textIs("Search settings")
+                    it.select("[Search Box]")
+                        .textIs("Search settings")
                 }
             }
         }

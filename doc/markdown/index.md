@@ -185,7 +185,7 @@
 ## Tool settings
 
 - IntelliJ IDEA
-    - [JVM version](tool_settings/jvm_version.md)
+    - [JVM version, JDK version](tool_settings/jvm_version.md)
 
 ## Troubleshooting
 

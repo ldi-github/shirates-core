@@ -1,6 +1,5 @@
 package experiment
 
-import macro.MacroObject1.it
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
