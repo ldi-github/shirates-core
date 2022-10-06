@@ -85,8 +85,12 @@ class CroppingImages1 : UITest() {
 
     private fun copy(fileName: String) {
 
+        val targetDir = "testConfig/android/clock/screens/images".toPath()
+        if (Files.exists(targetDir).not()) {
+            Files.createDirectory(targetDir)
+        }
         val source = TestLog.directoryForLog.resolve(fileName)
-        val target = "testConfig/android/clock/screens/images".toPath().resolve(fileName)
+        val target = targetDir.resolve(fileName)
         Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
     }
 
