@@ -10,7 +10,7 @@ import shirates.core.testcode.UITest
 
 /**
  * Note:
- * This sample code for explaining concept of irregular functions, and does not work.
+ * This sample code explains concepts and does not work.
  */
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class IrregularHandler1 : UITest() {

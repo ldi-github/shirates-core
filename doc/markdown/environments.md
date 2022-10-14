@@ -2,6 +2,19 @@
 
 ## Tested Environments
 
+2022/10/14
+
+- macOS Monterey 12.5.1
+- Appium 2.0.0-beta.45
+- uiautomator2@2.8.0
+- xcuitest@4.12.0
+- Android Studio 2021.3.1
+- Android Emulator Pixel 3a(Android 12)
+- Xcode 13.4.1
+- iOS Simulator iPhone 13(15.5)
+
+<hr>
+
 2022/10/5
 
 - macOS Monterey 12.5.1

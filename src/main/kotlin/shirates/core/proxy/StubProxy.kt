@@ -29,8 +29,8 @@ object StubProxy {
             .addQueryParameter("apiName", apiName)
             .addQueryParameter("dataPatternName", dataPatternName)
             .build()
-        val response = request(url)
-        return StubProxyResponse(response)
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
     }
 
     /**
@@ -45,8 +45,8 @@ object StubProxy {
         val url = "${testContext.profile.stubServerUrl}/management/getDataPattern".toHttpUrlOrNull()!!.newBuilder()
             .addQueryParameter("apiName", apiName)
             .build()
-        val response = request(url)
-        return StubProxyResponse(response)
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
     }
 
     /**
@@ -61,18 +61,19 @@ object StubProxy {
         val url =
             "${testContext.profile.stubServerUrl}/management/resetDataPattern".toHttpUrlOrNull()!!.newBuilder()
                 .build()
-        val response = request(url)
-        return StubProxyResponse(response)
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
     }
 
-    private fun request(url: HttpUrl): Response {
+    private fun request(url: HttpUrl): StubProxyResponse {
         val request = Request.Builder().url(url).build()
         val client = OkHttpClient()
 
         var response: Response? = null
         try {
             response = client.newCall(request).execute()
-            return response
+            val r = StubProxyResponse(response)
+            return r
         } catch (t: Throwable) {
             throw TestEnvironmentException(message(id = "failedToConnectToStubTool", arg1 = "$url"), t)
         } finally {
@@ -87,6 +88,25 @@ object StubProxy {
     class StubProxyResponse(
         val response: Response? = null
     ) {
+        var resultBytes: ByteArray? = null
 
+        val resultString: String?
+            get() {
+                if (resultBytes == null) {
+                    return null
+                }
+                return String(resultBytes!!)
+            }
+
+        val code: Int?
+            get() {
+                return response?.code
+            }
+
+        init {
+            if (response != null) {
+                resultBytes = response.body?.bytes()
+            }
+        }
     }
 }

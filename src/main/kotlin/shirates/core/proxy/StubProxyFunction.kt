@@ -29,8 +29,8 @@ fun dataPattern(
         fireEvent = false
     ) {
 
-        val response = StubProxy.setDataPattern(apiName = apiName, dataPatternName = dataPatternName).response
-        if (response!!.code != 200) {
+        val response = StubProxy.setDataPattern(apiName = apiName, dataPatternName = dataPatternName)
+        if (response.code != 200) {
             throw TestEnvironmentException(message(id = "httpErrorInResponseFromStubTool", arg1 = "${response.code}"))
         }
     }
@@ -48,9 +48,9 @@ fun getDataPattern(
     if (TestMode.isNoLoadRun)
         return ""
 
-    val response = StubProxy.getDataPattern(apiName).response
-    if (response!!.code == 200) {
-        return response.body!!.string()
+    val response = StubProxy.getDataPattern(apiName)
+    if (response.code == 200) {
+        return response.resultString!!
     }
 
     throw TestEnvironmentException(message(id = "httpErrorInResponseFromStubTool", arg1 = "${response.code}"))
@@ -72,8 +72,8 @@ fun resetDataPattern(): TestElement {
         fireEvent = false
     ) {
 
-        val response = StubProxy.resetDataPattern().response
-        if (response!!.code != 200) {
+        val response = StubProxy.resetDataPattern()
+        if (response.code != 200) {
             throw TestEnvironmentException(message(id = "httpErrorInResponseFromStubTool", arg1 = "${response.code}"))
         }
     }

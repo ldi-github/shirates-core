@@ -75,7 +75,7 @@ class DesigningCodeFirst1 : UITest() {
                         .tap("[0]")
                         .tap("[=]")
                 }.expectation {
-                    it.select("[result final]")
+                    it.select("[result preview]")
                         .textIs("Can't divide by 0")
                 }
             }
