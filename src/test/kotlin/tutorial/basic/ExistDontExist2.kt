@@ -1,5 +1,6 @@
 package tutorial.basic
 
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.dontExist
@@ -16,6 +17,7 @@ import shirates.core.testcode.UITest
 class ExistDontExist2 : UITest() {
 
     @Test
+    @Order(10)
     fun exist_image_OK() {
 
         scenario {
@@ -45,6 +47,7 @@ class ExistDontExist2 : UITest() {
     }
 
     @Test
+    @Order(20)
     fun exist_image_NG() {
 
         scenario {
@@ -61,6 +64,7 @@ class ExistDontExist2 : UITest() {
     }
 
     @Test
+    @Order(30)
     fun dont_exist_image_NG() {
 
         scenario {

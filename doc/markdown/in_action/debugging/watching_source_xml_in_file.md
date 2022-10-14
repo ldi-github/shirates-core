@@ -9,7 +9,7 @@
 ```kotlin
 @Test
 @Order(10)
-fun missingSelector() {
+fun missingSelector_ERROR() {
 
     scenario {
         case(1) {

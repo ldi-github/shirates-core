@@ -58,7 +58,7 @@ account.json is a special version of dataset nickname file for accounts.
 
 Attribute **id** and **password** are defined.
 
-You can get the value of `id` of `[account1]` by calling account function.
+You can get the value of `id` of `[account1]` by calling `account` function.
 
 ```kotlin
 it.sendKeys(account("[account1].id"))   // account function returns "account1@example.com"
@@ -124,7 +124,7 @@ apps.json is a special version of dataset nickname file for apps.
 
 Attribute **packageOrBundleId** is defined.
 
-You can get the value of `packageOrBundleId` of `[App1]` by calling account function.
+You can get the value of `packageOrBundleId` of `[App1]` by calling `app` function.
 
 ```kotlin
 it.sendKeys(app("[App1].packageOrBundleId"))   // app function returns "com.example.app1"
@@ -132,7 +132,7 @@ it.sendKeys(app("[App1].packageOrBundleId"))   // app function returns "com.exam
 
 <br>
 
-You can know current app is expected app by calling isApp function.
+You can know current app is expected app or not by calling `isApp` function.
 
 ```kotlin
 if (isApp("[Maps]")) {
