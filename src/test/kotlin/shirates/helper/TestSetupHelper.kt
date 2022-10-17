@@ -7,6 +7,7 @@ import shirates.core.driver.branchextension.realDevice
 import shirates.core.driver.commandextension.*
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.saveImage
+import java.io.File
 import java.nio.file.Files
 
 object TestSetupHelper : TestDrive {
@@ -18,7 +19,7 @@ object TestSetupHelper : TestDrive {
 
         val path = "images/androidSettingsTopScreen"
         val dir = TestLog.testResults.resolve(path)
-        if (Files.exists(dir).not()) Files.createDirectories(dir)
+        if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
         fun crop(nickname: String) {
             it.selectWithScrollDown(nickname)
@@ -62,7 +63,7 @@ object TestSetupHelper : TestDrive {
 
         val path = "images/calendarWeekScreen"
         val dir = TestLog.testResults.resolve(path)
-        if (Files.exists(dir).not()) Files.createDirectory(dir)
+        if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
         fun TestElement.crop(fileName: String) {
 
