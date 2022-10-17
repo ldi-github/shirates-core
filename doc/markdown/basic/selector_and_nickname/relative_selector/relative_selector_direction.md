@@ -53,9 +53,7 @@ right, below, left, above
 
 from TextView1
 
-![direction right android 1](../../_images/direction_right_android_1.png)
-
-![direction right android 2](../../_images/direction_right_android_2.png)
+![direction right android 1](../../_images/direction_right_android.png)
 
 <br>
 
@@ -63,9 +61,7 @@ from TextView1
 
 from StaticText1
 
-![direction right ios 1](../../_images/direction_right_ios_1.png)
-
-![direction right ios 2](../../_images/direction_right_ios_2.png)
+![direction right ios 1](../../_images/direction_right_ios.png)
 
 ### Search range
 

@@ -15,13 +15,14 @@ import shirates.core.utility.sync.SyncUtility
  */
 fun TestDrive?.findImage(
     expression: String,
+    scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
+    direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
     throwsException: Boolean = false,
-    syncCache: Boolean = true
+    syncCache: Boolean = true,
+    log: Boolean = true
 ): ImageMatchResult {
 
     val command = "findImage"
-    val scroll = CodeExecutionContext.withScrollDirection != null
-    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
 
     return findImageCore(
         command = command,
@@ -29,7 +30,8 @@ fun TestDrive?.findImage(
         scroll = scroll,
         direction = direction,
         throwsException = throwsException,
-        syncCache = syncCache
+        syncCache = syncCache,
+        log = log
     )
 }
 
@@ -42,7 +44,8 @@ internal fun TestDrive?.findImageCore(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = false,
-    syncCache: Boolean = true
+    syncCache: Boolean = true,
+    log: Boolean = false
 ): ImageMatchResult {
 
     val testElement = getTestElement()
@@ -52,18 +55,27 @@ internal fun TestDrive?.findImageCore(
 
     val context = TestDriverCommandContext(testElement)
     var r = ImageMatchResult(result = false)
-    context.execOperateCommand(command = command, message = message, subject = sel.toString()) {
-        r = TestDriver.findImage(
-            expression = expression,
-            scroll = scroll,
-            direction = direction,
-            scrollDurationSeconds = scrollDurationSeconds,
-            scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollMaxCount = scrollMaxCount,
-            throwsException = throwsException,
-            syncCache = syncCache
-        )
-        TestDriver.autoScreenshot()
+    val action = {
+        context.execOperateCommand(command = command, message = message, subject = sel.toString()) {
+            r = TestDriver.findImage(
+                expression = expression,
+                scroll = scroll,
+                direction = direction,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = throwsException,
+                syncCache = syncCache
+            )
+            TestDriver.autoScreenshot()
+        }
+    }
+    if (log) {
+        action()
+    } else {
+        silent {
+            action()
+        }
     }
 
     return r
@@ -79,6 +91,7 @@ fun TestDrive?.findImageWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     syncCache: Boolean = true,
+    log: Boolean = true
 ): ImageMatchResult {
 
     val command = "findImageWithScrollDown"
@@ -93,7 +106,8 @@ fun TestDrive?.findImageWithScrollDown(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
-        syncCache = syncCache
+        syncCache = syncCache,
+        log = log
     )
 }
 
@@ -107,6 +121,7 @@ fun TestDrive?.findImageWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     syncCache: Boolean = true,
+    log: Boolean = true
 ): ImageMatchResult {
 
     val command = "findImageWithScrollUp"
@@ -121,7 +136,8 @@ fun TestDrive?.findImageWithScrollUp(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
-        syncCache = syncCache
+        syncCache = syncCache,
+        log = log
     )
 }
 
@@ -135,6 +151,7 @@ fun TestDrive?.findImageWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     syncCache: Boolean = true,
+    log: Boolean = true
 ): ImageMatchResult {
 
     val command = "findImageWithScrollRight"
@@ -149,7 +166,8 @@ fun TestDrive?.findImageWithScrollRight(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
-        syncCache = syncCache
+        syncCache = syncCache,
+        log = log
     )
 }
 
@@ -163,6 +181,7 @@ fun TestDrive?.findImageWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     syncCache: Boolean = true,
+    log: Boolean = true
 ): ImageMatchResult {
 
     val command = "findImageWithScrollLeft"
@@ -177,7 +196,8 @@ fun TestDrive?.findImageWithScrollLeft(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
-        syncCache = syncCache
+        syncCache = syncCache,
+        log = log
     )
 }
 

@@ -5,15 +5,12 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ImageFileRepository
-import shirates.core.driver.branchextension.emulator
-import shirates.core.driver.branchextension.realDevice
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
-import shirates.core.utility.image.saveImage
-import java.nio.file.Files
+import shirates.helper.TestSetupHelper
 
 @Want
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -23,51 +20,7 @@ class TestElementImageExtensionTest : UITest() {
     @Order(10)
     fun cropImage() {
 
-        val dir = TestLog.testResults.resolve("images")
-        if (Files.exists(dir).not()) Files.createDirectory(dir)
-
-        fun crop(nickname: String) {
-            it.selectWithScrollDown(nickname)
-                .cropImage()
-                .lastCropInfo!!.croppedImage!!
-                .saveImage(TestLog.testResults.resolve("images/$nickname").toString())
-        }
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.action {
-                    crop("[Network & internet Icon]")
-                    crop("[Connected devices Icon]")
-                    crop("[Apps Icon]")
-                    crop("[Notifications Icon]")
-                    crop("[Battery Icon]")
-                    crop("[Storage Icon]")
-                    crop("[Sound & vibration Icon]")
-                    crop("[Display Icon]")
-                    crop("[Wallpaper & style Icon]")
-                    crop("[Accessibility Icon]")
-                    crop("[Security Icon]")
-                    crop("[Privacy Icon]")
-                    crop("[Location Icon]")
-                    crop("[Safety & emergency Icon]")
-                    crop("[Passwords & accounts Icon]")
-                    crop("[Google Icon]")
-                    crop("[System Icon]")
-                    realDevice {
-                        crop("[About phone]")
-                    }
-                    emulator {
-                        crop("[About emulated device Icon]")
-                    }
-                    crop("[Tips & support Icon]")
-                }.expectation {
-
-                }
-            }
-        }
-
+        TestSetupHelper.setupImageAndroidSettingsTopScreen()
     }
 
     @Test

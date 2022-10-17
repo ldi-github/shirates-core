@@ -7,9 +7,14 @@ import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.driver.branchextension.result.SpecialTagCompareResult
 import shirates.core.driver.commandextension.canSelect
+import shirates.core.driver.commandextension.findImage
+import shirates.core.driver.commandextension.isImage
 import shirates.core.driver.commandextension.isScreen
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.image.ImageMatchResult
+import shirates.core.utility.sync.SyncUtility
 
 /**
  * android
@@ -323,6 +328,127 @@ fun TestDrive?.ifCanSelectNot(
     else BooleanCompareResult(value = canSelect.not(), command = command)
     result.ifTrue(onTrue = onTrue)
 
+    return result
+}
+
+/**
+ * ifImageExist
+ */
+fun TestDrive?.ifImageExist(
+    expression: String,
+    scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
+    direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
+    onTrue: (() -> Unit)
+): BooleanCompareResult {
+
+    val command = "ifImageExist"
+    val imageMatchResult = findImage(
+        expression = expression,
+        scroll = scroll,
+        direction = direction,
+        log = false
+    )
+    val result = BooleanCompareResult(value = imageMatchResult.result, command = command)
+    result.ifTrue(onTrue = onTrue)
+
+    return result
+}
+
+/**
+ * ifImageExistNot
+ */
+fun TestDrive?.ifImageExistNot(
+    expression: String,
+    scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
+    direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
+    onTrue: () -> Unit
+): BooleanCompareResult {
+
+    val command = "ifImageExistNot"
+    val imageMatchResult = findImage(
+        expression = expression,
+        scroll = scroll,
+        direction = direction,
+        log = false
+    )
+    val result = if (this is BooleanCompareResult) this
+    else BooleanCompareResult(value = imageMatchResult.result.not(), command = command)
+    result.ifTrue(onTrue = onTrue)
+
+    return result
+}
+
+internal fun TestDrive.ifImageIsCore(
+    vararg expression: String,
+    command: String,
+    waitSeconds: Double,
+    negation: Boolean,
+    onTrue: (() -> Unit)
+): BooleanCompareResult {
+
+    val testElement = getTestElement()
+
+    var r = false
+    var matchResult: ImageMatchResult
+    SyncUtility.doUntilTrue(waitSeconds = waitSeconds) {
+        for (exp in expression) {
+            matchResult = testElement.isImage(exp)
+            r = matchResult.result
+            if (negation) {
+                r = r.not()
+            }
+            if (r) {
+                break
+            }
+        }
+        r
+    }
+
+    val result = BooleanCompareResult(value = r, command = command)
+    result.ifTrue(onTrue = onTrue)
+
+    return result
+}
+
+/**
+ * ifImageIs
+ */
+fun TestDrive.ifImageIs(
+    vararg expression: String,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    onTrue: (() -> Unit)
+): BooleanCompareResult {
+
+    val command = "ifImageIs"
+
+    val result = ifImageIsCore(
+        expression = expression,
+        command = command,
+        waitSeconds = waitSeconds,
+        negation = false,
+        onTrue = onTrue
+    )
+    return result
+}
+
+/**
+ * ifImageIsNot
+ */
+fun TestDrive.ifImageIsNot(
+    vararg expression: String,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    onTrue: (() -> Unit)
+): BooleanCompareResult {
+
+    val command = "ifImageIsNot"
+
+    val result = ifImageIsCore(
+        expression = expression,
+        command = command,
+        waitSeconds = waitSeconds,
+        negation = true,
+        onTrue = onTrue
+    )
     return result
 }
 
