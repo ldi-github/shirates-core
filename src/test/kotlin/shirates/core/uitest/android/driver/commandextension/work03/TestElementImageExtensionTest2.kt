@@ -5,14 +5,12 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ImageFileRepository
-import shirates.core.driver.TestElement
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
-import shirates.core.utility.image.saveImage
-import java.nio.file.Files
+import shirates.helper.TestSetupHelper
 
 @Want
 @Testrun("testConfig/android/calendar/testrun.properties")
@@ -22,47 +20,7 @@ class TestElementImageExtensionTest2 : UITest() {
     @Order(10)
     fun setupImage() {
 
-        val dir = TestLog.testResults.resolve("images")
-        if (Files.exists(dir).not()) Files.createDirectory(dir)
-
-        fun TestElement.crop(fileName: String) {
-
-            cropImage()
-                .lastCropInfo!!.croppedImage!!
-                .saveImage(TestLog.testResults.resolve("images/$fileName").toString())
-        }
-
-        fun TestElement.cropItems(dayN: String): List<TestElement> {
-
-            val items = this.children.filter { it.contentDesc.contains("Open Schedule View") }
-            for (i in 1..items.count()) {
-                items[i - 1].crop("[Day$dayN-$i].png")
-            }
-            return items
-        }
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Calendar Week Screen]")
-                }.action {
-                    it.select(".android.support.v7.widget.RecyclerView") {
-                        cropItems("1")
-                    }
-                    it.swipeToLeft()
-                    it.select(".android.support.v7.widget.RecyclerView") {
-                        cropItems("2")
-                    }
-                    it.swipeToLeft()
-                    it.select(".android.support.v7.widget.RecyclerView") {
-                        cropItems("3")
-                    }
-                }.expectation {
-
-                }
-            }
-        }
-
+        TestSetupHelper.setupImageCalendarWeekScreen()
     }
 
     @Test

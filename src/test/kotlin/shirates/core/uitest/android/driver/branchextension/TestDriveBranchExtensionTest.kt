@@ -1,5 +1,6 @@
 package shirates.core.uitest.android.driver.branchextension
 
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
@@ -13,6 +14,7 @@ import shirates.core.utility.host.HostOSUtility
 class TestDriveBranchExtensionTest : UITest() {
 
     @Test
+    @Order(10)
     fun android_ios() {
 
         var androidCalled = false
@@ -40,6 +42,7 @@ class TestDriveBranchExtensionTest : UITest() {
     }
 
     @Test
+    @Order(20)
     fun emulator_realDevice() {
 
         var emulatorCalled = false
@@ -90,6 +93,7 @@ class TestDriveBranchExtensionTest : UITest() {
     }
 
     @Test
+    @Order(30)
     fun arm64_intel() {
 
         var arm64Called = false
@@ -145,6 +149,7 @@ class TestDriveBranchExtensionTest : UITest() {
     }
 
     @Test
+    @Order(40)
     fun osaifuKeitai_osaifuKeitaiNot() {
 
         var osaifuKeitaiCalled = false
@@ -196,6 +201,7 @@ class TestDriveBranchExtensionTest : UITest() {
     }
 
     @Test
+    @Order(50)
     fun stub_stubNot() {
 
         var stubCalled = false
@@ -247,6 +253,7 @@ class TestDriveBranchExtensionTest : UITest() {
     }
 
     @Test
+    @Order(60)
     fun testRuntimeOnly() {
 
         var testRuntimeOnlyCalled = false
@@ -294,57 +301,60 @@ class TestDriveBranchExtensionTest : UITest() {
             }
         }
 
-        @Test
-        fun ifCanSelect_ifCanSelectNot() {
+    }
 
-            var ifCanSelectCalled = false
-            var ifCanSelectNotCalled = false
-            fun clear() {
-                ifCanSelectCalled = false
-                ifCanSelectNotCalled = false
-            }
+    @Test
+    @Order(70)
+    fun ifCanSelect_ifCanSelectNot() {
 
-            scenario {
-                case(1) {
-                    condition {
-                        it.macro("[Android Settings Top Screen]")
-                        clear()
-                    }.action {
-                        ifCanSelect("no exist") {
-                            describe("ifCanSelect('no exist') called")
-                            ifCanSelectCalled = true     // never called
-                        }
-                        ifCanSelectNot("no exist") {
-                            describe("ifCanSelectNot('no exist') called")
-                            ifCanSelectNotCalled = true     // called
-                        }
-                    }.expectation {
-                        ifCanSelectCalled.thisIsFalse("ifCanSelectCalled=$ifCanSelectCalled")
-                        ifCanSelectNotCalled.thisIsTrue("ifCanSelectNotCalled=$ifCanSelectNotCalled")
+        var ifCanSelectCalled = false
+        var ifCanSelectNotCalled = false
+        fun clear() {
+            ifCanSelectCalled = false
+            ifCanSelectNotCalled = false
+        }
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                    clear()
+                }.action {
+                    ifCanSelect("no exist") {
+                        describe("ifCanSelect('no exist') called")
+                        ifCanSelectCalled = true     // never called
                     }
+                    ifCanSelectNot("no exist") {
+                        describe("ifCanSelectNot('no exist') called")
+                        ifCanSelectNotCalled = true     // called
+                    }
+                }.expectation {
+                    ifCanSelectCalled.thisIsFalse("ifCanSelectCalled=$ifCanSelectCalled")
+                    ifCanSelectNotCalled.thisIsTrue("ifCanSelectNotCalled=$ifCanSelectNotCalled")
                 }
-                case(2) {
-                    condition {
-                        clear()
-                    }.action {
-                        ifCanSelect("Connected devices") {
-                            describe("ifCanSelect('Connected devices') called")
-                            ifCanSelectCalled = true
-                        }
-                        ifCanSelectNot("Connected devices") {
-                            describe("ifCanSelectNot('Connected devices') called")
-                            ifCanSelectCalled = true
-                        }
-                    }.expectation {
-                        ifCanSelectCalled.thisIsTrue("ifCanSelectCalled=$ifCanSelectCalled")
-                        ifCanSelectNotCalled.thisIsFalse("ifCanSelectNotCalled=$ifCanSelectNotCalled")
+            }
+            case(2) {
+                condition {
+                    clear()
+                }.action {
+                    ifCanSelect("Connected devices") {
+                        describe("ifCanSelect('Connected devices') called")
+                        ifCanSelectCalled = true
                     }
+                    ifCanSelectNot("Connected devices") {
+                        describe("ifCanSelectNot('Connected devices') called")
+                        ifCanSelectCalled = true
+                    }
+                }.expectation {
+                    ifCanSelectCalled.thisIsTrue("ifCanSelectCalled=$ifCanSelectCalled")
+                    ifCanSelectNotCalled.thisIsFalse("ifCanSelectNotCalled=$ifCanSelectNotCalled")
                 }
             }
         }
     }
 
     @Test
+    @Order(80)
     fun ifTrue_ifFalse() {
 
         var ifTrueCalled = false
@@ -393,6 +403,7 @@ class TestDriveBranchExtensionTest : UITest() {
     }
 
     @Test
+    @Order(90)
     fun onScreen() {
 
         var androidSettingsScreenCalled = false

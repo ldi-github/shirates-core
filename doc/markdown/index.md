@@ -92,6 +92,8 @@
     - [Package assertion](basic/function_property/asserting_others/package_assertion.md)
 - Branch
     - [Branch function (ifTrue, ifFalse)](basic/function_property/branch/if_true_if_false.md)
+    - [Branch function (ifScreenIs, ifScreenIsNot)](basic/function_property/branch/ifscreenis.md)
+    - [Branch function (ifCanSelect, ifCanSelectNot)](basic/function_property/branch/ifcanselect.md)
     - [Platform function (android, ios, emulator, simulator, realDevice)](basic/function_property/branch/platform_branch_functions.md)
     - [Platform property (platformName, platformVersion, isAndroid, isiOS)](basic/function_property/branch/platform_properties.md)
     - [Osaifukeitai function (osaifuKeitai, osaifuKeitaiNot)](basic/function_property/branch/osaifu_keitai_branch_functions.md)

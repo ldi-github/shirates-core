@@ -136,7 +136,7 @@ You can use **platform annotation**(@a, @i) to write selector expression for And
 it.select("@a<.android.widget.ImageButton>,@i<.XCUIElementTypeButton>")
 ```
 
-With this annotation, a [nickname](nickname.md) can be defined for Android and iOS.
+With this annotation, a [nickname](nickname/nickname.md) can be defined for Android and iOS.
 
 ```
 "[Button1]": "@a<.android.widget.ImageButton>,@i<.XCUIElementTypeButton>"
