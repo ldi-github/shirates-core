@@ -33,7 +33,8 @@ class AndroidSendKeys1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Search Screen]")
+                    it.restartApp()
+                        .macro("[Android Settings Search Screen]")
                         .select("[Search Box]")
                         .textIs("Search settings")
                         .sendKeys("clock")

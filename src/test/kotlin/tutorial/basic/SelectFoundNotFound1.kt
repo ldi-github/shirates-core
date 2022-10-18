@@ -91,7 +91,7 @@ class SelectFoundNotFound1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
                     describe("selectWithScrollDown(\"no exist\")")
-                        .selectWithScrollDown("no exist")
+                        .selectWithScrollDown("no exist", throwsException = false)
                 }.expectation {
                     it.isFound.thisIsFalse("${it.selector} not found")
                 }

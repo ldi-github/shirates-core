@@ -16,14 +16,17 @@ fun clearInput() {
     scenario {
         case(1) {
             condition {
-                it.macro("[Android Settings Search Screen]")
+                it.restartApp()
+                    .macro("[Android Settings Search Screen]")
+                    .select("[Search Box]")
                     .textIs("Search settings")
                     .sendKeys("clock")
                     .textIs("clock")
             }.action {
                 it.clearInput()
             }.expectation {
-                it.textIs("Search settings")
+                it.select("[Search Box]")
+                    .textIs("Search settings")
             }
         }
     }
