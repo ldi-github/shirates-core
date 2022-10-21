@@ -39,12 +39,14 @@ class TestProfileTest : UnitTest() {
         assertThat(p1.implicitlyWaitSeconds).isNull()
         assertThat(p1.settings.count()).isEqualTo(0)
         assertThat(p1.capabilities.count()).isEqualTo(0)
-        assertThat(p1.reuseDriver).isNull()
         assertThat(p1.appPackageFile).isNull()
         assertThat(p1.appPackageDir).isNull()
         assertThat(p1.packageOrBundleId).isNull()
         assertThat(p1.startupPackageOrBundleId).isNull()
         assertThat(p1.startupActivity).isNull()
+
+        // Appium Proxy --------------------------------------------------
+        assertThat(p1.appiumProxyReadTimeoutSeconds).isNull()
 
         // TestDriver --------------------------------------------------
         assertThat(p1.reuseDriver).isNull()

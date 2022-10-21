@@ -29,7 +29,7 @@ class TestDriveSwipeExtensionTest : UITest() {
             startY = itemBefore.centerY,
             endX = targetPlace.centerX,
             endY = targetPlace.centerY,
-            durationSeconds = 10
+            durationSeconds = 9
         )
         val itemAfter = it.select("Passwords").bounds
         it.screenshot(filename = "after")

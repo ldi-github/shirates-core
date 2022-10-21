@@ -320,22 +320,22 @@ class TestDriveSelectExtensionTest : UITest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.expectation {
-                    it.canSelectAllWithScrollDown("[General]", "[Privacy]", "[Developer]").thisIsTrue()
+                    it.canSelectAllWithScrollDown("[General]", "[Privacy & Security]", "[Developer]").thisIsTrue()
                 }
             }
             case(2) {
                 condition {
                     it.flickTopToBottom()
                 }.expectation {
-                    it.canSelectAllWithScrollDown("[Developer]", "[Privacy]", "[General]").thisIsFalse()
-                    it.canSelectAllWithScrollUp("[Developer]", "[Privacy]", "[General]").thisIsTrue()
+                    it.canSelectAllWithScrollDown("[Developer]", "[Privacy & Security]", "[General]").thisIsFalse()
+                    it.canSelectAllWithScrollUp("[Developer]", "[Privacy & Security]", "[General]").thisIsTrue()
                 }
             }
             case(3) {
                 condition {
                     it.flickBottomToTop()
                 }.expectation {
-                    it.canSelectAllWithScrollUp("[General]", "[Privacy]", "[Developer]").thisIsFalse()
+                    it.canSelectAllWithScrollUp("[General]", "[Privacy & Security]", "[Developer]").thisIsFalse()
                 }
             }
         }

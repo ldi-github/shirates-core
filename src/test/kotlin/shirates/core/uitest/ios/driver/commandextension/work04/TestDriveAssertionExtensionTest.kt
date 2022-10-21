@@ -202,7 +202,7 @@ class TestDriveAssertionExtensionTest : UITest() {
                         "Settings",
                         "General",
                         "Accessibility",
-                        "Privacy",
+                        "Privacy & Security",
                         "Passwords"
                     )
                 }
@@ -218,7 +218,7 @@ class TestDriveAssertionExtensionTest : UITest() {
                             "Settings",
                             "General",
                             "Accessibility",
-                            "Privacy",
+                            "Privacy & Security",
                             "no exist",
                             waitSeconds = 1.0
                         )
@@ -238,7 +238,7 @@ class TestDriveAssertionExtensionTest : UITest() {
                             "Settings",
                             "General",
                             "Accessibility",
-                            "Privacy",
+                            "Privacy & Security",
                             "no exist",
                             waitSeconds = 2.0
                         )
@@ -264,7 +264,7 @@ class TestDriveAssertionExtensionTest : UITest() {
                         "Settings",
                         "General",
                         "Accessibility",
-                        "Privacy",
+                        "Privacy & Security",
                         "Passwords",
                         "Safari",
                         "Developer"
@@ -305,7 +305,7 @@ class TestDriveAssertionExtensionTest : UITest() {
                         "Settings",
                         "General",
                         "Accessibility",
-                        "Privacy",
+                        "Privacy & Security",
                         "Passwords",
                         "Safari",
                         "Developer"

@@ -11,16 +11,28 @@ You can select an element and assert its properties.
 @Order(10)
 fun selectAndAssert1_OK() {
 
-    it.select("Settings")
-        .textIs("Settings")   // OK
+    scenario {
+        case(1) {
+            expectation {
+                it.select("Settings")
+                    .textIs("Settings")   // OK
+            }
+        }
+    }
 }
 
 @Test
 @Order(20)
 fun selectAndAssert2_NG() {
 
-    it.select("Settings")
-        .textIs("Network & internet")   // NG
+    scenario {
+        case(1) {
+            expectation {
+                it.select("Settings")
+                    .textIs("Network & internet")   // NG
+            }
+        }
+    }
 }
 ```
 

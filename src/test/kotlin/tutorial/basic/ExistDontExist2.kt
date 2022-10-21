@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.dontExist
 import shirates.core.driver.commandextension.exist
+import shirates.core.driver.commandextension.knownIssue
 import shirates.core.driver.commandextension.macro
 import shirates.core.testcode.UITest
 
@@ -58,6 +59,7 @@ class ExistDontExist2 : UITest() {
                     it
                         .dontExist("[Alarm Image]")
                         .exist("[Alarm Image]")
+                        .knownIssue("Should be NG, but ERROR", "")
                 }
             }
         }

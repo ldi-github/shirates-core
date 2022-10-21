@@ -37,7 +37,7 @@
 | `<text1>:right(2)`          | Select the first element that text is "text1", then select the second widget in right direction. This is equivalent to `<text1>:right(pos=2)` or `<text1>:right([2])` |
 | `<text1>:rightSwitch`       | Select the first element that text is "text1", then select the first switch in right direction.                                                                       |
 | `<text1>:right(text2)`      | Select the first element that text is "text1", then select the first widget that text is "text2" in right direction.                                                  |
-| `<text1>:right:belowButton` | Select the first element that text is "text1", then select the first widget in right direction, then select the 1st buttonin below direction.                         |
+| `<text1>:right:belowButton` | Select the first element that text is "text1", then select the first widget in right direction, then select the 1st button in below direction.                        |
 
 <br>
 
