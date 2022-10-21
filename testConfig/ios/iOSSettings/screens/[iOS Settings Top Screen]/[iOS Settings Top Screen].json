@@ -18,9 +18,9 @@
     "[Accessibility Image]": "image=[Accessibility Icon].png",
     "[Accessibility]": "",
 
-    "[Privacy Icon]": "[Privacy]:preImage",
-    "[Privacy Image]": "image=[Privacy Icon].png",
-    "[Privacy]": "",
+    "[Privacy & Security Icon]": "[Privacy & Security]:preImage",
+    "[Privacy & Security Image]": "image=[Privacy & Security Icon].png",
+    "[Privacy & Security]": "",
 
     "[Passwords Icon]": "[Passwords]:preImage",
     "[Passwords Image]": "image=[Passwords Icon].png",

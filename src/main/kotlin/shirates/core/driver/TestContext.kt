@@ -17,6 +17,10 @@ class TestContext(
         ?: (if (isAndroid) shirates.core.Const.BOUNDS_TO_RECT_RATIO_ANDROID else shirates.core.Const.BOUNDS_TO_RECT_RATIO_IOS)
 
     @SaveTarget
+    var appiumProxyReadTimeoutSeconds =
+        profile.appiumProxyReadTimeoutSeconds?.toDoubleOrNull() ?: shirates.core.Const.APPIUM_PROXY_READ_TIMEOUT_SECONDS
+
+    @SaveTarget
     var reuseDriver = profile.reuseDriver?.toBoolean() ?: shirates.core.Const.REUSE_DRIVER
 
     @SaveTarget

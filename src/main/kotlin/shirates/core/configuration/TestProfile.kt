@@ -40,6 +40,9 @@ class TestProfile(var profileName: String = "") {
     var startupPackageOrBundleId: String? = null
     var startupActivity: String? = null
 
+    // Appium Proxy --------------------------------------------------
+    var appiumProxyReadTimeoutSeconds: String? = null
+
     // TestDriver --------------------------------------------------
     var reuseDriver: String? = null
     var retryMaxCount: String? = null

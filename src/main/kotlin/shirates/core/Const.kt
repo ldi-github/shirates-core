@@ -58,6 +58,7 @@ object Const {
     const val APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS: Double = 8.0
     const val APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS: Double = 5.0
     const val APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS: Double = 30.0
+    const val APPIUM_PROXY_READ_TIMEOUT_SECONDS: Double = 10.0
 
     // Screenshot
     const val AUTO_SCREEN_SHOT = true

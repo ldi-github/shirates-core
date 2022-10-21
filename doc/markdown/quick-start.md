@@ -146,7 +146,7 @@ wave1008@SNB-M1 ~ %
 Install UIAutomator2 driver.
 
 ```
-appium driver install uiautomator2@2.8.0
+appium driver install uiautomator2@2.9.0
 ```
 
 <br>
@@ -155,7 +155,7 @@ If you have already installed the driver, uninstall it and install it again.
 ```
 appium driver list
 appium driver uninstall uiautomator2
-appium driver install uiautomator2@2.8.0
+appium driver install uiautomator2@2.9.0
 appium driver list
 ```
 
@@ -177,7 +177,7 @@ If you have already installed the driver, uninstall it and install it again.
 ```
 appium driver list
 appium driver uninstall xcuitest
-appium driver install xcuitest@4.12.0
+appium driver install xcuitest@4.12.1
 appium driver list
 ```
 

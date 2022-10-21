@@ -18,6 +18,7 @@ import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * AppiumProxy
@@ -222,7 +223,9 @@ object AppiumProxy {
             .build()
         val request = Request.Builder().url(url).post(json.toRequestBody(mediaType))
             .build()
-        val client = OkHttpClient()
+        val client = OkHttpClient().newBuilder()
+            .readTimeout((testContext.appiumProxyReadTimeoutSeconds * 1000).toLong(), TimeUnit.MILLISECONDS)
+            .build()
 
         var response: Response? = null
         try {
@@ -239,7 +242,7 @@ object AppiumProxy {
 
     /**
      * find
-     * @see http://appium.io/docs/en/commands/element/find-element/#example-usage
+     * @see https://appium.io/docs/en/commands/element/find-element/#example-usage
      */
     fun findElement(using: String, value: String): String {
 
@@ -260,7 +263,7 @@ object AppiumProxy {
 
     /**
      * find
-     * @see http://appium.io/docs/en/commands/element/find-element/#example-usage
+     * @see https://appium.io/docs/en/commands/element/find-element/#example-usage
      */
     fun findElements(using: String, value: String): String {
 

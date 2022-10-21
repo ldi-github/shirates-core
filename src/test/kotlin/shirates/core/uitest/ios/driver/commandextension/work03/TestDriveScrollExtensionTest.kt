@@ -144,7 +144,7 @@ class TestDriveScrollExtensionTest : UITest() {
         // Assert
         val lastItem =
             it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }
-        assertThat(lastItem.label).isEqualTo("Enable MIDI-CI")
+        assertThat(lastItem.label).isEqualTo("The graphics performance HUD shows framerate, GPU time, memory usage, and can log performance data for later analysis.")
 
 
         // Act
@@ -185,7 +185,7 @@ class TestDriveScrollExtensionTest : UITest() {
         // Assert
         val lastItem =
             it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }
-        assertThat(lastItem.label).isEqualTo("Enable MIDI-CI")
+        assertThat(lastItem.label).isEqualTo("The graphics performance HUD shows framerate, GPU time, memory usage, and can log performance data for later analysis.")
     }
 
     @Order(3)
