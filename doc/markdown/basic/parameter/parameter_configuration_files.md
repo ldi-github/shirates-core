@@ -123,7 +123,7 @@ appiumArgs=--session-override --relaxed-security
 #startupActivity=
 
 ## TestDriver --------------------
-#resuseDriver=
+#reuseDriver=
 #retryMaxCount=
 #retryTimeoutSeconds=
 #retryIntervalSeconds=

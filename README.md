@@ -9,6 +9,10 @@
 - [Quick start](doc/markdown/quick-start.md)
 - [Document index](doc/markdown/index.md)
 
+## Tested Environments
+
+- [Environments](doc/markdown/environments.md)
+
 ## Features in 3 lines
 
 1. Almost cross-platform useful APIs to write test code, currently supports Android and iOS platform.

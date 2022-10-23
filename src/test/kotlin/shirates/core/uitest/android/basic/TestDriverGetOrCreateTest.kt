@@ -42,7 +42,7 @@ class TestDriverCreateOrReuseTest : UITest() {
 
     @Test
     @Order(20)
-    fun sameConfig_sameProfile_resuse() {
+    fun sameConfig_sameProfile_reuse() {
 
         TestMode.runAsAndroid {
             if (TestLog.enableTrace.not()) {
