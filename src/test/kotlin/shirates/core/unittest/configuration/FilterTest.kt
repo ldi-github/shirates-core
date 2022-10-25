@@ -23,7 +23,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Act
-            val f = shirates.core.configuration.Filter(filterExpression = "")
+            val f = Filter(filterExpression = "")
             // Assert
             assertThat(f.name).isEqualTo("")
             assertThat(f.noun).isEqualTo("")
@@ -39,11 +39,11 @@ class FilterTest : UnitTest() {
 
         run {
             // Act, Assert
-            assertThat(shirates.core.configuration.Filter("").isPosFilter).isFalse()
-            assertThat(shirates.core.configuration.Filter("[2]").isPosFilter).isTrue()
-            assertThat(shirates.core.configuration.Filter("pos=2").isPosFilter).isTrue()
-            assertThat(shirates.core.configuration.Filter("2").isPosFilter).isFalse()
-            assertThat(shirates.core.configuration.Filter("2", parseNumberAsPos = true).isPosFilter).isTrue()
+            assertThat(Filter("").isPosFilter).isFalse()
+            assertThat(Filter("[2]").isPosFilter).isTrue()
+            assertThat(Filter("pos=2").isPosFilter).isTrue()
+            assertThat(Filter("2").isPosFilter).isFalse()
+            assertThat(Filter("2", parseNumberAsPos = true).isPosFilter).isTrue()
         }
     }
 
@@ -55,7 +55,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("image=tower_of_the_sun_face.png")
+            val f = Filter("image=tower_of_the_sun_face.png")
             // Act, Assert
             assertThat(f.templateImage).isNotNull()
 
@@ -70,7 +70,7 @@ class FilterTest : UnitTest() {
         run {
             // Arrange
             assertThatThrownBy {
-                shirates.core.configuration.Filter("image=NotRegistered.png").templateImage
+                Filter("image=NotRegistered.png").templateImage
             }.isInstanceOf(TestConfigException::class.java)
                 .hasMessage("Image file not found. (expression=NotRegistered.png)")
         }
@@ -81,42 +81,42 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("id=id1")
+            val f = Filter("id=id1")
             // Act, Assert
             assertThat(f.evaluate("id1")).isTrue()
             assertThat(f.evaluate("id2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("className=className1")
+            val f = Filter("className=className1")
             // Act, Assert
             assertThat(f.evaluate("className1")).isTrue()
             assertThat(f.evaluate("className2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("access=access1")
+            val f = Filter("access=access1")
             // Act, Assert
             assertThat(f.evaluate("access1")).isTrue()
             assertThat(f.evaluate("access2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("text=text1")
+            val f = Filter("text=text1")
             // Act, Assert
             assertThat(f.evaluate("text1")).isTrue()
             assertThat(f.evaluate("text2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("value=value1")
+            val f = Filter("value=value1")
             // Act, Assert
             assertThat(f.evaluate("value1")).isTrue()
             assertThat(f.evaluate("value2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("focusable=true")
+            val f = Filter("focusable=true")
             // Act, Assert
             assertThat(f.evaluate("true")).isTrue()
             assertThat(f.evaluate("false")).isFalse()
@@ -133,7 +133,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("")
+            val f = Filter("")
             // Act, Assert
             assertThatThrownBy {
                 f.evaluate("")
@@ -183,7 +183,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("id=id1")
+            val f = Filter("id=id1")
             // Act, Assert
             assertThat(f.evaluateId("id1")).isTrue()
             assertThat(f.evaluateId("id2")).isFalse()
@@ -195,14 +195,14 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("id=id1")
+            val f = Filter("id=id1")
             // Act, Assert
             assertThat(f.evaluateId("id1")).isTrue()
             assertThat(f.evaluateId("id2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("id=(id1|id2)")
+            val f = Filter("id=(id1|id2)")
             // Act, Assert
             assertThat(f.evaluateId("id1")).isTrue()
             assertThat(f.evaluateId("id2")).isTrue()
@@ -214,7 +214,7 @@ class FilterTest : UnitTest() {
     fun evaluateClassName() {
 
         // Arrange
-        val f = shirates.core.configuration.Filter(".Class1")
+        val f = Filter(".Class1")
         // Act, Assert
         assertThat(f.evaluateClassName("Class1")).isEqualTo(true)
         assertThat(f.evaluateClassName("Class2")).isEqualTo(false)
@@ -224,7 +224,7 @@ class FilterTest : UnitTest() {
     fun evaluateAccess() {
 
         // Arrange
-        val f = shirates.core.configuration.Filter("@access1")
+        val f = Filter("@access1")
         // Act, Assert
         assertThat(f.evaluateAccess("access1")).isTrue()
         assertThat(f.evaluateAccess("access2")).isFalse()
@@ -235,21 +235,21 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("'literal1'")
+            val f = Filter("'literal1'")
             // Act, Assert
             assertThat(f.evaluateLiteral("literal1")).isTrue()
             assertThat(f.evaluateLiteral("literal2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("literal=literal1")
+            val f = Filter("literal=literal1")
             // Act, Assert
             assertThat(f.evaluateLiteral("literal1")).isTrue()
             assertThat(f.evaluateLiteral("literal2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("literal=literal1\nliteral2")
+            val f = Filter("literal=literal1\nliteral2")
             // Act, Assert
             assertThat(f.evaluateLiteral("literal1\nliteral2")).isTrue()
             assertThat(f.evaluateLiteral("literal1 literal2")).isTrue()
@@ -257,7 +257,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("literal1 literal2")
+            val f = Filter("literal1 literal2")
             // Act, Assert
             assertThat(f.evaluateLiteral("literal1 literal2")).isTrue()
             assertThat(f.evaluateLiteral("literal1\nliteral2")).isTrue()
@@ -265,7 +265,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("literal1 literal2 ")
+            val f = Filter("literal1 literal2 ")
             // Act, Assert
             assertThat(f.evaluateLiteral(" literal1 literal2")).isTrue()
             assertThat(f.evaluateLiteral(" literal1\nliteral2 ")).isTrue()
@@ -278,14 +278,14 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("text1")
+            val f = Filter("text1")
             // Act, Assert
             assertThat(f.evaluateText("text1")).isTrue()
             assertThat(f.evaluateText("text2")).isFalse()
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("text1\ntext2")
+            val f = Filter("text1\ntext2")
             // Act, Assert
             assertThat(f.evaluateText("text1\ntext2")).isTrue()
             assertThat(f.evaluateText("text1 text2")).isTrue()
@@ -293,7 +293,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("text1 text2")
+            val f = Filter("text1 text2")
             // Act, Assert
             assertThat(f.evaluateText("text1 text2")).isTrue()
             assertThat(f.evaluateText("text1\ntext2")).isTrue()
@@ -301,7 +301,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange
-            val f = shirates.core.configuration.Filter("text1 text2 ")
+            val f = Filter("text1 text2 ")
             // Act, Assert
             assertThat(f.evaluateText(" text1 text2")).isTrue()
             assertThat(f.evaluateText(" text1\ntext2 ")).isTrue()
@@ -313,7 +313,7 @@ class FilterTest : UnitTest() {
     fun evaluateValue() {
 
         // Arrange
-        val f = shirates.core.configuration.Filter("value=value1")
+        val f = Filter("value=value1")
         // Act, Assert
         assertThat(f.evaluateValue("value1")).isTrue()
         assertThat(f.evaluateValue("value2")).isFalse()
@@ -323,7 +323,7 @@ class FilterTest : UnitTest() {
     fun evaluateFocusable() {
 
         // Arrange
-        val f = shirates.core.configuration.Filter("focusable=true")
+        val f = Filter("focusable=true")
         // Act, Assert
         assertThat(f.evaluateFocusable("true")).isTrue()
         assertThat(f.evaluateFocusable("false")).isFalse()
@@ -335,7 +335,7 @@ class FilterTest : UnitTest() {
         TestMode.runAsAndroid {
             // Arrange
             TestElementCache.loadXml(XmlDataAndroid.SettingsTopScreen)
-            val f = shirates.core.configuration.Filter("scrollable=true")
+            val f = Filter("scrollable=true")
             run {
                 // Arrange
                 val e = TestElementCache.select(".android.widget.ScrollView")
@@ -352,7 +352,7 @@ class FilterTest : UnitTest() {
         TestMode.runAsIos {
             // Arrange
             TestElementCache.loadXml(XmlDataIos.iOS1)
-            val f = shirates.core.configuration.Filter("scrollable=true")
+            val f = Filter("scrollable=true")
             run {
                 // Arrange
                 val e = TestElementCache.select(".XCUIElementTypeScrollView")
@@ -394,69 +394,69 @@ class FilterTest : UnitTest() {
     fun isAbbreviation() {
 
         // literal
-        assertThat(shirates.core.configuration.Filter("'literal1'").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!'literal1'").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("literal=literal1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("literal!=literal1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("'literal1'").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!'literal1'").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("literal=literal1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("literal!=literal1").isAbbreviation).isEqualTo(false)
 
         // text
-        assertThat(shirates.core.configuration.Filter("text1").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!text1").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("*text1*").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!*text1*").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("text1*").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!text1*").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("*text1").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!*text1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("text1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!text1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("*text1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!*text1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("text1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!text1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("*text1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!*text1").isAbbreviation).isEqualTo(true)
 
-        assertThat(shirates.core.configuration.Filter("text=text1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("text!=text1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("textContains=text1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("textContains!=text1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("textStartsWith=text1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("textStartsWith!=text1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("textEndsWith=text1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("textEndsWith!=text1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("text=text1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("text!=text1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("textContains=text1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("textContains!=text1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("textStartsWith=text1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("textStartsWith!=text1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("textEndsWith=text1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("textEndsWith!=text1").isAbbreviation).isEqualTo(false)
 
         // access
-        assertThat(shirates.core.configuration.Filter("@access1").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!@access1").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("@*access1*").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!@*access1*").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("@access1*").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!@access1*").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("@*access1").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!@*access1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("@access1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!@access1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("@*access1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!@*access1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("@access1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!@access1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("@*access1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!@*access1").isAbbreviation).isEqualTo(true)
 
-        assertThat(shirates.core.configuration.Filter("access=access1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("access!=access1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("accessContains=access1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("accessContains!=access1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("accessStartsWith=access1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("accessStartsWith!=access1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("accessEndsWith=access1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("accessEndsWith!=access1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("access=access1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("access!=access1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("accessContains=access1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("accessContains!=access1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("accessStartsWith=access1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("accessStartsWith!=access1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("accessEndsWith=access1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("accessEndsWith!=access1").isAbbreviation).isEqualTo(false)
 
         // value
-        assertThat(shirates.core.configuration.Filter("value=value1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("value!=value1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("valueContains=value1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("valueContains!=value1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("valueStartsWith=value1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("valueStartsWith!=avalue1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("valueEndsWith=value1").isAbbreviation).isEqualTo(false)
-        assertThat(shirates.core.configuration.Filter("valueEndsWith!=value1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("value=value1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("value!=value1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("valueContains=value1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("valueContains!=value1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("valueStartsWith=value1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("valueStartsWith!=avalue1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("valueEndsWith=value1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("valueEndsWith!=value1").isAbbreviation).isEqualTo(false)
 
         // id
-        assertThat(shirates.core.configuration.Filter("#id1").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("!#id1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("#id1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!#id1").isAbbreviation).isEqualTo(true)
 
-        assertThat(shirates.core.configuration.Filter("a=b").isAbbreviation).isEqualTo(true)    // "a" is not registered noun, and recognized as abbreviation
-        assertThat(shirates.core.configuration.Filter("id!=id1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("a=b").isAbbreviation).isEqualTo(true)    // "a" is not registered noun, and recognized as abbreviation
+        assertThat(Filter("id!=id1").isAbbreviation).isEqualTo(false)
 
         // pos
-        assertThat(shirates.core.configuration.Filter("[1]").isAbbreviation).isEqualTo(true)
-        assertThat(shirates.core.configuration.Filter("pos=1").isAbbreviation).isEqualTo(false)
+        assertThat(Filter("[1]").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("pos=1").isAbbreviation).isEqualTo(false)
 
     }
 
@@ -465,7 +465,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("id=id1")
+            val filter = Filter("id=id1")
             // Assert
             assertThat(filter.name).isEqualTo("id")
             assertThat(filter.noun).isEqualTo("id")
@@ -479,7 +479,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("id!=id1")
+            val filter = Filter("id!=id1")
             // Assert
             assertThat(filter.name).isEqualTo("id")
             assertThat(filter.noun).isEqualTo("id")
@@ -493,7 +493,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("#id1")
+            val filter = Filter("#id1")
             // Assert
             assertThat(filter.name).isEqualTo("id")
             assertThat(filter.noun).isEqualTo("id")
@@ -507,7 +507,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!#id1")
+            val filter = Filter("!#id1")
             // Assert
             assertThat(filter.name).isEqualTo("id")
             assertThat(filter.noun).isEqualTo("id")
@@ -528,7 +528,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("image=tower_of_the_sun_face.png?s=1.0&t=0.0")
+            val filter = Filter("image=tower_of_the_sun_face.png?s=1.0&t=0.0")
             // Assert
             assertThat(filter.name).isEqualTo("image")
             assertThat(filter.noun).isEqualTo("image")
@@ -564,7 +564,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!tower_of_the_sun_face.png?s=1.0&t=0.0")
+            val filter = Filter("!tower_of_the_sun_face.png?s=1.0&t=0.0")
             // Assert
             assertThat(filter.name).isEqualTo("image")
             assertThat(filter.noun).isEqualTo("image")
@@ -601,7 +601,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("tower_of_the_sun_face.png?s=1.0&t=0.0")
+            val filter = Filter("tower_of_the_sun_face.png?s=1.0&t=0.0")
             // Assert
             assertThat(filter.name).isEqualTo("image")
             assertThat(filter.noun).isEqualTo("image")
@@ -638,7 +638,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("image!=tower_of_the_sun_face.png?s=1.0&t=0.0")
+            val filter = Filter("image!=tower_of_the_sun_face.png?s=1.0&t=0.0")
             // Assert
             assertThat(filter.name).isEqualTo("image")
             assertThat(filter.noun).isEqualTo("image")
@@ -680,7 +680,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("className=className1")
+            val filter = Filter("className=className1")
             // Assert
             assertThat(filter.name).isEqualTo("className")
             assertThat(filter.noun).isEqualTo("className")
@@ -697,7 +697,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("className!=className1")
+            val filter = Filter("className!=className1")
             // Assert
             assertThat(filter.name).isEqualTo("className")
             assertThat(filter.noun).isEqualTo("className")
@@ -714,7 +714,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter(".className1")
+            val filter = Filter(".className1")
             // Assert
             assertThat(filter.name).isEqualTo("className")
             assertThat(filter.noun).isEqualTo("className")
@@ -731,7 +731,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!.className1")
+            val filter = Filter("!.className1")
             // Assert
             assertThat(filter.name).isEqualTo("className")
             assertThat(filter.noun).isEqualTo("className")
@@ -748,7 +748,7 @@ class FilterTest : UnitTest() {
         }
         TestMode.runAsAndroid {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter(".button")
+            val filter = Filter(".button")
             // Assert
             assertThat(filter.name).isEqualTo("className")
             assertThat(filter.noun).isEqualTo("className")
@@ -767,7 +767,7 @@ class FilterTest : UnitTest() {
         }
         TestMode.runAsAndroid {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!.button")
+            val filter = Filter("!.button")
             // Assert
             assertThat(filter.name).isEqualTo("className")
             assertThat(filter.noun).isEqualTo("className")
@@ -786,7 +786,7 @@ class FilterTest : UnitTest() {
         }
         TestMode.runAsIos {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter(".button")
+            val filter = Filter(".button")
             // Assert
             assertThat(filter.name).isEqualTo("className")
             assertThat(filter.noun).isEqualTo("className")
@@ -805,7 +805,7 @@ class FilterTest : UnitTest() {
         }
         TestMode.runAsIos {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!.button")
+            val filter = Filter("!.button")
             // Assert
             assertThat(filter.name).isEqualTo("className")
             assertThat(filter.noun).isEqualTo("className")
@@ -829,7 +829,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("literal=literal1")
+            val filter = Filter("literal=literal1")
             // Assert
             assertThat(filter.name).isEqualTo("literal")
             assertThat(filter.noun).isEqualTo("literal")
@@ -847,7 +847,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("literal!=literal1")
+            val filter = Filter("literal!=literal1")
             // Assert
             assertThat(filter.name).isEqualTo("literal")
             assertThat(filter.noun).isEqualTo("literal")
@@ -865,7 +865,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("'literal1'")
+            val filter = Filter("'literal1'")
             // Assert
             assertThat(filter.name).isEqualTo("literal")
             assertThat(filter.noun).isEqualTo("literal")
@@ -883,7 +883,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!'literal1'")
+            val filter = Filter("!'literal1'")
             // Assert
             assertThat(filter.name).isEqualTo("literal")
             assertThat(filter.noun).isEqualTo("literal")
@@ -906,7 +906,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("text=text1")
+            val filter = Filter("text=text1")
             // Assert
             assertThat(filter.name).isEqualTo("text")
             assertThat(filter.noun).isEqualTo("text")
@@ -924,7 +924,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("text!=text1")
+            val filter = Filter("text!=text1")
             // Assert
             assertThat(filter.name).isEqualTo("text")
             assertThat(filter.noun).isEqualTo("text")
@@ -942,7 +942,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("text1")
+            val filter = Filter("text1")
             // Assert
             assertThat(filter.name).isEqualTo("text")
             assertThat(filter.noun).isEqualTo("text")
@@ -960,7 +960,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!text1")
+            val filter = Filter("!text1")
             // Assert
             assertThat(filter.name).isEqualTo("text")
             assertThat(filter.noun).isEqualTo("text")
@@ -983,7 +983,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("textContains=text1")
+            val filter = Filter("textContains=text1")
             // Assert
             assertThat(filter.name).isEqualTo("textContains")
             assertThat(filter.noun).isEqualTo("text")
@@ -1001,7 +1001,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("textContains!=text1")
+            val filter = Filter("textContains!=text1")
             // Assert
             assertThat(filter.name).isEqualTo("textContains")
             assertThat(filter.noun).isEqualTo("text")
@@ -1019,7 +1019,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("*text1*")
+            val filter = Filter("*text1*")
             // Assert
             assertThat(filter.name).isEqualTo("textContains")
             assertThat(filter.noun).isEqualTo("text")
@@ -1037,7 +1037,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!*text1*")
+            val filter = Filter("!*text1*")
             // Assert
             assertThat(filter.name).isEqualTo("textContains")
             assertThat(filter.noun).isEqualTo("text")
@@ -1060,7 +1060,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("textStartsWith=text1")
+            val filter = Filter("textStartsWith=text1")
             // Assert
             assertThat(filter.name).isEqualTo("textStartsWith")
             assertThat(filter.noun).isEqualTo("text")
@@ -1078,7 +1078,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("textStartsWith!=text1")
+            val filter = Filter("textStartsWith!=text1")
             // Assert
             assertThat(filter.name).isEqualTo("textStartsWith")
             assertThat(filter.noun).isEqualTo("text")
@@ -1096,7 +1096,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("text1*")
+            val filter = Filter("text1*")
             // Assert
             assertThat(filter.name).isEqualTo("textStartsWith")
             assertThat(filter.noun).isEqualTo("text")
@@ -1114,7 +1114,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!text1*")
+            val filter = Filter("!text1*")
             // Assert
             assertThat(filter.name).isEqualTo("textStartsWith")
             assertThat(filter.noun).isEqualTo("text")
@@ -1137,7 +1137,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("textEndsWith=text1")
+            val filter = Filter("textEndsWith=text1")
             // Assert
             assertThat(filter.name).isEqualTo("textEndsWith")
             assertThat(filter.noun).isEqualTo("text")
@@ -1155,7 +1155,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("textEndsWith!=text1")
+            val filter = Filter("textEndsWith!=text1")
             // Assert
             assertThat(filter.name).isEqualTo("textEndsWith")
             assertThat(filter.noun).isEqualTo("text")
@@ -1173,7 +1173,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("*text1")
+            val filter = Filter("*text1")
             // Assert
             assertThat(filter.name).isEqualTo("textEndsWith")
             assertThat(filter.noun).isEqualTo("text")
@@ -1191,7 +1191,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!*text1")
+            val filter = Filter("!*text1")
             // Assert
             assertThat(filter.name).isEqualTo("textEndsWith")
             assertThat(filter.noun).isEqualTo("text")
@@ -1214,7 +1214,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("access=access1")
+            val filter = Filter("access=access1")
             // Assert
             assertThat(filter.name).isEqualTo("access")
             assertThat(filter.noun).isEqualTo("access")
@@ -1232,7 +1232,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("access!=access1")
+            val filter = Filter("access!=access1")
             // Assert
             assertThat(filter.name).isEqualTo("access")
             assertThat(filter.noun).isEqualTo("access")
@@ -1250,7 +1250,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("@access1")
+            val filter = Filter("@access1")
             // Assert
             assertThat(filter.name).isEqualTo("access")
             assertThat(filter.noun).isEqualTo("access")
@@ -1268,7 +1268,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!@access1")
+            val filter = Filter("!@access1")
             // Assert
             assertThat(filter.name).isEqualTo("access")
             assertThat(filter.noun).isEqualTo("access")
@@ -1291,7 +1291,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("accessContains=access1")
+            val filter = Filter("accessContains=access1")
             // Assert
             assertThat(filter.name).isEqualTo("accessContains")
             assertThat(filter.noun).isEqualTo("access")
@@ -1309,7 +1309,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("accessContains!=access1")
+            val filter = Filter("accessContains!=access1")
             // Assert
             assertThat(filter.name).isEqualTo("accessContains")
             assertThat(filter.noun).isEqualTo("access")
@@ -1327,7 +1327,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("@*access1*")
+            val filter = Filter("@*access1*")
             // Assert
             assertThat(filter.name).isEqualTo("accessContains")
             assertThat(filter.noun).isEqualTo("access")
@@ -1345,7 +1345,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!@*access1*")
+            val filter = Filter("!@*access1*")
             // Assert
             assertThat(filter.name).isEqualTo("accessContains")
             assertThat(filter.noun).isEqualTo("access")
@@ -1368,7 +1368,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("accessStartsWith=access1")
+            val filter = Filter("accessStartsWith=access1")
             // Assert
             assertThat(filter.name).isEqualTo("accessStartsWith")
             assertThat(filter.noun).isEqualTo("access")
@@ -1386,7 +1386,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("accessStartsWith!=access1")
+            val filter = Filter("accessStartsWith!=access1")
             // Assert
             assertThat(filter.name).isEqualTo("accessStartsWith")
             assertThat(filter.noun).isEqualTo("access")
@@ -1404,7 +1404,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("@access1*")
+            val filter = Filter("@access1*")
             // Assert
             assertThat(filter.name).isEqualTo("accessStartsWith")
             assertThat(filter.noun).isEqualTo("access")
@@ -1422,7 +1422,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!@access1*")
+            val filter = Filter("!@access1*")
             // Assert
             assertThat(filter.name).isEqualTo("accessStartsWith")
             assertThat(filter.noun).isEqualTo("access")
@@ -1445,7 +1445,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("accessEndsWith=access1")
+            val filter = Filter("accessEndsWith=access1")
             // Assert
             assertThat(filter.name).isEqualTo("accessEndsWith")
             assertThat(filter.noun).isEqualTo("access")
@@ -1463,7 +1463,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("accessEndsWith!=access1")
+            val filter = Filter("accessEndsWith!=access1")
             // Assert
             assertThat(filter.name).isEqualTo("accessEndsWith")
             assertThat(filter.noun).isEqualTo("access")
@@ -1481,7 +1481,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("@*access1")
+            val filter = Filter("@*access1")
             // Assert
             assertThat(filter.name).isEqualTo("accessEndsWith")
             assertThat(filter.noun).isEqualTo("access")
@@ -1499,7 +1499,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("!@*access1")
+            val filter = Filter("!@*access1")
             // Assert
             assertThat(filter.name).isEqualTo("accessEndsWith")
             assertThat(filter.noun).isEqualTo("access")
@@ -1522,7 +1522,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("value=value1")
+            val filter = Filter("value=value1")
             // Assert
             assertThat(filter.name).isEqualTo("value")
             assertThat(filter.noun).isEqualTo("value")
@@ -1540,7 +1540,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("value!=value1")
+            val filter = Filter("value!=value1")
             // Assert
             assertThat(filter.name).isEqualTo("value")
             assertThat(filter.noun).isEqualTo("value")
@@ -1563,7 +1563,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("valueContains=value1")
+            val filter = Filter("valueContains=value1")
             // Assert
             assertThat(filter.name).isEqualTo("valueContains")
             assertThat(filter.noun).isEqualTo("value")
@@ -1581,7 +1581,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("valueContains!=value1")
+            val filter = Filter("valueContains!=value1")
             // Assert
             assertThat(filter.name).isEqualTo("valueContains")
             assertThat(filter.noun).isEqualTo("value")
@@ -1604,7 +1604,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("valueStartsWith=value1")
+            val filter = Filter("valueStartsWith=value1")
             // Assert
             assertThat(filter.name).isEqualTo("valueStartsWith")
             assertThat(filter.noun).isEqualTo("value")
@@ -1622,7 +1622,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("valueStartsWith!=value1")
+            val filter = Filter("valueStartsWith!=value1")
             // Assert
             assertThat(filter.name).isEqualTo("valueStartsWith")
             assertThat(filter.noun).isEqualTo("value")
@@ -1645,7 +1645,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("valueEndsWith=value1")
+            val filter = Filter("valueEndsWith=value1")
             // Assert
             assertThat(filter.name).isEqualTo("valueEndsWith")
             assertThat(filter.noun).isEqualTo("value")
@@ -1663,7 +1663,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("valueEndsWith!=value1")
+            val filter = Filter("valueEndsWith!=value1")
             // Assert
             assertThat(filter.name).isEqualTo("valueEndsWith")
             assertThat(filter.noun).isEqualTo("value")
@@ -1686,7 +1686,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("textMatches=^value1\$")
+            val filter = Filter("textMatches=^value1\$")
             // Assert
             assertThat(filter.name).isEqualTo("textMatches")
             assertThat(filter.noun).isEqualTo("text")
@@ -1710,7 +1710,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("focusable=true")
+            val filter = Filter("focusable=true")
             assertThat(filter.name).isEqualTo("focusable")
             assertThat(filter.noun).isEqualTo("focusable")
             assertThat(filter.verb).isEqualTo("")
@@ -1728,7 +1728,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("focusable!=true")
+            val filter = Filter("focusable!=true")
             assertThat(filter.name).isEqualTo("focusable")
             assertThat(filter.noun).isEqualTo("focusable")
             assertThat(filter.verb).isEqualTo("")
@@ -1752,7 +1752,7 @@ class FilterTest : UnitTest() {
         TestMode.runAsAndroid {
             run {
                 // Arrange, Act
-                val filter = shirates.core.configuration.Filter("scrollable=true")
+                val filter = Filter("scrollable=true")
                 assertThat(filter.name).isEqualTo("scrollable")
                 assertThat(filter.noun).isEqualTo("scrollable")
                 assertThat(filter.verb).isEqualTo("")
@@ -1767,7 +1767,7 @@ class FilterTest : UnitTest() {
             }
             run {
                 // Arrange, Act
-                val filter = shirates.core.configuration.Filter("scrollable!=true")
+                val filter = Filter("scrollable!=true")
                 assertThat(filter.name).isEqualTo("scrollable")
                 assertThat(filter.noun).isEqualTo("scrollable")
                 assertThat(filter.verb).isEqualTo("")
@@ -1784,7 +1784,7 @@ class FilterTest : UnitTest() {
         TestMode.runAsIos {
             run {
                 // Arrange, Act
-                val filter = shirates.core.configuration.Filter("scrollable=true")
+                val filter = Filter("scrollable=true")
                 assertThat(filter.toString()).isEqualTo("scrollable=true")
             }
         }
@@ -1867,7 +1867,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("ignoreTypes!=Class1,Class2,Class3")
+            val filter = Filter("ignoreTypes!=Class1,Class2,Class3")
             assertThat(filter.name).isEqualTo("ignoreTypes")
             assertThat(filter.noun).isEqualTo("ignoreTypes")
             assertThat(filter.verb).isEqualTo("")
@@ -1889,7 +1889,7 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("pos=1")
+            val filter = Filter("pos=1")
             // Assert
             assertThat(filter.name).isEqualTo("pos")
             assertThat(filter.noun).isEqualTo("pos")
@@ -1905,7 +1905,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("[1]")
+            val filter = Filter("[1]")
             // Assert
             assertThat(filter.name).isEqualTo("pos")
             assertThat(filter.noun).isEqualTo("pos")
@@ -1921,7 +1921,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange, Act
-            val filter = shirates.core.configuration.Filter("pos!=1")
+            val filter = Filter("pos!=1")
             // Assert
             assertThat(filter.name).isEqualTo("pos")
             assertThat(filter.noun).isEqualTo("pos")
@@ -1942,14 +1942,14 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            val filter = shirates.core.configuration.Filter("access=access1")
+            val filter = Filter("access=access1")
             // Assert
             assertThat(filter.noun).isEqualTo("access")
         }
 
         run {
             // Arrange
-            val filter = shirates.core.configuration.Filter("unknown=unknown1")
+            val filter = Filter("unknown=unknown1")
             // Assert
             assertThat(filter.noun).isEqualTo("text")
         }
@@ -1960,25 +1960,25 @@ class FilterTest : UnitTest() {
 
         run {
             assertThat(
-                shirates.core.configuration.Filter.matchText(
+                Filter.matchText(
                     "a ",
                     "a"
                 )
             ).isTrue()        // criteria are interpreted as "a"
             assertThat(
-                shirates.core.configuration.Filter.matchText(
+                Filter.matchText(
                     "a ",
                     "(a)"
                 )
             ).isTrue()      // criteria are interpreted as "a"
             assertThat(
-                shirates.core.configuration.Filter.matchText(
+                Filter.matchText(
                     "(a)",
                     "(a)"
                 )
             ).isFalse()    // criteria are expanded to as "a"
             assertThat(
-                shirates.core.configuration.Filter.matchText(
+                Filter.matchText(
                     "(a|b)",
                     "(a|b)"
                 )
@@ -1987,30 +1987,30 @@ class FilterTest : UnitTest() {
         run {
             // Act, Assert
             assertThat(
-                shirates.core.configuration.Filter.matchText(
+                Filter.matchText(
                     "a",
                     "(a|b)"
                 )
             ).isTrue() // criteria are interpreted as "a or b"
             assertThat(
-                shirates.core.configuration.Filter.matchText(
+                Filter.matchText(
                     "b",
                     "(a|b)"
                 )
             ).isTrue() // criteria are interpreted as "a or b"
             assertThat(
-                shirates.core.configuration.Filter.matchText(
+                Filter.matchText(
                     "c",
                     "(a|b)"
                 )
             ).isFalse()    // criteria are interpreted as "a or b"
             assertThat(
-                shirates.core.configuration.Filter.matchText(
+                Filter.matchText(
                     "",
                     "(a|b)"
                 )
             ).isFalse()     // criteria are interpreted as "a or b"
-            assertThat(shirates.core.configuration.Filter.matchText("", "")).isFalse()
+            assertThat(Filter.matchText("", "")).isFalse()
         }
     }
 
@@ -2018,21 +2018,21 @@ class FilterTest : UnitTest() {
     fun matchLiteral() {
 
         run {
-            assertThat(shirates.core.configuration.Filter.matchLiteral("a", "a")).isTrue()
+            assertThat(Filter.matchLiteral("a", "a")).isTrue()
             assertThat(
-                shirates.core.configuration.Filter.matchLiteral(
+                Filter.matchLiteral(
                     "a",
                     "(a)"
                 )
             ).isFalse()  // criteria are interpreted literally
             assertThat(
-                shirates.core.configuration.Filter.matchLiteral(
+                Filter.matchLiteral(
                     "(a)",
                     "(a)"
                 )
             ).isTrue()  // criteria are interpreted literally
             assertThat(
-                shirates.core.configuration.Filter.matchLiteral(
+                Filter.matchLiteral(
                     "(a|b)",
                     "(a|b)"
                 )
@@ -2052,17 +2052,17 @@ class FilterTest : UnitTest() {
                 assertThat(e.visible).isEqualTo("true")
                 val sel = Selector("visible=true")
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isTrue()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isTrue()
 
                 // Arrange
                 sel.visible = null
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isTrue()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isTrue()
 
                 // Arrange
                 sel.visible = "*"
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isTrue()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isTrue()
             }
             run {
                 // Arrange
@@ -2070,17 +2070,17 @@ class FilterTest : UnitTest() {
                 assertThat(e.visible).isEqualTo("true")
                 val sel = Selector("visible=false")
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isFalse()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isFalse()
 
                 // Arrange
                 sel.visible = null
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isTrue()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isTrue()
 
                 // Arrange
                 sel.visible = "*"
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isTrue()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isTrue()
             }
             run {
                 // Arrange
@@ -2088,17 +2088,17 @@ class FilterTest : UnitTest() {
                 assertThat(e.visible).isEqualTo("false")
                 val sel = Selector("visible=false")
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isTrue()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isTrue()
 
                 // Arrange
                 sel.visible = null
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isFalse()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isFalse()
 
                 // Arrange
                 sel.visible = "*"
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isTrue()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isTrue()
             }
             run {
                 // Arrange
@@ -2106,24 +2106,24 @@ class FilterTest : UnitTest() {
                 assertThat(e.visible).isEqualTo("false")
                 val sel = Selector("visible=true")
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isFalse()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isFalse()
 
                 // Arrange
                 sel.visible = null
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isFalse()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isFalse()
 
                 // Arrange
                 sel.visible = "*"
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e, selector = sel)).isTrue()
+                assertThat(Filter.matchVisible(element = e, selector = sel)).isTrue()
             }
             run {
                 // Arrange
                 val e = TestElementCache.select("value=First Name")
                 assertThat(e.visible).isEqualTo("true")
                 // Act, Assert
-                assertThat(shirates.core.configuration.Filter.matchVisible(element = e)).isTrue()
+                assertThat(Filter.matchVisible(element = e)).isTrue()
 
             }
         }
@@ -2134,17 +2134,17 @@ class FilterTest : UnitTest() {
 
         run {
             TestMode.runAsAndroid {
-                assertThat(shirates.core.configuration.Filter.isNotIgnoreTypes(classOrType = "android.widget.TextView")).isTrue()
+                assertThat(Filter.isNotIgnoreTypes(classOrType = "android.widget.TextView")).isTrue()
                 assertThat(
-                    shirates.core.configuration.Filter.isNotIgnoreTypes(
+                    Filter.isNotIgnoreTypes(
                         classOrType = "android.widget.TextView",
                         ignoreTypes = "android.widget.EditText,android.widget.TextView"
                     )
                 ).isFalse()
             }
             TestMode.runAsIos {
-                assertThat(shirates.core.configuration.Filter.isNotIgnoreTypes(classOrType = "XCUIElementTypeStaticText")).isTrue()
-                assertThat(shirates.core.configuration.Filter.isNotIgnoreTypes(classOrType = "XCUIElementTypeCell")).isFalse()
+                assertThat(Filter.isNotIgnoreTypes(classOrType = "XCUIElementTypeStaticText")).isTrue()
+                assertThat(Filter.isNotIgnoreTypes(classOrType = "XCUIElementTypeCell")).isFalse()
             }
         }
     }
@@ -2157,7 +2157,7 @@ class FilterTest : UnitTest() {
             ImageFileRepository.setup("unitTestConfig/android/maps/screens".toPath())
             val image = BufferedImageUtility
                 .getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun_middle.png")
-            val filter = shirates.core.configuration.Filter("image=tower_of_the_sun_face.png")
+            val filter = Filter("image=tower_of_the_sun_face.png")
             ImageFileRepository.clear()
             assertThatThrownBy {
                 filter.evaluateImageEqualsTo(image)
@@ -2173,7 +2173,7 @@ class FilterTest : UnitTest() {
             ImageFileRepository.setup("unitTestConfig/android/maps/screens".toPath())
             val image = BufferedImageUtility
                 .getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun_middle.png")
-            val filter = shirates.core.configuration.Filter("image=tower_of_the_sun_face.png")
+            val filter = Filter("image=tower_of_the_sun_face.png")
             ImageFileRepository.clear()
             assertThatThrownBy {
                 filter.evaluateImageContainedIn(image)
