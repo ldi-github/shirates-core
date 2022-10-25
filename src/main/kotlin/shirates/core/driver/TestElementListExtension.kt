@@ -130,7 +130,7 @@ private fun filterBySelectorCore(
      */
     if ((selector.filterMap.containsKey("className")).not()) {
         result = result.filter {
-            val m = shirates.core.configuration.Filter.isNotIgnoreTypes(
+            val m = Filter.isNotIgnoreTypes(
                 classOrType = it.classOrType,
                 ignoreTypes = selector.ignoreTypes
             )
@@ -140,7 +140,7 @@ private fun filterBySelectorCore(
 
     if (isiOS) {
         result = result.filter { e ->
-            val m = shirates.core.configuration.Filter.matchVisible(element = e, selector = selector)
+            val m = Filter.matchVisible(element = e, selector = selector)
             m
         }
     }
