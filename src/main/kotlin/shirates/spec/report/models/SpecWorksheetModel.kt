@@ -1,14 +1,14 @@
 package shirates.spec.report.models
 
+import shirates.core.configuration.PropertiesManager
+import shirates.core.logging.LogType
+import shirates.core.logging.Message.message
 import shirates.spec.code.custom.DefaultTranslator.escapeForCode
 import shirates.spec.report.entity.Frame
 import shirates.spec.report.entity.LineObject
 import shirates.spec.report.entity.LogLine
 import shirates.spec.report.entity.SpecLine
 import shirates.spec.utilily.SpecResourceUtility
-import shirates.core.configuration.PropertiesManager
-import shirates.core.logging.LogType
-import shirates.core.logging.Message.message
 
 class SpecWorksheetModel(
     val noLoadRun: Boolean,
@@ -324,13 +324,7 @@ class SpecWorksheetModel(
             "exist" -> {
                 val msg = message(id = "exist", subject = "")
                 val subject = logLine.message.replace(msg, "")
-                if (subject.isNotBlank()) {
-                    if (current.target.isNotBlank() && logLine.message.contains(current.target)) {
-                        logLine.message = SpecResourceUtility.isDisplayed
-                    } else {
-                        logLine.message = subject
-                    }
-                }
+                logLine.message = subject
             }
         }
     }
