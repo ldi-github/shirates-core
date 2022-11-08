@@ -85,11 +85,11 @@ class SpecWorksheetModel(
                         special = logLine.special
                     }
 
-                    if (current.expectations.count() > 0 && (current.os != os || current.special != special)
+                    if (current.expectations.isNotEmpty() && (current.os != os || current.special != special)
                     ) {
                         newCase()
                     }
-                    if (current.type != "scenario" && current.result.isBlank()) {
+                    if (current.type != "scenario" && (current.result.isBlank() || current.result == notApplicable)) {
                         current.os = os
                         current.special = special
                         if (frame != Frame.EXPECTATION) {
@@ -108,6 +108,9 @@ class SpecWorksheetModel(
                             current.special = ""
                         }
                     }
+                    if (frame != Frame.EXPECTATION) {
+                        addDescription(logLine)
+                    }
                 }
             }
 
@@ -117,7 +120,7 @@ class SpecWorksheetModel(
                     setResult(logLine)
                 } else {
                     when (logLine.command) {
-                        "screenshot" -> {
+                        "screenshot", "scanElements" -> {
                             // do not output
                         }
 
@@ -175,10 +178,20 @@ class SpecWorksheetModel(
             }
 
             LogType.SKIP.label -> {
-                if (noLoadRun.not()) {
-                    addDescription(logLine)
-                    setResult(logLine)
-                }
+                addDescription(logLine)
+                setResult(logLine)
+            }
+
+            LogType.SKIP_CASE.label -> {
+                logLine.message = "SKIP_CASE(${logLine.message})"
+                addDescription(logLine)
+                setResult(logLine)
+            }
+
+            LogType.SKIP_SCENARIO.label -> {
+                logLine.message = "SKIP_SCENARIO(${logLine.message})"
+                addDescription(logLine)
+                setResult(logLine)
             }
 
             LogType.NOTIMPL.label -> {
@@ -455,19 +468,19 @@ class SpecWorksheetModel(
      */
     fun condition(logLine: LogLine): LineObject {
 
-        val msg = getNewLineAndMessage(logLine)
+        if (current.actions.isNotEmpty() || current.target.isNotBlank() || current.expectations.isNotEmpty()) {
+            newCase()
+        }
+        val msg = getMessage(logLine)
         current.conditions.add(msg)
 
         return current
     }
 
-    private fun getNewLineAndMessage(logLine: LogLine): String {
+    private fun getMessage(logLine: LogLine): String {
 
         val lastStepNo = lineObjects.filter { it.step.isNotBlank() }.lastOrNull()?.step
 
-        if (current.result.isNotBlank()) {
-            newCase()
-        }
         if (lastStepNo != logLine.stepNo) {
             current.step = logLine.stepNo
         }
@@ -483,11 +496,9 @@ class SpecWorksheetModel(
         var msg = "$bulletLocal${logLine.message}"
         if (frame != Frame.EXPECTATION) {
             if (logLine.logType == "branch") {
-                val subject = logLine.message.trimEnd('{').trim()
-                if (subject.lowercase().endsWith("screen]")) {
-                    msg = message(id = "onScreen", subject = subject)
-                } else {
-                    msg = subject
+                msg = logLine.message
+                if (msg.startsWith("}")) {
+                    msg = "}"
                 }
             }
         }
@@ -500,7 +511,10 @@ class SpecWorksheetModel(
      */
     fun action(logLine: LogLine): LineObject {
 
-        val msg = getNewLineAndMessage(logLine)
+        if (current.target.isNotBlank() || current.expectations.isNotEmpty()) {
+            newCase()
+        }
+        val msg = getMessage(logLine)
         current.actions.add(msg)
 
         return current
