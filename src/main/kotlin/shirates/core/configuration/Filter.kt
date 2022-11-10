@@ -20,7 +20,7 @@ class Filter(
     val filterExpression: String,
     val parseNumberAsPos: Boolean = false
 ) {
-    private val expressionParser: shirates.core.configuration.FilterExpressionParser
+    private val expressionParser: FilterExpressionParser
 
     var isPosFilter = false
 
@@ -70,7 +70,7 @@ class Filter(
     var templateImage: BufferedImage? = null
         get() {
             if (noun != "image") return null
-            val imageInfo = shirates.core.configuration.ImageInfo(value)
+            val imageInfo = ImageInfo(value)
             if (field == null) {
                 field = ImageFileRepository.getBufferedImage(imageInfo.fileName)
             }
@@ -81,14 +81,14 @@ class Filter(
     val scale: Double
         get() {
             if (noun != "image") return 1.0
-            val imageInfo = shirates.core.configuration.ImageInfo(value)
+            val imageInfo = ImageInfo(value)
             return imageInfo.scale
         }
 
     val threshold: Double
         get() {
             if (noun != "image") return 0.0
-            val imageInfo = shirates.core.configuration.ImageInfo(value)
+            val imageInfo = ImageInfo(value)
             return imageInfo.threshold
         }
 
@@ -175,7 +175,7 @@ class Filter(
         }
 
     init {
-        expressionParser = shirates.core.configuration.FilterExpressionParser(
+        expressionParser = FilterExpressionParser(
             expression = filterExpression,
             parseNumberAsPos = parseNumberAsPos
         )
@@ -244,8 +244,8 @@ class Filter(
 
         internal val registeredNounsWithVerb: List<String>
             get() {
-                if (shirates.core.configuration.Filter.Companion._nounsWithVerb.isEmpty()) {
-                    val list = shirates.core.configuration.Filter.Companion.registeredNouns.toMutableList()
+                if (_nounsWithVerb.isEmpty()) {
+                    val list = registeredNouns.toMutableList()
                     list.addAll(
                         listOf(
                             "accessStartsWith", "accessContains", "accessEndsWith", "accessMatches",
@@ -253,13 +253,13 @@ class Filter(
                             "valueStartsWith", "valueContains", "valueEndsWith", "valueMatches",
                         )
                     )
-                    shirates.core.configuration.Filter.Companion._nounsWithVerb.addAll(list.sortedByDescending { it.length })
+                    _nounsWithVerb.addAll(list.sortedByDescending { it.length })
                 }
-                return shirates.core.configuration.Filter.Companion._nounsWithVerb
+                return _nounsWithVerb
             }
 
         internal fun isValidName(name: String): Boolean {
-            return shirates.core.configuration.Filter.Companion.registeredNounsWithVerb.contains(name)
+            return registeredNounsWithVerb.contains(name)
         }
 
         /**
@@ -330,7 +330,7 @@ class Filter(
          */
         internal fun matchVisible(
             element: TestElement,
-            selector: shirates.core.configuration.Selector? = null
+            selector: Selector? = null
         ): Boolean {
 
             val filterValue = selector?.visible ?: "true"
@@ -352,7 +352,7 @@ class Filter(
         internal fun isNotIgnoreTypes(classOrType: String, ignoreTypes: String? = null): Boolean {
 
             val selectIgnoreTypes =
-                ignoreTypes?.split(",") ?: shirates.core.configuration.PropertiesManager.selectIgnoreTypes
+                ignoreTypes?.split(",") ?: PropertiesManager.selectIgnoreTypes
             return selectIgnoreTypes.contains(classOrType).not()
         }
     }
@@ -367,7 +367,7 @@ class Filter(
                 "StartsWith" -> if (value2.startsWith(selectorValue.normalize())) return true
                 "EndsWith" -> if (value2.endsWith(selectorValue.normalize())) return true
                 "Matches" -> if (value2.matches(Regex(selectorValue.normalize()))) return true
-                else -> return shirates.core.configuration.Filter.Companion.matchText(
+                else -> return matchText(
                     text = value2,
                     criteria = filterValue
                 )
@@ -519,8 +519,8 @@ class Filter(
             string: String
         ): Boolean {
             for (filterValue in filterValues) {
-                val fullId = shirates.core.configuration.Filter.Companion.getFullyQualifiedId(string)?.normalize()
-                val fullId2 = shirates.core.configuration.Filter.Companion.getFullyQualifiedId(filterValue)?.normalize()
+                val fullId = getFullyQualifiedId(string)?.normalize()
+                val fullId2 = getFullyQualifiedId(filterValue)?.normalize()
 
                 if (fullId == fullId2) {
                     return true
@@ -558,7 +558,7 @@ class Filter(
 
     internal fun evaluateLiteral(literal: String): Boolean {
 
-        val match = shirates.core.configuration.Filter.Companion.matchLiteral(literal = literal, criteria = this.value)
+        val match = matchLiteral(literal = literal, criteria = this.value)
         return match.reverseIfNegation()
     }
 

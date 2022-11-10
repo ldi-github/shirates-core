@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.ImageInfo
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.configuration.repository.ScreenRepository
@@ -340,6 +341,9 @@ internal fun TestDrive?.existCore(
     var e = TestElement()
 
     if (selector.isImageSelector) {
+        if (PropertiesManager.enableImageAssertion.not()) {
+            return manual(message = message)
+        }
         val r = TestDriver.findImage(
             selector = selector,
             scroll = scroll,
@@ -703,6 +707,11 @@ internal fun TestDrive?.dontExist(
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$selector") {
         if (selector.isImageSelector) {
+            if (PropertiesManager.enableImageAssertion.not()) {
+                e = testElement
+                manual(message = assertMessage)
+                return@execCheckCommand
+            }
             imageAssertionCoreCore(
                 expectedSelector = selector,
                 command = command,

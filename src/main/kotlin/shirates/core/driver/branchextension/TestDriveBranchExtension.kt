@@ -223,21 +223,46 @@ fun TestDrive?.specialTag(
  * stub
  */
 fun TestDrive?.stub(
-    onTrue: (TestElement) -> Unit
+    onTrue: () -> Unit
 ): BooleanCompareResult {
 
-    return isStub.ifTrue(onTrue = onTrue)
+    val command = "stub"
+
+    val match = (TestMode.isNoLoadRun || isStub)
+    if (match.not()) {
+        TestLog.trace("skip stub")
+        return BooleanCompareResult(value = false, command = command)
+    }
+
+    val context = TestDriverCommandContext(null)
+    context.execSpecial(subject = command, expected = command) {
+        onTrue()
+    }
+
+    return BooleanCompareResult(value = true, command = command)
 }
 
 /**
  * stubNot
  */
 fun TestDrive?.stubNot(
-    onTrue: (TestElement) -> Unit
+    onTrue: () -> Unit
 ): BooleanCompareResult {
 
-    val isStubNot = isStub.not()
-    return isStubNot.ifTrue(onTrue = onTrue)
+    val command = "stubNot"
+
+    val match = (TestMode.isNoLoadRun || isStub.not())
+    if (match.not()) {
+        TestLog.trace("skip stubNot")
+        return BooleanCompareResult(value = false, command = command)
+    }
+
+    val context = TestDriverCommandContext(null)
+    context.execSpecial(subject = command, expected = command) {
+        onTrue()
+    }
+
+    return BooleanCompareResult(value = true, command = command)
 }
 
 /**

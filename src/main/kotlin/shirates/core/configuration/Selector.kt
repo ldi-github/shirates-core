@@ -259,7 +259,7 @@ class Selector(
             return image.isNullOrBlank().not()
         }
 
-    var filterMap = mutableMapOf<String, shirates.core.configuration.Filter>()
+    var filterMap = mutableMapOf<String, Filter>()
 
     val isFlowBased: Boolean
         get() {
@@ -431,7 +431,7 @@ class Selector(
         parseExpression()
     }
 
-    private fun getFilter(key: String): shirates.core.configuration.Filter? {
+    private fun getFilter(key: String): Filter? {
 
         return if (filterMap.containsKey(key)) filterMap[key] else null
     }
@@ -452,11 +452,11 @@ class Selector(
         if (value == null && filterMap.containsKey(key)) {
             filterMap.remove(key)
         }
-        if (shirates.core.configuration.Filter.isValidName(name = key).not()) {
+        if (Filter.isValidName(name = key).not()) {
             throw IllegalArgumentException("key=$key")
         }
         if (value != null) {
-            filterMap[key] = shirates.core.configuration.Filter("$key=$value")
+            filterMap[key] = Filter("$key=$value")
         }
         expression = getElementExpression()
     }

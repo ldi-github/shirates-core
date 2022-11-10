@@ -74,7 +74,7 @@ class TestElementImageExtensionTest : UITest() {
             }
             case(2, "imageIs, imageIsNot, isImage") {
                 expectation {
-                    it.select("Display").leftImage()
+                    it.selectWithScrollDown("Display").leftImage()
                         .imageIs("[Display Icon].png")
                         .imageIsNot("[Sound & vibration Icon].png")
                     it.select("Display").leftImage()
