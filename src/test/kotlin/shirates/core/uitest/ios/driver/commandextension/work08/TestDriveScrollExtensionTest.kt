@@ -1,4 +1,4 @@
-package shirates.core.uitest.ios.driver.commandextension.work03
+package shirates.core.uitest.ios.driver.commandextension.work08
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
