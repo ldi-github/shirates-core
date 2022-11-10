@@ -435,6 +435,16 @@ object PropertiesManager {
     // Image Matching --------------------------------------------------
 
     /**
+     * enableImageAssertion
+     */
+    val enableImageAssertion: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableImageAssertion")
+                ?: return shirates.core.Const.ENABLE_IMAGE_ASSERTION
+            return value == "true"
+        }
+
+    /**
      * imageMatchingScale
      */
     val imageMatchingScale: Double

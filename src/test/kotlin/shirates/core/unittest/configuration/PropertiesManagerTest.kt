@@ -484,7 +484,7 @@ class PropertiesManagerTest : UnitTest() {
         run {
             // Arrange
             val value = "dir1"
-            PropertiesManager.setPropertyValue("testListDir", value.toString())
+            PropertiesManager.setPropertyValue("testListDir", value)
             // Act, Assert
             assertThat(PropertiesManager.testListDir).isEqualTo(value)
         }
@@ -705,6 +705,31 @@ class PropertiesManagerTest : UnitTest() {
                 PropertiesManager.screenshotScale
             }.isInstanceOf(TestConfigException::class.java)
                 .hasMessage("screenshotScale is allowed from 0.1 to 1.0. (1.1)")
+        }
+    }
+
+    @Test
+    fun enableImageAssertion() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableImageAssertion).isEqualTo(shirates.core.Const.ENABLE_IMAGE_ASSERTION)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableImageAssertion", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableImageAssertion).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableImageAssertion", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableImageAssertion).isEqualTo(value)
         }
     }
 

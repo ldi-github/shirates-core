@@ -38,6 +38,7 @@ object Const {
     const val ENABLE_TIME_MEASURE_LOG = false
     const val ENABLE_IMAGE_MATCH_DEBUG_LOG = false
     const val SCREENSHOT_SCALE = 0.5
+    const val ENABLE_IMAGE_ASSERTION = true
     const val IMAGE_MATCHING_SCALE = 0.25
     const val IMAGE_MATCHING_THRESHOLD = 1.0
     const val IMAGE_MATCHING_CANDIDATE_COUNT = 20
