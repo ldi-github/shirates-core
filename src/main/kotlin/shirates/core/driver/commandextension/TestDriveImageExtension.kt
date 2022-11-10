@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.exception.TestNGException
@@ -278,6 +279,9 @@ fun TestDrive?.imageContains(
         subject = testElement.selector?.toString() ?: testElement.getUniqueSelector().toString(),
         expected = expression
     )
+    if (PropertiesManager.enableImageAssertion.not()) {
+        return manual(message = assertMessage)
+    }
 
     val action = {
         isContainingImage(expression)
@@ -309,6 +313,9 @@ fun TestDrive?.imageIs(
 
     val testElement = getTestElement()
     val assertMessage = message(id = command, subject = testElement.selector.toString(), expected = expression)
+    if (PropertiesManager.enableImageAssertion.not()) {
+        return manual(message = assertMessage)
+    }
 
     val action = {
         isImage(expression)
@@ -340,6 +347,9 @@ fun TestDrive?.imageIsNot(
 
     val testElement = getTestElement()
     val assertMessage = message(id = command, subject = testElement.selector.toString(), expected = expression)
+    if (PropertiesManager.enableImageAssertion.not()) {
+        return manual(message = assertMessage)
+    }
 
     val action = {
         isImage(expression)

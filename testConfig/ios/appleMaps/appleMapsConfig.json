@@ -29,6 +29,12 @@
 
   "profiles": [
     {
+      "profileName": "iOS *",
+      "capabilities": {
+        "platformVersion": "*"
+      }
+    },
+    {
       "profileName": "iPhone 14(16.1)",
       "capabilities": {
         "platformVersion": "16.1",
@@ -137,7 +143,6 @@
         "wdaLocalPort": "8214"
       }
     }
-
 
   ]
 }
