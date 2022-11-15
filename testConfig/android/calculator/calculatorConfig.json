@@ -23,7 +23,6 @@
     {
       "profileName": "Android *",
       "capabilities": {
-        "platformVersion": "*"
       }
     },
     {
@@ -38,9 +37,9 @@
       }
     },
     {
-      "profileName": "Android 11",
+      "profileName": "Android 13",
       "capabilities": {
-        "platformVersion": "11"
+        "platformVersion": "13"
       }
     },
 

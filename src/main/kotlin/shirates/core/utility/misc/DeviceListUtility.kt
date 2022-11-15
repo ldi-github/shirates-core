@@ -6,6 +6,7 @@ import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.utility.getStringOrEmpty
 import shirates.core.utility.tool.AdbUtility
+import shirates.core.utility.tool.AndroidDeviceUtility
 import shirates.core.utility.tool.SimctlUtility
 
 object DeviceListUtility {
@@ -65,7 +66,7 @@ object DeviceListUtility {
     }
 
     private fun getAndroidDeviceInfoList(list: MutableList<DeviceInfo>) {
-        val androidDevices = AdbUtility.getAndroidDeviceList()
+        val androidDevices = AndroidDeviceUtility.getAndroidDeviceList()
         for (androidDeviceInfo in androidDevices) {
             val deviceInfo = DeviceInfo()
             deviceInfo.androidDeviceInfo = androidDeviceInfo

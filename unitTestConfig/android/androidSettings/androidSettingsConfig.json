@@ -40,7 +40,6 @@
     {
       "profileName": "Android *",
       "capabilities": {
-        "platformVersion": "*"
       }
     },
     {

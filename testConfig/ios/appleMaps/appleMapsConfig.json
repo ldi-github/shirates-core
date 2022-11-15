@@ -31,7 +31,6 @@
     {
       "profileName": "iOS *",
       "capabilities": {
-        "platformVersion": "*"
       }
     },
     {

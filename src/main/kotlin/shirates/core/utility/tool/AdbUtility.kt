@@ -1,48 +1,10 @@
 package shirates.core.utility.tool
 
+import shirates.core.Const
 import shirates.core.driver.TestMode
-import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 
 object AdbUtility {
-
-    /**
-     * getAndroidDeviceList
-     */
-    fun getAndroidDeviceList(): List<AndroidDeviceInfo> {
-
-        val result = ShellUtility.executeCommand("adb", "devices", "-l")
-        val list = mutableListOf<AndroidDeviceInfo>()
-
-        for (line in result.resultString.split(System.lineSeparator())) {
-            if (line.isNotBlank()) {
-                val deviceInfo = AndroidDeviceInfo(line)
-                if (deviceInfo.port.isNotBlank()) {
-                    // Get process information (pid, cmd)
-                    deviceInfo.pid = ProcessUtility.getPid(deviceInfo.port.toInt()) ?: ""
-                    val r = ShellUtility.executeCommandCore(log = false, "ps", "-p", deviceInfo.pid)
-                    deviceInfo.psResult = r.resultString
-                }
-                if (deviceInfo.status.isNotBlank()) {
-                    if (deviceInfo.udid.isNotBlank()) {
-                        deviceInfo.version = getAndroidVersion(udid = deviceInfo.udid)
-                    }
-                    list.add(deviceInfo)
-                }
-            }
-        }
-
-        return list
-    }
-
-    /**
-     * getAndroidVersion
-     */
-    fun getAndroidVersion(udid: String): String {
-
-        val result = ShellUtility.executeCommand("adb", "-s", udid, "shell", "getprop", "ro.build.version.release")
-        return result.resultString
-    }
 
     /**
      * reboot
@@ -118,16 +80,16 @@ object AdbUtility {
         var psResult = ""
         val cmd: String
             get() {
-                if (TestMode.isRunningOnWindows) {
-                    throw NotImplementedError()
-                } else {
-                    val lines = psResult.split("\n")
-                    if (lines.count() >= 2) {
+                val lines = psResult.split(Const.NEW_LINE)
+                if (lines.count() >= 2) {
+                    if (TestMode.isRunningOnWindows) {
+                        return lines[1].split(" ").last().removePrefix("@")
+                    } else {
                         val cmdIndex = lines[1].indexOf("/")
                         return lines[1].substring(cmdIndex)
-                    } else {
-                        return ""
                     }
+                } else {
+                    return ""
                 }
             }
         val avdName: String
@@ -173,12 +135,12 @@ object AdbUtility {
 
         val isEmulator: Boolean
             get() {
-                return isRealDevice.not()
+                return udid.startsWith("emulator-")
             }
 
         val isRealDevice: Boolean
             get() {
-                return info.startsWith("usb:")
+                return isEmulator.not()
             }
 
         init {

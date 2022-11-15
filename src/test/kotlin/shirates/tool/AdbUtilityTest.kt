@@ -1,6 +1,5 @@
 package shirates.tool
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisIsFalse
@@ -10,29 +9,6 @@ import shirates.core.utility.tool.AdbUtility
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class AdbUtilityTest {
-
-    @Test
-    fun getAndroidDeviceList() {
-
-        val result = AdbUtility.getAndroidDeviceList()
-        result.forEach {
-            it.print()
-//            println(it)
-        }
-    }
-
-    @Test
-    fun getAndroidVersion() {
-
-        run {
-            val version = AdbUtility.getAndroidVersion("emulator-5554")
-            assertThat(version).isEqualTo("12")
-        }
-        run {
-            val version = AdbUtility.getAndroidVersion("emulator-5554")
-            assertThat(version).isEqualTo("12")
-        }
-    }
 
     @Test
     fun reboot() {

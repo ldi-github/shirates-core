@@ -2,12 +2,14 @@ package shirates.core.utility.tool
 
 import shirates.core.Const
 import shirates.core.configuration.TestProfile
+import shirates.core.driver.TestMode
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.Message.message
+import shirates.core.logging.Message
+import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.sync.StopWatch
 
-object EmulatorUtility {
+object AndroidDeviceUtility {
 
     var currentAndroidDeviceInfo: AdbUtility.AndroidDeviceInfo? = null
 
@@ -29,26 +31,79 @@ object EmulatorUtility {
     }
 
     /**
+     * getAndroidDeviceList
+     */
+    fun getAndroidDeviceList(): List<AdbUtility.AndroidDeviceInfo> {
+
+        val result = ShellUtility.executeCommand("adb", "devices", "-l")
+        val list = mutableListOf<AdbUtility.AndroidDeviceInfo>()
+
+        for (line in result.resultString.split(System.lineSeparator())) {
+            if (line.isNotBlank()) {
+                val deviceInfo = AdbUtility.AndroidDeviceInfo(line)
+                if (deviceInfo.port.isNotBlank()) {
+                    val emulatorPort = deviceInfo.port.toIntOrNull()
+                    if (emulatorPort != null) {
+                        // Get process information (pid, cmd)
+                        deviceInfo.pid = ProcessUtility.getPid(emulatorPort) ?: ""
+                        if (TestMode.isRunningOnWindows) {
+                            val r = ShellUtility.executeCommand(
+                                "wmic",
+                                "process",
+                                "where",
+                                "ProcessID=${deviceInfo.pid}",
+                                "get",
+                                "CommandLine"
+                            )
+                            deviceInfo.psResult = r.resultString
+                        } else {
+                            val r = ShellUtility.executeCommand("ps", "-p", deviceInfo.pid)
+                            deviceInfo.psResult = r.resultString
+                        }
+                    }
+                }
+                if (deviceInfo.status.isNotBlank()) {
+                    if (deviceInfo.udid.isNotBlank()) {
+                        deviceInfo.version = getAndroidVersion(udid = deviceInfo.udid)
+                    }
+                    list.add(deviceInfo)
+                }
+            }
+        }
+
+        return list
+    }
+
+    /**
      * getAndroidDeviceInfo
      */
     fun getAndroidDeviceInfo(avdName: String): AdbUtility.AndroidDeviceInfo? {
 
-        val deviceList = AdbUtility.getAndroidDeviceList()
+        val deviceList = getAndroidDeviceList()
         val device = deviceList.firstOrNull() { it.avdName == avdName }
         return device
     }
 
     /**
-     * startEmulatorWithTestProfile
+     * getAndroidVersion
      */
-    fun startEmulatorWithTestProfile(testProfile: TestProfile): AdbUtility.AndroidDeviceInfo {
+    fun getAndroidVersion(udid: String): String {
+
+        val result = ShellUtility.executeCommand("adb", "-s", udid, "shell", "getprop", "ro.build.version.release")
+        return result.resultString
+    }
+
+    /**
+     * getOrCreateAndroidDeviceInfo
+     */
+    fun getOrCreateAndroidDeviceInfo(testProfile: TestProfile): AdbUtility.AndroidDeviceInfo {
 
         val profileName = testProfile.profileName
-        val emulatorInfo = EmulatorInfo(profileName = profileName)
-        val avdList = getAvdList()
+        val emulatorInfo = AndroidDeviceUtility.EmulatorInfo(profileName = profileName)
+        val avdList = AndroidDeviceUtility.getAvdList()
         if (avdList.contains(emulatorInfo.avdName)) {
             // Start avd to get device
-            val androidDeviceInfo = startEmulatorWithEmulatorInfo(
+            val androidDeviceInfo = AndroidDeviceUtility.startEmulatorWithEmulatorInfo(
                 emulatorInfo = emulatorInfo,
                 timeoutSeconds = testProfile.deviceStartupTimeoutSeconds?.toDoubleOrNull()
                     ?: Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
@@ -57,14 +112,18 @@ object EmulatorUtility {
             )
             return androidDeviceInfo
         }
-        val deviceList = AdbUtility.getAndroidDeviceList()
+        return getActiveDeviceInfo(testProfile)
+    }
+
+    fun getActiveDeviceInfo(testProfile: TestProfile): AdbUtility.AndroidDeviceInfo {
+        val deviceList = getAndroidDeviceList()
         if (testProfile.udid.isNotBlank()) {
             // Select the device by udid
             val deviceByUdid = deviceList.firstOrNull { it.udid == testProfile.udid }
             if (deviceByUdid != null) {
                 return deviceByUdid
             }
-            val msg = message(id = "couldNotFindConnectedAndroidDeviceByUdid", subject = testProfile.udid)
+            val msg = Message.message(id = "couldNotFindConnectedAndroidDeviceByUdid", subject = testProfile.udid)
             throw TestDriverException(msg)
         } else if (testProfile.platformVersion == "auto" || testProfile.platformVersion.isBlank()) {
             // Select the device that port number is smallest
@@ -72,15 +131,23 @@ object EmulatorUtility {
             if (deviceBySmallestPort != null) {
                 return deviceBySmallestPort
             }
-            throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
+            throw TestDriverException(Message.message(id = "couldNotFindConnectedAndroidDevice"))
         } else {
             // Select a device by platform version
-            val deviceByPlatformVersion =
-                deviceList.filter { it.version == testProfile.platformVersion }.minByOrNull { it.port }
-            if (deviceByPlatformVersion != null) {
-                return deviceByPlatformVersion
+            val version = testProfile.platformVersion
+            val devices = deviceList.filter { it.version == version }
+            val realDevices = devices.filter { it.isRealDevice }.sortedBy { it.udid }
+            if (realDevices.any()) {
+                return realDevices.first()
             }
-            val msg = message(id = "couldNotFindConnectedAndroidDeviceByVersion", subject = testProfile.platformVersion)
+            val emulators = devices.filter { it.isEmulator }.sortedBy { it.udid }
+            if (emulators.any()) {
+                return emulators.first()
+            }
+            val msg = Message.message(
+                id = "couldNotFindConnectedAndroidDeviceByVersion",
+                subject = testProfile.platformVersion
+            )
             throw TestDriverException(msg)
         }
     }

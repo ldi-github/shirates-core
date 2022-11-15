@@ -23,7 +23,7 @@ import shirates.core.macro.MacroRepository
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.toPath
-import shirates.core.utility.tool.EmulatorUtility
+import shirates.core.utility.tool.AndroidDeviceUtility
 import shirates.spec.report.TestListReport
 import java.lang.reflect.InvocationTargetException
 import java.nio.file.Files
@@ -265,16 +265,20 @@ abstract class UITest : TestDrive {
             // testContext
             TestDriver.setupContext(testContext = testContext)
 
-            // Start emulator
+            // Get device
             if (isAndroid) {
-                TestLog.info("Starting emulator. (profileName=${testContext.profile.profileName})")
-                val androidDeviceInfo = EmulatorUtility.startEmulatorWithTestProfile(testContext.profile)
-                TestLog.info("Emulator found. (${androidDeviceInfo.avdName}:${androidDeviceInfo.port}, platformVersion=${androidDeviceInfo.version})")
-
-                if (profile.avd == "auto" || profile.avd.isBlank()) {
-                    // Feedback
-                    profile.avd = androidDeviceInfo.avdName
+                TestLog.info("Starting device. (profileName=${testContext.profile.profileName})")
+                val androidDeviceInfo = AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testContext.profile)
+                if (androidDeviceInfo.isEmulator) {
+                    TestLog.info("Emulator found. (${androidDeviceInfo.avdName}:${androidDeviceInfo.port}, platformVersion=${androidDeviceInfo.version})")
+                    if (profile.avd == "auto" || profile.avd.isBlank()) {
+                        // Feedback
+                        profile.avd = androidDeviceInfo.avdName
+                    }
+                } else {
+                    TestLog.info("Device found. (udid=${androidDeviceInfo.udid}, platformVersion=${androidDeviceInfo.version})")
                 }
+
                 if (profile.platformVersion == "auto" || profile.platformVersion.isBlank()) {
                     // Feedback
                     profile.platformVersion = androidDeviceInfo.version
