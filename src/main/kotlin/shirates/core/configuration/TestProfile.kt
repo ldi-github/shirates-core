@@ -24,6 +24,10 @@ class TestProfile(var profileName: String = "") {
     // Test mode --------------------------------------------------
     var noLoadRun: String? = null
 
+    // Emulator/Simulator --------------------------------------------------
+    var deviceStartupTimeoutSeconds: String? = null
+    var deviceWaitSecondsAfterStartup: String? = null
+
     // Appium --------------------------------------------------
     var appiumServerUrl: String? = null
     var appiumPath: String? = null
@@ -89,9 +93,15 @@ class TestProfile(var profileName: String = "") {
             return profileName == ""
         }
 
-    val udid: String
+    /**
+     * udid
+     */
+    var udid: String
         get() {
             return capabilities.getStringOrEmpty("udid")
+        }
+        set(value) {
+            capabilities.set("udid", value)
         }
 
     /**
@@ -142,6 +152,9 @@ class TestProfile(var profileName: String = "") {
     // etc
     //
 
+    /**
+     * stubServerUrl
+     */
     var stubServerUrl: String? = null
 
     /**
@@ -180,6 +193,20 @@ class TestProfile(var profileName: String = "") {
         }
 
     /**
+     * avd
+     */
+    var avd: String
+        get() {
+            return getCapabilityRelaxed("avd")
+        }
+        set(value) {
+            if (capabilities.containsKey("avd")) {
+                capabilities.remove("avd")
+            }
+            capabilities.set("appium:avd", value)
+        }
+
+    /**
      * platformName
      */
     val platformName: String
@@ -190,9 +217,15 @@ class TestProfile(var profileName: String = "") {
     /**
      * platformVersion
      */
-    val platformVersion: String
+    var platformVersion: String
         get() {
             return getCapabilityRelaxed("platformVersion")
+        }
+        set(value) {
+            if (capabilities.containsKey("platformVersion")) {
+                capabilities.remove("platformVersion")
+            }
+            capabilities.set("appium:platformVersion", value)
         }
 
     /**
@@ -297,7 +330,10 @@ class TestProfile(var profileName: String = "") {
 
         val value = capabilities[propertyName]?.toString() ?: capabilities["appium:$propertyName"]?.toString()
         if (value.isNullOrBlank()) {
-            throw TestConfigException(message(id = "required", subject = "capabilities.$propertyName"))
+            val avd = capabilities["avd"]?.toString() ?: capabilities["appium:avd"]?.toString()
+            if (avd != "auto" && avd.isNullOrBlank()) {
+                throw TestConfigException(message(id = "required", subject = "capabilities.$propertyName"))
+            }
         }
     }
 
@@ -412,9 +448,6 @@ class TestProfile(var profileName: String = "") {
 
         // platformName
         validateCapabilityRequired("platformName")
-
-        // platformVersion
-        validateCapabilityRequired("platformVersion")
 
         if (isAndroid) {
             // appPackage

@@ -10,22 +10,22 @@
   "capabilities": {
     "automationName": "UiAutomator2",
     "platformName": "Android",
-    "platformVersion": "12",
     "language": "en",
     "locale": "US"
   },
   "profiles": [
     {
       "profileName": "Android 12",
+      "platformVersion": "12",
       "specialTags": "Tag1",
       "capabilities": {
       }
     },
     {
-      "profileName": "Pixel 3a API 31(Android 12)",
+      "profileName": "Pixel 3a(Android 12)",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_"
+        "avd": "auto"
       }
     }
   ]

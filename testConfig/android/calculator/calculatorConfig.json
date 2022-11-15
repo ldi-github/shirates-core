@@ -32,11 +32,9 @@
         "platformVersion": "12"
       }
     },    {
-      "profileName": "Pixel 3a API 31(Android 12)",
+      "profileName": "Pixel 3a(Android 12)",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "platformVersion": "12",
-        "avd": "Pixel_3a_API_31_Android_12_"
       }
     },
     {
@@ -49,66 +47,50 @@
 
 
     {
-      "profileName": "Pixel_3a_API_31_Android_12_-01",
+      "profileName": "Pixel 3a(Android 12)-01",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-01",
-        "platformVersion": "12",
         "systemPort": "8201"
       }
     },
     {
-      "profileName": "Pixel_3a_API_31_Android_12_-02",
+      "profileName": "Pixel 3a(Android 12)-02",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-02",
-        "platformVersion": "12",
         "systemPort": "8202"
       }
     },
     {
-      "profileName": "Pixel_3a_API_31_Android_12_-03",
+      "profileName": "Pixel 3a(Android 12)-03",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-03",
-        "platformVersion": "12",
         "systemPort": "8203"
       }
     },
     {
-      "profileName": "Pixel_3a_API_31_Android_12_-04",
+      "profileName": "Pixel 3a(Android 12)-04",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-04",
-        "platformVersion": "12",
         "systemPort": "8204"
       }
     },
     {
-      "profileName": "Pixel_3a_API_31_Android_12_-05",
+      "profileName": "Pixel 3a(Android 12)-05",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-05",
-        "platformVersion": "12",
         "systemPort": "8205"
       }
     },
     {
-      "profileName": "Pixel_3a_API_31_Android_12_-06",
+      "profileName": "Pixel 3a(Android 12)-06",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-06",
-        "platformVersion": "12",
         "systemPort": "8206"
       }
     },
     {
-      "profileName": "Pixel_3a_API_31_Android_12_-07",
+      "profileName": "Pixel 3a(Android 12)-07",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-07",
-        "platformVersion": "12",
         "systemPort": "8207"
       }
     },
     {
-      "profileName": "Pixel_3a_API_31_Android_12_-08",
+      "profileName": "Pixel 3a(Android 12)-08",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-08",
-        "platformVersion": "12",
         "systemPort": "8208"
       }
     }

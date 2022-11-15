@@ -10,7 +10,7 @@
 
 ### androidSettingsConfig.json
 
-In profiles section, each profile has specialTags. "`Android 12`" has "`Tag1`". "`Pixel 3a API 31(Android 12)`"
+In profiles section, each profile has specialTags. "`Android 12`" has "`Tag1`". "`Pixel 3a(Android 12)`"
 has "`Tag2`"
 and "`Tag3`".
 
@@ -23,10 +23,9 @@ and "`Tag3`".
       }
     },
     {
-      "profileName": "Pixel 3a API 31(Android 12)",
+      "profileName": "Pixel 3a(Android 12)",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_"
       }
     }
   ]
@@ -118,7 +117,7 @@ class SpecialTag1 : UITest() {
 ```
 
 When initialized with "`Android 12`" profile, the function for "`Tag1`" is called. When initialized
-with "`Pixel 3a API 31(Android 12)`", functions for "`Tag2`" and "`Tag3`" are called.
+with "`Pixel 3a(Android 12)`", functions for "`Tag2`" and "`Tag3`" are called.
 
 In this way, you can describe profile specific test code using specialTag function.
 

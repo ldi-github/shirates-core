@@ -193,7 +193,7 @@ Set environment variables in initializing script (.zshrc or others).
 
 ```
 export ANDROID_SDK_ROOT=/Users/$USER/Library/Android/sdk
-export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
+export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
 ```
 
 **Note:** Execute log out/log in to take effect above settings.
@@ -207,8 +207,9 @@ export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
 4. Set environment variable `ANDROID_SDK_ROOT`.<br>
    ![](_images/set_environment_variable_windows.png)
 5. Edit environment variable `Path`. Add entries as follows.
+    - `%ANDROID_SDK_ROOT%\emulator`
     - `%ANDROID_SDK_ROOT%\platform-tools`
-    - `%ANDROID_SDK_ROOT%\tools` <br>
+    - `%ANDROID_SDK_ROOT%\tools`<br>
       ![](_images/set_environment_variable_windows_2.png)
 6. Reboot the PC.
 
@@ -231,7 +232,7 @@ export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
    ![](_images/create_avd_3.png)
 
 
-6. Set AVD Name to `Pixel 3a API 31(Android 12)` and click `Finish`.<br>
+6. Set AVD Name to `Pixel 3a(Android 12)` and click `Finish`.<br>
    ![](_images/create_avd_4.png)
 
 <br>

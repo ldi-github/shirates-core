@@ -40,7 +40,7 @@ object DeviceListUtility {
     /**
      * getConnectedDeviceList
      */
-    fun getConnectedDeviceList(log: Boolean = true): List<DeviceInfo> {
+    fun getConnectedDeviceList(): List<DeviceInfo> {
 
         val list = mutableListOf<DeviceInfo>()
 
@@ -48,8 +48,8 @@ object DeviceListUtility {
             TestConfigContainer(PropertiesManager.configFile)
         }
 
-        getAndroidDeviceInfoList(log, list)
-        getIosDeviceInfoList(log, list)
+        getAndroidDeviceInfoList(list)
+        getIosDeviceInfoList(list)
 
         val result = mutableListOf<DeviceInfo>()
 
@@ -64,11 +64,8 @@ object DeviceListUtility {
         return result
     }
 
-    private fun getAndroidDeviceInfoList(
-        log: Boolean,
-        list: MutableList<DeviceInfo>
-    ) {
-        val androidDevices = AdbUtility.getAndroidDeviceList(log = log)
+    private fun getAndroidDeviceInfoList(list: MutableList<DeviceInfo>) {
+        val androidDevices = AdbUtility.getAndroidDeviceList()
         for (androidDeviceInfo in androidDevices) {
             val deviceInfo = DeviceInfo()
             deviceInfo.androidDeviceInfo = androidDeviceInfo
@@ -83,11 +80,8 @@ object DeviceListUtility {
         }
     }
 
-    private fun getIosDeviceInfoList(
-        log: Boolean,
-        list: MutableList<DeviceInfo>
-    ) {
-        val iosDevices = SimctlUtility.getBootedIosDeviceList(log = log)
+    private fun getIosDeviceInfoList(list: MutableList<DeviceInfo>) {
+        val iosDevices = SimctlUtility.getBootedIosDeviceList()
         for (iosDeviceInfo in iosDevices) {
             val deviceInfo = DeviceInfo()
             deviceInfo.iosDeviceInfo = iosDeviceInfo

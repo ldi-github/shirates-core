@@ -29,7 +29,6 @@ import shirates.core.server.AppiumServerManager
 import shirates.core.storage.app
 import shirates.core.testcode.CAEPattern
 import shirates.core.utility.appium.setCapabilityStrict
-import shirates.core.utility.getCapabilityRelaxed
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
 import shirates.core.utility.sync.RetryContext
@@ -39,7 +38,6 @@ import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.toBufferedImage
 import shirates.core.utility.tool.AdbUtility
 import shirates.core.utility.tool.AndroidMobileShellUtility
-import shirates.core.utility.tool.SimctlUtility
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -507,37 +505,6 @@ object TestDriver {
         if (capabilityNames.any() { it.endsWith("newCommandTimeout") }.not()) {
             capabilities.setCapabilityStrict("newCommandTimeout", 300)
         }
-        // platformVersion
-        val platformVersion = capabilities.getCapabilityRelaxed("platformVersion")
-        if (platformVersion == "*" || platformVersion == "") {
-            if (isAndroid) {
-                if (capabilities.getCapabilityRelaxed("avd").isBlank()) {
-                    val deviceInfos = AdbUtility.getAndroidDeviceList()
-                    if (deviceInfos.isEmpty()) {
-                        throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
-                    }
-                    if (deviceInfos.any() { it.udid.isNotBlank() }.not()) {
-                        throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
-                    }
-
-                    val udid = capabilities.getCapabilityRelaxed("udid")
-                    if (udid.isNotBlank()) {
-                        val deviceInfo = deviceInfos.firstOrNull() { it.udid == udid }
-                            ?: throw TestDriverException(message(id = "deviceNotConnected"))
-                        capabilities.setCapabilityStrict("platformVersion", deviceInfo.version)
-                    } else {
-                        val deviceInfo = deviceInfos.first()
-                        capabilities.setCapabilityStrict("platformVersion", deviceInfo.version)
-                    }
-                }
-            } else if (isiOS) {
-                val list = SimctlUtility.getBootedIosDeviceList()
-                list.forEach {
-                    println(it)
-                }
-            }
-        }
-
         // App package
         if (profile.packageOrBundleId == profile.startupPackageOrBundleId &&
             profile.appPackageFile.isNullOrBlank().not()

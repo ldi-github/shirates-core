@@ -201,7 +201,6 @@ In **testConfig** file, you can set test **profiles** for test devices and `desi
   "capabilities": {
     "automationName": "UiAutomator2",
     "platformName": "Android",
-    "platformVersion": "12",
     "language": "en",
     "locale": "US"
   },
@@ -210,12 +209,12 @@ In **testConfig** file, you can set test **profiles** for test devices and `desi
     {
       "profileName": "Android 12",
       "capabilities": {
+        "platformVersion": "12",
       }
     },
     {
-      "profileName": "Pixel 3a API 31(Android 12)",
+      "profileName": "Pixel 3a(Android 12)",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_"
       }
     }
   ]

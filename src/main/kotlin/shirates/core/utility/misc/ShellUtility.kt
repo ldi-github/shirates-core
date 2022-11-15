@@ -5,6 +5,7 @@ import org.apache.commons.exec.DefaultExecuteResultHandler
 import org.apache.commons.exec.DefaultExecutor
 import org.apache.commons.exec.PumpStreamHandler
 import org.apache.commons.exec.environment.EnvironmentUtils
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
 import java.io.ByteArrayInputStream
@@ -28,14 +29,14 @@ object ShellUtility {
     fun executeCommand(
         vararg args: String
     ): ShellResult {
-        return executeCommandCore(log = true, args = args)
+        return executeCommandCore(args = args)
     }
 
     /**
      * executeCommand
      */
     fun executeCommand(
-        log: Boolean = true,
+        log: Boolean,
         vararg args: String
     ): ShellResult {
         return executeCommandCore(log = log, args = args)
@@ -45,7 +46,7 @@ object ShellUtility {
      * executeCommandCore
      */
     fun executeCommandCore(
-        log: Boolean = true,
+        log: Boolean = PropertiesManager.enableShellExecLog,
         vararg args: String
     ): ShellResult {
 
@@ -67,7 +68,14 @@ object ShellUtility {
             error = t
             TestLog.trace(t.stackTraceToString())
             if (log) {
-                TestLog.warn(outputStream.toString().trim())
+                var msg = t.message ?: ""
+                val output = outputStream.toString().trim()
+                if (output.isNotBlank()) {
+                    msg += " $output"
+                }
+                if (msg.isNotBlank()) {
+                    TestLog.info(msg)
+                }
             }
         }
 
@@ -78,7 +86,17 @@ object ShellUtility {
      * executeCommandAsync
      */
     fun executeCommandAsync(
-        log: Boolean = true,
+        vararg args: String
+    ): ShellResult {
+
+        return executeCommandAsync(log = PropertiesManager.enableShellExecLog, args = args)
+    }
+
+    /**
+     * executeCommandAsync
+     */
+    fun executeCommandAsync(
+        log: Boolean,
         vararg args: String
     ): ShellResult {
         TestLog.execute(message = args.joinToString(" "), log = log)

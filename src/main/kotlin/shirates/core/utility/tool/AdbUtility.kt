@@ -1,5 +1,7 @@
 package shirates.core.utility.tool
 
+import shirates.core.driver.TestMode
+import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 
 object AdbUtility {
@@ -7,17 +9,23 @@ object AdbUtility {
     /**
      * getAndroidDeviceList
      */
-    fun getAndroidDeviceList(log: Boolean = true): List<AndroidDeviceInfo> {
+    fun getAndroidDeviceList(): List<AndroidDeviceInfo> {
 
-        val result = ShellUtility.executeCommand(log = log, "adb", "devices", "-l")
+        val result = ShellUtility.executeCommand("adb", "devices", "-l")
         val list = mutableListOf<AndroidDeviceInfo>()
 
         for (line in result.resultString.split(System.lineSeparator())) {
             if (line.isNotBlank()) {
                 val deviceInfo = AndroidDeviceInfo(line)
+                if (deviceInfo.port.isNotBlank()) {
+                    // Get process information (pid, cmd)
+                    deviceInfo.pid = ProcessUtility.getPid(deviceInfo.port.toInt()) ?: ""
+                    val r = ShellUtility.executeCommandCore(log = false, "ps", "-p", deviceInfo.pid)
+                    deviceInfo.psResult = r.resultString
+                }
                 if (deviceInfo.status.isNotBlank()) {
                     if (deviceInfo.udid.isNotBlank()) {
-                        deviceInfo.version = getAndroidVersion(log = log, udid = deviceInfo.udid)
+                        deviceInfo.version = getAndroidVersion(udid = deviceInfo.udid)
                     }
                     list.add(deviceInfo)
                 }
@@ -30,19 +38,18 @@ object AdbUtility {
     /**
      * getAndroidVersion
      */
-    fun getAndroidVersion(log: Boolean = true, udid: String): String {
+    fun getAndroidVersion(udid: String): String {
 
-        val result =
-            ShellUtility.executeCommand(log = log, "adb", "-s", udid, "shell", "getprop", "ro.build.version.release")
+        val result = ShellUtility.executeCommand("adb", "-s", udid, "shell", "getprop", "ro.build.version.release")
         return result.resultString
     }
 
     /**
      * reboot
      */
-    fun reboot(udid: String, log: Boolean = true) {
+    fun reboot(udid: String) {
 
-        ShellUtility.executeCommand(log = log, "adb", "-s", udid, "reboot")
+        ShellUtility.executeCommand("adb", "-s", udid, "reboot")
     }
 
     /**
@@ -51,12 +58,11 @@ object AdbUtility {
     fun startApp(
         udid: String,
         packageName: String,
-        activityName: String,
-        log: Boolean = true
+        activityName: String
     ): ShellUtility.ShellResult {
 
         val name = "$packageName/$activityName"
-        return ShellUtility.executeCommand(log = log, "adb", "-s", udid, "shell", "am", "start", "-n", name)
+        return ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", name)
     }
 
     /**
@@ -64,37 +70,36 @@ object AdbUtility {
      */
     fun stopApp(
         udid: String,
-        packageName: String,
-        log: Boolean = true
+        packageName: String
     ): ShellUtility.ShellResult {
 
-        return ShellUtility.executeCommand(log = log, "adb", "-s", udid, "shell", "am", "force-stop", packageName)
+        return ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "force-stop", packageName)
     }
 
     /**
      * killServer
      */
-    fun killServer(udid: String, log: Boolean = true) {
+    fun killServer(udid: String) {
 
-        ShellUtility.executeCommand(log = log, "adb", "-s", udid, "kill-server")
+        ShellUtility.executeCommand("adb", "-s", udid, "kill-server")
     }
 
     /**
      * startServer
      */
-    fun startServer(udid: String, log: Boolean = true) {
+    fun startServer(udid: String) {
 
-        ShellUtility.executeCommand(log = log, "adb", "-s", udid, "start-server")
+        ShellUtility.executeCommand("adb", "-s", udid, "start-server")
     }
 
     /**
      * restartServer
      */
-    fun restartServer(udid: String, log: Boolean = true) {
+    fun restartServer(udid: String) {
 
-        killServer(udid = udid, log = log)
+        killServer(udid = udid)
         Thread.sleep(1000)
-        startServer(udid = udid, log = log)
+        startServer(udid = udid)
     }
 
     /**
@@ -106,11 +111,39 @@ object AdbUtility {
         val info: String
         val map = mutableMapOf<String, String>()
         var version: String = ""
-            get() {
-                return field
-            }
             internal set(value) {
                 field = value
+            }
+        var pid = ""
+        var psResult = ""
+        val cmd: String
+            get() {
+                if (TestMode.isRunningOnWindows) {
+                    throw NotImplementedError()
+                } else {
+                    val lines = psResult.split("\n")
+                    if (lines.count() >= 2) {
+                        val cmdIndex = lines[1].indexOf("/")
+                        return lines[1].substring(cmdIndex)
+                    } else {
+                        return ""
+                    }
+                }
+            }
+        val avdName: String
+            get() {
+                val tokens = cmd.split(" ")
+                val last = tokens.last()
+                if (last.startsWith("@")) {
+                    return last.removePrefix("@")
+                } else {
+                    return last
+                }
+            }
+
+        val port: String
+            get() {
+                return udid.split("-").lastOrNull() ?: ""
             }
 
         val usb: String
@@ -181,6 +214,7 @@ object AdbUtility {
 
             println(line)
             println("udid=$udid")
+            println("port=$port")
             println("info=$info")
             println("status=$status")
             println("usb=$usb")

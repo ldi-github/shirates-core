@@ -25,11 +25,11 @@ class AdbUtilityTest {
     fun getAndroidVersion() {
 
         run {
-            val version = AdbUtility.getAndroidVersion(log = true, "emulator-5554")
+            val version = AdbUtility.getAndroidVersion("emulator-5554")
             assertThat(version).isEqualTo("12")
         }
         run {
-            val version = AdbUtility.getAndroidVersion(log = false, "emulator-5554")
+            val version = AdbUtility.getAndroidVersion("emulator-5554")
             assertThat(version).isEqualTo("12")
         }
     }

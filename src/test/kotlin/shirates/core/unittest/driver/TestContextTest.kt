@@ -193,8 +193,14 @@ class TestContextTest : UnitTest() {
         // Arrange
         val originalData = mutableMapOf<String, Any?>()
         originalData.putAll(context.saveData)
-        context.boundsToRectRatio = 999
+        // Appium Proxy --------------------------------------------------
+        context.appiumProxyReadTimeoutSeconds = 9.9
+        // TestDriver --------------------------------------------------
         context.reuseDriver = !context.reuseDriver
+        context.retryMaxCount = 999
+        context.retryTimeoutSeconds = 9.9
+        context.retryIntervalSeconds = 9.9
+        // Screenshot --------------------------------------------------
         context.autoScreenshot = !context.autoScreenshot
         context.onChangedOnly = !context.onChangedOnly
         context.onCondition = !context.onCondition
@@ -204,18 +210,24 @@ class TestContextTest : UnitTest() {
         context.onCheckCommand = !context.onCheckCommand
         context.onScrolling = !context.onScrolling
         context.manualScreenshot = !context.manualScreenshot
-        context.retryMaxCount = 999
+        // App operation --------------------------------------------------
         context.shortWaitSeconds = 999.0
-        context.waitSecondsOnIsScreen = 999.0
         context.waitSecondsForAnimationComplete = 999.0
+        context.waitSecondsOnIsScreen = 999.0
         context.waitSecondsForConnectionEnabled = 999.0
         context.swipeDurationSeconds = 999.0
         context.flickDurationSeconds = 999.0
         context.swipeMarginRatio = 999.0
         context.scrollVerticalMarginRatio = 999.0
         context.scrollHorizontalMarginRatio = 999.0
+        context.scrollMaxCount = 99
         context.tapHoldSeconds = 999.0
         context.syncWaitSeconds = 999.0
+        context.syncMaxLoopCount = 9
+        context.syncIntervalSeconds = 99.0
+        // misc --------------------------------------------------
+        context.boundsToRectRatio = 999
+
         // Act
         context.resumeState()
         // Assert

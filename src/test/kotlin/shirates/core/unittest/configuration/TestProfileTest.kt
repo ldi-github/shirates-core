@@ -275,6 +275,20 @@ class TestProfileTest : UnitTest() {
     }
 
     @Test
+    fun avd() {
+
+        // Arrange
+        val p = TestProfile("profile1")
+        // Act, Assert
+        assertThat(p.avd).isEqualTo("")
+
+        // Arrange
+        p.avd = "avd1"
+        // Act, Assert
+        assertThat(p.avd).isEqualTo("avd1")
+    }
+
+    @Test
     fun platformName() {
 
         // Arrange
@@ -302,7 +316,7 @@ class TestProfileTest : UnitTest() {
         assertThat(p.platformVersion).isEqualTo("")
 
         // Arrange
-        p.capabilities["platformVersion"] = "9"
+        p.platformVersion = "9"
         // Act, Assert
         assertThat(p.platformVersion).isEqualTo("9")
     }
