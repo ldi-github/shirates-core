@@ -25,6 +25,7 @@ class TestProfile(var profileName: String = "") {
     var noLoadRun: String? = null
 
     // Emulator/Simulator --------------------------------------------------
+    var emulatorOptions: String? = null
     var deviceStartupTimeoutSeconds: String? = null
     var deviceWaitSecondsAfterStartup: String? = null
 

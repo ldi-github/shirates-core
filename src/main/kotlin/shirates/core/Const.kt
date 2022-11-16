@@ -52,8 +52,9 @@ object Const {
      */
 
     // Emulator/Simulator
+    const val EMULATOR_OPTIONS = "-no-boot-anim"
     const val DEVICE_STARTUP_TIMEOUT_SECONDS: Double = 30.0
-    const val DEVICE_WAIT_SECONDS_AFTER_STARTUP: Double = 5.0
+    const val DEVICE_WAIT_SECONDS_AFTER_STARTUP: Double = 0.0
 
     // Appium server
     const val APPIUM_SERVER_ADDRESS = "http://127.0.0.1:4723/"

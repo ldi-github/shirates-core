@@ -5,13 +5,15 @@ import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message
+import shirates.core.logging.TestLog
+import shirates.core.utility.android.AndroidDeviceInfo
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.sync.StopWatch
 
 object AndroidDeviceUtility {
 
-    var currentAndroidDeviceInfo: AdbUtility.AndroidDeviceInfo? = null
+    var currentAndroidDeviceInfo: AndroidDeviceInfo? = null
 
     /**
      * getAvdName
@@ -33,14 +35,14 @@ object AndroidDeviceUtility {
     /**
      * getAndroidDeviceList
      */
-    fun getAndroidDeviceList(): List<AdbUtility.AndroidDeviceInfo> {
+    fun getAndroidDeviceList(): List<AndroidDeviceInfo> {
 
         val result = ShellUtility.executeCommand("adb", "devices", "-l")
-        val list = mutableListOf<AdbUtility.AndroidDeviceInfo>()
+        val list = mutableListOf<AndroidDeviceInfo>()
 
         for (line in result.resultString.split(System.lineSeparator())) {
             if (line.isNotBlank()) {
-                val deviceInfo = AdbUtility.AndroidDeviceInfo(line)
+                val deviceInfo = AndroidDeviceInfo(line)
                 if (deviceInfo.port.isNotBlank()) {
                     val emulatorPort = deviceInfo.port.toIntOrNull()
                     if (emulatorPort != null) {
@@ -77,7 +79,7 @@ object AndroidDeviceUtility {
     /**
      * getAndroidDeviceInfo
      */
-    fun getAndroidDeviceInfo(avdName: String): AdbUtility.AndroidDeviceInfo? {
+    fun getAndroidDeviceInfo(avdName: String): AndroidDeviceInfo? {
 
         val deviceList = getAndroidDeviceList()
         val device = deviceList.firstOrNull() { it.avdName == avdName }
@@ -96,14 +98,18 @@ object AndroidDeviceUtility {
     /**
      * getOrCreateAndroidDeviceInfo
      */
-    fun getOrCreateAndroidDeviceInfo(testProfile: TestProfile): AdbUtility.AndroidDeviceInfo {
+    fun getOrCreateAndroidDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo {
 
         val profileName = testProfile.profileName
-        val emulatorInfo = AndroidDeviceUtility.EmulatorInfo(profileName = profileName)
-        val avdList = AndroidDeviceUtility.getAvdList()
+        val emulatorInfo = EmulatorInfo(
+            profileName = profileName,
+            emulatorOptions = (testProfile.emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
+                .filter { it.isNotBlank() }.toMutableList()
+        )
+        val avdList = getAvdList()
         if (avdList.contains(emulatorInfo.avdName)) {
             // Start avd to get device
-            val androidDeviceInfo = AndroidDeviceUtility.startEmulatorWithEmulatorInfo(
+            val androidDeviceInfo = startEmulatorWithEmulatorInfo(
                 emulatorInfo = emulatorInfo,
                 timeoutSeconds = testProfile.deviceStartupTimeoutSeconds?.toDoubleOrNull()
                     ?: Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
@@ -115,7 +121,7 @@ object AndroidDeviceUtility {
         return getActiveDeviceInfo(testProfile)
     }
 
-    fun getActiveDeviceInfo(testProfile: TestProfile): AdbUtility.AndroidDeviceInfo {
+    fun getActiveDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo {
         val deviceList = getAndroidDeviceList()
         if (testProfile.udid.isNotBlank()) {
             // Select the device by udid
@@ -126,6 +132,11 @@ object AndroidDeviceUtility {
             val msg = Message.message(id = "couldNotFindConnectedAndroidDeviceByUdid", subject = testProfile.udid)
             throw TestDriverException(msg)
         } else if (testProfile.platformVersion == "auto" || testProfile.platformVersion.isBlank()) {
+            // Select real device
+            val realDevices = deviceList.filter { it.isRealDevice }.sortedBy { it.udid }
+            if (realDevices.any()) {
+                return realDevices.first()
+            }
             // Select the device that port number is smallest
             val deviceBySmallestPort = deviceList.minByOrNull { it.port }
             if (deviceBySmallestPort != null) {
@@ -159,7 +170,7 @@ object AndroidDeviceUtility {
         emulatorInfo: EmulatorInfo,
         timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
         waitSecondsAfterStartup: Double = Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
-    ): AdbUtility.AndroidDeviceInfo {
+    ): AndroidDeviceInfo {
 
         currentAndroidDeviceInfo = null
 
@@ -170,7 +181,12 @@ object AndroidDeviceUtility {
         }
 
         if (device == null) {
-            ShellUtility.executeCommandAsync("emulator", "@${emulatorInfo.avdName}")
+            val args = mutableListOf<String>()
+            args.add("emulator")
+            args.add("@${emulatorInfo.avdName}")
+            args.addAll(emulatorInfo.emulatorOptions)
+            TestLog.info(args.joinToString(" "))
+            ShellUtility.executeCommandAsync(args = args.toTypedArray())
         }
 
         val sw = StopWatch().start()
@@ -193,7 +209,8 @@ object AndroidDeviceUtility {
      * EmulatorInfo
      */
     class EmulatorInfo(
-        val profileName: String
+        val profileName: String,
+        val emulatorOptions: MutableList<String> = mutableListOf()
     ) {
         val avdName: String = getAvdName(profileName = profileName)
         val platformVersion: String

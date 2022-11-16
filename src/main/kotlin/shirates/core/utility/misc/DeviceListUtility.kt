@@ -4,8 +4,8 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestConfigContainer
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.utility.android.AndroidDeviceInfo
 import shirates.core.utility.getStringOrEmpty
-import shirates.core.utility.tool.AdbUtility
 import shirates.core.utility.tool.AndroidDeviceUtility
 import shirates.core.utility.tool.SimctlUtility
 
@@ -17,7 +17,7 @@ object DeviceListUtility {
         var info = ""
 
         var profileInstance: TestProfile? = null
-        var androidDeviceInfo: AdbUtility.AndroidDeviceInfo? = null
+        var androidDeviceInfo: AndroidDeviceInfo? = null
         var iosDeviceInfo: SimctlUtility.IosDeviceInfo? = null
 
         val isEmulator: Boolean

@@ -430,13 +430,13 @@ class CAEPatternTest : UITest() {
         assertThat(c.cases.count()).isEqualTo(2)
 
         assertThat(c.cases[0].result.label).isEqualTo("SKIP")
-        assertThat(c.cases[0].resultMessage).isEqualTo("case skipped.")
+        assertThat(c.cases[0].resultMessage).isEqualTo("Skipping case")
 
         assertThat(c.cases[1].result.label).isEqualTo("OK")
         assertThat(c.cases[1].resultMessage).isEqualTo("")
 
         assertThat(c.scenarios[0].result.label).isEqualTo("SKIP")
-        assertThat(c.scenarios[0].resultMessage).isEqualTo("case skipped.")
+        assertThat(c.scenarios[0].resultMessage).isEqualTo("Skipping case")
     }
 
     @Test
