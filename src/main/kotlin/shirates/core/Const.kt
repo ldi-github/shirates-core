@@ -53,7 +53,7 @@ object Const {
 
     // Emulator/Simulator
     const val EMULATOR_OPTIONS = "-no-boot-anim"
-    const val DEVICE_STARTUP_TIMEOUT_SECONDS: Double = 30.0
+    const val DEVICE_STARTUP_TIMEOUT_SECONDS: Double = 60.0
     const val DEVICE_WAIT_SECONDS_AFTER_STARTUP: Double = 0.0
 
     // Appium server
