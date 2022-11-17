@@ -180,28 +180,51 @@ object AndroidDeviceUtility {
             return device
         }
 
+        var shellResult: ShellUtility.ShellResult? = null
         if (device == null) {
             val args = mutableListOf<String>()
             args.add("emulator")
             args.add("@${emulatorInfo.avdName}")
             args.addAll(emulatorInfo.emulatorOptions)
             TestLog.info(args.joinToString(" "))
-            ShellUtility.executeCommandAsync(args = args.toTypedArray())
+            shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray())
         }
+
+        device = waitEmulatorStatus(
+            avdName = emulatorInfo.avdName,
+            status = "device",
+            timeoutSeconds = timeoutSeconds
+        )
+        Thread.sleep((waitSecondsAfterStartup * 1000).toLong())
+
+        device.shellResult = shellResult
+        return device
+    }
+
+
+    /**
+     * waitEmulatorStatus
+     */
+    fun waitEmulatorStatus(
+        avdName: String,
+        status: String = "device",
+        timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
+        intervalMilliseconds: Long = 1000
+    ): AndroidDeviceInfo {
 
         val sw = StopWatch().start()
         while (true) {
-            if (sw.elapsedSeconds > timeoutSeconds) {
-                throw TestDriverException("Start emulator timed out")
-            }
-            device = getAndroidDeviceInfo(avdName = emulatorInfo.avdName)
-            if (device != null && device.status == "device") {
+            val device = getAndroidDeviceInfo(avdName = avdName)
+            if (device != null && device.status == status) {
                 currentAndroidDeviceInfo = device
-                Thread.sleep((waitSecondsAfterStartup * 1000).toLong())
                 return device
             }
 
-            Thread.sleep(1000)
+            if (sw.elapsedSeconds > timeoutSeconds) {
+                throw TestDriverException("Waiting emulator status timed out. (expected=$status, actual=${device?.status}")
+            }
+
+            Thread.sleep(intervalMilliseconds)
         }
     }
 
@@ -217,8 +240,12 @@ object AndroidDeviceUtility {
 
         init {
             val tokens = profileName.replace("(", " ").replace(")", " ").replace("_", " ").split(" ")
-            val numbers = tokens.filter { it.toDoubleOrNull() != null }
-            platformVersion = numbers.lastOrNull() ?: ""
+            val versionIx = tokens.indexOf("Android") + 1
+            if (versionIx + 1 <= tokens.count()) {
+                platformVersion = tokens[versionIx]
+            } else {
+                platformVersion = ""
+            }
         }
     }
 }

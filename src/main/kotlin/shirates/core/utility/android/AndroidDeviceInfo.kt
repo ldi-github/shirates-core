@@ -2,6 +2,7 @@ package shirates.core.utility.android
 
 import shirates.core.Const
 import shirates.core.driver.TestMode
+import shirates.core.utility.misc.ShellUtility
 
 class AndroidDeviceInfo(val line: String) {
     val udid: String
@@ -89,6 +90,7 @@ class AndroidDeviceInfo(val line: String) {
         get() {
             return isEmulator.not()
         }
+    var shellResult: ShellUtility.ShellResult? = null
 
     init {
 
