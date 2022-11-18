@@ -109,7 +109,7 @@ object AndroidDeviceUtility {
         val avdList = getAvdList()
         if (avdList.contains(emulatorInfo.avdName)) {
             // Start avd to get device
-            val androidDeviceInfo = startEmulatorWithEmulatorInfo(
+            val androidDeviceInfo = startEmulatorAndWaitDeviceReady(
                 emulatorInfo = emulatorInfo,
                 timeoutSeconds = testProfile.deviceStartupTimeoutSeconds?.toDoubleOrNull()
                     ?: Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
@@ -164,9 +164,9 @@ object AndroidDeviceUtility {
     }
 
     /**
-     * startEmulatorWithEmulatorInfo
+     * startEmulatorAndWaitDeviceReady
      */
-    fun startEmulatorWithEmulatorInfo(
+    fun startEmulatorAndWaitDeviceReady(
         emulatorInfo: EmulatorInfo,
         timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
         waitSecondsAfterStartup: Double = Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
@@ -182,12 +182,7 @@ object AndroidDeviceUtility {
 
         var shellResult: ShellUtility.ShellResult? = null
         if (device == null) {
-            val args = mutableListOf<String>()
-            args.add("emulator")
-            args.add("@${emulatorInfo.avdName}")
-            args.addAll(emulatorInfo.emulatorOptions)
-            TestLog.info(args.joinToString(" "))
-            shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray())
+            shellResult = startEmulator(emulatorInfo)
         }
 
         device = waitEmulatorStatus(
@@ -201,6 +196,19 @@ object AndroidDeviceUtility {
         return device
     }
 
+    /**
+     * startEmulator
+     */
+    fun startEmulator(emulatorInfo: EmulatorInfo): ShellUtility.ShellResult {
+
+        val args = mutableListOf<String>()
+        args.add("emulator")
+        args.add("@${emulatorInfo.avdName}")
+        args.addAll(emulatorInfo.emulatorOptions)
+        TestLog.info(args.joinToString(" "))
+        val shellResult1 = ShellUtility.executeCommandAsync(args = args.toTypedArray())
+        return shellResult1
+    }
 
     /**
      * waitEmulatorStatus
