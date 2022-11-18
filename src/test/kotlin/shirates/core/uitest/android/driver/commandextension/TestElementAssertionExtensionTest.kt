@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.driver.commandextension.work03
+package shirates.core.uitest.android.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -8,7 +8,7 @@ import shirates.core.exception.TestNGException
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class TestElementAssertionExtension2Test : UITest() {
+class TestElementAssertionExtensionTest : UITest() {
 
     @Test
     fun selectedIs() {

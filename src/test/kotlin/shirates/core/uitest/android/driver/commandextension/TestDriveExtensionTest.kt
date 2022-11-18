@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.driver.commandextension.work04
+package shirates.core.uitest.android.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

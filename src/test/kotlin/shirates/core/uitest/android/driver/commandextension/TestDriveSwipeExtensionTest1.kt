@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.driver.commandextension.work05
+package shirates.core.uitest.android.driver.commandextension
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -7,7 +7,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class TestDriveSwipeExtensionTest : UITest() {
+class TestDriveSwipeExtensionTest1 : UITest() {
 
     @Order(10)
     @Test

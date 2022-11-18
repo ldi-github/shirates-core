@@ -583,7 +583,7 @@ fun TestDrive?.scanElements(
     startMarginRatio: Double =
         if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
         else testContext.scrollHorizontalMarginRatio,
-    maxScrollTimes: Int = shirates.core.Const.SCROLL_MAX_COUNT,
+    maxScrollTimes: Int = Const.SCROLL_MAX_COUNT,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     endSelector: String? = null,
     imageCompare: Boolean = false

@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.driver.commandextension.work04
+package shirates.core.uitest.android.driver.commandextension
 
 import io.appium.java_client.android.nativekey.AndroidKey
 import org.junit.jupiter.api.Test

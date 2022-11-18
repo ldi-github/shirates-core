@@ -87,6 +87,18 @@
       "capabilities": {
         "systemPort": "8208"
       }
+    },
+    {
+      "profileName": "Pixel 3a(Android 12)-09",
+      "capabilities": {
+        "systemPort": "8209"
+      }
+    },
+    {
+      "profileName": "Pixel 3a(Android 12)-10",
+      "capabilities": {
+        "systemPort": "8210"
+      }
     }
   ]
 

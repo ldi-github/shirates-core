@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.driver.commandextension.work04
+package shirates.core.uitest.android.driver.commandextension
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
