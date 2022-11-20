@@ -1,4 +1,4 @@
-package shirates.core.uitest.ios.driver.commandextension.work04
+package shirates.core.uitest.ios.driver.commandextension
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -9,73 +9,10 @@ import shirates.core.testcode.Want
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveTapExtensionTest2 : UITest() {
+class TestDriveTapExtensionTest5 : UITest() {
 
+    @Test
     @Order(10)
-    @Test
-    fun tapWithScrollUp_nickname() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Settings Top Screen]")
-                        .flickBottomToTop()
-                }.action {
-                    it.tapWithScrollUp(expression = "[General]")
-                }.expectation {
-                    it.screenIs("[General Screen]")
-                }
-            }
-        }
-
-        it.tap("[<Settings]")
-            .flickTopToBottom()
-    }
-
-    @Order(20)
-    @Test
-    fun tapWithScrollUp_text() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Settings Top Screen]")
-                        .flickBottomToTop()
-                }.action {
-                    it.tapWithScrollUp("General")
-                }.expectation {
-                    it.screenIs("[General Screen]")
-                }
-            }
-        }
-
-        it.tap("[<Settings]")
-            .flickTopToBottom()
-    }
-
-    @Order(30)
-    @Test
-    fun tapWithScrollUp_textStartsWith() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Settings Top Screen]")
-                        .flickBottomToTop()
-                }.action {
-                    it.tapWithScrollUp("Gen*")
-                }.expectation {
-                    it.screenIs("[General Screen]")
-                }
-            }
-        }
-
-        it.tap("[<Settings]")
-            .flickTopToBottom()
-    }
-
-    @Order(40)
-    @Test
     fun tapWithScrollUp_textContains() {
 
         scenario {
@@ -95,8 +32,8 @@ class TestDriveTapExtensionTest2 : UITest() {
             .flickTopToBottom()
     }
 
-    @Order(50)
     @Test
+    @Order(20)
     fun tapWithScrollUp_textEndsWith() {
 
         scenario {
@@ -116,8 +53,8 @@ class TestDriveTapExtensionTest2 : UITest() {
             .flickTopToBottom()
     }
 
-    @Order(60)
     @Test
+    @Order(30)
     fun tapWithScrollUp_textMatches() {
 
         scenario {
@@ -137,8 +74,8 @@ class TestDriveTapExtensionTest2 : UITest() {
             .flickTopToBottom()
     }
 
-    @Order(70)
     @Test
+    @Order(40)
     fun tapWithScrollUp_id() {
 
         scenario {
@@ -158,20 +95,20 @@ class TestDriveTapExtensionTest2 : UITest() {
             .flickTopToBottom()
     }
 
-//    @Order(3)
 //    @Test
+//    @Order(3)
 //    fun tapWithScrollUp_access() {
 //
 //    }
 //
-//    @Order(3)
 //    @Test
+//    @Order(3)
 //    fun tapWithScrollUp_accessStartsWith() {
 //
 //    }
 
-    @Order(80)
     @Test
+    @Order(50)
     fun tapWithScrollUp_xpath() {
 
         scenario {

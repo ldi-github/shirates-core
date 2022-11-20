@@ -1,4 +1,4 @@
-package shirates.core.uitest.ios.driver.commandextension.work10
+package shirates.core.uitest.ios.driver.commandextension
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test

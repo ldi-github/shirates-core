@@ -1,5 +1,6 @@
-package shirates.core.uitest.ios.driver.commandextension.work07
+package shirates.core.uitest.ios.driver.commandextension
 
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
@@ -10,7 +11,7 @@ import utility.handleIrregulars
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveKeyboardExtensionTest : UITest() {
+class TestDriveKeyboardExtensionTest1 : UITest() {
 
     override fun setEventHandlers(context: TestDriverEventContext) {
         context.irregularHandler = {
@@ -19,6 +20,7 @@ class TestDriveKeyboardExtensionTest : UITest() {
     }
 
     @Test
+    @Order(10)
     fun pressBack() {
 
         scenario {
@@ -41,6 +43,7 @@ class TestDriveKeyboardExtensionTest : UITest() {
     }
 
     @Test
+    @Order(20)
     fun pressHome() {
 
         scenario {
@@ -56,44 +59,4 @@ class TestDriveKeyboardExtensionTest : UITest() {
         }
     }
 
-    @Test
-    fun pressEnter_search() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Search Screen]")
-                        .tap("#SpotlightSearchField")
-                        .clearInput()
-                        .sendKeys("appium")
-                        .keyboardIsShown()
-                }.action {
-                    it.pressEnter()
-                }.expectation {
-                    it.keyboardIsNotShown()
-                }
-            }
-        }
-
-    }
-
-    @Test
-    fun pressSearch() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Search Screen]")
-                        .tap("#SpotlightSearchField")
-                        .clearInput()
-                        .sendKeys("appium")
-                        .keyboardIsShown()
-                }.action {
-                    it.pressSearch()
-                }.expectation {
-                    it.keyboardIsNotShown()
-                }
-            }
-        }
-    }
 }
