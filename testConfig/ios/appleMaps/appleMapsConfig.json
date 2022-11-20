@@ -70,39 +70,48 @@
     },
 
     {
-      "profileName": "iPhone 14(iOS 16)-01",
+      "profileName": "iPhone 14(iOS 16.0)-01",
       "capabilities": {
-        "platformVersion": "16.1",
-        "deviceName": "iPhone 14(iOS 16)-01",
-        "udid": "E0890B19-9531-4F55-B42F-80F813BE4167",
+        "platformVersion": "16.0",
+        "deviceName": "iPhone 14(iOS 16.0)-01",
+        "udid": "78160920-9E14-4452-B667-31D0616F9AC6",
         "wdaLocalPort": "8211"
       }
     },
     {
-      "profileName": "iPhone 14(iOS 16)-02",
+      "profileName": "iPhone 14(iOS 16.0)-02",
       "capabilities": {
-        "platformVersion": "16.1",
-        "deviceName": "iPhone 14(iOS 16)-02",
-        "udid": "E1C52943-2D75-450E-B33C-EA0BFE6DC4C3",
+        "platformVersion": "16.0",
+        "deviceName": "iPhone 14(iOS 16.0)-02",
+        "udid": "2271B11F-CBE2-4C76-BE6D-239F115989E2",
         "wdaLocalPort": "8212"
       }
     },
     {
-      "profileName": "iPhone 14(iOS 16)-03",
+      "profileName": "iPhone 14(iOS 16.0)-03",
       "capabilities": {
-        "platformVersion": "16.1",
-        "deviceName": "iPhone 14(iOS 16)-03",
-        "udid": "C5447DF3-1F9D-4857-B750-3C7DB67B2C9A",
+        "platformVersion": "16.0",
+        "deviceName": "iPhone 14(iOS 16.0)-03",
+        "udid": "6153ACD1-662F-4885-8CE4-721F3F362766",
         "wdaLocalPort": "8213"
       }
     },
     {
-      "profileName": "iPhone 14(iOS 16)-04",
+      "profileName": "iPhone 14(iOS 16.0)-04",
       "capabilities": {
-        "platformVersion": "16.1",
-        "deviceName": "iPhone 14(iOS 16)-04",
-        "udid": "F56D3F30-8CB8-4C2A-89FE-2A873EC0A443",
+        "platformVersion": "16.0",
+        "deviceName": "iPhone 14(iOS 16.0)-04",
+        "udid": "DE312B83-F926-4F1C-A66E-DB002B7B1B99",
         "wdaLocalPort": "8214"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-05",
+      "capabilities": {
+        "platformVersion": "16.0",
+        "deviceName": "iPhone 14(iOS 16.0)-05",
+        "udid": "5B91D23D-2AF7-4CEB-9064-E0D56B57D5D5",
+        "wdaLocalPort": "8215"
       }
     },
 
