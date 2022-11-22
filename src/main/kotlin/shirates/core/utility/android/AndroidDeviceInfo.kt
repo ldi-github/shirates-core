@@ -90,7 +90,32 @@ class AndroidDeviceInfo(val line: String) {
         get() {
             return isEmulator.not()
         }
+
     var shellResult: ShellUtility.ShellResult? = null
+
+    val emulatorTitle: String
+        get() {
+            if (isEmulator) {
+                return "${avdName}:${port}"
+            }
+            return ""
+        }
+
+    val description: String
+        get() {
+            val params = mutableListOf<String>()
+            if (isEmulator) {
+                params.add(emulatorTitle)
+            } else {
+                params.add(model)
+            }
+            params.add("Android ${version}")
+            if (udid.isNotBlank()) {
+                params.add(udid)
+            }
+
+            return params.joinToString(", ")
+        }
 
     init {
 

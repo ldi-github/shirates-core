@@ -1,11 +1,11 @@
-package shirates.tool
+package shirates.core.hand.unittest.utility
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.utility.android.AdbUtility
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.tool.AdbUtility
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class AdbUtilityTest {

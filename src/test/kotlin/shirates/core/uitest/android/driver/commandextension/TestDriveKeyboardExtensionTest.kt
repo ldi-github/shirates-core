@@ -6,7 +6,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
-import shirates.core.utility.tool.AndroidMobileShellUtility
+import shirates.core.utility.android.AndroidMobileShellUtility
 
 @Want
 @Testrun("testConfig/android/androidSettings/testrun.properties")

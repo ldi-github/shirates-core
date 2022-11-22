@@ -1,4 +1,4 @@
-package shirates.core.utility.tool
+package shirates.core.utility.android
 
 import com.google.common.collect.ImmutableMap
 import shirates.core.driver.TestDriver

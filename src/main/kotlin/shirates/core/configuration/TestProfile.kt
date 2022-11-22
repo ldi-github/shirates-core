@@ -232,9 +232,15 @@ class TestProfile(var profileName: String = "") {
     /**
      * deviceName
      */
-    val deviceName: String
+    var deviceName: String
         get() {
             return getCapabilityRelaxed("deviceName")
+        }
+        set(value) {
+            if (capabilities.containsKey("deviceName")) {
+                capabilities.remove("deviceName")
+            }
+            capabilities.set("appium:deviceName", value)
         }
 
     /**

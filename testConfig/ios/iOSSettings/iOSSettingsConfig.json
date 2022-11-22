@@ -26,6 +26,7 @@
     "simpleIsVisibleCheck": true,
     "useJSONSource": true,
     "appium:showXcodeLog": true,
+    "bundleId": "com.apple.Preferences",
     "language": "en",
     "locale": "US"
   },
@@ -34,38 +35,60 @@
     {
       "profileName": "iOS *",
       "capabilities": {
+        "platformVersion": "auto"
       }
     },
+    {
+      "profileName": "iOS 16.1",
+      "capabilities": {
+        "platformVersion": "16.1"
+      }
+    },
+    {
+      "profileName": "iOS 15.5",
+      "capabilities": {
+        "platformVersion": "15.5"
+      }
+    },
+    {
+      "profileName": "iOS udid",
+      "capabilities": {
+        "udid": "50AC15AE-078B-4022-BB1B-7A541B7D47B4"
+      }
+    },
+    {
+      "profileName": "iOS iPhone 13",
+      "capabilities": {
+        "deviceName": "iPhone 13"
+      }
+    },
+
     {
       "profileName": "iPhone 14(16.1)",
       "capabilities": {
         "platformVersion": "16.1",
-        "deviceName": "iPhone 14",
-        "bundleId": "com.apple.Preferences"
+        "deviceName": "iPhone 14"
       }
     },
     {
       "profileName": "iPhone 13(15.5)",
       "capabilities": {
         "platformVersion": "15.5",
-        "deviceName": "iPhone 13",
-        "bundleId": "com.apple.Preferences"
+        "deviceName": "iPhone 13"
       }
     },
     {
       "profileName": "iPhone 13(15.0)",
       "capabilities": {
         "platformVersion": "15.0",
-        "deviceName": "iPhone 13",
-        "bundleId": "com.apple.Preferences"
+        "deviceName": "iPhone 13"
       }
     },
     {
       "profileName": "iPhone 12 Pro(14.3)",
       "capabilities": {
         "platformVersion": "14.3",
-        "deviceName": "iPhone 12 Pro",
-        "bundleId": "com.apple.Preferences"
+        "deviceName": "iPhone 12 Pro"
       }
     },
     {
@@ -73,56 +96,70 @@
       "capabilities": {
         "platformVersion": "14.4.1",
         "deviceName": "",
-        "bundleId": "com.apple.Preferences",
         "udid": "",
         "xcodeOrgId": "",
         "xcodeSigningId": "iPhone Developer"
       }
     },
 
+    {
+      "profileName": "iPhone 14(iOS 16.1)-01",
+      "capabilities": {
+        "wdaLocalPort": "8211"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.1)-02",
+      "capabilities": {
+        "wdaLocalPort": "8212"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.1)-03",
+      "capabilities": {
+        "wdaLocalPort": "8213"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.1)-04",
+      "capabilities": {
+        "wdaLocalPort": "8214"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.1)-05",
+      "capabilities": {
+        "wdaLocalPort": "8215"
+      }
+    },
 
     {
       "profileName": "iPhone 14(iOS 16.0)-01",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-01",
-        "udid": "78160920-9E14-4452-B667-31D0616F9AC6",
         "wdaLocalPort": "8211"
       }
     },
     {
       "profileName": "iPhone 14(iOS 16.0)-02",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-02",
-        "udid": "2271B11F-CBE2-4C76-BE6D-239F115989E2",
         "wdaLocalPort": "8212"
       }
     },
     {
       "profileName": "iPhone 14(iOS 16.0)-03",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-03",
-        "udid": "6153ACD1-662F-4885-8CE4-721F3F362766",
         "wdaLocalPort": "8213"
       }
     },
     {
       "profileName": "iPhone 14(iOS 16.0)-04",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-04",
-        "udid": "DE312B83-F926-4F1C-A66E-DB002B7B1B99",
         "wdaLocalPort": "8214"
       }
     },
     {
       "profileName": "iPhone 14(iOS 16.0)-05",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-05",
-        "udid": "5B91D23D-2AF7-4CEB-9064-E0D56B57D5D5",
         "wdaLocalPort": "8215"
       }
     },
@@ -131,36 +168,24 @@
     {
       "profileName": "iPhone 13(iOS 15)-01",
       "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13(iOS 15)-01",
-        "udid": "868FB87B-A218-4ED0-8833-9A864532ED12",
         "wdaLocalPort": "8211"
       }
     },
     {
       "profileName": "iPhone 13(iOS 15)-02",
       "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13(iOS 15)-02",
-        "udid": "FC2695EA-BDF8-4B32-8628-6648C1D5B567",
         "wdaLocalPort": "8212"
       }
     },
     {
       "profileName": "iPhone 13(iOS 15)-03",
       "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13(iOS 15)-03",
-        "udid": "BD332FA2-D3D3-4A58-A51C-5D09945B730F",
         "wdaLocalPort": "8213"
       }
     },
     {
       "profileName": "iPhone 13(iOS 15)-04",
       "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13(iOS 15)-04",
-        "udid": "E2AC4280-0A1A-4F25-9E34-8AD43F311A24",
         "wdaLocalPort": "8214"
       }
     }

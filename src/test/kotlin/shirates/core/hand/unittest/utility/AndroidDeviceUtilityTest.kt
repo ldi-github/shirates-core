@@ -1,8 +1,8 @@
-package shirates.tool
+package shirates.core.hand.unittest.utility
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import shirates.core.utility.tool.AndroidDeviceUtility
+import shirates.core.utility.android.AndroidDeviceUtility
 
 class AndroidDeviceUtilityTest {
 

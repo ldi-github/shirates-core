@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
-import shirates.core.utility.tool.AndroidDeviceUtility
+import shirates.core.utility.android.AndroidDeviceUtility
 
 
 @Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android *")

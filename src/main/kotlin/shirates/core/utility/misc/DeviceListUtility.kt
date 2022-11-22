@@ -5,9 +5,10 @@ import shirates.core.configuration.TestConfigContainer
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.utility.android.AndroidDeviceInfo
+import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.getStringOrEmpty
-import shirates.core.utility.tool.AndroidDeviceUtility
-import shirates.core.utility.tool.SimctlUtility
+import shirates.core.utility.ios.IosDeviceInfo
+import shirates.core.utility.ios.IosDeviceUtility
 
 object DeviceListUtility {
 
@@ -18,7 +19,7 @@ object DeviceListUtility {
 
         var profileInstance: TestProfile? = null
         var androidDeviceInfo: AndroidDeviceInfo? = null
-        var iosDeviceInfo: SimctlUtility.IosDeviceInfo? = null
+        var iosDeviceInfo: IosDeviceInfo? = null
 
         val isEmulator: Boolean
             get() {
@@ -82,7 +83,7 @@ object DeviceListUtility {
     }
 
     private fun getIosDeviceInfoList(list: MutableList<DeviceInfo>) {
-        val iosDevices = SimctlUtility.getBootedIosDeviceList()
+        val iosDevices = IosDeviceUtility.getBootedIosDeviceList()
         for (iosDeviceInfo in iosDevices) {
             val deviceInfo = DeviceInfo()
             deviceInfo.iosDeviceInfo = iosDeviceInfo

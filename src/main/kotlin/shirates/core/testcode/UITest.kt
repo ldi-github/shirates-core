@@ -5,6 +5,7 @@ import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.opentest4j.TestAbortedException
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestConfig
 import shirates.core.configuration.TestProfile
@@ -14,6 +15,7 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -21,9 +23,10 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.macro.MacroRepository
 import shirates.core.server.AppiumServerManager
+import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.file.FileLockUtility.lockFile
+import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.toPath
-import shirates.core.utility.tool.AndroidDeviceUtility
 import shirates.spec.report.TestListReport
 import java.lang.reflect.InvocationTargetException
 import java.nio.file.Files
@@ -266,23 +269,37 @@ abstract class UITest : TestDrive {
             TestDriver.setupContext(testContext = testContext)
 
             // Get device
+            TestLog.info(Const.SEPARATOR_LONG)
+            TestLog.info(message(id = "searchingDeviceForProfile", subject = testContext.profile.profileName))
             if (isAndroid) {
-                TestLog.info("Starting device. (profileName=${testContext.profile.profileName})")
-                val androidDeviceInfo = AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testContext.profile)
+                val androidDeviceInfo =
+                    AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = testContext.profile)
+
+                val subject =
+                    "${androidDeviceInfo.emulatorTitle}, Android ${androidDeviceInfo.version}, ${androidDeviceInfo.udid}"
+                TestLog.info(message(id = "deviceFound", subject = subject))
+
                 if (androidDeviceInfo.isEmulator) {
-                    TestLog.info("Emulator found. (${androidDeviceInfo.avdName}:${androidDeviceInfo.port}, platformVersion=${androidDeviceInfo.version})")
                     if (profile.avd == "auto" || profile.avd.isBlank()) {
                         // Feedback
                         profile.avd = androidDeviceInfo.avdName
                     }
-                } else {
-                    TestLog.info("Device found. (udid=${androidDeviceInfo.udid}, platformVersion=${androidDeviceInfo.version})")
                 }
+                profile.platformVersion = androidDeviceInfo.version
+                profile.udid = androidDeviceInfo.udid
 
                 if (profile.platformVersion == "auto" || profile.platformVersion.isBlank()) {
                     // Feedback
                     profile.platformVersion = androidDeviceInfo.version
                 }
+            } else if (isiOS) {
+                val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
+                val subject = "${iosDeviceInfo.devicename}, iOS ${iosDeviceInfo.platformVersion}, ${iosDeviceInfo.udid}"
+                TestLog.info(message(id = "deviceFound", subject = subject))
+                // Feedback
+                profile.deviceName = iosDeviceInfo.devicename
+                profile.platformVersion = iosDeviceInfo.platformVersion
+                profile.udid = iosDeviceInfo.udid
             }
 
             // AppiumServer

@@ -1,4 +1,4 @@
-package shirates.core.utility.tool
+package shirates.core.utility.android
 
 import shirates.core.utility.misc.ShellUtility
 

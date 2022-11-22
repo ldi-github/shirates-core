@@ -16,8 +16,8 @@ import shirates.core.logging.LogFileFormat
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.server.AppiumServerManager
+import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.misc.EnvUtility
-import shirates.core.utility.tool.AndroidMobileShellUtility
 import java.nio.file.Files
 
 /**

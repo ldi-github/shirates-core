@@ -28,6 +28,8 @@ import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.storage.app
 import shirates.core.testcode.CAEPattern
+import shirates.core.utility.android.AdbUtility
+import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
@@ -36,8 +38,6 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.StopWatch
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.toBufferedImage
-import shirates.core.utility.tool.AdbUtility
-import shirates.core.utility.tool.AndroidMobileShellUtility
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL

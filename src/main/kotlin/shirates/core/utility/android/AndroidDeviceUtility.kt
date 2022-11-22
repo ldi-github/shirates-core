@@ -1,4 +1,4 @@
-package shirates.core.utility.tool
+package shirates.core.utility.android
 
 import shirates.core.Const
 import shirates.core.configuration.TestProfile
@@ -6,7 +6,6 @@ import shirates.core.driver.TestMode
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
-import shirates.core.utility.android.AndroidDeviceInfo
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.sync.StopWatch

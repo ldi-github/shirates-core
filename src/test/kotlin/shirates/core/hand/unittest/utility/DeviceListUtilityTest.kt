@@ -1,4 +1,4 @@
-package shirates.tool
+package shirates.core.hand.unittest.utility
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.PropertiesManager
