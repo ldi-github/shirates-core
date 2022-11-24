@@ -65,36 +65,8 @@
     },
     {
       "profileName": "iOS/iPhone"
-    },
-
-
-    {
-      "profileName": "Pixel 3a(Android 12)-01",
-      "capabilities": {
-        "chromedriverPort": "8001",
-        "systemPort": "8201"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-02",
-      "capabilities": {
-        "chromedriverPort": "8002",
-        "systemPort": "8202"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-03",
-      "capabilities": {
-        "chromedriverPort": "8003",
-        "systemPort": "8203"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-04",
-      "capabilities": {
-        "chromedriverPort": "8004",
-        "systemPort": "8204"
-      }
     }
+
+
   ]
 }

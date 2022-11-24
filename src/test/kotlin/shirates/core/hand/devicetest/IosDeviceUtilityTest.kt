@@ -1,4 +1,4 @@
-package shirates.core.hand.unittest.utility
+package shirates.core.hand.devicetest
 
 import org.junit.jupiter.api.Test
 import shirates.core.utility.ios.IosDeviceUtility

@@ -1,4 +1,4 @@
-package shirates.core.hand.unittest.utility
+package shirates.core.hand.devicetest
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

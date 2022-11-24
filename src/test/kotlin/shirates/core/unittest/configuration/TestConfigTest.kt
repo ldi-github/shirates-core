@@ -114,18 +114,6 @@ class TestConfigTest : UnitTest() {
     }
 
     @Test
-    fun init_noProfiles() {
-
-        val file = "unitTestData/testConfig/errorConfig/noProfilesConfig.json"
-        assertThatThrownBy {
-            TestConfig(file)
-        }.isInstanceOf(TestConfigException::class.java)
-            .hasMessage(
-                message(id = "requiredInFile", subject = "profiles", file = file.toPath().toString())
-            )
-    }
-
-    @Test
     fun init_noProfileName() {
 
         assertThatThrownBy {
@@ -320,7 +308,7 @@ class TestConfigTest : UnitTest() {
         assertThat(prof.settings["always_finish_activities"]).isEqualTo("1")
 
         // profiles
-        assertThat(config.profileMap.count()).isEqualTo(3)
+        assertThat(config.profileMap.count()).isEqualTo(4)
 
         run {
             // profile1

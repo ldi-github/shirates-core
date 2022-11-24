@@ -17,9 +17,8 @@ class TestDriveTapExtensionTest_DownUpTest5 : UITest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                        .flickBottomToTop()
                 }.action {
-                    it.tapWithScrollDown("#android:id/title")
+                    it.tapWithScrollDown("#android:id/title&&Security")
                 }.expectation {
                     it.exist("[<-]")
                 }

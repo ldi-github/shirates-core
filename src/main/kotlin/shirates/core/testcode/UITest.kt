@@ -335,17 +335,12 @@ abstract class UITest : TestDrive {
     ): TestProfile {
         TestLog.info("Loading config.(configFile=$configPath, profileName=$profileName)")
         testConfig = TestConfig(configPath.toString())
-        if (testConfig!!.profileMap.containsKey(profileName).not()) {
-            throw TestConfigException(
-                message = message(
-                    id = "profileNotFound",
-                    key = profileName,
-                    file = configPath.toString()
-                )
-            )
+        if (testConfig!!.profileMap.containsKey(profileName)) {
+            return testConfig!!.profileMap[profileName]!!
         }
-        val testProfile = testConfig!!.profileMap[profileName]!!
-        return testProfile
+        val defaultProfile = testConfig!!.profileMap["_default"]!!
+        defaultProfile.profileName = profileName
+        return defaultProfile
     }
 
     /**

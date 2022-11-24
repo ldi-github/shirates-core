@@ -39,69 +39,9 @@
       "capabilities": {
         "platformVersion": "12"
       }
-    },
-
-
-    {
-      "profileName": "Pixel 3a(Android 12)-01",
-      "capabilities": {
-        "systemPort": "8201"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-02",
-      "capabilities": {
-        "systemPort": "8202"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-03",
-      "capabilities": {
-        "systemPort": "8203"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-04",
-      "capabilities": {
-        "systemPort": "8204"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-05",
-      "capabilities": {
-        "systemPort": "8205"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-06",
-      "capabilities": {
-        "systemPort": "8206"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-07",
-      "capabilities": {
-        "systemPort": "8207"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-08",
-      "capabilities": {
-        "systemPort": "8208"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-09",
-      "capabilities": {
-        "systemPort": "8209"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-10",
-      "capabilities": {
-        "systemPort": "8210"
-      }
     }
+
+
   ]
 
 }

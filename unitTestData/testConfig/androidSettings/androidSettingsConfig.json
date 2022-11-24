@@ -60,33 +60,8 @@
       "capabilities": {
         "platformVersion": "11"
       }
-    },
-
-
-    {
-      "profileName": "Pixel 3a(Android 12)-01",
-      "capabilities": {
-        "systemPort": "8201"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-02",
-      "capabilities": {
-        "systemPort": "8202"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-03",
-      "capabilities": {
-        "systemPort": "8203"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)-04",
-      "capabilities": {
-        "systemPort": "8204"
-      }
     }
+
   ]
 
 }

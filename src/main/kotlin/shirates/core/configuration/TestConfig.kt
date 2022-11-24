@@ -3,6 +3,7 @@ package shirates.core.configuration
 import org.apache.commons.io.FilenameUtils
 import org.json.JSONArray
 import org.json.JSONObject
+import shirates.core.Const
 import shirates.core.configuration.repository.DatasetRepositoryManager
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
@@ -76,51 +77,38 @@ class TestConfig(val testConfigFile: String) {
             )
         }
 
-        if (jso.has("profiles").not()) {
-            throw TestConfigException(message(id = "requiredInFile", subject = "profiles", file = "$testConfigPath"))
-        }
-
-        if (jso.has("appiumPath")) {
-            commonProfile.appiumPath = jso.getString("appiumPath")
-        }
-
-        if (jso.has("appiumArgs")) {
-            commonProfile.appiumArgs = jso.getString("appiumArgs")
-        }
-
-        if (jso.has("appiumArgsSeparator")) {
-            commonProfile.appiumArgsSeparator = jso.getString("appiumArgsSeparator")
-        }
-
-        if (jso.has("appiumServerStartupTimeoutSeconds")) {
-            commonProfile.appiumServerStartupTimeoutSeconds = jso.getString("appiumServerStartupTimeoutSeconds")
-        }
-
-        if (jso.has("appiumSessionStartupTimeoutSeconds")) {
-            commonProfile.appiumSessionStartupTimeoutSeconds = jso.getString("appiumSessionStartupTimeoutSeconds")
-        }
-
         setPropertyFromJSON(commonProfile, jso)
 
-        val jsoProfiles = jso.getJSONArray("profiles")
-        for (i in 0 until jsoProfiles.length()) {
-            val profjso = jsoProfiles[i] as JSONObject
-            if (profjso.has("profileName").not()) {
-                val ex = TestConfigException("profileName is required.(index=$i) $profjso")
-                TestLog.error(ex)
-                throw ex
-            }
-            val profileName = profjso["profileName"].toString()
-            val profile = TestProfile(profileName)
-            this.profileMap[profileName] = profile
-            setProfileFromJson(profile = profile, profjso = profjso)
-            profile.testConfig = this
-            profile.testConfigPath = testConfigPath
+        val defaultProfile = createProfileFromProfjso(profileName = "_default", jso)
+        defaultProfile.profileName = "_default"
 
-            if (profile.appiumServerUrl.isNullOrBlank()) {
-                profile.appiumServerUrl = shirates.core.Const.APPIUM_SERVER_ADDRESS
+        if (jso.has("profiles")) {
+            val jsoProfiles = jso.getJSONArray("profiles")
+            for (i in 0 until jsoProfiles.length()) {
+                val profjso = jsoProfiles[i] as JSONObject
+                if (profjso.has("profileName").not()) {
+                    val ex = TestConfigException("profileName is required.(index=$i) $profjso")
+                    TestLog.error(ex)
+                    throw ex
+                }
+                val profileName = profjso["profileName"].toString()
+                createProfileFromProfjso(profileName, profjso)
             }
         }
+    }
+
+    private fun createProfileFromProfjso(profileName: String, profjso: JSONObject): TestProfile {
+        val profile = TestProfile(profileName)
+        this.profileMap[profileName] = profile
+        setProfileFromJson(profile = profile, profjso = profjso)
+        profile.testConfig = this
+        profile.testConfigPath = testConfigPath
+
+        if (profile.appiumServerUrl.isNullOrBlank()) {
+            profile.appiumServerUrl = Const.APPIUM_SERVER_ADDRESS
+        }
+
+        return profile
     }
 
     private fun setProfileFromJson(profile: TestProfile, profjso: JSONObject) {
@@ -156,8 +144,8 @@ class TestConfig(val testConfigFile: String) {
             profile.capabilities["appActivity"] = profile.startupActivity!!
         }
 
-        setDefaultValuesToTestProfile(profile = profile)
-        overwriteValuesToTestProfile(profile = profile)
+        setDefaultValuesFromPropertiesToTestProfile(profile = profile)
+        overwriteValuesFromPropertiesToTestProfile(profile = profile)
     }
 
     /**
@@ -174,9 +162,13 @@ class TestConfig(val testConfigFile: String) {
         }
     }
 
-    private fun setDefaultValuesToTestProfile(profile: TestProfile) {
+    private fun setDefaultValuesFromPropertiesToTestProfile(profile: TestProfile) {
 
         val props = PropertiesManager.properties
+
+        /**
+         * Set default value
+         */
         for (prop in props) {
             val pinfo = TestProfile::class.memberProperties.firstOrNull() { it.name == prop.key }
             if (pinfo == null) {
@@ -190,17 +182,23 @@ class TestConfig(val testConfigFile: String) {
         }
     }
 
-    private fun overwriteValuesToTestProfile(profile: TestProfile) {
+    private fun overwriteValuesFromPropertiesToTestProfile(profile: TestProfile) {
 
         val props = PropertiesManager.properties
 
-        val settings = props.filter { it.key.toString().startsWith("settings/") }
+        /**
+         * Override settings section
+         */
+        val settings = props.filter { it.key.toString().startsWith("settings_") }
         for (setting in settings) {
-            val key = setting.key.toString().substring("settings/".length)
+            val key = setting.key.toString().substring("settings_".length)
             profile.settings[key] = setting.value.toString()
         }
 
-        val caps = props.filter { it.key.toString().startsWith("capabilities/") }
+        /**
+         * Override capabilities section
+         */
+        val caps = props.filter { it.key.toString().startsWith("capabilities_") }
         for (cap in caps) {
             val key = cap.key.toString().substring("capabilities_".length)
             profile.capabilities[key] = cap.value
