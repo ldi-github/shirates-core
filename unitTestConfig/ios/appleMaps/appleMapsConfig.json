@@ -78,46 +78,61 @@
     {
       "profileName": "iPhone 14(iOS 16.0)-01",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-01",
-        "udid": "78160920-9E14-4452-B667-31D0616F9AC6",
         "wdaLocalPort": "8211"
       }
     },
     {
       "profileName": "iPhone 14(iOS 16.0)-02",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-02",
-        "udid": "2271B11F-CBE2-4C76-BE6D-239F115989E2",
         "wdaLocalPort": "8212"
       }
     },
     {
       "profileName": "iPhone 14(iOS 16.0)-03",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-03",
-        "udid": "6153ACD1-662F-4885-8CE4-721F3F362766",
         "wdaLocalPort": "8213"
       }
     },
     {
       "profileName": "iPhone 14(iOS 16.0)-04",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-04",
-        "udid": "DE312B83-F926-4F1C-A66E-DB002B7B1B99",
         "wdaLocalPort": "8214"
       }
     },
     {
       "profileName": "iPhone 14(iOS 16.0)-05",
       "capabilities": {
-        "platformVersion": "16.0",
-        "deviceName": "iPhone 14(iOS 16.0)-05",
-        "udid": "5B91D23D-2AF7-4CEB-9064-E0D56B57D5D5",
         "wdaLocalPort": "8215"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-06",
+      "capabilities": {
+        "wdaLocalPort": "8216"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-07",
+      "capabilities": {
+        "wdaLocalPort": "8217"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-08",
+      "capabilities": {
+        "wdaLocalPort": "8218"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-09",
+      "capabilities": {
+        "wdaLocalPort": "8219"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-10",
+      "capabilities": {
+        "wdaLocalPort": "8220"
       }
     },
 

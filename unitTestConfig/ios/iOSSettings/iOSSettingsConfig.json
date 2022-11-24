@@ -103,7 +103,36 @@
         "wdaLocalPort": "8215"
       }
     },
-
+    {
+      "profileName": "iPhone 14(iOS 16.0)-06",
+      "capabilities": {
+        "wdaLocalPort": "8216"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-07",
+      "capabilities": {
+        "wdaLocalPort": "8217"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-08",
+      "capabilities": {
+        "wdaLocalPort": "8218"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-09",
+      "capabilities": {
+        "wdaLocalPort": "8219"
+      }
+    },
+    {
+      "profileName": "iPhone 14(iOS 16.0)-10",
+      "capabilities": {
+        "wdaLocalPort": "8220"
+      }
+    },
 
     {
       "profileName": "iPhone 13(iOS 15)-01",
