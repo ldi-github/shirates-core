@@ -205,8 +205,8 @@ object AndroidDeviceUtility {
         args.add("@${emulatorInfo.avdName}")
         args.addAll(emulatorInfo.emulatorOptions)
         TestLog.info(args.joinToString(" "))
-        val shellResult1 = ShellUtility.executeCommandAsync(args = args.toTypedArray())
-        return shellResult1
+        val shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray())
+        return shellResult
     }
 
     /**

@@ -414,13 +414,11 @@ object TestDriver {
         return handled
     }
 
-    internal fun createAppiumDriver() {
+    internal fun createAppiumDriver(profile: TestProfile = testContext.profile) {
 
         if (TestMode.isNoLoadRun) {
             return
         }
-
-        val profile = testContext.profile
 
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)

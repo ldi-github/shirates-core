@@ -1,10 +1,13 @@
 package shirates.core.utility.ios
 
+import shirates.core.Const
 import shirates.core.configuration.TestProfile
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
+import shirates.core.utility.sync.StopWatch
 import shirates.core.utility.toPath
 import java.nio.file.Files
 
@@ -205,4 +208,89 @@ object IosDeviceUtility {
         return Files.exists(dir)
     }
 
+    /**
+     * isInstalled
+     */
+    fun isInstalled(bundleId: String, iosDeviceInfo: IosDeviceInfo): Boolean {
+
+        if (iosDeviceInfo.status != "Booted") {
+            throw IllegalStateException("Could not get installed app information. Device status must be Booted.")
+        }
+
+        val args = mutableListOf<String>()
+        args.add("xcrun")
+        args.add("simctl")
+        args.add("listapps")
+        args.add(iosDeviceInfo.udid)
+        TestLog.info(args.joinToString(" "))
+        val shellResult = ShellUtility.executeCommand(args = args.toTypedArray())
+        val lines = shellResult.resultString.split("\n")
+        return lines.any() { it.contains(bundleId) }
+    }
+
+    /**
+     * isWDAInstalled
+     */
+    fun isWDAInstalled(iosDeviceInfo: IosDeviceInfo): Boolean {
+
+        return isInstalled(bundleId = "com.facebook.WebDriverAgentRunner.xctrunner", iosDeviceInfo = iosDeviceInfo)
+    }
+
+    /**
+     * startSimulator
+     */
+    fun startSimulator(iosDeviceInfo: IosDeviceInfo): ShellUtility.ShellResult {
+
+        val args = mutableListOf<String>()
+        args.add("xcrun")
+        args.add("simctl")
+        args.add("boot")
+        args.add(iosDeviceInfo.udid)
+        TestLog.info(args.joinToString(" "))
+
+        val shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray())
+        return shellResult
+    }
+
+    /**
+     * waitSimulatorStatus
+     */
+    fun waitSimulatorStatus(
+        udid: String,
+        status: String = "Booted",
+        timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
+        intervalMilliseconds: Long = 1000
+    ): IosDeviceInfo {
+
+        val sw = StopWatch().start()
+        while (true) {
+            val deviceList = getIosDeviceList()
+            val device = deviceList.firstOrNull() { it.udid == udid }
+            if (device != null && device.status == status) {
+                return device
+            }
+
+            if (sw.elapsedSeconds > timeoutSeconds) {
+                throw TestDriverException("Waiting simulator status timed out. (expected=$status, actual=${device?.status}")
+            }
+
+            Thread.sleep(intervalMilliseconds)
+        }
+    }
+
+    /**
+     * stopSimulator
+     */
+    fun stopSimulator(
+        udid: String
+    ) {
+        val args = mutableListOf<String>()
+        args.add("xcrun")
+        args.add("simctl")
+        args.add("shutdown")
+        args.add(udid)
+
+        TestLog.info(args.joinToString(" "))
+        ShellUtility.executeCommand(args = args.toTypedArray())
+    }
 }
