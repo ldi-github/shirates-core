@@ -100,16 +100,16 @@ object AndroidDeviceUtility {
     fun getOrCreateAndroidDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo {
 
         val profileName = testProfile.profileName
-        val emulatorInfo = EmulatorInfo(
+        val emulatorProfile = EmulatorProfile(
             profileName = profileName,
             emulatorOptions = (testProfile.emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
                 .filter { it.isNotBlank() }.toMutableList()
         )
         val avdList = getAvdList()
-        if (avdList.contains(emulatorInfo.avdName)) {
+        if (avdList.contains(emulatorProfile.avdName)) {
             // Start avd to get device
             val androidDeviceInfo = startEmulatorAndWaitDeviceReady(
-                emulatorInfo = emulatorInfo,
+                emulatorProfile = emulatorProfile,
                 timeoutSeconds = testProfile.deviceStartupTimeoutSeconds?.toDoubleOrNull()
                     ?: Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
                 waitSecondsAfterStartup = testProfile.deviceWaitSecondsAfterStartup?.toDoubleOrNull()
@@ -166,14 +166,14 @@ object AndroidDeviceUtility {
      * startEmulatorAndWaitDeviceReady
      */
     fun startEmulatorAndWaitDeviceReady(
-        emulatorInfo: EmulatorInfo,
+        emulatorProfile: EmulatorProfile,
         timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
         waitSecondsAfterStartup: Double = Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
     ): AndroidDeviceInfo {
 
         currentAndroidDeviceInfo = null
 
-        var device = getAndroidDeviceInfo(avdName = emulatorInfo.avdName)
+        var device = getAndroidDeviceInfo(avdName = emulatorProfile.avdName)
         if (device != null && device.status == "device") {
             currentAndroidDeviceInfo = device
             return device
@@ -181,11 +181,11 @@ object AndroidDeviceUtility {
 
         var shellResult: ShellUtility.ShellResult? = null
         if (device == null) {
-            shellResult = startEmulator(emulatorInfo)
+            shellResult = startEmulator(emulatorProfile)
         }
 
         device = waitEmulatorStatus(
-            avdName = emulatorInfo.avdName,
+            avdName = emulatorProfile.avdName,
             status = "device",
             timeoutSeconds = timeoutSeconds
         )
@@ -198,12 +198,12 @@ object AndroidDeviceUtility {
     /**
      * startEmulator
      */
-    fun startEmulator(emulatorInfo: EmulatorInfo): ShellUtility.ShellResult {
+    fun startEmulator(emulatorProfile: EmulatorProfile): ShellUtility.ShellResult {
 
         val args = mutableListOf<String>()
         args.add("emulator")
-        args.add("@${emulatorInfo.avdName}")
-        args.addAll(emulatorInfo.emulatorOptions)
+        args.add("@${emulatorProfile.avdName}")
+        args.addAll(emulatorProfile.emulatorOptions)
         TestLog.info(args.joinToString(" "))
         val shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray())
         return shellResult
@@ -235,24 +235,4 @@ object AndroidDeviceUtility {
         }
     }
 
-    /**
-     * EmulatorInfo
-     */
-    class EmulatorInfo(
-        val profileName: String,
-        val emulatorOptions: MutableList<String> = mutableListOf()
-    ) {
-        val avdName: String = getAvdName(profileName = profileName)
-        val platformVersion: String
-
-        init {
-            val tokens = profileName.replace("(", " ").replace(")", " ").replace("_", " ").split(" ")
-            val versionIx = tokens.indexOf("Android") + 1
-            if (versionIx + 1 <= tokens.count()) {
-                platformVersion = tokens[versionIx]
-            } else {
-                platformVersion = ""
-            }
-        }
-    }
 }

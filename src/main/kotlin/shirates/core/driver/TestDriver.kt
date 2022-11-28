@@ -491,7 +491,13 @@ object TestDriver {
         profile: TestProfile,
         capabilities: DesiredCapabilities
     ) {
-        for (key in profile.capabilities.keys) {
+        val keys = profile.capabilities.keys
+        if (isiOS) {
+            if (keys.contains("appium:avd")) {
+                keys.remove("appium:avd")
+            }
+        }
+        for (key in keys) {
             // comment mark
             if (key.startsWith("#")) continue
             if (key.startsWith("//")) continue

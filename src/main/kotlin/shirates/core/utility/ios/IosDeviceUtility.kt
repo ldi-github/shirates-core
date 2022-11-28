@@ -92,43 +92,6 @@ object IosDeviceUtility {
         return list
     }
 
-//    /**
-//     * getIosDeviceInfo
-//     */
-//    fun getIosDeviceInfo(
-//        deviceList: List<IosDeviceInfo>,
-//        deviceName: String? = null,
-//        platformVersion: String? = null,
-//        status: String? = null
-//    ): IosDeviceInfo? {
-//
-//        if (deviceName.isNullOrBlank().not()) {
-//            deviceList = deviceList.filter { it.devicename == deviceName }
-//        }
-//        if (platformVersion.isNullOrBlank().not()) {
-//            deviceList = deviceList.filter { it.platformVersion == platformVersion }
-//        }
-//        if (status != null) {
-//            deviceList = deviceList.filter { it.status == status }
-//        }
-//        if (status == null && deviceList.count() >= 2) {
-//            val info = deviceList.filter { it.status == "Booted" }.lastOrNull()
-//            if (info != null) {
-//                return info
-//            }
-//        }
-//        val iPhoneList = deviceList.filter { it.devicename.startsWith("iPhone") }
-//        if (iPhoneList.any()) {
-//            return iPhoneList.last()
-//        }
-//        val iPadList = deviceList.filter { it.devicename.startsWith("iPad") }
-//        if (iPadList.any()) {
-//            return iPadList.last()
-//        }
-//
-//        return deviceList.lastOrNull()
-//    }
-
     /**
      * getIosDeviceInfo
      */
@@ -137,21 +100,38 @@ object IosDeviceUtility {
         val deviceList = getIosDeviceList()
 
         /**
-         * Select by profileName
-         */
-        if (testProfile.deviceName.isBlank() && testProfile.platformVersion.isBlank()) {
-            val info = deviceList.firstOrNull() { it.devicename == testProfile.profileName }
-            return info ?: throw TestConfigException(
-                message(id = "couldNotFindIosDevice", subject = "profileName=${testProfile.profileName}")
-            )
-        }
-        /**
          * Select by udid
          */
         if (testProfile.udid.isNotBlank()) {
             val info = deviceList.firstOrNull() { it.udid == testProfile.udid }
             return info ?: throw TestConfigException(
                 message(id = "couldNotFindIosDevice", subject = "udid=${testProfile.udid}")
+            )
+        }
+        /**
+         * Select by profileName
+         */
+        if (testProfile.deviceName.isBlank() && testProfile.platformVersion.isBlank()) {
+            var infos = deviceList.filter() { it.devicename == testProfile.profileName }
+            /**
+             * On deviceName uniquely matches profileName
+             */
+            if (infos.count() == 1) {
+                return infos[0]
+            }
+
+            /**
+             * Parses profileName and get model and platformVersion
+             */
+            val simulatorProfile = SimulatorProfile(profileName = testProfile.profileName)
+            val devices = deviceList.filter { it.devicename == simulatorProfile.model }
+            val info =
+                if (simulatorProfile.platformVersion.isNotBlank())
+                    devices.lastOrNull() { it.platformVersion == simulatorProfile.platformVersion }
+                else
+                    devices.sortedBy { it.platformVersion }.lastOrNull()
+            return info ?: throw TestConfigException(
+                message(id = "couldNotFindIosDevice", subject = "profileName=${testProfile.profileName}")
             )
         }
         /**
@@ -171,7 +151,8 @@ object IosDeviceUtility {
          * Select by deviceName
          */
         if (testProfile.deviceName.isNotBlank()) {
-            val info = deviceList.lastOrNull() { it.devicename == testProfile.deviceName }
+            val devices = deviceList.filter { it.devicename == testProfile.deviceName }.sortedBy { it.platformVersion }
+            val info = devices.lastOrNull()
             return info ?: throw TestConfigException(
                 message(id = "couldNotFindIosDevice", subject = "deviceName=${testProfile.deviceName}")
             )
