@@ -152,7 +152,12 @@ object AppiumServerManager {
         // Terminate existing appium process using the port
         val p = commandTokens.getPort()
         val port = p?.toIntOrNull() ?: throw ConfigurationException("Invalid port. (port=$p)")
-        ProcessUtility.terminateProcess(port = port)
+        run {
+            val pid = ProcessUtility.getPid(port = port)
+            if (pid != null) {
+                ProcessUtility.terminateProcess(pid = pid)
+            }
+        }
 
         // Start appium process
         val commandLine = CommandLine(appiumPath)
@@ -243,7 +248,15 @@ object AppiumServerManager {
 
         val commandTokens = getCommandTokens()
         val port = commandTokens.getPort()?.toIntOrNull() ?: return
-        ProcessUtility.terminateProcess(port = port)
+        val pid = ProcessUtility.getPid(port = port) ?: return
+        val shellResult = ProcessUtility.terminateProcess(pid = pid)
+        executeResultHandler?.waitFor((shirates.core.Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
+        executeResultHandler = null
+
+        if (shellResult != null) {
+            TestLog.info(message(id = "appiumServerTerminated", arg1 = pid, arg2 = "$port"))
+        }
+
     }
 
 }

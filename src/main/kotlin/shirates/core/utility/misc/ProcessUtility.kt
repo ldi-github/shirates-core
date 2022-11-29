@@ -2,9 +2,7 @@ package shirates.core.utility.misc
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
-import shirates.core.logging.Message
 import shirates.core.logging.TestLog
-import shirates.core.server.AppiumServerManager
 
 object ProcessUtility {
 
@@ -40,31 +38,20 @@ object ProcessUtility {
     /**
      * terminateProcess
      */
-    fun terminateProcess(port: Int): ShellUtility.ShellResult? {
+    fun terminateProcess(pid: String): ShellUtility.ShellResult? {
 
-        val pid = getPid(port = port)
         var shellResult: ShellUtility.ShellResult? = null
 
         if (TestMode.isRunningOnWindows) {
-            if (pid != null) {
-                shellResult = ShellUtility.executeCommand("taskkill", "/pid", "$pid", "/F")
-                if (PropertiesManager.enableShellExecLog) {
-                    TestLog.info(shellResult.resultString)
-                }
+            shellResult = ShellUtility.executeCommand("taskkill", "/pid", pid, "/F")
+            if (PropertiesManager.enableShellExecLog) {
+                TestLog.info(shellResult.resultString)
             }
         } else {
-            if (pid != null) {
-                shellResult = ShellUtility.executeCommand("kill", "-9", pid)
-                if (PropertiesManager.enableShellExecLog) {
-                    TestLog.info(shellResult.resultString)
-                }
+            shellResult = ShellUtility.executeCommand("kill", "-9", pid)
+            if (PropertiesManager.enableShellExecLog) {
+                TestLog.info(shellResult.resultString)
             }
-        }
-        AppiumServerManager.executeResultHandler?.waitFor((shirates.core.Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
-        AppiumServerManager.executeResultHandler = null
-
-        if (shellResult != null) {
-            TestLog.info(Message.message(id = "appiumServerTerminated", arg1 = pid, arg2 = "$port"))
         }
 
         return shellResult

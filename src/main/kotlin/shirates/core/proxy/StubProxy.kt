@@ -65,7 +65,23 @@ object StubProxy {
         return stubProxyResponse
     }
 
-    private fun request(url: HttpUrl): StubProxyResponse {
+    /**
+     * listDataPattern
+     */
+    fun listDataPattern(): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val url =
+            "${testContext.profile.stubServerUrl}/management/listDataPattern".toHttpUrlOrNull()!!.newBuilder()
+                .build()
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
+    }
+
+    fun request(url: HttpUrl): StubProxyResponse {
         val request = Request.Builder().url(url).build()
         val client = OkHttpClient()
 
