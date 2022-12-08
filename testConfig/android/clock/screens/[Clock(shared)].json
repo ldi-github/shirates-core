@@ -2,25 +2,22 @@
   "key": "[Clock(shared)]",
 
   "selectors": {
-    "[Alarm Tab]": "#tab_menu_alarm",
+    "[Alarm Tab]": "@Alarm",
     "[Alarm Image]": "Alarm.png",
     "[Alarm Image(selected)]": "Alarm(selected).png",
 
-    "[Clock Tab]": "#tab_menu_clock",
+    "[Clock Tab]": "@Clock",
     "[Clock Image]": "Clock.png",
     "[Clock Image(selected)]": "Clock(selected).png",
 
-    "[Timer Tab]": "#tab_menu_timer",
+    "[Timer Tab]": "@Timer",
     "[Timer Image]": "Timer.png",
     "[Timer Image(selected)]": "Timer(selected).png",
 
-    "[Stopwatch Tab]": "#tab_menu_stopwatch",
+    "[Stopwatch Tab]": "@Stopwatch",
     "[Stopwatch Image]": "Stopwatch.png",
-    "[Stopwatch Image(selected)]": "Stopwatch(selected).png",
+    "[Stopwatch Image(selected)]": "Stopwatch(selected).png"
 
-    "[Bedtime Tab]": "#tab_menu_bedtime",
-    "[Bedtime Image]": "Bedtime.png",
-    "[Bedtime Image(selected)]": "Bedtime(selected).png"
   }
 
 }

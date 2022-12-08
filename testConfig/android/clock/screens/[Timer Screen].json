@@ -5,7 +5,7 @@
     "[Clock(shared)]"
   ],
 
-  "identity": "~title=Timer",
+  "identity": "[Timer setup time]",
 
   "selectors": {
     "[Timer setup time]": "#timer_setup_time",

@@ -23,6 +23,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
                         .dontExist("Security")
                 }.action {
                     it.scrollDown()
+                    it.scrollDown()
                 }.expectation {
                     it.dontExist("Network & internet")
                     it.exist("Security")

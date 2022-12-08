@@ -8,6 +8,8 @@
   "identity": "~title=Stopwatch",
 
   "selectors": {
+
+    "[stopwatch_circle]": "#stopwatch_circle"
   }
 
 }

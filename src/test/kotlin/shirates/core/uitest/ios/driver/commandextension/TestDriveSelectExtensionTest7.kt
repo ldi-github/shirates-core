@@ -20,8 +20,8 @@ class TestDriveSelectExtensionTest7 : UITest() {
                 expectation {
                     describe("xpath")
                     it.canSelectWithScrollDown("xpath=//*[@label='Developer' and @visible='true']").thisIsTrue()
-                    it.canSelectWithScrollDown("xpath=//*[@label='General' and @visible='true']").thisIsFalse()
-                    it.canSelectWithScrollUp("xpath=//*[@label='General' and @visible='true']").thisIsTrue()
+                    it.canSelectWithScrollDown("xpath=//*[@label='VPN' and @visible='true']").thisIsFalse()
+                    it.canSelectWithScrollUp("xpath=//*[@label='VPN' and @visible='true']").thisIsTrue()
                     it.canSelectWithScrollUp("xpath=//*[@label='Developer' and @visible='true']").thisIsFalse()
                 }
             }

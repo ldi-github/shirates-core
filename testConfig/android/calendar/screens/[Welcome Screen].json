@@ -5,7 +5,7 @@
 
   "selectors": {
 
-    "[Google Calendar]": "@Welcome to Google Calendar",
+    "[Google Calendar]": "",
     "[Make the most of every day.]": "",
     "[>]": "@next page"
   }
