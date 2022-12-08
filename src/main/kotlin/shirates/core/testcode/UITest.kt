@@ -284,28 +284,30 @@ abstract class UITest : TestDrive {
                 TestLog.info(message(id = "deviceFound", subject = subject))
 
                 if (androidDeviceInfo.isEmulator) {
-                    if (profile.avd == "auto" || profile.avd.isBlank()) {
-                        // Feedback
-                        profile.avd = androidDeviceInfo.avdName
-                    }
+                    profile.avd = androidDeviceInfo.avdName
                 }
                 profile.platformVersion = androidDeviceInfo.version
                 profile.udid = androidDeviceInfo.udid
-
-                if (profile.platformVersion == "auto" || profile.platformVersion.isBlank()) {
-                    // Feedback
-                    profile.platformVersion = androidDeviceInfo.version
-                }
+                profile.platformVersion = androidDeviceInfo.version
             } else if (isiOS) {
                 val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
                 val subject =
                     "${iosDeviceInfo.devicename}, iOS ${iosDeviceInfo.platformVersion}, ${iosDeviceInfo.udid}"
                 TestLog.info(message(id = "deviceFound", subject = subject))
-                // Feedback
                 profile.deviceName = iosDeviceInfo.devicename
                 profile.platformVersion = iosDeviceInfo.platformVersion
                 profile.udid = iosDeviceInfo.udid
             }
+
+            // Complete profile
+            if (isAndroid) {
+                profile.automationName = "UiAutomator2"
+                profile.platformName = "Android"
+            } else {
+                profile.automationName = "XCUITest"
+                profile.platformName = "iOS"
+            }
+            profile.validate()
 
             // Appium Server
             AppiumServerManager.setupAppiumServerProcess(

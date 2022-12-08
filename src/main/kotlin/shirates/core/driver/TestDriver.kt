@@ -213,7 +213,6 @@ object TestDriver {
     fun setupContext(testContext: TestContext) {
 
         val profile = testContext.profile
-        profile.validate()
 
         this.testContext = testContext
 
