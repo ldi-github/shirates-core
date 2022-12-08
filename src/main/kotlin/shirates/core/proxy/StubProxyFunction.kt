@@ -29,7 +29,7 @@ fun dataPattern(
         fireEvent = false
     ) {
 
-        val response = StubProxy.setDataPattern(apiName = apiName, dataPatternName = dataPatternName)
+        val response = StubProxy.setDataPattern(urlPathOrApiName = apiName, dataPatternName = dataPatternName)
         if (response.code != 200) {
             throw TestEnvironmentException(message(id = "httpErrorInResponseFromStubTool", arg1 = "${response.code}"))
         }

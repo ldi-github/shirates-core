@@ -1,6 +1,5 @@
 package shirates.core.utility.misc
 
-import com.google.gson.GsonBuilder
 import org.json.JSONObject
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
@@ -39,13 +38,4 @@ object JsonUtility {
         }
     }
 
-    /**
-     * toJsonString
-     */
-    fun toJsonString(obj: Any): String {
-
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val jsonStr = gson.toJson(obj)
-        return jsonStr
-    }
 }
