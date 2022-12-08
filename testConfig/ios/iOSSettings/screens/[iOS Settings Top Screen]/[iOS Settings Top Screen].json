@@ -10,6 +10,8 @@
     "[Settings]": "~title=Settings",
     "[Profile Icon]": "#SilhouetteMonogram",
 
+    "[NavigationBar]": ".XCUIElementTypeNavigationBar",
+
     "[General Icon]": "[General]:preImage",
     "[General Image]": "image=[General Icon].png",
     "[General]": "",
@@ -32,6 +34,8 @@
   },
 
   "scroll": {
-    "start-elements": "[Profile Icon]"
+    "start-elements": "[Profile Icon]",
+    "end-elements": "",
+    "overlay-elements": "[NavigationBar]"
   }
 }

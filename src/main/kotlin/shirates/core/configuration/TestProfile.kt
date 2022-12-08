@@ -188,9 +188,15 @@ class TestProfile(var profileName: String = "") {
     /**
      * automationName
      */
-    val automationName: String
+    var automationName: String
         get() {
             return getCapabilityRelaxed("automationName")
+        }
+        set(value) {
+            if (capabilities.containsKey("automationName")) {
+                capabilities.remove("automationName")
+            }
+            capabilities.set("appium:automationName", value)
         }
 
     /**
@@ -210,9 +216,12 @@ class TestProfile(var profileName: String = "") {
     /**
      * platformName
      */
-    val platformName: String
+    var platformName: String
         get() {
             return getCapabilityRelaxed("platformName").lowercase()
+        }
+        set(value) {
+            capabilities.set("platformName", value)
         }
 
     /**

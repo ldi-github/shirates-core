@@ -19,9 +19,10 @@ class TestDriveScrollExtensionTest2 : UITest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                        .exist("Network & internet")
+                        .scrollToTop()
                         .dontExist("Security")
                 }.action {
+                    it.scrollDown()
                     it.scrollDown()
                 }.expectation {
                     it.dontExist("Network & internet")
@@ -30,6 +31,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
             }
             case(2) {
                 action {
+                    it.scrollUp()
                     it.scrollUp()
                 }.expectation {
                     it.exist("Network & internet")

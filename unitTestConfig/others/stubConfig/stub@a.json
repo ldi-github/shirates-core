@@ -1,0 +1,26 @@
+{
+  "testConfigName": "stub@a",
+
+  "stubServerUrl": "http://stub1",
+
+  "appIconName": "app.stub",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "capabilities": {
+    "automationName": "UiAutomator2",
+    "platformName": "Android"
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android *",
+      "capabilities": {
+      }
+    }
+  ]
+
+}

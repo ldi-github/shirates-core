@@ -58,8 +58,8 @@ dependencies {
     testImplementation("commons-io:commons-io:2.11.0")
 
     // Apache Commons Text
-    implementation("org.apache.commons:commons-text:1.9")
-    testImplementation("org.apache.commons:commons-text:1.9")
+    implementation("org.apache.commons:commons-text:1.10.0")
+    testImplementation("org.apache.commons:commons-text:1.10.0")
 
     // Apache Commons Exec
     implementation("org.apache.commons:commons-exec:1.3")
@@ -89,9 +89,6 @@ dependencies {
     // Dokka
     // https://github.com/Kotlin/dokka
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.10")
-
-    // Gson
-    implementation("com.google.code.gson:gson:2.9.0")
 
     // BoofCV
     implementation("org.boofcv:boofcv-core:0.41")
