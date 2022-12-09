@@ -199,8 +199,6 @@ In **testConfig** file, you can set test **profiles** for test devices and `desi
   "startupActivity": "com.android.settings.Settings",
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "language": "en",
     "locale": "US"
   },

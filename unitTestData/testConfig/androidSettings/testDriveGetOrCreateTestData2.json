@@ -12,8 +12,6 @@
 
   "capabilities": {
     "deviceName": "English",
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "platformVersion": "10",
     "language": "en",
     "locale": "US"

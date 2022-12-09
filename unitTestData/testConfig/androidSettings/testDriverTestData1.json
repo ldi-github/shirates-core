@@ -22,8 +22,6 @@
 
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "platformVersion": "12",
     "deviceName": "Pixel 3a",
     "language": "en",

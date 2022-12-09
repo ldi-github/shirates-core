@@ -329,8 +329,6 @@ class TestConfigTest : UnitTest() {
             val cap1 = mapOf(
                 "appPackage" to "com.example.app1",
                 "appActivity" to "com.example.app1.MainActivity",
-                "automationName" to "UiAutomator2",
-                "platformName" to "Android",
                 "platformVersion" to "9",
                 "deviceName" to "Pixel_2_API_28",
             )
@@ -357,7 +355,6 @@ class TestConfigTest : UnitTest() {
                 "appPackage" to "com.example.app1",
                 "appActivity" to "com.example.app1.MainActivity",
                 "automationName" to "UiAutomator3",
-                "platformName" to "Android",
                 "platformVersion" to "8.1",
                 "deviceName" to "Pixel"
             )

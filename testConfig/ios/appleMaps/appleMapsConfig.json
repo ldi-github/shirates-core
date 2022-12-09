@@ -18,8 +18,6 @@
   },
 
   "capabilities": {
-    "automationName": "XCUITest",
-    "platformName": "iOS",
     "simpleIsVisibleCheck": true,
     "useJSONSource": true,
     "showXcodeLog": true,

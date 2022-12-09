@@ -112,7 +112,8 @@ object IosDeviceUtility {
          * Select by profileName
          */
         if (testProfile.deviceName.isBlank() && testProfile.platformVersion.isBlank()) {
-            var infos = deviceList.filter() { it.devicename == testProfile.profileName }
+            val infos = deviceList.filter() { it.devicename == testProfile.profileName }
+
             /**
              * On deviceName uniquely matches profileName
              */
@@ -130,9 +131,9 @@ object IosDeviceUtility {
                     devices.lastOrNull() { it.platformVersion == simulatorProfile.platformVersion }
                 else
                     devices.sortedBy { it.platformVersion }.lastOrNull()
-            return info ?: throw TestConfigException(
-                message(id = "couldNotFindIosDevice", subject = "profileName=${testProfile.profileName}")
-            )
+            if (info != null) {
+                return info
+            }
         }
         /**
          * Select by deviceName and platformVersion
@@ -160,7 +161,7 @@ object IosDeviceUtility {
         /**
          * Select latest iPhone
          */
-        if (testProfile.platformVersion == "auto") {
+        if (testProfile.platformVersion.isBlank() || testProfile.platformVersion == "*") {
             val info = deviceList.lastOrNull() { it.devicename.startsWith("iPhone") }
             return info ?: throw TestConfigException(
                 message(id = "couldNotFindIosDevice", subject = "platformVersion=${testProfile.platformVersion}")

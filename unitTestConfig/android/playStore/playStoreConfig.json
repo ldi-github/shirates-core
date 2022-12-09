@@ -20,26 +20,11 @@
   },
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "language": "en",
     "locale": "US"
   },
 
   "profiles": [
-    {
-      "profileName": "Android *",
-      "capabilities": {
-      }
-    },
-    {
-      "profileName": "Android 12",
-      "capabilities": {
-        "platformVersion": "12"
-      }
-    }
-
-
   ]
 
 }

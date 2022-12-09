@@ -8,9 +8,6 @@ Set `language` and `locale` in capabilities section in testConfig.json
 
 ```
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
-    "platformVersion": "12",
     "language": "en",
     "locale": "US"
   },

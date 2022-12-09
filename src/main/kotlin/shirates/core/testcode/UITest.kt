@@ -279,8 +279,10 @@ abstract class UITest : TestDrive {
                 val androidDeviceInfo =
                     AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = testContext.profile)
 
-                val subject =
-                    "${androidDeviceInfo.emulatorTitle}, Android ${androidDeviceInfo.version}, ${androidDeviceInfo.udid}"
+                val deviceLabel =
+                    if (androidDeviceInfo.emulatorTitle.isNotBlank()) androidDeviceInfo.emulatorTitle
+                    else androidDeviceInfo.model
+                val subject = "${deviceLabel}, Android ${androidDeviceInfo.version}, ${androidDeviceInfo.udid}"
                 TestLog.info(message(id = "deviceFound", subject = subject))
 
                 if (androidDeviceInfo.isEmulator) {

@@ -13,8 +13,6 @@
   },
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "avd": "Pixel_3a_Android_12_-01",
     "language": "en",
     "locale": "US"

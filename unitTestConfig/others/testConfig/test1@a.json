@@ -13,8 +13,6 @@
   },
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "language": "en",
     "locale": "US"
   },

@@ -24,8 +24,6 @@
       "#shortWaitSeconds": "1",
       "testResults": "Downloads/TestResults/Pixel2",
       "capabilities": {
-        "automationName": "UiAutomator2",
-        "platformName": "Android",
         "platformVersion": "9",
         "deviceName": "Pixel_2_API_28",
         "app": "Downloads/hogehoge.apk"

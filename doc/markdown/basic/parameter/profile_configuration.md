@@ -27,8 +27,6 @@ You can configure profiles in the testConfig file for the specific condition of 
   },
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "platformVersion": "12",
     "language": "en",
     "locale": "US"

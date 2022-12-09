@@ -130,7 +130,7 @@ object AndroidDeviceUtility {
             }
             val msg = Message.message(id = "couldNotFindConnectedAndroidDeviceByUdid", subject = testProfile.udid)
             throw TestDriverException(msg)
-        } else if (testProfile.platformVersion == "auto" || testProfile.platformVersion.isBlank()) {
+        } else if (testProfile.platformVersion.isBlank() || testProfile.platformVersion == "*") {
             // Select real device
             val realDevices = deviceList.filter { it.isRealDevice }.sortedBy { it.udid }
             if (realDevices.any()) {

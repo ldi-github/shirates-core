@@ -220,7 +220,7 @@ object TestDriver {
 
         lastElement = TestElement.emptyElement
 
-        TestLog.info("Initializing TestDriver.(profileName='${testContext.profile.profileName}')")
+        TestLog.info("Initializing TestDriver.(profileName=${testContext.profile.profileName})")
 
         TestLog.info("noLoadRun: ${TestMode.isNoLoadRun}")
         TestLog.info("boundsToRectRatio: ${testContext.boundsToRectRatio}")
@@ -539,6 +539,7 @@ object TestDriver {
                 mAppiumDriver = AndroidDriver(appiumServerUrl, capabilities)
                 healthCheckForAndroid(profile = profile)
             } else {
+                TestLog.info(message(id = "initializingIosDriverMayTakeMinutes"))
                 mAppiumDriver = IOSDriver(appiumServerUrl, capabilities)
             }
         }

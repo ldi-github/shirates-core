@@ -146,7 +146,7 @@ wave1008@SNB-M1 ~ %
 Install UIAutomator2 driver.
 
 ```
-appium driver install uiautomator2@2.9.0
+appium driver install uiautomator2@2.12.0
 ```
 
 <br>
@@ -155,7 +155,7 @@ If you have already installed the driver, uninstall it and install it again.
 ```
 appium driver list
 appium driver uninstall uiautomator2
-appium driver install uiautomator2@2.9.0
+appium driver install uiautomator2@2.12.0
 appium driver list
 ```
 
@@ -168,7 +168,7 @@ See [Tested Environments](environments.md) to get tested version.
 Install XCUITest driver.
 
 ```
-appium driver install xcuitest
+appium driver install xcuitest@4.12.2
 ```
 
 <br>
@@ -177,7 +177,7 @@ If you have already installed the driver, uninstall it and install it again.
 ```
 appium driver list
 appium driver uninstall xcuitest
-appium driver install xcuitest@4.12.1
+appium driver install xcuitest@4.12.2
 appium driver list
 ```
 
@@ -267,18 +267,18 @@ Let's see demonstration.
 #### Console output
 
 ```
-Connected to the target VM, address: '127.0.0.1:58533', transport: 'socket'
+Connected to the target VM, address: '127.0.0.1:59302', transport: 'socket'
 lineNo	logDateTime	testCaseId	logType	group	message
-1	2022/10/14 14:36:20.789	{}	[-]	()	----------------------------------------------------------------------------------------------------
-2	2022/10/14 14:36:20.802	{}	[-]	()	///
-3	2022/10/14 14:36:20.802	{}	[-]	()	/// Shirates 1.0.2
-4	2022/10/14 14:36:20.802	{}	[-]	()	///
-5	2022/10/14 14:36:20.803	{}	[-]	()	powered by Appium (io.appium:java-client:8.1.1)
-6	2022/10/14 14:36:20.804	{}	[-]	()	----------------------------------------------------------------------------------------------------
-7	2022/10/14 14:36:20.804	{}	[info]	(parameter)	testClass: tutorial.advanced.StubProxy1
-8	2022/10/14 14:36:20.804	{}	[info]	(parameter)	sheetName: StubProxy1
-9	2022/10/14 14:36:20.804	{}	[info]	(parameter)	logLanguage: 
-10	2022/10/14 14:36:21.376	{}	[info]	()	Initializing with testRun.properties.(testConfig/android/stubExample/testrun.properties)
+1	2022/12/09 04:17:17.294	{}	[-]	()	----------------------------------------------------------------------------------------------------
+2	2022/12/09 04:17:17.307	{}	[-]	()	///
+3	2022/12/09 04:17:17.308	{}	[-]	()	/// Shirates 2.0.0
+4	2022/12/09 04:17:17.308	{}	[-]	()	///
+5	2022/12/09 04:17:17.309	{}	[-]	()	powered by Appium (io.appium:java-client:8.1.1)
+6	2022/12/09 04:17:17.309	{}	[-]	()	----------------------------------------------------------------------------------------------------
+7	2022/12/09 04:17:17.309	{}	[info]	(parameter)	testClass: demo.AndroidSettingsDemo
+8	2022/12/09 04:17:17.309	{}	[info]	(parameter)	sheetName: AndroidSettingsDemo
+9	2022/12/09 04:17:17.309	{}	[info]	(parameter)	logLanguage: 
+10	2022/12/09 04:17:17.903	{}	[info]	()	Initializing with testRun.properties.(testConfig/android/androidSettings/testrun.properties)
 ...
 ```
 

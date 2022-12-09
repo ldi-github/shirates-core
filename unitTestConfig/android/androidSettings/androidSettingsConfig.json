@@ -29,42 +29,12 @@
   },
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "platformVersion": "12",
     "language": "en",
     "locale": "US"
   },
 
   "profiles": [
-    {
-      "profileName": "Android *",
-      "capabilities": {
-      }
-    },
-    {
-      "profileName": "Android 12",
-      "capabilities": {
-        "platformVersion": "12"
-      }
-    },
-    {
-      "profileName": "Android 11",
-      "capabilities": {
-        "platformVersion": "11"
-      }
-    },
-    {
-      "profileName": "Android 7",
-      "capabilities": {
-        "platformVersion": "7"
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)",
-      "capabilities": {
-      }
-    },
     {
       "profileName": "Android/googlePixel",
       "tapAppIconMethod": "googlePixel",
@@ -95,7 +65,6 @@
       "capabilities": {
       }
     }
-
 
   ]
 

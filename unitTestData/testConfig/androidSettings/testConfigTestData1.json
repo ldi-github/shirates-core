@@ -103,8 +103,6 @@
       "#testResults" : "",
 
       "capabilities": {
-        "automationName": "UiAutomator2",
-        "platformName": "Android",
         "platformVersion": "9",
         "deviceName": "Pixel_2_API_28",
         "app": "Downloads/hoge.apk"
@@ -117,7 +115,6 @@
 
       "capabilities": {
         "automationName": "UiAutomator3",
-        "platformName": "Android",
         "platformVersion": "8.1",
         "deviceName": "Pixel"
       }

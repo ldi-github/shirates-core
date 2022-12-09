@@ -39,8 +39,6 @@ This is a sample configuration for Android apps.
   "startupActivity": "com.android.settings.Settings",
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "language": "en",
     "locale": "US"
   },
@@ -78,8 +76,6 @@ This is a sample configuration for iOS apps.
   "#startupActivity": "",
 
   "capabilities": {
-    "automationName": "XCUITest",
-    "platformName": "iOS",
     "simpleIsVisibleCheck": true,
     "useJSONSource": true,
     "showXcodeLog": true,
@@ -93,8 +89,6 @@ This is a sample configuration for iOS apps.
       "tapAppIconMethod": "",
       "tapAppIconMacro": "",
       "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13"
       }
     }
   ]

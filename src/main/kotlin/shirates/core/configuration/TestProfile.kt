@@ -347,7 +347,7 @@ class TestProfile(var profileName: String = "") {
         val value = capabilities[propertyName]?.toString() ?: capabilities["appium:$propertyName"]?.toString()
         if (value.isNullOrBlank()) {
             val avd = capabilities["avd"]?.toString() ?: capabilities["appium:avd"]?.toString()
-            if (avd != "auto" && avd.isNullOrBlank()) {
+            if (avd.isNullOrBlank()) {
                 throw TestConfigException(message(id = "required", subject = "capabilities.$propertyName"))
             }
         }
