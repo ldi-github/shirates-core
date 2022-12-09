@@ -438,12 +438,14 @@ Let's see `[Android Settings Top Screen]` as example.
 
     "[Tips & support]": "",
     "{Tips & support}": "[Tips & support]:label",
-    "[Tips & support Icon]": "[Tips & support]:leftImage"
+    "[Tips & support Icon]": "[Tips & support]:leftImage",
+
+    "[:Summary]": ":belowLabel"
   },
 
   "scroll": {
-    "start-elements": "",
-    "end-elements": "[Tips & support]",
+    "start-elements": "[Network & internet]",
+    "end-elements": "{Tips & support}",
     "overlay-elements": "[Search Button][Search settings]"
   }
 }

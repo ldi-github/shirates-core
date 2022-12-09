@@ -14,6 +14,12 @@ Screen nickname is for app views.
 {
   "key": "[Calculator Main Screen]",
 
+  "screens": {
+    "import": [
+      "testConfig/android/misc/screens"
+    ]
+  },
+
   "identity": "[AC][()]",
 
   "selectors": {
@@ -47,7 +53,12 @@ Screen nickname is for app views.
     "[7]": "#digit_7",
     "[8]": "#digit_8",
     "[9]": "#digit_9",
-    "[.]": "#dec_point"
+    "[.]": "#dec_point",
+
+    "[:Right button]": ":rightButton",
+    "[:Below button]": ":belowButton",
+    "[:Left button]": ":leftButton",
+    "[:Above button]": ":aboveButton"
   }
 
 }
@@ -162,11 +173,13 @@ Screen nickname is for app views.
 
     "[Tips & support]": "",
     "{Tips & support}": "[Tips & support]:label",
-    "[Tips & support Icon]": "[Tips & support]:leftImage"
+    "[Tips & support Icon]": "[Tips & support]:leftImage",
+
+    "[:Summary]": ":belowLabel"
   },
 
   "scroll": {
-    "start-elements": "",
+    "start-elements": "[Network & internet]",
     "end-elements": "{Tips & support}",
     "overlay-elements": "[Search Button][Search settings]"
   }

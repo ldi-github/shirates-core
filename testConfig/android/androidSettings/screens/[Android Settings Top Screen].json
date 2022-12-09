@@ -89,7 +89,9 @@
 
     "[Tips & support]": "",
     "{Tips & support}": "[Tips & support]:label",
-    "[Tips & support Icon]": "[Tips & support]:leftImage"
+    "[Tips & support Icon]": "[Tips & support]:leftImage",
+
+    "[:Summary]": ":belowLabel"
   },
 
   "scroll": {

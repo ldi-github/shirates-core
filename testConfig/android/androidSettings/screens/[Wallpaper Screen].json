@@ -1,0 +1,50 @@
+{
+  "key": "[Wallpaper Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Wallpaper",
+
+  "selectors": {
+    "[Wallpaper Preview]": "@Wallpaper preview",
+
+    "[Indicator Container]": "#indicator_container",
+    "[Page Indicator]": "#page_indicator",
+    "[Page1 Image]": "[Page Indicator]:child(1)",
+    "[Page2 Image]": "[Page Indicator]:child(2)",
+    "[Arrow Next]": "#arrow_next",
+
+    "[My photos]": "",
+    "[My photos Image]": "[My photos]:belowImage",
+
+    "[Living Universe]": "",
+    "[Living Universe Image]": "[Living Universe]:belowImage",
+
+    "[Come Alive]": "",
+    "[Come Alive Image]": "[Come Alive]:belowImage",
+
+    "[Landscapes]": "",
+    "[Landscapes Image": "[Landscapes]:belowImage",
+
+    "[Textures]": "",
+    "[Textures Image]": "[Textures]:belowImage",
+
+    "[Life]": "",
+    "[Life Image]": "[Life]:belowImage",
+
+    "[Earth]": "",
+    "[Earth Image]": "[Earth]:belowImage",
+
+    "[Art]": "",
+    "[Art Image]": "[Art]:belowImage",
+
+    "[Cityscapes]": "",
+    "[Cityscapes Image]": "[Cityscapes]:belowImage",
+
+
+    "[Wallpaper]": "#nav_wallpaper",
+    "[Grid]": "#nav_grid"
+  }
+
+}

@@ -1,0 +1,17 @@
+{
+  "key": "[Maps Go Screen]",
+
+  "include": [
+    "[Maps Footer Menu(shared)]"
+  ],
+
+  "identity": "[search_omnibox_container not exist][Explore Tab][Go Tab][Saved Tab][Contribute Tab][Updates Tab]",
+
+  "selectors": {
+
+    "[map_frame]": "#map_frame",
+    "[search_omnibox_container not exist]": "!#search_omnibox_container",
+    "[below_search_omnibox_container]": "#below_search_omnibox_container"
+  }
+
+}

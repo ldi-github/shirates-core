@@ -47,46 +47,66 @@ fun select() {
     scenario {
         case(1) {
             condition {
-                it.macro("[Timer Screen]")
+                it.macro("[Calculator Main Screen]")
             }.expectation {
-                it.select("<1>:rightButton").textIs("2")
-                it.select("<1>:rightButton:rightButton").textIs("3")
-                it.select("<1>:rightButton(2)").textIs("3")
-                it.select("[1]:rightButton(2)").textIs("3")
+                it.select("<@1>:rightButton").accessIs("2")
+                it.select("<@1>:rightButton:rightButton").accessIs("3")
+                it.select("<@1>:rightButton(2)").accessIs("3")
+                it.select("[1]:rightButton(2)").accessIs("3")
             }
         }
     }
 }
 ```
 
-### [Timer Screen].json
+### [Calculator Main Screen].json
 
-(`testConfig/android/clock/screens/[Timer Screen].json`)
+(`testConfig/android/calculator/screens/[Calculator Main Screen].json`)
 
 ```
 {
-  "key": "[Timer Screen]",
+  "key": "[Calculator Main Screen]",
 
-  "include": [
-    "[Clock(shared)]"
-  ],
+  "screens": {
+    "import": [
+      "testConfig/android/misc/screens"
+    ]
+  },
 
-  "identity": "~title=Timer",
+  "identity": "[AC][()]",
 
   "selectors": {
-    "[Timer setup time]": "#timer_setup_time",
-    "[1]": "#timer_setup_digit_1",
-    "[2]": "#timer_setup_digit_2",
-    "[3]": "#timer_setup_digit_3",
-    "[4]": "#timer_setup_digit_4",
-    "[5]": "#timer_setup_digit_5",
-    "[6]": "#timer_setup_digit_6",
-    "[7]": "#timer_setup_digit_7",
-    "[8]": "#timer_setup_digit_8",
-    "[9]": "#timer_setup_digit_9",
-    "[00]": "#timer_setup_digit_00",
-    "[0]": "#timer_setup_digit_0",
-    "[Delete]": "#timer_setup_delete",
+    "[formula]": "#formula",
+    "[result final]": "#result_final",
+    "[result preview]": "#result_preview",
+
+    "[√]": "#op_sqrt",
+    "[π]": "#const_pi",
+    "[^]": "#op_pow",
+    "[!]": "#op_fact",
+
+    "[AC]": "#clr",
+    "[()]": "#parens",
+    "[%]": "#op_pct",
+
+    "[÷]": "#op_div",
+    "[×]": "#op_mul",
+    "[-]": "#op_sub",
+    "[+]": "#op_add",
+    "[=]": "#eq",
+    "[⌫]": "#del",
+
+    "[0]": "#digit_0",
+    "[1]": "#digit_1",
+    "[2]": "#digit_2",
+    "[3]": "#digit_3",
+    "[4]": "#digit_4",
+    "[5]": "#digit_5",
+    "[6]": "#digit_6",
+    "[7]": "#digit_7",
+    "[8]": "#digit_8",
+    "[9]": "#digit_9",
+    "[.]": "#dec_point",
 
     "[:Right button]": ":rightButton",
     "[:Below button]": ":belowButton",
@@ -122,28 +142,28 @@ fun select_with_nickname() {
     scenario {
         case(1) {
             condition {
-                it.macro("[Timer Screen]")
+                it.macro("[Calculator Main Screen]")
             }.expectation {
-                it.select("<1>[:Right button]").textIs("2")
-                it.select("[1][:Below button]").textIs("4")
-                it.select("[1]:rightButton(2)[:Left button]").textIs("2")
+                it.select("<@1>[:Right button]").accessIs("2")
+                it.select("[1][:Below button]").accessIs("0")
+                it.select("[1]:rightButton(2)[:Left button]").accessIs("2")
             }
         }
         case(2) {
             expectation {
-                it.select("[5]").select("[:Right button]").textIs("6")
-                it.select("[5]").select("[:Below button]").textIs("8")
-                it.select("[5]").select("[:Left button]").textIs("4")
-                it.select("[5]").select("[:Above button]").textIs("2")
+                it.select("[5]").select("[:Right button]").accessIs("6")
+                it.select("[5]").select("[:Below button]").accessIs("2")
+                it.select("[5]").select("[:Left button]").accessIs("4")
+                it.select("[5]").select("[:Above button]").accessIs("8")
             }
         }
         case(3) {
             expectation {
                 it.select("[5]").apply {
-                    select("[:Right button]").textIs("6")
-                    select("[:Below button]").textIs("8")
-                    select("[:Left button]").textIs("4")
-                    select("[:Above button]").textIs("2")
+                    select("[:Right button]").accessIs("6")
+                    select("[:Below button]").accessIs("2")
+                    select("[:Left button]").accessIs("4")
+                    select("[:Above button]").accessIs("8")
                 }
             }
         }
