@@ -287,7 +287,8 @@ object TestDriver {
             }
         } else {
             e.lastResult = LogType.NG
-            e.lastError = TestDriverException(message(id = "imageNotFound", subject = e.selector.toString()))
+            val selectorString = "${e.selector} ($currentScreen})"
+            e.lastError = TestNGException(message = assertMessage, cause = TestDriverException(selectorString))
         }
     }
 

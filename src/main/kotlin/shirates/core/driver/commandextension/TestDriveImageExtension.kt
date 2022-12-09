@@ -429,7 +429,7 @@ internal fun imageAssertionCoreCore(
             val templateImageFileName = "${TestLog.lines.count()}_template_image"
             expectedSelector.templateImage?.saveImage("${TestLog.directoryForLog.resolve(templateImageFileName)}")
 
-            TestDriver.lastElement.lastError = TestNGException("$assertMessage $matchResult")
+            TestDriver.lastElement.lastError = TestNGException("$assertMessage ($matchResult)")
             throw TestDriver.lastElement.lastError!!
         }
     }
