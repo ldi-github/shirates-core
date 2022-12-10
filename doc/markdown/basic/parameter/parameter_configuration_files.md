@@ -198,6 +198,24 @@ In **testConfig** file, you can set test **profiles** for test devices and `desi
   "startupPackageOrBundleId": "com.android.settings",
   "startupActivity": "com.android.settings.Settings",
 
+  "settings": {
+    "always_finish_activities": "0"
+  },
+
+  "dataset": {
+    "accounts": "testConfig/android/androidSettings/dataset/accounts.json",
+    "apps": "testConfig/android/androidSettings/dataset/apps.json",
+    "data": "testConfig/android/androidSettings/dataset/data.json"
+  },
+
+  "screens": {
+    "import": [
+      "testConfig/android/calculator/screens",
+      "testConfig/android/misc/screens",
+      "testConfig/android/playStore/screen"
+    ]
+  },
+
   "capabilities": {
     "language": "en",
     "locale": "US"
@@ -207,14 +225,37 @@ In **testConfig** file, you can set test **profiles** for test devices and `desi
     {
       "profileName": "Android 12",
       "capabilities": {
-        "platformVersion": "12",
+        "platformVersion": "12"
       }
     },
     {
-      "profileName": "Pixel 3a(Android 12)",
+      "profileName": "Android 13",
       "capabilities": {
+        "platformVersion": "13"
+      }
+    },
+    {
+      "profileName": "Android 12 with Tag1",
+      "specialTags": "Tag1",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+    {
+      "profileName": "Android 12 with Tat2 & Tag3",
+      "specialTags": "Tag2, Tag3",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+
+    {
+      "profileName": "emulator-5556",
+      "capabilities": {
+        "udid": "emulator-5556"
       }
     }
+
   ]
 
 }

@@ -28,20 +28,6 @@
   },
 
   "profiles": [
-    {
-      "profileName": "Android 12",
-      "specialTags": "Tag1",
-      "capabilities": {
-      }
-    },
-    {
-      "profileName": "Pixel 3a(Android 12)",
-      "specialTags": "Tag2, Tag3",
-      "capabilities": {
-      }
-    }
-
-
   ]
 
 }

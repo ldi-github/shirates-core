@@ -4,7 +4,7 @@ Shirates outputs test result files at the end of test.
 
 ## Running sample
 
-1. Open `kotlin/demo/` in shirates-core project.
+1. Open `src/test/kotlin/demo/` in shirates-core project.
 2. Right click `AndroidSettingsDemo` and run.
 
 ## TestResults directory

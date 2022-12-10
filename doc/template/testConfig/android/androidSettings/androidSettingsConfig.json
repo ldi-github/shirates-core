@@ -1,28 +1,36 @@
 {
   "testConfigName": "androidSettingsConfig",
+
   "appIconName": "Settings",
+
   "packageOrBundleId": "com.android.settings",
   "startupPackageOrBundleId": "com.android.settings",
   "startupActivity": "com.android.settings.Settings",
+
   "settings": {
     "always_finish_activities": "0"
   },
+
   "capabilities": {
     "language": "en",
     "locale": "US"
   },
+
   "profiles": [
     {
       "profileName": "Android 12",
-      "platformVersion": "12",
-      "specialTags": "Tag1",
       "capabilities": {
       }
     },
     {
-      "profileName": "Pixel 3a(Android 12)",
-      "specialTags": "Tag2, Tag3",
+      "profileName": "Android 13",
       "capabilities": {
+      }
+    },
+    {
+      "profileName": "emulator-5556",
+      "capabilities": {
+        "udid": "emulator-5556"
       }
     }
   ]
