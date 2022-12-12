@@ -16,23 +16,31 @@ import shirates.core.logging.TestLog
  */
 object StubProxy {
 
-    var profile: String? = null
+    var activeProfile: String = ""
 
     /**
      * isProfileActivated
      */
     val isProfileActivated: Boolean
         get() {
-            return profile.isNullOrBlank().not()
+            return activeProfile.isNotBlank()
         }
 
     /**
-     * activateProfile
+     * setActiveProfile
      */
-    fun activateProfile(profile: String): String {
+    fun setActiveProfile(profile: String): String {
 
-        this.profile = profile
-        return this.profile!!
+        this.activeProfile = profile
+        return this.activeProfile
+    }
+
+    /**
+     * clearActiveProfile
+     */
+    fun clearActiveProfile() {
+
+        this.activeProfile = ""
     }
 
     /**
@@ -49,11 +57,7 @@ object StubProxy {
                 .addQueryParameter("instanceKey", instanceKey)
                 .addQueryParameter("profile", profile)
         val url = builder.build()
-        val stubProxyResponse = request(url)
-        if (stubProxyResponse.code == 200) {
-            activateProfile(profile = profile)
-        }
-        return stubProxyResponse
+        return request(url)
     }
 
     /**
@@ -92,7 +96,7 @@ object StubProxy {
      * resetInstance
      */
     fun resetInstance(
-        profile: String? = this.profile
+        profile: String? = this.activeProfile
     ): StubProxyResponse {
 
         if (TestMode.isNoLoadRun) {
@@ -126,7 +130,7 @@ object StubProxy {
         val url = builder.build()
         val stubProxyResponse = request(url)
         if (stubProxyResponse.code == 200) {
-            this.profile = null
+            this.clearActiveProfile()
         }
         return stubProxyResponse
     }
@@ -135,7 +139,7 @@ object StubProxy {
      * resetDataPattern
      */
     fun resetDataPattern(
-        profile: String? = this.profile
+        profile: String? = this.activeProfile
     ): StubProxyResponse {
 
         if (TestMode.isNoLoadRun) {
@@ -156,7 +160,7 @@ object StubProxy {
      * listDataPattern
      */
     fun listDataPattern(
-        profile: String? = this.profile
+        profile: String? = this.activeProfile
     ): StubProxyResponse {
 
         if (TestMode.isNoLoadRun) {
@@ -179,7 +183,7 @@ object StubProxy {
     fun setDataPattern(
         urlPathOrApiName: String,
         dataPatternName: String,
-        profile: String? = this.profile
+        profile: String? = this.activeProfile
     ): StubProxyResponse {
 
         if (TestMode.isNoLoadRun) {
@@ -202,7 +206,7 @@ object StubProxy {
      */
     fun getDataPattern(
         urlPathOrApiName: String,
-        profile: String? = this.profile
+        profile: String? = this.activeProfile
     ): StubProxyResponse {
 
         if (TestMode.isNoLoadRun) {
