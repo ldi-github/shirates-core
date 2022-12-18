@@ -72,7 +72,7 @@ See [shirates-stub](https://github.com/ldi-github/shirates-stub.git).
 }
 ```
 
-Or you can set `stubServerUrl` in testrun file if you like.
+Instead of using testConfig.json file, you can set `stubServerUrl` in testrun file.
 
 ```
 ## Stub --------------------

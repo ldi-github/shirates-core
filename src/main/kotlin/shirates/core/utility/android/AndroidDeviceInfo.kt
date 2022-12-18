@@ -9,7 +9,7 @@ class AndroidDeviceInfo(val line: String) {
     val status: String
     val info: String
     val map = mutableMapOf<String, String>()
-    var version: String = ""
+    var platformVersion: String = ""
         internal set(value) {
             field = value
         }
@@ -93,7 +93,7 @@ class AndroidDeviceInfo(val line: String) {
 
     var shellResult: ShellUtility.ShellResult? = null
 
-    val emulatorTitle: String
+    val avdNameAndPort: String
         get() {
             if (isEmulator) {
                 return "${avdName}:${port}"
@@ -101,21 +101,7 @@ class AndroidDeviceInfo(val line: String) {
             return ""
         }
 
-    val description: String
-        get() {
-            val params = mutableListOf<String>()
-            if (isEmulator) {
-                params.add(emulatorTitle)
-            } else {
-                params.add(model)
-            }
-            params.add("Android ${version}")
-            if (udid.isNotBlank()) {
-                params.add(udid)
-            }
-
-            return params.joinToString(", ")
-        }
+    var message: String = ""
 
     init {
 
@@ -165,6 +151,6 @@ class AndroidDeviceInfo(val line: String) {
     }
 
     override fun toString(): String {
-        return "$line Android:$version"
+        return "$line Android:$platformVersion"
     }
 }

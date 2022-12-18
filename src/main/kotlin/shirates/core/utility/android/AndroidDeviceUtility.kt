@@ -1,10 +1,11 @@
 package shirates.core.utility.android
 
 import shirates.core.Const
+import shirates.core.configuration.ProfileNameParser
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.Message
+import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
@@ -65,7 +66,7 @@ object AndroidDeviceUtility {
                 }
                 if (deviceInfo.status.isNotBlank()) {
                     if (deviceInfo.udid.isNotBlank()) {
-                        deviceInfo.version = getAndroidVersion(udid = deviceInfo.udid)
+                        deviceInfo.platformVersion = getAndroidVersion(udid = deviceInfo.udid)
                     }
                     list.add(deviceInfo)
                 }
@@ -120,46 +121,135 @@ object AndroidDeviceUtility {
         return getActiveDeviceInfo(testProfile)
     }
 
+    private fun String.escapeModel(): String {
+
+        return this.replace(" ", "_").replace("-", "_")
+    }
+
+    /**
+     * getActiveDeviceInfo
+     */
     fun getActiveDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo {
+
         val deviceList = getAndroidDeviceList()
-        if (testProfile.udid.isNotBlank()) {
-            // Select the device by udid
-            val deviceByUdid = deviceList.firstOrNull { it.udid == testProfile.udid }
-            if (deviceByUdid != null) {
-                return deviceByUdid
+            .sortedWith(compareBy<AndroidDeviceInfo> { it.platformVersion.toDoubleOrNull() ?: Double.MAX_VALUE }
+                .thenBy { it.udid })
+        val parser = ProfileNameParser(testProfile.profileName)
+
+        /**
+         * by platformVersion
+         *
+         * android.profile=12
+         */
+        val platformVersion = testProfile.platformVersion.replace("*", "")
+            .ifBlank { parser.osVersion }
+        if (parser.model.isBlank() && platformVersion.isNotBlank()) {
+            val devices = deviceList.filter { it.platformVersion.lowercase() == platformVersion.lowercase() }
+            val firstRealDevice = devices.firstOrNull() { it.isRealDevice }
+            if (firstRealDevice != null) {
+                return firstRealDevice
             }
-            val msg = Message.message(id = "couldNotFindConnectedAndroidDeviceByUdid", subject = testProfile.udid)
-            throw TestDriverException(msg)
-        } else if (testProfile.platformVersion.isBlank() || testProfile.platformVersion == "*") {
-            // Select real device
-            val realDevices = deviceList.filter { it.isRealDevice }.sortedBy { it.udid }
-            if (realDevices.any()) {
-                return realDevices.first()
+            val firstEmulator = devices.firstOrNull() { it.isEmulator }
+            if (firstEmulator != null) {
+                return firstEmulator
             }
-            // Select the device that port number is smallest
-            val deviceBySmallestPort = deviceList.minByOrNull { it.port }
-            if (deviceBySmallestPort != null) {
-                return deviceBySmallestPort
-            }
-            throw TestDriverException(Message.message(id = "couldNotFindConnectedAndroidDevice"))
-        } else {
-            // Select a device by platform version
-            val version = testProfile.platformVersion
-            val devices = deviceList.filter { it.version == version }
-            val realDevices = devices.filter { it.isRealDevice }.sortedBy { it.udid }
-            if (realDevices.any()) {
-                return realDevices.first()
-            }
-            val emulators = devices.filter { it.isEmulator }.sortedBy { it.udid }
-            if (emulators.any()) {
-                return emulators.first()
-            }
-            val msg = Message.message(
-                id = "couldNotFindConnectedAndroidDeviceByVersion",
-                subject = testProfile.platformVersion
+            val msg = message(
+                id = "couldNotFindConnectedDeviceByVersion",
+                subject = platformVersion
             )
             throw TestDriverException(msg)
         }
+
+        /**
+         * by model and platformVersion
+         *
+         * android.profile=sdk_gphone64_arm64(Android 12)
+         * android.profile=Pixel 3a(Android 12)
+         * android.profile=Pixel 4a(13)
+         * android.profile=Pixel_4a(13)
+         */
+        val model = parser.model.ifBlank { testProfile.profileName }
+        if (model.isNotBlank() && platformVersion.isNotBlank() && model != platformVersion) {
+            val devices = deviceList.filter {
+                it.model.escapeModel().lowercase() == model.escapeModel().lowercase()
+                        && it.platformVersion.lowercase() == platformVersion.lowercase()
+            }
+            val firstRealDevice = devices.firstOrNull() { it.isRealDevice }
+            if (firstRealDevice != null) {
+                return firstRealDevice
+            }
+            val firstEmulator = devices.firstOrNull() { it.isEmulator }
+            if (firstEmulator != null) {
+                return firstEmulator
+            }
+            val msg = message(
+                id = "couldNotFindConnectedDeviceByModelAndVersion",
+                arg1 = model,
+                arg2 = platformVersion
+            )
+            throw TestDriverException(msg)
+        }
+
+        /**
+         * by model
+         *
+         * android.profile=sdk_gphone64_arm64
+         * android.profile=Pixel 3a
+         * android.profile=pixel_3a
+         */
+        if (model.isNotBlank()) {
+            val devices = deviceList.filter { it.model.escapeModel().lowercase() == model.escapeModel().lowercase() }
+            val lastRealDevice = devices.lastOrNull() { it.isRealDevice }
+            if (lastRealDevice != null) {
+                return lastRealDevice
+            }
+            val lastEmulator = devices.lastOrNull() { it.isEmulator }
+            if (lastEmulator != null) {
+                return lastEmulator
+            }
+        }
+
+        /**
+         * by udid
+         *
+         * android.profile=emulator-5554
+         * android.profile=93MAY0CY1M
+         */
+        val udid = testProfile.udid.ifBlank { parser.udid }
+        if (udid.isNotBlank()) {
+            // Select the device by udid
+            val deviceByUdid = deviceList.firstOrNull { it.udid.lowercase() == udid.lowercase() }
+            if (deviceByUdid != null) {
+                return deviceByUdid
+            }
+            if (testProfile.udid.isNotBlank()) {
+                val msg = message(id = "couldNotFindConnectedDeviceByUdid", subject = udid)
+                throw TestDriverException(msg)
+            }
+        }
+
+        // Select real device
+        val realDevices = deviceList.filter { it.isRealDevice }
+            .sortedBy { it.platformVersion.toDoubleOrNull() ?: Double.MAX_VALUE }
+        if (realDevices.any()) {
+            val latestVersion = realDevices.last().platformVersion
+            val latestVersionDevices = realDevices.filter { it.platformVersion == latestVersion }.sortedBy { it.udid }
+            val realDevice = latestVersionDevices.first()
+            realDevice.message = message(id = "couldNotFindConnectedDeviceByProfile", subject = testProfile.profileName)
+            return realDevice
+        }
+
+        // Select emulator
+        val emulators = deviceList.filter { it.isEmulator }.sortedBy { it.platformVersion }
+        if (emulators.any()) {
+            val latestVersion = emulators.last().platformVersion
+            val lastVersionEmulators = emulators.filter { it.platformVersion == latestVersion }.sortedBy { it.udid }
+            val emulator = lastVersionEmulators.first()
+            emulator.message = message(id = "couldNotFindConnectedDeviceByProfile", subject = testProfile.profileName)
+            return emulator
+        }
+
+        throw TestDriverException(message(id = "couldNotFindConnectedDevice"))
     }
 
     /**

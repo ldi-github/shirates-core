@@ -278,21 +278,24 @@ abstract class UITest : TestDrive {
             if (isAndroid) {
                 val androidDeviceInfo =
                     AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = testContext.profile)
-
-                val deviceLabel =
-                    if (androidDeviceInfo.emulatorTitle.isNotBlank()) androidDeviceInfo.emulatorTitle
-                    else androidDeviceInfo.model
-                val subject = "${deviceLabel}, Android ${androidDeviceInfo.version}, ${androidDeviceInfo.udid}"
-                TestLog.info(message(id = "deviceFound", subject = subject))
+                if (androidDeviceInfo.message.isNotBlank()) {
+                    TestLog.info(androidDeviceInfo.message)
+                }
+                val deviceLabel = androidDeviceInfo.avdNameAndPort.ifBlank { androidDeviceInfo.model }
+                val subject = "${deviceLabel}, Android ${androidDeviceInfo.platformVersion}, ${androidDeviceInfo.udid}"
+                TestLog.info(message(id = "connectedDeviceFound", subject = subject))
 
                 if (androidDeviceInfo.isEmulator) {
                     profile.avd = androidDeviceInfo.avdName
                 }
-                profile.platformVersion = androidDeviceInfo.version
+                profile.platformVersion = androidDeviceInfo.platformVersion
                 profile.udid = androidDeviceInfo.udid
-                profile.platformVersion = androidDeviceInfo.version
+                profile.platformVersion = androidDeviceInfo.platformVersion
             } else if (isiOS) {
                 val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
+                if (iosDeviceInfo.message.isNotBlank()) {
+                    TestLog.info(iosDeviceInfo.message)
+                }
                 val subject =
                     "${iosDeviceInfo.devicename}, iOS ${iosDeviceInfo.platformVersion}, ${iosDeviceInfo.udid}"
                 TestLog.info(message(id = "deviceFound", subject = subject))
@@ -303,11 +306,19 @@ abstract class UITest : TestDrive {
 
             // Complete profile
             if (isAndroid) {
-                profile.automationName = "UiAutomator2"
-                profile.platformName = "Android"
+                if (profile.automationName.isBlank()) {
+                    profile.automationName = "UiAutomator2"
+                }
+                if (profile.platformName.isBlank()) {
+                    profile.platformName = "Android"
+                }
             } else {
-                profile.automationName = "XCUITest"
-                profile.platformName = "iOS"
+                if (profile.automationName.isBlank()) {
+                    profile.automationName = "XCUITest"
+                }
+                if (profile.platformName.isBlank()) {
+                    profile.platformName = "iOS"
+                }
             }
             profile.validate()
 

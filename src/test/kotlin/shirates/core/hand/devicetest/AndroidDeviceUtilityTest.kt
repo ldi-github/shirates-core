@@ -2,9 +2,12 @@ package shirates.core.hand.devicetest
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.testcode.UITest
 import shirates.core.utility.android.AndroidDeviceUtility
 
-class AndroidDeviceUtilityTest {
+@Testrun(testrunFile = "unitTestConfig/android/androidSettings/androidDeviceUtilityTest.properties")
+class AndroidDeviceUtilityTest : UITest() {
 
     @Test
     fun getAvdName() {

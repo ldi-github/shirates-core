@@ -168,7 +168,7 @@ See [Tested Environments](environments.md) to get tested version.
 Install XCUITest driver.
 
 ```
-appium driver install xcuitest@4.12.2
+appium driver install xcuitest@4.15.1
 ```
 
 <br>
@@ -177,7 +177,7 @@ If you have already installed the driver, uninstall it and install it again.
 ```
 appium driver list
 appium driver uninstall xcuitest
-appium driver install xcuitest@4.12.2
+appium driver install xcuitest@4.15.1
 appium driver list
 ```
 

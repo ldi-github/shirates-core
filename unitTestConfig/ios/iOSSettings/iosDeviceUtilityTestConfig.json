@@ -1,0 +1,34 @@
+{
+  "testConfigName": "iosDeviceUtilityTestConfig",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.apple.Preferences",
+
+  "startupPackageOrBundleId": "com.apple.Preferences",
+
+  "capabilities": {
+    "simpleIsVisibleCheck": true,
+    "useJSONSource": true,
+    "appium:showXcodeLog": true,
+    "bundleId": "com.apple.Preferences",
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "real device",
+      "capabilities": {
+        "udid": "80da80b8002e31e5ec8b1a0085a7e3c64d8b2d51"
+      }
+    },
+    {
+      "profileName": "real device(not exist udid)",
+      "capabilities": {
+        "udid": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+
+  ]
+}

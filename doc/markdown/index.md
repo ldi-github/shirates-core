@@ -57,6 +57,7 @@
 - [Parameter configuration files](basic/parameter/parameter_configuration_files.md)
 - [Parameters](basic/parameter/parameters.md)
 - [Profile configuration](basic/parameter/profile_configuration.md)
+- [Automatic device detection](basic/parameter/automatic_device_detection.md) **(New! 2.0.0)**
 
 ### Function/Property
 

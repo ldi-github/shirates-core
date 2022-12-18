@@ -7,9 +7,9 @@ import shirates.core.utility.ios.IosDeviceUtility
 class IosDeviceUtilityTest {
 
     @Test
-    fun getBootedIosDeviceList() {
+    fun getBootedSimulatorDeviceList() {
 
-        val list = IosDeviceUtility.getBootedIosDeviceList()
+        val list = IosDeviceUtility.getBootedSimulatorDeviceList()
         list.forEach {
             println(it)
         }

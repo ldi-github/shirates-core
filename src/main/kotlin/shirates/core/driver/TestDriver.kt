@@ -585,7 +585,7 @@ object TestDriver {
                 false
             } else if (message.contains("Could not find a connected Android device")) {
                 context.wrappedError = TestEnvironmentException(
-                    message = message(id = "couldNotFindConnectedAndroidDevice", arg1 = profile.profileName),
+                    message = message(id = "couldNotFindConnectedDevice", arg1 = profile.profileName),
                     cause = context.exception
                 )
                 true

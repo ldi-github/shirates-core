@@ -1,9 +1,9 @@
 package shirates.core.utility.ios
 
 class IosDeviceInfo(val platformVersion: String, val line: String) {
-    var devicename: String
-    var udid: String
-    var status: String
+    lateinit var devicename: String
+    lateinit var udid: String
+    lateinit var status: String
 
     val isSimulator: Boolean
         get() {
@@ -19,7 +19,18 @@ class IosDeviceInfo(val platformVersion: String, val line: String) {
             return isSimulator.not()
         }
 
+    var message = ""
+    var modelSortKey: Double? = null
+
     init {
+        parse(line = line)
+    }
+
+    private fun parse(line: String) {
+
+        if (line.isBlank()) {
+            return
+        }
 
         val regex = "[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}".toRegex()
         val match = regex.find(line)
@@ -33,6 +44,13 @@ class IosDeviceInfo(val platformVersion: String, val line: String) {
             devicename = ""
             udid = ""
             status = ""
+        }
+
+        if (devicename.contains("nd generation")) {
+            modelSortKey = 0.0
+        } else {
+            val matchResult = "[0-9]+".toRegex().find(devicename)
+            modelSortKey = matchResult?.value?.toDoubleOrNull()
         }
     }
 

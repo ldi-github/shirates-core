@@ -26,7 +26,7 @@ class AndroidDeviceInfoTest {
             assertThat(a.device).isEqualTo("emulator64_arm64")
             assertThat(a.transportId).isEqualTo("98")
 
-            assertThat(a.version).isEqualTo("")
+            assertThat(a.platformVersion).isEqualTo("")
             assertThat(a.pid).isEqualTo("")
             assertThat(a.psResult).isEqualTo("")
             assertThat(a.cmd).isEqualTo("")
@@ -45,7 +45,7 @@ class AndroidDeviceInfoTest {
             assertThat(a.device).isEqualTo("")
             assertThat(a.transportId).isEqualTo("99")
 
-            assertThat(a.version).isEqualTo("")
+            assertThat(a.platformVersion).isEqualTo("")
             assertThat(a.pid).isEqualTo("")
             assertThat(a.psResult).isEqualTo("")
             assertThat(a.cmd).isEqualTo("")
@@ -69,7 +69,7 @@ class AndroidDeviceInfoTest {
             assertThat(a.device).isEqualTo("sargo")
             assertThat(a.transportId).isEqualTo("72")
 
-            assertThat(a.version).isEqualTo("")
+            assertThat(a.platformVersion).isEqualTo("")
             assertThat(a.pid).isEqualTo("")
             assertThat(a.psResult).isEqualTo("")
             assertThat(a.cmd).isEqualTo("")

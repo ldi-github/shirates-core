@@ -83,7 +83,7 @@ object DeviceListUtility {
     }
 
     private fun getIosDeviceInfoList(list: MutableList<DeviceInfo>) {
-        val iosDevices = IosDeviceUtility.getBootedIosDeviceList()
+        val iosDevices = IosDeviceUtility.getBootedSimulatorDeviceList()
         for (iosDeviceInfo in iosDevices) {
             val deviceInfo = DeviceInfo()
             deviceInfo.iosDeviceInfo = iosDeviceInfo
