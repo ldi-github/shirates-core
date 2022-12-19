@@ -2,12 +2,12 @@ package shirates.spec.report.models
 
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
+import shirates.core.exception.TestConfigException
+import shirates.core.logging.Message.message
 import shirates.spec.report.entity.SpecReportData
 import shirates.spec.utilily.cells
 import shirates.spec.utilily.rows
 import shirates.spec.utilily.saveAs
-import shirates.core.exception.TestConfigException
-import shirates.core.logging.Message.message
 
 class SpecWriter(val specReport: SpecReport) {
 
@@ -119,8 +119,8 @@ class SpecWriter(val specReport: SpecReport) {
                     row.setString("column.target", sp.colTarget, specLine.target)
                     row.setString("column.expectation", sp.colExpectation, specLine.expectation)
                     val os =
-                        if (specLine.os == "android") "Android"
-                        else if (specLine.os == "ios") "iOS"
+                        if (specLine.os.lowercase() == "android") "Android"
+                        else if (specLine.os.lowercase() == "ios") "iOS"
                         else ""
                     row.setString("column.os", sp.colOS, os)
                     row.setString("column.special", sp.colSpecial, specLine.special)

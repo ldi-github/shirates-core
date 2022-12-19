@@ -15,7 +15,7 @@ private fun TestElement.filterCandidates(
     val sel = selector.copy()
     if (sel.className == null) {
         val widgetTypes = ElementCategoryExpressionUtility.widgetTypesExpression
-        sel.filterMap["className"] = shirates.core.configuration.Filter("className=$widgetTypes")
+        sel.filterMap["className"] = Filter("className=$widgetTypes")
     }
 
     val filtered = targetElements

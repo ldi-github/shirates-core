@@ -4,6 +4,7 @@ import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper.swipeLeftAndTapAppIcon
 import shirates.core.driver.befavior.TapHelper.tapAppIconAsGooglePixel
@@ -19,7 +20,8 @@ fun TestDrive?.tapAppIcon(
 ): TestElement {
 
     val command = "tapAppIcon"
-    val message = message(id = command, subject = "<${appIconName}>")
+    val subject = if (isNoLoadRun && appIconName == testContext.appIconName) "" else "<${appIconName}>"
+    val message = message(id = command, subject = subject)
     val context = TestDriverCommandContext(rootElement)
     context.execOperateCommand(command = command, message = message, subject = appIconName) {
 

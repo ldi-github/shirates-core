@@ -348,6 +348,7 @@ abstract class UITest : TestDrive {
         message: String = message(id = "SKIP_CASE")
     ) {
         if (TestMode.isNoLoadRun) {
+            TestLog.skipCase(message)
             return
         }
         driver.screenshotCore()
@@ -363,6 +364,7 @@ abstract class UITest : TestDrive {
         message: String = message(id = "SKIP_SCENARIO")
     ) {
         if (TestMode.isNoLoadRun) {
+            TestLog.skipScenario(message)
             return
         }
         driver.screenshotCore()
