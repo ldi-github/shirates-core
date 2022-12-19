@@ -1,4 +1,4 @@
-package shirates.core.unittest.utility.sync
+package shirates.core.unittest.utility.time
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package shirates.core.unittest.utility.sync
+package shirates.core.unittest.utility.time
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -30,9 +30,9 @@ class LapEntryTest : UnitTest() {
             assertThat(entry.lastLapTime).isEqualTo(lastLapDate.time)
             assertThat(entry.lapTime).isEqualTo(lapDate.time)
             assertThat(entry.elapsedMilliSeconds).isEqualTo(lapDate.time - startDate.time)
-            assertThat(entry.elapsedSeconds).isEqualTo(entry.elapsedMilliSeconds / 1000)
+            assertThat(entry.elapsedSeconds).isEqualTo(entry.elapsedMilliSeconds.toDouble() / 1000)
             assertThat(entry.durationMilliSeconds).isEqualTo(lapDate.time - lastLapDate.time)
-            assertThat(entry.durationSeconds).isEqualTo(entry.durationMilliSeconds / 1000)
+            assertThat(entry.durationSeconds).isEqualTo(entry.durationMilliSeconds.toDouble() / 1000)
         }
     }
 
