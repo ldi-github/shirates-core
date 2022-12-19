@@ -28,18 +28,16 @@ import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.storage.app
 import shirates.core.testcode.CAEPattern
+import shirates.core.utility.android.AdbUtility
+import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
-import shirates.core.utility.getCapabilityRelaxed
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
-import shirates.core.utility.sync.StopWatch
 import shirates.core.utility.sync.SyncUtility
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toBufferedImage
-import shirates.core.utility.tool.AdbUtility
-import shirates.core.utility.tool.AndroidMobileShellUtility
-import shirates.core.utility.tool.SimctlUtility
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -215,7 +213,6 @@ object TestDriver {
     fun setupContext(testContext: TestContext) {
 
         val profile = testContext.profile
-        profile.validate()
 
         this.testContext = testContext
 
@@ -223,7 +220,7 @@ object TestDriver {
 
         lastElement = TestElement.emptyElement
 
-        TestLog.info("Initializing TestDriver.(profileName='${testContext.profile.profileName}')")
+        TestLog.info("Initializing TestDriver.(profileName=${testContext.profile.profileName})")
 
         TestLog.info("noLoadRun: ${TestMode.isNoLoadRun}")
         TestLog.info("boundsToRectRatio: ${testContext.boundsToRectRatio}")
@@ -290,7 +287,8 @@ object TestDriver {
             }
         } else {
             e.lastResult = LogType.NG
-            e.lastError = TestDriverException(message(id = "imageNotFound", subject = e.selector.toString()))
+            val selectorString = "${e.selector} ($currentScreen})"
+            e.lastError = TestNGException(message = assertMessage, cause = TestDriverException(selectorString))
         }
     }
 
@@ -416,13 +414,11 @@ object TestDriver {
         return handled
     }
 
-    internal fun createAppiumDriver() {
+    internal fun createAppiumDriver(profile: TestProfile = testContext.profile) {
 
         if (TestMode.isNoLoadRun) {
             return
         }
-
-        val profile = testContext.profile
 
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
@@ -495,7 +491,13 @@ object TestDriver {
         profile: TestProfile,
         capabilities: DesiredCapabilities
     ) {
-        for (key in profile.capabilities.keys) {
+        val keys = profile.capabilities.keys
+        if (isiOS) {
+            if (keys.contains("appium:avd")) {
+                keys.remove("appium:avd")
+            }
+        }
+        for (key in keys) {
             // comment mark
             if (key.startsWith("#")) continue
             if (key.startsWith("//")) continue
@@ -507,37 +509,6 @@ object TestDriver {
         if (capabilityNames.any() { it.endsWith("newCommandTimeout") }.not()) {
             capabilities.setCapabilityStrict("newCommandTimeout", 300)
         }
-        // platformVersion
-        val platformVersion = capabilities.getCapabilityRelaxed("platformVersion")
-        if (platformVersion == "*" || platformVersion == "") {
-            if (isAndroid) {
-                if (capabilities.getCapabilityRelaxed("avd").isBlank()) {
-                    val deviceInfos = AdbUtility.getAndroidDeviceList()
-                    if (deviceInfos.isEmpty()) {
-                        throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
-                    }
-                    if (deviceInfos.any() { it.udid.isNotBlank() }.not()) {
-                        throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
-                    }
-
-                    val udid = capabilities.getCapabilityRelaxed("udid")
-                    if (udid.isNotBlank()) {
-                        val deviceInfo = deviceInfos.firstOrNull() { it.udid == udid }
-                            ?: throw TestDriverException(message(id = "deviceNotConnected"))
-                        capabilities.setCapabilityStrict("platformVersion", deviceInfo.version)
-                    } else {
-                        val deviceInfo = deviceInfos.first()
-                        capabilities.setCapabilityStrict("platformVersion", deviceInfo.version)
-                    }
-                }
-            } else if (isiOS) {
-                val list = SimctlUtility.getBootedIosDeviceList()
-                list.forEach {
-                    println(it)
-                }
-            }
-        }
-
         // App package
         if (profile.packageOrBundleId == profile.startupPackageOrBundleId &&
             profile.appPackageFile.isNullOrBlank().not()
@@ -569,6 +540,7 @@ object TestDriver {
                 mAppiumDriver = AndroidDriver(appiumServerUrl, capabilities)
                 healthCheckForAndroid(profile = profile)
             } else {
+                TestLog.info(message(id = "initializingIosDriverMayTakeMinutes"))
                 mAppiumDriver = IOSDriver(appiumServerUrl, capabilities)
             }
         }
@@ -613,7 +585,7 @@ object TestDriver {
                 false
             } else if (message.contains("Could not find a connected Android device")) {
                 context.wrappedError = TestEnvironmentException(
-                    message = message(id = "couldNotFindConnectedAndroidDevice", arg1 = profile.profileName),
+                    message = message(id = "couldNotFindConnectedDevice", arg1 = profile.profileName),
                     cause = context.exception
                 )
                 true

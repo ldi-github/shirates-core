@@ -51,6 +51,11 @@ object Const {
      * testConfig common properties
      */
 
+    // Emulator/Simulator
+    const val EMULATOR_OPTIONS = "-no-boot-anim -no-snapshot"
+    const val DEVICE_STARTUP_TIMEOUT_SECONDS: Double = 60.0
+    const val DEVICE_WAIT_SECONDS_AFTER_STARTUP: Double = 0.0
+
     // Appium server
     const val APPIUM_SERVER_ADDRESS = "http://127.0.0.1:4723/"
     const val IMPLICITLY_WAIT_SECONDS = 5.0

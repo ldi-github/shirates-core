@@ -8,12 +8,13 @@ import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 
-/**
- * Note:
- * This sample code explains concepts and does not work.
- */
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class IrregularHandler1 : UITest() {
+
+    /**
+     * Note:
+     * This sample code explains concepts and does not work.
+     */
 
     override fun setEventHandlers(context: TestDriverEventContext) {
 

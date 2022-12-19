@@ -5,6 +5,7 @@ import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.opentest4j.TestAbortedException
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestConfig
 import shirates.core.configuration.TestProfile
@@ -14,6 +15,7 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -21,7 +23,10 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.macro.MacroRepository
 import shirates.core.server.AppiumServerManager
+import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.file.FileLockUtility.lockFile
+import shirates.core.utility.ios.IosDeviceUtility
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.spec.report.TestListReport
 import java.lang.reflect.InvocationTargetException
@@ -264,23 +269,73 @@ abstract class UITest : TestDrive {
             // testContext
             TestDriver.setupContext(testContext = testContext)
 
-            // AppiumServer
-            if (TestMode.isNoLoadRun.not()) {
-                AppiumServerManager.setupAppiumServerProcess(
-                    sessionName = TestLog.currentTestClassName,
-                    profile = profile
-                )
+            if (TestMode.isNoLoadRun) {
+                return
             }
 
-            // AppiumDriver
-            if (TestMode.isNoLoadRun.not()) {
-                val lastProfile = TestDriver.lastTestContext.profile
-                if (profile.isSameProfile(lastProfile) && TestDriver.canReuse) {
-                    TestLog.info("Reusing AppiumDriver session. (configFile=${configPath}, profileName=${profileName})")
-                    TestDriver.testContext = TestDriver.lastTestContext
-                } else {
-                    TestDriver.createAppiumDriver()
+            // Get device
+            TestLog.info(Const.SEPARATOR_LONG)
+            TestLog.info(message(id = "searchingDeviceForProfile", subject = testContext.profile.profileName))
+            if (isAndroid) {
+                val androidDeviceInfo =
+                    AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = testContext.profile)
+                if (androidDeviceInfo.message.isNotBlank()) {
+                    TestLog.info(androidDeviceInfo.message)
                 }
+                val deviceLabel = androidDeviceInfo.avdNameAndPort.ifBlank { androidDeviceInfo.model }
+                val subject = "${deviceLabel}, Android ${androidDeviceInfo.platformVersion}, ${androidDeviceInfo.udid}"
+                TestLog.info(message(id = "connectedDeviceFound", subject = subject))
+
+                if (androidDeviceInfo.isEmulator) {
+                    profile.avd = androidDeviceInfo.avdName
+                }
+                profile.platformVersion = androidDeviceInfo.platformVersion
+                profile.udid = androidDeviceInfo.udid
+                profile.platformVersion = androidDeviceInfo.platformVersion
+            } else if (isiOS) {
+                val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
+                if (iosDeviceInfo.message.isNotBlank()) {
+                    TestLog.info(iosDeviceInfo.message)
+                }
+                val subject =
+                    "${iosDeviceInfo.devicename}, iOS ${iosDeviceInfo.platformVersion}, ${iosDeviceInfo.udid}"
+                TestLog.info(message(id = "deviceFound", subject = subject))
+                profile.deviceName = iosDeviceInfo.devicename
+                profile.platformVersion = iosDeviceInfo.platformVersion
+                profile.udid = iosDeviceInfo.udid
+            }
+
+            // Complete profile
+            if (isAndroid) {
+                if (profile.automationName.isBlank()) {
+                    profile.automationName = "UiAutomator2"
+                }
+                if (profile.platformName.isBlank()) {
+                    profile.platformName = "Android"
+                }
+            } else {
+                if (profile.automationName.isBlank()) {
+                    profile.automationName = "XCUITest"
+                }
+                if (profile.platformName.isBlank()) {
+                    profile.platformName = "iOS"
+                }
+            }
+            profile.validate()
+
+            // Appium Server
+            AppiumServerManager.setupAppiumServerProcess(
+                sessionName = TestLog.currentTestClassName,
+                profile = profile
+            )
+
+            // AppiumDriver
+            val lastProfile = TestDriver.lastTestContext.profile
+            if (profile.isSameProfile(lastProfile) && TestDriver.canReuse) {
+                TestLog.info("Reusing AppiumDriver session. (configFile=${configPath}, profileName=${profileName})")
+                TestDriver.testContext = TestDriver.lastTestContext
+            } else {
+                TestDriver.createAppiumDriver()
             }
         } catch (t: TestAbortedException) {
             TestLog.info(t.message ?: t.cause.toString())
@@ -297,17 +352,12 @@ abstract class UITest : TestDrive {
     ): TestProfile {
         TestLog.info("Loading config.(configFile=$configPath, profileName=$profileName)")
         testConfig = TestConfig(configPath.toString())
-        if (testConfig!!.profileMap.containsKey(profileName).not()) {
-            throw TestConfigException(
-                message = message(
-                    id = "profileNotFound",
-                    key = profileName,
-                    file = configPath.toString()
-                )
-            )
+        if (testConfig!!.profileMap.containsKey(profileName)) {
+            return testConfig!!.profileMap[profileName]!!
         }
-        val testProfile = testConfig!!.profileMap[profileName]!!
-        return testProfile
+        val defaultProfile = testConfig!!.profileMap["_default"]!!
+        defaultProfile.profileName = profileName
+        return defaultProfile
     }
 
     /**
@@ -397,10 +447,16 @@ abstract class UITest : TestDrive {
         }
 
         CodeExecutionContext.isInScenario = true
+
+        val sw = StopWatch(title = "Running scenario").start()
         try {
             scenarioCore(scenarioId, order, desc, testProc)
         } finally {
             CodeExecutionContext.isInScenario = false
+
+            sw.stop()
+            val duration = "%.1f".format(sw.elapsedSeconds)
+            TestLog.info(message(id = "scenarioExecuted", arg1 = duration))
         }
     }
 
@@ -546,7 +602,6 @@ abstract class UITest : TestDrive {
             throw TestAbortedException(message(id = "testSkipped"))
         }
 
-        TestLog.info("test finished.")
     }
 
     /**

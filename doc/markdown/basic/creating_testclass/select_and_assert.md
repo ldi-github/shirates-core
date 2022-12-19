@@ -41,7 +41,7 @@ and returns the TestElement object. TestElement is extended by **textIs** extens
 expected value, assertion log like below is output.
 
 ```
-[ok]	(textIs)	<Settings> is "Settings"
+[OK]	(textIs)	<Settings> is "Settings"
 ```
 
 Shirates's APIs are designed as _fluent API_, so you can chain functions as follows.

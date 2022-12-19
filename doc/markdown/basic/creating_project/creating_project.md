@@ -22,7 +22,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.7.21"
 }
 
 group = "org.example"
@@ -53,13 +53,13 @@ Append some lines to the file.
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.7.21"
 }
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val shiratesCoreVersion = "1.0.0"
+val shiratesCoreVersion = "2.0.0"
 val appiumClientVersion = "8.1.0"
 
 repositories {
@@ -80,10 +80,10 @@ dependencies {
     testImplementation("io.github.ldi-github:shirates-core:$shiratesCoreVersion")
 
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    testImplementation("org.apache.logging.log4j:log4j-core:2.18.0")
+    testImplementation("org.apache.logging.log4j:log4j-core:2.19.0")
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
-    testImplementation("org.slf4j:slf4j-nop:1.7.36")
+    testImplementation("org.slf4j:slf4j-nop:2.0.5")
 }
 
 tasks.test {

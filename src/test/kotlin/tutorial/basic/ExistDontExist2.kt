@@ -5,17 +5,19 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.dontExist
 import shirates.core.driver.commandextension.exist
-import shirates.core.driver.commandextension.knownIssue
 import shirates.core.driver.commandextension.macro
 import shirates.core.testcode.UITest
 
-/**
- * Note:
- * Setup template image files by executing CroppingImages1.kt(tutorial.inaction.CroppingImages1)
- * before executing this sample.
- */
-@Testrun("testConfig/android/clock/testrun.properties")
+@Testrun("testConfig/android/maps/testrun.properties")
 class ExistDontExist2 : UITest() {
+
+    /**
+     * Note:
+     *
+     * Run CroppingImages1.kt(tutorial.inaction.CroppingImages1)
+     * before running this sample
+     * to set up template image files.
+     */
 
     @Test
     @Order(10)
@@ -24,23 +26,23 @@ class ExistDontExist2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Maps Top Screen]")
                 }.expectation {
                     it
-                        .exist("[Alarm Image(selected)]")
-                        .dontExist("[Alarm Image]")
+                        .exist("[Explore Tab Image(selected)]")
+                        .dontExist("[Explore Tab Image]")
 
-                        .exist("[Clock Image]")
-                        .dontExist("[Clock Image(selected)]")
+                        .exist("[Go Tab Image]")
+                        .dontExist("[Go Tab Image(selected)]")
 
-                        .exist("[Timer Image]")
-                        .dontExist("[Timer Image(selected)]")
+                        .exist("[Saved Tab Image]")
+                        .dontExist("[Saved Tab Image(selected)]")
 
-                        .exist("[Stopwatch Image]")
-                        .dontExist("[Stopwatch Image(selected)]")
+                        .exist("[Contribute Tab Image]")
+                        .dontExist("[Contribute Tab Image(selected)]")
 
-                        .exist("[Bedtime Image]")
-                        .dontExist("[Bedtime Image(selected)]")
+                        .exist("[Updates Tab Image]")
+                        .dontExist("[Updates Tab Image(selected)]")
                 }
             }
         }
@@ -54,12 +56,11 @@ class ExistDontExist2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Maps Top Screen]")
                 }.expectation {
                     it
-                        .dontExist("[Alarm Image]")
-                        .exist("[Alarm Image]")
-                        .knownIssue("Should be NG, but ERROR", "")
+                        .dontExist("[Explore Tab Image]")   // OK
+                        .exist("[Explore Tab Image]")   // NG
                 }
             }
         }
@@ -72,11 +73,11 @@ class ExistDontExist2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Alarm Screen]")
+                    it.macro("[Maps Top Screen]")
                 }.expectation {
                     it
-                        .exist("[Alarm Image(selected)]")
-                        .dontExist("[Alarm Image(selected)]")
+                        .exist("[Explore Tab Image(selected)]")     // OK
+                        .dontExist("[Explore Tab Image(selected)]") // NG
                 }
             }
         }

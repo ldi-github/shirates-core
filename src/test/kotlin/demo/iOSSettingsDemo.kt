@@ -22,19 +22,15 @@ class iOSSettingsDemo : UITest() {
                         .tapAppIcon()
                         .screenIs("[iOS Settings Top Screen]")
                 }.action {
-                    it.selectWithScrollDown("Developer")
-                        .tap()
+                    it.tapWithScrollDown("Developer")
                 }.expectation {
                     it.screenIs("[Developer Screen]")
                 }
             }
 
             case(2) {
-                condition {
-                }.action {
-                    it.flickCenterToTop()
-                }.expectation {
-                    it.exist("Reset Local Data on Next Launch")
+                expectation {
+                    it.existWithScrollDown("Reset Local Data on Next Launch")
                 }
             }
 

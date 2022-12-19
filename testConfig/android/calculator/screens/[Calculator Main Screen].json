@@ -40,7 +40,12 @@
     "[7]": "#digit_7",
     "[8]": "#digit_8",
     "[9]": "#digit_9",
-    "[.]": "#dec_point"
+    "[.]": "#dec_point",
+
+    "[:Right button]": ":rightButton",
+    "[:Below button]": ":belowButton",
+    "[:Left button]": ":leftButton",
+    "[:Above button]": ":aboveButton"
   }
 
 }

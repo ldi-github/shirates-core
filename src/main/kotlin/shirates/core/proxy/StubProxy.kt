@@ -16,19 +16,187 @@ import shirates.core.logging.TestLog
  */
 object StubProxy {
 
+    var activeProfile: String = ""
+
     /**
-     * setDataPattern
+     * isProfileActivated
      */
-    fun setDataPattern(apiName: String, dataPatternName: String): StubProxyResponse {
+    val isProfileActivated: Boolean
+        get() {
+            return activeProfile.isNotBlank()
+        }
+
+    /**
+     * setActiveProfile
+     */
+    fun setActiveProfile(profile: String): String {
+
+        this.activeProfile = profile
+        return this.activeProfile
+    }
+
+    /**
+     * clearActiveProfile
+     */
+    fun clearActiveProfile() {
+
+        this.activeProfile = ""
+    }
+
+    /**
+     * registerInstance
+     */
+    fun registerInstance(instanceKey: String, profile: String): StubProxyResponse {
 
         if (TestMode.isNoLoadRun) {
             return StubProxyResponse()
         }
 
-        val url = "${testContext.profile.stubServerUrl}/management/setDataPattern".toHttpUrlOrNull()!!.newBuilder()
-            .addQueryParameter("apiName", apiName)
+        val builder =
+            "${testContext.profile.stubServerUrl}/management/registerInstance".toHttpUrlOrNull()!!.newBuilder()
+                .addQueryParameter("instanceKey", instanceKey)
+                .addQueryParameter("profile", profile)
+        val url = builder.build()
+        return request(url)
+    }
+
+    /**
+     * getInstanceInfo
+     */
+    fun getInstanceInfo(profile: String): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val builder = "${testContext.profile.stubServerUrl}/management/getInstanceInfo".toHttpUrlOrNull()!!.newBuilder()
+            .addQueryParameter("profile", profile)
+        val url = builder.build()
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
+    }
+
+    /**
+     * getInstanceProfileMap
+     */
+    fun getInstanceProfileMap(): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val builder =
+            "${testContext.profile.stubServerUrl}/management/getInstanceProfileMap".toHttpUrlOrNull()!!.newBuilder()
+        val url = builder.build()
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
+    }
+
+    /**
+     * resetInstance
+     */
+    fun resetInstance(
+        profile: String? = this.activeProfile
+    ): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val builder =
+            "${testContext.profile.stubServerUrl}/management/resetInstance".toHttpUrlOrNull()!!.newBuilder()
+        if (profile.isNullOrBlank().not()) {
+            builder.addQueryParameter("profile", profile)
+        }
+        val url = builder.build()
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
+    }
+
+    /**
+     * removeInstance
+     */
+    fun removeInstance(
+        profile: String
+    ): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val builder =
+            "${testContext.profile.stubServerUrl}/management/removeInstance".toHttpUrlOrNull()!!.newBuilder()
+                .addQueryParameter("profile", profile)
+        val url = builder.build()
+        val stubProxyResponse = request(url)
+        if (stubProxyResponse.code == 200) {
+            this.clearActiveProfile()
+        }
+        return stubProxyResponse
+    }
+
+    /**
+     * resetDataPattern
+     */
+    fun resetDataPattern(
+        profile: String? = this.activeProfile
+    ): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val builder =
+            "${testContext.profile.stubServerUrl}/management/resetDataPattern".toHttpUrlOrNull()!!.newBuilder()
+        if (profile.isNullOrBlank().not()) {
+            builder.addQueryParameter("profile", profile)
+        }
+        val url = builder.build()
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
+    }
+
+    /**
+     * listDataPattern
+     */
+    fun listDataPattern(
+        profile: String? = this.activeProfile
+    ): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val builder =
+            "${testContext.profile.stubServerUrl}/management/listDataPattern".toHttpUrlOrNull()!!.newBuilder()
+        if (profile.isNullOrBlank().not()) {
+            builder.addQueryParameter("profile", profile)
+        }
+        val url = builder.build()
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
+    }
+
+    /**
+     * setDataPattern
+     */
+    fun setDataPattern(
+        urlPathOrApiName: String,
+        dataPatternName: String,
+        profile: String? = this.activeProfile
+    ): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val builder = "${testContext.profile.stubServerUrl}/management/setDataPattern".toHttpUrlOrNull()!!.newBuilder()
+            .addQueryParameter("urlPathOrApiName", urlPathOrApiName)
             .addQueryParameter("dataPatternName", dataPatternName)
-            .build()
+        if (profile.isNullOrBlank().not()) {
+            builder.addQueryParameter("profile", profile)
+        }
+        val url = builder.build()
         val stubProxyResponse = request(url)
         return stubProxyResponse
     }
@@ -36,36 +204,26 @@ object StubProxy {
     /**
      * getDataPattern
      */
-    fun getDataPattern(apiName: String): StubProxyResponse {
+    fun getDataPattern(
+        urlPathOrApiName: String,
+        profile: String? = this.activeProfile
+    ): StubProxyResponse {
 
         if (TestMode.isNoLoadRun) {
             return StubProxyResponse()
         }
 
-        val url = "${testContext.profile.stubServerUrl}/management/getDataPattern".toHttpUrlOrNull()!!.newBuilder()
-            .addQueryParameter("apiName", apiName)
-            .build()
-        val stubProxyResponse = request(url)
-        return stubProxyResponse
-    }
-
-    /**
-     * resetDataPattern
-     */
-    fun resetDataPattern(): StubProxyResponse {
-
-        if (TestMode.isNoLoadRun) {
-            return StubProxyResponse()
+        val builder = "${testContext.profile.stubServerUrl}/management/getDataPattern".toHttpUrlOrNull()!!.newBuilder()
+            .addQueryParameter("urlPathOrApiName", urlPathOrApiName)
+        if (profile.isNullOrBlank().not()) {
+            builder.addQueryParameter("profile", profile)
         }
-
-        val url =
-            "${testContext.profile.stubServerUrl}/management/resetDataPattern".toHttpUrlOrNull()!!.newBuilder()
-                .build()
+        val url = builder.build()
         val stubProxyResponse = request(url)
         return stubProxyResponse
     }
 
-    private fun request(url: HttpUrl): StubProxyResponse {
+    fun request(url: HttpUrl): StubProxyResponse {
         val request = Request.Builder().url(url).build()
         val client = OkHttpClient()
 

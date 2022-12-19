@@ -22,8 +22,8 @@ object AppleMapsMacro : TestDrive {
             .pressHome()
             .tapAppIcon("Maps")
 
-        if (it.canSelect("Get Turn-by-Turn Directions")) {
-            it.tap("Not Now")
+        if (it.canSelect("Not Now")) {
+            it.tap()
         }
         if (it.canSelect("Cancel")) {
             it.tap()

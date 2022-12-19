@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "1.2.0"
+version = "2.0.0"
 
 val appiumClientVersion = "8.1.1"
 
@@ -48,18 +48,18 @@ dependencies {
 
     // SLF4J NOP Binding
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
-    testImplementation("org.slf4j:slf4j-nop:2.0.0")
+    testImplementation("org.slf4j:slf4j-nop:2.0.5")
 
     // Apache Log4j Core
-    implementation("org.apache.logging.log4j:log4j-core:2.18.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.19.0")
 
     // Apache Commons IO
     implementation("commons-io:commons-io:2.11.0")
     testImplementation("commons-io:commons-io:2.11.0")
 
     // Apache Commons Text
-    implementation("org.apache.commons:commons-text:1.9")
-    testImplementation("org.apache.commons:commons-text:1.9")
+    implementation("org.apache.commons:commons-text:1.10.0")
+    testImplementation("org.apache.commons:commons-text:1.10.0")
 
     // Apache Commons Exec
     implementation("org.apache.commons:commons-exec:1.3")
@@ -70,17 +70,17 @@ dependencies {
     testImplementation("commons-codec:commons-codec:1.15")
 
     // Jackson Module Kotlin
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
 
     // Jackson Dataformat XML
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4")
-    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0")
+    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0")
 
     // org.json
     // workaround for 'java.lang.RuntimeException: Method getString in org.json.JSONObject not mocked.'
-    implementation("org.json:json:20220320")
-    testImplementation("org.json:json:20220320")
+    implementation("org.json:json:20220924")
+    testImplementation("org.json:json:20220924")
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
@@ -88,10 +88,7 @@ dependencies {
 
     // Dokka
     // https://github.com/Kotlin/dokka
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.10")
-
-    // Gson
-    implementation("com.google.code.gson:gson:2.9.0")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
 
     // BoofCV
     implementation("org.boofcv:boofcv-core:0.41")

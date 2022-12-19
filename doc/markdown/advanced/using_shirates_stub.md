@@ -56,8 +56,6 @@ See [shirates-stub](https://github.com/ldi-github/shirates-stub.git).
   "startupActivity": "com.android.settings.Settings",
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "platformVersion": "12",
     "language": "en",
     "locale": "US"
@@ -74,7 +72,7 @@ See [shirates-stub](https://github.com/ldi-github/shirates-stub.git).
 }
 ```
 
-Or you can set `stubServerUrl` in testrun file if you like.
+Instead of using testConfig.json file, you can set `stubServerUrl` in testrun file.
 
 ```
 ## Stub --------------------

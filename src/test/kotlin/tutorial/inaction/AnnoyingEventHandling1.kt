@@ -9,12 +9,13 @@ import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.tap
 import shirates.core.testcode.UITest
 
-/**
- * Note:
- * This sample code explains concepts and does not work.
- */
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class AnnoyingEventHandling1 : UITest() {
+
+    /**
+     * Note:
+     * This sample code explains concepts and does not work.
+     */
 
     @Test
     @Order(10)

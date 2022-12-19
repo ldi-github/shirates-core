@@ -12,16 +12,28 @@ class TestContext(
     val profile: TestProfile = TestProfile()
 ) {
 
-    @SaveTarget
-    var boundsToRectRatio = profile.boundsToRectRatio?.toIntOrNull()
-        ?: (if (isAndroid) shirates.core.Const.BOUNDS_TO_RECT_RATIO_ANDROID else shirates.core.Const.BOUNDS_TO_RECT_RATIO_IOS)
+    // Appium Proxy --------------------------------------------------
 
     @SaveTarget
     var appiumProxyReadTimeoutSeconds =
         profile.appiumProxyReadTimeoutSeconds?.toDoubleOrNull() ?: shirates.core.Const.APPIUM_PROXY_READ_TIMEOUT_SECONDS
 
+    // TestDriver --------------------------------------------------
+
     @SaveTarget
     var reuseDriver = profile.reuseDriver?.toBoolean() ?: shirates.core.Const.REUSE_DRIVER
+
+    @SaveTarget
+    var retryMaxCount = profile.retryMaxCount?.toLongOrNull() ?: shirates.core.Const.RETRY_MAX_COUNT
+
+    @SaveTarget
+    var retryTimeoutSeconds = profile.retryTimeoutSeconds?.toDoubleOrNull() ?: shirates.core.Const.RETRY_TIMEOUT_SECONDS
+
+    @SaveTarget
+    var retryIntervalSeconds =
+        profile.retryIntervalSeconds?.toDoubleOrNull() ?: shirates.core.Const.RETRY_INTERVAL_SECONDS
+
+    // Screenshot --------------------------------------------------
 
     @SaveTarget
     var autoScreenshot = profile.autoScreenshot?.toBoolean() ?: shirates.core.Const.AUTO_SCREEN_SHOT
@@ -50,27 +62,48 @@ class TestContext(
     @SaveTarget
     var manualScreenshot = profile.manualScreenshot?.toBoolean() ?: shirates.core.Const.MANUAL_SCREENSHOT
 
-    @SaveTarget
-    var retryMaxCount = profile.retryMaxCount?.toLongOrNull() ?: shirates.core.Const.RETRY_MAX_COUNT
 
-    @SaveTarget
-    var retryTimeoutSeconds = profile.retryTimeoutSeconds?.toDoubleOrNull() ?: shirates.core.Const.RETRY_TIMEOUT_SECONDS
+    // App operation --------------------------------------------------
 
-    @SaveTarget
-    var retryIntervalSeconds =
-        profile.retryIntervalSeconds?.toDoubleOrNull() ?: shirates.core.Const.RETRY_INTERVAL_SECONDS
+    val appIconName: String
+        get() {
+            return profile.appIconName ?: ""
+        }
+
+    val tapAppIconMethod: TapAppIconMethod
+        get() {
+            if (profile.tapAppIconMethod.isNullOrBlank()) {
+                return TapAppIconMethod.auto
+            }
+            try {
+                return TapAppIconMethod.valueOf(profile.tapAppIconMethod!!)
+            } catch (t: Throwable) {
+                throw TestConfigException(
+                    message(
+                        id = "tapAppIconMethodIsInvalid",
+                        value = profile.tapAppIconMethod,
+                        arg1 = "${TapAppIconMethod.values().toList()}"
+                    )
+                )
+            }
+        }
+
+    val tapAppIconMacro: String
+        get() {
+            return profile.tapAppIconMacro ?: ""
+        }
 
     @SaveTarget
     var shortWaitSeconds = profile.shortWaitSeconds?.toDoubleOrNull() ?: shirates.core.Const.SHORT_WAIT_SECONDS
 
     @SaveTarget
-    var waitSecondsOnIsScreen =
-        profile.waitSecondsOnIsScreen?.toDoubleOrNull() ?: shirates.core.Const.WAIT_SECONDS_ON_ISSCREEN
-
-    @SaveTarget
     var waitSecondsForAnimationComplete =
         profile.waitSecondsForAnimationComplete?.toDoubleOrNull()
             ?: shirates.core.Const.WAIT_SECONDS_FOR_ANIMATION_COMPLETE
+
+    @SaveTarget
+    var waitSecondsOnIsScreen =
+        profile.waitSecondsOnIsScreen?.toDoubleOrNull() ?: shirates.core.Const.WAIT_SECONDS_ON_ISSCREEN
 
     @SaveTarget
     var waitSecondsForConnectionEnabled =
@@ -112,47 +145,26 @@ class TestContext(
     var syncIntervalSeconds =
         profile.syncMaxLoopCount?.toDoubleOrNull() ?: shirates.core.Const.SYNC_INTERVAL_SECONDS
 
-    val platformName: String
-        get() {
-            return TestMode.testTimePlatformName ?: profile.platformName
-        }
 
-    val appIconName: String
-        get() {
-            return profile.appIconName ?: ""
-        }
-
-    val tapAppIconMethod: TapAppIconMethod
-        get() {
-            if (profile.tapAppIconMethod.isNullOrBlank()) {
-                return TapAppIconMethod.auto
-            }
-            try {
-                return TapAppIconMethod.valueOf(profile.tapAppIconMethod!!)
-            } catch (t: Throwable) {
-                throw TestConfigException(
-                    message(
-                        id = "tapAppIconMethodIsInvalid",
-                        value = profile.tapAppIconMethod,
-                        arg1 = "${TapAppIconMethod.values().toList()}"
-                    )
-                )
-            }
-        }
-
-    val tapAppIconMacro: String
-        get() {
-            return profile.tapAppIconMacro ?: ""
-        }
-
-    var irregularHandler: (() -> Unit)? = null
-
-    var enableIrregularHandler = true
+    // misc --------------------------------------------------
 
     val isEmpty: Boolean
         get() {
             return profile.isEmpty
         }
+
+    @SaveTarget
+    var boundsToRectRatio = profile.boundsToRectRatio?.toIntOrNull()
+        ?: (if (isAndroid) shirates.core.Const.BOUNDS_TO_RECT_RATIO_ANDROID else shirates.core.Const.BOUNDS_TO_RECT_RATIO_IOS)
+
+    val platformName: String
+        get() {
+            return TestMode.testTimePlatformName ?: profile.platformName
+        }
+
+    var irregularHandler: (() -> Unit)? = null
+
+    var enableIrregularHandler = true
 
     internal val saveTargetProperties = this::class.memberProperties.filterIsInstance<KMutableProperty<*>>()
         .filter {

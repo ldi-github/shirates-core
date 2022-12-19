@@ -12,8 +12,8 @@ import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.misc.ProcessUtility
+import shirates.core.utility.time.StopWatch
 import java.io.ByteArrayOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -119,7 +119,7 @@ object AppiumServerManager {
         )
 
         if (appiumPath.isBlank()) {
-            val pid = getPid(port = port.toInt())
+            val pid = ProcessUtility.getPid(port = port.toInt())
             if (pid != null) {
                 TestLog.info(message(id = "usingExistingAppiumServer", arg1 = pid, arg2 = port))
                 return
@@ -152,7 +152,12 @@ object AppiumServerManager {
         // Terminate existing appium process using the port
         val p = commandTokens.getPort()
         val port = p?.toIntOrNull() ?: throw ConfigurationException("Invalid port. (port=$p)")
-        terminateProcess(port = port)
+        run {
+            val pid = ProcessUtility.getPid(port = port)
+            if (pid != null) {
+                ProcessUtility.terminateProcess(pid = pid)
+            }
+        }
 
         // Start appium process
         val commandLine = CommandLine(appiumPath)
@@ -175,7 +180,7 @@ object AppiumServerManager {
             if (sw.elapsedSeconds > appiumServerStartupTimeoutSeconds) {
                 throw TestDriverException(message = message("failedToConnectToAppiumServer"))
             }
-            val pid = getPid(port = port)
+            val pid = ProcessUtility.getPid(port = port)
             if (pid != null) {
                 val versionLine =
                     outputStream.toString().split("\n").firstOrNull() { it.contains("Welcome to Appium") } ?: ""
@@ -237,58 +242,14 @@ object AppiumServerManager {
     }
 
     /**
-     * getPid
+     * close
      */
-    fun getPid(port: Int): String? {
+    fun close() {
 
-        val log = PropertiesManager.enableShellExecLog
-        if (TestMode.isRunningOnWindows) {
-            val r = ShellUtility.executeCommandCore(log = log, "netstat", "-ano")
-            if (log && r.resultString.isNotBlank()) {
-                TestLog.info(message = r.resultString)
-            }
-            val line = r.resultString.split("\r\n")
-                .firstOrNull { it.contains("TCP") && it.contains("LISTEN") && it.contains(":$port") }
-                ?: return null
-            val pid = line.split(" ").lastOrNull()
-            return pid
-        } else {
-            val r = ShellUtility.executeCommandCore(log = log, "lsof", "-t", "-i:$port", "-sTCP:LISTEN")
-            if (log && r.resultString.isNotBlank()) {
-                TestLog.info(message = r.resultString)
-            }
-            val pid = r.resultString.trim()
-            if (pid.isBlank()) {
-                return null
-            }
-            return pid
-        }
-    }
-
-    /**
-     * terminateProcess
-     */
-    fun terminateProcess(port: Int): ShellUtility.ShellResult? {
-
-        val pid = getPid(port = port)
-        var shellResult: ShellUtility.ShellResult? = null
-        val log = PropertiesManager.enableShellExecLog
-
-        if (TestMode.isRunningOnWindows) {
-            if (pid != null) {
-                shellResult = ShellUtility.executeCommand(log = log, "taskkill", "/pid", "$pid", "/F")
-                if (PropertiesManager.enableShellExecLog) {
-                    TestLog.info(shellResult.resultString)
-                }
-            }
-        } else {
-            if (pid != null) {
-                shellResult = ShellUtility.executeCommand(log = log, "kill", "-9", pid)
-                if (PropertiesManager.enableShellExecLog) {
-                    TestLog.info(shellResult.resultString)
-                }
-            }
-        }
+        val commandTokens = getCommandTokens()
+        val port = commandTokens.getPort()?.toIntOrNull() ?: return
+        val pid = ProcessUtility.getPid(port = port) ?: return
+        val shellResult = ProcessUtility.terminateProcess(pid = pid)
         executeResultHandler?.waitFor((shirates.core.Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
         executeResultHandler = null
 
@@ -296,17 +257,6 @@ object AppiumServerManager {
             TestLog.info(message(id = "appiumServerTerminated", arg1 = pid, arg2 = "$port"))
         }
 
-        return shellResult
-    }
-
-    /**
-     * close
-     */
-    fun close() {
-
-        val commandTokens = getCommandTokens()
-        val port = commandTokens.getPort()?.toIntOrNull() ?: return
-        terminateProcess(port = port)
     }
 
 }

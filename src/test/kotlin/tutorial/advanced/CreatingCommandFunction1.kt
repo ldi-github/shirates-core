@@ -17,7 +17,8 @@ class CreatingCommandFunction1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.flickAndGoDown()
+                    it.macro("[Android Settings Top Screen]")
+                        .flickAndGoDown()
                         .dontExist("[Accessibility]")
                 }.action {
                     it.scrollToTop()
@@ -66,7 +67,8 @@ class CreatingCommandFunction1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.flickAndGoDown()
+                    it.macro("[Android Settings Top Screen]")
+                        .flickAndGoDown()
                         .dontExist("[Accessibility]")
                 }.action {
                     it.tapWithScrollDownFromTop("[Accessibility]")

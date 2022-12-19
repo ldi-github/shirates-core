@@ -23,13 +23,19 @@ You can configure profiles in the testConfig file for the specific condition of 
 
   "dataset": {
     "accounts": "testConfig/android/androidSettings/dataset/accounts.json",
+    "apps": "testConfig/android/androidSettings/dataset/apps.json",
     "data": "testConfig/android/androidSettings/dataset/data.json"
   },
 
+  "screens": {
+    "import": [
+      "testConfig/android/calculator/screens",
+      "testConfig/android/misc/screens",
+      "testConfig/android/playStore/screen"
+    ]
+  },
+
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
-    "platformVersion": "12",
     "language": "en",
     "locale": "US"
   },
@@ -37,17 +43,38 @@ You can configure profiles in the testConfig file for the specific condition of 
   "profiles": [
     {
       "profileName": "Android 12",
-      "specialTags": "Tag1",
       "capabilities": {
+        "platformVersion": "12"
       }
     },
     {
-      "profileName": "Pixel 3a API 31(Android 12)",
+      "profileName": "Android 13",
+      "capabilities": {
+        "platformVersion": "13"
+      }
+    },
+    {
+      "profileName": "Android 12 with Tag1",
+      "specialTags": "Tag1",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+    {
+      "profileName": "Android 12 with Tat2 & Tag3",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_"
+        "platformVersion": "12"
+      }
+    },
+
+    {
+      "profileName": "emulator-5556",
+      "capabilities": {
+        "udid": "emulator-5556"
       }
     }
+
   ]
 
 }
@@ -55,10 +82,10 @@ You can configure profiles in the testConfig file for the specific condition of 
 
 There are 2 profiles in the testConfig file.
 
-* "Android 12"
-* "Pixel 3a API 31(Android 12)"
+* "Android 12 with Tag1"
+* "Android 12 with Tag2 & Tag3"
 
-Each profile inherits from **common properties**
+Each profile inherits from top level properties.
 
 * "appIconName"
 * "packageOrBundleId"
@@ -70,13 +97,11 @@ Each profile inherits from **common properties**
 
 In addition to the above, each profile has specific properties.
 
-* **"Android 12"** specifies
-    * `"specialTags": "Tag1"`
-
-
-* **"Pixel 3a API 31(Android 12)"** specifies
-    * `"specialTags": "Tag2, Tag3"`
-    * `"capabilities/avd": "Pixel_3a_API_31_Android_12_"`
+* **"Android 12"** specifies `"platformVersion": "12"`
+* **"Android 13"** specifies `"platformVersion": "13"`
+* **"Android 12 with Tag1"** specifies `"specialTags": "Tag1"`
+* **"Android 12 with Tag2 & Tag3"** specifies `"specialTags": "Tag2, Tag3"`
+* **"emulator-5556"** specifies `"udid": "emulator-5556"`
 
 For more information about specialTag,
 see [Special branch function](../../basic/function_property/branch/special_branch_functions.md)

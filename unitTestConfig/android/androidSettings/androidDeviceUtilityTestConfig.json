@@ -1,0 +1,34 @@
+{
+  "testConfigName": "androidDeviceUtilityTestConfig",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "capabilities": {
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "profile 12",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+    {
+      "profileName": "profile ja_JP",
+      "capabilities": {
+        "platformVersion": "13",
+        "language": "ja",
+        "locale": "JP"
+      }
+    }
+
+  ]
+
+}

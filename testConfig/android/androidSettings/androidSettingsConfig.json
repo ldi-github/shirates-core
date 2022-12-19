@@ -27,107 +27,45 @@
   },
 
   "capabilities": {
-    "automationName": "UiAutomator2",
-    "platformName": "Android",
     "language": "en",
     "locale": "US"
   },
 
   "profiles": [
     {
-      "profileName": "Android *",
+      "profileName": "Android 12",
       "capabilities": {
-        "platformVersion": "*"
+        "platformVersion": "12"
       }
     },
     {
-      "profileName": "Android 12",
+      "profileName": "Android 13",
+      "capabilities": {
+        "platformVersion": "13"
+      }
+    },
+    {
+      "profileName": "Android 12 with Tag1",
       "specialTags": "Tag1",
       "capabilities": {
         "platformVersion": "12"
       }
     },
     {
-      "profileName": "Pixel 3a API 31(Android 12)",
+      "profileName": "Android 12 with Tat2 & Tag3",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_"
+        "platformVersion": "12"
       }
     },
 
-
     {
-      "profileName": "Android emulator-5556",
+      "profileName": "emulator-5556",
       "capabilities": {
-        "platformVersion": "*",
         "udid": "emulator-5556"
       }
-    },
-
-    {
-      "profileName": "Pixel_3a_API_31_Android_12_-01",
-      "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-01",
-        "platformVersion": "12",
-        "systemPort": "8201"
-      }
-    },
-    {
-      "profileName": "Pixel_3a_API_31_Android_12_-02",
-      "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-02",
-        "platformVersion": "12",
-        "systemPort": "8202"
-      }
-    },
-    {
-      "profileName": "Pixel_3a_API_31_Android_12_-03",
-      "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-03",
-        "platformVersion": "12",
-        "systemPort": "8203"
-      }
-    },
-    {
-      "profileName": "Pixel_3a_API_31_Android_12_-04",
-      "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-04",
-        "platformVersion": "12",
-        "systemPort": "8204"
-      }
-    },
-    {
-      "profileName": "Pixel_3a_API_31_Android_12_-05",
-      "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-05",
-        "platformVersion": "12",
-        "systemPort": "8205"
-      }
-    },
-    {
-      "profileName": "Pixel_3a_API_31_Android_12_-06",
-      "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-06",
-        "platformVersion": "12",
-        "systemPort": "8206"
-      }
-    },
-    {
-      "profileName": "Pixel_3a_API_31_Android_12_-07",
-      "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-07",
-        "platformVersion": "12",
-        "systemPort": "8207"
-      }
-    },
-    {
-      "profileName": "Pixel_3a_API_31_Android_12_-08",
-      "capabilities": {
-        "avd": "Pixel_3a_API_31_Android_12_-08",
-        "platformVersion": "12",
-        "systemPort": "8208"
-      }
     }
+
   ]
 
 }

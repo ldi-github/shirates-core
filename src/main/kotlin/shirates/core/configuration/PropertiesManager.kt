@@ -4,6 +4,7 @@ import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import shirates.core.utility.file.PropertiesUtility
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.toPath
@@ -77,12 +78,12 @@ object PropertiesManager {
         // Get properties from environment variables
         val srEnvs = EnvUtility.getSREnvMap()
         if (srEnvs.any()) {
-            println("Importing environment variables.")
+            TestLog.info("Importing environment variables.")
             for (env in srEnvs) {
                 val key = env.key.substring("SR_".length)
                 envProperties[key] = env.value
                 properties[key] = env.value
-                println("${env.key}=${env.value}")
+                TestLog.info("${env.key}=${env.value}")
             }
         }
     }

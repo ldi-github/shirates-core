@@ -6,7 +6,7 @@ import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 
 /**
  * getTapTarget

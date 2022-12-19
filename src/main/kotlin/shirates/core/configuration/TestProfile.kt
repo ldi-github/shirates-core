@@ -24,6 +24,11 @@ class TestProfile(var profileName: String = "") {
     // Test mode --------------------------------------------------
     var noLoadRun: String? = null
 
+    // Emulator/Simulator --------------------------------------------------
+    var emulatorOptions: String? = null
+    var deviceStartupTimeoutSeconds: String? = null
+    var deviceWaitSecondsAfterStartup: String? = null
+
     // Appium --------------------------------------------------
     var appiumServerUrl: String? = null
     var appiumPath: String? = null
@@ -89,9 +94,15 @@ class TestProfile(var profileName: String = "") {
             return profileName == ""
         }
 
-    val udid: String
+    /**
+     * udid
+     */
+    var udid: String
         get() {
             return capabilities.getStringOrEmpty("udid")
+        }
+        set(value) {
+            capabilities.set("udid", value)
         }
 
     /**
@@ -142,6 +153,9 @@ class TestProfile(var profileName: String = "") {
     // etc
     //
 
+    /**
+     * stubServerUrl
+     */
     var stubServerUrl: String? = null
 
     /**
@@ -174,33 +188,68 @@ class TestProfile(var profileName: String = "") {
     /**
      * automationName
      */
-    val automationName: String
+    var automationName: String
         get() {
             return getCapabilityRelaxed("automationName")
+        }
+        set(value) {
+            if (capabilities.containsKey("automationName")) {
+                capabilities.remove("automationName")
+            }
+            capabilities.set("appium:automationName", value)
+        }
+
+    /**
+     * avd
+     */
+    var avd: String
+        get() {
+            return getCapabilityRelaxed("avd")
+        }
+        set(value) {
+            if (capabilities.containsKey("avd")) {
+                capabilities.remove("avd")
+            }
+            capabilities.set("appium:avd", value)
         }
 
     /**
      * platformName
      */
-    val platformName: String
+    var platformName: String
         get() {
             return getCapabilityRelaxed("platformName").lowercase()
+        }
+        set(value) {
+            capabilities.set("platformName", value)
         }
 
     /**
      * platformVersion
      */
-    val platformVersion: String
+    var platformVersion: String
         get() {
             return getCapabilityRelaxed("platformVersion")
+        }
+        set(value) {
+            if (capabilities.containsKey("platformVersion")) {
+                capabilities.remove("platformVersion")
+            }
+            capabilities.set("appium:platformVersion", value)
         }
 
     /**
      * deviceName
      */
-    val deviceName: String
+    var deviceName: String
         get() {
             return getCapabilityRelaxed("deviceName")
+        }
+        set(value) {
+            if (capabilities.containsKey("deviceName")) {
+                capabilities.remove("deviceName")
+            }
+            capabilities.set("appium:deviceName", value)
         }
 
     /**
@@ -297,7 +346,10 @@ class TestProfile(var profileName: String = "") {
 
         val value = capabilities[propertyName]?.toString() ?: capabilities["appium:$propertyName"]?.toString()
         if (value.isNullOrBlank()) {
-            throw TestConfigException(message(id = "required", subject = "capabilities.$propertyName"))
+            val avd = capabilities["avd"]?.toString() ?: capabilities["appium:avd"]?.toString()
+            if (avd.isNullOrBlank()) {
+                throw TestConfigException(message(id = "required", subject = "capabilities.$propertyName"))
+            }
         }
     }
 
@@ -412,9 +464,6 @@ class TestProfile(var profileName: String = "") {
 
         // platformName
         validateCapabilityRequired("platformName")
-
-        // platformVersion
-        validateCapabilityRequired("platformVersion")
 
         if (isAndroid) {
             // appPackage

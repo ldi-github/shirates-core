@@ -5,9 +5,11 @@
     "[Clock(shared)]"
   ],
 
-  "identity": "~title=Alarm",
+  "identity": "[days_of_week]",
 
   "selectors": {
+
+    "[days_of_week]": "#days_of_week",
 
     "[:Expand alarm]": ":flow(1)",
     "[:Days of week]": ":flow(2)",

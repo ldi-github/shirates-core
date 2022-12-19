@@ -8,7 +8,7 @@ import shirates.core.driver.commandextension.describe
 import shirates.core.driver.testProfile
 import shirates.core.testcode.UITest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android 12")
+@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android 12 with Tag1")
 class SpecialTag1 : UITest() {
 
     @Test

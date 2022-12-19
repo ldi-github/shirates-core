@@ -155,6 +155,7 @@ object TestElementCache {
             list.removeAll(removeList)
             e = list.firstOrNull() ?: TestElement.emptyElement
         }
+        e.lastError = null
 
         if (e.isEmpty) {
             e.selector = selector

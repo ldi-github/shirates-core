@@ -21,8 +21,6 @@
   },
 
   "capabilities": {
-    "automationName": "XCUITest",
-    "platformName": "iOS",
     "simpleIsVisibleCheck": true,
     "useJSONSource": true,
     "appium:showXcodeLog": true,
@@ -72,88 +70,6 @@
         "udid": "375b88762a4a0a015fd8426d1e8222554ac81ef2",
         "#xcodeOrgId": "",
         "#xcodeSigningId": "iPhone Developer"
-      }
-    },
-
-    {
-      "profileName": "iPhone 14(iOS 16)-01",
-      "capabilities": {
-        "platformVersion": "16.1",
-        "deviceName": "iPhone 14(iOS 16)-01",
-        "udid": "E0890B19-9531-4F55-B42F-80F813BE4167",
-        "wdaLocalPort": "8211"
-      }
-    },
-    {
-      "profileName": "iPhone 14(iOS 16)-02",
-      "capabilities": {
-        "platformVersion": "16.1",
-        "deviceName": "iPhone 14(iOS 16)-02",
-        "udid": "E1C52943-2D75-450E-B33C-EA0BFE6DC4C3",
-        "wdaLocalPort": "8212"
-      }
-    },
-    {
-      "profileName": "iPhone 14(iOS 16)-03",
-      "capabilities": {
-        "platformVersion": "16.1",
-        "deviceName": "iPhone 14(iOS 16)-03",
-        "udid": "C5447DF3-1F9D-4857-B750-3C7DB67B2C9A",
-        "wdaLocalPort": "8213"
-      }
-    },
-    {
-      "profileName": "iPhone 14(iOS 16)-04",
-      "capabilities": {
-        "platformVersion": "16.1",
-        "deviceName": "iPhone 14(iOS 16)-04",
-        "udid": "F56D3F30-8CB8-4C2A-89FE-2A873EC0A443",
-        "wdaLocalPort": "8214"
-      }
-    },
-
-    {
-      "profileName": "iPhone 13(iOS 15)-01",
-      "tapAppIconMethod": "",
-      "tapAppIconMacro": "",
-      "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13(iOS 15)-01",
-        "udid": "868FB87B-A218-4ED0-8833-9A864532ED12",
-        "wdaLocalPort": "8211"
-      }
-    },
-    {
-      "profileName": "iPhone 13(iOS 15)-02",
-      "tapAppIconMethod": "",
-      "tapAppIconMacro": "",
-      "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13(iOS 15)-02",
-        "udid": "FC2695EA-BDF8-4B32-8628-6648C1D5B567",
-        "wdaLocalPort": "8212"
-      }
-    },
-    {
-      "profileName": "iPhone 13(iOS 15)-03",
-      "tapAppIconMethod": "",
-      "tapAppIconMacro": "",
-      "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13(iOS 15)-03",
-        "udid": "BD332FA2-D3D3-4A58-A51C-5D09945B730F",
-        "wdaLocalPort": "8213"
-      }
-    },
-    {
-      "profileName": "iPhone 13(iOS 15)-04",
-      "tapAppIconMethod": "",
-      "tapAppIconMacro": "",
-      "capabilities": {
-        "platformVersion": "15.5",
-        "deviceName": "iPhone 13(iOS 15)-04",
-        "udid": "E2AC4280-0A1A-4F25-9E34-8AD43F311A24",
-        "wdaLocalPort": "8214"
       }
     }
 

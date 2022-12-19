@@ -78,12 +78,29 @@ object AndroidSettingsMacro : TestDrive {
             .screenIs("[Connected devices Screen]")
     }
 
-    @Macro("[Developer options Screen]")
-    fun developerOptionsScreen() {
+    @Macro("[Battery Screen]")
+    fun batteryScreen() {
 
-        systemScreen()
-        it.tapWithScrollDown("Developer options")
-            .screenIs("[Developer options Screen]")
+        if (it.isScreen("[Battery Screen]")) {
+            it.flickTopToBottom()
+            return
+        }
+
+        androidSettingsTopScreen()
+        it.tapWithScrollDown("Battery")
+            .screenIs("[Battery Screen]")
+    }
+
+    @Macro("[Wallpaper Screen]")
+    fun wallpaperScreen() {
+
+        if (it.isScreen("[Wallpaper Screen]")) {
+            return
+        }
+
+        androidSettingsTopScreen()
+        it.tapWithScrollDown("[Wallpaper & style]")
+            .screenIs("[Wallpaper Screen]")
     }
 
     @Macro("[Accessibility Screen]")
@@ -110,6 +127,14 @@ object AndroidSettingsMacro : TestDrive {
         it.flickBottomToTop()
             .tapWithScrollDown("[System]")
             .screenIs("[System Screen]")
+    }
+
+    @Macro("[Developer options Screen]")
+    fun developerOptionsScreen() {
+
+        systemScreen()
+        it.tapWithScrollDown("Developer options")
+            .screenIs("[Developer options Screen]")
     }
 
 }

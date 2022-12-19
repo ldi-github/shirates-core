@@ -4,9 +4,11 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestConfigContainer
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.utility.android.AndroidDeviceInfo
+import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.getStringOrEmpty
-import shirates.core.utility.tool.AdbUtility
-import shirates.core.utility.tool.SimctlUtility
+import shirates.core.utility.ios.IosDeviceInfo
+import shirates.core.utility.ios.IosDeviceUtility
 
 object DeviceListUtility {
 
@@ -16,8 +18,8 @@ object DeviceListUtility {
         var info = ""
 
         var profileInstance: TestProfile? = null
-        var androidDeviceInfo: AdbUtility.AndroidDeviceInfo? = null
-        var iosDeviceInfo: SimctlUtility.IosDeviceInfo? = null
+        var androidDeviceInfo: AndroidDeviceInfo? = null
+        var iosDeviceInfo: IosDeviceInfo? = null
 
         val isEmulator: Boolean
             get() {
@@ -40,7 +42,7 @@ object DeviceListUtility {
     /**
      * getConnectedDeviceList
      */
-    fun getConnectedDeviceList(log: Boolean = true): List<DeviceInfo> {
+    fun getConnectedDeviceList(): List<DeviceInfo> {
 
         val list = mutableListOf<DeviceInfo>()
 
@@ -48,8 +50,8 @@ object DeviceListUtility {
             TestConfigContainer(PropertiesManager.configFile)
         }
 
-        getAndroidDeviceInfoList(log, list)
-        getIosDeviceInfoList(log, list)
+        getAndroidDeviceInfoList(list)
+        getIosDeviceInfoList(list)
 
         val result = mutableListOf<DeviceInfo>()
 
@@ -64,11 +66,8 @@ object DeviceListUtility {
         return result
     }
 
-    private fun getAndroidDeviceInfoList(
-        log: Boolean,
-        list: MutableList<DeviceInfo>
-    ) {
-        val androidDevices = AdbUtility.getAndroidDeviceList(log = log)
+    private fun getAndroidDeviceInfoList(list: MutableList<DeviceInfo>) {
+        val androidDevices = AndroidDeviceUtility.getAndroidDeviceList()
         for (androidDeviceInfo in androidDevices) {
             val deviceInfo = DeviceInfo()
             deviceInfo.androidDeviceInfo = androidDeviceInfo
@@ -83,11 +82,8 @@ object DeviceListUtility {
         }
     }
 
-    private fun getIosDeviceInfoList(
-        log: Boolean,
-        list: MutableList<DeviceInfo>
-    ) {
-        val iosDevices = SimctlUtility.getBootedIosDeviceList(log = log)
+    private fun getIosDeviceInfoList(list: MutableList<DeviceInfo>) {
+        val iosDevices = IosDeviceUtility.getBootedSimulatorDeviceList()
         for (iosDeviceInfo in iosDevices) {
             val deviceInfo = DeviceInfo()
             deviceInfo.iosDeviceInfo = iosDeviceInfo

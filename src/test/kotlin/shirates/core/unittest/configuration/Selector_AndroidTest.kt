@@ -12,7 +12,7 @@ import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.isSame
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 
 class Selector_AndroidTest : UnitTest() {

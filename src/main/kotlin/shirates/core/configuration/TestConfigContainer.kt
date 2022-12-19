@@ -56,7 +56,7 @@ class TestConfigContainer(val testConfigPattern: String) {
             val testConfig = TestConfig(testConfigFile = file.toString())
             testConfigs.add(testConfig)
             for (profile in testConfig.profileMap) {
-                if (profileMap.containsKey(profile.key)) {
+                if (profileMap.containsKey(profile.key) && profile.key != "_default") {
                     throw TestConfigException(
                         message(
                             id = "profileNameDuplicated",
