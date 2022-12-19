@@ -7,7 +7,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import java.nio.file.Files
 

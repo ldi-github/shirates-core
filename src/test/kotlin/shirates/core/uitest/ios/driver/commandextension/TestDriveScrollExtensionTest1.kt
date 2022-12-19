@@ -7,6 +7,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
+import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import utility.handleIrregulars
@@ -68,6 +69,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
         assertThat(target2).isEqualTo(largestScrollableTarget)
     }
 
+    @Unstable("[iOS Settings Top Screen] is displayed(currentScreen=, expected identity=[Settings])")
     @Test
     @Order(30)
     fun hasScrollable() {

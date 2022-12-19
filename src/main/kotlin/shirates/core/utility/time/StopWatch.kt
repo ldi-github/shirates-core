@@ -1,9 +1,7 @@
-package shirates.core.utility.sync
+package shirates.core.utility.time
 
-import shirates.core.utility.format
 import shirates.core.utility.label
 import java.time.Duration
-import java.util.*
 
 /**
  * StopWatch
@@ -48,6 +46,14 @@ class StopWatch(var title: String = "") {
         }
 
     /**
+     * lastLap
+     */
+    val lastLap: LapEntry?
+        get() {
+            return laps.lastOrNull()
+        }
+
+    /**
      * start
      */
     fun start(): StopWatch {
@@ -58,42 +64,65 @@ class StopWatch(var title: String = "") {
         return this
     }
 
+    private fun createLapEntry(label: String, lapTime: Long = System.currentTimeMillis()): LapEntry {
+
+        return LapEntry(
+            label = label,
+            startTime = startTime,
+            lastLapTime = lastLap?.lapTime ?: startTime,
+            lapTime = lapTime
+        )
+    }
+
     /**
      * lap
      */
-    fun lap(label: String): StopWatch {
+    fun lap(label: String): LapEntry {
 
-        val time = System.currentTimeMillis()
+        val currentTime = System.currentTimeMillis()
 
         val invalidLabel = laps.any { it.label == label } || label == "start" || label == "end"
 
         val label2 =
-            if (invalidLabel) "${label}_${time}"
+            if (invalidLabel) "${label}_${currentTime}"
             else label
-        val entry = LapEntry(label = label2, time = time, elapsedMilliSeconds = time - startTime)
-        laps.add(entry)
+        val lapEntry = createLapEntry(label = label2)
+        laps.add(lapEntry)
 
         endTime = System.currentTimeMillis()
 
-        return this
+        return lapEntry
+    }
+
+    /**
+     * getLap
+     */
+    fun getLap(label: String): LapEntry? {
+
+        return laps.firstOrNull() { it.label == label }
     }
 
     /**
      * stop
      */
-    fun stop(): StopWatch {
+    fun stop(): LapEntry {
 
         endTime = System.currentTimeMillis()
 
         val last = laps.lastOrNull()
         if (last?.label == "end") {
-            last.time = endTime!!
+            last.lapTime = endTime!!
         } else {
-            val entry = LapEntry(label = "end", time = endTime!!, elapsedMilliSeconds = endTime!! - startTime)
+            val entry = LapEntry(
+                label = "end",
+                startTime = startTime,
+                lastLapTime = lastLap?.lapTime ?: startTime,
+                lapTime = endTime!!
+            )
             laps.add(entry)
         }
 
-        return this
+        return lastLap!!
     }
 
     /**
@@ -104,7 +133,8 @@ class StopWatch(var title: String = "") {
         val list = mutableListOf<LapEntry>()
         list.addAll(laps)
         if (list.firstOrNull()?.label != "start") {
-            list.add(0, LapEntry(label = "start", time = startTime, elapsedMilliSeconds = 0))
+            val lapEntry = createLapEntry(label = "start")
+            list.add(0, lapEntry)
         }
         return list
     }
@@ -117,28 +147,5 @@ class StopWatch(var title: String = "") {
             return duration.label
         }
         return "$title: ${duration.label}"
-    }
-
-    /**
-     * LapEntry
-     */
-    data class LapEntry(
-        var label: String,
-        var time: Long,
-        var elapsedMilliSeconds: Long
-    ) {
-        override fun toString(): String {
-
-            val date = Date(time)
-            return "${label}\t${date.format("yyyy/MM/dd HH:mm:ss.SSS")}\t${elapsedMilliSeconds}"
-        }
-
-        /**
-         * durationFrom
-         */
-        fun durationFrom(fromTime: Long): Duration {
-
-            return Duration.ofMillis(time - fromTime)
-        }
     }
 }

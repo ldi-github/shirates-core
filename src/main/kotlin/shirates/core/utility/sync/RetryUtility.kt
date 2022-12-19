@@ -4,6 +4,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
+import shirates.core.utility.time.StopWatch
 
 /**
  * RetryUtility

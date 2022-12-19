@@ -6,7 +6,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
 import shirates.core.testcode.UITest
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriveAssertionExtensionTest2 : UITest() {

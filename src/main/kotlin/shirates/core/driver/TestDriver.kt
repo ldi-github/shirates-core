@@ -35,8 +35,8 @@ import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
-import shirates.core.utility.sync.StopWatch
 import shirates.core.utility.sync.SyncUtility
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toBufferedImage
 import java.io.File
 import java.io.FileNotFoundException

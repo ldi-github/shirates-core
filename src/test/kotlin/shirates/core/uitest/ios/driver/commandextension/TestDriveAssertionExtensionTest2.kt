@@ -8,7 +8,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")

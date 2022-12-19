@@ -26,6 +26,7 @@ import shirates.core.server.AppiumServerManager
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.ios.IosDeviceUtility
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.spec.report.TestListReport
 import java.lang.reflect.InvocationTargetException
@@ -446,10 +447,16 @@ abstract class UITest : TestDrive {
         }
 
         CodeExecutionContext.isInScenario = true
+
+        val sw = StopWatch(title = "Running scenario").start()
         try {
             scenarioCore(scenarioId, order, desc, testProc)
         } finally {
             CodeExecutionContext.isInScenario = false
+
+            sw.stop()
+            val duration = "%.1f".format(sw.elapsedSeconds)
+            TestLog.info(message(id = "scenarioExecuted", arg1 = duration))
         }
     }
 
@@ -595,7 +602,6 @@ abstract class UITest : TestDrive {
             throw TestAbortedException(message(id = "testSkipped"))
         }
 
-        TestLog.info("test finished.")
     }
 
     /**

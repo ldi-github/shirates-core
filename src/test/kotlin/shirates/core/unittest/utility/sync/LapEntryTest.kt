@@ -3,39 +3,64 @@ package shirates.core.unittest.utility.sync
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.testcode.UnitTest
-import shirates.core.utility.format
 import shirates.core.utility.label
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.LapEntry
 import shirates.core.utility.toDate
-import java.util.*
 
 class LapEntryTest : UnitTest() {
+
+    @Test
+    fun init() {
+
+        run {
+            // Arrange
+            val startDate = "2022/01/01 12:34:00.789".toDate("yyyy/MM/dd HH:mm:ss.SSS")
+            val lastLapDate = "2022/01/01 12:34:01.789".toDate("yyyy/MM/dd HH:mm:ss.SSS")
+            val lapDate = "2022/01/01 12:34:56.789".toDate("yyyy/MM/dd HH:mm:ss.SSS")
+            // Act
+            val entry = LapEntry(
+                label = "label1",
+                startTime = startDate.time,
+                lastLapTime = lastLapDate.time,
+                lapTime = lapDate.time,
+            )
+            // Assert
+            assertThat(entry.label).isEqualTo("label1")
+            assertThat(entry.startTime).isEqualTo(startDate.time)
+            assertThat(entry.lastLapTime).isEqualTo(lastLapDate.time)
+            assertThat(entry.lapTime).isEqualTo(lapDate.time)
+            assertThat(entry.elapsedMilliSeconds).isEqualTo(lapDate.time - startDate.time)
+            assertThat(entry.elapsedSeconds).isEqualTo(entry.elapsedMilliSeconds / 1000)
+            assertThat(entry.durationMilliSeconds).isEqualTo(lapDate.time - lastLapDate.time)
+            assertThat(entry.durationSeconds).isEqualTo(entry.durationMilliSeconds / 1000)
+        }
+    }
 
     @Test
     fun toStringTest() {
 
         // Arrange
-        val entry = StopWatch.LapEntry(
+        val entry = LapEntry(
             label = "label1",
-            time = "2022/01/01 12:34:56.789".toDate("yyyy/MM/dd HH:mm:ss.SSS").time,
-            elapsedMilliSeconds = 789
+            startTime = "2022/01/01 12:34:00.789".toDate("yyyy/MM/dd HH:mm:ss.SSS").time,
+            lastLapTime = "2022/01/01 12:34:01.789".toDate("yyyy/MM/dd HH:mm:ss.SSS").time,
+            lapTime = "2022/01/01 12:34:56.789".toDate("yyyy/MM/dd HH:mm:ss.SSS").time,
         )
         // Act
         val actual = entry.toString()
         // Assert
-        val date = Date(entry.time)
-        val expected = "${entry.label}\t${date.format("yyyy/MM/dd HH:mm:ss.SSS")}\t${entry.elapsedMilliSeconds}"
-        assertThat(actual).isEqualTo(expected)
+        assertThat(actual).isEqualTo("label1\t2022/01/01 12:34:56.789\t56000")
     }
 
     @Test
     fun durationFrom() {
 
         // Arrange
-        val entry = StopWatch.LapEntry(
+        val entry = LapEntry(
             label = "label1",
-            time = "2022/01/01 12:34:56.789".toDate("yyyy/MM/dd HH:mm:ss.SSS").time,
-            elapsedMilliSeconds = 789
+            startTime = "2022/01/01 12:34:00.789".toDate("yyyy/MM/dd HH:mm:ss.SSS").time,
+            lastLapTime = "2022/01/01 12:34:01.789".toDate("yyyy/MM/dd HH:mm:ss.SSS").time,
+            lapTime = "2022/01/01 12:34:56.789".toDate("yyyy/MM/dd HH:mm:ss.SSS").time,
         )
 
         run {

@@ -8,7 +8,7 @@ import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.StackTraceUtility
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 
 private const val COMMAND_CONTEXT_FILE_NAME: String = "TestDriverCommandContext.kt"
 

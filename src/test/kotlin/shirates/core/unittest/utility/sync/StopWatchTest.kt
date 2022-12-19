@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.format
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toDate
 import java.util.*
 
@@ -78,7 +78,7 @@ class StopWatchTest : UnitTest() {
     }
 
     @Test
-    fun lap() {
+    fun lap_getLap() {
 
         // Arrange
         val sw = StopWatch()
@@ -91,12 +91,16 @@ class StopWatchTest : UnitTest() {
         // Assert
         assertThat(sw.endTime).isGreaterThan(0)
         assertThat(lap1.label).isEqualTo("lap1")
-        assertThat(lap1.time).isGreaterThan(sw.startTime)
+        assertThat(lap1.lapTime).isGreaterThan(sw.startTime)
         assertThat(lap1.elapsedMilliSeconds).isGreaterThan(0)
         assertThat(sw.laps.count()).isEqualTo(1)
-        assertThat(lap1.toString()).isEqualTo("${lap1.label}\t${Date(lap1.time).format("yyyy/MM/dd HH:mm:ss.SSS")}\t${lap1.elapsedMilliSeconds}")
+        assertThat(lap1.toString()).isEqualTo("${lap1.label}\t${Date(lap1.lapTime).format("yyyy/MM/dd HH:mm:ss.SSS")}\t${lap1.elapsedMilliSeconds}")
         println(lap1)
 
+        // Act
+        val getLap1 = sw.getLap(label = "lap1")
+        // Assert
+        assertThat(getLap1).isEqualTo(lap1)
     }
 
     @Test
@@ -196,8 +200,10 @@ class StopWatchTest : UnitTest() {
 
         run {
             // Arrange
-            val sw = StopWatch().stop()
+            val sw = StopWatch()
+            sw.stop()
             sw.endTime = sw.startTime
+
             // Act
             val actual = sw.toString()
             println(actual)
@@ -207,7 +213,8 @@ class StopWatchTest : UnitTest() {
         }
         run {
             // Arrange
-            val sw = StopWatch().stop()
+            val sw = StopWatch()
+            sw.stop()
             sw.endTime = sw.startTime + 123
             val expected = "00:00:00.123"
             // Actual
@@ -218,7 +225,8 @@ class StopWatchTest : UnitTest() {
         }
         run {
             // Arrange
-            val sw = StopWatch().stop()
+            val sw = StopWatch()
+            sw.stop()
             sw.endTime = sw.startTime + (25 * 3600 + 12 * 60 + 34) * 1000 + 567
             val expected = "25:12:34.567"
             // Actual

@@ -40,7 +40,8 @@ class TestDriveScrollExtensionTest2 : UITest() {
             }
             case(3) {
                 action {
-                    it.scrollDown(durationSeconds = 8.0)
+                    it.scrollDown(durationSeconds = 6.0)
+                        .scrollDown(durationSeconds = 2.0)
                 }.expectation {
                     it.dontExist("Network & internet")
                     it.exist("Security")
@@ -48,7 +49,8 @@ class TestDriveScrollExtensionTest2 : UITest() {
             }
             case(4) {
                 action {
-                    it.scrollUp(durationSeconds = 8.0)
+                    it.scrollUp(durationSeconds = 6.0)
+                        .scrollUp(durationSeconds = 2.0)
                 }.expectation {
                     it.exist("Network & internet")
                         .dontExist("Security")

@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
+import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
 class TestDriveSelectExtensionTest4 : UITest() {
 
+    @Unstable("false is true (actual=false)")
     @Test
     @Order(10)
     fun canSelectWithScrollDown_canSelectWithScrollUp3() {

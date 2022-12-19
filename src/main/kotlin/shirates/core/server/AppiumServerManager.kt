@@ -13,7 +13,7 @@ import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ProcessUtility
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 import java.io.ByteArrayOutputStream
 import java.net.URL
 import java.text.SimpleDateFormat

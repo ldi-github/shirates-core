@@ -9,7 +9,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 
 object AndroidDeviceUtility {
 

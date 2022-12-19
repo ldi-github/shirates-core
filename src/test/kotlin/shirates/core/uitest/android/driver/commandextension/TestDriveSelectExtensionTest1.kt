@@ -9,7 +9,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.testcode.Must
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
-import shirates.core.utility.sync.StopWatch
+import shirates.core.utility.time.StopWatch
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")

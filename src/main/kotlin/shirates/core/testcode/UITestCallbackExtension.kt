@@ -14,10 +14,12 @@ import shirates.core.driver.TestMode.isStub
 import shirates.core.exception.TestFailException
 import shirates.core.logging.LogFileFormat
 import shirates.core.logging.LogType
+import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.misc.EnvUtility
+import shirates.core.utility.time.StopWatch
 import java.nio.file.Files
 
 /**
@@ -27,6 +29,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
     AfterEachCallback, TestExecutionExceptionHandler {
 
     var beforeAllExecuted = false
+    var testClassWatch = StopWatch()
+    var testFunctionWatch = StopWatch()
 
     companion object {
         var uiTest: UITest? = null
@@ -44,6 +48,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failOfTestContext = false
         failAnnotation = null
         noLoadRunOfTestContext = false
+
+        testClassWatch = StopWatch("testClassWatch").start()
 
         val tr = context!!.requiredTestClass.annotations.firstOrNull() { it is Testrun } as Testrun?
         PropertiesManager.testrun = tr
@@ -84,6 +90,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
      * beforeEach
      */
     override fun beforeEach(context: ExtensionContext?) {
+
+        testFunctionWatch = StopWatch("testFunctionWatch").start()
 
         TestMode.clear()
         EnvUtility.reset()
@@ -170,6 +178,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         uiTest?.beforeEach(context)
         lastElement.lastError = null
+
+        val lap = testFunctionWatch.lap("setupExecuted")
+        val duration = "%.1f".format(lap.durationSeconds)
+        TestLog.info(message(id = "setupExecuted", arg1 = duration))
     }
 
     /**
@@ -204,6 +216,9 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failAnnotation = null
         noLoadRunOfTestContext = false
 
+        testFunctionWatch.stop()
+        val duration = "%.1f".format(testFunctionWatch.elapsedSeconds)
+        TestLog.info(message(id = "testFunctionExecuted", arg1 = duration))
     }
 
     /**
@@ -253,6 +268,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         TestLog.currentTestClass = null
         noLoadRunOfTestContext = false
+
+        testClassWatch.stop()
+        val duration = "%.1f".format(testClassWatch.elapsedSeconds)
+        TestLog.info(message(id = "testClassExecuted", arg1 = duration))
     }
 
     /**
