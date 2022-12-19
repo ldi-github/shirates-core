@@ -1,4 +1,4 @@
-# Automatic Device Detection with profile naming convention
+# Automatic device detection with profile naming convention
 
 You can determine the virtual/real device to use in the test by profile naming convention.
 
