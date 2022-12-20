@@ -110,7 +110,7 @@ Open **Android Studio** and see **virtual** tab in **Device Manager**.
 
 ![Device Manager](../_images/device-manager-virtual.png)
 
-You can specify AVD name and OS version as profile name.
+You can specify _AVD name_ as profile name.
 
 - `Pixel 3a(Android 12)`
 - `Pixel 3a(Android 12)-01`
@@ -125,7 +125,7 @@ Open **Xcode** and see **Simulators** tab.
 
 ![Device Manager](../_images/devices-and-simulators.png)
 
-You can specify iOS device name and OS version as profile name.
+You can specify _simulator device name_ as profile name.
 
 - `iPhone 14(16.0)`
 - `iPhone 14(16.1)`
