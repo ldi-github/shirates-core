@@ -1,12 +1,12 @@
 package shirates.spec.report
 
-import shirates.spec.report.entity.TestListItem
-import shirates.spec.utilily.*
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.LogLine
 import shirates.core.logging.LogType
 import shirates.core.logging.getParameter
 import shirates.core.utility.file.FileLockUtility.lockFile
+import shirates.spec.report.entity.TestListItem
+import shirates.spec.utilily.*
 import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Path
@@ -23,6 +23,7 @@ const val SCENARIO = 6
 const val EXEC = 7
 const val RESULT = 8
 const val LAST_EXECUTED = 9
+const val MESSAGE = 10
 
 class TestListReport() {
 
@@ -128,6 +129,7 @@ class TestListReport() {
                 exec = ws.cells(row, EXEC).text.split(".").first()
                 result = ws.cells(row, RESULT).text
                 lastExecuted = ws.cells(row, LAST_EXECUTED).text
+                message = ws.cells(row, MESSAGE).text
             }
             if (item.testClassName.isBlank().not()) {
                 testListItems.add(item)
@@ -227,6 +229,7 @@ class TestListReport() {
             ws.cells(r, EXEC).setCellValue(item.exec)
             ws.cells(r, RESULT).setCellValue(item.result)
             ws.cells(r, LAST_EXECUTED).setCellValue(item.lastExecuted)
+            ws.cells(r, MESSAGE).setCellValue(item.message)
         }
 
         workbook.saveAs(outputTestListPath)
@@ -305,6 +308,9 @@ class TestListReport() {
             testListItem.exec = "X"
             testListItem.result = if (noLoadRun) "" else logLine.result.label
             testListItem.lastExecuted = if (noLoadRun) "" else logLine.logDateTimeLabel.split(".").first()
+            if (testListItem.result == "ERROR" || testListItem.result == "NG" || testListItem.result == "SKIP" || testListItem.result == "-") {
+                testListItem.message = logLine.resultMessage
+            }
             testListItems.add(testListItem)
         }
         return testListItems

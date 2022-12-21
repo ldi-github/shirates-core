@@ -6,6 +6,7 @@ import shirates.core.driver.TestMode
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.report.TestReport
+import shirates.core.report.TestReportIndex
 import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.format
 import shirates.core.utility.toPath
@@ -1447,11 +1448,24 @@ object TestLog {
                 }
 
                 LogFileFormat.Html -> {
+                    val fileName = "$directoryForLog/_Report(${filterName})_$dateLabel.html"
                     TestReport(
                         filterName = filterName,
-                        fileName = "$directoryForLog/_Report(${filterName})_$dateLabel.html",
+                        fileName = fileName,
                         lines = logLines
                     ).writeHtml()
+                    if (filterName == "simple") {
+                        val reportIndexDir = PropertiesManager.testListDir.ifBlank { directoryForLog.parent.toString() }
+                        val reportIndexFilePath = reportIndexDir.toPath().resolve("_ReportIndex.html")
+                        lockFile(filePath = reportIndexFilePath) {
+                            TestReportIndex(
+                                indexFilePath = reportIndexFilePath,
+                                isNoLoadRun = TestMode.isNoLoadRun
+                            )
+                                .add(fileName = fileName, logLines = logLines)
+                                .writeFile()
+                        }
+                    }
                 }
             }
 

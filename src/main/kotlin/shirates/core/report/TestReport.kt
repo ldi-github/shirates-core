@@ -5,6 +5,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogLine
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
+import shirates.core.report.TestReportUtility.getShortenMessageWithEllipsis
 import shirates.core.utility.file.ResourceUtility
 import shirates.core.utility.toPath
 import java.io.File
@@ -262,15 +263,6 @@ class TestReport(
         sb.append("<td class='processingTime'>${line.processingTime / 1000}</td>")
         sb.appendLine("</tr>")
 
-    }
-
-    private fun getShortenMessageWithEllipsis(message: String): String {
-        if (message.length <= 120) {
-            return message
-        }
-
-        val shortenMessage = message.substring(0, 120).trim() + "..."
-        return shortenMessage
     }
 
     private fun writeLogSection(sb: StringBuilder) {

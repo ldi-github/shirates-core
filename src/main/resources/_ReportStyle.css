@@ -323,3 +323,8 @@ td {
 .noLoadRunCell {
     background-color: silver;
 }
+
+.zero {
+    font-weight: normal !important;
+    color: gray
+}
