@@ -157,9 +157,6 @@ data class TestElement(
             if (isEmpty) {
                 return false
             }
-            if (isiOS && isVisible.not()) {
-                return false
-            }
             val frame = this.getScrollableElementsInAncestors().lastOrNull() ?: rootElement
             if (this.isIncludedIn(frame).not()) {
                 return false
