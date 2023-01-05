@@ -157,6 +157,9 @@ data class TestElement(
             if (isEmpty) {
                 return false
             }
+            if (bounds.area == 0) {
+                return false
+            }
             val frame = this.getScrollableElementsInAncestors().lastOrNull() ?: rootElement
             if (this.isIncludedIn(frame).not()) {
                 return false
