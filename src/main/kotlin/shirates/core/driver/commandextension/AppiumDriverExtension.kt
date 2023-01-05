@@ -4,9 +4,11 @@ import io.appium.java_client.AppiumDriver
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.testContext
+import shirates.core.driver.testDrive
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.toPath
 import java.nio.file.Files
 
@@ -66,6 +68,10 @@ internal fun AppiumDriver.removeApp(packageOrBundleId: String? = testContext.pro
         TestDriver.iosDriver.removeApp(packageOrBundleId)
     }
 
+    SyncUtility.doUntilTrue {
+        isAppInstalled(packageOrBundleId = packageOrBundleId).not()
+    }
+    testDrive.waitForClose(testContext.appIconName)
 }
 
 internal fun AppiumDriver.terminateApp(packageOrBundleId: String?) {
