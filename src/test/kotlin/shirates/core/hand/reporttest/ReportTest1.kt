@@ -11,7 +11,7 @@ import shirates.core.testcode.UITest
 class ReportTest1 : UITest() {
 
     @Test
-    @DisplayName("Test 1")
+    @DisplayName("OK,NG")
     fun test1() {
 
         scenario {
@@ -29,7 +29,7 @@ class ReportTest1 : UITest() {
     }
 
     @Test
-    @DisplayName("Test 2")
+    @DisplayName("MANUAL,ERROR")
     fun test2() {
 
         scenario {
@@ -47,7 +47,7 @@ class ReportTest1 : UITest() {
     }
 
     @Test
-    @DisplayName("Test 3")
+    @DisplayName("SKIP_SCENARIO")
     fun test3() {
 
         scenario {
@@ -60,7 +60,7 @@ class ReportTest1 : UITest() {
     }
 
     @Test
-    @DisplayName("Test 4")
+    @DisplayName("NOTIMPL")
     fun test4() {
 
         scenario {
