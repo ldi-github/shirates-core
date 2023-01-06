@@ -20,7 +20,7 @@ class AndroidDeviceInfo(val line: String) {
             val lines = psResult.split(Const.NEW_LINE)
             if (lines.count() >= 2) {
                 if (TestMode.isRunningOnWindows) {
-                    return lines[1].split(" ").last().removePrefix("@")
+                    return lines[1]
                 } else {
                     val cmdIndex = lines[1].indexOf("/")
                     return lines[1].substring(cmdIndex)

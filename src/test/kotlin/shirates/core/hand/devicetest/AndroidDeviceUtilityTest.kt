@@ -6,7 +6,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.testcode.UITest
 import shirates.core.utility.android.AndroidDeviceUtility
 
-@Testrun(testrunFile = "unitTestConfig/android/androidSettings/androidDeviceUtilityTest.properties")
+@Testrun(testrunFile = "unitTestConfig/android/androidSettings/androidDeviceUtilityTest.testrun.properties")
 class AndroidDeviceUtilityTest : UITest() {
 
     @Test

@@ -11,6 +11,24 @@ class ProfileNameParserTest : UnitTest() {
     fun init_platformName() {
 
         run {
+            val testProfileName = "Android"
+            val parser = ProfileNameParser(testProfileName)
+            assertThat(parser.testProfileName).isEqualTo(testProfileName)
+            assertThat(parser.platformName).isEqualTo("Android")
+            assertThat(parser.model).isEqualTo("")
+            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.udid).isEqualTo("")
+        }
+        run {
+            val testProfileName = "Android/googlePixel"
+            val parser = ProfileNameParser(testProfileName)
+            assertThat(parser.testProfileName).isEqualTo(testProfileName)
+            assertThat(parser.platformName).isEqualTo("Android")
+            assertThat(parser.model).isEqualTo("")
+            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.udid).isEqualTo("")
+        }
+        run {
             val testProfileName = "ios"
             val parser = ProfileNameParser(testProfileName)
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
