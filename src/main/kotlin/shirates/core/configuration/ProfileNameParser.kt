@@ -11,6 +11,11 @@ class ProfileNameParser(val testProfileName: String) {
         parse()
     }
 
+    private fun getOsVersionPart(osVersionPart: String): String {
+        val match = Regex("([0-9.]+)").find(osVersionPart)
+        return match?.value ?: ""
+    }
+
     private fun parse() {
 
         // platformName
@@ -58,17 +63,16 @@ class ProfileNameParser(val testProfileName: String) {
              */
             model = text.substring(0, parenthesisStartIndex)
             val osVersionPart = text.substring(parenthesisStartIndex)
-            val match = Regex("([0-9.]+)").find(osVersionPart)
-            if (match != null) {
-                osVersion = match.value
-            }
+            osVersion = getOsVersionPart(osVersionPart)
             return
         }
         if (pn.startsWith("android")) {
             /**
              * Android osVersion
              */
-            osVersion = pn.replace("*", "").replace("android", "").replace(" ", "").replace("(", "").replace(")", "")
+            val osVersionPart =
+                pn.replace("*", "").replace("android", "").replace(" ", "").replace("(", "").replace(")", "")
+            osVersion = getOsVersionPart(osVersionPart)
             return
         }
         if (pn.startsWith("ios") || pn.startsWith("ipad")) {

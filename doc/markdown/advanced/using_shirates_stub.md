@@ -56,7 +56,6 @@ See [shirates-stub](https://github.com/ldi-github/shirates-stub.git).
   "startupActivity": "com.android.settings.Settings",
 
   "capabilities": {
-    "platformVersion": "12",
     "language": "en",
     "locale": "US"
   },
