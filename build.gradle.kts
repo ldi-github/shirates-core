@@ -93,10 +93,6 @@ dependencies {
     // BoofCV
     implementation("org.boofcv:boofcv-core:0.41")
     testImplementation("org.boofcv:boofcv-core:0.41")
-
-    // jsoup
-    implementation("org.jsoup:jsoup:1.15.3")
-    testImplementation("org.jsoup:jsoup:1.15.3")
 }
 
 tasks {
