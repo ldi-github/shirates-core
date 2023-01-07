@@ -1456,29 +1456,42 @@ object TestLog {
                 }
 
                 LogFileFormat.Html -> {
-                    val fileName = "$directoryForLog/_Report(${filterName})_$dateLabel.html"
+                    val reportFileName = "$directoryForLog/_Report(${filterName})_$dateLabel.html"
                     TestReport(
                         filterName = filterName,
-                        fileName = fileName,
+                        fileName = reportFileName,
                         lines = logLines
                     ).writeHtml()
                     if (filterName == "simple") {
-                        val reportIndexDir = PropertiesManager.testListDir.ifBlank { directoryForLog.parent.toString() }
-                        val reportIndexFilePath = reportIndexDir.toPath().resolve("_ReportIndex.html")
-                        lockFile(filePath = reportIndexFilePath) {
-                            TestReportIndex(
-                                indexFilePath = reportIndexFilePath,
-                                isNoLoadRun = TestMode.isNoLoadRun
-                            )
-                                .add(fileName = fileName, logLines = logLines)
-                                .writeFile()
-                        }
+                        createOrUpdateTestReportIndex(
+                            inputReportFileName = reportFileName,
+                            logLines = logLines
+                        )
                     }
                 }
             }
 
         } catch (e: Exception) {
             throw TestDriverException("failed to output log file. (${e})")
+        }
+    }
+
+    internal fun createOrUpdateTestReportIndex(
+        inputReportFileName: String? = null,
+        logLines: List<LogLine> = listOf()
+    ) {
+        val reportIndexDir = PropertiesManager.testListDir.ifBlank { directoryForLog.parent.toString() }
+        val reportIndexFilePath = reportIndexDir.toPath().resolve("_ReportIndex.html")
+
+        lockFile(filePath = reportIndexFilePath) {
+            val tri = TestReportIndex(
+                indexFilePath = reportIndexFilePath,
+                isNoLoadRun = TestMode.isNoLoadRun
+            )
+            if (inputReportFileName != null) {
+                tri.add(fileName = inputReportFileName, logLines = logLines)
+            }
+            tri.writeFile()
         }
     }
 

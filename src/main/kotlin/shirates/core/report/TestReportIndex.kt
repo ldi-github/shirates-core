@@ -45,6 +45,7 @@ class TestReportIndex(
             val skipTd = tr.select(".skip").firstOrNull()
             val notImplTd = tr.select(".not-impl").firstOrNull()
             val knownIssueTd = tr.select(".known-issue").firstOrNull()
+            val elapsedSeconds = tr.select(".processingTime").firstOrNull()
             val messageTd = tr.select(".message").firstOrNull()
 
             val noLoadRun = okTd?.hasClass(NO_LOAD_RUN_CELL_CLASS) ?: false
@@ -56,6 +57,7 @@ class TestReportIndex(
             item.skipCount = skipTd?.text()?.toInt() ?: 0
             item.notImplCount = notImplTd?.text()?.toInt() ?: 0
             item.knownIssueCount = knownIssueTd?.text()?.toInt() ?: 0
+            item.durationSeconds = elapsedSeconds?.text()?.toLong() ?: 0
             item.message = messageTd?.text() ?: ""
 
             items.add(item)
@@ -80,7 +82,11 @@ class TestReportIndex(
         item.skipCount = logLines.count() { it.logType == LogType.SKIP }
         item.notImplCount = logLines.count() { it.logType == LogType.NOTIMPL }
         item.knownIssueCount = logLines.count() { it.logType == LogType.KNOWNISSUE }
-        item.elapsedSeconds = (logLines.lastOrNull()?.timeElapsed ?: 0) / 1000
+
+        val e1 = logLines.firstOrNull()?.timeElapsed ?: 0
+        val e2 = logLines.lastOrNull()?.timeElapsed ?: 0
+        val durationMilliseconds = e2 - e1
+        item.durationSeconds = durationMilliseconds / 1000
 
         val scenario = logLines.firstOrNull() { it.logType == LogType.SCENARIO }
         if (scenario != null) {
@@ -245,7 +251,7 @@ ${'$'}(function(){
         sb.append("            <tr class=''>")
         sb.append("<td class='no'>${number}</td>")
         sb.append("<td class='link'><a href='${line.link}'>${line.link}</a></td>")
-        sb.append("<td class='processingTime'>${line.elapsedSeconds}</td>")
+        sb.append("<td class='processingTime'>${line.durationSeconds}</td>")
         sb.append("<td class='OK section-count${z(line.okCount)}'>${line.okCount}</td>")
         sb.append("<td class='NG section-count${z(line.ngCount)}'>${line.ngCount}</td>")
         sb.append("<td class='ERROR section-count${z(line.errorCount)}'>${line.errorCount}</td>")
@@ -280,6 +286,6 @@ ${'$'}(function(){
         var notImplCount = 0
         var knownIssueCount = 0
         var message = ""
-        var elapsedSeconds = 0L
+        var durationSeconds = 0L
     }
 }
