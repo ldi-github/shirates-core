@@ -172,6 +172,7 @@ class TestReportIndex(
         sb.append("<th>KNOWNISSUE</th>")
         sb.append("<th>Message</th>")
         sb.appendLine("</tr>")
+        writeTotalLine(sb = sb)
         items.sortBy { it.link }
         items.forEachIndexed { index, line ->
             writeLine(sb = sb, index = index, line = line)
@@ -239,6 +240,39 @@ ${'$'}(function(){
         )
     }
 
+    private fun getTotalItem(): LineItem {
+
+        val item = LineItem(link = "Total", isNoLoadRun = isNoLoadRun)
+        item.durationSeconds = items.sumOf { it.durationSeconds }
+        item.okCount = items.sumOf { it.okCount }
+        item.ngCount = items.sumOf { it.ngCount }
+        item.errorCount = items.sumOf { it.errorCount }
+        item.manualCount = items.sumOf { it.manualCount }
+        item.skipCount = items.sumOf { it.skipCount }
+        item.notImplCount = items.sumOf { it.notImplCount }
+        item.knownIssueCount = items.sumOf { it.knownIssueCount }
+
+        return item
+    }
+
+    private fun writeTotalLine(sb: StringBuilder) {
+
+        val line = getTotalItem()
+        sb.append("            <tr class='total'>")
+        sb.append("<td class=''></td>")
+        sb.append("<td class='right'>Total</td>")
+        sb.append("<td class='processingTime section-count'>${line.durationSeconds}</td>")
+        sb.append("<td class='OK section-count'>${line.okCount}</td>")
+        sb.append("<td class='NG section-count'>${line.ngCount}</td>")
+        sb.append("<td class='ERROR section-count'>${line.errorCount}</td>")
+        sb.append("<td class='MANUAL section-count'>${line.manualCount}</td>")
+        sb.append("<td class='SKIP section-count'>${line.skipCount}</td>")
+        sb.append("<td class='NOTIMPL section-count'>${line.notImplCount}</td>")
+        sb.append("<td class='KNOWNISSUE section-count'>${line.knownIssueCount}</td>")
+        sb.append("<td class='message resultMessage'></td>")
+        sb.appendLine("</tr>")
+    }
+
     private fun z(count: Int): String {
 
         return if (count == 0) " zero" else ""
@@ -249,7 +283,7 @@ ${'$'}(function(){
         val number = index + 1
         val message = getShortenMessageWithEllipsis(line.message)
         sb.append("            <tr class=''>")
-        sb.append("<td class='no'>${number}</td>")
+        sb.append("<td class='lineNumber'>${number}</td>")
         sb.append("<td class='link'><a href='${line.link}'>${line.link}</a></td>")
         sb.append("<td class='processingTime'>${line.durationSeconds}</td>")
         sb.append("<td class='OK section-count${z(line.okCount)}'>${line.okCount}</td>")
