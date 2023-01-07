@@ -326,6 +326,8 @@ td {
 
 .total {
     font-weight: bold;
+    font-style: italic;
+    color: mediumblue;
     background-color: lightyellow;
 }
 
