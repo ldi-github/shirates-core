@@ -32,6 +32,8 @@ data class LogLine(
     var processingTime: Long = 0,
     var screenshot: String = "",
     var lastScreenshot: String = "",
+    var testClassName: String = "",
+    var testMethodName: String = "",
     var isInMacro: Boolean = false,
     var isInCheckCommand: Boolean = false,
     var isInSilentCommand: Boolean = false,

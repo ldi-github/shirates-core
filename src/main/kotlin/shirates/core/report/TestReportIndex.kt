@@ -80,6 +80,7 @@ class TestReportIndex(
         item.skipCount = logLines.count() { it.logType == LogType.SKIP }
         item.notImplCount = logLines.count() { it.logType == LogType.NOTIMPL }
         item.knownIssueCount = logLines.count() { it.logType == LogType.KNOWNISSUE }
+        item.elapsedSeconds = (logLines.lastOrNull()?.timeElapsed ?: 0) / 1000
 
         val scenario = logLines.firstOrNull() { it.logType == LogType.SCENARIO }
         if (scenario != null) {
@@ -244,7 +245,7 @@ ${'$'}(function(){
         sb.append("            <tr class=''>")
         sb.append("<td class='no'>${number}</td>")
         sb.append("<td class='link'><a href='${line.link}'>${line.link}</a></td>")
-        sb.append("<td class='time'>-</td>")
+        sb.append("<td class='processingTime'>${line.elapsedSeconds}</td>")
         sb.append("<td class='OK section-count${z(line.okCount)}'>${line.okCount}</td>")
         sb.append("<td class='NG section-count${z(line.ngCount)}'>${line.ngCount}</td>")
         sb.append("<td class='ERROR section-count${z(line.errorCount)}'>${line.errorCount}</td>")
@@ -279,5 +280,6 @@ ${'$'}(function(){
         var notImplCount = 0
         var knownIssueCount = 0
         var message = ""
+        var elapsedSeconds = 0L
     }
 }
