@@ -6,6 +6,8 @@ import shirates.core.driver.TestMode
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.report.TestReport
+import shirates.core.report.TestReportIndex
+import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.format
 import shirates.core.utility.toPath
@@ -50,6 +52,17 @@ object TestLog {
                 currentTestClass!!.simpleName
         }
 
+    /**
+     * currentTestMethodName
+     */
+    val currentTestMethodName: String
+        get() {
+            return UITestCallbackExtension.uiTest?.currentTestMethodName ?: ""
+        }
+
+    /**
+     * testConfigName
+     */
     var testConfigName: String = ""
 
     /**
@@ -284,12 +297,6 @@ object TestLog {
     }
 
     /**
-     * init
-     */
-    init {
-    }
-
-    /**
      * setupTestResults
      */
     fun setupTestResults(testResults: String, testConfigName: String) {
@@ -470,7 +477,9 @@ object TestLog {
             resultMessage = resultMsg,
             exception = exception,
             lastScreenshot = if (CodeExecutionContext.lastScreenshot.isBlank()) ""
-            else CodeExecutionContext.lastScreenshot.toPath().fileName.toString()
+            else CodeExecutionContext.lastScreenshot.toPath().fileName.toString(),
+            testClassName = currentTestClassName,
+            testMethodName = currentTestMethodName
         )
         logLine.timeElapsed = logLine.logDateTime.time - sessionStartTime.time
 
@@ -1447,16 +1456,42 @@ object TestLog {
                 }
 
                 LogFileFormat.Html -> {
+                    val reportFileName = "$directoryForLog/_Report(${filterName})_$dateLabel.html"
                     TestReport(
                         filterName = filterName,
-                        fileName = "$directoryForLog/_Report(${filterName})_$dateLabel.html",
+                        fileName = reportFileName,
                         lines = logLines
                     ).writeHtml()
+                    if (filterName == "simple") {
+                        createOrUpdateTestReportIndex(
+                            inputReportFileName = reportFileName,
+                            logLines = logLines
+                        )
+                    }
                 }
             }
 
         } catch (e: Exception) {
             throw TestDriverException("failed to output log file. (${e})")
+        }
+    }
+
+    internal fun createOrUpdateTestReportIndex(
+        inputReportFileName: String? = null,
+        logLines: List<LogLine> = listOf()
+    ) {
+        val reportIndexDir = PropertiesManager.testListDir.ifBlank { directoryForLog.parent.toString() }
+        val reportIndexFilePath = reportIndexDir.toPath().resolve("_ReportIndex.html")
+
+        lockFile(filePath = reportIndexFilePath) {
+            val tri = TestReportIndex(
+                indexFilePath = reportIndexFilePath,
+                isNoLoadRun = TestMode.isNoLoadRun
+            )
+            if (inputReportFileName != null) {
+                tri.add(fileName = inputReportFileName, logLines = logLines)
+            }
+            tri.writeFile()
         }
     }
 

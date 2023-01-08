@@ -126,7 +126,7 @@ th {
 
 td {
     border: solid 0.5px lightgray;
-    padding: 1px 2px 1px 4px;
+    padding: 1px 5px 1px 4px;
 }
 
 .title {
@@ -322,4 +322,28 @@ td {
 
 .noLoadRunCell {
     background-color: silver;
+}
+
+.total {
+    font-weight: bold;
+    font-style: italic;
+    color: mediumblue;
+    background-color: lightyellow;
+}
+
+.zero {
+    font-weight: normal !important;
+    color: transparent;
+}
+
+.left {
+    text-align: left !important;
+}
+
+.center {
+    text-align: center !important;
+}
+
+.right {
+    text-align: right !important;
 }

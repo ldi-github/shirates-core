@@ -96,9 +96,9 @@ fun TestDrive?.isApp(
     nickname: String? = null
 ): Boolean {
 
-    val testElement = getTestElement()
+    syncCache()
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(rootElement)
     var r = false
     context.execBooleanCommand(subject = nickname) {
         if (nickname == null) {

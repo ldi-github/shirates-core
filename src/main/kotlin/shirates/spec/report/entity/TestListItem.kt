@@ -10,6 +10,7 @@ class TestListItem {
     var exec = ""
     var result = ""
     var lastExecuted = ""
+    var message = ""
 
     val classNameFunctionName: String
         get() {
@@ -17,6 +18,6 @@ class TestListItem {
         }
 
     override fun toString(): String {
-        return "$no\t$sheetName\t$testClassName\t$function\t$order\t$scenario\t$exec\t$result\t$lastExecuted"
+        return "$no\t$sheetName\t$testClassName\t$function\t$order\t$scenario\t$exec\t$result\t$lastExecuted\t$message"
     }
 }

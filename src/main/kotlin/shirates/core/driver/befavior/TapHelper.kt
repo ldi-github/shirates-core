@@ -1,5 +1,6 @@
 package shirates.core.driver.befavior
 
+import shirates.core.driver.TapMethod
 import shirates.core.driver.TestDrive
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
@@ -13,22 +14,23 @@ object TapHelper : TestDrive {
      * swipeLeftAndTapAppIcon
      */
     fun swipeLeftAndTapAppIcon(
-        appIconName: String
+        appIconName: String,
+        tapMethod: TapMethod = TapMethod.click
     ) {
 
         if (it.canSelect(appIconName)) {
-            it.tap()
+            it.tap(tapMethod = tapMethod)
         } else {
             it.pressHome()
             if (it.canSelect(appIconName)) {
-                it.tap()
+                it.tap(tapMethod = tapMethod)
             }
             it.pressHome()
             for (i in 1..3) {
                 it.wait(0.5)
                 refreshCache()
                 if (canSelect(appIconName)) {
-                    it.tap()
+                    it.tap(tapMethod = tapMethod)
                     return
                 }
                 flickCenterToLeft()
@@ -42,18 +44,19 @@ object TapHelper : TestDrive {
      * appIconName
      */
     fun tapAppIconAsIos(
-        appIconName: String
+        appIconName: String,
+        tapMethod: TapMethod = TapMethod.click
     ) {
 
         if (it.canSelect(appIconName)) {
-            it.tap()
+            it.tap(tapMethod = tapMethod)
                 .wait()
             return
         }
 
         it.pressHome()
         if (it.canSelect(appIconName)) {
-            it.tap()
+            it.tap(tapMethod = tapMethod)
                 .wait()
             return
         }
@@ -63,7 +66,7 @@ object TapHelper : TestDrive {
         val pi = getPagerInfo()
         for (i in 1..pi.lastPageNumber) {
             if (it.canSelect(expression = appIconName)) {
-                it.tap()
+                it.tap(tapMethod = tapMethod)
                     .wait()
                 return
             } else {
@@ -86,10 +89,11 @@ object TapHelper : TestDrive {
      * tapAppIconAsGooglePixel
      */
     fun tapAppIconAsGooglePixel(
-        appIconName: String
+        appIconName: String,
+        tapMethod: TapMethod = TapMethod.auto
     ) {
         if (it.canSelect(appIconName)) {
-            it.tap()
+            it.tap(tapMethod = tapMethod)
                 .wait()
             return
         }
@@ -98,7 +102,7 @@ object TapHelper : TestDrive {
         }
         it.flickCenterToTop()
         if (it.canSelectWithScrollDown(appIconName)) {
-            it.tap()
+            it.tap(tapMethod = tapMethod)
                 .wait()
             return
         }

@@ -26,7 +26,7 @@ fun TestDrive?.tapAppIcon(
     context.execOperateCommand(command = command, message = message, subject = appIconName) {
 
         if (isiOS) {
-            if (canSelect("#SpotlightSearchField")) {
+            if (canSelect("#SpotlightSearchField||#dewey-search-field")) {
                 pressHome()
             }
         }
