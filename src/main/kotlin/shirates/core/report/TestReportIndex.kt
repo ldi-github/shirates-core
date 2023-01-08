@@ -99,11 +99,12 @@ class TestReportIndex(
         val durationMilliseconds = e2 - e1
         item.durationSeconds = durationMilliseconds / 1000
 
-        val scenario = logLines.firstOrNull() { it.logType == LogType.SCENARIO }
-        if (scenario != null) {
-            if (scenario.result.isFailType) {
-                item.message = scenario.resultMessage
-            }
+        /**
+         * Summary of ERROR message
+         */
+        val m = logLines.filter { it.logType == LogType.ERROR }.groupBy { it.message }
+        if (m.any()) {
+            item.message = m.entries.map { "${it.key}: ${it.value.count()}" }.joinToString(",")
         }
         items.add(item)
 
