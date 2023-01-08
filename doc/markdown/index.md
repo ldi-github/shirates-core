@@ -133,6 +133,8 @@
 
 ### Report
 
+- [HTML-Report](basic/creating_testclass/test_result_files.md)
+- [Test Report Index](basic/report/test_report_index.md) **(New! 2.1.0)**
 - [Spec-Report](basic/report/spec_report.md)
 - [No-Load-Run mode](basic/report/no_load_run_mode.md)
 - [TestList](basic/report/testlist.md)
