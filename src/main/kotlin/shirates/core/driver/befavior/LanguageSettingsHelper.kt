@@ -31,6 +31,8 @@ object LanguageSettingsHelper : TestDrive {
                 "adb -s $udid shell am start -a android.settings.LOCALE_SETTINGS".split(" ").toTypedArray()
             ShellUtility.executeCommand(args = args)
 
+            it.waitForDisplay("@言語||@Languages")
+
             if (locale == "JP") {
                 ifCanSelectNot("*日本語*") {
                     it.tap("#add_language")
@@ -43,15 +45,19 @@ object LanguageSettingsHelper : TestDrive {
                 it.select("<*日本語*>:right(#dragHandle)")
                     .swipeVerticalTo(endY = 0)
             } else {
-                ifCanSelectNot("English (United States)") {
+                ifCanSelectNot("*United States*") {
                     it.tap("#add_language")
-                        .tap("#android:id/locale_search_menu")
-                        .sendKeys("English (United")
-                    ifCanSelect("English (United States)") {
+                    ifCanSelect("*United States*") {
                         it.tap()
+                    }.ifElse {
+                        it.tap("#android:id/locale_search_menu")
+                            .sendKeys("English (United")
+                        ifCanSelect("*United States*") {
+                            it.tap()
+                        }
                     }
                 }
-                it.select("<English (United States)>:right(#dragHandle)")
+                it.select("<*United States*>:right(#dragHandle)")
                     .swipeVerticalTo(endY = 0)
             }
         }
