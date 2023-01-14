@@ -12,13 +12,13 @@ class ParameterRepository() {
     fun load(logLines: List<LogLine>) {
 
         for (log in logLines.filter { it.command == "parameter" }) {
-            val tokens = log.message.split(":").map { it.trim() }
-            if (tokens.count() == 2) {
-                val name = tokens[0]
-                val value = tokens[1]
+            val lastIndexOfSplitter = log.message.lastIndexOf(":")
+            if (lastIndexOfSplitter != -1) {
+                val name = log.message.substring(0, lastIndexOfSplitter).trim()
+                val value = log.message.substring(lastIndexOfSplitter + 1).trim()
                 paramMap[name] = value
             } else {
-                paramMap[log.message] = log.message
+                paramMap[log.message] = log.message.trim()
             }
         }
     }
