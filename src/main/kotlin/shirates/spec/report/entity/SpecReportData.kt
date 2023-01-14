@@ -58,18 +58,18 @@ class SpecReportData {
         }
     val deviceModel: String
         get() {
-            return p.getValue("deviceModel") ?: ""
+            return p.getValue("appium:deviceModel") ?: ""
         }
     var testDate = ""
     var testDateTime = ""
     var tester = "auto"
     val environment: String
         get() {
-            return p.getValue("environment") ?: ""
+            return p.getValue("appEnvironment") ?: ""
         }
-    val build: String
+    val appBuild: String
         get() {
-            return p.getValue("build") ?: ""
+            return p.getValue("appBuild") ?: ""
         }
     val noLoadRun: Boolean
         get() {

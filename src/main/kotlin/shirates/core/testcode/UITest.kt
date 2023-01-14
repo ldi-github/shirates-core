@@ -11,6 +11,7 @@ import shirates.core.configuration.TestConfig
 import shirates.core.configuration.TestProfile
 import shirates.core.configuration.repository.DatasetRepositoryManager
 import shirates.core.configuration.repository.ImageFileRepository
+import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
@@ -247,6 +248,37 @@ abstract class UITest : TestDrive {
                 configPath = configPath,
                 profileName = profileName
             )
+            // appPackageFile
+            if (profile.appPackageFile.isNullOrBlank().not()) {
+                ParameterRepository.write("appPackageFile", profile.appPackageFile!!)
+            }
+            // appEnvironment
+            if (profile.appEnvironment.isNullOrBlank().not()) {
+                val mr = profile.appEnvironment!!.toRegex().find(profile.appPackageFile ?: "")
+                if (mr?.groups?.count() == 2) {
+                    ParameterRepository.write("appEnvironment", mr.groupValues[1])
+                } else {
+                    ParameterRepository.write("appEnvironment", profile.appEnvironment!!)
+                }
+            }
+            // appVersion
+            if (profile.appVersion.isNullOrBlank().not()) {
+                val mr = profile.appVersion!!.toRegex().find(profile.appPackageFile ?: "")
+                if (mr?.groups?.count() == 2) {
+                    ParameterRepository.write("appVersion", mr.groupValues[1])
+                } else {
+                    ParameterRepository.write("appVersion", profile.appVersion!!)
+                }
+            }
+            // appBuild
+            if (profile.appBuild.isNullOrBlank().not()) {
+                val mr = profile.appBuild!!.toRegex().find(profile.appPackageFile ?: "")
+                if (mr?.groups?.count() == 2) {
+                    ParameterRepository.write("appBuild", mr.groupValues[1])
+                } else {
+                    ParameterRepository.write("appBuild", profile.appBuild!!)
+                }
+            }
 
             // setup ScreenRepository
             ScreenRepository.setup(
