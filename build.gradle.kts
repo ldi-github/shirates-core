@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "2.1.0"
+version = "2.1.1-SNAPSHOT"
 
 val appiumClientVersion = "8.1.1"
 
@@ -155,7 +155,7 @@ publishing {
             name = "ossrh"
             val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
             val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            url = if (version.toString().contains("-")) snapshotsRepoUrl else releasesRepoUrl
             credentials {
                 username = System.getenv("SHIRATES_CORE_OSSRH_USERNAME")
                 password = System.getenv("SHIRATES_CORE_OSSRH_PASSWORD")
