@@ -146,8 +146,11 @@ class SummaryReport(
                 val data = g.value[i]
                 data1.specLines.addAll(data.specLines)
             }
-            println("Writing sheet: $sheetName")
-            val sheet = templateWorkbook.copySheet(templateSheetName = "TestSpec", newSheetName = sheetName)
+            val sname =
+                if (sheetName.length > 31) sheetName.substring(sheetName.length - 31)   // Cutting sheetName
+                else sheetName
+            println("Writing sheet: $sname")
+            val sheet = templateWorkbook.copySheet(templateSheetName = "TestSpec", newSheetName = sname)
             SpecWriter.outputSpecSheet(templateWorksheet = sheet, worksheetData = data1)
         }
     }
@@ -161,14 +164,9 @@ class SummaryReport(
     private fun getSpecReportFiles() {
 
         val files = File(sessionPath.toUri()).walkTopDown()
-            .filter { it.name.startsWith(it.name) && it.name.endsWith(".xlsx") && it.toPath().parent != sessionPath }
+            .filter { it.name.startsWith(it.name) && it.name.endsWith(".xlsx") }
             .toList().sortedBy { it.absolutePath }
-        val groups =
-            files.groupBy {
-                val p = it.toPath()
-                val g = "${p.parent.parent.parent.fileName}/${p.parent.fileName}"
-                g
-            }
+        val groups = files.groupBy { it.name }
         for (g in groups) {
             val list = g.value.sortedBy { it.absolutePath }
             val last = list.last()

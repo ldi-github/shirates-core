@@ -155,7 +155,7 @@ publishing {
             name = "ossrh"
             val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
             val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            url = if (version.toString().contains("-")) snapshotsRepoUrl else releasesRepoUrl
             credentials {
                 username = System.getenv("SHIRATES_CORE_OSSRH_USERNAME")
                 password = System.getenv("SHIRATES_CORE_OSSRH_PASSWORD")
@@ -297,30 +297,11 @@ tasks.register<Test>("runtest") {
 }
 
 /**
- * spec
+ * test-spec-report
  */
-tasks.register<JavaExec>("generateCode") {
-    group = "spec"
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("shirates.core.task.CodeGeneratorExecute")
-}
-tasks.register<JavaExec>("createSpecReport") {
-    group = "spec"
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("shirates.core.task.SpecReportExecute")
-}
-tasks.register<JavaExec>("createSummaryReport") {
-    group = "spec"
-    classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("shirates.core.task.SummaryReportExecute")
-}
-
-/**
- * spec-report
- */
-tasks.register<Test>("spec-report-tutorial") {
+tasks.register<Test>("test-spec-report-tutorial") {
     useJUnitPlatform()
-    group = "spec-report"
+    group = "test-spec-report"
 
     filter {
         includeTestsMatching("tutorial*")
@@ -330,3 +311,47 @@ tasks.register<Test>("spec-report-tutorial") {
 
     environment("SR_noLoadRun", "true")
 }
+
+/**
+ * spec-code-generation
+ */
+tasks.register<JavaExec>("generateCode") {
+    group = "spec-code-generation"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("shirates.core.task.CodeGeneratorExecute")
+}
+
+/**
+ * spec-reporting
+ */
+tasks.register<JavaExec>("createSpecReport") {
+    group = "spec-reporting"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("shirates.core.task.SpecReportExecute")
+}
+tasks.register<JavaExec>("createSummaryReport") {
+    group = "spec-reporting"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("shirates.core.task.SummaryReportExecute")
+}
+
+/**
+ * spec-reporting-collected
+ */
+tasks.register<JavaExec>("collectSpecReport") {
+    group = "spec-reporting-collected"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("shirates.core.task.CollectSpecReportExecute")
+}
+tasks.register<JavaExec>("collectAndCreateSummaryReport") {
+    dependsOn("collectSpecReport")
+    group = "spec-reporting-collected"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("shirates.core.task.SummaryReportFromCollectedExecute")
+}
+tasks.register<JavaExec>("createSummaryReportFromCollected") {
+    group = "spec-reporting-collected"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("shirates.core.task.SummaryReportFromCollectedExecute")
+}
+

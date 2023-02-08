@@ -29,16 +29,21 @@ class SummaryReportExecutor(
         PropertiesManager.setup()
 
         val configDirectories = File(inputDirPath.toUri()).listFiles()
-            ?.filter { it.isDirectory && it.name != "unittest" } ?: listOf()
-        for (configDirectory in configDirectories) {
-            val sessionDirectories = configDirectory.listFiles()?.filter { it.isDirectory } ?: listOf()
+            ?.filter { it.isDirectory && it.name != "unittest" && it.name != "_Summary" } ?: listOf()
+        if (configDirectories.any()) {
+            for (configDirectory in configDirectories) {
+                val sessionDirectories = configDirectory.listFiles()?.filter { it.isDirectory } ?: listOf()
 
-            for (sessionDirectory in sessionDirectories) {
-                println()
-                println("session: ${configDirectory.name}/${sessionDirectory.name}")
-                SummaryReport(sessionPath = sessionDirectory.toPath())
-                    .execute()
+                for (sessionDirectory in sessionDirectories) {
+                    println()
+                    println("session: ${configDirectory.name}/${sessionDirectory.name}")
+                    SummaryReport(sessionPath = sessionDirectory.toPath())
+                        .execute()
+                }
             }
+        } else {
+            SummaryReport(sessionPath = inputDirPath)
+                .execute()
         }
     }
 }
