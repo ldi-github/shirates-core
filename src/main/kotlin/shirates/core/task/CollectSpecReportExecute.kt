@@ -41,11 +41,14 @@ object CollectSpecReportExecute {
         collectedDirectory.toFile().mkdir()
 
         val groups = specReportFiles.groupBy { it.name }
+        println("Collecting files.")
         for (g in groups) {
             val list = g.value.sortedBy { it.lastModified() }
             val latestFile = list.lastOrNull()
             if (latestFile != null) {
-                Files.copy(latestFile.toPath(), collectedDirectory.resolve(latestFile.name))
+                val p = collectedDirectory.resolve(latestFile.name)
+                Files.copy(latestFile.toPath(), p)
+                println("$p")
             }
         }
     }
