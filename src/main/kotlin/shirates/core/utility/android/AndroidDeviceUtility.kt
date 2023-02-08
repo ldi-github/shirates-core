@@ -325,4 +325,21 @@ object AndroidDeviceUtility {
         }
     }
 
+    /**
+     * shutdownEmulatorByUdid
+     */
+    fun shutdownEmulatorByUdid(udid: String) {
+
+        val args = mutableListOf("adb", "-s", udid, "shell", "reboot", "-p").toTypedArray()
+        ShellUtility.executeCommand(args = args)
+    }
+
+    /**
+     * shutdownEmulatorByAvdName
+     */
+    fun shutdownEmulatorByAvdName(avdName: String) {
+
+        val androidDeviceInfo = getAndroidDeviceInfo(avdName = avdName) ?: throw IllegalArgumentException("avdName")
+        return shutdownEmulatorByUdid(udid = androidDeviceInfo.udid)
+    }
 }

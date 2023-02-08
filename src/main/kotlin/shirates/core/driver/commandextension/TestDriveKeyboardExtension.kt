@@ -123,7 +123,7 @@ fun TestDrive?.pressEnter(
         if (isAndroid) {
             TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.ENTER))
         } else {
-            tap("#Return||#Go||#Search")  // Keys.ENTER never works. So tap software key.
+            tap("#Return||#Go||#Search||#Done")  // Keys.ENTER never works. So tap software key.
         }
         invalidateCache()
         wait(waitSeconds = waitSeconds)

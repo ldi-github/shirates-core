@@ -54,22 +54,26 @@ class SpecReportData {
         }
     val platformVersion: String
         get() {
-            return p.getValue("platformVersion") ?: ""
+            return p.getValue("appium:platformVersion") ?: ""
         }
     val deviceModel: String
         get() {
-            return p.getValue("deviceModel") ?: ""
+            if (platformName == "ANDROID") {
+                return p.getValue("appium:deviceModel") ?: ""
+            } else {
+                return p.getValue("appium:deviceName") ?: ""
+            }
         }
     var testDate = ""
     var testDateTime = ""
     var tester = "auto"
     val environment: String
         get() {
-            return p.getValue("environment") ?: ""
+            return p.getValue("appEnvironment") ?: ""
         }
-    val build: String
+    val appBuild: String
         get() {
-            return p.getValue("build") ?: ""
+            return p.getValue("appBuild") ?: ""
         }
     val noLoadRun: Boolean
         get() {

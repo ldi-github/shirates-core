@@ -293,11 +293,8 @@ object IosDeviceUtility {
             throw IllegalStateException("Could not get installed app information. Device status must be Booted.")
         }
 
-        val args = mutableListOf<String>()
-        args.add("xcrun")
-        args.add("simctl")
-        args.add("listapps")
-        args.add(iosDeviceInfo.udid)
+        val args = listOf("xcrun", "simctl", "listapps", iosDeviceInfo.udid)
+
         TestLog.info(args.joinToString(" "))
         val shellResult = ShellUtility.executeCommand(args = args.toTypedArray())
         val lines = shellResult.resultString.split("\n")
@@ -315,17 +312,31 @@ object IosDeviceUtility {
     /**
      * startSimulator
      */
-    fun startSimulator(iosDeviceInfo: IosDeviceInfo): ShellUtility.ShellResult {
+    fun startSimulator(
+        udid: String,
+        waitForBooted: Boolean = true
+    ): ShellUtility.ShellResult {
 
-        val args = mutableListOf<String>()
-        args.add("xcrun")
-        args.add("simctl")
-        args.add("boot")
-        args.add(iosDeviceInfo.udid)
+        val args = listOf("xcrun", "simctl", "boot", udid)
+
         TestLog.info(args.joinToString(" "))
 
         val shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray())
+        if (waitForBooted) {
+            waitSimulatorStatus(udid = udid)
+        }
         return shellResult
+    }
+
+    /**
+     * startSimulator
+     */
+    fun startSimulator(
+        iosDeviceInfo: IosDeviceInfo,
+        waitForBooted: Boolean = true
+    ): ShellUtility.ShellResult {
+
+        return startSimulator(udid = iosDeviceInfo.udid, waitForBooted = waitForBooted)
     }
 
     /**
@@ -360,13 +371,75 @@ object IosDeviceUtility {
     fun stopSimulator(
         udid: String
     ) {
-        val args = mutableListOf<String>()
-        args.add("xcrun")
-        args.add("simctl")
-        args.add("shutdown")
-        args.add(udid)
+        val args = listOf("xcrun", "simctl", "shutdown", udid)
 
         TestLog.info(args.joinToString(" "))
         ShellUtility.executeCommand(args = args.toTypedArray())
     }
+
+    /**
+     * terminateApp
+     */
+    fun terminateApp(
+        udid: String,
+        bundleId: String
+    ) {
+        val args = listOf("xcrun", "simctl", "terminate", udid, bundleId)
+        ShellUtility.executeCommand(args = args.toTypedArray())
+    }
+
+    /**
+     * setAppleLanguages
+     */
+    fun setAppleLanguages(
+        udid: String,
+        vararg langs: String
+    ) {
+        val args = mutableListOf(
+            "xcrun", "simctl", "spawn", udid, "defaults", "write", "-globalDomain", "AppleLanguages", "-array"
+        )
+        for (lang in langs) {
+            args.add(lang)
+        }
+
+        TestLog.info(args.joinToString(" "))
+        ShellUtility.executeCommand(args = args.toTypedArray())
+    }
+
+    fun setAppleLocale(
+        udid: String,
+        locale: String,
+        setAppleLanguages: Boolean = true,
+        restartDevice: Boolean = true
+    ) {
+        if (setAppleLanguages) {
+            setAppleLanguages(udid = udid, locale)
+        }
+
+        terminateApp(udid = udid, bundleId = "com.apple.Preferences")
+
+        val args = mutableListOf(
+            "xcrun", "simctl", "spawn", udid, "defaults", "write", "-globalDomain", "AppleLocale", "-string", locale
+        )
+
+        TestLog.info(args.joinToString(" "))
+        ShellUtility.executeCommand(args = args.toTypedArray())
+
+        if (restartDevice) {
+            stopSimulator(udid = udid)
+            waitSimulatorStatus(udid = udid, status = "Shutdown")
+            startSimulator(udid = udid)
+        }
+
+        waitSimulatorStatus(udid = udid)
+    }
+
+    /**
+     * restartSpringBoard
+     */
+    fun restartSpringBoard() {
+
+        ShellUtility.executeCommand("killall", "-HUP", "SpringBoard")
+    }
+
 }
