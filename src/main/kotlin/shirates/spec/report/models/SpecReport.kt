@@ -2,12 +2,12 @@ package shirates.spec.report.models
 
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import shirates.core.logging.TestLog
 import shirates.spec.report.entity.SpecReportData
 import shirates.spec.utilily.ExcelUtility
 import shirates.spec.utilily.SpecResourceUtility
 import shirates.spec.utilily.removeSheet
 import shirates.spec.utilily.worksheets
-import shirates.core.logging.TestLog
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -61,7 +61,7 @@ class SpecReport(
                 tester = tester,
                 testDate = testDate,
                 environment = environment,
-                build = build
+                build = appBuild
             )
 
             val targetLogLines = logLines.filter { it.testCaseId.isNotBlank() }

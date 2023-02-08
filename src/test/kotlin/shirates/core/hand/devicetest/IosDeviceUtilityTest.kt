@@ -46,7 +46,7 @@ class IosDeviceUtilityTest {
     @Test
     fun isInstalled() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.0)-01")
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
         val isInstalled = IosDeviceUtility.isInstalled(
@@ -59,7 +59,7 @@ class IosDeviceUtilityTest {
     @Test
     fun startSimulator() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.0)-01")
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
         val r = IosDeviceUtility.startSimulator(iosDeviceInfo = iosDeviceInfo)
@@ -79,10 +79,34 @@ class IosDeviceUtilityTest {
     @Test
     fun stopSimulator() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.0)-01")
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
         IosDeviceUtility.stopSimulator(udid = iosDeviceInfo.udid)
+    }
+
+    @Test
+    fun setAppleLanguages() {
+
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+
+        IosDeviceUtility.setAppleLanguages(udid = iosDeviceInfo.udid, "ja-JP", "en-US")
+    }
+
+    @Test
+    fun setLanguage() {
+
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+
+        if (iosDeviceInfo.status == "Shutdown") {
+            IosDeviceUtility.startSimulator(iosDeviceInfo)
+        }
+
+        IosDeviceUtility.setAppleLocale(udid = iosDeviceInfo.udid, "ja-JP")
+        Thread.sleep(3000)
+        IosDeviceUtility.setAppleLocale(udid = iosDeviceInfo.udid, "en-US")
     }
 
 }

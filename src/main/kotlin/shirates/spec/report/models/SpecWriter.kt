@@ -185,6 +185,7 @@ class SpecWriter(val specReport: SpecReport) {
                 templateWorksheet.cells("D2").setCellValue(testClassName)
                 templateWorksheet.cells("D3").setCellValue(profileName)
                 templateWorksheet.cells("D4").setCellValue(deviceModel)
+                templateWorksheet.cells("D5").setCellValue(platformVersion)
                 if (noLoadRun) {
                     templateWorksheet.cells("E1")
                         .setCellValue(shirates.spec.utilily.SpecResourceUtility.noLoadRunMode)

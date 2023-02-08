@@ -1,11 +1,14 @@
 package shirates.core.driver.befavior
 
+import org.openqa.selenium.StaleElementReferenceException
 import shirates.core.driver.TapMethod
 import shirates.core.driver.TestDrive
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import shirates.core.utility.ios.PagerInfo
+import shirates.core.utility.sync.SyncUtility
 
 
 object TapHelper : TestDrive {
@@ -66,11 +69,30 @@ object TapHelper : TestDrive {
         val pi = getPagerInfo()
         for (i in 1..pi.lastPageNumber) {
             if (it.canSelect(expression = appIconName)) {
-                it.tap(tapMethod = tapMethod)
-                    .wait()
+                fun tryTap(): Boolean {
+                    try {
+                        it.tap(tapMethod = tapMethod)
+                        return true
+                    } catch (t: Throwable) {
+                        if (t is StaleElementReferenceException) {
+                            return false
+                        }
+                        TestLog.warn(t.message ?: t.toString().split("\\n").first())
+                        throw t
+                    }
+                }
+
+                val syncResult = SyncUtility.doUntilTrue(maxLoopCount = 5) {
+                    tryTap()    // Workaround for org.openqa.selenium.StaleElementReferenceException
+                }
+                if (syncResult.hasError) {
+                    throw syncResult.error!!
+                }
+                it.wait()
                 return
             } else {
                 it.flickRightToLeft()
+                    .refreshCache()
             }
         }
 

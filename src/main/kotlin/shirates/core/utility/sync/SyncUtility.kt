@@ -62,7 +62,7 @@ object SyncUtility {
     ) {
         val hasError: Boolean
             get() {
-                return error == null
+                return error != null
             }
 
         fun throwIfError() {
