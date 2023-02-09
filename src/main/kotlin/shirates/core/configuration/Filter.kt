@@ -334,16 +334,11 @@ class Filter(
         ): Boolean {
 
             val filterValue = selector?.visible ?: "true"
-            if (filterValue == "*") {
-                return true
+            when (filterValue) {
+                "*" -> return true
+                "false" -> return element.isVisibleCalculated.not()
+                else -> return element.isVisibleCalculated
             }
-            if (filterValue == "false") {
-                return element.visible == "false"
-            }
-            if (element.type == "XCUIElementTypeImage") {
-                return true
-            }
-            return element.visible == filterValue
         }
 
         /**

@@ -563,11 +563,34 @@ data class TestElement(
         }
 
     /**
-     * isVisible
+     * isVisible (for iOS)
      */
     val isVisible: Boolean
         get() {
             return visible == "true"
+        }
+
+    /**
+     * isVisibleCalculated (for iOS)
+     */
+    val isVisibleCalculated: Boolean
+        get() {
+            if (isAndroid) {
+                return true
+            }
+            if (type == "XCUIElementTypeImage") {
+                return true
+            }
+            if (visible == "false" && isInXCUIElementTypeCell) {
+                return true
+            }
+            return isVisible
+        }
+
+    internal val isInXCUIElementTypeCell: Boolean
+        get() {
+            if (isAndroid) return false
+            return ancestors.any() { it.type == "XCUIElementTypeCell" && it.isVisible }
         }
 
     /**
