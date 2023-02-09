@@ -33,6 +33,7 @@ import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
+import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
@@ -619,7 +620,8 @@ object TestDriver {
                 false
             } else if (
                 message.contains("socket hang up") ||
-                message.contains("cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)")
+                message.contains("cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)") ||
+                context.exception.toString().contains("kAXErrorServerNotFound")
             ) {
                 TestLog.warn(message)
                 TestLog.outputLogDump()
@@ -636,6 +638,9 @@ object TestDriver {
 
                     // Restart Appium Server
                     AppiumServerManager.restartAppiumProcess()
+                } else if (isiOS) {
+                    TestLog.warn("kAXErrorServerNotFound")
+                    IosDeviceUtility.restartSimulator(udid = profile.udid)
                 }
                 true
             } else {
