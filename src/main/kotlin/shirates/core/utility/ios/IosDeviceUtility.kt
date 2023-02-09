@@ -3,6 +3,7 @@ package shirates.core.utility.ios
 import shirates.core.Const
 import shirates.core.configuration.ProfileNameParser
 import shirates.core.configuration.TestProfile
+import shirates.core.driver.TestMode
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -378,6 +379,16 @@ object IosDeviceUtility {
     }
 
     /**
+     * restartSimulator
+     */
+    fun restartSimulator(
+        udid: String
+    ) {
+        stopSimulator(udid = udid)
+        startSimulator(udid = udid)
+    }
+
+    /**
      * terminateApp
      */
     fun terminateApp(
@@ -395,6 +406,11 @@ object IosDeviceUtility {
         udid: String,
         vararg langs: String
     ) {
+        if (TestMode.isRealDevice) {
+            TestLog.warn("setAppleLanguages is not supported on real device.")
+            return
+        }
+
         val args = mutableListOf(
             "xcrun", "simctl", "spawn", udid, "defaults", "write", "-globalDomain", "AppleLanguages", "-array"
         )
@@ -406,12 +422,19 @@ object IosDeviceUtility {
         ShellUtility.executeCommand(args = args.toTypedArray())
     }
 
+    /**
+     * setAppleLocale
+     */
     fun setAppleLocale(
         udid: String,
         locale: String,
         setAppleLanguages: Boolean = true,
         restartDevice: Boolean = true
     ) {
+        if (TestMode.isRealDevice) {
+            TestLog.warn("setAppleLocale is not supported on real device.")
+            return
+        }
         if (setAppleLanguages) {
             setAppleLanguages(udid = udid, locale)
         }

@@ -86,6 +86,22 @@ class IosDeviceUtilityTest {
     }
 
     @Test
+    fun restartSimulator() {
+
+//        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+//        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+//
+//        IosDeviceUtility.stopSimulator(udid = iosDeviceInfo.udid)
+//        val r = IosDeviceUtility.startSimulator(iosDeviceInfo = iosDeviceInfo)
+//        val r2 = IosDeviceUtility.waitSimulatorStatus(udid = iosDeviceInfo.udid)
+//        println()
+
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+        IosDeviceUtility.restartSimulator(udid = iosDeviceInfo.udid)
+    }
+
+    @Test
     fun setAppleLanguages() {
 
         val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
