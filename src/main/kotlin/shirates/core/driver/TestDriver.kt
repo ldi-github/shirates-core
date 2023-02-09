@@ -552,103 +552,113 @@ object TestDriver {
         profile: TestProfile,
         capabilities: DesiredCapabilities
     ): (RetryContext<Unit>) -> Boolean {
+
         val retryPredicate: (RetryContext<Unit>) -> Boolean = { context ->
-            val message = context.exception?.message ?: ""
-            if (message.contains("The requested resource could not be found")) {
-                val msg = message(id = "TheRequestedResourceCouldNotBeFound", subject = profile.appiumServerUrl)
-                context.wrappedError = TestEnvironmentException(
-                    message = msg,
-                    cause = context.exception
-                )
-                true
-            } else if (message.contains("Unable to find an active device or emulator")) {
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "unableToFindAnActiveDevice", arg1 = profile.profileName),
-                    cause = context.exception
-                )
-                val p = profile
-                TestLog.info("deviceName:${p.deviceName}")
-                TestLog.info("platformName:${p.platformName}")
-                TestLog.info("platformVersion:${p.platformVersion}")
-                true
-            } else if (message.contains("'app' option is required for reinstall")) {
-                val pkg = capabilities.getCapability("appPackage")
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "appIsNotInstalled", subject = "$pkg"),
-                    cause = context.exception
-                )
-                false
-            } else if (message.contains("Could not find 'adb.exe' in PATH. Please set the ANDROID_HOME or ANDROID_SDK_ROOT environment variables")) {
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "adbNotFound"),
-                    cause = context.exception
-                )
-                false
-            } else if (message.contains("Could not find a connected Android device")) {
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "couldNotFindConnectedDevice", arg1 = profile.profileName),
-                    cause = context.exception
-                )
-                true
-            } else if (message.contains("device unauthorized")) {
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "deviceUnauthorized"),
-                    cause = context.exception
-                )
-                true
-            } else if (message.contains("was not in the list of connected devices")) {
-                val udid = profile.capabilities.getOrDefault("udid", "(not set)")?.toString()
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "deviceNotConnected", subject = profile.deviceName, arg1 = udid),
-                    cause = context.exception
-                )
-                true
-            } else if (message.contains("App with bundle identifier") && message.contains("unknown")) {
-                val bundleId = profile.capabilities.getOrDefault("bundleId", "(not set)")?.toString()
-                context.wrappedError = TestConfigException(
-                    message = message(id = "unknownBundleId", subject = bundleId),
-                    cause = context.exception
-                )
-                false
-            } else if (message.contains("Error getting device platform version.")) {
-                val msg = message(id = "adbFailedGettingDevicePlatformVersion")
-                context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
-                false
-            } else if (message.startsWith("Could not start a new session. Possible causes are invalid address")) {
-                val msg = message(id = "couldNotStartANewSession")
-                context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
-                false
-            } else if (
-                message.contains("socket hang up") ||
-                message.contains("cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)") ||
-                context.exception.toString().contains("kAXErrorServerNotFound")
-            ) {
-                TestLog.warn(message)
-                TestLog.outputLogDump()
-
-                if (isAndroid) {
-                    val udid = initialCapabilities["deviceUDID"] ?: testContext.profile.udid
-                    if (udid.isBlank()) {
-                        throw TestDriverException("deviceUDID not found.")
-                    }
-                    TestLog.info("udid=$udid")
-
-                    // Restart device
-                    AdbUtility.reboot(udid = udid)
-
-                    // Restart Appium Server
-                    AppiumServerManager.restartAppiumProcess()
-                } else if (isiOS) {
-                    TestLog.warn("kAXErrorServerNotFound")
-                    IosDeviceUtility.restartSimulator(udid = profile.udid)
-                }
-                true
-            } else {
-                true
-            }
+            retryPredicateCore(profile = profile, context = context, capabilities = capabilities)
         }
         return retryPredicate
     }
+
+    fun retryPredicateCore(
+        profile: TestProfile,
+        context: RetryContext<Unit>,
+        capabilities: DesiredCapabilities
+    ): Boolean {
+        val message = context.exception?.message ?: ""
+        if (message.contains("The requested resource could not be found")) {
+            val msg = message(id = "TheRequestedResourceCouldNotBeFound", subject = profile.appiumServerUrl)
+            context.wrappedError = TestEnvironmentException(
+                message = msg,
+                cause = context.exception
+            )
+            return true
+        } else if (message.contains("Unable to find an active device or emulator")) {
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "unableToFindAnActiveDevice", arg1 = profile.profileName),
+                cause = context.exception
+            )
+            val p = profile
+            TestLog.info("deviceName:${p.deviceName}")
+            TestLog.info("platformName:${p.platformName}")
+            TestLog.info("platformVersion:${p.platformVersion}")
+            return true
+        } else if (message.contains("'app' option is required for reinstall")) {
+            val pkg = capabilities.getCapability("appPackage")
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "appIsNotInstalled", subject = "$pkg"),
+                cause = context.exception
+            )
+            return false
+        } else if (message.contains("Could not find 'adb.exe' in PATH. Please set the ANDROID_HOME or ANDROID_SDK_ROOT environment variables")) {
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "adbNotFound"),
+                cause = context.exception
+            )
+            return false
+        } else if (message.contains("Could not find a connected Android device")) {
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "couldNotFindConnectedDevice", arg1 = profile.profileName),
+                cause = context.exception
+            )
+            return true
+        } else if (message.contains("device unauthorized")) {
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "deviceUnauthorized"),
+                cause = context.exception
+            )
+            return true
+        } else if (message.contains("was not in the list of connected devices")) {
+            val udid = profile.capabilities.getOrDefault("udid", "(not set)")?.toString()
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "deviceNotConnected", subject = profile.deviceName, arg1 = udid),
+                cause = context.exception
+            )
+            return true
+        } else if (message.contains("App with bundle identifier") && message.contains("unknown")) {
+            val bundleId = profile.capabilities.getOrDefault("bundleId", "(not set)")?.toString()
+            context.wrappedError = TestConfigException(
+                message = message(id = "unknownBundleId", subject = bundleId),
+                cause = context.exception
+            )
+            return false
+        } else if (message.contains("Error getting device platform version.")) {
+            val msg = message(id = "adbFailedGettingDevicePlatformVersion")
+            context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
+            return false
+        } else if (message.startsWith("Could not start a new session. Possible causes are invalid address")) {
+            val msg = message(id = "couldNotStartANewSession")
+            context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
+            return false
+        } else if (
+            message.contains("socket hang up") ||
+            message.contains("cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)") ||
+            context.exception.toString().contains("kAXErrorServerNotFound")
+        ) {
+            TestLog.warn(message)
+            TestLog.outputLogDump()
+
+            if (isAndroid) {
+                val udid = initialCapabilities["deviceUDID"] ?: testContext.profile.udid
+                if (udid.isBlank()) {
+                    throw TestDriverException("deviceUDID not found.")
+                }
+                TestLog.info("udid=$udid")
+
+                // Restart device
+                AdbUtility.reboot(udid = udid)
+
+                // Restart Appium Server
+                AppiumServerManager.restartAppiumProcess()
+            } else if (isiOS) {
+                TestLog.warn("kAXErrorServerNotFound")
+                IosDeviceUtility.restartSimulator(udid = profile.udid)
+            }
+            return true
+        } else {
+            return true
+        }
+    }
+
 
     private fun healthCheckForAndroid(profile: TestProfile) {
         /**
