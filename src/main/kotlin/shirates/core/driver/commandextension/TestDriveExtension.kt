@@ -6,8 +6,7 @@ import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.storage.app
-import shirates.core.utility.misc.AppIconNameUtility
+import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncUtility
 
 /**
@@ -86,53 +85,37 @@ fun TestDrive?.getCurrentAppIconName(): String {
  * getCurrentAppName
  */
 fun TestDrive?.getCurrentAppName(): String {
-    return AppIconNameUtility.getAppName(getCurrentAppIconName())
+    return AppNameUtility.getAppNameWithoutExtension(getCurrentAppIconName())
 }
 
 /**
  * isApp
+ *
+ * @param appNameOrAppId
+ * Nickname [App1]
+ * or appName App1
+ * or packageOrBundleId com.example.app1
  */
 fun TestDrive?.isApp(
-    nickname: String? = null
+    appNameOrAppId: String = testContext.appIconName
 ): Boolean {
 
     syncCache()
 
     val context = TestDriverCommandContext(rootElement)
     var r = false
-    context.execBooleanCommand(subject = nickname) {
-        if (nickname == null) {
-            if (isAndroid) {
-                r = rootElement.packageName == testContext.profile.packageOrBundleId
-            } else {
-                r = rootElement.name == testContext.profile.appIconName
-            }
-            return@execBooleanCommand
-        }
+    context.execBooleanCommand(subject = appNameOrAppId) {
 
-        NicknameUtility.validateNickname(nickname)
+        val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+        val appNickName = AppNameUtility.getAppNickNameFromPackageName(packageName = packageOrBundleId)
+        val appName =
+            if (appNickName.isNotBlank()) NicknameUtility.getNicknameText(nickname = appNickName)
+            else appNameOrAppId
 
         if (isAndroid) {
-            val nicknameText = NicknameUtility.getNicknameText(nickname)
-            val expectedPackage: String
-            val isTestTarget =
-                AppIconNameUtility.getAppName(testContext.profile.appIconName!!) == nicknameText
-            if (isTestTarget) {
-                expectedPackage = testContext.profile.packageOrBundleId!!
-            } else {
-                expectedPackage = app(datasetName = nickname, attributeName = "packageOrBundleId")
-            }
-
-            refreshCache()
-            val actualPackage = rootElement.packageName
-
-            val result = actualPackage == expectedPackage
-            r = result
+            r = rootElement.packageName == packageOrBundleId
         } else {
-            val expectedAppName = nickname.trimStart('[').trimEnd(']')
-            val actualAppName = TestElementCache.select(".XCUIElementTypeApplication").getCurrentAppName()
-
-            r = actualAppName == expectedAppName
+            r = rootElement.name == appName
         }
     }
 

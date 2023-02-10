@@ -4,36 +4,43 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.driver.rootElement
+import shirates.core.testcode.UITest
 import shirates.core.utility.android.AdbUtility
 import shirates.core.utility.misc.ShellUtility
+import shirates.core.utility.sync.SyncUtility
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class AdbUtilityTest {
+class AdbUtilityTest : UITest() {
 
     @Test
     fun reboot() {
 
         val packageName = "com.google.android.calculator"
-        val activity = "com.android.calculator2.Calculator"
 
-        // Arrange
-        run {
-            AdbUtility.startApp(udid = "emulator-5554", packageName = packageName, activityName = activity)
-            Thread.sleep(3 * 1000)
-            val result = ShellUtility.executeCommand("adb", "-s", "emulator-5554", "shell", "ps")
-            val isRunning = result.resultString.contains(packageName)
-            isRunning.thisIsTrue()
-        }
-        // Act
-        run {
-            AdbUtility.reboot(udid = "emulator-5554")
-            Thread.sleep(15 * 1000)
-        }
-        // Assert
-        run {
-            val result = ShellUtility.executeCommand("adb", "-s", "emulator-5554", "shell", "ps")
-            val isRunning = result.resultString.contains(packageName)
-            isRunning.thisIsFalse()
+        scenario {
+            case(1) {
+                condition {
+                    AdbUtility.startApp(udid = "emulator-5554", packageName = packageName)
+                    Thread.sleep(3 * 1000)
+                    val result = ShellUtility.executeCommand("adb", "-s", "emulator-5554", "shell", "ps")
+                    val isRunning = result.resultString.contains(packageName)
+                    isRunning.thisIsTrue()
+                }.action {
+                    AdbUtility.reboot(udid = "emulator-5554")
+                    SyncUtility.doUntilTrue(intervalSecond = 5.0) {
+                        try {
+                            rootElement.packageName == "com.google.android.apps.nexuslauncher"
+                        } catch (t: Throwable) {
+                            false
+                        }
+                    }
+                }.expectation {
+                    val result = ShellUtility.executeCommand("adb", "-s", "emulator-5554", "shell", "ps")
+                    val isRunning = result.resultString.contains(packageName)
+                    isRunning.thisIsFalse()
+                }
+            }
         }
     }
 
@@ -43,8 +50,20 @@ class AdbUtilityTest {
         val packageName = "com.android.settings"
         val activity = "com.android.settings.Settings"
 
-        val result = AdbUtility.startApp(udid = "emulator-5554", packageName = packageName, activityName = activity)
-        println(result)
+        scenario {
+            case(1) {
+                condition {
+                    AdbUtility.stopApp(udid = "emulator-5554", packageName = packageName)
+                }.action {
+                    AdbUtility.startApp(udid = "emulator-5554", packageName = packageName, activityName = activity)
+                }.expectation {
+                }
+            }
+            case(2) {
+
+            }
+        }
+
     }
 
     @Test

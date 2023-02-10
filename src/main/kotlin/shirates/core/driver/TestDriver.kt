@@ -26,7 +26,6 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
-import shirates.core.storage.app
 import shirates.core.testcode.CAEPattern
 import shirates.core.utility.android.AdbUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
@@ -985,30 +984,6 @@ object TestDriver {
                 ParameterRepository.write(i.key, "${i.value}")
             }
         }
-    }
-
-    /**
-     * restartApp
-     */
-    fun restartApp(nickname: String? = null): TestDriver {
-
-        if (TestMode.isNoLoadRun) {
-            return this
-        }
-
-        if (nickname == null) {
-            it.terminateApp()
-            it.tapAppIcon()
-            return this
-        }
-
-        val packageOrBundleId = app(datasetName = nickname, attributeName = "packageOrBundleId")
-        it.terminateApp(packageOrBundleId)
-
-        val appIconName = NicknameUtility.getNicknameText(nickname)
-        it.tapAppIcon(appIconName = appIconName)
-
-        return this
     }
 
     /**

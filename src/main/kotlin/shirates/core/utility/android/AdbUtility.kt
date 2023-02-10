@@ -18,11 +18,15 @@ object AdbUtility {
     fun startApp(
         udid: String,
         packageName: String,
-        activityName: String
+        activityName: String? = null
     ): ShellUtility.ShellResult {
 
-        val name = "$packageName/$activityName"
-        return ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", name)
+        if (activityName != null) {
+            val name = "$packageName/$activityName"
+            return ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", name)
+        } else {
+            return ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", packageName)
+        }
     }
 
     /**

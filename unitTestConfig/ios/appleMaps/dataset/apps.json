@@ -11,6 +11,9 @@
   "[Reminders]": {
     "packageOrBundleId": "com.apple.reminders"
   },
+  "[Freeform]": {
+    "packageOrBundleId": "com.apple.freeform"
+  },
   "[App1]": {
     "packageOrBundleId": "com.example.app1"
   }

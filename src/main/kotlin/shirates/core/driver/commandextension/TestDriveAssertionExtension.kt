@@ -12,35 +12,39 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.storage.App
-import shirates.core.utility.time.StopWatch
+import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncUtility
+import shirates.core.utility.time.StopWatch
 
 /**
  * appIs
+ *
+ * @param appNameOrAppId
+ * Nickname [App1]
+ * or appName App1
+ * or packageOrBundleId com.example.app1
  */
 fun TestDrive?.appIs(
-    nickname: String
+    appNameOrAppId: String
 ): TestElement {
 
     val testElement = getTestElement()
 
     val command = "appIs"
-    val assertMessage = message(id = command, subject = nickname)
+    val subject = Selector(appNameOrAppId).toString()
+    val assertMessage = message(id = command, subject = subject)
 
     val context = TestDriverCommandContext(testElement)
-    context.execCheckCommand(command = command, message = assertMessage, subject = nickname) {
-        if (isApp(nickname)) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+        if (isApp(appNameOrAppId)) {
             TestLog.ok(
                 message = assertMessage,
-                arg1 = nickname
+                arg1 = appNameOrAppId
             )
         } else {
-            val appName =
-                if (TestMode.isAndroid) App.getAppNameOfPackageName(packageName = rootElement.packageName) //AttributeManager.getAppNameOfPackageName(packageName = rootElement.packageName)
-                else "[${rootElement.label}]"
-            val nickName = if (appName.isBlank()) "?" else appName
-            lastElement.lastError = TestNGException("$assertMessage (actual=$nickName)")
+            val appName = AppNameUtility.getCurrentAppName()
+            val actual = if (appName.isBlank()) "?" else appName
+            lastElement.lastError = TestNGException("$assertMessage (actual=$actual)")
             throw lastElement.lastError!!
         }
     }
