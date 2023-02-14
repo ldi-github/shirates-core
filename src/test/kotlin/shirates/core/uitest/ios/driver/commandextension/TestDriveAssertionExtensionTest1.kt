@@ -29,7 +29,7 @@ class TestDriveAssertionExtensionTest1 : UITest() {
                     assertThatThrownBy {
                         it.appIs("[App1]")
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("App is [App1] (actual=[Settings])")
+                        .hasMessage("App is [App1] (actual=Settings)")
                 }
             }
         }
