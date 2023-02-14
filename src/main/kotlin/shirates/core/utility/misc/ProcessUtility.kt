@@ -13,7 +13,7 @@ object ProcessUtility {
 
         val log = PropertiesManager.enableShellExecLog
         if (TestMode.isRunningOnWindows) {
-            val r = ShellUtility.executeCommandCore(log = log, "netstat", "-ano")
+            val r = ShellUtility.executeCommandCore("netstat", "-ano", log = log)
             if (log && r.resultString.isNotBlank()) {
                 TestLog.info(message = r.resultString)
             }
@@ -23,7 +23,7 @@ object ProcessUtility {
             val pid = line.split(" ").lastOrNull()
             return pid
         } else {
-            val r = ShellUtility.executeCommandCore(log = log, "lsof", "-t", "-i:$port", "-sTCP:LISTEN")
+            val r = ShellUtility.executeCommandCore("lsof", "-t", "-i:$port", "-sTCP:LISTEN", log = log)
             if (log && r.resultString.isNotBlank()) {
                 TestLog.info(message = r.resultString)
             }
@@ -38,9 +38,9 @@ object ProcessUtility {
     /**
      * terminateProcess
      */
-    fun terminateProcess(pid: String): ShellUtility.ShellResult? {
+    fun terminateProcess(pid: String): ShellUtility.ShellResult {
 
-        var shellResult: ShellUtility.ShellResult? = null
+        val shellResult: ShellUtility.ShellResult?
 
         if (TestMode.isRunningOnWindows) {
             shellResult = ShellUtility.executeCommand("taskkill", "/pid", pid, "/F")

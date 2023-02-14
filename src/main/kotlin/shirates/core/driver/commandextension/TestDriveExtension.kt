@@ -127,14 +127,14 @@ fun TestDrive?.isApp(
  */
 fun TestDrive?.doUntilTrue(
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    intervalSecond: Double = shirates.core.Const.DO_UNTIL_INTERVAL_SECONDS,
+    intervalSecond: Double = shirates.core.Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
     maxLoopCount: Int = SyncUtility.MAX_LOOP_COUNT,
     actionFunc: () -> Boolean
 ): TestElement {
 
     SyncUtility.doUntilTrue(
         waitSeconds = waitSeconds,
-        intervalSecond = intervalSecond,
+        intervalSeconds = intervalSecond,
         maxLoopCount = maxLoopCount,
         actionFunc = actionFunc
     )

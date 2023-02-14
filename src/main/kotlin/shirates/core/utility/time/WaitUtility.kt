@@ -1,15 +1,10 @@
-package shirates.core.utility.sync
+package shirates.core.utility.time
 
-import shirates.core.driver.TestDriver
-import shirates.core.driver.testContext
+import shirates.core.Const
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
-import shirates.core.utility.time.StopWatch
 
-/**
- * SyncUtility
- */
-object SyncUtility {
+object WaitUtility {
 
     const val MAX_LOOP_COUNT = 1000
 
@@ -17,35 +12,31 @@ object SyncUtility {
      * doUntilTrue
      */
     fun doUntilTrue(
-        waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-        intervalSeconds: Double = shirates.core.Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
+        waitSeconds: Double = Const.WAIT_UTILITY_WAIT_SECONDS,
+        intervalSeconds: Double = Const.WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
         maxLoopCount: Int = MAX_LOOP_COUNT,
-        refreshCache: Boolean = true,
         actionFunc: () -> Boolean
-    ): SyncResult {
+    ): WaitResult {
 
         val sw = StopWatch().start()
-        fun loopAction(): SyncResult {
+        fun loopAction(): WaitResult {
             for (i in 1..maxLoopCount) {
                 TestLog.trace("doUntilTrue ($i)")
 
                 val breakLoop = actionFunc()
                 if (breakLoop) {
-                    return SyncResult(error = null, stopWatch = sw)
+                    return WaitResult(error = null, stopWatch = sw)
                 }
 
                 if (sw.elapsedSeconds > waitSeconds) {
                     sw.lap("timeout")
-                    return SyncResult(error = TestDriverException("Syncing time out."), stopWatch = sw)
+                    return WaitResult(error = TestDriverException("Syncing time out."), stopWatch = sw)
                 }
 
                 Thread.sleep((intervalSeconds * 1000).toLong())
-                if (refreshCache) {
-                    TestDriver.refreshCache()
-                }
             }
             val msg = "over maxLoopCount($maxLoopCount)"
-            return SyncResult(error = TestDriverException(msg), stopWatch = sw)
+            return WaitResult(error = TestDriverException(msg), stopWatch = sw)
         }
 
         val result = loopAction()
@@ -54,9 +45,9 @@ object SyncUtility {
     }
 
     /**
-     * SyncResult
+     * WaitResult
      */
-    class SyncResult(
+    class WaitResult(
         val error: Throwable?,
         val stopWatch: StopWatch
     ) {
@@ -72,4 +63,5 @@ object SyncUtility {
             }
         }
     }
+
 }

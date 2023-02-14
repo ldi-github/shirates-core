@@ -48,10 +48,26 @@ object AppNameUtility {
     }
 
     /**
+     * getAppNameFromPackageName
+     */
+    fun getAppNameFromPackageName(packageName: String): String {
+
+        if (packageName == testProfile.packageOrBundleId) {
+            return testProfile.appIconName!!
+        }
+
+        val appNickName = getAppNickNameFromPackageName(packageName = packageName)
+        return appNickName.trimStart('[').trimEnd(']')
+    }
+
+    /**
      * getAppNickNameFromPackageName
      */
     fun getAppNickNameFromPackageName(packageName: String): String {
 
+        /**
+         * Get from apps.json
+         */
         val jsonObject = App.repository!!.jsonObject
         for (key in jsonObject.keySet().filter { it != "key" }) {
             val e = jsonObject[key] as JSONObject? ?: continue

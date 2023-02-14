@@ -2,12 +2,21 @@ package shirates.core.hand.devicetest
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.testcode.UITest
+import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.testcode.UnitTest
 import shirates.core.utility.android.AndroidDeviceUtility
 
-@Testrun(testrunFile = "unitTestConfig/android/androidSettings/androidDeviceUtilityTest.testrun.properties")
-class AndroidDeviceUtilityTest : UITest() {
+class AndroidDeviceUtilityTest : UnitTest() {
+
+    val UDID = "emulator-5554"
+    val avd1 = "Pixel_3a_API_31_Android_12_"
+
+    override fun beforeAll(context: ExtensionContext?) {
+
+        if (AndroidDeviceUtility.isDeviceRunning(udid = UDID).not()) {
+            throw IllegalStateException("$UDID is not running.")
+        }
+    }
 
     @Test
     fun getAvdName() {
@@ -19,13 +28,30 @@ class AndroidDeviceUtilityTest : UITest() {
     }
 
     @Test
+    fun getAvdList() {
+
+        run {
+            val avdList = AndroidDeviceUtility.getAvdList()
+            for (a in avdList) {
+                println(a)
+            }
+            assertThat(avdList).contains(avd1)
+        }
+    }
+
+    @Test
     fun getAndroidDeviceList() {
 
-        val result = AndroidDeviceUtility.getAndroidDeviceList()
-        result.forEach {
-            it.print()
-//            println(it)
-        }
+        val deviceList = AndroidDeviceUtility.getAndroidDeviceList()
+        val device = deviceList.first() { it.udid == UDID }
+        assertThat(device.udid).isEqualTo(UDID)
+    }
+
+    @Test
+    fun getAndroidDeviceInfo() {
+
+        val deviceInfo = AndroidDeviceUtility.getAndroidDeviceInfoByAvdName(avdName = avd1)
+        assertThat(deviceInfo?.avdName).isEqualTo(avd1)
     }
 
     @Test

@@ -14,7 +14,9 @@ import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestDriverException
@@ -27,12 +29,15 @@ import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
-import shirates.core.utility.android.AdbUtility
+import shirates.core.utility.android.AndroidAppUtility
+import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
+import shirates.core.utility.ios.IosAppUtility
 import shirates.core.utility.ios.IosDeviceUtility
+import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
@@ -644,7 +649,7 @@ object TestDriver {
                 TestLog.info("udid=$udid")
 
                 // Restart device
-                AdbUtility.reboot(udid = udid)
+                AndroidDeviceUtility.reboot(udid = udid)
 
                 // Restart Appium Server
                 AppiumServerManager.restartAppiumProcess()
@@ -1508,6 +1513,102 @@ object TestDriver {
         TestElementCache.synced = false
 
         return this
+    }
+
+    /**
+     * isAppCore
+     *
+     * @param appNameOrAppId
+     * Nickname [App1]
+     * or appName App1
+     * or packageOrBundleId com.example.app1
+     */
+    fun isAppCore(
+        appNameOrAppId: String
+    ): Boolean {
+
+        val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+        if (isAndroid) {
+            return rootElement.packageName == packageOrBundleId
+        }
+
+        val appName = AppNameUtility.getAppNameFromPackageName(packageName = packageOrBundleId)
+        if (appName.isBlank()) {
+            return false
+        }
+
+        return rootElement.name == appName
+    }
+
+    /**
+     * tapAppIconCore
+     */
+    fun tapAppIconCore(
+        appIconName: String = shirates.core.driver.testContext.appIconName,
+        tapAppIconMethod: TapAppIconMethod = shirates.core.driver.testContext.tapAppIconMethod
+    ): TestElement {
+
+        when (tapAppIconMethod) {
+
+            TapAppIconMethod.googlePixel -> {
+                TapHelper.tapAppIconAsGooglePixel(appIconName = appIconName)
+                return lastElement
+            }
+
+            TapAppIconMethod.swipeLeftInHome -> {
+                TapHelper.swipeLeftAndTapAppIcon(appIconName = appIconName)
+            }
+
+            else -> {
+                if (isAndroid) {
+                    if (testDrive.deviceManufacturer == "Google" || testDrive.deviceModel.contains("Android SDK")) {
+                        TapHelper.tapAppIconAsGooglePixel(appIconName = appIconName)
+                    } else {
+                        TapHelper.swipeLeftAndTapAppIcon(appIconName = appIconName)
+                    }
+                } else if (isiOS) {
+                    TapHelper.tapAppIconAsIos(appIconName = appIconName)
+                }
+            }
+        }
+
+        return lastElement
+    }
+
+    /**
+     * launchApp
+     *
+     */
+    fun launchAppCore(
+        packageOrBundleId: String
+    ): TestElement {
+
+        if (isAndroid) {
+            AndroidAppUtility.startApp(udid = testProfile.udid, packageName = packageOrBundleId)
+            syncCache(force = true)
+            SyncUtility.doUntilTrue {
+                isAppCore(appNameOrAppId = packageOrBundleId)
+            }
+        } else if (isiOS) {
+            if (isRealDevice) {
+                throw NotImplementedError("TestDriver.launchApp is not supported on real device in iOS. (packageOrBundleId=$packageOrBundleId)")
+            }
+
+            val r = IosAppUtility.launchApp(udid = testProfile.udid, bundleId = packageOrBundleId, log = true)
+            val message = r.waitForResultString()
+            if (r.hasError) {
+                throw TestDriverException(
+                    message = message(id = "failedToLaunchApp", arg1 = packageOrBundleId, submessage = message),
+                    cause = r.error
+                )
+            }
+            testDrive.wait(waitSeconds = 2)
+            SyncUtility.doUntilTrue() {
+                isAppCore(appNameOrAppId = packageOrBundleId)
+            }
+        }
+
+        return lastElement
     }
 
 }
