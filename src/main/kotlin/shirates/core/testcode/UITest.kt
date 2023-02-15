@@ -248,36 +248,24 @@ abstract class UITest : TestDrive {
                 configPath = configPath,
                 profileName = profileName
             )
+
             // appPackageFile
             if (profile.appPackageFile.isNullOrBlank().not()) {
                 ParameterRepository.write("appPackageFile", profile.appPackageFile!!)
             }
+
+            profile.getMetadataFromFileName()
             // appEnvironment
-            if (profile.appEnvironment.isNullOrBlank().not()) {
-                val mr = profile.appEnvironment!!.toRegex().find(profile.appPackageFile ?: "")
-                if (mr?.groups?.count() == 2) {
-                    ParameterRepository.write("appEnvironment", mr.groupValues[1])
-                } else {
-                    ParameterRepository.write("appEnvironment", profile.appEnvironment!!)
-                }
+            if (profile.appEnvironment.isBlank().not()) {
+                ParameterRepository.write("appEnvironment", profile.appEnvironment)
             }
             // appVersion
-            if (profile.appVersion.isNullOrBlank().not()) {
-                val mr = profile.appVersion!!.toRegex().find(profile.appPackageFile ?: "")
-                if (mr?.groups?.count() == 2) {
-                    ParameterRepository.write("appVersion", mr.groupValues[1])
-                } else {
-                    ParameterRepository.write("appVersion", profile.appVersion!!)
-                }
+            if (profile.appVersion.isBlank().not()) {
+                ParameterRepository.write("appVersion", profile.appVersion)
             }
             // appBuild
-            if (profile.appBuild.isNullOrBlank().not()) {
-                val mr = profile.appBuild!!.toRegex().find(profile.appPackageFile ?: "")
-                if (mr?.groups?.count() == 2) {
-                    ParameterRepository.write("appBuild", mr.groupValues[1])
-                } else {
-                    ParameterRepository.write("appBuild", profile.appBuild!!)
-                }
+            if (profile.appBuild.isBlank().not()) {
+                ParameterRepository.write("appBuild", profile.appBuild)
             }
 
             // setup ScreenRepository
