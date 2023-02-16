@@ -2,7 +2,6 @@ package shirates.core.driver
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElement.Companion.emptyElement
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 
@@ -134,26 +133,4 @@ fun TestElement.findInDescendantsAndSelf(
     return a
 }
 
-/**
- * hasEmptyWebViewError
- */
-val TestElement.hasEmptyWebViewError: Boolean
-    get() {
-        if (isAndroid) {
-            val webView = descendantsAndSelf.firstOrNull() { it.className == "android.webkit.WebView" }
-            if (webView == null) {
-                return false
-            }
-            val webViewElements = webView.descendantsAndSelf
-            val hasError = webViewElements.count() < 5
-            return hasError
-        } else {
-            val webView = this.descendantsAndSelf.firstOrNull() { it.type == "XCUIElementTypeWebView" }
-            if (webView == null) {
-                return false
-            }
-            val webViewElements = webView.descendantsAndSelf
-            val hasError = webViewElements.count() < 6
-            return hasError
-        }
-    }
+

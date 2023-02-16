@@ -34,8 +34,9 @@ fun TestDrive?.tapAppIcon(
         }
 
         // launch by custom function
-        if (CustomFunctionRepository.hasFunction("tapAppIcon")) {
-            val tapped = CustomFunctionRepository.call(functionName = "tapAppIcon", appIconName)
+        val functionName = "tapAppIcon"
+        if (CustomFunctionRepository.hasFunction(functionName)) {
+            val tapped = CustomFunctionRepository.call(functionName = functionName, appIconName)
             if (tapped == true) {
                 return@execOperateCommand
             }

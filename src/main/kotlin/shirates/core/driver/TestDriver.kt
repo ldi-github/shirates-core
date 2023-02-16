@@ -1527,17 +1527,22 @@ object TestDriver {
         appNameOrAppId: String
     ): Boolean {
 
-        val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
-        if (isAndroid) {
-            return rootElement.packageName == packageOrBundleId
-        }
+        try {
+            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+            if (isAndroid) {
+                return rootElement.packageName == packageOrBundleId
+            }
 
-        val appName = AppNameUtility.getAppNameFromPackageName(packageName = packageOrBundleId)
-        if (appName.isBlank()) {
+            val appName = AppNameUtility.getAppNameFromPackageName(packageName = packageOrBundleId)
+            if (appName.isBlank()) {
+                return false
+            }
+
+            return rootElement.name == appName
+        } catch (t: Throwable) {
+            TestLog.info("Error in isAppCore: $t")
             return false
         }
-
-        return rootElement.name == appName
     }
 
     /**
@@ -1602,8 +1607,8 @@ object TestDriver {
                     cause = r.error
                 )
             }
-            testDrive.wait(waitSeconds = 2)
             SyncUtility.doUntilTrue() {
+                testDrive.wait(waitSeconds = 2)
                 isAppCore(appNameOrAppId = packageOrBundleId)
             }
         }

@@ -94,7 +94,38 @@ data class TestElement(
      */
     val hasError: Boolean
         get() {
+            hasEmptyWebViewError
             return (lastError != null)
+        }
+
+    /**
+     * hasEmptyWebViewError
+     */
+    val hasEmptyWebViewError: Boolean
+        get() {
+            if (isAndroid) {
+                val webView = descendantsAndSelf.firstOrNull() { it.className == "android.webkit.WebView" }
+                if (webView == null) {
+                    return false
+                }
+                val webViewElements = webView.descendantsAndSelf
+                val hasError = webViewElements.count() < 5
+                if (hasError) {
+                    lastError = IllegalStateException("EmptyWebViewError.")
+                }
+                return hasError
+            } else {
+                val webView = this.descendantsAndSelf.firstOrNull() { it.type == "XCUIElementTypeWebView" }
+                if (webView == null) {
+                    return false
+                }
+                val webViewElements = webView.descendantsAndSelf
+                val hasError = webViewElements.count() < 6
+                if (hasError) {
+                    lastError = IllegalStateException("EmptyWebViewError.")
+                }
+                return hasError
+            }
         }
 
     companion object {
