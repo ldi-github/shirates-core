@@ -2,6 +2,7 @@ package shirates.core.utility.ios
 
 import shirates.core.Const
 import shirates.core.configuration.ProfileNameParser
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
@@ -44,7 +45,7 @@ object IosDeviceUtility {
 
         val list = mutableListOf<IosDeviceInfo>()
 
-        val lines = result.resultString.split(System.lineSeparator())
+        val lines = result.resultLines
         for (i in 0 until lines.count()) {
             val line = lines[i]
             if (line == "== Simulators ==") {
@@ -74,7 +75,7 @@ object IosDeviceUtility {
         val list = mutableListOf<IosDeviceInfo>()
 
         var version = ""
-        val lines = result.resultString.split(System.lineSeparator())
+        val lines = result.resultLines
             .filter { it != "== Devices ==" && it.lowercase().contains("unavailable").not() }
         for (line in lines) {
             if (line.startsWith("-- ") && line.endsWith(" --")) {
@@ -314,14 +315,15 @@ object IosDeviceUtility {
      */
     fun startSimulator(
         udid: String,
-        waitForBooted: Boolean = true
+        waitForBooted: Boolean = true,
+        log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 
         val args = listOf("xcrun", "simctl", "boot", udid)
 
         TestLog.info(args.joinToString(" "))
 
-        val shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray())
+        val shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray(), log = log)
         if (waitForBooted) {
             waitSimulatorStatus(udid = udid)
         }
@@ -333,10 +335,11 @@ object IosDeviceUtility {
      */
     fun startSimulator(
         iosDeviceInfo: IosDeviceInfo,
-        waitForBooted: Boolean = true
+        waitForBooted: Boolean = true,
+        log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 
-        return startSimulator(udid = iosDeviceInfo.udid, waitForBooted = waitForBooted)
+        return startSimulator(udid = iosDeviceInfo.udid, waitForBooted = waitForBooted, log = log)
     }
 
     /**
@@ -369,77 +372,36 @@ object IosDeviceUtility {
      * stopSimulator
      */
     fun stopSimulator(
-        udid: String
-    ) {
+        udid: String,
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): ShellUtility.ShellResult {
         val args = listOf("xcrun", "simctl", "shutdown", udid)
 
         TestLog.info(args.joinToString(" "))
-        ShellUtility.executeCommand(args = args.toTypedArray())
+        return ShellUtility.executeCommand(args = args.toTypedArray(), log = log)
     }
 
     /**
-     * terminateApp
+     * restartSimulator
      */
-    fun terminateApp(
+    fun restartSimulator(
         udid: String,
-        bundleId: String
-    ) {
-        val args = listOf("xcrun", "simctl", "terminate", udid, bundleId)
-        ShellUtility.executeCommand(args = args.toTypedArray())
-    }
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): ShellUtility.ShellResult {
 
-    /**
-     * setAppleLanguages
-     */
-    fun setAppleLanguages(
-        udid: String,
-        vararg langs: String
-    ) {
-        val args = mutableListOf(
-            "xcrun", "simctl", "spawn", udid, "defaults", "write", "-globalDomain", "AppleLanguages", "-array"
-        )
-        for (lang in langs) {
-            args.add(lang)
-        }
-
-        TestLog.info(args.joinToString(" "))
-        ShellUtility.executeCommand(args = args.toTypedArray())
-    }
-
-    fun setAppleLocale(
-        udid: String,
-        locale: String,
-        setAppleLanguages: Boolean = true,
-        restartDevice: Boolean = true
-    ) {
-        if (setAppleLanguages) {
-            setAppleLanguages(udid = udid, locale)
-        }
-
-        terminateApp(udid = udid, bundleId = "com.apple.Preferences")
-
-        val args = mutableListOf(
-            "xcrun", "simctl", "spawn", udid, "defaults", "write", "-globalDomain", "AppleLocale", "-string", locale
-        )
-
-        TestLog.info(args.joinToString(" "))
-        ShellUtility.executeCommand(args = args.toTypedArray())
-
-        if (restartDevice) {
-            stopSimulator(udid = udid)
-            waitSimulatorStatus(udid = udid, status = "Shutdown")
-            startSimulator(udid = udid)
-        }
-
-        waitSimulatorStatus(udid = udid)
+        stopSimulator(udid = udid, log = log)
+        waitSimulatorStatus(udid = udid, status = "Shutdown")
+        return startSimulator(udid = udid, log = log)
     }
 
     /**
      * restartSpringBoard
      */
-    fun restartSpringBoard() {
+    fun restartSpringBoard(
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): ShellUtility.ShellResult {
 
-        ShellUtility.executeCommand("killall", "-HUP", "SpringBoard")
+        return ShellUtility.executeCommand("killall", "-HUP", "SpringBoard", log = log)
     }
 
 }

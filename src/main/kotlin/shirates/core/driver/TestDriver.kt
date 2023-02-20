@@ -14,7 +14,9 @@ import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestDriverException
@@ -26,13 +28,16 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
-import shirates.core.storage.app
 import shirates.core.testcode.CAEPattern
-import shirates.core.utility.android.AdbUtility
+import shirates.core.utility.android.AndroidAppUtility
+import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
+import shirates.core.utility.ios.IosAppUtility
+import shirates.core.utility.ios.IosDeviceUtility
+import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
@@ -551,99 +556,113 @@ object TestDriver {
         profile: TestProfile,
         capabilities: DesiredCapabilities
     ): (RetryContext<Unit>) -> Boolean {
+
         val retryPredicate: (RetryContext<Unit>) -> Boolean = { context ->
-            val message = context.exception?.message ?: ""
-            if (message.contains("The requested resource could not be found")) {
-                val msg = message(id = "TheRequestedResourceCouldNotBeFound", subject = profile.appiumServerUrl)
-                context.wrappedError = TestEnvironmentException(
-                    message = msg,
-                    cause = context.exception
-                )
-                true
-            } else if (message.contains("Unable to find an active device or emulator")) {
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "unableToFindAnActiveDevice", arg1 = profile.profileName),
-                    cause = context.exception
-                )
-                val p = profile
-                TestLog.info("deviceName:${p.deviceName}")
-                TestLog.info("platformName:${p.platformName}")
-                TestLog.info("platformVersion:${p.platformVersion}")
-                true
-            } else if (message.contains("'app' option is required for reinstall")) {
-                val pkg = capabilities.getCapability("appPackage")
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "appIsNotInstalled", subject = "$pkg"),
-                    cause = context.exception
-                )
-                false
-            } else if (message.contains("Could not find 'adb.exe' in PATH. Please set the ANDROID_HOME or ANDROID_SDK_ROOT environment variables")) {
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "adbNotFound"),
-                    cause = context.exception
-                )
-                false
-            } else if (message.contains("Could not find a connected Android device")) {
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "couldNotFindConnectedDevice", arg1 = profile.profileName),
-                    cause = context.exception
-                )
-                true
-            } else if (message.contains("device unauthorized")) {
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "deviceUnauthorized"),
-                    cause = context.exception
-                )
-                true
-            } else if (message.contains("was not in the list of connected devices")) {
-                val udid = profile.capabilities.getOrDefault("udid", "(not set)")?.toString()
-                context.wrappedError = TestEnvironmentException(
-                    message = message(id = "deviceNotConnected", subject = profile.deviceName, arg1 = udid),
-                    cause = context.exception
-                )
-                true
-            } else if (message.contains("App with bundle identifier") && message.contains("unknown")) {
-                val bundleId = profile.capabilities.getOrDefault("bundleId", "(not set)")?.toString()
-                context.wrappedError = TestConfigException(
-                    message = message(id = "unknownBundleId", subject = bundleId),
-                    cause = context.exception
-                )
-                false
-            } else if (message.contains("Error getting device platform version.")) {
-                val msg = message(id = "adbFailedGettingDevicePlatformVersion")
-                context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
-                false
-            } else if (message.startsWith("Could not start a new session. Possible causes are invalid address")) {
-                val msg = message(id = "couldNotStartANewSession")
-                context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
-                false
-            } else if (
-                message.contains("socket hang up") ||
-                message.contains("cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)")
-            ) {
-                TestLog.warn(message)
-                TestLog.outputLogDump()
-
-                if (isAndroid) {
-                    val udid = initialCapabilities["deviceUDID"] ?: testContext.profile.udid
-                    if (udid.isBlank()) {
-                        throw TestDriverException("deviceUDID not found.")
-                    }
-                    TestLog.info("udid=$udid")
-
-                    // Restart device
-                    AdbUtility.reboot(udid = udid)
-
-                    // Restart Appium Server
-                    AppiumServerManager.restartAppiumProcess()
-                }
-                true
-            } else {
-                true
-            }
+            retryPredicateCore(profile = profile, context = context, capabilities = capabilities)
         }
         return retryPredicate
     }
+
+    fun retryPredicateCore(
+        profile: TestProfile,
+        context: RetryContext<Unit>,
+        capabilities: DesiredCapabilities
+    ): Boolean {
+        val message = context.exception?.message ?: ""
+        if (message.contains("The requested resource could not be found")) {
+            val msg = message(id = "TheRequestedResourceCouldNotBeFound", subject = profile.appiumServerUrl)
+            context.wrappedError = TestEnvironmentException(
+                message = msg,
+                cause = context.exception
+            )
+            return true
+        } else if (message.contains("Unable to find an active device or emulator")) {
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "unableToFindAnActiveDevice", arg1 = profile.profileName),
+                cause = context.exception
+            )
+            val p = profile
+            TestLog.info("deviceName:${p.deviceName}")
+            TestLog.info("platformName:${p.platformName}")
+            TestLog.info("platformVersion:${p.platformVersion}")
+            return true
+        } else if (message.contains("'app' option is required for reinstall")) {
+            val pkg = capabilities.getCapability("appPackage")
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "appIsNotInstalled", subject = "$pkg"),
+                cause = context.exception
+            )
+            return false
+        } else if (message.contains("Could not find 'adb.exe' in PATH. Please set the ANDROID_HOME or ANDROID_SDK_ROOT environment variables")) {
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "adbNotFound"),
+                cause = context.exception
+            )
+            return false
+        } else if (message.contains("Could not find a connected Android device")) {
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "couldNotFindConnectedDevice", arg1 = profile.profileName),
+                cause = context.exception
+            )
+            return true
+        } else if (message.contains("device unauthorized")) {
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "deviceUnauthorized"),
+                cause = context.exception
+            )
+            return true
+        } else if (message.contains("was not in the list of connected devices")) {
+            val udid = profile.capabilities.getOrDefault("udid", "(not set)")?.toString()
+            context.wrappedError = TestEnvironmentException(
+                message = message(id = "deviceNotConnected", subject = profile.deviceName, arg1 = udid),
+                cause = context.exception
+            )
+            return true
+        } else if (message.contains("App with bundle identifier") && message.contains("unknown")) {
+            val bundleId = profile.capabilities.getOrDefault("bundleId", "(not set)")?.toString()
+            context.wrappedError = TestConfigException(
+                message = message(id = "unknownBundleId", subject = bundleId),
+                cause = context.exception
+            )
+            return false
+        } else if (message.contains("Error getting device platform version.")) {
+            val msg = message(id = "adbFailedGettingDevicePlatformVersion")
+            context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
+            return false
+        } else if (message.startsWith("Could not start a new session. Possible causes are invalid address")) {
+            val msg = message(id = "couldNotStartANewSession")
+            context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
+            return false
+        } else if (
+            message.contains("socket hang up") ||
+            message.contains("cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)") ||
+            context.exception.toString().contains("kAXErrorServerNotFound")
+        ) {
+            TestLog.warn(message)
+            TestLog.outputLogDump()
+
+            if (isAndroid) {
+                val udid = initialCapabilities["deviceUDID"] ?: testContext.profile.udid
+                if (udid.isBlank()) {
+                    throw TestDriverException("deviceUDID not found.")
+                }
+                TestLog.info("udid=$udid")
+
+                // Restart device
+                AndroidDeviceUtility.reboot(udid = udid)
+
+                // Restart Appium Server
+                AppiumServerManager.restartAppiumProcess()
+            } else if (isiOS) {
+                TestLog.warn("kAXErrorServerNotFound")
+                IosDeviceUtility.restartSimulator(udid = profile.udid)
+            }
+            return true
+        } else {
+            return true
+        }
+    }
+
 
     private fun healthCheckForAndroid(profile: TestProfile) {
         /**
@@ -970,30 +989,6 @@ object TestDriver {
                 ParameterRepository.write(i.key, "${i.value}")
             }
         }
-    }
-
-    /**
-     * restartApp
-     */
-    fun restartApp(nickname: String? = null): TestDriver {
-
-        if (TestMode.isNoLoadRun) {
-            return this
-        }
-
-        if (nickname == null) {
-            it.terminateApp()
-            it.tapAppIcon()
-            return this
-        }
-
-        val packageOrBundleId = app(datasetName = nickname, attributeName = "packageOrBundleId")
-        it.terminateApp(packageOrBundleId)
-
-        val appIconName = NicknameUtility.getNicknameText(nickname)
-        it.tapAppIcon(appIconName = appIconName)
-
-        return this
     }
 
     /**
@@ -1518,6 +1513,107 @@ object TestDriver {
         TestElementCache.synced = false
 
         return this
+    }
+
+    /**
+     * isAppCore
+     *
+     * @param appNameOrAppId
+     * Nickname [App1]
+     * or appName App1
+     * or packageOrBundleId com.example.app1
+     */
+    fun isAppCore(
+        appNameOrAppId: String
+    ): Boolean {
+
+        try {
+            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+            if (isAndroid) {
+                return rootElement.packageName == packageOrBundleId
+            }
+
+            val appName = AppNameUtility.getAppNameFromPackageName(packageName = packageOrBundleId)
+            if (appName.isBlank()) {
+                return false
+            }
+
+            return rootElement.name == appName
+        } catch (t: Throwable) {
+            TestLog.info("Error in isAppCore: $t")
+            return false
+        }
+    }
+
+    /**
+     * tapAppIconCore
+     */
+    fun tapAppIconCore(
+        appIconName: String = shirates.core.driver.testContext.appIconName,
+        tapAppIconMethod: TapAppIconMethod = shirates.core.driver.testContext.tapAppIconMethod
+    ): TestElement {
+
+        when (tapAppIconMethod) {
+
+            TapAppIconMethod.googlePixel -> {
+                TapHelper.tapAppIconAsGooglePixel(appIconName = appIconName)
+                return lastElement
+            }
+
+            TapAppIconMethod.swipeLeftInHome -> {
+                TapHelper.swipeLeftAndTapAppIcon(appIconName = appIconName)
+            }
+
+            else -> {
+                if (isAndroid) {
+                    if (testDrive.deviceManufacturer == "Google" || testDrive.deviceModel.contains("Android SDK")) {
+                        TapHelper.tapAppIconAsGooglePixel(appIconName = appIconName)
+                    } else {
+                        TapHelper.swipeLeftAndTapAppIcon(appIconName = appIconName)
+                    }
+                } else if (isiOS) {
+                    TapHelper.tapAppIconAsIos(appIconName = appIconName)
+                }
+            }
+        }
+
+        return lastElement
+    }
+
+    /**
+     * launchApp
+     *
+     */
+    fun launchAppCore(
+        packageOrBundleId: String
+    ): TestElement {
+
+        if (isAndroid) {
+            AndroidAppUtility.startApp(udid = testProfile.udid, packageName = packageOrBundleId)
+            syncCache(force = true)
+            SyncUtility.doUntilTrue {
+                isAppCore(appNameOrAppId = packageOrBundleId)
+            }
+        } else if (isiOS) {
+            if (isRealDevice) {
+                throw NotImplementedError("TestDriver.launchApp is not supported on real device in iOS. (packageOrBundleId=$packageOrBundleId)")
+            }
+
+            val r = IosAppUtility.launchApp(udid = testProfile.udid, bundleId = packageOrBundleId, log = true)
+            val message = r.waitForResultString()
+            if (r.hasError) {
+                throw TestDriverException(
+                    message = message(id = "failedToLaunchApp", arg1 = packageOrBundleId, submessage = message),
+                    cause = r.error
+                )
+            }
+            SyncUtility.doUntilTrue() {
+                testDrive.wait(waitSeconds = 2)
+                isAppCore(appNameOrAppId = packageOrBundleId)
+            }
+        }
+
+        return lastElement
     }
 
 }

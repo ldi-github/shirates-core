@@ -45,31 +45,39 @@ class DatasetRepository(
      *
      * longKey format: datasetName.attributeName
      */
-    fun getValue(longKey: String): String {
+    fun getValue(longKey: String, throwsException: Boolean = true): String {
 
         val (datasetName, attributeName) = getDatasetNameAndAttributeName(longKey)
 
         if (contains(datasetName = datasetName).not()) {
-            throw TestConfigException(
-                message(
-                    id = "datasetNotFoundInRepository",
-                    repository = repositoryName,
-                    dataset = datasetName
+            if (throwsException)
+                throw TestConfigException(
+                    message(
+                        id = "datasetNotFoundInRepository",
+                        repository = repositoryName,
+                        dataset = datasetName
+                    )
                 )
-            )
+            else {
+                return ""
+            }
         }
 
         val dataset = getDataset(datasetName = datasetName)
 
         if (dataset.nameValues.containsKey(attributeName).not()) {
-            throw TestConfigException(
-                message(
-                    id = "attributeNotFoundInDataset",
-                    repository = repositoryName,
-                    dataset = datasetName,
-                    attribute = attributeName
+            if (throwsException) {
+                throw TestConfigException(
+                    message(
+                        id = "attributeNotFoundInDataset",
+                        repository = repositoryName,
+                        dataset = datasetName,
+                        attribute = attributeName
+                    )
                 )
-            )
+            } else {
+                return ""
+            }
         }
 
         return dataset.nameValues[attributeName]!!

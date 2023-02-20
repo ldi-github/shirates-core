@@ -10,12 +10,15 @@ import okhttp3.Response
 import org.json.JSONObject
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.commandextension.getWebElement
 import shirates.core.logging.TestLog
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.element.ElementCacheUtility
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
+import shirates.core.utility.time.WaitUtility
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -34,11 +37,27 @@ object AppiumProxy {
             return TestElement()
         }
 
-        var e = getSourceCore()
-        if (e.hasEmptyWebViewError) {
-            // retry once
-            e = getSourceCore()
+        var e = TestElement()
+        fun checkState(): Boolean {
+            try {
+                val we = e.getWebElement()
+                if (isAndroid) {
+                    we.getAttribute("package")
+                } else {
+                    we.getAttribute("label")
+                }
+                return true
+            } catch (t: Throwable) {
+                TestLog.info("Error in AppiumProxy.getSource() doUntilTrue: $e $t")
+                return false
+            }
         }
+
+        WaitUtility.doUntilTrue {
+            e = getSourceCore()
+            checkState()
+        }
+
         return e
     }
 
@@ -49,15 +68,7 @@ object AppiumProxy {
         val retryMaxCount =
             AppiumServerManager.appiumSessionStartupTimeoutSeconds / TestDriver.testContext.retryIntervalSeconds
         val retryFunc: (RetryContext<Unit>) -> Unit = {
-            try {
-                source = TestDriver.appiumDriver.pageSource
-            } catch (t: Throwable) {
-                if (t.message!!.contains("Original error: socket hang up")) {
-                    throw t
-                } else {
-                    TestLog.warn(t.stackTraceToString())
-                }
-            }
+            source = TestDriver.appiumDriver.pageSource
         }
         val retryPredicate: (RetryContext<Unit>) -> Boolean = {
             if (isiOS) {
@@ -68,8 +79,8 @@ object AppiumProxy {
         }
         RetryUtility.exec(
             retryMaxCount = retryMaxCount.toLong(),
-            retryFunc = retryFunc,
-            retryPredicate = retryPredicate
+            retryPredicate = retryPredicate,
+            retryFunc = retryFunc
         )
 
         if (source.isBlank()) {

@@ -91,6 +91,8 @@ object CustomFunctionRepository {
      */
     fun call(functionName: String, vararg args: Any?): Any? {
 
+        TestLog.info("Calling custom function $functionName")
+
         val functionEntry = getFunction(functionName = functionName)
         return functionEntry.call(args = args)
     }

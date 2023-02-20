@@ -118,7 +118,7 @@ internal fun TestDrive?.waitScreenOfCore(
 
     SyncUtility.doUntilTrue(
         waitSeconds = waitSeconds,
-        intervalSecond = testContext.waitSecondsForAnimationComplete
+        intervalSeconds = testContext.waitSecondsForAnimationComplete
     ) {
         syncAndCheckScreen()
         screenFound

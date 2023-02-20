@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "2.1.1"
+version = "2.2.0"
 
 val appiumClientVersion = "8.1.1"
 
@@ -316,41 +316,41 @@ tasks.register<Test>("test-spec-report-tutorial") {
  * spec-code-generation
  */
 tasks.register<JavaExec>("generateCode") {
-    group = "spec-code-generation"
+    group = "spec-code"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("shirates.core.task.CodeGeneratorExecute")
 }
 
 /**
- * spec-reporting
+ * spec-report
  */
 tasks.register<JavaExec>("createSpecReport") {
-    group = "spec-reporting"
+    group = "spec-report"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("shirates.core.task.SpecReportExecute")
 }
 tasks.register<JavaExec>("createSummaryReport") {
-    group = "spec-reporting"
+    group = "spec-report"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("shirates.core.task.SummaryReportExecute")
 }
 
 /**
- * spec-reporting-collected
+ * spec-report-collected
  */
 tasks.register<JavaExec>("collectSpecReport") {
-    group = "spec-reporting-collected"
+    group = "spec-report-collected"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("shirates.core.task.CollectSpecReportExecute")
 }
 tasks.register<JavaExec>("collectAndCreateSummaryReport") {
     dependsOn("collectSpecReport")
-    group = "spec-reporting-collected"
+    group = "spec-report-collected"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("shirates.core.task.SummaryReportFromCollectedExecute")
 }
 tasks.register<JavaExec>("createSummaryReportFromCollected") {
-    group = "spec-reporting-collected"
+    group = "spec-report-collected"
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("shirates.core.task.SummaryReportFromCollectedExecute")
 }

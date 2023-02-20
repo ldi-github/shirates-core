@@ -40,9 +40,9 @@ class TestProfile(var profileName: String = "") {
     val settings = mutableMapOf<String, String>()
     val capabilities = mutableMapOf<String, Any?>()
     var appPackageFile: String? = null
-    var appVersion: String? = null
-    var appBuild: String? = null
-    var appEnvironment: String? = null
+    var appVersion: String = ""
+    var appBuild: String = ""
+    var appEnvironment: String = ""
     var appPackageDir: String? = null
     var packageOrBundleId: String? = null
     var startupPackageOrBundleId: String? = null
@@ -490,4 +490,36 @@ class TestProfile(var profileName: String = "") {
         }
     }
 
+    /**
+     * getMetadataFromFileName
+     */
+    fun getMetadataFromFileName() {
+
+        if (appPackageFile.isNullOrBlank()) {
+            return
+        }
+
+        // appEnvironment
+        if (appEnvironment.isBlank().not()) {
+            val mr = appEnvironment.toRegex().find(appPackageFile ?: "")
+            if (mr?.groups?.count() == 2) {
+                appEnvironment = mr.groupValues[1]
+            }
+        }
+        // appVersion
+        if (appVersion.isBlank().not()) {
+            val mr = appVersion.toRegex().find(appPackageFile ?: "")
+            if (mr?.groups?.count() == 2) {
+                appVersion = mr.groupValues[1]
+            }
+        }
+        // appBuild
+        if (appBuild.isBlank().not()) {
+            val mr = appBuild.toRegex().find(appPackageFile ?: "")
+            if (mr?.groups?.count() == 2) {
+                appBuild = mr.groupValues[1]
+            }
+        }
+
+    }
 }

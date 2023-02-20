@@ -7,7 +7,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.driver.testProfile
 import shirates.core.utility.getStringOrEmpty
-import shirates.core.utility.ios.IosDeviceUtility
+import shirates.core.utility.ios.IosLanguageUtility
 import shirates.core.utility.misc.ShellUtility
 
 object LanguageSettingsHelper : TestDrive {
@@ -78,7 +78,7 @@ object LanguageSettingsHelper : TestDrive {
         if (searchElement.isFound) {
             val deviceLocale = if (it.label == "検索") "ja-JP" else "en-US"
             if (deviceLocale != targetLocale) {
-                IosDeviceUtility.setAppleLocale(udid = testProfile.udid, targetLocale)
+                IosLanguageUtility.setAppleLocale(udid = testProfile.udid, targetLocale)
             }
         }
     }

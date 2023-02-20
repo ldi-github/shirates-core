@@ -2,7 +2,9 @@ package shirates.core.hand.devicetest
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.TestProfile
+import shirates.core.utility.ios.IosAppUtility
 import shirates.core.utility.ios.IosDeviceUtility
+import shirates.core.utility.ios.IosLanguageUtility
 
 class IosDeviceUtilityTest {
 
@@ -86,12 +88,32 @@ class IosDeviceUtilityTest {
     }
 
     @Test
+    fun restartSimulator() {
+
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+        IosDeviceUtility.restartSimulator(udid = iosDeviceInfo.udid)
+    }
+
+    @Test
+    fun launchApp_terminateApp() {
+
+        val bundleId = "com.apple.Maps"
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+
+        IosAppUtility.launchApp(udid = iosDeviceInfo.udid, bundleId = bundleId)
+        IosAppUtility.terminateApp(udid = iosDeviceInfo.udid, bundleId = bundleId)
+
+    }
+
+    @Test
     fun setAppleLanguages() {
 
         val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
-        IosDeviceUtility.setAppleLanguages(udid = iosDeviceInfo.udid, "ja-JP", "en-US")
+        IosLanguageUtility.setAppleLanguages(udid = iosDeviceInfo.udid, "ja-JP", "en-US")
     }
 
     @Test
@@ -104,9 +126,9 @@ class IosDeviceUtilityTest {
             IosDeviceUtility.startSimulator(iosDeviceInfo)
         }
 
-        IosDeviceUtility.setAppleLocale(udid = iosDeviceInfo.udid, "ja-JP")
+        IosLanguageUtility.setAppleLocale(udid = iosDeviceInfo.udid, "ja-JP")
         Thread.sleep(3000)
-        IosDeviceUtility.setAppleLocale(udid = iosDeviceInfo.udid, "en-US")
+        IosLanguageUtility.setAppleLocale(udid = iosDeviceInfo.udid, "en-US")
     }
 
 }

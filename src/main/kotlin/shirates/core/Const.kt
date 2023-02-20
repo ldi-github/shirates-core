@@ -97,7 +97,14 @@ object Const {
     const val SYNC_INTERVAL_SECONDS = 0.5
     const val BOUNDS_TO_RECT_RATIO_ANDROID = 1
     const val BOUNDS_TO_RECT_RATIO_IOS = 3
-    internal const val DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
+
+    /**
+     * internal
+     */
+    internal const val SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
+    internal const val WAIT_UTILITY_WAIT_SECONDS: Double = 30.0
+    internal const val WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
+    internal const val SHELL_RESULT_WAIT_FOR_SECONDS: Double = 30.0
 
     /**
      * others

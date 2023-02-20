@@ -1,65 +1,59 @@
 package shirates.core.utility.android
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.utility.misc.ShellUtility
+import shirates.core.utility.time.WaitUtility
 
 object AdbUtility {
 
     /**
-     * reboot
+     * ps
      */
-    fun reboot(udid: String) {
+    fun ps(udid: String): String {
 
-        ShellUtility.executeCommand("adb", "-s", udid, "reboot")
-    }
-
-    /**
-     * startApp
-     */
-    fun startApp(
-        udid: String,
-        packageName: String,
-        activityName: String
-    ): ShellUtility.ShellResult {
-
-        val name = "$packageName/$activityName"
-        return ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", name)
-    }
-
-    /**
-     * stopApp
-     */
-    fun stopApp(
-        udid: String,
-        packageName: String
-    ): ShellUtility.ShellResult {
-
-        return ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "force-stop", packageName)
+        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "ps")
+        return r.resultString
     }
 
     /**
      * killServer
      */
-    fun killServer(udid: String) {
+    fun killServer(
+        udid: String,
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): ShellUtility.ShellResult {
 
-        ShellUtility.executeCommand("adb", "-s", udid, "kill-server")
+        return ShellUtility.executeCommand("adb", "-s", udid, "kill-server", log = log)
     }
 
     /**
      * startServer
      */
-    fun startServer(udid: String) {
+    fun startServer(
+        udid: String,
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): ShellUtility.ShellResult {
 
-        ShellUtility.executeCommand("adb", "-s", udid, "start-server")
+        val r = ShellUtility.executeCommand("adb", "-s", udid, "start-server", log = log)
+
+        WaitUtility.doUntilTrue {
+            val p = AdbUtility.ps(udid = udid)
+            p.startsWith("USER")
+        }
+
+        return r
     }
 
     /**
      * restartServer
      */
-    fun restartServer(udid: String) {
+    fun restartServer(
+        udid: String,
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): ShellUtility.ShellResult {
 
-        killServer(udid = udid)
-        Thread.sleep(1000)
-        startServer(udid = udid)
+        killServer(udid = udid, log = log)
+        return startServer(udid = udid, log = log)
     }
 
 }

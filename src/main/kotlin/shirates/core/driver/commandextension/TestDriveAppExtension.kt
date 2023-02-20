@@ -1,7 +1,6 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.configuration.NicknameUtility
-import shirates.core.configuration.isValidNickname
+import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
@@ -9,6 +8,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.storage.app
+import shirates.core.utility.misc.AppNameUtility
 
 /**
  * isAppInstalled
@@ -94,30 +94,19 @@ fun TestDrive?.removeApp(
  * terminateApp
  */
 fun TestDrive?.terminateApp(
-    expression: String? = testContext.profile.packageOrBundleId,
+    appNameOrAppId: String = testContext.appIconName
 ): TestElement {
 
     val testElement = getTestElement()
 
-    var appPackage = expression ?: ""
-    if (expression != null && expression.isValidNickname()) {
-        appPackage = app("${expression}.packageOrBundleId")
-    }
-
     val command = "terminateApp"
-    val message = message(id = command)
+    val subject = Selector(appNameOrAppId).toString()
+    val message = message(id = command, subject = subject)
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message, fireEvent = false) {
-        if (appPackage.isBlank()) {
-            if (isAndroid) {
-                throw IllegalAccessException(
-                    message(id = "required", subject = "appPackage(bundleId)", value = appPackage)
-                )
-            }
-        }
-
         try {
-            TestDriver.appiumDriver.terminateApp(appPackage)
+            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+            TestDriver.appiumDriver.terminateApp(packageOrBundleId = packageOrBundleId)
         } catch (t: Throwable) {
             if (t.message?.contains("is still running after") == true) {
                 // 'com.android.settings' is still running after 500ms timeout
@@ -136,23 +125,16 @@ fun TestDrive?.terminateApp(
 /**
  * restartApp
  */
-fun TestDrive?.restartApp(nickname: String? = null): TestElement {
+fun TestDrive?.restartApp(
+    appIconNameOrPackageOrBundleId: String = TestDriver.testContext.appIconName
+): TestElement {
 
     if (TestMode.isNoLoadRun) {
         return lastElement
     }
 
-    if (nickname == null) {
-        TestDriver.it.terminateApp()
-        TestDriver.it.tapAppIcon()
-        return lastElement
-    }
-
-    val packageOrBundleId = app(datasetName = nickname, attributeName = "packageOrBundleId")
-    TestDriver.it.terminateApp(packageOrBundleId)
-
-    val appIconName = NicknameUtility.getNicknameText(nickname)
-    TestDriver.it.tapAppIcon(appIconName = appIconName)
+    TestDriver.it.terminateApp(appIconNameOrPackageOrBundleId)
+    TestDriver.it.launchApp(appIconNameOrPackageOrBundleId)
 
     return lastElement
 }

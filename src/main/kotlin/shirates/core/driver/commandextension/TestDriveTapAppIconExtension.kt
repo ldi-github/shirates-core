@@ -3,12 +3,8 @@ package shirates.core.driver.commandextension
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.befavior.TapHelper.swipeLeftAndTapAppIcon
-import shirates.core.driver.befavior.TapHelper.tapAppIconAsGooglePixel
-import shirates.core.driver.befavior.TapHelper.tapAppIconAsIos
 import shirates.core.logging.Message.message
 
 /**
@@ -38,8 +34,9 @@ fun TestDrive?.tapAppIcon(
         }
 
         // launch by custom function
-        if (CustomFunctionRepository.hasFunction("tapAppIcon")) {
-            val tapped = CustomFunctionRepository.call(functionName = "tapAppIcon", appIconName)
+        val functionName = "tapAppIcon"
+        if (CustomFunctionRepository.hasFunction(functionName)) {
+            val tapped = CustomFunctionRepository.call(functionName = functionName, appIconName)
             if (tapped == true) {
                 return@execOperateCommand
             }
@@ -51,32 +48,7 @@ fun TestDrive?.tapAppIcon(
             return@execOperateCommand
         }
 
-        when (tapAppIconMethod) {
-
-            TapAppIconMethod.auto -> {
-                if (isAndroid) {
-                    if (deviceManufacturer == "Google" || deviceModel.contains("Android SDK")) {
-                        tapAppIconAsGooglePixel(appIconName = appIconName)
-                    } else {
-                        swipeLeftAndTapAppIcon(appIconName = appIconName)
-                    }
-                } else if (isiOS) {
-                    tapAppIconAsIos(appIconName = appIconName)
-                }
-                return@execOperateCommand
-            }
-
-            TapAppIconMethod.googlePixel -> {
-                tapAppIconAsGooglePixel(appIconName = appIconName)
-                return@execOperateCommand
-            }
-
-            TapAppIconMethod.swipeLeftInHome -> {
-                swipeLeftAndTapAppIcon(appIconName = appIconName)
-                return@execOperateCommand
-            }
-        }
-
+        TestDriver.tapAppIconCore(appIconName = appIconName, tapAppIconMethod = tapAppIconMethod)
     }
 
     return lastElement

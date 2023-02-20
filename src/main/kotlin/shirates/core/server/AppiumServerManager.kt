@@ -184,6 +184,9 @@ object AppiumServerManager {
             if (pid != null) {
                 val versionLine =
                     outputStream.toString().split("\n").firstOrNull() { it.contains("Welcome to Appium") } ?: ""
+                if (versionLine.isBlank()) {
+                    continue
+                }
                 if (PropertiesManager.enableShellExecLog) {
                     TestLog.info(versionLine)
                 }

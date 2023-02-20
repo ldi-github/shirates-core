@@ -94,7 +94,38 @@ data class TestElement(
      */
     val hasError: Boolean
         get() {
+            hasEmptyWebViewError
             return (lastError != null)
+        }
+
+    /**
+     * hasEmptyWebViewError
+     */
+    val hasEmptyWebViewError: Boolean
+        get() {
+            if (isAndroid) {
+                val webView = descendantsAndSelf.firstOrNull() { it.className == "android.webkit.WebView" }
+                if (webView == null) {
+                    return false
+                }
+                val webViewElements = webView.descendantsAndSelf
+                val hasError = webViewElements.count() < 5
+                if (hasError) {
+                    lastError = IllegalStateException("EmptyWebViewError.")
+                }
+                return hasError
+            } else {
+                val webView = this.descendantsAndSelf.firstOrNull() { it.type == "XCUIElementTypeWebView" }
+                if (webView == null) {
+                    return false
+                }
+                val webViewElements = webView.descendantsAndSelf
+                val hasError = webViewElements.count() < 6
+                if (hasError) {
+                    lastError = IllegalStateException("EmptyWebViewError.")
+                }
+                return hasError
+            }
         }
 
     companion object {
@@ -563,11 +594,34 @@ data class TestElement(
         }
 
     /**
-     * isVisible
+     * isVisible (for iOS)
      */
     val isVisible: Boolean
         get() {
             return visible == "true"
+        }
+
+    /**
+     * isVisibleCalculated (for iOS)
+     */
+    val isVisibleCalculated: Boolean
+        get() {
+            if (isAndroid) {
+                return true
+            }
+            if (type == "XCUIElementTypeImage") {
+                return true
+            }
+            if (visible == "false" && isInXCUIElementTypeCell) {
+                return true
+            }
+            return isVisible
+        }
+
+    internal val isInXCUIElementTypeCell: Boolean
+        get() {
+            if (isAndroid) return false
+            return ancestors.any() { it.type == "XCUIElementTypeCell" && it.isVisible }
         }
 
     /**

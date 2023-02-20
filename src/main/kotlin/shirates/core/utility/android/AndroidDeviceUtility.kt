@@ -2,14 +2,17 @@ package shirates.core.utility.android
 
 import shirates.core.Const
 import shirates.core.configuration.ProfileNameParser
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.utility.time.WaitUtility
 
 object AndroidDeviceUtility {
 
@@ -40,7 +43,7 @@ object AndroidDeviceUtility {
         val result = ShellUtility.executeCommand("adb", "devices", "-l")
         val list = mutableListOf<AndroidDeviceInfo>()
 
-        for (line in result.resultString.split(System.lineSeparator())) {
+        for (line in result.resultLines) {
             if (line.isNotBlank()) {
                 val deviceInfo = AndroidDeviceInfo(line)
                 if (deviceInfo.port.isNotBlank()) {
@@ -77,12 +80,22 @@ object AndroidDeviceUtility {
     }
 
     /**
-     * getAndroidDeviceInfo
+     * getAndroidDeviceInfoByAvdName
      */
-    fun getAndroidDeviceInfo(avdName: String): AndroidDeviceInfo? {
+    fun getAndroidDeviceInfoByAvdName(avdName: String): AndroidDeviceInfo? {
 
         val deviceList = getAndroidDeviceList()
         val device = deviceList.firstOrNull() { it.avdName == avdName }
+        return device
+    }
+
+    /**
+     * getAndroidDeviceInfoByUdid
+     */
+    fun getAndroidDeviceInfoByUdid(udid: String): AndroidDeviceInfo? {
+
+        val deviceList = getAndroidDeviceList()
+        val device = deviceList.firstOrNull() { it.udid == udid }
         return device
     }
 
@@ -249,7 +262,11 @@ object AndroidDeviceUtility {
             return emulator
         }
 
-        throw TestDriverException(message(id = "couldNotFindConnectedDevice"))
+        if (isAndroid) {
+            throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
+        } else {
+            throw TestDriverException(message(id = "couldNotFindIosDevice", subject = testProfile.profileName))
+        }
     }
 
     /**
@@ -263,7 +280,7 @@ object AndroidDeviceUtility {
 
         currentAndroidDeviceInfo = null
 
-        var device = getAndroidDeviceInfo(avdName = emulatorProfile.avdName)
+        var device = getAndroidDeviceInfoByAvdName(avdName = emulatorProfile.avdName)
         if (device != null && device.status == "device") {
             currentAndroidDeviceInfo = device
             return device
@@ -274,7 +291,7 @@ object AndroidDeviceUtility {
             shellResult = startEmulator(emulatorProfile)
         }
 
-        device = waitEmulatorStatus(
+        device = waitEmulatorStatusByAvdName(
             avdName = emulatorProfile.avdName,
             status = "device",
             timeoutSeconds = timeoutSeconds
@@ -300,18 +317,56 @@ object AndroidDeviceUtility {
     }
 
     /**
-     * waitEmulatorStatus
+     * waitEmulatorStatusByAvdName
      */
-    fun waitEmulatorStatus(
+    fun waitEmulatorStatusByAvdName(
         avdName: String,
         status: String = "device",
         timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
         intervalMilliseconds: Long = 1000
     ): AndroidDeviceInfo {
 
+        val getDevice = {
+            getAndroidDeviceInfoByAvdName(avdName = avdName)
+        }
+        return waitEmulatorStatusCore(
+            getDevice = getDevice,
+            status = status,
+            timeoutSeconds = timeoutSeconds,
+            intervalMilliseconds = intervalMilliseconds
+        )
+    }
+
+    /**
+     * waitEmulatorStatusByUdid
+     */
+    fun waitEmulatorStatusByUdid(
+        udid: String,
+        status: String = "device",
+        timeoutSeconds: Double = Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
+        intervalMilliseconds: Long = 1000
+    ): AndroidDeviceInfo {
+
+        val getDevice = {
+            getAndroidDeviceInfoByUdid(udid = udid)
+        }
+        return waitEmulatorStatusCore(
+            getDevice = getDevice,
+            status = status,
+            timeoutSeconds = timeoutSeconds,
+            intervalMilliseconds = intervalMilliseconds
+        )
+    }
+
+    private fun waitEmulatorStatusCore(
+        getDevice: () -> AndroidDeviceInfo?,
+        status: String,
+        timeoutSeconds: Double,
+        intervalMilliseconds: Long
+    ): AndroidDeviceInfo {
         val sw = StopWatch().start()
         while (true) {
-            val device = getAndroidDeviceInfo(avdName = avdName)
+            val device = getDevice()
             if (device != null && device.status == status) {
                 currentAndroidDeviceInfo = device
                 return device
@@ -339,7 +394,56 @@ object AndroidDeviceUtility {
      */
     fun shutdownEmulatorByAvdName(avdName: String) {
 
-        val androidDeviceInfo = getAndroidDeviceInfo(avdName = avdName) ?: throw IllegalArgumentException("avdName")
+        val androidDeviceInfo =
+            getAndroidDeviceInfoByAvdName(avdName = avdName) ?: throw IllegalArgumentException("avdName")
         return shutdownEmulatorByUdid(udid = androidDeviceInfo.udid)
     }
+
+    /**
+     * isDeviceRunning
+     */
+    fun isDeviceRunning(udid: String): Boolean {
+
+        val r = ShellUtility.executeCommand("adb", "devices")
+        return r.resultString.contains(udid)
+    }
+
+    /**
+     * reboot
+     */
+    fun reboot(
+        udid: String,
+        timeoutSeconds: Double = 60.0,
+        intervalSeconds: Double = 0.5,
+        log: Boolean = PropertiesManager.enableShellExecLog,
+    ): ShellUtility.ShellResult {
+
+        val r = ShellUtility.executeCommand("adb", "-s", udid, "reboot", log = log)
+
+        WaitUtility.doUntilTrue(waitSeconds = timeoutSeconds, intervalSeconds = intervalSeconds) {
+            val psResult = AdbUtility.ps(udid = udid)
+            val deviceOffline = psResult == "adb: device offline"
+            TestLog.trace("deviceOffline=$deviceOffline")
+
+            deviceOffline.not()
+        }
+        WaitUtility.doUntilTrue(waitSeconds = 20.0, intervalSeconds = intervalSeconds) {
+            val psResult = AdbUtility.ps(udid = udid)
+            val bootanimation = psResult.contains("bootanimation")
+            TestLog.trace("bootanimation=$bootanimation")
+
+            bootanimation
+        }
+        WaitUtility.doUntilTrue(waitSeconds = timeoutSeconds, intervalSeconds = intervalSeconds) {
+            val psResult = AdbUtility.ps(udid = udid)
+            val bootanimation = psResult.contains("bootanimation")
+            TestLog.trace("bootanimation=$bootanimation")
+
+            bootanimation.not()
+        }
+        Thread.sleep(1000)
+
+        return r
+    }
+
 }
