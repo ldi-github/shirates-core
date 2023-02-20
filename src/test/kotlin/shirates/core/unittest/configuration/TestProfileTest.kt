@@ -420,7 +420,7 @@ class TestProfileTest : UnitTest() {
         p.tapAppIconMethod = "auto"
         p.tapAppIconMacro = "appLaunchMacro1"
         p.appiumServerUrl = "http://127.0.0.1:4720/"
-        p.appPackageFile = "Stub_v10.23.0(2505)_20230120.app.zip"
+        p.appPackageFile = null
         p.appPackageDir = null
         p.packageOrBundleId = "com.example.android.app1"
         p.appiumServerStartupTimeoutSeconds = "1.0"

@@ -241,7 +241,8 @@ abstract class UITest : TestDrive {
             TestLog.printLogDirectory()
 
             // TestReportIndex
-            TestLog.createOrUpdateTestReportIndex()
+            TestLog.createOrUpdateTestReportIndex(filterName = "simple")
+            TestLog.createOrUpdateTestReportIndex(filterName = "detail")
 
             // setup config
             val profile = setupConfigAndProfile(

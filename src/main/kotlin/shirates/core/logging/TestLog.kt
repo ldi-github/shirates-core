@@ -1462,12 +1462,11 @@ object TestLog {
                         fileName = reportFileName,
                         lines = logLines
                     ).writeHtml()
-                    if (filterName == "simple") {
-                        createOrUpdateTestReportIndex(
-                            inputReportFileName = reportFileName,
-                            logLines = logLines
-                        )
-                    }
+                    createOrUpdateTestReportIndex(
+                        filterName = filterName,
+                        inputReportFileName = reportFileName,
+                        logLines = logLines
+                    )
                 }
             }
 
@@ -1477,11 +1476,12 @@ object TestLog {
     }
 
     internal fun createOrUpdateTestReportIndex(
+        filterName: String,
         inputReportFileName: String? = null,
         logLines: List<LogLine> = listOf()
     ) {
         val reportIndexDir = PropertiesManager.testListDir.ifBlank { directoryForLog.parent.toString() }
-        val reportIndexFilePath = reportIndexDir.toPath().resolve("_ReportIndex.html")
+        val reportIndexFilePath = reportIndexDir.toPath().resolve("_ReportIndex($filterName).html")
 
         lockFile(filePath = reportIndexFilePath) {
             val tri = TestReportIndex(
