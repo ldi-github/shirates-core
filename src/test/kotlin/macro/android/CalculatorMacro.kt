@@ -12,7 +12,7 @@ object CalculatorMacro : TestDrive {
     fun restartCalculator() {
 
         it.terminateApp("com.google.android.calculator")
-            .tapAppIcon("Calculator")
+            .launchApp("Calculator")
             .screenIs("[Calculator Main Screen]")
     }
 

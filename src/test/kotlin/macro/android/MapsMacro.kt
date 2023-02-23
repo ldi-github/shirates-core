@@ -17,7 +17,7 @@ object MapsMacro : TestDrive {
         }
 
         it.terminateApp("com.google.android.apps.maps")
-            .tapAppIcon("Maps")
+            .launchApp("Maps")
             .ifCanSelect("*to send you notifications?") {
                 it.tap("Allow")
             }

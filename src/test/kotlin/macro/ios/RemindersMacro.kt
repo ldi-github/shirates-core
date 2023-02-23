@@ -14,7 +14,7 @@ object RemindersMacro {
         it.refreshCache()
 
         if (it.isApp("[Reminders]").not()) {
-            it.tapAppIcon("Reminders")
+            it.launchApp("Reminders")
         }
 
         if (it.isScreen("[Reminders Top Screen]")) {

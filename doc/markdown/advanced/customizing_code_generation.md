@@ -126,7 +126,7 @@ interface Translator {
                     return "manual(\"$message\")"
                 }
             }
-            if (message.contains("アイコンをする") || message.lowercase().contains("tap app icon")) {
+            if (message.contains("アイコンをタップする") || message.lowercase().contains("tap app icon")) {
                 return "tapAppIcon(\"$subject\")"
             }
             if (message.contains("タップする") || message.lowercase().contains("tap ")) {

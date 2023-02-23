@@ -74,18 +74,16 @@ fun TestDrive?.waitForClose(
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
         var closeTarget = TestElement.emptyElement
-        val actionFunc = {
+
+        SyncUtility.doUntilTrue(
+            waitSeconds = waitSeconds
+        ) {
             closeTarget = TestElementCache.select(selector = sel, throwsException = false)
             if (closeTarget.isFound) {
                 refreshCache()
             }
             closeTarget.isEmpty
         }
-
-        SyncUtility.doUntilTrue(
-            waitSeconds = waitSeconds,
-            actionFunc = actionFunc
-        )
 
         if (throwsException && closeTarget.isFound) {
             throw TestDriverException(
@@ -117,15 +115,13 @@ fun TestDrive?.waitForDisplay(
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
         var element = TestElement(selector = sel)
-        val actionFunc = {
-            element = TestElementCache.select(selector = sel, throwsException = false)
-            element.isFound
-        }
 
         SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds,
-            actionFunc = actionFunc
-        )
+        ) {
+            element = TestElementCache.select(selector = sel, throwsException = false)
+            element.isFound
+        }
         lastElement = element
 
         if (throwsException && element.isEmpty) {

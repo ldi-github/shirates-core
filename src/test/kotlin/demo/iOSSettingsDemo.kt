@@ -19,7 +19,7 @@ class iOSSettingsDemo : UITest() {
             case(1) {
                 condition {
                     it.pressHome()
-                        .tapAppIcon()
+                        .launchApp()
                         .screenIs("[iOS Settings Top Screen]")
                 }.action {
                     it.tapWithScrollDown("Developer")

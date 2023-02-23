@@ -17,7 +17,7 @@ class WaitScreen1 : UITest() {
             case(1) {
                 condition {
                     it.terminateApp()
-                        .tapAppIcon()
+                        .launchApp()
                 }.action {
                     it.waitScreen("[Android Settings Top Screen]")
                 }.expectation {
@@ -35,7 +35,7 @@ class WaitScreen1 : UITest() {
             case(1) {
                 condition {
                     it.terminateApp()
-                        .tapAppIcon()
+                        .launchApp()
                 }.action {
                     it.waitScreen("[Network & internet Screen]")
                 }
@@ -51,7 +51,7 @@ class WaitScreen1 : UITest() {
             case(1) {
                 condition {
                     it.terminateApp()
-                        .tapAppIcon()
+                        .launchApp()
                 }.action {
                     it.waitScreenOf(
                         "[Android Settings Top Screen]",
@@ -74,7 +74,7 @@ class WaitScreen1 : UITest() {
             case(1) {
                 condition {
                     it.terminateApp()
-                        .tapAppIcon("Chrome")
+                        .launchApp("Chrome")
                 }.action {
                     it.waitScreenOf(
                         "[Android Settings Top Screen]",

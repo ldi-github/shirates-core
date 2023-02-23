@@ -24,7 +24,7 @@ class AssertingOthers1 : UITest() {
 
             case(2) {
                 condition {
-                    it.tapAppIcon("Chrome")
+                    it.launchApp("Chrome")
                 }.expectation {
                     val isApp = it.isApp("[Chrome]")
                     output("isApp(\"[Chrome]\")=$isApp")
@@ -104,7 +104,7 @@ class AssertingOthers1 : UITest() {
 
             case(2) {
                 action {
-                    it.tapAppIcon("Chrome")
+                    it.launchApp("Chrome")
                 }.expectation {
                     it.packageIs("com.android.chrome")
                 }

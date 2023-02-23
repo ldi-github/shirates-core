@@ -771,18 +771,16 @@ internal fun TestDrive?.dontExistCore(
     )
 
     if (waitSeconds > 0.0 && scroll.not() && e.isFound) {
-        val actionFunc = {
+
+        SyncUtility.doUntilTrue(
+            waitSeconds = waitSeconds
+        ) {
             e = TestElementCache.select(selector = selector, throwsException = false)
             if (e.isEmpty.not()) {
                 refreshCache()
             }
             e.isEmpty
         }
-
-        SyncUtility.doUntilTrue(
-            waitSeconds = waitSeconds,
-            actionFunc = actionFunc
-        )
     }
 
     TestDriver.postProcessForAssertion(
