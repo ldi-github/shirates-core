@@ -29,7 +29,7 @@ fun appIs_OK() {
 
         case(2) {
             condition {
-                it.tapAppIcon("Chrome")
+                it.launchApp("Chrome")
             }.expectation {
                 val isApp = it.isApp("[Chrome]")
                 output("isApp(\"[Chrome]\")=$isApp")
