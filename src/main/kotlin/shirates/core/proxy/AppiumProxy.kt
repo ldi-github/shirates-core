@@ -48,7 +48,7 @@ object AppiumProxy {
                 }
                 return true
             } catch (t: Throwable) {
-                TestLog.info("Error in AppiumProxy.getSource() doUntilTrue: $e $t")
+                TestLog.trace("Error in AppiumProxy.getSource() doUntilTrue: $e $t")
                 return false
             }
         }

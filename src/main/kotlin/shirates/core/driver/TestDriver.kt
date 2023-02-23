@@ -9,12 +9,14 @@ import org.openqa.selenium.Capabilities
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.DesiredCapabilities
+import shirates.core.Const
 import shirates.core.configuration.*
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isRealDevice
+import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
@@ -859,7 +861,10 @@ object TestDriver {
 
         // Wait for seconds
         if (waitSeconds > 0 && isInitialized) {
-            val actionFunc = {
+            // Search until it is(not) found
+            val r = SyncUtility.doUntilTrue(
+                waitSeconds = waitSeconds
+            ) {
                 val e = TestElementCache.select(selector = selector, throwsException = false)
                 selectedElement = e
                 if (selector.isNegation) {
@@ -868,12 +873,6 @@ object TestDriver {
                     e.isFound
                 }
             }
-
-            // Search until it is(not) found
-            val r = SyncUtility.doUntilTrue(
-                waitSeconds = waitSeconds,
-                actionFunc = actionFunc
-            )
             if (r.hasError) {
                 lastElement.lastError = r.error
             }
@@ -1599,17 +1598,41 @@ object TestDriver {
                 throw NotImplementedError("TestDriver.launchApp is not supported on real device in iOS. (packageOrBundleId=$packageOrBundleId)")
             }
 
-            val r = IosAppUtility.launchApp(udid = testProfile.udid, bundleId = packageOrBundleId, log = true)
-            val message = r.waitForResultString()
-            if (r.hasError) {
-                throw TestDriverException(
-                    message = message(id = "failedToLaunchApp", arg1 = packageOrBundleId, submessage = message),
-                    cause = r.error
-                )
+            var isApp = false
+            val action = {
+                val r = IosAppUtility.launchApp(udid = testProfile.udid, bundleId = packageOrBundleId, log = true)
+                val message = r.waitForResultString()
+                if (r.hasError) {
+                    throw TestDriverException(
+                        message = message(id = "failedToLaunchApp", arg1 = packageOrBundleId, submessage = message),
+                        cause = r.error
+                    )
+                }
+                SyncUtility.doUntilTrue(
+                    waitSeconds = Const.LAUNCH_APP_WAIT_SECONDS
+                ) { context ->
+                    TestLog.info("doUntilTrue(${context.count})")
+                    testDrive.wait(waitSeconds = 2)
+                    isApp = isAppCore(appNameOrAppId = packageOrBundleId)
+                    if (isApp) {
+                        TestLog.info("App launched. ($packageOrBundleId)")
+                        true
+                    } else {
+                        val kAXErrorServerNotFound = TestLog.lastTestLog!!.message.contains("kAXErrorServerNotFound")
+                        kAXErrorServerNotFound
+                    }
+                }
             }
-            SyncUtility.doUntilTrue() {
-                testDrive.wait(waitSeconds = 2)
-                isAppCore(appNameOrAppId = packageOrBundleId)
+
+            action()
+
+            if (isApp.not()) {
+                if (isiOS && isSimulator) {
+                    TestLog.info("Retrying launchApp.")
+                    IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
+                    createAppiumDriver()
+                }
+                action()
             }
         }
 
