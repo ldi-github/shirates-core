@@ -1527,7 +1527,7 @@ object TestDriver {
     ): Boolean {
 
         try {
-            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             if (isAndroid) {
                 return rootElement.packageName == packageOrBundleId
             }

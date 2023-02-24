@@ -106,7 +106,7 @@ fun TestDrive?.isApp(
     var r = false
     context.execBooleanCommand(subject = appNameOrAppId) {
 
-        val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+        val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
         val appNickName = AppNameUtility.getAppNickNameFromPackageName(packageName = packageOrBundleId)
         val appName =
             if (appNickName.isNotBlank()) NicknameUtility.getNicknameText(nickname = appNickName)

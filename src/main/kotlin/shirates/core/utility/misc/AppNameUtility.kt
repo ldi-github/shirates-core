@@ -29,22 +29,26 @@ object AppNameUtility {
     /**
      * getPackageOrBundleId
      */
-    fun getPackageOrBundleId(appNameOrAppId: String): String {
+    fun getPackageOrBundleId(appNameOrAppIdOrActivityName: String): String {
 
-        if (appNameOrAppId == testProfile.appIconName) {
+        if (appNameOrAppIdOrActivityName == testProfile.appIconName) {
             return testProfile.packageOrBundleId!!
         }
 
-        if (NicknameUtility.isValidNickname(appNameOrAppId)) {
-            return app("${appNameOrAppId}.packageOrBundleId", throwsException = false)
+        if (NicknameUtility.isValidNickname(appNameOrAppIdOrActivityName)) {
+            return app("${appNameOrAppIdOrActivityName}.packageOrBundleId", throwsException = false)
         }
 
-        val packageOrBundleId = app("[$appNameOrAppId].packageOrBundleId", throwsException = false)
+        if (appNameOrAppIdOrActivityName.contains("/")) {
+            return appNameOrAppIdOrActivityName.split("/").first()
+        }
+
+        val packageOrBundleId = app("[$appNameOrAppIdOrActivityName].packageOrBundleId", throwsException = false)
         if (packageOrBundleId.isNotBlank()) {
             return packageOrBundleId
         }
 
-        return appNameOrAppId
+        return appNameOrAppIdOrActivityName
     }
 
     /**
