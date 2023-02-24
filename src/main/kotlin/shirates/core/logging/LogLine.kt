@@ -176,7 +176,7 @@ data class LogLine(
                 return false
             }
             if (logType == LogType.NONE) {
-                return false
+                return true
             }
             if (logType == LogType.SCREENSHOT && withScrollDirection != null) {
                 return false

@@ -689,6 +689,7 @@ object TestLog {
         arg2: String,
         message: String?,
         log: Boolean,
+        logType: LogType = LogType.INFO
     ): LogLine {
         if (log.not()) return LogLine()
 
@@ -699,7 +700,7 @@ object TestLog {
 
         return write(
             message = msg,
-            logType = LogType.INFO,
+            logType = logType,
             scriptCommand = scriptCommand,
             subject = subject,
             arg1 = arg1,
@@ -716,7 +717,8 @@ object TestLog {
         arg1: String = "",
         arg2: String = "",
         message: String? = null,
-        log: Boolean = true
+        log: Boolean = true,
+        logType: LogType = LogType.NONE
     ): LogLine {
 
         return scriptCommand(
@@ -726,6 +728,7 @@ object TestLog {
             arg2 = arg2,
             message = message,
             log = log,
+            logType = logType
         )
     }
 
