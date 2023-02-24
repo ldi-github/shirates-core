@@ -73,7 +73,7 @@ class iOSSettingsDemo : UITest() {
         scenario {
             case(1) {
                 ios {
-                    it.appIs("[Settings]")
+                    it.appIs("Settings")
                 }
             }
         }

@@ -1584,27 +1584,32 @@ object TestDriver {
      *
      */
     fun launchAppCore(
-        packageOrBundleId: String
+        packageOrBundleIdOrActivity: String
     ): TestElement {
 
         if (isAndroid) {
-            AndroidAppUtility.startApp(udid = testProfile.udid, packageName = packageOrBundleId)
+            AndroidAppUtility.startApp(udid = testProfile.udid, packageNameOrActivityName = packageOrBundleIdOrActivity)
             syncCache(force = true)
             SyncUtility.doUntilTrue {
-                isAppCore(appNameOrAppId = packageOrBundleId)
+                isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
             }
         } else if (isiOS) {
             if (isRealDevice) {
-                throw NotImplementedError("TestDriver.launchApp is not supported on real device in iOS. (packageOrBundleId=$packageOrBundleId)")
+                throw NotImplementedError("TestDriver.launchApp is not supported on real device in iOS. (packageOrBundleId=$packageOrBundleIdOrActivity)")
             }
 
             var isApp = false
             val action = {
-                val r = IosAppUtility.launchApp(udid = testProfile.udid, bundleId = packageOrBundleId, log = true)
+                val r =
+                    IosAppUtility.launchApp(udid = testProfile.udid, bundleId = packageOrBundleIdOrActivity, log = true)
                 val message = r.waitForResultString()
                 if (r.hasError) {
                     throw TestDriverException(
-                        message = message(id = "failedToLaunchApp", arg1 = packageOrBundleId, submessage = message),
+                        message = message(
+                            id = "failedToLaunchApp",
+                            arg1 = packageOrBundleIdOrActivity,
+                            submessage = message
+                        ),
                         cause = r.error
                     )
                 }
@@ -1613,9 +1618,9 @@ object TestDriver {
                 ) { context ->
                     TestLog.info("doUntilTrue(${context.count})")
                     testDrive.wait(waitSeconds = 2)
-                    isApp = isAppCore(appNameOrAppId = packageOrBundleId)
+                    isApp = isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
                     if (isApp) {
-                        TestLog.info("App launched. ($packageOrBundleId)")
+                        TestLog.info("App launched. ($packageOrBundleIdOrActivity)")
                         true
                     } else {
                         val kAXErrorServerNotFound = TestLog.lastTestLog!!.message.contains("kAXErrorServerNotFound")

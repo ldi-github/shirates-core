@@ -49,10 +49,10 @@ fun TestDrive?.launchApp(
         }
 
         if (isAndroid) {
-            TestDriver.launchAppCore(packageOrBundleId = packageOrBundleId)
+            TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
         } else if (isiOS) {
             if (isSimulator) {
-                TestDriver.launchAppCore(packageOrBundleId = packageOrBundleId)
+                TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
             } else {
                 TestDriver.tapAppIconCore(appNameOrAppId)
                 SyncUtility.doUntilTrue {

@@ -88,23 +88,24 @@ object AndroidAppUtility {
      */
     fun startApp(
         udid: String,
-        packageName: String,
-        activityName: String? = null,
+        packageNameOrActivityName: String,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 
         if (udid.isBlank()) {
             throw IllegalArgumentException("udid=$udid")
         }
-        if (packageName.isBlank()) {
-            throw IllegalStateException("packageName=$packageName")
+        if (packageNameOrActivityName.isBlank()) {
+            throw IllegalStateException("packageName=$packageNameOrActivityName")
         }
 
-        val aname = activityName ?: getMainActivity(udid = udid, packageName = packageName)
-        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", aname, log = log)
+        val activityName =
+            if (packageNameOrActivityName.contains("/")) packageNameOrActivityName
+            else getMainActivity(udid = udid, packageName = packageNameOrActivityName)
+        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", activityName, log = log)
 
         WaitUtility.doUntilTrue {
-            isAppRunning(udid = udid, packageName = packageName)
+            isAppRunning(udid = udid, packageName = packageNameOrActivityName)
         }
 
         return r

@@ -134,7 +134,7 @@ class AndroidAppUtilityTest : UnitTest() {
 
         // Arrange
         run {
-            AndroidAppUtility.startApp(udid = UDID, packageName = packageName, log = true)
+            AndroidAppUtility.startApp(udid = UDID, packageNameOrActivityName = packageName, log = true)
             val isAppRunning = AndroidAppUtility.isAppRunning(udid = UDID, packageName = packageName)
             assertThat(isAppRunning).isTrue()
             Thread.sleep(1000)
