@@ -32,7 +32,7 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
                         .sendKeys("safa")
                         .tap(".XCUIElementTypeButton&&Safari")
                         .wait()
-                        .appIs("[Safari]")
+                        .appIs("Safari")
                 }.action {
                     it.pressBack()
                 }.expectation {

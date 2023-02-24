@@ -1,8 +1,14 @@
 package shirates.core.configuration
 
+import shirates.core.driver.TestMode
+import shirates.core.driver.testContext
+import shirates.core.driver.testProfile
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
+import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.getStringOrEmpty
+import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.misc.ReflectionUtility
 import shirates.core.utility.toPath
 import java.net.URL
@@ -522,4 +528,54 @@ class TestProfile(var profileName: String = "") {
         }
 
     }
+
+    /**
+     * completeProfile
+     */
+    fun completeProfile() {
+        TestLog.info(message(id = "searchingDeviceForProfile", subject = testContext.profile.profileName))
+        if (TestMode.isAndroid) {
+            if (automationName.isBlank()) {
+                automationName = "UiAutomator2"
+            }
+            if (platformName.isBlank()) {
+                platformName = "Android"
+            }
+
+            val androidDeviceInfo =
+                AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = testContext.profile)
+            if (androidDeviceInfo.message.isNotBlank()) {
+                TestLog.info(androidDeviceInfo.message)
+            }
+            val deviceLabel = androidDeviceInfo.avdNameAndPort.ifBlank { androidDeviceInfo.model }
+            val subject = "${deviceLabel}, Android ${androidDeviceInfo.platformVersion}, ${androidDeviceInfo.udid}"
+            TestLog.info(message(id = "connectedDeviceFound", subject = subject))
+
+            if (androidDeviceInfo.isEmulator) {
+                avd = androidDeviceInfo.avdName
+            }
+            platformVersion = androidDeviceInfo.platformVersion
+            udid = androidDeviceInfo.udid
+            platformVersion = androidDeviceInfo.platformVersion
+        } else if (TestMode.isiOS) {
+            if (automationName.isBlank()) {
+                automationName = "XCUITest"
+            }
+            if (platformName.isBlank()) {
+                platformName = "iOS"
+            }
+
+            val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
+            if (iosDeviceInfo.message.isNotBlank()) {
+                TestLog.info(iosDeviceInfo.message)
+            }
+            val subject =
+                "${iosDeviceInfo.devicename}, iOS ${iosDeviceInfo.platformVersion}, ${iosDeviceInfo.udid}"
+            TestLog.info(message(id = "deviceFound", subject = subject))
+            deviceName = iosDeviceInfo.devicename
+            platformVersion = iosDeviceInfo.platformVersion
+            udid = iosDeviceInfo.udid
+        }
+    }
+
 }

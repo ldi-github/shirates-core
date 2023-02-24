@@ -76,6 +76,9 @@ internal fun AppiumDriver.removeApp(packageOrBundleId: String? = testContext.pro
 
 internal fun AppiumDriver.terminateApp(packageOrBundleId: String?) {
 
+    if (packageOrBundleId.isNullOrBlank()) {
+        throw IllegalAccessException(message(id = "required", subject = "packageOrBundleId", value = packageOrBundleId))
+    }
     if (isAndroid) {
         TestDriver.androidDriver.terminateApp(packageOrBundleId)
     } else {
