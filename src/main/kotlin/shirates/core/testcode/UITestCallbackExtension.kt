@@ -193,9 +193,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         val scenarioLines = TestLog.getLinesOfCurrentTestScenario()
 
-        val testMethodName = context?.requiredTestMethod?.name
         TestLog.stepNo = null
-        TestLog.trace("end of fun $testMethodName()")
         TestLog.resetTestScenarioInfo()
 
         uiTest?.afterEach(context)
@@ -219,6 +217,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         testFunctionWatch.stop()
         val duration = "%.1f".format(testFunctionWatch.elapsedSeconds)
         TestLog.info(message(id = "testFunctionExecuted", arg1 = duration))
+        TestLog.info("End of ${uiTest?.TestFunctionDescription}")
     }
 
     /**

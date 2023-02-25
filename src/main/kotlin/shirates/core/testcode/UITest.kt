@@ -82,6 +82,15 @@ abstract class UITest : TestDrive {
     var o2: Any? = null
     var o3: Any? = null
 
+    val TestFunctionDescription: String
+        get() {
+            var description = "Test function: ${currentTestMethodName}"
+            if (currentDisplayName.isNotBlank()) {
+                description += " [$currentDisplayName]"
+            }
+            return description
+        }
+
     fun clearTempStorages() {
 
         e1 = TestElement()
@@ -161,6 +170,9 @@ abstract class UITest : TestDrive {
         testrunFile: String = PropertiesManager.testrunFile,
         profileName: String = PropertiesManager.profile
     ) {
+        TestLog.info(Const.SEPARATOR_LONG)
+        TestLog.info(TestFunctionDescription)
+
         PropertiesManager.setup(testrunFile = testrunFile)
         TestMode.testTimeNoLoadRun = PropertiesManager.getPropertyValue("noLoadRun") == "true"
         prepareTestLog()
@@ -294,9 +306,6 @@ abstract class UITest : TestDrive {
             if (TestMode.isNoLoadRun) {
                 return
             }
-
-            // Get device
-            TestLog.info(Const.SEPARATOR_LONG)
 
             // Complete profile
             profile.completeProfile()
@@ -484,7 +493,7 @@ abstract class UITest : TestDrive {
             }
 
             if (TestMode.isNoLoadRun) {
-                TestLog.warn("No-Load-Run mode")
+                TestLog.skip("No-Load-Run mode")
             }
 
             testProc()
