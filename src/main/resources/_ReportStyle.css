@@ -242,6 +242,11 @@ td {
     background-color: orange !important;
 }
 
+.WARN {
+    font-weight: bold;
+    background-color: yellow !important;
+}
+
 .MANUAL {
     font-weight: bold;
     background-color: #a0d8ef !important;

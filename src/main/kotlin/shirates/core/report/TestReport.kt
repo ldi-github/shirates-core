@@ -199,6 +199,7 @@ class TestReport(
         val total = lines.count()
         val okCount = lines.filter { it.result == LogType.OK }.count()
         val ngCount = lines.filter { it.result == LogType.NG }.count()
+        val warnCount = lines.filter { it.result == LogType.WARN }.count()
         val manualCount = lines.filter { it.result == LogType.MANUAL }.count()
         val skipCount = lines.filter { it.result == LogType.SKIP }.count()
         val notImplCount = lines.filter { it.result == LogType.NOTIMPL }.count()
@@ -218,11 +219,12 @@ class TestReport(
             <tr><td class='section-result ERROR'>ERROR</td><td class='section-count'>$errorCount</td></tr>
         </table> 
         <table class='result-table'>
+            <tr><td class='section-result WARN'>WARN</td><td class='section-count'>$warnCount</td></tr>
             <tr><td class='section-result MANUAL'>MANUAL</td><td class='section-count'>$manualCount</td></tr>
             <tr><td class='section-result SKIP'>SKIP</td><td class='section-count'>$skipCount</td></tr>
-            <tr><td class='section-result NOTIMPL'>NOTIMPL</td><td class='section-count'>$notImplCount</td></tr>
         </table> 
         <table class='result-table'>
+            <tr><td class='section-result NOTIMPL'>NOTIMPL</td><td class='section-count'>$notImplCount</td></tr>
             <tr><td class='section-result KNOWNISSUE'>KNOWNISSUE</td><td class='section-count'>$knownIssueCount</td></tr>
         </table>
 """
@@ -271,6 +273,7 @@ class TestReport(
         val total = items.filter { it.logType.isEffectiveType }.count()
         val okCount = items.filter { it.logType == LogType.OK }.count()
         val ngCount = items.filter { it.logType == LogType.NG }.count()
+        val warnCount = items.filter { it.logType == LogType.WARN }.count()
         val manualCount = items.filter { it.logType == LogType.MANUAL }.count()
         val skipCount = items.filter { it.logType == LogType.SKIP }.count()
         val notImplCount = items.filter { it.logType == LogType.NOTIMPL }.count()
@@ -290,11 +293,12 @@ class TestReport(
             <tr><td class='section-result ERROR'>ERROR</td><td class='section-count'>$errorCount</td></tr>
         </table> 
         <table class='result-table'>
+            <tr><td class='section-result WARN'>WARN</td><td class='section-count'>$warnCount</td></tr>
             <tr><td class='section-result MANUAL'>MANUAL</td><td class='section-count'>$manualCount</td></tr>
             <tr><td class='section-result SKIP'>SKIP</td><td class='section-count'>$skipCount</td></tr>
-            <tr><td class='section-result NOTIMPL'>NOTIMPL</td><td class='section-count'>$notImplCount</td></tr>
         </table> 
         <table class='result-table'>
+            <tr><td class='section-result NOTIMPL'>NOTIMPL</td><td class='section-count'>$notImplCount</td></tr>
             <tr><td class='section-result KNOWNISSUE'>KNOWNISSUE</td><td class='section-count'>$knownIssueCount</td></tr>
         </table>
 """

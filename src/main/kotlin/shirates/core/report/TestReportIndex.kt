@@ -52,6 +52,7 @@ class TestReportIndex(
             val okTd = tr.select(".ok").firstOrNull()
             val ngTd = tr.select(".ng").firstOrNull()
             val errorTd = tr.select(".error").firstOrNull()
+            val warnTd = tr.select(".warn").firstOrNull()
             val manualTd = tr.select(".manual").firstOrNull()
             val skipTd = tr.select(".skip").firstOrNull()
             val notImplTd = tr.select(".not-impl").firstOrNull()
@@ -64,6 +65,7 @@ class TestReportIndex(
             item.okCount = okTd?.text()?.toInt() ?: 0
             item.ngCount = ngTd?.text()?.toInt() ?: 0
             item.errorCount = errorTd?.text()?.toInt() ?: 0
+            item.warnCount = warnTd?.text()?.toInt() ?: 0
             item.manualCount = manualTd?.text()?.toInt() ?: 0
             item.skipCount = skipTd?.text()?.toInt() ?: 0
             item.notImplCount = notImplTd?.text()?.toInt() ?: 0
@@ -89,6 +91,7 @@ class TestReportIndex(
         item.okCount = logLines.count() { it.logType == LogType.OK }
         item.ngCount = logLines.count() { it.logType == LogType.NG }
         item.errorCount = logLines.count() { it.logType == LogType.ERROR }
+        item.warnCount = logLines.count() { it.logType == LogType.WARN }
         item.manualCount = logLines.count() { it.logType == LogType.MANUAL }
         item.skipCount = logLines.count() { it.logType == LogType.SKIP }
         item.notImplCount = logLines.count() { it.logType == LogType.NOTIMPL }
@@ -198,6 +201,7 @@ class TestReportIndex(
         sb.append("<th>OK</th>")
         sb.append("<th>NG</th>")
         sb.append("<th>ERROR</th>")
+        sb.append("<th>WARN</th>")
         sb.append("<th>MANUAL</th>")
         sb.append("<th>SKIP</th>")
         sb.append("<th>NOTIMPL</th>")
@@ -279,6 +283,7 @@ ${'$'}(function(){
         item.okCount = items.sumOf { it.okCount }
         item.ngCount = items.sumOf { it.ngCount }
         item.errorCount = items.sumOf { it.errorCount }
+        item.warnCount = items.sumOf { it.warnCount }
         item.manualCount = items.sumOf { it.manualCount }
         item.skipCount = items.sumOf { it.skipCount }
         item.notImplCount = items.sumOf { it.notImplCount }
@@ -296,6 +301,7 @@ ${'$'}(function(){
         sb.append("<td class='OK section-count'>${line.okCount}</td>")
         sb.append("<td class='NG section-count'>${line.ngCount}</td>")
         sb.append("<td class='ERROR section-count'>${line.errorCount}</td>")
+        sb.append("<td class='WARN section-count'>${line.warnCount}</td>")
         sb.append("<td class='MANUAL section-count'>${line.manualCount}</td>")
         sb.append("<td class='SKIP section-count'>${line.skipCount}</td>")
         sb.append("<td class='NOTIMPL section-count'>${line.notImplCount}</td>")
@@ -320,6 +326,7 @@ ${'$'}(function(){
         sb.append("<td class='OK section-count${z(line.okCount)}'>${line.okCount}</td>")
         sb.append("<td class='NG section-count${z(line.ngCount)}'>${line.ngCount}</td>")
         sb.append("<td class='ERROR section-count${z(line.errorCount)}'>${line.errorCount}</td>")
+        sb.append("<td class='WARN section-count${z(line.warnCount)}'>${line.warnCount}</td>")
         sb.append("<td class='MANUAL section-count${z(line.manualCount)}'>${line.manualCount}</td>")
         sb.append("<td class='SKIP section-count${z(line.skipCount)}'>${line.skipCount}</td>")
         sb.append("<td class='NOTIMPL section-count${z(line.notImplCount)}'>${line.notImplCount}</td>")
@@ -346,6 +353,7 @@ ${'$'}(function(){
         var okCount = 0
         var ngCount = 0
         var errorCount = 0
+        var warnCount = 0
         var manualCount = 0
         var skipCount = 0
         var notImplCount = 0
