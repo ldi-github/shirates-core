@@ -76,9 +76,9 @@ class RetryContext<T>(
             return
         }
         if (wrappedError != null) {
-            TestLog.warn(message = wrappedError!!.message!!)
+            TestLog.warn(message = "Error in retry context: ${wrappedError!!.message}")
         } else if (exception != null) {
-            TestLog.warn(message = exception!!.message!!)
+            TestLog.warn(message = "Error in retry context: ${exception!!.message}")
         }
     }
 }

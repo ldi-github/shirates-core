@@ -16,6 +16,7 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.commandextension.launchApp
 import shirates.core.driver.commandextension.wait
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
@@ -431,6 +432,7 @@ abstract class UITest : TestDrive {
         scenarioId: String? = currentTestMethodName,
         order: Int? = currentOrder,
         desc: String = currentDisplayName,
+        launchApp: Boolean = true,
         testProc: () -> Unit
     ) {
         if (CodeExecutionContext.isInScenario) {
@@ -447,7 +449,13 @@ abstract class UITest : TestDrive {
 
         val sw = StopWatch(title = "Running scenario").start()
         try {
-            scenarioCore(scenarioId, order, desc, testProc)
+            scenarioCore(
+                scenarioId = scenarioId,
+                order = order,
+                desc = desc,
+                launchApp = launchApp,
+                testProc = testProc
+            )
         } finally {
             CodeExecutionContext.isInScenario = false
 
@@ -461,6 +469,7 @@ abstract class UITest : TestDrive {
         scenarioId: String?,
         order: Int?,
         desc: String,
+        launchApp: Boolean,
         testProc: () -> Unit
     ) {
         driver.skipScenario = false
@@ -496,6 +505,10 @@ abstract class UITest : TestDrive {
 
             if (TestMode.isNoLoadRun) {
                 TestLog.skip("No-Load-Run mode")
+            }
+
+            if (launchApp) {
+                testDrive.launchApp()
             }
 
             testProc()
