@@ -16,6 +16,7 @@ class TestDriveScreenExtensionTest : UITest() {
         scenario {
             case(1) {
                 condition {
+                    launchApp()
                     it.screenIs("[Android Settings Top Screen]")
                 }.expectation {
                     it.screenName
@@ -31,6 +32,7 @@ class TestDriveScreenExtensionTest : UITest() {
         scenario {
             case(1) {
                 condition {
+                    launchApp()
                     it.screenIs("[Android Settings Top Screen]")
                 }.expectation {
                     it.isScreen("[Android Settings Top Screen]")
@@ -48,6 +50,7 @@ class TestDriveScreenExtensionTest : UITest() {
         scenario {
             case(1) {
                 condition {
+                    launchApp()
                     it.screenIs("[Android Settings Top Screen]")
                 }.expectation {
                     it.isScreenOf("[Android Settings Top Screen]", "[Notifications Screen]")
