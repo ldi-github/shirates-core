@@ -213,7 +213,7 @@ internal fun TestDrive?.screenIsCore(
             TestLog.warn(message(id = "checkScreenManually", subject = expectedScreenName))
         } else {
             lastElement.lastResult = LogType.NG
-            TestLog.warn(
+            TestLog.info(
                 message(
                     id = "expectedScreenNotDisplayed",
                     subject = expectedScreenName,

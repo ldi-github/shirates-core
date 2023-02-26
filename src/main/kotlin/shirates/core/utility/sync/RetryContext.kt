@@ -13,7 +13,8 @@ class RetryContext<T>(
     val retryIntervalSeconds: Double = testContext.retryIntervalSeconds,
     val log: Boolean = true,
     var retryPredicate: (RetryContext<T>) -> Boolean,
-    var retryFunc: (RetryContext<T>) -> T
+    var beforeRetryFunc: (RetryContext<T>) -> T,
+    var actionFunc: (RetryContext<T>) -> T
 ) {
     /**
      * result
@@ -45,7 +46,8 @@ class RetryContext<T>(
         retryIntervalSeconds = testContext.retryIntervalSeconds,
         log = true,
         retryPredicate = { true },
-        retryFunc = { null as T })
+        beforeRetryFunc = { null as T },
+        actionFunc = { null as T })
 
     /**
      * hasUnknownServerSideError

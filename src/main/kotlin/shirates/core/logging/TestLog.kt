@@ -930,7 +930,7 @@ object TestLog {
      * notImpl
      */
     fun notImpl(
-        exception: NotImplementedError,
+        exception: Throwable,
         log: Boolean = true
     ): LogLine {
 

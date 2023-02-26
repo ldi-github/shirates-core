@@ -172,6 +172,7 @@ object AppiumServerManager {
         executeResultHandler = DefaultExecuteResultHandler()
         TestLog.info("${commandLine.executable} ${commandLine.arguments.joinToString(" ")}")
         executor.execute(commandLine, executeResultHandler)
+        Thread.sleep(500)
 
         // Wait for listening to the port
         val sw = StopWatch()
@@ -197,7 +198,7 @@ object AppiumServerManager {
                 }
                 break
             } else {
-                Thread.sleep(200)
+                Thread.sleep(1000)
             }
         }
     }
@@ -252,13 +253,11 @@ object AppiumServerManager {
         val commandTokens = getCommandTokens()
         val port = commandTokens.getPort()?.toIntOrNull() ?: return
         val pid = ProcessUtility.getPid(port = port) ?: return
-        val shellResult = ProcessUtility.terminateProcess(pid = pid)
+        ProcessUtility.terminateProcess(pid = pid)
         executeResultHandler?.waitFor((shirates.core.Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
         executeResultHandler = null
 
-        if (shellResult != null) {
-            TestLog.info(message(id = "appiumServerTerminated", arg1 = pid, arg2 = "$port"))
-        }
+        TestLog.info(message(id = "appiumServerTerminated", arg1 = pid, arg2 = "$port"))
 
     }
 

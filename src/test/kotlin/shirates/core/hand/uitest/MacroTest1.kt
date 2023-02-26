@@ -19,7 +19,8 @@ class MacroTest1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.screenIs("[Calculator Main Screen]")
+                    it.macro("[Calculator Main Screen]")
+                        .screenIs("[Calculator Main Screen]")
                 }.action {
                     it.macro("[Calculator Main Screen]")
                 }.expectation {

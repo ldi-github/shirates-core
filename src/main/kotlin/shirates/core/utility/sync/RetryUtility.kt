@@ -27,7 +27,8 @@ class RetryUtility {
             retryPredicate: (RetryContext<T>) -> Boolean = {
                 it.hasUnknownServerSideError || it.noSuchElementException
             },
-            retryFunc: (RetryContext<T>) -> T
+            beforeRetryFunc: (RetryContext<T>) -> T,
+            actionFunc: (RetryContext<T>) -> T
         ): RetryContext<T> {
 
             val context = RetryContext(
@@ -36,7 +37,8 @@ class RetryUtility {
                 retryIntervalSeconds = retryIntervalSecond,
                 log = log,
                 retryPredicate = retryPredicate,
-                retryFunc = retryFunc
+                beforeRetryFunc = beforeRetryFunc,
+                actionFunc = actionFunc
             )
             return execWithContext(context)
         }
@@ -52,7 +54,7 @@ class RetryUtility {
             fun execute() {
                 try {
                     context.exception = null
-                    context.result = context.retryFunc(context)
+                    context.result = context.actionFunc(context)
                 } catch (t: Throwable) {
                     context.exception = t
                     context.retryPredicate(context)
@@ -78,7 +80,10 @@ class RetryUtility {
                         context.exception = null
                         Thread.sleep(intervalMilliseconds)
                         TestLog.info("Retrying($i) retryIntervalSecond=${context.retryIntervalSeconds}")
+
+                        context.beforeRetryFunc(context)
                         execute()
+
                         if (context.exception == null) {
                             return context
                         }

@@ -105,7 +105,7 @@ class TestReportIndex(
         /**
          * Summary of ERROR message
          */
-        val m = logLines.filter { it.logType == LogType.ERROR }.groupBy { it.message }
+        val m = logLines.filter { it.logType == LogType.ERROR || it.logType == LogType.WARN }.groupBy { it.message }
         if (m.any()) {
             item.message = m.entries.map { "${it.key}: ${it.value.count()}" }.joinToString(",")
         }
@@ -194,7 +194,7 @@ class TestReportIndex(
         )
 
         sb.appendLine("        <table class='lines'>")
-        sb.append("            <tr>")
+        sb.append("            <tr class='sticky'>")
         sb.append("<th>no</th>")
         sb.append("<th>Report</th>")
         sb.append("<th>time(sec)</th>")

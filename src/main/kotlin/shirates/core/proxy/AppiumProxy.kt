@@ -67,7 +67,7 @@ object AppiumProxy {
 
         val retryMaxCount =
             AppiumServerManager.appiumSessionStartupTimeoutSeconds / TestDriver.testContext.retryIntervalSeconds
-        val retryFunc: (RetryContext<Unit>) -> Unit = {
+        val actionFunc: (RetryContext<Unit>) -> Unit = {
             source = TestDriver.appiumDriver.pageSource
         }
         val retryPredicate: (RetryContext<Unit>) -> Boolean = {
@@ -80,7 +80,8 @@ object AppiumProxy {
         RetryUtility.exec(
             retryMaxCount = retryMaxCount.toLong(),
             retryPredicate = retryPredicate,
-            retryFunc = retryFunc
+            beforeRetryFunc = {},
+            actionFunc = actionFunc
         )
 
         if (source.isBlank()) {

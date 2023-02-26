@@ -29,7 +29,7 @@ enum class LogType(val label: String) {
     /**
      * WARN
      */
-    WARN("warn"),
+    WARN("WARN"),
 
     /**
      * ERROR

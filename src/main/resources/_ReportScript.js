@@ -289,11 +289,12 @@ $(function () {
             var targetTr = $("#log-lines tr[data-line='" + lineNo + "']")[0]
             targetTr.scrollIntoView({behavior: "smooth", block: "center"});
             setTimeout(function () {
-                highlightRow(targetTr)
+                highlightRowAndImage(targetTr)
             })
         })
     }
 
+    setNavigationToLogLine("#irregular-lines tr")
     setNavigationToLogLine("#scenario-lines tr")
     setNavigationToLogLine("#case-lines tr")
 

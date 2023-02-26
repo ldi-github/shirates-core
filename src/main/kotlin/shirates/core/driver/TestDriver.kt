@@ -430,18 +430,13 @@ object TestDriver {
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
 
-        val initFunc: (RetryContext<Unit>) -> Unit =
-            getInitFunc(profile = profile, capabilities = capabilities)
-
-        val retryPredicate: (RetryContext<Unit>) -> Boolean =
-            getRetryPredicate(profile = profile, capabilities = capabilities)
-
         val retryMaxCount = AppiumServerManager.appiumSessionStartupTimeoutSeconds / testContext.retryIntervalSeconds
         val retryContext = RetryUtility.exec(
             retryMaxCount = retryMaxCount.toLong(),
             retryTimeoutSeconds = testContext.retryTimeoutSeconds,
-            retryFunc = initFunc,
-            retryPredicate = retryPredicate
+            retryPredicate = getRetryPredicate(profile = profile, capabilities = capabilities),
+            beforeRetryFunc = getBeforeRetry(profile = profile, capabilities = capabilities),
+            actionFunc = getInitFunc(profile = profile, capabilities = capabilities)
         )
 
         // Write log on error
@@ -565,6 +560,67 @@ object TestDriver {
         return retryPredicate
     }
 
+    private fun restartAndroid(udid: String) {
+
+        // Restart device
+        TestLog.info("Restarting Android device.")
+        AndroidDeviceUtility.reboot(udid = udid)
+
+        // Restart Appium Server
+        TestLog.info("Restarting AppiumServer.")
+        AppiumServerManager.restartAppiumProcess()
+    }
+
+    private fun restartIos(udid: String) {
+
+        TestLog.info("Restarting Simulator.")
+        IosDeviceUtility.restartSimulator(udid = udid)
+    }
+
+    private fun getBeforeRetry(
+        profile: TestProfile,
+        capabilities: DesiredCapabilities
+    ): (RetryContext<Unit>) -> Unit {
+        val beforeRetry: (RetryContext<Unit>) -> Unit = { context ->
+            val message = context.exception?.message ?: ""
+
+            if (isAndroid) {
+                val udid = initialCapabilities["deviceUDID"] ?: profile.udid
+                if (udid.isBlank()) {
+                    throw TestDriverException("deviceUDID not found.")
+                }
+                TestLog.info("udid=$udid")
+
+                if (message.isNotBlank()) {
+                    TestLog.warn(message)
+                }
+
+                // ex.
+                // socket hang up
+                // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
+
+                restartAndroid(udid = udid)
+            }
+            if (isiOS) {
+                val udid = initialCapabilities["udid"] ?: profile.udid
+                if (udid.isBlank()) {
+                    throw TestDriverException("udid not found.")
+                }
+                TestLog.info("udid=$udid")
+
+                if (message.isNotBlank()) {
+                    TestLog.warn(message)
+                }
+
+                // ex.
+                // kAXErrorServerNotFound
+
+                restartIos(udid = udid)
+            }
+        }
+        return beforeRetry
+    }
+
     fun retryPredicateCore(
         profile: TestProfile,
         context: RetryContext<Unit>,
@@ -635,32 +691,9 @@ object TestDriver {
             val msg = message(id = "couldNotStartANewSession")
             context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
             return false
-        } else if (
-            message.contains("socket hang up") ||
-            message.contains("cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)") ||
-            context.exception.toString().contains("kAXErrorServerNotFound")
-        ) {
+        } else {
             TestLog.warn(message)
             TestLog.outputLogDump()
-
-            if (isAndroid) {
-                val udid = initialCapabilities["deviceUDID"] ?: testContext.profile.udid
-                if (udid.isBlank()) {
-                    throw TestDriverException("deviceUDID not found.")
-                }
-                TestLog.info("udid=$udid")
-
-                // Restart device
-                AndroidDeviceUtility.reboot(udid = udid)
-
-                // Restart Appium Server
-                AppiumServerManager.restartAppiumProcess()
-            } else if (isiOS) {
-                TestLog.warn("kAXErrorServerNotFound")
-                IosDeviceUtility.restartSimulator(udid = profile.udid)
-            }
-            return true
-        } else {
             return true
         }
     }
@@ -686,9 +719,17 @@ object TestDriver {
          */
         TestLog.info("[Health check] start")
 
-        syncCache(force = true)     // throws on fails
-        androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fails
-        androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fails
+        try {
+            syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
+            testDrive.pressHome()   // throws on fail
+            testDrive.tapCenterOfScreen()   // throws on fail
+            androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fail
+            androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail
+        } catch (t: Throwable) {
+            val e = TestDriverException("[Health Check] failed. ${t.message ?: ""}", cause = t)
+            TestLog.warn(e.message)
+            throw e
+        }
 
         TestLog.info("[Health check] end")
     }
@@ -1339,7 +1380,8 @@ object TestDriver {
         force: Boolean = false,
         syncWaitSeconds: Double = testContext.syncWaitSeconds,
         maxLoopCount: Int = testContext.syncMaxLoopCount,
-        syncIntervalSeconds: Double = testContext.syncIntervalSeconds
+        syncIntervalSeconds: Double = testContext.syncIntervalSeconds,
+        syncOnTimeout: Boolean = true
     ): TestDriver {
 
         if (isSyncing) {
@@ -1366,11 +1408,13 @@ object TestDriver {
                 for (i in 1..maxLoopCount) {
                     TestLog.info("Syncing ($i)", log = enableSyncLog)
                     refreshCache(currentScreenRefresh = false)
-                    if (TestElementCache.sourceXml == lastXml) {
+
+                    TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
+
+                    if (TestElementCache.synced) {
                         /**
                          * Synced
                          */
-                        TestElementCache.synced = true
                         refreshCurrentScreen()
                         val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
                         TestLog.info(
@@ -1383,17 +1427,21 @@ object TestDriver {
                     lastXml = TestElementCache.sourceXml
 
                     if (sw.elapsedSeconds > syncWaitSeconds) {
-                        /**
-                         * Synced(Timeout)
-                         */
-                        TestElementCache.synced = true
-                        refreshCurrentScreen()
-                        val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
-                        TestLog.info(
-                            "Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
-                            log = enableSyncLog
-                        )
-                        return@execSilentCommand
+                        if (syncOnTimeout) {
+                            /**
+                             * Synced(Timeout)
+                             */
+                            TestElementCache.synced = true
+                            refreshCurrentScreen()
+                            val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
+                            TestLog.info(
+                                "Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
+                                log = enableSyncLog
+                            )
+                            return@execSilentCommand
+                        } else {
+                            throw TestDriverException("Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
+                        }
                     }
 
                     /**

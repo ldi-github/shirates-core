@@ -327,7 +327,9 @@ abstract class UITest : TestDrive {
             // AppiumDriver
             val lastProfile = TestDriver.lastTestContext.profile
             if (profile.isSameProfile(lastProfile) && TestDriver.canReuse) {
-                TestLog.info("Reusing AppiumDriver session. (configFile=${configPath}, profileName=${profileName})")
+                TestLog.info(
+                    message(id = "reusingAppiumDriverSession", arg1 = configPath.toString(), arg2 = profileName)
+                )
                 TestDriver.testContext = TestDriver.lastTestContext
             } else {
                 TestDriver.createAppiumDriver()
@@ -502,10 +504,10 @@ abstract class UITest : TestDrive {
                 throw TestFailException(failMessage)
             }
             if (TestLog.lines.any { it.logType == LogType.CASE }.not()) {
-                throw TestAbortedException("No case found in scenario.")
+                throw NotImplementedError("No case found in scenario.")
             }
             if (TestLog.lines.any { it.result.isEffectiveType }.not()) {
-                throw TestAbortedException(message(id = "noTestResultFound"))
+                throw NotImplementedError(message(id = "noTestResultFound"))
             }
         } catch (t: TestNGException) {
             val scriptCommand = t.commandContext?.beginLogLine?.scriptCommand ?: ""
@@ -645,7 +647,7 @@ abstract class UITest : TestDrive {
                 throw ex
             }
         } catch (t: ExpectationNotImplementedException) {
-            TestLog.warn(message = t.message)
+            TestLog.notImpl(t)
 
         } catch (t: NotImplementedError) {
             throw t

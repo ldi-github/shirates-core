@@ -171,6 +171,9 @@ class TestReport(
 """
         )
 
+        if (collector.irregulars.any()) {
+            writeIrregularGroup(sb = sb, lines = collector.irregulars)
+        }
         writeGroup(id = "scenario-lines", sb = sb, levelDescription = "Test Scenario", lines = collector.scenarios)
         writeGroup(id = "case-lines", sb = sb, levelDescription = "Test Case", lines = collector.cases)
 
@@ -194,17 +197,80 @@ class TestReport(
 
     }
 
-    private fun writeGroup(id: String, sb: StringBuilder, levelDescription: String, lines: List<LogLine>) {
+    internal class Counter(val lines: List<LogLine>) {
+        val total: Int
+            get() {
+                return lines.count()
+            }
+        val okCount: Int
+            get() {
+                return lines.filter { it.result == LogType.OK }.count()
+            }
+        val ngCount: Int
+            get() {
+                return lines.filter { it.result == LogType.NG }.count()
+            }
+        val warnCount: Int
+            get() {
+                return lines.filter { it.result == LogType.WARN }.count()
+            }
+        val manualCount: Int
+            get() {
+                return lines.filter { it.result == LogType.MANUAL }.count()
+            }
+        val skipCount: Int
+            get() {
+                return lines.filter { it.result == LogType.SKIP }.count()
+            }
+        val notImplCount: Int
+            get() {
+                return lines.filter { it.result == LogType.NOTIMPL }.count()
+            }
+        val knownIssueCount: Int
+            get() {
+                return lines.filter { it.result == LogType.KNOWNISSUE }.count()
+            }
+        val errorCount: Int
+            get() {
+                return lines.filter { it.result == LogType.ERROR }.count()
+            }
+    }
 
-        val total = lines.count()
-        val okCount = lines.filter { it.result == LogType.OK }.count()
-        val ngCount = lines.filter { it.result == LogType.NG }.count()
-        val warnCount = lines.filter { it.result == LogType.WARN }.count()
-        val manualCount = lines.filter { it.result == LogType.MANUAL }.count()
-        val skipCount = lines.filter { it.result == LogType.SKIP }.count()
-        val notImplCount = lines.filter { it.result == LogType.NOTIMPL }.count()
-        val knownIssueCount = lines.filter { it.result == LogType.KNOWNISSUE }.count()
-        val errorCount = lines.filter { it.result == LogType.ERROR }.count()
+    private fun writeIrregularGroup(
+        sb: StringBuilder,
+        lines: List<LogLine>
+    ) {
+        sb.appendLine(
+            """
+        <hr>
+        <div class='section-title-irregulars'>Irregulars</div>
+        ${noLoadRun}
+        <br>
+"""
+        )
+        sb.appendLine("        <table id='irregular-lines' class='lines'>")
+        sb.append("            <tr class='sticky'>")
+        sb.append("<th class='th-irregulars'>seq</th>")
+        sb.append("<th class='th-irregulars'>line</th>")
+        sb.append("<th class='th-irregulars'>logDateTime</th>")
+        sb.append("<th class='th-irregulars'>testCaseId</th>")
+        sb.append("<th class='th-irregulars'>logType</th>")
+        sb.append("<th class='th-irregulars'>message</th>")
+        sb.appendLine("</tr>")
+        lines.forEachIndexed { index, line ->
+            writeIrregularLine(sb, index + 1, line)
+        }
+        sb.appendLine("        </table>")
+        sb.appendLine("        <br>")
+    }
+
+    private fun writeGroup(
+        id: String,
+        sb: StringBuilder,
+        levelDescription: String,
+        lines: List<LogLine>
+    ) {
+        val counter = Counter(lines = lines)
 
         sb.appendLine(
             """
@@ -212,25 +278,12 @@ class TestReport(
         <div class='section-title'>$levelDescription</div>
         ${noLoadRun}
         <br>
-        <div class='section-total'>Total: $total</div>
-        <table class='result-table'>
-            <tr><td class='section-result OK'>OK</td><td class='section-count'>$okCount</td></tr>
-            <tr><td class='section-result NG'>NG</td><td class='section-count'>$ngCount</td></tr>
-            <tr><td class='section-result ERROR'>ERROR</td><td class='section-count'>$errorCount</td></tr>
-        </table> 
-        <table class='result-table'>
-            <tr><td class='section-result WARN'>WARN</td><td class='section-count'>$warnCount</td></tr>
-            <tr><td class='section-result MANUAL'>MANUAL</td><td class='section-count'>$manualCount</td></tr>
-            <tr><td class='section-result SKIP'>SKIP</td><td class='section-count'>$skipCount</td></tr>
-        </table> 
-        <table class='result-table'>
-            <tr><td class='section-result NOTIMPL'>NOTIMPL</td><td class='section-count'>$notImplCount</td></tr>
-            <tr><td class='section-result KNOWNISSUE'>KNOWNISSUE</td><td class='section-count'>$knownIssueCount</td></tr>
-        </table>
 """
         )
+        sb.appendLine("        <div class='section-total'>Total: ${counter.total}</div>")
+        sb.appendLine(getCounterHtml(counter))
         sb.appendLine("        <table id='$id' class='lines'>")
-        sb.append("            <tr class='stickey'>")
+        sb.append("            <tr class='sticky'>")
         sb.append("<th>seq</th>")
         sb.append("<th>line</th>")
         sb.append("<th>logDateTime</th>")
@@ -248,6 +301,40 @@ class TestReport(
         sb.appendLine("        <br>")
     }
 
+    private fun getCounterHtml(counter: Counter): String {
+        return """
+        <table class='result-table'>
+            <tr><td class='section-result OK'>OK</td><td class='section-count'>${counter.okCount}</td></tr>
+            <tr><td class='section-result NG'>NG</td><td class='section-count'>${counter.ngCount}</td></tr>
+            <tr><td class='section-result ERROR'>ERROR</td><td class='section-count'>${counter.errorCount}</td></tr>
+        </table> 
+        <table class='result-table'>
+            <tr><td class='section-result WARN'>WARN</td><td class='section-count'>${counter.warnCount}</td></tr>
+            <tr><td class='section-result MANUAL'>MANUAL</td><td class='section-count'>${counter.manualCount}</td></tr>
+            <tr><td class='section-result SKIP'>SKIP</td><td class='section-count'>${counter.skipCount}</td></tr>
+        </table> 
+        <table class='result-table'>
+            <tr><td class='section-result NOTIMPL'>NOTIMPL</td><td class='section-count'>${counter.notImplCount}</td></tr>
+            <tr><td class='section-result KNOWNISSUE'>KNOWNISSUE</td><td class='section-count'>${counter.knownIssueCount}</td></tr>
+        </table>
+        """.trimIndent()
+    }
+
+    private fun writeIrregularLine(sb: StringBuilder, seq: Int, line: LogLine) {
+
+        val nlr = if (line.isNoLoadRun) "noLoadRunCell" else ""
+
+        sb.append("            <tr data-seq='$seq' data-line='${line.lineNumber}'>")
+        sb.append("<td class='seq'>$seq</td>")
+        sb.append("<td class='lineNumber $nlr'>${line.lineNumber}</td>")
+        sb.append("<td class='logDateTimeLabel $nlr'>${line.logDateTimeLabel}</td>")
+        sb.append("<td>${line.testCaseId}</td>")
+        sb.append("<td class='logType ${line.logType}'>${line.logType.label}</td>")
+        val message = line.exception?.toString() ?: line.message
+        sb.append("<td class='message-default'>${getShortenMessageWithEllipsis(message)}</td>")
+        sb.appendLine("</tr>")
+    }
+
     private fun writeLine(sb: StringBuilder, seq: Int, line: LogLine) {
 
         val message = getShortenMessageWithEllipsis(line.resultMessage)
@@ -259,7 +346,7 @@ class TestReport(
         sb.append("<td class='logDateTimeLabel $nlr'>${line.logDateTimeLabel}</td>")
         sb.append("<td>${line.testCaseId}</td>")
         sb.append("<td class='logType ${line.logType}'>${line.logType.label}</td>")
-        sb.append("<td class='description'>${line.message}</td>")
+        sb.append("<td class='description'>${getShortenMessageWithEllipsis(line.message)}</td>")
         sb.append("<td class='logType ${line.result}'>${line.result.label}</td>")
         sb.append("<td class='resultMessage'>${getMessageHtml(message)}</td>")
         sb.append("<td class='processingTime'>${line.processingTime / 1000}</td>")
@@ -304,7 +391,7 @@ class TestReport(
 """
         )
         sb.appendLine("        <table id='log-lines' class='lines'>")
-        sb.append("            <tr class='stickey'>")
+        sb.append("            <tr class='sticky'>")
         sb.append("<th>seq</th>")
         sb.append("<th>line</th>")
         sb.append("<th>logDateTime</th>")

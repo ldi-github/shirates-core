@@ -2,8 +2,8 @@ package shirates.core.report
 
 internal object TestReportUtility {
 
-    fun getShortenMessageWithEllipsis(message: String): String {
-        if (message.length <= 120) {
+    fun getShortenMessageWithEllipsis(message: String, maxLength: Int = 120): String {
+        if (message.length <= maxLength) {
             return message
         }
 

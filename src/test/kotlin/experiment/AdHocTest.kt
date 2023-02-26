@@ -31,4 +31,13 @@ class AdHocTest : UITest() {
         }
     }
 
+    @Test
+    @Order(20)
+    fun noCase() {
+
+        scenario {
+
+        }
+    }
+
 }
