@@ -2,6 +2,7 @@ package shirates.core.uitest.android.basic
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.launchApp
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.testcode.UITest
 import shirates.core.utility.misc.AppNameUtility
@@ -14,7 +15,9 @@ class AppNameUtilityTest : UITest() {
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    launchApp()
+                }.action {
                     s1 = AppNameUtility.getAppNameWithoutExtension("app1.hoge.stg")
                 }.expectation {
                     s1.thisIs("app1.hoge")
@@ -49,7 +52,9 @@ class AppNameUtilityTest : UITest() {
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    launchApp()
+                }.action {
                     s1 = AppNameUtility.getPackageOrBundleId("Settings")
                 }.expectation {
                     s1.thisIs("com.android.settings")
