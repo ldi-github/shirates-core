@@ -281,6 +281,12 @@ object AndroidDeviceUtility {
         currentAndroidDeviceInfo = null
 
         var device = getAndroidDeviceInfoByAvdName(avdName = emulatorProfile.avdName)
+
+        if (device?.status == "offline") {
+            ProcessUtility.terminateProcess(pid = device.pid)
+            device = null
+        }
+
         if (device != null && device.status == "device") {
             currentAndroidDeviceInfo = device
             return device
@@ -373,7 +379,7 @@ object AndroidDeviceUtility {
             }
 
             if (sw.elapsedSeconds > timeoutSeconds) {
-                throw TestDriverException("Waiting emulator status timed out. (expected=$status, actual=${device?.status}")
+                throw TestDriverException("Waiting emulator status timed out. (expected=$status, actual=${device?.status})")
             }
 
             Thread.sleep(intervalMilliseconds)
