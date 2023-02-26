@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.refreshCache
+import shirates.core.driver.commandextension.restartApp
 import shirates.core.driver.commandextension.select
 import shirates.core.driver.commandextension.textIs
 import shirates.core.testcode.UITest
@@ -22,6 +23,7 @@ class XPathTest : UITest() {
         scenario {
             case(1) {
                 // Arrange, Act
+                it.restartApp()
                 it.refreshCache()
                 val selectedElement = it.select("xpath=//*[@text='Network & internet']")
                 val e = TestElementCache.select("xpath=//*[@text='Network & internet']", throwsException = false)

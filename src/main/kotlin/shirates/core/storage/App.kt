@@ -24,8 +24,11 @@ object App {
      */
     fun getValue(longKey: String, throwsException: Boolean = true): String {
 
-        val value = repository!!.getValue(longKey = longKey, throwsException = throwsException)
-        return value
+        try {
+            return repository!!.getValue(longKey = longKey, throwsException = throwsException)
+        } catch (t: Throwable) {
+            return ""
+        }
     }
 
 }
