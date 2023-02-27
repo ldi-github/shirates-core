@@ -13,6 +13,7 @@ import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.getWebElement
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.element.ElementCacheUtility
@@ -48,12 +49,21 @@ object AppiumProxy {
                 }
                 return true
             } catch (t: Throwable) {
-                TestLog.trace("Error in AppiumProxy.getSource() doUntilTrue: $e $t")
+                if (PropertiesManager.enableGetSourceLog) {
+                    TestLog.info("[Error] AppiumProxy.getSource() checkState(): $t $e")
+                }
                 return false
             }
         }
 
-        WaitUtility.doUntilTrue {
+        WaitUtility.doUntilTrue(
+            onMaxLoopFunc = {
+                throw TestDriverException("AppiumProxy.getSource() reached maxLoop count.(maxLoopCount=${it.maxLoopCount})")
+            },
+            onTimeoutFunc = {
+                throw TestDriverException("AppiumProxy.getSource() timed out. (waitSeconds=${it.waitSeconds})")
+            }
+        ) {
             e = getSourceCore()
             checkState()
         }
@@ -68,6 +78,10 @@ object AppiumProxy {
         val retryMaxCount =
             AppiumServerManager.appiumSessionStartupTimeoutSeconds / TestDriver.testContext.retryIntervalSeconds
         val actionFunc: (RetryContext<Unit>) -> Unit = {
+            val c = it.retryCount + 1
+            if (PropertiesManager.enableGetSourceLog) {
+                TestLog.info("getSourceCore($c)")
+            }
             source = TestDriver.appiumDriver.pageSource
         }
         val retryPredicate: (RetryContext<Unit>) -> Boolean = {

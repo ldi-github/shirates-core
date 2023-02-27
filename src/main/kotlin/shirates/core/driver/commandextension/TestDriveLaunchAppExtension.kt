@@ -52,10 +52,6 @@ fun TestDrive?.launchApp(
             }
         }
 
-        if (testProfile.udid.isBlank()) {
-            throw IllegalStateException("$command($appNameOrAppIdOrActivityName) failed. testProfile.udid is blank")
-        }
-
         if (isAndroid) {
             TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
         } else if (isiOS) {

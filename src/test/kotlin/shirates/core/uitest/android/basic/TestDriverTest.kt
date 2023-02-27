@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import shirates.core.Const
 import shirates.core.configuration.Selector
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
@@ -24,7 +25,7 @@ class TestDriverTest : UITest() {
     fun init_test() {
 
         assertThat(testContext.profile.retryMaxCount).isEqualTo(null)    // retryMaxCount is not set
-        assertThat(testContext.retryMaxCount).isEqualTo(shirates.core.Const.RETRY_MAX_COUNT)
+        assertThat(testContext.retryMaxCount).isEqualTo(Const.RETRY_MAX_COUNT)
         assertThat(it.lastError).isNull()
     }
 

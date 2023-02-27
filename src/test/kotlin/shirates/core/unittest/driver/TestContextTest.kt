@@ -212,6 +212,7 @@ class TestContextTest : UnitTest() {
         context.manualScreenshot = !context.manualScreenshot
         // App operation --------------------------------------------------
         context.shortWaitSeconds = 999.0
+        context.waitSecondsForLaunchAppComplete = 999.0
         context.waitSecondsForAnimationComplete = 999.0
         context.waitSecondsOnIsScreen = 999.0
         context.waitSecondsForConnectionEnabled = 999.0

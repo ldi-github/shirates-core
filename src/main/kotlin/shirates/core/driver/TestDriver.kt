@@ -245,6 +245,7 @@ object TestDriver {
         TestLog.info("retryIntervalSeconds: ${testContext.retryIntervalSeconds}")
         TestLog.info("shortWaitSeconds: ${testContext.shortWaitSeconds}")
         TestLog.info("waitSecondsOnIsScreen: ${testContext.waitSecondsOnIsScreen}")
+        TestLog.info("waitSecondsForLaunchAppComplete: ${testContext.waitSecondsForLaunchAppComplete}")
         TestLog.info("waitSecondsForAnimationComplete: ${testContext.waitSecondsForAnimationComplete}")
         if (isAndroid) {
             TestLog.info("waitSecondsForConnectionEnabled: ${testContext.waitSecondsForConnectionEnabled}")
@@ -421,7 +422,10 @@ object TestDriver {
         return handled
     }
 
-    internal fun createAppiumDriver(profile: TestProfile = testContext.profile) {
+    /**
+     * createAppiumDriver
+     */
+    fun createAppiumDriver(profile: TestProfile = testContext.profile) {
 
         if (TestMode.isNoLoadRun) {
             return
@@ -462,7 +466,7 @@ object TestDriver {
 
         // implicitlyWaitSeconds
         implicitlyWaitSeconds =
-            profile.implicitlyWaitSeconds?.toDoubleOrNull() ?: shirates.core.Const.IMPLICITLY_WAIT_SECONDS
+            profile.implicitlyWaitSeconds?.toDoubleOrNull() ?: Const.IMPLICITLY_WAIT_SECONDS
         TestLog.info("implicitlyWaitSeconds: ${implicitlyWaitSeconds}")
 
         // Settings(Android)
@@ -485,6 +489,8 @@ object TestDriver {
                 TestLog.warn(message(id = "findingFelicaPackageFailed", arg1 = "${t.message}"))
             }
         }
+
+        profile.completeProfile()
 
         TestLog.info("AppiumDriver initialized.")
     }
@@ -560,62 +566,57 @@ object TestDriver {
         return retryPredicate
     }
 
-    private fun restartAndroid(udid: String) {
+    private fun restartAndroid(profile: TestProfile) {
 
         // Restart device
-        TestLog.info("Restarting Android device.")
-        AndroidDeviceUtility.reboot(udid = udid)
+        if (profile.udid.isNotBlank()) {
+            TestLog.info("Rebooting Android device.")
+            AndroidDeviceUtility.reboot(udid = profile.udid)
+        } else {
+            TestLog.info("Starting Android device")
+            AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
+        }
 
         // Restart Appium Server
         TestLog.info("Restarting AppiumServer.")
         AppiumServerManager.restartAppiumProcess()
     }
 
-    private fun restartIos(udid: String) {
+    private fun restartIos(profile: TestProfile) {
 
         TestLog.info("Restarting Simulator.")
-        IosDeviceUtility.restartSimulator(udid = udid)
+        IosDeviceUtility.restartSimulator(udid = profile.udid)
     }
 
     private fun getBeforeRetry(
         profile: TestProfile,
         capabilities: DesiredCapabilities
     ): (RetryContext<Unit>) -> Unit {
+
         val beforeRetry: (RetryContext<Unit>) -> Unit = { context ->
             val message = context.exception?.message ?: ""
+            if (message.isNotBlank()) {
+                TestLog.warn(message)
+            }
 
             if (isAndroid) {
-                val udid = initialCapabilities["deviceUDID"] ?: profile.udid
-                if (udid.isBlank()) {
-                    throw TestDriverException("deviceUDID not found.")
-                }
-                TestLog.info("udid=$udid")
-
-                if (message.isNotBlank()) {
-                    TestLog.warn(message)
-                }
-
                 // ex.
                 // socket hang up
                 // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
 
-                restartAndroid(udid = udid)
+                restartAndroid(profile)
             }
             if (isiOS) {
                 val udid = initialCapabilities["udid"] ?: profile.udid
                 if (udid.isBlank()) {
                     throw TestDriverException("udid not found.")
                 }
-                TestLog.info("udid=$udid")
-
-                if (message.isNotBlank()) {
-                    TestLog.warn(message)
-                }
+                TestLog.info("udid found in initialCapabilities. (udid=$udid)")
 
                 // ex.
                 // kAXErrorServerNotFound
 
-                restartIos(udid = udid)
+                restartIos(profile)
             }
         }
         return beforeRetry
@@ -1635,6 +1636,18 @@ object TestDriver {
         packageOrBundleIdOrActivity: String
     ): TestElement {
 
+        if (packageOrBundleIdOrActivity.isBlank()) {
+            throw IllegalArgumentException("launchAppCore(blank)")
+        }
+
+        if (testProfile.udid.isBlank()) {
+            testProfile.completeProfile()
+
+            if (testProfile.udid.isBlank()) {
+                resetAppiumSession()
+            }
+        }
+
         if (isAndroid) {
             AndroidAppUtility.startApp(udid = testProfile.udid, packageNameOrActivityName = packageOrBundleIdOrActivity)
             syncCache(force = true)
@@ -1646,50 +1659,85 @@ object TestDriver {
                 throw NotImplementedError("TestDriver.launchApp is not supported on real device in iOS. (packageOrBundleId=$packageOrBundleIdOrActivity)")
             }
 
-            var isApp = false
-            val action = {
-                val r =
-                    IosAppUtility.launchApp(udid = testProfile.udid, bundleId = packageOrBundleIdOrActivity, log = true)
-                val message = r.waitForResultString()
-                if (r.hasError) {
-                    throw TestDriverException(
-                        message = message(
-                            id = "failedToLaunchApp",
-                            arg1 = packageOrBundleIdOrActivity,
-                            submessage = message
-                        ),
-                        cause = r.error
-                    )
-                }
+            val bundleId = packageOrBundleIdOrActivity
+
+            try {
+                testDrive.terminateApp(appNameOrAppId = bundleId)
+                TestLog.info("Launching app. (bundleId=$bundleId)")
+                IosAppUtility.launchApp(udid = testProfile.udid, bundleId = bundleId, log = true)
+            } catch (t: Throwable) {
+                TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
+
                 SyncUtility.doUntilTrue(
-                    waitSeconds = Const.LAUNCH_APP_WAIT_SECONDS
-                ) { context ->
-                    TestLog.info("doUntilTrue(${context.count})")
-                    testDrive.wait(waitSeconds = 2)
-                    isApp = isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
-                    if (isApp) {
-                        TestLog.info("App launched. ($packageOrBundleIdOrActivity)")
-                        true
-                    } else {
-                        val kAXErrorServerNotFound = TestLog.lastTestLog!!.message.contains("kAXErrorServerNotFound")
-                        kAXErrorServerNotFound
+                    waitSeconds = testContext.waitSecondsForLaunchAppComplete,
+                    maxLoopCount = 2,
+                ) {
+
+                    if (isiOS) {
+                        IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
                     }
-                }
-            }
-
-            action()
-
-            if (isApp.not()) {
-                if (isiOS && isSimulator) {
-                    TestLog.info("Retrying launchApp.")
-                    IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
                     createAppiumDriver()
+//                    resetAppiumSession()
+
+                    val retry =
+                        try {
+                            IosAppUtility.launchApp(udid = testProfile.udid, bundleId = bundleId, log = true)
+                            false
+                        } catch (t: Throwable) {
+                            if (PropertiesManager.enableWarnOnRetryError) {
+                                TestLog.warn("Error: $t")
+                            }
+                            if (PropertiesManager.enableRetryLog) {
+                                TestLog.info("Retrying launching app. (bundleId=$bundleId)")
+                            }
+                            true
+                        }
+                    retry
                 }
-                action()
             }
         }
 
         return lastElement
+    }
+
+    /**
+     * resetAppiumSession
+     */
+    fun resetAppiumSession() {
+
+        TestLog.info("Resetting Appium session.")
+
+        /**
+         * Shutdown AppiumServer
+         */
+        AppiumServerManager.close()
+
+        /**
+         * Restart device
+         */
+        if (isAndroid) {
+            val device = AndroidDeviceUtility.currentAndroidDeviceInfo!!
+            AndroidDeviceUtility.reboot(udid = device.udid)
+        } else if (isiOS && isSimulator) {
+//            IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
+//            IosDeviceUtility.stopSimulator(udid = testProfile.udid)
+            IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
+        }
+
+        Thread.sleep(500)
+
+        /**
+         * Restart AppiumServer
+         */
+        AppiumServerManager.setupAppiumServerProcess(
+            sessionName = TestLog.currentTestClassName,
+            profile = testProfile
+        )
+
+        /**
+         * Create AppiumDriver
+         */
+        createAppiumDriver()
     }
 
 }

@@ -24,6 +24,8 @@
 
   "waitSecondsOnIsScreen": "21.1",
 
+  "waitSecondsForLaunchAppComplete": "32.1",
+
   "waitSecondsForAnimationComplete": "1.23",
 
   "swipeDurationSeconds": "3.2",

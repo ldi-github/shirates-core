@@ -1,6 +1,7 @@
 package shirates.core.report
 
 import com.google.common.html.HtmlEscapers
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogLine
 import shirates.core.logging.LogType
@@ -93,19 +94,19 @@ class TestReport(
 
         val dir = fileName.toPath().parent
 
-        val reportScript = dir.resolve(shirates.core.Const.REPORT_SCRIPT_FILE_NAME)
+        val reportScript = dir.resolve(Const.REPORT_SCRIPT_FILE_NAME)
         if (Files.exists(reportScript).not()) {
             ResourceUtility.copyFile(
-                fileName = shirates.core.Const.REPORT_SCRIPT_FILE_NAME,
+                fileName = Const.REPORT_SCRIPT_FILE_NAME,
                 targetFile = reportScript,
                 logLanguage = ""
             )
         }
 
-        val reportStyle = dir.resolve(shirates.core.Const.REPORT_STYLE_FILE_NAME)
+        val reportStyle = dir.resolve(Const.REPORT_STYLE_FILE_NAME)
         if (Files.exists(reportStyle).not()) {
             ResourceUtility.copyFile(
-                fileName = shirates.core.Const.REPORT_STYLE_FILE_NAME,
+                fileName = Const.REPORT_STYLE_FILE_NAME,
                 targetFile = reportStyle,
                 logLanguage = ""
             )

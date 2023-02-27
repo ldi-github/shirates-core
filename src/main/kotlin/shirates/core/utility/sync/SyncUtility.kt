@@ -1,5 +1,6 @@
 package shirates.core.utility.sync
 
+import shirates.core.Const
 import shirates.core.driver.TestDriver
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
@@ -18,9 +19,11 @@ object SyncUtility {
      */
     fun doUntilTrue(
         waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-        intervalSeconds: Double = shirates.core.Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
+        intervalSeconds: Double = Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
         maxLoopCount: Int = MAX_LOOP_COUNT,
         refreshCache: Boolean = true,
+        onTimeoutFunc: (SyncContext) -> Unit = {},
+        onMaxLoopFunc: (SyncContext) -> Unit = {},
         actionFunc: (SyncContext) -> Boolean
     ): SyncResult {
 
@@ -29,14 +32,16 @@ object SyncUtility {
             intervalSeconds = intervalSeconds,
             maxLoopCount = maxLoopCount,
             refreshCache = refreshCache,
+            onTimeoutFunc = onTimeoutFunc,
+            onMaxLoopFunc = onMaxLoopFunc,
             actionFunc = actionFunc
         )
         context.stopWatch.start()
 
         fun loopAction(): SyncResult {
             for (i in 1..maxLoopCount) {
-                TestLog.trace("doUntilTrue($i)")
                 context.count = i
+                TestLog.trace("doUntilTrue($i)")
 
                 val breakLoop = actionFunc(context)
                 if (breakLoop) {
@@ -45,6 +50,9 @@ object SyncUtility {
 
                 if (context.stopWatch.elapsedSeconds > context.waitSeconds) {
                     context.stopWatch.lap("timeout")
+
+                    context.onTimeoutFunc(context)
+
                     return SyncResult(error = TestDriverException("Syncing time out."), syncContext = context)
                 }
 
@@ -53,6 +61,9 @@ object SyncUtility {
                     TestDriver.refreshCache()
                 }
             }
+
+            context.onMaxLoopFunc(context)
+
             val msg = "over maxLoopCount(${context.maxLoopCount})"
             return SyncResult(error = TestDriverException(msg), syncContext = context)
         }
@@ -70,6 +81,8 @@ object SyncUtility {
         var intervalSeconds: Double,
         var maxLoopCount: Int,
         var refreshCache: Boolean,
+        var onTimeoutFunc: (SyncContext) -> Unit = {},
+        var onMaxLoopFunc: (SyncContext) -> Unit = {},
         var actionFunc: (SyncContext) -> Boolean,
         var stopWatch: StopWatch = StopWatch(),
         var count: Int = 0

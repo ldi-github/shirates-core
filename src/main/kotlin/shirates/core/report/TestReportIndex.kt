@@ -2,6 +2,7 @@ package shirates.core.report
 
 import org.assertj.core.util.DateUtil
 import org.jsoup.Jsoup
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogLine
 import shirates.core.logging.LogType
@@ -120,10 +121,10 @@ class TestReportIndex(
      */
     fun writeFile() {
 
-        val reportStyle = indexFilePath.parent.resolve(shirates.core.Const.REPORT_STYLE_FILE_NAME)
+        val reportStyle = indexFilePath.parent.resolve(Const.REPORT_STYLE_FILE_NAME)
         if (Files.exists(reportStyle).not()) {
             ResourceUtility.copyFile(
-                fileName = shirates.core.Const.REPORT_STYLE_FILE_NAME,
+                fileName = Const.REPORT_STYLE_FILE_NAME,
                 targetFile = reportStyle,
                 logLanguage = ""
             )

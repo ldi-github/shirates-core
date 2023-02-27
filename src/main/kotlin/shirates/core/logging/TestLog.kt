@@ -1,5 +1,6 @@
 package shirates.core.logging
 
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
@@ -414,10 +415,10 @@ object TestLog {
 
         try {
             if (Files.exists(monitorLogPath).not()) {
-                val bufferedText = lines.joinToString(shirates.core.Const.NEW_LINE)
-                monitorLogPath.toFile().writeText(bufferedText + shirates.core.Const.NEW_LINE)
+                val bufferedText = lines.joinToString(Const.NEW_LINE)
+                monitorLogPath.toFile().writeText(bufferedText + Const.NEW_LINE)
             } else {
-                monitorLogPath.toFile().appendText(text + shirates.core.Const.NEW_LINE)
+                monitorLogPath.toFile().appendText(text + Const.NEW_LINE)
             }
         } catch (t: Throwable) {
             println(t)

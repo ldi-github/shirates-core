@@ -4,6 +4,7 @@ import org.apache.commons.exec.CommandLine
 import org.apache.commons.exec.DefaultExecuteResultHandler
 import org.apache.commons.exec.DefaultExecutor
 import org.apache.commons.exec.PumpStreamHandler
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
@@ -61,7 +62,7 @@ object AppiumServerManager {
      */
     val appiumArgsSeparator: String
         get() {
-            return profile.appiumArgsSeparator ?: shirates.core.Const.APPIUM_ARGS_SEPARATOR
+            return profile.appiumArgsSeparator ?: Const.APPIUM_ARGS_SEPARATOR
         }
 
     /**
@@ -78,7 +79,7 @@ object AppiumServerManager {
     val appiumServerStartupTimeoutSeconds: Double
         get() {
             return profile.appiumServerStartupTimeoutSeconds?.toDoubleOrNull()
-                ?: shirates.core.Const.APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS
+                ?: Const.APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS
         }
 
     /**
@@ -87,7 +88,7 @@ object AppiumServerManager {
     val appiumSessionStartupTimeoutSeconds: Double
         get() {
             return profile.appiumSessionStartupTimeoutSeconds?.toDoubleOrNull()
-                ?: shirates.core.Const.APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS
+                ?: Const.APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS
         }
 
     /**
@@ -254,7 +255,7 @@ object AppiumServerManager {
         val port = commandTokens.getPort()?.toIntOrNull() ?: return
         val pid = ProcessUtility.getPid(port = port) ?: return
         ProcessUtility.terminateProcess(pid = pid)
-        executeResultHandler?.waitFor((shirates.core.Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
+        executeResultHandler?.waitFor((Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
         executeResultHandler = null
 
         TestLog.info(message(id = "appiumServerTerminated", arg1 = pid, arg2 = "$port"))

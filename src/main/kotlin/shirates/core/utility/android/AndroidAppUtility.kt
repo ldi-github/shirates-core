@@ -93,7 +93,7 @@ object AndroidAppUtility {
     ): ShellUtility.ShellResult {
 
         if (udid.isBlank()) {
-            throw IllegalArgumentException("udid=$udid")
+            throw IllegalArgumentException("udid is required to startApp.")
         }
         if (packageNameOrActivityName.isBlank()) {
             throw IllegalStateException("packageName=$packageNameOrActivityName")

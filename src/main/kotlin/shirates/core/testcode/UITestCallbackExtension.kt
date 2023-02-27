@@ -3,6 +3,7 @@ package shirates.core.testcode
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.extension.*
 import org.opentest4j.TestAbortedException
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ParameterRepository
@@ -71,12 +72,12 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         val sheetNameAnnotation = tc.declaredAnnotations.firstOrNull { it is SheetName } as SheetName?
         val sheetName = sheetNameAnnotation?.sheetname ?: tc.simpleName
 
-        TestLog.write(shirates.core.Const.SEPARATOR_LONG)
+        TestLog.write(Const.SEPARATOR_LONG)
         TestLog.write("///")
         TestLog.write("/// Shirates $version")
         TestLog.write("///")
         TestLog.write("powered by Appium (io.appium:java-client:$appiumClientVersion)")
-        TestLog.write(shirates.core.Const.SEPARATOR_LONG)
+        TestLog.write(Const.SEPARATOR_LONG)
         ParameterRepository.write("testClass", tc.name)
         ParameterRepository.write("sheetName", sheetName)
         ParameterRepository.write("logLanguage", TestLog.logLanguage)

@@ -57,7 +57,6 @@ class RetryUtility {
                     context.result = context.actionFunc(context)
                 } catch (t: Throwable) {
                     context.exception = t
-                    context.retryPredicate(context)
                     context.writeErrorLog()
                 }
             }
@@ -71,6 +70,7 @@ class RetryUtility {
 
             if (context.retryMaxCount > 0) {
                 for (i in 1..context.retryMaxCount) {
+                    context.retryCount = i.toInt()
                     if (stopWatch.elapsedSeconds > timeoutSeconds) {
                         return context
                     }

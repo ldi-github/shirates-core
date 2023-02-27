@@ -12,6 +12,7 @@ class RetryContext<T>(
     val retryTimeoutSeconds: Double = testContext.retryTimeoutSeconds,
     val retryIntervalSeconds: Double = testContext.retryIntervalSeconds,
     val log: Boolean = true,
+    var retryCount: Int = 0,
     var retryPredicate: (RetryContext<T>) -> Boolean,
     var beforeRetryFunc: (RetryContext<T>) -> T,
     var actionFunc: (RetryContext<T>) -> T
@@ -72,13 +73,13 @@ class RetryContext<T>(
         if (log.not()) {
             return
         }
-        if (PropertiesManager.enableRetryLog.not()) {
-            return
-        }
-        if (wrappedError != null) {
-            TestLog.warn(message = "Error in retry context: ${wrappedError!!.message}")
-        } else if (exception != null) {
-            TestLog.warn(message = "Error in retry context: ${exception!!.message}")
+        val errorMessage = wrappedError?.message ?: exception?.message
+        if (errorMessage != null) {
+            if (PropertiesManager.enableWarnOnRetryError) {
+                TestLog.warn(message = "Error in retry context: $errorMessage")
+            } else if (PropertiesManager.enableRetryLog.not()) {
+                TestLog.info(message = "Error in retry context: $errorMessage")
+            }
         }
     }
 }

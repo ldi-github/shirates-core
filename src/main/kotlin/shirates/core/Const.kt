@@ -29,6 +29,8 @@ object Const {
     const val ENABLE_TRACE = false
     const val ENABLE_SYNC_LOG = true
     const val ENABLE_RETRY_LOG = true
+    const val ENABLE_WARN_ON_RETRY_ERROR = false
+    const val ENABLE_GET_SOURCE_LOG = false
     const val ENABLE_INNER_MACRO_LOG = false
     const val ENABLE_INNER_COMMAND_LOG = false
     const val ENABLE_SILENT_LOG = false
@@ -61,7 +63,7 @@ object Const {
     const val IMPLICITLY_WAIT_SECONDS = 5.0
     const val REUSE_DRIVER = true
     const val APPIUM_ARGS_SEPARATOR = " "
-    const val APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS: Double = 8.0
+    const val APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS: Double = 15.0
     const val APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS: Double = 5.0
     const val APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS: Double = 30.0
     const val APPIUM_PROXY_READ_TIMEOUT_SECONDS: Double = 10.0
@@ -82,6 +84,7 @@ object Const {
     const val RETRY_TIMEOUT_SECONDS: Double = 15.0
     const val RETRY_INTERVAL_SECONDS: Double = 2.0
     const val SHORT_WAIT_SECONDS = 1.5
+    const val WAIT_SECONDS_FOR_LAUNCH_APP_COMPLETE = 15.0
     const val WAIT_SECONDS_FOR_ANIMATION_COMPLETE = 0.5
     const val WAIT_SECONDS_ON_ISSCREEN = 15.0
     const val WAIT_SECONDS_FOR_CONNECTION_ENABLED = 8.0
@@ -105,7 +108,6 @@ object Const {
     internal const val WAIT_UTILITY_WAIT_SECONDS: Double = 30.0
     internal const val WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
     internal const val SHELL_RESULT_WAIT_FOR_SECONDS: Double = 30.0
-    internal const val LAUNCH_APP_WAIT_SECONDS: Double = 10.0
 
     /**
      * others

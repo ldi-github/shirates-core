@@ -237,7 +237,7 @@ fun TestDrive?.scrollToBottom(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     repeat: Int = 2,
     flick: Boolean = true,
-    maxLoopCount: Int = shirates.core.Const.SCROLL_MAX_COUNT,
+    maxLoopCount: Int = Const.SCROLL_MAX_COUNT,
     edgeSelector: String? = null,
     imageCompare: Boolean = false
 ): TestElement {
@@ -263,7 +263,7 @@ fun TestDrive?.scrollToTop(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     repeat: Int = 2,
     flick: Boolean = true,
-    maxLoopCount: Int = shirates.core.Const.SCROLL_MAX_COUNT,
+    maxLoopCount: Int = Const.SCROLL_MAX_COUNT,
     edgeSelector: String? = null,
     imageCompare: Boolean = false
 ): TestElement {
@@ -289,7 +289,7 @@ fun TestDrive?.scrollToRightEdge(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     repeat: Int = 2,
     flick: Boolean = true,
-    maxLoopCount: Int = shirates.core.Const.SCROLL_MAX_COUNT,
+    maxLoopCount: Int = Const.SCROLL_MAX_COUNT,
     edgeSelector: String? = null,
     imageCompare: Boolean = false
 ): TestElement {
@@ -315,7 +315,7 @@ fun TestDrive?.scrollToLeftEdge(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     repeat: Int = 2,
     flick: Boolean = true,
-    maxLoopCount: Int = shirates.core.Const.SCROLL_MAX_COUNT,
+    maxLoopCount: Int = Const.SCROLL_MAX_COUNT,
     edgeSelector: String? = null,
     imageCompare: Boolean = false
 ): TestElement {

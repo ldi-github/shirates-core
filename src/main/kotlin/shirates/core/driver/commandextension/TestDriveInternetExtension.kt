@@ -1,7 +1,7 @@
 package shirates.core.driver.commandextension
 
 import io.appium.java_client.android.connection.ConnectionStateBuilder
-import shirates.core.Const.WAIT_SECONDS_FOR_CONNECTION_ENABLED
+import shirates.core.Const
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
@@ -191,15 +191,15 @@ fun TestDrive?.mobileOff(
 
 private fun TestDrive?.waitWiFiEnabled() {
 
-    wait(waitSeconds = WAIT_SECONDS_FOR_CONNECTION_ENABLED)
+    wait(waitSeconds = Const.WAIT_SECONDS_FOR_CONNECTION_ENABLED)
 }
 
 private fun TestDrive?.waitMobileEnabled() {
 
-    wait(waitSeconds = WAIT_SECONDS_FOR_CONNECTION_ENABLED)
+    wait(waitSeconds = Const.WAIT_SECONDS_FOR_CONNECTION_ENABLED)
 }
 
 private fun TestDrive?.waitAllEnabled() {
 
-    wait(waitSeconds = WAIT_SECONDS_FOR_CONNECTION_ENABLED)
+    wait(waitSeconds = Const.WAIT_SECONDS_FOR_CONNECTION_ENABLED)
 }

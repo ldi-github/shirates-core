@@ -16,8 +16,10 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.commandextension.isAppInstalled
 import shirates.core.driver.commandextension.launchApp
-import shirates.core.driver.commandextension.wait
+import shirates.core.driver.commandextension.tapAppIcon
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -308,15 +310,8 @@ abstract class UITest : TestDrive {
                 return
             }
 
-            // Complete profile
+            // profile
             profile.completeProfile()
-            if (profile.udid.isBlank()) {
-                wait(waitSeconds = 2.0)
-                profile.completeProfile()
-                if (profile.udid.isBlank()) {
-                    throw IllegalStateException("profile.udid is blank.")
-                }
-            }
             profile.validate()
 
             // Appium Server
@@ -507,8 +502,12 @@ abstract class UITest : TestDrive {
                 TestLog.skip("No-Load-Run mode")
             }
 
-            if (launchApp) {
-                testDrive.launchApp()
+            if (launchApp && testDrive.isAppInstalled()) {
+                if (isiOS && isRealDevice) {
+                    testDrive.tapAppIcon()
+                } else {
+                    testDrive.launchApp()
+                }
             }
 
             testProc()

@@ -57,4 +57,36 @@ object ProcessUtility {
         return shellResult
     }
 
+    /**
+     * getMacProcessList
+     */
+    fun getMacProcessList(
+        log: Boolean = false
+    ): List<ProcessInfo> {
+
+        val list = mutableListOf<ProcessInfo>()
+
+        val shellResult = ShellUtility.executeCommand("ps", "axo", "pid,ppid,command", log = log)
+        val lines = shellResult.resultLines
+        for (i in 1 until lines.count()) {
+            val line = lines[i]
+            val processInfo = ProcessInfo(
+                pid = line.substring(0, 5).trim(),
+                ppid = line.substring(6, 11).trim(),
+                command = line.substring(12)
+            )
+            list.add(processInfo)
+        }
+
+        return list
+    }
+
+    /**
+     * ProcessInfo
+     */
+    class ProcessInfo(
+        var pid: String = "",
+        var ppid: String = "",
+        var command: String = ""
+    )
 }

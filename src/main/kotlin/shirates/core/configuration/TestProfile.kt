@@ -80,6 +80,7 @@ class TestProfile(var profileName: String = "") {
     var tapAppIconMacro: String? = null
     var shortWaitSeconds: String? = null
     var waitSecondsOnIsScreen: String? = null
+    var waitSecondsForLaunchAppComplete: String? = null
     var waitSecondsForAnimationComplete: String? = null
     var waitSecondsForConnectionEnabled: String? = null
     var swipeDurationSeconds: String? = null
@@ -425,6 +426,9 @@ class TestProfile(var profileName: String = "") {
 
         // waitSecondsOnIsScreen
         validateNumeric("waitSecondsOnIsScreen")
+
+        // waitSecondsForLaunchAppComplete
+        validateNumeric("waitSecondsForLaunchAppComplete")
 
         // waitSecondsForAnimationComplete
         validateNumeric("waitSecondsForAnimationComplete")

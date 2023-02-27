@@ -209,18 +209,8 @@ internal fun TestDrive?.screenIsCore(
             invalidateCache()   // matched, but not synced yet.
         }
     } else {
-        if (rootElement.packageName == "com.sec.android.app.sbrowser" || TestMode.isiOS) {
-            TestLog.warn(message(id = "checkScreenManually", subject = expectedScreenName))
-        } else {
-            lastElement.lastResult = LogType.NG
-            TestLog.info(
-                message(
-                    id = "expectedScreenNotDisplayed",
-                    subject = expectedScreenName,
-                    submessage = lastElement.lastError?.message
-                )
-            )
-        }
+        lastElement.lastResult = LogType.NG
+
         val identity = ScreenRepository.get(expectedScreenName).identityElements.joinToString("")
         val message = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected identity=$identity)"
         val ex = TestNGException(message, lastElement.lastError)
@@ -311,11 +301,7 @@ internal fun TestDrive?.screenIsOfCore(
             invalidateCache()   // matched, but not synced yet.
         }
     } else {
-        if (rootElement.packageName == "com.sec.android.app.sbrowser" || TestMode.isiOS) {
-            TestLog.warn(message(id = "checkScreenManually", subject = screenNames.joinToString(",")))
-        } else {
-            lastElement.lastResult = LogType.NG
-        }
+        lastElement.lastResult = LogType.NG
 
         val screenIdentities = mutableMapOf<String, String>()
         for (name in screenNames) {

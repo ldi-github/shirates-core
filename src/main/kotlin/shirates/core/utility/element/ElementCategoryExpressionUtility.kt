@@ -1,5 +1,6 @@
 package shirates.core.utility.element
 
+import shirates.core.Const
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
@@ -18,7 +19,7 @@ object ElementCategoryExpressionUtility {
         get() {
             if (elementCategoryExpressionPropertiesField == null) {
                 elementCategoryExpressionPropertiesField =
-                    ResourceUtility.getProperties(baseName = shirates.core.Const.ELEMENT_CATEGORY_RESOURCE_BASE_NAME)
+                    ResourceUtility.getProperties(baseName = Const.ELEMENT_CATEGORY_RESOURCE_BASE_NAME)
             }
             return elementCategoryExpressionPropertiesField!!
         }
