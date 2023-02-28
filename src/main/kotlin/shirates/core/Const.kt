@@ -44,6 +44,8 @@ object Const {
     const val IMAGE_MATCHING_SCALE = 0.25
     const val IMAGE_MATCHING_THRESHOLD = 1.0
     const val IMAGE_MATCHING_CANDIDATE_COUNT = 20
+    const val ENABLE_HEALTH_CHECK = true
+    const val TAP_TEST_SELECTOR = ".label"
     const val CUSTOM_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val ANDROID_SWIPE_OFFSET_Y = -24

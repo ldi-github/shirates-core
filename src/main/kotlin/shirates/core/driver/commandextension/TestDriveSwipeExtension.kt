@@ -1,7 +1,6 @@
 package shirates.core.driver.commandextension
 
 import org.openqa.selenium.InvalidElementStateException
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.logging.CodeExecutionContext
@@ -19,7 +18,6 @@ fun TestDrive?.swipePointToPoint(
     startY: Int,
     endX: Int,
     endY: Int,
-    swipeOffsetY: Int = PropertiesManager.swipeOffsetY,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true,
@@ -32,7 +30,6 @@ fun TestDrive?.swipePointToPoint(
         startY = startY,
         endX = endX,
         endY = endY,
-        swipeOffsetY = swipeOffsetY,
         safeMode = safeMode,
         durationSeconds = durationSeconds,
         repeat = repeat
@@ -60,14 +57,11 @@ internal class SwipeContext(
     var startY: Int,
     var endX: Int,
     var endY: Int,
-    val swipeOffsetY: Int = PropertiesManager.swipeOffsetY,
     val safeMode: Boolean = true,
     val durationSeconds: Double = testContext.swipeDurationSeconds,
     val repeat: Int = 1
 ) {
     init {
-        endY += swipeOffsetY
-
         if (safeMode) {
             if (startX < swipeFrame.left) {
                 startX = swipeFrame.left

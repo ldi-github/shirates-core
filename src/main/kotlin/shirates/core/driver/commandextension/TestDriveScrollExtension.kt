@@ -161,7 +161,6 @@ fun TestDrive?.scrollRight(
                 startY = b.centerY,
                 endX = b.left,
                 endY = b.centerY,
-                swipeOffsetY = 0,
                 durationSeconds = durationSeconds
             )
         )
@@ -191,7 +190,6 @@ fun TestDrive?.scrollLeft(
                 startY = b.centerY,
                 endX = b.right,
                 endY = b.centerY,
-                swipeOffsetY = 0,
                 durationSeconds = durationSeconds
             )
         )

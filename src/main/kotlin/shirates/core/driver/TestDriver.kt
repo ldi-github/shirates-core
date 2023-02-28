@@ -729,23 +729,25 @@ object TestDriver {
         /**
          * Health check
          */
-        TestLog.info("[Health check] start")
+        if (PropertiesManager.enableHealthCheck) {
+            TestLog.info("[Health check] start")
 
-        try {
-            syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
-            val label = testDrive.select(".label")
-            if (label.isFound) {
-                label.click()   // throws on fail
+            try {
+                syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
+                val tapTestElement = testDrive.select(PropertiesManager.tapTestSelector)
+                if (tapTestElement.isFound) {
+                    tapTestElement.tap()   // throws on fail
+                }
+                androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fail
+                androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail
+            } catch (t: Throwable) {
+                val e = TestDriverException("[Health Check] failed. ${t.message ?: ""}", cause = t)
+                TestLog.warn(e.message)
+                throw e
             }
-            androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fail
-            androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail
-        } catch (t: Throwable) {
-            val e = TestDriverException("[Health Check] failed. ${t.message ?: ""}", cause = t)
-            TestLog.warn(e.message)
-            throw e
-        }
 
-        TestLog.info("[Health check] end")
+            TestLog.info("[Health check] end")
+        }
     }
 
     private var isRefreshing = false

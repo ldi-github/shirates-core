@@ -53,8 +53,7 @@ fun TestDrive?.tap(
             endY = y + 1,
             durationSeconds = holdSeconds,
             repeat = repeat,
-            safeMode = safeMode,
-            swipeOffsetY = 0
+            safeMode = safeMode
         )
     }
 

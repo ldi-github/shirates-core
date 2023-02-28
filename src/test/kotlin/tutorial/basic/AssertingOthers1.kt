@@ -18,7 +18,7 @@ class AssertingOthers1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.appIs("[Settings]")
+                    it.appIs("Settings")
                 }
             }
 
@@ -26,9 +26,9 @@ class AssertingOthers1 : UITest() {
                 condition {
                     it.launchApp("Chrome")
                 }.expectation {
-                    val isApp = it.isApp("[Chrome]")
-                    output("isApp(\"[Chrome]\")=$isApp")
-                    it.appIs("[Chrome]")
+                    val isApp = it.isApp("Chrome")
+                    output("isApp(\"Chrome\")=$isApp")
+                    it.appIs("Chrome")
                 }
             }
         }
@@ -43,7 +43,7 @@ class AssertingOthers1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.appIs("[Chrome]")
+                    it.appIs("Chrome")
                 }
             }
         }

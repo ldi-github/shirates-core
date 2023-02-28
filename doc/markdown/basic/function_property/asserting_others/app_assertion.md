@@ -23,7 +23,7 @@ fun appIs_OK() {
             condition {
                 it.macro("[Android Settings Top Screen]")
             }.expectation {
-                it.appIs("[Settings]")
+                it.appIs("Settings")
             }
         }
 
@@ -31,9 +31,9 @@ fun appIs_OK() {
             condition {
                 it.launchApp("Chrome")
             }.expectation {
-                val isApp = it.isApp("[Chrome]")
-                output("isApp(\"[Chrome]\")=$isApp")
-                it.appIs("[Chrome]")
+                val isApp = it.isApp("Chrome")
+                output("isApp(\"Chrome\")=$isApp")
+                it.appIs("Chrome")
             }
         }
     }
@@ -48,7 +48,7 @@ fun appIs_NG() {
             condition {
                 it.macro("[Android Settings Top Screen]")
             }.expectation {
-                it.appIs("[Chrome]")
+                it.appIs("Chrome")
             }
         }
     }

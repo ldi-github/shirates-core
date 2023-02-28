@@ -20,9 +20,7 @@ class LaunchApp2 : UITest() {
                 }.action {
                     it.launchApp()
                 }.expectation {
-                    it.appIs("[Settings]")
                     it.appIs("Settings")
-                    it.appIs("com.apple.Preferences")
                 }
             }
             case(2) {

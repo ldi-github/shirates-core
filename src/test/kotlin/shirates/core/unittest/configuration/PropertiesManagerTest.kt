@@ -845,6 +845,49 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableHealthCheck() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableHealthCheck).isEqualTo(Const.ENABLE_HEALTH_CHECK)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableHealthCheck", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableHealthCheck).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableHealthCheck", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableHealthCheck).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun tapTestSelector() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.tapTestSelector).isEqualTo(Const.TAP_TEST_SELECTOR)
+        }
+        run {
+            // Arrange
+            val value = ".button"
+            PropertiesManager.setPropertyValue("tapTestSelector", value)
+            // Act, Assert
+            assertThat(PropertiesManager.tapTestSelector).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun macroObjectsScanDir() {
 
         run {
@@ -934,41 +977,41 @@ class PropertiesManagerTest : UnitTest() {
         }
     }
 
-    @Test
-    fun swipeOffsetY() {
-
-        run {
-            // Arrange
-            TestMode.setAndroid()
-            PropertiesManager.setPropertyValue("os", "android")
-            // Act, Assert
-            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(Const.ANDROID_SWIPE_OFFSET_Y)
-        }
-        run {
-            // Arrange
-            TestMode.setAndroid()
-            PropertiesManager.clear()
-            val value = 1
-            PropertiesManager.setPropertyValue("android.swipeOffsetY", value.toString())
-            // Act, Assert
-            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(value)
-        }
-        run {
-            // Arrange
-            TestMode.setIos()
-            PropertiesManager.setPropertyValue("os", "ios")
-            // Act, Assert
-            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(Const.IOS_SWIPE_OFFSET_Y)
-        }
-        run {
-            // Arrange
-            PropertiesManager.setPropertyValue("os", "ios")
-            val value = 2
-            PropertiesManager.setPropertyValue("ios.swipeOffsetY", value.toString())
-            // Act, Assert
-            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(value)
-        }
-    }
+//    @Test
+//    fun swipeOffsetY() {
+//
+//        run {
+//            // Arrange
+//            TestMode.setAndroid()
+//            PropertiesManager.setPropertyValue("os", "android")
+//            // Act, Assert
+//            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(Const.ANDROID_SWIPE_OFFSET_Y)
+//        }
+//        run {
+//            // Arrange
+//            TestMode.setAndroid()
+//            PropertiesManager.clear()
+//            val value = 1
+//            PropertiesManager.setPropertyValue("android.swipeOffsetY", value.toString())
+//            // Act, Assert
+//            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(value)
+//        }
+//        run {
+//            // Arrange
+//            TestMode.setIos()
+//            PropertiesManager.setPropertyValue("os", "ios")
+//            // Act, Assert
+//            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(Const.IOS_SWIPE_OFFSET_Y)
+//        }
+//        run {
+//            // Arrange
+//            PropertiesManager.setPropertyValue("os", "ios")
+//            val value = 2
+//            PropertiesManager.setPropertyValue("ios.swipeOffsetY", value.toString())
+//            // Act, Assert
+//            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(value)
+//        }
+//    }
 
     @Test
     fun xmlSourceRemovePattern() {

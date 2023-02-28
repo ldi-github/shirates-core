@@ -22,7 +22,7 @@ class iOSPressKey1 : UITest() {
                         .sendKeys("safa")
                         .tap("Safari")
                         .wait()
-                        .appIs("[Safari]")
+                        .appIs("Safari")
                 }.action {
                     it.pressBack()
                 }.expectation {
@@ -65,7 +65,7 @@ class iOSPressKey1 : UITest() {
                 }.action {
                     it.pressEnter()
                 }.expectation {
-                    it.appIs("[Safari]")
+                    it.appIs("Safari")
                 }
             }
         }

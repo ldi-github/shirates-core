@@ -502,6 +502,27 @@ object PropertiesManager {
             return value
         }
 
+    // TestDriver --------------------------------------------------
+
+    /**
+     * enableHealthCheck
+     */
+    val enableHealthCheck: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableHealthCheck")
+                ?: return Const.ENABLE_HEALTH_CHECK
+            return value == "true"
+        }
+
+    /**
+     * tapTestSelector
+     */
+    val tapTestSelector: String
+        get() {
+            return getPropertyValue(propertyName = "tapTestSelector")
+                ?: Const.TAP_TEST_SELECTOR
+        }
+
     // Custom --------------------------------------------------
 
     /**
