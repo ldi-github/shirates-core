@@ -122,7 +122,7 @@ object AppiumServerManager {
         if (appiumPath.isBlank()) {
             val pid = ProcessUtility.getPid(port = port.toInt())
             if (pid != null) {
-                TestLog.info(message(id = "usingExistingAppiumServer", arg1 = pid, arg2 = port))
+                TestLog.info(message(id = "usingExistingAppiumServer", arg1 = pid.toString(), arg2 = port))
                 return
             } else {
                 throw TestEnvironmentException(message(id = "appiumServerProcessNotFound", arg1 = port))
@@ -173,7 +173,7 @@ object AppiumServerManager {
         executeResultHandler = DefaultExecuteResultHandler()
         TestLog.info("${commandLine.executable} ${commandLine.arguments.joinToString(" ")}")
         executor.execute(commandLine, executeResultHandler)
-        Thread.sleep(500)
+        Thread.sleep(2000)
 
         // Wait for listening to the port
         val sw = StopWatch()
@@ -192,7 +192,7 @@ object AppiumServerManager {
                 if (PropertiesManager.enableShellExecLog) {
                     TestLog.info(versionLine)
                 }
-                TestLog.info(message(id = "appiumServerStarted", arg1 = pid, arg2 = "$port"))
+                TestLog.info(message(id = "appiumServerStarted", arg1 = pid.toString(), arg2 = "$port"))
                 if (versionLine.contains("v2.").not()) {
                     val msg = message(id = "unsupportedAppiumServerVersion", subject = versionLine)
                     throw TestEnvironmentException(msg, cause = Exception(outputStream.toString()))
@@ -259,7 +259,7 @@ object AppiumServerManager {
         executeResultHandler?.waitFor((Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
         executeResultHandler = null
 
-        TestLog.info(message(id = "appiumServerTerminated", arg1 = pid, arg2 = "$port"))
+        TestLog.info(message(id = "appiumServerTerminated", arg1 = pid.toString(), arg2 = "$port"))
 
     }
 

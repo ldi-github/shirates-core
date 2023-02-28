@@ -50,7 +50,7 @@ object AndroidDeviceUtility {
                     val emulatorPort = deviceInfo.port.toIntOrNull()
                     if (emulatorPort != null) {
                         // Get process information (pid, cmd)
-                        deviceInfo.pid = ProcessUtility.getPid(emulatorPort) ?: ""
+                        deviceInfo.pid = ProcessUtility.getPid(emulatorPort)?.toString() ?: ""
                         if (TestMode.isRunningOnWindows) {
                             val r = ShellUtility.executeCommand(
                                 "wmic",
@@ -105,6 +105,9 @@ object AndroidDeviceUtility {
     fun getAndroidVersion(udid: String): String {
 
         val result = ShellUtility.executeCommand("adb", "-s", udid, "shell", "getprop", "ro.build.version.release")
+        if (result.resultString.contains("adb: device offline")) {
+            return ""
+        }
         return result.resultString
     }
 
@@ -283,7 +286,7 @@ object AndroidDeviceUtility {
         var device = getAndroidDeviceInfoByAvdName(avdName = emulatorProfile.avdName)
 
         if (device?.status == "offline") {
-            ProcessUtility.terminateProcess(pid = device.pid)
+            ProcessUtility.terminateProcess(pid = device.pid.toInt())
             device = null
         }
 
@@ -295,12 +298,14 @@ object AndroidDeviceUtility {
         var shellResult: ShellUtility.ShellResult? = null
         if (device == null) {
             shellResult = startEmulator(emulatorProfile)
+            Thread.sleep(10 * 1000)
         }
 
         device = waitEmulatorStatusByAvdName(
             avdName = emulatorProfile.avdName,
             status = "device",
-            timeoutSeconds = timeoutSeconds
+            timeoutSeconds = timeoutSeconds,
+            intervalMilliseconds = 2000
         )
         Thread.sleep((waitSecondsAfterStartup * 1000).toLong())
 
