@@ -419,8 +419,8 @@ object AndroidDeviceUtility {
      */
     fun reboot(
         udid: String,
-        timeoutSeconds: Double = 60.0,
-        intervalSeconds: Double = 0.5,
+        timeoutSeconds: Double = 30.0,
+        intervalSeconds: Double = 2.0,
         log: Boolean = PropertiesManager.enableShellExecLog,
     ): ShellUtility.ShellResult {
 

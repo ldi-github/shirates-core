@@ -12,7 +12,7 @@ class RetryContext<T>(
     val retryTimeoutSeconds: Double = testContext.retryTimeoutSeconds,
     val retryIntervalSeconds: Double = testContext.retryIntervalSeconds,
     val log: Boolean = true,
-    var retryCount: Int = 0,
+    var retryCount: Long = 0,
     var retryPredicate: (RetryContext<T>) -> Boolean,
     var beforeRetryFunc: (RetryContext<T>) -> T,
     var actionFunc: (RetryContext<T>) -> T

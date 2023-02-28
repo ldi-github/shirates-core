@@ -70,7 +70,7 @@ class RetryUtility {
 
             if (context.retryMaxCount > 0) {
                 for (i in 1..context.retryMaxCount) {
-                    context.retryCount = i.toInt()
+                    context.retryCount = i
                     if (stopWatch.elapsedSeconds > timeoutSeconds) {
                         return context
                     }

@@ -40,6 +40,7 @@ import shirates.core.utility.image.*
 import shirates.core.utility.ios.IosAppUtility
 import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.misc.AppNameUtility
+import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
@@ -354,7 +355,7 @@ object TestDriver {
         screenName: String = currentScreen
     ): Selector {
 
-        if (screenName.isBlank()) {
+        if (screenName.isBlank() || ScreenRepository.has(screenName).not()) {
             return screenInfo.expandExpression(expression = expression)
         }
         return ScreenRepository.getScreenInfo(screenName).expandExpression(expression)
@@ -434,7 +435,7 @@ object TestDriver {
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
 
-        val retryMaxCount = AppiumServerManager.appiumSessionStartupTimeoutSeconds / testContext.retryIntervalSeconds
+        val retryMaxCount = 3
         val retryContext = RetryUtility.exec(
             retryMaxCount = retryMaxCount.toLong(),
             retryTimeoutSeconds = testContext.retryTimeoutSeconds,
@@ -566,12 +567,18 @@ object TestDriver {
         return retryPredicate
     }
 
-    private fun restartAndroid(profile: TestProfile) {
+    private fun restartAndroid(profile: TestProfile, terminateEmulatorProcess: Boolean) {
 
         // Restart device
         if (profile.udid.isNotBlank()) {
             TestLog.info("Rebooting Android device.")
-            AndroidDeviceUtility.reboot(udid = profile.udid)
+            if (terminateEmulatorProcess) {
+                val pid = ProcessUtility.getPid(port = profile.udid.removePrefix("emulator-").toInt())!!
+                ProcessUtility.terminateProcess(pid = pid)
+                AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
+            } else {
+                AndroidDeviceUtility.reboot(udid = profile.udid)
+            }
         } else {
             TestLog.info("Starting Android device")
             AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
@@ -604,7 +611,11 @@ object TestDriver {
                 // socket hang up
                 // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
 
-                restartAndroid(profile)
+                if (context.retryCount == context.retryMaxCount) {
+                    restartAndroid(profile = profile, terminateEmulatorProcess = true)
+                } else {
+                    restartAndroid(profile = profile, terminateEmulatorProcess = false)
+                }
             }
             if (isiOS) {
                 val udid = initialCapabilities["udid"] ?: profile.udid
@@ -722,7 +733,7 @@ object TestDriver {
 
         try {
             syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
-            testDrive.pressHome()   // throws on fail
+//            testDrive.pressHome()   // throws on fail
             testDrive.tapCenterOfScreen()   // throws on fail
             androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fail
             androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail
@@ -1672,13 +1683,19 @@ object TestDriver {
                     waitSeconds = testContext.waitSecondsForLaunchAppComplete,
                     maxLoopCount = 2,
                 ) {
-
-                    if (isiOS) {
+                    /**
+                     * Reset Appium session
+                     */
+                    if (isAndroid) {
+                        AndroidDeviceUtility.reboot(udid = testProfile.udid)
+                    } else if (isiOS) {
                         IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
                     }
                     createAppiumDriver()
-//                    resetAppiumSession()
 
+                    /**
+                     * Retry launchApp
+                     */
                     val retry =
                         try {
                             IosAppUtility.launchApp(udid = testProfile.udid, bundleId = bundleId, log = true)
