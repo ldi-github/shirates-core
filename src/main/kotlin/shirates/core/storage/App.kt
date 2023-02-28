@@ -3,6 +3,7 @@ package shirates.core.storage
 import shirates.core.configuration.repository.DatasetRepository
 import shirates.core.configuration.repository.DatasetRepositoryManager
 import shirates.core.driver.TestMode
+import shirates.core.exception.TestConfigException
 
 object App {
 
@@ -24,6 +25,12 @@ object App {
      */
     fun getValue(longKey: String, throwsException: Boolean = true): String {
 
+        if (DatasetRepositoryManager.repositories.containsKey("apps").not()) {
+            if (throwsException) {
+                throw TestConfigException("Repository 'apps' not found.")
+            }
+            return ""
+        }
         return repository!!.getValue(longKey = longKey, throwsException = throwsException)
     }
 
