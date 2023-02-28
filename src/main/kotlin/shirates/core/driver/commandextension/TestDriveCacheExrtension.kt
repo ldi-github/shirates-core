@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.Const
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
 
@@ -38,7 +39,7 @@ fun TestDrive?.refreshCacheOnInvalidated(): TestElement {
 fun TestDrive?.syncCache(
     force: Boolean = false,
     syncWaitSeconds: Double = testContext.syncWaitSeconds,
-    maxLoopCount: Int = shirates.core.Const.SYNC_MAX_LOOP_COUNT
+    maxLoopCount: Int = Const.SYNC_MAX_LOOP_COUNT
 ): TestElement {
 
     if (TestDriver.isInitialized.not()) {

@@ -17,7 +17,7 @@ object SafariMacro {
             return
         }
 
-        it.tapAppIcon("Safari")
+        it.launchApp("Safari")
         if (it.canSelect("Cancel")) {
             it.tap()
         }

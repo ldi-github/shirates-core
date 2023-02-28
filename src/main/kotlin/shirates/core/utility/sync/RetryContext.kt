@@ -12,8 +12,10 @@ class RetryContext<T>(
     val retryTimeoutSeconds: Double = testContext.retryTimeoutSeconds,
     val retryIntervalSeconds: Double = testContext.retryIntervalSeconds,
     val log: Boolean = true,
+    var retryCount: Long = 0,
     var retryPredicate: (RetryContext<T>) -> Boolean,
-    var retryFunc: (RetryContext<T>) -> T
+    var beforeRetryFunc: (RetryContext<T>) -> T,
+    var actionFunc: (RetryContext<T>) -> T
 ) {
     /**
      * result
@@ -45,7 +47,8 @@ class RetryContext<T>(
         retryIntervalSeconds = testContext.retryIntervalSeconds,
         log = true,
         retryPredicate = { true },
-        retryFunc = { null as T })
+        beforeRetryFunc = { null as T },
+        actionFunc = { null as T })
 
     /**
      * hasUnknownServerSideError
@@ -70,13 +73,13 @@ class RetryContext<T>(
         if (log.not()) {
             return
         }
-        if (PropertiesManager.enableRetryLog.not()) {
-            return
-        }
-        if (wrappedError != null) {
-            TestLog.warn(message = wrappedError!!.message!!)
-        } else if (exception != null) {
-            TestLog.warn(message = exception!!.message!!)
+        val errorMessage = wrappedError?.message ?: exception?.message
+        if (errorMessage != null) {
+            if (PropertiesManager.enableWarnOnRetryError) {
+                TestLog.warn(message = "Error in retry context: $errorMessage")
+            } else if (PropertiesManager.enableRetryLog.not()) {
+                TestLog.info(message = "Error in retry context: $errorMessage")
+            }
         }
     }
 }

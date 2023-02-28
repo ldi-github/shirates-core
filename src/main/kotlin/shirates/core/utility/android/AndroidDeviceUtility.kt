@@ -50,7 +50,7 @@ object AndroidDeviceUtility {
                     val emulatorPort = deviceInfo.port.toIntOrNull()
                     if (emulatorPort != null) {
                         // Get process information (pid, cmd)
-                        deviceInfo.pid = ProcessUtility.getPid(emulatorPort) ?: ""
+                        deviceInfo.pid = ProcessUtility.getPid(emulatorPort)?.toString() ?: ""
                         if (TestMode.isRunningOnWindows) {
                             val r = ShellUtility.executeCommand(
                                 "wmic",
@@ -105,6 +105,9 @@ object AndroidDeviceUtility {
     fun getAndroidVersion(udid: String): String {
 
         val result = ShellUtility.executeCommand("adb", "-s", udid, "shell", "getprop", "ro.build.version.release")
+        if (result.resultString.contains("adb: device offline")) {
+            return ""
+        }
         return result.resultString
     }
 
@@ -281,6 +284,12 @@ object AndroidDeviceUtility {
         currentAndroidDeviceInfo = null
 
         var device = getAndroidDeviceInfoByAvdName(avdName = emulatorProfile.avdName)
+
+        if (device?.status == "offline") {
+            ProcessUtility.terminateProcess(pid = device.pid.toInt())
+            device = null
+        }
+
         if (device != null && device.status == "device") {
             currentAndroidDeviceInfo = device
             return device
@@ -289,12 +298,14 @@ object AndroidDeviceUtility {
         var shellResult: ShellUtility.ShellResult? = null
         if (device == null) {
             shellResult = startEmulator(emulatorProfile)
+            Thread.sleep(10 * 1000)
         }
 
         device = waitEmulatorStatusByAvdName(
             avdName = emulatorProfile.avdName,
             status = "device",
-            timeoutSeconds = timeoutSeconds
+            timeoutSeconds = timeoutSeconds,
+            intervalMilliseconds = 2000
         )
         Thread.sleep((waitSecondsAfterStartup * 1000).toLong())
 
@@ -373,7 +384,7 @@ object AndroidDeviceUtility {
             }
 
             if (sw.elapsedSeconds > timeoutSeconds) {
-                throw TestDriverException("Waiting emulator status timed out. (expected=$status, actual=${device?.status}")
+                throw TestDriverException("Waiting emulator status timed out. (expected=$status, actual=${device?.status})")
             }
 
             Thread.sleep(intervalMilliseconds)
@@ -413,12 +424,13 @@ object AndroidDeviceUtility {
      */
     fun reboot(
         udid: String,
-        timeoutSeconds: Double = 60.0,
-        intervalSeconds: Double = 0.5,
+        timeoutSeconds: Double = 30.0,
+        intervalSeconds: Double = 5.0,
         log: Boolean = PropertiesManager.enableShellExecLog,
     ): ShellUtility.ShellResult {
 
         val r = ShellUtility.executeCommand("adb", "-s", udid, "reboot", log = log)
+        Thread.sleep(10 * 1000)
 
         WaitUtility.doUntilTrue(waitSeconds = timeoutSeconds, intervalSeconds = intervalSeconds) {
             val psResult = AdbUtility.ps(udid = udid)

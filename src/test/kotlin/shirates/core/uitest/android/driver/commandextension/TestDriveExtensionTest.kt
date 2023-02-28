@@ -118,7 +118,7 @@ class TestDriveExtensionTest : UITest() {
                     ImageFileRepository.setFile(TestLog.directoryForLog.resolve("Explore(selected).png"))
                     ImageFileRepository.setFile(TestLog.directoryForLog.resolve("Go.png"))
 
-                    it.tapAppIcon("Maps")
+                    it.launchApp("Maps")
                         .wait()
                         .ifCanSelect("Allow") {
                             it.tap("Allow")

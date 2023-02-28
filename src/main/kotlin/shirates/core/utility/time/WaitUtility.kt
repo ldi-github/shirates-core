@@ -15,26 +15,45 @@ object WaitUtility {
         waitSeconds: Double = Const.WAIT_UTILITY_WAIT_SECONDS,
         intervalSeconds: Double = Const.WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
         maxLoopCount: Int = MAX_LOOP_COUNT,
-        actionFunc: () -> Boolean
+        onTimeoutFunc: (WaitContext) -> Unit = {},
+        onMaxLoopFunc: (WaitContext) -> Unit = {},
+        actionFunc: (WaitContext) -> Boolean
     ): WaitResult {
 
-        val sw = StopWatch().start()
+        val context = WaitContext(
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            maxLoopCount = maxLoopCount,
+            onTimeoutFunc = onTimeoutFunc,
+            onMaxLoopFunc = onMaxLoopFunc,
+            actionFunc = actionFunc
+        )
+
+        val sw = context.stopWatch.start()
         fun loopAction(): WaitResult {
-            for (i in 1..maxLoopCount) {
+            for (i in 1..context.maxLoopCount) {
+                context.count = i
                 TestLog.trace("doUntilTrue ($i)")
 
-                val breakLoop = actionFunc()
+                val breakLoop = actionFunc(context)
                 if (breakLoop) {
                     return WaitResult(error = null, stopWatch = sw)
                 }
 
                 if (sw.elapsedSeconds > waitSeconds) {
                     sw.lap("timeout")
-                    return WaitResult(error = TestDriverException("Syncing time out."), stopWatch = sw)
+
+                    context.onTimeoutFunc(context)
+
+                    val waitResult = WaitResult(error = TestDriverException("Syncing time out."), stopWatch = sw)
+                    return waitResult
                 }
 
-                Thread.sleep((intervalSeconds * 1000).toLong())
+                Thread.sleep((context.intervalSeconds * 1000).toLong())
             }
+
+            context.onMaxLoopFunc(context)
+
             val msg = "over maxLoopCount($maxLoopCount)"
             return WaitResult(error = TestDriverException(msg), stopWatch = sw)
         }
@@ -43,6 +62,17 @@ object WaitUtility {
         sw.stop()
         return result
     }
+
+    class WaitContext(
+        var waitSeconds: Double,
+        var intervalSeconds: Double,
+        var maxLoopCount: Int,
+        var onTimeoutFunc: (WaitContext) -> Unit,
+        var onMaxLoopFunc: (WaitContext) -> Unit = {},
+        var actionFunc: (WaitContext) -> Boolean,
+        var stopWatch: StopWatch = StopWatch(),
+        var count: Int = 0
+    )
 
     /**
      * WaitResult

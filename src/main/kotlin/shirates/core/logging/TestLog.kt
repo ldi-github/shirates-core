@@ -1,5 +1,6 @@
 package shirates.core.logging
 
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
@@ -414,10 +415,10 @@ object TestLog {
 
         try {
             if (Files.exists(monitorLogPath).not()) {
-                val bufferedText = lines.joinToString(shirates.core.Const.NEW_LINE)
-                monitorLogPath.toFile().writeText(bufferedText + shirates.core.Const.NEW_LINE)
+                val bufferedText = lines.joinToString(Const.NEW_LINE)
+                monitorLogPath.toFile().writeText(bufferedText + Const.NEW_LINE)
             } else {
-                monitorLogPath.toFile().appendText(text + shirates.core.Const.NEW_LINE)
+                monitorLogPath.toFile().appendText(text + Const.NEW_LINE)
             }
         } catch (t: Throwable) {
             println(t)
@@ -689,6 +690,7 @@ object TestLog {
         arg2: String,
         message: String?,
         log: Boolean,
+        logType: LogType = LogType.INFO
     ): LogLine {
         if (log.not()) return LogLine()
 
@@ -699,7 +701,7 @@ object TestLog {
 
         return write(
             message = msg,
-            logType = LogType.INFO,
+            logType = logType,
             scriptCommand = scriptCommand,
             subject = subject,
             arg1 = arg1,
@@ -716,7 +718,8 @@ object TestLog {
         arg1: String = "",
         arg2: String = "",
         message: String? = null,
-        log: Boolean = true
+        log: Boolean = true,
+        logType: LogType = LogType.NONE
     ): LogLine {
 
         return scriptCommand(
@@ -726,6 +729,7 @@ object TestLog {
             arg2 = arg2,
             message = message,
             log = log,
+            logType = logType
         )
     }
 
@@ -927,7 +931,7 @@ object TestLog {
      * notImpl
      */
     fun notImpl(
-        exception: NotImplementedError,
+        exception: Throwable,
         log: Boolean = true
     ): LogLine {
 

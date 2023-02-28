@@ -288,6 +288,7 @@ class TestConfigTest : UnitTest() {
         assertThat(prof.implicitlyWaitSeconds).isEqualTo(null)
         assertThat(prof.shortWaitSeconds).isEqualTo("2")
         assertThat(prof.waitSecondsOnIsScreen).isEqualTo("21.1")
+        assertThat(prof.waitSecondsForLaunchAppComplete).isEqualTo("32.1")
         assertThat(prof.waitSecondsForAnimationComplete).isEqualTo("1.23")
         assertThat(prof.swipeDurationSeconds).isEqualTo("3.2")
         assertThat(prof.flickDurationSeconds).isEqualTo("0.33")

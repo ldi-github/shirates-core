@@ -50,16 +50,30 @@ class AppNameUtilityTest : UITest() {
         scenario {
             case(1) {
                 action {
-                    s1 = AppNameUtility.getPackageOrBundleId("[Chrome]")
+                    s1 = AppNameUtility.getPackageOrBundleId("Settings")
                 }.expectation {
-                    s1.thisIs("com.android.chrome")
+                    s1.thisIs("com.android.settings")
                 }
             }
             case(2) {
                 action {
-                    s1 = AppNameUtility.getPackageOrBundleId("com.android.chrome")
+                    s1 = AppNameUtility.getPackageOrBundleId("[Settings]")
                 }.expectation {
-                    s1.thisIs("com.android.chrome")
+                    s1.thisIs("com.android.settings")
+                }
+            }
+            case(3) {
+                action {
+                    s1 = AppNameUtility.getPackageOrBundleId("com.android.settings/.Settings")
+                }.expectation {
+                    s1.thisIs("com.android.settings")
+                }
+            }
+            case(4) {
+                action {
+                    s1 = AppNameUtility.getPackageOrBundleId("com.android.settings")
+                }.expectation {
+                    s1.thisIs("com.android.settings")
                 }
             }
         }

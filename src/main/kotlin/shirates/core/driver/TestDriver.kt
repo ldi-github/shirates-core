@@ -9,12 +9,14 @@ import org.openqa.selenium.Capabilities
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.DesiredCapabilities
+import shirates.core.Const
 import shirates.core.configuration.*
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isRealDevice
+import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
@@ -38,6 +40,7 @@ import shirates.core.utility.image.*
 import shirates.core.utility.ios.IosAppUtility
 import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.misc.AppNameUtility
+import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
@@ -243,6 +246,7 @@ object TestDriver {
         TestLog.info("retryIntervalSeconds: ${testContext.retryIntervalSeconds}")
         TestLog.info("shortWaitSeconds: ${testContext.shortWaitSeconds}")
         TestLog.info("waitSecondsOnIsScreen: ${testContext.waitSecondsOnIsScreen}")
+        TestLog.info("waitSecondsForLaunchAppComplete: ${testContext.waitSecondsForLaunchAppComplete}")
         TestLog.info("waitSecondsForAnimationComplete: ${testContext.waitSecondsForAnimationComplete}")
         if (isAndroid) {
             TestLog.info("waitSecondsForConnectionEnabled: ${testContext.waitSecondsForConnectionEnabled}")
@@ -351,7 +355,7 @@ object TestDriver {
         screenName: String = currentScreen
     ): Selector {
 
-        if (screenName.isBlank()) {
+        if (screenName.isBlank() || ScreenRepository.has(screenName).not()) {
             return screenInfo.expandExpression(expression = expression)
         }
         return ScreenRepository.getScreenInfo(screenName).expandExpression(expression)
@@ -419,7 +423,10 @@ object TestDriver {
         return handled
     }
 
-    internal fun createAppiumDriver(profile: TestProfile = testContext.profile) {
+    /**
+     * createAppiumDriver
+     */
+    fun createAppiumDriver(profile: TestProfile = testContext.profile) {
 
         if (TestMode.isNoLoadRun) {
             return
@@ -428,18 +435,13 @@ object TestDriver {
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
 
-        val initFunc: (RetryContext<Unit>) -> Unit =
-            getInitFunc(profile = profile, capabilities = capabilities)
-
-        val retryPredicate: (RetryContext<Unit>) -> Boolean =
-            getRetryPredicate(profile = profile, capabilities = capabilities)
-
-        val retryMaxCount = AppiumServerManager.appiumSessionStartupTimeoutSeconds / testContext.retryIntervalSeconds
+        val retryMaxCount = 3
         val retryContext = RetryUtility.exec(
             retryMaxCount = retryMaxCount.toLong(),
             retryTimeoutSeconds = testContext.retryTimeoutSeconds,
-            retryFunc = initFunc,
-            retryPredicate = retryPredicate
+            retryPredicate = getRetryPredicate(profile = profile, capabilities = capabilities),
+            beforeRetryFunc = getBeforeRetry(profile = profile, capabilities = capabilities),
+            actionFunc = getInitFunc(profile = profile, capabilities = capabilities)
         )
 
         // Write log on error
@@ -465,7 +467,7 @@ object TestDriver {
 
         // implicitlyWaitSeconds
         implicitlyWaitSeconds =
-            profile.implicitlyWaitSeconds?.toDoubleOrNull() ?: shirates.core.Const.IMPLICITLY_WAIT_SECONDS
+            profile.implicitlyWaitSeconds?.toDoubleOrNull() ?: Const.IMPLICITLY_WAIT_SECONDS
         TestLog.info("implicitlyWaitSeconds: ${implicitlyWaitSeconds}")
 
         // Settings(Android)
@@ -488,6 +490,8 @@ object TestDriver {
                 TestLog.warn(message(id = "findingFelicaPackageFailed", arg1 = "${t.message}"))
             }
         }
+
+        profile.completeProfile()
 
         TestLog.info("AppiumDriver initialized.")
     }
@@ -563,6 +567,72 @@ object TestDriver {
         return retryPredicate
     }
 
+    private fun restartAndroid(profile: TestProfile, terminateEmulatorProcess: Boolean) {
+
+        // Restart device
+        if (profile.udid.isNotBlank()) {
+            TestLog.info("Rebooting Android device.")
+            if (terminateEmulatorProcess) {
+                val pid = ProcessUtility.getPid(port = profile.udid.removePrefix("emulator-").toInt())!!
+                ProcessUtility.terminateProcess(pid = pid)
+                AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
+            } else {
+                AndroidDeviceUtility.reboot(udid = profile.udid)
+            }
+        } else {
+            TestLog.info("Starting Android device")
+            AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
+        }
+
+        // Restart Appium Server
+        TestLog.info("Restarting AppiumServer.")
+        AppiumServerManager.restartAppiumProcess()
+    }
+
+    private fun restartIos(profile: TestProfile) {
+
+        TestLog.info("Restarting Simulator.")
+        IosDeviceUtility.restartSimulator(udid = profile.udid)
+    }
+
+    private fun getBeforeRetry(
+        profile: TestProfile,
+        capabilities: DesiredCapabilities
+    ): (RetryContext<Unit>) -> Unit {
+
+        val beforeRetry: (RetryContext<Unit>) -> Unit = { context ->
+            val message = context.exception?.message ?: ""
+            if (message.isNotBlank()) {
+                TestLog.warn(message)
+            }
+
+            if (isAndroid) {
+                // ex.
+                // socket hang up
+                // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
+
+                if (context.retryCount == context.retryMaxCount) {
+                    restartAndroid(profile = profile, terminateEmulatorProcess = true)
+                } else {
+                    restartAndroid(profile = profile, terminateEmulatorProcess = false)
+                }
+            }
+            if (isiOS) {
+                val udid = initialCapabilities["udid"] ?: profile.udid
+                if (udid.isBlank()) {
+                    throw TestDriverException("udid not found.")
+                }
+                TestLog.info("udid found in initialCapabilities. (udid=$udid)")
+
+                // ex.
+                // kAXErrorServerNotFound
+
+                restartIos(profile)
+            }
+        }
+        return beforeRetry
+    }
+
     fun retryPredicateCore(
         profile: TestProfile,
         context: RetryContext<Unit>,
@@ -633,32 +703,9 @@ object TestDriver {
             val msg = message(id = "couldNotStartANewSession")
             context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
             return false
-        } else if (
-            message.contains("socket hang up") ||
-            message.contains("cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)") ||
-            context.exception.toString().contains("kAXErrorServerNotFound")
-        ) {
+        } else {
             TestLog.warn(message)
             TestLog.outputLogDump()
-
-            if (isAndroid) {
-                val udid = initialCapabilities["deviceUDID"] ?: testContext.profile.udid
-                if (udid.isBlank()) {
-                    throw TestDriverException("deviceUDID not found.")
-                }
-                TestLog.info("udid=$udid")
-
-                // Restart device
-                AndroidDeviceUtility.reboot(udid = udid)
-
-                // Restart Appium Server
-                AppiumServerManager.restartAppiumProcess()
-            } else if (isiOS) {
-                TestLog.warn("kAXErrorServerNotFound")
-                IosDeviceUtility.restartSimulator(udid = profile.udid)
-            }
-            return true
-        } else {
             return true
         }
     }
@@ -682,13 +729,25 @@ object TestDriver {
         /**
          * Health check
          */
-        TestLog.info("[Health check] start")
+        if (PropertiesManager.enableHealthCheck) {
+            TestLog.info("[Health check] start")
 
-        syncCache(force = true)     // throws on fails
-        androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fails
-        androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fails
+            try {
+                syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
+                val tapTestElement = testDrive.select(PropertiesManager.tapTestSelector)
+                if (tapTestElement.isFound) {
+                    tapTestElement.tap()   // throws on fail
+                }
+                androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fail
+                androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail
+            } catch (t: Throwable) {
+                val e = TestDriverException("[Health Check] failed. ${t.message ?: ""}", cause = t)
+                TestLog.warn(e.message)
+                throw e
+            }
 
-        TestLog.info("[Health check] end")
+            TestLog.info("[Health check] end")
+        }
     }
 
     private var isRefreshing = false
@@ -859,7 +918,10 @@ object TestDriver {
 
         // Wait for seconds
         if (waitSeconds > 0 && isInitialized) {
-            val actionFunc = {
+            // Search until it is(not) found
+            val r = SyncUtility.doUntilTrue(
+                waitSeconds = waitSeconds
+            ) {
                 val e = TestElementCache.select(selector = selector, throwsException = false)
                 selectedElement = e
                 if (selector.isNegation) {
@@ -868,12 +930,6 @@ object TestDriver {
                     e.isFound
                 }
             }
-
-            // Search until it is(not) found
-            val r = SyncUtility.doUntilTrue(
-                waitSeconds = waitSeconds,
-                actionFunc = actionFunc
-            )
             if (r.hasError) {
                 lastElement.lastError = r.error
             }
@@ -1340,7 +1396,8 @@ object TestDriver {
         force: Boolean = false,
         syncWaitSeconds: Double = testContext.syncWaitSeconds,
         maxLoopCount: Int = testContext.syncMaxLoopCount,
-        syncIntervalSeconds: Double = testContext.syncIntervalSeconds
+        syncIntervalSeconds: Double = testContext.syncIntervalSeconds,
+        syncOnTimeout: Boolean = true
     ): TestDriver {
 
         if (isSyncing) {
@@ -1367,11 +1424,13 @@ object TestDriver {
                 for (i in 1..maxLoopCount) {
                     TestLog.info("Syncing ($i)", log = enableSyncLog)
                     refreshCache(currentScreenRefresh = false)
-                    if (TestElementCache.sourceXml == lastXml) {
+
+                    TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
+
+                    if (TestElementCache.synced) {
                         /**
                          * Synced
                          */
-                        TestElementCache.synced = true
                         refreshCurrentScreen()
                         val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
                         TestLog.info(
@@ -1384,17 +1443,21 @@ object TestDriver {
                     lastXml = TestElementCache.sourceXml
 
                     if (sw.elapsedSeconds > syncWaitSeconds) {
-                        /**
-                         * Synced(Timeout)
-                         */
-                        TestElementCache.synced = true
-                        refreshCurrentScreen()
-                        val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
-                        TestLog.info(
-                            "Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
-                            log = enableSyncLog
-                        )
-                        return@execSilentCommand
+                        if (syncOnTimeout) {
+                            /**
+                             * Synced(Timeout)
+                             */
+                            TestElementCache.synced = true
+                            refreshCurrentScreen()
+                            val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
+                            TestLog.info(
+                                "Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
+                                log = enableSyncLog
+                            )
+                            return@execSilentCommand
+                        } else {
+                            throw TestDriverException("Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
+                        }
                     }
 
                     /**
@@ -1528,7 +1591,7 @@ object TestDriver {
     ): Boolean {
 
         try {
-            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             if (isAndroid) {
                 return rootElement.packageName == packageOrBundleId
             }
@@ -1585,35 +1648,117 @@ object TestDriver {
      *
      */
     fun launchAppCore(
-        packageOrBundleId: String
+        packageOrBundleIdOrActivity: String
     ): TestElement {
 
+        if (packageOrBundleIdOrActivity.isBlank()) {
+            throw IllegalArgumentException("launchAppCore(blank)")
+        }
+
+        if (testProfile.udid.isBlank()) {
+            testProfile.completeProfile()
+
+            if (testProfile.udid.isBlank()) {
+                resetAppiumSession()
+            }
+        }
+
         if (isAndroid) {
-            AndroidAppUtility.startApp(udid = testProfile.udid, packageName = packageOrBundleId)
+            AndroidAppUtility.startApp(udid = testProfile.udid, packageNameOrActivityName = packageOrBundleIdOrActivity)
             syncCache(force = true)
             SyncUtility.doUntilTrue {
-                isAppCore(appNameOrAppId = packageOrBundleId)
+                isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
             }
         } else if (isiOS) {
             if (isRealDevice) {
-                throw NotImplementedError("TestDriver.launchApp is not supported on real device in iOS. (packageOrBundleId=$packageOrBundleId)")
+                throw NotImplementedError("TestDriver.launchApp is not supported on real device in iOS. (packageOrBundleId=$packageOrBundleIdOrActivity)")
             }
 
-            val r = IosAppUtility.launchApp(udid = testProfile.udid, bundleId = packageOrBundleId, log = true)
-            val message = r.waitForResultString()
-            if (r.hasError) {
-                throw TestDriverException(
-                    message = message(id = "failedToLaunchApp", arg1 = packageOrBundleId, submessage = message),
-                    cause = r.error
-                )
-            }
-            SyncUtility.doUntilTrue() {
-                testDrive.wait(waitSeconds = 2)
-                isAppCore(appNameOrAppId = packageOrBundleId)
+            val bundleId = packageOrBundleIdOrActivity
+
+            try {
+                testDrive.terminateApp(appNameOrAppId = bundleId)
+                TestLog.info("Launching app. (bundleId=$bundleId)")
+                IosAppUtility.launchApp(udid = testProfile.udid, bundleId = bundleId, log = true)
+            } catch (t: Throwable) {
+                TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
+
+                SyncUtility.doUntilTrue(
+                    waitSeconds = testContext.waitSecondsForLaunchAppComplete,
+                    maxLoopCount = 2,
+                ) {
+                    /**
+                     * Reset Appium session
+                     */
+                    if (isAndroid) {
+                        AndroidDeviceUtility.reboot(udid = testProfile.udid)
+                    } else if (isiOS) {
+                        IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
+                    }
+                    createAppiumDriver()
+
+                    /**
+                     * Retry launchApp
+                     */
+                    val retry =
+                        try {
+                            IosAppUtility.launchApp(udid = testProfile.udid, bundleId = bundleId, log = true)
+                            false
+                        } catch (t: Throwable) {
+                            if (PropertiesManager.enableWarnOnRetryError) {
+                                TestLog.warn("Error: $t")
+                            }
+                            if (PropertiesManager.enableRetryLog) {
+                                TestLog.info("Retrying launching app. (bundleId=$bundleId)")
+                            }
+                            true
+                        }
+                    retry
+                }
             }
         }
 
         return lastElement
+    }
+
+    /**
+     * resetAppiumSession
+     */
+    fun resetAppiumSession() {
+
+        TestLog.info("Resetting Appium session.")
+
+        /**
+         * Shutdown AppiumServer
+         */
+        AppiumServerManager.close()
+
+        /**
+         * Restart device
+         */
+        if (isAndroid) {
+            val device = AndroidDeviceUtility.currentAndroidDeviceInfo!!
+            AndroidDeviceUtility.reboot(udid = device.udid)
+        } else if (isiOS && isSimulator) {
+//            IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
+//            IosDeviceUtility.stopSimulator(udid = testProfile.udid)
+            IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
+        }
+
+        Thread.sleep(500)
+
+        /**
+         * Restart AppiumServer
+         */
+        AppiumServerManager.setupAppiumServerProcess(
+            sessionName = TestLog.currentTestClassName,
+            profile = testProfile
+        )
+
+        /**
+         * Create AppiumDriver
+         */
+        createAppiumDriver()
     }
 
 }

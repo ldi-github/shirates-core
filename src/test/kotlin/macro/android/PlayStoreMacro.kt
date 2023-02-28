@@ -1,10 +1,7 @@
 package macro.android
 
 import shirates.core.driver.TestDrive
-import shirates.core.driver.commandextension.isScreen
-import shirates.core.driver.commandextension.refreshCache
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.tapAppIcon
+import shirates.core.driver.commandextension.*
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 
@@ -20,7 +17,7 @@ object PlayStoreMacro : TestDrive {
             return
         }
 
-        it.tapAppIcon("Play Store")
+        it.launchApp("Play Store")
             .screenIs("[Play Store Screen]")
     }
 

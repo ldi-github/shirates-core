@@ -71,6 +71,7 @@ class TestProfileTest : UnitTest() {
         assertThat(p1.tapAppIconMacro).isNull()
         assertThat(p1.shortWaitSeconds).isNull()
         assertThat(p1.waitSecondsOnIsScreen).isNull()
+        assertThat(p1.waitSecondsForLaunchAppComplete).isNull()
         assertThat(p1.waitSecondsForAnimationComplete).isNull()
         assertThat(p1.waitSecondsForConnectionEnabled).isNull()
         assertThat(p1.swipeDurationSeconds).isNull()
@@ -428,6 +429,7 @@ class TestProfileTest : UnitTest() {
         p.implicitlyWaitSeconds = "1.1"
         p.shortWaitSeconds = "2.2"
         p.waitSecondsOnIsScreen = "3.3"
+        p.waitSecondsForLaunchAppComplete = "4.1"
         p.waitSecondsForAnimationComplete = "4.4"
         p.waitSecondsForConnectionEnabled = "5.5"
         p.swipeDurationSeconds = "6.6"
@@ -466,6 +468,7 @@ class TestProfileTest : UnitTest() {
         p.implicitlyWaitSeconds = "1.1"
         p.shortWaitSeconds = "2.2"
         p.waitSecondsOnIsScreen = "3.3"
+        p.waitSecondsForLaunchAppComplete = "4.1"
         p.waitSecondsForAnimationComplete = "4.4"
         p.waitSecondsForConnectionEnabled = "5.5"
         p.swipeDurationSeconds = "6.6"
@@ -642,6 +645,13 @@ class TestProfileTest : UnitTest() {
             propertyName = "waitSecondsOnIsScreen",
             errorValue = "a",
             message = "Numeric format error.(waitSecondsOnIsScreen=a)",
+            validValue = "2.1"
+        )
+        // waitSecondsForLaunchAppComplete
+        validateProperty(
+            propertyName = "waitSecondsForLaunchAppComplete",
+            errorValue = "a",
+            message = "Numeric format error.(waitSecondsForLaunchAppComplete=a)",
             validValue = "2.1"
         )
         // waitSecondsForAnimationComplete

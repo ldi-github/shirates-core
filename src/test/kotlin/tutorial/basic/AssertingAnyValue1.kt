@@ -83,10 +83,10 @@ class AssertingAnyValue1 : UITest() {
             }
             case(2) {
                 expectation {
-                    it.isApp("[Settings]")
-                        .thisIsTrue("This app is [Settings]")
-                    it.isApp("[Chrome]")
-                        .thisIsFalse("This app is not [Chrome]")
+                    it.isApp("Settings")
+                        .thisIsTrue("This app is <Settings>")
+                    it.isApp("Chrome")
+                        .thisIsFalse("This app is not <Chrome>")
                 }
             }
         }

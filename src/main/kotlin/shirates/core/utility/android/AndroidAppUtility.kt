@@ -3,6 +3,7 @@ package shirates.core.utility.android
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message
+import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.time.WaitUtility
 
@@ -22,6 +23,11 @@ object AndroidAppUtility {
 
         var r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "pm", "dump", packageName)
         val dump = r.toString()
+
+        if (PropertiesManager.enableShellExecLog) {
+            val n = TestLog.lines.count() + 1
+            TestLog.directoryForLog.resolve("${n}_shell_pm_dump.txt").toFile().writeText(text = dump)
+        }
         if (dump.contains("more than one device/emulator")) {
             Thread.sleep(1000)
             r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "pm", "dump", packageName)
@@ -34,20 +40,35 @@ object AndroidAppUtility {
             throw TestConfigException(Message.message(id = "appIsNotInstalled", subject = packageName))
         }
 
-        val errorMessage = "Could not get main activity. App seems not be installed. (package=$packageName)\n$dump"
         val lines = dump.split(System.lineSeparator())
-        val actionMain = lines.firstOrNull() { it.contains("android.intent.action.MAIN:") }
-            ?: dump
-        val indexOfActionMain = lines.indexOf(actionMain)
-        if (indexOfActionMain == -1) {
-            throw IllegalStateException(errorMessage)
+
+        val nonDataActionLines = getNonDataActionLines(lines = lines)
+        val activities = nonDataActionLines.flatMap { it.activities }
+        var candidateActivity =
+            activities.firstOrNull() {
+                it.actions.contains("android.intent.action.MAIN") &&
+                        it.categories.contains("android.intent.category.LAUNCHER") &&
+                        it.activity.contains("$").not()
+            }
+        if (candidateActivity != null) {
+            return candidateActivity.activity
         }
-        val nextIndex = indexOfActionMain + 1
-        if (nextIndex >= lines.count()) throw IllegalStateException(errorMessage)
-        val line = lines[nextIndex]
-        val activity = line.split(" ").firstOrNull() { it.contains(packageName) }
-            ?: throw IllegalStateException(errorMessage)
-        return activity
+        candidateActivity = activities.firstOrNull() {
+            it.actions.contains("android.intent.action.MAIN") &&
+                    it.categories.contains("android.intent.category.DEFAULT") &&
+                    it.activity.contains("$").not()
+        }
+        if (candidateActivity != null) {
+            return candidateActivity.activity
+        }
+        candidateActivity = activities.firstOrNull() {
+            it.actions.contains("android.intent.action.SEARCH") && it.activity.contains("$").not()
+        }
+        if (candidateActivity != null) {
+            return candidateActivity.activity
+        }
+
+        return ""
     }
 
     /**
@@ -67,23 +88,24 @@ object AndroidAppUtility {
      */
     fun startApp(
         udid: String,
-        packageName: String,
-        activityName: String? = null,
+        packageNameOrActivityName: String,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 
         if (udid.isBlank()) {
-            throw IllegalArgumentException("udid=$udid")
+            throw IllegalArgumentException("udid is required to startApp.")
         }
-        if (packageName.isBlank()) {
-            throw IllegalStateException("packageName=$packageName")
+        if (packageNameOrActivityName.isBlank()) {
+            throw IllegalStateException("packageName=$packageNameOrActivityName")
         }
 
-        val aname = activityName ?: getMainActivity(udid = udid, packageName = packageName)
-        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", aname, log = log)
+        val activityName =
+            if (packageNameOrActivityName.contains("/")) packageNameOrActivityName
+            else getMainActivity(udid = udid, packageName = packageNameOrActivityName)
+        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", activityName, log = log)
 
         WaitUtility.doUntilTrue {
-            isAppRunning(udid = udid, packageName = packageName)
+            isAppRunning(udid = udid, packageName = packageNameOrActivityName)
         }
 
         return r
@@ -107,4 +129,55 @@ object AndroidAppUtility {
         return r
     }
 
+    class ServiceResolverItem(
+        var section: String = "",
+        var type: String = "",
+        val activities: MutableList<ServiceResolverActivity> = mutableListOf()
+    )
+
+    class ServiceResolverActivity(
+        var activity: String = "",
+        val actions: MutableList<String> = mutableListOf(),
+        val categories: MutableList<String> = mutableListOf(),
+        val parent: ServiceResolverItem
+    ) {
+        override fun toString(): String {
+            val a = actions.joinToString(",")
+            val c = categories.joinToString(",")
+            return "${parent.section} ${parent.type} $activity [$a}] [$c]"
+        }
+    }
+
+    fun getNonDataActionLines(lines: List<String>): List<ServiceResolverItem> {
+
+        val serviceResolverItems = mutableListOf<ServiceResolverItem>()
+        val nonDataActionLine = lines.firstOrNull() { it.contains("Non-Data Actions:") }
+        if (nonDataActionLine == null) {
+            return serviceResolverItems
+        }
+        val nonDataActionIndex = lines.indexOf(nonDataActionLine)
+
+        var serviceResolverItem: ServiceResolverItem? = null
+        var activity: ServiceResolverActivity? = null
+        for (i in nonDataActionIndex + 1 until lines.count()) {
+            val line = lines[i]
+            if (line.isBlank()) {
+                break
+            }
+            if (line.endsWith(":")) {
+                serviceResolverItem = ServiceResolverItem(section = nonDataActionLine.trim(), type = line.trim())
+                serviceResolverItems.add(serviceResolverItem)
+            } else if (line.contains(" filter ")) {
+                val a = line.trim().split(" ")[1]
+                activity = ServiceResolverActivity(activity = a, parent = serviceResolverItem!!)
+                serviceResolverItem.activities.add(activity)
+            } else if (line.contains("Action:")) {
+                activity!!.actions.add(line.trim().split(" ")[1].trim('\"'))
+            } else if (line.contains("Category:")) {
+                activity!!.categories.add(line.trim().split(" ")[1].trim('\"'))
+            }
+        }
+
+        return serviceResolverItems
+    }
 }

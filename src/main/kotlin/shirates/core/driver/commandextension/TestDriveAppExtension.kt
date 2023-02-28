@@ -105,7 +105,7 @@ fun TestDrive?.terminateApp(
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message, fireEvent = false) {
         try {
-            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+            val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             TestDriver.appiumDriver.terminateApp(packageOrBundleId = packageOrBundleId)
         } catch (t: Throwable) {
             if (t.message?.contains("is still running after") == true) {

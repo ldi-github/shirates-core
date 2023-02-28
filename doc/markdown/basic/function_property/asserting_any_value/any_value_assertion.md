@@ -4,12 +4,12 @@ You can assert any value using these functions.
 
 ## functions
 
-| function          | description                                  |
-|:------------------|----------------------------------------------|
-| thisIs            | Assert that this value is expected value     |
-| thisIsNot         | Assert that this value is not expected value |
-| thisIsTrue        | Assert that this value is true               |
-| thisIsFalse       | Assert that this value is false              |
+| function    | description                                  |
+|:------------|----------------------------------------------|
+| thisIs      | Assert that this value is expected value     |
+| thisIsNot   | Assert that this value is not expected value |
+| thisIsTrue  | Assert that this value is true               |
+| thisIsFalse | Assert that this value is false              |
 
 ## Example
 
@@ -92,10 +92,10 @@ fun booleanAssertion_OK() {
         }
         case(2) {
             expectation {
-                it.isApp("[Settings]")
-                    .thisIsTrue("This app is [Settings]")
-                it.isApp("[Chrome]")
-                    .thisIsFalse("This app is not [Chrome]")
+                it.isApp("Settings")
+                    .thisIsTrue("This app is <Settings>")
+                it.isApp("Chrome")
+                    .thisIsFalse("This app is not <Chrome>")
             }
         }
     }

@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
@@ -42,8 +43,8 @@ class PropertiesManagerTest : UnitTest() {
             assertThat(PropertiesManager.envProperties.count()).isEqualTo(0)
             assertThat(PropertiesManager.properties.count()).isEqualTo(0)
 
-            val globalPropsPath = shirates.core.Const.TESTRUN_GLOBAL_PROPERTIES.toPath()
-            val testrunPath = shirates.core.Const.TESTRUN_PROPERTIES.toPath()
+            val globalPropsPath = Const.TESTRUN_GLOBAL_PROPERTIES.toPath()
+            val testrunPath = Const.TESTRUN_PROPERTIES.toPath()
             var props = Properties()
             var globalProps = Properties()
             var testrunProps = Properties()
@@ -425,11 +426,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableSyncLog).isEqualTo(shirates.core.Const.ENABLE_SYNC_LOG)
+            assertThat(PropertiesManager.enableSyncLog).isEqualTo(Const.ENABLE_SYNC_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_SYNC_LOG.not()
+            val value = Const.ENABLE_SYNC_LOG.not()
             PropertiesManager.setPropertyValue("enableSyncLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableSyncLog).isEqualTo(value)
@@ -443,11 +444,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableTestList).isEqualTo(shirates.core.Const.ENABLE_TEST_LIST)
+            assertThat(PropertiesManager.enableTestList).isEqualTo(Const.ENABLE_TEST_LIST)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_TEST_LIST.not()
+            val value = Const.ENABLE_TEST_LIST.not()
             PropertiesManager.setPropertyValue("enableTestList", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableTestList).isEqualTo(value)
@@ -461,11 +462,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableSpecReport).isEqualTo(shirates.core.Const.ENABLE_SPEC_REPORT)
+            assertThat(PropertiesManager.enableSpecReport).isEqualTo(Const.ENABLE_SPEC_REPORT)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_SPEC_REPORT.not()
+            val value = Const.ENABLE_SPEC_REPORT.not()
             PropertiesManager.setPropertyValue("enableSpecReport", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableSpecReport).isEqualTo(value)
@@ -497,11 +498,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableInnerMacroLog).isEqualTo(shirates.core.Const.ENABLE_INNER_MACRO_LOG)
+            assertThat(PropertiesManager.enableInnerMacroLog).isEqualTo(Const.ENABLE_INNER_MACRO_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_INNER_MACRO_LOG.not()
+            val value = Const.ENABLE_INNER_MACRO_LOG.not()
             PropertiesManager.setPropertyValue("enableInnerMacroLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableInnerMacroLog).isEqualTo(value)
@@ -515,11 +516,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableInnerCommandLog).isEqualTo(shirates.core.Const.ENABLE_INNER_COMMAND_LOG)
+            assertThat(PropertiesManager.enableInnerCommandLog).isEqualTo(Const.ENABLE_INNER_COMMAND_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_INNER_COMMAND_LOG.not()
+            val value = Const.ENABLE_INNER_COMMAND_LOG.not()
             PropertiesManager.setPropertyValue("enableInnerCommandLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableInnerCommandLog).isEqualTo(value)
@@ -533,11 +534,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableSilentLog).isEqualTo(shirates.core.Const.ENABLE_SILENT_LOG)
+            assertThat(PropertiesManager.enableSilentLog).isEqualTo(Const.ENABLE_SILENT_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_SILENT_LOG.not()
+            val value = Const.ENABLE_SILENT_LOG.not()
             PropertiesManager.setPropertyValue("enableSilentLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableSilentLog).isEqualTo(value)
@@ -551,11 +552,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableTapElementImageLog).isEqualTo(shirates.core.Const.ENABLE_INNER_MACRO_LOG)
+            assertThat(PropertiesManager.enableTapElementImageLog).isEqualTo(Const.ENABLE_INNER_MACRO_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_INNER_MACRO_LOG.not()
+            val value = Const.ENABLE_INNER_MACRO_LOG.not()
             PropertiesManager.setPropertyValue("enableTapElementImageLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableTapElementImageLog).isEqualTo(value)
@@ -569,11 +570,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableXmlSourceDump).isEqualTo(shirates.core.Const.ENABLE_XMLSOURCE_DUMP)
+            assertThat(PropertiesManager.enableXmlSourceDump).isEqualTo(Const.ENABLE_XMLSOURCE_DUMP)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_XMLSOURCE_DUMP.not()
+            val value = Const.ENABLE_XMLSOURCE_DUMP.not()
             PropertiesManager.setPropertyValue("enableXmlSourceDump", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableXmlSourceDump).isEqualTo(value)
@@ -587,14 +588,50 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableRetryLog).isEqualTo(shirates.core.Const.ENABLE_RETRY_LOG)
+            assertThat(PropertiesManager.enableRetryLog).isEqualTo(Const.ENABLE_RETRY_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_RETRY_LOG.not()
+            val value = Const.ENABLE_RETRY_LOG.not()
             PropertiesManager.setPropertyValue("enableRetryLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableRetryLog).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableWarnOnRetryError() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableWarnOnRetryError).isEqualTo(Const.ENABLE_WARN_ON_RETRY_ERROR)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_WARN_ON_RETRY_ERROR.not()
+            PropertiesManager.setPropertyValue("enableWarnOnRetryError", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableWarnOnRetryError).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableGetSourceLog() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableGetSourceLog).isEqualTo(Const.ENABLE_GET_SOURCE_LOG)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_GET_SOURCE_LOG.not()
+            PropertiesManager.setPropertyValue("enableGetSourceLog", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableGetSourceLog).isEqualTo(value)
         }
     }
 
@@ -605,11 +642,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableTrace).isEqualTo(shirates.core.Const.ENABLE_TRACE)
+            assertThat(PropertiesManager.enableTrace).isEqualTo(Const.ENABLE_TRACE)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_TRACE.not()
+            val value = Const.ENABLE_TRACE.not()
             PropertiesManager.setPropertyValue("enableTrace", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableTrace).isEqualTo(value)
@@ -623,11 +660,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableShellExecLog).isEqualTo(shirates.core.Const.ENABLE_SHELL_EXEC_LOG)
+            assertThat(PropertiesManager.enableShellExecLog).isEqualTo(Const.ENABLE_SHELL_EXEC_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_SHELL_EXEC_LOG.not()
+            val value = Const.ENABLE_SHELL_EXEC_LOG.not()
             PropertiesManager.setPropertyValue("enableShellExecLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableShellExecLog).isEqualTo(value)
@@ -641,11 +678,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableTimeMeasureLog).isEqualTo(shirates.core.Const.ENABLE_TIME_MEASURE_LOG)
+            assertThat(PropertiesManager.enableTimeMeasureLog).isEqualTo(Const.ENABLE_TIME_MEASURE_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_TIME_MEASURE_LOG.not()
+            val value = Const.ENABLE_TIME_MEASURE_LOG.not()
             PropertiesManager.setPropertyValue("enableTimeMeasureLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableTimeMeasureLog).isEqualTo(value)
@@ -659,11 +696,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableImageMatchDebugLog).isEqualTo(shirates.core.Const.ENABLE_IMAGE_MATCH_DEBUG_LOG)
+            assertThat(PropertiesManager.enableImageMatchDebugLog).isEqualTo(Const.ENABLE_IMAGE_MATCH_DEBUG_LOG)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.ENABLE_IMAGE_MATCH_DEBUG_LOG.not()
+            val value = Const.ENABLE_IMAGE_MATCH_DEBUG_LOG.not()
             PropertiesManager.setPropertyValue("enableImageMatchDebugLog", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableImageMatchDebugLog).isEqualTo(value)
@@ -677,11 +714,11 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.screenshotScale).isEqualTo(shirates.core.Const.SCREENSHOT_SCALE)
+            assertThat(PropertiesManager.screenshotScale).isEqualTo(Const.SCREENSHOT_SCALE)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.SCREENSHOT_SCALE / 2
+            val value = Const.SCREENSHOT_SCALE / 2
             PropertiesManager.setPropertyValue("screenshotScale", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.screenshotScale).isEqualTo(value)
@@ -715,7 +752,7 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableImageAssertion).isEqualTo(shirates.core.Const.ENABLE_IMAGE_ASSERTION)
+            assertThat(PropertiesManager.enableImageAssertion).isEqualTo(Const.ENABLE_IMAGE_ASSERTION)
         }
         run {
             // Arrange
@@ -740,7 +777,7 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.imageMatchingScale).isEqualTo(shirates.core.Const.IMAGE_MATCHING_SCALE)
+            assertThat(PropertiesManager.imageMatchingScale).isEqualTo(Const.IMAGE_MATCHING_SCALE)
         }
         run {
             // Arrange
@@ -778,7 +815,7 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.imageMatchingThreshold).isEqualTo(shirates.core.Const.IMAGE_MATCHING_THRESHOLD)
+            assertThat(PropertiesManager.imageMatchingThreshold).isEqualTo(Const.IMAGE_MATCHING_THRESHOLD)
         }
         run {
             // Arrange
@@ -796,7 +833,7 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.imageMatchingCandidateCount).isEqualTo(shirates.core.Const.IMAGE_MATCHING_CANDIDATE_COUNT)
+            assertThat(PropertiesManager.imageMatchingCandidateCount).isEqualTo(Const.IMAGE_MATCHING_CANDIDATE_COUNT)
         }
         run {
             // Arrange
@@ -808,17 +845,60 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableHealthCheck() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableHealthCheck).isEqualTo(Const.ENABLE_HEALTH_CHECK)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableHealthCheck", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableHealthCheck).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableHealthCheck", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableHealthCheck).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun tapTestSelector() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.tapTestSelector).isEqualTo(Const.TAP_TEST_SELECTOR)
+        }
+        run {
+            // Arrange
+            val value = ".button"
+            PropertiesManager.setPropertyValue("tapTestSelector", value)
+            // Act, Assert
+            assertThat(PropertiesManager.tapTestSelector).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun macroObjectsScanDir() {
 
         run {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.macroObjectScanDir).isEqualTo(shirates.core.Const.MACRO_OBJECT_SCAN_DIR)
+            assertThat(PropertiesManager.macroObjectScanDir).isEqualTo(Const.MACRO_OBJECT_SCAN_DIR)
         }
         run {
             // Arrange
-            val value = shirates.core.Const.MACRO_OBJECT_SCAN_DIR + "2"
+            val value = Const.MACRO_OBJECT_SCAN_DIR + "2"
             PropertiesManager.setPropertyValue("MacroObject.scan.dir", value)
             // Act, Assert
             assertThat(PropertiesManager.macroObjectScanDir).isEqualTo(value)
@@ -897,41 +977,41 @@ class PropertiesManagerTest : UnitTest() {
         }
     }
 
-    @Test
-    fun swipeOffsetY() {
-
-        run {
-            // Arrange
-            TestMode.setAndroid()
-            PropertiesManager.setPropertyValue("os", "android")
-            // Act, Assert
-            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(shirates.core.Const.ANDROID_SWIPE_OFFSET_Y)
-        }
-        run {
-            // Arrange
-            TestMode.setAndroid()
-            PropertiesManager.clear()
-            val value = 1
-            PropertiesManager.setPropertyValue("android.swipeOffsetY", value.toString())
-            // Act, Assert
-            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(value)
-        }
-        run {
-            // Arrange
-            TestMode.setIos()
-            PropertiesManager.setPropertyValue("os", "ios")
-            // Act, Assert
-            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(shirates.core.Const.IOS_SWIPE_OFFSET_Y)
-        }
-        run {
-            // Arrange
-            PropertiesManager.setPropertyValue("os", "ios")
-            val value = 2
-            PropertiesManager.setPropertyValue("ios.swipeOffsetY", value.toString())
-            // Act, Assert
-            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(value)
-        }
-    }
+//    @Test
+//    fun swipeOffsetY() {
+//
+//        run {
+//            // Arrange
+//            TestMode.setAndroid()
+//            PropertiesManager.setPropertyValue("os", "android")
+//            // Act, Assert
+//            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(Const.ANDROID_SWIPE_OFFSET_Y)
+//        }
+//        run {
+//            // Arrange
+//            TestMode.setAndroid()
+//            PropertiesManager.clear()
+//            val value = 1
+//            PropertiesManager.setPropertyValue("android.swipeOffsetY", value.toString())
+//            // Act, Assert
+//            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(value)
+//        }
+//        run {
+//            // Arrange
+//            TestMode.setIos()
+//            PropertiesManager.setPropertyValue("os", "ios")
+//            // Act, Assert
+//            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(Const.IOS_SWIPE_OFFSET_Y)
+//        }
+//        run {
+//            // Arrange
+//            PropertiesManager.setPropertyValue("os", "ios")
+//            val value = 2
+//            PropertiesManager.setPropertyValue("ios.swipeOffsetY", value.toString())
+//            // Act, Assert
+//            assertThat(PropertiesManager.swipeOffsetY).isEqualTo(value)
+//        }
+//    }
 
     @Test
     fun xmlSourceRemovePattern() {
@@ -961,7 +1041,7 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("os", "android")
             // Act, Assert
             assertThat(PropertiesManager.selectIgnoreTypes).isEqualTo(
-                shirates.core.Const.ANDROID_SELECT_IGNORE_TYPES.split(",").filter { it.isNotBlank() }.toMutableList()
+                Const.ANDROID_SELECT_IGNORE_TYPES.split(",").filter { it.isNotBlank() }.toMutableList()
             )
 
             // Arrange
@@ -977,7 +1057,7 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("os", "ios")
             // Act, Assert
             assertThat(PropertiesManager.selectIgnoreTypes).isEqualTo(
-                shirates.core.Const.IOS_SELECT_IGNORE_TYPES.split(",").toMutableList()
+                Const.IOS_SELECT_IGNORE_TYPES.split(",").toMutableList()
             )
 
             // Arrange
@@ -997,7 +1077,7 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.clear()
             PropertiesManager.setPropertyValue("os", "android")
             // Act, Assert
-            assertThat(PropertiesManager.titleSelector).isEqualTo(shirates.core.Const.ANDROID_TITLE_SELECTOR)
+            assertThat(PropertiesManager.titleSelector).isEqualTo(Const.ANDROID_TITLE_SELECTOR)
         }
         run {
             // Arrange
@@ -1005,7 +1085,7 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.clear()
             PropertiesManager.setPropertyValue("os", "ios")
             // Act, Assert
-            assertThat(PropertiesManager.titleSelector).isEqualTo(shirates.core.Const.IOS_TITLE_SELECTOR)
+            assertThat(PropertiesManager.titleSelector).isEqualTo(Const.IOS_TITLE_SELECTOR)
         }
     }
 
@@ -1018,7 +1098,7 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.clear()
             PropertiesManager.setPropertyValue("os", "android")
             // Act, Assert
-            assertThat(PropertiesManager.webTitleSelector).isEqualTo(shirates.core.Const.ANDROID_WEBTITLE_SELECTOR)
+            assertThat(PropertiesManager.webTitleSelector).isEqualTo(Const.ANDROID_WEBTITLE_SELECTOR)
         }
         run {
             // Arrange
@@ -1026,7 +1106,7 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.clear()
             PropertiesManager.setPropertyValue("os", "ios")
             // Act, Assert
-            assertThat(PropertiesManager.webTitleSelector).isEqualTo(shirates.core.Const.IOS_WEBTITLE_SELECTOR)
+            assertThat(PropertiesManager.webTitleSelector).isEqualTo(Const.IOS_WEBTITLE_SELECTOR)
         }
     }
 
@@ -1037,7 +1117,7 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.jquerySource).isEqualTo(shirates.core.Const.JQUERY_SOURCE)
+            assertThat(PropertiesManager.jquerySource).isEqualTo(Const.JQUERY_SOURCE)
         }
         run {
             // Arrange

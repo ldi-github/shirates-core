@@ -13,7 +13,7 @@ object CalendarMacro : TestDrive {
     fun restartCalendar() {
 
         it.terminateApp("com.google.android.calendar")
-            .tapAppIcon("Calendar")
+            .launchApp("Calendar")
         skipWelcomeScreen()
     }
 

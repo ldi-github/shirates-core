@@ -11,53 +11,57 @@ import shirates.core.utility.sync.SyncUtility
 /**
  * launchApp
  *
- * @param appNameOrAppId
+ * @param appNameOrAppIdOrActivityName
  * Nickname [App1]
  * or appName App1
  * or packageOrBundleId com.example.app1
+ * or activityName com.android.settings/.Settings
  */
 fun TestDrive?.launchApp(
-    appNameOrAppId: String = testContext.appIconName,
+    appNameOrAppIdOrActivityName: String = testContext.appIconName,
     fallBackToTapAppIcon: Boolean = true
 ): TestElement {
 
     val testElement = getTestElement()
 
     val command = "launchApp"
-    val subject = Selector(appNameOrAppId).toString()
+    val subject = Selector(appNameOrAppIdOrActivityName).toString()
     val message = message(id = command, subject = subject)
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message, subject = subject) {
 
-        val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+        if (appNameOrAppIdOrActivityName.contains("/")) {
+            val activityName = appNameOrAppIdOrActivityName
+            TestDriver.launchAppCore(packageOrBundleIdOrActivity = activityName)
+            return@execOperateCommand
+        }
+
+        val packageOrBundleId =
+            AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName)
         if (packageOrBundleId.isBlank()) {
             if (fallBackToTapAppIcon) {
-                TestDriver.tapAppIconCore(appIconName = appNameOrAppId)
+                TestDriver.tapAppIconCore(appIconName = appNameOrAppIdOrActivityName)
                 return@execOperateCommand
             } else {
                 throw IllegalArgumentException(
                     message(
                         id = "failedToGetPackageOrBundleId",
-                        arg1 = "appNameOrAppId=$appNameOrAppId"
+                        arg1 = "appNameOrAppId=$appNameOrAppIdOrActivityName"
                     )
                 )
             }
         }
 
-        if (testProfile.udid.isBlank()) {
-            throw IllegalStateException("$command($appNameOrAppId) failed. testProfile.udid is blank")
-        }
-
         if (isAndroid) {
-            TestDriver.launchAppCore(packageOrBundleId = packageOrBundleId)
+            TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
         } else if (isiOS) {
             if (isSimulator) {
-                TestDriver.launchAppCore(packageOrBundleId = packageOrBundleId)
+                TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
             } else {
-                TestDriver.tapAppIconCore(appNameOrAppId)
+                TestDriver.tapAppIconCore(appNameOrAppIdOrActivityName)
                 SyncUtility.doUntilTrue {
                     invalidateCache()
-                    isApp(appNameOrAppId = appNameOrAppId)
+                    isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
                 }
             }
         }

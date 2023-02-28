@@ -17,6 +17,9 @@ import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.commandextension.isAppInstalled
+import shirates.core.driver.commandextension.launchApp
+import shirates.core.driver.commandextension.tapAppIcon
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -24,9 +27,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.macro.MacroRepository
 import shirates.core.server.AppiumServerManager
-import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.file.FileLockUtility.lockFile
-import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.spec.report.TestListReport
@@ -83,6 +84,15 @@ abstract class UITest : TestDrive {
     var o1: Any? = null
     var o2: Any? = null
     var o3: Any? = null
+
+    val TestFunctionDescription: String
+        get() {
+            var description = "Test function: ${currentTestMethodName}"
+            if (currentDisplayName.isNotBlank()) {
+                description += " [$currentDisplayName]"
+            }
+            return description
+        }
 
     fun clearTempStorages() {
 
@@ -163,6 +173,9 @@ abstract class UITest : TestDrive {
         testrunFile: String = PropertiesManager.testrunFile,
         profileName: String = PropertiesManager.profile
     ) {
+        TestLog.info(Const.SEPARATOR_LONG)
+        TestLog.info(TestFunctionDescription)
+
         PropertiesManager.setup(testrunFile = testrunFile)
         TestMode.testTimeNoLoadRun = PropertiesManager.getPropertyValue("noLoadRun") == "true"
         prepareTestLog()
@@ -297,54 +310,8 @@ abstract class UITest : TestDrive {
                 return
             }
 
-            // Get device
-            TestLog.info(Const.SEPARATOR_LONG)
-            TestLog.info(message(id = "searchingDeviceForProfile", subject = testContext.profile.profileName))
-            if (isAndroid) {
-                val androidDeviceInfo =
-                    AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = testContext.profile)
-                if (androidDeviceInfo.message.isNotBlank()) {
-                    TestLog.info(androidDeviceInfo.message)
-                }
-                val deviceLabel = androidDeviceInfo.avdNameAndPort.ifBlank { androidDeviceInfo.model }
-                val subject = "${deviceLabel}, Android ${androidDeviceInfo.platformVersion}, ${androidDeviceInfo.udid}"
-                TestLog.info(message(id = "connectedDeviceFound", subject = subject))
-
-                if (androidDeviceInfo.isEmulator) {
-                    profile.avd = androidDeviceInfo.avdName
-                }
-                profile.platformVersion = androidDeviceInfo.platformVersion
-                profile.udid = androidDeviceInfo.udid
-                profile.platformVersion = androidDeviceInfo.platformVersion
-            } else if (isiOS) {
-                val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
-                if (iosDeviceInfo.message.isNotBlank()) {
-                    TestLog.info(iosDeviceInfo.message)
-                }
-                val subject =
-                    "${iosDeviceInfo.devicename}, iOS ${iosDeviceInfo.platformVersion}, ${iosDeviceInfo.udid}"
-                TestLog.info(message(id = "deviceFound", subject = subject))
-                profile.deviceName = iosDeviceInfo.devicename
-                profile.platformVersion = iosDeviceInfo.platformVersion
-                profile.udid = iosDeviceInfo.udid
-            }
-
-            // Complete profile
-            if (isAndroid) {
-                if (profile.automationName.isBlank()) {
-                    profile.automationName = "UiAutomator2"
-                }
-                if (profile.platformName.isBlank()) {
-                    profile.platformName = "Android"
-                }
-            } else {
-                if (profile.automationName.isBlank()) {
-                    profile.automationName = "XCUITest"
-                }
-                if (profile.platformName.isBlank()) {
-                    profile.platformName = "iOS"
-                }
-            }
+            // profile
+            profile.completeProfile()
             profile.validate()
 
             // Appium Server
@@ -356,7 +323,9 @@ abstract class UITest : TestDrive {
             // AppiumDriver
             val lastProfile = TestDriver.lastTestContext.profile
             if (profile.isSameProfile(lastProfile) && TestDriver.canReuse) {
-                TestLog.info("Reusing AppiumDriver session. (configFile=${configPath}, profileName=${profileName})")
+                TestLog.info(
+                    message(id = "reusingAppiumDriverSession", arg1 = configPath.toString(), arg2 = profileName)
+                )
                 TestDriver.testContext = TestDriver.lastTestContext
             } else {
                 TestDriver.createAppiumDriver()
@@ -458,6 +427,7 @@ abstract class UITest : TestDrive {
         scenarioId: String? = currentTestMethodName,
         order: Int? = currentOrder,
         desc: String = currentDisplayName,
+        launchApp: Boolean = true,
         testProc: () -> Unit
     ) {
         if (CodeExecutionContext.isInScenario) {
@@ -474,7 +444,13 @@ abstract class UITest : TestDrive {
 
         val sw = StopWatch(title = "Running scenario").start()
         try {
-            scenarioCore(scenarioId, order, desc, testProc)
+            scenarioCore(
+                scenarioId = scenarioId,
+                order = order,
+                desc = desc,
+                launchApp = launchApp,
+                testProc = testProc
+            )
         } finally {
             CodeExecutionContext.isInScenario = false
 
@@ -488,6 +464,7 @@ abstract class UITest : TestDrive {
         scenarioId: String?,
         order: Int?,
         desc: String,
+        launchApp: Boolean,
         testProc: () -> Unit
     ) {
         driver.skipScenario = false
@@ -522,7 +499,15 @@ abstract class UITest : TestDrive {
             }
 
             if (TestMode.isNoLoadRun) {
-                TestLog.warn("No-Load-Run mode")
+                TestLog.skip("No-Load-Run mode")
+            }
+
+            if (launchApp && testDrive.isAppInstalled()) {
+                if (isiOS && isRealDevice) {
+                    testDrive.tapAppIcon()
+                } else {
+                    testDrive.launchApp()
+                }
             }
 
             testProc()
@@ -531,10 +516,10 @@ abstract class UITest : TestDrive {
                 throw TestFailException(failMessage)
             }
             if (TestLog.lines.any { it.logType == LogType.CASE }.not()) {
-                throw TestAbortedException("No case found in scenario.")
+                throw NotImplementedError("No case found in scenario.")
             }
             if (TestLog.lines.any { it.result.isEffectiveType }.not()) {
-                throw TestAbortedException(message(id = "noTestResultFound"))
+                throw NotImplementedError(message(id = "noTestResultFound"))
             }
         } catch (t: TestNGException) {
             val scriptCommand = t.commandContext?.beginLogLine?.scriptCommand ?: ""
@@ -674,7 +659,7 @@ abstract class UITest : TestDrive {
                 throw ex
             }
         } catch (t: ExpectationNotImplementedException) {
-            TestLog.warn(message = t.message)
+            TestLog.notImpl(t)
 
         } catch (t: NotImplementedError) {
             throw t

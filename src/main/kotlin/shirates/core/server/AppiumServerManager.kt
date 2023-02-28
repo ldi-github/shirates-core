@@ -4,6 +4,7 @@ import org.apache.commons.exec.CommandLine
 import org.apache.commons.exec.DefaultExecuteResultHandler
 import org.apache.commons.exec.DefaultExecutor
 import org.apache.commons.exec.PumpStreamHandler
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
@@ -61,7 +62,7 @@ object AppiumServerManager {
      */
     val appiumArgsSeparator: String
         get() {
-            return profile.appiumArgsSeparator ?: shirates.core.Const.APPIUM_ARGS_SEPARATOR
+            return profile.appiumArgsSeparator ?: Const.APPIUM_ARGS_SEPARATOR
         }
 
     /**
@@ -78,7 +79,7 @@ object AppiumServerManager {
     val appiumServerStartupTimeoutSeconds: Double
         get() {
             return profile.appiumServerStartupTimeoutSeconds?.toDoubleOrNull()
-                ?: shirates.core.Const.APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS
+                ?: Const.APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS
         }
 
     /**
@@ -87,7 +88,7 @@ object AppiumServerManager {
     val appiumSessionStartupTimeoutSeconds: Double
         get() {
             return profile.appiumSessionStartupTimeoutSeconds?.toDoubleOrNull()
-                ?: shirates.core.Const.APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS
+                ?: Const.APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS
         }
 
     /**
@@ -121,7 +122,7 @@ object AppiumServerManager {
         if (appiumPath.isBlank()) {
             val pid = ProcessUtility.getPid(port = port.toInt())
             if (pid != null) {
-                TestLog.info(message(id = "usingExistingAppiumServer", arg1 = pid, arg2 = port))
+                TestLog.info(message(id = "usingExistingAppiumServer", arg1 = pid.toString(), arg2 = port))
                 return
             } else {
                 throw TestEnvironmentException(message(id = "appiumServerProcessNotFound", arg1 = port))
@@ -172,6 +173,7 @@ object AppiumServerManager {
         executeResultHandler = DefaultExecuteResultHandler()
         TestLog.info("${commandLine.executable} ${commandLine.arguments.joinToString(" ")}")
         executor.execute(commandLine, executeResultHandler)
+        Thread.sleep(2000)
 
         // Wait for listening to the port
         val sw = StopWatch()
@@ -190,14 +192,15 @@ object AppiumServerManager {
                 if (PropertiesManager.enableShellExecLog) {
                     TestLog.info(versionLine)
                 }
-                TestLog.info(message(id = "appiumServerStarted", arg1 = pid, arg2 = "$port"))
+                TestLog.info(message(id = "appiumServerStarted", arg1 = pid.toString(), arg2 = "$port"))
                 if (versionLine.contains("v2.").not()) {
                     val msg = message(id = "unsupportedAppiumServerVersion", subject = versionLine)
                     throw TestEnvironmentException(msg, cause = Exception(outputStream.toString()))
                 }
+                Thread.sleep(1000)
                 break
             } else {
-                Thread.sleep(200)
+                Thread.sleep(1000)
             }
         }
     }
@@ -252,13 +255,11 @@ object AppiumServerManager {
         val commandTokens = getCommandTokens()
         val port = commandTokens.getPort()?.toIntOrNull() ?: return
         val pid = ProcessUtility.getPid(port = port) ?: return
-        val shellResult = ProcessUtility.terminateProcess(pid = pid)
-        executeResultHandler?.waitFor((shirates.core.Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
+        ProcessUtility.terminateProcess(pid = pid)
+        executeResultHandler?.waitFor((Const.APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS * 1000).toLong())
         executeResultHandler = null
 
-        if (shellResult != null) {
-            TestLog.info(message(id = "appiumServerTerminated", arg1 = pid, arg2 = "$port"))
-        }
+        TestLog.info(message(id = "appiumServerTerminated", arg1 = pid.toString(), arg2 = "$port"))
 
     }
 

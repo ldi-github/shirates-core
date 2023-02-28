@@ -7,6 +7,7 @@ import shirates.core.configuration.TestProfile
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
@@ -394,10 +395,45 @@ object IosDeviceUtility {
         return startSimulator(udid = udid, log = log)
     }
 
+    fun getLauncd_simPid(
+        udid: String
+    ): String? {
+        val launchd_sim = ProcessUtility.getMacProcessList().firstOrNull { it.command.contains("/Devices/$udid/") }
+        return launchd_sim?.pid
+    }
+
+    fun getSpringBoardPid(
+        udid: String
+    ): String? {
+        val launchd_sim_pid = getLauncd_simPid(udid = udid) ?: return null
+
+        val springBoard = ProcessUtility.getMacProcessList().firstOrNull() {
+            it.ppid == launchd_sim_pid && it.command.endsWith("SpringBoard")
+        }
+        return springBoard?.pid
+    }
+
     /**
-     * restartSpringBoard
+     * terminateSpringBoardByUdid
      */
-    fun restartSpringBoard(
+    fun terminateSpringBoardByUdid(
+        udid: String,
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ) {
+        val pid = getSpringBoardPid(udid = udid)
+        if (pid == null) {
+            TestLog.info("SpringBoard process not found. (udid=$udid)", log = log)
+            return
+        }
+
+        TestLog.info("terminateSpringBoardByUdid(udid=$udid)")
+        ShellUtility.executeCommand("kill", "-9", pid, log = log)
+    }
+
+    /**
+     * restartSpringBoardAll
+     */
+    fun restartSpringBoardAll(
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 

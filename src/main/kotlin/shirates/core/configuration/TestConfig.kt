@@ -319,8 +319,12 @@ class TestConfig(val testConfigFile: String) {
         }
 
         val prop = profProps[propertyName]
-        val value = jsonObject.getString(propertyName)
-        prop!!.setter.call(target, value)
+        try {
+            val value = jsonObject.getString(propertyName)
+            prop!!.setter.call(target, value)
+        } catch (t: Throwable) {
+            throw TestConfigException("${t.message} $jsonObject")
+        }
     }
 
     /**

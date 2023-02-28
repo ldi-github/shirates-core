@@ -1,5 +1,6 @@
 package shirates.core.configuration
 
+import shirates.core.Const
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
@@ -58,13 +59,13 @@ object PropertiesManager {
     /**
      * setup
      */
-    fun setup(testrunFile: String = shirates.core.Const.TESTRUN_PROPERTIES) {
+    fun setup(testrunFile: String = Const.TESTRUN_PROPERTIES) {
 
         clear()
         setupTestrunFile(testrunFile)
 
         // Get properties from testrun.global.properties
-        testrunGlobalProperties = getProperties(propertiesFile = shirates.core.Const.TESTRUN_GLOBAL_PROPERTIES)
+        testrunGlobalProperties = getProperties(propertiesFile = Const.TESTRUN_GLOBAL_PROPERTIES)
         for (p in testrunGlobalProperties) {
             properties[p.key.toString()] = p.value.toString()
         }
@@ -106,7 +107,7 @@ object PropertiesManager {
 
         // default
         if (this.testrunFile.isBlank()) {
-            this.testrunFile = shirates.core.Const.TESTRUN_PROPERTIES
+            this.testrunFile = Const.TESTRUN_PROPERTIES
             println("Using default testrun file. (${this.testrunFile})")
         }
     }
@@ -223,7 +224,7 @@ object PropertiesManager {
     val must: Boolean
         get() {
             val value = getPropertyValue(propertyName = "must")
-                ?: return shirates.core.Const.MUST
+                ?: return Const.MUST
             return value == "true"
         }
 
@@ -233,7 +234,7 @@ object PropertiesManager {
     val should: Boolean
         get() {
             val value = getPropertyValue(propertyName = "should")
-                ?: return shirates.core.Const.SHOULD
+                ?: return Const.SHOULD
             return value == "true"
         }
 
@@ -243,7 +244,7 @@ object PropertiesManager {
     val want: Boolean
         get() {
             val value = getPropertyValue(propertyName = "want")
-                ?: return shirates.core.Const.WANT
+                ?: return Const.WANT
             return value == "true"
         }
 
@@ -284,7 +285,7 @@ object PropertiesManager {
     val enableSyncLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableSyncLog")
-                ?: return shirates.core.Const.ENABLE_SYNC_LOG
+                ?: return Const.ENABLE_SYNC_LOG
             return value == "true"
         }
 
@@ -294,7 +295,7 @@ object PropertiesManager {
     val enableTestList: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableTestList")
-                ?: return shirates.core.Const.ENABLE_TEST_LIST
+                ?: return Const.ENABLE_TEST_LIST
             return value == "true"
         }
 
@@ -304,7 +305,7 @@ object PropertiesManager {
     val enableSpecReport: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableSpecReport")
-                ?: return shirates.core.Const.ENABLE_SPEC_REPORT
+                ?: return Const.ENABLE_SPEC_REPORT
             return value == "true"
         }
 
@@ -322,7 +323,7 @@ object PropertiesManager {
     val enableInnerMacroLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableInnerMacroLog")
-                ?: return shirates.core.Const.ENABLE_INNER_MACRO_LOG
+                ?: return Const.ENABLE_INNER_MACRO_LOG
             return value == "true"
         }
 
@@ -332,7 +333,7 @@ object PropertiesManager {
     val enableInnerCommandLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableInnerCommandLog")
-                ?: return shirates.core.Const.ENABLE_SILENT_LOG
+                ?: return Const.ENABLE_SILENT_LOG
             return value == "true"
         }
 
@@ -342,7 +343,7 @@ object PropertiesManager {
     val enableSilentLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableSilentLog")
-                ?: return shirates.core.Const.ENABLE_INNER_COMMAND_LOG
+                ?: return Const.ENABLE_INNER_COMMAND_LOG
             return value == "true"
         }
 
@@ -352,7 +353,7 @@ object PropertiesManager {
     val enableTapElementImageLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableTapElementImageLog")
-                ?: return shirates.core.Const.ENABLE_TAP_ELEMENT_IMAGE_LOG
+                ?: return Const.ENABLE_TAP_ELEMENT_IMAGE_LOG
             return value == "true"
         }
 
@@ -362,7 +363,7 @@ object PropertiesManager {
     val enableXmlSourceDump: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableXmlSourceDump")
-                ?: return shirates.core.Const.ENABLE_XMLSOURCE_DUMP
+                ?: return Const.ENABLE_XMLSOURCE_DUMP
             return value == "true"
         }
 
@@ -372,7 +373,27 @@ object PropertiesManager {
     val enableRetryLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableRetryLog")
-                ?: return shirates.core.Const.ENABLE_RETRY_LOG
+                ?: return Const.ENABLE_RETRY_LOG
+            return value == "true"
+        }
+
+    /**
+     * enableWarnOnRetryError
+     */
+    val enableWarnOnRetryError: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableWarnOnRetryError")
+                ?: return Const.ENABLE_WARN_ON_RETRY_ERROR
+            return value == "true"
+        }
+
+    /**
+     * enableGetSourceLog
+     */
+    val enableGetSourceLog: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableGetSourceLog")
+                ?: return Const.ENABLE_GET_SOURCE_LOG
             return value == "true"
         }
 
@@ -382,7 +403,7 @@ object PropertiesManager {
     val enableTrace: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableTrace")
-                ?: return shirates.core.Const.ENABLE_TRACE
+                ?: return Const.ENABLE_TRACE
             return value == "true"
         }
 
@@ -392,7 +413,7 @@ object PropertiesManager {
     val enableShellExecLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableShellExecLog")
-                ?: return shirates.core.Const.ENABLE_SHELL_EXEC_LOG
+                ?: return Const.ENABLE_SHELL_EXEC_LOG
             return value == "true"
         }
 
@@ -402,7 +423,7 @@ object PropertiesManager {
     val enableTimeMeasureLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableTimeMeasureLog")
-                ?: return shirates.core.Const.ENABLE_TIME_MEASURE_LOG
+                ?: return Const.ENABLE_TIME_MEASURE_LOG
             return value == "true"
         }
 
@@ -412,7 +433,7 @@ object PropertiesManager {
     val enableImageMatchDebugLog: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableImageMatchDebugLog")
-                ?: return shirates.core.Const.ENABLE_IMAGE_MATCH_DEBUG_LOG
+                ?: return Const.ENABLE_IMAGE_MATCH_DEBUG_LOG
             return value == "true"
         }
 
@@ -425,7 +446,7 @@ object PropertiesManager {
         get() {
             val value =
                 getPropertyValue(propertyName = "screenshotScale")?.toDoubleOrNull()
-                    ?: return shirates.core.Const.SCREENSHOT_SCALE
+                    ?: return Const.SCREENSHOT_SCALE
             if (value < 0.1 || value > 1.0) {
                 throw TestConfigException(message(id = "screenshotScale", value = "$value"))
             }
@@ -441,7 +462,7 @@ object PropertiesManager {
     val enableImageAssertion: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableImageAssertion")
-                ?: return shirates.core.Const.ENABLE_IMAGE_ASSERTION
+                ?: return Const.ENABLE_IMAGE_ASSERTION
             return value == "true"
         }
 
@@ -451,7 +472,7 @@ object PropertiesManager {
     val imageMatchingScale: Double
         get() {
             val value = getPropertyValue(propertyName = "imageMatchingScale")?.toDoubleOrNull()
-                ?: return shirates.core.Const.IMAGE_MATCHING_SCALE
+                ?: return Const.IMAGE_MATCHING_SCALE
             if (value < 0.1 || value > 1.0) {
                 throw TestConfigException(message(id = "imageMatchingScale", value = "$value"))
             }
@@ -465,7 +486,7 @@ object PropertiesManager {
     val imageMatchingThreshold: Double
         get() {
             val value = getPropertyValue(propertyName = "imageMatchingThreshold")?.toDoubleOrNull()
-                ?: return shirates.core.Const.IMAGE_MATCHING_THRESHOLD
+                ?: return Const.IMAGE_MATCHING_THRESHOLD
 
             return value
         }
@@ -476,9 +497,30 @@ object PropertiesManager {
     val imageMatchingCandidateCount: Int
         get() {
             val value = getPropertyValue(propertyName = "imageMatchingCandidateCount")?.toIntOrNull()
-                ?: return shirates.core.Const.IMAGE_MATCHING_CANDIDATE_COUNT
+                ?: return Const.IMAGE_MATCHING_CANDIDATE_COUNT
 
             return value
+        }
+
+    // TestDriver --------------------------------------------------
+
+    /**
+     * enableHealthCheck
+     */
+    val enableHealthCheck: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableHealthCheck")
+                ?: return Const.ENABLE_HEALTH_CHECK
+            return value == "true"
+        }
+
+    /**
+     * tapTestSelector
+     */
+    val tapTestSelector: String
+        get() {
+            return getPropertyValue(propertyName = "tapTestSelector")
+                ?: Const.TAP_TEST_SELECTOR
         }
 
     // Custom --------------------------------------------------
@@ -489,7 +531,7 @@ object PropertiesManager {
     val customObjectScanDir: String
         get() {
             return getPropertyValue(propertyName = "CustomObject.scan.dir")
-                ?: shirates.core.Const.CUSTOM_OBJECT_SCAN_DIR
+                ?: Const.CUSTOM_OBJECT_SCAN_DIR
         }
 
     // Macro --------------------------------------------------
@@ -499,7 +541,7 @@ object PropertiesManager {
      */
     val macroObjectScanDir: String
         get() {
-            return getPropertyValue(propertyName = "MacroObject.scan.dir") ?: shirates.core.Const.MACRO_OBJECT_SCAN_DIR
+            return getPropertyValue(propertyName = "MacroObject.scan.dir") ?: Const.MACRO_OBJECT_SCAN_DIR
         }
 
     // Spec-Report --------------------------------------------------
@@ -550,9 +592,9 @@ object PropertiesManager {
             }
 
             return if (os == "android") {
-                shirates.core.Const.ANDROID_SWIPE_OFFSET_Y
+                Const.ANDROID_SWIPE_OFFSET_Y
             } else {
-                shirates.core.Const.IOS_SWIPE_OFFSET_Y
+                Const.IOS_SWIPE_OFFSET_Y
             }
         }
 
@@ -575,14 +617,14 @@ object PropertiesManager {
             if (isAndroid) {
                 if (_selectIgnoreTypesForAndroid == null) {
                     val types = getPropertyValue(propertyName = "android.selectIgnoreTypes")
-                        ?: shirates.core.Const.ANDROID_SELECT_IGNORE_TYPES
+                        ?: Const.ANDROID_SELECT_IGNORE_TYPES
                     _selectIgnoreTypesForAndroid = types.split(",").toMutableList()
                 }
                 return _selectIgnoreTypesForAndroid!!.filter { it.isNotEmpty() }.toMutableList()
             } else {
                 if (_selectIgnoreTypesForIos == null) {
                     val types = getPropertyValue(propertyName = "ios.selectIgnoreTypes")
-                        ?: shirates.core.Const.IOS_SELECT_IGNORE_TYPES
+                        ?: Const.IOS_SELECT_IGNORE_TYPES
                     _selectIgnoreTypesForIos = types.split(",").toMutableList()
                 }
                 return _selectIgnoreTypesForIos!!.filter { it.isNotEmpty() }.toMutableList()
@@ -595,9 +637,9 @@ object PropertiesManager {
     val titleSelector: String
         get() {
             if (isAndroid) {
-                return getPropertyValue("android.titleSelector") ?: shirates.core.Const.ANDROID_TITLE_SELECTOR
+                return getPropertyValue("android.titleSelector") ?: Const.ANDROID_TITLE_SELECTOR
             } else {
-                return getPropertyValue("ios.titleSelector") ?: shirates.core.Const.IOS_TITLE_SELECTOR
+                return getPropertyValue("ios.titleSelector") ?: Const.IOS_TITLE_SELECTOR
             }
         }
 
@@ -607,9 +649,9 @@ object PropertiesManager {
     val webTitleSelector: String
         get() {
             if (isAndroid) {
-                return getPropertyValue("android.webTitleSelector") ?: shirates.core.Const.ANDROID_WEBTITLE_SELECTOR
+                return getPropertyValue("android.webTitleSelector") ?: Const.ANDROID_WEBTITLE_SELECTOR
             } else {
-                return getPropertyValue("ios.webTitleSelector") ?: shirates.core.Const.IOS_WEBTITLE_SELECTOR
+                return getPropertyValue("ios.webTitleSelector") ?: Const.IOS_WEBTITLE_SELECTOR
             }
         }
 
@@ -618,7 +660,7 @@ object PropertiesManager {
      */
     val jquerySource: String
         get() {
-            return getPropertyValue("jquerySource") ?: shirates.core.Const.JQUERY_SOURCE
+            return getPropertyValue("jquerySource") ?: Const.JQUERY_SOURCE
         }
 
 

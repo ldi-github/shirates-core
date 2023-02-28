@@ -96,6 +96,14 @@ class IosDeviceUtilityTest {
     }
 
     @Test
+    fun terminateSpringBoardByUdid() {
+
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+        IosDeviceUtility.terminateSpringBoardByUdid(iosDeviceInfo.udid, log = true)
+    }
+
+    @Test
     fun launchApp_terminateApp() {
 
         val bundleId = "com.apple.Maps"

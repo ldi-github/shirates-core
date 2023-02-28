@@ -20,7 +20,7 @@ object AppleMapsMacro : TestDrive {
 
         it.pressHome()
             .pressHome()
-            .tapAppIcon("Maps")
+            .launchApp("Maps")
 
         if (it.canSelect("Not Now")) {
             it.tap()

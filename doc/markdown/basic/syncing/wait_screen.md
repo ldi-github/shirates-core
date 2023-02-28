@@ -59,7 +59,7 @@ fun waitScreenOf() {
         case(1) {
             condition {
                 it.terminateApp()
-                    .tapAppIcon()
+                    .launchApp()
             }.action {
                 it.waitScreenOf(
                     "[Android Settings Top Screen]",
@@ -82,7 +82,7 @@ fun waitScreenOf_ERROR() {
         case(1) {
             condition {
                 it.terminateApp()
-                    .tapAppIcon("Chrome")
+                    .launchApp("Chrome")
             }.action {
                 it.waitScreenOf(
                     "[Android Settings Top Screen]",

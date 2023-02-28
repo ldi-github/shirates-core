@@ -14,7 +14,7 @@ class AndroidSettingsDemo : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.tapAppIcon("Settings")
+                    it.launchApp("Settings")
                         .screenIs("[Android Settings Top Screen]")
                 }.action {
                     it.tap("[Network & internet]")

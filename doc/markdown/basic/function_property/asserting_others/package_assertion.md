@@ -30,7 +30,7 @@ fun packageIs_OK() {
 
         case(2) {
             action {
-                it.tapAppIcon("Chrome")
+                it.launchApp("Chrome")
             }.expectation {
                 it.packageIs("com.android.chrome")
             }

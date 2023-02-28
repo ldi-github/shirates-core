@@ -84,6 +84,8 @@ ios.profile=iPhone 13(15.5)
 #enableTapElementImageLog=true
 #enableXmlSourceDump=false
 #enableRetryLog=false
+#enableWarnOnRetryError=true
+#enableGetSourceLog=true
 #enableTrace=true
 #enableShellExecLog=true
 #enableTimeMeasureLog=true
@@ -127,12 +129,15 @@ appiumArgs=--session-override --relaxed-security
 #retryMaxCount=
 #retryTimeoutSeconds=
 #retryIntervalSeconds=
+#enableHealthCheck=false
+#tapTestSelector=
 
 ## App operation --------------------
 #appIconName=
 #tapAppIconMethod=
 #tapAppIconMacro=
 #shortWaitSeconds=
+#waitSecondsForLaunchAppComplete=
 #waitSecondsForAnimationComplete=
 #waitSecondsOnIsScreen=
 #waitSecondsForConnectionEnabled=
@@ -157,8 +162,6 @@ appiumArgs=--session-override --relaxed-security
 #specReport.replace.SKIP.reason=
 
 ## misc
-#android.swipeOffsetY=-20
-#ios.swipeOffsetY=-5
 #xmlSourceRemovePattern=
 #boundsToRectRatio=
 #ios.selectIgnoreTypes=XCUIElementTypeCell,XCUIElementTypeApplication

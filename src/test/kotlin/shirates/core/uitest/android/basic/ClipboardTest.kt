@@ -4,10 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.thisIs
-import shirates.core.driver.commandextension.thisIsEmpty
-import shirates.core.driver.commandextension.writeToClipboard
+import shirates.core.driver.commandextension.*
 import shirates.core.driver.function.clearClipboard
 import shirates.core.driver.function.readClipboard
 import shirates.core.driver.function.writeClipboard

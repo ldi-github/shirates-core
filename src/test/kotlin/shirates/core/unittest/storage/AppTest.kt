@@ -43,17 +43,20 @@ class AppTest : UnitTest() {
     }
 
     @Test
-    fun exceptions() {
+    fun noExist() {
+
+        // Act, Assert
+        assertThat(App.getValue(longKey = "[no exist].key1", throwsException = false)).isEmpty()
 
         // Act, Assert
         assertThatThrownBy {
-            App.getValue(longKey = "[no exist].key1")
+            App.getValue(longKey = "[no exist].key1", throwsException = true)
         }.isInstanceOf(TestConfigException::class.java)
             .hasMessage(message(id = "datasetNotFoundInRepository", repository = "apps", dataset = "[no exist]"))
 
         // Act, Assert
         assertThatThrownBy {
-            App.getValue(longKey = "[App1].noExistKey")
+            App.getValue(longKey = "[App1].noExistKey", throwsException = true)
         }.isInstanceOf(TestConfigException::class.java)
             .hasMessage(
                 message(

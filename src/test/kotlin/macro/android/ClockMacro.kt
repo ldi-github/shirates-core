@@ -12,7 +12,7 @@ object ClockMacro : TestDrive {
     fun restartClock() {
 
         it.terminateApp("com.google.android.deskclock")
-            .tapAppIcon("Clock")
+            .launchApp("Clock")
     }
 
     @Macro("[Alarm Screen]")

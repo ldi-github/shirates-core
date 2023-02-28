@@ -17,7 +17,7 @@ object AndroidSettingsMacro : TestDrive {
         }
 
         it.restartApp()
-            .tapAppIcon("Settings")
+            .launchApp("Settings")
             .screenIs("[Android Settings Top Screen]")
 
         if (canSelect("[Account Avatar]").not()) {

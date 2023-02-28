@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.Const
 import shirates.core.configuration.NicknameUtility
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
@@ -106,7 +107,7 @@ fun TestDrive?.isApp(
     var r = false
     context.execBooleanCommand(subject = appNameOrAppId) {
 
-        val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppId = appNameOrAppId)
+        val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
         val appNickName = AppNameUtility.getAppNickNameFromPackageName(packageName = packageOrBundleId)
         val appName =
             if (appNickName.isNotBlank()) NicknameUtility.getNicknameText(nickname = appNickName)
@@ -127,9 +128,9 @@ fun TestDrive?.isApp(
  */
 fun TestDrive?.doUntilTrue(
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    intervalSecond: Double = shirates.core.Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
+    intervalSecond: Double = Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
     maxLoopCount: Int = SyncUtility.MAX_LOOP_COUNT,
-    actionFunc: () -> Boolean
+    actionFunc: (SyncUtility.SyncContext) -> Boolean
 ): TestElement {
 
     SyncUtility.doUntilTrue(

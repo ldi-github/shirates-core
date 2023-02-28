@@ -33,6 +33,7 @@ class TestDriveKeyboardExtensionTest : UITest() {
             case(3) {
                 action {
                     it.hideKeyboard()
+                        .wait()
                 }.expectation {
                     it.isKeyboardShown.thisIsFalse("isKeyboardShown=false")
                 }

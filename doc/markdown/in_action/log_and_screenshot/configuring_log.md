@@ -15,6 +15,8 @@ See also [parameters](../../basic/parameter/parameters.md).
 #enableTapElementImageLog=true
 #enableXmlSourceDump=false
 #enableRetryLog=false
+#enableWarnOnRetryError=true
+#enableGetSourceLog=true
 #enableTrace=true
 #enableShellExecLog=true
 #enableTimeMeasureLog=true

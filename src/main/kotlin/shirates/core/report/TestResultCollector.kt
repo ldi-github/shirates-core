@@ -6,10 +6,11 @@ import shirates.core.logging.LogType
 /**
  * TestResultCollector
  */
-class TestResultCollector(val loglines: List<LogLine>) {
+class TestResultCollector(val logLines: List<LogLine>) {
 
-    val cases = mutableListOf<LogLine>()
+    val irregulars = mutableListOf<LogLine>()
     val scenarios = mutableListOf<LogLine>()
+    val cases = mutableListOf<LogLine>()
 
     init {
 
@@ -18,8 +19,12 @@ class TestResultCollector(val loglines: List<LogLine>) {
 
     fun collect() {
 
-        cases.addAll(loglines.filter { it.logType == LogType.CASE }.map { it.copy() })
-        scenarios.addAll(loglines.filter { it.logType == LogType.SCENARIO }.map { it.copy() })
+        irregulars.addAll(logLines.filter {
+            it.logType == LogType.NG || it.logType == LogType.ERROR || it.logType == LogType.WARN
+        }
+            .map { it.copy() })
+        scenarios.addAll(logLines.filter { it.logType == LogType.SCENARIO }.map { it.copy() })
+        cases.addAll(logLines.filter { it.logType == LogType.CASE }.map { it.copy() })
 
         for (scenario in scenarios) {
             val casesInScenario = cases.filter { it.testScenarioId == scenario.testScenarioId }

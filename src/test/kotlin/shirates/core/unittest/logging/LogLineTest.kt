@@ -78,7 +78,7 @@ class LogLineTest : UnitTest() {
     @Test
     fun isForDetail() {
 
-        assertThat(LogLine(logType = LogType.NONE).isForDetail).isFalse()
+        assertThat(LogLine(logType = LogType.NONE).isForDetail).isTrue()
         assertThat(LogLine(logType = LogType.TRACE).isForDetail).isFalse()
         assertThat(LogLine(logType = LogType.INFO).isForDetail).isTrue()
         assertThat(LogLine(logType = LogType.WARN).isForDetail).isTrue()
@@ -92,7 +92,7 @@ class LogLineTest : UnitTest() {
     @Test
     fun isForSimple() {
 
-        assertThat(LogLine(logType = LogType.NONE).isForSimple).isFalse()
+        assertThat(LogLine(logType = LogType.NONE).isForSimple).isTrue()
         assertThat(LogLine(logType = LogType.TRACE).isForSimple).isFalse()
         assertThat(LogLine(logType = LogType.INFO).isForSimple).isFalse()
         assertThat(LogLine(logType = LogType.WARN).isForSimple).isTrue()
@@ -131,7 +131,7 @@ class LogLineTest : UnitTest() {
     @Test
     fun isForCommandList() {
 
-        assertThat(LogLine(logType = LogType.NONE).isForCommandList).isFalse()
+        assertThat(LogLine(logType = LogType.NONE).isForCommandList).isTrue()
         assertThat(LogLine(logType = LogType.TRACE).isForCommandList).isFalse()
         assertThat(LogLine(logType = LogType.INFO).isForCommandList).isFalse()
         assertThat(LogLine(logType = LogType.WARN).isForCommandList).isTrue()
