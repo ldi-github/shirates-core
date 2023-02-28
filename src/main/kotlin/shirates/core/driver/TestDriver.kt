@@ -733,8 +733,10 @@ object TestDriver {
 
         try {
             syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
-//            testDrive.pressHome()   // throws on fail
-            testDrive.tapCenterOfScreen()   // throws on fail
+            val label = testDrive.select(".label")
+            if (label.isFound) {
+                label.click()   // throws on fail
+            }
             androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fail
             androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail
         } catch (t: Throwable) {

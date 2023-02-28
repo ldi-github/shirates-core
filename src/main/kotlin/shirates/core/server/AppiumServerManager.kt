@@ -197,6 +197,7 @@ object AppiumServerManager {
                     val msg = message(id = "unsupportedAppiumServerVersion", subject = versionLine)
                     throw TestEnvironmentException(msg, cause = Exception(outputStream.toString()))
                 }
+                Thread.sleep(1000)
                 break
             } else {
                 Thread.sleep(1000)

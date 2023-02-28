@@ -420,11 +420,12 @@ object AndroidDeviceUtility {
     fun reboot(
         udid: String,
         timeoutSeconds: Double = 30.0,
-        intervalSeconds: Double = 2.0,
+        intervalSeconds: Double = 5.0,
         log: Boolean = PropertiesManager.enableShellExecLog,
     ): ShellUtility.ShellResult {
 
         val r = ShellUtility.executeCommand("adb", "-s", udid, "reboot", log = log)
+        Thread.sleep(10 * 1000)
 
         WaitUtility.doUntilTrue(waitSeconds = timeoutSeconds, intervalSeconds = intervalSeconds) {
             val psResult = AdbUtility.ps(udid = udid)
