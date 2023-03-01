@@ -456,7 +456,8 @@ abstract class UITest : TestDrive {
             if (t is RerunScenarioException ||
                 message.contains("Read timed out") ||
                 message.contains("AppiumProxy.getSource() timed out") ||
-                message.contains("Could not start a new session. Response code 500.")
+                message.contains("Could not start a new session. Response code 500.") ||
+                message.contains(" is still running after")
             ) {
                 TestLog.getLinesOfCurrentTestScenario().forEach {
                     it.deleted = true
