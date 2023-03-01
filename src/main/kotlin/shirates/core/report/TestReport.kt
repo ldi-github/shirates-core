@@ -199,41 +199,44 @@ class TestReport(
     }
 
     internal class Counter(val lines: List<LogLine>) {
+
+        val activeLines = lines.filter { it.deleted == false }
+
         val total: Int
             get() {
-                return lines.count()
+                return activeLines.count()
             }
         val okCount: Int
             get() {
-                return lines.filter { it.result == LogType.OK }.count()
+                return activeLines.filter { it.result == LogType.OK }.count()
             }
         val ngCount: Int
             get() {
-                return lines.filter { it.result == LogType.NG }.count()
+                return activeLines.filter { it.result == LogType.NG }.count()
             }
         val warnCount: Int
             get() {
-                return lines.filter { it.result == LogType.WARN }.count()
+                return activeLines.filter { it.result == LogType.WARN }.count()
             }
         val manualCount: Int
             get() {
-                return lines.filter { it.result == LogType.MANUAL }.count()
+                return activeLines.filter { it.result == LogType.MANUAL }.count()
             }
         val skipCount: Int
             get() {
-                return lines.filter { it.result == LogType.SKIP }.count()
+                return activeLines.filter { it.result == LogType.SKIP }.count()
             }
         val notImplCount: Int
             get() {
-                return lines.filter { it.result == LogType.NOTIMPL }.count()
+                return activeLines.filter { it.result == LogType.NOTIMPL }.count()
             }
         val knownIssueCount: Int
             get() {
-                return lines.filter { it.result == LogType.KNOWNISSUE }.count()
+                return activeLines.filter { it.result == LogType.KNOWNISSUE }.count()
             }
         val errorCount: Int
             get() {
-                return lines.filter { it.result == LogType.ERROR }.count()
+                return activeLines.filter { it.result == LogType.ERROR }.count()
             }
     }
 
@@ -477,7 +480,7 @@ class TestReport(
             logTypeClass = ""
         }
         val logType = a.logType.label
-        val nlr = if (line.isNoLoadRun) "noLoadRunCell" else ""
+        val nlr = if (line.isNoLoadRun || line.deleted) "noLoadRunCell" else ""
 
         sb.append(
             "                <tr data-seq='$seq' data-line='${line.lineNumber}' data-last-screenshot='${

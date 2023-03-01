@@ -1408,7 +1408,7 @@ object TestLog {
      */
     fun outputCommandList() {
 
-        val commandLines = lines.filter { it.isForCommandList }
+        val commandLines = lines.filter { it.isForCommandList && it.deleted == false }
         outputLogFile(
             filterName = "commandList",
             logLines = commandLines,
