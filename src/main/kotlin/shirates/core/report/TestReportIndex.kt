@@ -88,25 +88,27 @@ class TestReportIndex(
             return this
         }
 
-        val item = LineItem(link = link, isNoLoadRun = isNoLoadRun)
-        item.okCount = logLines.count() { it.logType == LogType.OK }
-        item.ngCount = logLines.count() { it.logType == LogType.NG }
-        item.errorCount = logLines.count() { it.logType == LogType.ERROR }
-        item.warnCount = logLines.count() { it.logType == LogType.WARN }
-        item.manualCount = logLines.count() { it.logType == LogType.MANUAL }
-        item.skipCount = logLines.count() { it.logType == LogType.SKIP }
-        item.notImplCount = logLines.count() { it.logType == LogType.NOTIMPL }
-        item.knownIssueCount = logLines.count() { it.logType == LogType.KNOWNISSUE }
+        val activeLines = logLines.filter { it.deleted.not() }
 
-        val e1 = logLines.firstOrNull()?.timeElapsed ?: 0
-        val e2 = logLines.lastOrNull()?.timeElapsed ?: 0
+        val item = LineItem(link = link, isNoLoadRun = isNoLoadRun)
+        item.okCount = activeLines.count() { it.logType == LogType.OK }
+        item.ngCount = activeLines.count() { it.logType == LogType.NG }
+        item.errorCount = activeLines.count() { it.logType == LogType.ERROR }
+        item.warnCount = activeLines.count() { it.logType == LogType.WARN }
+        item.manualCount = activeLines.count() { it.logType == LogType.MANUAL }
+        item.skipCount = activeLines.count() { it.logType == LogType.SKIP }
+        item.notImplCount = activeLines.count() { it.logType == LogType.NOTIMPL }
+        item.knownIssueCount = activeLines.count() { it.logType == LogType.KNOWNISSUE }
+
+        val e1 = activeLines.firstOrNull()?.timeElapsed ?: 0
+        val e2 = activeLines.lastOrNull()?.timeElapsed ?: 0
         val durationMilliseconds = e2 - e1
         item.durationSeconds = durationMilliseconds / 1000
 
         /**
          * Summary of ERROR message
          */
-        val m = logLines.filter { it.logType == LogType.ERROR || it.logType == LogType.WARN }.groupBy { it.message }
+        val m = activeLines.filter { it.logType == LogType.ERROR || it.logType == LogType.WARN }.groupBy { it.message }
         if (m.any()) {
             item.message = m.entries.map { "${it.key}: ${it.value.count()}" }.joinToString(",")
         }

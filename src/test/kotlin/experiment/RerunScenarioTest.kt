@@ -7,7 +7,7 @@ import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class ScenarioRerunTest : UITest() {
+class RerunScenarioTest : UITest() {
 
     @Test
     fun rerunScenario() {
@@ -22,7 +22,7 @@ class ScenarioRerunTest : UITest() {
     }
 
     @Test
-    fun rerunScenario_multipleScenario() {
+    fun multipleScenario() {
 
         scenario {
             case(1) {

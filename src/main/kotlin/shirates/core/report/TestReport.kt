@@ -482,12 +482,10 @@ class TestReport(
         val logType = a.logType.label
         val nlr = if (line.isNoLoadRun || line.deleted) "noLoadRunCell" else ""
 
+        val deleted = if (a.deleted) "data-deleted" else ""
+        val lastScreenshotHtml = htmlEscape(a.lastScreenshot)
         sb.append(
-            "                <tr data-seq='$seq' data-line='${line.lineNumber}' data-last-screenshot='${
-                htmlEscape(
-                    a.lastScreenshot
-                )
-            }'>"
+            "                <tr data-seq='$seq' data-line='${line.lineNumber}' $deleted data-last-screenshot='$lastScreenshotHtml'>"
         )
         sb.append("<td class='seq'>$seq</td>")
         sb.append("<td class='lineNumber $nlr'>${a.lineNumber}</td>")
