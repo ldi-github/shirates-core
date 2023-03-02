@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import org.openqa.selenium.InvalidElementStateException
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.logging.CodeExecutionContext
@@ -18,6 +19,8 @@ fun TestDrive?.swipePointToPoint(
     startY: Int,
     endX: Int,
     endY: Int,
+    withOffset: Boolean = false,
+    offsetY: Int = PropertiesManager.swipeOffsetY,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true,
@@ -34,6 +37,9 @@ fun TestDrive?.swipePointToPoint(
         durationSeconds = durationSeconds,
         repeat = repeat
     )
+    if (withOffset) {
+        sc.endY += offsetY
+    }
 
     val command = "swipePointToPoint"
     val message = message(id = command, from = "(${sc.startX},${sc.startY})", to = "(${sc.endX},${sc.endY})")
@@ -147,6 +153,8 @@ fun TestDrive?.swipePointToPoint(
     startY: Int,
     endX: Int,
     endY: Int,
+    withOffset: Boolean = false,
+    offsetY: Int = PropertiesManager.swipeOffsetY,
     durationSeconds: Int,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -157,6 +165,8 @@ fun TestDrive?.swipePointToPoint(
         startY = startY,
         endX = endX,
         endY = endY,
+        withOffset = withOffset,
+        offsetY = offsetY,
         durationSeconds = durationSeconds.toDouble(),
         repeat = repeat,
         safeMode = safeMode
@@ -745,6 +755,8 @@ fun TestDrive?.swipeElementToElement(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
+    withOffset: Boolean = false,
+    offsetY: Int = PropertiesManager.swipeOffsetY,
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
@@ -770,20 +782,24 @@ fun TestDrive?.swipeElementToElement(
             startY = b1.centerY,
             endX = b2.centerX - marginX,
             endY = b2.centerY - marginY,
+            withOffset = withOffset,
+            offsetY = offsetY,
             durationSeconds = durationSeconds,
             repeat = repeat,
             safeMode = safeMode
         )
 
+        val m = TestDriver.select(selector = startElement.selector!!, throwsException = false)
         if (adjust) {
             TestDriver.syncCache(force = true)
-            val m = TestDriver.select(selector = testElement.selector!!, throwsException = false)
             if (m.isEmpty.not()) {
                 swipePointToPoint(
                     startX = m.bounds.centerX,
                     startY = m.bounds.centerY,
                     endX = b2.centerX,
                     endY = b2.centerY,
+                    withOffset = true,
+                    offsetY = offsetY,
                     durationSeconds = durationSeconds,
                     safeMode = safeMode
                 )
@@ -817,6 +833,7 @@ fun TestDrive?.swipeElementToElementAdjust(
         durationSeconds = durationSeconds,
         marginRatio = marginRatio,
         adjust = true,
+        offsetY = PropertiesManager.swipeOffsetY,
         repeat = repeat,
         safeMode = safeMode
     )

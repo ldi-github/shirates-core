@@ -1,43 +1,127 @@
 package shirates.core.uitest.ios.driver.commandextension
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenshot
-import shirates.core.driver.commandextension.select
-import shirates.core.driver.commandextension.swipePointToPoint
+import shirates.core.driver.commandextension.*
+import shirates.core.driver.testContext
 import shirates.core.testcode.UITest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
 class TestDriveSwipeExtensionTest : UITest() {
 
-    @Order(1)
+    @Order(10)
     @Test
     fun swipePointToPoint() {
 
-        // Arrange
-        it.macro("[iOS Settings Top Screen]")
-        val itemBefore = it.select("Passwords").bounds
-        val targetPlace = it.select("General").bounds
-        println("targetPlace=$targetPlace")
-        // Act
-        it.screenshot(filename = "before")
-        it.swipePointToPoint(
-            startX = itemBefore.centerX,
-            startY = itemBefore.centerY,
-            endX = targetPlace.centerX,
-            endY = targetPlace.centerY,
-            durationSeconds = 9
-        )
-        val itemAfter = it.select("Passwords").bounds
-        it.screenshot(filename = "after")
-        println("itemAfter=$itemAfter")
-        // Assert
-        val diff = Math.abs(itemAfter.centerY - targetPlace.centerY)
-        println("diff=$diff")
-        assertThat(diff < 30).isTrue()
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Settings Top Screen]")
+                }.action {
+                    e1 = it.select("Passwords")
+                    e2 = it.select("General")
+                    output("from=${e1.selector}, target=${e2.selector}")
+                    it.swipePointToPoint(
+                        startX = e1.bounds.centerX,
+                        startY = e1.bounds.centerY,
+                        endX = e2.bounds.centerX,
+                        endY = e2.bounds.centerY,
+                        durationSeconds = 10
+                    )
+                }.expectation {
+                    val current = it.select("Passwords")
+                    val diff = current.bounds.centerY - e2.bounds.centerY
+                    output("diff=$diff")
+                    val result = Math.abs(diff) != 0
+                    result.thisIsTrue("Math.abs(diff) != 0. diff=$diff")
+                }
+            }
+            case(2) {
+                condition {
+                    it.macro("[iOS Settings Top Screen]")
+                    testContext.appiumProxyReadTimeoutSeconds = 30.0
+                }.action {
+                    e1 = it.select("Passwords")
+                    e2 = it.select("General")
+                    output("from=${e1.selector}, target=${e2.selector}")
+                    it.swipePointToPoint(
+                        startX = e1.bounds.centerX,
+                        startY = e1.bounds.centerY,
+                        endX = e2.bounds.centerX,
+                        endY = e2.bounds.centerY,
+                        withOffset = true,
+                        durationSeconds = 10
+                    )
+                }.expectation {
+                    val current = it.select("Passwords")
+                    val diff = current.bounds.centerY - e2.bounds.centerY
+                    output("diff=$diff")
+                    val result = Math.abs(diff) < 10
+                    result.thisIsTrue("Math.abs(diff) < 10. diff=$diff")
+                }
+            }
+
+        }
     }
 
+    @Test
+    @Order(20)
+    fun swipeElementToElement() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Settings Top Screen]")
+                    e1 = it.select("Passwords")
+                    e2 = it.select("General")
+                }.action {
+                    it.swipeElementToElement(startElement = e1, endElement = e2, durationSeconds = 2.0, adjust = true)
+                }.expectation {
+                    it.bounds.isOverlapping(e2.bounds)
+                        .thisIsTrue("${it.bounds} is overlapping ${e2.bounds}")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(30)
+    fun swipeElementToElementAdjust() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Settings Top Screen]")
+                    e1 = it.select("Passwords")
+                    e2 = it.select("General")
+                }.action {
+                    it.swipeElementToElementAdjust(startElement = e1, endElement = e2, durationSeconds = 2.0)
+                }.expectation {
+                    it.bounds.isOverlapping(e2.bounds)
+                        .thisIsTrue("${it.bounds} is overlapping ${e2.bounds}")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(40)
+    fun swipeTo_swipeVerticalTo() {
+
+        scenario {
+            case(1) {
+                action {
+                    e1 = it.select("Passwords")
+                    e2 = it.select("General")
+                    e1.swipeVerticalTo(endY = e2.bounds.top, durationSeconds = 5.0)
+
+                }.expectation {
+                    e3 = it.select("Passwords")
+                    val abs = Math.abs(e3.bounds.centerY - e2.bounds.centerY)
+                    (abs < e3.bounds.height).thisIsTrue("|${e3.bounds.centerY} - ${e2.bounds.centerY}| < ${abs}")
+                }
+            }
+        }
+    }
 }
