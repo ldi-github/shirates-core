@@ -461,6 +461,9 @@ abstract class UITest : TestDrive {
             ) {
                 TestLog.getLinesOfCurrentTestScenario().forEach {
                     it.deleted = true
+                    if (it.logType == LogType.ERROR) {
+                        it.logType = LogType.WARN
+                    }
                 }
 
                 if (t is RerunScenarioException && t.cause != null) {
