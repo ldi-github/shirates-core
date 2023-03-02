@@ -467,9 +467,9 @@ abstract class UITest : TestDrive {
                 }
 
                 if (t is RerunScenarioException && t.cause != null) {
-                    TestLog.info(t.cause?.message ?: t.cause.toString())
+                    TestLog.warn(t.cause?.message ?: t.cause.toString())
                 } else {
-                    TestLog.info(message)
+                    TestLog.warn(message)
                 }
 
                 /**
