@@ -162,22 +162,12 @@ class TestDriveAppExtensionTest : UITest() {
             }
             case(9) {
                 action {
-                    s1 = TestDriveObjectAndroid.getMainActivity(
-                        udid = udid,
-                        packageName = "com.google.android.apps.messaging"
-                    )
-                }.expectation {
-                    s1.thisIs("com.google.android.apps.messaging/.main.MainActivity")
-                }
-            }
-            case(10) {
-                action {
                     s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.camera2")
                 }.expectation {
                     s1.thisIs("com.android.camera2/com.android.camera.CameraLauncher")
                 }
             }
-            case(11) {
+            case(10) {
                 action {
                     s1 = TestDriveObjectAndroid.getMainActivity(
                         udid = udid,
@@ -187,14 +177,14 @@ class TestDriveAppExtensionTest : UITest() {
                     s1.thisIs("com.google.android.apps.docs/.app.NewMainProxyActivity")
                 }
             }
-            case(12) {
+            case(11) {
                 action {
                     s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.dialer")
                 }.expectation {
                     s1.thisIs("com.android.dialer/.main.impl.MainActivity")
                 }
             }
-            case(13) {
+            case(12) {
                 action {
                     s1 = TestDriveObjectAndroid.getMainActivity(
                         udid = udid,
