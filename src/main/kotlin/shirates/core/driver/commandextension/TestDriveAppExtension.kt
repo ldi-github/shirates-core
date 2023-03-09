@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
+import shirates.core.configuration.isValidNickname
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
@@ -21,8 +22,9 @@ fun TestDrive.isAppInstalled(
     val testElement = getTestElement()
 
     var id = packageOrBundleId
-    if (appNickname != null) {
-        id = app(datasetName = appNickname, attributeName = "packageOrBundleId")
+    if (appNickname?.isValidNickname() == true) {
+        id = app(datasetName = appNickname, attributeName = "packageOrBundleId", throwsException = false)
+            .ifBlank { packageOrBundleId }
     }
 
     val context = TestDriverCommandContext(testElement)

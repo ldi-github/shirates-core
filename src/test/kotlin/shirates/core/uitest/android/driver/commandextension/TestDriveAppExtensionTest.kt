@@ -92,10 +92,17 @@ class TestDriveAppExtensionTest : UITest() {
     fun getMainActivity() {
 
         val udid = testProfile.udid
+        fun checkInstalled(pkg: String) {
+            if (it.isAppInstalled(pkg).not()) {
+                SKIP_CASE("$pkg is not installed")
+            }
+        }
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    checkInstalled("com.google.android.calculator")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(
                         udid = udid,
                         packageName = "com.google.android.calculator"
@@ -105,7 +112,9 @@ class TestDriveAppExtensionTest : UITest() {
                 }
             }
             case(2) {
-                action {
+                condition {
+                    checkInstalled("com.google.android.calendar")
+                }.action {
                     s1 =
                         TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.google.android.calendar")
                 }.expectation {
@@ -113,14 +122,18 @@ class TestDriveAppExtensionTest : UITest() {
                 }
             }
             case(3) {
-                action {
+                condition {
+                    checkInstalled("com.android.chrome")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.chrome")
                 }.expectation {
                     s1.thisIs("com.android.chrome/com.google.android.apps.chrome.Main")
                 }
             }
             case(4) {
-                action {
+                condition {
+                    checkInstalled("com.google.android.apps.maps")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(
                         udid = udid,
                         packageName = "com.google.android.apps.maps"
@@ -130,7 +143,9 @@ class TestDriveAppExtensionTest : UITest() {
                 }
             }
             case(5) {
-                action {
+                condition {
+                    checkInstalled("com.google.android.deskclock")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(
                         udid = udid,
                         packageName = "com.google.android.deskclock"
@@ -140,35 +155,45 @@ class TestDriveAppExtensionTest : UITest() {
                 }
             }
             case(6) {
-                action {
+                condition {
+                    checkInstalled("com.android.settings")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.settings")
                 }.expectation {
                     s1.thisIs("com.android.settings/.Settings")
                 }
             }
             case(7) {
-                action {
+                condition {
+                    checkInstalled("com.android.vending")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.vending")
                 }.expectation {
                     s1.thisIs("com.android.vending/.AssetBrowserActivity")
                 }
             }
             case(8) {
-                action {
+                condition {
+                    checkInstalled("com.google.android.youtube")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.google.android.youtube")
                 }.expectation {
                     s1.thisIs("com.google.android.youtube/com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity")
                 }
             }
             case(9) {
-                action {
+                condition {
+                    checkInstalled("com.android.camera2")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.camera2")
                 }.expectation {
                     s1.thisIs("com.android.camera2/com.android.camera.CameraLauncher")
                 }
             }
             case(10) {
-                action {
+                condition {
+                    checkInstalled("com.google.android.apps.docs")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(
                         udid = udid,
                         packageName = "com.google.android.apps.docs"
@@ -178,14 +203,18 @@ class TestDriveAppExtensionTest : UITest() {
                 }
             }
             case(11) {
-                action {
+                condition {
+                    checkInstalled("com.android.dialer")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.dialer")
                 }.expectation {
                     s1.thisIs("com.android.dialer/.main.impl.MainActivity")
                 }
             }
             case(12) {
-                action {
+                condition {
+                    checkInstalled("com.google.android.apps.youtube.music")
+                }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(
                         udid = udid,
                         packageName = "com.google.android.apps.youtube.music"
