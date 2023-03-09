@@ -567,6 +567,39 @@ class TestElementCache_AndroidTest : UnitTest() {
     }
 
     @Test
+    fun select_selected() {
+
+        // Arrange
+        TestElementCache.loadXml(xmlData = XmlDataAndroid.clock_Alarm)
+
+        run {
+            // Act
+            val e = TestElementCache.select("selected=true")
+            // Assert
+            assertThat(e.id).isEqualTo("com.google.android.deskclock:id/tab_menu_alarm")
+        }
+        run {
+            // Act
+            val e = TestElementCache.select("<selected=true>")
+            // Assert
+            assertThat(e.id).isEqualTo("com.google.android.deskclock:id/tab_menu_alarm")
+        }
+        run {
+            // Act
+            val e = TestElementCache.select("selected=true&&[2]")
+            // Assert
+            assertThat(e.id).isEqualTo("com.google.android.deskclock:id/navigation_bar_item_icon_container")
+        }
+        run {
+            // Act
+            val e = TestElementCache.select("#action_bar_root&&selected=false")
+            // Assert
+            assertThat(e.isFound).isTrue()
+        }
+
+    }
+
+    @Test
     fun select_xpath() {
 
         // Arrange

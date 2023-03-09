@@ -26,6 +26,17 @@ class DatasetRepositoryManagerTest : UnitTest() {
     }
 
     @Test
+    fun hasRepository() {
+
+        // Act
+        DatasetRepositoryManager.clear()
+        DatasetRepositoryManager.loadFromFile(file = "unitTestData/testConfig/androidSettings/dataset/data.json")
+        // Assert
+        assertThat(DatasetRepositoryManager.hasRepository("data")).isTrue()
+        assertThat(DatasetRepositoryManager.hasRepository("no-data")).isFalse()
+    }
+
+    @Test
     fun getRepository() {
 
         // Act

@@ -13,7 +13,9 @@ object App {
     var repository: DatasetRepository? = null
         get() {
             if (field == null) {
-                field = DatasetRepositoryManager.getRepository("apps")
+                if (DatasetRepositoryManager.hasRepository("apps")) {
+                    field = DatasetRepositoryManager.getRepository("apps")
+                }
             }
             return field
         }

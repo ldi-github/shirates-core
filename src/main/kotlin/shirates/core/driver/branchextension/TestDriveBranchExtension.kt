@@ -1,7 +1,6 @@
 package shirates.core.driver.branchextension
 
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.hasOsaifuKeitai
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.branchextension.result.ScreenCompareResult
@@ -19,7 +18,7 @@ import shirates.core.utility.sync.SyncUtility
 /**
  * android
  */
-fun TestDrive?.android(
+fun TestDrive.android(
     onTrue: () -> Unit
 ): TestElement {
 
@@ -40,7 +39,7 @@ fun TestDrive?.android(
 /**
  * ios
  */
-fun TestDrive?.ios(
+fun TestDrive.ios(
     onTrue: () -> Unit
 ): TestElement {
 
@@ -61,7 +60,7 @@ fun TestDrive?.ios(
 /**
  * emulator
  */
-fun TestDrive?.emulator(
+fun TestDrive.emulator(
     onTrue: () -> Unit
 ): TestElement {
 
@@ -84,7 +83,7 @@ fun TestDrive?.emulator(
 /**
  * simulator
  */
-fun TestDrive?.simulator(
+fun TestDrive.simulator(
     onTrue: () -> Unit
 ): TestElement {
 
@@ -107,7 +106,7 @@ fun TestDrive?.simulator(
 /**
  * realDevice
  */
-fun TestDrive?.realDevice(
+fun TestDrive.realDevice(
     onTrue: () -> Unit
 ): TestElement {
 
@@ -130,7 +129,7 @@ fun TestDrive?.realDevice(
 /**
  * arm64
  */
-fun TestDrive?.arm64(func: () -> Unit): TestElement {
+fun TestDrive.arm64(func: () -> Unit): TestElement {
 
     if (TestMode.isArm64.not()) {
         TestLog.trace("skip arm64")
@@ -148,7 +147,7 @@ fun TestDrive?.arm64(func: () -> Unit): TestElement {
 /**
  * intel
  */
-fun TestDrive?.intel(func: () -> Unit): TestElement {
+fun TestDrive.intel(func: () -> Unit): TestElement {
 
     if (TestMode.isIntel.not()) {
         TestLog.trace("skip intel")
@@ -166,7 +165,7 @@ fun TestDrive?.intel(func: () -> Unit): TestElement {
 /**
  * osaifuKeitai
  */
-fun TestDrive?.osaifuKeitai(
+fun TestDrive.osaifuKeitai(
     onTrue: () -> Unit
 ): TestElement {
 
@@ -187,7 +186,7 @@ fun TestDrive?.osaifuKeitai(
 /**
  * osaifuKeitaiNot
  */
-fun TestDrive?.osaifuKeitaiNot(
+fun TestDrive.osaifuKeitaiNot(
     onTrue: () -> Unit
 ): TestElement {
 
@@ -208,7 +207,7 @@ fun TestDrive?.osaifuKeitaiNot(
 /**
  * specialTag
  */
-fun TestDrive?.specialTag(
+fun TestDrive.specialTag(
     specialTag: String,
     onTrue: () -> Unit
 ): SpecialTagCompareResult {
@@ -222,7 +221,7 @@ fun TestDrive?.specialTag(
 /**
  * stub
  */
-fun TestDrive?.stub(
+fun TestDrive.stub(
     onTrue: () -> Unit
 ): BooleanCompareResult {
 
@@ -245,7 +244,7 @@ fun TestDrive?.stub(
 /**
  * stubNot
  */
-fun TestDrive?.stubNot(
+fun TestDrive.stubNot(
     onTrue: () -> Unit
 ): BooleanCompareResult {
 
@@ -268,7 +267,7 @@ fun TestDrive?.stubNot(
 /**
  * testRuntimeOnly
  */
-fun TestDrive?.testRuntimeOnly(
+fun TestDrive.testRuntimeOnly(
     onTrue: () -> Unit
 ): BooleanCompareResult {
 
@@ -286,7 +285,7 @@ fun TestDrive?.testRuntimeOnly(
 /**
  * ifScreenIs
  */
-fun TestDrive?.ifScreenIs(
+fun TestDrive.ifScreenIs(
     vararg screenNames: String,
     onTrue: () -> Unit
 ): ScreenCompareResult {
@@ -300,7 +299,7 @@ fun TestDrive?.ifScreenIs(
 /**
  * ifScreenIsNot
  */
-fun TestDrive?.ifScreenIsNot(
+fun TestDrive.ifScreenIsNot(
     vararg screenNames: String,
     onTrue: () -> Unit
 ): ScreenCompareResult {
@@ -314,7 +313,7 @@ fun TestDrive?.ifScreenIsNot(
 /**
  * ifCanSelect
  */
-fun TestDrive?.ifCanSelect(
+fun TestDrive.ifCanSelect(
     expression: String,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
@@ -336,7 +335,7 @@ fun TestDrive?.ifCanSelect(
 /**
  * ifCanSelectNot
  */
-fun TestDrive?.ifCanSelectNot(
+fun TestDrive.ifCanSelectNot(
     expression: String,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
@@ -359,7 +358,7 @@ fun TestDrive?.ifCanSelectNot(
 /**
  * ifImageExist
  */
-fun TestDrive?.ifImageExist(
+fun TestDrive.ifImageExist(
     expression: String,
     scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
     direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
@@ -382,7 +381,7 @@ fun TestDrive?.ifImageExist(
 /**
  * ifImageExistNot
  */
-fun TestDrive?.ifImageExistNot(
+fun TestDrive.ifImageExistNot(
     expression: String,
     scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
     direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
@@ -480,7 +479,7 @@ fun TestDrive.ifImageIsNot(
 /**
  * ifTrue
  */
-fun TestDrive?.ifTrue(
+fun TestDrive.ifTrue(
     value: Boolean,
     onTrue: (TestElement) -> Unit
 ): BooleanCompareResult {
@@ -491,7 +490,7 @@ fun TestDrive?.ifTrue(
 /**
  * ifFalse
  */
-fun TestDrive?.ifFalse(
+fun TestDrive.ifFalse(
     value: Boolean,
     onFalse: (TestElement) -> Unit
 ): BooleanCompareResult {
@@ -502,7 +501,7 @@ fun TestDrive?.ifFalse(
 /**
  * onScreen
  */
-fun TestDrive?.onScreen(
+fun TestDrive.onScreen(
     vararg screenNames: String,
     onTrue: () -> Unit
 ): BooleanCompareResult {

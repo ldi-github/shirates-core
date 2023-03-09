@@ -11,7 +11,7 @@ import shirates.core.utility.sync.SyncUtility
 /**
  * wait
  */
-fun TestDrive?.wait(
+fun TestDrive.wait(
     waitSeconds: Double
 ): TestElement {
 
@@ -33,7 +33,7 @@ fun TestDrive?.wait(
 /**
  * wait
  */
-fun TestDrive?.wait(
+fun TestDrive.wait(
     waitSeconds: Long
 ): TestElement {
 
@@ -44,7 +44,7 @@ fun TestDrive?.wait(
 /**
  * wait
  */
-fun TestDrive?.wait(): TestElement {
+fun TestDrive.wait(): TestElement {
 
     return wait(waitSeconds = testContext.shortWaitSeconds)
 }
@@ -52,7 +52,7 @@ fun TestDrive?.wait(): TestElement {
 /**
  * waitForClose
  */
-fun TestDrive?.waitForClose(
+fun TestDrive.waitForClose(
     expression: String? = null,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwsException: Boolean = true
@@ -102,7 +102,7 @@ fun TestDrive?.waitForClose(
 /**
  * waitForDisplay
  */
-fun TestDrive?.waitForDisplay(
+fun TestDrive.waitForDisplay(
     expression: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwsException: Boolean = true
@@ -141,7 +141,7 @@ fun TestDrive?.waitForDisplay(
 /**
  * usingWaitSeconds
  */
-fun TestDrive?.usingWaitSeconds(
+fun TestDrive.usingWaitSeconds(
     implicitlyWaitSeconds: Double,
     func: () -> Unit
 ) {

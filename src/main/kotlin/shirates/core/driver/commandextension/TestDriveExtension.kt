@@ -3,7 +3,6 @@ package shirates.core.driver.commandextension
 import shirates.core.Const
 import shirates.core.configuration.NicknameUtility
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -13,7 +12,7 @@ import shirates.core.utility.sync.SyncUtility
 /**
  * sendKeys
  */
-fun TestDrive?.sendKeys(
+fun TestDrive.sendKeys(
     keysToSend: CharSequence,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen
 ): TestElement {
@@ -39,7 +38,7 @@ fun TestDrive?.sendKeys(
 /**
  * putSelector
  */
-fun TestDrive?.putSelector(nickname: String, expression: String? = null): TestElement {
+fun TestDrive.putSelector(nickname: String, expression: String? = null): TestElement {
 
     val screenInfo = TestDriver.screenInfo
     if (expression == null) {
@@ -54,7 +53,7 @@ fun TestDrive?.putSelector(nickname: String, expression: String? = null): TestEl
 /**
  * screenshot
  */
-fun TestDrive?.screenshot(
+fun TestDrive.screenshot(
     force: Boolean = false,
     onChangedOnly: Boolean = testContext.onChangedOnly,
     filename: String? = null,
@@ -73,7 +72,7 @@ fun TestDrive?.screenshot(
 /**
  * getCurrentAppIconName
  */
-fun TestDrive?.getCurrentAppIconName(): String {
+fun TestDrive.getCurrentAppIconName(): String {
     if (isAndroid) {
         throw NotImplementedError("getCurrentAppIconName function is not supported in Android.")
     } else {
@@ -85,7 +84,7 @@ fun TestDrive?.getCurrentAppIconName(): String {
 /**
  * getCurrentAppName
  */
-fun TestDrive?.getCurrentAppName(): String {
+fun TestDrive.getCurrentAppName(): String {
     return AppNameUtility.getAppNameWithoutExtension(getCurrentAppIconName())
 }
 
@@ -97,7 +96,7 @@ fun TestDrive?.getCurrentAppName(): String {
  * or appName App1
  * or packageOrBundleId com.example.app1
  */
-fun TestDrive?.isApp(
+fun TestDrive.isApp(
     appNameOrAppId: String = testContext.appIconName
 ): Boolean {
 
@@ -126,7 +125,7 @@ fun TestDrive?.isApp(
 /**
  * doUntilTrue
  */
-fun TestDrive?.doUntilTrue(
+fun TestDrive.doUntilTrue(
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     intervalSecond: Double = Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
     maxLoopCount: Int = SyncUtility.MAX_LOOP_COUNT,

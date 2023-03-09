@@ -12,7 +12,7 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.image.isSame
 
 
-internal fun TestDrive?.getScrollableElementsInDescendants(): List<TestElement> {
+internal fun TestDrive.getScrollableElementsInDescendants(): List<TestElement> {
 
     val testElement = getTestElement()
 
@@ -23,7 +23,7 @@ internal fun TestDrive?.getScrollableElementsInDescendants(): List<TestElement> 
     }
 }
 
-internal fun TestDrive?.getScrollableElementsInAncestors(): List<TestElement> {
+internal fun TestDrive.getScrollableElementsInAncestors(): List<TestElement> {
 
     val testElement = getTestElement()
 
@@ -34,7 +34,7 @@ internal fun TestDrive?.getScrollableElementsInAncestors(): List<TestElement> {
     }
 }
 
-internal fun TestDrive?.getScrollableTarget(): TestElement {
+internal fun TestDrive.getScrollableTarget(): TestElement {
 
     val testElement = getTestElement()
     if (testElement.isScrollable) {
@@ -60,12 +60,12 @@ internal fun TestDrive?.getScrollableTarget(): TestElement {
 /**
  * hasScrollable
  */
-val TestDrive?.hasScrollable: Boolean
+val TestDrive.hasScrollable: Boolean
     get() {
         return this.scrollFrame.isScrollable
     }
 
-private fun TestDrive?.scrollCommand(
+private fun TestDrive.scrollCommand(
     command: String,
     direction: ScrollDirection,
     startMarginRatio: Double,
@@ -85,7 +85,7 @@ private fun TestDrive?.scrollCommand(
 /**
  * scrollDown
  */
-fun TestDrive?.scrollDown(
+fun TestDrive.scrollDown(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio
 ): TestElement {
@@ -114,7 +114,7 @@ fun TestDrive?.scrollDown(
 /**
  * scrollUp
  */
-fun TestDrive?.scrollUp(
+fun TestDrive.scrollUp(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio
 ): TestElement {
@@ -143,7 +143,7 @@ fun TestDrive?.scrollUp(
 /**
  * scrollRight
  */
-fun TestDrive?.scrollRight(
+fun TestDrive.scrollRight(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio
 ): TestElement {
@@ -172,7 +172,7 @@ fun TestDrive?.scrollRight(
 /**
  * scrollLeft
  */
-fun TestDrive?.scrollLeft(
+fun TestDrive.scrollLeft(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio
 ): TestElement {
@@ -198,7 +198,7 @@ fun TestDrive?.scrollLeft(
     return lastElement
 }
 
-private fun TestDrive?.scrollToDirectionCommand(
+private fun TestDrive.scrollToDirectionCommand(
     command: String,
     maxLoopCount: Int,
     direction: ScrollDirection,
@@ -231,7 +231,7 @@ private fun TestDrive?.scrollToDirectionCommand(
 /**
  * scrollToBottom
  */
-fun TestDrive?.scrollToBottom(
+fun TestDrive.scrollToBottom(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     repeat: Int = 2,
     flick: Boolean = true,
@@ -257,7 +257,7 @@ fun TestDrive?.scrollToBottom(
 /**
  * scrollToTop
  */
-fun TestDrive?.scrollToTop(
+fun TestDrive.scrollToTop(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     repeat: Int = 2,
     flick: Boolean = true,
@@ -283,7 +283,7 @@ fun TestDrive?.scrollToTop(
 /**
  * scrollToRightEdge
  */
-fun TestDrive?.scrollToRightEdge(
+fun TestDrive.scrollToRightEdge(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     repeat: Int = 2,
     flick: Boolean = true,
@@ -309,7 +309,7 @@ fun TestDrive?.scrollToRightEdge(
 /**
  * scrollToLeftEdge
  */
-fun TestDrive?.scrollToLeftEdge(
+fun TestDrive.scrollToLeftEdge(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     repeat: Int = 2,
     flick: Boolean = true,
@@ -335,7 +335,7 @@ fun TestDrive?.scrollToLeftEdge(
 /**
  * doUntilScrollStop
  */
-fun TestDrive?.doUntilScrollStop(
+fun TestDrive.doUntilScrollStop(
     maxLoopCount: Int = testContext.scrollMaxCount,
     direction: ScrollDirection,
     flick: Boolean = false,
@@ -427,7 +427,7 @@ fun TestDrive?.doUntilScrollStop(
     return lastElement
 }
 
-internal fun TestDrive?.edgeElementFound(expressions: List<String>): Boolean {
+internal fun TestDrive.edgeElementFound(expressions: List<String>): Boolean {
 
     for (expression in expressions) {
         val e = TestElementCache.select(expression = expression, throwsException = false)
@@ -450,7 +450,7 @@ private fun List<TestElement>.serialize(): String {
 /**
  * withScrollDown
  */
-fun TestDrive?.withScrollDown(
+fun TestDrive.withScrollDown(
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     proc: () -> Unit
@@ -476,7 +476,7 @@ fun TestDrive?.withScrollDown(
 /**
  * withScrollUp
  */
-fun TestDrive?.withScrollUp(
+fun TestDrive.withScrollUp(
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     proc: () -> Unit
@@ -502,7 +502,7 @@ fun TestDrive?.withScrollUp(
 /**
  * withScrollRight
  */
-fun TestDrive?.withScrollRight(
+fun TestDrive.withScrollRight(
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     proc: () -> Unit
@@ -528,7 +528,7 @@ fun TestDrive?.withScrollRight(
 /**
  * withScrollLeft
  */
-fun TestDrive?.withScrollLeft(
+fun TestDrive.withScrollLeft(
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     proc: () -> Unit
@@ -554,7 +554,7 @@ fun TestDrive?.withScrollLeft(
 /**
  * suppressWithScroll
  */
-fun TestDrive?.suppressWithScroll(
+fun TestDrive.suppressWithScroll(
     proc: () -> Unit
 ): TestElement {
 
@@ -576,7 +576,7 @@ fun TestDrive?.suppressWithScroll(
 /**
  * scanElements
  */
-fun TestDrive?.scanElements(
+fun TestDrive.scanElements(
     direction: ScrollDirection = ScrollDirection.Down,
     startMarginRatio: Double =
         if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
@@ -660,7 +660,7 @@ private data class ScrollingInfo(
         }
 }
 
-private fun TestDrive?.getScrollingInfo(
+private fun TestDrive.getScrollingInfo(
     direction: ScrollDirection,
     marginRatio: Double =
         if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio

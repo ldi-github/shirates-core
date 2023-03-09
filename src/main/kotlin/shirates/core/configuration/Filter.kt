@@ -223,6 +223,7 @@ class Filter(
                 "value",
                 "literal",
                 "focusable",
+                "selected",
                 "scrollable",
                 "visible",
                 "ignoreTypes",
@@ -500,6 +501,9 @@ class Filter(
             "focusable" ->
                 evaluateFocusable(focusable = element.focusable)
 
+            "selected" ->
+                evaluateFocusable(focusable = element.selected)
+
             "scrollable" ->
                 evaluateScrollable(element = element)
 
@@ -567,6 +571,13 @@ class Filter(
 
         val filterValue = this.value
         val match = focusable == filterValue
+        return match.reverseIfNegation()
+    }
+
+    internal fun evaluateSelected(selected: String): Boolean {
+
+        val filterValue = this.value
+        val match = selected == filterValue
         return match.reverseIfNegation()
     }
 

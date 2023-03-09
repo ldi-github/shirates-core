@@ -10,7 +10,7 @@
 
 ## Solution
 
-See [Nickname](../../basic/selector_and_nickname/nickname.md),
+See [Nickname](../../basic/selector_and_nickname/nickname/nickname.md),
 
 or you can copy `screens` directory from `testConfig` directory in shirates-core project as template.
 

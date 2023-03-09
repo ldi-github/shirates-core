@@ -8,7 +8,7 @@ import shirates.core.storage.Memo
 /**
  * clearMemo
  */
-fun TestDrive?.clearMemo(): TestElement {
+fun TestDrive.clearMemo(): TestElement {
 
     val testElement = getTestElement()
 
@@ -30,7 +30,7 @@ fun TestDrive?.clearMemo(): TestElement {
 /**
  * writeMemo
  */
-fun TestDrive?.writeMemo(key: String, text: String): TestElement {
+fun TestDrive.writeMemo(key: String, text: String): TestElement {
 
     val testElement = getTestElement()
 
@@ -55,7 +55,7 @@ fun TestDrive?.writeMemo(key: String, text: String): TestElement {
 /**
  * readMemo
  */
-fun TestDrive?.readMemo(key: String): String {
+fun TestDrive.readMemo(key: String): String {
 
     val testElement = getTestElement()
 

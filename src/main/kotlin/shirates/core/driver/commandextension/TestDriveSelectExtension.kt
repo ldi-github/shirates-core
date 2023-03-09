@@ -10,7 +10,7 @@ import shirates.core.logging.Message.message
 /**
  * filterElements
  */
-fun TestDrive?.filterElements(
+fun TestDrive.filterElements(
     expression: String,
     syncCache: Boolean = true
 ): List<TestElement> {
@@ -24,7 +24,7 @@ fun TestDrive?.filterElements(
 /**
  * filterElements
  */
-fun TestDrive?.filterElements(
+fun TestDrive.filterElements(
     selector: Selector,
     selectContext: TestElement = rootElement
 ): List<TestElement> {
@@ -38,7 +38,7 @@ fun TestDrive?.filterElements(
 /**
  * select
  */
-fun TestDrive?.select(
+fun TestDrive.select(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -78,7 +78,7 @@ fun TestDrive?.select(
 /**
  * selectWithScrollDown
  */
-fun TestDrive?.selectWithScrollDown(
+fun TestDrive.selectWithScrollDown(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -112,7 +112,7 @@ fun TestDrive?.selectWithScrollDown(
 /**
  * selectWithScrollUp
  */
-fun TestDrive?.selectWithScrollUp(
+fun TestDrive.selectWithScrollUp(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -146,7 +146,7 @@ fun TestDrive?.selectWithScrollUp(
 /**
  * selectWithScrollRight
  */
-fun TestDrive?.selectWithScrollRight(
+fun TestDrive.selectWithScrollRight(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
@@ -180,7 +180,7 @@ fun TestDrive?.selectWithScrollRight(
 /**
  * selectWithScrollLeft
  */
-fun TestDrive?.selectWithScrollLeft(
+fun TestDrive.selectWithScrollLeft(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
@@ -214,7 +214,7 @@ fun TestDrive?.selectWithScrollLeft(
 /**
  * selectInScanResults
  */
-fun TestDrive?.selectInScanResults(
+fun TestDrive.selectInScanResults(
     expression: String,
     throwsException: Boolean = true,
     log: Boolean = false,
@@ -251,7 +251,7 @@ fun TestDrive?.selectInScanResults(
     return lastElement
 }
 
-internal fun TestDrive?.canSelect(
+internal fun TestDrive.canSelect(
     selector: Selector,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
@@ -278,7 +278,7 @@ internal fun TestDrive?.canSelect(
 /**
  * canSelect
  */
-fun TestDrive?.canSelect(
+fun TestDrive.canSelect(
     expression: String,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
@@ -314,7 +314,7 @@ fun TestDrive?.canSelect(
 /**
  * canSelectWithScrollDown
  */
-fun TestDrive?.canSelectWithScrollDown(
+fun TestDrive.canSelectWithScrollDown(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -345,7 +345,7 @@ fun TestDrive?.canSelectWithScrollDown(
 /**
  * canSelectWithScrollUp
  */
-fun TestDrive?.canSelectWithScrollUp(
+fun TestDrive.canSelectWithScrollUp(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -376,7 +376,7 @@ fun TestDrive?.canSelectWithScrollUp(
 /**
  * canSelectWithScrollRight
  */
-fun TestDrive?.canSelectWithScrollRight(
+fun TestDrive.canSelectWithScrollRight(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
@@ -407,7 +407,7 @@ fun TestDrive?.canSelectWithScrollRight(
 /**
  * canSelectWithScrollLeft
  */
-fun TestDrive?.canSelectWithScrollLeft(
+fun TestDrive.canSelectWithScrollLeft(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
@@ -438,7 +438,7 @@ fun TestDrive?.canSelectWithScrollLeft(
 /**
  * canSelectInScanResults
  */
-fun TestDrive?.canSelectInScanResults(
+fun TestDrive.canSelectInScanResults(
     expression: String,
     log: Boolean = false
 ): Boolean {
@@ -464,7 +464,7 @@ fun TestDrive?.canSelectInScanResults(
 /**
  * canSelectAllInScanResults
  */
-fun TestDrive?.canSelectAllInScanResults(
+fun TestDrive.canSelectAllInScanResults(
     vararg expressions: String,
     log: Boolean = false
 ): Boolean {
@@ -493,7 +493,7 @@ fun TestDrive?.canSelectAllInScanResults(
 /**
  * canSelectAll
  */
-internal fun TestDrive?.canSelectAll(
+internal fun TestDrive.canSelectAll(
     selectors: Iterable<Selector>,
     log: Boolean = false
 ): Boolean {
@@ -514,7 +514,7 @@ internal fun TestDrive?.canSelectAll(
 /**
  * canSelectAll
  */
-fun TestDrive?.canSelectAll(
+fun TestDrive.canSelectAll(
     vararg expressions: String,
     log: Boolean = false
 ): Boolean {
@@ -540,7 +540,7 @@ fun TestDrive?.canSelectAll(
 /**
  * canSelectAllWithScrollDown
  */
-fun TestDrive?.canSelectAllWithScrollDown(
+fun TestDrive.canSelectAllWithScrollDown(
     vararg expressions: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -578,7 +578,7 @@ fun TestDrive?.canSelectAllWithScrollDown(
 /**
  * canSelectAllWithScrollUp
  */
-fun TestDrive?.canSelectAllWithScrollUp(
+fun TestDrive.canSelectAllWithScrollUp(
     vararg expressions: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -615,7 +615,7 @@ fun TestDrive?.canSelectAllWithScrollUp(
 /**
  * canSelectAllWithScrollRight
  */
-fun TestDrive?.canSelectAllWithScrollRight(
+fun TestDrive.canSelectAllWithScrollRight(
     vararg expressions: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
@@ -652,7 +652,7 @@ fun TestDrive?.canSelectAllWithScrollRight(
 /**
  * canSelectAllWithScrollLeft
  */
-fun TestDrive?.canSelectAllWithScrollLeft(
+fun TestDrive.canSelectAllWithScrollLeft(
     vararg expressions: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,

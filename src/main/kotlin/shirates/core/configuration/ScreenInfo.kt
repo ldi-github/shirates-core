@@ -268,7 +268,9 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
                     return sels[nickname]!!
                 }
             }
-            var exp = nicknameMap[nickname]!!
+            var exp =
+                if (nicknameMap.containsKey(nickname)) nicknameMap[nickname]!!
+                else ""
             /**
              * Expands nickname
              *   "[nickname1]": ""

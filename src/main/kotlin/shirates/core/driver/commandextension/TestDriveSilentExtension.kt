@@ -9,7 +9,7 @@ import shirates.core.driver.getTestElement
 /**
  * silent
  */
-fun TestDrive?.silent(
+fun TestDrive.silent(
     proc: () -> Unit
 ): TestElement {
 

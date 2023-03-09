@@ -11,7 +11,7 @@ import shirates.core.logging.Message.message
 /**
  * internetEnabled
  */
-val TestDrive?.internetEnabled: Boolean
+val TestDrive.internetEnabled: Boolean
     get() {
         if (TestMode.isNoLoadRun) {
             return true
@@ -23,7 +23,7 @@ val TestDrive?.internetEnabled: Boolean
 /**
  * wiFiEnabled
  */
-val TestDrive?.wiFiEnabled: Boolean
+val TestDrive.wiFiEnabled: Boolean
     get() {
         if (TestMode.isNoLoadRun) {
             return true
@@ -42,7 +42,7 @@ val TestDrive?.wiFiEnabled: Boolean
 /**
  * mobileEnabled
  */
-val TestDrive?.mobileEnabled: Boolean
+val TestDrive.mobileEnabled: Boolean
     get() {
         if (TestMode.isNoLoadRun) {
             return true
@@ -61,7 +61,7 @@ val TestDrive?.mobileEnabled: Boolean
 /**
  * internetOn
  */
-fun TestDrive?.internetOn(
+fun TestDrive.internetOn(
 ): TestElement {
 
     val testElement = getTestElement()
@@ -83,7 +83,7 @@ fun TestDrive?.internetOn(
 /**
  * internetOff
  */
-fun TestDrive?.internetOff(
+fun TestDrive.internetOff(
 ): TestElement {
 
     val testElement = getTestElement()
@@ -106,7 +106,7 @@ fun TestDrive?.internetOff(
 /**
  * wiFiOn
  */
-fun TestDrive?.wiFiOn(
+fun TestDrive.wiFiOn(
 ): TestElement {
 
     val testElement = getTestElement()
@@ -128,7 +128,7 @@ fun TestDrive?.wiFiOn(
 /**
  * wiFiOff
  */
-fun TestDrive?.wiFiOff(
+fun TestDrive.wiFiOff(
 ): TestElement {
 
     val testElement = getTestElement()
@@ -149,7 +149,7 @@ fun TestDrive?.wiFiOff(
 /**
  * mobileOn
  */
-fun TestDrive?.mobileOn(
+fun TestDrive.mobileOn(
 ): TestElement {
 
     val testElement = getTestElement()
@@ -171,7 +171,7 @@ fun TestDrive?.mobileOn(
 /**
  * mobileOff
  */
-fun TestDrive?.mobileOff(
+fun TestDrive.mobileOff(
 ): TestElement {
 
     val testElement = getTestElement()
@@ -189,17 +189,17 @@ fun TestDrive?.mobileOff(
     return lastElement
 }
 
-private fun TestDrive?.waitWiFiEnabled() {
+private fun TestDrive.waitWiFiEnabled() {
 
     wait(waitSeconds = Const.WAIT_SECONDS_FOR_CONNECTION_ENABLED)
 }
 
-private fun TestDrive?.waitMobileEnabled() {
+private fun TestDrive.waitMobileEnabled() {
 
     wait(waitSeconds = Const.WAIT_SECONDS_FOR_CONNECTION_ENABLED)
 }
 
-private fun TestDrive?.waitAllEnabled() {
+private fun TestDrive.waitAllEnabled() {
 
     wait(waitSeconds = Const.WAIT_SECONDS_FOR_CONNECTION_ENABLED)
 }

@@ -2,12 +2,11 @@ package shirates.core.driver.commandextension
 
 import shirates.core.Const
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 
 /**
  * invalidateCache
  */
-fun TestDrive?.invalidateCache(): TestElement {
+fun TestDrive.invalidateCache(): TestElement {
 
     TestDriver.invalidateCache()
     return lastElement
@@ -16,7 +15,7 @@ fun TestDrive?.invalidateCache(): TestElement {
 /**
  * refreshCache
  */
-fun TestDrive?.refreshCache(): TestElement {
+fun TestDrive.refreshCache(): TestElement {
 
     val testElement = getTestElement()
 
@@ -27,7 +26,7 @@ fun TestDrive?.refreshCache(): TestElement {
 /**
  * refreshCacheOnInvalidated
  */
-fun TestDrive?.refreshCacheOnInvalidated(): TestElement {
+fun TestDrive.refreshCacheOnInvalidated(): TestElement {
 
     TestDriver.refreshCacheOnInvalidated()
     return lastElement
@@ -36,7 +35,7 @@ fun TestDrive?.refreshCacheOnInvalidated(): TestElement {
 /**
  * syncCache
  */
-fun TestDrive?.syncCache(
+fun TestDrive.syncCache(
     force: Boolean = false,
     syncWaitSeconds: Double = testContext.syncWaitSeconds,
     maxLoopCount: Int = Const.SYNC_MAX_LOOP_COUNT

@@ -10,7 +10,7 @@ import shirates.core.logging.TestLog
 /**
  * output
  */
-fun TestDrive?.output(
+fun TestDrive.output(
     message: Any
 ): TestElement {
 
@@ -27,7 +27,7 @@ fun TestDrive?.output(
 /**
  * comment
  */
-fun TestDrive?.comment(
+fun TestDrive.comment(
     message: String
 ): TestElement {
 
@@ -44,7 +44,7 @@ fun TestDrive?.comment(
 /**
  * describe
  */
-fun TestDrive?.describe(
+fun TestDrive.describe(
     message: String
 ): TestElement {
 
@@ -61,7 +61,7 @@ fun TestDrive?.describe(
 /**
  * caption
  */
-fun TestDrive?.caption(
+fun TestDrive.caption(
     message: String
 ): TestElement {
 
@@ -78,7 +78,7 @@ fun TestDrive?.caption(
 /**
  * target
  */
-fun TestDrive?.target(
+fun TestDrive.target(
     targetItem: String
 ): TestElement {
 
@@ -95,7 +95,7 @@ fun TestDrive?.target(
 /**
  * manual
  */
-fun TestDrive?.manual(
+fun TestDrive.manual(
     message: String,
     arg1: String = "",
     arg2: String = ""
@@ -120,7 +120,7 @@ fun TestDrive?.manual(
 /**
  * procedure
  */
-fun TestDrive?.procedure(
+fun TestDrive.procedure(
     message: String,
     proc: () -> Unit
 ): TestElement {
@@ -140,7 +140,7 @@ fun TestDrive?.procedure(
 /**
  * knownIssue
  */
-fun TestDrive?.knownIssue(
+fun TestDrive.knownIssue(
     message: String,
     ticketUrl: String
 ): TestElement {
@@ -157,7 +157,7 @@ fun TestDrive?.knownIssue(
 /**
  * codeblock
  */
-fun TestDrive?.codeblock(
+fun TestDrive.codeblock(
     func: () -> Unit
 ): TestElement {
 

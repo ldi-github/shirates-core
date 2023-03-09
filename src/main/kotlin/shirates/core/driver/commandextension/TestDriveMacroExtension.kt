@@ -1,7 +1,6 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.macro.MacroRepository
 import java.lang.reflect.InvocationTargetException
@@ -9,7 +8,7 @@ import java.lang.reflect.InvocationTargetException
 /**
  * macro
  */
-fun TestDrive?.macro(
+fun TestDrive.macro(
     macroName: String,
     vararg args: Any,
     message: String = macroName,

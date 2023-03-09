@@ -31,13 +31,11 @@ import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
-import shirates.core.utility.android.AndroidAppUtility
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
-import shirates.core.utility.ios.IosAppUtility
 import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.misc.ProcessUtility
@@ -1596,9 +1594,9 @@ object TestDriver {
                 return rootElement.packageName == packageOrBundleId
             }
 
-            val appName = AppNameUtility.getAppNameFromPackageName(packageName = packageOrBundleId)
+            var appName = AppNameUtility.getAppNameFromPackageName(packageName = packageOrBundleId)
             if (appName.isBlank()) {
-                return false
+                appName = appNameOrAppId.split(".").last()
             }
 
             return rootElement.name == appName
@@ -1664,7 +1662,10 @@ object TestDriver {
         }
 
         if (isAndroid) {
-            AndroidAppUtility.startApp(udid = testProfile.udid, packageNameOrActivityName = packageOrBundleIdOrActivity)
+            TestDriveObjectAndroid.launchAndroidApp(
+                udid = testProfile.udid,
+                packageNameOrActivityName = packageOrBundleIdOrActivity
+            )
             syncCache(force = true)
             SyncUtility.doUntilTrue {
                 isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
@@ -1679,7 +1680,7 @@ object TestDriver {
             try {
                 testDrive.terminateApp(appNameOrAppId = bundleId)
                 TestLog.info("Launching app. (bundleId=$bundleId)")
-                IosAppUtility.launchApp(udid = testProfile.udid, bundleId = bundleId, log = true)
+                TestDriveObjectIos.launchIosApp(udid = testProfile.udid, bundleId = bundleId, log = true)
             } catch (t: Throwable) {
                 TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
 
@@ -1702,7 +1703,11 @@ object TestDriver {
                      */
                     val retry =
                         try {
-                            IosAppUtility.launchApp(udid = testProfile.udid, bundleId = bundleId, log = true)
+                            TestDriveObjectIos.launchIosApp(
+                                udid = testProfile.udid,
+                                bundleId = bundleId,
+                                log = true
+                            )
                             false
                         } catch (t: Throwable) {
                             if (PropertiesManager.enableWarnOnRetryError) {

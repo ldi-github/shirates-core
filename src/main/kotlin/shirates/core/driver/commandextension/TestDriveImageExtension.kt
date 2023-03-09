@@ -14,7 +14,7 @@ import shirates.core.utility.sync.SyncUtility
 /**
  * findImage
  */
-fun TestDrive?.findImage(
+fun TestDrive.findImage(
     expression: String,
     scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
     direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
@@ -36,7 +36,7 @@ fun TestDrive?.findImage(
     )
 }
 
-internal fun TestDrive?.findImageCore(
+internal fun TestDrive.findImageCore(
     command: String,
     expression: String,
     scroll: Boolean = false,
@@ -85,7 +85,7 @@ internal fun TestDrive?.findImageCore(
 /**
  * findImageWithScrollDown
  */
-fun TestDrive?.findImageWithScrollDown(
+fun TestDrive.findImageWithScrollDown(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -115,7 +115,7 @@ fun TestDrive?.findImageWithScrollDown(
 /**
  * findImageWithScrollUp
  */
-fun TestDrive?.findImageWithScrollUp(
+fun TestDrive.findImageWithScrollUp(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -145,7 +145,7 @@ fun TestDrive?.findImageWithScrollUp(
 /**
  * findImageWithScrollRight
  */
-fun TestDrive?.findImageWithScrollRight(
+fun TestDrive.findImageWithScrollRight(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -175,7 +175,7 @@ fun TestDrive?.findImageWithScrollRight(
 /**
  * findImageWithScrollLeft
  */
-fun TestDrive?.findImageWithScrollLeft(
+fun TestDrive.findImageWithScrollLeft(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -205,7 +205,7 @@ fun TestDrive?.findImageWithScrollLeft(
 /**
  * isImage
  */
-fun TestDrive?.isImage(
+fun TestDrive.isImage(
     expression: String
 ): ImageMatchResult {
 
@@ -235,7 +235,7 @@ fun TestDrive?.isImage(
 /**
  * isContainingImage
  */
-fun TestDrive?.isContainingImage(
+fun TestDrive.isContainingImage(
     expression: String
 ): ImageMatchResult {
 
@@ -266,7 +266,7 @@ fun TestDrive?.isContainingImage(
 /**
  * imageContains
  */
-fun TestDrive?.imageContains(
+fun TestDrive.imageContains(
     expression: String,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
 ): TestElement {
@@ -304,7 +304,7 @@ fun TestDrive?.imageContains(
 /**
  * imageIs
  */
-fun TestDrive?.imageIs(
+fun TestDrive.imageIs(
     expression: String,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
 ): TestElement {
@@ -338,7 +338,7 @@ fun TestDrive?.imageIs(
 /**
  * imageIsNot
  */
-fun TestDrive?.imageIsNot(
+fun TestDrive.imageIsNot(
     expression: String,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
 ): TestElement {

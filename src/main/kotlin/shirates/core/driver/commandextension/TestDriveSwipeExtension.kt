@@ -14,7 +14,7 @@ import shirates.core.proxy.AppiumProxy
  *
  * https://stackoverflow.com/questions/57550682/how-to-scroll-up-down-in-appium-android
  */
-fun TestDrive?.swipePointToPoint(
+fun TestDrive.swipePointToPoint(
     startX: Int,
     startY: Int,
     endX: Int,
@@ -98,7 +98,7 @@ internal class SwipeContext(
 
 }
 
-internal fun TestDrive?.swipePointToPointCore(
+internal fun TestDrive.swipePointToPointCore(
     swipeContext: SwipeContext,
 ): TestElement {
 
@@ -148,7 +148,7 @@ internal fun TestDrive?.swipePointToPointCore(
  *
  * https://stackoverflow.com/questions/57550682/how-to-scroll-up-down-in-appium-android
  */
-fun TestDrive?.swipePointToPoint(
+fun TestDrive.swipePointToPoint(
     startX: Int,
     startY: Int,
     endX: Int,
@@ -173,7 +173,7 @@ fun TestDrive?.swipePointToPoint(
     )
 }
 
-private fun TestDrive?.getSwipeTarget(): TestElement {
+private fun TestDrive.getSwipeTarget(): TestElement {
 
     val testElement = getTestElement()
 
@@ -186,7 +186,7 @@ private fun TestDrive?.getSwipeTarget(): TestElement {
 /**
  * swipeCenterToTop
  */
-fun TestDrive?.swipeCenterToTop(
+fun TestDrive.swipeCenterToTop(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -216,7 +216,7 @@ fun TestDrive?.swipeCenterToTop(
 /**
  * flickCenterToTop
  */
-fun TestDrive?.flickCenterToTop(
+fun TestDrive.flickCenterToTop(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -240,7 +240,7 @@ fun TestDrive?.flickCenterToTop(
 /**
  * swipeCenterToBottom
  */
-fun TestDrive?.swipeCenterToBottom(
+fun TestDrive.swipeCenterToBottom(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -270,7 +270,7 @@ fun TestDrive?.swipeCenterToBottom(
 /**
  * flickCenterToBottom
  */
-fun TestDrive?.flickCenterToBottom(
+fun TestDrive.flickCenterToBottom(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -295,7 +295,7 @@ fun TestDrive?.flickCenterToBottom(
 /**
  * swipeCenterToLeft
  */
-fun TestDrive?.swipeCenterToLeft(
+fun TestDrive.swipeCenterToLeft(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -325,7 +325,7 @@ fun TestDrive?.swipeCenterToLeft(
 /**
  * flickCenterToLeft
  */
-fun TestDrive?.flickCenterToLeft(
+fun TestDrive.flickCenterToLeft(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -350,7 +350,7 @@ fun TestDrive?.flickCenterToLeft(
 /**
  * swipeCenterToRight
  */
-fun TestDrive?.swipeCenterToRight(
+fun TestDrive.swipeCenterToRight(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -380,7 +380,7 @@ fun TestDrive?.swipeCenterToRight(
 /**
  * flickCenterToRight
  */
-fun TestDrive?.flickCenterToRight(
+fun TestDrive.flickCenterToRight(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -405,7 +405,7 @@ fun TestDrive?.flickCenterToRight(
 /**
  * swipeLeftToRight
  */
-fun TestDrive?.swipeLeftToRight(
+fun TestDrive.swipeLeftToRight(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -437,7 +437,7 @@ fun TestDrive?.swipeLeftToRight(
 /**
  * flickLeftToRight
  */
-fun TestDrive?.flickLeftToRight(
+fun TestDrive.flickLeftToRight(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -464,7 +464,7 @@ fun TestDrive?.flickLeftToRight(
 /**
  * swipeRightToLeft
  */
-fun TestDrive?.swipeRightToLeft(
+fun TestDrive.swipeRightToLeft(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -496,7 +496,7 @@ fun TestDrive?.swipeRightToLeft(
 /**
  * flickRightToLeft
  */
-fun TestDrive?.flickRightToLeft(
+fun TestDrive.flickRightToLeft(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -523,7 +523,7 @@ fun TestDrive?.flickRightToLeft(
 /**
  * swipeBottomToTop
  */
-fun TestDrive?.swipeBottomToTop(
+fun TestDrive.swipeBottomToTop(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -556,7 +556,7 @@ fun TestDrive?.swipeBottomToTop(
 /**
  * flickBottomToTop
  */
-fun TestDrive?.flickBottomToTop(
+fun TestDrive.flickBottomToTop(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -583,7 +583,7 @@ fun TestDrive?.flickBottomToTop(
 /**
  * flickAndGoDown
  */
-fun TestDrive?.flickAndGoDown(
+fun TestDrive.flickAndGoDown(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -610,7 +610,7 @@ fun TestDrive?.flickAndGoDown(
 /**
  * flickAndGoRight
  */
-fun TestDrive?.flickAndGoRight(
+fun TestDrive.flickAndGoRight(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -637,7 +637,7 @@ fun TestDrive?.flickAndGoRight(
 /**
  * flickAndGoLeft
  */
-fun TestDrive?.flickAndGoLeft(
+fun TestDrive.flickAndGoLeft(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -664,7 +664,7 @@ fun TestDrive?.flickAndGoLeft(
 /**
  * swipeTopToBottom
  */
-fun TestDrive?.swipeTopToBottom(
+fun TestDrive.swipeTopToBottom(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -697,7 +697,7 @@ fun TestDrive?.swipeTopToBottom(
 /**
  * flickAndGoUp
  */
-fun TestDrive?.flickAndGoUp(
+fun TestDrive.flickAndGoUp(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -723,7 +723,7 @@ fun TestDrive?.flickAndGoUp(
 /**
  * flickTopToBottom
  */
-fun TestDrive?.flickTopToBottom(
+fun TestDrive.flickTopToBottom(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -749,7 +749,7 @@ fun TestDrive?.flickTopToBottom(
 /**
  * swipeElementToElement
  */
-fun TestDrive?.swipeElementToElement(
+fun TestDrive.swipeElementToElement(
     startElement: TestElement,
     endElement: TestElement,
     durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -818,7 +818,7 @@ fun TestDrive?.swipeElementToElement(
 /**
  * swipeElementToElementAdjust
  */
-fun TestDrive?.swipeElementToElementAdjust(
+fun TestDrive.swipeElementToElementAdjust(
     startElement: TestElement,
     endElement: TestElement,
     durationSeconds: Double = testContext.swipeDurationSeconds,

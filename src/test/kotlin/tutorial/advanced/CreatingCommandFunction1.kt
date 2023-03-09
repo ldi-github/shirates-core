@@ -30,7 +30,7 @@ class CreatingCommandFunction1 : UITest() {
         }
     }
 
-    private fun TestDrive?.tapWithScrollDownFromTop(
+    private fun TestDrive.tapWithScrollDownFromTop(
         expression: String,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
