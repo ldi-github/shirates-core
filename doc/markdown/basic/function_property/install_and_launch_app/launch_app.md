@@ -1,3 +1,21 @@
+# launchApp, terminateApp
+
+You can launch or terminate app using these functions.
+
+## Functions
+
+| function     | description                                                         |
+|:-------------|:--------------------------------------------------------------------|
+| launchApp    | Launch app. Accepts appName or packageOrBundleId or activityName    |
+| terminateApp | Terminate app. Accepts appName or packageOrBundleId or activityName |
+
+## Example
+
+### LaunchApp1.kt
+
+(`kotlin/tutorial/basic/LaunchApp1.kt`)
+
+```kotlin
 package tutorial.basic
 
 import org.junit.jupiter.api.Test
@@ -65,3 +83,8 @@ class LaunchApp1 : UITest() {
     }
 
 }
+```
+
+### Link
+
+- [index](../../../index.md)

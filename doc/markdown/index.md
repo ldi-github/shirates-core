@@ -67,8 +67,9 @@
 - Tap element
     - [tap](basic/function_property/tap_element/tap.md)
     - [tapAppIcon](basic/function_property/tap_element/tap_app_icon.md)
-- Install app
-    - [installApp, removeApp](basic/function_property/install_app/install_app.md)
+- Install and launch app
+    - [installApp, removeApp](basic/function_property/install_and_launch_app/install_app.md)
+    - [launchApp, terminateApp](basic/function_property/install_and_launch_app/launch_app.md) **(New!)**
 - Swipe screen
     - [swipe, flick](basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](basic/function_property/swipe_screen/scroll.md)
@@ -129,15 +130,15 @@
 - Find image
     - [find image](basic/function_property/find_image/find_image.md)
 - External command
-    - [shell](basic/function_property/external_command/shell.md) **(New! 2.4.0)**
+    - [shell](basic/function_property/external_command/shell.md) **(New!)**
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
 
 ### Behavior Helper
 
 - Language
-    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android.md)
-    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios.md)
+    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android.md) **(New!)**
+    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios.md) **(New!)**
 
 ### Report
 
