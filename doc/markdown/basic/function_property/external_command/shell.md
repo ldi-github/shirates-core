@@ -4,10 +4,10 @@ You can execute shell command using these functions.
 
 ## functions
 
-| function   |
-|:-----------|
-| shell      |
-| shellAsync |
+| function   | description                  |
+|:-----------|:-----------------------------|
+| shell      | Execute shell                |
+| shellAsync | Execute shell asynchronously |
 
 ## Example
 
@@ -79,6 +79,10 @@ class Shell1 : UITest() {
     }
 }
 ```
+
+### Note
+
+It's recommended to use [macro function](../../routine_work/macro.md) to hide platform dependent implementation.
 
 ### Link
 
