@@ -5,11 +5,9 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
 import shirates.core.driver.testProfile
 import shirates.core.exception.TestDriverException
-import shirates.core.utility.getStringOrEmpty
-import shirates.core.utility.ios.IosLanguageUtility
 import shirates.core.utility.misc.ShellUtility
 
-object LanguageSettingsHelper : TestDrive {
+object LanguageHelperAndroid : TestDrive {
 
     /**
      * gotoLocaleSettings
@@ -133,74 +131,6 @@ object LanguageSettingsHelper : TestDrive {
         }
 
         return currentLanguageAndRegion
-    }
-
-//    /**
-//     * setLanguageOnAndroid
-//     */
-//    fun setLanguageOnAndroid() {
-//
-//        val locale = testContext.profile.capabilities.getStringOrEmpty("locale")
-//
-//        it.pressHome()
-//            .pressHome()
-//
-//        val clock = it.select("#clock")
-//        val isJapaneseClock = clock.text.contains("日")
-//        val hasMissMatch = locale == "JP" && isJapaneseClock.not() || locale != "JP" && isJapaneseClock
-//        if (hasMissMatch) {
-//            gotoLocaleSettings()
-//
-//            it.waitForDisplay("#add_language")
-//
-//            if (locale == "JP") {
-//                ifCanSelectNot("*日本語*") {
-//                    it.tap("#add_language")
-//                        .tap("#android:id/locale_search_menu")
-//                        .sendKeys("ja")
-//                    ifCanSelect("*日本語*") {
-//                        it.tap()
-//                    }
-//                }
-//                it.select("<*日本語*>:right(#dragHandle)")
-//                    .swipeVerticalTo(endY = 0)
-//            } else {
-//                ifCanSelectNot("*United States*") {
-//                    it.tap("#add_language")
-//                    ifCanSelect("*United States*") {
-//                        it.tap()
-//                    }.ifElse {
-//                        it.tap("#android:id/locale_search_menu")
-//                            .sendKeys("English (United")
-//                        ifCanSelect("*United States*") {
-//                            it.tap()
-//                        }
-//                    }
-//                }
-//                it.select("<*United States*>:right(#dragHandle)")
-//                    .swipeVerticalTo(endY = 0)
-//            }
-//        }
-//        it.pressHome()
-//    }
-
-    /**
-     * setLanguageOnIos
-     */
-    fun setLanguageOnIos() {
-
-        val capabilityLange = testProfile.capabilities.getStringOrEmpty("language")
-        val capabilityLocale = testProfile.capabilities.getStringOrEmpty("locale")
-        val targetLocale = "$capabilityLange-$capabilityLocale"
-
-        it.pressHome()
-        val searchElement = it.select("<#spotlight-pill>:descendant(.XCUIElementTypeStaticText)")
-        if (searchElement.isFound) {
-            val deviceLocale = if (it.label == "検索") "ja-JP" else "en-US"
-            if (deviceLocale != targetLocale) {
-                IosLanguageUtility.setAppleLocale(udid = testProfile.udid, targetLocale)
-            }
-        }
     }
 
 }

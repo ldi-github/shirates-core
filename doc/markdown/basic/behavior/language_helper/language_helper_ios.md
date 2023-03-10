@@ -1,3 +1,20 @@
+# LanguageHelperIos
+
+You can set iOS device language using these functions.
+
+## Functions
+
+| function    | description   |
+|:------------|:--------------|
+| setLanguage | Set language. |
+
+## Example
+
+### SetLanguageOnIos1.kt
+
+(`kotlin/tutorial/basic/SetLanguageOnIos1.kt`)
+
+```kotlin
 package tutorial.basic
 
 import org.junit.jupiter.api.Order
@@ -29,3 +46,8 @@ class SetLanguageOnIos1 : UITest() {
     }
 
 }
+```
+
+### Link
+
+- [index](../../../index.md)

@@ -127,11 +127,17 @@
     - [info, warn](basic/function_property/logging/info_warn.md)
     - [silent, procedure](basic/function_property/logging/silent_and_procedure_function.md)
 - Find image
-    - [Find image](basic/function_property/find_image/find_image.md)
+    - [find image](basic/function_property/find_image/find_image.md)
 - External command
     - [shell](basic/function_property/external_command/shell.md) **(New! 2.4.0)**
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
+
+### Behavior Helper
+
+- Language
+    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android.md)
+    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios.md)
 
 ### Report
 

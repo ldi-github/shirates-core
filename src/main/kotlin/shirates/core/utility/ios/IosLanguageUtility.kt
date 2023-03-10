@@ -58,7 +58,7 @@ object IosLanguageUtility {
         ShellUtility.executeCommand(args = args.toTypedArray())
 
         if (restartDevice) {
-            IosDeviceUtility.restartSimulator(udid = udid)
+            IosDeviceUtility.terminateSpringBoardByUdid(udid = udid)
         }
 
         IosDeviceUtility.waitSimulatorStatus(udid = udid)
