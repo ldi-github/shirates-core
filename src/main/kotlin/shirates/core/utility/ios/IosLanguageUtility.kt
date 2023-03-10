@@ -1,6 +1,8 @@
 package shirates.core.utility.ios
 
+import shirates.core.driver.TestDriveObjectIos
 import shirates.core.driver.TestMode
+import shirates.core.driver.commandextension.terminateIosApp
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
 
@@ -46,7 +48,7 @@ object IosLanguageUtility {
             setAppleLanguages(udid = udid, locale)
         }
 
-        IosAppUtility.terminateApp(udid = udid, bundleId = "com.apple.Preferences")
+        TestDriveObjectIos.terminateIosApp(udid = udid, bundleId = "com.apple.Preferences")
 
         val args = mutableListOf(
             "xcrun", "simctl", "spawn", udid, "defaults", "write", "-globalDomain", "AppleLocale", "-string", locale
@@ -56,7 +58,7 @@ object IosLanguageUtility {
         ShellUtility.executeCommand(args = args.toTypedArray())
 
         if (restartDevice) {
-            IosDeviceUtility.restartSimulator(udid = udid)
+            IosDeviceUtility.terminateSpringBoardByUdid(udid = udid)
         }
 
         IosDeviceUtility.waitSimulatorStatus(udid = udid)

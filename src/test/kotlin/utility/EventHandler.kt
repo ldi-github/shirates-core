@@ -6,7 +6,7 @@ import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.tap
 
-fun TestDrive?.handleIrregulars(): Any? {
+fun TestDrive.handleIrregulars(): Any? {
 
     if (TestMode.isNoLoadRun) {
         return this

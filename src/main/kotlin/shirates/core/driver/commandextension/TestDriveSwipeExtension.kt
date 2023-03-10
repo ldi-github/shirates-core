@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import org.openqa.selenium.InvalidElementStateException
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.logging.CodeExecutionContext
@@ -13,11 +14,13 @@ import shirates.core.proxy.AppiumProxy
  *
  * https://stackoverflow.com/questions/57550682/how-to-scroll-up-down-in-appium-android
  */
-fun TestDrive?.swipePointToPoint(
+fun TestDrive.swipePointToPoint(
     startX: Int,
     startY: Int,
     endX: Int,
     endY: Int,
+    withOffset: Boolean = false,
+    offsetY: Int = PropertiesManager.swipeOffsetY,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true,
@@ -34,6 +37,9 @@ fun TestDrive?.swipePointToPoint(
         durationSeconds = durationSeconds,
         repeat = repeat
     )
+    if (withOffset) {
+        sc.endY += offsetY
+    }
 
     val command = "swipePointToPoint"
     val message = message(id = command, from = "(${sc.startX},${sc.startY})", to = "(${sc.endX},${sc.endY})")
@@ -92,7 +98,7 @@ internal class SwipeContext(
 
 }
 
-internal fun TestDrive?.swipePointToPointCore(
+internal fun TestDrive.swipePointToPointCore(
     swipeContext: SwipeContext,
 ): TestElement {
 
@@ -142,11 +148,13 @@ internal fun TestDrive?.swipePointToPointCore(
  *
  * https://stackoverflow.com/questions/57550682/how-to-scroll-up-down-in-appium-android
  */
-fun TestDrive?.swipePointToPoint(
+fun TestDrive.swipePointToPoint(
     startX: Int,
     startY: Int,
     endX: Int,
     endY: Int,
+    withOffset: Boolean = false,
+    offsetY: Int = PropertiesManager.swipeOffsetY,
     durationSeconds: Int,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -157,13 +165,15 @@ fun TestDrive?.swipePointToPoint(
         startY = startY,
         endX = endX,
         endY = endY,
+        withOffset = withOffset,
+        offsetY = offsetY,
         durationSeconds = durationSeconds.toDouble(),
         repeat = repeat,
         safeMode = safeMode
     )
 }
 
-private fun TestDrive?.getSwipeTarget(): TestElement {
+private fun TestDrive.getSwipeTarget(): TestElement {
 
     val testElement = getTestElement()
 
@@ -176,7 +186,7 @@ private fun TestDrive?.getSwipeTarget(): TestElement {
 /**
  * swipeCenterToTop
  */
-fun TestDrive?.swipeCenterToTop(
+fun TestDrive.swipeCenterToTop(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -206,7 +216,7 @@ fun TestDrive?.swipeCenterToTop(
 /**
  * flickCenterToTop
  */
-fun TestDrive?.flickCenterToTop(
+fun TestDrive.flickCenterToTop(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -230,7 +240,7 @@ fun TestDrive?.flickCenterToTop(
 /**
  * swipeCenterToBottom
  */
-fun TestDrive?.swipeCenterToBottom(
+fun TestDrive.swipeCenterToBottom(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -260,7 +270,7 @@ fun TestDrive?.swipeCenterToBottom(
 /**
  * flickCenterToBottom
  */
-fun TestDrive?.flickCenterToBottom(
+fun TestDrive.flickCenterToBottom(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -285,7 +295,7 @@ fun TestDrive?.flickCenterToBottom(
 /**
  * swipeCenterToLeft
  */
-fun TestDrive?.swipeCenterToLeft(
+fun TestDrive.swipeCenterToLeft(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -315,7 +325,7 @@ fun TestDrive?.swipeCenterToLeft(
 /**
  * flickCenterToLeft
  */
-fun TestDrive?.flickCenterToLeft(
+fun TestDrive.flickCenterToLeft(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -340,7 +350,7 @@ fun TestDrive?.flickCenterToLeft(
 /**
  * swipeCenterToRight
  */
-fun TestDrive?.swipeCenterToRight(
+fun TestDrive.swipeCenterToRight(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -370,7 +380,7 @@ fun TestDrive?.swipeCenterToRight(
 /**
  * flickCenterToRight
  */
-fun TestDrive?.flickCenterToRight(
+fun TestDrive.flickCenterToRight(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -395,7 +405,7 @@ fun TestDrive?.flickCenterToRight(
 /**
  * swipeLeftToRight
  */
-fun TestDrive?.swipeLeftToRight(
+fun TestDrive.swipeLeftToRight(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -427,7 +437,7 @@ fun TestDrive?.swipeLeftToRight(
 /**
  * flickLeftToRight
  */
-fun TestDrive?.flickLeftToRight(
+fun TestDrive.flickLeftToRight(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -454,7 +464,7 @@ fun TestDrive?.flickLeftToRight(
 /**
  * swipeRightToLeft
  */
-fun TestDrive?.swipeRightToLeft(
+fun TestDrive.swipeRightToLeft(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -486,7 +496,7 @@ fun TestDrive?.swipeRightToLeft(
 /**
  * flickRightToLeft
  */
-fun TestDrive?.flickRightToLeft(
+fun TestDrive.flickRightToLeft(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -513,7 +523,7 @@ fun TestDrive?.flickRightToLeft(
 /**
  * swipeBottomToTop
  */
-fun TestDrive?.swipeBottomToTop(
+fun TestDrive.swipeBottomToTop(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -546,7 +556,7 @@ fun TestDrive?.swipeBottomToTop(
 /**
  * flickBottomToTop
  */
-fun TestDrive?.flickBottomToTop(
+fun TestDrive.flickBottomToTop(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -573,7 +583,7 @@ fun TestDrive?.flickBottomToTop(
 /**
  * flickAndGoDown
  */
-fun TestDrive?.flickAndGoDown(
+fun TestDrive.flickAndGoDown(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -600,7 +610,7 @@ fun TestDrive?.flickAndGoDown(
 /**
  * flickAndGoRight
  */
-fun TestDrive?.flickAndGoRight(
+fun TestDrive.flickAndGoRight(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -627,7 +637,7 @@ fun TestDrive?.flickAndGoRight(
 /**
  * flickAndGoLeft
  */
-fun TestDrive?.flickAndGoLeft(
+fun TestDrive.flickAndGoLeft(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -654,7 +664,7 @@ fun TestDrive?.flickAndGoLeft(
 /**
  * swipeTopToBottom
  */
-fun TestDrive?.swipeTopToBottom(
+fun TestDrive.swipeTopToBottom(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -687,7 +697,7 @@ fun TestDrive?.swipeTopToBottom(
 /**
  * flickAndGoUp
  */
-fun TestDrive?.flickAndGoUp(
+fun TestDrive.flickAndGoUp(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -713,7 +723,7 @@ fun TestDrive?.flickAndGoUp(
 /**
  * flickTopToBottom
  */
-fun TestDrive?.flickTopToBottom(
+fun TestDrive.flickTopToBottom(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -739,12 +749,14 @@ fun TestDrive?.flickTopToBottom(
 /**
  * swipeElementToElement
  */
-fun TestDrive?.swipeElementToElement(
+fun TestDrive.swipeElementToElement(
     startElement: TestElement,
     endElement: TestElement,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
+    withOffset: Boolean = false,
+    offsetY: Int = PropertiesManager.swipeOffsetY,
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
@@ -770,20 +782,24 @@ fun TestDrive?.swipeElementToElement(
             startY = b1.centerY,
             endX = b2.centerX - marginX,
             endY = b2.centerY - marginY,
+            withOffset = withOffset,
+            offsetY = offsetY,
             durationSeconds = durationSeconds,
             repeat = repeat,
             safeMode = safeMode
         )
 
+        val m = TestDriver.select(selector = startElement.selector!!, throwsException = false)
         if (adjust) {
             TestDriver.syncCache(force = true)
-            val m = TestDriver.select(selector = testElement.selector!!, throwsException = false)
             if (m.isEmpty.not()) {
                 swipePointToPoint(
                     startX = m.bounds.centerX,
                     startY = m.bounds.centerY,
                     endX = b2.centerX,
                     endY = b2.centerY,
+                    withOffset = true,
+                    offsetY = offsetY,
                     durationSeconds = durationSeconds,
                     safeMode = safeMode
                 )
@@ -802,7 +818,7 @@ fun TestDrive?.swipeElementToElement(
 /**
  * swipeElementToElementAdjust
  */
-fun TestDrive?.swipeElementToElementAdjust(
+fun TestDrive.swipeElementToElementAdjust(
     startElement: TestElement,
     endElement: TestElement,
     durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -817,6 +833,7 @@ fun TestDrive?.swipeElementToElementAdjust(
         durationSeconds = durationSeconds,
         marginRatio = marginRatio,
         adjust = true,
+        offsetY = PropertiesManager.swipeOffsetY,
         repeat = repeat,
         safeMode = safeMode
     )

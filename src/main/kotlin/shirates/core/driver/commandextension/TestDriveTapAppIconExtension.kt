@@ -2,7 +2,6 @@ package shirates.core.driver.commandextension
 
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.Message.message
@@ -10,7 +9,7 @@ import shirates.core.logging.Message.message
 /**
  * tapAppIcon
  */
-fun TestDrive?.tapAppIcon(
+fun TestDrive.tapAppIcon(
     appIconName: String = testContext.appIconName,
     tapAppIconMethod: TapAppIconMethod = testContext.tapAppIconMethod
 ): TestElement {

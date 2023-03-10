@@ -44,7 +44,7 @@ using **TestDriverCommandContext#execOperateCommand** function.
 ### CreatingCommandFunction1.kt
 
 ```kotlin
-private fun TestDrive?.tapWithScrollDownFromTop(
+private fun TestDrive.tapWithScrollDownFromTop(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,

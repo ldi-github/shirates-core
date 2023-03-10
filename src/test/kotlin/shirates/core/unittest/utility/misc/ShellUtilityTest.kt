@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.android.AndroidDeviceUtility
+import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.time.WaitUtility
 
@@ -114,6 +115,11 @@ class ShellUtilityTest : UnitTest() {
         assertThat(r.resultHandler!!.exitValue).isEqualTo(0)
         assertThat(s).contains("DUMP OF SERVICE package:")
 
+        val port = udid.split("-").last().toInt()
+        val pid = ProcessUtility.getPid(port)
+        if (pid != null) {
+            ProcessUtility.terminateProcess(pid = pid)
+        }
     }
 
     private fun setupEmulator(): String {

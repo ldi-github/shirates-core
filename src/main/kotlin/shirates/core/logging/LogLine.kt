@@ -9,6 +9,7 @@ import java.util.*
  * LogLine
  */
 data class LogLine(
+    var deleted: Boolean = false,
     var lineNumber: Int = 0,
     var logDateTime: Date = dateFormatrer.parse("2000/01/01"),
     var message: String = "",

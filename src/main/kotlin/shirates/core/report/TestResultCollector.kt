@@ -21,10 +21,13 @@ class TestResultCollector(val logLines: List<LogLine>) {
 
         irregulars.addAll(logLines.filter {
             it.logType == LogType.NG || it.logType == LogType.ERROR || it.logType == LogType.WARN
-        }
+        }.filter { it.deleted == false }
             .map { it.copy() })
-        scenarios.addAll(logLines.filter { it.logType == LogType.SCENARIO }.map { it.copy() })
-        cases.addAll(logLines.filter { it.logType == LogType.CASE }.map { it.copy() })
+
+        scenarios.addAll(logLines.filter { it.logType == LogType.SCENARIO }.filter { it.deleted == false }
+            .map { it.copy() })
+
+        cases.addAll(logLines.filter { it.logType == LogType.CASE }.filter { it.deleted == false }.map { it.copy() })
 
         for (scenario in scenarios) {
             val casesInScenario = cases.filter { it.testScenarioId == scenario.testScenarioId }

@@ -1,14 +1,16 @@
 package shirates.core.hand.devicetest
 
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.TestProfile
-import shirates.core.utility.ios.IosAppUtility
+import shirates.core.testcode.UnitTest
 import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.ios.IosLanguageUtility
 
-class IosDeviceUtilityTest {
+class IosDeviceUtilityTest : UnitTest() {
 
     @Test
+    @Order(1)
     fun getBootedSimulatorDeviceList() {
 
         val list = IosDeviceUtility.getBootedSimulatorDeviceList()
@@ -18,6 +20,7 @@ class IosDeviceUtilityTest {
     }
 
     @Test
+    @Order(2)
     fun getIosDeviceList() {
 
         val list = IosDeviceUtility.getIosDeviceList()
@@ -28,6 +31,7 @@ class IosDeviceUtilityTest {
     }
 
     @Test
+    @Order(3)
     fun getRealDeviceList() {
 
         val list = IosDeviceUtility.getRealDeviceList()
@@ -37,6 +41,7 @@ class IosDeviceUtilityTest {
     }
 
     @Test
+    @Order(4)
     fun getSimulatorDeviceList() {
 
         val list = IosDeviceUtility.getSimulatorDeviceList()
@@ -46,19 +51,7 @@ class IosDeviceUtilityTest {
     }
 
     @Test
-    fun isInstalled() {
-
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
-        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
-
-        val isInstalled = IosDeviceUtility.isInstalled(
-            bundleId = "com.facebook.WebDriverAgentRunner.xctrunner",
-            iosDeviceInfo = iosDeviceInfo
-        )
-        println("isInstalled=$isInstalled")
-    }
-
-    @Test
+    @Order(5)
     fun startSimulator() {
 
         val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
@@ -79,43 +72,22 @@ class IosDeviceUtilityTest {
 //    }
 
     @Test
-    fun stopSimulator() {
+    @Order(6)
+    fun isInstalled() {
 
         val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
-        IosDeviceUtility.stopSimulator(udid = iosDeviceInfo.udid)
+        val isInstalled = IosDeviceUtility.isInstalled(
+            bundleId = "com.facebook.WebDriverAgentRunner.xctrunner",
+            iosDeviceInfo = iosDeviceInfo
+        )
+        println("isInstalled=$isInstalled")
     }
 
-    @Test
-    fun restartSimulator() {
-
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
-        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
-        IosDeviceUtility.restartSimulator(udid = iosDeviceInfo.udid)
-    }
 
     @Test
-    fun terminateSpringBoardByUdid() {
-
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
-        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
-        IosDeviceUtility.terminateSpringBoardByUdid(iosDeviceInfo.udid, log = true)
-    }
-
-    @Test
-    fun launchApp_terminateApp() {
-
-        val bundleId = "com.apple.Maps"
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
-        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
-
-        IosAppUtility.launchApp(udid = iosDeviceInfo.udid, bundleId = bundleId)
-        IosAppUtility.terminateApp(udid = iosDeviceInfo.udid, bundleId = bundleId)
-
-    }
-
-    @Test
+    @Order(8)
     fun setAppleLanguages() {
 
         val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
@@ -125,6 +97,7 @@ class IosDeviceUtilityTest {
     }
 
     @Test
+    @Order(9)
     fun setLanguage() {
 
         val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
@@ -137,6 +110,34 @@ class IosDeviceUtilityTest {
         IosLanguageUtility.setAppleLocale(udid = iosDeviceInfo.udid, "ja-JP")
         Thread.sleep(3000)
         IosLanguageUtility.setAppleLocale(udid = iosDeviceInfo.udid, "en-US")
+    }
+
+    @Test
+    @Order(10)
+    fun restartSimulator() {
+
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+        IosDeviceUtility.restartSimulator(udid = iosDeviceInfo.udid)
+    }
+
+    @Test
+    @Order(11)
+    fun terminateSpringBoardByUdid() {
+
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+        IosDeviceUtility.terminateSpringBoardByUdid(iosDeviceInfo.udid, log = true)
+    }
+
+    @Test
+    @Order(12)
+    fun stopSimulator() {
+
+        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
+
+        IosDeviceUtility.stopSimulator(udid = iosDeviceInfo.udid)
     }
 
 }

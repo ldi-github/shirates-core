@@ -57,7 +57,7 @@
 - [Parameter configuration files](basic/parameter/parameter_configuration_files.md)
 - [Parameters](basic/parameter/parameters.md)
 - [Profile configuration](basic/parameter/profile_configuration.md)
-- [Automatic device detection](basic/parameter/automatic_device_detection.md) **(New! 2.0.0)**
+- [Automatic device detection](basic/parameter/automatic_device_detection.md)
 
 ### Function/Property
 
@@ -67,8 +67,9 @@
 - Tap element
     - [tap](basic/function_property/tap_element/tap.md)
     - [tapAppIcon](basic/function_property/tap_element/tap_app_icon.md)
-- Install app
-    - [installApp, removeApp](basic/function_property/install_app/install_app.md)
+- Install and launch app
+    - [installApp, removeApp](basic/function_property/install_and_launch_app/install_app.md)
+    - [launchApp, terminateApp](basic/function_property/install_and_launch_app/launch_app.md) **(New! 3.0.0)**
 - Swipe screen
     - [swipe, flick](basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](basic/function_property/swipe_screen/scroll.md)
@@ -127,14 +128,22 @@
     - [info, warn](basic/function_property/logging/info_warn.md)
     - [silent, procedure](basic/function_property/logging/silent_and_procedure_function.md)
 - Find image
-    - [Find image](basic/function_property/find_image/find_image.md)
+    - [find image](basic/function_property/find_image/find_image.md)
+- External command
+    - [shell](basic/function_property/external_command/shell.md) **(New! 3.0.0)**
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
+
+### Behavior Helper
+
+- Language
+    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android.md) **(New! 3.0.0)**
+    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios.md) **(New! 3.0.0)**
 
 ### Report
 
 - [HTML-Report](basic/creating_testclass/test_result_files.md)
-- [Test Report Index](basic/report/test_report_index.md) **(New! 2.1.0)**
+- [Test Report Index](basic/report/test_report_index.md)
 - [Spec-Report](basic/report/spec_report.md)
 - [No-Load-Run mode](basic/report/no_load_run_mode.md)
 - [TestList](basic/report/testlist.md)

@@ -330,6 +330,16 @@ class FilterTest : UnitTest() {
     }
 
     @Test
+    fun evaluateSelected() {
+
+        // Arrange
+        val f = Filter("selected=true")
+        // Act, Assert
+        assertThat(f.evaluateSelected("true")).isTrue()
+        assertThat(f.evaluateSelected("false")).isFalse()
+    }
+
+    @Test
     fun evaluateScrollable() {
 
         TestMode.runAsAndroid {

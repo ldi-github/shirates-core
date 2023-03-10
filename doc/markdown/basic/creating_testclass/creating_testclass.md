@@ -103,107 +103,116 @@ At this point, you can run `testMethod1`.
 
 ```
 lineNo	logDateTime	testCaseId	logType	group	message
-1	2022/12/11 01:32:37.416	{}	[-]	()	----------------------------------------------------------------------------------------------------
-2	2022/12/11 01:32:37.429	{}	[-]	()	///
-3	2022/12/11 01:32:37.429	{}	[-]	()	/// Shirates 2.0.0
-4	2022/12/11 01:32:37.430	{}	[-]	()	///
-5	2022/12/11 01:32:37.430	{}	[-]	()	powered by Appium (io.appium:java-client:8.1.1)
-6	2022/12/11 01:32:37.430	{}	[-]	()	----------------------------------------------------------------------------------------------------
-7	2022/12/11 01:32:37.431	{}	[info]	(parameter)	testClass: exercise.TestClass1
-8	2022/12/11 01:32:37.431	{}	[info]	(parameter)	sheetName: TestClass1
-9	2022/12/11 01:32:37.431	{}	[info]	(parameter)	logLanguage: 
-10	2022/12/11 01:32:38.059	{}	[info]	()	Initializing with testRun.properties.(testConfig/android/androidSettings/testrun.properties)
-11	2022/12/11 01:32:38.128	{}	[info]	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2022-12-11_013237/TestClass1/
-12	2022/12/11 01:32:38.135	{}	[info]	()	Loading config.(configFile=/Users/wave1008/Downloads/CreatingNewProject1/testConfig/android/androidSettings/androidSettingsConfig.json, profileName=Android *)
-13	2022/12/11 01:32:38.166	{}	[warn]	()	screens directory not found. (/Users/wave1008/Downloads/CreatingNewProject1/testConfig/android/androidSettings/screens)
-14	2022/12/11 01:32:38.177	{}	[info]	()	Scanning macro under '/Users/wave1008/Downloads/CreatingNewProject1/src/test/kotlin'
-15	2022/12/11 01:32:38.178	{}	[info]	()	Initializing TestDriver.(profileName=Android *)
-16	2022/12/11 01:32:38.179	{}	[info]	()	noLoadRun: false
-17	2022/12/11 01:32:38.179	{}	[info]	()	boundsToRectRatio: 1
-18	2022/12/11 01:32:38.180	{}	[info]	()	reuseDriver: true
-19	2022/12/11 01:32:38.180	{}	[info]	()	autoScreenshot: true
-20	2022/12/11 01:32:38.180	{}	[info]	()	onChangedOnly: true
-21	2022/12/11 01:32:38.181	{}	[info]	()	onCondition: true
-22	2022/12/11 01:32:38.181	{}	[info]	()	onAction: true
-23	2022/12/11 01:32:38.181	{}	[info]	()	onExpectation: true
-24	2022/12/11 01:32:38.182	{}	[info]	()	onExecOperateCommand: true
-25	2022/12/11 01:32:38.182	{}	[info]	()	onCheckCommand: true
-26	2022/12/11 01:32:38.182	{}	[info]	()	onScrolling: true
-27	2022/12/11 01:32:38.183	{}	[info]	()	manualScreenshot: true
-28	2022/12/11 01:32:38.184	{}	[info]	()	retryMaxCount: 1
-29	2022/12/11 01:32:38.185	{}	[info]	()	retryIntervalSeconds: 2.0
-30	2022/12/11 01:32:38.185	{}	[info]	()	shortWaitSeconds: 1.5
-31	2022/12/11 01:32:38.185	{}	[info]	()	waitSecondsOnIsScreen: 15.0
-32	2022/12/11 01:32:38.186	{}	[info]	()	waitSecondsForAnimationComplete: 0.5
-33	2022/12/11 01:32:38.186	{}	[info]	()	waitSecondsForConnectionEnabled: 8.0
-34	2022/12/11 01:32:38.186	{}	[info]	()	swipeDurationSeconds: 3.0
-35	2022/12/11 01:32:38.187	{}	[info]	()	flickDurationSeconds: 0.3
-36	2022/12/11 01:32:38.187	{}	[info]	()	swipeMarginRatio: 0.1
-37	2022/12/11 01:32:38.188	{}	[info]	()	scrollVerticalMarginRatio: 0.2
-38	2022/12/11 01:32:38.188	{}	[info]	()	scrollHorizontalMarginRatio: 0.2
-39	2022/12/11 01:32:38.189	{}	[info]	()	tapHoldSeconds: 0.2
-40	2022/12/11 01:32:38.189	{}	[info]	()	tapAppIconMethod: auto
-41	2022/12/11 01:32:38.189	{}	[info]	()	tapAppIconMacro: 
-42	2022/12/11 01:32:38.190	{}	[info]	()	syncWaitSeconds: 1.8
-43	2022/12/11 01:32:38.190	{}	[info]	()	----------------------------------------------------------------------------------------------------
-44	2022/12/11 01:32:38.191	{}	[info]	()	Searching device for (profileName=Android *)
-45	2022/12/11 01:32:38.386	{}	[info]	()	Device found. (Pixel_3a_Android_12_-02:5554, Android 12, emulator-5554)
-46	2022/12/11 01:32:38.435	{}	[info]	()	appium --session-override --relaxed-security --log /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2022-12-11_013237/TestClass1/appium_2022-12-11_013238388.log --port 4720
-Cleaning up unclosed ZipFile for archive /Users/wave1008/Downloads/TestResults/androidSettingsConfig/TestList_androidSettingsConfig.xlsx
-47	2022/12/11 01:32:41.453	{}	[info]	()	Appium Server started. (pid=9753, port=4720)
-48	2022/12/11 01:32:41.457	{}	[info]	()	Connecting to Appium Server.(http://127.0.0.1:4720/)
-49	2022/12/11 01:32:47.341	{}	[info]	()	[Health check] start
-50	2022/12/11 01:32:47.347	{}	[info]	(syncCache)	Syncing (1)
-51	2022/12/11 01:32:48.115	{}	[info]	(syncCache)	elapsed=0.768, syncWaitSeconds=1.8
-52	2022/12/11 01:32:48.616	{}	[info]	(syncCache)	Syncing (2)
-53	2022/12/11 01:32:48.668	{}	[info]	(syncCache)	Synced. (elapsed=1.321, currentScreen=?)
-54	2022/12/11 01:32:48.913	{}	[info]	()	[Health check] end
-55	2022/12/11 01:32:48.919	{}	[info]	()	implicitlyWaitSeconds: 5.0
-56	2022/12/11 01:32:49.008	{}	[info]	()	(settings) always_finish_activities: 0
-57	2022/12/11 01:32:49.038	{}	[info]	()	AppiumDriver initialized.
-58	2022/12/11 01:32:49.038	{}	[info]	(parameter)	testrun: testConfig/android/androidSettings/testrun.properties
-59	2022/12/11 01:32:49.039	{}	[info]	(parameter)	testConfigName: androidSettingsConfig(/Users/wave1008/Downloads/CreatingNewProject1/testConfig/android/androidSettings/androidSettingsConfig.json)
-60	2022/12/11 01:32:49.039	{}	[info]	(parameter)	profileName: Android *
-61	2022/12/11 01:32:49.039	{}	[info]	(parameter)	appIconName: Settings
-62	2022/12/11 01:32:49.040	{}	[-]	()	(capabilities)
-63	2022/12/11 01:32:49.040	{}	[info]	(parameter)	appium:newCommandTimeout: 300
-64	2022/12/11 01:32:49.041	{}	[info]	(parameter)	appium:takesScreenshot: true
-65	2022/12/11 01:32:49.041	{}	[info]	(parameter)	appium:warnings: {}
-66	2022/12/11 01:32:49.041	{}	[info]	(parameter)	appium:deviceApiLevel: 31
-67	2022/12/11 01:32:49.042	{}	[info]	(parameter)	appium:automationName: UiAutomator2
-68	2022/12/11 01:32:49.042	{}	[info]	(parameter)	appium:locationContextEnabled: false
-69	2022/12/11 01:32:49.043	{}	[info]	(parameter)	appium:deviceScreenSize: 1080x2220
-70	2022/12/11 01:32:49.043	{}	[info]	(parameter)	appium:deviceManufacturer: Google
-71	2022/12/11 01:32:49.043	{}	[info]	(parameter)	appium:udid: emulator-5554
-72	2022/12/11 01:32:49.044	{}	[info]	(parameter)	appium:pixelRatio: 2.75
-73	2022/12/11 01:32:49.044	{}	[info]	(parameter)	platformName: android
-74	2022/12/11 01:32:49.045	{}	[info]	(parameter)	appium:networkConnectionEnabled: true
-75	2022/12/11 01:32:49.045	{}	[info]	(parameter)	appium:locale: US
-76	2022/12/11 01:32:49.046	{}	[info]	(parameter)	appium:deviceScreenDensity: 440
-77	2022/12/11 01:32:49.046	{}	[info]	(parameter)	appium:viewportRect: {left=0, top=66, width=1080, height=2022}
-78	2022/12/11 01:32:49.046	{}	[info]	(parameter)	appium:language: en
-79	2022/12/11 01:32:49.046	{}	[info]	(parameter)	appium:avd: Pixel_3a_Android_12_-02
-80	2022/12/11 01:32:49.047	{}	[info]	(parameter)	appium:deviceModel: sdk_gphone64_arm64
-81	2022/12/11 01:32:49.047	{}	[info]	(parameter)	appium:platformVersion: 12
-82	2022/12/11 01:32:49.047	{}	[info]	(parameter)	appium:databaseEnabled: false
-83	2022/12/11 01:32:49.047	{}	[info]	(parameter)	appium:deviceUDID: emulator-5554
-84	2022/12/11 01:32:49.048	{}	[info]	(parameter)	appium:statBarHeight: 66
-85	2022/12/11 01:32:49.048	{}	[info]	(parameter)	appium:webStorageEnabled: false
-86	2022/12/11 01:32:49.048	{}	[info]	(parameter)	appium:appActivity: com.android.settings.Settings
-87	2022/12/11 01:32:49.048	{}	[info]	(parameter)	appium:deviceName: emulator-5554
-88	2022/12/11 01:32:49.049	{}	[info]	(parameter)	appium:javascriptEnabled: true
-89	2022/12/11 01:32:49.049	{}	[info]	(parameter)	appium:appPackage: com.android.settings
-90	2022/12/11 01:32:49.049	{}	[-]	()	settings
-91	2022/12/11 01:32:49.125	{}	[info]	(parameter)	always_finish_activities: 0
-92	2022/12/11 01:32:49.126	{}	[-]	()	(others)
-93	2022/12/11 01:32:49.127	{}	[info]	(parameter)	isEmulator: true
-94	2022/12/11 01:32:49.127	{}	[info]	(parameter)	hasOsaihuKeitai: false
-95	2022/12/11 01:32:49.132	{}	[warn]	()	scenario not implemented.
+1	2023/03/11 06:24:13.193	{}	[-]	()	----------------------------------------------------------------------------------------------------
+2	2023/03/11 06:24:13.206	{}	[-]	()	///
+3	2023/03/11 06:24:13.206	{}	[-]	()	/// Shirates 3.0.0
+4	2023/03/11 06:24:13.207	{}	[-]	()	///
+5	2023/03/11 06:24:13.207	{}	[-]	()	powered by Appium (io.appium:java-client:8.1.1)
+6	2023/03/11 06:24:13.208	{}	[-]	()	----------------------------------------------------------------------------------------------------
+7	2023/03/11 06:24:13.208	{}	[-]	(parameter)	testClass: excercise.TestClass1
+8	2023/03/11 06:24:13.208	{}	[-]	(parameter)	sheetName: TestClass1
+9	2023/03/11 06:24:13.208	{}	[-]	(parameter)	logLanguage: 
+10	2023/03/11 06:24:13.217	{}	[info]	()	----------------------------------------------------------------------------------------------------
+11	2023/03/11 06:24:13.217	{}	[info]	()	Test function: testMethod1 [testMethod1()]
+12	2023/03/11 06:24:13.863	{}	[info]	()	Initializing with testrun file.(testConfig/android/androidSettings/testrun.properties)
+13	2023/03/11 06:24:13.955	{}	[info]	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1/
+Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1
+14	2023/03/11 06:24:13.989	{}	[info]	()	Loading config.(configFile=/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/androidSettingsConfig.json, profileName=Android 12)
+15	2023/03/11 06:24:14.024	{}	[WARN]	()	screens directory not found. (/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/screens)
+16	2023/03/11 06:24:14.034	{}	[info]	()	Scanning macro under '/Users/wave1008/Downloads/Practice1/src/test/kotlin'
+17	2023/03/11 06:24:14.035	{}	[info]	()	Initializing TestDriver.(profileName=Android 12)
+18	2023/03/11 06:24:14.036	{}	[info]	()	noLoadRun: false
+19	2023/03/11 06:24:14.036	{}	[info]	()	boundsToRectRatio: 1
+20	2023/03/11 06:24:14.036	{}	[info]	()	reuseDriver: true
+21	2023/03/11 06:24:14.036	{}	[info]	()	autoScreenshot: true
+22	2023/03/11 06:24:14.037	{}	[info]	()	onChangedOnly: true
+23	2023/03/11 06:24:14.037	{}	[info]	()	onCondition: true
+24	2023/03/11 06:24:14.037	{}	[info]	()	onAction: true
+25	2023/03/11 06:24:14.037	{}	[info]	()	onExpectation: true
+26	2023/03/11 06:24:14.038	{}	[info]	()	onExecOperateCommand: true
+27	2023/03/11 06:24:14.038	{}	[info]	()	onCheckCommand: true
+28	2023/03/11 06:24:14.038	{}	[info]	()	onScrolling: true
+29	2023/03/11 06:24:14.038	{}	[info]	()	manualScreenshot: true
+30	2023/03/11 06:24:14.039	{}	[info]	()	retryMaxCount: 1
+31	2023/03/11 06:24:14.039	{}	[info]	()	retryIntervalSeconds: 2.0
+32	2023/03/11 06:24:14.040	{}	[info]	()	shortWaitSeconds: 1.5
+33	2023/03/11 06:24:14.040	{}	[info]	()	waitSecondsOnIsScreen: 15.0
+34	2023/03/11 06:24:14.040	{}	[info]	()	waitSecondsForLaunchAppComplete: 15.0
+35	2023/03/11 06:24:14.041	{}	[info]	()	waitSecondsForAnimationComplete: 0.5
+36	2023/03/11 06:24:14.041	{}	[info]	()	waitSecondsForConnectionEnabled: 8.0
+37	2023/03/11 06:24:14.042	{}	[info]	()	swipeDurationSeconds: 3.0
+38	2023/03/11 06:24:14.042	{}	[info]	()	flickDurationSeconds: 0.3
+39	2023/03/11 06:24:14.043	{}	[info]	()	swipeMarginRatio: 0.1
+40	2023/03/11 06:24:14.043	{}	[info]	()	scrollVerticalMarginRatio: 0.2
+41	2023/03/11 06:24:14.044	{}	[info]	()	scrollHorizontalMarginRatio: 0.2
+42	2023/03/11 06:24:14.044	{}	[info]	()	tapHoldSeconds: 0.2
+43	2023/03/11 06:24:14.044	{}	[info]	()	tapAppIconMethod: auto
+44	2023/03/11 06:24:14.044	{}	[info]	()	tapAppIconMacro: 
+45	2023/03/11 06:24:14.045	{}	[info]	()	syncWaitSeconds: 1.8
+46	2023/03/11 06:24:14.045	{}	[info]	()	Searching device for the profile. (profileName=Android 12)
+47	2023/03/11 06:24:14.516	{}	[info]	()	Connected device found. (Pixel_3a_Android_12_-01:5554, Android 12, emulator-5554)
+48	2023/03/11 06:24:14.568	{}	[info]	()	appium --session-override --relaxed-security --log /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1/appium_2023-03-11_062414523.log --port 4720
+49	2023/03/11 06:24:18.708	{}	[info]	()	Appium Server started. (pid=43662, port=4720)
+50	2023/03/11 06:24:19.717	{}	[info]	()	Connecting to Appium Server.(http://127.0.0.1:4720/)
+51	2023/03/11 06:24:25.307	{}	[info]	()	[Health check] start
+52	2023/03/11 06:24:25.311	{}	[info]	(syncCache)	Syncing (1)
+53	2023/03/11 06:24:26.126	{}	[info]	(syncCache)	elapsed=0.814, syncWaitSeconds=15.0
+54	2023/03/11 06:24:26.629	{}	[info]	(syncCache)	Syncing (2)
+55	2023/03/11 06:24:26.734	{}	[info]	(syncCache)	Synced. (elapsed=1.422, currentScreen=?)
+56	2023/03/11 06:24:27.285	{}	[screenshot]	(screenshot)	screenshot
+57	2023/03/11 06:24:27.287	{}	[operate]	(tap)	Tap <.label>
+58	2023/03/11 06:24:28.727	{}	[info]	(syncCache)	Syncing (1)
+59	2023/03/11 06:24:28.836	{}	[info]	(syncCache)	Synced. (elapsed=0.108, currentScreen=?)
+60	2023/03/11 06:24:29.014	{}	[info]	()	[Health check] end
+61	2023/03/11 06:24:29.019	{}	[info]	()	implicitlyWaitSeconds: 5.0
+62	2023/03/11 06:24:29.097	{}	[info]	()	(settings) always_finish_activities: 0
+63	2023/03/11 06:24:29.128	{}	[info]	()	Searching device for the profile. (profileName=Android 12)
+64	2023/03/11 06:24:29.579	{}	[info]	()	Connected device found. (Pixel_3a_Android_12_-01:5554, Android 12, emulator-5554)
+65	2023/03/11 06:24:29.580	{}	[info]	()	AppiumDriver initialized.
+66	2023/03/11 06:24:29.580	{}	[-]	(parameter)	testrun: testConfig/android/androidSettings/testrun.properties
+67	2023/03/11 06:24:29.581	{}	[-]	(parameter)	testConfigName: androidSettingsConfig(/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/androidSettingsConfig.json)
+68	2023/03/11 06:24:29.582	{}	[-]	(parameter)	profileName: Android 12
+69	2023/03/11 06:24:29.583	{}	[-]	(parameter)	appIconName: Settings
+70	2023/03/11 06:24:29.583	{}	[-]	()	(capabilities)
+71	2023/03/11 06:24:29.583	{}	[-]	(parameter)	appium:newCommandTimeout: 300
+72	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:takesScreenshot: true
+73	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:warnings: {}
+74	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:deviceApiLevel: 31
+75	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:automationName: UiAutomator2
+76	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:locationContextEnabled: false
+77	2023/03/11 06:24:29.585	{}	[-]	(parameter)	appium:deviceScreenSize: 1080x2220
+78	2023/03/11 06:24:29.585	{}	[-]	(parameter)	appium:deviceManufacturer: Google
+79	2023/03/11 06:24:29.585	{}	[-]	(parameter)	appium:udid: emulator-5554
+80	2023/03/11 06:24:29.585	{}	[-]	(parameter)	appium:pixelRatio: 2.75
+81	2023/03/11 06:24:29.585	{}	[-]	(parameter)	platformName: android
+82	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:networkConnectionEnabled: true
+83	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:locale: US
+84	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:deviceScreenDensity: 440
+85	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:viewportRect: {left=0, top=66, width=1080, height=2022}
+86	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:language: en
+87	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:avd: Pixel_3a_Android_12_-01
+88	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:deviceModel: sdk_gphone64_arm64
+89	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:platformVersion: 12
+90	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:databaseEnabled: false
+91	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:deviceUDID: emulator-5554
+92	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:statBarHeight: 66
+93	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:webStorageEnabled: false
+94	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:appActivity: com.android.settings.Settings
+95	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:deviceName: emulator-5554
+96	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:javascriptEnabled: true
+97	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:appPackage: com.android.settings
+98	2023/03/11 06:24:29.589	{}	[-]	()	settings
+99	2023/03/11 06:24:29.665	{}	[-]	(parameter)	always_finish_activities: 0
+100	2023/03/11 06:24:29.665	{}	[-]	()	(others)
+101	2023/03/11 06:24:29.666	{}	[-]	(parameter)	isEmulator: true
+102	2023/03/11 06:24:29.666	{}	[-]	(parameter)	hasOsaihuKeitai: false
+103	2023/03/11 06:24:29.667	{}	[info]	()	Setup executed. (duration: 16.0 sec)
+104	2023/03/11 06:24:29.671	{}	[WARN]	()	scenario not implemented.
 
 org.opentest4j.TestAbortedException: scenario not implemented.
 
 
-	at shirates.core.testcode.UITestCallbackExtension.afterEach(UITestCallbackExtension.kt:198)
+	at shirates.core.testcode.UITestCallbackExtension.afterEach(UITestCallbackExtension.kt:209)
 	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeAfterEachCallbacks$12(TestMethodTestDescriptor.java:260)
 	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeAllAfterMethodsOrCallbacks$13(TestMethodTestDescriptor.java:276)
 	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
@@ -261,13 +270,13 @@ org.opentest4j.TestAbortedException: scenario not implemented.
 	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:235)
 	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:54)
 
-96	2022/12/11 01:32:49.137	{}	[info]	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2022-12-11_013237/TestClass1/
-Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2022-12-11_013237/TestClass1
-Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2022-12-11_013237/TestClass1
+105	2023/03/11 06:24:29.675	{}	[info]	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1/
+Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1
+Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1
 No scenario found. Outputting Spec-Report skipped.
-Cleaning up unclosed ZipFile for archive /Users/wave1008/Downloads/TestResults/androidSettingsConfig/TestList_androidSettingsConfig.xlsx
-97	2022/12/11 01:32:49.411	{}	[info]	()	Quitting TestDriver.
-Disconnected from the target VM, address: '127.0.0.1:60559', transport: 'socket'
+106	2023/03/11 06:24:29.966	{}	[info]	()	Quitting TestDriver.
+107	2023/03/11 06:24:30.086	{}	[info]	()	Test class executed. (duration: 17.1 sec)
+Disconnected from the target VM, address: '127.0.0.1:55240', transport: 'socket'
 
 Process finished with exit code 255
 ```

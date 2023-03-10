@@ -7,7 +7,7 @@ import shirates.core.storage.Clipboard
 /**
  * clearClipboard
  */
-fun TestDrive?.clearClipboard(): TestElement {
+fun TestDrive.clearClipboard(): TestElement {
 
     val testElement = getTestElement()
 
@@ -28,7 +28,7 @@ fun TestDrive?.clearClipboard(): TestElement {
 /**
  * writeClipboard
  */
-fun TestDrive?.writeClipboard(text: String): TestElement {
+fun TestDrive.writeClipboard(text: String): TestElement {
 
     val testElement = getTestElement()
 
@@ -49,7 +49,7 @@ fun TestDrive?.writeClipboard(text: String): TestElement {
 /**
  * readClipboard
  */
-fun TestDrive?.readClipboard(): String {
+fun TestDrive.readClipboard(): String {
 
     val testElement = getTestElement()
 

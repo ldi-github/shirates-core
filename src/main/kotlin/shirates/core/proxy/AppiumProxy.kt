@@ -257,12 +257,10 @@ object AppiumProxy {
         try {
             response = client.newCall(request).execute()
             return response
+        } catch (t: Throwable) {
+            throw TestDriverException("${t.message} (appiumProxyReadTimeoutSeconds=${testContext.appiumProxyReadTimeoutSeconds})")
         } finally {
-            try {
-                response?.close()
-            } catch (t: Throwable) {
-                TestLog.error(t)
-            }
+            response?.close()
         }
     }
 

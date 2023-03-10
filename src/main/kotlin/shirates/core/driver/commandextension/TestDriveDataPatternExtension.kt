@@ -8,7 +8,7 @@ import shirates.core.logging.TestLog
 /**
  * dataPattern
  */
-fun TestDrive?.dataPattern(
+fun TestDrive.dataPattern(
     apiNickname: String,
     dataPatternName: String
 ): TestElement {
@@ -24,7 +24,7 @@ fun TestDrive?.dataPattern(
 /**
  * getDataPattern
  */
-fun TestDrive?.getDataPattern(
+fun TestDrive.getDataPattern(
     apiNickname: String
 ): String {
 
@@ -34,7 +34,7 @@ fun TestDrive?.getDataPattern(
 /**
  * resetDataPattern
  */
-fun TestDrive?.resetDataPattern(): TestElement {
+fun TestDrive.resetDataPattern(): TestElement {
 
     return shirates.core.proxy.resetDataPattern()
 }

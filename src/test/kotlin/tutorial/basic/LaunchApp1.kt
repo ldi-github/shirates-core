@@ -16,18 +16,18 @@ class LaunchApp1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    terminateApp()
+                    it.terminateApp()   // Refers packageOrBundleId in testConfig.json
                 }.action {
-                    it.launchApp()
+                    it.launchApp()  // Refers packageOrBundleId in testConfig.json
                 }.expectation {
-                    it.appIs("[Settings]")
-                    it.appIs("Settings")
-                    it.appIs("com.android.settings")
+                    it.appIs("[Settings]")  // App Nickname in app.json
+                    it.appIs("Settings")    // App Nickname in app.json
+                    it.appIs("com.android.settings")    // package
                 }
             }
             case(2) {
                 condition {
-                    terminateApp("[Chrome]")
+                    it.terminateApp("[Chrome]")     // App Nickname in app.json
                 }.action {
                     it.launchApp("[Chrome]")
                 }.expectation {
@@ -36,7 +36,7 @@ class LaunchApp1 : UITest() {
             }
             case(3) {
                 condition {
-                    terminateApp("com.android.chrome")
+                    it.terminateApp("com.android.chrome")   // package
                 }.action {
                     it.launchApp("com.android.chrome")
                 }.expectation {
@@ -45,7 +45,7 @@ class LaunchApp1 : UITest() {
             }
             case(4) {
                 condition {
-                    terminateApp("Chrome")
+                    it.terminateApp("Chrome")   // App Nickname in app.json
                 }.action {
                     it.launchApp("Chrome")
                 }.expectation {
@@ -54,7 +54,7 @@ class LaunchApp1 : UITest() {
             }
             case(5) {
                 condition {
-                    terminateApp("[Play Store]")
+                    it.terminateApp("[Play Store]")     // App Nickname in app.json
                 }.action {
                     it.launchApp("[Play Store]")
                 }.expectation {

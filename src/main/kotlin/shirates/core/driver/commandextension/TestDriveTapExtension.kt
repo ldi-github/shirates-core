@@ -11,7 +11,7 @@ import shirates.core.utility.time.StopWatch
 /**
  * getTapTarget
  */
-fun TestDrive?.getTapTarget(
+fun TestDrive.getTapTarget(
     x: Int,
     y: Int,
     expression: String? = null
@@ -30,7 +30,7 @@ fun TestDrive?.getTapTarget(
 /**
  * tap
  */
-fun TestDrive?.tap(
+fun TestDrive.tap(
     x: Int,
     y: Int,
     holdSeconds: Double = testContext.tapHoldSeconds,
@@ -151,7 +151,7 @@ private fun TestElement.tapCore(
 /**
  * tap
  */
-fun TestDrive?.tap(
+fun TestDrive.tap(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
@@ -196,7 +196,7 @@ fun TestDrive?.tap(
     return e
 }
 
-private fun TestDrive?.tapWithScrollCommandCore(
+private fun TestDrive.tapWithScrollCommandCore(
     expression: String,
     command: String,
     direction: ScrollDirection,
@@ -230,7 +230,7 @@ private fun TestDrive?.tapWithScrollCommandCore(
 /**
  * tapWithScrollDown
  */
-fun TestDrive?.tapWithScrollDown(
+fun TestDrive.tapWithScrollDown(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -259,7 +259,7 @@ fun TestDrive?.tapWithScrollDown(
 /**
  * tapWithScrollUp
  */
-fun TestDrive?.tapWithScrollUp(
+fun TestDrive.tapWithScrollUp(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
@@ -288,7 +288,7 @@ fun TestDrive?.tapWithScrollUp(
 /**
  * tapWithScrollRight
  */
-fun TestDrive?.tapWithScrollRight(
+fun TestDrive.tapWithScrollRight(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
@@ -317,7 +317,7 @@ fun TestDrive?.tapWithScrollRight(
 /**
  * tapWithScrollLeft
  */
-fun TestDrive?.tapWithScrollLeft(
+fun TestDrive.tapWithScrollLeft(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
@@ -346,7 +346,7 @@ fun TestDrive?.tapWithScrollLeft(
 /**
  * tapCenterOfScreen
  */
-fun TestDrive?.tapCenterOfScreen(
+fun TestDrive.tapCenterOfScreen(
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -368,7 +368,7 @@ fun TestDrive?.tapCenterOfScreen(
 /**
  * tapCenterOf
  */
-fun TestDrive?.tapCenterOf(
+fun TestDrive.tapCenterOf(
     expression: String,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,

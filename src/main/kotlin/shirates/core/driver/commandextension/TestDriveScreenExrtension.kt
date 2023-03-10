@@ -2,7 +2,6 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
@@ -12,7 +11,7 @@ import shirates.core.utility.sync.SyncUtility
 /**
  * screenName
  */
-val TestDrive?.screenName: String
+val TestDrive.screenName: String
     get() {
         return TestDriver.currentScreen
     }
@@ -20,7 +19,7 @@ val TestDrive?.screenName: String
 /**
  * isScreen
  */
-fun TestDrive?.isScreen(
+fun TestDrive.isScreen(
     screenName: String
 ): Boolean {
 
@@ -39,7 +38,7 @@ fun TestDrive?.isScreen(
 /**
  * isScreenOf
  */
-fun TestDrive?.isScreenOf(
+fun TestDrive.isScreenOf(
     vararg screenNames: String,
 ): Boolean {
 
@@ -58,7 +57,7 @@ fun TestDrive?.isScreenOf(
 /**
  * waitScreenOf
  */
-fun TestDrive?.waitScreenOf(
+fun TestDrive.waitScreenOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     syncCache: Boolean = true,
@@ -80,7 +79,7 @@ fun TestDrive?.waitScreenOf(
     return lastElement
 }
 
-internal fun TestDrive?.waitScreenOfCore(
+internal fun TestDrive.waitScreenOfCore(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     syncCache: Boolean = true,
@@ -146,7 +145,7 @@ internal fun TestDrive?.waitScreenOfCore(
 /**
  * waitScreen
  */
-fun TestDrive?.waitScreen(
+fun TestDrive.waitScreen(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler

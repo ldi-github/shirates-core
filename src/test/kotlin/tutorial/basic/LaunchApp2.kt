@@ -16,7 +16,7 @@ class LaunchApp2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    terminateApp()
+                    it.terminateApp()
                 }.action {
                     it.launchApp()
                 }.expectation {
@@ -25,7 +25,7 @@ class LaunchApp2 : UITest() {
             }
             case(2) {
                 condition {
-                    terminateApp("[Safari]")
+                    it.terminateApp("[Safari]")
                 }.action {
                     it.launchApp("[Safari]")
                 }.expectation {
@@ -34,7 +34,7 @@ class LaunchApp2 : UITest() {
             }
             case(3) {
                 condition {
-                    terminateApp("com.apple.mobilesafari")
+                    it.terminateApp("com.apple.mobilesafari")
                 }.action {
                     it.launchApp("com.apple.mobilesafari")
                 }.expectation {
@@ -43,7 +43,7 @@ class LaunchApp2 : UITest() {
             }
             case(4) {
                 condition {
-                    terminateApp("Safari")
+                    it.terminateApp("Safari")
                 }.action {
                     it.launchApp("Safari")
                 }.expectation {
@@ -52,7 +52,7 @@ class LaunchApp2 : UITest() {
             }
             case(5) {
                 condition {
-                    terminateApp("[Freeform]")
+                    it.terminateApp("[Freeform]")
                 }.action {
                     it.launchApp("[Freeform]")
                 }.expectation {

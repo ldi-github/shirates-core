@@ -24,7 +24,7 @@ class TestDriveTapAppIconExtensionTest : UITest() {
                         .pressHome()
                         .tapAppIcon("Safari")
                 }.expectation {
-                    it.appIs("[Safari]")
+                    it.appIs("Safari")
 
                 }
             }
@@ -36,7 +36,7 @@ class TestDriveTapAppIconExtensionTest : UITest() {
                         it.tap()
                     }
                 }.expectation {
-                    it.appIs("[Reminders]")
+                    it.appIs("Reminders")
                 }
             }
         }

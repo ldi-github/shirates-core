@@ -1,19 +1,20 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
+import shirates.core.configuration.isValidNickname
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.storage.app
 import shirates.core.utility.misc.AppNameUtility
+import shirates.core.utility.sync.SyncUtility
 
 /**
  * isAppInstalled
  */
-fun TestDrive?.isAppInstalled(
+fun TestDrive.isAppInstalled(
     appNickname: String? = null,
     packageOrBundleId: String? = testContext.profile.packageOrBundleId
 ): Boolean {
@@ -21,8 +22,9 @@ fun TestDrive?.isAppInstalled(
     val testElement = getTestElement()
 
     var id = packageOrBundleId
-    if (appNickname != null) {
-        id = app(datasetName = appNickname, attributeName = "packageOrBundleId")
+    if (appNickname?.isValidNickname() == true) {
+        id = app(datasetName = appNickname, attributeName = "packageOrBundleId", throwsException = false)
+            .ifBlank { packageOrBundleId }
     }
 
     val context = TestDriverCommandContext(testElement)
@@ -43,7 +45,7 @@ fun TestDrive?.isAppInstalled(
 /**
  * installApp
  */
-fun TestDrive?.installApp(
+fun TestDrive.installApp(
     appPackageFile: String = testContext.profile.appPackageFullPath,
 ): TestElement {
 
@@ -71,7 +73,7 @@ fun TestDrive?.installApp(
 /**
  * removeApp
  */
-fun TestDrive?.removeApp(
+fun TestDrive.removeApp(
     packageOrBundleId: String? = testContext.profile.packageOrBundleId,
 ): TestElement {
 
@@ -93,7 +95,7 @@ fun TestDrive?.removeApp(
 /**
  * terminateApp
  */
-fun TestDrive?.terminateApp(
+fun TestDrive.terminateApp(
     appNameOrAppId: String = testContext.appIconName
 ): TestElement {
 
@@ -125,7 +127,7 @@ fun TestDrive?.terminateApp(
 /**
  * restartApp
  */
-fun TestDrive?.restartApp(
+fun TestDrive.restartApp(
     appIconNameOrPackageOrBundleId: String = TestDriver.testContext.appIconName
 ): TestElement {
 
@@ -137,5 +139,67 @@ fun TestDrive?.restartApp(
     TestDriver.it.launchApp(appIconNameOrPackageOrBundleId)
 
     return lastElement
+}
+
+/**
+ * launchApp
+ *
+ * @param appNameOrAppIdOrActivityName
+ * Nickname [App1]
+ * or appName App1
+ * or packageOrBundleId com.example.app1
+ * or activityName com.android.settings/.Settings
+ */
+fun TestDrive.launchApp(
+    appNameOrAppIdOrActivityName: String = testContext.appIconName,
+    fallBackToTapAppIcon: Boolean = true
+): TestElement {
+
+    val testElement = getTestElement()
+
+    val command = "launchApp"
+    val subject = Selector(appNameOrAppIdOrActivityName).toString()
+    val message = message(id = command, subject = subject)
+    val context = TestDriverCommandContext(testElement)
+    context.execOperateCommand(command = command, message = message, subject = subject) {
+
+        if (appNameOrAppIdOrActivityName.contains("/")) {
+            val activityName = appNameOrAppIdOrActivityName
+            TestDriver.launchAppCore(packageOrBundleIdOrActivity = activityName)
+            return@execOperateCommand
+        }
+
+        val packageOrBundleId =
+            AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName)
+        if (packageOrBundleId.isBlank()) {
+            if (fallBackToTapAppIcon) {
+                TestDriver.tapAppIconCore(appIconName = appNameOrAppIdOrActivityName)
+                return@execOperateCommand
+            } else {
+                throw IllegalArgumentException(
+                    message(
+                        id = "failedToGetPackageOrBundleId",
+                        arg1 = "appNameOrAppId=$appNameOrAppIdOrActivityName"
+                    )
+                )
+            }
+        }
+
+        if (isAndroid) {
+            TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
+        } else if (TestMode.isiOS) {
+            if (isSimulator) {
+                TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
+            } else {
+                TestDriver.tapAppIconCore(appNameOrAppIdOrActivityName)
+                SyncUtility.doUntilTrue {
+                    invalidateCache()
+                    isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+                }
+            }
+        }
+    }
+
+    return TestDriver.lastElement
 }
 

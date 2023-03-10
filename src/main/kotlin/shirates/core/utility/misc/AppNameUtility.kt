@@ -69,6 +69,10 @@ object AppNameUtility {
      */
     fun getAppNickNameFromPackageName(packageName: String): String {
 
+        if (App.repository == null) {
+            return ""
+        }
+
         /**
          * Get from apps.json
          */

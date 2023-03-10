@@ -180,7 +180,12 @@ object AppiumServerManager {
         sw.start()
         while (true) {
             if (sw.elapsedSeconds > appiumServerStartupTimeoutSeconds) {
-                throw TestDriverException(message = message("failedToConnectToAppiumServer"))
+                throw TestDriverException(
+                    message = message(
+                        "failedToStartAppiumServerInSeconds",
+                        arg1 = "$appiumServerStartupTimeoutSeconds"
+                    )
+                )
             }
             val pid = ProcessUtility.getPid(port = port)
             if (pid != null) {

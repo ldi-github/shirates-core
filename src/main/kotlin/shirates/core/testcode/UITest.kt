@@ -451,6 +451,41 @@ abstract class UITest : TestDrive {
                 launchApp = launchApp,
                 testProc = testProc
             )
+        } catch (t: Throwable) {
+            val message = t.message ?: ""
+            if (t is RerunScenarioException ||
+                message.contains("Read timed out") ||
+                message.contains("AppiumProxy.getSource() timed out") ||
+                message.contains("Could not start a new session. Response code 500.") ||
+                message.contains(" is still running after")
+            ) {
+                TestLog.getLinesOfCurrentTestScenario().forEach {
+                    it.deleted = true
+                    if (it.logType == LogType.ERROR) {
+                        it.logType = LogType.WARN
+                    }
+                }
+
+                if (t is RerunScenarioException && t.cause != null) {
+                    TestLog.warn(t.cause?.message ?: t.cause.toString())
+                } else {
+                    TestLog.warn(message)
+                }
+
+                /**
+                 * Retry after resetting appium session
+                 */
+                TestDriver.resetAppiumSession()
+                scenarioCore(
+                    scenarioId = scenarioId,
+                    order = order,
+                    desc = desc,
+                    launchApp = launchApp,
+                    testProc = testProc
+                )
+            } else {
+                throw t
+            }
         } finally {
             CodeExecutionContext.isInScenario = false
 
@@ -471,7 +506,8 @@ abstract class UITest : TestDrive {
         CodeExecutionContext.lastScreenshotXmlSource = ""
         testSkipped = false
 
-        if (TestLog.lastScenarioLog?.testScenarioId == scenarioId) {
+        val lastScenarioLog = TestLog.lastScenarioLog
+        if (lastScenarioLog?.testScenarioId == scenarioId && lastScenarioLog?.deleted == false) {
             throw TestDriverException(message(id = "multipleScenarioNotAllowed"))
         }
 

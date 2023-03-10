@@ -312,8 +312,11 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             func()
         } finally {
             CodeExecutionContext.isInOperationCommand = original
-            TestDriver.autoScreenshot()
-            endCommand()
+            try {
+                TestDriver.autoScreenshot()
+            } finally {
+                endCommand()
+            }
         }
 
         if (PropertiesManager.enableTimeMeasureLog) {

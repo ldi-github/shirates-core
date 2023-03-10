@@ -33,6 +33,14 @@ object DatasetRepositoryManager {
     }
 
     /**
+     * hasRepository
+     */
+    fun hasRepository(repositoryName: String): Boolean {
+
+        return repositories.containsKey(repositoryName)
+    }
+
+    /**
      * getRepository
      */
     fun getRepository(repositoryName: String): DatasetRepository {

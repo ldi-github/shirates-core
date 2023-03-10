@@ -9,7 +9,7 @@ import shirates.core.utility.getCapabilityRelaxed
 /**
  * parameters
  */
-val TestDrive?.parameters: Map<String, String>
+val TestDrive.parameters: Map<String, String>
     get() {
         return ParameterRepository.parameters
     }
@@ -17,7 +17,7 @@ val TestDrive?.parameters: Map<String, String>
 /**
  * parameter
  */
-fun TestDrive?.parameter(name: String): String {
+fun TestDrive.parameter(name: String): String {
     if (parameters.containsKey(name)) {
         return parameters[name]!!
     }
@@ -31,7 +31,7 @@ fun TestDrive?.parameter(name: String): String {
 /**
  * viewport
  */
-val TestDrive?.viewport: Bounds
+val TestDrive.viewport: Bounds
     get() {
         if (TestMode.isAndroid) {
             try {
@@ -53,7 +53,7 @@ val TestDrive?.viewport: Bounds
 /**
  * capabilities
  */
-val TestDrive?.capabilities: Capabilities
+val TestDrive.capabilities: Capabilities
     get() {
         if (TestDriver.isInitialized.not()) {
             throw TestDriverException("Failed to get capabilities. TestDriver is not initialized.")
@@ -64,7 +64,7 @@ val TestDrive?.capabilities: Capabilities
 /**
  * capabilityRelaxed
  */
-fun TestDrive?.capabilityRelaxed(capabilityName: String): String {
+fun TestDrive.capabilityRelaxed(capabilityName: String): String {
 
     return capabilities.getCapabilityRelaxed(capabilityName = capabilityName)
 }
@@ -72,7 +72,7 @@ fun TestDrive?.capabilityRelaxed(capabilityName: String): String {
 /**
  * deviceManufacturer
  */
-val TestDrive?.deviceManufacturer: String
+val TestDrive.deviceManufacturer: String
     get() {
         return parameter("deviceManufacturer")
     }
@@ -80,7 +80,7 @@ val TestDrive?.deviceManufacturer: String
 /**
  * deviceModel
  */
-val TestDrive?.deviceModel: String
+val TestDrive.deviceModel: String
     get() {
         return parameter("deviceModel")
     }
@@ -88,7 +88,7 @@ val TestDrive?.deviceModel: String
 /**
  * deviceName
  */
-val TestDrive?.deviceName: String
+val TestDrive.deviceName: String
     get() {
         return parameter("deviceName")
     }
@@ -96,7 +96,7 @@ val TestDrive?.deviceName: String
 /**
  * isEmulator
  */
-val TestDrive?.isEmulator: Boolean
+val TestDrive.isEmulator: Boolean
     get() {
         return TestMode.isEmulator
     }
@@ -104,7 +104,7 @@ val TestDrive?.isEmulator: Boolean
 /**
  * isSimulator
  */
-val TestDrive?.isSimulator: Boolean
+val TestDrive.isSimulator: Boolean
     get() {
         return TestMode.isEmulator
     }
@@ -112,7 +112,7 @@ val TestDrive?.isSimulator: Boolean
 /**
  * isRealDevice
  */
-val TestDrive?.isRealDevice: Boolean
+val TestDrive.isRealDevice: Boolean
     get() {
         return TestMode.isRealDevice
     }
@@ -120,7 +120,7 @@ val TestDrive?.isRealDevice: Boolean
 /**
  * isStub
  */
-val TestDrive?.isStub: Boolean
+val TestDrive.isStub: Boolean
     get() {
         return TestMode.isStub
     }
@@ -129,7 +129,7 @@ val TestDrive?.isStub: Boolean
  * platformName
  * (Android or iOS)
  */
-val TestDrive?.platformName: String
+val TestDrive.platformName: String
     get() {
         return testContext.profile.platformName
     }
@@ -138,7 +138,7 @@ val TestDrive?.platformName: String
  * platformVersion
  * (os version)
  */
-val TestDrive?.platformVersion: String
+val TestDrive.platformVersion: String
     get() {
         if (TestDriver.isInitialized) {
             return TestDriver.appiumDriver.capabilities.getCapabilityRelaxed("platformVersion")
@@ -149,7 +149,7 @@ val TestDrive?.platformVersion: String
 /**
  * appIconName
  */
-val TestDrive?.appIconName: String
+val TestDrive.appIconName: String
     get() {
         return testContext.appIconName
     }
@@ -157,7 +157,7 @@ val TestDrive?.appIconName: String
 /**
  * scrollFrame
  */
-val TestDrive?.scrollFrame: TestElement
+val TestDrive.scrollFrame: TestElement
     get() {
         val testElement = getTestElement()
         TestDriver.lastElement = testElement.getScrollableTarget()

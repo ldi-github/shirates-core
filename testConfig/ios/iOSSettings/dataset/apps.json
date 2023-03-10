@@ -6,7 +6,7 @@
     "packageOrBundleId": "com.apple.mobilesafari"
   },
   "[Maps]": {
-    "packageOrBundleId": "com.google.Maps"
+    "packageOrBundleId": "com.apple.Maps"
   },
   "[Reminders]": {
     "packageOrBundleId": "com.apple.reminders"

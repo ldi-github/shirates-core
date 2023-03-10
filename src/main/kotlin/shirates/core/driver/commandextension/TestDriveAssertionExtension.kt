@@ -24,7 +24,7 @@ import shirates.core.utility.time.StopWatch
  * or appName App1
  * or packageOrBundleId com.example.app1
  */
-fun TestDrive?.appIs(
+fun TestDrive.appIs(
     appNameOrAppId: String
 ): TestElement {
 
@@ -55,7 +55,7 @@ fun TestDrive?.appIs(
 /**
  * keyboardIsShown
  */
-fun TestDrive?.keyboardIsShown(): TestElement {
+fun TestDrive.keyboardIsShown(): TestElement {
 
     val testElement = getTestElement()
 
@@ -78,7 +78,7 @@ fun TestDrive?.keyboardIsShown(): TestElement {
 /**
  * keyboardIsNotShown
  */
-fun TestDrive?.keyboardIsNotShown(): TestElement {
+fun TestDrive.keyboardIsNotShown(): TestElement {
 
     val testElement = getTestElement()
 
@@ -101,7 +101,7 @@ fun TestDrive?.keyboardIsNotShown(): TestElement {
 /**
  * packageIs
  */
-fun TestDrive?.packageIs(expected: String): TestElement {
+fun TestDrive.packageIs(expected: String): TestElement {
 
     val testElement = getTestElement()
 
@@ -137,7 +137,7 @@ fun TestDrive?.packageIs(expected: String): TestElement {
 /**
  * screenIs
  */
-fun TestDrive?.screenIs(
+fun TestDrive.screenIs(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     syncCache: Boolean = true,
@@ -168,7 +168,7 @@ fun TestDrive?.screenIs(
 /**
  * screenIs
  */
-fun TestDrive?.screenIs(
+fun TestDrive.screenIs(
     screenName: String,
     waitSeconds: Int,
     syncCache: Boolean = true,
@@ -178,7 +178,7 @@ fun TestDrive?.screenIs(
     return screenIs(screenName = screenName, waitSeconds = waitSeconds.toDouble(), syncCache = syncCache, func = func)
 }
 
-internal fun TestDrive?.screenIsCore(
+internal fun TestDrive.screenIsCore(
     expectedScreenName: String,
     assertMessage: String,
     waitSeconds: Double,
@@ -221,7 +221,7 @@ internal fun TestDrive?.screenIsCore(
 /**
  * screenIsOf
  */
-fun TestDrive?.screenIsOf(
+fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     syncCache: Boolean = true,
@@ -252,7 +252,7 @@ fun TestDrive?.screenIsOf(
 /**
  * screenIs
  */
-fun TestDrive?.screenIsOf(
+fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Int,
     syncCache: Boolean = true,
@@ -267,7 +267,7 @@ fun TestDrive?.screenIsOf(
     )
 }
 
-internal fun TestDrive?.screenIsOfCore(
+internal fun TestDrive.screenIsOfCore(
     vararg screenNames: String,
     assertMessage: String,
     waitSeconds: Double,
@@ -315,7 +315,7 @@ internal fun TestDrive?.screenIsOfCore(
     }
 }
 
-internal fun TestDrive?.existCore(
+internal fun TestDrive.existCore(
     message: String,
     selector: Selector,
     throwsException: Boolean = true,
@@ -378,7 +378,7 @@ internal fun TestDrive?.existCore(
 /**
  * exist
  */
-fun TestDrive?.exist(
+fun TestDrive.exist(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -421,7 +421,7 @@ fun TestDrive?.exist(
 /**
  * existWithScrollDown
  */
-fun TestDrive?.existWithScrollDown(
+fun TestDrive.existWithScrollDown(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -461,7 +461,7 @@ fun TestDrive?.existWithScrollDown(
 /**
  * existWithScrollUp
  */
-fun TestDrive?.existWithScrollUp(
+fun TestDrive.existWithScrollUp(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -501,7 +501,7 @@ fun TestDrive?.existWithScrollUp(
 /**
  * existWithScrollRight
  */
-fun TestDrive?.existWithScrollRight(
+fun TestDrive.existWithScrollRight(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -541,7 +541,7 @@ fun TestDrive?.existWithScrollRight(
 /**
  * existWithScrollLeft
  */
-fun TestDrive?.existWithScrollLeft(
+fun TestDrive.existWithScrollLeft(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -581,7 +581,7 @@ fun TestDrive?.existWithScrollLeft(
 /**
  * existInScanResults
  */
-fun TestDrive?.existInScanResults(
+fun TestDrive.existInScanResults(
     expression: String,
     throwsException: Boolean = true,
     func: (TestElement.() -> Unit)? = null
@@ -628,7 +628,7 @@ fun TestDrive?.existInScanResults(
 /**
  * existAll
  */
-fun TestDrive?.existAll(
+fun TestDrive.existAll(
     vararg expressions: String,
     waitSeconds: Double = testContext.syncWaitSeconds,
     syncCache: Boolean = true
@@ -656,7 +656,7 @@ fun TestDrive?.existAll(
 /**
  * existAllWithScrollDown
  */
-fun TestDrive?.existAllWithScrollDown(
+fun TestDrive.existAllWithScrollDown(
     vararg expressions: String
 ): TestElement {
 
@@ -670,7 +670,7 @@ fun TestDrive?.existAllWithScrollDown(
 /**
  * existAllInScanResults
  */
-fun TestDrive?.existAllInScanResults(
+fun TestDrive.existAllInScanResults(
     vararg expressions: String
 ): TestElement {
 
@@ -681,7 +681,7 @@ fun TestDrive?.existAllInScanResults(
     return lastElement
 }
 
-internal fun TestDrive?.dontExist(
+internal fun TestDrive.dontExist(
     selector: Selector,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
@@ -729,7 +729,7 @@ internal fun TestDrive?.dontExist(
     return e
 }
 
-internal fun TestDrive?.dontExistCore(
+internal fun TestDrive.dontExistCore(
     message: String,
     selector: Selector,
     throwsException: Boolean = true,
@@ -786,7 +786,7 @@ internal fun TestDrive?.dontExistCore(
 /**
  * dontExist
  */
-fun TestDrive?.dontExist(
+fun TestDrive.dontExist(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
@@ -814,7 +814,7 @@ fun TestDrive?.dontExist(
 /**
  * dontExistWithScrollDown
  */
-fun TestDrive?.dontExistWithScrollDown(
+fun TestDrive.dontExistWithScrollDown(
     expression: String,
     throwsException: Boolean = true,
     syncCache: Boolean = true
@@ -845,7 +845,7 @@ fun TestDrive?.dontExistWithScrollDown(
 /**
  * dontExistWithScrollUp
  */
-fun TestDrive?.dontExistWithScrollUp(
+fun TestDrive.dontExistWithScrollUp(
     expression: String,
     throwsException: Boolean = true,
     syncCache: Boolean = true,
@@ -882,7 +882,7 @@ fun TestDrive?.dontExistWithScrollUp(
 /**
  * dontExistAll
  */
-fun TestDrive?.dontExistAll(
+fun TestDrive.dontExistAll(
     vararg expressions: String,
     syncCache: Boolean = true
 ): TestElement {
@@ -897,7 +897,7 @@ fun TestDrive?.dontExistAll(
 /**
  * dontExistAllInScanResult
  */
-fun TestDrive?.dontExistAllInScanResult(
+fun TestDrive.dontExistAllInScanResult(
     vararg expressions: String
 ): TestElement {
 
@@ -910,7 +910,7 @@ fun TestDrive?.dontExistAllInScanResult(
 /**
  * dontExistInScanResults
  */
-fun TestDrive?.dontExistInScanResults(
+fun TestDrive.dontExistInScanResults(
     expression: String,
     throwsException: Boolean = true
 ): TestElement {

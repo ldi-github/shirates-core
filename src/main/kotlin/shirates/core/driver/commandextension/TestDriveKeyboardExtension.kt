@@ -4,15 +4,13 @@ import com.google.common.collect.ImmutableMap
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.Message.message
-import shirates.core.utility.android.AndroidKeyboardUtility
 
 /**
  * isKeyboardShown
  */
-val TestDrive?.isKeyboardShown: Boolean
+val TestDrive.isKeyboardShown: Boolean
     get() {
         if (TestMode.isNoLoadRun) {
             return true
@@ -28,7 +26,7 @@ val TestDrive?.isKeyboardShown: Boolean
 /**
  * hideKeyboard
  */
-fun TestDrive?.hideKeyboard(
+fun TestDrive.hideKeyboard(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
@@ -57,7 +55,7 @@ fun TestDrive?.hideKeyboard(
 /**
  * pressBack
  */
-fun TestDrive?.pressBack(
+fun TestDrive.pressBack(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
@@ -84,7 +82,7 @@ fun TestDrive?.pressBack(
 /**
  * pressHome
  */
-fun TestDrive?.pressHome(
+fun TestDrive.pressHome(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
@@ -109,7 +107,7 @@ fun TestDrive?.pressHome(
 /**
  * pressEnter
  */
-fun TestDrive?.pressEnter(
+fun TestDrive.pressEnter(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
@@ -136,7 +134,7 @@ fun TestDrive?.pressEnter(
 /**
  * pressSearch
  */
-fun TestDrive?.pressSearch(
+fun TestDrive.pressSearch(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
@@ -167,7 +165,7 @@ fun TestDrive?.pressSearch(
 /**
  * pressTab
  */
-fun TestDrive?.pressTab(
+fun TestDrive.pressTab(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
@@ -194,7 +192,7 @@ fun TestDrive?.pressTab(
 /**
  * pressAndroid
  */
-fun TestDrive?.pressAndroid(
+fun TestDrive.pressAndroid(
     key: AndroidKey,
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
@@ -226,7 +224,7 @@ fun TestDrive?.pressAndroid(
 /**
  * pressKeys
  */
-fun TestDrive?.pressKeys(
+fun TestDrive.pressKeys(
     keys: String,
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
@@ -245,7 +243,7 @@ fun TestDrive?.pressKeys(
         arg1 = keys
     ) {
         if (isAndroid) {
-            AndroidKeyboardUtility.pressKeys(keys = keys)
+            TestDriveObjectAndroid.pressKeys(keys = keys)
         } else {
             sendKeys(keysToSend = keys)
         }

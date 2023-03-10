@@ -8,7 +8,7 @@ import shirates.core.driver.getTestElement
 /**
  * suppressHandler
  */
-fun TestDrive?.suppressHandler(func: () -> Unit): TestElement {
+fun TestDrive.suppressHandler(func: () -> Unit): TestElement {
 
     val context = TestDriver.testContext
     val original = context.enableIrregularHandler
@@ -26,7 +26,7 @@ fun TestDrive?.suppressHandler(func: () -> Unit): TestElement {
 /**
  * disableHandler
  */
-fun TestDrive?.disableHandler(): TestElement {
+fun TestDrive.disableHandler(): TestElement {
 
     TestDriver.testContext.enableIrregularHandler = false
 
@@ -36,7 +36,7 @@ fun TestDrive?.disableHandler(): TestElement {
 /**
  * enableHandler
  */
-fun TestDrive?.enableHandler(): TestElement {
+fun TestDrive.enableHandler(): TestElement {
 
     TestDriver.testContext.enableIrregularHandler = true
 
