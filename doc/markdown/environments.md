@@ -2,6 +2,17 @@
 
 ## Tested Environments
 
+2023/3/11
+
+- macOS Ventura 13.1
+- Appium 2.0.0-beta.57
+- uiautomator2@2.12.6
+- xcuitest@4.19.0
+- Android Studio Electric Eel | 2022.1.1 Patch 2
+- Android Emulator Pixel 3a(Android 12)
+- Xcode 14.2
+- iOS Simulator iPhone 14(16.2)
+
 2023/2/28
 
 - macOS Ventura 13.1
