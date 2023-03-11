@@ -13,6 +13,8 @@
 - Xcode 14.2
 - iOS Simulator iPhone 14(16.2)
 
+<hr>
+
 2023/2/28
 
 - macOS Ventura 13.1
