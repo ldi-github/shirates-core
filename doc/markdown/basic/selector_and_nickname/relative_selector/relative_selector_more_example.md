@@ -208,7 +208,6 @@ class RelativeCommand1 : UITest() {
 
 - [Relative selector command (XML based)](relative_selector_xml.md)
 
+
 - [Relative selector](relative_selector.md)
--
-- [index](../../../index.md)
 
