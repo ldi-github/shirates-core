@@ -187,6 +187,9 @@
     - [Designing test in code first](in_action/designing_and_implementing_test/designing_test_in_code_first.md)
 - Running test on CI server
     - [Running with Gradle](in_action/running_test_on_ci_server/running_with_gradle.md)
+- Stabilizing test execution (Improve Flaky Test)
+    - [Causes of flaky test](in_action/stabilizing_test_execution/causes_of_flaky_test.md)
+    - [Rerun test](in_action/stabilizing_test_execution/rerun_scenario.md)
 
 ## Tutorial(Advanced)
 

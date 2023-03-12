@@ -1757,6 +1757,47 @@ class FilterTest : UnitTest() {
     }
 
     @Test
+    fun selected() {
+
+        run {
+            // Arrange, Act
+            val filter = Filter("selected=true")
+            assertThat(filter.name).isEqualTo("selected")
+            assertThat(filter.noun).isEqualTo("selected")
+            assertThat(filter.verb).isEqualTo("")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("true")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("selected=true")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("selected=true")
+            assertThat(filter.abbreviationOperator).isEqualTo("")
+            assertThat(filter.abbreviationExpression).isEqualTo("")
+            assertThat(filter.evaluate("true")).isEqualTo(true)
+            assertThat(filter.evaluate("false")).isEqualTo(false)
+            assertThat(filter.evaluate("a")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("selected!=true")
+            assertThat(filter.name).isEqualTo("selected")
+            assertThat(filter.noun).isEqualTo("selected")
+            assertThat(filter.verb).isEqualTo("")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("true")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("selected!=true")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("selected!=true")
+            assertThat(filter.abbreviationOperator).isEqualTo("")
+            assertThat(filter.abbreviationExpression).isEqualTo("")
+            assertThat(filter.evaluate("true")).isEqualTo(false)
+            assertThat(filter.evaluate("false")).isEqualTo(true)
+            assertThat(filter.evaluate("a")).isEqualTo(true)
+        }
+    }
+
+    @Test
     fun scrollable() {
 
         TestMode.runAsAndroid {

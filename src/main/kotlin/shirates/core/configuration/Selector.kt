@@ -1083,6 +1083,14 @@ class Selector(
     }
 
     /**
+     * evaluateSelected
+     */
+    fun evaluateSelected(element: TestElement): Boolean {
+
+        return getFilter("selected")?.evaluate(element = element) ?: true
+    }
+
+    /**
      * evaluateScrollable
      */
     fun evaluateScrollable(element: TestElement): Boolean {
