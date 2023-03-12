@@ -408,6 +408,9 @@ class Filter(
             "focusable" ->
                 evaluateFocusable(focusable = stringValue)
 
+            "selected" ->
+                evaluateSelected(selected = stringValue)
+
             "ignoreTypes" ->
                 evaluateIgnoreTypes(classOrType = stringValue)
 
@@ -492,17 +495,17 @@ class Filter(
             "text" ->
                 evaluateText(text = element.textOrLabel)
 
-            "value" ->
-                evaluateValue(value = element.value)
-
             "literal" ->
                 evaluateLiteral(literal = element.textOrLabel)
+
+            "value" ->
+                evaluateValue(value = element.value)
 
             "focusable" ->
                 evaluateFocusable(focusable = element.focusable)
 
             "selected" ->
-                evaluateFocusable(focusable = element.selected)
+                evaluateSelected(selected = element.selected)
 
             "scrollable" ->
                 evaluateScrollable(element = element)

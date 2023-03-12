@@ -49,6 +49,7 @@ Shirates **Filter expression** is expression describing conditions to filter scr
 | class            | class=class1              | .class1      | class             | type          |
 | focusable        | focusable=true            | n/a          | focusable         | n/a           |
 | scrollable       | scrollable=true           | n/a          | scrollable        | n/a           |
+| selected         | selected=true             | n/a          | selected          | n/a           |
 | visible          | visible=true              | n/a          | n/a               | visible       |
 | xpath            | xpath=//*[@text='text1']  | n/a          | (arbitrary)       | (arbitrary)   |
 | pos              | pos=2                     | [2]          | n/a               | n/a           |

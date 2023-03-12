@@ -570,6 +570,30 @@ class Selector_AndroidTest2 : UnitTest() {
     }
 
     @Test
+    fun evaluateSelected() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            TestElementCache.loadXml(XmlDataAndroid.clock_Alarm)
+            val e = TestElementCache.rootElement
+            val e1 = TestElementCache.select("id=com.google.android.deskclock:id/navigation_bar")
+            val e2 = TestElementCache.select("id=com.google.android.deskclock:id/tab_menu_alarm")
+
+            run {
+                // Arrange
+                val sel = Selector("selected=true")
+                // Act, Assert
+                assertThat(sel.evaluateSelected(e)).isFalse()
+                assertThat(sel.evaluateSelected(e1)).isFalse()
+                assertThat(sel.evaluateSelected(e2)).isTrue()
+            }
+        }
+        TestMode.runAsIos {
+            // not supported
+        }
+    }
+
+    @Test
     fun evaluateScrollable() {
 
         TestMode.runAsAndroid {
