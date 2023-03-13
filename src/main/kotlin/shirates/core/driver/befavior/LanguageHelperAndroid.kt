@@ -17,6 +17,7 @@ object LanguageHelperAndroid : TestDrive {
         val udid = testProfile.udid
         val args = "adb -s $udid shell am start -a android.settings.LOCALE_SETTINGS".split(" ").toTypedArray()
         ShellUtility.executeCommand(args = args)
+        invalidateCache()
     }
 
     /**
