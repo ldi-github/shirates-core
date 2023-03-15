@@ -114,7 +114,7 @@
     - [waitForClose](basic/syncing/wait_for_close.md)
     - [waitForDisplay](basic/syncing/wait_for_display.md)
 - Repeating action
-    - [doUntilTrue](basic/repeating_action/do_until_true.md)
+    - [doUntilTrue](basic/repeating_action/do_until_true.md)  **(New! 3.0.2)**
 - Data storage
     - [memoAs, readMemo](basic/function_property/data_storage/memo.md)
     - [clipboard, readClipboard](basic/function_property/data_storage/clipboard.md)
