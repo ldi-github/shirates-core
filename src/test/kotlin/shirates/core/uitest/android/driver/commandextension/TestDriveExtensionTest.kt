@@ -9,6 +9,7 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
+import shirates.core.driver.wait
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog

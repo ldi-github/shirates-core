@@ -4,6 +4,7 @@ import io.appium.java_client.android.nativekey.AndroidKey
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.wait
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.utility.android.AndroidMobileShellUtility

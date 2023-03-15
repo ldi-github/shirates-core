@@ -3,6 +3,7 @@ package macro.android
 import shirates.core.driver.TestDrive
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.waitForDisplay
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 

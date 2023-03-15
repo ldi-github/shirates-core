@@ -461,9 +461,6 @@ abstract class UITest : TestDrive {
             ) {
                 TestLog.getLinesOfCurrentTestScenario().forEach {
                     it.deleted = true
-                    if (it.logType == LogType.ERROR) {
-                        it.logType = LogType.WARN
-                    }
                 }
 
                 if (t is RerunScenarioException && t.cause != null) {
@@ -473,8 +470,9 @@ abstract class UITest : TestDrive {
                 }
 
                 /**
-                 * Retry after resetting appium session
+                 * Rerun scenario after resetting appium session
                  */
+                TestLog.write("Rerunning scenario ...")
                 TestDriver.resetAppiumSession()
                 scenarioCore(
                     scenarioId = scenarioId,
@@ -578,7 +576,8 @@ abstract class UITest : TestDrive {
             TestLog.error(t)
             driver.screenshotCore()
             throw t
-
+        } catch (t: RerunScenarioException) {
+            throw t
         } catch (t: Throwable) {
             TestLog.error(message = t.message ?: t.toString(), exception = t)
             driver.screenshotCore()

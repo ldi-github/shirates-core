@@ -18,7 +18,6 @@
   },
 
   "capabilities": {
-    "simpleIsVisibleCheck": true,
     "useJSONSource": true,
     "showXcodeLog": true,
     "language": "en",

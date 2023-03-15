@@ -2,6 +2,7 @@ package macro.ios
 
 import shirates.core.driver.TestDriver.it
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.wait
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 

@@ -17,7 +17,6 @@
   },
 
   "capabilities": {
-    "simpleIsVisibleCheck": true,
     "useJSONSource": true,
     "appium:showXcodeLog": true,
     "bundleId": "com.apple.Preferences",

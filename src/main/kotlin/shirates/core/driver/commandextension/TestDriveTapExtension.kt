@@ -3,7 +3,6 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.time.StopWatch
@@ -155,6 +154,7 @@ fun TestDrive.tap(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
+    handleIrregular: Boolean = true
 ): TestElement {
 
     val testElement = getTestElement()
@@ -181,6 +181,10 @@ fun TestDrive.tap(
             TestLog.warn(errorMessage)
 
             syncCache(force = true)
+
+            if (handleIrregular) {
+                TestDriver.fireIrregularHandler()
+            }
 
             if (errorMessage.contains("Read timed out").not()) {
                 // retry once

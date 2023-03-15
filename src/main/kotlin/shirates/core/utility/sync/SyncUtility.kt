@@ -1,6 +1,7 @@
 package shirates.core.utility.sync
 
 import shirates.core.Const
+import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriver
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
@@ -86,7 +87,7 @@ object SyncUtility {
         var actionFunc: (SyncContext) -> Boolean,
         var stopWatch: StopWatch = StopWatch(),
         var count: Int = 0
-    )
+    ) : TestDrive
 
     /**
      * SyncResult

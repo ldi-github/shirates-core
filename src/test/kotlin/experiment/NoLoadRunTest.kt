@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.wait
 import shirates.core.storage.Memo
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest

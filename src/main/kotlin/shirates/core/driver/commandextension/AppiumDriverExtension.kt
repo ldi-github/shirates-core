@@ -5,6 +5,7 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.testContext
 import shirates.core.driver.testDrive
+import shirates.core.driver.waitForClose
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog

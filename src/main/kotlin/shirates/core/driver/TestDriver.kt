@@ -601,7 +601,7 @@ object TestDriver {
         val beforeRetry: (RetryContext<Unit>) -> Unit = { context ->
             val message = context.exception?.message ?: ""
             if (message.isNotBlank()) {
-                TestLog.warn(message)
+                TestLog.info("Retry cause: $message")
             }
 
             if (isAndroid) {
@@ -734,7 +734,10 @@ object TestDriver {
                 syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
                 val tapTestElement = testDrive.select(PropertiesManager.tapTestSelector)
                 if (tapTestElement.isFound) {
-                    tapTestElement.tap()   // throws on fail
+                    TestLog.info("tap${tapTestElement.selector}")
+                    testDrive.silent {
+                        tapTestElement.tap()   // throws on fail
+                    }
                 }
                 androidDriver.getScreenshotAs(OutputType.BYTES)   // throws on fail
                 androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail

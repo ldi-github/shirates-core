@@ -76,7 +76,6 @@ This is a sample configuration for iOS apps.
   "#startupActivity": "",
 
   "capabilities": {
-    "simpleIsVisibleCheck": true,
     "useJSONSource": true,
     "showXcodeLog": true,
     "language": "en",

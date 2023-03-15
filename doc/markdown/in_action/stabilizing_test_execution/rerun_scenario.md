@@ -19,7 +19,7 @@ Rerun is executed in these situation.
 | situation                                         | description                                                     |
 |---------------------------------------------------|-----------------------------------------------------------------|
 | HTTP connection time out ("Read timed out")       | Device is not responding.                                       |
-| AppiumProxy.getSource() time out.                 | ppium session is corrupted.                                     |
+| AppiumProxy.getSource() time out.                 | Appium session is corrupted.                                    |
 | Could not start a new session. Response code 500. | Appium session failed.                                          |
 | Terminating app time out. (Android)               | ex. 'com.android.settings' is still running after 500ms timeout |
 
@@ -29,6 +29,52 @@ You can handle error and request rerun scenario with throwing **RerunScenarioExc
 
 ```kotlin
 throw RerunScenarioException("App is not responding")
+```
+
+## Example
+
+### RerunScenario1.kt
+
+(`kotlin/tutorial/basic/RerunScenario1.kt`)
+
+```kotlin
+package tutorial.basic
+
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.*
+import shirates.core.exception.RerunScenarioException
+import shirates.core.testcode.UITest
+
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class RerunScenario1 : UITest() {
+
+    @Test
+    @Order(10)
+    fun rerunScenario() {
+
+        var count = 0
+
+        scenario {
+            case(1) {
+                action {
+                    count++
+                    output("count=$count")
+                    if (count == 1) {
+                        throw RerunScenarioException("Request to rerun scenario")
+                    }
+                }.expectation {
+                    count.thisIs(2, "count is 2")
+                }
+            }
+        }
+    }
+}
+```
+
+```
+
 ```
 
 ### Link

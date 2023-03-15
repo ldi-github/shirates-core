@@ -80,11 +80,6 @@ You can configure profiles in the testConfig file for the specific condition of 
 }
 ```
 
-There are 2 profiles in the testConfig file.
-
-* "Android 12 with Tag1"
-* "Android 12 with Tag2 & Tag3"
-
 Each profile inherits from top level properties.
 
 * "appIconName"
