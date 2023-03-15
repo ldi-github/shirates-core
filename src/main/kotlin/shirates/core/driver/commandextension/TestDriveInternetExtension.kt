@@ -3,7 +3,6 @@ package shirates.core.driver.commandextension
 import io.appium.java_client.android.connection.ConnectionStateBuilder
 import shirates.core.Const
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.branchextension.android
 import shirates.core.logging.Message.message

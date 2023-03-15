@@ -8,7 +8,6 @@
   "startupPackageOrBundleId": "com.apple.Preferences",
 
   "capabilities": {
-    "simpleIsVisibleCheck": true,
     "useJSONSource": true,
     "appium:showXcodeLog": true,
     "language": "en",

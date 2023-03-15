@@ -4,6 +4,7 @@ import org.openqa.selenium.StaleElementReferenceException
 import shirates.core.driver.TapMethod
 import shirates.core.driver.TestDrive
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.wait
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog

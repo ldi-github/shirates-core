@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.describe
-import shirates.core.driver.commandextension.wait
+import shirates.core.driver.wait
 import shirates.core.driver.testContext
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want

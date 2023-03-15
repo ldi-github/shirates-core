@@ -5,6 +5,7 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.commandextension.getUniqueXpath
 import shirates.core.driver.commandextension.relative
+import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
@@ -169,7 +170,7 @@ object TestElementCache {
             val elms = this.allElements
             if (elms.any() { it.id == "android:id/aerr_close" } && elms.any() { it.id == "android:id/aerr_wait" }) {
                 val alert = elms.firstOrNull() { it.id == "android:id/alertTitle" } ?: TestElement.emptyElement
-                e.lastError = TestDriverException(message(id = "appIsNotResponding", submessage = alert.text))
+                throw RerunScenarioException(message(id = "appIsNotResponding", submessage = alert.text))
             }
         } else {
             e.selector = selector

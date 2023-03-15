@@ -8,12 +8,14 @@ The function returns `TestElement` object.
 
 ## Functions
 
-| function             | description                                                            |
-|:---------------------|:-----------------------------------------------------------------------|
-| select               | Finds the first element that matches the selector in current screen.   |
-| selectWithScrollDown | Finds the first element that matches the selector with scrolling down. |
-| selectWithScrollUp   | Finds the first element that matches the selector with scrolling up.   |
-| selectInScanResults  | Finds the first element that matches the selector in scan results.     |
+| function              | description                                                             |
+|:----------------------|:------------------------------------------------------------------------|
+| select                | Finds the first element that matches the selector in current screen.    |
+| selectWithScrollDown  | Finds the first element that matches the selector with scrolling down.  |
+| selectWithScrollUp    | Finds the first element that matches the selector with scrolling up.    |
+| selectWithScrollRight | Finds the first element that matches the selector with scrolling right. |
+| selectWithScrollLeft  | Finds the first element that matches the selector with scrolling left.  |
+| selectInScanResults   | Finds the first element that matches the selector in scan results.      |
 
 ## Example 1: select
 

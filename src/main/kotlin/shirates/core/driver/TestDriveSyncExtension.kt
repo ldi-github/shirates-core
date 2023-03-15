@@ -1,8 +1,7 @@
-package shirates.core.driver.commandextension
+package shirates.core.driver
 
 import shirates.core.configuration.Selector
-import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
+import shirates.core.driver.commandextension.refreshCache
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -155,3 +154,4 @@ fun TestDrive.usingWaitSeconds(
         TestDriver.implicitlyWaitSeconds = originalImplicitlyWaitSeconds
     }
 }
+

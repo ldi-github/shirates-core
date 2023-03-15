@@ -125,7 +125,7 @@ appiumArgs=--session-override --relaxed-security
 #startupActivity=
 
 ## TestDriver --------------------
-#resuseDriver=
+#reuseDriver=
 #retryMaxCount=
 #retryTimeoutSeconds=
 #retryIntervalSeconds=
@@ -162,6 +162,8 @@ appiumArgs=--session-override --relaxed-security
 #specReport.replace.SKIP.reason=
 
 ## misc
+#android.swipeOffsetY=-20
+#ios.swipeOffsetY=-5
 #xmlSourceRemovePattern=
 #boundsToRectRatio=
 #ios.selectIgnoreTypes=XCUIElementTypeCell,XCUIElementTypeApplication

@@ -112,6 +112,9 @@
     - [wait](basic/syncing/wait.md)
     - [waitScreen, waitScreenOf](basic/syncing/wait_screen.md)
     - [waitForClose](basic/syncing/wait_for_close.md)
+    - [waitForDisplay](basic/syncing/wait_for_display.md)
+- Repeating action
+    - [doUntilTrue](basic/repeating_action/do_until_true.md)  **(New! 3.1.0)**
 - Data storage
     - [memoAs, readMemo](basic/function_property/data_storage/memo.md)
     - [clipboard, readClipboard](basic/function_property/data_storage/clipboard.md)
@@ -189,7 +192,7 @@
     - [Running with Gradle](in_action/running_test_on_ci_server/running_with_gradle.md)
 - Stabilizing test execution (Improve Flaky Test)
     - [Causes of flaky test](in_action/stabilizing_test_execution/causes_of_flaky_test.md)
-    - [Rerun test](in_action/stabilizing_test_execution/rerun_scenario.md)
+    - [Rerun scenario](in_action/stabilizing_test_execution/rerun_scenario.md)
 
 ## Tutorial(Advanced)
 
