@@ -1,13 +1,11 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.Const
 import shirates.core.configuration.NicknameUtility
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
-import shirates.core.utility.sync.SyncUtility
 
 /**
  * sendKeys
@@ -121,23 +119,3 @@ fun TestDrive.isApp(
 
     return r
 }
-
-/**
- * doUntilTrue
- */
-fun TestDrive.doUntilTrue(
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    intervalSecond: Double = Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
-    maxLoopCount: Int = SyncUtility.MAX_LOOP_COUNT,
-    actionFunc: (SyncUtility.SyncContext) -> Boolean
-): TestElement {
-
-    SyncUtility.doUntilTrue(
-        waitSeconds = waitSeconds,
-        intervalSeconds = intervalSecond,
-        maxLoopCount = maxLoopCount,
-        actionFunc = actionFunc
-    )
-    return lastElement
-}
-
