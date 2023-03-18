@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "3.1.1"
+version = "3.1.2"
 
 val appiumClientVersion = "8.1.1"
 
@@ -265,16 +265,12 @@ tasks.test {
     )
 
     // Filter test methods
-    val envIncludeTestMatching = System.getenv("includeTestsMatching") ?: ""
+    val envIncludeTestMatching = System.getenv("includeTestsMatching") ?: "*"
+    val list = envIncludeTestMatching.split(",").map { it.trim() }
     filter {
-        if (envIncludeTestMatching.isNotBlank()) {
-            val list = envIncludeTestMatching.split(",").map { it.trim() }
-            for (item in list) {
-                println("includeTestMatching($item)")
-                includeTestsMatching(item)
-            }
-        } else {
-            includeTestsMatching("*")
+        for (item in list) {
+            println("includeTestMatching($item)")
+            includeTestsMatching(item)
         }
     }
     finalizedBy(tasks.jacocoTestReport)

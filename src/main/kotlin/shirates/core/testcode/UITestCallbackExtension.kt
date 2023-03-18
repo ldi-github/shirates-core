@@ -153,17 +153,16 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             if (TestLog.capabilityPrinted.not()) {
                 TestDriver.printCapabilities()
 
-                // Settings(Android only)
-                if (isAndroid && testContext.profile.settings.any()) {
-                    TestLog.write("settings")
-                    for (s in testContext.profile.settings) {
-                        val value = AndroidMobileShellUtility.setValue(name = s.key, value = s.value)
-                        ParameterRepository.write(s.key, value.toString().trimEnd())
-                    }
-                }
-
-                // others
                 if (TestMode.isNoLoadRun.not()) {
+                    // Settings(Android only)
+                    if (isAndroid && testContext.profile.settings.any()) {
+                        TestLog.write("settings")
+                        for (s in testContext.profile.settings) {
+                            val value = AndroidMobileShellUtility.setValue(name = s.key, value = s.value)
+                            ParameterRepository.write(s.key, value.toString().trimEnd())
+                        }
+                    }
+                    // others
                     TestLog.write("(others)")
                     ParameterRepository.write("isEmulator", TestDriveObject.isEmulator.toString())
                     if (isStub) {
@@ -272,6 +271,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         testClassWatch.stop()
         val duration = "%.1f".format(testClassWatch.elapsedSeconds)
         TestLog.info(message(id = "testClassExecuted", arg1 = duration))
+
+        uiTest?.finally()
     }
 
     /**

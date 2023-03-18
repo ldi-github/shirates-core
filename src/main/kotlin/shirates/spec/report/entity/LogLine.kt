@@ -16,6 +16,7 @@ class LogLine(
     var command: String = ""
     var result: String = ""
     var message: String = ""
+    var arrangedMessage: String = ""
     var exception: String = ""
     internal var delete = false
 
