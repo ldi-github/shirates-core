@@ -59,7 +59,7 @@ plugins {
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val shiratesCoreVersion = "2.0.0"
+val shiratesCoreVersion = "3.1.1"
 val appiumClientVersion = "8.1.0"
 
 repositories {
@@ -88,20 +88,23 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs = listOf(
+        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED"
+    )
+
+    // Filter test methods
+    val envIncludeTestMatching = System.getenv("includeTestsMatching") ?: "*"
+    val list = envIncludeTestMatching.split(",").map { it.trim() }
+    filter {
+        for (item in list) {
+            println("includeTestMatching($item)")
+            includeTestsMatching(item)
+        }
+    }
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-configurations.all {
-    resolutionStrategy {
-
-        // cache dynamic versions for 10 minutes
-        cacheDynamicVersionsFor(10 * 60, "seconds")
-        // don't cache changing modules at all
-        cacheChangingModulesFor(0, "seconds")
-    }
 }
 ```
 
