@@ -150,6 +150,14 @@ abstract class UITest : TestDrive {
     }
 
     /**
+     * finally
+     */
+    open fun finally() {
+
+        TestLog.trace()
+    }
+
+    /**
      * setup
      */
     open fun setup() {
@@ -533,7 +541,7 @@ abstract class UITest : TestDrive {
             }
 
             if (TestMode.isNoLoadRun) {
-                TestLog.skip("No-Load-Run mode")
+                TestLog.info("No-Load-Run mode")
             }
 
             if (launchApp && testDrive.isAppInstalled()) {

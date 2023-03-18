@@ -266,9 +266,9 @@ tasks.test {
 
     // Filter test methods
     val envIncludeTestMatching = System.getenv("includeTestsMatching") ?: ""
+    val list = envIncludeTestMatching.split(",").map { it.trim() }
     filter {
-        if (envIncludeTestMatching.isNotBlank()) {
-            val list = envIncludeTestMatching.split(",").map { it.trim() }
+        if (list.any()) {
             for (item in list) {
                 println("includeTestMatching($item)")
                 includeTestsMatching(item)

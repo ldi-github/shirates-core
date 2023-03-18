@@ -115,7 +115,9 @@ class SpecWorksheetModel(
             }
 
             LogType.OPERATE.label -> {
-                if (logLine.result == "ERROR") {
+                if (current.type == "scenario") {
+                    // NOP
+                } else if (logLine.result == "ERROR") {
                     addDescription(logLine)
                     setResult(logLine)
                 } else {
@@ -195,7 +197,6 @@ class SpecWorksheetModel(
             }
 
             LogType.NOTIMPL.label -> {
-                addDescription(logLine)
                 setResult(logLine)
             }
 
