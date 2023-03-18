@@ -7,8 +7,13 @@ import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ios
 import shirates.core.driver.branchextension.specialTag
 import shirates.core.driver.commandextension.*
+import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
+import shirates.spec.utilily.ExcelUtility
+import shirates.spec.utilily.cells
+import shirates.spec.utilily.text
+import shirates.spec.utilily.worksheets
 
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/no-load.testrun.properties")
@@ -91,57 +96,255 @@ class SpecReportNoLoadRunTest : UITest() {
                         .describe("describe E2-1")
                         .describe("describe E2-2")
 
-                    it.target("target T1")
-                        .caption("caption T1")
-                        .describe("expectation has no test result")
-                        .describe("if neither assertion nor manua specified")
-                        .android {
-                            it.caption("os branch")
-                            specialTag("S1") {
-                                it.caption("specialTag S1")
-                                    .describe("describe S1-1")
-                                    .screenIs("[AAA Screen]")
-                                    .describe("describe S1-2")
-                                    .manual("manual S1-2")
-                            }
+                    android {
+                        it.screenIs("[AAA Screen]")
+                        target("T1")
+                            .exist("exist T1")
+                        specialTag("S1") {
+                            it.caption("specialTag S1")
+                                .describe("describe S1-1")
+                                .describe("describe S1-2")
+                                .manual("manual S1-2")
                         }
-                        .ios {
-                            it.caption("os branch")
-                            specialTag("S2") {
-                                it.caption("S2")
-                                    .describe("describe S2-1")
-                                    .manual("manual S2-1")
-                                    .describe("describe S2-2")
-                                    .manual("manual S2-2")
-                            }
+                    }
+                    ios {
+                        it.screenIs("[AAA Screen]")
+                        target("T1")
+                            .exist("exist T1")
+                        specialTag("S2") {
+                            it.caption("S2")
+                                .describe("describe S2-1")
+                                .describe("describe S2-2")
+                                .manual("manual S2-2")
                         }
+                    }
 
-                    it.target("target T2")
-                        .caption("T2")
-                        .describe("describe T2-1")
-                        .describe("describe T2-2")
-                        .android {
-                            describe("android")
-                            specialTag("S1") {
-                                it.caption("S1")
-                                    .describe("describe S1-1")
-                                    .manual("manual S1-1")
-                                    .describe("describe S1-2")
-                                    .manual("manual S1-2")
-                            }
+                    target("T2")
+                    android {
+                        specialTag("S1") {
+                            it.caption("S1")
+                                .describe("describe S1-1")
+                                .manual("manual S1-1")
+                                .describe("describe S1-2")
+                                .manual("manual S1-2")
                         }
-                        .ios {
-                            describe("ios")
-                            specialTag("S2") {
-                                it.caption("S2")
-                                    .describe("describe S2-1")
-                                    .manual("manual S2-1")
-                                    .describe("describe S2-2")
-                                    .manual("manual S2-2")
-                            }
+                    }
+                    ios {
+                        specialTag("S2") {
+                            it.caption("S2")
+                                .describe("describe S2-1")
+                                .manual("manual S2-1")
+                                .describe("describe S2-2")
+                                .manual("manual S2-2")
                         }
+                    }
                 }
             }
+        }
+    }
+
+    override fun finally() {
+
+        val filePath = TestLog.directoryForLog.resolve("SpecReportNoLoadRunTest/SpecReportNoLoadRunTest.xlsx")
+        val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("SheetName1")
+        val commandSheet = ws.workbook.worksheets("CommandList")
+
+        val executionDateTime = commandSheet.cells("B4").text
+        val date = executionDateTime.substring(0, 10)
+
+        /**
+         * Header
+         */
+        ws.assertHeader(
+            testConfigName = "Settings",
+            sheetName = "SheetName1",
+            testClassName = "SpecReportNoLoadRunTest",
+            profileName = "Android 12",
+            deviceModel = "",
+            platformVersion = "",
+            noLoadRunMode = "No-Load-Run Mode",
+            ok = 0,
+            ng = 0,
+            error = 0,
+            suspended = 0,
+            manual = 0,
+            skip = 0,
+            notImpl = 0,
+            total = 0
+        )
+
+        /**
+         * Header Row
+         */
+        ws.assertRowHeader()
+
+        /**
+         * Rows
+         */
+        with(ws) {
+            assertRow(
+                rowNum = 10,
+                id = 1,
+                step = "S100",
+                condition = "condition_only"
+            )
+            assertRow(
+                rowNum = 11,
+                id = 2,
+                step = "1",
+                condition = "(caption1)\n- describe1\n(caption2)\n- manual1",
+            )
+            assertRow(
+                rowNum = 12,
+                id = 3,
+                step = "S200",
+                condition = "action_only"
+            )
+            assertRow(
+                rowNum = 13,
+                id = 4,
+                step = "1",
+                action = "(caption1)\n" +
+                        "- describe1\n" +
+                        "(caption2)\n" +
+                        "- manual1"
+            )
+            assertRow(
+                rowNum = 14,
+                id = 5,
+                step = "S300",
+                condition = "expectation_only"
+            )
+            assertRow(
+                rowNum = 15,
+                id = 6,
+                expectation = "(caption1)\n" +
+                        "- describe1\n" +
+                        "(caption2)\n" +
+                        "- manual1",
+                auto = "M",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 16,
+                id = 7,
+                step = "S1000",
+                condition = "scenario1"
+            )
+            assertRow(
+                rowNum = 17,
+                id = 8,
+                step = "1",
+                condition = "(caption C1)\n" +
+                        "- describe C1-1\n" +
+                        "- describe C1-2\n" +
+                        "(caption C2)\n" +
+                        "- describe C2-1\n" +
+                        "- describe C2-2",
+                action = "(caption A1)\n" +
+                        "- describe A1-1\n" +
+                        "- describe A1-2\n" +
+                        "(caption A2)\n" +
+                        "- describe A2-1\n" +
+                        "- describe A2-2",
+                target = "[Android Settings Top Screen]",
+                expectation = "- is displayed\n" +
+                        "(E1)\n" +
+                        "- describe E1-1\n" +
+                        "- describe E1-2\n" +
+                        "(E2)\n" +
+                        "- describe E2-1\n" +
+                        "- describe E2-2",
+                auto = "A",
+                result = "N/A",
+            )
+            assertRow(
+                rowNum = 18,
+                id = 9,
+                target = "[AAA Screen]",
+                expectation = "- is displayed",
+                os = "Android",
+                auto = "A",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 19,
+                id = 10,
+                target = "T1",
+                expectation = "- <exist T1>",
+                os = "Android",
+                auto = "A",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 20,
+                id = 11,
+                expectation = "(specialTag S1)\n" +
+                        "- describe S1-1\n" +
+                        "- describe S1-2\n" +
+                        "- manual S1-2",
+                os = "Android",
+                special = "S1",
+                auto = "M",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 21,
+                id = 12,
+                target = "[AAA Screen]",
+                expectation = "- is displayed",
+                os = "iOS",
+                auto = "A",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 22,
+                id = 13,
+                target = "T1",
+                expectation = "- <exist T1>",
+                os = "iOS",
+                auto = "A",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 23,
+                id = 14,
+                expectation = "(S2)\n" +
+                        "- describe S2-1\n" +
+                        "- describe S2-2\n" +
+                        "- manual S2-2",
+                os = "iOS",
+                special = "S2",
+                auto = "M",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 24,
+                id = 15,
+                target = "T2",
+                expectation = "(S1)\n" +
+                        "- describe S1-1\n" +
+                        "- manual S1-1\n" +
+                        "- describe S1-2\n" +
+                        "- manual S1-2",
+                os = "Android",
+                special = "S1",
+                auto = "M",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 25,
+                id = 16,
+                expectation = "(S2)\n" +
+                        "- describe S2-1\n" +
+                        "- manual S2-1\n" +
+                        "- describe S2-2\n" +
+                        "- manual S2-2",
+                os = "iOS",
+                special = "S2",
+                auto = "M",
+                result = "N/A"
+            )
         }
     }
 }

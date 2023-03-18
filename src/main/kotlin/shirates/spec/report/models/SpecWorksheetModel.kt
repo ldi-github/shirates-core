@@ -331,14 +331,14 @@ class SpecWorksheetModel(
                 val subject = logLine.message.replace(msg, "")
                 if (subject.isNotBlank()) {
                     current.target = escapeForCode(subject)
-                    logLine.message = SpecResourceUtility.isDisplayed
+                    logLine.arrangedMessage = SpecResourceUtility.isDisplayed
                 }
             }
 
             "exist" -> {
                 val msg = message(id = "exist", subject = "")
                 val subject = logLine.message.replace(msg, "")
-                logLine.message = subject
+                logLine.arrangedMessage = subject
             }
         }
     }
@@ -534,6 +534,8 @@ class SpecWorksheetModel(
             newCase()
         }
         current.target = logLine.message
+        current.os = logLine.os
+        current.special = logLine.special
         this.target = logLine.message
 
         return current
@@ -550,7 +552,8 @@ class SpecWorksheetModel(
             else if (logLine.logType == LogType.COMMENT.label) ""
             else if (logLine.logType == LogType.WITHSCROLL.label) ""
             else bullet
-        val msg = "$bulletLocal${logLine.message}"
+        val m = logLine.arrangedMessage.ifBlank { logLine.message }
+        val msg = "$bulletLocal$m"
         current.expectations.add(msg)
 
         return current
