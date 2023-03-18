@@ -155,162 +155,142 @@ class SpecReportTest : UITest() {
         /**
          * Header
          */
-        with(ws) {
-            cells("A1").textIs("Calculator")
-            cells("D1").textIs("calculator test")
-            cells("D2").textIs("SpecReportTest")
-            cells("D3").textIs("Pixel 3a(Android 12)")
-            if (cells("D4").text.isNotBlank()) {
-                cells("D4").textIs("sdk_gphone64_arm64")
-                cells("D5").textIs("12")
-            }
-        }
+        val deviceModel = if (ws.cells("D4").text.isNotBlank()) "sdk_gphone64_arm64" else ""
+        val platformVersion = if (deviceModel.isNotBlank()) "12" else ""
+        ws.assertHeader(
+            testConfigName = "Calculator",
+            sheetName = "calculator test",
+            testClassName = "SpecReportTest",
+            profileName = "Pixel 3a(Android 12)",
+            deviceModel = deviceModel,
+            platformVersion = platformVersion,
+            ok = 4,
+            notImpl = 1,
+            total = 5
+        )
 
         val date = Date().format("yyyy/MM/dd")
 
         /**
-         * s10
+         * Row Header
          */
-        with(ws) {
-            cells("B10").textIs("s10")
-            cells("C10").textIs("calculate 123+456")
-            cells("D10").textIs("")
-            cells("E10").textIs("")
-            cells("F10").textIs("")
-            cells("G10").textIs("")
-            cells("H10").textIs("")
-            cells("I10").textIs("")
-            cells("J10").textIs("")
-            cells("K10").textIs("")
-            cells("L10").textIs("")
-            cells("M10").textIs("")
-            cells("N10").textIs("")
-            cells("O10").textIs("")
-            cells("P10").textIs("")
-            cells("Q10").textIs("")
-            cells("R10").textIs("")
-
-            cells("B11").textIs("1")
-            cells("C11").textIs("- [Restart Calculator]\n- [Calculator Main Screen] is displayed")
-            cells("D11").textIs("- Tap [1]\n- Tap [2]\n- Tap [3]")
-            cells("E11").textIs("")
-            cells("F11").textIs("- [formula] is \"123\"")
-            cells("G11").textIs("")
-            cells("H11").textIs("")
-            cells("I11").textIs("M")
-            cells("J11").textIs("N/A")
-            cells("K11").textIs("")
-            cells("L11").textIs("")
-
-            cells("B12").textIs("2")
-            cells("C12").textIs("")
-            cells("D12").textIs("- Tap [+]")
-            cells("E12").textIs("")
-            cells("F12").textIs("- [formula] is \"123+\"")
-            cells("G12").textIs("")
-            cells("H12").textIs("")
-            cells("I12").textIs("M")
-            cells("J12").textIs("N/A")
-            cells("K12").textIs("")
-            cells("L12").textIs("")
-
-            cells("B13").textIs("3")
-            cells("C13").textIs("")
-            cells("D13").textIs("- Tap [4]\n- Tap [5]\n- Tap [6]")
-            cells("E13").textIs("")
-            cells("F13").textIs("- [formula] is \"123+456\"\n- [result preview] is \"579\"")
-            cells("G13").textIs("")
-            cells("H13").textIs("")
-            cells("I13").textIs("M")
-            cells("J13").textIs("N/A")
-            cells("K13").textIs("")
-            cells("L1").textIs("")
-
-            cells("B14").textIs("4")
-            cells("C14").textIs("")
-            cells("D14").textIs("- Tap [=]")
-            cells("E14").textIs("")
-            cells("F14").textIs("- [result final] is \"579\"")
-            cells("G14").textIs("")
-            cells("H14").textIs("")
-            cells("I14").textIs("A")
-            cells("J14").textIs("NOTIMPL")
-            cells("K14").textIs(date)
-            cells("L14").textIs("auto")
-            cells("O14").textIs("No test result found. Use assertion function in expectation block.")
-        }
+        ws.assertRowHeader()
 
         /**
-         * s20
+         * Rows
          */
         with(ws) {
-            cells("B15").textIs("s20")
-            cells("C15").textIs("calculate 123+456")
-            cells("D15").textIs("")
-            cells("E15").textIs("")
-            cells("F15").textIs("")
-            cells("G15").textIs("")
-            cells("H15").textIs("")
-            cells("I15").textIs("")
-            cells("J15").textIs("")
-            cells("K15").textIs("")
-            cells("L15").textIs("")
-            cells("M15").textIs("")
-            cells("N15").textIs("")
-            cells("O15").textIs("")
-            cells("P15").textIs("")
-            cells("Q15").textIs("")
-            cells("R15").textIs("")
+            assertRow(
+                rowNum = 10,
+                id = 1,
+                step = "s10",
+                condition = "calculate 123+456",
+            )
+            assertRow(
+                rowNum = 11,
+                id = 2,
+                step = "1",
+                condition = "- [Restart Calculator]\n" +
+                        "- [Calculator Main Screen] is displayed",
+                action = "- Tap [1]\n" +
+                        "- Tap [2]\n" +
+                        "- Tap [3]",
+                expectation = "- [formula] is \"123\"",
+                auto = "M",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 12,
+                id = 3,
+                step = "2",
+                action = "- Tap [+]",
+                expectation = "- [formula] is \"123+\"",
+                auto = "M",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 13,
+                id = 4,
+                step = "3",
+                action = "- Tap [4]\n" +
+                        "- Tap [5]\n" +
+                        "- Tap [6]",
+                expectation = "- [formula] is \"123+456\"\n" +
+                        "- [result preview] is \"579\"",
+                auto = "M",
+                result = "N/A"
+            )
+            assertRow(
+                rowNum = 14,
+                id = 5,
+                step = "4",
+                action = "- Tap [=]",
+                expectation = "- [result final] is \"579\"",
+                auto = "A",
+                result = "NOTIMPL",
+                testDate = date,
+                tester = "auto"
+            )
 
-            cells("B16").textIs("1")
-            cells("C16").textIs("- [Restart Calculator]\n- [Calculator Main Screen] is displayed")
-            cells("D16").textIs("- Tap [1]\n- Tap [2]\n- Tap [3]")
-            cells("E16").textIs("")
-            cells("F16").textIs("- [formula] is \"123\"")
-            cells("G16").textIs("")
-            cells("H16").textIs("")
-            cells("I16").textIs("A")
-            cells("J16").textIs("OK")
-            cells("K16").textIs(date)
-            cells("L16").textIs("auto")
+            assertRow(
+                rowNum = 15,
+                id = 6,
+                step = "s20",
+                condition = "calculate 123+456",
+            )
+            assertRow(
+                rowNum = 16,
+                id = 7,
+                step = "1",
+                condition = "- [Restart Calculator]\n" +
+                        "- [Calculator Main Screen] is displayed",
+                action = "- Tap [1]\n" +
+                        "- Tap [2]\n" +
+                        "- Tap [3]",
+                expectation = "- [formula] is \"123\"",
+                auto = "A",
+                result = "OK",
+                testDate = date,
+                tester = "auto"
+            )
+            assertRow(
+                rowNum = 17,
+                id = 8,
+                step = "2",
+                action = "- Tap [+]",
+                expectation = "- [formula] is \"123+\"",
+                auto = "A",
+                result = "OK",
+                testDate = date,
+                tester = "auto"
+            )
+            assertRow(
+                rowNum = 18,
+                id = 9,
+                step = "3",
+                action = "- Tap [4]\n" +
+                        "- Tap [5]\n" +
+                        "- Tap [6]",
+                expectation = "- [formula] is \"123+456\"\n" +
+                        "- [result preview] is \"579\"",
+                auto = "A",
+                result = "OK",
+                testDate = date,
+                tester = "auto"
+            )
+            assertRow(
+                rowNum = 19,
+                id = 10,
+                step = "4",
+                action = "- Tap [=]",
+                expectation = "- [result final] is \"579\"",
+                auto = "A",
+                result = "OK",
+                testDate = date,
+                tester = "auto"
+            )
 
-            cells("B17").textIs("2")
-            cells("C17").textIs("")
-            cells("D17").textIs("- Tap [+]")
-            cells("E17").textIs("")
-            cells("F17").textIs("- [formula] is \"123+\"")
-            cells("G17").textIs("")
-            cells("H17").textIs("")
-            cells("I17").textIs("A")
-            cells("J17").textIs("OK")
-            cells("K17").textIs(date)
-            cells("L17").textIs("auto")
-
-            cells("B18").textIs("3")
-            cells("C18").textIs("")
-            cells("D18").textIs("- Tap [4]\n- Tap [5]\n- Tap [6]")
-            cells("E18").textIs("")
-            cells("F18").textIs("- [formula] is \"123+456\"\n- [result preview] is \"579\"")
-            cells("G18").textIs("")
-            cells("H18").textIs("")
-            cells("I18").textIs("A")
-            cells("J18").textIs("OK")
-            cells("K18").textIs(date)
-            cells("L18").textIs("auto")
-
-            cells("B19").textIs("4")
-            cells("C19").textIs("")
-            cells("D19").textIs("- Tap [=]")
-            cells("E19").textIs("")
-            cells("F19").textIs("- [result final] is \"579\"")
-            cells("G19").textIs("")
-            cells("H19").textIs("")
-            cells("I19").textIs("A")
-            cells("J19").textIs("OK")
-            cells("K19").textIs(date)
-            cells("L19").textIs("auto")
         }
-
     }
 
 }

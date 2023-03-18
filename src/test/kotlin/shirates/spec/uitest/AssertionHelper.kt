@@ -29,17 +29,17 @@ fun XSSFSheet.assertHeader(
     sheetName: String,
     testClassName: String,
     profileName: String,
-    deviceModel: String,
-    platformVersion: String,
-    noLoadRunMode: String,
-    ok: Int,
-    ng: Int,
-    error: Int,
-    suspended: Int,
-    manual: Int,
-    skip: Int,
-    notImpl: Int,
-    total: Int
+    deviceModel: String = "",
+    platformVersion: String = "",
+    noLoadRunMode: String = "",
+    ok: Int = 0,
+    ng: Int = 0,
+    error: Int = 0,
+    suspended: Int = 0,
+    manual: Int = 0,
+    skip: Int = 0,
+    notImpl: Int = 0,
+    total: Int = 0
 ) {
 
     val commandSheet = workbook.worksheets("CommandList")
