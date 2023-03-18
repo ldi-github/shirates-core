@@ -265,16 +265,12 @@ tasks.test {
     )
 
     // Filter test methods
-    val envIncludeTestMatching = System.getenv("includeTestsMatching") ?: ""
+    val envIncludeTestMatching = System.getenv("includeTestsMatching") ?: "*"
     val list = envIncludeTestMatching.split(",").map { it.trim() }
     filter {
-        if (list.any()) {
-            for (item in list) {
-                println("includeTestMatching($item)")
-                includeTestsMatching(item)
-            }
-        } else {
-            includeTestsMatching("*")
+        for (item in list) {
+            println("includeTestMatching($item)")
+            includeTestsMatching(item)
         }
     }
     finalizedBy(tasks.jacocoTestReport)
