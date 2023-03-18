@@ -66,6 +66,37 @@ BUILD SUCCESSFUL in 35s
 wave1008@SNB-M1 Practice1 % 
 ```
 
+## Example 4
+
+You can specify tests to run with environment variable `includeTestsMatching`.
+
+1. Write filtering procedure on **tasks.test** in `build.gradle.kts`.
+
+```kotlin
+tasks.test {
+    useJUnitPlatform()
+    jvmArgs = listOf(
+        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED"
+    )
+
+    // Filter test methods
+    val envIncludeTestMatching = System.getenv("includeTestsMatching") ?: "*"
+    val list = envIncludeTestMatching.split(",").map { it.trim() }
+    filter {
+        for (item in list) {
+            println("includeTestMatching($item)")
+            includeTestsMatching(item)
+        }
+    }
+}
+```
+
+2. Now you can specify tests in comma separated.
+
+```
+export includeTestsMatching="product1.Test1,product1.Test2,product1.Test3"
+```
+
 ### Link
 
 - [index](../../index.md)
