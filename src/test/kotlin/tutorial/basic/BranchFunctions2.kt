@@ -13,13 +13,13 @@ class BranchFunctions2 : UITest() {
 
     @Test
     @Order(10)
-    fun branch_os_platform() {
+    fun branch_platform_device() {
 
         scenario {
             case(1) {
                 action {
                     android {
-                        emulator {
+                        virtualDevice {
                             describe("This is called on android emulator")
                         }
                         realDevice {
@@ -27,12 +27,27 @@ class BranchFunctions2 : UITest() {
                         }
                     }
                     ios {
-                        simulator {
+                        virtualDevice {
                             describe("This is called on iOS Simulator")
                         }
                         realDevice {
                             describe("This is called on iOS real device")
                         }
+                    }
+                }.expectation {
+                    it.screenIs("[iOS Settings Top Screen]")
+                }
+            }
+            case(2) {
+                action {
+                    emulator {
+                        describe("This is called on android emulator")
+                    }
+                    simulator {
+                        describe("This is called on iOS simulator")
+                    }
+                    realDevice {
+                        describe("This is called on real device")
                     }
                 }.expectation {
                     it.screenIs("[iOS Settings Top Screen]")

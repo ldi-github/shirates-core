@@ -23,12 +23,12 @@ class TestModeTest : UnitTest() {
         // Arrange
         TestMode.testTimeNoLoadRun = true
         TestMode.testTimePlatformName = "IOS"
-        TestMode.testTimeIsEmulator = true
+        TestMode.testTimeIsVirtualDevice = true
         TestMode.testTimeHasOsaifuKeitai = true
         TestMode.testTimeIsStub = true
         assertThat(TestMode.testTimeNoLoadRun).isTrue()
         assertThat(TestMode.testTimePlatformName).isEqualTo("IOS")
-        assertThat(TestMode.testTimeIsEmulator).isTrue()
+        assertThat(TestMode.testTimeIsVirtualDevice).isTrue()
         assertThat(TestMode.testTimeHasOsaifuKeitai).isTrue()
         assertThat(TestMode.testTimeIsStub).isTrue()
 
@@ -37,7 +37,7 @@ class TestModeTest : UnitTest() {
         // Assert
         assertThat(TestMode.testTimeNoLoadRun).isNull()
         assertThat(TestMode.testTimePlatformName).isNull()
-        assertThat(TestMode.testTimeIsEmulator).isNull()
+        assertThat(TestMode.testTimeIsVirtualDevice).isNull()
         assertThat(TestMode.testTimeHasOsaifuKeitai).isNull()
         assertThat(TestMode.testTimeIsStub).isNull()
     }
@@ -177,47 +177,112 @@ class TestModeTest : UnitTest() {
     }
 
     @Test
-    fun isEmulator() {
+    fun isEmulator_isSimulator_isVirtualDevide_isRealDevice() {
 
         TestMode.runAsNoLoadRunMode {
             // Act, Assert
             assertThat(TestMode.isEmulator).isTrue()
-        }
-
-        run {
-            // Arrange
-            TestMode.testTimeIsEmulator = true
-            // Act, Assert
-            assertThat(TestMode.isEmulator).isTrue()
-
-            // Arrange
-            TestMode.testTimeIsEmulator = false
-            // Act, Assert
-            assertThat(TestMode.isEmulator).isFalse()
+            assertThat(TestMode.isSimulator).isTrue()
         }
 
         TestMode.runAsAndroid {
             // Arrange
-            TestMode.testTimeIsEmulator = null
+            TestMode.testTimeIsVirtualDevice = true
+            // Act, Assert
+            assertThat(TestMode.isEmulator).isTrue()
+            assertThat(TestMode.isSimulator).isFalse()
+            assertThat(TestMode.isVirtualDevice).isTrue()
+            assertThat(TestMode.isRealDevice).isFalse()
+
+            // Arrange
+            TestMode.testTimeIsVirtualDevice = false
             // Act, Assert
             assertThat(TestMode.isEmulator).isFalse()
+            assertThat(TestMode.isSimulator).isFalse()
+            assertThat(TestMode.isVirtualDevice).isFalse()
+            assertThat(TestMode.isRealDevice).isTrue()
+
+            // Arrange
+            TestMode.testTimeIsVirtualDevice = null
+            assertThat(TestMode.isEmulator).isFalse()
+            assertThat(TestMode.isSimulator).isFalse()
+            assertThat(TestMode.isVirtualDevice).isFalse()
+            assertThat(TestMode.isRealDevice).isTrue()
         }
         TestMode.runAsIos {
             // Arrange
-            TestMode.testTimeIsEmulator = null
+            TestMode.testTimeIsVirtualDevice = true
             // Act, Assert
             assertThat(TestMode.isEmulator).isFalse()
+            assertThat(TestMode.isSimulator).isTrue()
+            assertThat(TestMode.isVirtualDevice).isTrue()
+            assertThat(TestMode.isRealDevice).isFalse()
+
+            // Arrange
+            TestMode.testTimeIsVirtualDevice = false
+            // Act, Assert
+            assertThat(TestMode.isEmulator).isFalse()
+            assertThat(TestMode.isSimulator).isFalse()
+            assertThat(TestMode.isVirtualDevice).isFalse()
+            assertThat(TestMode.isRealDevice).isTrue()
+
+            // Arrange
+            TestMode.testTimeIsVirtualDevice = null
+            // Act, Assert
+            assertThat(TestMode.isEmulator).isFalse()
+            assertThat(TestMode.isSimulator).isFalse()
+            assertThat(TestMode.isVirtualDevice).isFalse()
+            assertThat(TestMode.isRealDevice).isTrue()
         }
+
     }
 
     @Test
-    fun isRealDevice() {
+    fun runAs() {
 
-        TestMode.runAsEmulator {
-            assertThat(TestMode.isRealDevice).isFalse()
+        TestMode.runAsVirtualDevice {
+            TestMode.runAsAndroid {
+                assertThat(TestMode.isVirtualDevice).isTrue()
+                assertThat(TestMode.isRealDevice).isFalse()
+
+                assertThat(TestMode.isAndroid).isTrue()
+                assertThat(TestMode.isEmulator).isTrue()
+
+                assertThat(TestMode.isiOS).isFalse()
+                assertThat(TestMode.isSimulator).isFalse()
+            }
+            TestMode.runAsIos {
+                assertThat(TestMode.isVirtualDevice).isTrue()
+                assertThat(TestMode.isRealDevice).isFalse()
+
+                assertThat(TestMode.isAndroid).isFalse()
+                assertThat(TestMode.isEmulator).isFalse()
+
+                assertThat(TestMode.isiOS).isTrue()
+                assertThat(TestMode.isSimulator).isTrue()
+            }
         }
         TestMode.runAsRealDevice {
-            assertThat(TestMode.isRealDevice).isTrue()
+            TestMode.runAsAndroid {
+                assertThat(TestMode.isVirtualDevice).isFalse()
+                assertThat(TestMode.isRealDevice).isTrue()
+
+                assertThat(TestMode.isAndroid).isTrue()
+                assertThat(TestMode.isEmulator).isFalse()
+
+                assertThat(TestMode.isiOS).isFalse()
+                assertThat(TestMode.isSimulator).isFalse()
+            }
+            TestMode.runAsIos {
+                assertThat(TestMode.isVirtualDevice).isFalse()
+                assertThat(TestMode.isRealDevice).isTrue()
+
+                assertThat(TestMode.isAndroid).isFalse()
+                assertThat(TestMode.isEmulator).isFalse()
+
+                assertThat(TestMode.isiOS).isTrue()
+                assertThat(TestMode.isSimulator).isFalse()
+            }
         }
     }
 

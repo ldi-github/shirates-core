@@ -25,7 +25,7 @@ Consider reconnecting to appium server.
 
 ## Poor quality of Virtual device
 
-Virtual devices(Android emulator/iOS Simulator) is often not stable.
+Virtual devices(Android emulator/iOS simulator) is often not stable.
 
 Consider rebooting the device on trouble.
 

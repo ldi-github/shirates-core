@@ -21,7 +21,7 @@ object DeviceListUtility {
         var androidDeviceInfo: AndroidDeviceInfo? = null
         var iosDeviceInfo: IosDeviceInfo? = null
 
-        val isEmulator: Boolean
+        val isVirtualDevice: Boolean
             get() {
                 return isRealDevice.not()
             }
@@ -59,9 +59,9 @@ object DeviceListUtility {
         result.addAll(realDevices.filter { it.profile != NO_PROFILE }.sortedBy { it.profile })
         result.addAll(realDevices.filter { it.profile == NO_PROFILE }.sortedBy { it.udid })
 
-        val emulators = list.filter { it.isEmulator }
-        result.addAll(emulators.filter { it.profile != NO_PROFILE }.sortedBy { it.profile })
-        result.addAll(emulators.filter { it.profile == NO_PROFILE }.sortedBy { it.udid })
+        val virtualDevices = list.filter { it.isVirtualDevice }
+        result.addAll(virtualDevices.filter { it.profile != NO_PROFILE }.sortedBy { it.profile })
+        result.addAll(virtualDevices.filter { it.profile == NO_PROFILE }.sortedBy { it.udid })
 
         return result
     }
