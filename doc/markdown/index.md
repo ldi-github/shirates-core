@@ -116,7 +116,7 @@
 - Repeating action
     - [doUntilTrue](basic/repeating_action/do_until_true.md)  **(New! 3.1.0)**
 - Data storage
-    - [memoAs, readMemo](basic/function_property/data_storage/memo.md)
+    - [writeMemo, readMemo, memoTextAs](basic/function_property/data_storage/memo.md)
     - [clipboard, readClipboard](basic/function_property/data_storage/clipboard.md)
     - [account](basic/function_property/data_storage/account.md)
     - [app](basic/function_property/data_storage/app.md)

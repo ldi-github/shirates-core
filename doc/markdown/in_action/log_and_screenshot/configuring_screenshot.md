@@ -54,6 +54,5 @@ onScrolling=false
 ### Link
 
 - [Configuring log](configuring_log.md)
-
 - [index](../../index.md)
 

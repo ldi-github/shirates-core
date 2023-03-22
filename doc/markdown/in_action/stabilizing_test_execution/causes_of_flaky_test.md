@@ -39,6 +39,4 @@ serial with interval is a good practice.
 ### Link
 
 - [Rerun scenario](rerun_scenario.md)
-
-
 - [index](../../index.md)
