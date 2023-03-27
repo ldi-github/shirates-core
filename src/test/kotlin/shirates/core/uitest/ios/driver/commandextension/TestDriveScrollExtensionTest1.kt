@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.*
+import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Unstable
@@ -30,6 +31,9 @@ class TestDriveScrollExtensionTest1 : UITest() {
             case(1) {
                 condition {
                     it.macro("[Apple Maps Top Screen]")
+                        .ifCanSelect("Not Now") {
+                            it.tap()
+                        }
                         .screenIs("[Apple Maps Top Screen]")
                         .tap(".XCUIElementTypeSearchField")
                 }.expectation {

@@ -589,8 +589,12 @@ object TestDriver {
 
     private fun restartIos(profile: TestProfile) {
 
-        TestLog.info("Restarting Simulator.")
-        IosDeviceUtility.restartSimulator(udid = profile.udid)
+        if (isSimulator) {
+            TestLog.info("Restarting Simulator.")
+            IosDeviceUtility.restartSimulator(udid = profile.udid)
+        } else {
+            // NOP
+        }
     }
 
     private fun getBeforeRetry(
@@ -614,16 +618,12 @@ object TestDriver {
                 } else {
                     restartAndroid(profile = profile, terminateEmulatorProcess = false)
                 }
-            }
-            if (isiOS) {
+            } else if (isiOS) {
                 val udid = initialCapabilities["udid"] ?: profile.udid
                 if (udid.isBlank()) {
                     throw TestDriverException("udid not found.")
                 }
                 TestLog.info("udid found in initialCapabilities. (udid=$udid)")
-
-                // ex.
-                // kAXErrorServerNotFound
 
                 restartIos(profile)
             }

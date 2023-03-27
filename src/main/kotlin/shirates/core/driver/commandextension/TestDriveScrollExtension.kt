@@ -3,7 +3,6 @@ package shirates.core.driver.commandextension
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -19,7 +18,7 @@ internal fun TestDrive.getScrollableElementsInDescendants(): List<TestElement> {
     if (isAndroid) {
         return testElement.descendants.filter { it.isScrollable }
     } else {
-        return testElement.descendants.filter { it.isScrollable && it.isVisible }
+        return testElement.descendants.filter { it.isScrollable && it.isVisibleCalculated }
     }
 }
 
