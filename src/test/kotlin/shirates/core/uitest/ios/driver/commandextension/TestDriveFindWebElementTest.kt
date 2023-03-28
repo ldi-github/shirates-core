@@ -4,8 +4,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.findWebElement
-import shirates.core.driver.commandextension.thisIs
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.testcode.UITest
 
@@ -88,6 +87,20 @@ class TestDriveFindWebElementTest : UITest() {
                 expectation {
                     it.findWebElement("#VPN&&[2]").getAttribute("type")
                         .thisIs("XCUIElementTypeStaticText")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(20)
+    fun canFindWebElementTest() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    it.canFindWebElement("Sign in to your iPhone").thisIsTrue()
+                    it.canFindWebElement("Sign in to your iPhone2").thisIsFalse()
                 }
             }
         }

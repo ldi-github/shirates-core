@@ -85,5 +85,18 @@ class TestDriveFindWebElementTest : UITest() {
         }
     }
 
+    @Test
+    @Order(20)
+    fun canFindWebElementTest() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    it.canFindWebElement("Network & internet").thisIsTrue()
+                    it.canFindWebElement("Network & internet2").thisIsFalse()
+                }
+            }
+        }
+    }
 
 }

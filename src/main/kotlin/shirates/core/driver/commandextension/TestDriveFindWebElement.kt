@@ -65,6 +65,36 @@ fun TestDrive.findWebElement(
     return webElements.first()
 }
 
+/**
+ * canFindWebElement
+ */
+fun TestDrive.canFindWebElement(
+    expression: String
+): Boolean {
+
+    try {
+        findWebElement(expression = expression, log = false)
+        return true
+    } catch (t: Throwable) {
+        return false
+    }
+}
+
+/**
+ * canFindAllWebElement
+ */
+fun TestDrive.canFindAllWebElement(
+    vararg expressions: String
+): Boolean {
+
+    for (expression in expressions.toList()) {
+        if (canFindWebElement(expression = expression).not()) {
+            return false
+        }
+    }
+    return true
+}
+
 private fun findElementsByXpath(xpath: String): List<WebElement> {
 
     return appiumDriver.findElements(By.xpath(xpath))
