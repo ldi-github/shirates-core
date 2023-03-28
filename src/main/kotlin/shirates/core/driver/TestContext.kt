@@ -170,6 +170,7 @@ class TestContext(
 
     var irregularHandler: (() -> Unit)? = null
 
+    @SaveTarget
     var enableIrregularHandler = true
 
     internal val saveTargetProperties = this::class.memberProperties.filterIsInstance<KMutableProperty<*>>()
