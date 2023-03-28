@@ -2,7 +2,6 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
