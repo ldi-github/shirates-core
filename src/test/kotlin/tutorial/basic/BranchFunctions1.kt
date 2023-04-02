@@ -8,18 +8,18 @@ import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.testcode.UITest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
+@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android")
 class BranchFunctions1 : UITest() {
 
     @Test
     @Order(10)
-    fun branch_os_platform() {
+    fun branch_platform_device() {
 
         scenario {
             case(1) {
                 action {
                     android {
-                        emulator {
+                        virtualDevice {
                             describe("This is called on android emulator")
                         }
                         realDevice {
@@ -27,12 +27,27 @@ class BranchFunctions1 : UITest() {
                         }
                     }
                     ios {
-                        simulator {
-                            describe("This is called on iOS Simulator")
+                        virtualDevice {
+                            describe("This is called on iOS simulator")
                         }
                         realDevice {
                             describe("This is called on iOS real device")
                         }
+                    }
+                }.expectation {
+                    it.screenIs("[Android Settings Top Screen]")
+                }
+            }
+            case(2) {
+                action {
+                    emulator {
+                        describe("This is called on android emulator")
+                    }
+                    simulator {
+                        describe("This is called on iOS simulator")
+                    }
+                    realDevice {
+                        describe("This is called on real device")
                     }
                 }.expectation {
                     it.screenIs("[Android Settings Top Screen]")

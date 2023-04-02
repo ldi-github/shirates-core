@@ -60,7 +60,7 @@ fun TestDrive.isScreenOf(
 fun TestDrive.waitScreenOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler
 ): TestElement {
 
@@ -72,7 +72,7 @@ fun TestDrive.waitScreenOf(
     waitScreenOfCore(
         screenNames = screenNames,
         waitSeconds = waitSeconds,
-        syncCache = syncCache,
+        useCache = useCache,
         irregularHandler = irregularHandler
     )
 
@@ -82,7 +82,7 @@ fun TestDrive.waitScreenOf(
 internal fun TestDrive.waitScreenOfCore(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler
 ): String {
 
@@ -137,7 +137,7 @@ internal fun TestDrive.waitScreenOfCore(
 
     TestDriver.switchScreen(screenName = currentScreenName)
 
-    syncCache(force = syncCache)
+    syncCache(force = useCache)
 
     return currentScreenName
 }

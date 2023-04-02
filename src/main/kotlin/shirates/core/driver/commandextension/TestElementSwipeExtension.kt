@@ -12,7 +12,7 @@ fun TestElement.swipeTo(
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
     repeat: Int = 1,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     val command = "swipeTo"
@@ -21,7 +21,7 @@ fun TestElement.swipeTo(
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject, arg1 = expression) {
-        val e = TestDriver.select(selector = sel, syncCache = syncCache)
+        val e = TestDriver.select(selector = sel, useCache = useCache)
 
         swipeElementToElement(
             startElement = this,
@@ -43,7 +43,7 @@ fun TestElement.swipeToAdjust(
     expression: String,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     return swipeTo(
@@ -51,7 +51,7 @@ fun TestElement.swipeToAdjust(
         durationSeconds = durationSeconds,
         marginRatio = marginRatio,
         adjust = true,
-        syncCache = syncCache
+        useCache = useCache
     )
 }
 

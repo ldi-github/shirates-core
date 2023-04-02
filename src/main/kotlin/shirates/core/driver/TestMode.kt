@@ -24,7 +24,7 @@ object TestMode {
     var testTimeNoLoadRun: Boolean? = null
     var testTimePlatformName: String? = null
     var testTimeProcessorArchitecture: String? = null
-    var testTimeIsEmulator: Boolean? = null
+    var testTimeIsVirtualDevice: Boolean? = null
     var testTimeHasOsaifuKeitai: Boolean? = null
     var testTimeIsStub: Boolean? = null
     var testTimeScreen: String? = null
@@ -37,7 +37,7 @@ object TestMode {
         testTimeNoLoadRun = null
         testTimePlatformName = null
         testTimeProcessorArchitecture = null
-        testTimeIsEmulator = null
+        testTimeIsVirtualDevice = null
         testTimeHasOsaifuKeitai = null
         testTimeIsStub = null
         testTimeScreen = null
@@ -100,20 +100,17 @@ object TestMode {
             if (isNoLoadRun) {
                 return true
             }
-            if (testTimeIsEmulator != null) {
-                return testTimeIsEmulator == true
+            if (isAndroid.not()) {
+                return false
+            }
+            if (testTimeIsVirtualDevice != null) {
+                return testTimeIsVirtualDevice == true
             }
             if (TestDriver.isInitialized.not()) {
                 return false
             }
 
-            if (isAndroid) {
-                return TestDriver.capabilities.getCapability("deviceName").toString().startsWith("emulator-")
-            } else {
-                val udid = TestDriver.capabilities.getCapability("udid").toString().uppercase()
-                val dir = "${shirates.core.UserVar.USER_HOME}/Library/Developer/CoreSimulator/Devices/$udid".toPath()
-                return Files.exists(dir)
-            }
+            return TestDriver.capabilities.getCapability("deviceName").toString().startsWith("emulator-")
         }
 
     /**
@@ -121,7 +118,30 @@ object TestMode {
      */
     val isSimulator: Boolean
         get() {
-            return isEmulator
+            if (isNoLoadRun) {
+                return true
+            }
+            if (isiOS.not()) {
+                return false
+            }
+            if (testTimeIsVirtualDevice != null) {
+                return testTimeIsVirtualDevice == true
+            }
+            if (TestDriver.isInitialized.not()) {
+                return false
+            }
+
+            val udid = TestDriver.capabilities.getCapability("udid").toString().uppercase()
+            val dir = "${shirates.core.UserVar.USER_HOME}/Library/Developer/CoreSimulator/Devices/$udid".toPath()
+            return Files.exists(dir)
+        }
+
+    /**
+     * isVirtualDevice
+     */
+    val isVirtualDevice: Boolean
+        get() {
+            return isEmulator || isSimulator
         }
 
     /**
@@ -132,7 +152,7 @@ object TestMode {
             if (isNoLoadRun) {
                 return true
             }
-            return isEmulator.not()
+            return isVirtualDevice.not()
         }
 
     /**
@@ -321,18 +341,18 @@ object TestMode {
     }
 
     /**
-     * runAsEmulator
+     * runAsVirtualDevice
      */
-    fun runAsEmulator(func: () -> Unit) {
+    fun runAsVirtualDevice(func: () -> Unit) {
 
-        val original = testTimeIsEmulator
+        val original = testTimeIsVirtualDevice
         try {
-            testTimeIsEmulator = true
-            TestLog.info("Run as Emulator")
+            testTimeIsVirtualDevice = true
+            TestLog.info("Run as VirtualDevice")
             func()
         } finally {
-            testTimeIsEmulator = original
-            TestLog.info("End of Run as Emulator")
+            testTimeIsVirtualDevice = original
+            TestLog.info("End of Run as VirtualDevice")
         }
     }
 
@@ -341,13 +361,13 @@ object TestMode {
      */
     fun runAsRealDevice(func: () -> Unit) {
 
-        val original = testTimeIsEmulator
+        val original = testTimeIsVirtualDevice
         try {
-            testTimeIsEmulator = false
+            testTimeIsVirtualDevice = false
             TestLog.info("Run as Real Device")
             func()
         } finally {
-            testTimeIsEmulator = original
+            testTimeIsVirtualDevice = original
             TestLog.info("End of Run as Real Device")
         }
     }

@@ -223,6 +223,8 @@ class TestContextTest : UnitTest() {
         context.scrollHorizontalMarginRatio = 999.0
         context.scrollMaxCount = 99
         context.tapHoldSeconds = 999.0
+        context.enableCache = !context.enableCache
+        context.findWebElementTimeoutMillisecond = 999
         context.syncWaitSeconds = 999.0
         context.syncMaxLoopCount = 9
         context.syncIntervalSeconds = 99.0

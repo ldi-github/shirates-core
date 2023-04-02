@@ -280,11 +280,11 @@ class CAEPatternTest : UITest() {
         val lines = TestLog.lines.filter { it.testScenarioId == TestLog.testScenarioId }
         val c = TestResultCollector(lines)
         assertThat(c.scenarios.count()).isEqualTo(1)
-        assertThat(c.scenarios[0].result.label).isEqualTo("NOT_IMPL")
+        assertThat(c.scenarios[0].result.label).isEqualTo("NOTIMPL")
 
         assertThat(c.cases.count()).isEqualTo(2)
         assertThat(c.cases[0].result.label).isEqualTo("-")
-        assertThat(c.cases[1].result.label).isEqualTo("-")
+        assertThat(c.cases[1].result.label).isEqualTo("NOTIMPL")
     }
 
     @Test
@@ -310,7 +310,7 @@ class CAEPatternTest : UITest() {
         assertThat(c.scenarios[0].result.label).isEqualTo("NOTIMPL")
 
         assertThat(c.cases.count()).isEqualTo(1)
-        assertThat(c.cases[0].result.label).isEqualTo("ok")
+        assertThat(c.cases[0].result.label).isEqualTo("NOTIMPL")
     }
 
     @Test

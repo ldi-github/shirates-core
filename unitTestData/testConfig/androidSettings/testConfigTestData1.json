@@ -42,6 +42,10 @@
 
   "tapHoldSeconds": "0.4",
 
+  "enableCache": "false",
+
+  "findWebElementTimeoutSeconds": "0.123",
+
   "syncWaitSeconds": "0.22",
 
   "syncMaxLoopCount": "5",

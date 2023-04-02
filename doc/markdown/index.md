@@ -98,8 +98,8 @@
     - [Branch function (ifCanSelect, ifCanSelectNot)](basic/function_property/branch/ifcanselect.md)
     - [Branch function (ifImageExist, ifImageExistNot)](basic/function_property/branch/ifimageexist.md)
     - [Branch function (ifImageIs, ifImageIsNot)](basic/function_property/branch/ifimageis.md)
-    - [Platform function (android, ios, emulator, simulator, realDevice)](basic/function_property/branch/platform_branch_functions.md)
-    - [Platform property (platformName, platformVersion, isAndroid, isiOS)](basic/function_property/branch/platform_properties.md)
+    - [Platform function (android, ios, emulator, simulator, virtualDevice, realDevice)](basic/function_property/branch/platform_branch_functions.md)
+    - [Platform property (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](basic/function_property/branch/platform_properties.md)
     - [Osaifukeitai function (osaifuKeitai, osaifuKeitaiNot)](basic/function_property/branch/osaifu_keitai_branch_functions.md)
     - [Special branch function (specialTag)](basic/function_property/branch/special_branch_functions.md)
     - [Screen branch function (onScreen)](basic/function_property/branch/screen_branch_functions.md)
@@ -116,7 +116,7 @@
 - Repeating action
     - [doUntilTrue](basic/repeating_action/do_until_true.md)  **(New! 3.1.0)**
 - Data storage
-    - [memoAs, readMemo](basic/function_property/data_storage/memo.md)
+    - [writeMemo, readMemo, memoTextAs](basic/function_property/data_storage/memo.md)
     - [clipboard, readClipboard](basic/function_property/data_storage/clipboard.md)
     - [account](basic/function_property/data_storage/account.md)
     - [app](basic/function_property/data_storage/app.md)
@@ -193,6 +193,9 @@
 - Stabilizing test execution (Improve Flaky Test)
     - [Causes of flaky test](in_action/stabilizing_test_execution/causes_of_flaky_test.md)
     - [Rerun scenario](in_action/stabilizing_test_execution/rerun_scenario.md)
+- Performance tuning with cache control **(New! 4.0.0)**
+    - [Performance problem of getSource in iOS](in_action/performance_tuning_with_cache_control/performance_problem_of_getpagesource_in_ios.md)
+    - [Direct access mode](in_action/performance_tuning_with_cache_control/direct_access_mode.md)
 
 ## Tutorial(Advanced)
 

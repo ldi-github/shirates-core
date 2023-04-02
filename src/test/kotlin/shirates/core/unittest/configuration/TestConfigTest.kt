@@ -297,6 +297,8 @@ class TestConfigTest : UnitTest() {
         assertThat(prof.scrollHorizontalMarginRatio).isEqualTo("0.2")
         assertThat(prof.scrollMaxCount).isEqualTo("7")
         assertThat(prof.tapHoldSeconds).isEqualTo("0.4")
+        assertThat(prof.enableCache).isEqualTo("false")
+        assertThat(prof.findWebElementTimeoutSeconds).isEqualTo("0.123")
         assertThat(prof.syncWaitSeconds).isEqualTo("0.22")
         assertThat(prof.syncMaxLoopCount).isEqualTo("5")
         assertThat(prof.syncIntervalSeconds).isEqualTo("1.5")

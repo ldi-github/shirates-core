@@ -10,6 +10,7 @@ import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.relative
 import shirates.core.driver.commandextension.select
+import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.testcode.UnitTest
@@ -858,7 +859,7 @@ class TestElementCache_AndroidTest : UnitTest() {
         // Act, Assert
         assertThatThrownBy {
             TestElementCache.select("a")
-        }.isInstanceOf(TestDriverException::class.java)
+        }.isInstanceOf(RerunScenarioException::class.java)
             .hasMessage(message(id = "appIsNotResponding", submessage = "Settings isn't responding"))
     }
 

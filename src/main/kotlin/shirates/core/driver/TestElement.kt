@@ -1,5 +1,7 @@
 package shirates.core.driver
 
+import org.json.JSONObject
+import org.openqa.selenium.WebElement
 import org.w3c.dom.Node
 import shirates.core.configuration.Selector
 import shirates.core.configuration.TestProfile
@@ -12,7 +14,6 @@ import shirates.core.driver.commandextension.getWebElement
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
-import shirates.core.logging.TestLog
 import shirates.core.utility.element.ElementCategory
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getAttribute
@@ -21,11 +22,12 @@ import shirates.core.utility.image.CropInfo
 /**
  * TestElement
  */
-data class TestElement(
+class TestElement(
     var selector: Selector? = null,
     var lastError: Throwable? = null,
     var lastResult: LogType = LogType.NONE,
-    var node: Node? = null
+    var node: Node? = null,
+    var webElement: WebElement? = null
 ) : TestDrive {
 
     /**
@@ -36,7 +38,7 @@ data class TestElement(
         if (isDummy) {
             return "(dummy)"
         }
-        if (node == null) {
+        if (isEmpty) {
             return "(empty)"
         }
 
@@ -49,7 +51,7 @@ data class TestElement(
 
     internal fun serializeForEndOfScroll(): String {
 
-        if (node == null) {
+        if (isEmpty) {
             return "(empty)"
         }
 
@@ -64,6 +66,22 @@ data class TestElement(
      * descendantsCache
      */
     internal var descendantsCache: MutableList<TestElement>? = null
+
+    /**
+     * isWebElementMode
+     */
+    val isWebElementMode: Boolean
+        get() {
+            return webElement != null
+        }
+
+    /**
+     * isCacheMode
+     */
+    val isCacheMode: Boolean
+        get() {
+            return isWebElementMode.not()
+        }
 
     /**
      * profile
@@ -103,6 +121,9 @@ data class TestElement(
      */
     val hasEmptyWebViewError: Boolean
         get() {
+            if (isWebElementMode) {
+                return false
+            }
             if (isAndroid) {
                 val webView = descendantsAndSelf.firstOrNull() { it.className == "android.webkit.WebView" }
                 if (webView == null) {
@@ -168,8 +189,10 @@ data class TestElement(
      */
     val isEmpty: Boolean
         get() {
-            return if (isDummy) false
-            else (node == null)
+            if (isDummy) {
+                return false
+            }
+            return (node == null && webElement == null)
         }
 
     /**
@@ -187,6 +210,9 @@ data class TestElement(
         get() {
             if (isEmpty) {
                 return false
+            }
+            if (isWebElementMode) {
+                return true
             }
             if (bounds.area == 0) {
                 return false
@@ -223,7 +249,7 @@ data class TestElement(
      */
     val checkable: String
         get() {
-            return getAttribute("checkable")
+            return getProperty("checkable")
         }
 
     /**
@@ -231,7 +257,7 @@ data class TestElement(
      */
     val checked: String
         get() {
-            return getAttribute("checked")
+            return getProperty("checked")
         }
 
     /**
@@ -239,7 +265,7 @@ data class TestElement(
      */
     val className: String
         get() {
-            return getAttribute("class")
+            return getProperty("class")
         }
 
     /**
@@ -259,7 +285,7 @@ data class TestElement(
      */
     val clickable: String
         get() {
-            return getAttribute("clickable")
+            return getProperty("clickable")
         }
 
     /**
@@ -267,7 +293,7 @@ data class TestElement(
      */
     val focusable: String
         get() {
-            return getAttribute("focusable")
+            return getProperty("focusable")
         }
 
     /**
@@ -275,7 +301,7 @@ data class TestElement(
      */
     val focused: String
         get() {
-            return getAttribute("focused")
+            return getProperty("focused")
         }
 
     /**
@@ -291,7 +317,7 @@ data class TestElement(
      */
     val longClickable: String
         get() {
-            return getAttribute("long-clickable")
+            return getProperty("long-clickable")
         }
 
     /**
@@ -302,7 +328,7 @@ data class TestElement(
             if (node == null) {
                 return ""
             }
-            return getAttribute("package")
+            return getProperty("package")
         }
 
     /**
@@ -310,7 +336,7 @@ data class TestElement(
      */
     val password: String
         get() {
-            return getAttribute("password")
+            return getProperty("password")
         }
 
     /**
@@ -318,7 +344,7 @@ data class TestElement(
      */
     val scrollable: String
         get() {
-            return getAttribute("scrollable")
+            return getProperty("scrollable")
         }
 
     /**
@@ -326,7 +352,7 @@ data class TestElement(
      */
     val selected: String
         get() {
-            return getAttribute("selected")
+            return getProperty("selected")
         }
 
     /**
@@ -334,7 +360,7 @@ data class TestElement(
      */
     val displayed: String
         get() {
-            return getAttribute("displayed")
+            return getProperty("displayed")
         }
 
     /**
@@ -342,7 +368,7 @@ data class TestElement(
      */
     val id: String
         get() {
-            return getAttribute("resource-id")
+            return getProperty("resource-id")
         }
 
     /**
@@ -359,7 +385,7 @@ data class TestElement(
      */
     val contentDesc: String
         get() {
-            return getAttribute("content-desc")
+            return getProperty("content-desc")
         }
 
     /**
@@ -376,7 +402,7 @@ data class TestElement(
      */
     val text: String
         get() {
-            return getAttribute("text")
+            return getProperty("text")
         }
 
     /**
@@ -411,7 +437,7 @@ data class TestElement(
             if (isAndroid) {
                 return text
             } else {
-                return if (label.isNotBlank()) label else value
+                return label.ifBlank { value }
             }
         }
 
@@ -420,7 +446,7 @@ data class TestElement(
      */
     val boundsString: String
         get() {
-            return getAttribute("bounds")
+            return getProperty("bounds")
         }
 
     /**
@@ -434,10 +460,27 @@ data class TestElement(
                 }
                 return Bounds(boundsString)
             } else {
-                val x1 = x.toIntOrNull() ?: 0
-                val y1 = y.toIntOrNull() ?: 0
-                val w = width.toIntOrNull() ?: 0
-                val h = height.toIntOrNull() ?: 0
+                if (isCacheMode) {
+                    val x1 = x.toIntOrNull() ?: 0
+                    val y1 = y.toIntOrNull() ?: 0
+                    val w = width.toIntOrNull() ?: 0
+                    val h = height.toIntOrNull() ?: 0
+                    return Bounds(left = x1, top = y1, width = w, height = h)
+                }
+
+                // webElementMode
+                val rectString: String
+                if (propertyCache.containsKey("rect")) {
+                    rectString = propertyCache["rect"]!!
+                } else {
+                    rectString = webElement!!.getAttribute("rect")
+                    propertyCache["rect"] = rectString
+                }
+                val jso = JSONObject(rectString)
+                val x1 = jso.getInt("x")
+                val y1 = jso.getInt("y")
+                val w = jso.getInt("width")
+                val h = jso.getInt("height")
                 return Bounds(left = x1, top = y1, width = w, height = h)
             }
         }
@@ -449,7 +492,7 @@ data class TestElement(
      */
     val type: String
         get() {
-            return getAttribute("type")
+            return getProperty("type")
         }
 
     /**
@@ -457,7 +500,7 @@ data class TestElement(
      */
     val visible: String
         get() {
-            return getAttribute("visible")
+            return getProperty("visible")
         }
 
     /**
@@ -465,7 +508,10 @@ data class TestElement(
      */
     val x: String
         get() {
-            return getAttribute("x")
+            if (isCacheMode) {
+                return getProperty("x")
+            }
+            return bounds.x1.toString()
         }
 
     /**
@@ -473,7 +519,10 @@ data class TestElement(
      */
     val y: String
         get() {
-            return getAttribute("y")
+            if (isCacheMode) {
+                return getProperty("y")
+            }
+            return bounds.y1.toString()
         }
 
     /**
@@ -481,7 +530,10 @@ data class TestElement(
      */
     val width: String
         get() {
-            return getAttribute("width")
+            if (isCacheMode) {
+                return getProperty("width")
+            }
+            return bounds.width.toString()
         }
 
     /**
@@ -489,7 +541,10 @@ data class TestElement(
      */
     val height: String
         get() {
-            return getAttribute("height")
+            if (isCacheMode) {
+                return getProperty("height")
+            }
+            return bounds.height.toString()
         }
 
     /**
@@ -497,7 +552,7 @@ data class TestElement(
      */
     val name: String
         get() {
-            return getAttribute("name")
+            return getProperty("name")
         }
 
     /**
@@ -505,7 +560,7 @@ data class TestElement(
      */
     val label: String
         get() {
-            return getAttribute("label")
+            return getProperty("label")
         }
 
     /**
@@ -517,9 +572,9 @@ data class TestElement(
     val value: String
         get() {
             if (isiOS) {
-                return getAttribute("value")
+                return getProperty("value")
             } else {
-                return getAttribute("text")
+                return getProperty("text")
             }
         }
 
@@ -530,8 +585,33 @@ data class TestElement(
      */
     val enabled: String
         get() {
-            return getAttribute("enabled")
+            return getProperty("enabled")
         }
+
+    /**
+     * getProperty
+     */
+    fun getProperty(name: String): String {
+
+        if (node != null) {
+            return getAttribute(name = name)
+        }
+        if (webElement != null) {
+            if (propertyCache.containsKey(name)) {
+                return propertyCache[name]!!
+            }
+            try {
+                val value = webElement!!.getAttribute(name)
+                propertyCache[name] = value
+                return value
+            } catch (t: Throwable) {
+                return ""
+            }
+        }
+        return ""
+    }
+
+    private val propertyCache = mutableMapOf<String, String>()
 
     /**
      * getAttribute
@@ -629,7 +709,7 @@ data class TestElement(
      */
     val isScrollable: Boolean
         get() {
-            if (node == null) {
+            if (isEmpty) {
                 return false
             }
             if (isAndroid) {
@@ -644,8 +724,6 @@ data class TestElement(
      */
     val subject: String
         get() {
-            TestLog.trace()
-
             if (selector == null && isEmpty) {
                 return "(empty)"
             }
@@ -695,17 +773,20 @@ data class TestElement(
         var e = TestElement(selector = selector)
         context.execOperateCommand(command = command, message = message, subject = subject) {
             try {
-                getWebElement().click()
+                val we = webElement ?: getWebElement()
+                we.click()
             } catch (t: Throwable) {
                 throw TestDriverException(message(id = "clickError", subject = subject), cause = t)
             }
 
             TestDriver.invalidateCache()
 
-            if (selector != null) {
-                if (canSelect(selector = selector!!)) {
-                    e = TestElementCache.select(selector = selector!!)
-                    return@execOperateCommand
+            if (isCacheMode) {
+                if (selector != null) {
+                    if (canSelect(selector = selector!!)) {
+                        e = TestElementCache.select(selector = selector!!)
+                        return@execOperateCommand
+                    }
                 }
             }
         }

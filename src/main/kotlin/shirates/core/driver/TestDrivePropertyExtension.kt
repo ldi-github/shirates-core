@@ -106,7 +106,15 @@ val TestDrive.isEmulator: Boolean
  */
 val TestDrive.isSimulator: Boolean
     get() {
-        return TestMode.isEmulator
+        return TestMode.isSimulator
+    }
+
+/**
+ * isVirtualDevice
+ */
+val TestDrive.isVirtualDevice: Boolean
+    get() {
+        return TestMode.isVirtualDevice
     }
 
 /**

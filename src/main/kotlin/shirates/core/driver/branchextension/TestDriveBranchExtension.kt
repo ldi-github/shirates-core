@@ -104,6 +104,29 @@ fun TestDrive.simulator(
 }
 
 /**
+ * virtualDevice
+ */
+fun TestDrive.virtualDevice(
+    onTrue: () -> Unit
+): TestElement {
+
+    val command = "virtualDevice"
+
+    val match = (TestMode.isNoLoadRun || isVirtualDevice)
+    if (match.not()) {
+        TestLog.trace("skip virtualDevice")
+        return lastElement
+    }
+
+    val context = TestDriverCommandContext(null)
+    context.execSpecial(subject = command, expected = command) {
+        onTrue()
+    }
+
+    return lastElement
+}
+
+/**
  * realDevice
  */
 fun TestDrive.realDevice(

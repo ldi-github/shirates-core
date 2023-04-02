@@ -50,47 +50,109 @@ class AnyBranchExtensionTest : UnitTest() {
     }
 
     @Test
-    fun emulatorTest() {
+    fun virtualDeviceTest() {
 
         var e = false
         var s = false
+        var v = false
         var r = false
-        val drivable = TestElement()
 
-        TestMode.runAsEmulator {
-            drivable
-                .emulator {
-                    e = true
-                }.simulator {
-                    s = true
-                }.realDevice {
-                    r = true
-                }
-            assertThat(e).isTrue()
-            assertThat(s).isTrue()
-            assertThat(r).isFalse()
+        fun reset() {
+            e = false
+            s = false
+            v = false
+            r = false
         }
+
+        TestMode.runAsVirtualDevice {
+            TestMode.runAsAndroid {
+                reset()
+                testDrive
+                    .emulator {
+                        e = true
+                    }.simulator {
+                        s = true
+                    }.virtualDevice {
+                        v = true
+                    }.realDevice {
+                        r = true
+                    }
+                assertThat(e).isTrue()
+                assertThat(s).isFalse()
+                assertThat(v).isTrue()
+                assertThat(r).isFalse()
+            }
+            TestMode.runAsIos {
+                reset()
+                testDrive
+                    .emulator {
+                        e = true
+                    }.simulator {
+                        s = true
+                    }.virtualDevice {
+                        v = true
+                    }.realDevice {
+                        r = true
+                    }
+                assertThat(e).isFalse()
+                assertThat(s).isTrue()
+                assertThat(v).isTrue()
+                assertThat(r).isFalse()
+            }
+        }
+
     }
 
     @Test
-    fun readDeviceTest() {
+    fun realDeviceTest() {
 
         var e = false
         var s = false
+        var v = false
         var r = false
 
+        fun reset() {
+            e = false
+            s = false
+            v = false
+            r = false
+        }
+
         TestMode.runAsRealDevice {
-            testDrive
-                .emulator {
-                    e = true
-                }.simulator {
-                    s = true
-                }.realDevice {
-                    r = true
-                }
-            assertThat(e).isFalse()
-            assertThat(s).isFalse()
-            assertThat(r).isTrue()
+            TestMode.runAsAndroid {
+                reset()
+                testDrive
+                    .emulator {
+                        e = true
+                    }.simulator {
+                        s = true
+                    }.virtualDevice {
+                        v = true
+                    }.realDevice {
+                        r = true
+                    }
+                assertThat(e).isFalse()
+                assertThat(s).isFalse()
+                assertThat(v).isFalse()
+                assertThat(r).isTrue()
+            }
+            TestMode.runAsIos {
+                reset()
+                testDrive
+                    .emulator {
+                        e = true
+                    }.simulator {
+                        s = true
+                    }.virtualDevice {
+                        v = true
+                    }.realDevice {
+                        r = true
+                    }
+                assertThat(e).isFalse()
+                assertThat(s).isFalse()
+                assertThat(v).isFalse()
+                assertThat(r).isTrue()
+            }
         }
     }
 

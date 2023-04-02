@@ -59,9 +59,12 @@ fun TestElement.refreshThisElement(): TestElement {
     if (isEmpty) {
         return this
     }
+    if (testContext.useCache.not()) {
+        return this
+    }
 
     val sel = getUniqueSelector()
-    val e = TestDriver.select(selector = sel, throwsException = false, syncCache = true)
+    val e = TestDriver.select(selector = sel, throwsException = false, useCache = true)
 
     return e
 }
@@ -113,8 +116,11 @@ fun TestElement.getWebElement(): WebElement {
 
     val xpath = getUniqueXpath()
     try {
-        val m = TestDriver.appiumDriver.findElement(By.xpath(xpath))
-        return m
+        var m: WebElement? = null
+        implicitWaitMilliseconds(200) {
+            m = TestDriver.appiumDriver.findElement(By.xpath(xpath))
+        }
+        return m!!
     } catch (t: Throwable) {
         throw TestDriverException(message(id = "getWebElementFailed", subject = "${selector}", arg1 = xpath), t)
     }
@@ -166,7 +172,8 @@ fun TestElement.getUniqueSelector(): Selector {
         }
     }
 
-    return Selector("xpath=${getUniqueXpath()}")
+    val uniqueXpath = getUniqueXpath().ifBlank { "//*[1]" }
+    return Selector("xpath=${uniqueXpath}")
 }
 
 /**
@@ -204,6 +211,9 @@ fun TestElement.getAbsoluteXpath(): String {
 fun TestElement.getUniqueXpath(): String {
 
     if (isEmpty) {
+        return ""
+    }
+    if (isCacheMode.not()) {
         return ""
     }
 
@@ -366,7 +376,7 @@ fun TestElement.capture(
     expression: String? = null,
     throwsException: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     if (expression != null) {
@@ -374,7 +384,7 @@ fun TestElement.capture(
             expression = expression,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
-            syncCache = syncCache
+            useCache = useCache
         )
     }
 

@@ -24,21 +24,21 @@ fun TestDrive.suppressHandler(func: () -> Unit): TestElement {
 }
 
 /**
- * disableHandler
- */
-fun TestDrive.disableHandler(): TestElement {
-
-    TestDriver.testContext.enableIrregularHandler = false
-
-    return getTestElement()
-}
-
-/**
  * enableHandler
  */
 fun TestDrive.enableHandler(): TestElement {
 
     TestDriver.testContext.enableIrregularHandler = true
+
+    return getTestElement()
+}
+
+/**
+ * disableHandler
+ */
+fun TestDrive.disableHandler(): TestElement {
+
+    TestDriver.testContext.enableIrregularHandler = false
 
     return getTestElement()
 }

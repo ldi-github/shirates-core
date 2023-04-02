@@ -54,9 +54,8 @@ class TestElementListExtensionTest : UnitTest() {
                 // Act
                 val filtered = list.filterBySelector(selector = selector)
                 // Assert
-                assertThat(filtered.count()).isEqualTo(2)
+                assertThat(filtered.count()).isEqualTo(1)
                 assertThat(filtered[0].label).isEqualTo("Settings")
-                assertThat(filtered[1].isEmpty).isEqualTo(true)
             }
 
             run {
