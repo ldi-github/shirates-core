@@ -3,35 +3,42 @@ package shirates.core.driver.commandextension
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import shirates.core.configuration.Filter
-import shirates.core.driver.TestDrive
+import shirates.core.configuration.Selector
+import shirates.core.driver.*
 import shirates.core.driver.TestDriver.appiumDriver
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.getSelector
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.Message.message
 
 /**
  * findWebElements
  */
 fun TestDrive.findWebElements(
-    expression: String,
+    selector: Selector,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
 ): List<WebElement> {
 
     var webElements = listOf<WebElement>()
-    val sel = getSelector(expression = expression)
-
     if (TestMode.isNoLoadRun) {
         return webElements
     }
-    val filters = sel.filterMap.values.toList()
+    val filters = selector.filterMap.values.toList()
     if (filters.isEmpty()) {
         return webElements
+    }
+    if (selector.relativeSelectors.any()) {
+        throw TestDriverException(
+            message = message(
+                id = "relativeSelectorNotSupportedInFindingWebElement",
+                arg1 = "findWebElements",
+                arg2 = "$selector"
+            )
+        )
     }
 
     val firstFilter = filters.first()
 
-    webElements = getWebElements(firstFilter)
+    webElements = getWebElements(filter = firstFilter, timeoutMilliseconds = timeoutMilliseconds)
 
     if (filters.count() >= 2) {
         for (i in 1 until filters.count()) {
@@ -44,21 +51,43 @@ fun TestDrive.findWebElements(
 }
 
 /**
+ * findWebElements
+ */
+fun TestDrive.findWebElements(
+    expression: String,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
+): List<WebElement> {
+
+    val selector = getSelector(expression = expression)
+    return findWebElements(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
+}
+
+/**
  * findWebElement
  */
 fun TestDrive.findWebElement(
-    expression: String,
+    selector: Selector,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
     log: Boolean = false
 ): WebElement {
 
-    var webElements = listOf<WebElement>()
-    val sel = getSelector(expression = expression)
-    val context = TestDriverCommandContext(null)
-    context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
+    if (selector.relativeSelectors.any()) {
+        throw TestDriverException(
+            message = message(
+                id = "relativeSelectorNotSupportedInFindingWebElement",
+                arg1 = "$selector",
+                arg2 = selector.expression
+            )
+        )
+    }
 
-        webElements = findWebElements(expression = expression)
+    var webElements = listOf<WebElement>()
+    val context = TestDriverCommandContext(null)
+    context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
+
+        webElements = findWebElements(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
         if (webElements.isEmpty()) {
-            throw TestDriverException("Element not found. ($expression)")
+            throw TestDriverException("Element not found. (selector=$selector)")
         }
     }
 
@@ -66,14 +95,38 @@ fun TestDrive.findWebElement(
 }
 
 /**
+ * findWebElement
+ */
+fun TestDrive.findWebElement(
+    expression: String,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
+    log: Boolean = false
+): WebElement {
+
+    val selector = getSelector(expression = expression)
+    return findWebElement(selector = selector, timeoutMilliseconds = timeoutMilliseconds, log = log)
+}
+
+/**
  * canFindWebElement
  */
 fun TestDrive.canFindWebElement(
-    expression: String
+    selector: Selector,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
 ): Boolean {
 
+    if (selector.relativeSelectors.any()) {
+        throw TestDriverException(
+            message = message(
+                id = "relativeSelectorNotSupportedInFindingWebElement",
+                arg1 = "$selector",
+                arg2 = selector.expression
+            )
+        )
+    }
+
     try {
-        findWebElement(expression = expression, log = false)
+        findWebElement(selector = selector, timeoutMilliseconds = timeoutMilliseconds, log = false)
         return true
     } catch (t: Throwable) {
         return false
@@ -81,14 +134,43 @@ fun TestDrive.canFindWebElement(
 }
 
 /**
+ * canFindWebElement
+ */
+fun TestDrive.canFindWebElement(
+    expression: String,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
+): Boolean {
+
+    val selector = getSelector(expression = expression)
+    return canFindWebElement(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
+}
+
+/**
  * canFindAllWebElement
  */
 fun TestDrive.canFindAllWebElement(
-    vararg expressions: String
+    vararg selectors: Selector,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
+): Boolean {
+
+    for (selector in selectors.toList()) {
+        if (canFindWebElement(selector = selector, timeoutMilliseconds = timeoutMilliseconds).not()) {
+            return false
+        }
+    }
+    return true
+}
+
+/**
+ * canFindAllWebElement
+ */
+fun TestDrive.canFindAllWebElement(
+    vararg expressions: String,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
 ): Boolean {
 
     for (expression in expressions.toList()) {
-        if (canFindWebElement(expression = expression).not()) {
+        if (canFindWebElement(expression = expression, timeoutMilliseconds = timeoutMilliseconds).not()) {
             return false
         }
     }
@@ -109,6 +191,7 @@ private fun getAttrName(noun: String): String {
         "text" -> if (isAndroid) "text" else "label"
         "access" -> if (isAndroid) "content-desc" else "name"
         "value" -> if (isAndroid) "text" else "value"
+        "xpath" -> ""
         "pos" -> ""
         else -> throw NotImplementedError("noun is not supported. (${noun})")
     }
@@ -116,37 +199,42 @@ private fun getAttrName(noun: String): String {
 }
 
 private fun getWebElements(
-    filter: Filter
+    filter: Filter,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
 ): List<WebElement> {
 
     var webElements = listOf<WebElement>()
     val attrName = getAttrName(noun = filter.noun)
 
-    webElements = when (filter.noun) {
-        "id" -> appiumDriver.findElements(By.id(filter.value))
-        "className" -> appiumDriver.findElements(By.className(filter.value))
-        "literal" -> findElementsByXpath("//*[@$attrName='${filter.value}']")
-        "text", "access", "value" -> when (filter.verb) {
-            "StartsWith" -> findElementsByXpath("//*[starts-with(@$attrName, '${filter.value}')]")
-            "Contains" -> findElementsByXpath("//*[contains(@$attrName, '${filter.value}')]")
-            "EndsWith" -> if (isAndroid) {
-                findElementsByXpath("//*[ends-with(@$attrName, '${filter.value}')]")
-            } else {
-                // workaround for bug
-                val list = findElementsByXpath("//*[contains(@$attrName, '${filter.value}')]")
-                list.filter { it.getAttribute("label").endsWith(filter.value) }
+    testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+        webElements = when (filter.noun) {
+            "id" -> appiumDriver.findElements(By.id(filter.value))
+            "className" -> appiumDriver.findElements(By.className(filter.value))
+            "literal" -> findElementsByXpath("//*[@$attrName='${filter.value}']")
+            "text", "access", "value" -> when (filter.verb) {
+                "StartsWith" -> findElementsByXpath("//*[starts-with(@$attrName, '${filter.value}')]")
+                "Contains" -> findElementsByXpath("//*[contains(@$attrName, '${filter.value}')]")
+                "EndsWith" -> if (isAndroid) {
+                    findElementsByXpath("//*[ends-with(@$attrName, '${filter.value}')]")
+                } else {
+                    // workaround for bug
+                    val list = findElementsByXpath("//*[contains(@$attrName, '${filter.value}')]")
+                    list.filter { it.getAttribute("label").endsWith(filter.value) }
+                }
+
+                "Matches" -> if (isAndroid) {
+                    findElementsByXpath("//*[matches(@$attrName, '${filter.value}')]")
+                } else {
+                    throw TestDriverException("find elements by XPath with regular expression is not supported on iOS.(filterExpression=${filter.filterExpression})")
+                }
+
+                else -> findElementsByXpath("//*[@$attrName='${filter.value}']")
             }
 
-            "Matches" -> if (isAndroid) {
-                findElementsByXpath("//*[matches(@$attrName, '${filter.value}')]")
-            } else {
-                throw TestDriverException("find elements by XPath with regular expression is not supported on iOS.(filterExpression=${filter.filterExpression})")
-            }
+            "xpath" -> findElementsByXpath(filter.value)
 
-            else -> findElementsByXpath("//*[@$attrName='${filter.value}']")
+            else -> webElements
         }
-
-        else -> webElements
     }
 
     return webElements
@@ -178,9 +266,8 @@ private fun List<WebElement>.filterWebElements(
             }
         }
 
-        else -> listOf()
+        else -> this
     }
 
     return webElements
 }
-

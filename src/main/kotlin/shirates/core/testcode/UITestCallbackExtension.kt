@@ -38,6 +38,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         var failOfTestContext = false
         var failAnnotation: Fail? = null
         var noLoadRunOfTestContext = false
+        var disableCacheAnnotation = false
     }
 
     /**
@@ -49,6 +50,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failOfTestContext = false
         failAnnotation = null
         noLoadRunOfTestContext = false
+        disableCacheAnnotation = false
 
         testClassWatch = StopWatch("testClassWatch").start()
 
@@ -99,6 +101,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failOfTestContext = context.isMethodAnnotated(Fail::class)
         failAnnotation = context.getMethodAnnotation(Fail::class) ?: context.getClassAnnotation(Fail::class)
         noLoadRunOfTestContext = context.isAnnotated(NoLoadRun::class)
+        disableCacheAnnotation = context.isAnnotated(DisableCache::class)
 
         val requiredContext = context!!.requiredContext
         if (requiredContext.isRequired.not()) {
@@ -176,6 +179,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.trace("@Test fun $testMethodName()")
         TestLog.trace(context.displayName)
 
+        testContext.saveState()
         uiTest?.beforeEach(context)
         lastElement.lastError = null
 
@@ -213,6 +217,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failOfTestContext = false
         failAnnotation = null
         noLoadRunOfTestContext = false
+        disableCacheAnnotation = false
+        testContext.resumeState()
 
         testFunctionWatch.stop()
         val duration = "%.1f".format(testFunctionWatch.elapsedSeconds)

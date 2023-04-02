@@ -522,7 +522,7 @@ abstract class UITest : TestDrive {
         TestLog.info("Running scenario ..................................................")
 
         if (isAndroid) {
-            val pack = rootElement.getAttribute("package")
+            val pack = rootElement.getProperty("package")
             TestLog.info("Startup package: $pack")
         }
 

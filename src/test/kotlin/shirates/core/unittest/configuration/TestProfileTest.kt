@@ -81,6 +81,8 @@ class TestProfileTest : UnitTest() {
         assertThat(p1.scrollHorizontalMarginRatio).isNull()
         assertThat(p1.scrollMaxCount).isNull()
         assertThat(p1.tapHoldSeconds).isNull()
+        assertThat(p1.enableCache).isNull()
+        assertThat(p1.findWebElementTimeoutSeconds).isNull()
         assertThat(p1.syncWaitSeconds).isNull()
         assertThat(p1.syncMaxLoopCount).isNull()
         assertThat(p1.syncIntervalSeconds).isNull()

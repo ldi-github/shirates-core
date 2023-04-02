@@ -111,6 +111,9 @@ object TestDriver {
             if (TestMode.isNoLoadRun) {
                 return lastElement
             }
+            if (testContext.useCache.not()) {
+                return lastElement
+            }
 
             if (TestElementCache.synced) {
                 TestLog.trace("TestElementCache.synced=${TestElementCache.synced}. syncCache skipped.")
@@ -257,6 +260,7 @@ object TestDriver {
         TestLog.info("tapHoldSeconds: ${testContext.tapHoldSeconds}")
         TestLog.info("tapAppIconMethod: ${testContext.tapAppIconMethod}")
         TestLog.info("tapAppIconMacro: ${testContext.tapAppIconMacro}")
+        TestLog.info("enableCache: ${testContext.enableCache}")
         TestLog.info("syncWaitSeconds: ${testContext.syncWaitSeconds}")
     }
 
@@ -377,6 +381,9 @@ object TestDriver {
      */
     fun fireIrregularHandler(force: Boolean = false) {
 
+        if (testContext.useCache.not()) {
+            return
+        }
         if (force.not()) {
             if (isFiringIrregularHandler || testContext.enableIrregularHandler.not() || TestMode.isNoLoadRun || isInitialized.not()) {
                 return
@@ -761,6 +768,9 @@ object TestDriver {
         if (isInitialized.not()) {
             return this
         }
+        if (testContext.useCache.not()) {
+            return this
+        }
 
         try {
             isRefreshing = true
@@ -844,7 +854,7 @@ object TestDriver {
         scrollMaxCount: Int = testContext.scrollMaxCount,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
-        syncCache: Boolean = true,
+        useCache: Boolean = testContext.useCache,
         log: Boolean = false
     ): TestElement {
 
@@ -861,7 +871,7 @@ object TestDriver {
                 scrollMaxCount = scrollMaxCount,
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
-                syncCache = syncCache
+                useCache = useCache
             )
         }
 
@@ -877,7 +887,7 @@ object TestDriver {
         scrollMaxCount: Int = testContext.scrollMaxCount,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
-        syncCache: Boolean = true,
+        useCache: Boolean = testContext.useCache,
     ): TestElement {
 
         if (selector.isRelative) {
@@ -889,15 +899,34 @@ object TestDriver {
 
         lastElement = TestElement.emptyElement
 
-        if (syncCache) {
+        if (useCache) {
             syncCache()
         }
 
         // Search in current screen
-        var selectedElement = TestElementCache.select(
-            selector = selector,
-            throwsException = false
-        )
+        var selectedElement: TestElement
+        if (testContext.useCache) {
+            selectedElement = TestElementCache.select(
+                selector = selector,
+                throwsException = false
+            )
+        } else {
+            if (selector.relativeSelectors.any()) {
+                throw TestDriverException(
+                    message = message(
+                        id = "relativeSelectorNotSupportedInFindingWebElement",
+                        arg1 = "select",
+                        arg2 = "$selector"
+                    )
+                )
+            }
+            try {
+                val webElement = testDrive.findWebElement(selector = selector)
+                selectedElement = TestElement(selector = selector, webElement = webElement)
+            } catch (t: Throwable) {
+                selectedElement = TestElement(selector = selector)
+            }
+        }
         if (selector.isNegation.not()) {
             if (selectedElement.isFound) {
                 lastElement = selectedElement
@@ -959,7 +988,7 @@ object TestDriver {
         scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true,
-        syncCache: Boolean = true,
+        useCache: Boolean = testContext.useCache,
     ): ImageMatchResult {
 
         val sel = expandExpression(expression = expression)
@@ -972,7 +1001,7 @@ object TestDriver {
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = throwsException,
-            syncCache = syncCache
+            useCache = useCache
         )
     }
 
@@ -984,12 +1013,12 @@ object TestDriver {
         scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true,
-        syncCache: Boolean = true,
+        useCache: Boolean = testContext.useCache,
     ): ImageMatchResult {
 
         lastElement = TestElement.emptyElement
 
-        if (syncCache) {
+        if (useCache) {
             syncCache()
         }
 
@@ -1062,6 +1091,42 @@ object TestDriver {
         throwsException: Boolean = true
     ): TestElement {
 
+        if (testContext.useCache) {
+            lastElement = selectWithScrollInCacheMode(
+                selector = selector,
+                direction = direction,
+                durationSeconds = durationSeconds,
+                startMarginRatio = startMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+            )
+        } else {
+            lastElement = selectWithScrollInWebElementMode(
+                selector = selector,
+                direction = direction,
+                durationSeconds = durationSeconds,
+                startMarginRatio = startMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+            )
+        }
+
+        if (lastElement.hasError) {
+            lastElement.lastResult = LogType.ERROR
+            if (throwsException) {
+                throw lastElement.lastError!!
+            }
+        }
+
+        return lastElement
+    }
+
+    private fun selectWithScrollInCacheMode(
+        selector: Selector,
+        direction: ScrollDirection,
+        durationSeconds: Double,
+        startMarginRatio: Double,
+        scrollMaxCount: Int,
+    ): TestElement {
+
         var e = TestElementCache.select(selector = selector, throwsException = false)
         if (e.isSafe) {
             it.syncCache()
@@ -1091,16 +1156,45 @@ object TestDriver {
             e = TestElementCache.select(selector = selector, throwsException = false)
         }
 
-        lastElement = e
+        return e
+    }
 
-        if (lastElement.hasError) {
-            lastElement.lastResult = LogType.ERROR
-            if (throwsException) {
-                throw lastElement.lastError!!
+    private fun selectWithScrollInWebElementMode(
+        selector: Selector,
+        direction: ScrollDirection,
+        durationSeconds: Double,
+        startMarginRatio: Double,
+        scrollMaxCount: Int,
+    ): TestElement {
+
+        val we = testDrive.findWebElement(selector = selector)
+        var e = TestElement(selector = selector, webElement = we)
+        if (e.isSafe) {
+            if (e.isSafe) {
+                lastElement = e
+                return lastElement
             }
         }
 
-        return lastElement
+        val actionFunc = {
+            e = testDrive.findWebElement(selector = selector).toTestElement(selector = selector)
+            e.isSafe
+        }
+
+        testDrive.doUntilScrollStop(
+            maxLoopCount = scrollMaxCount,
+            direction = direction,
+            durationSeconds = durationSeconds,
+            startMarginRatio = startMarginRatio,
+            actionFunc = actionFunc
+        )
+
+        if (e.isEmpty) {
+            // Try select after scroll stops
+            e = testDrive.findWebElement(selector = selector).toTestElement(selector = selector)
+        }
+
+        return e
     }
 
     /**
@@ -1175,7 +1269,7 @@ object TestDriver {
 
     internal fun screenshotCore(
         force: Boolean = false,
-        sync: Boolean = true,
+        sync: Boolean = testContext.useCache,
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump
@@ -1199,7 +1293,7 @@ object TestDriver {
         if (sync) {
             syncCache()
         }
-        if (force.not() && onChangedOnly) {
+        if (testContext.useCache && force.not() && onChangedOnly) {
             val sourceXml = TestElementCache.sourceXml
             val xmlHasDifference = sourceXml != CodeExecutionContext.lastScreenshotXmlSource
             if (xmlHasDifference.not()) {
@@ -1246,7 +1340,7 @@ object TestDriver {
         screenshotLine.lastScreenshot = screenshotFileName
         screenshotLine.subject = screenshotFileName
 
-        if (withXmlSource) {
+        if (withXmlSource && testContext.useCache) {
             val fileName = screenshotFileName.replace(".png", ".xml")
             outputXmlSource(filePath = TestLog.directoryForLog.resolve(fileName))
         }
@@ -1400,6 +1494,10 @@ object TestDriver {
         syncIntervalSeconds: Double = testContext.syncIntervalSeconds,
         syncOnTimeout: Boolean = true
     ): TestDriver {
+
+        if (testContext.useCache.not()) {
+            return this
+        }
 
         if (isSyncing) {
             TestLog.trace("syncCache called recursively.")
@@ -1602,6 +1700,12 @@ object TestDriver {
                 appName = appNameOrAppId.split(".").last()
             }
 
+
+            if (testContext.useCache) {
+                syncCache()
+            } else {
+                rootElement = testDrive.findWebElement("xpath=//*[1]").toTestElement()
+            }
             return rootElement.name == appName
         } catch (t: Throwable) {
             TestLog.info("Error in isAppCore: $t")

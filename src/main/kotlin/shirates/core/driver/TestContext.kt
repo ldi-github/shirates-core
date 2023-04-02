@@ -5,6 +5,7 @@ import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
+import shirates.core.testcode.UITestCallbackExtension
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.memberProperties
@@ -140,6 +141,28 @@ class TestContext(
 
     @SaveTarget
     var tapHoldSeconds = profile.tapHoldSeconds?.toDoubleOrNull() ?: Const.TAP_HOLD_SECONDS
+
+    @SaveTarget
+    var enableCache = profile.enableCache?.toBoolean() ?: Const.ENABLE_CACHE
+
+    @SaveTarget
+    var forceUseCache = false
+
+    /**
+     * useCache
+     */
+    val useCache: Boolean
+        get() {
+            if (forceUseCache) {
+                return true
+            }
+            return enableCache && UITestCallbackExtension.disableCacheAnnotation.not()
+        }
+
+    @SaveTarget
+    var findWebElementTimeoutMillisecond =
+        ((profile.findWebElementTimeoutSeconds?.toDoubleOrNull() ?: Const.FIND_WEB_ELEMENT_TIMEOUT_SECONDS) * 1000)
+            .toInt()
 
     @SaveTarget
     var syncWaitSeconds = profile.syncWaitSeconds?.toDoubleOrNull() ?: Const.SYNC_WAIT_SECONDS

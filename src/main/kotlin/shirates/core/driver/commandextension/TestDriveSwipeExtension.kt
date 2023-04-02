@@ -3,7 +3,6 @@ package shirates.core.driver.commandextension
 import org.openqa.selenium.InvalidElementStateException
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -129,10 +128,14 @@ internal fun TestDrive.swipePointToPointCore(
             try {
                 swipeFunc()
             } catch (t: InvalidElementStateException) {
-                // retry once
-                TestLog.info("Swipe did not complete successfully. Retrying once")
-                refreshCache()
-                swipeFunc()
+                if (testContext.useCache) {
+                    // retry once
+                    TestLog.info("Swipe did not complete successfully. Retrying once")
+                    refreshCache()
+                    swipeFunc()
+                } else {
+                    throw t
+                }
             }
         }
     } finally {

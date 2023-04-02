@@ -80,7 +80,7 @@ class TestDriveFindWebElementTest : UITest() {
                     assertThatThrownBy {
                         it.findWebElement(".XCUIElementTypeStaticText&&[999]")
                     }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage("Element not found. (.XCUIElementTypeStaticText&&[999])")
+                        .hasMessage("Element not found. (selector=<.XCUIElementTypeStaticText&&[999]>)")
                 }
             }
             case(99) {

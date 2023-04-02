@@ -19,7 +19,7 @@ fun TestDrive.findImage(
     scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
     direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
     throwsException: Boolean = false,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     log: Boolean = true
 ): ImageMatchResult {
 
@@ -31,7 +31,7 @@ fun TestDrive.findImage(
         scroll = scroll,
         direction = direction,
         throwsException = throwsException,
-        syncCache = syncCache,
+        useCache = useCache,
         log = log
     )
 }
@@ -45,7 +45,7 @@ internal fun TestDrive.findImageCore(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = false,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     log: Boolean = false
 ): ImageMatchResult {
 
@@ -66,7 +66,7 @@ internal fun TestDrive.findImageCore(
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 throwsException = throwsException,
-                syncCache = syncCache
+                useCache = useCache
             )
             TestDriver.autoScreenshot()
         }
@@ -91,7 +91,7 @@ fun TestDrive.findImageWithScrollDown(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     log: Boolean = true
 ): ImageMatchResult {
 
@@ -107,7 +107,7 @@ fun TestDrive.findImageWithScrollDown(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
-        syncCache = syncCache,
+        useCache = useCache,
         log = log
     )
 }
@@ -121,7 +121,7 @@ fun TestDrive.findImageWithScrollUp(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     log: Boolean = true
 ): ImageMatchResult {
 
@@ -137,7 +137,7 @@ fun TestDrive.findImageWithScrollUp(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
-        syncCache = syncCache,
+        useCache = useCache,
         log = log
     )
 }
@@ -151,7 +151,7 @@ fun TestDrive.findImageWithScrollRight(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     log: Boolean = true
 ): ImageMatchResult {
 
@@ -167,7 +167,7 @@ fun TestDrive.findImageWithScrollRight(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
-        syncCache = syncCache,
+        useCache = useCache,
         log = log
     )
 }
@@ -181,7 +181,7 @@ fun TestDrive.findImageWithScrollLeft(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     log: Boolean = true
 ): ImageMatchResult {
 
@@ -197,7 +197,7 @@ fun TestDrive.findImageWithScrollLeft(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
-        syncCache = syncCache,
+        useCache = useCache,
         log = log
     )
 }

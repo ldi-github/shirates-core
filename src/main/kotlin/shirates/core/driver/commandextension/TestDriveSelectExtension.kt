@@ -11,10 +11,10 @@ import shirates.core.logging.Message.message
  */
 fun TestDrive.filterElements(
     expression: String,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): List<TestElement> {
 
-    if (syncCache) {
+    if (useCache) {
         syncCache(force = true)
     }
     return TestElementCache.filterElements(expression = expression)
@@ -41,7 +41,7 @@ fun TestDrive.select(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -60,7 +60,7 @@ fun TestDrive.select(
             direction = direction,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
-            syncCache = syncCache
+            useCache = useCache
         )
     }
     if (func != null) {
@@ -502,7 +502,11 @@ internal fun TestDrive.canSelectAll(
     var foundAll = false
     val context = TestDriverCommandContext(testElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
-        foundAll = TestElementCache.canSelectAll(selectors = selectors)
+        if (testContext.useCache) {
+            foundAll = TestElementCache.canSelectAll(selectors = selectors)
+        } else {
+            foundAll = testDrive.canFindAllWebElement(selectors = selectors.toList().toTypedArray())
+        }
     }
     if (logLine != null) {
         logLine.message += " (result=$foundAll)"

@@ -71,7 +71,7 @@ class TestDriveFindWebElementTest : UITest() {
                     assertThatThrownBy {
                         it.findWebElement(".android.widget.TextView&&[999]")
                     }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage("Element not found. (.android.widget.TextView&&[999])")
+                        .hasMessage("Element not found. (selector=<.android.widget.TextView&&[999]>)")
                 }
             }
             case(99) {
@@ -97,6 +97,16 @@ class TestDriveFindWebElementTest : UITest() {
                 }
             }
         }
+    }
+
+    @Test
+    @Order(30)
+    fun relativeSelector_exception() {
+
+        assertThatThrownBy {
+            it.findWebElement("<Network & internet>:belowLabel")
+        }.isInstanceOf(TestDriverException::class.java)
+            .hasMessage("Relative selector is not supported in finding WebElement. Use cache mode.(selector=<Network & internet>:belowLabel, expression=<Network & internet>:belowLabel)")
     }
 
 }

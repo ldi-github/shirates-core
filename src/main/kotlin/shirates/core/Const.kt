@@ -97,6 +97,8 @@ object Const {
     const val SCROLL_HORIZONTAL_MARGIN_RATIO = 0.2
     const val SCROLL_MAX_COUNT = 20
     const val TAP_HOLD_SECONDS = 0.2
+    const val ENABLE_CACHE = true
+    const val FIND_WEB_ELEMENT_TIMEOUT_SECONDS = 0.2
     const val SYNC_WAIT_SECONDS = 1.8
     const val SYNC_MAX_LOOP_COUNT = 5
     const val SYNC_INTERVAL_SECONDS = 0.5

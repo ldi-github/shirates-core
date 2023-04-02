@@ -6,7 +6,6 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastElement
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -140,7 +139,7 @@ fun TestDrive.packageIs(expected: String): TestElement {
 fun TestDrive.screenIs(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -155,7 +154,7 @@ fun TestDrive.screenIs(
             expectedScreenName = screenName,
             waitSeconds = waitSeconds,
             assertMessage = assertMessage,
-            syncCache = syncCache
+            useCache = useCache
         )
     }
     if (func != null) {
@@ -171,18 +170,18 @@ fun TestDrive.screenIs(
 fun TestDrive.screenIs(
     screenName: String,
     waitSeconds: Int,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     func: (() -> Unit)? = null
 ): TestElement {
 
-    return screenIs(screenName = screenName, waitSeconds = waitSeconds.toDouble(), syncCache = syncCache, func = func)
+    return screenIs(screenName = screenName, waitSeconds = waitSeconds.toDouble(), useCache = useCache, func = func)
 }
 
 internal fun TestDrive.screenIsCore(
     expectedScreenName: String,
     assertMessage: String,
     waitSeconds: Double,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ) {
 
     var isScreenResult = false
@@ -205,7 +204,7 @@ internal fun TestDrive.screenIsCore(
 
     if (isScreenResult) {
         TestLog.ok(message = assertMessage, arg1 = expectedScreenName)
-        if (syncCache.not()) {
+        if (useCache.not()) {
             invalidateCache()   // matched, but not synced yet.
         }
     } else {
@@ -224,7 +223,7 @@ internal fun TestDrive.screenIsCore(
 fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -239,7 +238,7 @@ fun TestDrive.screenIsOf(
             screenNames = screenNames,
             waitSeconds = waitSeconds,
             assertMessage = assertMessage,
-            syncCache = syncCache
+            useCache = useCache
         )
     }
     if (func != null) {
@@ -255,14 +254,14 @@ fun TestDrive.screenIsOf(
 fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Int,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     func: (() -> Unit)? = null
 ): TestElement {
 
     return screenIsOf(
         screenNames = screenNames,
         waitSeconds = waitSeconds.toDouble(),
-        syncCache = syncCache,
+        useCache = useCache,
         func = func
     )
 }
@@ -271,7 +270,7 @@ internal fun TestDrive.screenIsOfCore(
     vararg screenNames: String,
     assertMessage: String,
     waitSeconds: Double,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ) {
     var isScreenResult = false
     var matchedScreenName = ""
@@ -297,7 +296,7 @@ internal fun TestDrive.screenIsOfCore(
 
     if (isScreenResult) {
         TestLog.ok(message = assertMessage, arg1 = matchedScreenName)
-        if (syncCache.not()) {
+        if (useCache.not()) {
             invalidateCache()   // matched, but not synced yet.
         }
     } else {
@@ -320,7 +319,7 @@ internal fun TestDrive.existCore(
     selector: Selector,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -342,7 +341,7 @@ internal fun TestDrive.existCore(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = false,
-            syncCache = syncCache
+            useCache = useCache
         )
         e.selector = selector
         TestDriver.postProcessForImageAssertion(
@@ -360,7 +359,7 @@ internal fun TestDrive.existCore(
             scrollMaxCount = scrollMaxCount,
             throwsException = false,
             waitSeconds = waitSeconds,
-            syncCache = syncCache
+            useCache = useCache
         )
         TestDriver.postProcessForAssertion(
             selectResult = e,
@@ -382,7 +381,7 @@ fun TestDrive.exist(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -405,7 +404,7 @@ fun TestDrive.exist(
             selector = sel,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
-            syncCache = syncCache,
+            useCache = useCache,
             scroll = scroll,
             direction = direction
         )
@@ -631,7 +630,7 @@ fun TestDrive.existInScanResults(
 fun TestDrive.existAll(
     vararg expressions: String,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     var wsec = waitSeconds
@@ -643,7 +642,7 @@ fun TestDrive.existAll(
         this.exist(
             expression = expression,
             waitSeconds = wsec,
-            syncCache = syncCache
+            useCache = useCache
         )
         if (sw.elapsedMillis > waitSeconds * 1000) {
             wsec = 0.0
@@ -685,7 +684,7 @@ internal fun TestDrive.dontExist(
     selector: Selector,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     val testElement = getTestElement()
@@ -722,7 +721,7 @@ internal fun TestDrive.dontExist(
             selector = selector,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
-            syncCache = syncCache
+            useCache = useCache
         )
     }
 
@@ -734,7 +733,7 @@ internal fun TestDrive.dontExistCore(
     selector: Selector,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -753,7 +752,7 @@ internal fun TestDrive.dontExistCore(
         scrollMaxCount = scrollMaxCount,
         waitSeconds = 0.0,
         throwsException = false,
-        syncCache = syncCache
+        useCache = useCache
     )
 
     if (waitSeconds > 0.0 && scroll.not() && e.isFound) {
@@ -790,7 +789,7 @@ fun TestDrive.dontExist(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     var sel = getSelector(expression = expression)
@@ -807,7 +806,7 @@ fun TestDrive.dontExist(
         selector = sel,
         throwsException = throwsException,
         waitSeconds = waitSeconds,
-        syncCache = syncCache
+        useCache = useCache
     )
 }
 
@@ -817,7 +816,7 @@ fun TestDrive.dontExist(
 fun TestDrive.dontExistWithScrollDown(
     expression: String,
     throwsException: Boolean = true,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     val testElement = getTestElement()
@@ -833,7 +832,7 @@ fun TestDrive.dontExistWithScrollDown(
             message = assertMessage,
             selector = selector,
             throwsException = throwsException,
-            syncCache = syncCache,
+            useCache = useCache,
             scroll = true,
             direction = ScrollDirection.Down,
         )
@@ -848,7 +847,7 @@ fun TestDrive.dontExistWithScrollDown(
 fun TestDrive.dontExistWithScrollUp(
     expression: String,
     throwsException: Boolean = true,
-    syncCache: Boolean = true,
+    useCache: Boolean = testContext.useCache,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
@@ -867,7 +866,7 @@ fun TestDrive.dontExistWithScrollUp(
             message = assertMessage,
             selector = selector,
             throwsException = throwsException,
-            syncCache = syncCache,
+            useCache = useCache,
             scroll = true,
             direction = ScrollDirection.Up,
             scrollDurationSeconds = scrollDurationSeconds,
@@ -884,11 +883,11 @@ fun TestDrive.dontExistWithScrollUp(
  */
 fun TestDrive.dontExistAll(
     vararg expressions: String,
-    syncCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     for (expression in expressions) {
-        this.dontExist(expression = expression, syncCache = syncCache)
+        this.dontExist(expression = expression, useCache = useCache)
     }
 
     return lastElement

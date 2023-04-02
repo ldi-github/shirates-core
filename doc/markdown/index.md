@@ -193,6 +193,9 @@
 - Stabilizing test execution (Improve Flaky Test)
     - [Causes of flaky test](in_action/stabilizing_test_execution/causes_of_flaky_test.md)
     - [Rerun scenario](in_action/stabilizing_test_execution/rerun_scenario.md)
+- Performance tuning with cache control **(New! 4.0.0)**
+    - [Performance problem of getSource in iOS](in_action/performance_tuning_with_cache_control/performance_problem_of_getpagesource_in_ios.md)
+    - [Direct access mode](in_action/performance_tuning_with_cache_control/direct_access_mode.md)
 
 ## Tutorial(Advanced)
 

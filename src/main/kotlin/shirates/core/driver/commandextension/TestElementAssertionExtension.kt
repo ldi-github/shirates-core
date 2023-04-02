@@ -767,7 +767,7 @@ fun TestElement.enabledIs(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        val actual = getAttribute("enabled")
+        val actual = getProperty("enabled")
         actual.thisIs(expected = expected, message = assertMessage)
     }
 
@@ -786,7 +786,7 @@ fun TestElement.enabledIsTrue(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
-        val actual = getAttribute("enabled")
+        val actual = getProperty("enabled")
         actual.thisIs(expected = "true", message = assertMessage)
     }
 
@@ -805,7 +805,7 @@ fun TestElement.enabledIsFalse(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
-        val actual = getAttribute("enabled")
+        val actual = getProperty("enabled")
         actual.thisIs(expected = "false", message = assertMessage)
     }
 
@@ -822,7 +822,7 @@ fun TestElement.buttonIsActive(): TestElement {
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = subject) {
-        val actual = getAttribute("enabled")
+        val actual = getProperty("enabled")
         actual.thisIs(expected = "true", message = assertMessage)
     }
 
@@ -839,7 +839,7 @@ fun TestElement.buttonIsNotActive(): TestElement {
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = subject) {
-        val actual = getAttribute("enabled")
+        val actual = getProperty("enabled")
         actual.thisIs(expected = "false", message = assertMessage)
     }
 
@@ -910,7 +910,7 @@ fun TestElement.displayedIs(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        val actual = getAttribute("displayed")
+        val actual = getProperty("displayed")
         actual.thisIs(expected = expected, message = assertMessage)
     }
 
@@ -937,7 +937,7 @@ fun TestElement.attributeIs(
         arg1 = attributeName,
         arg2 = expected
     ) {
-        val actual = getAttribute(attributeName)
+        val actual = getProperty(attributeName)
         actual.thisIs(expected = expected, message = assertMessage)
     }
 
@@ -964,7 +964,7 @@ fun TestElement.attributeIsNot(
         arg1 = attributeName,
         arg2 = expected
     ) {
-        val actual = getAttribute(attributeName)
+        val actual = getProperty(attributeName)
         actual.thisIsNot(expected = expected, message = assertMessage)
     }
 
