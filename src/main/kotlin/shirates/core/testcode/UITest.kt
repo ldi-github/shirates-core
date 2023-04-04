@@ -126,9 +126,9 @@ abstract class UITest : TestDrive {
     }
 
     /**
-     * afterAll
+     * beforeAllAfterSetup
      */
-    open fun afterAll(context: ExtensionContext?) {
+    open fun beforeAllAfterSetup(context: ExtensionContext?) {
 
         TestLog.trace()
     }
@@ -145,6 +145,14 @@ abstract class UITest : TestDrive {
      * afterEach
      */
     open fun afterEach(context: ExtensionContext?) {
+
+        TestLog.trace()
+    }
+
+    /**
+     * afterAll
+     */
+    open fun afterAll(context: ExtensionContext?) {
 
         TestLog.trace()
     }
