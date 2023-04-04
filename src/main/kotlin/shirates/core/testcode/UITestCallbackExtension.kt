@@ -30,6 +30,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
     AfterEachCallback, TestExecutionExceptionHandler {
 
     var beforeAllExecuted = false
+    var beforeAllAfterSetupExecuted = false
     var testClassWatch = StopWatch()
     var testFunctionWatch = StopWatch()
 
@@ -173,6 +174,12 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
                     }
                     ParameterRepository.write("hasOsaihuKeitai", hasOsaifuKeitai.toString())
                 }
+            }
+
+            // beforeAllAfterSetup
+            if (beforeAllAfterSetupExecuted.not()) {
+                testBase.beforeAllAfterSetup(context)
+                beforeAllAfterSetupExecuted = true
             }
         }
 

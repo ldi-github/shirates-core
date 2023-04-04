@@ -89,7 +89,7 @@ fun TestDrive.removeApp(
         TestDriver.invalidateCache()
     }
 
-    return testElement
+    return lastElement
 }
 
 /**
@@ -121,22 +121,30 @@ fun TestDrive.terminateApp(
         TestDriver.invalidateCache()
     }
 
-    return testElement
+    return lastElement
 }
 
 /**
  * restartApp
  */
 fun TestDrive.restartApp(
-    appIconNameOrPackageOrBundleId: String = TestDriver.testContext.appIconName
+    appNameOrAppId: String = TestDriver.testContext.appIconName
 ): TestElement {
 
     if (TestMode.isNoLoadRun) {
         return lastElement
     }
 
-    TestDriver.it.terminateApp(appIconNameOrPackageOrBundleId)
-    TestDriver.it.launchApp(appIconNameOrPackageOrBundleId)
+    val testElement = getTestElement()
+
+    val command = "restartApp"
+    val subject = Selector(appNameOrAppId).toString()
+    val message = message(id = command, subject = subject)
+    val context = TestDriverCommandContext(testElement)
+    context.execOperateCommand(command = command, message = message, fireEvent = false) {
+        terminateApp(appNameOrAppId)
+        launchApp(appNameOrAppId)
+    }
 
     return lastElement
 }
@@ -200,6 +208,6 @@ fun TestDrive.launchApp(
         }
     }
 
-    return TestDriver.lastElement
+    return lastElement
 }
 
