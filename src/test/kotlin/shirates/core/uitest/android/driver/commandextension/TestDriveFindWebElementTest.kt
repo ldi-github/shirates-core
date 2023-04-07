@@ -59,11 +59,7 @@ class TestDriveFindWebElementTest : UITest() {
             }
             case(6, "value") {
                 expectation {
-                    it.findWebElement("Network & internet").getAttribute("text").thisIs("Network & internet")
-                    it.findWebElement("Network &*").getAttribute("text").thisIs("Network & internet")
-                    it.findWebElement("*work & inter*").getAttribute("text").thisIs("Network & internet")
-                    it.findWebElement("*& internet").getAttribute("text").thisIs("Network & internet")
-                    it.findWebElement("textMatches=^Net.*net$").getAttribute("text").thisIs("Network & internet")
+                    // Android does not have "value" attribute
                 }
             }
             case(7, "pos") {

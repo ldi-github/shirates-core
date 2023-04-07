@@ -193,7 +193,7 @@ private fun getAttrName(noun: String): String {
         "value" -> if (isAndroid) "text" else "value"
         "xpath" -> ""
         "pos" -> ""
-        else -> throw NotImplementedError("noun is not supported. (${noun})")
+        else -> noun
     }
     return attrName
 }
@@ -230,6 +230,8 @@ private fun getWebElements(
 
                 else -> findElementsByXpath("//*[@$attrName='${filter.value}']")
             }
+
+            "visible" -> findElementsByXpath("//*[@visible='${filter.value}']")
 
             "xpath" -> findElementsByXpath(filter.value)
 
