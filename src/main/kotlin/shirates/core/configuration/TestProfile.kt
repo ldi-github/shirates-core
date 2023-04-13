@@ -551,7 +551,7 @@ class TestProfile(var profileName: String = "") {
             val androidDeviceInfo =
                 AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = testContext.profile)
             if (androidDeviceInfo.message.isNotBlank()) {
-                TestLog.info(androidDeviceInfo.message)
+                TestLog.warn(androidDeviceInfo.message)
             }
             val deviceLabel = androidDeviceInfo.avdNameAndPort.ifBlank { androidDeviceInfo.model }
             val subject = "${deviceLabel}, Android ${androidDeviceInfo.platformVersion}, ${androidDeviceInfo.udid}"
@@ -573,7 +573,7 @@ class TestProfile(var profileName: String = "") {
 
             val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
             if (iosDeviceInfo.message.isNotBlank()) {
-                TestLog.info(iosDeviceInfo.message)
+                TestLog.warn(iosDeviceInfo.message)
             }
             val subject =
                 "${iosDeviceInfo.devicename}, iOS ${iosDeviceInfo.platformVersion}, ${iosDeviceInfo.udid}"

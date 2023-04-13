@@ -205,7 +205,7 @@ Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/an
 99	2023/03/11 06:24:29.665	{}	[-]	(parameter)	always_finish_activities: 0
 100	2023/03/11 06:24:29.665	{}	[-]	()	(others)
 101	2023/03/11 06:24:29.666	{}	[-]	(parameter)	isEmulator: true
-102	2023/03/11 06:24:29.666	{}	[-]	(parameter)	hasOsaihuKeitai: false
+102	2023/03/11 06:24:29.666	{}	[-]	(parameter)	hasOsaifuKeitai: false
 103	2023/03/11 06:24:29.667	{}	[info]	()	Setup executed. (duration: 16.0 sec)
 104	2023/03/11 06:24:29.671	{}	[WARN]	()	scenario not implemented.
 

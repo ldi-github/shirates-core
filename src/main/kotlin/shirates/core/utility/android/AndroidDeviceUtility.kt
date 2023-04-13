@@ -5,7 +5,6 @@ import shirates.core.configuration.ProfileNameParser
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -23,7 +22,7 @@ object AndroidDeviceUtility {
      */
     fun getAvdName(profileName: String): String {
 
-        return profileName.replace(" ", "_").replace("(", "_").replace(")", "_")
+        return profileName.escapeAvdName()
     }
 
     /**
@@ -36,9 +35,9 @@ object AndroidDeviceUtility {
     }
 
     /**
-     * getAndroidDeviceList
+     * getConnectedDeviceList
      */
-    fun getAndroidDeviceList(): List<AndroidDeviceInfo> {
+    fun getConnectedDeviceList(): List<AndroidDeviceInfo> {
 
         val result = ShellUtility.executeCommand("adb", "devices", "-l")
         val list = mutableListOf<AndroidDeviceInfo>()
@@ -46,7 +45,7 @@ object AndroidDeviceUtility {
         for (line in result.resultLines) {
             if (line.isNotBlank()) {
                 val deviceInfo = AndroidDeviceInfo(line)
-                if (deviceInfo.port.isNotBlank()) {
+                if (deviceInfo.isEmulator) {
                     val emulatorPort = deviceInfo.port.toIntOrNull()
                     if (emulatorPort != null) {
                         // Get process information (pid, cmd)
@@ -67,16 +66,17 @@ object AndroidDeviceUtility {
                         }
                     }
                 }
-                if (deviceInfo.status.isNotBlank()) {
-                    if (deviceInfo.udid.isNotBlank()) {
-                        deviceInfo.platformVersion = getAndroidVersion(udid = deviceInfo.udid)
-                    }
+                if (deviceInfo.status.isNotBlank() && deviceInfo.udid.isNotBlank()) {
+                    deviceInfo.platformVersion = getAndroidVersion(udid = deviceInfo.udid)
                     list.add(deviceInfo)
                 }
             }
         }
 
-        return list
+        val resultList = list.sortedWith(compareBy<AndroidDeviceInfo> { it.platformVersion }.thenBy { it.model }
+            .thenBy { it.isRealDevice }.thenBy { it.udid })
+
+        return resultList
     }
 
     /**
@@ -84,8 +84,9 @@ object AndroidDeviceUtility {
      */
     fun getAndroidDeviceInfoByAvdName(avdName: String): AndroidDeviceInfo? {
 
-        val deviceList = getAndroidDeviceList()
-        val device = deviceList.firstOrNull() { it.avdName == avdName }
+        val deviceList = getConnectedDeviceList()
+        val device =
+            deviceList.firstOrNull() { it.avdName.escapeAvdName().lowercase() == avdName.escapeAvdName().lowercase() }
         return device
     }
 
@@ -94,7 +95,7 @@ object AndroidDeviceUtility {
      */
     fun getAndroidDeviceInfoByUdid(udid: String): AndroidDeviceInfo? {
 
-        val deviceList = getAndroidDeviceList()
+        val deviceList = getConnectedDeviceList()
         val device = deviceList.firstOrNull() { it.udid == udid }
         return device
     }
@@ -116,6 +117,31 @@ object AndroidDeviceUtility {
      */
     fun getOrCreateAndroidDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo {
 
+        val emulatorDeviceInfo = getOrCreateEmulatorDeviceInfo(testProfile)
+        if (emulatorDeviceInfo != null) {
+            return emulatorDeviceInfo
+        }
+        return getConnectedDeviceInfo(testProfile)
+    }
+
+    private fun String.escapeAvdName(): String {
+
+        var s = this.replace(" ", "_").replace("(", "_").replace(")", "_")
+        for (i in 1..100) {
+            val before = s
+            s = s.replace("__", "_")
+            if (s == before) {
+                break
+            }
+        }
+        return s
+    }
+
+    /**
+     * getOrCreateEmulatorDeviceInfo
+     */
+    fun getOrCreateEmulatorDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo? {
+
         val profileName = testProfile.profileName
         val emulatorProfile = EmulatorProfile(
             profileName = profileName,
@@ -123,7 +149,8 @@ object AndroidDeviceUtility {
                 .filter { it.isNotBlank() }.toMutableList()
         )
         val avdList = getAvdList()
-        if (avdList.contains(emulatorProfile.avdName)) {
+        val a = emulatorProfile.avdName.escapeAvdName()
+        if (avdList.contains(a)) {
             // Start avd to get device
             val androidDeviceInfo = startEmulatorAndWaitDeviceReady(
                 emulatorProfile = emulatorProfile,
@@ -134,47 +161,61 @@ object AndroidDeviceUtility {
             )
             return androidDeviceInfo
         }
-        return getActiveDeviceInfo(testProfile)
-    }
 
-    private fun String.escapeModel(): String {
-
-        return this.replace(" ", "_").replace("-", "_")
+        return null
     }
 
     /**
-     * getActiveDeviceInfo
+     * getConnectedDeviceInfo
      */
-    fun getActiveDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo {
+    fun getConnectedDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo {
 
-        val deviceList = getAndroidDeviceList()
-            .sortedWith(compareBy<AndroidDeviceInfo> { it.platformVersion.toDoubleOrNull() ?: Double.MAX_VALUE }
-                .thenBy { it.udid })
+        val sortedDeviceList = getConnectedDeviceList()
+            .sortedWith(compareBy<AndroidDeviceInfo> { it.platformVersion.toDoubleOrNull() }.thenBy { it.model }
+                .thenBy { it.isRealDevice }.thenByDescending { it.udid })
         val parser = ProfileNameParser(testProfile.profileName)
 
         /**
-         * by platformVersion
+         * by udid
          *
-         * android.profile=12
+         * android.profile=emulator-5554
+         * android.profile=93MAY0CY1M
          */
-        val platformVersion = testProfile.platformVersion.replace("*", "")
-            .ifBlank { parser.osVersion }
-        if (parser.model.isBlank() && platformVersion.isNotBlank()) {
-            val devices = deviceList.filter { it.platformVersion.lowercase() == platformVersion.lowercase() }
-            val firstRealDevice = devices.firstOrNull() { it.isRealDevice }
-            if (firstRealDevice != null) {
-                return firstRealDevice
+        val udid = testProfile.udid.ifBlank { parser.udid }
+        if (udid.isNotBlank()) {
+            val deviceByUdid = sortedDeviceList.lastOrNull { it.udid.lowercase() == udid.lowercase() }
+            if (deviceByUdid != null) {
+                return deviceByUdid
             }
-            val firstEmulator = devices.firstOrNull() { it.isEmulator }
-            if (firstEmulator != null) {
-                return firstEmulator
-            }
-            val msg = message(
-                id = "couldNotFindConnectedDeviceByVersion",
-                subject = platformVersion
-            )
-            throw TestDriverException(msg)
         }
+
+        /**
+         * by AVD name
+         */
+        val avdName = testProfile.avd.ifBlank { testProfile.profileName }
+        if (avdName.isNotBlank()) {
+            val deviceByAvdName =
+                sortedDeviceList.lastOrNull {
+                    it.avdName.escapeAvdName().lowercase() == avdName.escapeAvdName().lowercase()
+                }
+            if (deviceByAvdName != null) {
+                return deviceByAvdName
+            }
+        }
+
+        /**
+         * by device
+         */
+        if (testProfile.profileName.isNotBlank()) {
+            val deviceBydevice =
+                sortedDeviceList.lastOrNull { it.device == testProfile.deviceName || it.device == testProfile.profileName }
+            if (deviceBydevice != null) {
+                return deviceBydevice
+            }
+        }
+
+        val platformVersion = testProfile.platformVersion.replace("*", "").ifBlank { parser.platformVersion }
+        val model = parser.model
 
         /**
          * by model and platformVersion
@@ -184,24 +225,44 @@ object AndroidDeviceUtility {
          * android.profile=Pixel 4a(13)
          * android.profile=Pixel_4a(13)
          */
-        val model = parser.model.ifBlank { testProfile.profileName }
         if (model.isNotBlank() && platformVersion.isNotBlank() && model != platformVersion) {
-            val devices = deviceList.filter {
-                it.model.escapeModel().lowercase() == model.escapeModel().lowercase()
+            val devices = sortedDeviceList.filter {
+                it.model.escapeAvdName().lowercase() == model.escapeAvdName().lowercase()
                         && it.platformVersion.lowercase() == platformVersion.lowercase()
             }
-            val firstRealDevice = devices.firstOrNull() { it.isRealDevice }
-            if (firstRealDevice != null) {
-                return firstRealDevice
+
+            val realDevice = devices.lastOrNull { it.isRealDevice }
+            if (realDevice != null) {
+                return realDevice
             }
-            val firstEmulator = devices.firstOrNull() { it.isEmulator }
-            if (firstEmulator != null) {
-                return firstEmulator
+
+            val emulator = devices.lastOrNull { it.isEmulator }
+            if (emulator != null) {
+                return emulator
             }
+        }
+
+        /**
+         * by platformVersion
+         *
+         * android.profile=12
+         */
+        if (platformVersion.isNotBlank()) {
+            val devices = sortedDeviceList.filter { it.platformVersion.lowercase() == platformVersion.lowercase() }
+
+            val realDevice = devices.lastOrNull { it.isRealDevice }
+            if (realDevice != null) {
+                return realDevice
+            }
+
+            val emulator = devices.lastOrNull { it.isEmulator }
+            if (emulator != null) {
+                return emulator
+            }
+
             val msg = message(
-                id = "couldNotFindConnectedDeviceByModelAndVersion",
-                arg1 = model,
-                arg2 = platformVersion
+                id = "couldNotFindConnectedDeviceByVersion",
+                subject = platformVersion
             )
             throw TestDriverException(msg)
         }
@@ -213,63 +274,55 @@ object AndroidDeviceUtility {
          * android.profile=Pixel 3a
          * android.profile=pixel_3a
          */
-        if (model.isNotBlank()) {
-            val devices = deviceList.filter { it.model.escapeModel().lowercase() == model.escapeModel().lowercase() }
-            val lastRealDevice = devices.lastOrNull() { it.isRealDevice }
-            if (lastRealDevice != null) {
-                return lastRealDevice
+        if (testProfile.profileName.isNotBlank()) {
+            val devices = sortedDeviceList.filter {
+                it.model.escapeAvdName().lowercase() == testProfile.profileName.escapeAvdName().lowercase()
             }
-            val lastEmulator = devices.lastOrNull() { it.isEmulator }
-            if (lastEmulator != null) {
-                return lastEmulator
+
+            val realDevice = devices.lastOrNull { it.isRealDevice }
+            if (realDevice != null) {
+                return realDevice
+            }
+
+            val emulator = devices.lastOrNull { it.isEmulator }
+            if (emulator != null) {
+                return emulator
             }
         }
 
         /**
-         * by udid
-         *
-         * android.profile=emulator-5554
-         * android.profile=93MAY0CY1M
+         * Fallback to available device.
+         * Priority: real device > emulator, platform version(descending), udid(aescending)
          */
-        val udid = testProfile.udid.ifBlank { parser.udid }
-        if (udid.isNotBlank()) {
-            // Select the device by udid
-            val deviceByUdid = deviceList.firstOrNull { it.udid.lowercase() == udid.lowercase() }
-            if (deviceByUdid != null) {
-                return deviceByUdid
-            }
-            if (testProfile.udid.isNotBlank()) {
-                val msg = message(id = "couldNotFindConnectedDeviceByUdid", subject = udid)
-                throw TestDriverException(msg)
-            }
-        }
-
-        // Select real device
-        val realDevices = deviceList.filter { it.isRealDevice }
-            .sortedBy { it.platformVersion.toDoubleOrNull() ?: Double.MAX_VALUE }
-        if (realDevices.any()) {
-            val latestVersion = realDevices.last().platformVersion
-            val latestVersionDevices = realDevices.filter { it.platformVersion == latestVersion }.sortedBy { it.udid }
-            val realDevice = latestVersionDevices.first()
-            realDevice.message = message(id = "couldNotFindConnectedDeviceByProfile", subject = testProfile.profileName)
+        // Fallback to connected real device
+        val realDevices = sortedDeviceList.filter { it.isRealDevice }
+        val realDevice = realDevices.lastOrNull()
+        if (realDevice != null) {
+            realDevice.message = message(
+                id = "couldNotFindConnectedDeviceByProfile",
+                subject = testProfile.profileName,
+                arg1 = realDevice.toString()
+            )
             return realDevice
         }
-
-        // Select emulator
-        val emulators = deviceList.filter { it.isEmulator }.sortedBy { it.platformVersion }
-        if (emulators.any()) {
-            val latestVersion = emulators.last().platformVersion
-            val lastVersionEmulators = emulators.filter { it.platformVersion == latestVersion }.sortedBy { it.udid }
-            val emulator = lastVersionEmulators.first()
-            emulator.message = message(id = "couldNotFindConnectedDeviceByProfile", subject = testProfile.profileName)
+        // Fallback to emulator
+        val emulators = sortedDeviceList.filter { it.isEmulator }
+        val emulator = emulators.lastOrNull()
+        if (emulator != null) {
+            emulator.message = message(
+                id = "couldNotFindConnectedDeviceByProfile",
+                subject = testProfile.profileName,
+                arg1 = emulator.toString()
+            )
             return emulator
         }
 
-        if (isAndroid) {
-            throw TestDriverException(message(id = "couldNotFindConnectedAndroidDevice"))
-        } else {
-            throw TestDriverException(message(id = "couldNotFindIosDevice", subject = testProfile.profileName))
-        }
+        throw TestDriverException(
+            message(
+                id = "couldNotFindConnectedAndroidDevice",
+                arg1 = testProfile.profileName
+            )
+        )
     }
 
     /**
@@ -394,20 +447,29 @@ object AndroidDeviceUtility {
     /**
      * shutdownEmulatorByUdid
      */
-    fun shutdownEmulatorByUdid(udid: String) {
+    fun shutdownEmulatorByUdid(udid: String, waitSeconds: Double = Const.EMULATOR_SHUTDOWN_WAIT_SECONDS) {
+
+        val deviceInfo = getAndroidDeviceInfoByUdid(udid = udid) ?: return
+        val port = deviceInfo.port.toInt()
 
         val args = mutableListOf("adb", "-s", udid, "shell", "reboot", "-p").toTypedArray()
         ShellUtility.executeCommand(args = args)
+
+        WaitUtility.doUntilTrue(waitSeconds = waitSeconds, intervalSeconds = 0.5) {
+            val pid = ProcessUtility.getPid(port = port)
+            TestLog.trace("pid=$pid")
+            pid == null
+        }
     }
 
     /**
      * shutdownEmulatorByAvdName
      */
-    fun shutdownEmulatorByAvdName(avdName: String) {
+    fun shutdownEmulatorByAvdName(avdName: String, waitSeconds: Double = Const.EMULATOR_SHUTDOWN_WAIT_SECONDS) {
 
         val androidDeviceInfo =
             getAndroidDeviceInfoByAvdName(avdName = avdName) ?: throw IllegalArgumentException("avdName")
-        return shutdownEmulatorByUdid(udid = androidDeviceInfo.udid)
+        return shutdownEmulatorByUdid(udid = androidDeviceInfo.udid, waitSeconds = waitSeconds)
     }
 
     /**

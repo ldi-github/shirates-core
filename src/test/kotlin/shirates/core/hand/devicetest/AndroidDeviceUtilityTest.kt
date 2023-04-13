@@ -1,69 +1,147 @@
 package shirates.core.hand.devicetest
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.Const
+import shirates.core.configuration.TestProfile
+import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.android.AndroidDeviceUtility
+import shirates.core.utility.misc.ShellUtility
 
 class AndroidDeviceUtilityTest : UnitTest() {
 
-    val UDID = "emulator-5554"
     val avd1 = "Pixel_3a_API_31_Android_12_"
 
     override fun beforeAll(context: ExtensionContext?) {
 
-        if (AndroidDeviceUtility.isDeviceRunning(udid = UDID).not()) {
-            throw IllegalStateException("$UDID is not running.")
+        if (AndroidDeviceUtility.getConnectedDeviceList().isEmpty()) {
+            AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(TestProfile(avd1))
         }
     }
 
     @Test
+    @Order(10)
     fun getAvdName() {
 
         run {
+            // Act
             val actual = AndroidDeviceUtility.getAvdName(profileName = "Pixel 3a(Android 12)")
+            // Assert
             assertThat(actual).isEqualTo("Pixel_3a_Android_12_")
         }
-    }
-
-    @Test
-    fun getAvdList() {
-
         run {
-            val avdList = AndroidDeviceUtility.getAvdList()
-            for (a in avdList) {
-                println(a)
-            }
-            assertThat(avdList).contains(avd1)
+            // Act
+            val actual = AndroidDeviceUtility.getAvdName(profileName = "Pixel 3a(Android 12)-01")
+            // Assert
+            assertThat(actual).isEqualTo("Pixel_3a_Android_12_-01")
+        }
+        run {
+            // Act
+            val actual = AndroidDeviceUtility.getAvdName(profileName = "Resizable (Experimental) API 33")
+            // Assert
+            assertThat(actual).isEqualTo("Resizable_Experimental_API_33")
         }
     }
 
     @Test
-    fun getAndroidDeviceList() {
+    @Order(20)
+    fun getAvdList() {
 
-        val deviceList = AndroidDeviceUtility.getAndroidDeviceList()
-        val device = deviceList.first() { it.udid == UDID }
-        assertThat(device.udid).isEqualTo(UDID)
+        // Arrange
+        val expected = ShellUtility.executeCommand("emulator", "-list-avds").resultString.split(Const.NEW_LINE)
+        // Act
+        val actual = AndroidDeviceUtility.getAvdList()
+        // Assert
+        assertThat(actual).containsExactlyElementsOf(expected)
+    }
+
+    private fun getUdids(): List<String> {
+
+        return ShellUtility.executeCommand("adb", "devices", "-l").resultString.split(System.lineSeparator())
+            .filter { it.contains("product:") }.map { it.split(" ")[0] }
     }
 
     @Test
-    fun getAndroidDeviceInfo() {
+    @Order(30)
+    fun getAndroidDeviceList() {
 
+        // Arrange
+        val udids = getUdids()
+        // Act
+        val deviceList = AndroidDeviceUtility.getConnectedDeviceList()
+        // Assert
+        assertThat(deviceList.count()).isEqualTo(udids.count())
+        assertThat(deviceList.map { it.udid }).containsExactlyElementsOf(udids)
+    }
+
+    @Test
+    @Order(40)
+    fun getAndroidDeviceInfoByAvdName() {
+
+        // Act
         val deviceInfo = AndroidDeviceUtility.getAndroidDeviceInfoByAvdName(avdName = avd1)
+        // Assert
         assertThat(deviceInfo?.avdName).isEqualTo(avd1)
     }
 
     @Test
+    @Order(50)
+    fun getAndroidDeviceInfoByUdid() {
+
+        // Arrange
+        val udid = AndroidDeviceUtility.getAndroidDeviceInfoByAvdName(avdName = avd1)!!.udid
+        // Act
+        val deviceInfo = AndroidDeviceUtility.getAndroidDeviceInfoByUdid(udid = udid)!!
+        // Assert
+        assertThat(deviceInfo.udid).isEqualTo(udid)
+        assertThat(deviceInfo.avdName).isEqualTo(avd1)
+    }
+
+    @Test
+    @Order(60)
     fun getAndroidVersion() {
 
-        run {
-            val version = AndroidDeviceUtility.getAndroidVersion("emulator-5554")
-            assertThat(version).isEqualTo("12")
+        // Arrange
+        val udids = getUdids()
+        // Act, Assert
+        for (udid in udids) {
+            val deviceInfo = AndroidDeviceUtility.getAndroidDeviceInfoByUdid(udid = udid)
+            val version = AndroidDeviceUtility.getAndroidVersion(udid = udid)
+            assertThat(version).isEqualTo(deviceInfo!!.platformVersion)
         }
+    }
+
+    @Test
+    @Order(70)
+    fun getOrCreateAndroidDeviceInfo() {
+
+        TestLog.enableTrace = true
+
+        // Arrange
+        if (AndroidDeviceUtility.getConnectedDeviceList().map { it.avdName }.contains(avd1)) {
+            AndroidDeviceUtility.shutdownEmulatorByAvdName(avdName = avd1)
+        }
+
+        /**
+         * Create device
+         */
         run {
-            val version = AndroidDeviceUtility.getAndroidVersion("emulator-5554")
-            assertThat(version).isEqualTo("12")
+            // Act
+            val deviceInfo = AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(TestProfile(profileName = avd1))
+            // Assert
+            assertThat(deviceInfo.avdName).isEqualTo(avd1)
+        }
+        /**
+         * Get device
+         */
+        run {
+            // Act
+            val deviceInfo = AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(TestProfile(profileName = avd1))
+            // Assert
+            assertThat(deviceInfo.avdName).isEqualTo(avd1)
         }
     }
 

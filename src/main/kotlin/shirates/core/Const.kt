@@ -112,6 +112,7 @@ object Const {
     internal const val WAIT_UTILITY_WAIT_SECONDS: Double = 30.0
     internal const val WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
     internal const val SHELL_RESULT_WAIT_FOR_SECONDS: Double = 30.0
+    internal const val EMULATOR_SHUTDOWN_WAIT_SECONDS: Double = 20.0
 
     /**
      * others

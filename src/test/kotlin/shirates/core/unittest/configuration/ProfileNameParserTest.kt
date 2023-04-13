@@ -16,7 +16,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -25,7 +25,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -34,7 +34,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -43,7 +43,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -52,7 +52,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -61,7 +61,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -70,7 +70,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -79,16 +79,16 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo("")
         }
     }
 
     @Test
-    fun init_model_osVersion() {
+    fun init_model_platformVersion() {
 
         /**
-         * model(osVersion)
+         * model(platformVersion)
          */
         run {
             val testProfileName = "Pixel 3a(12)"
@@ -96,7 +96,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("Pixel 3a")
-            assertThat(parser.osVersion).isEqualTo("12")
+            assertThat(parser.platformVersion).isEqualTo("12")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -105,7 +105,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("iPhone 14 Pro Max")
-            assertThat(parser.osVersion).isEqualTo("16.2")
+            assertThat(parser.platformVersion).isEqualTo("16.2")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -114,12 +114,12 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("iPad Air (5th generation)")
-            assertThat(parser.osVersion).isEqualTo("16.2")
+            assertThat(parser.platformVersion).isEqualTo("16.2")
             assertThat(parser.udid).isEqualTo("")
         }
 
         /**
-         * model(iOS osVersion)
+         * model(iOS platformVersion)
          */
         run {
             val testProfileName = "iPhone 14 Pro Max(iOS 16.2)"
@@ -127,7 +127,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("iPhone 14 Pro Max")
-            assertThat(parser.osVersion).isEqualTo("16.2")
+            assertThat(parser.platformVersion).isEqualTo("16.2")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -136,12 +136,12 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("iPad Air (5th generation)")
-            assertThat(parser.osVersion).isEqualTo("16.2")
+            assertThat(parser.platformVersion).isEqualTo("16.2")
             assertThat(parser.udid).isEqualTo("")
         }
 
         /**
-         * model(Android osVersion)
+         * model(Android platformVersion)
          */
         run {
             val testProfileName = "Pixel 3a(Android 12)"
@@ -149,13 +149,13 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("Pixel 3a")
-            assertThat(parser.osVersion).isEqualTo("12")
+            assertThat(parser.platformVersion).isEqualTo("12")
             assertThat(parser.udid).isEqualTo("")
         }
     }
 
     @Test
-    fun init_android_osVersion() {
+    fun init_android_platformVersion() {
 
         run {
             val testProfileName = "Android 12"
@@ -163,7 +163,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("12")
+            assertThat(parser.platformVersion).isEqualTo("12")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -172,13 +172,13 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("12")
+            assertThat(parser.platformVersion).isEqualTo("12")
             assertThat(parser.udid).isEqualTo("")
         }
     }
 
     @Test
-    fun init_ios_osVersion() {
+    fun init_ios_platformVersion() {
 
         run {
             val testProfileName = "iOS 16.2"
@@ -186,7 +186,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("16.2")
+            assertThat(parser.platformVersion).isEqualTo("16.2")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -195,13 +195,13 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("16.2")
+            assertThat(parser.platformVersion).isEqualTo("16.2")
             assertThat(parser.udid).isEqualTo("")
         }
     }
 
     @Test
-    fun init_ipad_osVersion() {
+    fun init_ipad_platformVersion() {
 
         run {
             val testProfileName = "iPad 16.2"
@@ -209,7 +209,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("16.2")
+            assertThat(parser.platformVersion).isEqualTo("16.2")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
@@ -218,7 +218,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("16.2")
+            assertThat(parser.platformVersion).isEqualTo("16.2")
             assertThat(parser.udid).isEqualTo("")
         }
     }
@@ -232,13 +232,13 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo(testProfileName)
         }
     }
 
     @Test
-    fun init_osVersion() {
+    fun init_platformVersion() {
 
         run {
             val testProfileName = "16.2"
@@ -246,7 +246,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo(testProfileName)
+            assertThat(parser.platformVersion).isEqualTo(testProfileName)
             assertThat(parser.udid).isEqualTo("")
         }
     }
@@ -260,7 +260,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("iOS")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo(testProfileName)
         }
     }
@@ -274,7 +274,7 @@ class ProfileNameParserTest : UnitTest() {
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.osVersion).isEqualTo("")
+            assertThat(parser.platformVersion).isEqualTo("")
             assertThat(parser.udid).isEqualTo(testProfileName)
         }
     }

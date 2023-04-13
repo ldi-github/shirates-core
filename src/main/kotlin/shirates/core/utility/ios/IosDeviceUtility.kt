@@ -94,83 +94,53 @@ object IosDeviceUtility {
         return list
     }
 
-    internal fun String.versionSortKey(): Double {
-
-        val ix = this.indexOf(".")
-        if (ix == -1) {
-            return this.toDoubleOrNull() ?: Double.MAX_VALUE
-        }
-        val major = this.substring(0, ix).toDoubleOrNull() ?: Double.MAX_VALUE
-        val minor = ("0." + this.substring(ix).replace(".", "")).toDoubleOrNull() ?: Double.MAX_VALUE
-        val r = major + minor
-        return r
-    }
-
     /**
      * getIosDeviceInfo
      */
     fun getIosDeviceInfo(testProfile: TestProfile): IosDeviceInfo {
 
-        val deviceList = getIosDeviceList()
-            .sortedWith(compareBy<IosDeviceInfo> { it.platformVersion.versionSortKey() }
-                .thenBy { it.modelSortKey }
+        val sortedDeviceList = getIosDeviceList()
+            .sortedWith(compareBy<IosDeviceInfo> { it.platformVersion }
+                .thenBy { it.modelVersion }
                 .thenBy { it.devicename }
-            )
-
+                .thenBy { it.udid })
         val parser = ProfileNameParser(testProfile.profileName)
+
+        /**
+         * by udid
+         *
+         * ios.profile=EDF2DD70-439D-40F3-8835-54EF8B7297EA
+         */
+        val udid = testProfile.udid.ifBlank { parser.udid }
+        if (udid.isNotBlank()) {
+            // Select the device by udid
+            val deviceByUdid = sortedDeviceList.lastOrNull { it.udid.lowercase() == udid.lowercase() }
+            if (deviceByUdid != null) {
+                return deviceByUdid
+            }
+            val msg = message(
+                id = "couldNotFindConnectedDeviceByUdid",
+                subject = udid
+            )
+            throw TestDriverException(msg)
+        }
 
         /**
          * by deviceName
          *
          * ios.profile=iPhone 14(iOS 16.1)-01
          */
+        val deviceName = testProfile.deviceName.ifBlank { testProfile.profileName }
         if (testProfile.profileName.isNotBlank()) {
-            val devices = deviceList.filter { it.devicename == testProfile.profileName }
-                .sortedWith(compareBy<IosDeviceInfo> { it.modelSortKey }.thenBy { it.platformVersion })
+            val devices = sortedDeviceList.filter { it.devicename == deviceName }
             if (devices.any()) {
                 return devices.last()
             }
         }
 
-        /**
-         * by platformVersion
-         *
-         * ios.profile=16.1
-         */
+        val model = parser.model.ifBlank { testProfile.profileName }
         val platformVersion = testProfile.platformVersion.replace("*", "")
-            .ifBlank { parser.osVersion }
-        if (parser.model.isBlank() && platformVersion.isNotBlank()) {
-            val devices = deviceList.filter { it.platformVersion.lowercase() == platformVersion.lowercase() }
-                .sortedWith(compareBy<IosDeviceInfo> { it.modelSortKey }.thenBy { it.platformVersion })
-
-            val reals = devices.filter { it.isRealDevice }
-                .sortedBy { it.devicename }
-            if (reals.any()) {
-                return reals.last()
-            }
-
-            val simulators = devices.filter {
-                it.isSimulator
-                        && it.devicename.lowercase().startsWith("iphone")
-                        && it.devicename.lowercase().startsWith("iphone se").not()
-            }
-
-            val bootedSimulators = simulators.filter { it.status == "Booted" }
-                .sortedBy { it.modelSortKey }
-            if (bootedSimulators.any()) {
-                return bootedSimulators.last()
-            }
-
-            if (simulators.any()) {
-                return simulators.last()
-            }
-
-            val msg = message(
-                id = "couldNotFindConnectedDeviceByVersion",
-                subject = platformVersion
-            )
-            throw TestDriverException(msg)
-        }
+            .ifBlank { parser.platformVersion }
 
         /**
          * by model and platformVersion
@@ -180,12 +150,11 @@ object IosDeviceUtility {
          * ios.profile=iPhone 14 Pro Max(iOS 16.1)
          * ios.profile=Hoge-01(16.1)
          */
-        val model = parser.model.ifBlank { testProfile.profileName }
         if (model.isNotBlank() && platformVersion.isNotBlank() && model != platformVersion) {
-            val devices = deviceList.filter {
+            val devices = sortedDeviceList.filter {
                 it.devicename.lowercase() == model.lowercase()
                         && it.platformVersion.lowercase() == platformVersion.lowercase()
-            }.sortedWith(compareBy<IosDeviceInfo> { it.modelSortKey }.thenBy { it.platformVersion })
+            }
 
             val realDevices = devices.filter { it.isRealDevice }
             if (realDevices.any()) {
@@ -211,6 +180,40 @@ object IosDeviceUtility {
         }
 
         /**
+         * by platformVersion
+         *
+         * ios.profile=16.2
+         */
+        if (parser.model.isBlank() && platformVersion.isNotBlank()) {
+            val devices = sortedDeviceList.filter { it.platformVersion.lowercase() == platformVersion.lowercase() }
+
+            val realDevices = devices.filter { it.isRealDevice }
+            if (realDevices.any()) {
+                return realDevices.last()
+            }
+
+            val bootedSimulators = devices.filter { it.isSimulator && it.status == "Booted" }
+            if (bootedSimulators.any()) {
+                return bootedSimulators.last()
+            }
+
+            val iPhoneSimulators = devices.filter {
+                it.isSimulator
+                        && it.devicename.lowercase().startsWith("iphone")
+                        && it.devicename.lowercase().startsWith("iphone se").not()
+            }
+            if (iPhoneSimulators.any()) {
+                return iPhoneSimulators.last()
+            }
+
+            val msg = message(
+                id = "couldNotFindConnectedDeviceByVersion",
+                subject = platformVersion
+            )
+            throw TestDriverException(msg)
+        }
+
+        /**
          * by model
          *
          * ios.profile=iPhone 13
@@ -219,7 +222,7 @@ object IosDeviceUtility {
          * ios.profile=Hoge-01
          */
         if (model.isNotBlank()) {
-            val devices = deviceList.filter { it.devicename.lowercase() == model.lowercase() }
+            val devices = sortedDeviceList.filter { it.devicename.lowercase() == model.lowercase() }
 
             val realDevices = devices.filter { it.isRealDevice }
             if (realDevices.any()) {
@@ -227,7 +230,6 @@ object IosDeviceUtility {
             }
 
             val simulators = devices.filter { it.isSimulator }
-                .sortedWith(compareBy<IosDeviceInfo> { it.modelSortKey }.thenBy { it.platformVersion })
 
             val bootedSimulators = simulators.filter { it.status == "Booted" }
             if (bootedSimulators.any()) {
@@ -240,40 +242,30 @@ object IosDeviceUtility {
         }
 
         /**
-         * by udid
-         *
-         * ios.profile=EDF2DD70-439D-40F3-8835-54EF8B7297EA
+         * Fallback to available iPhone device.
+         * Priority: real device > simulator, modelSortKey(ascending), platform version(descending)
          */
-        val udid = testProfile.udid.ifBlank { parser.udid }
-        if (udid.isNotBlank()) {
-            // Select the device by udid
-            val deviceByUdid = deviceList.firstOrNull { it.udid.lowercase() == udid.lowercase() }
-            if (deviceByUdid != null) {
-                return deviceByUdid
-            }
-            if (testProfile.udid.isNotBlank()) {
-                val msg = message(id = "couldNotFindConnectedDeviceByUdid", subject = udid)
-                throw TestDriverException(msg)
-            }
+        val iPhones = sortedDeviceList.filter { it.devicename.lowercase().startsWith("iphone") }
+        // Fallback to connected real device
+        val realDevice = iPhones.lastOrNull { it.isRealDevice }
+        if (realDevice != null) {
+            realDevice.message = message(
+                id = "couldNotFindConnectedDeviceByProfile",
+                subject = testProfile.profileName,
+                arg1 = realDevice.toString()
+            )
+            return realDevice
         }
-
-        // Select simulator
-        val simulators = deviceList.filter { it.isSimulator && it.devicename.lowercase().startsWith("iphone") }
-            .sortedWith(compareBy<IosDeviceInfo> { it.modelSortKey }.thenBy { it.platformVersion })
-
-        val bootedSimulators = simulators.filter { it.status == "Booted" }
-        if (bootedSimulators.any()) {
-            val last = bootedSimulators.last()
-            last.message = message(id = "couldNotFindConnectedDeviceByUdid", subject = udid)
-            return last
+        // Fallback to simulator
+        val simulator = iPhones.lastOrNull { it.isSimulator }
+        if (simulator != null) {
+            simulator.message = message(
+                id = "couldNotFindConnectedDeviceByProfile",
+                subject = testProfile.profileName,
+                arg1 = simulator.toString()
+            )
+            return simulator
         }
-
-        if (simulators.any()) {
-            val last = simulators.last()
-            last.message = message(id = "couldNotFindConnectedDeviceByProfile", subject = testProfile.profileName)
-            return last
-        }
-
         throw TestDriverException(message(id = "couldNotFindIosDevice", subject = testProfile.profileName))
     }
 
