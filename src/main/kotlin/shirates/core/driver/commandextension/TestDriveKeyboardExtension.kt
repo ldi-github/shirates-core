@@ -152,7 +152,7 @@ fun TestDrive.pressSearch(
             )
 
         } else {
-            TestDriver.appiumDriver.keyboard.sendKeys("\n")
+            TestDriver.lastElement.sendKeys("\n")
         }
         invalidateCache()
         wait(waitSeconds = waitSeconds)

@@ -15,7 +15,7 @@ plugins {
 group = "io.github.ldi-github"
 version = "4.1.2-SNAPSHOT"
 
-val appiumClientVersion = "8.1.1"
+val appiumClientVersion = "8.3.0"
 
 val userHome = System.getProperty("user.home")
 
@@ -32,13 +32,13 @@ dependencies {
 
     // JUnit 5
     // (Required) Writing and executing Unit Tests on the JUnit Platform
-    implementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+    implementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
     // Assert J
-    implementation("org.assertj:assertj-core:3.23.1")
-    testImplementation("org.assertj:assertj-core:3.23.1")
+    implementation("org.assertj:assertj-core:3.24.2")
+    testImplementation("org.assertj:assertj-core:3.24.2")
 
     // Apache POI
     implementation("org.apache.poi:poi:5.2.2")
@@ -51,7 +51,7 @@ dependencies {
     testImplementation("org.slf4j:slf4j-nop:2.0.5")
 
     // Apache Log4j Core
-    implementation("org.apache.logging.log4j:log4j-core:2.19.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
 
     // Apache Commons IO
     implementation("commons-io:commons-io:2.11.0")
@@ -70,17 +70,17 @@ dependencies {
     testImplementation("commons-codec:commons-codec:1.15")
 
     // Jackson Module Kotlin
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
     // Jackson Dataformat XML
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0")
-    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2")
+    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2")
 
     // org.json
     // workaround for 'java.lang.RuntimeException: Method getString in org.json.JSONObject not mocked.'
-    implementation("org.json:json:20220924")
-    testImplementation("org.json:json:20220924")
+    implementation("org.json:json:20230227")
+    testImplementation("org.json:json:20230227")
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
@@ -88,15 +88,15 @@ dependencies {
 
     // Dokka
     // https://github.com/Kotlin/dokka
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.8.10")
 
     // BoofCV
-    implementation("org.boofcv:boofcv-core:0.41")
-    testImplementation("org.boofcv:boofcv-core:0.41")
+    implementation("org.boofcv:boofcv-core:0.42")
+    testImplementation("org.boofcv:boofcv-core:0.42")
 
     // jsoup
-    implementation("org.jsoup:jsoup:1.15.3")
-    testImplementation("org.jsoup:jsoup:1.15.3")
+    implementation("org.jsoup:jsoup:1.15.4")
+    testImplementation("org.jsoup:jsoup:1.15.4")
 }
 
 tasks {
