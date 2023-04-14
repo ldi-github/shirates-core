@@ -67,7 +67,7 @@ object DeviceListUtility {
     }
 
     private fun getAndroidDeviceInfoList(list: MutableList<DeviceInfo>) {
-        val androidDevices = AndroidDeviceUtility.getAndroidDeviceList()
+        val androidDevices = AndroidDeviceUtility.getConnectedDeviceList()
         for (androidDeviceInfo in androidDevices) {
             val deviceInfo = DeviceInfo()
             deviceInfo.androidDeviceInfo = androidDeviceInfo

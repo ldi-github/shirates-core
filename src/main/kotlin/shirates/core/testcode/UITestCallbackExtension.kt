@@ -172,7 +172,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
                     if (isStub) {
                         ParameterRepository.write("isStub", isStub.toString())
                     }
-                    ParameterRepository.write("hasOsaihuKeitai", hasOsaifuKeitai.toString())
+                    ParameterRepository.write("hasOsaifuKeitai", hasOsaifuKeitai.toString())
                 }
             }
 

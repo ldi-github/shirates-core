@@ -14,7 +14,7 @@ class TestDriverAndroidUdidTest : UITest() {
     @Test
     fun firstDeviceUsed() {
 
-        val list = AndroidDeviceUtility.getAndroidDeviceList()
+        val list = AndroidDeviceUtility.getConnectedDeviceList()
         val firstDevice = list.first()
 
         val udidLine = TestLog.lines.firstOrNull() { it.subject == "deviceUDID" }

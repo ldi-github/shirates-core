@@ -20,7 +20,7 @@ class IosDeviceInfo(val platformVersion: String, val line: String) {
         }
 
     var message = ""
-    var modelSortKey: Double? = null
+    var modelVersion: Double? = null
 
     init {
         parse(line = line)
@@ -31,6 +31,12 @@ class IosDeviceInfo(val platformVersion: String, val line: String) {
         if (line.isBlank()) {
             return
         }
+
+        /**
+         * line example
+         * iPhone 5s (26CB3A55-C73A-4D25-92E3-2BF1B65BEE7C) (Shutdown)
+         * devicename (udid) (status)
+         */
 
         val regex = "[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}".toRegex()
         val match = regex.find(line)
@@ -47,10 +53,10 @@ class IosDeviceInfo(val platformVersion: String, val line: String) {
         }
 
         if (devicename.contains("nd generation")) {
-            modelSortKey = 0.0
+            modelVersion = 0.0
         } else {
             val matchResult = "[0-9]+".toRegex().find(devicename)
-            modelSortKey = matchResult?.value?.toDoubleOrNull()
+            modelVersion = matchResult?.value?.toDoubleOrNull()
         }
     }
 

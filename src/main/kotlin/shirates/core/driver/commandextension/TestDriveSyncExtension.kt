@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
+import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.logging.TestLog
 
 /**
@@ -69,4 +70,48 @@ fun TestDrive.switchScreen(screenName: String): TestElement {
     TestLog.info("switchScreen($screenName)")
     TestDriver.switchScreen(screenName = screenName)
     return getTestElement()
+}
+
+/**
+ * onCache
+ */
+fun TestDrive.onCache(
+    func: () -> Unit
+): BooleanCompareResult {
+
+    val command = "onCache"
+
+    val match = testContext.useCache
+    val result =
+        if (this is BooleanCompareResult) this
+        else BooleanCompareResult(value = match, command = command)
+    if (match.not()) {
+        return result
+    }
+
+    func()
+
+    return result
+}
+
+/**
+ * onDirectAccess
+ */
+fun TestDrive.onDirectAccess(
+    func: () -> Unit
+): BooleanCompareResult {
+
+    val command = "onDirectAccess"
+
+    val match = testContext.useCache.not()
+    val result =
+        if (this is BooleanCompareResult) this
+        else BooleanCompareResult(value = match, command = command)
+    if (match.not()) {
+        return result
+    }
+
+    func()
+
+    return result
 }

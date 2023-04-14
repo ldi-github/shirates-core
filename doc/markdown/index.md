@@ -14,7 +14,8 @@
 
 ### Recommended settings
 
-- [Plugin settings (IntelliJ IDEA)](basic/creating_project/plugin_settings.md)
+- [Plugin settings (IntelliJ IDEA)](tool_settings/plugin_settings.md)
+- [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save.md) **(New! 4.1.1)**
 - [Enable right-click test running (IntelliJ IDEA)](tool_settings/right_click_test_running.md)
 - [Android Device settings](basic/recommended_settings/recommended_settings_android.md)
 
@@ -69,7 +70,7 @@
     - [tapAppIcon](basic/function_property/tap_element/tap_app_icon.md)
 - Install and launch app
     - [installApp, removeApp](basic/function_property/install_and_launch_app/install_app.md)
-    - [launchApp, terminateApp](basic/function_property/install_and_launch_app/launch_app.md) **(New! 3.0.0)**
+    - [launchApp, terminateApp](basic/function_property/install_and_launch_app/launch_app.md)
 - Swipe screen
     - [swipe, flick](basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](basic/function_property/swipe_screen/scroll.md)
@@ -114,7 +115,7 @@
     - [waitForClose](basic/syncing/wait_for_close.md)
     - [waitForDisplay](basic/syncing/wait_for_display.md)
 - Repeating action
-    - [doUntilTrue](basic/repeating_action/do_until_true.md)  **(New! 3.1.0)**
+    - [doUntilTrue](basic/repeating_action/do_until_true.md)
 - Data storage
     - [writeMemo, readMemo, memoTextAs](basic/function_property/data_storage/memo.md)
     - [clipboard, readClipboard](basic/function_property/data_storage/clipboard.md)
@@ -133,15 +134,15 @@
 - Find image
     - [find image](basic/function_property/find_image/find_image.md)
 - External command
-    - [shell](basic/function_property/external_command/shell.md) **(New! 3.0.0)**
+    - [shell](basic/function_property/external_command/shell.md)
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
 
 ### Behavior Helper
 
 - Language
-    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android.md) **(New! 3.0.0)**
-    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios.md) **(New! 3.0.0)**
+    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android.md)
+    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios.md)
 
 ### Report
 

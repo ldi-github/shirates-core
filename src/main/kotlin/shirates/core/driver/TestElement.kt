@@ -45,7 +45,7 @@ class TestElement(
         if (isAndroid) {
             return "<$className index='$index' class='$className' resource-id='$id' text='$text' content-desc='$contentDesc' checked='$checked' focusable='$focused' focused='$focused' selected='$selected' scrollable='$scrollable' bounds=$boundsString>"
         } else {
-            return "<$type type='$type' enabled='$enabled' visible='$visible' name='$name' label='$label' value='$value' x='$x' y='$y' width='$width' height='$height'>"
+            return "<$type index='$index' type='$type' enabled='$enabled' visible='$visible' name='$name' label='$label' value='$value' visible='$visible' x='$x' y='$y' width='$width' height='$height'>"
         }
     }
 

@@ -182,7 +182,7 @@ fun TestDrive.tap(
             val errorMessage = t.toString()
             TestLog.warn(errorMessage)
 
-            syncCache(force = true)
+            syncCache(force = testContext.useCache)
 
             if (handleIrregular) {
                 TestDriver.fireIrregularHandler()

@@ -49,7 +49,7 @@ class AndroidDeviceInfo(val line: String) {
 
     val port: String
         get() {
-            if (udid.startsWith("emulator-")) {
+            if (isEmulator) {
                 return udid.split("-").last()
             } else {
                 return ""
