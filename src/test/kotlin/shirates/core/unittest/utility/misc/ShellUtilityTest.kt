@@ -6,7 +6,7 @@ import shirates.core.testcode.UnitTest
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.time.WaitUtility
+import shirates.core.utility.sync.WaitUtility
 
 class ShellUtilityTest : UnitTest() {
 

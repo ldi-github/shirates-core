@@ -19,7 +19,7 @@ import shirates.core.server.AppiumServerManager
 import shirates.core.utility.element.ElementCacheUtility
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
-import shirates.core.utility.time.WaitUtility
+import shirates.core.utility.sync.WaitUtility
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -40,27 +40,27 @@ object AppiumProxy {
 
         var e = TestElement()
         fun checkState(): Boolean {
-            try {
+            return try {
                 val we = e.getWebElement()
                 if (isAndroid) {
                     we.getAttribute("package")
                 } else {
                     we.getAttribute("label")
                 }
-                return true
+                true
             } catch (t: Throwable) {
                 if (PropertiesManager.enableGetSourceLog) {
                     TestLog.info("[Error] AppiumProxy.getSource() checkState(): $t $e")
                 }
-                return false
+                false
             }
         }
 
         WaitUtility.doUntilTrue(
-            onMaxLoopFunc = {
+            onMaxLoop = {
                 throw TestDriverException("AppiumProxy.getSource() reached maxLoop count.(maxLoopCount=${it.maxLoopCount})")
             },
-            onTimeoutFunc = {
+            onTimeout = {
                 throw TestDriverException("AppiumProxy.getSource() timed out. (waitSeconds=${it.waitSeconds})")
             }
         ) {
@@ -77,7 +77,7 @@ object AppiumProxy {
 
         val retryMaxCount =
             AppiumServerManager.appiumSessionStartupTimeoutSeconds / TestDriver.testContext.retryIntervalSeconds
-        val actionFunc: (RetryContext<Unit>) -> Unit = {
+        val action: (RetryContext<Unit>) -> Unit = {
             val c = it.retryCount + 1
             if (PropertiesManager.enableGetSourceLog) {
                 TestLog.info("getSourceCore($c)")
@@ -94,8 +94,8 @@ object AppiumProxy {
         RetryUtility.exec(
             retryMaxCount = retryMaxCount.toLong(),
             retryPredicate = retryPredicate,
-            beforeRetryFunc = {},
-            actionFunc = actionFunc
+            onBeforeRetry = {},
+            action = action
         )
 
         if (source.isBlank()) {

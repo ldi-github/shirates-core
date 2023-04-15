@@ -10,8 +10,8 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
+import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
-import shirates.core.utility.time.WaitUtility
 
 object AndroidDeviceUtility {
 

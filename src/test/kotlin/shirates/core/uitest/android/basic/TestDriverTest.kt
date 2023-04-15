@@ -281,7 +281,7 @@ class TestDriverTest : UITest() {
                     it.restartApp()
                 }.expectation {
                     assertThatThrownBy {
-                        TestDriver.getFocusedWebElement(2.0)
+                        TestDriver.getFocusedWebElement()
                     }.isInstanceOf(TestDriverException::class.java)
                         .hasMessageStartingWith("Active element not found. ")
                 }

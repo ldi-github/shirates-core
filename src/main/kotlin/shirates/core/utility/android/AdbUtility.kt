@@ -2,7 +2,7 @@ package shirates.core.utility.android
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.time.WaitUtility
+import shirates.core.utility.sync.WaitUtility
 
 object AdbUtility {
 

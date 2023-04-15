@@ -11,5 +11,5 @@ object BuildConfig {
 
     const val charset: String = "UTF-8"
 
-    const val appiumClientVersion: String = "8.1.1"
+    const val appiumClientVersion: String = "8.3.0"
 }
