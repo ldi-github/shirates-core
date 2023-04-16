@@ -10,6 +10,7 @@ interface WaitContextBase<T> : TestDrive {
     var maxLoopCount: Int
     var error: Throwable?
     var retryOnError: Boolean
+    var throwOnFinally: Boolean
     var stopWatch: StopWatch
     var count: Int
     var onTimeout: (T) -> Unit
@@ -34,6 +35,11 @@ interface WaitContextBase<T> : TestDrive {
     val elapsedSecondsOnTimeout: Double?
         get() {
             return stopWatch.getLap("timeout")?.elapsedSeconds
+        }
+
+    val isTimeOut: Boolean
+        get() {
+            return elapsedSecondsOnTimeout != null
         }
 
     fun throwIfError() {

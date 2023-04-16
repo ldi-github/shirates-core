@@ -15,11 +15,12 @@ object WaitUtility {
         waitSeconds: Double = Const.WAIT_UTILITY_WAIT_SECONDS,
         intervalSeconds: Double = Const.WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
         maxLoopCount: Int = MAX_LOOP_COUNT,
+        retryOnError: Boolean = true,
+        throwOnFinally: Boolean = true,
         onTimeout: (WaitContext) -> Unit = {},
         onMaxLoop: (WaitContext) -> Unit = {},
         onError: (WaitContext) -> Unit = {},
         onBeforeRetry: (WaitContext) -> Unit = {},
-        retryOnError: Boolean = true,
         action: (WaitContext) -> Boolean
     ): WaitContext {
 
@@ -29,6 +30,7 @@ object WaitUtility {
             maxLoopCount = maxLoopCount,
             onError = onError,
             retryOnError = retryOnError,
+            throwOnFinally = throwOnFinally,
             onTimeout = onTimeout,
             onMaxLoop = onMaxLoop,
             onBeforeRetry = onBeforeRetry,
@@ -66,9 +68,12 @@ object WaitUtility {
                     return context as T
                 }
 
-                if (context.stopWatch.elapsedSeconds > context.waitSeconds) {
+                if (context.hasError.not() &&
+                    context.stopWatch.elapsedSeconds > context.waitSeconds
+                ) {
                     context.stopWatch.lap("timeout")
-
+                    context.error =
+                        TestDriverException("timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds})")
                     context.onTimeout(context as T)
 
                     return context
@@ -86,6 +91,9 @@ object WaitUtility {
 
         val result = loopAction()
         context.stopWatch.stop()
+        if (context.throwOnFinally) {
+            context.throwIfError()
+        }
         return result
     }
 

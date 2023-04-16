@@ -1,6 +1,7 @@
 package shirates.core.unittest.utility.misc
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.exception.TestDriverException
 import shirates.core.testcode.UnitTest
@@ -20,61 +21,79 @@ class SyncUtilityTest : UnitTest() {
         assertThat(r.error).isNull()
         assertThat(r.hasError).isFalse()
         assertThat(r.count).isEqualTo(3)
+        assertThat(r.isTimeOut).isFalse()
+        assertThat(r.elapsedSecondsOnTimeout).isNull()
     }
 
     @Test
     fun doUntilTrue_onTimeout() {
 
-        // Arrange
-        var timeout = false
         // Act
         val r = SyncUtility.doUntilTrue(
             waitSeconds = 1.0,
             onTimeout = { sc ->
                 println("elapsedSecondsOnTimeout=${sc.elapsedSecondsOnTimeout}")
-                timeout = true
             }
         ) { sc ->
             println("elapsedSeconds=${sc.stopWatch.elapsedSeconds}")
             false
         }
         // Assert
-        assertThat(timeout).isTrue()
         assertThat(r.waitSeconds).isEqualTo(1.0)
+        assertThat(r.isTimeOut).isTrue()
         assertThat(r.elapsedSecondsOnTimeout).isGreaterThanOrEqualTo(1.0)
-        assertThat(r.hasError).isTrue()
-        assertThat(r.error?.message).isEqualTo("Syncing time out.")
+        assertThat(r.hasError).isFalse()
+        assertThat(r.error).isNull()
+        r.throwIfError()    // This does not throw on timeout.
     }
 
 
     @Test
     fun doUntilTrue_onMaxLoop() {
 
-        // Arrange
-        var maxLoop = false
-        // Act
-        val r = SyncUtility.doUntilTrue(
-            maxLoopCount = 5,
-            onMaxLoop = { sc ->
-                maxLoop = true
+        // Act, Assert
+        assertThatThrownBy {
+            SyncUtility.doUntilTrue(
+                maxLoopCount = 5,
+                onMaxLoop = { sc ->
+                    println("onMaxLoop count=${sc.count}")
+                }
+            ) { sc ->
+                println("count=${sc.count}")
+                false
             }
-        ) { sc ->
-            println("count=${sc.count}")
-            false
+        }.isInstanceOf(TestDriverException::class.java)
+            .hasMessage("over maxLoopCount(5)")
+
+        run {
+            // Act
+            val c = SyncUtility.doUntilTrue(
+                throwOnFinally = false,
+                maxLoopCount = 5,
+                onMaxLoop = { sc ->
+                    println("onMaxLoop count=${sc.count}")
+                }
+            ) { sc ->
+                println("count=${sc.count}")
+                false
+            }
+            // Assert
+            assertThat(c.maxLoopCount).isEqualTo(5)
+            assertThat(c.count).isEqualTo(5)
+            assertThat(c.isTimeOut).isFalse()
+            assertThat(c.elapsedSecondsOnTimeout).isNull()
+            assertThat(c.hasError).isTrue()
+            assertThat(c.error?.message).isEqualTo("over maxLoopCount(${c.maxLoopCount})")
         }
-        // Assert
-        assertThat(maxLoop).isTrue()
-        assertThat(r.count).isEqualTo(5)
-        assertThat(r.hasError).isTrue()
-        assertThat(r.error?.message).isEqualTo("over maxLoopCount(${r.maxLoopCount})")
+
     }
 
     @Test
     fun doUntilTrue_onError() {
 
-        run {
-            // Act
-            val r = SyncUtility.doUntilTrue(
+        // Act, Assert
+        assertThatThrownBy {
+            SyncUtility.doUntilTrue(
                 onError = { sc ->
                     if (sc.count == 3) {
                         sc.cancelRetry = true
@@ -82,13 +101,34 @@ class SyncUtilityTest : UnitTest() {
                 }
             ) { sc ->
                 println("count=${sc.count}")
-                throw TestDriverException("Exception1")
+                throw TestDriverException("count=${sc.count}")
+            }
+        }.isInstanceOf(TestDriverException::class.java)
+            .hasMessage("count=3")
+
+        run {
+            // Act
+            val c = SyncUtility.doUntilTrue(
+                throwOnFinally = false,
+                onError = { sc ->
+                    if (sc.count == 3) {
+                        sc.cancelRetry = true
+                    }
+                }
+            ) { sc ->
+                println("count=${sc.count}")
+                throw TestDriverException("count=${sc.count}")
             }
             // Assert
-            assertThat(r.cancelRetry).isEqualTo(true)
-            assertThat(r.count).isEqualTo(3)
-            assertThat(r.hasError).isTrue()
-            assertThat(r.error?.message).isEqualTo("Exception1")
+            assertThat(c.cancelRetry).isEqualTo(true)
+            assertThat(c.count).isEqualTo(3)
+            assertThat(c.isTimeOut).isFalse()
+            assertThat(c.elapsedSecondsOnTimeout).isNull()
+            assertThat(c.hasError).isTrue()
+            assertThat(c.error?.message).isEqualTo("count=3")
+            assertThatThrownBy {
+                c.throwIfError()
+            }.hasMessage("count=3")
         }
     }
 }

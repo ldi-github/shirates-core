@@ -19,6 +19,7 @@ object SyncUtility {
         intervalSeconds: Double = Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
         maxLoopCount: Int = MAX_LOOP_COUNT,
         retryOnError: Boolean = true,
+        throwOnFinally: Boolean = true,
         refreshCache: Boolean = true,
         onTimeout: (SyncContext) -> Unit = {},
         onMaxLoop: (SyncContext) -> Unit = {},
@@ -31,6 +32,7 @@ object SyncUtility {
             intervalSeconds = intervalSeconds,
             maxLoopCount = maxLoopCount,
             retryOnError = retryOnError,
+            throwOnFinally = false,
             refreshCache = refreshCache,
             onTimeout = onTimeout,
             onMaxLoop = onMaxLoop,
@@ -45,6 +47,14 @@ object SyncUtility {
         )
 
         WaitUtility.doUntilTrue(context)
+
+        if (context.error?.message?.startsWith("timeout") == true) {
+            context.error = null
+        }
+        if (throwOnFinally) {
+            context.throwIfError()
+        }
+
         return context
     }
 }
