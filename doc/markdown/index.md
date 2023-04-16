@@ -215,6 +215,11 @@
 - IntelliJ IDEA
     - [JVM version, JDK version](tool_settings/jvm_version.md)
 
+## Installing/Updating packages
+
+- [Installing/Updating node & npm](updating_packages/installing_updating_node&npm.md) **(New!)**
+- [Installing/Updating Appium & drivers](updating_packages/installing_updating_appium&drivers.md) **(New!)**
+
 ## Troubleshooting
 
 - [Error messages / Warning messages](troubleshooting/error_warning_messages.md)

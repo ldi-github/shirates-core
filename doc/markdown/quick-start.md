@@ -55,7 +55,7 @@ If you have not installed, search installation guide and install it.
 
 <br>
 
-### Node Package Manager (NPM)
+### node & npm
 
 If you have not installed, install it.
 
