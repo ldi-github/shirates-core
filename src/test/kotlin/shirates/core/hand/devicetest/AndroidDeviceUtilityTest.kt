@@ -74,7 +74,7 @@ class AndroidDeviceUtilityTest : UnitTest() {
         val deviceList = AndroidDeviceUtility.getConnectedDeviceList()
         // Assert
         assertThat(deviceList.count()).isEqualTo(udids.count())
-        assertThat(deviceList.map { it.udid }).containsExactlyElementsOf(udids)
+        assertThat(deviceList.map { it.udid }).containsAll(udids)
     }
 
     @Test

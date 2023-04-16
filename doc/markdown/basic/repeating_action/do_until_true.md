@@ -4,15 +4,18 @@ You can repeat action until the action returns true using **doUntilTrue** functi
 
 ## argument
 
-| argument        | description                                           |
-|:----------------|:------------------------------------------------------|
-| waitSeconds     | Maximum seconds to exit.                              |
-| intervalSeconds | Interval seconds before next execution of actionFunc. |
-| maxLoopCount    | Maximum loop count to exit.                           |
-| refreshCache    | refreshCache() is called before next loop on true.    |
-| onTimeoutFunc   | Called on waitSeconds has elapsed.                    |
-| onMaxLoopFunc   | Called on over maxLoopCount.                          |
-| actionFunc      | Repeated action. Returns true or false.               |
+| argument        | description                                                |
+|:----------------|:-----------------------------------------------------------|
+| waitSeconds     | Maximum seconds to exit.                                   |
+| intervalSeconds | Interval seconds before next execution of action func.     |
+| maxLoopCount    | Maximum loop count to break.                               |
+| retryOnError    | Retry on error.                                            |
+| throwOnFinally  | Throw if error on finally.                                 |
+| refreshCache    | refreshCache() is called before next loop on true.         |
+| onTimeout       | Function called on waitSeconds has elapsed.                |
+| onMaxLoop       | Function called on over maxLoopCount.                      |
+| onError         | Function called on exception thrown.                       |
+| action          | Repeated action. Returns true(break loop) or false(retry). |
 
 ### DoUntilTrue1.kt
 
@@ -33,7 +36,7 @@ class DoUntilTrue1 : UITest() {
 
     @Test
     @Order(10)
-    fun doUntilTrue() {
+    fun doUntilTrue_action() {
 
         scenario {
             case(1) {
@@ -56,7 +59,7 @@ class DoUntilTrue1 : UITest() {
 
     @Test
     @Order(20)
-    fun doUntilTrue_timeout() {
+    fun doUntilTrue_onTimeout() {
 
         scenario {
             case(1) {
@@ -67,8 +70,8 @@ class DoUntilTrue1 : UITest() {
                 }.action {
                     doUntilTrue(
                         waitSeconds = 3.0,
-                        onTimeoutFunc = { sc ->
-                            SKIP_SCENARIO("Timeout. (waitSeconds=${sc.waitSeconds})")
+                        onTimeout = { c ->
+                            SKIP_SCENARIO("Timeout. (waitSeconds=${c.waitSeconds})")
                         }
                     ) {
                         it.swipeCenterToTop()
@@ -84,7 +87,7 @@ class DoUntilTrue1 : UITest() {
 
     @Test
     @Order(30)
-    fun doUntilTrue_maxLoop() {
+    fun doUntilTrue_onMaxLoop() {
 
         scenario {
             case(1) {
@@ -95,8 +98,8 @@ class DoUntilTrue1 : UITest() {
                 }.action {
                     doUntilTrue(
                         maxLoopCount = 2,
-                        onMaxLoopFunc = { sc ->
-                            SKIP_SCENARIO("MaxLoopCount. (maxLoopCount=${sc.maxLoopCount})")
+                        onMaxLoop = { c ->
+                            SKIP_SCENARIO("MaxLoopCount. (maxLoopCount=${c.maxLoopCount})")
                         }
                     ) {
                         it.swipeCenterToTop()
@@ -105,6 +108,40 @@ class DoUntilTrue1 : UITest() {
                     it.tap()
                 }.expectation {
                     it.screenIs("[System Screen]")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(40)
+    fun doUntilTrue_onError() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    doUntilTrue(
+                        onError = { c ->
+                            output("${c.error} (${c.count})")
+                            c.cancelRetry = c.count >= 3
+                        },
+                    ) {
+                        it.select("#no-exist", waitSeconds = 0.0)   // throws TestDriverException
+                        false
+                    }
+                }
+            }
+            case(2) {
+                expectation {
+                    doUntilTrue(
+                        onError = { c ->
+                            output("${c.error} (${c.count})")
+                            c.cancelRetry = true
+                        }
+                    ) {
+                        it.select("#no-exist", waitSeconds = 0.0)   // throws TestDriverException
+                        false
+                    }
                 }
             }
         }

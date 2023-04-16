@@ -49,6 +49,7 @@ internal fun <T : Annotation> ExtensionContext?.isAnnotated(
     return isMethodAnnotated(annotation) || isClassAnnotated(annotation)
 }
 
+@Suppress("UNCHECKED_CAST")
 internal fun <T : Annotation> ExtensionContext?.getMethodAnnotation(
     annotation: KClass<T>,
 ): T? {
@@ -60,6 +61,7 @@ internal fun <T : Annotation> ExtensionContext?.getMethodAnnotation(
     return first as T?
 }
 
+@Suppress("UNCHECKED_CAST")
 internal fun <T : Annotation> ExtensionContext?.getClassAnnotation(
     annotation: KClass<T>,
 ): T? {

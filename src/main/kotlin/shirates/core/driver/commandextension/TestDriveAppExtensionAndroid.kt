@@ -6,7 +6,7 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.time.WaitUtility
+import shirates.core.utility.sync.WaitUtility
 
 
 /**

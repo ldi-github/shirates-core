@@ -445,8 +445,8 @@ object TestDriver {
             retryMaxCount = retryMaxCount.toLong(),
             retryTimeoutSeconds = testContext.retryTimeoutSeconds,
             retryPredicate = getRetryPredicate(profile = profile, capabilities = capabilities),
-            beforeRetryFunc = getBeforeRetry(profile = profile, capabilities = capabilities),
-            actionFunc = getInitFunc(profile = profile, capabilities = capabilities)
+            onBeforeRetry = getBeforeRetry(profile = profile, capabilities = capabilities),
+            action = getInitFunc(profile = profile, capabilities = capabilities)
         )
 
         // Write log on error
@@ -960,6 +960,7 @@ object TestDriver {
                     e.isFound
                 }
             }
+
             if (r.hasError) {
                 lastElement.lastError = r.error
             }
@@ -1594,36 +1595,35 @@ object TestDriver {
     /**
      * getFocusedWebElement
      */
-    fun getFocusedWebElement(
-        waitSeconds: Double = testContext.waitSecondsOnIsScreen
-    ): WebElement {
+    fun getFocusedWebElement(): WebElement {
 
-        syncCache()
-
-        var m: WebElement? = null
-        val r = SyncUtility.doUntilTrue(waitSeconds = waitSeconds) {
-            try {
-                m = mAppiumDriver!!.switchTo().activeElement() as WebElement
-            } catch (t: Throwable) {
-                throw TestDriverException(message(id = "activeElementNotFound", submessage = "$t"), cause = t)
-            }
-            m != null
+        val m = try {
+            mAppiumDriver!!.switchTo().activeElement() as WebElement
+        } catch (t: Throwable) {
+            throw TestDriverException(message(id = "activeElementNotFound", submessage = "$t"), cause = t)
         }
-        r.throwIfError()
-        return m!!
+        return m
     }
 
-    private fun getFocusedElementCore(): TestElement {
+    private fun getFocusedElementCore(
+        throwsException: Boolean = false
+    ): TestElement {
 
         if (isAndroid) {
             val focused = TestElementCache.allElements.firstOrNull() { it.focused == "true" }
             return focused ?: TestElement()
         } else {
-            val a = getFocusedWebElement()
+            val a = try {
+                getFocusedWebElement()
+            } catch (t: Throwable) {
+                if (throwsException) throw t
+                return TestElement.emptyElement
+            }
+
             val type = a.getAttribute("type")
             val sel = Selector("className=$type")
             val name = a.getAttribute("name")
-            if (name.isNullOrBlank()) {
+            return if (name.isNullOrBlank()) {
                 val location = a.location
                 val x = location.x
                 val y = location.y
@@ -1631,10 +1631,10 @@ object TestDriver {
                 val width = size.width
                 val height = size.height
                 val xpath = "//*[@x='$x' and @y='$y' and @width='$width' and @height='$height']"
-                return TestElementCache.select("xpath=$xpath")
+                TestElementCache.select("xpath=$xpath")
             } else {
                 sel.id = name
-                return TestElementCache.select(selector = sel)
+                TestElementCache.select(selector = sel)
             }
         }
     }
@@ -1655,7 +1655,7 @@ object TestDriver {
         val r = SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds
         ) {
-            element = getFocusedElementCore()
+            element = getFocusedElementCore(throwsException = throwsException)
             element.isFound
         }
 

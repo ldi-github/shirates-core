@@ -33,16 +33,14 @@ internal fun TestElement.getChainedSelector(relativeSelector: Selector): Selecto
 /**
  * clearInput
  */
-fun TestElement.clearInput(
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen
-): TestElement {
+fun TestElement.clearInput(): TestElement {
 
     val command = "clearInput"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message) {
-        val m = TestDriver.getFocusedWebElement(waitSeconds = waitSeconds)
+        val m = TestDriver.getFocusedWebElement()
         m.clear()
         refreshCache()
         TestDriver.lastElement = this.refreshThisElement()

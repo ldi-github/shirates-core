@@ -4,10 +4,12 @@
 
 1. `IntelliJ IDEA > Preferences` (or `File > Settings`)
 2. `Tools > Actions on Save`
-3. Check these items on.
-    - Reformat code
-    - Optimize imports
-4. Click `OK` .
+    - Check these items on.
+        - Reformat code
+        - Optimize imports
+4. `Editor > Code Style > JSON`
+    - Keep maximum blank lines in code: `1`
+5. Click `OK` .
 
 ### Link
 
