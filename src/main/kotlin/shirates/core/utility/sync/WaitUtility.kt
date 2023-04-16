@@ -71,7 +71,6 @@ object WaitUtility {
 
                     context.onTimeout(context as T)
 
-                    context.error = TestDriverException("Syncing time out.")
                     return context
                 }
 

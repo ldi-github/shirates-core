@@ -17,9 +17,9 @@ fun TestDrive.doUntilTrue(
     onMaxLoop: (SyncContext) -> Unit = {},
     onError: (SyncContext) -> Unit = {},
     action: (SyncContext) -> Boolean
-): TestElement {
+): SyncContext {
 
-    SyncUtility.doUntilTrue(
+    return SyncUtility.doUntilTrue(
         waitSeconds = waitSeconds,
         intervalSeconds = intervalSeconds,
         maxLoopCount = maxLoopCount,
@@ -30,7 +30,5 @@ fun TestDrive.doUntilTrue(
         onError = onError,
         action = action
     )
-
-    return lastElement
 
 }
