@@ -8,7 +8,7 @@
         - Reformat code
         - Optimize imports
 4. `Editor > Code Style > JSON`
-    - Keep maximum blank lines in code: 1
+    - Keep maximum blank lines in code: `1`
 5. Click `OK` .
 
 ### Link

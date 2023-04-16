@@ -15,7 +15,7 @@
 ### Recommended settings
 
 - [Plugin settings (IntelliJ IDEA)](tool_settings/plugin_settings.md)
-- [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save.md) **(New! 4.1.1)**
+- [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save.md) **(New! 4.2.0)**
 - [Enable right-click test running (IntelliJ IDEA)](tool_settings/right_click_test_running.md)
 - [Android Device settings](basic/recommended_settings/recommended_settings_android.md)
 
@@ -217,8 +217,8 @@
 
 ## Installing/Updating packages
 
-- [Installing/Updating node & npm](updating_packages/installing_updating_node&npm.md) **(New!)**
-- [Installing/Updating Appium & drivers](updating_packages/installing_updating_appium&drivers.md) **(New!)**
+- [Installing/Updating node & npm](updating_packages/installing_updating_node&npm.md) **(New! 4.2.0)**
+- [Installing/Updating Appium & drivers](updating_packages/installing_updating_appium&drivers.md) **(New! 4.2.0)**
 
 ## Troubleshooting
 
