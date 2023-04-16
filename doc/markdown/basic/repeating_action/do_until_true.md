@@ -9,8 +9,8 @@ You can repeat action until the action returns true using **doUntilTrue** functi
 | waitSeconds     | Maximum seconds to exit.                                   |
 | intervalSeconds | Interval seconds before next execution of action func.     |
 | maxLoopCount    | Maximum loop count to break.                               |
-| refreshCache    | refreshCache() is called before next loop on true.         |
 | retryOnError    | Retry on error.                                            |
+| refreshCache    | refreshCache() is called before next loop on true.         |
 | onTimeout       | Function called on waitSeconds has elapsed.                |
 | onMaxLoop       | Function called on over maxLoopCount.                      |
 | onError         | Function called on exception thrown.                       |
