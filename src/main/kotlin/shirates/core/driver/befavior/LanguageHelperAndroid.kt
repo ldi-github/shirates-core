@@ -1,6 +1,7 @@
 package shirates.core.driver.befavior
 
 import shirates.core.driver.TestDrive
+import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
 import shirates.core.driver.testProfile
@@ -14,6 +15,10 @@ object LanguageHelperAndroid : TestDrive {
      */
     fun gotoLocaleSettings() {
 
+        if (TestMode.isNoLoadRun) {
+            return
+        }
+
         val udid = testProfile.udid
         val args = "adb -s $udid shell am start -a android.settings.LOCALE_SETTINGS".split(" ").toTypedArray()
         ShellUtility.executeCommand(args = args)
@@ -24,6 +29,10 @@ object LanguageHelperAndroid : TestDrive {
      * getLanguage
      */
     fun getLanguage(): String {
+
+        if (TestMode.isNoLoadRun) {
+            return ""
+        }
 
         testDrive.syncCache(true)
 
@@ -41,6 +50,10 @@ object LanguageHelperAndroid : TestDrive {
      * addLanguage
      */
     fun addLanguage(language: String, region: String) {
+
+        if (TestMode.isNoLoadRun) {
+            return
+        }
 
         gotoLocaleSettings()
 
@@ -76,6 +89,10 @@ object LanguageHelperAndroid : TestDrive {
      */
     fun removeLanguage(language: String, region: String) {
 
+        if (TestMode.isNoLoadRun) {
+            return
+        }
+
         gotoLocaleSettings()
 
         val languageAndRegion = "$language ($region)"
@@ -107,9 +124,18 @@ object LanguageHelperAndroid : TestDrive {
      */
     fun setLanguage(language: String, region: String): String {
 
+        val languageAndRegion = "$language ($region)"
+
+        if (TestMode.isNoLoadRun) {
+            return languageAndRegion
+        }
+
+        if (TestMode.isNoLoadRun) {
+            return languageAndRegion
+        }
+
         gotoLocaleSettings()
 
-        val languageAndRegion = "$language ($region)"
 
         if (getLanguage() == languageAndRegion) {
             return languageAndRegion
