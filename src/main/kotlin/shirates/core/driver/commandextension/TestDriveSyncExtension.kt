@@ -12,12 +12,12 @@ fun TestDrive.useCache(func: () -> Unit): TestElement {
     val original = testContext.forceUseCache
 
     try {
-        TestLog.info("useCache {")
+        TestLog.info("useCache(${TestLog.lines.count() + 1}) {")
         testContext.forceUseCache = true
         func()
     } finally {
         testContext.forceUseCache = original
-        TestLog.info("} useCache")
+        TestLog.info("} useCache(${TestLog.lines.count() + 1})")
     }
 
     return getTestElement()
@@ -32,14 +32,14 @@ fun TestDrive.suppressCache(func: () -> Unit): TestElement {
     val originalEnableCache = testContext.enableCache
 
     try {
-        TestLog.info("suppressCache {")
+        TestLog.info("suppressCache(${TestLog.lines.count() + 1}) {")
         testContext.forceUseCache = false
         testContext.enableCache = false
         func()
     } finally {
         testContext.forceUseCache = originalForceUseCache
         testContext.enableCache = originalEnableCache
-        TestLog.info("} suppressCache")
+        TestLog.info("} suppressCache(${TestLog.lines.count() + 1})")
     }
 
     return getTestElement()
