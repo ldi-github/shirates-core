@@ -670,20 +670,20 @@ object XmlDataIos {
     val RelativeTest = """
 <?xml version="1.0" encoding="UTF-8"?>
 <AppiumAUT>
-    <XCUIElementTypeApplication type="XCUIElementTypeApplication" visible="true" name="App1" label="App1">
-        <XCUIElementTypeWindow type="XCUIElementTypeWindow" visible="true">
-            <XCUIElementTypeTable type="XCUIElementTypeTable" visible="true">
-                <XCUIElementTypeCell type="XCUIElementTypeCell" visible="true" name="cell1">
-                    <XCUIElementTypeButton type="XCUIElementTypeButton" visible="true" name="item1" label="item1"></XCUIElementTypeButton>
-                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" visible="true" name="item2" label="item2" value="item2"></XCUIElementTypeStaticText>
-                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" visible="true" name="item3" label="item3" value="item3"></XCUIElementTypeStaticText>
-                    <XCUIElementTypeImage type="XCUIElementTypeImage" visible="false" name="item4"></XCUIElementTypeImage>
+    <XCUIElementTypeApplication type="XCUIElementTypeApplication" visible="true" name="App1" label="App1" width="1000" height="1000">
+        <XCUIElementTypeWindow type="XCUIElementTypeWindow" visible="true" width="1000" height="1000">
+            <XCUIElementTypeTable type="XCUIElementTypeTable" visible="true" width="1000" height="1000">
+                <XCUIElementTypeCell type="XCUIElementTypeCell" visible="true" name="cell1" width="1000" height="1000">
+                    <XCUIElementTypeButton type="XCUIElementTypeButton" visible="true" name="item1" label="item1" width="1000" height="1000"></XCUIElementTypeButton>
+                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" visible="true" name="item2" label="item2" value="item2" width="1000" height="1000"></XCUIElementTypeStaticText>
+                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" visible="true" name="item3" label="item3" value="item3" width="1000" height="1000"></XCUIElementTypeStaticText>
+                    <XCUIElementTypeImage type="XCUIElementTypeImage" visible="false" name="item4" width="1000" height="1000"></XCUIElementTypeImage>
                 </XCUIElementTypeCell>
-                <XCUIElementTypeCell type="XCUIElementTypeCell" visible="true" name="cell2">
-                    <XCUIElementTypeButton type="XCUIElementTypeButton" visible="true" name="item1" label="item1"></XCUIElementTypeButton>
-                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" visible="true" name="item2" label="item2" value="item2"></XCUIElementTypeStaticText>
-                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" visible="true" name="item3" label="item3" value="item3"></XCUIElementTypeStaticText>
-                    <XCUIElementTypeImage type="XCUIElementTypeImage" visible="false" name="item4"></XCUIElementTypeImage>
+                <XCUIElementTypeCell type="XCUIElementTypeCell" visible="true" name="cell2" width="1000" height="1000">
+                    <XCUIElementTypeButton type="XCUIElementTypeButton" visible="true" name="item1" label="item1" width="1000" height="1000"></XCUIElementTypeButton>
+                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" visible="true" name="item2" label="item2" value="item2" width="1000" height="1000"></XCUIElementTypeStaticText>
+                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" visible="true" name="item3" label="item3" value="item3" width="1000" height="1000"></XCUIElementTypeStaticText>
+                    <XCUIElementTypeImage type="XCUIElementTypeImage" visible="false" name="item4" width="1000" height="1000"></XCUIElementTypeImage>
                 </XCUIElementTypeCell>
             </XCUIElementTypeTable>
         </XCUIElementTypeWindow>
@@ -697,7 +697,7 @@ object XmlDataIos {
     val RelativeCoordinateTest = """
 <?xml version="1.0" encoding="UTF-8"?>
 <AppiumAUT>
-    <XCUIElementTypeApplication type="XCUIElementTypeApplication" visible="true" name="App1" label="App1">
+    <XCUIElementTypeApplication type="XCUIElementTypeApplication" visible="true" name="App1" label="App1" width="2000" height="2000">
         <XCUIElementTypeCell                x="0"  y="0"  width="1000" height="1000" name="XCUIElementTypeCell1" type="XCUIElementTypeCell" visible="true">
             <XCUIElementTypeOther           x="0"  y="10" width="10" height="10" name="Other1-1" type="XCUIElementTypeOther" visible="true"></XCUIElementTypeOther>
             <XCUIElementTypeStaticText      x="10" y="10" width="10" height="10" name="StaticText1-1" type="XCUIElementTypeStaticText" visible="true" ></XCUIElementTypeStaticText>
@@ -736,8 +736,8 @@ object XmlDataIos {
     val RelativeCoordinateTest2 = """
 <?xml version="1.0" encoding="UTF-8"?>
 <AppiumAUT>
-    <XCUIElementTypeApplication type="XCUIElementTypeApplication" visible="true" name="App1" label="App1">
-        <XCUIElementTypeCell                x="0"  y="0"  width="1000" height="1000" name="XCUIElementTypeCell1" type="XCUIElementTypeCell" visible="true">
+    <XCUIElementTypeApplication type="XCUIElementTypeApplication" visible="true" name="App1" label="App1" width="1000" height="1000">
+        <XCUIElementTypeCell                x="0"  y="0" width="1000" height="1000" name="XCUIElementTypeCell1" type="XCUIElementTypeCell" visible="true">
             <XCUIElementTypeOther           x="10" y="0" width="10" height="10" name="Other1-1" type="XCUIElementTypeOther" visible="true"></XCUIElementTypeOther>
             <XCUIElementTypeOther           x="20" y="0" width="10" height="10" name="Other1-2" type="XCUIElementTypeOther" visible="true" ></XCUIElementTypeOther>
             <XCUIElementTypeOther           x="30" y="0" width="10" height="10" name="Other1-3" type="XCUIElementTypeOther" visible="true" ></XCUIElementTypeOther>

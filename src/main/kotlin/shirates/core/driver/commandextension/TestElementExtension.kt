@@ -62,7 +62,7 @@ fun TestElement.refreshThisElement(): TestElement {
     }
 
     val sel = getUniqueSelector()
-    val e = TestDriver.select(selector = sel, throwsException = false, useCache = true)
+    val e = TestDriver.select(selector = sel, throwsException = false, useCache = true, safeElementOnly = true)
 
     return e
 }
@@ -141,7 +141,7 @@ fun TestElement.getUniqueSelector(): Selector {
 
     fun isUniqueSelector(sel: Selector): Boolean {
 
-        val elements = TestElementCache.filterElements(selector = sel)
+        val elements = TestElementCache.filterElements(selector = sel, safeElementOnly = true)
         return elements.count() == 1
     }
 
@@ -236,7 +236,7 @@ fun TestElement.getUniqueXpath(): String {
 
         val xpath = "//$classOrType[$condition]"
 
-        val elements = TestElementCache.filterElements("xpath=$xpath")
+        val elements = TestElementCache.filterElements("xpath=$xpath", safeElementOnly = true)
         if (elements.count() == 1) {
             return xpath
         }
@@ -382,7 +382,8 @@ fun TestElement.capture(
             expression = expression,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
-            useCache = useCache
+            useCache = useCache,
+            safeElementOnly = true
         )
     }
 

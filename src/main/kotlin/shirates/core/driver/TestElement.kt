@@ -211,19 +211,26 @@ class TestElement(
             if (isEmpty) {
                 return false
             }
+            if (isDummy) {
+                return false
+            }
             if (isWebElementMode) {
                 return true
             }
             if (bounds.area == 0) {
                 return false
             }
-            val frame = this.getScrollableElementsInAncestors().lastOrNull() ?: rootElement
-            if (this.isIncludedIn(frame).not()) {
+            if (isInView.not()) {
+                return false
+            }
+            val frame = this.getScrollableElementsInAncestors().lastOrNull()
+            if (frame != null && this.isIncludedIn(frame).not()) {
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
                 for (overlay in TestDriver.screenInfo.scrollInfo.overlayElements) {
-                    val overlayElement = TestElementCache.select(expression = overlay, throwsException = false)
+                    val overlayElement =
+                        TestElementCache.select(expression = overlay, throwsException = false, safeElementOnly = true)
                     if (overlayElement.isFound) {
                         if (this.bounds.isOverlapping(overlayElement.bounds)) {
                             return false
@@ -698,6 +705,14 @@ class TestElement(
             return isVisible
         }
 
+    /**
+     * isInView
+     */
+    val isInView: Boolean
+        get() {
+            return this.isOverlapping(rootElement)
+        }
+
     internal val isInXCUIElementTypeCell: Boolean
         get() {
             if (isAndroid) return false
@@ -783,8 +798,8 @@ class TestElement(
 
             if (isCacheMode) {
                 if (selector != null) {
-                    if (canSelect(selector = selector!!)) {
-                        e = TestElementCache.select(selector = selector!!)
+                    if (canSelect(selector = selector!!, safeElementOnly = true)) {
+                        e = TestElementCache.select(selector = selector!!, safeElementOnly = true)
                         return@execOperateCommand
                     }
                 }
@@ -807,10 +822,29 @@ class TestElement(
         if (isEmpty) {
             return false
         }
+        if (isDummy) {
+            return false
+        }
         if (container.isEmpty) {
             return false
         }
         return this.bounds.isIncludedIn(container.bounds)
     }
 
+    /**
+     * isOverlapping
+     */
+    fun isOverlapping(container: TestElement): Boolean {
+
+        if (isEmpty) {
+            return false
+        }
+        if (isDummy) {
+            return false
+        }
+        if (container.isEmpty) {
+            return false
+        }
+        return this.bounds.isOverlapping(container.bounds)
+    }
 }

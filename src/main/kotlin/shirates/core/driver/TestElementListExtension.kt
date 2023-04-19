@@ -14,7 +14,8 @@ import java.awt.image.BufferedImage
  */
 fun List<TestElement>.filterBySelector(
     selector: Selector,
-    throwsException: Boolean = false
+    throwsException: Boolean = false,
+    safeElementOnly: Boolean = true
 ): MutableList<TestElement> {
 
     if (selector.pos == 0) {
@@ -28,20 +29,18 @@ fun List<TestElement>.filterBySelector(
     val filtered = mutableListOf<TestElement>()
     for (sel in selectors) {
         // select
-        val list = filterBySelectorCore(list = this, selector = sel)
-        if (list.isEmpty() && selector.isNegation) {
-            filtered.add(TestElement.dummyElement)
-        }
+        val list = filterBySelectorCore(list = this, selector = sel, safeElementOnly = safeElementOnly)
+
         for (e in list) {
             // get relative
             if (selector.relativeSelectors.any()) {
                 val exps = selector.expandRelativeExpressions()
                 var relative = e
                 for (exp in exps) {
-                    relative = relative.relative(command = exp, scopeElements = this)
+                    relative = relative.relative(command = exp, safeElementOnly = safeElementOnly, scopeElements = this)
                 }
                 relative.selector = selector
-                if (relative.isEmpty.not() && filtered.contains(relative).not()) {
+                if (relative.isEmpty.not() && filtered.contains(relative).not() && relative.isInView) {
                     filtered.add(relative)
                 }
             } else {
@@ -49,6 +48,9 @@ fun List<TestElement>.filterBySelector(
                     filtered.add(e)
                 }
             }
+        }
+        if (list.isEmpty() && selector.isNegation) {
+            filtered.add(TestElement.dummyElement)
         }
     }
 
@@ -89,6 +91,7 @@ fun List<TestElement>.filterBySelector(
 private fun filterBySelectorCore(
     list: List<TestElement>,
     selector: Selector,
+    safeElementOnly: Boolean
 ): MutableList<TestElement> {
 
     var result = list
@@ -142,6 +145,12 @@ private fun filterBySelectorCore(
         result = result.filter { e ->
             val m = Filter.matchVisible(element = e, selector = selector)
             m
+        }
+    }
+
+    if (safeElementOnly) {
+        result = result.filter {
+            it.isInView
         }
     }
 

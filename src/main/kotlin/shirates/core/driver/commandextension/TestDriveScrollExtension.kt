@@ -9,6 +9,8 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.isSame
+import kotlin.math.max
+import kotlin.math.min
 
 
 internal fun TestDrive.getScrollableElementsInDescendants(): List<TestElement> {
@@ -93,15 +95,15 @@ fun TestDrive.scrollDown(
         command = "scrollDown",
         direction = ScrollDirection.Down,
         startMarginRatio = startMarginRatio
-    ) { scrollingInfo ->
-        val b = scrollingInfo.scrollableFrame.bounds
+    ) { s ->
         swipePointToPointCore(
             SwipeContext(
-                swipeFrame = b,
-                startX = b.centerX,
-                startY = b.bottom - scrollingInfo.margin,
-                endX = b.centerX,
-                endY = b.top,
+                swipeFrame = s.adjustedScrollableBounds,
+                viewPort = viewport,
+                startX = s.startX,
+                startY = s.startY,
+                endX = s.endX,
+                endY = s.endY,
                 durationSeconds = durationSeconds,
             )
         )
@@ -122,15 +124,15 @@ fun TestDrive.scrollUp(
         command = "scrollUp",
         direction = ScrollDirection.Up,
         startMarginRatio = startMarginRatio
-    ) { scrollingInfo ->
-        val b = scrollingInfo.scrollableFrame.bounds
+    ) { s ->
         swipePointToPointCore(
             SwipeContext(
-                swipeFrame = b,
-                startX = b.centerX,
-                startY = b.top + scrollingInfo.margin,
-                endX = b.centerX,
-                endY = b.bottom,
+                swipeFrame = s.adjustedScrollableBounds,
+                viewPort = viewport,
+                startX = s.startX,
+                startY = s.startY,
+                endX = s.endX,
+                endY = s.endY,
                 durationSeconds = durationSeconds
             )
         )
@@ -151,15 +153,15 @@ fun TestDrive.scrollRight(
         command = "scrollRight",
         direction = ScrollDirection.Right,
         startMarginRatio = startMarginRatio
-    ) { scrollingInfo ->
-        val b = scrollingInfo.scrollableFrame.bounds
+    ) { s ->
         swipePointToPointCore(
             SwipeContext(
-                swipeFrame = b,
-                startX = b.right - scrollingInfo.margin,
-                startY = b.centerY,
-                endX = b.left,
-                endY = b.centerY,
+                swipeFrame = s.adjustedScrollableBounds,
+                viewPort = viewport,
+                startX = s.startX,
+                startY = s.startY,
+                endX = s.endX,
+                endY = s.endY,
                 durationSeconds = durationSeconds
             )
         )
@@ -180,15 +182,15 @@ fun TestDrive.scrollLeft(
         command = "scrollLeft",
         direction = ScrollDirection.Left,
         startMarginRatio = startMarginRatio
-    ) { scrollingInfo ->
-        val b = scrollingInfo.scrollableFrame.bounds
+    ) { s ->
         swipePointToPointCore(
             SwipeContext(
-                swipeFrame = b,
-                startX = b.left + scrollingInfo.margin,
-                startY = b.centerY,
-                endX = b.right,
-                endY = b.centerY,
+                swipeFrame = s.adjustedScrollableBounds,
+                viewPort = viewport,
+                startX = s.startX,
+                startY = s.startY,
+                endX = s.endX,
+                endY = s.endY,
                 durationSeconds = durationSeconds
             )
         )
@@ -640,9 +642,10 @@ fun TestDrive.scanElements(
     return lastElement
 }
 
-private data class ScrollingInfo(
+private class ScrollingInfo(
     val errorMessage: String,
-    val scrollableFrame: TestElement,
+    val scrollableBounds: Bounds,
+    val viewPort: Bounds,
     val direction: ScrollDirection,
     val marginRatio: Double,
 ) {
@@ -651,11 +654,98 @@ private data class ScrollingInfo(
             return errorMessage.isBlank().not()
         }
 
-    val margin: Int
+    val leftEdge: Int
         get() {
-            val length = if (direction.isDown || direction.isUp) scrollableFrame.bounds.height
-            else scrollableFrame.bounds.width
-            return (length * marginRatio).toInt()
+            return max(scrollableBounds.left, viewPort.left)
+        }
+
+    val rightEdge: Int
+        get() {
+            return min(scrollableBounds.right, viewPort.right)
+        }
+
+    val topEdge: Int
+        get() {
+            return max(scrollableBounds.top, viewPort.top)
+        }
+
+    val bottomEdge: Int
+        get() {
+            return min(scrollableBounds.bottom, viewPort.bottom)
+        }
+
+    val adjustedScrollableBounds: Bounds
+        get() {
+            return Bounds(
+                left = leftEdge,
+                top = topEdge,
+                width = rightEdge - leftEdge + 1,
+                height = bottomEdge - topEdge + 1
+            )
+        }
+
+    val leftMargin: Int
+        get() {
+            return if (direction.isLeft)
+                (adjustedScrollableBounds.width * marginRatio).toInt()
+            else 0
+        }
+
+    val rightMargin: Int
+        get() {
+            return if (direction.isRight)
+                (adjustedScrollableBounds.width * marginRatio).toInt()
+            else 0
+        }
+
+    val topMargin: Int
+        get() {
+            return if (direction.isUp)
+                (adjustedScrollableBounds.height * marginRatio).toInt()
+            else 0
+        }
+
+    val bottomMargin: Int
+        get() {
+            return if (direction.isDown)
+                (adjustedScrollableBounds.height * marginRatio).toInt()
+            else 0
+        }
+
+    val startY: Int
+        get() {
+            return when (direction) {
+                ScrollDirection.Down -> bottomEdge - bottomMargin
+                ScrollDirection.Up -> topEdge + topMargin
+                else -> adjustedScrollableBounds.centerY
+            }
+        }
+
+    val endY: Int
+        get() {
+            return when (direction) {
+                ScrollDirection.Down -> topEdge
+                ScrollDirection.Up -> bottomEdge
+                else -> adjustedScrollableBounds.centerY
+            }
+        }
+
+    val startX: Int
+        get() {
+            return when (direction) {
+                ScrollDirection.Right -> rightEdge - rightMargin
+                ScrollDirection.Left -> leftEdge + leftMargin
+                else -> adjustedScrollableBounds.centerX
+            }
+        }
+
+    val endX: Int
+        get() {
+            return when (direction) {
+                ScrollDirection.Right -> leftEdge
+                ScrollDirection.Left -> rightEdge
+                else -> adjustedScrollableBounds.centerX
+            }
         }
 }
 
@@ -671,7 +761,8 @@ private fun TestDrive.getScrollingInfo(
     val scrollableTarget = testElement.getScrollableTarget()
     val r = ScrollingInfo(
         errorMessage = "",
-        scrollableFrame = scrollableTarget,
+        scrollableBounds = scrollableTarget.bounds,
+        viewPort = viewport,
         direction = direction,
         marginRatio = marginRatio
     )
