@@ -1154,7 +1154,10 @@ object TestDriver {
 
         val actionFunc = {
             e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
-            e.isFound
+            if (safeElementOnly)
+                e.isSafe
+            else
+                e.isFound
         }
 
         testDrive.doUntilScrollStop(
