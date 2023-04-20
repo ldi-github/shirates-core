@@ -94,22 +94,39 @@ class UITestCaseTest : UITest() {
             irregularHandlerCallCount = 0
             assertThat(testContext.enableIrregularHandler).isTrue()
             assertThat(irregularHandlerCallCount).isEqualTo(0)
-
             // Act
             case(1, useHandler = true) {
                 action {
                     it.exist("[Network & internet]")
                 }.expectation {
-                    // Act
                     it.screenIs("[Android Settings Top Screen]")
-                    // Assert
-                    assertThat(testContext.enableIrregularHandler).isTrue()
-                    assertThat(irregularHandlerCallCount).isGreaterThan(0)
                 }
+                // Assert
+                assertThat(testContext.enableIrregularHandler).isTrue()
+                assertThat(irregularHandlerCallCount).isGreaterThan(0)
             }
             // Assert
             assertThat(testContext.enableIrregularHandler).isTrue()
-            assertThat(irregularHandlerCallCount).isEqualTo(0)
+            assertThat(irregularHandlerCallCount).isGreaterThan(0)
+
+            // Arrange
+            irregularHandlerCallCount = 0
+            testContext.enableIrregularHandler = false
+            assertThat(testContext.enableIrregularHandler).isFalse()
+            // Act
+            case(2, useHandler = true) {
+                action {
+                    it.exist("[Network & internet]")
+                }.expectation {
+                    it.screenIs("[Android Settings Top Screen]")
+                }
+                // Assert
+                assertThat(testContext.enableIrregularHandler).isTrue()
+                assertThat(irregularHandlerCallCount).isGreaterThan(0)
+            }
+            // Assert
+            assertThat(testContext.enableIrregularHandler).isFalse()
+            assertThat(irregularHandlerCallCount).isGreaterThan(0)
         }
     }
 
@@ -122,7 +139,6 @@ class UITestCaseTest : UITest() {
             irregularHandlerCallCount = 0
             assertThat(testContext.enableIrregularHandler).isTrue()
             assertThat(irregularHandlerCallCount).isEqualTo(0)
-
             // Act
             case(1, useHandler = false) {
                 action {
@@ -136,6 +152,25 @@ class UITestCaseTest : UITest() {
             }
             // Assert
             assertThat(testContext.enableIrregularHandler).isTrue()
+            assertThat(irregularHandlerCallCount).isEqualTo(0)
+
+            // Arrange
+            irregularHandlerCallCount = 0
+            testContext.enableIrregularHandler = false
+            assertThat(testContext.enableIrregularHandler).isFalse()
+            // Act
+            case(1, useHandler = false) {
+                action {
+                    it.exist("[Network & internet]")
+                }.expectation {
+                    it.screenIs("[Android Settings Top Screen]")
+                }
+                // Assert
+                assertThat(testContext.enableIrregularHandler).isFalse()
+                assertThat(irregularHandlerCallCount).isEqualTo(0)
+            }
+            // Assert
+            assertThat(testContext.enableIrregularHandler).isFalse()
             assertThat(irregularHandlerCallCount).isEqualTo(0)
         }
     }
