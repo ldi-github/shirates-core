@@ -40,7 +40,7 @@ fun List<TestElement>.filterBySelector(
                     relative = relative.relative(command = exp, safeElementOnly = safeElementOnly, scopeElements = this)
                 }
                 relative.selector = selector
-                if (relative.isEmpty.not() && filtered.contains(relative).not() && relative.isInView) {
+                if (relative.isEmpty.not() && filtered.contains(relative).not()) {
                     filtered.add(relative)
                 }
             } else {
