@@ -501,7 +501,7 @@ object AndroidDeviceUtility {
 
             deviceOffline.not()
         }
-        WaitUtility.doUntilTrue(waitSeconds = 20.0, intervalSeconds = intervalSeconds) {
+        WaitUtility.doUntilTrue(waitSeconds = timeoutSeconds, intervalSeconds = intervalSeconds) {
             val psResult = AdbUtility.ps(udid = udid)
             val bootanimation = psResult.contains("bootanimation")
             TestLog.trace("bootanimation=$bootanimation")
