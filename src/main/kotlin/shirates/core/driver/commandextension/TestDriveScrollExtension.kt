@@ -397,6 +397,13 @@ fun TestDrive.doUntilScrollStop(
     }
 
     if (TestDriver.isInitialized) {
+        if (actionFunc != null) {
+            val result = actionFunc()
+            if (result) {
+                return lastElement
+            }
+        }
+
         val original = CodeExecutionContext.isScrolling
         try {
             CodeExecutionContext.isScrolling = true
@@ -408,8 +415,8 @@ fun TestDrive.doUntilScrollStop(
                 TestDriver.refreshCache()
 
                 if (actionFunc != null) {
-                    val found = actionFunc()
-                    if (found) {
+                    val result = actionFunc()
+                    if (result) {
                         return lastElement
                     }
                 }

@@ -1142,16 +1142,7 @@ object TestDriver {
         safeElementOnly: Boolean = true,
     ): TestElement {
 
-        var e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
-        if (e.isFound) {
-            it.syncCache()
-            e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
-            if (e.isFound) {
-                lastElement = e
-                return lastElement
-            }
-        }
-
+        var e = TestElement()
         val actionFunc = {
             e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
             if (safeElementOnly)
@@ -1167,12 +1158,6 @@ object TestDriver {
             startMarginRatio = startMarginRatio,
             actionFunc = actionFunc
         )
-
-        if (e.isEmpty) {
-            // Try select after scroll stops
-            it.syncCache()
-            e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
-        }
 
         return e
     }
