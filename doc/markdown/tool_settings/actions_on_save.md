@@ -9,7 +9,10 @@
         - Optimize imports
 4. `Editor > Code Style > JSON`
     - Keep maximum blank lines in code: `1`
-5. Click `OK` .
+5. `Editor > Code Style > properties`
+    - Check these items on.
+        - Keep blank lines
+6. Click `OK` .
 
 ### Link
 

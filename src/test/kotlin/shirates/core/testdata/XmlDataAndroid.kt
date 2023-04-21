@@ -752,43 +752,43 @@ object XmlDataAndroid {
     val RelativeTest = """
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <hierarchy class="hierarchy" rotation="0" width="1080" height="2088">
-    <android.widget.FrameLayout package="jp.co.app.android" class="android.widget.FrameLayout" text="" scrollable="true" checkable="false" enabled="true" displayed="true">
-        <android.widget.LinearLayout package="jp.co.app.android" class="android.widget.LinearLayout" text="" scrollable="true" enabled="true" displayed="true">
-            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar1" displayed="true">
-                <android.widget.ImageButton package="jp.co.app.android" class="android.widget.ImageButton" text="tb1-item1" displayed="true">
-                    <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb1-item1-1" displayed="true" />
+    <android.widget.FrameLayout package="jp.co.app.android" class="android.widget.FrameLayout" text="" scrollable="true" checkable="false" enabled="true" displayed="true" bounds="[0,0][99,99]" >
+        <android.widget.LinearLayout package="jp.co.app.android" class="android.widget.LinearLayout" text="" scrollable="true" enabled="true" displayed="true" bounds="[0,0][99,99]">
+            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar1" displayed="true" bounds="[0,0][99,99]">
+                <android.widget.ImageButton package="jp.co.app.android" class="android.widget.ImageButton" text="tb1-item1" displayed="true" bounds="[0,0][99,99]">
+                    <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb1-item1-1" displayed="true" bounds="[0,0][99,99]" />
                 </android.widget.ImageButton>
-                <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb1-item2" enabled="true" displayed="true" />
-                <android.widget.ImageView class="android.widget.ImageView" text="tb1-item3"></android.widget.ImageView>
+                <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb1-item2" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.ImageView class="android.widget.ImageView" text="tb1-item3" bounds="[0,0][99,99]"></android.widget.ImageView>
             </android.view.ViewGroup>
-            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar2" enabled="true" displayed="true">
-                <android.widget.ImageButton package="jp.co.app.android" class="android.widget.ImageButton" text="tb2-item1" enabled="true" displayed="true" />
-                <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb2-item2" enabled="true" displayed="true" />
-                <android.widget.ImageView class="android.widget.ImageView" text="tb2-item3" />
+            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar2" enabled="true" displayed="true" bounds="[0,0][99,99]">
+                <android.widget.ImageButton package="jp.co.app.android" class="android.widget.ImageButton" text="tb2-item1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb2-item2" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.ImageView class="android.widget.ImageView" text="tb2-item3" bounds="[0,0][99,99]" />
             </android.view.ViewGroup>
-            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar3" enabled="true" displayed="true">
-                <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb3-TextView1" enabled="true" displayed="true" />
-                <android.widget.EditText package="jp.co.app.android" class="android.widget.EditText" text="tb3-EditText1" enabled="true" displayed="true" />
-                <android.widget.ImageView package="jp.co.app.android" class="android.widget.ImageView" text="tb3-ImageView1" />
-                <android.widget.Button package="jp.co.app.android" class="android.widget.Button" text="tb3-Button1" displayed="true">
-                    <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb3-TextView2" displayed="true" />
+            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar3" enabled="true" displayed="true" bounds="[0,0][99,99]">
+                <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb3-TextView1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.EditText package="jp.co.app.android" class="android.widget.EditText" text="tb3-EditText1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.ImageView package="jp.co.app.android" class="android.widget.ImageView" text="tb3-ImageView1" bounds="[0,0][99,99]" />
+                <android.widget.Button package="jp.co.app.android" class="android.widget.Button" text="tb3-Button1" displayed="true" bounds="[0,0][99,99]">
+                    <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb3-TextView2" displayed="true" bounds="[0,0][99,99]" />
                 </android.widget.Button>
-                <android.widget.CheckBox package="jp.co.app.android" class="android.widget.CheckBox" text="tb3-CheckBox1" enabled="true" displayed="true" />
-                <android.widget.ImageButton package="jp.co.app.android" class="android.widget.ImageButton" text="tb3-ImageButton1" enabled="true" displayed="true" />
-                <android.widget.Switch package="jp.co.app.android" class="android.widget.Switch" text="tb3-Switch1" enabled="true" displayed="true" />
+                <android.widget.CheckBox package="jp.co.app.android" class="android.widget.CheckBox" text="tb3-CheckBox1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.ImageButton package="jp.co.app.android" class="android.widget.ImageButton" text="tb3-ImageButton1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.Switch package="jp.co.app.android" class="android.widget.Switch" text="tb3-Switch1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
             </android.view.ViewGroup>
-            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar4" enabled="true" displayed="true">
-                <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb4-TextView1" enabled="true" displayed="true" />
-                <android.widget.EditText package="jp.co.app.android" class="android.widget.EditText" text="tb4-EditText1" enabled="true" displayed="true" />
-                <android.widget.ImageView package="jp.co.app.android" class="android.widget.ImageView" text="tb4-ImageView1" />
-                <android.widget.Button package="jp.co.app.android" class="android.widget.Button" text="tb4-Button1" displayed="true">
-                    <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb4-TextView2" displayed="true" />
+            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar4" enabled="true" displayed="true" bounds="[0,0][99,99]">
+                <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb4-TextView1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.EditText package="jp.co.app.android" class="android.widget.EditText" text="tb4-EditText1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.ImageView package="jp.co.app.android" class="android.widget.ImageView" text="tb4-ImageView1" bounds="[0,0][99,99]" />
+                <android.widget.Button package="jp.co.app.android" class="android.widget.Button" text="tb4-Button1" displayed="true" bounds="[0,0][99,99]">
+                    <android.widget.TextView package="jp.co.app.android" class="android.widget.TextView" text="tb4-TextView2" displayed="true" bounds="[0,0][99,99]" />
                 </android.widget.Button>
-                <android.widget.CheckBox package="jp.co.app.android" class="android.widget.CheckBox" text="tb4-CheckBox1" enabled="true" displayed="true" />
-                <android.widget.ImageButton package="jp.co.app.android" class="android.widget.ImageButton" text="tb4-ImageButton1" enabled="true" displayed="true" />
-                <android.widget.Switch package="jp.co.app.android" class="android.widget.Switch" text="tb4-Switch1" enabled="true" displayed="true" />
+                <android.widget.CheckBox package="jp.co.app.android" class="android.widget.CheckBox" text="tb4-CheckBox1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.ImageButton package="jp.co.app.android" class="android.widget.ImageButton" text="tb4-ImageButton1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
+                <android.widget.Switch package="jp.co.app.android" class="android.widget.Switch" text="tb4-Switch1" enabled="true" displayed="true" bounds="[0,0][99,99]" />
             </android.view.ViewGroup>
-            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar5" enabled="true" displayed="true">
+            <android.view.ViewGroup package="jp.co.app.android" class="android.view.ViewGroup" text="" resource-id="jp.co.app.android:id/toolbar5" enabled="true" displayed="true" bounds="[0,0][99,99]">
             </android.view.ViewGroup>
         </android.widget.LinearLayout>
     </android.widget.FrameLayout>

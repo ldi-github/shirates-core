@@ -7,6 +7,8 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * swipePointToPoint
@@ -28,6 +30,7 @@ fun TestDrive.swipePointToPoint(
 
     val sc = SwipeContext(
         swipeFrame = viewport,
+        viewPort = viewport,
         startX = startX,
         startY = startY,
         endX = endX,
@@ -58,6 +61,7 @@ fun TestDrive.swipePointToPoint(
 
 internal class SwipeContext(
     var swipeFrame: Bounds,
+    var viewPort: Bounds,
     var startX: Int,
     var startY: Int,
     var endX: Int,
@@ -68,29 +72,34 @@ internal class SwipeContext(
 ) {
     init {
         if (safeMode) {
-            if (startX < swipeFrame.left) {
-                startX = swipeFrame.left
+            val leftEdge = max(swipeFrame.left, viewPort.left)
+            val rightEdge = min(swipeFrame.right, viewPort.right)
+            val topEdge = max(swipeFrame.top, viewPort.top)
+            val bottomEdge = min(swipeFrame.bottom, viewPort.bottom)
+
+            if (startX < leftEdge) {
+                startX = leftEdge
             }
-            if (startX > swipeFrame.right - 1) {
-                startX = swipeFrame.right - 1
+            if (startX > rightEdge - 1) {
+                startX = rightEdge - 1
             }
-            if (startY < swipeFrame.top) {
-                startY = swipeFrame.top
+            if (startY < topEdge) {
+                startY = topEdge
             }
-            if (startY > swipeFrame.bottom - 1) {
-                startY = swipeFrame.bottom - 1
+            if (startY > bottomEdge - 1) {
+                startY = bottomEdge - 1
             }
-            if (endX > swipeFrame.right - 1) {
-                endX = swipeFrame.right - 1
+            if (endX > rightEdge - 1) {
+                endX = rightEdge - 1
             }
-            if (endX < swipeFrame.left) {
-                endX = swipeFrame.left
+            if (endX < leftEdge) {
+                endX = leftEdge
             }
-            if (endY > swipeFrame.bottom - 1) {
-                endY = swipeFrame.bottom - 1
+            if (endY > bottomEdge - 1) {
+                endY = bottomEdge - 1
             }
-            if (endY < swipeFrame.top) {
-                endY = swipeFrame.top
+            if (endY < topEdge) {
+                endY = topEdge
             }
         }
     }

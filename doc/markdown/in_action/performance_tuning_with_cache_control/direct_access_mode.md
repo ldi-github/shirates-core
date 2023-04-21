@@ -25,6 +25,22 @@ You can access elements with direct access mode.
 | useCache { }      | Use cache {code block}                              |
 | switchScreen      | Set currentScreen to switch screen context manually |
 
+## useCache argument
+
+You can specify useCache argument with these functions of UITest.
+
+- scenario
+- case
+- condition
+- action
+- expectation
+
+| useCache             | description                  |
+|:---------------------|:-----------------------------|
+| null (not specified) | Depends on ambient condition |
+| true                 | use cache                    |
+| false                | direct access                |
+
 ### DirectAccessModeIos.kt
 
 (`kotlin/tutorial/inaction/DirectAccessModeIos.kt`)

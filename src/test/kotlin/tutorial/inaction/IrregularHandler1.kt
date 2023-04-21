@@ -44,7 +44,7 @@ class IrregularHandler1 : UITest() {
 
     @Test
     @Order(20)
-    fun suppressHandler() {
+    fun suppressHandler_useHandler() {
 
         scenario {
             case(1) {
@@ -60,6 +60,26 @@ class IrregularHandler1 : UITest() {
                     }
                 }.expectation {
                     it.screenIs("[Next Screen]")
+                }
+            }
+            case(2) {
+                action {
+                    /**
+                     * In suppressHandler block,
+                     * calling irregular handler is suppressed
+                     */
+                    suppressHandler {
+                        it.tap("[Button2]")
+
+                        /**
+                         * In useHandler block,
+                         * calling irregular handler is enabled
+                         * even if it is nested in suppressHandler block
+                         */
+                        useHandler {
+                            it.tap("[Button3]")
+                        }
+                    }
                 }
             }
         }

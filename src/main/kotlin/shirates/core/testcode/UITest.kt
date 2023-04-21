@@ -17,9 +17,7 @@ import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.commandextension.isAppInstalled
-import shirates.core.driver.commandextension.launchApp
-import shirates.core.driver.commandextension.tapAppIcon
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -444,6 +442,8 @@ abstract class UITest : TestDrive {
         order: Int? = currentOrder,
         desc: String = currentDisplayName,
         launchApp: Boolean = true,
+        useCache: Boolean? = null,
+        useHandler: Boolean? = null,
         testProc: () -> Unit
     ) {
         if (CodeExecutionContext.isInScenario) {
@@ -460,13 +460,18 @@ abstract class UITest : TestDrive {
 
         val sw = StopWatch(title = "Running scenario").start()
         try {
-            scenarioCore(
-                scenarioId = scenarioId,
-                order = order,
-                desc = desc,
-                launchApp = launchApp,
-                testProc = testProc
-            )
+            withContext(
+                useCache = useCache,
+                useHandler = useHandler
+            ) {
+                scenarioCore(
+                    scenarioId = scenarioId,
+                    order = order,
+                    desc = desc,
+                    launchApp = launchApp,
+                    testProc = testProc
+                )
+            }
         } catch (t: Throwable) {
             val message = t.message ?: ""
             if (t is RerunScenarioException ||
@@ -667,7 +672,13 @@ abstract class UITest : TestDrive {
     /**
      * case
      */
-    open fun case(stepNo: Int, desc: String? = null, proc: () -> Unit) {
+    open fun case(
+        stepNo: Int,
+        desc: String? = null,
+        useCache: Boolean? = null,
+        useHandler: Boolean? = null,
+        proc: () -> Unit
+    ) {
 
         if (CodeExecutionContext.isInCase) {
             throw TestDriverException(
@@ -681,13 +692,22 @@ abstract class UITest : TestDrive {
 
         try {
             CodeExecutionContext.isInCase = true
-            caseCore(stepNo, desc, proc)
+            withContext(
+                useCache = useCache,
+                useHandler = useHandler
+            ) {
+                caseCore(stepNo, desc, proc)
+            }
         } finally {
             CodeExecutionContext.isInCase = false
         }
     }
 
-    private fun caseCore(stepNo: Int, desc: String?, proc: () -> Unit) {
+    private fun caseCore(
+        stepNo: Int,
+        desc: String?,
+        proc: () -> Unit
+    ) {
 
         driver.skipCase = false
         val caseLog = TestLog.case(stepNo = stepNo, log = true, desc = desc)
@@ -777,36 +797,54 @@ abstract class UITest : TestDrive {
      * condition
      */
     fun condition(
+        useCache: Boolean? = null,
+        useHandler: Boolean? = null,
         conditionFunc: () -> Unit
     ): CAEPattern {
 
         TestLog.trace()
 
-        return CAEPattern.condition(conditionFunc)
+        return CAEPattern.condition(
+            useCache = useCache,
+            useHandler = useHandler,
+            conditionFunc = conditionFunc
+        )
     }
 
     /**
      * action
      */
     fun action(
+        useCache: Boolean? = null,
+        useHandler: Boolean? = null,
         actionFunc: () -> Unit
     ): CAEPattern {
 
         TestLog.trace()
 
-        return CAEPattern.action(actionFunc)
+        return CAEPattern.condition(
+            useCache = useCache,
+            useHandler = useHandler,
+            conditionFunc = actionFunc
+        )
     }
 
     /**
      * expectation
      */
     fun expectation(
+        useCache: Boolean? = null,
+        useHandler: Boolean? = null,
         expectationFunc: () -> Unit
     ): CAEPattern {
 
         TestLog.trace()
 
-        return CAEPattern.expectation(expectationFunc)
+        return CAEPattern.condition(
+            useCache = useCache,
+            useHandler = useHandler,
+            conditionFunc = expectationFunc
+        )
     }
 
 }

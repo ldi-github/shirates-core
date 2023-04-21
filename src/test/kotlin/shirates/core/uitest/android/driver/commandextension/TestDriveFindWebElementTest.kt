@@ -18,7 +18,8 @@ class TestDriveFindWebElementTest : UITest() {
         scenario {
             case(1, "id") {
                 expectation {
-                    it.findWebElement("#android:id/title").getAttribute("text").thisIs("Network & internet")
+                    it.findWebElement("#com.android.settings:id/homepage_title").getAttribute("text").thisIs("Settings")
+                    it.findWebElement("#homepage_title").getAttribute("text").thisIs("Settings")
                 }
             }
             case(2, "className") {

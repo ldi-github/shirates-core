@@ -1,23 +1,39 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.driver.TestDrive
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestElement
-import shirates.core.driver.getTestElement
+import shirates.core.driver.*
+import shirates.core.logging.TestLog
+
+/**
+ * useHandler
+ */
+fun TestDrive.useHandler(func: () -> Unit): TestElement {
+
+    val original = testContext.enableIrregularHandler
+
+    try {
+        TestLog.info("useHandler(${TestLog.lines.count() + 1}) {")
+        testContext.enableIrregularHandler = true
+        func()
+    } finally {
+        testContext.enableIrregularHandler = original
+        TestLog.info("} useHandler(${TestLog.lines.count() + 1}) {")
+    }
+
+    return getTestElement()
+}
 
 /**
  * suppressHandler
  */
 fun TestDrive.suppressHandler(func: () -> Unit): TestElement {
 
-    val context = TestDriver.testContext
-    val original = context.enableIrregularHandler
+    val original = testContext.enableIrregularHandler
 
     try {
-        context.enableIrregularHandler = false
+        testContext.enableIrregularHandler = false
         func()
     } finally {
-        context.enableIrregularHandler = original
+        testContext.enableIrregularHandler = original
     }
 
     return getTestElement()

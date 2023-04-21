@@ -20,7 +20,7 @@ fun TestDrive.getTapTarget(
         .filter { it.bounds.includesPoint(x = x, y = y) }
         .sortedByDescending { it.bounds.area }
     if (expression != null) {
-        elms = elms.filterBySelector(Selector(expression))
+        elms = elms.filterBySelector(Selector(expression), safeElementOnly = true)
     }
 
     return elms.lastOrNull() ?: TestElement.emptyElement
@@ -169,7 +169,7 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = select(expression = expression)
+        val targetElement = select(expression = expression, safeElementOnly = true)
         val tapFunc = {
             silent {
                 e = targetElement.tap(holdSeconds = holdSeconds, tapMethod = tapMethod)
@@ -381,7 +381,7 @@ fun TestDrive.tapCenterOf(
     safeMode: Boolean = true
 ): TestElement {
 
-    val testElement = TestDriver.select(expression = expression)
+    val testElement = TestDriver.select(expression = expression, safeElementOnly = true)
 
     val command = "tapCenterOf"
     val message = message(id = command, subject = testElement.subject)

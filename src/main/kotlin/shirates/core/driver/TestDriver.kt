@@ -794,7 +794,8 @@ object TestDriver {
                 }
 
                 if (lastElement.selector != null) {
-                    val e = rootElement.findInDescendantsAndSelf(selector = lastElement.selector!!)
+                    val e =
+                        rootElement.findInDescendantsAndSelf(selector = lastElement.selector!!, safeElementOnly = true)
                     e.lastError = lastElement.lastError
                     if (e.isEmpty.not()) {
                         lastElement = e
@@ -855,6 +856,7 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
+        safeElementOnly: Boolean = true,
         log: Boolean = false
     ): TestElement {
 
@@ -871,7 +873,8 @@ object TestDriver {
                 scrollMaxCount = scrollMaxCount,
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
-                useCache = useCache
+                useCache = useCache,
+                safeElementOnly = safeElementOnly,
             )
         }
 
@@ -888,10 +891,15 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
+        safeElementOnly: Boolean = true
     ): TestElement {
 
         if (selector.isRelative) {
-            return TestElementCache.select(selector = selector, throwsException = false)
+            return TestElementCache.select(
+                selector = selector,
+                throwsException = false,
+                safeElementOnly = safeElementOnly
+            )
         }
         if (selector.isImageSelector) {
             throw TestDriverException(message(id = "imageSelectorNotSupported"))
@@ -908,7 +916,8 @@ object TestDriver {
         if (testContext.useCache) {
             selectedElement = TestElementCache.select(
                 selector = selector,
-                throwsException = false
+                throwsException = false,
+                safeElementOnly = safeElementOnly
             )
         } else {
             if (selector.relativeSelectors.any()) {
@@ -952,7 +961,11 @@ object TestDriver {
             val r = SyncUtility.doUntilTrue(
                 waitSeconds = waitSeconds
             ) {
-                val e = TestElementCache.select(selector = selector, throwsException = false)
+                val e = TestElementCache.select(
+                    selector = selector,
+                    throwsException = false,
+                    safeElementOnly = safeElementOnly
+                )
                 selectedElement = e
                 if (selector.isNegation) {
                     e.isEmpty
@@ -1126,21 +1139,16 @@ object TestDriver {
         durationSeconds: Double,
         startMarginRatio: Double,
         scrollMaxCount: Int,
+        safeElementOnly: Boolean = true,
     ): TestElement {
 
-        var e = TestElementCache.select(selector = selector, throwsException = false)
-        if (e.isSafe) {
-            it.syncCache()
-            e = TestElementCache.select(selector = selector, throwsException = false)
-            if (e.isSafe) {
-                lastElement = e
-                return lastElement
-            }
-        }
-
+        var e = TestElement()
         val actionFunc = {
-            e = TestElementCache.select(selector = selector, throwsException = false)
-            e.isSafe
+            e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
+            if (safeElementOnly)
+                e.isSafe
+            else
+                e.isFound
         }
 
         testDrive.doUntilScrollStop(
@@ -1150,12 +1158,6 @@ object TestDriver {
             startMarginRatio = startMarginRatio,
             actionFunc = actionFunc
         )
-
-        if (e.isEmpty) {
-            // Try select after scroll stops
-            it.syncCache()
-            e = TestElementCache.select(selector = selector, throwsException = false)
-        }
 
         return e
     }
@@ -1457,7 +1459,8 @@ object TestDriver {
      * isScreen
      */
     fun isScreen(
-        screenName: String
+        screenName: String,
+        safeElementOnly: Boolean = false,
     ): Boolean {
 
         if (TestMode.isNoLoadRun) {
@@ -1467,11 +1470,16 @@ object TestDriver {
         NicknameUtility.validateScreenName(screenName)
         val repo = ScreenRepository.get(screenName)
 
-        var r = TestDriveObject.canSelectAll(selectors = repo.identitySelectors)
+        var r = TestDriveObject.canSelectAll(selectors = repo.identitySelectors, safeElementOnly = safeElementOnly)
         if (r && repo.satelliteSelectors.any()) {
             fun hasAnySatellite(): Boolean {
                 for (expression in repo.satelliteExpressions) {
-                    if (TestDriveObject.canSelect(expression = expression, screenName = screenName)) {
+                    if (TestDriveObject.canSelect(
+                            expression = expression,
+                            screenName = screenName,
+                            safeElementOnly = safeElementOnly
+                        )
+                    ) {
                         return true
                     }
                 }
@@ -1631,10 +1639,10 @@ object TestDriver {
                 val width = size.width
                 val height = size.height
                 val xpath = "//*[@x='$x' and @y='$y' and @width='$width' and @height='$height']"
-                TestElementCache.select("xpath=$xpath")
+                TestElementCache.select("xpath=$xpath", safeElementOnly = true)
             } else {
                 sel.id = name
-                TestElementCache.select(selector = sel)
+                TestElementCache.select(selector = sel, safeElementOnly = true)
             }
         }
     }

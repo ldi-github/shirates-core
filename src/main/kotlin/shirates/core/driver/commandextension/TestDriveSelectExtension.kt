@@ -11,13 +11,14 @@ import shirates.core.logging.Message.message
  */
 fun TestDrive.filterElements(
     expression: String,
+    safeElementOnly: Boolean = true,
     useCache: Boolean = testContext.useCache
 ): List<TestElement> {
 
     if (useCache) {
         syncCache(force = true)
     }
-    return TestElementCache.filterElements(expression = expression)
+    return TestElementCache.filterElements(expression = expression, safeElementOnly = safeElementOnly)
 }
 
 /**
@@ -25,11 +26,13 @@ fun TestDrive.filterElements(
  */
 fun TestDrive.filterElements(
     selector: Selector,
+    safeElementOnly: Boolean = true,
     selectContext: TestElement = rootElement
 ): List<TestElement> {
 
     return TestElementCache.filterElements(
         selector = selector,
+        safeElementOnly = safeElementOnly,
         selectContext = selectContext
     )
 }
@@ -42,6 +45,7 @@ fun TestDrive.select(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
+    safeElementOnly: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -60,7 +64,8 @@ fun TestDrive.select(
             direction = direction,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
-            useCache = useCache
+            useCache = useCache,
+            safeElementOnly = safeElementOnly
         )
     }
     if (func != null) {
@@ -230,7 +235,8 @@ fun TestDrive.selectInScanResults(
             e = TestElementCache.select(
                 expression = expression,
                 throwsException = false,
-                selectContext = scanRoot.element
+                selectContext = scanRoot.element,
+                safeElementOnly = true
             )
             if (e.isEmpty.not()) {
                 return@execSelectCommand
@@ -257,7 +263,8 @@ internal fun TestDrive.canSelect(
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    waitSeconds: Double = 0.0
+    waitSeconds: Double = 0.0,
+    safeElementOnly: Boolean = true
 ): Boolean {
 
     val e = TestDriver.select(
@@ -268,7 +275,8 @@ internal fun TestDrive.canSelect(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         waitSeconds = waitSeconds,
-        throwsException = false
+        throwsException = false,
+        safeElementOnly = safeElementOnly
     )
 
     return e.isEmpty.not()
@@ -286,6 +294,7 @@ fun TestDrive.canSelect(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     screenName: String = TestDriver.currentScreen,
     waitSeconds: Double = 0.0,
+    safeElementOnly: Boolean = true,
     log: Boolean = false
 ): Boolean {
     val testElement = this.getTestElement()
@@ -301,7 +310,8 @@ fun TestDrive.canSelect(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            waitSeconds = waitSeconds
+            waitSeconds = waitSeconds,
+            safeElementOnly = safeElementOnly
         )
     }
     if (logLine != null) {
@@ -332,7 +342,8 @@ fun TestDrive.canSelectWithScrollDown(
             direction = ScrollDirection.Down,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollMaxCount = scrollMaxCount
+            scrollMaxCount = scrollMaxCount,
+            safeElementOnly = true
         )
     }
     if (logLine != null) {
@@ -363,7 +374,8 @@ fun TestDrive.canSelectWithScrollUp(
             direction = ScrollDirection.Up,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollMaxCount = scrollMaxCount
+            scrollMaxCount = scrollMaxCount,
+            safeElementOnly = true
         )
     }
     if (logLine != null) {
@@ -394,7 +406,8 @@ fun TestDrive.canSelectWithScrollRight(
             direction = ScrollDirection.Right,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollMaxCount = scrollMaxCount
+            scrollMaxCount = scrollMaxCount,
+            safeElementOnly = true
         )
     }
     if (logLine != null) {
@@ -425,7 +438,8 @@ fun TestDrive.canSelectWithScrollLeft(
             direction = ScrollDirection.Left,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollMaxCount = scrollMaxCount
+            scrollMaxCount = scrollMaxCount,
+            safeElementOnly = true
         )
     }
     if (logLine != null) {
@@ -494,6 +508,7 @@ fun TestDrive.canSelectAllInScanResults(
  */
 internal fun TestDrive.canSelectAll(
     selectors: Iterable<Selector>,
+    safeElementOnly: Boolean = true,
     log: Boolean = false
 ): Boolean {
     val testElement = this.getTestElement()
@@ -503,7 +518,7 @@ internal fun TestDrive.canSelectAll(
     val context = TestDriverCommandContext(testElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         if (testContext.useCache) {
-            foundAll = TestElementCache.canSelectAll(selectors = selectors)
+            foundAll = TestElementCache.canSelectAll(selectors = selectors, safeElementOnly = safeElementOnly)
         } else {
             foundAll = testDrive.canFindAllWebElement(selectors = selectors.toList().toTypedArray())
         }

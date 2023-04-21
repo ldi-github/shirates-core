@@ -163,19 +163,36 @@ class TestElementRelativeExtension_IosTest1 : UnitTest() {
     @Test
     fun preImage() {
 
-        // Arrange
-        val e = TestElementCache.select("100% battery power")
-        // Act
-        val image1 = e.select(":preImage()")
-        // Assert
-        assertThat(image1.name).isEqualTo("CAPTCHA Image")
-        assertThat(image1.selector.toString()).isEqualTo("<100% battery power>:preImage")
+        run {
+            // Arrange
+            val e = TestElementCache.select("100% battery power")
+            // Act
+            val image1 = e.select(":preImage()")
+            // Assert
+            assertThat(image1.label).isEqualTo("Dummy Image B")
+            assertThat(image1.selector.toString()).isEqualTo("<100% battery power>:preImage")
 
-        // Act
-        val image2 = image1.select(":preImage()")
-        // Assert
-        assertThat(image2.label).isEqualTo("Dummy Image B")
-        assertThat(image2.selector.toString()).isEqualTo("<100% battery power>:preImage(2)")
+            // Act
+            val image2 = image1.select(":preImage()")
+            // Assert
+            assertThat(image2.label).isEqualTo("Dummy Image1")
+            assertThat(image2.selector.toString()).isEqualTo("<100% battery power>:preImage(2)")
+        }
+        run {
+            // Arrange
+            val e = TestElementCache.select("100% battery power")
+            // Act
+            val image1 = e.select(":preImage()", safeElementOnly = false)
+            // Assert
+            assertThat(image1.name).isEqualTo("CAPTCHA Image")
+            assertThat(image1.selector.toString()).isEqualTo("<100% battery power>:preImage")
+
+            // Act
+            val image2 = image1.select(":preImage()", safeElementOnly = false)
+            // Assert
+            assertThat(image2.label).isEqualTo("Dummy Image B")
+            assertThat(image2.selector.toString()).isEqualTo("<100% battery power>:preImage(2)")
+        }
     }
 
     @Test

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.testContext
 import shirates.core.testcode.UITest
 import shirates.core.utility.time.StopWatch
 
@@ -128,5 +129,38 @@ class DirectAccessModeIos : UITest() {
                 }
             }
         }
+    }
+
+    @Test
+    @Order(50)
+    fun useCacheArgument() {
+
+        // useCache argument can be specified with these functions
+
+        printUseCache("testMethod")
+
+        scenario(useCache = true) {
+            printUseCache("scenario")
+
+            case(1, useCache = false) {
+                printUseCache("case")
+
+                condition(useCache = true) {
+                    printUseCache("condition")
+
+                }.action(useCache = false) {
+                    printUseCache("action")
+
+                }.expectation(useCache = true) {
+                    printUseCache("expectation")
+
+                }
+            }
+        }
+    }
+
+    private fun printUseCache(funcName: String) {
+
+        println("($funcName) testContext.useCache=${testContext.useCache}")
     }
 }

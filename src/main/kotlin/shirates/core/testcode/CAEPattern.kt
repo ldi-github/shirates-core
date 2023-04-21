@@ -1,7 +1,9 @@
 package shirates.core.testcode
 
 import shirates.core.driver.TestDriver
+import shirates.core.driver.commandextension.withContext
 import shirates.core.driver.testContext
+import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -34,6 +36,8 @@ object CAEPattern {
      * condition
      */
     fun condition(
+        useCache: Boolean? = null,
+        useHandler: Boolean? = null,
         conditionFunc: () -> Unit
     ): CAEPattern {
 
@@ -71,7 +75,12 @@ object CAEPattern {
             CodeExecutionContext.isInCondition = true
             TestLog.condition(message(funcName))
 
-            conditionFunc()
+            testDrive.withContext(
+                useCache = useCache,
+                useHandler = useHandler
+            ) {
+                conditionFunc()
+            }
 
             if (testContext.onCondition) {
                 TestDriver.autoScreenshot()
@@ -87,6 +96,8 @@ object CAEPattern {
      * action
      */
     fun action(
+        useCache: Boolean? = null,
+        useHandler: Boolean? = null,
         actionFunc: () -> Unit
     ): CAEPattern {
 
@@ -124,7 +135,12 @@ object CAEPattern {
             CodeExecutionContext.isInAction = true
             TestLog.action(message(funcName))
 
-            actionFunc()
+            testDrive.withContext(
+                useCache = useCache,
+                useHandler = useHandler
+            ) {
+                actionFunc()
+            }
 
             if (testContext.onAction) {
                 TestDriver.autoScreenshot()
@@ -140,6 +156,8 @@ object CAEPattern {
      * expectation
      */
     fun expectation(
+        useCache: Boolean? = null,
+        useHandler: Boolean? = null,
         expectationFunc: () -> Unit
     ): CAEPattern {
 
@@ -183,7 +201,12 @@ object CAEPattern {
                 TestDriver.autoScreenshot()
             }
 
-            expectationFunc()
+            testDrive.withContext(
+                useCache = useCache,
+                useHandler = useHandler
+            ) {
+                expectationFunc()
+            }
 
             if (testContext.onExpectation) {
                 TestDriver.autoScreenshot()

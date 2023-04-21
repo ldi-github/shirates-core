@@ -208,7 +208,11 @@ private fun getWebElements(
 
     testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
         webElements = when (filter.noun) {
-            "id" -> appiumDriver.findElements(By.id(filter.value))
+            "id" -> {
+                val fqid = Filter.getFullyQualifiedId(id = filter.value)
+                appiumDriver.findElements(By.id(fqid))
+            }
+
             "className" -> appiumDriver.findElements(By.className(filter.value))
             "literal" -> findElementsByXpath("//*[@$attrName='${filter.value}']")
             "text", "access", "value" -> when (filter.verb) {
