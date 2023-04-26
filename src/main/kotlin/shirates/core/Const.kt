@@ -22,6 +22,7 @@ object Const {
      * testrun properties
      */
     const val ENABLE_TEST_LIST = true
+    const val ENABLE_TEST_CLASS_LIST = true
     const val ENABLE_SPEC_REPORT = true
     const val MUST = true
     const val SHOULD = true

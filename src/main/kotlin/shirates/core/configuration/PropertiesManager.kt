@@ -300,6 +300,16 @@ object PropertiesManager {
         }
 
     /**
+     * enableTestClassList
+     */
+    val enableTestClassList: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableTestClassList")
+                ?: return Const.ENABLE_TEST_CLASS_LIST
+            return value == "true"
+        }
+
+    /**
      * enableSpecReport
      */
     val enableSpecReport: Boolean

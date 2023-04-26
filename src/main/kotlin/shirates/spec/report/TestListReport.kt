@@ -185,24 +185,26 @@ class TestListReport() {
     }
 
     /**
-     * outputFile
+     * outputXlsx
      */
-    fun outputFile(
+    fun outputXlsx(
         outputTestListPath: Path,
         withLock: Boolean = false
-    ) {
+    ): TestListReport {
         this.testListPath = outputTestListPath
 
         if (withLock) {
             lockFile(filePath = outputTestListPath) {
-                outputWithoutLock(outputTestListPath)
+                outputXlsxWithoutLock(outputTestListPath)
             }
         } else {
-            outputWithoutLock(outputTestListPath)
+            outputXlsxWithoutLock(outputTestListPath)
         }
+
+        return this
     }
 
-    private fun outputWithoutLock(
+    private fun outputXlsxWithoutLock(
         outputTestListPath: Path
     ) {
         this.testListPath = outputTestListPath
@@ -236,16 +238,16 @@ class TestListReport() {
     }
 
     /**
-     * outputFile
+     * outputXlsx
      */
-    fun outputFile(
+    fun outputXlsx(
         testConfigName: String,
         testClass: String,
         sheetName: String,
         noLoadRun: Boolean,
         testListPath: Path,
         withLock: Boolean = false
-    ) {
+    ): TestListReport {
         this.testListPath = testListPath
 
         this.testConfigName = testConfigName
@@ -255,11 +257,13 @@ class TestListReport() {
 
         if (withLock) {
             lockFile(filePath = testListPath) {
-                outputFile(outputTestListPath = testListPath)
+                outputXlsx(outputTestListPath = testListPath)
             }
         } else {
-            outputFile(outputTestListPath = testListPath)
+            outputXlsx(outputTestListPath = testListPath)
         }
+
+        return this
     }
 
     /**
@@ -269,12 +273,12 @@ class TestListReport() {
         sourceTestListPath: Path,
         outputTestListPath: Path,
         withLock: Boolean = false
-    ) {
+    ): TestListReport {
         val action = {
             val source = TestListReport().loadFileOnExist(sourceTestListPath)
             this.loadFileOnExist(testListPath = outputTestListPath)
                 .mergeTestListItems(source.testListItems)
-                .outputFile(
+                .outputXlsx(
                     testConfigName = source.testConfigName,
                     testClass = source.testClass,
                     sheetName = source.sheetName,
@@ -290,6 +294,8 @@ class TestListReport() {
         } else {
             action()
         }
+
+        return this
     }
 
     private fun getTestListItems(

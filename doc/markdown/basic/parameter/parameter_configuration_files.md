@@ -77,6 +77,7 @@ ios.profile=iPhone 13(15.5)
 #logLanguage=ja
 #enableSyncLog=false
 #enableTestList=false
+#enableTestClassList=false
 #enableSpecReport=false
 #enableInnerMacroLog=true
 #enableInnerCommandLog=true

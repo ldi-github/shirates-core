@@ -205,6 +205,7 @@ abstract class UITest : TestDrive {
     private fun prepareTestLog() {
 
         TestLog.enableTestList = PropertiesManager.enableTestList
+        TestLog.enableTestClassList = PropertiesManager.enableTestClassList
         TestLog.enableSpecReport = PropertiesManager.enableSpecReport
         TestLog.enableTrace = PropertiesManager.enableTrace
         TestLog.enableXmlSourceDump = PropertiesManager.enableXmlSourceDump
