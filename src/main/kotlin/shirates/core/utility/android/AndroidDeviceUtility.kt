@@ -486,7 +486,7 @@ object AndroidDeviceUtility {
      */
     fun reboot(
         udid: String,
-        timeoutSeconds: Double = 30.0,
+        timeoutSeconds: Double = Const.EMULATOR_REBOOT_WAIT_SECONDS,
         intervalSeconds: Double = 5.0,
         log: Boolean = PropertiesManager.enableShellExecLog,
     ): ShellUtility.ShellResult {
