@@ -14,7 +14,7 @@ class AdbUtilityTest {
     fun killServer() {
 
         // Act
-        AdbUtility.killServer(udid = UDID, log = true)
+        AdbUtility.killServer(log = true)
         // Assert
         val r = AdbUtility.ps(udid = UDID)
         assertThat(r).contains("adb: device")
@@ -25,7 +25,7 @@ class AdbUtilityTest {
     fun startServer() {
 
         // Act
-        val r = AdbUtility.startServer(udid = UDID, log = true)
+        val r = AdbUtility.startServer(log = true)
         println(r)
         // Assert
         val r2 = AdbUtility.ps(udid = UDID)
@@ -40,7 +40,7 @@ class AdbUtilityTest {
     fun restartServer() {
 
         // Act
-        val r = AdbUtility.restartServer(udid = UDID, log = true)
+        val r = AdbUtility.restartServer(log = true)
         println(r)
         // Assert
         val r2 = AdbUtility.ps(udid = UDID)
