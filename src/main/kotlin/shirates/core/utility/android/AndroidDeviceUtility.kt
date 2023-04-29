@@ -499,7 +499,8 @@ object AndroidDeviceUtility {
 
         WaitUtility.doUntilTrue(
             waitSeconds = timeoutSeconds,
-            intervalSeconds = intervalSeconds
+            intervalSeconds = intervalSeconds,
+            throwOnFinally = true
         ) {
             val deviceInfo = getAndroidDeviceInfoByUdid(udid)
             val found = deviceInfo != null
