@@ -50,6 +50,9 @@ object AndroidDeviceUtility {
                     if (emulatorPort != null) {
                         // Get process information (pid, cmd)
                         deviceInfo.pid = ProcessUtility.getPid(emulatorPort)?.toString() ?: ""
+                        if (deviceInfo.pid.isBlank()) {
+                            continue
+                        }
                         if (TestMode.isRunningOnWindows) {
                             val r = ShellUtility.executeCommand(
                                 "wmic",
@@ -492,30 +495,49 @@ object AndroidDeviceUtility {
     ): ShellUtility.ShellResult {
 
         val r = ShellUtility.executeCommand("adb", "-s", udid, "reboot", log = log)
-        Thread.sleep(10 * 1000)
+        if (r.hasError) throw r.error!!
 
-        WaitUtility.doUntilTrue(waitSeconds = timeoutSeconds, intervalSeconds = intervalSeconds) {
-            val psResult = AdbUtility.ps(udid = udid)
-            val deviceOffline = psResult == "adb: device offline"
-            TestLog.trace("deviceOffline=$deviceOffline")
-
-            deviceOffline.not()
+        WaitUtility.doUntilTrue(
+            waitSeconds = timeoutSeconds,
+            intervalSeconds = intervalSeconds
+        ) {
+            val deviceInfo = getAndroidDeviceInfoByUdid(udid)
+            val found = deviceInfo != null
+            if (found) {
+                TestLog.info("Device found. (udid=$udid)")
+            } else {
+                TestLog.info("Device not found. (udid=$udid)")
+            }
+            found
         }
-        WaitUtility.doUntilTrue(waitSeconds = timeoutSeconds, intervalSeconds = intervalSeconds) {
-            val psResult = AdbUtility.ps(udid = udid)
+        WaitUtility.doUntilTrue(
+            waitSeconds = Const.EMULATOR_BOOTANIMATION_WAIT_SECONDS,
+            intervalSeconds = intervalSeconds,
+            throwOnFinally = false
+        ) {
+            TestLog.info("Waiting bootanimation.", log = log)
+            val psResult = AdbUtility.ps(udid = udid, log = log)
             val bootanimation = psResult.contains("bootanimation")
-            TestLog.trace("bootanimation=$bootanimation")
+            TestLog.info("bootanimation=$bootanimation", log = log)
 
             bootanimation
         }
-        WaitUtility.doUntilTrue(waitSeconds = timeoutSeconds, intervalSeconds = intervalSeconds) {
-            val psResult = AdbUtility.ps(udid = udid)
+        WaitUtility.doUntilTrue(
+            waitSeconds = timeoutSeconds,
+            intervalSeconds = intervalSeconds,
+            throwOnFinally = false
+        ) {
+            TestLog.info("Waiting end of bootanimation.", log = log)
+            val psResult = AdbUtility.ps(udid = udid, log = log)
             val bootanimation = psResult.contains("bootanimation")
-            TestLog.trace("bootanimation=$bootanimation")
+            TestLog.info("bootanimation=$bootanimation", log = log)
 
-            bootanimation.not()
+            val breakLoop = bootanimation.not()
+            if (breakLoop) {
+                Thread.sleep(1000)
+            }
+            breakLoop
         }
-        Thread.sleep(1000)
 
         return r
     }

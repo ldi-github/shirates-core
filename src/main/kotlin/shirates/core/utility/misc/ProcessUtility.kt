@@ -11,16 +11,21 @@ object ProcessUtility {
      */
     fun getPid(port: Int): Int? {
 
-        if (TestMode.isRunningOnWindows) {
-            val r = ShellUtility.executeCommandCore("netstat", "-ano")
-            val line = r.resultString.split("\r\n")
-                .firstOrNull { it.contains("TCP") && it.contains("LISTEN") && it.contains(":$port") } ?: ""
-            val pid = line.split(" ").lastOrNull()?.toIntOrNull()
-            return pid
-        } else {
-            val r = ShellUtility.executeCommandCore("lsof", "-t", "-i:$port", "-sTCP:LISTEN")
-            val pid = r.resultString.trim().toIntOrNull()
-            return pid
+        try {
+            if (TestMode.isRunningOnWindows) {
+                val r = ShellUtility.executeCommandCore("netstat", "-ano")
+                val line = r.resultString.split("\r\n")
+                    .firstOrNull { it.contains("TCP") && it.contains("LISTEN") && it.contains(":$port") } ?: ""
+                val pid = line.split(" ").lastOrNull()?.toIntOrNull()
+                return pid
+            } else {
+                val r = ShellUtility.executeCommandCore("lsof", "-t", "-i:$port", "-sTCP:LISTEN")
+                val pid = r.resultString.trim().toIntOrNull()
+                return pid
+            }
+        } catch (t: Throwable) {
+            TestLog.warn(t.message!!)
+            throw t
         }
     }
 
@@ -33,14 +38,11 @@ object ProcessUtility {
 
         if (TestMode.isRunningOnWindows) {
             shellResult = ShellUtility.executeCommand("taskkill", "/pid", pid.toString(), "/F")
-            if (PropertiesManager.enableShellExecLog) {
-                TestLog.info(shellResult.resultString)
-            }
         } else {
             shellResult = ShellUtility.executeCommand("kill", "-9", pid.toString())
-            if (PropertiesManager.enableShellExecLog) {
-                TestLog.info(shellResult.resultString)
-            }
+        }
+        if (PropertiesManager.enableShellExecLog && shellResult.resultString.isNotBlank()) {
+            TestLog.info(shellResult.resultString)
         }
 
         return shellResult

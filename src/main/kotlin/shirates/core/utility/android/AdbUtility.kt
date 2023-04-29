@@ -8,9 +8,12 @@ object AdbUtility {
     /**
      * ps
      */
-    fun ps(udid: String): String {
+    fun ps(
+        udid: String,
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): String {
 
-        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "ps")
+        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "ps", log = log)
         return r.resultString
     }
 
