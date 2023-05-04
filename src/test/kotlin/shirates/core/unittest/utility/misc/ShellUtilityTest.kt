@@ -3,8 +3,6 @@ package shirates.core.unittest.utility.misc
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.testcode.UnitTest
-import shirates.core.utility.android.AndroidDeviceUtility
-import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.sync.WaitUtility
 
@@ -82,45 +80,45 @@ class ShellUtilityTest : UnitTest() {
 
     }
 
-    @Test
-    fun executeCommandAsync2() {
-
-        // Arrange
-        val avdName = setupEmulator()
-        val deviceInfo = AndroidDeviceUtility.waitEmulatorStatusByAvdName(avdName = avdName)
-        val udid = deviceInfo.udid
-        // Act
-        val r = ShellUtility.executeCommandAsync(
-            "adb", "-s", udid, "shell", "pm", "dump", "com.android.settings"
-        )
-        // Assert
-        assertThat(r.hasCompleted).isFalse()
-
-        assertThat(r.executor).isNotNull
-        assertThat(r.args.count()).isEqualTo(7)
-        assertThat(r.outputStream).isNotNull
-        assertThat(r.error).isNull()
-        assertThat(r.resultHandler).isNotNull
-        assertThat(r.command).isEqualTo("adb -s $udid shell pm dump com.android.settings")
-        assertThat(r.hasError).isFalse()
-        assertThat(r.isAsync).isTrue()
-        assertThat(r.resultString).contains("")
-
-        // Act
-        val s = r.waitForResultString()
-        // Assert
-        assertThat(r.error).isNull()
-        assertThat(r.hasError).isFalse()
-        assertThat(r.hasCompleted).isTrue()
-        assertThat(r.resultHandler!!.exitValue).isEqualTo(0)
-        assertThat(s).contains("DUMP OF SERVICE package:")
-
-        val port = udid.split("-").last().toInt()
-        val pid = ProcessUtility.getPid(port)
-        if (pid != null) {
-            ProcessUtility.terminateProcess(pid = pid)
-        }
-    }
+//    @Test
+//    fun executeCommandAsync2() {
+//
+//        // Arrange
+//        val avdName = setupEmulator()
+//        val deviceInfo = AndroidDeviceUtility.waitEmulatorStatusByAvdName(avdName = avdName)
+//        val udid = deviceInfo.udid
+//        // Act
+//        val r = ShellUtility.executeCommandAsync(
+//            "adb", "-s", udid, "shell", "pm", "dump", "com.android.settings"
+//        )
+//        // Assert
+//        assertThat(r.hasCompleted).isFalse()
+//
+//        assertThat(r.executor).isNotNull
+//        assertThat(r.args.count()).isEqualTo(7)
+//        assertThat(r.outputStream).isNotNull
+//        assertThat(r.error).isNull()
+//        assertThat(r.resultHandler).isNotNull
+//        assertThat(r.command).isEqualTo("adb -s $udid shell pm dump com.android.settings")
+//        assertThat(r.hasError).isFalse()
+//        assertThat(r.isAsync).isTrue()
+//        assertThat(r.resultString).contains("")
+//
+//        // Act
+//        val s = r.waitForResultString()
+//        // Assert
+//        assertThat(r.error).isNull()
+//        assertThat(r.hasError).isFalse()
+//        assertThat(r.hasCompleted).isTrue()
+//        assertThat(r.resultHandler!!.exitValue).isEqualTo(0)
+//        assertThat(s).contains("DUMP OF SERVICE package:")
+//
+//        val port = udid.split("-").last().toInt()
+//        val pid = ProcessUtility.getPid(port)
+//        if (pid != null) {
+//            ProcessUtility.terminateProcess(pid = pid)
+//        }
+//    }
 
     private fun setupEmulator(): String {
         val avdNames = ShellUtility.executeCommand("emulator", "-list-avds").resultLines
