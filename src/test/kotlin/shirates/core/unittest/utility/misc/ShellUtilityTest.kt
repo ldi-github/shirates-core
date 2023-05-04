@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.sync.WaitUtility
 
 class ShellUtilityTest : UnitTest() {
 
@@ -119,25 +118,25 @@ class ShellUtilityTest : UnitTest() {
 //            ProcessUtility.terminateProcess(pid = pid)
 //        }
 //    }
-
-    private fun setupEmulator(): String {
-        val avdNames = ShellUtility.executeCommand("emulator", "-list-avds").resultLines
-        if (avdNames.isEmpty()) {
-            throw IllegalStateException("No AVD found.")
-        }
-        val avdName = avdNames.first()
-
-        val devices = ShellUtility.executeCommand("adb", "devices", "-l").resultLines
-        if (devices.contains("emulator-").not()) {
-            /**
-             * Start emulator
-             */
-            ShellUtility.executeCommandAsync("emulator", "-avd", avdName)
-            WaitUtility.doUntilTrue {
-                val r = ShellUtility.executeCommand("adb", "devices").resultString
-                r.contains("emulator-")
-            }
-        }
-        return avdName
-    }
+//
+//    private fun setupEmulator(): String {
+//        val avdNames = ShellUtility.executeCommand("emulator", "-list-avds").resultLines
+//        if (avdNames.isEmpty()) {
+//            throw IllegalStateException("No AVD found.")
+//        }
+//        val avdName = avdNames.first()
+//
+//        val devices = ShellUtility.executeCommand("adb", "devices", "-l").resultLines
+//        if (devices.contains("emulator-").not()) {
+//            /**
+//             * Start emulator
+//             */
+//            ShellUtility.executeCommandAsync("emulator", "-avd", avdName)
+//            WaitUtility.doUntilTrue {
+//                val r = ShellUtility.executeCommand("adb", "devices").resultString
+//                r.contains("emulator-")
+//            }
+//        }
+//        return avdName
+//    }
 }
