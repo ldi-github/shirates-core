@@ -25,7 +25,7 @@ import shirates.core.testcode.UITest
 class CAEPatternTest : UITest() {
 
     @Test
-    @Order(0)
+    @Order(10)
     fun testLog_isIn() {
 
         assertThat(CodeExecutionContext.isInScenario).isFalse()
@@ -75,7 +75,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(0)
+    @Order(20)
     fun logLine_isIn() {
 
         TestLog.info("before scenario")
@@ -144,7 +144,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(5)
+    @Order(30)
     fun validateCalling() {
 
         scenario {
@@ -227,13 +227,13 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(10)
+    @Order(40)
     fun noScenario() {
 
     }
 
     @Test
-    @Order(20)
+    @Order(50)
     fun multipleScenarioInTestFunction() {
 
         scenario {
@@ -249,7 +249,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(30)
+    @Order(60)
     fun caseOutOfScenario() {
 
         assertThatThrownBy {
@@ -261,7 +261,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(40)
+    @Order(70)
     fun noTestResult() {
 
         TestLog.clear()
@@ -288,7 +288,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(50)
+    @Order(80)
     fun noTestResult2() {
 
         TestLog.clear()
@@ -314,7 +314,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(60)
+    @Order(90)
     @DisplayName("OK test")
     fun okTest() {
 
@@ -354,7 +354,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(70)
+    @Order(100)
     @DisplayName("NG test")
     fun ngTest() {
 
@@ -396,7 +396,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(80)
+    @Order(110)
     @DisplayName("SKIP test")
     fun skipTest() {
 
@@ -440,7 +440,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(90)
+    @Order(120)
     @DisplayName("NOTIMPL test")
     fun notimplTest() {
 
@@ -491,7 +491,7 @@ class CAEPatternTest : UITest() {
     }
 
     @Test
-    @Order(100)
+    @Order(130)
     @DisplayName("ExpectationNotImplemented test")
     fun expectationNotImplementedTest() {
 
