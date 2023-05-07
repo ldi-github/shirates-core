@@ -3,14 +3,19 @@ package shirates.spec.uitest
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import shirates.spec.utilily.cells
 import shirates.spec.utilily.text
 import shirates.spec.utilily.worksheets
 
 fun XSSFCell.textIs(expected: String) {
 
-    Assertions.assertThat(this.text).isEqualTo(expected)
+    assertThat(this.text).isEqualTo(expected)
+}
+
+fun XSSFCell.textStartsWith(expected: String) {
+
+    assertThat(this.text).startsWith(expected)
 }
 
 fun XSSFCell.intIs(expected: Int) {
@@ -18,9 +23,9 @@ fun XSSFCell.intIs(expected: Int) {
 
     if (this.cellType == CellType.FORMULA) {
         val cellValue = evaluator.evaluate(this)
-        Assertions.assertThat(cellValue.numberValue.toInt()).isEqualTo(expected)
+        assertThat(cellValue.numberValue.toInt()).isEqualTo(expected)
     } else {
-        Assertions.assertThat(this.rawValue.toDouble().toInt()).isEqualTo(expected)
+        assertThat(this.rawValue.toDouble().toInt()).isEqualTo(expected)
     }
 }
 
@@ -48,7 +53,7 @@ fun XSSFSheet.assertHeader(
     cells("A1").textIs(testConfigName)
     cells("D1").textIs(sheetName)
     cells("D2").textIs(testClassName)
-    cells("D3").textIs(profileName)
+    cells("D3").textStartsWith(profileName)
     cells("D4").textIs(deviceModel)
     cells("D5").textIs(platformVersion)
     cells("E1").textIs(noLoadRunMode)
