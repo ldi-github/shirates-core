@@ -159,7 +159,7 @@ class SpecReportNoLoadRunTest : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReportNoLoadRunTest",
-            profileName = "Android 12",
+            profileName = "Pixel 3a(Android 12)",
             deviceModel = "",
             platformVersion = "",
             noLoadRunMode = "No-Load-Run Mode",
