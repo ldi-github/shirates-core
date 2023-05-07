@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.basic
+package shirates.core.uitest.android.basic.others
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
