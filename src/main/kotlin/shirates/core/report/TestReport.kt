@@ -183,10 +183,12 @@ class TestReport(
         sb.appendLine("    </div>")
         sb.appendLine("    <div id='separator'></div>")
         sb.appendLine("    <div class='image-gallery'>")
-        screenshotLines.forEach {
+        val screenshotFiles = screenshotLines.map { it.lastScreenshot }.sortedBy { it }.distinct()
+        screenshotFiles.forEach { screenshotFile ->
             sb.appendLine("        <div class='image-frame'>")
-            sb.appendLine("            <div class='image-title'><span class='image-title-text'>${htmlEscape(it.lastScreenshot)}</span></div>")
-            sb.appendLine("            <img src='${it.lastScreenshot.replace("#", "%23")}' class='screenshot'>")
+            val text = htmlEscape(screenshotFile)
+            sb.appendLine("            <div class='image-title'><span class='image-title-text'>$text</span></div>")
+            sb.appendLine("            <img src='${screenshotFile.replace("#", "%23")}' class='screenshot'>")
             sb.appendLine("        </div>")
         }
         sb.appendLine("    </div>")

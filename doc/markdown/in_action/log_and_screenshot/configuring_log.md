@@ -8,6 +8,7 @@ See also [parameters](../../basic/parameter/parameters.md).
 #logLanguage=ja
 #enableSyncLog=false
 #enableTestList=false
+#enableTestClassList=false
 #enableSpecReport=false
 #enableInnerMacroLog=true
 #enableInnerCommandLog=true

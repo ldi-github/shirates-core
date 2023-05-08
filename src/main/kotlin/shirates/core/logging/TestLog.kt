@@ -12,6 +12,7 @@ import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.format
 import shirates.core.utility.toPath
+import shirates.spec.report.TestClassListReport
 import shirates.spec.report.TestListReport
 import shirates.spec.report.models.SpecReportExecutor
 import java.io.File
@@ -126,6 +127,11 @@ object TestLog {
      * enableTestList
      */
     var enableTestList: Boolean = false
+
+    /**
+     * enableTestClassList
+     */
+    var enableTestClassList: Boolean = false
 
     /**
      * enableSpecReport
@@ -1520,15 +1526,12 @@ object TestLog {
             return
         }
 
-        /**
-         * Output TestList
-         */
-        val outputPath = getTestListPath()
-        lockFile(outputPath) {
+        val testListPath = getTestListPath()
+        lockFile(testListPath) {
             TestListReport()
-                .loadFileOnExist(testListPath = it)
+                .loadFileOnExist(testListPath = testListPath)
                 .mergeLogLines(this.lines)
-                .outputFile(outputTestListPath = it)
+                .outputXlsx(outputTestListPath = testListPath)
         }
 
         /**
@@ -1539,12 +1542,46 @@ object TestLog {
             if (Files.exists(testListDir.toPath()).not()) {
                 throw FileNotFoundException(message(id = "testListDirNotFound", file = testListDir))
             }
-            val targetPath = testListDir.toPath().resolve(outputPath.fileName)
+            val targetPath = testListDir.toPath().resolve(testListPath.fileName)
             lockFile(targetPath) {
                 TestListReport()
-                    .mergeOutput(sourceTestListPath = outputPath, outputTestListPath = targetPath)
+                    .mergeOutput(sourceTestListPath = testListPath, outputTestListPath = targetPath)
             }
+
         }
+
+    }
+
+    /**
+     * outputTestClassList
+     */
+    fun outputTestClassList() {
+
+        if (enableTestClassList.not()) {
+            return
+        }
+
+        val testClassListPath = getTestClassListPath()
+        TestClassListReport()
+            .loadFileOnExist(testClassListPath = testClassListPath)
+            .merge(currentTestClass!!.name)
+            .output(outputTestClassListPath = testClassListPath)
+
+        /**
+         * Copy the TestClassList to testListDir and merge if testListDir is defined.
+         */
+        val testListDir = PropertiesManager.testListDir
+        if (testListDir.isNotBlank()) {
+            if (Files.exists(testListDir.toPath()).not()) {
+                throw FileNotFoundException(message(id = "testListDirNotFound", file = testListDir))
+            }
+            val targetPath = testListDir.toPath().resolve(testClassListPath.fileName)
+            TestClassListReport()
+                .loadFileOnExist(testClassListPath = targetPath)
+                .merge(line = currentTestClass!!.name)
+                .output(outputTestClassListPath = targetPath)
+        }
+
     }
 
     /**
@@ -1615,6 +1652,14 @@ object TestLog {
     fun getTestListPath(): Path {
 
         return getTestListDirPath().resolve("TestList_${testConfigName}.xlsx")
+    }
+
+    /**
+     * getTestClassListPath
+     */
+    fun getTestClassListPath(): Path {
+
+        return getTestListDirPath().parent.resolve("TestClassList.txt")
     }
 
     /**

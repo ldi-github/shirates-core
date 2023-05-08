@@ -20,7 +20,13 @@ class TestElementImageExtensionTest2 : UITest() {
     @Order(10)
     fun setupImage() {
 
-        TestSetupHelper.setupImageCalendarWeekScreen()
+        scenario {
+            case(1) {
+                condition {
+                    TestSetupHelper.setupImageCalendarWeekScreen()
+                }
+            }
+        }
     }
 
     @Test

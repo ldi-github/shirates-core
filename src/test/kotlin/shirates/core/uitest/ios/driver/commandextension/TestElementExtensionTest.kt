@@ -1,6 +1,7 @@
 package shirates.core.uitest.ios.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.WebElement
 import shirates.core.configuration.Testrun
@@ -14,6 +15,7 @@ import shirates.core.testcode.Want
 class TestElementExtensionTest : UITest() {
 
     @Test
+    @Order(10)
     fun value_clear() {
 
         scenario {
@@ -41,6 +43,7 @@ class TestElementExtensionTest : UITest() {
     }
 
     @Test
+    @Order(20)
     fun getWebElement() {
 
         scenario {
@@ -70,6 +73,7 @@ class TestElementExtensionTest : UITest() {
     }
 
     @Test
+    @Order(30)
     fun scrollFrame() {
 
         scenario {
@@ -96,6 +100,7 @@ class TestElementExtensionTest : UITest() {
     }
 
     @Test
+    @Order(40)
     fun sendKeys() {
 
         scenario {
@@ -115,6 +120,7 @@ class TestElementExtensionTest : UITest() {
     }
 
     @Test
+    @Order(50)
     fun getAbsoluteXpath() {
 
         scenario {
@@ -131,6 +137,7 @@ class TestElementExtensionTest : UITest() {
     }
 
     @Test
+    @Order(60)
     fun getUniqueXpath() {
 
         scenario {

@@ -2,16 +2,18 @@ package shirates.core.utility.android
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.sync.WaitUtility
 
 object AdbUtility {
 
     /**
      * ps
      */
-    fun ps(udid: String): String {
+    fun ps(
+        udid: String,
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): String {
 
-        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "ps")
+        val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "ps", log = log)
         return r.resultString
     }
 
@@ -19,28 +21,21 @@ object AdbUtility {
      * killServer
      */
     fun killServer(
-        udid: String,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 
-        return ShellUtility.executeCommand("adb", "-s", udid, "kill-server", log = log)
+        return ShellUtility.executeCommand("adb", "kill-server", log = log)
     }
 
     /**
      * startServer
      */
     fun startServer(
-        udid: String,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 
-        val r = ShellUtility.executeCommand("adb", "-s", udid, "start-server", log = log)
-
-        WaitUtility.doUntilTrue {
-            val p = AdbUtility.ps(udid = udid)
-            p.startsWith("USER")
-        }
-
+        val r = ShellUtility.executeCommand("adb", "start-server", log = log)
+        Thread.sleep(1000)
         return r
     }
 
@@ -48,12 +43,11 @@ object AdbUtility {
      * restartServer
      */
     fun restartServer(
-        udid: String,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 
-        killServer(udid = udid, log = log)
-        return startServer(udid = udid, log = log)
+        killServer(log = log)
+        return startServer(log = log)
     }
 
 }

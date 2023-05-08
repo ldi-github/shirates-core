@@ -456,6 +456,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableTestClassList() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableTestClassList).isEqualTo(Const.ENABLE_TEST_CLASS_LIST)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_TEST_LIST.not()
+            PropertiesManager.setPropertyValue("enableTestClassList", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableTestClassList).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableSpecReport() {
 
         run {

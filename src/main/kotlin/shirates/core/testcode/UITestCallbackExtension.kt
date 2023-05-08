@@ -271,6 +271,9 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         // TestList
         TestLog.outputTestList()
 
+        // TestClassList
+        TestLog.outputTestClassList()
+
         // close
         val appiumClose = AppiumServerManager.appiumClose
         if (appiumClose) {

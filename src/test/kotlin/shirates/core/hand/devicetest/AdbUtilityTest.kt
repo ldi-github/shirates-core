@@ -10,43 +10,51 @@ class AdbUtilityTest {
     val UDID = "emulator-5554"
 
     @Test
-    @Order(1)
-    fun killServer() {
+    @Order(10)
+    fun startServer_killServer_restartServer() {
 
-        // Act
-        AdbUtility.killServer(udid = UDID, log = true)
-        // Assert
-        val r = AdbUtility.ps(udid = UDID)
-        assertThat(r).contains("adb: device")
+        run {
+            // Act
+            val r = AdbUtility.startServer(log = true)
+            println(r)
+            // Assert
+            val r2 = AdbUtility.ps(udid = UDID)
+            println(r2)
+            val header = r2.split(System.lineSeparator()).first()
+            assertThat(header).startsWith("USER")
+            assertThat(header).contains("PID")
+        }
+        run {
+            // Act
+            val r = AdbUtility.killServer(log = true)
+            println(r)
+            // Assert
+            val r2 = AdbUtility.ps(udid = UDID)
+            println(r2)
+            assertThat(r2).contains("* daemon not running; starting now at tcp:5037")
+
+            // Arrange
+            Thread.sleep(1000)  // daemon restarts
+            // Assert
+            val r3 = AdbUtility.ps(udid = UDID)
+            println(r3)
+            val header = r3.split(System.lineSeparator()).first()
+            assertThat(header).startsWith("USER")
+            assertThat(header).contains("PID")
+        }
+        run {
+            // Arrange
+            AdbUtility.startServer(log = true)
+            // Act
+            val r = AdbUtility.restartServer(log = true)
+            println(r)
+            // Assert
+            val r2 = AdbUtility.ps(udid = UDID)
+            println(r2)
+            val header = r2.split(System.lineSeparator()).first()
+            assertThat(header).startsWith("USER")
+            assertThat(header).contains("PID")
+        }
     }
 
-    @Test
-    @Order(2)
-    fun startServer() {
-
-        // Act
-        val r = AdbUtility.startServer(udid = UDID, log = true)
-        println(r)
-        // Assert
-        val r2 = AdbUtility.ps(udid = UDID)
-        println(r2)
-        val header = r2.split(System.lineSeparator()).first()
-        assertThat(header).startsWith("USER")
-        assertThat(header).contains("PID")
-    }
-
-    @Test
-    @Order(3)
-    fun restartServer() {
-
-        // Act
-        val r = AdbUtility.restartServer(udid = UDID, log = true)
-        println(r)
-        // Assert
-        val r2 = AdbUtility.ps(udid = UDID)
-        println(r2)
-        val header = r2.split(System.lineSeparator()).first()
-        assertThat(header).startsWith("USER")
-        assertThat(header).contains("PID")
-    }
 }

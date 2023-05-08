@@ -205,6 +205,7 @@ abstract class UITest : TestDrive {
     private fun prepareTestLog() {
 
         TestLog.enableTestList = PropertiesManager.enableTestList
+        TestLog.enableTestClassList = PropertiesManager.enableTestClassList
         TestLog.enableSpecReport = PropertiesManager.enableSpecReport
         TestLog.enableTrace = PropertiesManager.enableTrace
         TestLog.enableXmlSourceDump = PropertiesManager.enableXmlSourceDump
@@ -822,10 +823,10 @@ abstract class UITest : TestDrive {
 
         TestLog.trace()
 
-        return CAEPattern.condition(
+        return CAEPattern.action(
             useCache = useCache,
             useHandler = useHandler,
-            conditionFunc = actionFunc
+            actionFunc = actionFunc
         )
     }
 
@@ -840,10 +841,10 @@ abstract class UITest : TestDrive {
 
         TestLog.trace()
 
-        return CAEPattern.condition(
+        return CAEPattern.expectation(
             useCache = useCache,
             useHandler = useHandler,
-            conditionFunc = expectationFunc
+            expectationFunc = expectationFunc
         )
     }
 

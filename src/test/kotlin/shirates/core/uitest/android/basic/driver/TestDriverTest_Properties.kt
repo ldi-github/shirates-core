@@ -1,9 +1,10 @@
-package shirates.core.uitest.android.basic
+package shirates.core.uitest.android.basic.driver
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.testContext
 import shirates.core.testcode.UITest
 
@@ -14,16 +15,20 @@ class TestDriverTest_Properties : UITest() {
     @DisplayName("shortWaitSeconds")
     fun shortWaitSeconds() {
 
-        // Arrange
         val original = testContext.shortWaitSeconds
-        // Act, Assert
-        assertThat(original).isEqualTo(2.1)
 
-        // Act, Assert
         try {
-            testContext.shortWaitSeconds = 1.0
-            val a1 = testContext.shortWaitSeconds
-            assertThat(a1).isEqualTo(1.0)
+            scenario(launchApp = false) {
+                case(1) {
+                    condition {
+                        original.thisIs(2.1)
+                    }.action {
+                        testContext.shortWaitSeconds = 1.0
+                    }.expectation {
+                        assertThat(testContext.shortWaitSeconds).isEqualTo(1.0)
+                    }
+                }
+            }
         } finally {
             testContext.shortWaitSeconds = original
         }
@@ -33,14 +38,18 @@ class TestDriverTest_Properties : UITest() {
     @DisplayName("retryMaxCount")
     fun retryMaxCount() {
 
-        // Arrange
         val original = testContext.retryMaxCount
+
         try {
-            // Act
-            testContext.retryMaxCount = 5
-            val actual = testContext.retryMaxCount
-            // Assert
-            assertThat(actual).isEqualTo(5)
+            scenario(launchApp = false) {
+                case(1) {
+                    action {
+                        testContext.retryMaxCount = 5
+                    }.expectation {
+                        assertThat(testContext.retryMaxCount).isEqualTo(5)
+                    }
+                }
+            }
         } finally {
             testContext.retryMaxCount = original
         }

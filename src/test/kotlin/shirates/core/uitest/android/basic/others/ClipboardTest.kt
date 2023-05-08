@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.basic
+package shirates.core.uitest.android.basic.others
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test

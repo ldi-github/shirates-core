@@ -3,6 +3,7 @@ package experiment
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.utility.android.AndroidDeviceUtility
@@ -26,5 +27,11 @@ class TestDriverAndroidUdidTest : UITest() {
 
         val udidLine = TestLog.lines.firstOrNull() { it.message == "udid: emulator-5556" }
         assertThat(udidLine).isNotNull()
+    }
+
+    @Test
+    fun reboot() {
+
+        AndroidDeviceUtility.reboot(testProfile.udid, log = true)
     }
 }

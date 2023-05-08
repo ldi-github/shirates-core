@@ -68,31 +68,31 @@ class RetryUtility {
                 return context
             }
 
-            if (context.retryMaxCount > 0) {
-                for (i in 1..context.retryMaxCount) {
-                    context.retryCount = i
-                    if (stopWatch.elapsedSeconds > timeoutSeconds) {
-                        return context
-                    }
+            /**
+             * Retrying
+             */
+            for (i in 1..context.retryMaxCount) {
+                context.retryCount = i
 
-                    if (context.retryPredicate(context)) {
-                        context.lastException = context.exception
-                        context.exception = null
-                        Thread.sleep(intervalMilliseconds)
-                        TestLog.info("Retrying($i) retryIntervalSecond=${context.retryIntervalSeconds}")
+                val retryRequired = context.retryPredicate(context)
+                if (retryRequired.not()) {
+                    break
+                }
 
-                        context.onBeforeRetry(context)
-                        execute()
+                context.lastException = context.exception
+                context.exception = null
+                Thread.sleep(intervalMilliseconds)
+                TestLog.info("Retrying($i) retryIntervalSecond=${context.retryIntervalSeconds}")
 
-                        if (context.exception == null) {
-                            return context
-                        }
-                    } else {
-                        if (i > 1) {
-                            TestLog.info("Retry stopped.")
-                        }
-                        break
-                    }
+                context.onBeforeRetry(context)
+                execute()
+
+                if (context.exception == null) {
+                    return context
+                }
+                if (stopWatch.elapsedSeconds > timeoutSeconds) {
+                    TestLog.info("Timeout in retrying. (${stopWatch.elapsedSeconds} > $timeoutSeconds)")
+                    return context
                 }
             }
 

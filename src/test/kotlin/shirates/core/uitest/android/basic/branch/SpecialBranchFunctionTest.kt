@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.basic
+package shirates.core.uitest.android.basic.branch
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -7,17 +7,20 @@ import shirates.core.driver.branchextension.specialTag
 import shirates.core.driver.commandextension.output
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.driver.testProfile
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
 @Want
-@Testrun("unitTestConfig/android/androidSettings/testrun.properties", profile = "SpecialTagTest1")
+@Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecialBranchFunctionTest : UITest() {
 
     @Test
     fun specialTagTest1() {
 
         scenario {
+            testProfile.specialTags = "Device1, Device2"
+
             case(1, "Device1 and Device2 matches") {
                 // Arrange
                 var device1Called = false

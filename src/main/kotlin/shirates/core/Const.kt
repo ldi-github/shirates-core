@@ -22,6 +22,7 @@ object Const {
      * testrun properties
      */
     const val ENABLE_TEST_LIST = true
+    const val ENABLE_TEST_CLASS_LIST = true
     const val ENABLE_SPEC_REPORT = true
     const val MUST = true
     const val SHOULD = true
@@ -82,7 +83,7 @@ object Const {
     const val MANUAL_SCREENSHOT = true
 
     // App operation
-    const val RETRY_MAX_COUNT: Long = 1
+    const val RETRY_MAX_COUNT: Long = 2
     const val RETRY_TIMEOUT_SECONDS: Double = 15.0
     const val RETRY_INTERVAL_SECONDS: Double = 2.0
     const val SHORT_WAIT_SECONDS = 1.5
@@ -112,6 +113,8 @@ object Const {
     internal const val WAIT_UTILITY_WAIT_SECONDS: Double = 30.0
     internal const val WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
     internal const val SHELL_RESULT_WAIT_FOR_SECONDS: Double = 30.0
+    internal const val EMULATOR_REBOOT_WAIT_SECONDS: Double = 60.0
+    internal const val EMULATOR_BOOTANIMATION_WAIT_SECONDS: Double = 15.0
     internal const val EMULATOR_SHUTDOWN_WAIT_SECONDS: Double = 20.0
 
     /**

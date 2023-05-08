@@ -572,26 +572,61 @@ object TestDriver {
         return retryPredicate
     }
 
-    private fun restartAndroid(profile: TestProfile, terminateEmulatorProcess: Boolean) {
+    private fun restartAndroid(
+        profile: TestProfile,
+        terminateEmulatorProcess: Boolean
+    ) {
 
         // Restart device
-        if (profile.udid.isNotBlank()) {
-            TestLog.info("Rebooting Android device.")
-            if (terminateEmulatorProcess) {
-                val pid = ProcessUtility.getPid(port = profile.udid.removePrefix("emulator-").toInt())!!
-                ProcessUtility.terminateProcess(pid = pid)
-                AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
-            } else {
-                AndroidDeviceUtility.reboot(udid = profile.udid)
-            }
-        } else {
-            TestLog.info("Starting Android device")
-            AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
-        }
+        restartAndroidDevice(profile = profile, terminateEmulatorProcess = terminateEmulatorProcess)
 
         // Restart Appium Server
         TestLog.info("Restarting AppiumServer.")
         AppiumServerManager.restartAppiumProcess()
+    }
+
+    private fun restartAndroidDevice(profile: TestProfile, terminateEmulatorProcess: Boolean) {
+
+        TestLog.info("profile=${profile.profileName}")
+        TestLog.info("terminateEmulatorProcess=$terminateEmulatorProcess")
+
+        if (profile.udid.isBlank()) {
+            TestLog.info("Starting Android device. (${profile.profileName})")
+            AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
+            return
+        }
+
+        val pid = run {
+            val port = profile.udid.removePrefix("emulator-").toIntOrNull()
+            if (port == null) {
+                TestLog.warn("Could not get port number. (udid=${profile.udid})")
+                null
+            } else {
+                ProcessUtility.getPid(port = port)
+            }
+        }
+        TestLog.info("pid=$pid")
+
+        if (terminateEmulatorProcess && pid != null) {
+            TestLog.info("Terminating Android device. (pid=$pid)")
+            ProcessUtility.terminateProcess(pid = pid)
+        }
+        if (terminateEmulatorProcess || pid == null) {
+            TestLog.info("Starting Android device. (${profile.profileName})")
+            AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
+        } else {
+            TestLog.info("Rebooting Android device. (${profile.udid})")
+            try {
+                AndroidDeviceUtility.reboot(udid = profile.udid)
+            } catch (t: Throwable) {
+                if (t.message!!.contains("device offline")) {
+                    AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
+                } else {
+                    throw TestDriverException("Failed rebooting Android device. ($t)", cause = t)
+                }
+            }
+        }
+
     }
 
     private fun restartIos(profile: TestProfile) {
@@ -620,11 +655,8 @@ object TestDriver {
                 // socket hang up
                 // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
 
-                if (context.retryCount == context.retryMaxCount) {
-                    restartAndroid(profile = profile, terminateEmulatorProcess = true)
-                } else {
-                    restartAndroid(profile = profile, terminateEmulatorProcess = false)
-                }
+                val terminateEmulatorProcess = (context.retryCount == context.retryMaxCount)
+                restartAndroid(profile = profile, terminateEmulatorProcess = terminateEmulatorProcess)
             } else if (isiOS) {
                 val udid = initialCapabilities["udid"] ?: profile.udid
                 if (udid.isBlank()) {
