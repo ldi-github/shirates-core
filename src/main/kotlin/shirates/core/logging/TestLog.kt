@@ -128,6 +128,9 @@ object TestLog {
      */
     var enableTestList: Boolean = false
 
+    /**
+     * enableTestClassList
+     */
     var enableTestClassList: Boolean = false
 
     /**
