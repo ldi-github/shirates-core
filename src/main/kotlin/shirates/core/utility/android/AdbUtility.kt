@@ -34,7 +34,9 @@ object AdbUtility {
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
 
-        return ShellUtility.executeCommand("adb", "start-server", log = log)
+        val r = ShellUtility.executeCommand("adb", "start-server", log = log)
+        Thread.sleep(1000)
+        return r
     }
 
     /**
