@@ -25,13 +25,14 @@ internal fun TestDriveObjectAndroid.launchAndroidApp(
         throw IllegalStateException("packageName=$packageNameOrActivityName")
     }
 
+    val packageName = packageNameOrActivityName.split("/")[0]
     val activityName =
         if (packageNameOrActivityName.contains("/")) packageNameOrActivityName
         else getMainActivity(udid = udid, packageName = packageNameOrActivityName)
     val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", activityName, log = log)
 
     WaitUtility.doUntilTrue {
-        isAndroidAppRunning(udid = udid, packageName = packageNameOrActivityName)
+        isAndroidAppRunning(udid = udid, packageName = packageName)
     }
 
     return r
