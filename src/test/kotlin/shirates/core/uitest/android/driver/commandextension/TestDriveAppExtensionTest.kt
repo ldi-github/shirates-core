@@ -181,46 +181,46 @@ class TestDriveAppExtensionTest : UITest() {
                     s1.thisIs("com.google.android.youtube/com.google.android.apps.youtube.app.watchwhile.WatchWhileActivity")
                 }
             }
-            case(9) {
-                condition {
-                    checkInstalled("com.android.camera2")
-                }.action {
-                    s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.camera2")
-                }.expectation {
-                    s1.thisIs("com.android.camera2/com.android.camera.CameraLauncher")
+            if (isAppInstalled("com.android.camera2")) {
+                case(9) {
+                    action {
+                        s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.camera2")
+                    }.expectation {
+                        s1.thisIs("com.android.camera2/com.android.camera.CameraLauncher")
+                    }
                 }
             }
-            case(10) {
-                condition {
-                    checkInstalled("com.google.android.apps.docs")
-                }.action {
-                    s1 = TestDriveObjectAndroid.getMainActivity(
-                        udid = udid,
-                        packageName = "com.google.android.apps.docs"
-                    )
-                }.expectation {
-                    s1.thisIs("com.google.android.apps.docs/.app.NewMainProxyActivity")
+            if (isAppInstalled("com.google.android.apps.docs")) {
+                case(10) {
+                    action {
+                        s1 = TestDriveObjectAndroid.getMainActivity(
+                            udid = udid,
+                            packageName = "com.google.android.apps.docs"
+                        )
+                    }.expectation {
+                        s1.thisIs("com.google.android.apps.docs/.app.NewMainProxyActivity")
+                    }
                 }
             }
-            case(11) {
-                condition {
-                    checkInstalled("com.android.dialer")
-                }.action {
-                    s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.dialer")
-                }.expectation {
-                    s1.thisIs("com.android.dialer/.main.impl.MainActivity")
+            if (isAppInstalled("com.android.dialer")) {
+                case(11) {
+                    action {
+                        s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.dialer")
+                    }.expectation {
+                        s1.thisIs("com.android.dialer/.main.impl.MainActivity")
+                    }
                 }
             }
-            case(12) {
-                condition {
-                    checkInstalled("com.google.android.apps.youtube.music")
-                }.action {
-                    s1 = TestDriveObjectAndroid.getMainActivity(
-                        udid = udid,
-                        packageName = "com.google.android.apps.youtube.music"
-                    )
-                }.expectation {
-                    s1.thisIs("com.google.android.apps.youtube.music/.activities.MusicActivity")
+            if (isAppInstalled("com.google.android.apps.youtube.music")) {
+                case(12) {
+                    action {
+                        s1 = TestDriveObjectAndroid.getMainActivity(
+                            udid = udid,
+                            packageName = "com.google.android.apps.youtube.music"
+                        )
+                    }.expectation {
+                        s1.thisIs("com.google.android.apps.youtube.music/.activities.MusicActivity")
+                    }
                 }
             }
         }
