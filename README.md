@@ -8,6 +8,10 @@
 
 [https://github.com/ldi-github/shirates-core](https://github.com/ldi-github/shirates-core)
 
+## Website
+
+- [HTML (GitHub Pages)](https://ldi-github.github.io/shirates-core/)
+
 ## Document
 
 - [Quick start](doc/markdown/quick-start.md)
