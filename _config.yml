@@ -1,6 +1,5 @@
 plugins:
   - jekyll-relative-links
-  - jekyll-sitemap
 relative_links:
   enabled: true
   collections: true
