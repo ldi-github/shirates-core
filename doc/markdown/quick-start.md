@@ -193,7 +193,7 @@ Set environment variables in initializing script (.zshrc or others).
 
 ```
 export ANDROID_SDK_ROOT=/Users/$USER/Library/Android/sdk
-export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
+export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator:$PATH
 ```
 
 **Note:** Execute log out/log in to take effect above settings.
