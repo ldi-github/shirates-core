@@ -4,10 +4,6 @@
 
 **shirates-core** is core library.
 
-## Repository
-
-https://github.com/ldi-github/shirates-core
-
 ## Document
 
 - [Quick start](doc/markdown/quick-start.md)
