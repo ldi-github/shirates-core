@@ -6,7 +6,7 @@
 
 ## Repository
 
-https://github.com/ldi-github/shirates-core
+[https://github.com/ldi-github/shirates-core](https://github.com/ldi-github/shirates-core)
 
 ## Document
 
