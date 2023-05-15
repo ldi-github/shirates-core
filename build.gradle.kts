@@ -21,6 +21,8 @@ val userHome = System.getProperty("user.home")
 
 repositories {
     mavenCentral()
+//    maven(url = "file:/$userHome/github/ldi-github/md2html/build/repository")
+    maven(url = "https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -97,6 +99,19 @@ dependencies {
     // jsoup
     implementation("org.jsoup:jsoup:1.15.4")
     testImplementation("org.jsoup:jsoup:1.15.4")
+
+    // md2html
+    implementation("io.github.ldi-github:md2html:0.1.0-SNAPSHOT")
+}
+
+configurations.all {
+    resolutionStrategy {
+
+        // cache dynamic versions for 10 minutes
+        cacheDynamicVersionsFor(10 * 60, "seconds")
+        // don't cache changing modules at all
+        cacheChangingModulesFor(0, "seconds")
+    }
 }
 
 tasks {
@@ -351,3 +366,11 @@ tasks.register<JavaExec>("createSummaryReportFromCollected") {
     mainClass.set("shirates.core.task.SummaryReportFromCollectedExecute")
 }
 
+/**
+ * md2html
+ */
+tasks.register<JavaExec>("md2html") {
+    group = "md2html"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("md2html.Executor")
+}
