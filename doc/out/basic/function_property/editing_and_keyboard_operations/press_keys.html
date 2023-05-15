@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Press keys</h1>
+    <p>You can press key using these functions.</p>
+    <h2>functions (Android)</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">pressBack</td>
+      </tr>
+      <tr>
+       <td align="left">pressHome</td>
+      </tr>
+      <tr>
+       <td align="left">pressSearch</td>
+      </tr>
+      <tr>
+       <td align="left">pressTab</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>functions (iOS)</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">pressBack</td>
+      </tr>
+      <tr>
+       <td align="left">pressHome</td>
+      </tr>
+      <tr>
+       <td align="left">pressEnter</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>pressBack (Android)</h2>
+    <h4>AndroidPressKey1.kt</h4>
+    <p>(<code>kotlin/tutorial/basic/AndroidPressKey1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun pressBack() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Network &amp; internet Screen]")
+            }.action {
+                it.pressBack()
+            }.expectation {
+                it.screenIs("[Android Settings Top Screen]")
+            }
+        }
+
+    }
+}
+</code></pre>
+    <h2>pressHome (Android)</h2>
+    <h4>AndroidPressKey1.kt</h4>
+    <p>(<code>kotlin/tutorial/basic/AndroidPressKey1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(20)
+fun pressHome() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Network &amp; internet Screen]")
+            }.action {
+                it.pressHome()
+            }.expectation {
+                it.screenIs("[Pixel Home Screen]")
+            }
+        }
+
+    }
+}
+</code></pre>
+    <h2>pressSearch (Android)</h2>
+    <h4>AndroidPressKey1.kt</h4>
+    <p>(<code>kotlin/tutorial/basic/AndroidPressKey1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(30)
+fun pressSearch() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Search Screen]")
+                    .sendKeys("clock")
+            }.action {
+                it.pressSearch()
+            }.expectation {
+                it.exist("Open Clock app")
+            }
+        }
+    }
+
+}
+</code></pre>
+    <h2>pressBack (iOS)</h2>
+    <h4>iOSPressKey1.kt</h4>
+    <p>(<code>kotlin/tutorial/basic/iOSPressKey1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun pressBack() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[iOS Search Screen]")
+                it.select("[SpotlightSearchField]")
+                    .clearInput()
+                    .sendKeys("safa")
+                    .tap("Safari")
+                    .wait()
+                    .appIs("[Safari]")
+            }.action {
+                it.pressBack()
+            }.expectation {
+                it.screenIs("[iOS Search Screen]")
+            }
+        }
+    }
+}
+</code></pre>
+    <h2>pressHome (iOS)</h2>
+    <h4>iOSPressKey1.kt</h4>
+    <p>(<code>kotlin/tutorial/basic/iOSPressKey1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(20)
+fun pressHome() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[iOS Settings Top Screen]")
+            }.action {
+                it.pressHome()
+            }.expectation {
+                it.exist(".XCUIElementTypePageIndicator")
+                    .exist("#Safari")
+            }
+        }
+    }
+}
+</code></pre>
+    <h2>pressEnter (iOS)</h2>
+    <h4>iOSPressKey1.kt</h4>
+    <p>(<code>kotlin/tutorial/basic/iOSPressKey1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(30)
+fun pressEnter() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.pressHome()
+                    .swipeCenterToBottom()
+                    .tap("#SpotlightSearchField")
+                    .clearInput()
+                    .sendKeys("safari")
+            }.action {
+                it.pressEnter()
+            }.expectation {
+                it.appIs("[Safari]")
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>
