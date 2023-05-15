@@ -1,8 +1,11 @@
 # Shirates (shirates-core)
 
+## Repository
+
+- [shirates-core](https://github.com/ldi-github/shirates-core)
+
 ## Overview
 
-- [README](../../README.md)
 - [Environments](environments.md)
 - [Quick start](quick-start.md)
 
