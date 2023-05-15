@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>id assertion</h1>
+    <p>You can assert the value of <code>id</code> or <code>name</code> property of the element using these functions.</p>
+    <h2>functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">idIs</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Example</h2>
+    <h3>AssertingAttribute1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/AssertingAttribute1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(30)
+fun idAssertion_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.select("#account_avatar", log = true)
+            }.expectation {
+                it
+                    .idIs("account_avatar")
+                    .idIs("com.android.settings:id/account_avatar")
+            }
+        }
+    }
+}
+
+@Test
+@Order(40)
+fun idAssertion_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.select("#account_avatar", log = true)
+            }.expectation {
+                it
+                    // OK. expected is converted to "com.android.settings:id/account_avatar"
+                    .idIs("account_avatar")
+
+                    // OK. expected is converted to "com.android.settings:id/account_avatar"
+                    .idIs("account_avatar", auto = true)
+
+                    // NG. expected is "account_avatar"
+                    .idIs("account_avatar", auto = false)
+            }
+        }
+    }
+}
+</code></pre>
+    <h4>Note</h4>
+    <p><code>log = true</code> is specified for demonstration. This should not be specified in production code. Default is false.</p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>installApp, removeApp</h1>
+    <p>You can install app by app package file.</p>
+    <p>Put your app’s package file (<code>.apk</code> or <code>.app</code> or <code>.ipa</code>) in Download directory, set app file path to <code>appPackageFile</code> in <code>testConfig.json</code>.</p>
+    <h2>iOS package file (.app or .ipa)</h2>
+    <p>Use <code>.app</code> on simulator. Use <code>.ipa</code> on real device.</p>
+    <h2>Example</h2>
+    <p>This code demonstrates how to reinstall.</p>
+    <pre><code class="language-kotlin">if (it.isAppInstalled()) {
+    it.removeApp()
+}
+it.installApp()
+</code></pre>
+    <h3>testConfig@a.json</h3>
+    <p>This is a sample configuration for Android apps.</p>
+    <pre><code>{
+  "testConfigName": "st@a",
+
+  "appIconName": "You app",
+
+  "appPackageFile": "your_app_package.apk",
+
+  "packageOrBundleId": "com.example.android.yourapp",
+
+  "startupPackageOrBundleId": "com.android.settings",
+
+  "startupActivity": "com.android.settings.Settings",
+
+  "capabilities": {
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "tapAppIconMethod": "",
+      "tapAppIconMacro": "",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    }
+  ]
+
+}
+</code></pre>
+    <h3>testConfig@i.json</h3>
+    <p>This is a sample configuration for iOS apps.</p>
+    <pre><code>{
+  "testConfigName": "st@i",
+
+  "appIconName": "You app",
+
+  "appPackageFile": ".app",
+
+  "packageOrBundleId": "com.example.ios.yourapp",
+
+  "#startupPackageOrBundleId": "",
+
+  "#startupActivity": "",
+
+  "capabilities": {
+    "useJSONSource": true,
+    "showXcodeLog": true,
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "iPhone 13(15.5)",
+      "tapAppIconMethod": "",
+      "tapAppIconMacro": "",
+      "capabilities": {
+      }
+    }
+  ]
+
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

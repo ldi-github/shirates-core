@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Could not start a new session. Response code 500</h1>
+    <h3>Message</h3>
+    <p><code>Could not start a new session. Response code 500. Message: An unknown server-side error occurred while processing the command. Original error: The instrumentation process cannot be initialized within 30000ms timeout. Make sure the application under test does not crash and investigate the logcat output. You could also try to increase the value of 'uiautomator2ServerLaunchTimeout' capability</code></p>
+    <h3>Solution</h3>
+    <p>Increase capability <code>uiautomator2ServerLaunchTimeout</code> in <a href="../../basic/parameter/parameter_configuration_files.html">testConfig file</a>.</p>
+    <pre><code>  "capabilities": {
+    "uiautomator2ServerLaunchTimeout": "60000",
+  },
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../error_warning_messages.html">Error messages / Warning messages</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

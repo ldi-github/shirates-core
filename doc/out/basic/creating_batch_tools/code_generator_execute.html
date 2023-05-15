@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>CodeGeneratorExecute</h1>
+    <p>You can generate <strong>test code template</strong> from Spec-Report format.</p>
+    <p><img src="../_images/code_generator_spec_report.png" alt=""></p>
+    <p><img src="../_images/code_generator_code_template.png" alt=""></p>
+    <h2>Creating function</h2>
+    <ol>
+     <li>Create a class file named <code>CodeGeneratorExecute</code>.</li>
+     <li>Create main function as follows.</li>
+    </ol>
+    <pre><code class="language-kotlin">import shirates.spec.code.model.CodeGenerationExecutor
+
+fun main() {
+
+    CodeGenerationExecutor().execute()
+}
+</code></pre>
+    <h2>Running function</h2>
+    <ol>
+     <li>Create <code>SpecInput</code> directory in download directory.</li>
+     <li>Put <strong>test specification file</strong> in Spec-Report format into <code>SpecInput</code> directory.<br><img src="../_images/code_generator_execute_1.png" alt=""></li>
+     <li>Right click <code>CodeGeneratorExecute.kt</code> and select <code>run</code>.</li>
+     <li>You can see generated test code template in <code>CodeOutput</code> directory.<br><img src="../_images/code_generator_execute_2.png" alt=""></li>
+    </ol>
+    <h3>CalculatorTestDemo.kt (Generated)</h3>
+    <pre><code class="language-kotlin">package generated
+
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.branchextension.*
+import shirates.core.driver.commandextension.*
+import shirates.core.driver.function.*
+import shirates.core.testcode.*
+
+@SheetName("calculator test")
+class CalculatorDemo : UITest() {
+
+    @NoLoadRun
+    @Test
+    @DisplayName("calculate 123+456")
+    fun S1010() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Restart Calculator]")
+                        .screenIs("[Calculator Main Screen]")
+                }.action {
+                    it.tap("[1]")
+                        .tap("[2]")
+                        .tap("[3]")
+                }.expectation {
+                    it.select("[formula]").textIs("123")
+                }
+            }
+            case(2) {
+                action {
+                    it.tap("[+]")
+                }.expectation {
+                    it.select("[formula]").textIs("123+")
+                }
+            }
+            case(3) {
+                action {
+                    it.tap("[4]")
+                        .tap("[5]")
+                        .tap("[6]")
+                }.expectation {
+                    it.select("[formula]").textIs("123+456")
+                        .select("[result preview]").textIs("579")
+                }
+            }
+            case(4) {
+                action {
+                    it.tap("[=]")
+                }.expectation {
+                    it.select("[result final]").textIs("579")
+                }
+            }
+        }
+    }
+
+    @NoLoadRun
+    @Test
+    @DisplayName("calculate 1÷0")
+    fun S1020() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Restart Calculator]")
+                        .screenIs("[Calculator Main Screen]")
+                }.action {
+                    it.tap("[1]")
+                        .tap("[÷]")
+                        .tap("[0]")
+                        .tap("[=]")
+                }.expectation {
+                    it.select("[formula]").textIs("1÷0")
+                        .select("[result preview]").textIs("Can't divide by 0")
+                }
+            }
+        }
+    }
+
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

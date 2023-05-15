@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>TestList</h1>
+    <p>TestList is generated after test finished. If already exists, TestList is updated by succeeding tests.<br></p>
+    <h2>Features</h2>
+    <ul>
+     <li>You can see overview of tests results as list.</li>
+     <li>You can filter tests for execution. It’s useful for rerun tests in error.</li>
+    </ul>
+    <h2>Example 1: Generate TestList</h2>
+    <p>You can generate TestList.</p>
+    <ol>
+     <li>Run <code>CalculatorDemo</code>(<code>src/test/kotlin/demo/CalculatorDemo.kt</code>).</li>
+     <li>Open TestList file. <br><img src="../_images/testlist_file_1.png" alt="Spec-Report format"></li>
+     <li>You can see TestList like this. <br><img src="../_images/testlist_1.png" alt="Spec-Report format"></li>
+    </ol>
+    <h2>Example 2: Rerun tests and update TestList</h2>
+    <p>If you rerun tests, TestList is updated.</p>
+    <ol>
+     <li>Run CalculatorDemo again.</li>
+     <li>Reopen TestList file. <br><img src="../_images/testlist_file_2.png" alt="Spec-Report format"></li>
+     <li>You can see TestList like this. Look <code>LastExecuted</code> is updated. <br><img src="../_images/testlist_2.png" alt="Spec-Report format"></li>
+    </ol>
+    <h2>Example 3: Rerun only failed test</h2>
+    <p>Some tests may succeed, and others may fail. Let’s see TestList in this case.</p>
+    <ol>
+     <li>Run CalculatorDemo. Tap any digit button while s10 is running to make it failed.</li>
+     <li>Reopen TestList file.</li>
+     <li>You can see TestList like this. Look <code>Result</code> and <code>LastExecuted</code> is updated. <br><img src="../_images/testlist_3.png" alt="Spec-Report format"></li>
+     <li><p>Now you may want to rerun only failed test.</p>
+      <ul>
+       <li>Set <code>Enable Control</code> to “X”.</li>
+       <li>Set <code>Exec</code> to “X” on the line you want to rerun.</li>
+       <li>Save the file.</li>
+      </ul><p><img src="../_images/testlist_4.png" alt="Spec-Report format"></p></li>
+     <li>Run CalculatorDemo again. Tests that you specified “X” on column exec is executed.</li>
+     <li>Reopen TestList file. You can see TestList like this. Look <code>Result</code> and <code>LastExecuted</code> is updated. <br><img src="../_images/testlist_5.png" alt="Spec-Report format"></li>
+    </ol>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

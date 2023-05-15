@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>launchApp, terminateApp</h1>
+    <p>You can launch or terminate app using these functions.</p>
+    <h2>Functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">launchApp</td>
+       <td align="left">Launch app. Accepts appName or packageOrBundleId or activityName</td>
+      </tr>
+      <tr>
+       <td align="left">terminateApp</td>
+       <td align="left">Terminate app. Accepts appName or packageOrBundleId or activityName</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Example</h2>
+    <h3>LaunchApp1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/LaunchApp1.kt</code>)</p>
+    <pre><code class="language-kotlin">package tutorial.basic
+
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.appIs
+import shirates.core.driver.commandextension.launchApp
+import shirates.core.driver.commandextension.terminateApp
+import shirates.core.testcode.UITest
+
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class LaunchApp1 : UITest() {
+
+    @Test
+    fun launchApp() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.terminateApp()   // Refers packageOrBundleId in testConfig.json
+                }.action {
+                    it.launchApp()  // Refers packageOrBundleId in testConfig.json
+                }.expectation {
+                    it.appIs("[Settings]")  // App Nickname in app.json
+                    it.appIs("Settings")    // App Nickname in app.json
+                    it.appIs("com.android.settings")    // package
+                }
+            }
+            case(2) {
+                condition {
+                    it.terminateApp("[Chrome]")     // App Nickname in app.json
+                }.action {
+                    it.launchApp("[Chrome]")
+                }.expectation {
+                    it.appIs("[Chrome]")
+                }
+            }
+            case(3) {
+                condition {
+                    it.terminateApp("com.android.chrome")   // package
+                }.action {
+                    it.launchApp("com.android.chrome")
+                }.expectation {
+                    it.appIs("com.android.chrome")
+                }
+            }
+            case(4) {
+                condition {
+                    it.terminateApp("Chrome")   // App Nickname in app.json
+                }.action {
+                    it.launchApp("Chrome")
+                }.expectation {
+                    it.appIs("Chrome")
+                }
+            }
+            case(5) {
+                condition {
+                    it.terminateApp("[Play Store]")     // App Nickname in app.json
+                }.action {
+                    it.launchApp("[Play Store]")
+                }.expectation {
+                    it.appIs("[Play Store]")
+                }
+            }
+        }
+    }
+
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

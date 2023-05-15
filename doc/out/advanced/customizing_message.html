@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Customizing message</h1>
+    <p>You can customize message using resource file.</p>
+    <ol>
+     <li>Create <code>resources</code> directory under <code>src/test</code> directory in your project.</li>
+     <li><p>Copy <code>message.xlsx</code> from shirates-core project to you project. <br><img src="_images/customizing_message.png" alt=""></p></li>
+     <li><p>Customize <code>messages.xlsx</code> as you like. <br><strong>message.xlsx</strong> <br><img src="_images/message_xlsx.png" alt=""></p></li>
+    </ol>
+    <p>For example, rewrite message(default) of line of <code>noTestResultFound</code>.</p>
+    <h3>Before</h3>
+    <pre><code>No test result found. Use assertion function in expectation block.
+</code></pre>
+    <h3>After</h3>
+    <pre><code>HA!HA!HA! You forgot implementing assertion function in expectation block?
+</code></pre>
+    <ol>
+     <li>Save message.xlsx.</li>
+     <li>Build project.</li>
+     <li>Implement test code as follows.</li>
+    </ol>
+    <pre><code class="language-kotlin">package exercise
+
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.testcode.UITest
+
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class NoTestResultTest : UITest() {
+
+    @Test
+    fun test1() {
+
+        scenario {
+            case(1) {
+
+            }
+        }
+    }
+}
+</code></pre>
+    <ol>
+     <li>Run test.</li>
+    </ol>
+    <h3>Run result</h3>
+    <pre><code>97	2022/09/28 21:46:40.313	{test1}	[SCENARIO]	(scenario)	test1()
+98	2022/09/28 21:46:40.313	{test1-1}	[CASE]	(case)	(1)
+99	2022/09/28 21:46:40.314	{test1-1}	[ACTION]	(action)	action
+100	2022/09/28 21:46:40.784	{test1-1}	[screenshot]	(screenshot)	screenshot
+101	2022/09/28 21:46:40.786	{test1-1}	[warn]	()	HA!HA!HA! You forgot implementing assertion function in expectation block?
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

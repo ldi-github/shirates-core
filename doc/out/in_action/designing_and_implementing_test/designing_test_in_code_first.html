@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Designing test in code first</h1>
+    <p>You can design test in code first style.</p>
+    <ol>
+     <li>Create test class, then create test functions with <code>@NoLoadRun</code> annotation.</li>
+     <li>Implement procedures of tests tentatively.</li>
+     <li>After the app under test is rolled out, remove <code>@NoLoadRun</code>, implement tests completely, and run tests.</li>
+    </ol>
+    <h3>CodeFirst1.kt</h3>
+    <p>Create test class, then create test method with <code>@NoLoadRun</code> annotation.</p>
+    <pre><code class="language-kotlin">@Testrun("testConfig/android/calculator/testrun.properties")
+class CodeFirst1 : UITest() {
+
+    @NoLoadRun
+    @Test
+    @DisplayName("Start calculator")
+    fun A0010() {
+
+        scenario {
+
+        }
+    }
+
+    @NoLoadRun
+    @Test
+    @DisplayName("Add")
+    fun A0020() {
+
+        scenario {
+
+        }
+    }
+
+    @NoLoadRun
+    @Test
+    @DisplayName("Divide by zero")
+    fun A0030() {
+
+        scenario {
+
+        }
+    }
+
+}
+</code></pre>
+    <h4>Spec-Report</h4>
+    <p><img src="../_images/code_first_1.png" alt=""></p>
+    <p><br></p>
+    <h3>CodeFirst2.kt</h3>
+    <p>Implement procedures of tests tentatively.</p>
+    <p>The macro “[Calculator Main Screen]” is not required to be implemented at this point. The screen nickname file “[Calculator Main Screen]” also is not required to be implemented at this point.</p>
+    <pre><code class="language-kotlin">@Testrun("testConfig/android/calculator/testrun.properties")
+class CodeFirst2 : UITest() {
+
+    @NoLoadRun
+    @Test
+    @DisplayName("Start calculator")
+    fun A0010() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Calculator Main Screen]")
+                }.expectation {
+                    it.screenIs("[Calculator Main Screen]")
+                }
+            }
+        }
+    }
+
+    @NoLoadRun
+    @Test
+    @DisplayName("Add")
+    fun A0020() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Calculator Main Screen]")
+                }.action {
+                    it.tap("[1]")
+                        .tap("[+]")
+                        .tap("[2]")
+                        .tap("[=]")
+                }.expectation {
+                    it.select("[result final]")
+                        .textIs("3")
+                }
+            }
+        }
+    }
+
+    @NoLoadRun
+    @Test
+    @DisplayName("Divide by zero")
+    fun A0030() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Calculator Main Screen]")
+                }.action {
+                    it.tap("[1]")
+                        .tap("[÷]")
+                        .tap("[0]")
+                        .tap("[=]")
+                }.expectation {
+                    it.select("[result preview]")
+                        .textIs("Can't divide by 0")
+                }
+            }
+        }
+    }
+
+}
+</code></pre>
+    <p>You can run test, get Spec-Report as follows at this point.</p>
+    <h4>Spec-Report</h4>
+    <p><img src="../_images/code_first_2.png" alt=""></p>
+    <p><br></p>
+    <h3>CodeFirst3.kt</h3>
+    <p>After the test target app is rolled out, remove <code>@NoLoadRun</code>, implement tests completely, and run tests.</p>
+    <pre><code class="language-kotlin">@Testrun("testConfig/android/calculator/testrun.properties")
+class CodeFirst3 : UITest() {
+
+    @Test
+    @DisplayName("Start calculator")
+    fun A0010() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Calculator Main Screen]")
+                }.expectation {
+                    it.screenIs("[Calculator Main Screen]")
+                }
+            }
+        }
+    }
+
+    @Test
+    @DisplayName("Add")
+    fun A0020() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Calculator Main Screen]")
+                }.action {
+                    it.tap("[1]")
+                        .tap("[+]")
+                        .tap("[2]")
+                        .tap("[=]")
+                }.expectation {
+                    it.select("[result final]")
+                        .textIs("3")
+                }
+            }
+        }
+    }
+
+    @Test
+    @DisplayName("Divide by zero")
+    fun A0040() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Calculator Main Screen]")
+                }.action {
+                    it.tap("[1]")
+                        .tap("[÷]")
+                        .tap("[0]")
+                        .tap("[=]")
+                }.expectation {
+                    it.select("[result preview]")
+                        .textIs("Can't divide by 0")
+                }
+            }
+        }
+    }
+
+}
+</code></pre>
+    <p>If tests and the app are implemented correctly, you can get Spec-Report as follows.</p>
+    <h4>Spec-Report</h4>
+    <p><img src="../_images/code_first_3.png" alt=""></p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

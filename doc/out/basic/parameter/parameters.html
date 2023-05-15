@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Parameters</h1>
+    <p>In testrun files and config files you can set parameters below.</p>
+    <p>[type] <strong>T</strong>: tesrun file, <strong>C</strong>: config.json file</p>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">category</th>
+       <th align="left">property</th>
+       <th align="left">description</th>
+       <th align="left">default</th>
+       <th align="center">type</th>
+       <th align="left">remarks</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">OS</td>
+       <td align="left">os</td>
+       <td align="left">“android” or “ios”</td>
+       <td align="left">android</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Config</td>
+       <td align="left">android.configFile</td>
+       <td align="left">testConfig file for android</td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Config</td>
+       <td align="left">android.profile</td>
+       <td align="left">profile for android</td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Config</td>
+       <td align="left">ios.configFile</td>
+       <td align="left">testConfig file for iOS</td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Config</td>
+       <td align="left">ios.profile</td>
+       <td align="left">profile for iOS</td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Stub</td>
+       <td align="left">stubServerUrl</td>
+       <td align="left">Stub server url</td>
+       <td align="left"></td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Test mode</td>
+       <td align="left">noLoadRun</td>
+       <td align="left">No-Load-Run(NLR) mode is enabled on true</td>
+       <td align="left">false</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Priority</td>
+       <td align="left">must</td>
+       <td align="left">Skip test function with <code>@must</code> on false</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Priority</td>
+       <td align="left">should</td>
+       <td align="left">Skip test function with <code>@should</code> on false</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Priority</td>
+       <td align="left">want</td>
+       <td align="left">Skip test function with <code>@want</code> on false</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Priority</td>
+       <td align="left">none</td>
+       <td align="left">Skip test function without priority on false</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">logLanguage</td>
+       <td align="left">Language for logging</td>
+       <td align="left">""(empty)</td>
+       <td align="center">T</td>
+       <td align="left">Default(empty) is English. “ja” is supported</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableSyncLog</td>
+       <td align="left">sync log is output on true</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableTestList</td>
+       <td align="left">TestList.xls is output on true</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableTestClassList</td>
+       <td align="left">TestClassList.txt is output on true</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableSpecReport</td>
+       <td align="left">Spec-Report is output on true</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableInnerMacroLog</td>
+       <td align="left">Logging in macro is enabled on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableInnerCommandLog</td>
+       <td align="left">Logging in command is enabled on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableSilentLog</td>
+       <td align="left">Logging in silent is enabled on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableTapElementImageLog</td>
+       <td align="left">The image of tapped element is saved on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableXmlSourceDump</td>
+       <td align="left">XmlSourceDump is output on true</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableRetryLog</td>
+       <td align="left">info log is output on retrying on true</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableWarnOnRetryError</td>
+       <td align="left">warn log is output on true. info log is output on false.</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableGetSourceLog</td>
+       <td align="left">getSource log is output on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableTrace</td>
+       <td align="left">trace log is output on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableShellExecLog</td>
+       <td align="left">Shell command exec is output on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableTimeMeasureLog</td>
+       <td align="left">Time measure log is output on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">enableImageMatchDebugLog</td>
+       <td align="left">Image match debug log is output on true</td>
+       <td align="left">false</td>
+       <td align="center">T</td>
+       <td align="left">For debugging</td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">testResults</td>
+       <td align="left">Directory path for output test results</td>
+       <td align="left">(userhome)/Downloads/TestResults</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Log</td>
+       <td align="left">testListDir</td>
+       <td align="left">Directory path for output test TestList.xlsx</td>
+       <td align="left">""(empty)</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">screenshotScale</td>
+       <td align="left">Reduce the size of screenshot (0.1 to 1.0)</td>
+       <td align="left">0.5</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">autoScreenshot</td>
+       <td align="left">Takes screenshots automatically</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">onChangedOnly</td>
+       <td align="left">Takes screenshots on changed only</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">onCondition</td>
+       <td align="left">Takes a screenshot automatically on condition</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">onAction</td>
+       <td align="left">Takes a screenshot automatically on action</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">onExpectation</td>
+       <td align="left">Takes a screenshot automatically on expectation</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">onExecOperateCommand</td>
+       <td align="left">Takes a screenshot automatically on before and after operate command (tap, swipe, etc.)</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">onCheckCommand</td>
+       <td align="left">Takes a screenshot automatically on check command (screenIs, exist, etc.)</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">onScrolling</td>
+       <td align="left">Takes a screenshot automatically on scrolling (tapWithScrollDown, scanElements, etc.)</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Screenshot</td>
+       <td align="left">manualScreenshot</td>
+       <td align="left">Enable manual screenshot on true</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Image Matching</td>
+       <td align="left">enableImageAssertion</td>
+       <td align="left">Enable image assertion</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Image Matching</td>
+       <td align="left">imageMatchingScale</td>
+       <td align="left">Reduce the size of matching image (0 &lt; x &lt;= 1.0)</td>
+       <td align="left">0.25</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Image Matching</td>
+       <td align="left">imageMatchingThreshold</td>
+       <td align="left">Threshold for matching image</td>
+       <td align="left">1.0</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Image Matching</td>
+       <td align="left">imageMatchingCandidateCount</td>
+       <td align="left">Count of matched image candidates</td>
+       <td align="left">20</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Emulator/Simulator</td>
+       <td align="left">emulatorOptions</td>
+       <td align="left">emulator command options</td>
+       <td align="left">-no-boot-anim -no-snapshot</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Emulator/Simulator</td>
+       <td align="left">deviceStartupTimeoutSeconds</td>
+       <td align="left">Virtual device startup timeout seconds</td>
+       <td align="left">60.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Emulator/Simulator</td>
+       <td align="left">deviceWaitSecondsAfterStartup</td>
+       <td align="left">Virtual device wait seconds after startup</td>
+       <td align="left">0.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">appiumServerUrl</td>
+       <td align="left">Appium server URL</td>
+       <td align="left">(mandatory)</td>
+       <td align="center">T/C</td>
+       <td align="left">ex. <code>http://127.0.0.1:4720/</code></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">appiumPath</td>
+       <td align="left">Command or path of appium executable.</td>
+       <td align="left">(mandatory)</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">appiumArgs</td>
+       <td align="left">Arguments for appium command. Separator can be used.</td>
+       <td align="left"></td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">appiumArgsSeparator</td>
+       <td align="left">Separator used for appiumArgs</td>
+       <td align="left">" " (space)</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">appiumServerStartupTimeoutSeconds</td>
+       <td align="left">Timeout seconds for starting Appium Server</td>
+       <td align="left">15.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">appiumSessionStartupTimeoutSeconds</td>
+       <td align="left">Timeout seconds for starting Appium session</td>
+       <td align="left">30.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">implicitlyWaitSeconds</td>
+       <td align="left">default timeout(sec)</td>
+       <td align="left">5.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">capabilities</td>
+       <td align="left">Desired capabilities of AppiumDriver</td>
+       <td align="left">(mandatory)</td>
+       <td align="center">C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">appPackageFile</td>
+       <td align="left">Package file to install</td>
+       <td align="left"></td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">appPackageDir</td>
+       <td align="left">Directory that package files are placed</td>
+       <td align="left">(userhome)/Downloads</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">packageOrBundleId</td>
+       <td align="left">Test target app’s package(Android) or bundleId(iOS)</td>
+       <td align="left">(mandatory)</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">startupPackageOrBundleId</td>
+       <td align="left">Startup app’s package(Android) or bundleId(iOS)</td>
+       <td align="left"></td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium</td>
+       <td align="left">startupActivity</td>
+       <td align="left">Startup app’s activity(Android)</td>
+       <td align="left">(mandatory)</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Appium Proxy</td>
+       <td align="left">appiumProxyReadTimeoutSeconds</td>
+       <td align="left">Read timeout seconds</td>
+       <td align="left">20.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">TestDriver</td>
+       <td align="left">reuseDriver</td>
+       <td align="left">Reuse of TestDriver instance</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">TestDriver</td>
+       <td align="left">retryMaxCount</td>
+       <td align="left">Max count of retry</td>
+       <td align="left">2</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">TestDriver</td>
+       <td align="left">retryTimeoutSeconds</td>
+       <td align="left">Retry timeout seconds</td>
+       <td align="left">15.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">TestDriver</td>
+       <td align="left">retryIntervalSeconds</td>
+       <td align="left">Retry interval seconds</td>
+       <td align="left">2.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">TestDriver</td>
+       <td align="left">enableHealthCheck</td>
+       <td align="left">Execute health check on initializing TestDriver(Android only)</td>
+       <td align="left">true</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">TestDriver</td>
+       <td align="left">tapTestSelector</td>
+       <td align="left">Tap test selector on health checking</td>
+       <td align="left">.label</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">appIconName</td>
+       <td align="left">Name of the app icon</td>
+       <td align="left"></td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">tapAppIconMethod</td>
+       <td align="left">“auto”, “googlePixel”, “swipeLeftInHome”</td>
+       <td align="left">auto</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">tapAppIconMacro</td>
+       <td align="left">Macro name for tapping app icon</td>
+       <td align="left"></td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">shortWaitSeconds</td>
+       <td align="left">Default wait second for wait function</td>
+       <td align="left">1.5</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">waitSecondsForLaunchAppComplete</td>
+       <td align="left">Default wait seconds for launchApp complete</td>
+       <td align="left">15.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">waitSecondsForAnimationComplete</td>
+       <td align="left">Default wait seconds for animation complete</td>
+       <td align="left">0.5</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">waitSecondsOnIsScreen</td>
+       <td align="left">Default wait seconds for screen display</td>
+       <td align="left">15.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">waitSecondsForConnectionEnabled</td>
+       <td align="left">Default wait seconds for reconnecting network</td>
+       <td align="left">8.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">swipeDurationSeconds</td>
+       <td align="left">Swipe duration seconds</td>
+       <td align="left">3.0</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">flickDurationSeconds</td>
+       <td align="left">Flick duration seconds</td>
+       <td align="left">0.3</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">swipeMarginRatio</td>
+       <td align="left">Ratio of margin on swipe</td>
+       <td align="left">0.1</td>
+       <td align="center">T/C</td>
+       <td align="left">Consider momentum scrolling</td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">scrollVerticalMarginRatio</td>
+       <td align="left">Ratio of margin on vertical scroll</td>
+       <td align="left">0.2</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">scrollHorizontalMarginRatio</td>
+       <td align="left">Ratio of margin on horizontal scroll</td>
+       <td align="left">0.2</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">scrollMaxCount</td>
+       <td align="left">Max times of scrolling</td>
+       <td align="left">20</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">tapHoldSeconds</td>
+       <td align="left">Tap holding duration seconds</td>
+       <td align="left">0.1</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">enableCache</td>
+       <td align="left">Enable cache</td>
+       <td align="left">true</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">findWebElementTimeoutSeconds</td>
+       <td align="left">Default wait seconds for findWebElement</td>
+       <td align="left">0.2</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">syncWaitSeconds</td>
+       <td align="left">Syncing wait seconds</td>
+       <td align="left">1.8</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">syncMaxLoopCount</td>
+       <td align="left">Max loop count of syncing</td>
+       <td align="left">5</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">App operation</td>
+       <td align="left">syncIntervalSeconds</td>
+       <td align="left">Interval seconds in syncing</td>
+       <td align="left">0.5</td>
+       <td align="center">T/C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Custom</td>
+       <td align="left">CustomObject.scan.dir</td>
+       <td align="left">Directory for searching custom objects</td>
+       <td align="left">src/test/kotlin</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Macro</td>
+       <td align="left">MacroObject.scan.dir</td>
+       <td align="left">Directory for searching macro objects</td>
+       <td align="left">src/test/kotlin</td>
+       <td align="center">T</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Special Tags</td>
+       <td align="left">specialTags</td>
+       <td align="left">Any tags for conditional branch for test devices</td>
+       <td align="left"></td>
+       <td align="center">C</td>
+       <td align="left"></td>
+      </tr>
+      <tr>
+       <td align="left">Spec-Report</td>
+       <td align="left">specReport.replace.MANUAL</td>
+       <td align="left"></td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">Spec-Report</td>
+       <td align="left">specReport.replace.MANUAL.reason</td>
+       <td align="left"></td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">Spec-Report</td>
+       <td align="left">specReport.replace.SKIP</td>
+       <td align="left"></td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">Spec-Report</td>
+       <td align="left">specReport.replace.SKIP.reason</td>
+       <td align="left"></td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">misc</td>
+       <td align="left">android.swipeOffsetY</td>
+       <td align="left">Adjust y coordinate on swipe(for Android)</td>
+       <td align="left">-20</td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">misc</td>
+       <td align="left">ios.swipeOffsetY</td>
+       <td align="left">Adjust y coordinate on swipe(for iOS)</td>
+       <td align="left">-5</td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">misc</td>
+       <td align="left">xmlSourceRemovePattern</td>
+       <td align="left">Regex pattern for characters to remove</td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">misc</td>
+       <td align="left">boundsToRectRatio</td>
+       <td align="left">Conversion ratio of bounds information to bitmap coordinate</td>
+       <td align="left">“1”(Android), “3”(iOS)</td>
+       <td align="center">T/C</td>
+       <td align="left">Depends on retina display</td>
+      </tr>
+      <tr>
+       <td align="left">misc</td>
+       <td align="left">selectIgnoreTypes</td>
+       <td align="left">Ignores on selecting by default. This is optimization for iOS</td>
+       <td align="left">XCUIElementTypeCell, XCUIElementTypeApplication</td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">misc</td>
+       <td align="left">titleSelector</td>
+       <td align="left">Selector template for screen title</td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">misc</td>
+       <td align="left">webTitleSelector</td>
+       <td align="left">Selector template for web title</td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+      <tr>
+       <td align="left">misc</td>
+       <td align="left">jquerySource</td>
+       <td align="left">URL for jQuery javascript file</td>
+       <td align="left"></td>
+       <td align="center">T</td>
+       <td align="left">For framework developer</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>
