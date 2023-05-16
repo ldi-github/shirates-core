@@ -34,7 +34,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'corret'
+          distribution: 'corretto'
           java-version: '17'
           cache: 'gradle'
       - name: md2html
