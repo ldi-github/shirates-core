@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>info, warn</h1>
+    <p>You can use info and warn function to output additional information.</p>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">info</td>
+       <td align="left">For detail report only</td>
+      </tr>
+      <tr>
+       <td align="left">warn</td>
+       <td align="left">For both simple and detail report</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Example</h2>
+    <h3>InfoAndWarn1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/InfoAndWarn1.kt</code>)</p>
+    <pre><code class="language-kotlin">package tutorial.basic
+
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.logging.TestLog.info
+import shirates.core.logging.TestLog.warn
+import shirates.core.testcode.UITest
+
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class InfoAndWarn1 : UITest() {
+
+    @Test
+    @Order(10)
+    fun infoAndWarn1() {
+
+        scenario {
+            case(1) {
+                action {
+                    info("info")
+                    warn("warn")
+                }
+            }
+        }
+    }
+
+}
+</code></pre>
+    <h3>Html-Report(detail)</h3>
+    <p><img src="../../_images/info_and_warn_detail.png" alt=""></p>
+    <p>Both info and warn messages are output.</p>
+    <h3>Html-Report(simple)</h3>
+    <p><img src="../../_images/info_and_warn_simple.png" alt=""></p>
+    <p>Only warn message is output.</p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

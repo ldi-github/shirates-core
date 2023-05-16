@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Screen assertion</h1>
+    <p>You can assert screen using <strong>screenIs</strong> function.</p>
+    <p>You can use <strong>isScreen</strong> function to getting whether the screen is displayed or not.</p>
+    <h2>functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+       <th>description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">screenIs</td>
+       <td>Assert that the screen is displayed</td>
+      </tr>
+      <tr>
+       <td align="left">isScreen</td>
+       <td>Returns true if the screen is displayed</td>
+      </tr>
+      <tr>
+       <td align="left">screenIsOf</td>
+       <td>Assert that any of the screens is displayed</td>
+      </tr>
+      <tr>
+       <td align="left">isScreenOf</td>
+       <td>Returns true if any of the screens is displayed</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Screen nickname file</h2>
+    <p>In advance of using these functions, you must define <a href="../../selector_and_nickname/nickname/screen_nickname.html">Screen Nickname File</a></p>
+    <h2>Example</h2>
+    <h3>ScreenIsAndIsScreen1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/ScreenIsAndIsScreen1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun screenIs_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.screenIs("[Android Settings Top Screen]")
+            }
+        }
+    }
+}
+
+@Test
+@Order(20)
+fun screenIs_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.screenIs("[System Screen]")
+            }
+        }
+    }
+}
+
+@Test
+@Order(30)
+fun isScreen_true() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.isScreen("[Android Settings Top Screen]")
+                    .ifTrue {
+                        OK("This is [Android Settings Top Screen]")
+                    }
+            }
+        }
+    }
+}
+
+@Test
+@Order(40)
+fun isScreen_false() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.isScreen("[System Screen]")
+                    .ifFalse {
+                        OK("This is not [System Screen]")
+                    }
+            }
+        }
+    }
+}
+</code></pre>
+    <h2>Example</h2>
+    <h3>ScreenIsOfAndIsScreenOf1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/ScreenIsOfAndIsScreenOf1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun screenIsOf_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.screenIsOf("[Android Settings Top Screen]")
+                    .screenIsOf("[Android Settings Top Screen]", "[Network &amp; internet Screen]", "[System Screen]")
+            }
+        }
+    }
+}
+
+@Test
+@Order(20)
+fun screenIsOf_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.screenIsOf("[Network &amp; internet Screen]", "[System Screen]")
+            }
+        }
+    }
+}
+
+@Test
+@Order(30)
+fun isScreenOf_true() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.isScreenOf("[Android Settings Top Screen]")
+                    .ifTrue {
+                        OK("This is [Android Settings Top Screen]")
+                    }
+                it.isScreenOf("[Android Settings Top Screen]", "[Network &amp; internet Screen]", "[System Screen]")
+                    .ifTrue {
+                        OK("This is of [Android Settings Top Screen],[Network &amp; internet Screen],[System Screen]")
+                    }
+            }
+        }
+    }
+}
+
+@Test
+@Order(40)
+fun isScreenOf_false() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.isScreenOf("[Network &amp; internet Screen]", "[System Screen]")
+                    .ifFalse {
+                        OK("This is not of [Network &amp; internet Screen],[System Screen]")
+                    }
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

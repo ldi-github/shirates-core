@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Relative selector</h1>
+    <p><strong>Relative selector</strong> is additional operation to select an element relatively.</p>
+    <p>In the below example, TestDriver selects the first element that text is “First Name”, then select next input element in right direction.</p>
+    <pre><code class="language-kotlin">it.select("&lt;First Name&gt;:rightInput")
+</code></pre>
+    <h2>Relative selector format</h2>
+    <pre><code>&lt;selector expression&gt;:command(args)
+</code></pre>
+    <p>or</p>
+    <pre><code>[Nickname]:command(args)
+</code></pre>
+    <p><strong>command</strong> is relative selector command.</p>
+    <p><strong>args</strong> is selector expression (optional).</p>
+    <p><br></p>
+    <p>Command can be chained like this.</p>
+    <pre><code>[Nickname]:command(args):command(args):command(args)
+</code></pre>
+    <h2>Example</h2>
+    <h3>RelativeSelector1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/RelativeSelector1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+fun select() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Calculator Main Screen]")
+            }.expectation {
+                it.select("&lt;@1&gt;:rightButton").accessIs("2")
+                it.select("&lt;@1&gt;:rightButton:rightButton").accessIs("3")
+                it.select("&lt;@1&gt;:rightButton(2)").accessIs("3")
+                it.select("[1]:rightButton(2)").accessIs("3")
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>[Calculator Main Screen].json</h3>
+    <p>(<code>testConfig/android/calculator/screens/[Calculator Main Screen].json</code>)</p>
+    <pre><code>{
+  "key": "[Calculator Main Screen]",
+
+  "screens": {
+    "import": [
+      "testConfig/android/misc/screens"
+    ]
+  },
+
+  "identity": "[AC][()]",
+
+  "selectors": {
+    "[formula]": "#formula",
+    "[result final]": "#result_final",
+    "[result preview]": "#result_preview",
+
+    "[√]": "#op_sqrt",
+    "[π]": "#const_pi",
+    "[^]": "#op_pow",
+    "[!]": "#op_fact",
+
+    "[AC]": "#clr",
+    "[()]": "#parens",
+    "[%]": "#op_pct",
+
+    "[÷]": "#op_div",
+    "[×]": "#op_mul",
+    "[-]": "#op_sub",
+    "[+]": "#op_add",
+    "[=]": "#eq",
+    "[⌫]": "#del",
+
+    "[0]": "#digit_0",
+    "[1]": "#digit_1",
+    "[2]": "#digit_2",
+    "[3]": "#digit_3",
+    "[4]": "#digit_4",
+    "[5]": "#digit_5",
+    "[6]": "#digit_6",
+    "[7]": "#digit_7",
+    "[8]": "#digit_8",
+    "[9]": "#digit_9",
+    "[.]": "#dec_point",
+
+    "[:Right button]": ":rightButton",
+    "[:Below button]": ":belowButton",
+    "[:Left button]": ":leftButton",
+    "[:Above button]": ":aboveButton"
+  }
+
+}
+</code></pre>
+    <h2>Relative nickname</h2>
+    <p>You can define nickname for relative selector.</p>
+    <pre><code>"[:Right button]": ":rightButton"
+</code></pre>
+    <p>You can select an element using relative nickname.</p>
+    <pre><code>it.select("&lt;Label1&gt;[:Right button]")
+</code></pre>
+    <h3>RelativeSelector1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/RelativeSelector1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+fun select_with_nickname() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Calculator Main Screen]")
+            }.expectation {
+                it.select("&lt;@1&gt;[:Right button]").accessIs("2")
+                it.select("[1][:Below button]").accessIs("0")
+                it.select("[1]:rightButton(2)[:Left button]").accessIs("2")
+            }
+        }
+        case(2) {
+            expectation {
+                it.select("[5]").select("[:Right button]").accessIs("6")
+                it.select("[5]").select("[:Below button]").accessIs("2")
+                it.select("[5]").select("[:Left button]").accessIs("4")
+                it.select("[5]").select("[:Above button]").accessIs("8")
+            }
+        }
+        case(3) {
+            expectation {
+                it.select("[5]").apply {
+                    select("[:Right button]").accessIs("6")
+                    select("[:Below button]").accessIs("2")
+                    select("[:Left button]").accessIs("4")
+                    select("[:Above button]").accessIs("8")
+                }
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><p><a href="relative_selector_direction.html">Relative selector command (Direction based)</a></p></li>
+     <li><p><a href="relative_selector_flow.html">Relative selector command (Widget flow based)</a></p></li>
+     <li><p><a href="relative_selector_xml.html">Relative selector command (XML based)</a></p></li>
+     <li><p><a href="relative_selector_more_example.html">Relative selector more example</a></p></li>
+     <li><p><a href="../../../index.html">index</a></p></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

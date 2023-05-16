@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Relative selector(XML based)</h1>
+    <h2>Relative selectors</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">relative selector</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">:parent</td>
+       <td align="left">parent element</td>
+      </tr>
+      <tr>
+       <td align="left">:child</td>
+       <td align="left">child element</td>
+      </tr>
+      <tr>
+       <td align="left">:sibling</td>
+       <td align="left">sibling element</td>
+      </tr>
+      <tr>
+       <td align="left">:ancestor</td>
+       <td align="left">ancestor element</td>
+      </tr>
+      <tr>
+       <td align="left">:descendant</td>
+       <td align="left">descendant element</td>
+      </tr>
+      <tr>
+       <td align="left">:next</td>
+       <td align="left">next element</td>
+      </tr>
+      <tr>
+       <td align="left">:previous</td>
+       <td align="left">previous element</td>
+      </tr>
+      <tr>
+       <td align="left">:nextLabel</td>
+       <td align="left">next label element</td>
+      </tr>
+      <tr>
+       <td align="left">:preLabel</td>
+       <td align="left">previous label element</td>
+      </tr>
+      <tr>
+       <td align="left">:nextInput</td>
+       <td align="left">next input element</td>
+      </tr>
+      <tr>
+       <td align="left">:preInput</td>
+       <td align="left">previous input element</td>
+      </tr>
+      <tr>
+       <td align="left">:nextImage</td>
+       <td align="left">next image element</td>
+      </tr>
+      <tr>
+       <td align="left">:preImage</td>
+       <td align="left">previous image element</td>
+      </tr>
+      <tr>
+       <td align="left">:nextButton</td>
+       <td align="left">next button element</td>
+      </tr>
+      <tr>
+       <td align="left">:preButton</td>
+       <td align="left">previous button element</td>
+      </tr>
+      <tr>
+       <td align="left">:nextSwitch</td>
+       <td align="left">next switch element</td>
+      </tr>
+      <tr>
+       <td align="left">:preSwitch</td>
+       <td align="left">previous switch element</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Relative selector examples</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">example</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left"><code>&lt;.class1&gt;:child(1)</code></td>
+       <td align="left">Select the first element that type is class1, then select the first child.</td>
+      </tr>
+      <tr>
+       <td align="left"><code>&lt;#id1&gt;:next</code></td>
+       <td align="left">Select the first element that resource-id is “id1”, then select next element.</td>
+      </tr>
+      <tr>
+       <td align="left"><code>&lt;text1&gt;:previous</code></td>
+       <td align="left">Select the first element that text is “text1”, then select previous element.</td>
+      </tr>
+      <tr>
+       <td align="left"><code>&lt;@access1&gt;:next:next</code></td>
+       <td align="left">Select the first element that accessibility(content-desc or name) is “access1”, then select next element, then select next element.</td>
+      </tr>
+      <tr>
+       <td align="left"><code>&lt;@access1&gt;:next(2)</code></td>
+       <td align="left">This is equivalent to <code>&lt;@access1&gt;:next:next</code></td>
+      </tr>
+      <tr>
+       <td align="left"><code>&lt;text1&gt;:next(.class1)</code></td>
+       <td align="left">Select the first element that text is “text1”, then select next element that class is “class1”</td>
+      </tr>
+      <tr>
+       <td align="left"><code>&lt;text1&gt;:nextInput</code></td>
+       <td align="left">Select the first element that text is “text1”, then select next input element.</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>Link</h3>
+    <ul>
+     <li><p><a href="relative_selector_direction.html">Relative selector (Direction based)</a></p></li>
+     <li><p><a href="relative_selector_flow.html">Relative selector (Widget flow based)</a></p></li>
+     <li><p><a href="relative_selector.html">Relative selector</a></p></li>
+     <li><p><a href="../../../index.html">index</a></p></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

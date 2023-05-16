@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Profile configuration</h1>
+    <p>You can configure profiles in the testConfig file for the specific condition of the device used for testing.</p>
+    <h2>Example</h2>
+    <h3>androidSettingsConfig.json</h3>
+    <pre><code>{
+  "testConfigName": "androidSettingsConfig",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "settings": {
+    "always_finish_activities": "0"
+  },
+
+  "dataset": {
+    "accounts": "testConfig/android/androidSettings/dataset/accounts.json",
+    "apps": "testConfig/android/androidSettings/dataset/apps.json",
+    "data": "testConfig/android/androidSettings/dataset/data.json"
+  },
+
+  "screens": {
+    "import": [
+      "testConfig/android/calculator/screens",
+      "testConfig/android/misc/screens",
+      "testConfig/android/playStore/screen"
+    ]
+  },
+
+  "capabilities": {
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+    {
+      "profileName": "Android 12",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+    {
+      "profileName": "Android 13",
+      "capabilities": {
+        "platformVersion": "13"
+      }
+    },
+    {
+      "profileName": "Android 12 with Tag1",
+      "specialTags": "Tag1",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+    {
+      "profileName": "Android 12 with Tat2 &amp; Tag3",
+      "specialTags": "Tag2, Tag3",
+      "capabilities": {
+        "platformVersion": "12"
+      }
+    },
+
+    {
+      "profileName": "emulator-5556",
+      "capabilities": {
+        "udid": "emulator-5556"
+      }
+    }
+
+  ]
+
+}
+</code></pre>
+    <p>Each profile inherits from top level properties.</p>
+    <ul>
+     <li>“appIconName”</li>
+     <li>“packageOrBundleId”</li>
+     <li>“startupPackageOrBundleId”</li>
+     <li>“startupActivity”</li>
+     <li>“settings”</li>
+     <li>“dataset”</li>
+     <li>“capabilities”</li>
+    </ul>
+    <p>In addition to the above, each profile has specific properties.</p>
+    <ul>
+     <li><strong>“Android 12”</strong> specifies <code>"platformVersion": "12"</code></li>
+     <li><strong>“Android 13”</strong> specifies <code>"platformVersion": "13"</code></li>
+     <li><strong>“Android 12 with Tag1”</strong> specifies <code>"specialTags": "Tag1"</code></li>
+     <li><strong>“Android 12 with Tag2 &amp; Tag3”</strong> specifies <code>"specialTags": "Tag2, Tag3"</code></li>
+     <li><strong>“emulator-5556”</strong> specifies <code>"udid": "emulator-5556"</code></li>
+    </ul>
+    <p>For more information about specialTag, see <a href="../../basic/function_property/branch/special_branch_functions.html">Special branch function</a></p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Branch function (ifCanSelect, ifCanSelectNot)</h1>
+    <p>You can use special branch functions for element.</p>
+    <h2>functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">ifCanSelect</td>
+       <td align="left">The code block is executed when specified element is on the screen</td>
+      </tr>
+      <tr>
+       <td align="left">ifCanSelectNot</td>
+       <td align="left">The code block is executed when specified element is not on the screen</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>IfCanSelect1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/IfCanSelect1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun ifCanSelectTest() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                ifCanSelect("[Network &amp; internet]") {
+                    OK("ifCanSelect called")
+                }.ifElse {
+                    NG()
+                }
+
+                ifCanSelectNot("[System]") {
+                    OK("ifCanSelectNot called")
+                }.ifElse {
+                    NG()
+                }
+            }
+        }
+        case(2) {
+            action {
+                it.scrollToBottom()
+            }.expectation {
+                ifCanSelect("[Network &amp; internet]") {
+                    NG()
+                }.ifElse {
+                    OK("ifElse called")
+                }
+
+                ifCanSelectNot("[System]") {
+                    NG()
+                }.ifElse {
+                    OK("ifElse called")
+                }
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

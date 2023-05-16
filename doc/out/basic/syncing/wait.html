@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>wait</h1>
+    <p>Sometimes, waiting for some seconds is required in particular situation.</p>
+    <p>You can use <strong>wait</strong> function.</p>
+    <p>Calling without <code>waitSeconds</code> argument uses default duration of <code>shortWaitSeconds</code>.</p>
+    <p>See Also <a href="../parameter/parameters.html">Parameters</a></p>
+    <h3>Wait1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/Wait1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun wait1() {
+
+    scenario {
+        case(1) {
+            action {
+                describe("Wait for a short time.")
+                    .wait()
+            }
+        }
+
+        case(2) {
+            action {
+                describe("Wait for 3.0 seconds.")
+                    .wait(3.0)
+            }
+        }
+    }
+}
+</code></pre>
+    <p>You can configure parameter <code>shortWaitSeconds</code> in testrun files.</p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

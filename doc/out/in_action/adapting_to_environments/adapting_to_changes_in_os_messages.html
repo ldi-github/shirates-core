@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Adapting to changes in OS messages</h1>
+    <p>After upgrading to a new version of OS, the test code that always succeeds may fail.</p>
+    <p>Changes in messages may the cause of this issue.</p>
+    <h2>Example</h2>
+    <p>The following is <strong>Location Permissions</strong> dialog for Android 10.</p>
+    <p><img src="../_images/location_permissions_android_10.png" alt=""></p>
+    <p>You can tap <strong>“Allow only while using the app”</strong> using <code>tap</code> function.</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun original() {
+
+    scenario {
+        case(1) {
+            action {
+                it.tap("Allow only while using the app")
+            }
+        }
+    }
+}
+</code></pre>
+    <p>When upgrading from Android 10 to 11, <strong>“Allow only while using the app”</strong> changes to <strong>“While using the app”</strong>.</p>
+    <p><img src="../_images/location_permissions_comparison.png" alt=""></p>
+    <p>The test code fails.</p>
+    <p>In this case, you might adapt your test code using conditional <code>if-else</code> branch.</p>
+    <h3>Using conditional branch</h3>
+    <pre><code class="language-kotlin">if (platformVersion.toInt() &lt; 11) {
+    it.tap("Allow only while using the app")
+} else {
+    it.tap("While using the app")
+}
+</code></pre>
+    <p>This works, but is not a good idea.</p>
+    <p>Instead of using conditional branch, you can use selector “||”(or).</p>
+    <h3>Using <code>||</code> in selector</h3>
+    <pre><code class="language-kotlin">it.tap("Allow only while using the app||While using the app")
+</code></pre>
+    <p>This is better than former, but writing literals in test code makes it less maintainable.</p>
+    <p>It’s better to use nickname.</p>
+    <h3>Using nickname</h3>
+    <pre><code class="language-kotlin">it.tap("[While using the app]")
+</code></pre>
+    <p>Define nickname in screen nickname file</p>
+    <pre><code>"[While using the app]": "Allow only while using the app||While using the app"
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

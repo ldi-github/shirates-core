@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Running with Gradle</h1>
+    <p>You can run test with Gradle.</p>
+    <h2>Example 1</h2>
+    <p>You can run test with <code>gradlew</code> in console.</p>
+    <ol>
+     <li>Change directory to project dir(ex.<code>Practice1</code>).</li>
+     <li>Run test with <code>gradlew</code>.</li>
+    </ol>
+    <pre><code>wave1008@SNB-M1 ~ % cd Downloads/Practice1
+wave1008@SNB-M1 Practice1 % ./gradlew cleanTest test
+
+BUILD SUCCESSFUL in 35s
+3 actionable tasks: 2 executed, 1 up-to-date
+wave1008@SNB-M1 Practice1 %
+</code></pre>
+    <h2>Example 2</h2>
+    <p>You can create and run script.</p>
+    <ol>
+     <li>Create file <code>runtest.sh</code> under the project root directory.</li>
+    </ol>
+    <p>Content of <strong>runtest.sh</strong></p>
+    <pre><code>./gradlew cleanTest test
+</code></pre>
+    <ol>
+     <li>Run <code>runtest.sh</code>.</li>
+    </ol>
+    <pre><code>wave1008@SNB-M1 Practice1 % sh ./runtest.sh         
+
+BUILD SUCCESSFUL in 35s
+3 actionable tasks: 2 executed, 1 up-to-date
+wave1008@SNB-M1 Practice1 % 
+</code></pre>
+    <h2>Example 3</h2>
+    <p>You can set <a href="../../basic/parameter/parameters.html">parameters</a> via environment variables using “<code>SR_*</code>” prefix.</p>
+    <ol>
+     <li>Rewrite <code>runtest.sh</code> as follows.</li>
+    </ol>
+    <pre><code>export SR_os="android"
+export SR_profile="Pixel 3a(Android 12)"
+export SR_appiumServerUrl="http://127.0.0.1:4720/"
+export SR_appiumArgs="--session-override --relaxed-security"
+export SR_testResults="$HOME/Downloads/TestResults/Practice1"
+export SR_testListDir="$HOME/Downloads/TestResults/Practice1"
+./gradlew cleanTest test
+</code></pre>
+    <ol>
+     <li>Run <code>runtest.sh</code>.</li>
+    </ol>
+    <pre><code>wave1008@SNB-M1 Practice1 % sh ./runtest.sh 
+
+BUILD SUCCESSFUL in 35s
+3 actionable tasks: 2 executed, 1 up-to-date
+wave1008@SNB-M1 Practice1 % 
+</code></pre>
+    <h2>Example 4</h2>
+    <p>You can specify tests to run with environment variable <code>includeTestsMatching</code>.</p>
+    <ol>
+     <li>Write filtering procedure on <strong>tasks.test</strong> in <code>build.gradle.kts</code>.</li>
+    </ol>
+    <pre><code class="language-kotlin">tasks.test {
+    useJUnitPlatform()
+    jvmArgs = listOf(
+        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED"
+    )
+
+    // Filter test methods
+    val envIncludeTestMatching = System.getenv("includeTestsMatching") ?: "*"
+    val list = envIncludeTestMatching.split(",").map { it.trim() }
+    filter {
+        for (item in list) {
+            println("includeTestMatching($item)")
+            includeTestsMatching(item)
+        }
+    }
+}
+</code></pre>
+    <ol>
+     <li>Now you can specify tests in comma separated.</li>
+    </ol>
+    <pre><code>export includeTestsMatching="product1.Test1,product1.Test2,product1.Test3"
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

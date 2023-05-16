@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Selector nickname</h1>
+    <p>Selector nickname is defined of key and value pair. The key is nickname, and the value is selector expression.</p>
+    <pre><code>"[selector nickname]": "(selector expression)"
+</code></pre>
+    <h2>Example 1</h2>
+    <p>Selector nickname is defined like this. (see also <a href="screen_nickname.html">Screen nickname</a>)</p>
+    <pre><code>"[Search Box]": "@Search"
+</code></pre>
+    <p>You can use the nickname in test code.</p>
+    <pre><code class="language-kotlin">it.tap("[Search Box]")
+</code></pre>
+    <p>Above is equivalent to below.</p>
+    <pre><code class="language-kotlin">it.tap("@Search")
+</code></pre>
+    <p>Using nickname makes your test code more readable and semantic.</p>
+    <h2>Example 2</h2>
+    <p>Selector nickname is defined like this. (see also <a href="screen_nickname.html">Screen nickname</a>)</p>
+    <pre><code>"[Network &amp; internet]": "Network &amp; internet"
+</code></pre>
+    <p>When the selector expression is text filter and is equal to the nickname label(without brackets), the value can be omitted.</p>
+    <pre><code>"[Network &amp; internet]": ""
+</code></pre>
+    <p>You can use the nickname in test code.</p>
+    <pre><code class="language-kotlin">it.tap("[Network &amp; internet]")
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><p><a href="screen_nickname.html">Screen nickname</a></p></li>
+     <li><p><a href="dataset_nickname.html">Dataset nickname</a></p></li>
+     <li><p><a href="nickname.html">Nickname</a></p></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

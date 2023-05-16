@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Test Descriptors</h1>
+    <p>You can describe your test procedure using these functions. These are for readable documentation in Spec-Report.</p>
+    <h2>functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+       <th align="left">description</th>
+       <th align="left">example</th>
+       <th align="left">example(ja)</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">describe</td>
+       <td align="left">Any description with bullet</td>
+       <td align="left">- message</td>
+       <td align="left">・メッセージ</td>
+      </tr>
+      <tr>
+       <td align="left">procedure</td>
+       <td align="left">Description for a set of operations</td>
+       <td align="left">- message</td>
+       <td align="left">・メッセージ</td>
+      </tr>
+      <tr>
+       <td align="left">caption</td>
+       <td align="left">Caption with decoration</td>
+       <td align="left">(message)</td>
+       <td align="left">【メッセージ】</td>
+      </tr>
+      <tr>
+       <td align="left">comment</td>
+       <td align="left">Comment with prefix</td>
+       <td align="left">// message</td>
+       <td align="left">// メッセージ</td>
+      </tr>
+      <tr>
+       <td align="left">manual</td>
+       <td align="left">Manual operation</td>
+       <td align="left">- message</td>
+       <td align="left">・メッセージ</td>
+      </tr>
+      <tr>
+       <td align="left">knownIssue</td>
+       <td align="left">Known issue</td>
+       <td align="left">[KNOWNISSUE]message (url)</td>
+       <td align="left">[KNOWNISSUE]メッセージ (url)</td>
+      </tr>
+      <tr>
+       <td align="left">target</td>
+       <td align="left">Target to check</td>
+       <td align="left">message</td>
+       <td align="left">メッセージ</td>
+      </tr>
+      <tr>
+       <td align="left">output</td>
+       <td align="left">Any text</td>
+       <td align="left">message</td>
+       <td align="left">メッセージ</td>
+      </tr>
+     </tbody>
+    </table>
+    <p><strong>Note:</strong> Bullet, caption and comment can be customized in <code>spec.properties</code> resource file.</p>
+    <h2>Example 1</h2>
+    <h3>Descriptor1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/Descriptor1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun descriptors() {
+
+    scenario {
+        case(1) {
+            condition {
+                describe("describe")
+                procedure("procedure") {
+                    manual("manual")
+                }
+                caption("caption")
+                comment("comment")
+                manual("manual")
+                output("output")
+            }.action {
+                caption("caption")
+                    .describe("describe1")
+                    .describe("describe2")
+                procedure("procedure") {
+                    manual("manual")
+                }
+            }.expectation {
+                target("target1")
+                    .manual("manual")
+                target("target2")
+                    .knownIssue("knownIssue", ticketUrl = "https://example.com/ticket/12345")
+            }
+        }
+    }
+
+}
+</code></pre>
+    <h3>Spec-Report</h3>
+    <p><img src="../../_images/descriptor1_descriptors.png" alt=""></p>
+    <h2>Example 2</h2>
+    <h3>Descriptor1.kt</h3>
+    <pre><code class="language-kotlin">@Test
+fun example() {
+
+    scenario {
+        case(1) {
+            condition {
+                macro("[Setup stock]")
+                macro("[Login]")
+                macro("[Order Screen]")
+            }.action {
+                osaifuKeitai {
+                    caption("Osaifu keitai")
+                        .procedure("Order by osaifu-keitai") {
+                            // implement
+                        }
+                        .comment("note: must be charged")
+                }
+                osaifuKeitaiNot {
+                    caption("Not osaifu keitai")
+                        .procedure("Order by credit card") {
+                            // implement
+                        }
+                }
+            }.expectation {
+                target("[Completion message]")
+                    .manual("is displayed")
+                target("[OK]")
+                    .manual("is displayed")
+            }
+        }
+
+        case(2) {
+            action {
+                manual("Tap [OK]")
+            }.expectation {
+                manual("[Home screen] is displayed")
+                target("target3")
+                    .knownIssue("knownIssue", ticketUrl = "https://example.com/ticket/12345")
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Spec-Report</h3>
+    <p><img src="../../_images/descriptor1_example.png" alt=""></p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

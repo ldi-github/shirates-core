@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Irregular Handler</h1>
+    <p>In smartphone apps, irregular screens are often inserted in the middle of screen transitions.</p>
+    <p>You may or may not see popup dialog (e.g. Location Permissions, Network Error, Firebase In-App Messaging, ads), tutorials to explain how to use features, and notification balloons.</p>
+    <p><img src="../_images/location_permissions.png" alt=""></p>
+    <p>To handle these irregulars, you have to implement conditional branching. That’s very annoying.</p>
+    <h3>AnnoyingEventHandling1.kt</h3>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun annoyingEventHandling1() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Some Screen]")
+                    .ifCanSelect("While using the app") {
+                        it.tap()
+                    }
+            }.action {
+                it.tap("[Button1]")
+                    .ifCanSelect("While using the app") {
+                        it.tap()
+                    }
+            }.expectation {
+                it.screenIs("[Next Screen]")
+            }
+        }
+    }
+}
+
+@Test
+@Order(20)
+fun annoyingEventHandling2() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Some Screen2]")
+                    .ifCanSelect("While using the app") {
+                        it.tap()
+                    }
+            }.action {
+                it.tap("[Button2]")
+                    .ifCanSelect("While using the app") {
+                        it.tap()
+                    }
+            }.expectation {
+                it.screenIs("[Next Screen]")
+            }
+        }
+    }
+}
+</code></pre>
+    <h2>irregularHandler</h2>
+    <p>You can centralize irregular handling procedure using <strong>irregularHandler</strong>.</p>
+    <p>To apply to all test functions in the <code>TestClass</code>, override <code>setEventHandlers</code> function and set delegate function to <code>context.irregularHandler</code>.</p>
+    <p><strong>irregularHandler</strong> is invoked every time on command execution. This mechanism is very powerful and makes the test code simple.</p>
+    <h3>IrregularHandler1</h3>
+    <p>(<code>kotlin/tutorial/inaction/IrregularHandler1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Testrun("testConfig/android/androidSettings/testrun.properties")
+class IrregularHandler1 : UITest() {
+
+    override fun setEventHandlers(context: TestDriverEventContext) {
+
+        context.irregularHandler = {
+            ifCanSelect("While using the app") {
+                it.tap()
+            }
+        }
+    }
+
+    @Test
+    @Order(10)
+    fun irregularHandler1() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Some Screen]")
+                }.action {
+                    it.tap("[Button1]")
+                }.expectation {
+                    it.screenIs("[Next Screen]")
+                }
+            }
+        }
+    }
+
+}
+</code></pre>
+    <p><strong>Note:</strong></p>
+    <ul>
+     <li>A lot of procedure in irregularHandler may cause performance problem.</li>
+     <li>Logging is suppressed while executing irregularHandler delegate function by default.</li>
+    </ul>
+    <h2>suppressHandler</h2>
+    <p>You can suppress firing irregularHandler by using <strong>suppressHandler</strong> function.</p>
+    <h3>IrregularHandler1</h3>
+    <p>(<code>kotlin/tutorial/inaction/IrregularHandler1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(20)
+fun suppressHandler() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Some Screen]")
+            }.action {
+                /**
+                 * In suppressHandler block,
+                 * calling irregular handler is suppressed
+                 */
+                suppressHandler {
+                    it.tap("[Button1]")
+                }
+            }.expectation {
+                it.screenIs("[Next Screen]")
+            }
+        }
+    }
+}
+</code></pre>
+    <h2>disableHandler(), enableHandler()</h2>
+    <p>You can disable or enable handler by these functions.</p>
+    <h3>IrregularHandler1</h3>
+    <p>(<code>kotlin/tutorial/inaction/IrregularHandler1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(30)
+fun disableHandler_EnableHandler() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Some Screen]")
+            }.action {
+                disableHandler()    // Calling irregular handler is disabled.
+                it.tap("[Button1]")
+                ifCanSelect("While using the app") {
+                    it.tap()
+                }
+                enableHandler()     // Calling irregular handler is enabled again.
+            }.expectation {
+                it.screenIs("[Next Screen]")
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

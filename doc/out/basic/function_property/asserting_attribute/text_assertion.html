@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>text assertion</h1>
+    <p>You can assert the value of <code>text</code> or <code>label</code> or <code>value</code> property of the element using these functions.</p>
+    <h2>functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">textIs</td>
+      </tr>
+      <tr>
+       <td align="left">textIsNot</td>
+      </tr>
+      <tr>
+       <td align="left">textStartsWith</td>
+      </tr>
+      <tr>
+       <td align="left">textStartsWithNot</td>
+      </tr>
+      <tr>
+       <td align="left">textContains</td>
+      </tr>
+      <tr>
+       <td align="left">textContainsNot</td>
+      </tr>
+      <tr>
+       <td align="left">textEndsWith</td>
+      </tr>
+      <tr>
+       <td align="left">textEndsWithNot</td>
+      </tr>
+      <tr>
+       <td align="left">textMatches</td>
+      </tr>
+      <tr>
+       <td align="left">textMatchesNot</td>
+      </tr>
+      <tr>
+       <td align="left">textIsEmpty</td>
+      </tr>
+      <tr>
+       <td align="left">textIsNotEmpty</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>Note</h3>
+    <p><code>text</code> attribute is for Android.</p>
+    <p><code>label</code> attribute and <code>value</code> attribute are for iOS. <code>value</code> attribute is applied when <code>label</code> attribute is empty.</p>
+    <p><img src="../../_images/xml_data_text_label_value.png" alt=""></p>
+    <h2>Example</h2>
+    <h3>AssertingAttribute1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/AssertingAttribute1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun textAssertion_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.select("Network &amp; internet", log = true)
+            }.expectation {
+                it
+                    .textIs("Network &amp; internet")
+                    .textIsNot("Notifications")
+
+                    .textStartsWith("Network &amp;")
+                    .textStartsWithNot("Connected")
+
+                    .textContains("work &amp; int")
+                    .textContainsNot("device")
+
+                    .textEndsWith("&amp; internet")
+                    .textEndsWithNot("devices")
+
+                    .textMatches("^Net.*")
+                    .textMatchesNot("^Connected.*")
+
+                    .textIsNotEmpty()
+            }
+        }
+        case(2) {
+            action {
+                it.select("#account_avatar", log = true)
+            }.expectation {
+                it.textIsEmpty()
+            }
+        }
+    }
+}
+
+@Test
+@Order(20)
+fun textAssertion_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.select("Network &amp; internet", log = true)
+            }.expectation {
+                it.textIs("Connected devices")
+            }
+        }
+    }
+}
+</code></pre>
+    <h4>Note</h4>
+    <p><code>log = true</code> is specified for demonstration. This should not be specified in production code. Default is false.</p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

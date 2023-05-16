@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Selector expression</h1>
+    <p>Shirates <strong>Selector expression</strong> is expression to filter screen elements.</p>
+    <p><strong>select</strong> function accepts selector expressions, parses them, retrieves and filters elements, and returns result element.</p>
+    <p>Selector expression consists of one or more <strong>filter expressions</strong>.</p>
+    <pre><code class="language-kotlin">it.select("#id1")    // id filter
+
+it.select("@accessibility1") // accessibility filter
+
+it.select(".android.widget.ImageButton")    // class filter
+
+it.select("text1")  // text filter
+
+it.select("xpath=//*[@resource-id='android:id/icon']")  // xpath filter
+
+it.select("Hello&amp;&amp;.android.widget.TextView")    // text filter and class filter combined with "&amp;&amp;"(and) operator
+
+it.select("About phone||About emulated device") // text filters combined with "||"(or) operator
+</code></pre>
+    <h2>Filter expression</h2>
+    <p>Shirates <strong>Filter expression</strong> is expression describing conditions to filter screen elements.</p>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">filter</th>
+       <th align="left">formal</th>
+       <th align="left">abbreviation</th>
+       <th align="left">Android attribute</th>
+       <th align="left">iOS attribute</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">text</td>
+       <td align="left">text=text1</td>
+       <td align="left">text1</td>
+       <td align="left">text</td>
+       <td align="left">label</td>
+      </tr>
+      <tr>
+       <td align="left">textStartsWith</td>
+       <td align="left">textStartsWith=text1</td>
+       <td align="left">text1*</td>
+       <td align="left">text</td>
+       <td align="left">label</td>
+      </tr>
+      <tr>
+       <td align="left">textContains</td>
+       <td align="left">textContains=text1</td>
+       <td align="left">*text1*</td>
+       <td align="left">text</td>
+       <td align="left">label</td>
+      </tr>
+      <tr>
+       <td align="left">textEndsWith</td>
+       <td align="left">textEndsWith=text1</td>
+       <td align="left">*text1</td>
+       <td align="left">text</td>
+       <td align="left">label</td>
+      </tr>
+      <tr>
+       <td align="left">textMatches</td>
+       <td align="left">textMatches=^text$</td>
+       <td align="left">n/a</td>
+       <td align="left">text</td>
+       <td align="left">label</td>
+      </tr>
+      <tr>
+       <td align="left">literal</td>
+       <td align="left">literal=literal1</td>
+       <td align="left">‘literal1’</td>
+       <td align="left">text</td>
+       <td align="left">label</td>
+      </tr>
+      <tr>
+       <td align="left">id</td>
+       <td align="left">id=id1</td>
+       <td align="left">#id1</td>
+       <td align="left">resource-id</td>
+       <td align="left">name</td>
+      </tr>
+      <tr>
+       <td align="left">access</td>
+       <td align="left">access=access1</td>
+       <td align="left">@access1</td>
+       <td align="left">content-desc</td>
+       <td align="left">name</td>
+      </tr>
+      <tr>
+       <td align="left">accessStartsWith</td>
+       <td align="left">accessStartsWith=access1</td>
+       <td align="left">@access1*</td>
+       <td align="left">content-desc</td>
+       <td align="left">name</td>
+      </tr>
+      <tr>
+       <td align="left">accessContains</td>
+       <td align="left">accessContains=access1</td>
+       <td align="left">@*access1*</td>
+       <td align="left">content-desc</td>
+       <td align="left">name</td>
+      </tr>
+      <tr>
+       <td align="left">accessEndsWith</td>
+       <td align="left">accessEndsWith=access1</td>
+       <td align="left">@*access1</td>
+       <td align="left">content-desc</td>
+       <td align="left">name</td>
+      </tr>
+      <tr>
+       <td align="left">accessMatches</td>
+       <td align="left">accessMatches=^access1$</td>
+       <td align="left">n/a</td>
+       <td align="left">content-desc</td>
+       <td align="left">name</td>
+      </tr>
+      <tr>
+       <td align="left">value</td>
+       <td align="left">value=value1</td>
+       <td align="left">n/a</td>
+       <td align="left">text</td>
+       <td align="left">value</td>
+      </tr>
+      <tr>
+       <td align="left">valueStartsWith</td>
+       <td align="left">valueStartsWith=value1</td>
+       <td align="left">n/a</td>
+       <td align="left">text</td>
+       <td align="left">value</td>
+      </tr>
+      <tr>
+       <td align="left">valueContains</td>
+       <td align="left">valueContains=value1</td>
+       <td align="left">n/a</td>
+       <td align="left">text</td>
+       <td align="left">value</td>
+      </tr>
+      <tr>
+       <td align="left">valueEndsWith</td>
+       <td align="left">valueEndsWith=value1</td>
+       <td align="left">n/a</td>
+       <td align="left">text</td>
+       <td align="left">value</td>
+      </tr>
+      <tr>
+       <td align="left">valueMatches</td>
+       <td align="left">valueMatches=^value1$</td>
+       <td align="left">n/a</td>
+       <td align="left">text</td>
+       <td align="left">value</td>
+      </tr>
+      <tr>
+       <td align="left">class</td>
+       <td align="left">class=class1</td>
+       <td align="left">.class1</td>
+       <td align="left">class</td>
+       <td align="left">type</td>
+      </tr>
+      <tr>
+       <td align="left">focusable</td>
+       <td align="left">focusable=true</td>
+       <td align="left">n/a</td>
+       <td align="left">focusable</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">scrollable</td>
+       <td align="left">scrollable=true</td>
+       <td align="left">n/a</td>
+       <td align="left">scrollable</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">selected</td>
+       <td align="left">selected=true</td>
+       <td align="left">n/a</td>
+       <td align="left">selected</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">visible</td>
+       <td align="left">visible=true</td>
+       <td align="left">n/a</td>
+       <td align="left">n/a</td>
+       <td align="left">visible</td>
+      </tr>
+      <tr>
+       <td align="left">xpath</td>
+       <td align="left">xpath=//*[@text=‘text1’]</td>
+       <td align="left">n/a</td>
+       <td align="left">(arbitrary)</td>
+       <td align="left">(arbitrary)</td>
+      </tr>
+      <tr>
+       <td align="left">pos</td>
+       <td align="left">pos=2</td>
+       <td align="left">[2]</td>
+       <td align="left">n/a</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">ignoreTypes</td>
+       <td align="left">ignoreTypes=Class1,Class2</td>
+       <td align="left">n/a</td>
+       <td align="left">class</td>
+       <td align="left">type</td>
+      </tr>
+      <tr>
+       <td align="left">image</td>
+       <td align="left">image=image1.png</td>
+       <td align="left">image1.png</td>
+       <td align="left">n/a</td>
+       <td align="left">n/a</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Multiple values in filter</h2>
+    <p>Filter accepts multiple values using parentheses and “|”(or) operator.</p>
+    <pre><code class="language-kotlin">it.select("text=(text1|text2)") // formal
+
+it.select("(text1|text2)")  // abbreviation
+</code></pre>
+    <p>The below selector expression is simple and equivalent to above.</p>
+    <pre><code class="language-kotlin">it.select("text1||text2")   // equivalent selector expression
+</code></pre>
+    <p>In more complex situation, “|” may be needed.</p>
+    <pre><code class="language-kotlin">it.select("(text1|text2)&amp;&amp;.class1||(@access1|@access2)&amp;&amp;.class2)")
+</code></pre>
+    <h2>Rules of selector expression</h2>
+    <p>A filter expression can be used alone as a selector expression.</p>
+    <pre><code>text1
+</code></pre>
+    <p>Filter expression can be combined with “&amp;&amp;”(AND) operator.</p>
+    <pre><code>text1&amp;&amp;.class1&amp;&amp;visible=true
+</code></pre>
+    <p>Filter expressions can be combined with “||”(OR) operator.</p>
+    <pre><code>text1||text2||@access1
+</code></pre>
+    <p>“&amp;&amp;” is prior to “||”</p>
+    <pre><code>text1&amp;&amp;.class1||@access1
+</code></pre>
+    <p>The above means <code>(text=text1 and class=class1) or access=access1</code>, but do not specify parenthesis like below (not supported).</p>
+    <p><strong>Bad example</strong></p>
+    <pre><code>(text1&amp;&amp;.class1)||@access1
+</code></pre>
+    <h2>Fully qualified id</h2>
+    <p>In android <code>resource-id</code> has prefix that corresponds to the app package name. For example, “<code>com.android.settings</code>” is package name of Settings app.</p>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">fully qualified</th>
+       <th align="left">abbreviated</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">com.android.settings:id/search_bar</td>
+       <td align="left">search_bar</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>In Shirates, abbreviated id is recommended to use because it is converted to fully qualified id automatically, and it is easy to read. In case of failing, try fully qualified id explicitly.</p>
+    <h2>Platform annotation for selector expression</h2>
+    <p>You can use <strong>platform annotation</strong>(@a, @i) to write selector expression for Android and for iOS in one line.</p>
+    <pre><code>@a&lt;.android.widget.ImageButton&gt;,@i&lt;.XCUIElementTypeButton&gt;
+</code></pre>
+    <pre><code class="language-kotlin">it.select("@a&lt;.android.widget.ImageButton&gt;,@i&lt;.XCUIElementTypeButton&gt;")
+</code></pre>
+    <p>With this annotation, a <a href="nickname/nickname.html">nickname</a> can be defined for Android and iOS.</p>
+    <pre><code>"[Button1]": "@a&lt;.android.widget.ImageButton&gt;,@i&lt;.XCUIElementTypeButton&gt;"
+</code></pre>
+    <h2>Negative filter</h2>
+    <p>In some complex situation you can use negative filter.</p>
+    <pre><code>text=text1      // positive
+text!=text1     // negative
+
+text1       // positive
+!text1      // negative
+
+accessContains=text1    // positive
+accessContains!=text1   // negative
+
+@*text1*    // positive
+!@*text1*   // negative
+</code></pre>
+    <h2>Image filter</h2>
+    <p>You can use image file for image matching(template matching). See <a href="../function_property/asserting_image/image_assertion.html">Image assertion</a></p>
+    <pre><code>image=image1.png    // formal
+image1.png          // abbreviation
+image1.png?scale=0.5&amp;threshold=20   // with option(formal)
+image1.png?s=0.5&amp;t=20   // with option(abbreviation)
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

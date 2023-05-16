@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>knownIssue</h1>
+    <p>You can describe known issue using <strong>knownIssue</strong> function.</p>
+    <h2>Example</h2>
+    <h3>KnownIssues1.kt</h3>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun knownIssue() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.manual("Animation should be displayed on start up.")
+                    .knownIssue(
+                        message = "Animation is not executed smoothly.",
+                        ticketUrl = "https://issues.example.com/TICKET-1234"
+                    )
+            }
+        }
+    }
+
+}
+</code></pre>
+    <p><strong>message</strong> and <strong>ticketUrl</strong> is required. Set <code>ticketUrl = ""</code> if you don’t need it.</p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

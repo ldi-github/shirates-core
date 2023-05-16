@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>swipe, flick</h1>
+    <p>You can swipe or flick screen using these functions.</p>
+    <h2>functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">swipe function</th>
+       <th align="left">description</th>
+       <th align="left">flick function</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">swipeTo</td>
+       <td align="left">Swipe the element to another element</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">swipeToAdjust</td>
+       <td align="left">Swipe the element to another element, with adjustment</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">swipeVerticalTo</td>
+       <td align="left">Swipe the element to y coordinate vertically</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">swipeHorizontalTo</td>
+       <td align="left">Swipe the element to x coordinate horizontally</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">swipeToTop</td>
+       <td align="left">Swipe the element to top</td>
+       <td align="left">flickToTop</td>
+      </tr>
+      <tr>
+       <td align="left">swipeToRight</td>
+       <td align="left">Swipe the element to right</td>
+       <td align="left">flickToRight</td>
+      </tr>
+      <tr>
+       <td align="left">swipeToBottom</td>
+       <td align="left">Swipe the element to bottom</td>
+       <td align="left">flickToBottom</td>
+      </tr>
+      <tr>
+       <td align="left">swipeToLeft</td>
+       <td align="left">Swipe the element to left</td>
+       <td align="left">flickToLeft</td>
+      </tr>
+      <tr>
+       <td align="left">swipeToCenter</td>
+       <td align="left">Swipe the element to center</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">swipeCenterToTop</td>
+       <td align="left">Swipe from center to top</td>
+       <td align="left">flickCenterToTop</td>
+      </tr>
+      <tr>
+       <td align="left">swipeCenterToRight</td>
+       <td align="left">Swipe from center to right</td>
+       <td align="left">flickCenterToRight</td>
+      </tr>
+      <tr>
+       <td align="left">swipeCenterToBottom</td>
+       <td align="left">Swipe from center to bottom</td>
+       <td align="left">flickCenterToBottom</td>
+      </tr>
+      <tr>
+       <td align="left">swipeCenterToLeft</td>
+       <td align="left">Swipe from center to left</td>
+       <td align="left">flickCenterToLeft</td>
+      </tr>
+      <tr>
+       <td align="left">swipeLeftToRight</td>
+       <td align="left">Swipe from left to right</td>
+       <td align="left">flickLeftToRight</td>
+      </tr>
+      <tr>
+       <td align="left">swipeRightToLeft</td>
+       <td align="left">Swipe from right to left</td>
+       <td align="left">flickRightToLeft</td>
+      </tr>
+      <tr>
+       <td align="left">swipeBottomToTop</td>
+       <td align="left">Swipe from bottom to top</td>
+       <td align="left">flickBottomToTop, flickAndGoDown</td>
+      </tr>
+      <tr>
+       <td align="left">swipeTopToBottom</td>
+       <td align="left">Swipe from top to bottom</td>
+       <td align="left">flickTopToBottom, flickAndGoUp</td>
+      </tr>
+      <tr>
+       <td align="left">swipePointToPoint</td>
+       <td align="left">Swipe from the start coordinate to the end coordinate</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">swipeElementToElement</td>
+       <td align="left">Swipe from the start element to the end element</td>
+       <td align="left">n/a</td>
+      </tr>
+      <tr>
+       <td align="left">swipeElementToElementAdjust</td>
+       <td align="left">Swipe from the start element to the end element with adjustment</td>
+       <td align="left">n/a</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>swipeTo, swipeToAdjust</h2>
+    <h3>Swipe1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/Swipe1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun swipeTo_swipeToAdjust() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.select("[Battery]")
+                    .swipeTo("[Network &amp; internet]")
+            }.expectation {
+            }
+        }
+        case(2) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.select("[Battery]")
+                    .swipeToAdjust("[Network &amp; internet]")
+            }.expectation {
+            }
+        }
+    }
+}
+</code></pre>
+    <p><strong>swipeTo</strong> is not precise, but fast.</p>
+    <p><img src="../../_images/swipeTo.png" alt="swipeTo"></p>
+    <p><strong>swipeToAdjust</strong> is more precise, but slow.</p>
+    <p><img src="../../_images/swipeToAdjust.png" alt="swipeTo"></p>
+    <h2>swipeToCenter, swipeToTop, swipeToBottom</h2>
+    <h3>Swipe1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/Swipe1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(20)
+fun swipeToCenter_swipeToTop_swipeToBottom() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+                    .exist("[Notifications]")
+                    .exist("[Battery]")
+                    .output("scrollFrame: ${it.scrollFrame}")
+            }.action {
+                it.select("[Battery]")
+                    .swipeToCenter()
+                    .swipeToTop(durationSeconds = 10.0)
+            }.expectation {
+                output("[Battery].bounds: ${it.bounds}")
+                    .dontExist("[Notifications]")
+                    .exist("[Battery]")
+            }
+        }
+        case(2) {
+            condition {
+                it.exist("[Security]")
+                    .exist("[Privacy]")
+            }.action {
+                it.select("[Security]")
+                    .swipeToBottom(durationSeconds = 10.0)
+            }.expectation {
+                output("[Security].bounds: ${it.bounds}")
+                    .exist("[Security]")
+                    .dontExist("[Privacy]")
+            }
+        }
+    }
+}
+</code></pre>
+    <h2>swipePointToPoint</h2>
+    <h3>Swipe1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/Swipe1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(30)
+fun swipePointToPoint() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.swipePointToPoint(
+                    startX = viewport.centerX,
+                    startY = viewport.centerY,
+                    endX = viewport.centerX,
+                    endY = viewport.top
+                )
+            }.expectation {
+
+            }
+        }
+
+        case(2) {
+            action {
+                it.swipePointToPoint(
+                    startX = viewport.centerX,
+                    startY = viewport.centerY,
+                    endX = viewport.centerX,
+                    endY = viewport.bottom,
+                    durationSeconds = 0.2
+                )
+            }.expectation {
+
+            }
+        }
+    }
+}
+</code></pre>
+    <p>For more examples, see <strong>Swipe1.kt</strong></p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

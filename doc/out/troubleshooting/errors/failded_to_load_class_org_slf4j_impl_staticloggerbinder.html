@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>SLF4J: Failed to load class “org.slf4j.impl.StaticLoggerBinder”</h1>
+    <h2>Message</h2>
+    <p><code>SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".</code></p>
+    <h2>Cause</h2>
+    <p>Apache POI could not find a logging implementation.</p>
+    <h2>Solution</h2>
+    <p>Add dependency to SLF4J, or just ignore this message.</p>
+    <p>You can choose SLF4J NOP Binding.</p>
+    <pre><code>// https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
+testImplementation("org.slf4j:slf4j-nop:1.7.36")
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../error_warning_messages.html">Error messages / Warning messages</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

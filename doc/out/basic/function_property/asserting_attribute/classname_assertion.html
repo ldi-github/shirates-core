@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>className assertion</h1>
+    <p>You can assert the value of <code>className</code> or <code>type</code> property of the element using these functions.</p>
+    <h2>functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">classIs</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Example</h2>
+    <h3>AssertingAttribute1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/AssertingAttribute1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(70)
+fun classNameAssertion_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.select("#account_avatar", log = true)
+            }.expectation {
+                it.classIs("android.widget.ImageView")
+                    .classIsNot("android.widget.TextView")
+            }
+        }
+    }
+}
+
+@Test
+@Order(80)
+fun classNameAssertion_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                it.select("#account_avatar", log = true)
+            }.expectation {
+                it.classIs("android.widget.TextView")
+            }
+        }
+    }
+}
+</code></pre>
+    <h4>Note</h4>
+    <p><code>log = true</code> is specified for demonstration. This should not be specified in production code. Default is false.</p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Direct access mode</h1>
+    <p>You can access elements with direct access mode.</p>
+    <h3>Pros.</h3>
+    <ul>
+     <li>Can avoid severe performance problem of getPageSource</li>
+     <li>Fast to get <strong>a few</strong> elements in the screen with many elements</li>
+    </ul>
+    <h3>Cons.</h3>
+    <ul>
+     <li>Slower than cache mode when get many elements</li>
+     <li>Relative selector is not available</li>
+     <li>currentScreen is not set automatically. You have to set currentScreen with <code>screenIs</code>/<code>switchScreen</code> function manually before using selector nickname</li>
+     <li>Other functions may be restricted</li>
+    </ul>
+    <h2>Function</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">disableCache</td>
+       <td align="left">Disables cache</td>
+      </tr>
+      <tr>
+       <td align="left">enableCache</td>
+       <td align="left">Enables cache</td>
+      </tr>
+      <tr>
+       <td align="left">suppressCache { }</td>
+       <td align="left">Suppress cache {code block}</td>
+      </tr>
+      <tr>
+       <td align="left">useCache { }</td>
+       <td align="left">Use cache {code block}</td>
+      </tr>
+      <tr>
+       <td align="left">switchScreen</td>
+       <td align="left">Set currentScreen to switch screen context manually</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>useCache argument</h2>
+    <p>You can specify useCache argument with these functions of UITest.</p>
+    <ul>
+     <li>scenario</li>
+     <li>case</li>
+     <li>condition</li>
+     <li>action</li>
+     <li>expectation</li>
+    </ul>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">useCache</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">null (not specified)</td>
+       <td align="left">Depends on ambient condition</td>
+      </tr>
+      <tr>
+       <td align="left">true</td>
+       <td align="left">use cache</td>
+      </tr>
+      <tr>
+       <td align="left">false</td>
+       <td align="left">direct access</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>DirectAccessModeIos.kt</h3>
+    <p>(<code>kotlin/tutorial/inaction/DirectAccessModeIos.kt</code>)</p>
+    <pre><code class="language-kotlin">package tutorial.inaction
+
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.DisableCache
+import shirates.core.driver.commandextension.*
+import shirates.core.testcode.UITest
+import shirates.core.utility.time.StopWatch
+
+@Testrun("testConfig/ios/iOSSettings/testrun.properties")
+class DirectAccessModeIos : UITest() {
+
+    @Test
+    @Order(10)
+    fun enableCacheTest() {
+
+//        enableCache()   // This should not be specified if cache mode is default
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[iOS Settings Top Screen]")
+                        .tap("[General]")
+                        .screenIs("[General Screen]")
+                }.action {
+                    it.tap("[About]")
+                }.expectation {
+                    it.screenIs("[About Screen]")
+                        .exist("[Name]")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(20)
+    fun disableCacheTest() {
+
+        disableCache()
+
+        scenario {
+            case(1) {
+                condition {
+                    it.switchScreen("[iOS Settings Top Screen]")
+                        .tap("[General]")
+                        .switchScreen("[General Screen]")
+                }.action {
+                    it.tap("[About]")
+                }.expectation {
+                    it.switchScreen("[About Screen]")
+                        .exist("[Name]")
+                }
+            }
+        }
+    }
+
+    @Test
+    @DisableCache
+    @Order(30)
+    fun disableCacheTest2() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.switchScreen("[iOS Settings Top Screen]")
+                        .tap("[General]")
+                        .switchScreen("[General Screen]")
+                }.action {
+                    it.tap("[About]")
+                }.expectation {
+                    it.switchScreen("[About Screen]")
+                        .exist("[Name]")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(40)
+    fun performanceComparison() {
+
+        fun process(count: Int) {
+            val sw1 = StopWatch()
+            val sw2 = StopWatch()
+            invalidateCache()
+
+            sw1.start()
+            useCache {
+                for (i in 1..count) {
+                    it.select("General")  // cache mode
+                }
+            }
+            sw1.stop()
+
+            sw2.start()
+            suppressCache {
+                for (i in 1..count) {
+                    it.select("General")  // direct access mode
+                }
+            }
+            sw2.stop()
+
+            output("$count element(s)")
+            output("$sw1 cache mode")
+            output("$sw2 direct access mode")
+        }
+
+        scenario {
+            case(1) {
+                expectation {
+                    process(1)
+                }
+            }
+            case(2) {
+                expectation {
+                    process(5)
+                }
+            }
+            case(3) {
+                expectation {
+                    process(10)
+                }
+            }
+            case(4) {
+                expectation {
+                    process(50)
+                }
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="performance_problem_of_getpagesource_in_ios.html">Performance problem of getPageSource in iOS</a></li>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

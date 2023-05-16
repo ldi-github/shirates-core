@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Tapping app icon to launch</h1>
+    <h2>tapAppIcon function</h2>
+    <p>You can tap app icon to launch app with <a href="../../basic/function_property/tap_element/tap_app_icon.html">tapAppIcon</a> function.</p>
+    <pre><code class="language-kotlin">it.tapAppIcon("Chrome")
+</code></pre>
+    <p>This function is optimized for <code>Google Pixel</code> and <code>iOS</code> by default.</p>
+    <h2>Configuring parameters</h2>
+    <p>On android devices, hardware manufacturer may install their own graphical user interface(GUI) for home screen and app launcher. You can specify how to tap app icon in profiles with parameter <strong>tapAppIconMethod</strong> or <strong>tapAppIconMacro</strong>.</p>
+    <p>See <a href="../../basic/parameter/parameters.html">parameters</a>.</p>
+    <h3>tapAppIconMethod</h3>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">value</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">auto</td>
+       <td align="left">Default. In Android, currently same as <code>googlePixel</code></td>
+      </tr>
+      <tr>
+       <td align="left">googlePixel</td>
+       <td align="left">Optimized for Google Pixel</td>
+      </tr>
+      <tr>
+       <td align="left">swipeLeftInHome</td>
+       <td align="left">Find app icon with swiping home screen to left</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>tapAppIconMacro</h3>
+    <p>Specify macro name that you created.</p>
+    <h2>Example</h2>
+    <h3>profiles</h3>
+    <pre><code>  "profiles": [
+    {
+      "profileName": "Android/googlePixel",
+      "tapAppIconMethod": "googlePixel",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Android/swipeLeftInHome",
+      "tapAppIconMethod": "swipeLeftInHome",
+      "capabilities": {
+      }
+    },
+    {
+      "profileName": "Android/TapAppIconMacro1",
+      "tapAppIconMacro": "[TapAppIconMacro1]",
+      "capabilities": {
+      }
+    }
+  ]
+</code></pre>
+    <h3>TapAppIconMacro.kt</h3>
+    <p>(<code>kotlin/macro/common/TapAppIconMacro.kt</code>)</p>
+    <pre><code class="language-kotlin">@MacroObject
+object TapAppIconMacro : TestDrive {
+
+    @Macro("[TapAppIconMacro1]")
+    fun tapAppIconMacro1(appIconName: String) {
+
+        android {
+            it.pressHome()
+            it.flickBottomToTop()
+
+            if (it.canSelectWithScrollDown(appIconName)) {
+                it.tap()
+                    .wait()
+            }
+        }
+        ios {
+            it.tapAppIcon(appIconName)
+        }
+    }
+}
+</code></pre>
+    <p>You can use <code>[TapAppIconMacro1]</code> in your test code.</p>
+    <pre><code class="language-kotlin">it.macro("[TapAppIconMacro1]", "Calculator")
+</code></pre>
+    <h2>Customizing tapAppIcon function</h2>
+    <p>You can customize behavior of <code>tapAppIcon</code> function by <strong>CustomObject</strong>. This is better for use.</p>
+    <ol>
+     <li><p>Create a directory named <code>custom</code> anywhere under <code>src/test/kotlin</code>. <br><img src="../_images/tap_app_icon_custom_object.png" alt=""></p></li>
+     <li><p>Create class named <code>TapAppIconCustomObject</code>.</p></li>
+     <li>Implement <code>tapAppIcon</code> function.</li>
+    </ol>
+    <h3>Custom function example</h3>
+    <pre><code class="language-kotlin">package custom
+
+import shirates.core.customobject.CustomFunction
+import shirates.core.customobject.CustomObject
+import shirates.core.driver.TestDrive
+import shirates.core.driver.branchextension.android
+import shirates.core.driver.branchextension.ios
+import shirates.core.driver.commandextension.*
+
+@CustomObject
+object TapAppIconCustomObject : TestDrive {
+
+    @CustomFunction
+    fun tapAppIcon(appIconName: String) {
+
+        android {
+            it.pressHome()
+            it.flickBottomToTop()
+
+            if (it.canSelectWithScrollDown(appIconName)) {
+                it.tap()
+                    .wait()
+            }
+        }
+        ios {
+            it.tapAppIcon(appIconName)
+        }
+    }
+}
+</code></pre>
+    <ol>
+     <li>Build project.</li>
+     <li>You can use tapAppIcon with customized befavior.</li>
+    </ol>
+    <pre><code class="language-kotlin">it.tapAppIcon("Calculator")
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

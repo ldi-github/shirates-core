@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Widget</h1>
+    <p><strong>Widget</strong> is abstract user interface element.</p>
+    <p>Built-in widget information is as follows.</p>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">widget</th>
+       <th align="left">corresponding (Android)</th>
+       <th align="left">corresponding (iOS)</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">label</td>
+       <td align="left">android.widget.TextView</td>
+       <td align="left">XCUIElementTypeStaticText</td>
+      </tr>
+      <tr>
+       <td align="left">input</td>
+       <td align="left">android.widget.EditText</td>
+       <td align="left">XCUIElementTypeTextField<br>
+        XCUIElementTypeSecureTextField</td>
+      </tr>
+      <tr>
+       <td align="left">image</td>
+       <td align="left">android.widget.ImageView</td>
+       <td align="left">XCUIElementTypeImage</td>
+      </tr>
+      <tr>
+       <td align="left">button</td>
+       <td align="left">android.widget.Button<br>
+        android.widget.ImageButton<br>
+        android.widget.CheckBox</td>
+       <td align="left">XCUIElementTypeButton</td>
+      </tr>
+      <tr>
+       <td align="left">switch</td>
+       <td align="left">android.widget.Switch</td>
+       <td align="left">XCUIElementTypeSwitch</td>
+      </tr>
+      <tr>
+       <td align="left">widget</td>
+       <td align="left">(all of the above)</td>
+       <td align="left">(all of the above)</td>
+      </tr>
+     </tbody>
+    </table>
+    <p><br></p>
+    <p>You can edit this information in <code>element_category.properties</code>resource file (not recommended).</p>
+    <pre><code class="language-properties">#Android
+android.labelTypes=android.widget.TextView
+android.inputTypes=android.widget.EditText
+android.imageTypes=android.widget.ImageView
+android.buttonTypes=android.widget.Button|android.widget.ImageButton|android.widget.CheckBox
+android.switchTypes=android.widget.Switch
+#iOS
+ios.labelTypes=XCUIElementTypeStaticText
+ios.inputTypes=XCUIElementTypeTextField|XCUIElementTypeSecureTextField
+ios.imageTypes=XCUIElementTypeImage
+ios.buttonTypes=XCUIElementTypeButton
+ios.switchTypes=XCUIElementTypeSwitch
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

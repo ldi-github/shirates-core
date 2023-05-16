@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Existence assertion</h1>
+    <p>You can check existence of element using these functions.</p>
+    <h2>Functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="center">group</th>
+       <th align="left">function</th>
+       <th align="left">description</th>
+       <th align="left">return value</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="center">exist</td>
+       <td align="left">exist</td>
+       <td align="left">Assert that the element exists in current screen</td>
+       <td align="left">TestElement(if exists)<br>
+        TestNGException(if doesn’t exist)</td>
+      </tr>
+      <tr>
+       <td align="center">exist</td>
+       <td align="left">existWithScrollDown</td>
+       <td align="left">Assert that the element exists with scrolling down</td>
+       <td align="left">(same as above)</td>
+      </tr>
+      <tr>
+       <td align="center">exist</td>
+       <td align="left">existWithScrollUp</td>
+       <td align="left">Assert that the element exists with scrolling up</td>
+       <td align="left">(same as above)</td>
+      </tr>
+      <tr>
+       <td align="center">exist</td>
+       <td align="left">existInScanResults</td>
+       <td align="left">Assert that the element exists in scan results</td>
+       <td align="left">(same as above)</td>
+      </tr>
+      <tr>
+       <td align="center">dontExist</td>
+       <td align="left">dontExist</td>
+       <td align="left">Assert that the element doesn’t exist in current screen</td>
+       <td align="left">empty element(if doesn’t exist)<br>
+        TestNGException(if exists)</td>
+      </tr>
+      <tr>
+       <td align="center">dontExist</td>
+       <td align="left">dontExistWithScrollDown</td>
+       <td align="left">Assert that the element doesn’t exist with scrolling down</td>
+       <td align="left">(same as above)</td>
+      </tr>
+      <tr>
+       <td align="center">dontExist</td>
+       <td align="left">dontExistWithScrollUp</td>
+       <td align="left">Assert that the element doesn’t exist with scrolling up</td>
+       <td align="left">(same as above)</td>
+      </tr>
+      <tr>
+       <td align="center">dontExist</td>
+       <td align="left">dontExistInScanResults</td>
+       <td align="left">Assert that the element doesn’t exist in scan results</td>
+       <td align="left">(same as above)</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Example</h2>
+    <h3>ExistDontExist1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/ExistDontExist1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun exist_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.exist("Network &amp; internet")
+            }
+        }
+    }
+}
+
+@Test
+@Order(20)
+fun exist_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.exist("System")
+            }
+        }
+    }
+}
+
+@Test
+@Order(30)
+fun existWithScrollDown_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.existWithScrollDown("System")
+            }
+        }
+    }
+}
+
+@Test
+@Order(40)
+fun existWithScrollDown_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.existWithScrollDown("Network business")
+            }
+        }
+    }
+}
+
+@Test
+@Order(50)
+fun existWithScrollUp_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+                    .flickBottomToTop()
+            }.expectation {
+                it.existWithScrollUp("Network &amp; internet")
+            }
+        }
+    }
+}
+
+@Test
+@Order(60)
+fun existWithScrollUp_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+                    .flickBottomToTop()
+            }.expectation {
+                it.existWithScrollUp("Network business")
+            }
+        }
+    }
+}
+
+@Test
+@Order(70)
+fun existInScanResult_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.action {
+                describe("Scans elements with scrolling down.")
+                    .scanElements()
+            }.expectation {
+                describe("Asserts that expected elements exist in scan results.")
+                    .existInScanResults("Network &amp; internet")
+                    .existInScanResults("Storage")
+                    .existInScanResults("System")
+            }
+        }
+    }
+}
+
+@Test
+@Order(80)
+fun existInScanResult_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.condition {
+                describe("Scans elements with scrolling down.")
+                    .scanElements()
+            }.expectation {
+                it.existInScanResults("Network &amp; internet")
+                    .existInScanResults("Storage")
+                    .existInScanResults("System")
+                    .existInScanResults("Network business")
+            }
+        }
+    }
+}
+
+@Test
+@Order(90)
+fun dontExist_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.dontExist("System")
+            }
+        }
+    }
+}
+
+@Test
+@Order(100)
+fun dontExist_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.dontExist("Network &amp; internet")
+            }
+        }
+    }
+}
+
+@Test
+@Order(110)
+fun dontExistWithScrollDown_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.dontExistWithScrollDown("Network business")
+            }
+        }
+    }
+}
+
+@Test
+@Order(120)
+fun dontExistWithScrollDown_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.expectation {
+                it.dontExistWithScrollDown("System")
+            }
+        }
+    }
+}
+
+@Test
+@Order(130)
+fun dontExistWithScrollUp_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.condition {
+                it.flickBottomToTop()
+            }.expectation {
+                it.dontExistWithScrollUp("Network business")
+            }
+        }
+    }
+}
+
+@Test
+@Order(140)
+fun dontExistWithScrollUp_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.condition {
+                it.flickBottomToTop()
+            }.expectation {
+                it.dontExistWithScrollUp("System")
+            }
+        }
+    }
+}
+
+@Test
+@Order(150)
+fun dontExistInScanResults_OK() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.condition {
+                it.scanElements()
+            }.expectation {
+                it.dontExistInScanResults("Switch")
+                    .dontExistInScanResults("PS5")
+                    .dontExistInScanResults("XBOX")
+            }
+        }
+    }
+}
+
+@Test
+@Order(160)
+fun dontExistInScanResults_NG() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[Android Settings Top Screen]")
+            }.condition {
+                it.scanElements()
+            }.expectation {
+                it.dontExistInScanResults("Switch")
+                    .dontExistInScanResults("PS5")
+                    .dontExistInScanResults("XBOX")
+                    .dontExistInScanResults("Network &amp; internet")
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

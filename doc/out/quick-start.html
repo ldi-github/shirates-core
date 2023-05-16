@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Quick Start</h1>
+    <h2>Installation</h2>
+    <p>Install following prerequisite tools.</p>
+    <p><strong>Note:</strong> Do not use OS account with username contains non-ASCII characters or white spaces. Some of following tools don’t work well.</p>
+    <p><br></p>
+    <h3>IntelliJ IDEA</h3>
+    <p>If you have not installed, download Ultimate or COMMUNITY and install it. (COMMUNITY is opensource product)</p>
+    <p><a href="https://www.jetbrains.com/idea/">https://www.jetbrains.com/idea/</a></p>
+    <p><br></p>
+    <h3>Android Studio</h3>
+    <p>If you have not installed, download Android Studio and install it.</p>
+    <p><a href="https://developer.android.com/studio">https://developer.android.com/studio</a></p>
+    <p><br></p>
+    <h3>Xcode (Mac only)</h3>
+    <p>If you have not installed, search Xcode in App Store and install it.</p>
+    <p><br></p>
+    <h3>Command Line Tools for Xcode (Mac only)</h3>
+    <p>If you have not installed, open terminal window and run this command.</p>
+    <pre><code>xcode-select --install
+</code></pre>
+    <p><br></p>
+    <h3>Homebrew (Mac only)</h3>
+    <p>If you have not installed, go to <a href="https://brew.sh/">https://brew.sh/</a> and install it.</p>
+    <p><br></p>
+    <h3>Java Development Kit (JDK)</h3>
+    <p>If you have not installed, search installation guide and install it.</p>
+    <p><br></p>
+    <h3>node &amp; npm</h3>
+    <p>If you have not installed, install it.</p>
+    <h4>(for Mac)</h4>
+    <p>You can install NPM with brew. Open terminal window and type these.</p>
+    <pre><code>brew install node
+node -v
+</code></pre>
+    <h4>(for Windows)</h4>
+    <p>Download installation package. <a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a></p>
+    <p><br></p>
+    <p><strong>Note:</strong> Use newer version to avoid troubles of installing appium.</p>
+    <p><br></p>
+    <h3>Appium 2.0</h3>
+    <p>Appium 2.0 is required.</p>
+    <p>If you are already using appium, check version.</p>
+    <pre><code>appium -v
+</code></pre>
+    <p>If you have installed appium 1.x, uninstall it.</p>
+    <pre><code>npm uninstall -g appium
+</code></pre>
+    <p>Install appium 2.0 using npm.</p>
+    <pre><code>npm install -g appium@next
+appium -v
+</code></pre>
+    <p><strong>Note:</strong> Appium 2.0 is going to release. “@next” is required to install 2.0</p>
+    <p>See <a href="environments.html">Tested Environments</a> to get tested version.</p>
+    <p><br>
+      If you have already installed appium, uninstall it and install it again.</p>
+    <pre><code>appium -v
+npm uninstall -g appium
+npm install -g appium@next
+appium -v
+</code></pre>
+    <h4>Example</h4>
+    <pre><code>wave1008@SNB-M1 ~ % appium -v
+2.0.0-beta.33
+wave1008@SNB-M1 ~ % npm uninstall -g appium
+
+removed 437 packages, and audited 1 package in 816ms
+
+found 0 vulnerabilities
+wave1008@SNB-M1 ~ % npm install -g appium@next
+
+added 426 packages, and audited 427 packages in 16s
+
+62 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+wave1008@SNB-M1 ~ % appium -v                 
+2.0.0-beta.35
+wave1008@SNB-M1 ~ % 
+</code></pre>
+    <p><br></p>
+    <h3>UIAutomator2 driver</h3>
+    <p>Install UIAutomator2 driver.</p>
+    <pre><code>appium driver install uiautomator2
+</code></pre>
+    <p><br>
+      If you have already installed the driver, uninstall it and install it again.</p>
+    <pre><code>appium driver list
+appium driver uninstall uiautomator2
+appium driver install uiautomator2
+appium driver list
+</code></pre>
+    <p>See <a href="environments.html">Tested Environments</a> to get tested version.</p>
+    <p><br></p>
+    <h3>XCUITest driver(Mac only)</h3>
+    <p>Install XCUITest driver.</p>
+    <pre><code>appium driver install xcuitest
+</code></pre>
+    <p><br>
+      If you have already installed the driver, uninstall it and install it again.</p>
+    <pre><code>appium driver list
+appium driver uninstall xcuitest
+appium driver install xcuitest
+appium driver list
+</code></pre>
+    <p>See <a href="environments.html">Tested Environments</a> to get tested version.</p>
+    <p><br></p>
+    <h3>Setting Environment Variables (Mac only)</h3>
+    <p>Set environment variables in initializing script (.zshrc or others).</p>
+    <h4>Example</h4>
+    <pre><code>export ANDROID_SDK_ROOT=/Users/$USER/Library/Android/sdk
+export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
+</code></pre>
+    <p><strong>Note:</strong> Execute log out/log in to take effect above settings.</p>
+    <h3>Setting Environment Variables (Windows only)</h3>
+    <ol>
+     <li>Open <strong>Android Studio</strong>.</li>
+     <li>Select <code>Tools &gt; SDK Manager &gt; Appearance &amp; Behavior &gt; System Settings &gt; Android SDK</code></li>
+     <li>Copy Android SDK Location.<br><img src="_images/android_sdk_location.png" alt=""></li>
+     <li>Set environment variable <code>ANDROID_SDK_ROOT</code>.<br><img src="_images/set_environment_variable_windows.png" alt=""></li>
+     <li>Edit environment variable <code>Path</code>. Add entries as follows. 
+      <ul>
+       <li><code>%ANDROID_SDK_ROOT%\emulator</code></li>
+       <li><code>%ANDROID_SDK_ROOT%\platform-tools</code></li>
+       <li><code>%ANDROID_SDK_ROOT%\tools</code><br><img src="_images/set_environment_variable_windows_2.png" alt=""></li>
+      </ul></li>
+     <li>Reboot the PC.</li>
+    </ol>
+    <h2>Setting up AVD (Android Virtual Device)</h2>
+    <h3>Create AVD for demo</h3>
+    <ol>
+     <li>Open <strong>Android Studio</strong>.</li>
+     <li>Select menu <code>Tools &gt; Device Manager</code>.</li>
+     <li><p>Click <code>Create device</code>. <br><img src="_images/create_avd_1.png" alt=""></p></li>
+     <li><p>Select <code>Pixcel 3a</code> and click Next.<br><img src="_images/create_avd_2.png" alt=""></p></li>
+     <li><p>Select <code>S/API Level 31/Android 12.0 (Google Play)</code> and click <code>Next</code> (Google Play Store is required for demonstration using <strong>Calculator</strong> app). Select <strong>arm64</strong> image for M1 Mac, otherwise select <strong>x86_64</strong> image.<br><img src="_images/create_avd_3.png" alt=""></p></li>
+     <li><p>Set AVD Name to <code>Pixel 3a(Android 12)</code> and click <code>Finish</code>.<br><img src="_images/create_avd_4.png" alt=""></p></li>
+    </ol>
+    <p><br></p>
+    <h2>Demonstration</h2>
+    <p>Let’s see demonstration.</p>
+    <h3>Opening Project</h3>
+    <ol>
+     <li>Open <strong>shirates-core</strong> project directory in Finder or Explorer.</li>
+     <li>Right click <code>build.gradle.kts</code> and open with IntelliJ IDEA. <br><img src="_images/opening_project.png" alt=""></li>
+    </ol>
+    <h3>Enable right-click test running</h3>
+    <ol>
+     <li><code>IntelliJ IDEA &gt; Preferences</code> (or <code>File &gt; Settings</code>)</li>
+     <li><code>Build, Execution, Deployment &gt; Build Tools &gt; Gradle</code></li>
+     <li>Set <code>Run tests using</code> to <code>IntelliJ IDEA</code></li>
+    </ol>
+    <p><img src="basic/_images/build_tools_gradle.png" alt=""></p>
+    <p><br></p>
+    <h3>Run AndroidSettingsDemo</h3>
+    <ol>
+     <li>Launch the AVD of Android 12 from <strong>Device Manager</strong>.</li>
+     <li>Open <code>shirates-core</code> project in IntelliJ, right click on <code>src/test/Kotlin/demo/AndroidSettingsDemo</code> and select <strong>Debug ‘AndroidSettingsDemo’</strong></li>
+     <li>You’ll see logs in the Console like this.</li>
+    </ol>
+    <h4>Console output</h4>
+    <pre><code>Connected to the target VM, address: '127.0.0.1:59302', transport: 'socket'
+lineNo	logDateTime	testCaseId	logType	group	message
+1	2022/12/09 04:17:17.294	{}	[-]	()	----------------------------------------------------------------------------------------------------
+2	2022/12/09 04:17:17.307	{}	[-]	()	///
+3	2022/12/09 04:17:17.308	{}	[-]	()	/// Shirates 2.0.0
+4	2022/12/09 04:17:17.308	{}	[-]	()	///
+5	2022/12/09 04:17:17.309	{}	[-]	()	powered by Appium (io.appium:java-client:8.1.1)
+6	2022/12/09 04:17:17.309	{}	[-]	()	----------------------------------------------------------------------------------------------------
+7	2022/12/09 04:17:17.309	{}	[info]	(parameter)	testClass: demo.AndroidSettingsDemo
+8	2022/12/09 04:17:17.309	{}	[info]	(parameter)	sheetName: AndroidSettingsDemo
+9	2022/12/09 04:17:17.309	{}	[info]	(parameter)	logLanguage: 
+10	2022/12/09 04:17:17.903	{}	[info]	()	Initializing with testRun.properties.(testConfig/android/androidSettings/testrun.properties)
+...
+</code></pre>
+    <p><br></p>
+    <h3>Check output reports</h3>
+    <ol>
+     <li>Click the hyperlink in the IntelliJ IDEA’s console to open the log directory<br><img src="_images/hyper_link_to_testresults.png" alt=""></li>
+     <li>You’ll see log and report files.<br><img src="_images/test_results.png" alt=""></li>
+     <li>First, open <strong>_Report(simple).html</strong> file. You’ll see simple test report. Click on a line to highlight the screenshot image. Double-click on a line to show a larger image.</li>
+     <li>Second, open <strong>_Report(detail).html</strong> file. You’ll see more information with log type “info”.</li>
+     <li>At last, open <strong>AndroidSettingsDemo@a.xlsx</strong> file with MS-Excel or other compatible software.</li>
+    </ol>
+    <h3>HTML-Report(simple)</h3>
+    <p><img src="_images/html_report.png" alt=""></p>
+    <h3>Spec-Report</h3>
+    <p>AndroidSettingsDemo@a.xlsx</p>
+    <p><img src="_images/spec_report.png" alt=""></p>
+    <h3>TestList</h3>
+    <ol>
+     <li>Open Downloads/TestResults in Finder (or Explorer).</li>
+     <li>Open <strong>TestList_androidSettingsConfig.xlsx</strong> file with MS-Excel or other compatible software.</li>
+    </ol>
+    <p><strong>TestList_androidSettingsConfig.xlsx<br></strong> <img src="_images/test_list.png" alt=""></p>
+    <p><br></p>
+    <h3>Run CalculatorDemo</h3>
+    <ol>
+     <li>Launch the AVD of Android 12 from <strong>Device Manager</strong>.</li>
+     <li>Open <strong>Google Play Store</strong> and install <strong>Calculator</strong>(Google LLC).</li>
+     <li>Open this project in IntelliJ, right click on <code>src/test/Kotlin/demo/CalculatorDemo</code> and select <strong>Debug ‘CalculatorDemo’</strong></li>
+     <li>You’ll see the calculator test works.</li>
+    </ol>
+    <p><img src="_images/calculator_demo.png" alt=""></p>
+    <p><br></p>
+    <h3>Run iOSSettingsDemo</h3>
+    <ol>
+     <li>Open Xcode and setup iOS Simulator.(iPhone 13, iOS 15.5)</li>
+    </ol>
+    <p><img src="_images/setup_ios_simulator.png" alt=""></p>
+    <ol>
+     <li>Open shirates-core project in IntelliJ, right click on <code>src/test/Kotlin/demo/iOSSettingsDemo</code> and select <strong>Debug ‘iOSSettingsDemo’</strong></li>
+     <li>You’ll see the iOS Settings test works.</li>
+    </ol>
+    <p><img src="_images/ios_settings_demo.png" alt=""></p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

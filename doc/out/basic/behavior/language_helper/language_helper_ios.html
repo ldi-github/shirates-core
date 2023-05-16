@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>LanguageHelperIos</h1>
+    <p>You can set iOS device language using these functions.</p>
+    <h2>Functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">setLanguage</td>
+       <td align="left">Set language.</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Example</h2>
+    <h3>SetLanguageOnIos1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/SetLanguageOnIos1.kt</code>)</p>
+    <pre><code class="language-kotlin">package tutorial.basic
+
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.befavior.LanguageHelperIos
+import shirates.core.driver.commandextension.*
+import shirates.core.testcode.UITest
+
+@Testrun("testConfig/ios/iOSSettings/testrun.properties")
+class SetLanguageOnIos1 : UITest() {
+
+    @Test
+    @Order(10)
+    fun setLanguage1() {
+
+        scenario {
+            case(1) {
+                action {
+                    LanguageHelperIos.setLanguage(locale = "ja-JP")
+                }
+            }
+            case(2) {
+                action {
+                    LanguageHelperIos.setLanguage(locale = "en-US")
+                }
+            }
+        }
+    }
+
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

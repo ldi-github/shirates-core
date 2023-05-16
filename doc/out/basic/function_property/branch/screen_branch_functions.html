@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Screen branch function</h1>
+    <h2>functions</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">function</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">onScreen</td>
+       <td align="left">This function is executed on screen matched.</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>Example</h2>
+    <h3>OnScreen1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/OnScreen1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun onScreen1() {
+
+    scenario {
+        case(1) {
+            condition {
+                it.macro("[System Screen]")
+            }.expectation {
+                onScreen("[Android Settings Top Screen]") {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.onScreen("[System Screen]") {
+                    it.screenIs("[System Screen]")
+                }.not {
+                    describe("Screen is $screenName")
+                }
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

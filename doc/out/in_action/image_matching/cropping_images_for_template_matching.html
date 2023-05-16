@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Cropping images for template matching</h1>
+    <p>When you want to use <strong>template matching</strong>(image matching), you have to prepare image files in advance. You can use <code>cropImage</code> function for capturing and saving image of specified element.</p>
+    <h2>Cropping sample</h2>
+    <h3>CroppingImages1.kt</h3>
+    <p>(<code>kotlin/tutorial/inaction/CroppingImages1.kt</code>)</p>
+    <pre><code class="language-kotlin">package tutorial.inaction
+
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.TestElement
+import shirates.core.driver.commandextension.*
+import shirates.core.driver.rootElement
+import shirates.core.logging.TestLog
+import shirates.core.testcode.UITest
+import shirates.core.utility.toPath
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+@Testrun("testConfig/android/maps/testrun.properties")
+class CroppingImages1 : UITest() {
+
+    @Test
+    fun croppingMapsImages() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Maps Top Screen]")
+                        .screenIs("[Maps Top Screen]")
+                        .wait()     // wait for animation to complete
+                }.action {
+                    rootElement.cropImage("[Maps Top Screen].png")
+                    it.select("[Explore Tab]").cropAndCopy("[Explore Tab Image(selected)].png")
+                    it.select("[Go Tab]").cropAndCopy("[Go Tab Image].png")
+                    it.select("[Saved Tab]").cropAndCopy("[Saved Tab Image].png")
+                    it.select("[Contribute Tab]").cropAndCopy("[Contribute Tab Image].png")
+                    it.select("[Updates Tab]").cropAndCopy("[Updates Tab Image].png")
+                }
+            }
+            case(2) {
+                action {
+                    it.tap("[Go Tab]")
+                        .screenIs("[Maps Go Screen]")
+                        .wait()
+                    it.select("[Explore Tab]").cropAndCopy("[Explore Tab Image].png")
+                    it.select("[Go Tab]").cropAndCopy("[Go Tab Image(selected)].png")
+                }
+            }
+            case(3) {
+                action {
+                    it.tap("[Saved Tab]")
+                        .wait()     // wait for animation to complete
+                    it.select("[Saved Tab]").cropAndCopy("[Saved Tab Image(selected)].png")
+                }
+            }
+            case(4) {
+                action {
+                    it.tap("[Contribute Tab]")
+                        .wait()     // wait for animation to complete
+                    it.select("[Contribute Tab]").cropAndCopy("[Contribute Tab Image(selected)].png")
+                }
+            }
+            case(5) {
+                action {
+                    it.tap("[Updates Tab]")
+                        .wait()     // wait for animation to complete
+                    it.select("[Updates Tab]").cropAndCopy("[Updates Tab Image(selected)].png")
+                }
+            }
+        }
+    }
+
+    private fun TestElement.cropAndCopy(fileName: String) {
+
+        this.cropImage(fileName = fileName)
+
+        val targetDir = "testConfig/android/maps/screens/images".toPath()
+        if (Files.exists(targetDir).not()) {
+            Files.createDirectory(targetDir)
+        }
+        val source = TestLog.directoryForLog.resolve(fileName)
+        val target = targetDir.resolve(fileName)
+        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
+    }
+
+}
+</code></pre>
+    <h3>Cropping images</h3>
+    <p>Above program select elements and crops images to file.</p>
+    <p><img src="../_images/cropping_images.png" alt="cropping images"></p>
+    <h3>Cropped images</h3>
+    <p><img src="../_images/cropped_images.png" alt="cropped images"></p>
+    <h3>Using image matching</h3>
+    <p>See <a href="../../basic/function_property/asserting_image/image_assertion.html">Image Assertion</a></p>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>

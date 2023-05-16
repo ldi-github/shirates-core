@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../../_assets/main.css">
+ </head>
+ <body>
+  <div id="readme" class="Box">
+   <article class="markdown-body container-lg">
+    <h1>Platform property</h1>
+    <p>You can get information of the platform using these properties.</p>
+    <h2>properties</h2>
+    <table>
+     <thead>
+      <tr>
+       <th align="left">property</th>
+       <th align="left">description</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <td align="left">platformName</td>
+       <td align="left">“android” or “ios”</td>
+      </tr>
+      <tr>
+       <td align="left">platformVersion</td>
+       <td align="left">Major version of os</td>
+      </tr>
+      <tr>
+       <td align="left">isAndroid</td>
+       <td align="left">true on Android</td>
+      </tr>
+      <tr>
+       <td align="left">isiOS</td>
+       <td align="left">true on iOS</td>
+      </tr>
+      <tr>
+       <td align="left">isVirtualDevice</td>
+       <td align="left">true on virtual device</td>
+      </tr>
+      <tr>
+       <td align="left">isRealDevice</td>
+       <td align="left">true on real device</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>PlatformProperties1.kt</h3>
+    <p>(<code>kotlin/tutorial/basic/PlatformProperties1.kt</code>)</p>
+    <pre><code class="language-kotlin">@Test
+@Order(10)
+fun platformProperties() {
+
+    scenario {
+        case(1) {
+            expectation {
+                platformName
+                    .stringIs("android")
+
+                platformVersion
+                    .stringIs("12")
+
+                isAndroid
+                    .thisIsTrue()
+
+                isiOS
+                    .thisIsFalse()
+            }
+        }
+    }
+}
+</code></pre>
+    <h3>Link</h3>
+    <ul>
+     <li><a href="../../../index.html">index</a></li>
+    </ul>
+   </article>
+  </div>
+ </body>
+</html>
