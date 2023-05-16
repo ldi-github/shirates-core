@@ -31,12 +31,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: md2html
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'corret'
           java-version: '17'
           cache: 'gradle'
+      - name: md2html
         run: ./gradlew md2html
       - name: Setup Pages
         uses: actions/configure-pages@v3
