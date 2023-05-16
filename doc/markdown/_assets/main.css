@@ -9,6 +9,23 @@ body {
     line-height: 1.5;
     color: #1f2328;
     background-color: #ffffff;
+    margin: 0;
+}
+
+header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    padding: 0;
+    background-color: #ffffff;
+    border-bottom: 2px solid lightgray;
+}
+
+#shirates-logo {
+    width: 12%;
+    height: 12%;
+    margin-top: 10px;
+    margin-left: 40px;
 }
 
 .markdown-body {
@@ -122,3 +139,4 @@ code {
     border-radius: 6px;
     font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 }
+
