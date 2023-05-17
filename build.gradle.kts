@@ -101,7 +101,7 @@ dependencies {
     testImplementation("org.jsoup:jsoup:1.15.4")
 
     // md2html
-    implementation("io.github.ldi-github:md2html:0.1.0-SNAPSHOT")
+    implementation("io.github.ldi-github:md2html:0.1.1-SNAPSHOT")
 }
 
 configurations.all {

@@ -1,23 +1,23 @@
-# Creating project
+# プロジェクトの作成
 
-## Create new project
+## 新しいプロジェクトの作成
 
-1. Open IntelliJ IDEA, select `File > New > Project`.
-1. In New Project window, select `New Project` tab.
-1. Input fields.
+1. IntelliJ IDEAを開き、`File > New > Project`を選択します。
+1. New Project ウィンドウで`New Project` タブを選択します。
+1. 以下の項目を入力します。
     - `Name: Practice1`
-    - `Location: (Your location)`
+    - `Location: (保存場所を入力してください)`
     - `Language: Kotlin`
     - `Build system: Gradle`
-    - `JDK: (Your choice)`
+    - `JDK: (好みのバージョンを選択してください)`
     - `Gradle DSL: Kotlin`
     - `Add sample code: OFF`
       <br>![](../_images/new_project.png)
-1. Click `Create`.
-1. Wait for a while until background tasks finish. It may take minutes.
-1. Edit `build.gradle.kts` as follows.
+1. `Create`をクリックします。
+1. バックグラウンドタスクが完了するまで待ちます。これには数分かかる場合があります。
+1. `build.gradle.kts`を下記の通りに編集します。
 
-### build.gradle.kts (after edit)
+### build.gradle.kts (編集後)
 
 ```kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -78,11 +78,11 @@ tasks.withType<KotlinCompile> {
 }
 ```
 
-Click reload on Gradle pane.
+Gradleペインの `reload` をクリックします。
 
 ![](../_images/gradle_refresh.png)
 
 ### Link
 
-- [index](../../index.md)
+- [index](../../index_ja.md)
 

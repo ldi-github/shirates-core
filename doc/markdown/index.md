@@ -17,7 +17,7 @@
 
 ### Recommended settings
 
-- [Plugin settings (IntelliJ IDEA)](tool_settings/plugin_settings.md)
+- [Save Actions Plugin (IntelliJ IDEA)](tool_settings/plugin_settings.md) **(Obsolete)**
 - [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save.md) **(New! 4.2.0)**
 - [Enable right-click test running (IntelliJ IDEA)](tool_settings/right_click_test_running.md)
 - [Android Device settings](basic/recommended_settings/recommended_settings_android.md)
