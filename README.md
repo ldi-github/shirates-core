@@ -6,8 +6,8 @@
 
 ## Document
 
-- [Quick start](doc/markdown/quick-start.md)
-- [Document index](doc/markdown/index.md)
+- [Quick start](https://ldi-github.github.io/shirates-core/quick-start.html)
+- [Document index](https://ldi-github.github.io/shirates-core/)
 
 ## Features in 3 lines
 
