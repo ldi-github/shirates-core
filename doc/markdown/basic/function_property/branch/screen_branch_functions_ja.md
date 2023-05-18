@@ -1,12 +1,12 @@
-# Screen branch function
+# 画面分岐関数
 
-## functions
+## 関数
 
-| function | description                                   |
-|:---------|:----------------------------------------------|
-| onScreen | The code block is executed on screen matched. |
+| 関数       | 説明                        |
+|:---------|:--------------------------|
+| onScreen | 画面がマッチした場合にコードブロックが実行されます |
 
-## Example
+## 例
 
 ### OnScreen1.kt
 
@@ -37,5 +37,5 @@ fun onScreen1() {
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

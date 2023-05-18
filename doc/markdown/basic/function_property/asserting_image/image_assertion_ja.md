@@ -1,10 +1,10 @@
-# Image assertion
+# 画像の検証
 
-You can assert image using these functions.
+これらの関数を使用して画像の検証を行うことができます。
 
-## functions
+## 関数
 
-| function                |
+| 関数                      |
 |:------------------------|
 | imageIs                 |
 | imageContains           |
@@ -19,23 +19,23 @@ You can assert image using these functions.
 | dontExistWithScrollDown |
 | dontExistWithScrollUp   |
 
-## Example
+## 例
 
-### Getting image files
+### 画像ファイルの取得
 
-Get image files for template matching.
+テンプレートマッチングのための画像ファイルを取得してください。
 
-See [Cropping images for template matching](../../../in_action/image_matching/cropping_images_for_template_matching.md).
+See [テンプレートマッチングのための画像の切り出し](../../../in_action/image_matching/cropping_images_for_template_matching_ja.md).
 
-### Images directory
+### imagesディレクトリ
 
-1. Create `images` directory under `screens` directory. Put images files in images directory.
+1. `screens`ディレクトリの下に`images`ディレクトリを作成し、画像ファイルを配置します。
 
 ![cropped images](../../../in_action/_images/put_cropped_images_in_images_directory.png)
 
-### Screen nickname file
+### 画面ニックネームファイル
 
-Define image nicknames in screen nickname file. File name must be unique.
+画面ニックネームファイル内で画像ニックネームを定義します。ファイル名はユニークであることが必要です。
 
 #### [Clock(shared)].json
 
@@ -70,7 +70,7 @@ Define image nicknames in screen nickname file. File name must be unique.
 }
 ```
 
-## Example
+## 例
 
 ### AssertingImage1.kt
 
@@ -193,14 +193,14 @@ class AssertingImage1 : UITest() {
 }
 ```
 
-### On unexpected NG occurs
+### 予期せぬNGが起きる場合
 
-You can see **template_image.png** (expected image) and **cropped_image.png** (actual image) in the log directory.
+ログディレクトリにおいてテンプレート画像のファイルと切り出された画像のファイルを確認することができます。
 
-### Note
+### 注意
 
-See [WARNING: An illegal reflective access operation has occurred](../../../troubleshooting/warnings/anIllegalRefrectiveAccessOperationHasOccured.md)
+参照 [WARNING: An illegal reflective access operation has occurred](../../../troubleshooting/warnings/anIllegalRefrectiveAccessOperationHasOccured＿じゃ.md)
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)

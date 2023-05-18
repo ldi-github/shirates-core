@@ -1,6 +1,6 @@
 # select
 
-以下の関数を使用して要素を選択することができます。
+これらの関数を使用して要素を選択することができます。
 
 [セレクター式](../../selector_and_nickname/selector_expression_ja.md) is accepted as argument.
 

@@ -1,16 +1,16 @@
-# Special branch function
+# スペシャル分岐関数
 
-## functions
+## 関数
 
-| function   | description                                                              |
-|:-----------|:-------------------------------------------------------------------------|
-| specialTag | The code block is executed on any of specialTags in the profile matched. |
+| 関数         | 説明                                                 |
+|:-----------|:---------------------------------------------------|
+| specialTag | プロファイル内の`specialTags`の任意のタグにマッチした場合にコードブロックが実行されます |
 
-## Example
+## 例
 
 ### androidSettingsConfig.json
 
-In profiles section, each profile has specialTags.
+`profiles`セクションにおいて各プロファイルに`specialTags`が設定されています。
 
 ```
   "profiles": [
@@ -122,12 +122,12 @@ class SpecialTag1 : UITest() {
 179	2022/09/27 19:41:37.618	{specialTag2-1}	[info]	()	test finished.
 ```
 
-When initialized with "`Android 12 with Tag1`" profile, the function for "`Tag1`" is called. When initialized
-with "`Android 12 with Tag2 & Tag3`", functions for "`Tag2`" is called.
+"`Android 12 with Tag1`"のプロファイルを使用して初期化した場合は"`Tag1`"に対応するspecialTag関数のコードブロックが実行されます。
+"`Android 12 with Tag2 & Tag3`"を使用して初期化した場合は"`Tag2`"に対応するspecialTag関数のコードブロックが実行されます。
 
-In this way, you can describe profile specific test code using specialTag function.
+このように、specialTag関数を使用するとプロファイルに固有のテストコードを記述することができます。
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

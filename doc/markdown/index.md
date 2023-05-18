@@ -74,7 +74,7 @@
 - Install and launch app
     - [installApp, removeApp](basic/function_property/install_and_launch_app/install_app.md)
     - [launchApp, terminateApp](basic/function_property/install_and_launch_app/launch_app.md)
-- Swipe screen
+- Swipe/Scroll screen
     - [swipe, flick](basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](basic/function_property/swipe_screen/scroll.md)
 - Asserting attribute

@@ -1,10 +1,10 @@
-# text assertion
+# text属性の検証
 
-You can assert the value of `text` or `label` or `value` attribute of the element using these functions.
+これらの関数を使用して要素の`text`または`label`または`value`の属性を検証することができます。
 
-## functions
+## 関数
 
-| function          |
+| 関数                |
 |:------------------|
 | textIs            |
 | textIsNot         |
@@ -19,15 +19,15 @@ You can assert the value of `text` or `label` or `value` attribute of the elemen
 | textIsEmpty       |
 | textIsNotEmpty    |
 
-### Note
+### 注意
 
-`text` attribute is for Android.
+`text` 属性はAndroid用です。
 
-`label` attribute and `value` attribute are for iOS. `value` attribute is applied when `label` attribute is empty.
+`label`属性と`value`属性はiOS用です。 `value`属性は`label`属性が空文字の場合に適用されます。
 
 ![](../../_images/xml_data_text_label_value.png)
 
-## Example
+## 例
 
 ### AssertingAttribute1.kt
 
@@ -92,11 +92,11 @@ fun textAssertion_NG() {
 }
 ```
 
-#### Note
+#### 注意
 
-`log = true` is specified for demonstration. This should not be specified in production code. Default is false.
+`log = true` はデモンストレーション用です。実際のテストコードでは指定しないでください。デフォルトはfalseです。
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

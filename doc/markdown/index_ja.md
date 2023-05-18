@@ -74,7 +74,7 @@
 - インストールとアプリの起動
     - [installApp, removeApp](basic/function_property/install_and_launch_app/install_app_ja.md)
     - [launchApp, terminateApp](basic/function_property/install_and_launch_app/launch_app_ja.md)
-- 画面をスワイプスる
+- 画面をスワイプ/スクロールする
     - [swipe, flick](basic/function_property/swipe_screen/swipe_flick_ja.md)
     - [scroll](basic/function_property/swipe_screen/scroll_ja.md)
 - 属性を検証する
@@ -85,10 +85,10 @@
     - [クラス名の検証](basic/function_property/asserting_attribute/classname_assertion_ja.md)
     - [任意の属性の検証](basic/function_property/asserting_attribute/attribute_assertion_ja.md)
 - 任意の値を検証する
-    - [任意型の検証](basic/function_property/asserting_any_value/any_value_assertion_ja.md)
+    - [任意の値の検証](basic/function_property/asserting_any_value/any_value_assertion_ja.md)
     - [文字列の検証](basic/function_property/asserting_any_value/string_assertion_ja.md)
 - 存在することを検証する
-    - [要素が表示されていることの検証](basic/function_property/asserting_existence/exist_dontExist_ja.md)
+    - [要素が存在することの検証](basic/function_property/asserting_existence/exist_dontExist_ja.md)
     - [画面が表示されていることの検証](basic/function_property/asserting_existence/screen_is_ja.md)
 - 画像を検証する
     - [画像の検証](basic/function_property/asserting_image/image_assertion_ja.md)
