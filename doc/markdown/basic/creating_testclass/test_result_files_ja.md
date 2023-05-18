@@ -10,7 +10,7 @@ Shirates はテスト実行が完了した時にテスト結果ファイルを�
 ## TestResultsディレクトリ
 
 **ダウンロード/TestResults** がデフォルトの出力ディレクトリです。
-[Parameter](../parameter/parameters.md)ファイルの`testResults`で変更することができます。
+[Parameter](../parameter/parameters_ja.md)ファイルの`testResults`で変更することができます。
 
 ![](../../_images/test_results.png)
 

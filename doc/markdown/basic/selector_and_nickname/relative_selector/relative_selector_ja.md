@@ -1,40 +1,39 @@
-# Relative selector
+# 相対セレクター
 
-**Relative selector** is additional operation to select an element relatively.
+**相対セレクター** は相対的に要素を選択するための追加操作です。
 
-In the below example, TestDriver selects the first element that text is "First Name", then select next input element in
-right direction.
+以下の例では`TestDriver`はまず textが"First Name"である要素を選択し、次にそこから右方向にあるinput要素を選択します。
 
 ```kotlin
 it.select("<First Name>:rightInput")
 ```
 
-## Relative selector format
+## 相対セレクターの書式
 
 ```
-<selector expression>:command(args)
+<セレクター式>:コマンド名(引数)
 ```
 
-or
+または
 
 ```
-[Nickname]:command(args)
+[ニックネーム]:コマンド名(引数)
 ```
 
-**command** is relative selector command.
+**コマンド名** は相対セレクターのコマンドです。
 
-**args** is selector expression (optional).
+**引数** はセレクター式（省略可）です。
 
 
 <br>
 
-Command can be chained like this.
+コマンドは以下のようにチェーンして指定することができます。
 
 ```
-[Nickname]:command(args):command(args):command(args)
+[ニックネーム]:コマンド名(引数):コマンド名(引数):コマンド名(引数)
 ```
 
-## Example
+## 例
 
 ### RelativeSelector1.kt
 
@@ -117,15 +116,15 @@ fun select() {
 }
 ```
 
-## Relative nickname
+## 相対ニックネーム
 
-You can define nickname for relative selector.
+相対セレクターをニックネームで定義することができます。
 
 ```
 "[:Right button]": ":rightButton"
 ```
 
-You can select an element using relative nickname.
+相対セレクターを使用して要素を選択することができます。
 
 ```
 it.select("<Label1>[:Right button]")
@@ -173,14 +172,14 @@ fun select_with_nickname() {
 
 ### Link
 
-- [Relative selector (Direction based)](relative_selector_direction.md)
+- [相対セレクター方向ベース)](relative_selector_direction_ja.md)
 
-- [Relative selector (Widget flow based)](relative_selector_flow.md)
+- [相対セレクター(ウィジェットフローベース)](relative_selector_flow_ja.md)
 
-- [Relative selector (XML based)](relative_selector_xml.md)
+- [相対セレクター(XMLベース)](relative_selector_xml_ja.md)
 
-- [Relative selector more example](relative_selector_more_example.md)
+- [相対セレクターのサンプル](relative_selector_more_example_ja.md)
 
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

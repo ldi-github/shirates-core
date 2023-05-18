@@ -1,6 +1,6 @@
 # Parameters
 
-In testrun files and config files you can set parameters below.
+In testrun files and testConfig files you can set parameters below.
 
 [type] **T**: tesrun file, **C**: config.json file
 

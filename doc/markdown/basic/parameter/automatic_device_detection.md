@@ -2,7 +2,7 @@
 
 You can determine the virtual/real device to use in the test by profile naming convention.
 
-## As of version 1.x
+## shirates-core 1.x
 
 As of shirates-core version 1.x, you have to configure profile to give capabilities that required for the
 device you want to use explicitly.
@@ -24,10 +24,10 @@ device you want to use explicitly.
 ...  
 ```
 
-## As of version 2.x
+## shirates-core 2.x or later
 
 Now you can specify the device that you want to use by **Profile Naming Convention**.
-You don't have to configure profile in profile capabilities in config.json. Just specify profile name.
+You don't have to configure profile in profile capabilities in testConfig.json. Just specify profile name.
 
 #### testConfig.json
 

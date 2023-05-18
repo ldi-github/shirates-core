@@ -72,6 +72,8 @@ The below selector expression is simple and equivalent to above.
 it.select("text1||text2")   // equivalent selector expression
 ```
 
+In this case, the result is the same whether the or expression by filter or by selector is used.
+
 In more complex situation, "|" may be needed.
 
 ```kotlin

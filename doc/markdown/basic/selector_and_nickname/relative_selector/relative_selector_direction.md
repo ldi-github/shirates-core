@@ -29,7 +29,7 @@
 | :aboveButton      | button in above direction |
 | :aboveSwitch      | switch in above direction |
 
-## Selector command examples
+## Examples
 
 | example                     | description                                                                                                                                                           |
 |:----------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -65,7 +65,7 @@ from StaticText1
 
 ### Search range
 
-Right selector searches in right direction between the top and the bottom of base element.
+`right` selector searches in right direction between the top and the bottom of base element.
 
 ![search range](../../_images/direction_search_range.png)
 

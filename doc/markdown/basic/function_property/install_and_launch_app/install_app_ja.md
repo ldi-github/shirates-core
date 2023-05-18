@@ -1,17 +1,17 @@
 # installApp, removeApp
 
-You can install app by app package file.
+アプリをパッケージファイルからインストールすることができます。
 
-Put your app's package file (`.apk` or `.app` or `.ipa`) in Download directory, set app file name to `appPackageFile` in
-`testConfig.json`.
+ダウンロードディレクトリにアプリのパッケージファイル(`.apk` または `.app` または `.ipa`)を配置し
+`testConfig.json`で`appPackageFile`にファイル名を設定してください。
 
-## iOS package file (.app or .ipa)
+## iOSのパッケージファイル (.app or .ipa)
 
-Use `.app` on simulator. Use `.ipa` on real device.
+シミュレーターでは`.app`、実機では`.ipa`を使用してください。
 
-## Example
+## 例
 
-This code demonstrates how to reinstall.
+このコードは再インストールの例を示しています。
 
 ```kotlin
 if (it.isAppInstalled()) {
@@ -22,7 +22,7 @@ it.installApp()
 
 ### testConfig@a.json
 
-This is a sample configuration for Android apps.
+以下はAndroidアプリ用の簡単な設定例です。
 
 ```
 {
@@ -59,7 +59,7 @@ This is a sample configuration for Android apps.
 
 ### testConfig@i.json
 
-This is a sample configuration for iOS apps.
+これはiOSアプリ用の簡単な設定例です。
 
 ```
 {
@@ -97,4 +97,4 @@ This is a sample configuration for iOS apps.
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
