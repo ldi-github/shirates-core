@@ -32,8 +32,6 @@ noLoadRun=true
 
 ![no-load1](../_images/spec_report_calculator_no_load.png)
 
-In NLR mode, both emulator block and non emulator block are output.
-
 ### Link
 
 - [index](../../index.md)

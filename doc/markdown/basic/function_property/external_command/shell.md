@@ -82,6 +82,7 @@ class Shell1 : UITest() {
 
 ### Note
 
+Using shell is platform dependent.
 It's recommended to use [macro function](../../routine_work/macro.md) to hide platform dependent implementation.
 
 ### Link

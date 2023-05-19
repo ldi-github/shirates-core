@@ -2,9 +2,9 @@
 
 ## functions
 
-| function   | description                                                             |
-|:-----------|:------------------------------------------------------------------------|
-| specialTag | This function is executed on any of specialTags in the profile matched. |
+| function   | description                                                              |
+|:-----------|:-------------------------------------------------------------------------|
+| specialTag | The code block is executed on any of specialTags in the profile matched. |
 
 ## Example
 

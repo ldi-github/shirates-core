@@ -2,10 +2,10 @@
 
 You can use info and warn function to output additional information.
 
-| function | description                       |
-|:---------|:----------------------------------|
-| info     | For detail report only            |
-| warn     | For both simple and detail report |
+| function | description                               |
+|:---------|:------------------------------------------|
+| info     | For **detail** report only                |
+| warn     | For both **simple** and **detail** report |
 
 ## Example
 

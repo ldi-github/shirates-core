@@ -52,7 +52,5 @@ it.tap("[Network & internet]")
 ### Link
 
 - [Screen nickname](screen_nickname.md)
-
 - [Dataset nickname](dataset_nickname.md)
-
 - [Nickname](nickname.md)

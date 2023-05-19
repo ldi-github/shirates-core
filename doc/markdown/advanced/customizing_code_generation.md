@@ -10,8 +10,8 @@ You can customize code generation by **Translator** interface.
 | format                       | Format message                                           |
 | getSubject                   | Get subject from message                                 |
 | getScreenNickName            | Get screen nickname from message                         |
-| conditionMessageToFunction   | Convert expectation message to function string           |
-| actionMessageToFunction      | Convert expectation message to function string           |
+| conditionMessageToFunction   | Convert condition message to function string             |
+| actionMessageToFunction      | Convert action message to function string                |
 | targetToFunction             | Convert target to function string                        |
 | expectationMessageToFunction | Convert expectation message to function string           |
 | atEndOfScenario              | Extension point called after scenario lines generated    |

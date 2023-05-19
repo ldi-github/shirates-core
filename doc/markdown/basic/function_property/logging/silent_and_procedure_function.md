@@ -2,7 +2,7 @@
 
 ## silent function
 
-You can suppress logging using `silent` function.
+You can suppress logging using **silent** function.
 
 ### SilentAndProcedure1.kt
 
@@ -42,7 +42,7 @@ fun silent1() {
 
 # procedure function
 
-You can use procedure function instead of describe + silent.
+You can use **procedure** function instead of describe + silent.
 
 ### SilentAndProcedure1.kt
 

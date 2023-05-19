@@ -2,7 +2,7 @@
 
 You can install app by app package file.
 
-Put your app's package file (`.apk` or `.app` or `.ipa`) in Download directory, set app file path to `appPackageFile` in
+Put your app's package file (`.apk` or `.app` or `.ipa`) in Download directory, set app file name to `appPackageFile` in
 `testConfig.json`.
 
 ## iOS package file (.app or .ipa)
@@ -67,7 +67,7 @@ This is a sample configuration for iOS apps.
 
   "appIconName": "You app",
 
-  "appPackageFile": ".app",
+  "appPackageFile": "your_app_package.app",
 
   "packageOrBundleId": "com.example.ios.yourapp",
 

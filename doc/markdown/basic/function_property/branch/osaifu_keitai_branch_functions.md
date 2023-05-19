@@ -1,8 +1,6 @@
 # OsaifuKeitai function
 
-You can branch whether [Osaifu-Keitai](https://en.wikipedia.org/wiki/Osaifu-Keitai) is available or not
-using these
-functions.
+You can use special branch functions for [Osaifu-Keitai](https://en.wikipedia.org/wiki/Osaifu-Keitai).
 
 ## functions
 

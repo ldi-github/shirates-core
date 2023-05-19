@@ -2,6 +2,8 @@
 
 You can write and read memo using these functions.
 
+**memo** is temporary storage in memory.
+
 ## functions
 
 | function             | description                                               |

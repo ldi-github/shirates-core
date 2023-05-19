@@ -37,7 +37,7 @@ fun scrollToTopAndTapWithScrollDown() {
 <br>
 
 If you want to combine two function into one function, you can define extension function for any type
-using **TestDriverCommandContext#execOperateCommand** function.
+using **execOperateCommand** function of **TestDriverCommandContext** object.
 
 **Note:** No-Load-Run mode and other features are supported in execOperateCommand function.
 

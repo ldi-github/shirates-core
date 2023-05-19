@@ -7,7 +7,7 @@ function.
 
 ### accounts.json
 
-Create accounts.json file, and describe data items. Property names(id, password, etc) are arbitrary.
+Create `accounts.json` file, and describe data items. Property names(id, password, etc) are arbitrary.
 
 ```
 {
@@ -25,7 +25,7 @@ Create accounts.json file, and describe data items. Property names(id, password,
 
 ### androidSettingsConfig.json (testConfig.json)
 
-Set the path of accounts.json to "**accounts**" in **dataset** section of the testConfig.json file.
+Set the path of accounts.json to "**accounts**" in **dataset** section of the `testConfig.json` file.
 
 ```
 {

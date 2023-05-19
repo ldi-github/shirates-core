@@ -2,9 +2,12 @@
 
 In smartphone apps, irregular screens are often inserted in the middle of screen transitions.
 
-You may or may not see popup dialog (e.g. Location Permissions, Network Error, Firebase In-App Messaging, ads),
-tutorials to explain how to use
-features, and notification balloons.
+You may or may not see these screens.
+
+- popup dialog (e.g. Location Permissions, Network Error, Firebase In-App Messaging, ads)
+- tutorials to explain how to use features
+- notification balloons.
+- others
 
 ![](../_images/location_permissions.png)
 

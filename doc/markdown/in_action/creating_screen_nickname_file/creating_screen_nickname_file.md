@@ -41,9 +41,9 @@ Let's see `[Connected devices Screen]` as example.
     1. Start appium.
     2. Start Android 12 emulator.
     3. Start Appium Inspector.
-    4. Edit capabilities for Android 12 emulator to start session of `Settings` app. Click `Start Session`.
+    4. Edit capabilities for Android 12 emulator. Click `Start Session`to start session of `Settings` app.
     5. Tap `Connected devices` in the emulator.
-    6. Tap `Refresh source & screenshot` in Appium Inspector to capture `Connected devices` screen.
+    6. Click `Refresh source & screenshot` in Appium Inspector to capture `Connected devices` screen.
        <br>![](../_images/refresh_source_and_screenshot.png)
 
 5. Look at the screen and define selector names. At this point values may be "" (empty).
@@ -73,19 +73,19 @@ Let's see `[Connected devices Screen]` as example.
 
 6. Inspect each elements to find unique attribute(s).
    (See [Selector expression](../../basic/selector_and_nickname/selector_expression.md))
-    - `[<-]` is filtered uniquely by content-desc '`Navigate up`'.
+    - `[<-]` is determined uniquely by the condition that content-desc is '`Navigate up`'.
       <br>![](../_images/inspect_element_1.png)
       <br>So you can define the selector as follows using **accessibility filter**.
       <br>```"[<-]": "@Navigate up"```
       <br>
       <br>
-    - `[Connected devices]` is filtered uniquely by content-desc '`Connected devices`'.
+    - `[Connected devices]` is uniquely determined by the condition that content-desc is '`Connected devices`'.
       <br> ![](../_images/inspect_element_2.png)
       <br>So you can define the selector as follows using **accessibility filter**.
       <br>```"[Connected devices]": "@Connected devices"```
       <br>
       <br>
-    - `[Pair new device]` is filtered uniquely by text.
+    - `[Pair new device]` is uniquely determined by text.
       <br> ![](../_images/inspect_element_3.png)
       <br>So you can define the selector as follows using **text filter**.
       <br>```"[Pair new device]": "Pair new device"```
@@ -95,7 +95,7 @@ Let's see `[Connected devices Screen]` as example.
       <br>```"[Pair new device]": ""```
       <br>
       <br>
-    - `[+]` is not filtered uniquely by its attributes.
+    - `[+]` is not uniquely determined by its attributes.
       <br> ![](../_images/inspect_element_4.png)
       <br>In this case, consider
       using [Relative selector](../../basic/selector_and_nickname/relative_selector/relative_selector.md). You
@@ -104,13 +104,13 @@ Let's see `[Connected devices Screen]` as example.
       <br>```"[+]": "[Pair new device]:leftImage"```
       <br>
       <br>
-    - `[Connection preferences]` is filtered uniquely by text.
+    - `[Connection preferences]` is uniquely determined by text.
       <br> ![](../_images/inspect_element_5.png)
       <br>So you can define the selector as follows using **text filter**.
       <br>```"[Connection preferences]": ""```
       <br>
       <br>
-    - `Bluetooth, Android Auto` is dynamic content of `[Connection preferences]`, and is not filtered uniquely by its
+    - `Bluetooth, Android Auto` is dynamic content of `[Connection preferences]`, and is not uniquely determined by its
       attributes.
       <br> ![](../_images/inspect_element_6.png)
       <br>In this case, consider
@@ -329,7 +329,7 @@ See [Relative selector(Widget flow based)](../../basic/selector_and_nickname/rel
 `"scroll"` section is for optimization (optional).
 
 `start-elements` and `end-elements` are for detecting end of scroll efficiently.
-See [Optimizing end of scroll](../../in_action/performance_resource/end_of_scroll.md)
+See [end of scroll](../../in_action/performance_resource/end_of_scroll.md)
 
 `overlay-elements` is for detecting overlay elements. Elements under overlay-elements are considered as not displayed.
 
@@ -458,11 +458,11 @@ Let's see `[Android Settings Top Screen]` as example.
 If you can always access elements that consist of screen identity, you should use these elements for `identity`.
 The former **Example 1** and **Example 2** are in this case.
 
-If you can not always access such elements, you should consider another workaround. In case
-of `[Android Settings Top Screen]`, you
-can scroll up or down.
+If you can not always access such elements, you should consider another workaround.
 
 ![Optimizing end of scroll](../../in_action/_images/screen_nickname_identity_without_fixed_header.png)
+
+In case of `[Android Settings Top Screen]`, you can scroll up or down.
 
 This screen does not have fixed header area. While scrolling there is no position-fixed element for `"identity"`.
 In this case you can use `"satellites"` to complement unique key for screen identification.

@@ -143,7 +143,5 @@ if (isApp("[Maps]")) {
 ### Link
 
 - [Selector nickname](selector_nickname.md)
-
 - [Screen nickname](screen_nickname.md)
-
 - [Nickname](nickname.md)

@@ -1,6 +1,6 @@
 # text assertion
 
-You can assert the value of `text` or `label` or `value` property of the element using these functions.
+You can assert the value of `text` or `label` or `value` attribute of the element using these functions.
 
 ## functions
 

@@ -1,6 +1,6 @@
 # TestList
 
-TestList is generated after test finished. If already exists, TestList is updated by succeeding tests.<br>
+**TestList** is generated after test finished. If already exists, TestList is updated by succeeding tests.
 
 ## Features
 
@@ -9,7 +9,7 @@ TestList is generated after test finished. If already exists, TestList is update
 
 ## Example 1: Generate TestList
 
-You can generate TestList.
+You can generate TestList as follows.
 
 1. Run `CalculatorDemo`(`src/test/kotlin/demo/CalculatorDemo.kt`).
 2. Open TestList file.

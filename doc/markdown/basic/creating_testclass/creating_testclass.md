@@ -338,7 +338,7 @@ class TestClass1 : UITest() {
 
 ## @Nested support?
 
-No. Do not use @Nested. This limitation is of software design of Shirates test framework.
+No. Do not use @Nested. This limitation is of software design of Shirates Test Framework.
 
 ### Link
 

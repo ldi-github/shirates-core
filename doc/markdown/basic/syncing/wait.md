@@ -5,6 +5,7 @@ Sometimes, waiting for some seconds is required in particular situation.
 You can use **wait** function.
 
 Calling without `waitSeconds` argument uses default duration of `shortWaitSeconds`.
+You can configure parameter `shortWaitSeconds` in testrun files.
 
 See Also [Parameters](../parameter/parameters.md)
 
@@ -34,8 +35,6 @@ fun wait1() {
     }
 }
 ```
-
-You can configure parameter `shortWaitSeconds` in testrun files.
 
 ### Link
 

@@ -25,7 +25,7 @@ Create apps.json file, and describe data items. Property names(packageOrBundleId
 
 ### androidSettingsConfig.json (testConfig.json)
 
-Set the path of accounts.json to "**apps**" in **dataset** section of the testConfig.json file.
+Set the path of `apps.json` to "**apps**" in **dataset** section of the testConfig.json file.
 
 ```
 {

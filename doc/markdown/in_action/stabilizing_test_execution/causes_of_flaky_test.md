@@ -13,8 +13,9 @@ Write order-independent test as possible as you can if you want to run tests in 
 
 ## Stale element error
 
-Sync screen elements between device and local cache. **shirates-core**'s built in syncing mechanism supports syncing as
-possible as it can.
+An error may occur if screen elements are not synchronized between the device and the cache.
+
+**shirates-core**'s built in syncing mechanism supports syncing as possible as it can.
 
 ## Session corruption
 

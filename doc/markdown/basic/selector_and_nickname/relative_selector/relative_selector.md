@@ -173,14 +173,9 @@ fun select_with_nickname() {
 
 ### Link
 
-- [Relative selector command (Direction based)](relative_selector_direction.md)
-
-- [Relative selector command (Widget flow based)](relative_selector_flow.md)
-
-- [Relative selector command (XML based)](relative_selector_xml.md)
-
+- [Relative selector (Direction based)](relative_selector_direction.md)
+- [Relative selector (Widget flow based)](relative_selector_flow.md)
+- [Relative selector (XML based)](relative_selector_xml.md)
 - [Relative selector more example](relative_selector_more_example.md)
-
-
 - [index](../../../index.md)
 

@@ -1,21 +1,21 @@
-# Test Descriptors
+# Descriptors
 
 You can describe your test procedure using these functions. These are for readable documentation in Spec-Report.
 
 ## functions
 
-| function   | description                         | example                   | example(ja)              |
-|:-----------|:------------------------------------|:--------------------------|:-------------------------|
-| describe   | Any description with bullet         | - message                 | ・メッセージ                   |
-| procedure  | Description for a set of operations | - message                 | ・メッセージ                   |
-| caption    | Caption with decoration             | (message)                 | 【メッセージ】                  |
-| comment    | Comment with prefix                 | // message                | // メッセージ                 |
-| manual     | Manual operation                    | - message                 | ・メッセージ                   |
-| knownIssue | Known issue                         | [KNOWNISSUE]message (url) | [KNOWNISSUE]メッセージ (url)  |
-| target     | Target to check                     | message                   | メッセージ                    |
-| output     | Any text                            | message                   | メッセージ                    |
+| function   | description                         | example                   | example(ja)             |
+|:-----------|:------------------------------------|:--------------------------|:------------------------|
+| describe   | Any description with bullet         | - message                 | ・メッセージ                  |
+| procedure  | Description for a set of operations | - message                 | ・メッセージ                  |
+| caption    | Caption with decoration             | (message)                 | 【メッセージ】                 |
+| comment    | Comment with prefix                 | // message                | // メッセージ                |
+| manual     | Manual operation                    | - message                 | ・メッセージ                  |
+| knownIssue | Known issue                         | [KNOWNISSUE]message (url) | [KNOWNISSUE]メッセージ (url) |
+| target     | Target to check                     | message                   | メッセージ                   |
+| output     | Any text                            | message                   | メッセージ                   |
 
-**Note:** Bullet, caption and comment can be customized in `spec.properties` resource file.
+**Note:** bullet, caption and comment can be customized in `spec.properties` resource file.
 
 ## Example 1
 

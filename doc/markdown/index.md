@@ -17,7 +17,7 @@
 
 ### Recommended settings
 
-- [Plugin settings (IntelliJ IDEA)](tool_settings/plugin_settings.md)
+- [Save Actions Plugin (IntelliJ IDEA)](tool_settings/plugin_settings.md) **(Obsolete)**
 - [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save.md) **(New! 4.2.0)**
 - [Enable right-click test running (IntelliJ IDEA)](tool_settings/right_click_test_running.md)
 - [Android Device settings](basic/recommended_settings/recommended_settings_android.md)
@@ -74,7 +74,7 @@
 - Install and launch app
     - [installApp, removeApp](basic/function_property/install_and_launch_app/install_app.md)
     - [launchApp, terminateApp](basic/function_property/install_and_launch_app/launch_app.md)
-- Swipe screen
+- Swipe/Scroll screen
     - [swipe, flick](basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](basic/function_property/swipe_screen/scroll.md)
 - Asserting attribute
@@ -157,8 +157,8 @@
 
 ### Creating batch tools
 
-- [SummaryReportExecute](basic/creating_batch_tools/summary_report_execute.md)
-- [CodeGeneratorExecute](basic/creating_batch_tools/code_generator_execute.md)
+- [Summary-Report](basic/creating_batch_tools/summary_report_execute.md)
+- [Code Generator](basic/creating_batch_tools/code_generator_execute.md)
 
 ## Tutorial(In action)
 

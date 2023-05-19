@@ -29,8 +29,7 @@ See [Cropping images for template matching](../../../in_action/image_matching/cr
 
 ### Images directory
 
-1. Create image directory under
-   Put images files in images directory.
+1. Create `images` directory under `screens` directory. Put images files in images directory.
 
 ![cropped images](../../../in_action/_images/put_cropped_images_in_images_directory.png)
 
@@ -71,7 +70,7 @@ Define image nicknames in screen nickname file. File name must be unique.
 }
 ```
 
-## Sample program
+## Example
 
 ### AssertingImage1.kt
 

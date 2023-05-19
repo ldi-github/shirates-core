@@ -4,7 +4,7 @@
 
 | function | description                                   |
 |:---------|:----------------------------------------------|
-| onScreen | This function is executed on screen matched.  |
+| onScreen | The code block is executed on screen matched. |
 
 ## Example
 
