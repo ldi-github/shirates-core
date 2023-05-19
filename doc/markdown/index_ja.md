@@ -1,5 +1,7 @@
 # Shirates (shirates-core) 日本語ドキュメント
 
+[in English](index.md)
+
 ## リポジトリ
 
 - [shirates-core](https://github.com/ldi-github/shirates-core)
