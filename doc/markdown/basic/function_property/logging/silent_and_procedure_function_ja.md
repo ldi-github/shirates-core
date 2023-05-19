@@ -2,7 +2,7 @@
 
 ## silent関数
 
-You can suppress logging using **silent** function.
+**silent**関数を使用するとログ出力を抑制することができます。
 
 ### SilentAndProcedure1.kt
 

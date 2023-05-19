@@ -1,7 +1,7 @@
-# ログ出力の構成
+# ログ出力を構成する
 
 testrunファイルでログ出力を構成することができます。
-参照 [パラメーター](../../basic/parameter/parameters.md)
+参照 [パラメーター](../../basic/parameter/parameters_ja.md)
 
 ```
 ## Log --------------------
@@ -109,6 +109,6 @@ enableTapElementImageLog=true
 
 ### Link
 
-- [Configuring screenshot](configuring_screenshot_ja.md)
+- [スクリーンショットを構成する](configuring_screenshot_ja.md)
 - [index](../../index_ja.md)
 

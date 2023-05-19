@@ -193,7 +193,8 @@
 この場合は"sattelites"で補完してユニークな識別子を構成することができます。
 例えば、`#recycler_view&&Battery`と `#recycler_view&&Accessibility` はそれぞれ`[Android Settings Top Screen]`をユニークに識別することができます。
 
-"**selectors**"セクションにおいてセレクターニックネームを定義できます。上記の場合、 [相対セレクター](../relative_selector/relative_selector.md)が使用されています。
+"**selectors**"セクションにおいてセレクターニックネームを定義できます。上記の場合、 [相対セレクター](../relative_selector/relative_selector_ja.md)
+が使用されています。
 
 ## 画面ニックネームの共有
 
@@ -270,7 +271,5 @@
 ### Link
 
 - [セレクターニックネーム](selector_nickname_ja.md)
-
 - [データセットニックネーム](dataset_nickname_ja.md)
-
 - [ニックネーム](nickname_ja.md)

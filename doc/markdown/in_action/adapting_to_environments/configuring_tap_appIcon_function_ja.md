@@ -1,8 +1,8 @@
-# 起動するアプリのアイコンをタップする
+# tapAppIcon関数を構成する
 
 ## tapAppIcon 関数
 
-[tapAppIcon](../../basic/function_property/tap_element/tap_app_icon.md)関数を使用するとアプリアイコンをタップして起動することができます。
+[tapAppIcon](../../basic/function_property/tap_element/tap_app_icon_ja.md)関数を使用するとアプリアイコンをタップして起動することができます。
 
 ```kotlin
 it.tapAppIcon("Chrome")

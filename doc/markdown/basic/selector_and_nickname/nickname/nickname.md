@@ -39,10 +39,7 @@ A nickname is decorated with **"[ ]"**(square brackets) or **"{ }"**(curly brack
 ### Link
 
 - [Selector nickname](selector_nickname.md)
-
 - [Screen nickname](screen_nickname.md)
-
 - [Dataset nickname](dataset_nickname.md)
-
 - [index](../../../index.md)
 

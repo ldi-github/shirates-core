@@ -11,5 +11,5 @@ TestElementCache内の要素に対して柔軟な問い合わせ（例：相対�
 
 ### Link
 
-- [Direct access mode](direct_access_mode_ja.md)
+- [ダイレクトアクセスモード](direct_access_mode_ja.md)
 - [index](../../index_ja.md)

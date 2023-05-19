@@ -55,9 +55,6 @@ In the 6th group, widget flow order is (13). <br>
 ### Link
 
 - [Relative selector (Direction based)](relative_selector_direction.md)
-
 - [Relative selector (XML based)](relative_selector_xml.md)
-
-
 - [Relative selector](relative_selector.md)
 

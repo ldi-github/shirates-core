@@ -25,7 +25,7 @@
 
 テンプレートマッチングのための画像ファイルを取得してください。
 
-See [テンプレートマッチングのための画像の切り出し](../../../in_action/image_matching/cropping_images_for_template_matching_ja.md).
+参照 [テンプレートマッチングのための画像を切り出す](../../../in_action/image_matching/cropping_images_for_template_matching_ja.md)
 
 ### imagesディレクトリ
 
@@ -199,7 +199,7 @@ class AssertingImage1 : UITest() {
 
 ### 注意
 
-参照 [WARNING: An illegal reflective access operation has occurred](../../../troubleshooting/warnings/anIllegalRefrectiveAccessOperationHasOccured＿じゃ.md)
+参照 [WARNING: An illegal reflective access operation has occurred](../../../troubleshooting/warnings/anIllegalRefrectiveAccessOperationHasOccured.md)
 
 ### Link
 

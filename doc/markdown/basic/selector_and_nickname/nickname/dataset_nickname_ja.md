@@ -143,7 +143,5 @@ if (isApp("[地図]")) {
 ### Link
 
 - [セレクターニックネーム](selector_nickname_ja.md)
-
 - [画面ニックネーム](screen_nickname_ja.md)
-
 - [ニックネーム](nickname_ja.md)

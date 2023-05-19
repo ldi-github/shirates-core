@@ -237,7 +237,7 @@ Androidの設定アプリを起動します。
 ```
 
 これで十分動作しますが、**titleセレクター**を使用するともっと簡単になります。 (
-参照 [title selector](../../basic/selector_and_nickname/special_selector/title_selector_ja.md))
+参照 [titleセレクター](../../basic/selector_and_nickname/special_selector/title_selector_ja.md))
 
 ```
 {
@@ -316,8 +316,7 @@ Androidの設定アプリを起動します。
 
 相対セレクター`:switch`はウィジェットフローの最初のswitchを選択します。
 
-See [Relative selector(Widget flow based)](../../basic/selector_and_nickname/relative_selector/relative_selector_flow.md)
-.
+参照 [相対セレクター(ウィジェットフローベース)](../../basic/selector_and_nickname/relative_selector/relative_selector_flow_ja.md)
 
 ### "scroll" section
 

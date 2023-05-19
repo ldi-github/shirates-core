@@ -35,7 +35,7 @@ class TestClass1 : UITest() {
 テストのセッションを初期化するためにテスト構成情報を記載した**Testrunファイル** が必要です。
 **@Testrun**アノテーションをクラスに付与して適用する**Testrunファイル**を指定してください。
 
-参照 [テスト構成テンプレート](../creating_project/test_configuration_template.md)
+参照 [テスト構成テンプレート](../creating_project/test_configuration_template_ja.md)
 
 ```kotlin
 package exercise
@@ -93,10 +93,10 @@ class TestClass1 : UITest() {
 この時点で `testMethod1`は実行できます。
 
 1. Androidデバイスを起動します。
-    - [Quick Start](../../quick-start_ja.md) の **Create AVD for demo**で作成したAndroid AVDを使用できます。
+    - [クイックスタート](../../quick-start_ja.md) の **Create AVD for demo**で作成したAndroid AVDを使用できます。
     - またはAndroidの実機をマシンに接続し、 **USB デバッグ** を有効にします。
 1. IntelliJ IDEA のpreferences（またはSettings)を設定します。
-    - 参照 [Enable right-click test running](../../tool_settings/right_click_test_running_ja.md)
+    - 参照 [右クリックによろテスト実行を有効にする](../../tool_settings/right_click_test_running_ja.md)
 1. `testMethod1`の内部で右クリックして`Debug`を選択します。
 
 ### Console
@@ -287,7 +287,7 @@ Process finished with exit code 255
 org.opentest4j.TestAbortedException: scenario not implemented.
 ```
 
-その他のエラーが発生する場合は [エラーメッセージ](../../troubleshooting/error_warning_messages_ja.md) を参照してください。
+その他のエラーが発生する場合は [エラーメッセージ](../../troubleshooting/error_warning_messages.md) を参照してください。
 
 ## @Orderアノテーション
 
@@ -338,7 +338,7 @@ class TestClass1 : UITest() {
 
 ## @Nestedのサポートについて
 
-@Nested は使用しないでください。 これはShirates test framework のソフトウェアデザインに伴う制限です。
+@Nested は使用しないでください。 これはShirates Test Framework のソフトウェアデザインに伴う制限です。
 
 ### Link
 

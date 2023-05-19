@@ -2,7 +2,7 @@
 
 これらの関数を使用すると画像を検索することができます。
 
-[セレクター式](../../selector_and_nickname/selector_expression.md)を引数として使用します。
+[セレクター式](../../selector_and_nickname/selector_expression_ja.md)を引数として使用します。
 
 関数は`TestElement`オブジェクトではなく`ImageMatchResult`オブジェクトを返却します。
 

@@ -1,6 +1,6 @@
 # Test Report Index
 
-**Test Report Index** は[Htmlレポート](../creating_testclass/test_result_files_ja.md)のインデックスです。
+**Test Report Index** は[HTMLレポート](../creating_testclass/test_result_files_ja.md)のインデックスです。
 
 テスト結果のサマリーをほぼリアルタイム（ポーリング）で確認できます。
 

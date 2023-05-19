@@ -72,8 +72,5 @@ StaticText1を基準とした場合
 ### Link
 
 - [相対セレクター (ウィジェットフローベース)](relative_selector_flow_ja.md)
-
 - [相対セレクター (XMLベース)](relative_selector_xml_ja.md)
-
-
 - [相対セレクター](relative_selector_ja.md)

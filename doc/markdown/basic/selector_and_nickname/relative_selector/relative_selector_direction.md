@@ -72,8 +72,5 @@ from StaticText1
 ### Link
 
 - [Relative selector (Widget flow based)](relative_selector_flow.md)
-
 - [Relative selector (XML based)](relative_selector_xml.md)
-
-
 - [Relative selector](relative_selector.md)

@@ -272,7 +272,5 @@ nickname `[Screen A]`.
 ### Link
 
 - [Selector nickname](selector_nickname.md)
-
 - [Dataset nickname](dataset_nickname.md)
-
 - [Nickname](nickname.md)

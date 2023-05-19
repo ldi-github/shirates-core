@@ -203,11 +203,7 @@ class RelativeCommand1 : UITest() {
 ### Link
 
 - [Relative selector command (Direction based)](relative_selector_direction.md)
-
 - [Relative selector command (Widget flow based)](relative_selector_flow.md)
-
 - [Relative selector command (XML based)](relative_selector_xml.md)
-
-
 - [Relative selector](relative_selector.md)
 

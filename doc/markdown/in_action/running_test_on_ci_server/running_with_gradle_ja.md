@@ -42,7 +42,7 @@ wave1008@SNB-M1 Practice1 %
 
 ## 例3
 
-"`SR_*`"のプレフィックを付与して環境変数経由で[パラメーター](../../basic/parameter/parameters.md)を設定することができます。
+"`SR_*`"のプレフィックを付与して環境変数経由で[パラメーター](../../basic/parameter/parameters_ja.md)を設定することができます。
 
 1. `runtest.sh`を以下のように書き換えます。
 

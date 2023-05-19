@@ -169,23 +169,23 @@
     - [ログ言語](in_action/message_and_language/log_language_ja.md)
     - [デバイス言語](in_action/message_and_language/device_language_ja.md)
 - ログとスクリーンショット
-    - [ログを構成する](in_action/log_and_screenshot/configuring_log_ja.md)
+    - [ログ出力を構成する](in_action/log_and_screenshot/configuring_log_ja.md)
     - [スクリーンショットを構成する](in_action/log_and_screenshot/configuring_screenshot_ja.md)
 - デバッグ
     - [ソースXMLをファイルで確認する](in_action/debugging/watching_source_xml_in_file_ja.md)
     - [ソースXMLをデバッガーで確認する](in_action/debugging/watching_source_xml_in_debugger_ja.md)
 - さまざまな環境に適応する
     - [tapAppIcon関数を構成する](in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md)
-    - [OSのメッセージの変化に適応する](in_action/adapting_to_environments/adapting_to_changes_in_os_messages_ja.md)
+    - [OSのメッセージの変更に適応する](in_action/adapting_to_environments/adapting_to_changes_in_os_messages_ja.md)
 - イレギュラーを処理する
     - [イレギュラーハンドラー](in_action/handling_irregulars/irregular_handler_ja.md)
-- Test Fixture
-    - [Test fixture](in_action/test_fixture/test_fixture_ja.md)
+- テストフィクスチャ
+    - [テストフィクスチャ](in_action/test_fixture/test_fixture_ja.md)
 - 画像マッチング
     - [テンプレートマッチングのための画像を切り出す](in_action/image_matching/cropping_images_for_template_matching_ja.md)
 - パフォーマンスとリソースの最適化
     - [スクロール終端位置の検出の最適化](in_action/performance_resource/end_of_scroll_ja.md)
-    - [スクリーンショットのサイズ](in_action/performance_resource/screenshot_scale_ja.md)
+    - [スクリーンショットの縮小率](in_action/performance_resource/screenshot_scale_ja.md)
 - AppiumのAPIを使用する
     - [Appium ClientのAPIを使用する](in_action/using_appium_apis/using_appium_client_bare_apis_ja.md)
 - テストを優先度でフィルターする

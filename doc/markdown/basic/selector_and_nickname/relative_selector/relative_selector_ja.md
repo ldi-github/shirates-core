@@ -173,13 +173,8 @@ fun select_with_nickname() {
 ### Link
 
 - [相対セレクター方向ベース)](relative_selector_direction_ja.md)
-
 - [相対セレクター(ウィジェットフローベース)](relative_selector_flow_ja.md)
-
 - [相対セレクター(XMLベース)](relative_selector_xml_ja.md)
-
 - [相対セレクターの追加サンプル](relative_selector_more_example_ja.md)
-
-
 - [index](../../../index_ja.md)
 

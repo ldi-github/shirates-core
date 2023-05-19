@@ -51,7 +51,5 @@ it.tap("[Network & internet]")
 ### Link
 
 - [画面ニックネーム](screen_nickname_ja.md)
-
 - [データセットニックネーム](dataset_nickname_ja.md)
-
 - [ニックネーム](nickname_ja.md)

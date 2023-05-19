@@ -1,7 +1,7 @@
 # スクリーンショットを構成する
 
 testrunファイルでスクリーンショットを構成することができます。
-参照 [パラメーター](../../basic/parameter/parameters_ja.md).
+参照 [パラメーター](../../basic/parameter/parameters_ja.md)
 
 ```
 ## Screenshot --------------------
@@ -53,6 +53,6 @@ onScrolling=false
 
 ### Link
 
-- [Configuring log](configuring_log_ja.md)
+- [ログ出力を構成する](configuring_log_ja.md)
 - [index](../../index_ja.md)
 
