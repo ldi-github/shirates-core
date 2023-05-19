@@ -1,25 +1,25 @@
-# Customizing code generation
+# コード生成のカスタマイズ
 
-You can customize code generation by **Translator** interface.
+**Translator** インターフェースを使用するとコード生成をカスタマイズすることができます。
 
-## Translator interface
+## Translator インターフェース
 
-| function                     | description                                              |
-|------------------------------|----------------------------------------------------------|
-| escape                       | Escape characters                                        |
-| format                       | Format message                                           |
-| getSubject                   | Get subject from message                                 |
-| getScreenNickName            | Get screen nickname from message                         |
-| conditionMessageToFunction   | Convert condition message to function string             |
-| actionMessageToFunction      | Convert action message to function string                |
-| targetToFunction             | Convert target to function string                        |
-| expectationMessageToFunction | Convert expectation message to function string           |
-| atEndOfScenario              | Extension point called after scenario lines generated    |
-| atEndOfCase                  | Extension point called after case lines generated        |
-| atEndOfCondition             | Extension point called after condition lines generated   |
-| atEndOfAction                | Extension point called after action lines generated      |
-| atEndOfExpectation           | Extension point called after expectation lines generated |
-| atEndOfTarget                | Extension point called after target lines generated      |
+| 関数                           | 説明                             |
+|------------------------------|--------------------------------|
+| escape                       | 文字をエスケープします                    |
+| format                       | メッセージをフォーマットします                |
+| getSubject                   | メッセージからsubjectを取得します           |
+| getScreenNickName            | 画面ニックネームをメッセージから取得します          |
+| conditionMessageToFunction   | conditionのメッセージを関数の文字列に変換します   |
+| actionMessageToFunction      | expectationのメッセージを関数の文字列に変換します |
+| targetToFunction             | targetのメッセージを関数の文字列に変換します      |
+| expectationMessageToFunction | expectationのメッセージを関数の文字列に変換します |
+| atEndOfScenario              | scenarioの行が生成された後の拡張ポイント       |
+| atEndOfCase                  | case行が生成された後の拡張ポイント            |
+| atEndOfCondition             | condition行が生成された後の拡張ポイント       |
+| atEndOfAction                | action行が生成された後の拡張ポイント          |
+| atEndOfExpectation           | expectation行が生成された後の拡張ポイント     |
+| atEndOfTarget                | target行が生成された後の拡張ポイント          |
 
 ### Translator.kt
 
@@ -293,12 +293,12 @@ interface Translator {
 }
 ```
 
-## Example
+## 例
 
-1. Run `AndroidSettingdDemo` to get **Spec-Report** (`AndroidSettingsDemo@a.xlsx`). (
-   See [Quick start](../quick-start.md))
-2. Create `SpecInput` directory in `Downloads` directory, put `AndroidSettingsDemo@a.xlsx` in it.
-3. Run `CodeGeneratorExecute` to get `AndroidSettingsDemo.kt`.
+1. `AndroidSettingdDemo`を実行して**Spec-Report**(`AndroidSettingsDemo@a.xlsx`)を作成します。  (
+   参照 [クイックスタート](../quick-start_ja.md))
+2. `ダウンロード`ディレクトリの下に`SpecInput`ディレクトリを作成し、`AndroidSettingsDemo@a.xlsx`を配置します。
+3. `CodeGeneratorExecute` を実行して `AndroidSettingsDemo.kt`を生成します。
 
 ### AndroidSettingsDemo.kt
 
@@ -353,7 +353,7 @@ class AndroidSettingsDemo : UITest() {
 }
 ```
 
-4. Create `CustomTranslator.kt` in `kotlin/exercise`.
+4. `kotlin/exercise`の下に`CustomTranslator.kt`を作成します。
 
 #### CustomTranslator.kt
 
@@ -365,12 +365,11 @@ object CustomTranslator {
 }
 ```
 
-5. Edit as follows.
-    1. Annotate `CustomTranslator` with `@CustomObject`.
-    2. Inherit from Translator interface.
-    3. Override `actionMessageToFunction` function and annotate it with `@CustomFunction`.
-    4. Implement custom translation logic. In this example, tap function is output if the message has 'tap' and
-       nickname.
+5. 以下のように編集します。
+    1. `@CustomObject`アノテーションを`CustomTranslator`に付与します。
+    2. `Translator`インターフェースを継承します。
+    3. `actionMessageToFunction`関数をオーバーライドして`@CustomFunction`アノテーションを付与します。
+    4. カスタムの変換ロジックを実装します。この例ではメッセージが`tap`という文字列と、何らかのニックネームを含む場合にtap関数を出力します。
 
 ```kotlin
 package exercise
@@ -397,8 +396,8 @@ object CustomTranslator : Translator {
 }
 ```
 
-6. Build the project.
-7. Run `CodeGeneratorExecute` to get `AndroidSettingsDemo.kt`. You can get output as follows.
+6. プロジェクトをビルドします。
+7. `CodeGeneratorExecute`を実行して`AndroidSettingsDemo.kt`を生成します。以下のように出力されます。
 
 ```kotlin
 case(1) {
@@ -432,4 +431,4 @@ it.tap("[Network & internet]")
 
 ### Link
 
-- [index](../index.md)
+- [index](../index_ja.md)

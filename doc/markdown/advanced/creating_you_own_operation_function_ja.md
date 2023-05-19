@@ -1,12 +1,12 @@
-# Creating your own operation function
+# 独自のオペレーション関数を作成する
 
-You can create your own operation function with extension function.
+拡張関数で独自のオペレーション関数を作成することができます。
 
-## Example
+## 例
 
 ### CreatingCommandFunction1.kt
 
-In the action block of the following test code, two actions are executed by two operation functions.
+以下のテストコードのactionブロックにおいて、2つのオペレーション関数(scrollToTop, tapWithScrollDown)によって2つのアクションが実行されます。
 
 ```kotlin
 @Test
@@ -30,16 +30,15 @@ fun scrollToTopAndTapWithScrollDown() {
 }
 ```
 
-### Html-Report
+### Htmlレポート
 
 ![](_images/creating_your_own_operation_function_1.png)
 
 <br>
 
-If you want to combine two function into one function, you can define extension function for any type
-using **execOperateCommand** function of **TestDriverCommandContext** object.
+2つの関数を1つにまとめたい場合、**TestDriverCommandContext**オブジェクトの**execOperateCommand**関数を使用して拡張関数を定義することができます。
 
-**Note:** No-Load-Run mode and other features are supported in execOperateCommand function.
+**注意:** execOperateCommandを使用することで無負荷実行モード等の機能がサポートされます。
 
 ### CreatingCommandFunction1.kt
 
@@ -90,12 +89,12 @@ fun tapWithScrollDownFromTop() {
 }
 ```
 
-### Html-Report
+### Htmlレポート
 
 ![](_images/creating_your_own_operation_function_2.png)
 
-Using the function you have created, you can combine the two functions into one.
+作成した関数を使用することで2つの関数を1つに統合することができました。
 
 ### Link
 
-- [index](../index.md)
+- [index](../index_ja.md)

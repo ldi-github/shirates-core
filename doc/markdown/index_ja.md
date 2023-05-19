@@ -225,8 +225,8 @@
 
 ## トラブルシューティング
 
-- [エラーメッセージ/警告メッセージ](troubleshooting/error_warning_messages_ja.md)
-- [トラブルシューティング](troubleshooting/troubleshooting_ja.md)
+- [エラーメッセージ/警告メッセージ](troubleshooting/error_warning_messages.md)
+- [トラブルシューティング](troubleshooting/troubleshooting.md)
 
 ## Appendix
 

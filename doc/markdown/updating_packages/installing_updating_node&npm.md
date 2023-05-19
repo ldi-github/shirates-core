@@ -24,7 +24,7 @@ https://nodejs.org/en/download/
 
 ## Installing **n**
 
-`n` is a version management tool for node. (https://github.com/tj/n)
+`n` is a package management tool for node. (https://github.com/tj/n)
 
 ```
 npm install -g n
