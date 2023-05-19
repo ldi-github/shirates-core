@@ -6,8 +6,8 @@
 
 ## Document
 
-- [Quick start](https://ldi-github.github.io/shirates-core/quick-start.html)
-- [Document index](https://ldi-github.github.io/shirates-core/)
+- [in English](https://ldi-github.github.io/shirates-core/)
+- [in Japanese](https://ldi-github.github.io/shirates-core/index_ja.html)
 
 ## Features in 3 lines
 
