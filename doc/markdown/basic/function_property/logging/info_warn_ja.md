@@ -1,13 +1,13 @@
 # info, warn
 
-You can use info and warn function to output additional information.
+これらの関数を使用すると追加のメッセージを出力することができます。
 
-| function | description                               |
-|:---------|:------------------------------------------|
-| info     | For **detail** report only                |
-| warn     | For both **simple** and **detail** report |
+| 関数   | 説明                                      |
+|:-----|:----------------------------------------|
+| info | **detail**のレポートでのみ出力されます                |
+| warn | **simple** と **detail** の両方のレポートで出力されます |
 
-## Example
+## 例
 
 ### InfoAndWarn1.kt
 
@@ -47,14 +47,14 @@ class InfoAndWarn1 : UITest() {
 
 ![](../../_images/info_and_warn_detail.png)
 
-Both info and warn messages are output.
+infoとwarnの両方のメッセージが出力されます。
 
 ### Html-Report(simple)
 
 ![](../../_images/info_and_warn_simple.png)
 
-Only warn message is output.
+warnのメッセージのみが出力されます。
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)

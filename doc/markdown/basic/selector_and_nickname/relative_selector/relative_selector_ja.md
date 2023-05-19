@@ -178,7 +178,7 @@ fun select_with_nickname() {
 
 - [相対セレクター(XMLベース)](relative_selector_xml_ja.md)
 
-- [相対セレクターのサンプル](relative_selector_more_example_ja.md)
+- [相対セレクターの追加サンプル](relative_selector_more_example_ja.md)
 
 
 - [index](../../../index_ja.md)

@@ -1,13 +1,12 @@
 # account
 
-You can configure account data in **accounts.json** file, and you can get properties of accounts with **account**
-function.
+**account**関数を使用すると**accounts.json**ファイルに設定したアカウント情報のプロパティを取得することができます。
 
-## Example
+## 例
 
 ### accounts.json
 
-Create `accounts.json` file, and describe data items. Property names(id, password, etc) are arbitrary.
+`accounts.json`ファイルを作成し、データアイテムを記述します。プロパティ名（id, passwordなど）は任意です。
 
 ```
 {
@@ -25,7 +24,7 @@ Create `accounts.json` file, and describe data items. Property names(id, passwor
 
 ### androidSettingsConfig.json (testConfig.json)
 
-Set the path of accounts.json to "**accounts**" in **dataset** section of the `testConfig.json` file.
+使用する`accounts.json`ファイルのパスを`testConfig.json`ファイルの**dataset**セクションの"**accounts**"で指定します。
 
 ```
 {
@@ -42,7 +41,7 @@ Set the path of accounts.json to "**accounts**" in **dataset** section of the `t
 
 (`kotlin/tutorial/basic/Account1.kt`)
 
-Use account function.
+account関数を使用します。
 
 ```kotlin
 @Test
@@ -69,5 +68,5 @@ fun account() {
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

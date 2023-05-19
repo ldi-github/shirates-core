@@ -1,16 +1,16 @@
 # memo
 
-You can write and read memo using these functions.
+これらの関数を使用してメモを読み取り/書き込みすることができます。
 
-**memo** is temporary storage in memory.
+メモはメモリ内の一時的な記憶領域です。
 
-## functions
+## 関数
 
-| function             | description                                               |
-|:---------------------|:----------------------------------------------------------|
-| writeMemo(key, text) | Take a memo.                                              |
-| readMemo(key)        | Read remo of the key                                      |
-| memoTextAs(key)      | Get text value of the element and take a memo as the key. |
+| 関数                   | 説明                         |
+|:---------------------|:---------------------------|
+| writeMemo(key, text) | 指定したキーとテキストでメモを書き込みます      |
+| readMemo(key)        | 指定したキーでメモを読み取ります           |
+| memoTextAs(key)      | 要素のtextの値を指定したキーでメモに書き込みます |
 
 ## Example 1
 
@@ -98,5 +98,5 @@ fun memoTextAs_readMemo() {
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

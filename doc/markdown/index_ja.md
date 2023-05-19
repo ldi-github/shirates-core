@@ -157,8 +157,8 @@
 
 ### バッチ処理を作成する
 
-- [SummaryReportExecute](basic/creating_batch_tools/summary_report_execute_ja.md)
-- [CodeGeneratorExecute](basic/creating_batch_tools/code_generator_execute_ja.md)
+- [Summary-Report](basic/creating_batch_tools/summary_report_execute_ja.md)
+- [Code Generator](basic/creating_batch_tools/code_generator_execute_ja.md)
 
 ## チュートリアル(In action)
 

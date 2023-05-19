@@ -157,8 +157,8 @@
 
 ### Creating batch tools
 
-- [SummaryReportExecute](basic/creating_batch_tools/summary_report_execute.md)
-- [CodeGeneratorExecute](basic/creating_batch_tools/code_generator_execute.md)
+- [Summary-Report](basic/creating_batch_tools/summary_report_execute.md)
+- [Code Generator](basic/creating_batch_tools/code_generator_execute.md)
 
 ## Tutorial(In action)
 

@@ -1,15 +1,15 @@
 # Shell
 
-You can execute shell command using these functions.
+これらの関数を使用してシェルコマンドを実行することができます。
 
-## functions
+## 関数
 
-| function   | description                  |
-|:-----------|:-----------------------------|
-| shell      | Execute shell                |
-| shellAsync | Execute shell asynchronously |
+| 関数         | 説明            |
+|:-----------|:--------------|
+| shell      | シェルを実行します     |
+| shellAsync | シェルを非同期で実行します |
 
-## Example
+## 例
 
 ### Shell1.kt
 
@@ -80,11 +80,10 @@ class Shell1 : UITest() {
 }
 ```
 
-### Note
+### 注意
 
-Using shell is platform dependent.
-It's recommended to use [macro function](../../routine_work/macro.md) to hide platform dependent implementation.
+シェルの使用はプラットフォーム依存です。[マクロ関数](../../routine_work/macro_ja.md)を使用してプラットフォーム依存の実装を隠蔽することを推奨します。
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)

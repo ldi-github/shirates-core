@@ -4,13 +4,13 @@
 
 ## 関数
 
-| 関数                 | 説明                                    |
-|:-------------------|:--------------------------------------|
-| tap                | selectorにマッチする最初の要素をタップする（現在表示中の画面）   |
-| tapWithScrollDown  | selectorにマッチする最初の要素をタップする（下方向スクロールあり） |
-| tapWithScrollUp    | selectorにマッチする最初の要素をタップする（上方向スクロールあり） |
-| tapWithScrollRight | selectorにマッチする最初の要素をタップする（右方向スクロールあり） |
-| tapWithScrollLeft  | selectorにマッチする最初の要素をタップする（左方向スクロールあり） |
+| 関数                 | 説明                                     |
+|:-------------------|:---------------------------------------|
+| tap                | selectorにマッチする最初の要素をタップします（現在の画面）      |
+| tapWithScrollDown  | selectorにマッチする最初の要素をタップします（下方向スクロールあり） |
+| tapWithScrollUp    | selectorにマッチする最初の要素をタップします（上方向スクロールあり） |
+| tapWithScrollRight | selectorにマッチする最初の要素をタップします（右方向スクロールあり） |
+| tapWithScrollLeft  | selectorにマッチする最初の要素をタップします（左方向スクロールあり） |
 
 ## 例
 

@@ -6,44 +6,43 @@
 "[selector nickname]": "(selector expression)"
 ```
 
-## Example 1
+## 例1
 
-Selector nickname is defined like this. (see also [Screen nickname](screen_nickname_ja.md))
+セレクターニックネームを以下のように定義します。(参照 [画面ニックネーム](screen_nickname_ja.md))
 
 ```
 "[Search Box]": "@Search"
 ```
 
-You can use the nickname in test code.
+定義したニックネームはテストコードで使用することができます。
 
 ```kotlin
 it.tap("[Search Box]")
 ```
 
-Above is equivalent to below.
+上記は以下と同じです。
 
 ```kotlin
 it.tap("@Search")
 ```
 
-Using nickname makes your test code more readable and semantic.
+ニックネームを使用するとテストコードが読みやすく意味がわかりやすくなります。
 
-## Example 2
+## 例2
 
-Selector nickname is defined like this. (see also [Screen nickname](screen_nickname_ja.md))
+セレクターニックネームを以下のように定義します。(参照 [画面ニックネーム](screen_nickname_ja.md))
 
 ```
 "[Network & internet]": "Network & internet"
 ```
 
-When the selector expression is text filter and is equal to the nickname label(without brackets), the value can be
-omitted.
+セレクター式がテキストフィルターであり、ニックネームから括弧を除いたラベル部分と一致する場合は、値の設定は省略できます。
 
 ```
 "[Network & internet]": ""
 ```
 
-You can use the nickname in test code.
+定義したニックネームはテストコードで使用することができます。
 
 ```kotlin
 it.tap("[Network & internet]")

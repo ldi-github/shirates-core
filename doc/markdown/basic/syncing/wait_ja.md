@@ -1,13 +1,13 @@
 # wait
 
-Sometimes, waiting for some seconds is required in particular situation.
+特定の条件下では数秒の待つことが必要になる場合があります。
 
-You can use **wait** function.
+**wait**関数を使用することができます。
 
-Calling without `waitSeconds` argument uses default duration of `shortWaitSeconds`.
-You can configure parameter `shortWaitSeconds` in testrun files.
+引数`waitSeconds`を指定せずに使用した場合はデフォルトで`shortWaitSeconds`が適用されます。
+`shortWaitSeconds`はtestrunファイルで設定することができます。
 
-See Also [Parameters](../parameter/parameters.md)
+参照 [パラメーター](../parameter/parameters_ja.md)
 
 ### Wait1.kt
 
@@ -38,4 +38,4 @@ fun wait1() {
 
 ### Link
 
-- [index](../../index.md)
+- [index](../../index_ja.md)

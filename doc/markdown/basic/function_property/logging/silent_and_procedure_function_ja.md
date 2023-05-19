@@ -1,6 +1,6 @@
 # silent, procedure
 
-## silent function
+## silent関数
 
 You can suppress logging using **silent** function.
 
@@ -35,14 +35,14 @@ fun silent1() {
 
 ![](../../_images/silent_and_procedure_1.png)
 
-`describe` is logged.<br>
-`scrollToEnd` and `tap` are not logged.
+`describe`は出力されています。<br>
+`scrollToEnd`と`tap`は出力されていません。
 
 <br>
 
-# procedure function
+# procedure関数
 
-You can use **procedure** function instead of describe + silent.
+**procedure**関数を使用するとdescribe関数 と silent関数を組み合わせることなく代用できます。
 
 ### SilentAndProcedure1.kt
 
@@ -72,9 +72,9 @@ fun procedure1() {
 
 ![](../../_images/silent_and_procedure_2.png )
 
-`procedure` is logged.<br>
-`scrollToEnd` and `tap` are not logged.
+`procedure` は出力されています。<br>
+`scrollToEnd` と `tap`は出力されていません。
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)

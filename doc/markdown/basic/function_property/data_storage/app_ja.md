@@ -1,13 +1,12 @@
 # app
 
-You can configure apps data in **apps.json** file, and you can get properties of apps with **app**
-function.
+**app**関数を使用すると**app.json**ファイルに設定したアプリ情報のプロパティを取得することができます。
 
-## Example
+## 例
 
 ### apps.json
 
-Create apps.json file, and describe data items. Property names(packageOrBundleId) are arbitrary.
+`apps.json`ファイルを作成し、データアイテムを記述します。プロパティ名（packageOrBundleIdなど）は任意です。
 
 ```
 {
@@ -25,7 +24,7 @@ Create apps.json file, and describe data items. Property names(packageOrBundleId
 
 ### androidSettingsConfig.json (testConfig.json)
 
-Set the path of `apps.json` to "**apps**" in **dataset** section of the testConfig.json file.
+使用する`apps.json`ファイルのパスを`testConfig.json`ファイルの**dataset**セクションの"**apps**"で指定します。
 
 ```
 {
@@ -42,7 +41,7 @@ Set the path of `apps.json` to "**apps**" in **dataset** section of the testConf
 
 (`kotlin/tutorial/basic/App1.kt`)
 
-Use app function.
+app関数を使用します。
 
 ```kotlin
 @Test
@@ -68,5 +67,5 @@ fun app() {
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

@@ -18,8 +18,9 @@ fun main() {
 
 ## Running function
 
-1. Run tests and get **Spec-Report** in the log directory.
-2. Right click `SummaryReportExecute.kt` and select `run` to get **Summary-Report**.
+1. Run tests and get **Spec-Report**.
+2. Right click `SummaryReportExecute.kt` and select `run`.
+3. You can get **Summary-Report**.
 
 ![](../_images/summary_report_execute_1.png)
 

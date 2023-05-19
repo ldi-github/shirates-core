@@ -1,23 +1,23 @@
-# Descriptors
+# ディスクリプター
 
-You can describe your test procedure using these functions. These are for readable documentation in Spec-Report.
+これらの関数を使用してテストの手続きを説明することができます。これはSpec-Reportを読みやすいドキュメントにするために使用します。
 
-## functions
+## 関数
 
-| function   | description                         | example                   | example(ja)             |
-|:-----------|:------------------------------------|:--------------------------|:------------------------|
-| describe   | Any description with bullet         | - message                 | ・メッセージ                  |
-| procedure  | Description for a set of operations | - message                 | ・メッセージ                  |
-| caption    | Caption with decoration             | (message)                 | 【メッセージ】                 |
-| comment    | Comment with prefix                 | // message                | // メッセージ                |
-| manual     | Manual operation                    | - message                 | ・メッセージ                  |
-| knownIssue | Known issue                         | [KNOWNISSUE]message (url) | [KNOWNISSUE]メッセージ (url) |
-| target     | Target to check                     | message                   | メッセージ                   |
-| output     | Any text                            | message                   | メッセージ                   |
+| 関数         | 説明          | 出力例                       | 出力例(日本語)                |
+|:-----------|:------------|:--------------------------|:------------------------|
+| describe   | 行頭文字を伴う説明   | - message                 | ・メッセージ                  |
+| procedure  | 複数の操作に関する説明 | - message                 | ・メッセージ                  |
+| caption    | 装飾を伴う見出し    | (message)                 | 【メッセージ】                 |
+| comment    | コメント        | // message                | // メッセージ                |
+| manual     | 手動による操作     | - message                 | ・メッセージ                  |
+| knownIssue | 既知の問題       | [KNOWNISSUE]message (url) | [KNOWNISSUE]メッセージ (url) |
+| target     | 確認対象        | message                   | メッセージ                   |
+| output     | 任意のテキスト     | message                   | メッセージ                   |
 
-**Note:** bullet, caption and comment can be customized in `spec.properties` resource file.
+**注意:** 行頭文字(bullet), 見出し(caption), コメントのプレフィックス(comment)は リソースファイルの`spec.properties`でカスタマイズすることができます。
 
-## Example 1
+## 例1
 
 ### Descriptor1.kt
 
@@ -117,4 +117,4 @@ fun example() {
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
