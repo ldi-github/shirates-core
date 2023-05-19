@@ -57,9 +57,9 @@ it.tap("Allow only while using the app||While using the app")
 
 This is better than former, but writing literals in test code makes it less maintainable.
 
-It's better to use nickname.
-
 ### Using nickname
+
+It's better to use nickname for maintainability.
 
 ```kotlin
 it.tap("[While using the app]")

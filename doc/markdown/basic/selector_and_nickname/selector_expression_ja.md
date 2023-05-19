@@ -163,7 +163,7 @@ accessContains!=text1   // 否定
 
 ## 画像フィルター
 
-画像ファイルを使用してイメージマッチング（テンプレートマッチング）を行うことができます。
+画像ファイルを使用して画像マッチング（テンプレートマッチング）を行うことができます。
 参照 [Image assertion](../function_property/asserting_image/image_assertion_ja.md)
 
 ```

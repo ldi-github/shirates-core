@@ -1,30 +1,30 @@
-# Creating screen nickname file
+# 画面ニックネームを作成する
 
-Creating screen nickname file is important to make testing easy.
+画面ニックネームの作成はテストを容易にするために重要です。
 
-There are several patterns with defining unique screen identity.
+ユニークな画面識別子を定義するにはいくつかのパターンがあります。
 
-1. Fixed layout
-2. Scrolling layout with fixed header
-3. Scrolling layout without fixed header
+1. 固定レイアウト
+2. スクロールするレイアウト（固定ヘッダあり）
+3. スクロールするレイアウト（固定ヘッダなし）
 
-The latter is harder than the former.
+後ろのものの方が難易度は高くなります。
 
-## Example 1: Fixed layout
+## 例1: 固定レイアウト
 
-Open Android Settings app.
+Androidの設定アプリを開きます。
 
-Let's see `[Connected devices Screen]` as example.
+`[Connected devices Screen]`の例で説明します。
 
 ![](../_images/connected_devices_screen_1.png)
 
-1. Create `screens` directory (if it does not exist).
-2. Create a file with name `[Connected devices Screen].json`.
+1. `screens`ディレクトリを作成します(存在していない場合)。
+2. `[Connected devices Screen].json`という名前でファイルを作成します。
 
 ![](../_images/create_connected_decives_screen_json.png)
 
-3. Edit content as follows. **key** must be the same as the file name(without extension). (
-   See [Screen nickname](../../basic/selector_and_nickname/nickname/screen_nickname.md) )
+3. 以下のように内容を編集します。 **key** はファイル名（拡張子なし）と同じにする必要があります。 (
+   参照 [画面ニックネーム](../../basic/selector_and_nickname/nickname/screen_nickname_ja.md) )
 
 ```
 {
@@ -37,16 +37,16 @@ Let's see `[Connected devices Screen]` as example.
 }
 ```
 
-4. Capture `Connected Devices` screen in Appium Inspector. (See [Using Appium Inspector](using_appium_inspector.md))
-    1. Start appium.
-    2. Start Android 12 emulator.
-    3. Start Appium Inspector.
-    4. Edit capabilities for Android 12 emulator. Click `Start Session`to start session of `Settings` app.
-    5. Tap `Connected devices` in the emulator.
-    6. Click `Refresh source & screenshot` in Appium Inspector to capture `Connected devices` screen.
+4. Appium Inspectorで`Connected Devices`画面をキャプチャします。 (参照 [Appium Inspectorを使用する](using_appium_inspector_ja.md))
+    1. appiumを起動します。
+    2. Android 12のエミュレーターを起動します。
+    3. Appium Inspectorを起動します。
+    4. Android 12エミュレーター向けにcapabilitiesを編集し、`Start Session`をクリックして`設定アプリ`のセッションを開始します。
+    5. エミュレーターで`Connected devices`をタップします。
+    6. Appium Inspectorで`Refresh source & screenshot`をクリックして`Connected devices`画面をキャプチャします。
        <br>![](../_images/refresh_source_and_screenshot.png)
 
-5. Look at the screen and define selector names. At this point values may be "" (empty).
+5. 画面を見ながらセレクターの名前を定義します。この時点では値は""（空文字）でかまいません。
    <br>![](../_images/connected_devices_screen_edit_1.png)
 
 ```
@@ -71,56 +71,53 @@ Let's see `[Connected devices Screen]` as example.
 }
 ```
 
-6. Inspect each elements to find unique attribute(s).
-   (See [Selector expression](../../basic/selector_and_nickname/selector_expression.md))
-    - `[<-]` is determined uniquely by the condition that content-desc is '`Navigate up`'.
+6. 各要素を精査しユニークな属性を探します。
+   (参照 [セレクター式](../../basic/selector_and_nickname/selector_expression_ja.md))
+    - `[<-]` は content-descが '`Navigate up`'であるという条件で唯一に決定することができます。
       <br>![](../_images/inspect_element_1.png)
-      <br>So you can define the selector as follows using **accessibility filter**.
+      <br>これにより **アクセシビリティフィルター** を使用して以下のようにセレクターを定義できます。
       <br>```"[<-]": "@Navigate up"```
       <br>
       <br>
-    - `[Connected devices]` is uniquely determined by the condition that content-desc is '`Connected devices`'.
+    - `[Connected devices]`はcontent-descが '`Connected devices`'であるという条件で唯一に決定することができます。
       <br> ![](../_images/inspect_element_2.png)
-      <br>So you can define the selector as follows using **accessibility filter**.
+      <br>これにより **アクセシビリティフィルター** を使用して以下のようにセレクターを定義できます。
       <br>```"[Connected devices]": "@Connected devices"```
       <br>
       <br>
-    - `[Pair new device]` is uniquely determined by text.
+    - `[Pair new device]` はテキストによって唯一に決定することができます。
       <br> ![](../_images/inspect_element_3.png)
-      <br>So you can define the selector as follows using **text filter**.
+      <br>これにより **テキストフィルター** を使用して以下のようにセレクターを定義できます。
       <br>```"[Pair new device]": "Pair new device"```
       <br>
-      <br>In this case, the value can be omitted because the text is the same as nickname label(without brackets). (
-      See [Selector nickname](../../basic/selector_and_nickname/nickname/selector_nickname.md))
+      <br>この場合、テキストがニックネームから括弧を除いたラベルと一致するので、値の指定は省略できます。 (
+      参照 [セレクターニックネーム](../../basic/selector_and_nickname/nickname/selector_nickname_ja.md))
       <br>```"[Pair new device]": ""```
       <br>
       <br>
-    - `[+]` is not uniquely determined by its attributes.
+    - `[+]` は属性値によって唯一に決定することはできません。
       <br> ![](../_images/inspect_element_4.png)
-      <br>In this case, consider
-      using [Relative selector](../../basic/selector_and_nickname/relative_selector/relative_selector.md). You
-      can define the selector as follows using `:leftImage`.
-      See [Relative selector(Direction based)](../../basic/selector_and_nickname/relative_selector/relative_selector_direction.md)
+      <br>この場合は[相対セレクター](../../basic/selector_and_nickname/relative_selector/relative_selector_ja.md)の使用を検討します。
+      `:leftImage`を使用するとセレクターを以下のように定義できます。
+      参照 [相対セレクター(方向ベース)](../../basic/selector_and_nickname/relative_selector/relative_selector_direction_ja.md)
       <br>```"[+]": "[Pair new device]:leftImage"```
       <br>
       <br>
-    - `[Connection preferences]` is uniquely determined by text.
+    - `[Connection preferences]` はテキストによって唯一に決定することができます。
       <br> ![](../_images/inspect_element_5.png)
-      <br>So you can define the selector as follows using **text filter**.
+      <br>**テキストフィルター**を使用して以下のようにセレクターを定義できます。
       <br>```"[Connection preferences]": ""```
       <br>
       <br>
-    - `Bluetooth, Android Auto` is dynamic content of `[Connection preferences]`, and is not uniquely determined by its
-      attributes.
+    - `Bluetooth, Android Auto` は`[Connection preferences]`の動的なコンテンツであり、その属性によって唯一に決定することはできません。
       <br> ![](../_images/inspect_element_6.png)
-      <br>In this case, consider
-      using [Relative selector](../../basic/selector_and_nickname/relative_selector/relative_selector.md). You
-      can define the selector as follows using `:belowLabel`.
-      See [Relative selector(Direction based)](../../basic/selector_and_nickname/relative_selector/relative_selector_direction.md)
+      <br>この場合は[相対セレクター](../../basic/selector_and_nickname/relative_selector/relative_selector_ja.md)の使用を検討します。
+      `:belowLabel`を使用するとセレクターを以下のように定義できます。
+      参照 [相対セレクター（方向ベース）](../../basic/selector_and_nickname/relative_selector/relative_selector_direction_ja.md)
       <br>```"{Connection preferences}": "[Connection preferences]:belowLabel"```
       <br>
       <br>
-    - Inspect the rest of elements and edit all selector nicknames. Finally, you can get selectors as follows.
+    - その他の要素についてもAppium Inspectorで精査し、全てのセレクターニックネームを編集した結果、以下のようなセレクターとなりました。
 
 ```
 {
@@ -144,7 +141,7 @@ Let's see `[Connected devices Screen]` as example.
 }
 ```
 
-7. Set `identity` combining selector nicknames to make it unique identity.
+7. セレクターニックネームを結合してユニークな識別子を作成して`identity`に設定します。
 
 ```
 {
@@ -168,7 +165,7 @@ Let's see `[Connected devices Screen]` as example.
 }
 ```
 
-8. Create `ConnectedDevicesTest.kt` under `kotlin/exercise` directory.
+8. `kotlin/exercise`ディレクトリの下に`ConnectedDevicesTest.kt`を作成します。
 
 ```
 package exercise
@@ -216,22 +213,21 @@ class ConnectedDevicesTest : UITest() {
 }
 ```
 
-9. Run test. You can get a Html-report as follows when configured correctly.
+9. テストを実行します。正しく設定されている場合は以下のようなHTMLレポートが出力されます。
    <br>![](../_images/connected_devices_test_result.png)
 
 <br>
 
-## Example 2: Scrolling layout with fixed header
+## 例2: スクロールするレイアウト（固定ヘッダあり）
 
-Open Android Settings app.
+Androidの設定アプリを起動します。
 
-Let's see `[Network & internet Screen]` as example.
+`[Network & internet Screen]`を例に説明します。
 
 ![Optimizing end of scroll](../../in_action/_images/screen_nickname_identity_with_fixed_header_1.png)
 ![Optimizing end of scroll](../../in_action/_images/screen_nickname_identity_with_fixed_header_2.png)
 
-This screen is scrollable and has fixed header area `<#collapsing_toolbar>`. In this case, you can define `identity`
-as follows.
+この画面はスクロール可能であり、固定ヘッダとして`<#collapsing_toolbar>`を持ちます。この場合、`identity`を以下のように設定できます。
 
 ```
 {
@@ -240,8 +236,8 @@ as follows.
   "identity": "#collapsing_toolbar&&@Network & internet",
 ```
 
-This is enough, but you can simply use **title selector**. (
-See [title selector](../../basic/selector_and_nickname/special_selector/title_selector.md))
+これで十分動作しますが、**titleセレクター**を使用するともっと簡単になります。 (
+参照 [title selector](../../basic/selector_and_nickname/special_selector/title_selector_ja.md))
 
 ```
 {
@@ -252,7 +248,7 @@ See [title selector](../../basic/selector_and_nickname/special_selector/title_se
 
 <br>
 
-Screen nickname file for `[Network & internet Screen]` can be described as follows.
+`[Network & internet Screen]`向けの画面ニックネームは以下のように記述することができます。
 
 **[Network & internet Screen].json**
 
@@ -311,40 +307,39 @@ Screen nickname file for `[Network & internet Screen]` can be described as follo
 
 ### :label
 
-In this example, relative selector`:label` is used instead of `:belowLabel`. `:label` searches the nearest label
-in widget flow.
+この例では相対セレクターとして`:belowLabel`ではなく`:label`を使用しています。`:label`はウィジェットフローの最初のlabelを選択します。
 
-See [Relative selector(Widget flow based)](../../basic/selector_and_nickname/relative_selector/relative_selector_flow.md)
+参照 [相対セレクター(ウィジェットフローベース)](../../basic/selector_and_nickname/relative_selector/relative_selector_flow_ja.md)
 .
 
 ### :switch
 
-Relative selector `:switch` searches the nearest switch in widget flow.
+相対セレクター`:switch`はウィジェットフローの最初のswitchを選択します。
 
 See [Relative selector(Widget flow based)](../../basic/selector_and_nickname/relative_selector/relative_selector_flow.md)
 .
 
 ### "scroll" section
 
-`"scroll"` section is for optimization (optional).
+`"scroll"セクションは最適化のために使用します。（オプション）
 
-`start-elements` and `end-elements` are for detecting end of scroll efficiently.
-See [end of scroll](../../in_action/performance_resource/end_of_scroll.md)
+`start-elements` と `end-elements` はスクロールの終端位置を効率よく検出するためのものです。
+参照 [スクロール終端位置の検出の最適化](../../in_action/performance_resource/end_of_scroll_ja.md)
 
-`overlay-elements` is for detecting overlay elements. Elements under overlay-elements are considered as not displayed.
+`overlay-elements` はオーバーレイを検出するためのに使用します。 オーバーレイの下にある要素は表示されていないものとみなします。
 
 <br>
 
-## Example 3: Scrolling layout without fixed header
+## 例3: スクロールするレイアウト（固定ヘッダなし）
 
-Open Android Settings app.
+Androidの設定アプリを開きます。
 
-Let's see `[Android Settings Top Screen]` as example.
+`[Android Settings Top Screen]`を例に説明します。
 
 ![](../_images/settings_1.png)
 
-1. Open shirates-core project.
-2. Open `[Android Settings Top Screen].json` under `testConfig/android/androidSettings/screens`.
+1. shirates-coreプロジェクトを開きます。
+2. `testConfig/android/androidSettings/screens`の下にある`[Android Settings Top Screen].json`を開きます。
 
 ```
 {
@@ -453,22 +448,22 @@ Let's see `[Android Settings Top Screen]` as example.
 
 <br>
 
-### "identity" and "satellites"
+### "identity" と "satellites"
 
-If you can always access elements that consist of screen identity, you should use these elements for `identity`.
-The former **Example 1** and **Example 2** are in this case.
+画面のidentityを構成する要素に常にアクセスできるならば、それらの要素を`identity`として使用すべきです。
+上述の**例1** と **例2** がこれに該当します。
 
-If you can not always access such elements, you should consider another workaround.
+そのような要素に常にアクセスできない場合は、他の方法を検討する必要があります。
 
 ![Optimizing end of scroll](../../in_action/_images/screen_nickname_identity_without_fixed_header.png)
 
-In case of `[Android Settings Top Screen]`, you can scroll up or down.
+`[Android Settings Top Screen]`の場合は上下にスクロール可能です。
 
-This screen does not have fixed header area. While scrolling there is no position-fixed element for `"identity"`.
-In this case you can use `"satellites"` to complement unique key for screen identification.
-`"satellites` is a list of selector.
+この画面は固定ヘッダを持っていません。スクロールする際に`"identity"`として使用可能な位置が固定された要素はありません。
+この場合、`"satellites"`を指定して画面の識別がユニークになるようにすることができます。
+`"satellites`はセレクターのリストです。
 
-In `[Android Settings Top Screen].json`, you can specify `"identity"` and `"satellites"` as follows.
+`[Android Settings Top Screen].json`においては、`"identity"` と `"satellites"`を以下のように指定することができます。
 
 ```
 {
@@ -479,12 +474,12 @@ In `[Android Settings Top Screen].json`, you can specify `"identity"` and `"sate
 ...
 ```
 
-This means that the screen is considered as `"[Android Settings Top Screen]"` when the screen has `"#recycler_view"`
-and has at least one of `"Battery"`, `"Accessibility"`
-, `"Passwords & accounts"` or `"Tips & support"`. The complex key(consists of identity and satellite key) must be unique
-over screens.
+これにより、画面が`"#recycler_view"`を持ち、`"Battery"`, `"Accessibility"`, `"Passwords & accounts"` or `"Tips & support"`のうち
+少なくとも一つが画面上に存在している場合、`"[Android Settings Top Screen]"`とみなされます
+
+identity と satellite keyから構成される複合キーが固有である必要があります。
 
 ### Link
 
-- [Using Appium Inspector](using_appium_inspector.md)
-- [index](../../index.md)
+- [Appium Inspectorを使用する](using_appium_inspector_ja.md)
+- [index](../../index_ja.md)

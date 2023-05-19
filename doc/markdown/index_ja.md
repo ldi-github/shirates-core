@@ -163,8 +163,8 @@
 ## チュートリアル(In action)
 
 - 画面ニックネームを作成する
-    - [Appium Inspectorを導入する](in_action/creating_screen_nickname_file/using_appium_inspector_ja.md)
-    - [画面ニックネームを作成する](in_action/creating_screen_nickname_file/creating_screen_nickname_file_ja.md)
+    - [Appium Inspectorを使用する](in_action/creating_screen_nickname_file/using_appium_inspector_ja.md)
+    - [画面ニックネームファイルを作成する](in_action/creating_screen_nickname_file/creating_screen_nickname_file_ja.md)
 - メッセージと言語
     - [ログ言語](in_action/message_and_language/log_language_ja.md)
     - [デバイス言語](in_action/message_and_language/device_language_ja.md)
@@ -184,18 +184,18 @@
 - 画像マッチング
     - [テンプレートマッチングのための画像を切り出す](in_action/image_matching/cropping_images_for_template_matching_ja.md)
 - パフォーマンスとリソースの最適化
-    - [スクロールの終端の検出](in_action/performance_resource/end_of_scroll_ja.md)
+    - [スクロール終端位置の検出の最適化](in_action/performance_resource/end_of_scroll_ja.md)
     - [スクリーンショットのサイズ](in_action/performance_resource/screenshot_scale_ja.md)
 - AppiumのAPIを使用する
-    - [AppiumClientのAPIsを使用する](in_action/using_appium_apis/using_appium_client_bare_apis_ja.md)
-- テストを優先順位でフィルターする
+    - [Appium ClientのAPIを使用する](in_action/using_appium_apis/using_appium_client_bare_apis_ja.md)
+- テストを優先度でフィルターする
     - [must, should, want](in_action/filtering_tests_with_priority/must_should_want_ja.md)
 - 手動テストから移行する
     - [テストコードのテンプレートを生成する](in_action/migrating_from_manual_testing/generating_test_code_template_ja.md)
 - コードファーストでテストを設計する
     - [コードファーストでテストを設計する](in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)
 - CIサーバーでテストを実行する
-    - [Gradleで実行する](in_action/running_test_on_ci_server/running_with_gradle_ja.md)
+    - [テストをGradleで実行する](in_action/running_test_on_ci_server/running_with_gradle_ja.md)
 - テストの実行を安定化させる(フレーキーテストの改善)
     - [フレーキーテストの原因](in_action/stabilizing_test_execution/causes_of_flaky_test_ja.md)
     - [scenarioの再実行](in_action/stabilizing_test_execution/rerun_scenario_ja.md)

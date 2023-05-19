@@ -135,7 +135,7 @@ object TapAppIconCustomObject : TestDrive {
 ```
 
 4. Build project.
-5. You can use tapAppIcon with customized befavior.
+5. You can use tapAppIcon in your test code with customized befavior.
 
 ```kotlin
 it.tapAppIcon("Calculator")

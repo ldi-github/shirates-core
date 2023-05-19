@@ -1,18 +1,18 @@
-# Using Appium Client bare APIs
+# Appium ClientのAPIを使用する
 
-You can access APIs of UiAutomator2 Driver or iOS Driver via these properties. Common interfaces are implemented in
-appiumDriver, but you can use driver specific interface on androidDriver/iosDriver. For more detail see appium client
-document.
+これらのプロパティを使用するとUiAutomator2ドライバーやiOSドライバーのAPIにアクセスできます。
+共通のインターフェースはappiumDriverに実装されていますが、androidDriver/iosDriverを使用すればドライバーに固有のインターフェースを利用できます。
+詳細はAppium Clientのドキュメントを参照してください。
 
-## properties
+## プロパティ
 
-| properties    | type                                                                                                                      | description                        |
-|:--------------|:--------------------------------------------------------------------------------------------------------------------------|:-----------------------------------|
-| appiumDriver  | [AppiumDriver](https://www.javadoc.io/doc/io.appium/java-client/latest/io/appium/java_client/AppiumDriver.html)           | Appium driver implementation       |
-| androidDriver | [AndroidDriver](https://www.javadoc.io/doc/io.appium/java-client/latest/io/appium/java_client/android/AndroidDriver.html) | UiAutomator2 driver implementation |
-| iosDriver     | [IOSDriver](https://www.javadoc.io/doc/io.appium/java-client/latest/io/appium/java_client/ios/IOSDriver.html)             | iOS driver implementation          |
+| プロパティ         | type                                                                                                                      | 説明                     |
+|:--------------|:--------------------------------------------------------------------------------------------------------------------------|:-----------------------|
+| appiumDriver  | [AppiumDriver](https://www.javadoc.io/doc/io.appium/java-client/latest/io/appium/java_client/AppiumDriver.html)           | Appium driverの実装       |
+| androidDriver | [AndroidDriver](https://www.javadoc.io/doc/io.appium/java-client/latest/io/appium/java_client/android/AndroidDriver.html) | UiAutomator2 driverの実装 |
+| iosDriver     | [IOSDriver](https://www.javadoc.io/doc/io.appium/java-client/latest/io/appium/java_client/ios/IOSDriver.html)             | iOS driverの実装          |
 
-## Example
+## 例
 
 ### Drivers1.kt
 
@@ -78,4 +78,4 @@ class Drivers2 : UITest() {
 
 ### Link
 
-- [index](../../index.md)
+- [index](../../index_ja.md)

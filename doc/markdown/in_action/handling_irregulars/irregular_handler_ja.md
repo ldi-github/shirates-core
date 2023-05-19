@@ -1,17 +1,17 @@
-# Irregular Handler
+# イレギュラーハンドラー
 
-In smartphone apps, irregular screens are often inserted in the middle of screen transitions.
+スマートフォンアプリにおいては画面遷移の中でイレギュラーな画面が挿入されることが頻繁にあります。
 
-You may or may not see these screens.
+以下のような画面が表示されたりされなかったりします。
 
-- popup dialog (e.g. Location Permissions, Network Error, Firebase In-App Messaging, ads)
-- tutorials to explain how to use features
-- notification balloons.
-- others
+- ポップアップダイアログ（位置情報許可、ネットワークエラー、Firebase In Appメッセージ、広告）
+- 新機能のチュートリアル
+- 通知バルーン
+- その他
 
 ![](../_images/location_permissions.png)
 
-To handle these irregulars, you have to implement conditional branching. That's very annoying.
+これらのイレギュラーを処理するには、条件分岐を実装する必要があります。これは相当大変な作業です。
 
 ### AnnoyingEventHandling1.kt
 
@@ -63,15 +63,13 @@ fun annoyingEventHandling2() {
 }
 ```
 
-## irregularHandler
+## イレギュラーハンドラー
 
-You can centralize irregular handling procedure using **irregularHandler**.
+**イレギュラーハンドラー** を使用するとイレギュラー処理を一箇所で行うことができます。
 
-To apply to all test functions in the `TestClass`, override `setEventHandlers` function and set delegate function
-to `context.irregularHandler`.
+テストクラス内の全ての関数に適用するには`setEventHandlers`関数をオーバーライドして`context.irregularHandler`に処理を設定します。
 
-**irregularHandler** is invoked every time on command execution. This mechanism is very powerful and makes the test code
-simple.
+**irregularHandler** はコマンドを実行する時に毎回呼ばれます。この仕組みは非常に便利であり、テストコードをシンプルにします。
 
 ### IrregularHandler1
 
@@ -110,14 +108,14 @@ class IrregularHandler1 : UITest() {
 }
 ```
 
-**Note:**
+**注意:**
 
-- A lot of procedure in irregularHandler may cause performance problem.
-- Logging is suppressed while executing irregularHandler delegate function by default.
+- irregularHandler にたくさんの処理を入れるとパフォーマンスの問題を引き起こす可能性があります
+- irregularHandlerの処理中はログ出力はデフォルトでは抑制されます
 
 ## suppressHandler
 
-You can suppress firing irregularHandler by using **suppressHandler** function.
+**suppressHandler** 関数を使用するとコードブロック内ではirregularHandlerの呼び出しが無効になります。
 
 ### IrregularHandler1
 
@@ -148,9 +146,9 @@ fun suppressHandler() {
 }
 ```
 
-## disableHandler(), enableHandler()
+## disableHandler, enableHandler
 
-You can disable or enable handler by these functions.
+これらの関数を使用してirregularHandlerを無効化したり有効化したりすることができます。
 
 ### IrregularHandler1
 
@@ -182,4 +180,4 @@ fun disableHandler_EnableHandler() {
 
 ### Link
 
-- [index](../../index.md)
+- [index](../../index_ja.md)
