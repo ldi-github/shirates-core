@@ -61,8 +61,13 @@ fun TestElement.refreshThisElement(): TestElement {
         return this
     }
 
-    val sel = getUniqueSelector()
-    val e = TestDriver.select(selector = sel, throwsException = false, useCache = true, safeElementOnly = true)
+    val e = try {
+        val sel = getUniqueSelector()
+        TestDriver.select(selector = sel, throwsException = false, useCache = true, safeElementOnly = true)
+    } catch (t: Throwable) {
+        TestLog.warn(t.message!!)
+        return TestElement.emptyElement
+    }
 
     return e
 }
@@ -231,12 +236,17 @@ fun TestElement.getUniqueXpath(): String {
         }.joinToString(" and ")
 
         if (condition.isBlank()) {
-            return "//$classOrType"
+            return ""
         }
 
-        val xpath = "//$classOrType[$condition]"
+        val locationStep = classOrType.ifBlank { "*" }
+        val xpath = "//$locationStep[$condition]"
 
-        val elements = TestElementCache.filterElements("xpath=$xpath", safeElementOnly = true)
+        val elements = try {
+            TestElementCache.filterElements("xpath=$xpath", safeElementOnly = true)
+        } catch (t: Throwable) {
+            throw Exception("$t xpath=$xpath")
+        }
         if (elements.count() == 1) {
             return xpath
         }

@@ -23,7 +23,11 @@ object XPathUtility {
         if (node == null) {
             return mutableListOf()
         }
-        val nodeList = xpath.compile(expression).evaluate(node, XPathConstants.NODESET) as NodeList
+        val nodeList = try {
+            xpath.compile(expression).evaluate(node, XPathConstants.NODESET) as NodeList
+        } catch (t: Throwable) {
+            throw Exception("$t expression=$expression")
+        }
         val nodes = mutableListOf<Node>()
         for (i in 0 until nodeList.length) {
             val item = nodeList.item(i)
