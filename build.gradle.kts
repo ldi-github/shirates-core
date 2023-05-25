@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "4.4.2-SNAPSHOT"
+version = "4.4.3"
 
 val appiumClientVersion = "8.3.0"
 
@@ -101,7 +101,7 @@ dependencies {
     testImplementation("org.jsoup:jsoup:1.15.4")
 
     // md2html
-    implementation("io.github.ldi-github:md2html:0.1.1-SNAPSHOT")
+    implementation("io.github.ldi-github:md2html:0.1.1")
 }
 
 configurations.all {
