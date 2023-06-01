@@ -77,7 +77,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         TestLog.write(Const.SEPARATOR_LONG)
         TestLog.write("///")
-        TestLog.write("/// Shirates $version")
+        TestLog.write("/// shirates-core $version")
         TestLog.write("///")
         TestLog.write("powered by Appium (io.appium:java-client:$appiumClientVersion)")
         TestLog.write(Const.SEPARATOR_LONG)

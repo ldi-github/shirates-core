@@ -26,13 +26,13 @@ https://developer.android.com/studio
 
 <br>
 
-### Xcode (Mac only)
+### Xcode (Macのみ)
 
 インストールしていない場合はApp StoreでXcodeを検索してインストールしてください。
 
 <br>
 
-### Command Line Tools for Xcode (Mac only)
+### Command Line Tools for Xcode (Macのみ)
 
 インストールしていない場合はターミナルウィンドウを開いて以下のコマンドを実行してください。
 
@@ -317,7 +317,7 @@ AndroidSettingsDemo@a.xlsx
 ### CalculatorDemoを実行する
 
 1. **Device Manager**でAndroid 12 のAVDを起動します。
-2. **Google Play Store** を開いて **電卓(Calculator)**(Google LLC)をインストールします。
+2. **Google Playストア** を開いて **電卓(Calculator)**(Google LLC)をインストールします。
 3. IntelliJでこのプロジェクトを開き、`src/test/Kotlin/demo/CalculatorDemo`を右クリックして **Debug 'CalculatorDemo'** を選択します。
 4. 電卓アプリのテストが実行されます。
 
