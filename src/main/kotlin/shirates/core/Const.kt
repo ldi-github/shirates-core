@@ -96,7 +96,7 @@ object Const {
     const val SWIPE_MARGIN_RATIO = 0.1
     const val SCROLL_VERTICAL_MARGIN_RATIO = 0.2
     const val SCROLL_HORIZONTAL_MARGIN_RATIO = 0.2
-    const val SCROLL_TO_EDGE_BOOST = 2
+    const val SCROLL_TO_EDGE_BOOST = 1
     const val SCROLL_MAX_COUNT = 20
     const val TAP_HOLD_SECONDS = 0.2
     const val ENABLE_CACHE = true
