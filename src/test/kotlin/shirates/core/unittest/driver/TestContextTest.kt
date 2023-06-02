@@ -221,7 +221,7 @@ class TestContextTest : UnitTest() {
         context.swipeMarginRatio = 999.0
         context.scrollVerticalMarginRatio = 999.0
         context.scrollHorizontalMarginRatio = 999.0
-        context.scrollRepeat = 99
+        context.scrollToEdgeBoost = 99
         context.scrollMaxCount = 99
         context.tapHoldSeconds = 999.0
         context.enableCache = !context.enableCache

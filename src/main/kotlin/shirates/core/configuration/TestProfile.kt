@@ -88,7 +88,7 @@ class TestProfile(var profileName: String = "") {
     var swipeMarginRatio: String? = null
     var scrollVerticalMarginRatio: String? = null
     var scrollHorizontalMarginRatio: String? = null
-    var scrollRepeat: String? = null
+    var scrollToEdgeBoost: String? = null
     var scrollMaxCount: String? = null
     var tapHoldSeconds: String? = null
     var enableCache: String? = null
@@ -454,8 +454,8 @@ class TestProfile(var profileName: String = "") {
         // scrollHorizontalMarginRatio
         validateNumeric("scrollHorizontalMarginRatio")
 
-        // scrollRepeat
-        validateNumeric("scrollRepeat")
+        // scrollToEdgeBoost
+        validateNumeric("scrollToEdgeBoost")
 
         // scrollMaxCount
         validateNumeric("scrollMaxCount")

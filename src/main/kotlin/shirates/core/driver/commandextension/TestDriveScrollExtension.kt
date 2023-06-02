@@ -198,7 +198,7 @@ fun TestDrive.scrollLeft(
     return lastElement
 }
 
-private fun TestDrive.scrollToDirectionCommand(
+private fun TestDrive.scrollToEdgeCommand(
     command: String,
     maxLoopCount: Int,
     direction: ScrollDirection,
@@ -233,14 +233,14 @@ private fun TestDrive.scrollToDirectionCommand(
  */
 fun TestDrive.scrollToBottom(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
-    repeat: Int = testContext.scrollRepeat,
+    repeat: Int = testContext.scrollToEdgeBoost,
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
     imageCompare: Boolean = false
 ): TestElement {
 
-    scrollToDirectionCommand(
+    scrollToEdgeCommand(
         command = "scrollToBottom",
         direction = ScrollDirection.Down,
         maxLoopCount = maxLoopCount,
@@ -259,14 +259,14 @@ fun TestDrive.scrollToBottom(
  */
 fun TestDrive.scrollToTop(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
-    repeat: Int = testContext.scrollRepeat,
+    repeat: Int = testContext.scrollToEdgeBoost,
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
     imageCompare: Boolean = false
 ): TestElement {
 
-    scrollToDirectionCommand(
+    scrollToEdgeCommand(
         command = "scrollToTop",
         direction = ScrollDirection.Up,
         maxLoopCount = maxLoopCount,
@@ -285,14 +285,14 @@ fun TestDrive.scrollToTop(
  */
 fun TestDrive.scrollToRightEdge(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
-    repeat: Int = testContext.scrollRepeat,
+    repeat: Int = testContext.scrollToEdgeBoost,
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
     imageCompare: Boolean = false
 ): TestElement {
 
-    scrollToDirectionCommand(
+    scrollToEdgeCommand(
         command = "scrollToRightEdge",
         direction = ScrollDirection.Right,
         maxLoopCount = maxLoopCount,
@@ -311,14 +311,14 @@ fun TestDrive.scrollToRightEdge(
  */
 fun TestDrive.scrollToLeftEdge(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
-    repeat: Int = testContext.scrollRepeat,
+    repeat: Int = testContext.scrollToEdgeBoost,
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
     imageCompare: Boolean = false
 ): TestElement {
 
-    scrollToDirectionCommand(
+    scrollToEdgeCommand(
         command = "scrollToLeftEdge",
         direction = ScrollDirection.Left,
         maxLoopCount = maxLoopCount,
