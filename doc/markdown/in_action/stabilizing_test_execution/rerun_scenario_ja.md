@@ -14,12 +14,13 @@
 
 以下のような状況において再実行が実施されます。
 
-| 状況                                                | 説明                                                              |
-|---------------------------------------------------|-----------------------------------------------------------------|
-| HTTP connection time out ("Read timed out")       | デバイスが反応していない                                                    |
-| AppiumProxy.getSource() time out.                 | Appiumのセッションが破損している                                             |
-| Could not start a new session. Response code 500. | Appiumのセッションが開始できなかった                                           |
-| Terminating app time out. (Android)               | ex. 'com.android.settings' is still running after 500ms timeout |
+| 状況                                                | 説明                                                                |
+|---------------------------------------------------|-------------------------------------------------------------------|
+| HTTP connection time out ("Read timed out")       | デバイスが反応していない                                                      |
+| AppiumProxy.getSource() time out.                 | Appiumのセッションが破損している                                               |
+| Could not start a new session. Response code 500. | Appiumのセッションが開始できなかった                                             |
+| Terminating app time out. (Android)               | ex. `'com.android.settings' is still running after 500ms timeout` |
+| Could not proxy command to the remote server.     | デバイスへのコマンド送信に失敗した (ex. `socket hang up`, `connect ECONNREFUSED`)  |
 
 ## scenarioの再実行を手動で要求する
 

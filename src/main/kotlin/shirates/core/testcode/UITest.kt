@@ -479,7 +479,8 @@ abstract class UITest : TestDrive {
                 message.contains("Read timed out") ||
                 message.contains("AppiumProxy.getSource() timed out") ||
                 message.contains("Could not start a new session. Response code 500.") ||
-                message.contains(" is still running after")
+                message.contains(" is still running after") ||
+                message.contains("Could not proxy command to the remote server.")
             ) {
                 TestLog.getLinesOfCurrentTestScenario().forEach {
                     it.deleted = true

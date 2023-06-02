@@ -131,7 +131,7 @@ table td {
 }
 
 code {
-    padding: 0.2em 0.4em;
+    padding: 0.2em 0;
     margin: 0;
     font-size: 85%;
     white-space: pre;

@@ -718,6 +718,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         command: String,
         scrollDirection: ScrollDirection?,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+        scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         message: String = "",
         func: () -> Unit
@@ -725,11 +726,13 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
         val originalWithScrollDirection = CodeExecutionContext.withScrollDirection
         val originalScrollDurationSeconds = testContext.swipeDurationSeconds
+        val originalScrollToEdgeBoost = testContext.scrollToEdgeBoost
         val originalScrollMaxCount = testContext.scrollMaxCount
 
         try {
             CodeExecutionContext.withScrollDirection = scrollDirection
             testContext.swipeDurationSeconds = scrollDurationSeconds
+            testContext.scrollToEdgeBoost = scrollToEdgeBoost
             testContext.scrollMaxCount = scrollMaxCount
 
             callerName = StackTraceUtility.getCallerName(
@@ -748,6 +751,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         } finally {
             CodeExecutionContext.withScrollDirection = originalWithScrollDirection
             testContext.swipeDurationSeconds = originalScrollDurationSeconds
+            testContext.scrollToEdgeBoost = originalScrollToEdgeBoost
             testContext.scrollMaxCount = originalScrollMaxCount
             endExecWithScroll(command = command)
         }

@@ -137,6 +137,9 @@ class TestContext(
         profile.scrollHorizontalMarginRatio?.toDoubleOrNull() ?: Const.SCROLL_HORIZONTAL_MARGIN_RATIO
 
     @SaveTarget
+    var scrollToEdgeBoost = profile.scrollToEdgeBoost?.toIntOrNull() ?: Const.SCROLL_TO_EDGE_BOOST
+
+    @SaveTarget
     var scrollMaxCount = profile.scrollMaxCount?.toIntOrNull() ?: Const.SCROLL_MAX_COUNT
 
     @SaveTarget

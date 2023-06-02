@@ -16,12 +16,13 @@ test results stable.
 
 Rerun is executed in these situation.
 
-| situation                                         | description                                                     |
-|---------------------------------------------------|-----------------------------------------------------------------|
-| HTTP connection time out ("Read timed out")       | Device is not responding.                                       |
-| AppiumProxy.getSource() time out.                 | Appium session is corrupted.                                    |
-| Could not start a new session. Response code 500. | Appium session failed.                                          |
-| Terminating app time out. (Android)               | ex. 'com.android.settings' is still running after 500ms timeout |
+| situation                                         | description                                                                          |
+|---------------------------------------------------|--------------------------------------------------------------------------------------|
+| HTTP connection time out ("Read timed out")       | Device is not responding.                                                            |
+| AppiumProxy.getSource() time out.                 | Appium session is corrupted.                                                         |
+| Could not start a new session. Response code 500. | Appium session failed.                                                               |
+| Terminating app time out. (Android)               | ex. `'com.android.settings' is still running after 500ms timeout`                    |
+| Could not proxy command to the remote server.     | Sending command to the device failed. (ex. `socket hang up`, `connect ECONNREFUSED`) |
 
 ## Requesting rerun scenario manually
 
