@@ -1090,6 +1090,7 @@ object TestDriver {
             }
 
             testDrive.doUntilScrollStop(
+                repeat = 1,
                 maxLoopCount = scrollMaxCount,
                 direction = direction,
                 durationSeconds = scrollDurationSeconds,
@@ -1184,6 +1185,7 @@ object TestDriver {
         }
 
         testDrive.doUntilScrollStop(
+            repeat = 1,
             maxLoopCount = scrollMaxCount,
             direction = direction,
             durationSeconds = durationSeconds,
@@ -1217,6 +1219,7 @@ object TestDriver {
         }
 
         testDrive.doUntilScrollStop(
+            repeat = 1,
             maxLoopCount = scrollMaxCount,
             direction = direction,
             durationSeconds = durationSeconds,

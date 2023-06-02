@@ -345,7 +345,7 @@ fun TestDrive.doUntilScrollStop(
     startMarginRatio: Double =
         if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
         else testContext.scrollHorizontalMarginRatio,
-    repeat: Int = testContext.scrollRepeat,
+    repeat: Int = 1,
     edgeSelector: String? = null,
     imageCompare: Boolean = false,
     scrollFunc: (() -> Unit)? = null,
@@ -621,6 +621,7 @@ fun TestDrive.scanElements(
         }
 
         doUntilScrollStop(
+            repeat = 1,
             maxLoopCount = maxScrollTimes,
             direction = direction,
             durationSeconds = durationSeconds,
