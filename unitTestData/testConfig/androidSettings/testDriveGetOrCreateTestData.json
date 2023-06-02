@@ -20,10 +20,16 @@
 
   "profiles": [
     {
-      "profileName": "profile1"
+      "profileName": "profile1",
+      "capabilities": {
+        "avd": "Pixel_3a_Android_12_"
+      }
     },
     {
-      "profileName": "profile2"
+      "profileName": "profile2",
+      "capabilities": {
+        "avd": "Pixel_3a_Android_12_"
+      }
     }
   ]
 }
