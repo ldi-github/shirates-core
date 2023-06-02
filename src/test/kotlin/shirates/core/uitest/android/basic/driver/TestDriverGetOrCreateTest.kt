@@ -26,7 +26,7 @@ class TestDriverCreateOrReuseTest : UITest() {
 
             // Arrange
             val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
-            val prof = "profile1"
+            val prof = "Pixel 3a(Android 12)"
             // Act
             setupFromConfig(conf, prof)
             // Assert
