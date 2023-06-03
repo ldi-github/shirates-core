@@ -15,6 +15,8 @@ To handle these irregulars, you have to implement conditional branching. That's 
 
 ### AnnoyingEventHandling1.kt
 
+(`kotlin/tutorial/inaction/AnnoyingEventHandling1.kt`)
+
 ```kotlin
 @Test
 @Order(10)
@@ -73,7 +75,7 @@ to `context.irregularHandler`.
 **irregularHandler** is invoked every time on command execution. This mechanism is very powerful and makes the test code
 simple.
 
-### IrregularHandler1
+### IrregularHandler1.kt
 
 (`kotlin/tutorial/inaction/IrregularHandler1.kt`)
 
@@ -119,14 +121,10 @@ class IrregularHandler1 : UITest() {
 
 You can suppress firing irregularHandler by using **suppressHandler** function.
 
-### IrregularHandler1
-
-(`kotlin/tutorial/inaction/IrregularHandler1.kt`)
-
 ```kotlin
 @Test
 @Order(20)
-fun suppressHandler() {
+fun suppressHandler_useHandler() {
 
     scenario {
         case(1) {
@@ -144,6 +142,26 @@ fun suppressHandler() {
                 it.screenIs("[Next Screen]")
             }
         }
+        case(2) {
+            action {
+                /**
+                 * In suppressHandler block,
+                 * calling irregular handler is suppressed
+                 */
+                suppressHandler {
+                    it.tap("[Button2]")
+
+                    /**
+                     * In useHandler block,
+                     * calling irregular handler is enabled
+                     * even if it is nested in suppressHandler block
+                     */
+                    useHandler {
+                        it.tap("[Button3]")
+                    }
+                }
+            }
+        }
     }
 }
 ```
@@ -151,10 +169,6 @@ fun suppressHandler() {
 ## disableHandler(), enableHandler()
 
 You can disable or enable handler by these functions.
-
-### IrregularHandler1
-
-(`kotlin/tutorial/inaction/IrregularHandler1.kt`)
 
 ```kotlin
 @Test
