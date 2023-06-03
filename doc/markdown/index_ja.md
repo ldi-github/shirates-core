@@ -20,7 +20,7 @@
 ### 推奨設定
 
 - [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save_ja.md)
-- [右クリックによろテスト実行を有効にする (IntelliJ IDEA)](tool_settings/right_click_test_running_ja.md)
+- [右クリックによるテスト実行を有効にする (IntelliJ IDEA)](tool_settings/right_click_test_running_ja.md)
 - [propertiesファイルのエンコーディング設定](tool_settings/properties_file_encoding_ja.md)
 - [Androidデバイスの設定](basic/recommended_settings/recommended_settings_android_ja.md)
 
