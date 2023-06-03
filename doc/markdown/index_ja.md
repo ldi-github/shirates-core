@@ -19,7 +19,6 @@
 
 ### 推奨設定
 
-- [Save Actions (IntelliJ IDEA)](tool_settings/plugin_settings_ja.md) **(非推奨)**
 - [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save_ja.md)
 - [右クリックによろテスト実行を有効にする (IntelliJ IDEA)](tool_settings/right_click_test_running_ja.md)
 - [propertiesファイルのエンコーディング設定](tool_settings/properties_file_encoding_ja.md)
@@ -220,6 +219,10 @@
 
 - IntelliJ IDEA
     - [JVMのバージョン, JDKのバージョン](tool_settings/jvm_version_ja.md)
+
+## 仮想マシンの設定
+
+- [Google Play Storeを有効にする](virtual_machine_settings/enabling_google_play_store_ja.md)
 
 ## パッケージのインストール/アップデート
 
