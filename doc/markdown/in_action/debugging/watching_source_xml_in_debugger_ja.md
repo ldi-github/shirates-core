@@ -8,8 +8,12 @@
 
 (`kotlin/tutorial/inaction/Debugging1.kt`)
 
+1. クリックしてブレークポイントを設定します。
+2. ウォッチウィンドウに`sourceXml`を追加します。
+3. `View`をクリックします。
 ![](../_images/source_xml_in_debugger.png)
 
+キャッシュされている画面情報のXMLを確認することができます。
 ![](../_images/source_xml_in_view.png)
 
 ### Link
