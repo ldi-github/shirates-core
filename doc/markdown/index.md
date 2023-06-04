@@ -19,8 +19,7 @@
 
 ### Recommended settings
 
-- [Save Actions Plugin (IntelliJ IDEA)](tool_settings/plugin_settings.md) **(Obsolete)**
-- [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save.md) **(New! 4.2.0)**
+- [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save.md)
 - [Enable right-click test running (IntelliJ IDEA)](tool_settings/right_click_test_running.md)
 - [Encoding setting for properties file](tool_settings/properties_file_encoding.md)
 - [Android Device settings](basic/recommended_settings/recommended_settings_android.md)
@@ -183,7 +182,7 @@
 - Handling irregulars
     - [Irregular Handler](in_action/handling_irregulars/irregular_handler.md)
 - Test Fixture
-    - [Test fixture](in_action/test_fixture/test_fixture.md) **(New! 4.1.0)**
+    - [Test fixture](in_action/test_fixture/test_fixture.md)
 - Image matching
     - [Cropping images for template matching](in_action/image_matching/cropping_images_for_template_matching.md)
 - Optimizing performance and resources
@@ -202,7 +201,7 @@
 - Stabilizing test execution (Improve Flaky Test)
     - [Causes of flaky test](in_action/stabilizing_test_execution/causes_of_flaky_test.md)
     - [Rerun scenario](in_action/stabilizing_test_execution/rerun_scenario.md)
-- Performance tuning with cache control **(New! 4.0.0)**
+- Performance tuning with cache control
     - [Performance problem of getSource in iOS](in_action/performance_tuning_with_cache_control/performance_problem_of_getpagesource_in_ios.md)
     - [Direct access mode](in_action/performance_tuning_with_cache_control/direct_access_mode.md)
 
@@ -221,10 +220,14 @@
 - IntelliJ IDEA
     - [JVM version, JDK version](tool_settings/jvm_version.md)
 
+## Virtual machine settings
+
+- [Enabling Google Play Store](virtual_machine_settings/enabling_google_play_store.md)
+
 ## Installing/Updating packages
 
-- [Installing/Updating node & npm](updating_packages/installing_updating_node&npm.md) **(New! 4.2.0)**
-- [Installing/Updating Appium & drivers](updating_packages/installing_updating_appium&drivers.md) **(New! 4.2.0)**
+- [Installing/Updating node & npm](updating_packages/installing_updating_node&npm.md)
+- [Installing/Updating Appium & drivers](updating_packages/installing_updating_appium&drivers.md)
 
 ## Troubleshooting
 
