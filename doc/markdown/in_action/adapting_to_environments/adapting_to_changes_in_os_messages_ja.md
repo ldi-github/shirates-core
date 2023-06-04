@@ -8,9 +8,9 @@ OSのメッセージの変更がこの原因である可能性があります。
 
 以下はAndroid 10における**位置情報アクセス許可**ダイアログです。
 
-![](../_images/location_permissions_android_10.png)
+![](../_images/location_permissions_android_10_ja.png)
 
-`tap`関数を使用して **"Allow only while using the app"**をタップすることができます。
+`tap`関数を使用して **"アプリの使用中のみ許可"** をタップすることができます。
 
 ```kotlin
 @Test
@@ -20,16 +20,16 @@ fun original() {
     scenario {
         case(1) {
             action {
-                it.tap("Allow only while using the app")
+                it.tap("アプリの使用中のみ許可")
             }
         }
     }
 }
 ```
 
-Android 10 から 11へアップグレードした場合は **"Allow only while using the app"** は **"While using the app"** に変更されます。
+Android 10 から 11へアップグレードした場合は **"アプリの使用中のみ許可"** は **"アプリの使用時のみ"** に変更されます。
 
-![](../_images/location_permissions_comparison.png)
+![](../_images/location_permissions_comparison_ja.png)
 
 テストコードは失敗します。
 
@@ -39,9 +39,9 @@ Android 10 から 11へアップグレードした場合は **"Allow only while 
 
 ```kotlin
 if (platformVersion.toInt() < 11) {
-    it.tap("Allow only while using the app")
+    it.tap("アプリの使用中のみ許可")
 } else {
-    it.tap("While using the app")
+    it.tap("アプリの使用時のみ")
 }
 ```
 
@@ -52,7 +52,7 @@ if (platformVersion.toInt() < 11) {
 ### セレクター内で `||` を使用する
 
 ```kotlin
-it.tap("Allow only while using the app||While using the app")
+it.tap("アプリの使用中のみ許可||アプリの使用時のみ")
 ```
 
 これはベターな方法ですが、テストコード内に複数のメッセージを記述するのはメンテナンス性がよくありません。
@@ -62,13 +62,13 @@ it.tap("Allow only while using the app||While using the app")
 ニックネームを使用するとメンテナンス性の問題が改善します。
 
 ```kotlin
-it.tap("[While using the app]")
+it.tap("[アプリの使用時のみ]")
 ```
 
 ニックネームは画面ニックネームファイル内に定義します。
 
 ```
-"[While using the app]": "Allow only while using the app||While using the app"
+"[アプリの使用時のみ]": "アプリの使用中のみ許可||アプリの使用時のみ"
 ```
 
 ### Link
