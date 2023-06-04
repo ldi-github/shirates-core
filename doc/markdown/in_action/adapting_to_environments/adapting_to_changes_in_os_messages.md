@@ -6,6 +6,12 @@ Changes in messages may the cause of this issue.
 
 ## Example
 
+### AdaptingToChangesInMessage1.kt
+
+(`kotlin/tutorial/inaction/AdaptingToChangesInMessage1.kt`)
+
+<br>
+
 The following is **Location Permissions** dialog for Android 10.
 
 ![](../_images/location_permissions_android_10.png)

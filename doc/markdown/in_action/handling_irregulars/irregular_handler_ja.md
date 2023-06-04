@@ -9,13 +9,18 @@
 - 通知バルーン
 - その他
 
-![](../_images/location_permissions.png)
+![](../_images/location_permissions_ja.png)
 
 これらのイレギュラーを処理するには、条件分岐を実装する必要があります。これは相当大変な作業です。
 
-### AnnoyingEventHandling1.kt
+### AnnoyingEventHandling1_ja.kt
+
+(`kotlin/tutorial/inaction/AnnoyingEventHandling1_ja.kt`)
 
 ```kotlin
+/**
+ * 面倒なイベントハンドリングの例1
+ */
 @Test
 @Order(10)
 fun annoyingEventHandling1() {
@@ -23,22 +28,25 @@ fun annoyingEventHandling1() {
     scenario {
         case(1) {
             condition {
-                it.macro("[Some Screen]")
-                    .ifCanSelect("While using the app") {
+                it.macro("[画面A]")
+                    .ifCanSelect("アプリの使用時のみ") {
                         it.tap()
                     }
             }.action {
-                it.tap("[Button1]")
-                    .ifCanSelect("While using the app") {
+                it.tap("[ボタン1]")
+                    .ifCanSelect("アプリの使用時のみ") {
                         it.tap()
                     }
             }.expectation {
-                it.screenIs("[Next Screen]")
+                it.screenIs("[画面B]")
             }
         }
     }
 }
 
+/**
+ * 面倒なイベントハンドリングの例2
+ */
 @Test
 @Order(20)
 fun annoyingEventHandling2() {
@@ -46,17 +54,17 @@ fun annoyingEventHandling2() {
     scenario {
         case(1) {
             condition {
-                it.macro("[Some Screen2]")
-                    .ifCanSelect("While using the app") {
+                it.macro("[画面B]")
+                    .ifCanSelect("アプリの使用時のみ") {
                         it.tap()
                     }
             }.action {
-                it.tap("[Button2]")
-                    .ifCanSelect("While using the app") {
+                it.tap("[ボタン2]")
+                    .ifCanSelect("アプリの使用時のみ") {
                         it.tap()
                     }
             }.expectation {
-                it.screenIs("[Next Screen]")
+                it.screenIs("[画面C]")
             }
         }
     }
@@ -71,18 +79,23 @@ fun annoyingEventHandling2() {
 
 **irregularHandler** はコマンドを実行する時に毎回呼ばれます。この仕組みは非常に便利であり、テストコードをシンプルにします。
 
-### IrregularHandler1
+### IrregularHandler1_ja.kt
 
-(`kotlin/tutorial/inaction/IrregularHandler1.kt`)
+(`kotlin/tutorial/inaction/IrregularHandler1_ja.kt`)
 
 ```kotlin
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class IrregularHandler1 : UITest() {
+class IrregularHandler1_ja : UITest() {
+
+    /**
+     * 注意:
+     * このサンプルコードはコンセプトを説明するものです。実行することはできません。
+     */
 
     override fun setEventHandlers(context: TestDriverEventContext) {
 
         context.irregularHandler = {
-            ifCanSelect("While using the app") {
+            ifCanSelect("アプリの使用時のみ") {
                 it.tap()
             }
         }
@@ -95,11 +108,11 @@ class IrregularHandler1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Some Screen]")
+                    it.macro("[画面A]")
                 }.action {
-                    it.tap("[Button1]")
+                    it.tap("[ボタン1]")
                 }.expectation {
-                    it.screenIs("[Next Screen]")
+                    it.screenIs("[画面B]")
                 }
             }
         }
@@ -117,29 +130,45 @@ class IrregularHandler1 : UITest() {
 
 **suppressHandler** 関数を使用するとコードブロック内ではirregularHandlerの呼び出しが無効になります。
 
-### IrregularHandler1
-
-(`kotlin/tutorial/inaction/IrregularHandler1.kt`)
-
 ```kotlin
 @Test
 @Order(20)
-fun suppressHandler() {
+fun suppressHandler_useHandler() {
 
     scenario {
         case(1) {
             condition {
-                it.macro("[Some Screen]")
+                it.macro("[画面A]")
             }.action {
                 /**
-                 * In suppressHandler block,
-                 * calling irregular handler is suppressed
+                 * suppressHandlerブロックの中では
+                 * イレギュラーハンドラーは呼び出されません
                  */
                 suppressHandler {
-                    it.tap("[Button1]")
+                    it.tap("[ボタン1]")
                 }
             }.expectation {
-                it.screenIs("[Next Screen]")
+                it.screenIs("[画面B]")
+            }
+        }
+        case(2) {
+            action {
+                /**
+                 * suppressHandlerブロックの中では
+                 * イレギュラーハンドラーは呼び出されません
+                 */
+                suppressHandler {
+                    it.tap("[ボタン2]")
+
+                    /**
+                     * useHandlerブロックの中では
+                     * suppressHandlerブロックの中に入れ子になっていた場合でも
+                     * イレギュラーハンドラーは呼び出されます
+                     */
+                    useHandler {
+                        it.tap("[ボタン3]")
+                    }
+                }
             }
         }
     }
@@ -150,10 +179,6 @@ fun suppressHandler() {
 
 これらの関数を使用してirregularHandlerを無効化したり有効化したりすることができます。
 
-### IrregularHandler1
-
-(`kotlin/tutorial/inaction/IrregularHandler1.kt`)
-
 ```kotlin
 @Test
 @Order(30)
@@ -162,16 +187,16 @@ fun disableHandler_EnableHandler() {
     scenario {
         case(1) {
             condition {
-                it.macro("[Some Screen]")
+                it.macro("[画面A]")
             }.action {
-                disableHandler()    // Calling irregular handler is disabled.
-                it.tap("[Button1]")
-                ifCanSelect("While using the app") {
+                disableHandler()    // イレギュラーハンドラーの呼び出しは無効になります
+                it.tap("[ボタン1]")
+                ifCanSelect("アプリの使用時のみ") {
                     it.tap()
                 }
-                enableHandler()     // Calling irregular handler is enabled again.
+                enableHandler()     // イレギュラーハンドラーの呼び出しは再び有効になります
             }.expectation {
-                it.screenIs("[Next Screen]")
+                it.screenIs("[画面B]")
             }
         }
     }

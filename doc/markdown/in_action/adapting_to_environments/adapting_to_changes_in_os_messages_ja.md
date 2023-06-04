@@ -6,6 +6,12 @@ OSのメッセージの変更がこの原因である可能性があります。
 
 ## 例
 
+### AdaptingToChangesInMessage1_ja.kt
+
+(`kotlin/tutorial/inaction/AdaptingToChangesInMessage1_ja.kt`)
+
+<br>
+
 以下はAndroid 10における**位置情報アクセス許可**ダイアログです。
 
 ![](../_images/location_permissions_android_10_ja.png)
