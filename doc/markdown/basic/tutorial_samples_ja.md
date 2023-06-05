@@ -1,6 +1,6 @@
 # チュートリアルのサンプル
 
-[shirates-core](https://github.com/ldi-github/shirates-core/tree/main/src/test/kotlin/) の`src/test/kotlin`ディレクトリ内のサンプルコードを参照して実行できます。
+[shirates-core](https://github.com/ldi-github/shirates-core/) の`src/test/kotlin`ディレクトリ内のサンプルコードを参照して実行できます。
 
 また、[shirates-coreのサンプル（日本語版）](https://github.com/ldi-github/shirates-core-samples-ja) を入手することができます。
 
