@@ -103,7 +103,7 @@ appium -v
 
 **注意:** Appium 2.0 はリリース予定です。 2.0をインストールするには"@next" を付与してください。
 
-参照 [テスト済みの環境](environments.md) to get tested version.
+参照 [テスト済みの環境](environments.md)
 
 <br>
 Appiumをすでにインストールしている場合はアンインストールしてから再度インストールしてください。

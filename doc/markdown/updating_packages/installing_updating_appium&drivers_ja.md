@@ -22,7 +22,7 @@ appium -v
 
 **注意:** Appium 2.0 はリリース予定です。 2.0をインストールするには "@next"が必要です。
 
-参照 [Tested Environments](../environments.md) to get tested version.
+参照 [Tested Environments](../environments.md)
 
 <hr>
 
@@ -44,7 +44,7 @@ appium driver install uiautomator2
 appium driver list
 ```
 
-参照 [Tested Environments](../environments.md) to get tested version.
+参照 [Tested Environments](../environments.md)
 
 <hr>
 
@@ -66,7 +66,7 @@ appium driver install xcuitest
 appium driver list
 ```
 
-参照 [Tested Environments](../environments.md) to get tested version.
+参照 [Tested Environments](../environments.md)
 
 <hr>
 
