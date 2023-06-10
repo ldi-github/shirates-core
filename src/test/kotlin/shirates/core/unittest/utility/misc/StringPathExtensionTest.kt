@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.driver.TestMode
+import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.*
 import java.nio.file.Path
@@ -32,16 +33,77 @@ class StringPathExtensionTest : UnitTest() {
     }
 
     @Test
-    fun replaceUserHome() {
+    fun replaceUserVars() {
+
+        val userHome = System.getProperty("user.home")
 
         run {
             // Arrange
-            val target = "{userhome}/Downloads"
-            val expected = target.replace("{userhome}", System.getProperty("user.home"))
-            // Act
-            val actual = target.replaceUserHome()
-            // Assert
-            assertThat(actual).isEqualTo(expected)
+            val target = "{USER_HOME}/Downloads"
+            val expected = target.replace("{USER_HOME}", userHome)
+            run {
+                // Act
+                val actual = target.replaceUserHome()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+            run {
+                // Act
+                val actual = target.replaceUserVars()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+        }
+        run {
+            // Arrange
+            val target = "{DOWNLOADS}/dir1"
+            val expected = target.replace("{DOWNLOADS}", "$userHome/Downloads")
+            run {
+                // Act
+                val actual = target.replaceDownloads()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+            run {
+                // Act
+                val actual = target.replaceUserVars()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+        }
+        run {
+            // Arrange
+            val target = "{TEST_RESULTS}/dir1"
+            val expected = target.replace("{TEST_RESULTS}", "$userHome/Downloads/TestResults")
+            run {
+                // Act
+                val actual = target.replaceTestResults()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+            run {
+                // Act
+                val actual = target.replaceUserVars()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+        }
+        run {
+            // Arrange
+            val target = "{DIRECTORY_FOR_LOG}/dir1"
+            val expected = target.replace("{DIRECTORY_FOR_LOG}", TestLog.directoryForLog.toString())
+            run {
+                // Act
+                val actual = target.replaceDirectoryForLog()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+            run {
+                // Act
+                val actual = target.replaceUserVars()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
         }
     }
 

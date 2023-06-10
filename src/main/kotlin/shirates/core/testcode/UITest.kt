@@ -248,7 +248,7 @@ abstract class UITest : TestDrive {
             }
 
             // TestList
-            val testListPath = TestLog.getTestListPath()
+            val testListPath = TestLog.directoryForTestList.resolve("TestList_${testConfigName}.xlsx")
             if (Files.exists(testListPath)) {
                 val testListReport = lockFile(testListPath) {
                     TestListReport().loadFileOnExist(testListPath = testListPath, withLock = true)

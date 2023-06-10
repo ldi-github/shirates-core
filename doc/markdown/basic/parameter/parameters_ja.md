@@ -35,7 +35,8 @@ testrunファイルやtestConfigファイルで以下のパラメーターを設
 | Log                | enableTimeMeasureLog               | 時間計測ログを出力する                                                               | false                                           |  T   | For debugging                                |
 | Log                | enableImageMatchDebugLog           | 画像マッチングのデバッグログを出力する                                                       | false                                           |  T   | For debugging                                |
 | Log                | testResults                        | テスト結果出力ディレクトリのパス                                                          | (userhome)/Downloads/TestResults                |  T   |                                              |
-| Log                | testListDir                        | TestList.xlsxを出力するディレクトのパス                                                | ""(empty)                                       |  T   |                                              |
+| Log                | testListDir                        | TestList.xlsxを出力するディレクトリのパス                                               | ""(empty)                                       |  T   |                                              |
+| Log                | reportIndexDir                     | report index(html)を出力するディレクトリのパス                                          | ""(empty)                                       |  T   |                                              |
 | Screenshot         | screenshotScale                    | スクリーンショットのサイズを縮小する (0.1 to 1.0)                                           | 0.5                                             |  T   |                                              |
 | Screenshot         | autoScreenshot                     | 自動でスクリーンショットを取得する                                                         | true                                            | T/C  |                                              |
 | Screenshot         | onChangedOnly                      | 変更があった場合のみスクリーンショットを取得する                                                  | true                                            | T/C  |                                              |
@@ -110,6 +111,18 @@ testrunファイルやtestConfigファイルで以下のパラメーターを設
 | misc               | titleSelector                      | Selector template for screen title                                        |                                                 |  T   | For framework developer                      |
 | misc               | webTitleSelector                   | Selector template for web title                                           |                                                 |  T   | For framework developer                      |
 | misc               | jquerySource                       | URL for jQuery javascript file                                            |                                                 |  T   | For framework developer                      |
+
+# Path macro
+
+ログディレクトリには **Path macro** を使用することができます。
+
+| Path macro                    | description                    | Usage                                          | 
+|:------------------------------|:-------------------------------|:-----------------------------------------------|
+| `{USER_HOME}`                 | ユーザーのホームディレクトリ                 | `testResults={USER_HOME}/dir1`                 |
+| `{DOWNLOADS}`                 | Downloadsディレクトリ                | `testListDir={DOWNLOADS}/dir1`                 |
+| `{TEST_RESULTS}`              | TestResultsディレクトリ              | `reportIndexDir={TEST_RESULTS}/dir1`           |
+| `{DIRECTORY_FOR_TEST_CONFIG}` | TestResults配下のTestConfigディレクトリ | `testListDir={DIRECTORY_FOR_TEST_CONFIG}/dir1` |
+| `{DIRECTORY_FOR_LOG}`         | TestResults配下のログディレクトリ         | `reportIndexDir={DIRECTORY_FOR_LOG}`           |
 
 ### Link
 
