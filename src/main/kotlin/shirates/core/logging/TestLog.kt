@@ -136,7 +136,7 @@ object TestLog {
      */
     val directoryForReportIndex: Path
         get() {
-            return if (PropertiesManager.reportIndexDir.isBlank()) directoryForLog.parent
+            return if (PropertiesManager.reportIndexDir.isBlank()) testResults
             else PropertiesManager.reportIndexDir.toPath()
         }
 
