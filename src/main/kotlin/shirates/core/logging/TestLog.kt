@@ -21,6 +21,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.reflect.full.memberProperties
 
 /**
  * TestLog
@@ -102,15 +103,52 @@ object TestLog {
     var testResults = PropertiesManager.testResults.toPath()
 
     /**
+     * directoryForTestConfig
+     */
+    val directoryForTestConfig: Path
+        get() {
+            return if (testConfigName.isBlank()) {
+                testResults
+            } else {
+                testResults.resolve(testConfigName)
+            }
+        }
+
+    /**
      * directoryForLog
      */
     val directoryForLog: Path
         get() {
-            if (testConfigName.isBlank()) {
-                return testResults.resolve("$sessionStartTimeLabel/$currentTestClassName")
-            } else {
-                return testResults.resolve("$testConfigName/$sessionStartTimeLabel/$currentTestClassName")
-            }
+            return directoryForTestConfig.resolve("$sessionStartTimeLabel/$currentTestClassName")
+        }
+
+    /**
+     * directoryForTestList
+     */
+    val directoryForTestList: Path
+        get() {
+            return if (PropertiesManager.testListDir.isBlank()) testResults
+            else PropertiesManager.testListDir.toPath()
+        }
+
+    /**
+     * directoryForReportIndex
+     */
+    val directoryForReportIndex: Path
+        get() {
+            return if (PropertiesManager.reportIndexDir.isBlank()) directoryForLog.parent
+            else PropertiesManager.reportIndexDir.toPath()
+        }
+
+    /**
+     * directoryMap
+     */
+    val directoryMap: Map<String, String>
+        get() {
+            val map = TestLog::class.memberProperties
+                .filter { it.returnType.toString() == "java.nio.file.Path" }
+                .map { it.name to it.get(this).toString() }.toMap()
+            return map
         }
 
     /**
@@ -1490,8 +1528,7 @@ object TestLog {
         inputReportFileName: String? = null,
         logLines: List<LogLine> = listOf()
     ) {
-        val reportIndexDir = PropertiesManager.testListDir.ifBlank { directoryForLog.parent.toString() }
-        val reportIndexFilePath = reportIndexDir.toPath().resolve("_ReportIndex($filterName).html")
+        val reportIndexFilePath = directoryForReportIndex.resolve("_ReportIndex($filterName).html")
 
         lockFile(filePath = reportIndexFilePath) {
             val tri = TestReportIndex(
@@ -1526,7 +1563,7 @@ object TestLog {
             return
         }
 
-        val testListPath = getTestListPath()
+        val testListPath = directoryForLog.resolve("TestList_${testConfigName}.xlsx")
         lockFile(testListPath) {
             TestListReport()
                 .loadFileOnExist(testListPath = testListPath)
@@ -1535,21 +1572,16 @@ object TestLog {
         }
 
         /**
-         * Copy the TestList to testListDir and merge if testListDir is defined.
+         * Merge into TestList.xlsx
          */
-        val testListDir = PropertiesManager.testListDir
-        if (testListDir.isNotBlank()) {
-            if (Files.exists(testListDir.toPath()).not()) {
-                throw FileNotFoundException(message(id = "testListDirNotFound", file = testListDir))
-            }
-            val targetPath = testListDir.toPath().resolve(testListPath.fileName)
-            lockFile(targetPath) {
-                TestListReport()
-                    .mergeOutput(sourceTestListPath = testListPath, outputTestListPath = targetPath)
-            }
-
+        if (Files.exists(directoryForTestList).not()) {
+            directoryForTestList.toFile().mkdirs()
         }
-
+        val mergedTestListPath = directoryForTestList.resolve("TestList.xlsx")
+        lockFile(mergedTestListPath) {
+            TestListReport()
+                .mergeOutput(sourceTestListPath = testListPath, outputTestListPath = mergedTestListPath)
+        }
     }
 
     /**
@@ -1561,7 +1593,7 @@ object TestLog {
             return
         }
 
-        val testClassListPath = getTestClassListPath()
+        val testClassListPath = testResults.resolve("TestClassList.txt")
         TestClassListReport()
             .loadFileOnExist(testClassListPath = testClassListPath)
             .merge(currentTestClass!!.name)
@@ -1636,30 +1668,6 @@ object TestLog {
 
         val logDir = "$directoryForLog/".replace(File.separator, "/")
         return "file:///$logDir"
-    }
-
-    /**
-     * getTestListDirPath
-     */
-    fun getTestListDirPath(): Path {
-
-        return "${testResults}/${testConfigName}".toPath()
-    }
-
-    /**
-     * getTestListPath
-     */
-    fun getTestListPath(): Path {
-
-        return getTestListDirPath().resolve("TestList_${testConfigName}.xlsx")
-    }
-
-    /**
-     * getTestClassListPath
-     */
-    fun getTestClassListPath(): Path {
-
-        return getTestListDirPath().parent.resolve("TestClassList.txt")
     }
 
     /**

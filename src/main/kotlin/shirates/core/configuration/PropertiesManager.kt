@@ -8,6 +8,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.file.PropertiesUtility
 import shirates.core.utility.misc.EnvUtility
+import shirates.core.utility.replaceUserVars
 import shirates.core.utility.toPath
 import java.nio.file.Files
 import java.util.*
@@ -324,7 +325,15 @@ object PropertiesManager {
      */
     val testListDir: String
         get() {
-            return getPropertyValue(propertyName = "testListDir") ?: ""
+            return getPropertyValue(propertyName = "testListDir")?.replaceUserVars() ?: ""
+        }
+
+    /**
+     * reportIndexDir
+     */
+    val reportIndexDir: String
+        get() {
+            return getPropertyValue(propertyName = "reportIndexDir")?.replaceUserVars() ?: ""
         }
 
     /**

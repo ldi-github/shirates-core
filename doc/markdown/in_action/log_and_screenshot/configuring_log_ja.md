@@ -24,6 +24,7 @@ testrunファイルでログ出力を構成することができます。
 #enableImageMatchDebugLog=true
 #testResults=
 #testListDir=
+#reportIndexDir=
 ```
 
 ## 同期ログを抑制する

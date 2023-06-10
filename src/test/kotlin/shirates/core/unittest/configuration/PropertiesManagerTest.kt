@@ -5,9 +5,11 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.Const
+import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
+import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.file.PropertiesUtility
 import shirates.core.utility.misc.EnvUtility
@@ -494,6 +496,8 @@ class PropertiesManagerTest : UnitTest() {
     @Test
     fun testListDir() {
 
+        TestLog.directoryMap
+
         run {
             // Arrange
             PropertiesManager.clear()
@@ -506,6 +510,38 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("testListDir", value)
             // Act, Assert
             assertThat(PropertiesManager.testListDir).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = "{TEST_RESULTS}"
+            PropertiesManager.setPropertyValue("testListDir", value)
+            // Act, Assert
+            assertThat(PropertiesManager.testListDir).isEqualTo(UserVar.TEST_RESULTS)
+        }
+    }
+
+    @Test
+    fun reportIndexDir() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.reportIndexDir).isEqualTo("")
+        }
+        run {
+            // Arrange
+            val value = "dir1"
+            PropertiesManager.setPropertyValue("reportIndexDir", value)
+            // Act, Assert
+            assertThat(PropertiesManager.reportIndexDir).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = "{TEST_RESULTS}"
+            PropertiesManager.setPropertyValue("reportIndexDir", value)
+            // Act, Assert
+            assertThat(PropertiesManager.reportIndexDir).isEqualTo(UserVar.TEST_RESULTS)
         }
     }
 

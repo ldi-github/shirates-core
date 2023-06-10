@@ -19,9 +19,8 @@
 
 ### 推奨設定
 
-- [Save Actions (IntelliJ IDEA)](tool_settings/plugin_settings_ja.md) **(非推奨)**
 - [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save_ja.md)
-- [右クリックによろテスト実行を有効にする (IntelliJ IDEA)](tool_settings/right_click_test_running_ja.md)
+- [右クリックによるテスト実行を有効にする (IntelliJ IDEA)](tool_settings/right_click_test_running_ja.md)
 - [propertiesファイルのエンコーディング設定](tool_settings/properties_file_encoding_ja.md)
 - [Androidデバイスの設定](basic/recommended_settings/recommended_settings_android_ja.md)
 
@@ -169,8 +168,8 @@
     - [Appium Inspectorを使用する](in_action/creating_screen_nickname_file/using_appium_inspector_ja.md)
     - [画面ニックネームファイルを作成する](in_action/creating_screen_nickname_file/creating_screen_nickname_file_ja.md)
 - メッセージと言語
-    - [ログ言語](in_action/message_and_language/log_language_ja.md)
-    - [デバイス言語](in_action/message_and_language/device_language_ja.md)
+    - [ログ出力の言語](in_action/message_and_language/log_language_ja.md)
+    - [デバイスの言語](in_action/message_and_language/device_language_ja.md)
 - ログとスクリーンショット
     - [ログ出力を構成する](in_action/log_and_screenshot/configuring_log_ja.md)
     - [スクリーンショットを構成する](in_action/log_and_screenshot/configuring_screenshot_ja.md)
@@ -220,6 +219,10 @@
 
 - IntelliJ IDEA
     - [JVMのバージョン, JDKのバージョン](tool_settings/jvm_version_ja.md)
+
+## 仮想マシンの設定
+
+- [Google Play Storeを有効にする](virtual_machine_settings/enabling_google_play_store_ja.md)
 
 ## パッケージのインストール/アップデート
 

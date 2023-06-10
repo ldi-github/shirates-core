@@ -2,6 +2,7 @@ package shirates.core.utility
 
 import okhttp3.internal.trimSubstring
 import shirates.core.driver.TestMode
+import shirates.core.logging.TestLog
 import java.io.File
 import java.nio.file.Path
 
@@ -15,11 +16,35 @@ fun String.replacePathSeparators(): String {
 }
 
 /**
- * replaceUserHome
+ * replaceUserVars
  */
-fun String.replaceUserHome(): String {
+fun String.replaceUserVars(): String {
 
-    return this.replace("{userhome}", shirates.core.UserVar.USER_HOME)
+    return this
+        .replaceUserHome()
+        .replaceDownloads()
+        .replaceTestResults()
+        .replaceDirectoryForLog()
+}
+
+internal fun String.replaceUserHome(): String {
+
+    return this.replace("{USER_HOME}", shirates.core.UserVar.USER_HOME)
+}
+
+internal fun String.replaceDownloads(): String {
+
+    return this.replace("{DOWNLOADS}", shirates.core.UserVar.DOWNLOADS)
+}
+
+internal fun String.replaceTestResults(): String {
+
+    return this.replace("{TEST_RESULTS}", shirates.core.UserVar.TEST_RESULTS)
+}
+
+internal fun String.replaceDirectoryForLog(): String {
+
+    return this.replace("{DIRECTORY_FOR_LOG}", TestLog.directoryForLog.toString())
 }
 
 /**

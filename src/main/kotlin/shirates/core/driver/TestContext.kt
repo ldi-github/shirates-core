@@ -140,6 +140,9 @@ class TestContext(
     var scrollToEdgeBoost = profile.scrollToEdgeBoost?.toIntOrNull() ?: Const.SCROLL_TO_EDGE_BOOST
 
     @SaveTarget
+    var scrollIntervalSeconds = profile.scrollIntervalSeconds?.toDoubleOrNull() ?: Const.SCROLL_INTERVAL_SECONDS
+
+    @SaveTarget
     var scrollMaxCount = profile.scrollMaxCount?.toIntOrNull() ?: Const.SCROLL_MAX_COUNT
 
     @SaveTarget

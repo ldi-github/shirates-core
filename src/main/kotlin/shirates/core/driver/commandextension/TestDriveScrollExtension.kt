@@ -205,6 +205,7 @@ private fun TestDrive.scrollToEdgeCommand(
     flick: Boolean,
     startMarginRatio: Double,
     repeat: Int,
+    intervalSeconds: Double,
     edgeSelector: String?,
     imageCompare: Boolean
 ) {
@@ -220,6 +221,7 @@ private fun TestDrive.scrollToEdgeCommand(
             flick = flick,
             startMarginRatio = startMarginRatio,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             edgeSelector = edgeSelector,
             imageCompare = imageCompare
         )
@@ -234,6 +236,7 @@ private fun TestDrive.scrollToEdgeCommand(
 fun TestDrive.scrollToBottom(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
@@ -247,6 +250,7 @@ fun TestDrive.scrollToBottom(
         flick = flick,
         startMarginRatio = startMarginRatio,
         repeat = repeat,
+        intervalSeconds = intervalSeconds,
         edgeSelector = edgeSelector,
         imageCompare = imageCompare
     )
@@ -260,6 +264,7 @@ fun TestDrive.scrollToBottom(
 fun TestDrive.scrollToTop(
     startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
@@ -273,6 +278,7 @@ fun TestDrive.scrollToTop(
         flick = flick,
         startMarginRatio = startMarginRatio,
         repeat = repeat,
+        intervalSeconds = intervalSeconds,
         edgeSelector = edgeSelector,
         imageCompare = imageCompare
     )
@@ -286,6 +292,7 @@ fun TestDrive.scrollToTop(
 fun TestDrive.scrollToRightEdge(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
@@ -299,6 +306,7 @@ fun TestDrive.scrollToRightEdge(
         flick = flick,
         startMarginRatio = startMarginRatio,
         repeat = repeat,
+        intervalSeconds = intervalSeconds,
         edgeSelector = edgeSelector,
         imageCompare = imageCompare
     )
@@ -312,6 +320,7 @@ fun TestDrive.scrollToRightEdge(
 fun TestDrive.scrollToLeftEdge(
     startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
@@ -325,6 +334,7 @@ fun TestDrive.scrollToLeftEdge(
         flick = flick,
         startMarginRatio = startMarginRatio,
         repeat = repeat,
+        intervalSeconds = intervalSeconds,
         edgeSelector = edgeSelector,
         imageCompare = imageCompare
     )
@@ -346,6 +356,7 @@ fun TestDrive.doUntilScrollStop(
         if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
         else testContext.scrollHorizontalMarginRatio,
     repeat: Int = 1,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     edgeSelector: String? = null,
     imageCompare: Boolean = false,
     scrollFunc: (() -> Unit)? = null,
@@ -424,6 +435,9 @@ fun TestDrive.doUntilScrollStop(
                 TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
                 if (endOfScroll) {
                     break
+                }
+                if (i < maxLoopCount && intervalSeconds > 0.0) {
+                    Thread.sleep((intervalSeconds * 1000).toLong())
                 }
             }
         } finally {

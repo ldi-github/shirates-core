@@ -89,6 +89,7 @@ class TestProfile(var profileName: String = "") {
     var scrollVerticalMarginRatio: String? = null
     var scrollHorizontalMarginRatio: String? = null
     var scrollToEdgeBoost: String? = null
+    var scrollIntervalSeconds: String? = null
     var scrollMaxCount: String? = null
     var tapHoldSeconds: String? = null
     var enableCache: String? = null
@@ -456,6 +457,9 @@ class TestProfile(var profileName: String = "") {
 
         // scrollToEdgeBoost
         validateNumeric("scrollToEdgeBoost")
+
+        // scrollIntervalSeconds
+        validateNumeric("scrollIntervalSeconds")
 
         // scrollMaxCount
         validateNumeric("scrollMaxCount")

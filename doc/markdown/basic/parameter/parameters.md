@@ -35,7 +35,8 @@ In testrun files and testConfig files you can set parameters below.
 | Log                | enableTimeMeasureLog               | Time measure log is output on true                                                      | false                                           |  T   | For debugging                                |
 | Log                | enableImageMatchDebugLog           | Image match debug log is output on true                                                 | false                                           |  T   | For debugging                                |
 | Log                | testResults                        | Directory path for output test results                                                  | (userhome)/Downloads/TestResults                |  T   |                                              |
-| Log                | testListDir                        | Directory path for output test TestList.xlsx                                            | ""(empty)                                       |  T   |                                              |
+| Log                | testListDir                        | Directory path for output TestList.xlsx                                                 | ""(empty)                                       |  T   |                                              |
+| Log                | reportIndexDir                     | Directory path for output report index(html)                                            | ""(empty)                                       |  T   |                                              |
 | Screenshot         | screenshotScale                    | Reduce the size of screenshot (0.1 to 1.0)                                              | 0.5                                             |  T   |                                              |
 | Screenshot         | autoScreenshot                     | Takes screenshots automatically                                                         | true                                            | T/C  |                                              |
 | Screenshot         | onChangedOnly                      | Takes screenshots on changed only                                                       | true                                            | T/C  |                                              |
@@ -87,6 +88,7 @@ In testrun files and testConfig files you can set parameters below.
 | App operation      | scrollVerticalMarginRatio          | Ratio of margin on vertical scroll                                                      | 0.2                                             | T/C  |                                              |
 | App operation      | scrollHorizontalMarginRatio        | Ratio of margin on horizontal scroll                                                    | 0.2                                             | T/C  |                                              |
 | App operation      | scrollToEdgeBoost                  | Swipe times in one action on scrolling to the edge                                      | 1                                               | T/C  |                                              |
+| App operation      | scrollIntervalSeconds              | Interval seconds before next scroll                                                     | 0.5                                             | T/C  |                                              |
 | App operation      | scrollMaxCount                     | Max times of scrolling                                                                  | 20                                              | T/C  |                                              |
 | App operation      | tapHoldSeconds                     | Tap holding duration seconds                                                            | 0.1                                             | T/C  |                                              |
 | App operation      | enableCache                        | Enable cache                                                                            | true                                            | T/C  |                                              |
@@ -109,6 +111,18 @@ In testrun files and testConfig files you can set parameters below.
 | misc               | titleSelector                      | Selector template for screen title                                                      |                                                 |  T   | For framework developer                      |
 | misc               | webTitleSelector                   | Selector template for web title                                                         |                                                 |  T   | For framework developer                      |
 | misc               | jquerySource                       | URL for jQuery javascript file                                                          |                                                 |  T   | For framework developer                      |
+
+# Path macro
+
+You can use **Path macro** for log directories.
+
+| Path macro                    | description                            | Usage                                          | 
+|:------------------------------|:---------------------------------------|:-----------------------------------------------|
+| `{USER_HOME}`                 | User's home directory                  | `testResults={USER_HOME}/dir1`                 |
+| `{DOWNLOADS}`                 | Downloads directory                    | `testListDir={DOWNLOADS}/dir1`                 |
+| `{TEST_RESULTS}`              | TestResults directory                  | `reportIndexDir={TEST_RESULTS}/dir1`           |
+| `{DIRECTORY_FOR_TEST_CONFIG}` | TestConfig directory under TestResults | `testListDir={DIRECTORY_FOR_TEST_CONFIG}/dir1` |
+| `{DIRECTORY_FOR_LOG}`         | Log directory under TestResults        | `reportIndexDir={DIRECTORY_FOR_LOG}`           |
 
 ### Link
 

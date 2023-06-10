@@ -93,6 +93,7 @@ ios.profile=iPhone 13(15.5)
 #enableImageMatchDebugLog=true
 #testResults=
 #testListDir=
+#reportIndexDir=
 
 ## Screenshot --------------------
 #screenshotScale=0.333333
