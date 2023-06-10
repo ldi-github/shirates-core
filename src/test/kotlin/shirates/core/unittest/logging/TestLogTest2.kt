@@ -100,7 +100,7 @@ class TestLogTest2 : UnitTest() {
             // Act
             val actual = TestLog.directoryForReportIndex
             // Assert
-            val expected = TestLog.directoryForLog.parent
+            val expected = TestLog.testResults
             assertThat(actual).isEqualTo(expected)
         }
         run {
