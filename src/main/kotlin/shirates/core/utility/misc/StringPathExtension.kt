@@ -24,6 +24,7 @@ fun String.replaceUserVars(): String {
         .replaceUserHome()
         .replaceDownloads()
         .replaceTestResults()
+        .replaceDirectoryForTestConfig()
         .replaceDirectoryForLog()
 }
 
@@ -40,6 +41,11 @@ internal fun String.replaceDownloads(): String {
 internal fun String.replaceTestResults(): String {
 
     return this.replace("{TEST_RESULTS}", shirates.core.UserVar.TEST_RESULTS)
+}
+
+internal fun String.replaceDirectoryForTestConfig(): String {
+
+    return this.replace("{DIRECTORY_FOR_TEST_CONFIG}", TestLog.directoryForTestConfig.toString())
 }
 
 internal fun String.replaceDirectoryForLog(): String {

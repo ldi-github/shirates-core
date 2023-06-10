@@ -90,6 +90,23 @@ class StringPathExtensionTest : UnitTest() {
         }
         run {
             // Arrange
+            val target = "{DIRECTORY_FOR_TEST_CONFIG}/dir1"
+            val expected = target.replace("{DIRECTORY_FOR_TEST_CONFIG}", TestLog.directoryForTestConfig.toString())
+            run {
+                // Act
+                val actual = target.replaceDirectoryForTestConfig()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+            run {
+                // Act
+                val actual = target.replaceUserVars()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+        }
+        run {
+            // Arrange
             val target = "{DIRECTORY_FOR_LOG}/dir1"
             val expected = target.replace("{DIRECTORY_FOR_LOG}", TestLog.directoryForLog.toString())
             run {
