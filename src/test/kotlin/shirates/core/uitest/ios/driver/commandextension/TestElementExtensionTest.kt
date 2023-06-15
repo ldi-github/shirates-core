@@ -28,7 +28,7 @@ class TestElementExtensionTest : UITest() {
                     it.sendKeys("safa")
                 }.expectation {
                     it.valueStartsWith("safa")
-                    it.exist("Safari")
+                    it.exist("safari browser")
                 }
             }
             case(2) {
@@ -112,8 +112,8 @@ class TestElementExtensionTest : UITest() {
                 }.action {
                     it.sendKeys("safa")
                 }.expectation {
-                    it.textStartsWith("safa")
-                    it.exist("Safari")
+                    it.valueStartsWith("safa")
+                    it.exist("safari browser")
                 }
             }
         }
