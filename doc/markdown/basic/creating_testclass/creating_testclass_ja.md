@@ -30,7 +30,7 @@ class TestClass1 : UITest() {
 }
 ```
 
-## @Testrun annotation
+## @Testrunアノテーション
 
 テストのセッションを初期化するためにテスト構成情報を記載した**Testrunファイル** が必要です。
 **@Testrun**アノテーションをクラスに付与して適用する**Testrunファイル**を指定してください。
@@ -49,11 +49,11 @@ class TestClass1 : UITest() {
 ```
 
 `testrun.properties`ファイルを`testConfig`ディレクトリの下に配置すると、このファイルがデフォルトになります。
-この場合は各テストクラスに`@Testrun`アノテーションすることを省略できます。
+この場合は各テストクラスに`@Testrun`アノテーションを付与することを省略できます。
 
 ![](../_images/testrun_file_default.png)
 
-## @Test annotation
+## @Testアノテーション
 
 `testMethod1`という名前の関数を作成してください。
 
@@ -338,7 +338,7 @@ class TestClass1 : UITest() {
 
 ## @Nestedのサポートについて
 
-@Nested は使用しないでください。 これはShirates Test Framework のソフトウェアデザインに伴う制限です。
+@Nested は使用しないでください。 これはshirates-coreのソフトウェアデザインに伴う制限です。
 
 ### Link
 
