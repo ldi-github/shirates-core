@@ -7,6 +7,12 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 
+internal fun TestDrive.getTestElement(): TestElement {
+
+    return if (this is TestElement) this
+    else rootElement
+}
+
 /**
  * sendKeys
  */
@@ -15,7 +21,7 @@ fun TestDrive.sendKeys(
     waitSeconds: Double = testContext.waitSecondsOnIsScreen
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = focusedElement
 
     val command = "sendKeys"
     val message = message(id = command, key = "$keysToSend")

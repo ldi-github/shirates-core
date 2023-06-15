@@ -433,7 +433,7 @@ internal fun TestDrive.ifImageIsCore(
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     var r = false
     var matchResult: ImageMatchResult

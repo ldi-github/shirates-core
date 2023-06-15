@@ -39,85 +39,87 @@ class StringPathExtensionTest : UnitTest() {
 
         run {
             // Arrange
-            val target = "{USER_HOME}/Downloads"
-            val expected = target.replace("{USER_HOME}", userHome)
+            val target = "{USER_HOME}/Downloads".replacePathSeparators()
+            val expected = target.replace("{USER_HOME}", userHome).replacePathSeparators()
             run {
                 // Act
-                val actual = target.replaceUserHome()
+                val actual = target.replaceUserHome().replacePathSeparators()
                 // Assert
                 assertThat(actual).isEqualTo(expected)
             }
             run {
                 // Act
-                val actual = target.replaceUserVars()
-                // Assert
-                assertThat(actual).isEqualTo(expected)
-            }
-        }
-        run {
-            // Arrange
-            val target = "{DOWNLOADS}/dir1"
-            val expected = target.replace("{DOWNLOADS}", "$userHome/Downloads")
-            run {
-                // Act
-                val actual = target.replaceDownloads()
-                // Assert
-                assertThat(actual).isEqualTo(expected)
-            }
-            run {
-                // Act
-                val actual = target.replaceUserVars()
+                val actual = target.replaceUserVars().replacePathSeparators()
                 // Assert
                 assertThat(actual).isEqualTo(expected)
             }
         }
         run {
             // Arrange
-            val target = "{TEST_RESULTS}/dir1"
-            val expected = target.replace("{TEST_RESULTS}", "$userHome/Downloads/TestResults")
+            val target = "{DOWNLOADS}/dir1".replacePathSeparators()
+            val expected = target.replace("{DOWNLOADS}", "$userHome/Downloads").replacePathSeparators()
             run {
                 // Act
-                val actual = target.replaceTestResults()
+                val actual = target.replaceDownloads().replacePathSeparators()
                 // Assert
                 assertThat(actual).isEqualTo(expected)
             }
             run {
                 // Act
-                val actual = target.replaceUserVars()
+                val actual = target.replaceUserVars().replacePathSeparators()
                 // Assert
                 assertThat(actual).isEqualTo(expected)
             }
         }
         run {
             // Arrange
-            val target = "{DIRECTORY_FOR_TEST_CONFIG}/dir1"
+            val target = "{TEST_RESULTS}/dir1".replacePathSeparators()
+            val expected = target.replace("{TEST_RESULTS}", "$userHome/Downloads/TestResults").replacePathSeparators()
+            run {
+                // Act
+                val actual = target.replaceTestResults().replacePathSeparators()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+            run {
+                // Act
+                val actual = target.replaceUserVars().replacePathSeparators()
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+        }
+        run {
+            // Arrange
+            val target = "{DIRECTORY_FOR_TEST_CONFIG}/dir1".replacePathSeparators()
             val expected = target.replace("{DIRECTORY_FOR_TEST_CONFIG}", TestLog.directoryForTestConfig.toString())
+                .replacePathSeparators()
             run {
                 // Act
-                val actual = target.replaceDirectoryForTestConfig()
+                val actual = target.replaceDirectoryForTestConfig().replacePathSeparators()
                 // Assert
                 assertThat(actual).isEqualTo(expected)
             }
             run {
                 // Act
-                val actual = target.replaceUserVars()
+                val actual = target.replaceUserVars().replacePathSeparators()
                 // Assert
                 assertThat(actual).isEqualTo(expected)
             }
         }
         run {
             // Arrange
-            val target = "{DIRECTORY_FOR_LOG}/dir1"
-            val expected = target.replace("{DIRECTORY_FOR_LOG}", TestLog.directoryForLog.toString())
+            val target = "{DIRECTORY_FOR_LOG}/dir1".replacePathSeparators()
+            val expected =
+                target.replace("{DIRECTORY_FOR_LOG}", TestLog.directoryForLog.toString()).replacePathSeparators()
             run {
                 // Act
-                val actual = target.replaceDirectoryForLog()
+                val actual = target.replaceDirectoryForLog().replacePathSeparators()
                 // Assert
                 assertThat(actual).isEqualTo(expected)
             }
             run {
                 // Act
-                val actual = target.replaceUserVars()
+                val actual = target.replaceUserVars().replacePathSeparators()
                 // Assert
                 assertThat(actual).isEqualTo(expected)
             }

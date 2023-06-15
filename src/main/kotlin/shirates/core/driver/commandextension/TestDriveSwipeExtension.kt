@@ -26,7 +26,8 @@ fun TestDrive.swipePointToPoint(
     repeat: Int = 1,
     safeMode: Boolean = true,
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = rootElement
 
     val sc = SwipeContext(
         swipeFrame = viewport,
@@ -203,14 +204,15 @@ fun TestDrive.swipeCenterToTop(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "swipeCenterToTop"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val b = getSwipeTarget().bounds
+        val b = testElement.bounds
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -233,7 +235,8 @@ fun TestDrive.flickCenterToTop(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickCenterToTop"
     val message = message(id = command)
@@ -257,14 +260,15 @@ fun TestDrive.swipeCenterToBottom(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "swipeCenterToBottom"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val b = getSwipeTarget().bounds
+        val b = testElement.bounds
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -287,7 +291,8 @@ fun TestDrive.flickCenterToBottom(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickCenterToBottom"
     val message = message(id = command)
@@ -312,14 +317,15 @@ fun TestDrive.swipeCenterToLeft(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "swipeCenterToLeft"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val b = getSwipeTarget().bounds
+        val b = testElement.bounds
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -342,7 +348,8 @@ fun TestDrive.flickCenterToLeft(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickCenterToLeft"
     val message = message(id = command)
@@ -367,14 +374,15 @@ fun TestDrive.swipeCenterToRight(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "swipeCenterToRight"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val b = getSwipeTarget().bounds
+        val b = testElement.bounds
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -397,7 +405,8 @@ fun TestDrive.flickCenterToRight(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickCenterToRight"
     val message = message(id = command)
@@ -423,14 +432,15 @@ fun TestDrive.swipeLeftToRight(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "swipeLeftToRight"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val b = getSwipeTarget().bounds
+        val b = testElement.bounds
         val startX = (b.right * startMarginRatio).toInt()
         swipePointToPoint(
             startX = startX,
@@ -455,7 +465,8 @@ fun TestDrive.flickLeftToRight(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickLeftToRight"
     val message = message(id = command)
@@ -482,14 +493,15 @@ fun TestDrive.swipeRightToLeft(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "swipeRightToLeft"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val b = getSwipeTarget().bounds
+        val b = testElement.bounds
         val startX = (b.right * (1 - startMarginRatio)).toInt()
         swipePointToPoint(
             startX = startX,
@@ -514,7 +526,8 @@ fun TestDrive.flickRightToLeft(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickRightToLeft"
     val message = message(id = command)
@@ -541,14 +554,15 @@ fun TestDrive.swipeBottomToTop(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "swipeBottomToTop"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val b = getSwipeTarget().bounds
+        val b = testElement.bounds
         val startY = (b.bottom * (1 - startMarginRatio)).toInt()
 
         swipePointToPoint(
@@ -574,7 +588,8 @@ fun TestDrive.flickBottomToTop(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickBottomToTop"
     val message = message(id = command)
@@ -601,7 +616,8 @@ fun TestDrive.flickAndGoDown(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickAndGoDown"
     val message = message(id = command)
@@ -628,7 +644,8 @@ fun TestDrive.flickAndGoRight(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickAndGoRight"
     val message = message(id = command)
@@ -655,7 +672,8 @@ fun TestDrive.flickAndGoLeft(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickAndGoLeft"
     val message = message(id = command)
@@ -682,14 +700,15 @@ fun TestDrive.swipeTopToBottom(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "swipeTopToBottom"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val b = getSwipeTarget().bounds
+        val b = testElement.bounds
         val startY = (b.bottom * startMarginRatio).toInt()
 
         swipePointToPoint(
@@ -715,7 +734,8 @@ fun TestDrive.flickAndGoUp(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickAndGoUp"
     val message = message(id = command)
@@ -741,7 +761,8 @@ fun TestDrive.flickTopToBottom(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = getSwipeTarget()
 
     val command = "flickTopToBottom"
     val message = message(id = command)
@@ -772,7 +793,8 @@ fun TestDrive.swipeElementToElement(
     repeat: Int = 1,
     safeMode: Boolean = true
 ): TestElement {
-    val testElement = getTestElement()
+
+    val testElement = rootElement
 
     val command = "swipeElementToElement"
     val message = message(id = command, subject = startElement.subject, to = endElement.subject)

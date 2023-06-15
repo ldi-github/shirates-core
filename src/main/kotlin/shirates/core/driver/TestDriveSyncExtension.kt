@@ -1,6 +1,7 @@
 package shirates.core.driver
 
 import shirates.core.configuration.Selector
+import shirates.core.driver.commandextension.getTestElement
 import shirates.core.driver.commandextension.refreshCache
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
@@ -57,7 +58,7 @@ fun TestDrive.waitForClose(
     throwsException: Boolean = true
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val sel: Selector
     if (expression == null) {
@@ -107,7 +108,7 @@ fun TestDrive.waitForDisplay(
     throwsException: Boolean = true
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val sel = getSelector(expression = expression)
     val context = TestDriverCommandContext(testElement)

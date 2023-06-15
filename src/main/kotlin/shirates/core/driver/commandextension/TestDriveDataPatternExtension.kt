@@ -2,7 +2,6 @@ package shirates.core.driver.commandextension
 
 import shirates.core.driver.TestDrive
 import shirates.core.driver.TestElement
-import shirates.core.driver.getTestElement
 import shirates.core.logging.TestLog
 
 /**
@@ -17,8 +16,7 @@ fun TestDrive.dataPattern(
     TestLog.info(message = message)
     shirates.core.proxy.dataPattern(apiName = apiNickname, dataPatternName = dataPatternName)
 
-    val testElement = getTestElement()
-    return testElement
+    return getTestElement()
 }
 
 /**

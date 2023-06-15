@@ -37,7 +37,7 @@ fun TestDrive.tap(
     safeMode: Boolean = true
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "tap"
     val message = message(id = command, subject = "($x,$y)")
@@ -67,7 +67,7 @@ fun TestDrive.tap(
     tapMethod: TapMethod = TapMethod.auto
 ): TestElement {
 
-    val tappedElement = getTestElement()
+    val tappedElement = TestDriver.it
 
     val command = "tap"
     val message = message(id = command, subject = tappedElement.subject)
@@ -159,7 +159,7 @@ fun TestDrive.tap(
     handleIrregular: Boolean = true
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "tap"
     val sel = getSelector(expression = expression)
@@ -169,7 +169,7 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = select(expression = expression, safeElementOnly = true)
+        val targetElement = it.select(expression = expression, safeElementOnly = true)
         val tapFunc = {
             silent {
                 e = targetElement.tap(holdSeconds = holdSeconds, tapMethod = tapMethod)
@@ -182,7 +182,7 @@ fun TestDrive.tap(
             val errorMessage = t.toString()
             TestLog.warn(errorMessage)
 
-            syncCache(force = testContext.useCache)
+            refreshCache()
 
             if (handleIrregular) {
                 TestDriver.fireIrregularHandler()
@@ -199,7 +199,7 @@ fun TestDrive.tap(
         lastElement = e
     }
 
-    return e
+    return TestDriver.it
 }
 
 private fun TestDrive.tapWithScrollCommandCore(

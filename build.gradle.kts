@@ -1,5 +1,5 @@
 plugins {
-    val kotlin_version = "1.6.21"
+    val kotlin_version = "1.8.21"
     kotlin("jvm") version kotlin_version
 //    kotlin("plugin.serialization") version kotlin_version
     id("idea")
@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "4.5.1"
+version = "4.5.2"
 
 val appiumClientVersion = "8.5.0"
 

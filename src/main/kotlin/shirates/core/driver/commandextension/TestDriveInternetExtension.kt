@@ -63,7 +63,7 @@ val TestDrive.mobileEnabled: Boolean
 fun TestDrive.internetOn(
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "internetOn"
     val message = message(id = command)
@@ -85,7 +85,7 @@ fun TestDrive.internetOn(
 fun TestDrive.internetOff(
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "internetOff"
     val message = message(id = command)
@@ -108,7 +108,7 @@ fun TestDrive.internetOff(
 fun TestDrive.wiFiOn(
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "wiFiOn"
     val message = message(id = command)
@@ -130,7 +130,7 @@ fun TestDrive.wiFiOn(
 fun TestDrive.wiFiOff(
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "wiFiOff"
     val message = message(id = command)
@@ -151,7 +151,7 @@ fun TestDrive.wiFiOff(
 fun TestDrive.mobileOn(
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "mobileOn"
     val message = message(id = command)
@@ -173,7 +173,7 @@ fun TestDrive.mobileOn(
 fun TestDrive.mobileOff(
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "mobileOff"
     val message = message(id = command)

@@ -27,10 +27,10 @@ internal fun TestDrive.getScrollableElementsInAncestors(): List<TestElement> {
 
     val testElement = getTestElement()
 
-    if (isAndroid) {
-        return testElement.ancestors.filter { it.isScrollable }
+    return if (isAndroid) {
+        testElement.ancestors.filter { it.isScrollable }
     } else {
-        return testElement.ancestors.filter { it.isScrollable && it.isVisible }
+        testElement.ancestors.filter { it.isScrollable && it.isVisible }
     }
 }
 
@@ -407,6 +407,7 @@ fun TestDrive.doUntilScrollStop(
     }
 
     if (TestDriver.isInitialized) {
+        TestDriver.refreshCache()
         if (actionFunc != null) {
             val result = actionFunc()
             if (result) {
@@ -777,9 +778,7 @@ private fun TestDrive.getScrollingInfo(
         else testContext.scrollHorizontalMarginRatio
 ): ScrollingInfo {
 
-    val testElement = getTestElement()
-
-    val scrollableTarget = testElement.getScrollableTarget()
+    val scrollableTarget = getScrollableTarget()
     val r = ScrollingInfo(
         errorMessage = "",
         scrollableBounds = scrollableTarget.bounds,

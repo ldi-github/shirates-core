@@ -91,7 +91,7 @@ fun TestDrive.selectWithScrollDown(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-    val testElement = getTestElement()
+    val testElement = getScrollableTarget()
 
     val selector = getSelector(expression = expression)
     val context = TestDriverCommandContext(testElement)
@@ -125,7 +125,7 @@ fun TestDrive.selectWithScrollUp(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-    val testElement = getTestElement()
+    val testElement = getScrollableTarget()
 
     val selector = getSelector(expression = expression)
     var e = TestElement(selector = selector)
@@ -159,7 +159,7 @@ fun TestDrive.selectWithScrollRight(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-    val testElement = getTestElement()
+    val testElement = getScrollableTarget()
 
     val selector = getSelector(expression = expression)
     var e = TestElement(selector = selector)
@@ -193,7 +193,7 @@ fun TestDrive.selectWithScrollLeft(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-    val testElement = getTestElement()
+    val testElement = getScrollableTarget()
 
     val selector = getSelector(expression = expression)
     var e = TestElement(selector = selector)
@@ -224,7 +224,7 @@ fun TestDrive.selectInScanResults(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-    val testElement = getTestElement()
+    val testElement = getScrollableTarget()
 
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
@@ -297,7 +297,7 @@ fun TestDrive.canSelect(
     safeElementOnly: Boolean = true,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = TestDriver.it
 
     val sel = TestDriver.expandExpression(expression = expression, screenName = screenName)
     var found = false
@@ -330,7 +330,7 @@ fun TestDrive.canSelectWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = getScrollableTarget()
 
     val sel = getSelector(expression = expression)
     var found = false
@@ -362,7 +362,7 @@ fun TestDrive.canSelectWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = getScrollableTarget()
 
     val sel = getSelector(expression = expression)
     var found = false
@@ -394,7 +394,7 @@ fun TestDrive.canSelectWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = getScrollableTarget()
 
     val sel = getSelector(expression = expression)
     var found = false
@@ -426,7 +426,7 @@ fun TestDrive.canSelectWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = getScrollableTarget()
 
     val sel = getSelector(expression = expression)
     var found = false
@@ -455,7 +455,7 @@ fun TestDrive.canSelectInScanResults(
     expression: String,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = getScrollableTarget()
 
     val subject = TestDriver.screenInfo.getSelector(expression = expression).toString()
     var found = false
@@ -481,7 +481,7 @@ fun TestDrive.canSelectAllInScanResults(
     vararg expressions: String,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = TestDriver.it
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var found = true
@@ -511,7 +511,7 @@ internal fun TestDrive.canSelectAll(
     safeElementOnly: Boolean = true,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = TestDriver.it
 
     val subject = selectors.joinToString()
     var foundAll = false
@@ -536,7 +536,7 @@ fun TestDrive.canSelectAll(
     vararg expressions: String,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = TestDriver.it
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var foundAll = false
@@ -565,7 +565,7 @@ fun TestDrive.canSelectAllWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = this.getTestElement()
+    val testElement = getScrollableTarget()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var foundAll = false
@@ -603,7 +603,7 @@ fun TestDrive.canSelectAllWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getTestElement()
+    val testElement = getScrollableTarget()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var found = false
@@ -640,7 +640,7 @@ fun TestDrive.canSelectAllWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getTestElement()
+    val testElement = getScrollableTarget()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var found = false
@@ -677,7 +677,7 @@ fun TestDrive.canSelectAllWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getTestElement()
+    val testElement = getScrollableTarget()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var found = false

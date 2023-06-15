@@ -1,6 +1,9 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.driver.*
+import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestElement
+import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 
 /**
@@ -19,7 +22,7 @@ fun TestDrive.useHandler(func: () -> Unit): TestElement {
         TestLog.info("} useHandler(${TestLog.lines.count() + 1}) {")
     }
 
-    return getTestElement()
+    return TestDriver.it
 }
 
 /**
@@ -36,7 +39,7 @@ fun TestDrive.suppressHandler(func: () -> Unit): TestElement {
         testContext.enableIrregularHandler = original
     }
 
-    return getTestElement()
+    return TestDriver.it
 }
 
 /**
@@ -46,7 +49,7 @@ fun TestDrive.enableHandler(): TestElement {
 
     TestDriver.testContext.enableIrregularHandler = true
 
-    return getTestElement()
+    return TestDriver.it
 }
 
 /**
@@ -56,5 +59,5 @@ fun TestDrive.disableHandler(): TestElement {
 
     TestDriver.testContext.enableIrregularHandler = false
 
-    return getTestElement()
+    return TestDriver.it
 }
