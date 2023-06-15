@@ -1,5 +1,5 @@
 plugins {
-    val kotlin_version = "1.6.21"
+    val kotlin_version = "1.8.21"
     kotlin("jvm") version kotlin_version
 //    kotlin("plugin.serialization") version kotlin_version
     id("idea")
