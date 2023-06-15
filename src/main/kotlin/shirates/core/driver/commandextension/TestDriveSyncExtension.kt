@@ -1,7 +1,10 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.driver.*
+import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestElement
 import shirates.core.driver.branchextension.result.BooleanCompareResult
+import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 
 /**
@@ -20,7 +23,7 @@ fun TestDrive.useCache(func: () -> Unit): TestElement {
         TestLog.info("} useCache(${TestLog.lines.count() + 1})")
     }
 
-    return getTestElement()
+    return TestDriver.it
 }
 
 /**
@@ -42,7 +45,7 @@ fun TestDrive.suppressCache(func: () -> Unit): TestElement {
         TestLog.info("} suppressCache(${TestLog.lines.count() + 1})")
     }
 
-    return getTestElement()
+    return TestDriver.it
 }
 
 /**
@@ -52,7 +55,7 @@ fun TestDrive.enableCache(): TestElement {
 
     TestLog.info("enableCache")
     testContext.enableCache = true
-    return getTestElement()
+    return TestDriver.it
 }
 
 /**
@@ -62,14 +65,14 @@ fun TestDrive.disableCache(): TestElement {
 
     TestLog.info("disableCache")
     testContext.enableCache = false
-    return getTestElement()
+    return TestDriver.it
 }
 
 fun TestDrive.switchScreen(screenName: String): TestElement {
 
     TestLog.info("switchScreen($screenName)")
     TestDriver.switchScreen(screenName = screenName)
-    return getTestElement()
+    return TestDriver.it
 }
 
 /**

@@ -15,7 +15,7 @@ fun TestDrive.macro(
     onError: ((e: ErrorEventArgs) -> Unit)? = null
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
     val command = "macro"
 
     val msg =

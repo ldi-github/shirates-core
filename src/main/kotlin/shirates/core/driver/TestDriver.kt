@@ -106,31 +106,39 @@ object TestDriver {
      */
     val it: TestElement
         get() {
-            TestLog.trace()
+            return refreshLastElement()
+        }
 
-            if (TestMode.isNoLoadRun) {
-                return lastElement
-            }
-            if (testContext.useCache.not()) {
-                return lastElement
-            }
+    /**
+     * refreshLastElement
+     */
+    fun refreshLastElement(): TestElement {
 
-            if (TestElementCache.synced) {
-                TestLog.trace("TestElementCache.synced=${TestElementCache.synced}. syncCache skipped.")
-                return lastElement
-            }
+        TestLog.trace()
 
-            syncCache()
-
-            if (lastElement.isEmpty.not()) {
-                lastElement = lastElement.refreshThisElement()
-            }
-            if (lastElement.isEmpty) {
-                lastElement = rootElement
-            }
-
+        if (TestMode.isNoLoadRun) {
             return lastElement
         }
+        if (testContext.useCache.not()) {
+            return lastElement
+        }
+
+        if (TestElementCache.synced) {
+            TestLog.trace("TestElementCache.synced=${TestElementCache.synced}. syncCache skipped.")
+            return lastElement
+        }
+
+        syncCache()
+
+        if (lastElement.isEmpty.not()) {
+            lastElement = lastElement.refreshThisElement()
+        }
+        if (lastElement.isEmpty) {
+            lastElement = rootElement
+        }
+
+        return lastElement
+    }
 
     /**
      * lastElement
@@ -961,11 +969,11 @@ object TestDriver {
                     )
                 )
             }
-            try {
+            selectedElement = try {
                 val webElement = testDrive.findWebElement(selector = selector)
-                selectedElement = TestElement(selector = selector, webElement = webElement)
+                TestElement(selector = selector, webElement = webElement)
             } catch (t: Throwable) {
-                selectedElement = TestElement(selector = selector)
+                TestElement(selector = selector)
             }
         }
         if (selector.isNegation.not()) {
@@ -1693,6 +1701,8 @@ object TestDriver {
         if (TestMode.isNoLoadRun) {
             return lastElement
         }
+
+        refreshCache()
 
         var element = TestElement()
         val r = SyncUtility.doUntilTrue(

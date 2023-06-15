@@ -1,7 +1,10 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.Const
-import shirates.core.driver.*
+import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestElement
+import shirates.core.driver.testContext
 
 /**
  * invalidateCache
@@ -17,7 +20,7 @@ fun TestDrive.invalidateCache(): TestElement {
  */
 fun TestDrive.refreshCache(): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = lastElement
 
     TestDriver.refreshCache()
     return testElement.refreshThisElement()
@@ -53,4 +56,10 @@ fun TestDrive.syncCache(
     return lastElement
 }
 
+/**
+ * refreshLastElement
+ */
+fun TestDrive.refreshLastElement(): TestElement {
 
+    return TestDriver.refreshLastElement()
+}

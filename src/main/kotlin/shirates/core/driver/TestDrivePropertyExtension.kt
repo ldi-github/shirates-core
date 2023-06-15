@@ -3,6 +3,7 @@ package shirates.core.driver
 import org.openqa.selenium.Capabilities
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.driver.commandextension.getScrollableTarget
+import shirates.core.driver.commandextension.getTestElement
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.getCapabilityRelaxed
 

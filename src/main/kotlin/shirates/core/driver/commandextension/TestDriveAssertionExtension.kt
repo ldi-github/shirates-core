@@ -27,7 +27,7 @@ fun TestDrive.appIs(
     appNameOrAppId: String
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "appIs"
     val subject = Selector(appNameOrAppId).toString()
@@ -56,7 +56,7 @@ fun TestDrive.appIs(
  */
 fun TestDrive.keyboardIsShown(): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "keyboardIsShown"
     val assertMessage = message(id = command)
@@ -79,7 +79,7 @@ fun TestDrive.keyboardIsShown(): TestElement {
  */
 fun TestDrive.keyboardIsNotShown(): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "keyboardIsNotShown"
     val assertMessage = message(id = command)
@@ -102,7 +102,7 @@ fun TestDrive.keyboardIsNotShown(): TestElement {
  */
 fun TestDrive.packageIs(expected: String): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "packageIs"
     val assertMessage = message(id = command, expected = expected)
@@ -143,7 +143,7 @@ fun TestDrive.screenIs(
     func: (() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "screenIs"
     val assertMessage = message(id = command, subject = screenName)
@@ -227,7 +227,7 @@ fun TestDrive.screenIsOf(
     func: (() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "screenIsOf"
     val assertMessage = message(id = command, subject = screenNames.joinToString(","))
@@ -390,7 +390,7 @@ fun TestDrive.exist(
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "exist"
     val assertMessage = message(id = command, subject = "$sel")
@@ -431,7 +431,7 @@ fun TestDrive.existWithScrollDown(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)
@@ -471,7 +471,7 @@ fun TestDrive.existWithScrollUp(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "existWithScrollUp"
     val sel = getSelector(expression = expression)
@@ -511,7 +511,7 @@ fun TestDrive.existWithScrollRight(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "existWithScrollRight"
     val sel = getSelector(expression = expression)
@@ -551,7 +551,7 @@ fun TestDrive.existWithScrollLeft(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "existWithScrollLeft"
     val sel = getSelector(expression = expression)
@@ -589,7 +589,7 @@ fun TestDrive.existInScanResults(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "existInScanResults"
     val sel = getSelector(expression = expression)
@@ -691,7 +691,7 @@ internal fun TestDrive.dontExist(
     useCache: Boolean = testContext.useCache
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
     var e = TestElement(selector = selector)
 
     val command = "dontExist"
@@ -824,7 +824,7 @@ fun TestDrive.dontExistWithScrollDown(
     useCache: Boolean = testContext.useCache
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "dontExistWithScrollDown"
     val selector = TestDriver.screenInfo.getSelector(expression = expression)
@@ -858,7 +858,7 @@ fun TestDrive.dontExistWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "dontExistWithScrollUp"
     val selector = TestDriver.screenInfo.getSelector(expression = expression)
@@ -920,7 +920,7 @@ fun TestDrive.dontExistInScanResults(
     throwsException: Boolean = true
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "dontExistInScanResults"
     val sel = getSelector(expression = expression)

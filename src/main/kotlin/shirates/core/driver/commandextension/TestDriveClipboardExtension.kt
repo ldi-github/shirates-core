@@ -1,6 +1,10 @@
 package shirates.core.driver.function
 
-import shirates.core.driver.*
+import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.TestElement
+import shirates.core.driver.TestMode
+import shirates.core.driver.commandextension.getTestElement
 import shirates.core.logging.Message.message
 import shirates.core.storage.Clipboard
 

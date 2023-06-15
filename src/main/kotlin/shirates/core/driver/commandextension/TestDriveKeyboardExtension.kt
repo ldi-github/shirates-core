@@ -30,7 +30,7 @@ fun TestDrive.hideKeyboard(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "hideKeyboard"
     val message = message(id = command)
@@ -59,7 +59,7 @@ fun TestDrive.pressBack(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "pressBack"
     val message = message(id = command)
@@ -86,7 +86,7 @@ fun TestDrive.pressHome(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "pressHome"
     val message = message(id = command)
@@ -111,7 +111,7 @@ fun TestDrive.pressEnter(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "pressEnter"
     val message = message(id = command)
@@ -138,7 +138,7 @@ fun TestDrive.pressSearch(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "pressSearch"
     val message = message(id = command)
@@ -169,7 +169,7 @@ fun TestDrive.pressTab(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "pressTab"
     val message = message(id = command)
@@ -197,7 +197,7 @@ fun TestDrive.pressAndroid(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "pressAndroid"
     val message = message(id = command, key = "$key")
@@ -229,7 +229,7 @@ fun TestDrive.pressKeys(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = TestDriver.it
 
     val command = "pressKeys"
 
