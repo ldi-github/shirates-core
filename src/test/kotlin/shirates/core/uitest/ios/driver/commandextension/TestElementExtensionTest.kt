@@ -25,9 +25,9 @@ class TestElementExtensionTest : UITest() {
                         .select("[SpotlightSearchField]")
                         .clearInput()
                 }.action {
-                    it.sendKeys("safa")
+                    it.sendKeys("safari")
                 }.expectation {
-                    it.valueStartsWith("safa")
+                    it.valueStartsWith("safari")
                     it.exist("safari browser")
                 }
             }
@@ -110,9 +110,9 @@ class TestElementExtensionTest : UITest() {
                     it.select("[SpotlightSearchField]")
                         .clearInput()
                 }.action {
-                    it.sendKeys("safa")
+                    it.sendKeys("safari")
                 }.expectation {
-                    it.valueStartsWith("safa")
+                    it.valueStartsWith("safari")
                     it.exist("safari browser")
                 }
             }
