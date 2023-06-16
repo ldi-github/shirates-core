@@ -7,7 +7,10 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 
-internal fun TestDrive.getTestElement(): TestElement {
+/**
+ * getTestElement
+ */
+fun TestDrive.getTestElement(): TestElement {
 
     return if (this is TestElement) this
     else rootElement
