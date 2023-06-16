@@ -699,7 +699,7 @@ class TestElement(
             if (type == "XCUIElementTypeImage") {
                 return true
             }
-            if (visible == "false" && isInXCUIElementTypeCell) {
+            if (visible == "false" && (isInXCUIElementTypeCell || isInXCUIElementTypeTabBar)) {
                 return true
             }
             return isVisible
@@ -717,6 +717,12 @@ class TestElement(
         get() {
             if (isAndroid) return false
             return ancestors.any() { it.type == "XCUIElementTypeCell" && it.isVisible }
+        }
+
+    internal val isInXCUIElementTypeTabBar: Boolean
+        get() {
+            if (isAndroid) return false
+            return ancestors.any() { it.type == "XCUIElementTypeTabBar" && it.isVisible }
         }
 
     /**
