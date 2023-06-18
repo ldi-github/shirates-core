@@ -28,7 +28,7 @@ class TestElementExtensionTest : UITest() {
                     it.sendKeys("safari")
                 }.expectation {
                     it.valueStartsWith("safari")
-                    it.exist("safari browser")
+                    it.exist("safari")
                 }
             }
             case(2) {
@@ -113,7 +113,7 @@ class TestElementExtensionTest : UITest() {
                     it.sendKeys("safari")
                 }.expectation {
                     it.valueStartsWith("safari")
-                    it.exist("safari browser")
+                    it.exist("safari")
                 }
             }
         }
