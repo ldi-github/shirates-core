@@ -21,9 +21,9 @@ class iOSPressKey1 : UITest() {
                     it.select("[SpotlightSearchField]")
                         .clearInput()
                         .sendKeys("safari")
-                        .tap("Safari")
+                        .tap("safari")
                         .wait()
-                        .appIs("Safari")
+                        .appIs("[Safari]")
                 }.action {
                     it.pressBack()
                 }.expectation {
