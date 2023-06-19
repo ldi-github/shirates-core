@@ -10,7 +10,7 @@ import shirates.core.driver.*
 fun TestElement.relative(
     command: String,
     safeElementOnly: Boolean = true,
-    scopeElements: List<TestElement> = TestElementCache.allElements,
+    scopeElements: List<TestElement> = elements,
 ): TestElement {
 
     val c = command.removeRedundantExpression()
@@ -468,7 +468,7 @@ internal fun TestElement.relative(
 fun TestElement.relative(
     relativeSelectors: List<Selector>,
     safeElementOnly: Boolean = true,
-    scopeElements: List<TestElement> = TestElementCache.allElements
+    scopeElements: List<TestElement> = elements
 ): TestElement {
 
     var e = this
@@ -515,7 +515,11 @@ fun TestElement.child(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":child($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":child($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = children
+    )
 }
 
 /**
@@ -526,7 +530,11 @@ fun TestElement.child(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":child($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":child($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = children
+    )
 }
 
 internal fun TestElement.sibling(
@@ -562,7 +570,11 @@ fun TestElement.sibling(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":sibling($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":sibling($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = parent().children
+    )
 }
 
 /**
@@ -573,7 +585,11 @@ fun TestElement.sibling(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":sibling($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":sibling($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = parent().children
+    )
 }
 
 /**
@@ -633,7 +649,11 @@ fun TestElement.ancestor(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":ancestor($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":ancestor($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = this.ancestors
+    )
 }
 
 internal fun TestElement.descendant(
@@ -666,7 +686,11 @@ fun TestElement.descendant(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":descendant($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":descendant($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = this.descendants
+    )
 }
 
 /**
@@ -677,7 +701,11 @@ fun TestElement.descendant(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":descendant($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":descendant($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = descendants
+    )
 }
 
 /**

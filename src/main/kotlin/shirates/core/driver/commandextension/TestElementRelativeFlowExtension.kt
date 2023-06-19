@@ -101,7 +101,11 @@ fun TestElement.flow(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flow($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flow($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 /**
@@ -112,7 +116,11 @@ fun TestElement.flow(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flow($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flow($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 internal fun TestElement.flowLabel(
@@ -134,7 +142,11 @@ fun TestElement.flowLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowLabel($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 /**
@@ -145,7 +157,11 @@ fun TestElement.flowLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowLabel($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 internal fun TestElement.flowInput(
@@ -167,7 +183,11 @@ fun TestElement.flowInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowInput($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 /**
@@ -178,7 +198,11 @@ fun TestElement.flowInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowInput($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 internal fun TestElement.flowImage(
@@ -200,7 +224,11 @@ fun TestElement.flowImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowImage($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 /**
@@ -211,7 +239,11 @@ fun TestElement.flowImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowImage($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 internal fun TestElement.flowButton(
@@ -233,7 +265,11 @@ fun TestElement.flowButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowButton($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 /**
@@ -244,7 +280,11 @@ fun TestElement.flowButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowButton($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 internal fun TestElement.flowSwitch(
@@ -266,7 +306,11 @@ fun TestElement.flowSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowSwitch($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 /**
@@ -277,7 +321,11 @@ fun TestElement.flowSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":flowSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":flowSwitch($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 internal fun TestElement.vflow(
@@ -306,7 +354,11 @@ fun TestElement.vflow(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":vflow($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":vflow($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 /**
@@ -317,5 +369,9 @@ fun TestElement.vflow(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":vflow($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":vflow($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }

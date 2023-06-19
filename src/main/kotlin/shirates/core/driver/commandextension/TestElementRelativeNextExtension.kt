@@ -53,7 +53,10 @@ fun TestElement.next(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":next($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":next($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -64,7 +67,10 @@ fun TestElement.next(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":next($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":next($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.previous(
@@ -112,7 +118,10 @@ fun TestElement.previous(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":previous($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":previous($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -123,7 +132,10 @@ fun TestElement.previous(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":previous($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":previous($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 private fun TestElement.nextPreviousCore(
@@ -210,7 +222,10 @@ fun TestElement.nextLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextLabel($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -221,7 +236,10 @@ fun TestElement.nextLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextLabel($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.preLabel(
@@ -246,7 +264,10 @@ fun TestElement.preLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preLabel($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -257,7 +278,10 @@ fun TestElement.preLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preLabel($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.nextInput(
@@ -282,7 +306,10 @@ fun TestElement.nextInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextInput($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -293,7 +320,10 @@ fun TestElement.nextInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextInput($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.preInput(
@@ -318,7 +348,10 @@ fun TestElement.preInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preInput($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -329,7 +362,10 @@ fun TestElement.preInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preInput($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.nextImage(
@@ -354,7 +390,10 @@ fun TestElement.nextImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextImage($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -365,7 +404,10 @@ fun TestElement.nextImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextImage($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.preImage(
@@ -390,7 +432,10 @@ fun TestElement.preImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preImage($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -401,7 +446,10 @@ fun TestElement.preImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preImage($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.nextButton(
@@ -426,7 +474,10 @@ fun TestElement.nextButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextButton($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -437,7 +488,10 @@ fun TestElement.nextButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextButton($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.preButton(
@@ -462,7 +516,10 @@ fun TestElement.preButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preButton($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -473,7 +530,10 @@ fun TestElement.preButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preButton($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.nextSwitch(
@@ -498,7 +558,10 @@ fun TestElement.nextSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextSwitch($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -509,7 +572,10 @@ fun TestElement.nextSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":nextSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextSwitch($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 internal fun TestElement.preSwitch(
@@ -534,7 +600,10 @@ fun TestElement.preSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preSwitch($pos)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 
 /**
@@ -545,6 +614,9 @@ fun TestElement.preSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":preSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preSwitch($expression)",
+        safeElementOnly = safeElementOnly,
+    )
 }
 

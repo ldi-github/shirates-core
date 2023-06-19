@@ -1,16 +1,14 @@
 package shirates.core.driver
 
 import org.json.JSONObject
+import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.w3c.dom.Node
 import shirates.core.configuration.Selector
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.commandextension.canSelect
-import shirates.core.driver.commandextension.getScrollableElementsInAncestors
-import shirates.core.driver.commandextension.getUniqueSelector
-import shirates.core.driver.commandextension.getWebElement
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
@@ -105,6 +103,14 @@ class TestElement(
      * children
      */
     var children: MutableList<TestElement> = mutableListOf()
+        get() {
+            if (webElement == null) {
+                return field
+            }
+            val xpath = this.getAbsoluteXpath() + "/child::*"
+            return driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+                .toMutableList()
+        }
         private set
 
     /**

@@ -947,13 +947,10 @@ object TestDriver {
 
         lastElement = TestElement.emptyElement
 
-        if (useCache) {
-            syncCache()
-        }
-
         // Search in current screen
         var selectedElement: TestElement
-        if (testContext.useCache) {
+        if (useCache) {
+            syncCache()
             selectedElement = TestElementCache.select(
                 selector = selector,
                 throwsException = false,

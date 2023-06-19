@@ -148,7 +148,11 @@ fun TestElement.right(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":right($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":right($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 /**
@@ -159,7 +163,11 @@ fun TestElement.right(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":right($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":right($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 internal fun TestElement.rightInput(
@@ -216,7 +224,11 @@ fun TestElement.rightInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":rightInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightInput($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 /**
@@ -227,7 +239,11 @@ fun TestElement.rightInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":rightInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightInput($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 internal fun TestElement.rightLabel(
@@ -254,7 +270,11 @@ fun TestElement.rightLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":rightLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightLabel($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 /**
@@ -265,7 +285,11 @@ fun TestElement.rightLabel(
     safeElementOnly: Boolean = true,
 ): TestElement {
 
-    return relative(":rightLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightLabel($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 internal fun TestElement.rightImage(
@@ -292,7 +316,11 @@ fun TestElement.rightImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":rightImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightImage($pos)",
+        safeElementOnly = safeElementOnly,
+        imageWidgets
+    )
 }
 
 /**
@@ -303,7 +331,11 @@ fun TestElement.rightImage(
     safeElementOnly: Boolean = true,
 ): TestElement {
 
-    return relative(":rightImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightImage($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 internal fun TestElement.rightButton(
@@ -330,7 +362,11 @@ fun TestElement.rightButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":rightButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightButton($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 /**
@@ -341,7 +377,11 @@ fun TestElement.rightButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":rightButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightButton($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 internal fun TestElement.rightSwitch(
@@ -368,7 +408,11 @@ fun TestElement.rightSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":rightSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightSwitch($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 /**
@@ -379,7 +423,11 @@ fun TestElement.rightSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":rightSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":rightSwitch($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 internal fun TestElement.below(
@@ -409,7 +457,11 @@ fun TestElement.below(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":below($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":below($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 /**
@@ -420,7 +472,11 @@ fun TestElement.below(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":below($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":below($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 internal fun TestElement.belowInput(
@@ -447,7 +503,11 @@ fun TestElement.belowInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowInput($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 /**
@@ -458,7 +518,11 @@ fun TestElement.belowInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowInput($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 internal fun TestElement.belowLabel(
@@ -485,7 +549,11 @@ fun TestElement.belowLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowLabel($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 /**
@@ -496,7 +564,11 @@ fun TestElement.belowLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowLabel($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 internal fun TestElement.belowImage(
@@ -523,7 +595,11 @@ fun TestElement.belowImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowImage($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 /**
@@ -534,7 +610,11 @@ fun TestElement.belowImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowImage($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 internal fun TestElement.belowButton(
@@ -561,7 +641,11 @@ fun TestElement.belowButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowButton($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 /**
@@ -572,7 +656,11 @@ fun TestElement.belowButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowButton($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 internal fun TestElement.belowSwitch(
@@ -599,7 +687,11 @@ fun TestElement.belowSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowSwitch($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 /**
@@ -610,7 +702,11 @@ fun TestElement.belowSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":belowSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":belowSwitch($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 internal fun TestElement.left(
@@ -642,7 +738,11 @@ fun TestElement.left(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":left($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":left($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 /**
@@ -653,7 +753,11 @@ fun TestElement.left(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":left($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":left($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 internal fun TestElement.leftInput(
@@ -680,7 +784,11 @@ fun TestElement.leftInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftInput($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 /**
@@ -691,7 +799,11 @@ fun TestElement.leftInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftInput($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 internal fun TestElement.leftLabel(
@@ -718,7 +830,11 @@ fun TestElement.leftLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftLabel($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 /**
@@ -729,7 +845,11 @@ fun TestElement.leftLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftLabel($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 internal fun TestElement.leftImage(
@@ -756,7 +876,11 @@ fun TestElement.leftImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftImage($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 /**
@@ -767,7 +891,11 @@ fun TestElement.leftImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftImage($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 internal fun TestElement.leftButton(
@@ -794,7 +922,11 @@ fun TestElement.leftButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftButton($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 /**
@@ -805,7 +937,11 @@ fun TestElement.leftButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftButton($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 internal fun TestElement.leftSwitch(
@@ -832,7 +968,11 @@ fun TestElement.leftSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftSwitch($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 /**
@@ -843,7 +983,11 @@ fun TestElement.leftSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":leftSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":leftSwitch($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 internal fun TestElement.above(
@@ -873,7 +1017,11 @@ fun TestElement.above(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":above($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":above($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 /**
@@ -884,7 +1032,11 @@ fun TestElement.above(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":above($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":above($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = widgets
+    )
 }
 
 internal fun TestElement.aboveInput(
@@ -911,7 +1063,11 @@ fun TestElement.aboveInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveInput($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 /**
@@ -922,7 +1078,11 @@ fun TestElement.aboveInput(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveInput($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = inputWidgets
+    )
 }
 
 internal fun TestElement.aboveLabel(
@@ -949,7 +1109,11 @@ fun TestElement.aboveLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveLabel($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 /**
@@ -960,7 +1124,11 @@ fun TestElement.aboveLabel(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveLabel($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = labelWidgets
+    )
 }
 
 internal fun TestElement.aboveImage(
@@ -987,7 +1155,11 @@ fun TestElement.aboveImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveImage($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 /**
@@ -998,7 +1170,11 @@ fun TestElement.aboveImage(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveImage($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = imageWidgets
+    )
 }
 
 internal fun TestElement.aboveButton(
@@ -1025,7 +1201,11 @@ fun TestElement.aboveButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveButton($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 /**
@@ -1036,7 +1216,11 @@ fun TestElement.aboveButton(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveButton($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = buttonWidgets
+    )
 }
 
 internal fun TestElement.aboveSwitch(
@@ -1063,7 +1247,11 @@ fun TestElement.aboveSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveSwitch($pos)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
 
 /**
@@ -1074,5 +1262,9 @@ fun TestElement.aboveSwitch(
     safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":aboveSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":aboveSwitch($expression)",
+        safeElementOnly = safeElementOnly,
+        scopeElements = switchWidgets
+    )
 }
