@@ -2,6 +2,7 @@ package shirates.core.driver
 
 import org.openqa.selenium.Capabilities
 import shirates.core.configuration.repository.ParameterRepository
+import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.commandextension.getScrollableTarget
 import shirates.core.driver.commandextension.getTestElement
 import shirates.core.exception.TestDriverException
@@ -34,7 +35,7 @@ fun TestDrive.parameter(name: String): String {
  */
 val TestDrive.viewport: Bounds
     get() {
-        return rootElement.bounds
+        return rootBounds
     }
 
 /**

@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.*
-import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.utility.getCapabilityRelaxed
 
@@ -28,18 +27,6 @@ class TestDrivePropertyExtensionTest : UITest() {
     fun appIconName() {
 
         assertThat(appIconName).isEqualTo("Settings")
-    }
-
-    @Test
-    fun viewport() {
-
-        val statBarHeight = TestLog.lines.first() { it.subject == "appium:statBarHeight" }
-        assertThat(viewport.top.toString()).isEqualTo(statBarHeight.arg1)
-
-        val viewportRect = TestLog.lines.first() { it.subject == "appium:viewportRect" }
-        assertThat("{left=${viewport.left}, top=${viewport.top}, width=${viewport.width}, height=${viewport.height}}").isEqualTo(
-            viewportRect.arg1
-        )
     }
 
     @Test

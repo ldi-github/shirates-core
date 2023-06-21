@@ -110,6 +110,19 @@ object TestDriver {
             return refreshLastElement()
         }
 
+    private var _rootBounds: Bounds? = null
+
+    /**
+     * rootBounds
+     */
+    val rootBounds: Bounds
+        get() {
+            if (_rootBounds == null) {
+                _rootBounds = rootElement.bounds
+            }
+            return _rootBounds!!
+        }
+
     /**
      * refreshLastElement
      */
