@@ -16,6 +16,7 @@ import shirates.core.utility.element.ElementCategory
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getAttribute
 import shirates.core.utility.image.CropInfo
+import shirates.core.utility.time.StopWatch
 
 /**
  * TestElement
@@ -28,23 +29,33 @@ class TestElement(
     var webElement: WebElement? = null
 ) : TestDrive {
 
+    private var toStringResult: String? = null
+
     /**
      * toString
      */
     override fun toString(): String {
 
-        if (isDummy) {
-            return "(dummy)"
-        }
-        if (isEmpty) {
-            return "(empty)"
+        if (toStringResult != null) {
+            return toStringResult!!
         }
 
-        if (isAndroid) {
-            return "<$className index='$index' class='$className' resource-id='$id' text='$text' content-desc='$contentDesc' checked='$checked' focusable='$focused' focused='$focused' selected='$selected' scrollable='$scrollable' bounds=$boundsString>"
-        } else {
-            return "<$type index='$index' type='$type' enabled='$enabled' visible='$visible' name='$name' label='$label' value='$value' visible='$visible' x='$x' y='$y' width='$width' height='$height'>"
+        if (isDummy) {
+            toStringResult = "(dummy)"
+            return toStringResult!!
         }
+        if (isEmpty) {
+            toStringResult = "(empty)"
+            return toStringResult!!
+        }
+
+        toStringResult = if (isAndroid) {
+            "<$className index='$index' class='$className' resource-id='$id' text='$text' content-desc='$contentDesc' checked='$checked' focusable='$focused' focused='$focused' selected='$selected' scrollable='$scrollable' bounds=$boundsString>"
+        } else {
+            "<$type index='$index' type='$type' enabled='$enabled' visible='$visible' name='$name' label='$label' value='$value' visible='$visible' x='$x' y='$y' width='$width' height='$height'>"
+        }
+
+        return toStringResult!!
     }
 
     internal fun serializeForEndOfScroll(): String {
@@ -104,12 +115,13 @@ class TestElement(
      */
     var children: MutableList<TestElement> = mutableListOf()
         get() {
-            if (webElement == null) {
-                return field
+            return if (isCacheMode) {
+                field
+            } else {
+                val xpath = this.getUniqueXpath() + "/child::*"
+                driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+                    .toMutableList()
             }
-            val xpath = this.getAbsoluteXpath() + "/child::*"
-            return driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
-                .toMutableList()
         }
         private set
 
@@ -338,9 +350,6 @@ class TestElement(
      */
     val packageName: String
         get() {
-            if (node == null) {
-                return ""
-            }
             return getProperty("package")
         }
 
@@ -606,22 +615,28 @@ class TestElement(
      */
     fun getProperty(name: String): String {
 
-        if (node != null) {
-            return getAttribute(name = name)
-        }
-        if (webElement != null) {
-            if (propertyCache.containsKey(name)) {
-                return propertyCache[name]!!
+        val sw = StopWatch("getProperty($name)")
+
+        try {
+            if (node != null) {
+                return getAttribute(name = name)
             }
-            try {
-                val value = webElement!!.getAttribute(name)
-                propertyCache[name] = value
-                return value
-            } catch (t: Throwable) {
-                return ""
+            if (webElement != null) {
+                if (propertyCache.containsKey(name)) {
+                    return propertyCache[name]!!
+                }
+                try {
+                    val value = webElement!!.getAttribute(name)
+                    propertyCache[name] = value
+                    return value
+                } catch (t: Throwable) {
+                    return ""
+                }
             }
+            return ""
+        } finally {
+//            sw.printInfo()
         }
-        return ""
     }
 
     private val propertyCache = mutableMapOf<String, String>()
@@ -742,6 +757,9 @@ class TestElement(
             if (isAndroid) {
                 return (scrollable == "true")
             } else {
+                if (type == "") {
+                    return false
+                }
                 return ElementCategoryExpressionUtility.iosScrollableTypesExpression.contains(type)
             }
         }

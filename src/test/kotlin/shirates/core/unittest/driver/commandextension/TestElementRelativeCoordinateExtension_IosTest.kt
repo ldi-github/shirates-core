@@ -47,7 +47,7 @@ class TestElementRelativeCoordinateExtension_IosTest : UnitTest() {
             val r2 = e.select(":right")
             assertThat(r2.selector.toString()).isEqualTo("<#Other1-1>:right")
             val r3 = e.select("[:Right]")
-            assertThat(r3.selector.toString()).isEqualTo("[:Right]")
+            assertThat(r3.selector.toString()).isEqualTo("<#Other1-1>[:Right]")
             // Assert
             assertThat(e.right().name).isEqualTo("StaticText1-1")
             assertThat(r1).isEqualTo(r2)
@@ -60,7 +60,7 @@ class TestElementRelativeCoordinateExtension_IosTest : UnitTest() {
             val r2 = e.select(":rightLabel")
             assertThat(r2.selector.toString()).isEqualTo("<#Other1-1>:rightLabel")
             val r3 = e.select("[:Right label]")
-            assertThat(r3.selector.toString()).isEqualTo("[:Right label]")
+            assertThat(r3.selector.toString()).isEqualTo("<#Other1-1>[:Right label]")
             // Assert
             assertThat(e.rightLabel().name).isEqualTo("StaticText1-1")
             assertThat(r1).isEqualTo(r2)
@@ -73,7 +73,7 @@ class TestElementRelativeCoordinateExtension_IosTest : UnitTest() {
             val r2 = e.select(":rightInput")
             assertThat(r2.selector.toString()).isEqualTo("<#Other1-1>:rightInput")
             val r3 = e.select("[:Right input]")
-            assertThat(r3.selector.toString()).isEqualTo("[:Right input]")
+            assertThat(r3.selector.toString()).isEqualTo("<#Other1-1>[:Right input]")
             // Assert
             assertThat(e.rightInput().name).isEqualTo("TextField1-1")
             assertThat(r1).isEqualTo(r2)
@@ -86,7 +86,7 @@ class TestElementRelativeCoordinateExtension_IosTest : UnitTest() {
             val r2 = e.select(":rightImage")
             assertThat(r2.selector.toString()).isEqualTo("<#Other1-1>:rightImage")
             val r3 = e.select("[:Right image]")
-            assertThat(r3.selector.toString()).isEqualTo("[:Right image]")
+            assertThat(r3.selector.toString()).isEqualTo("<#Other1-1>[:Right image]")
             // Assert
             assertThat(e.rightImage().name).isEqualTo("Image1-1")
             assertThat(r1).isEqualTo(r2)
@@ -99,7 +99,7 @@ class TestElementRelativeCoordinateExtension_IosTest : UnitTest() {
             val r2 = e.select(":rightButton")
             assertThat(r2.selector.toString()).isEqualTo("<#Other1-1>:rightButton")
             val r3 = e.select("[:Right button]")
-            assertThat(r3.selector.toString()).isEqualTo("[:Right button]")
+            assertThat(r3.selector.toString()).isEqualTo("<#Other1-1>[:Right button]")
             // Assert
             assertThat(e.rightButton().name).isEqualTo("Button1-1")
             assertThat(r1).isEqualTo(r2)
@@ -112,7 +112,7 @@ class TestElementRelativeCoordinateExtension_IosTest : UnitTest() {
             val r2 = e.select(":rightSwitch")
             assertThat(r2.selector.toString()).isEqualTo("<#Other1-1>:rightSwitch")
             val r3 = e.select("[:Right switch]")
-            assertThat(r3.selector.toString()).isEqualTo("[:Right switch]")
+            assertThat(r3.selector.toString()).isEqualTo("<#Other1-1>[:Right switch]")
             // Assert
             assertThat(e.rightSwitch().name).isEqualTo("Switch1-1")
             assertThat(r1).isEqualTo(r2)

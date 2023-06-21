@@ -1,13 +1,9 @@
 {
-  "key": "[RelativeCoordinateTest Screen]",
+  "key": "[Relative(shared)]",
 
   "identity": "",
 
   "selectors": {
-    "[A]": "",
-    "[B]": "",
-    "[A:Right]": "[A][:Right]",
-
     "[:Right]": ":right",
     "[:Right(2)]": ":right(2)",
     "[:Right(3)]": ":right(3)",

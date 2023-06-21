@@ -330,35 +330,35 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
 
     }
 
-    @Test
-    fun absoluteXpath() {
-
-        // Arrange
-        TestElementCache.loadXml(XmlDataAndroid.SettingsTopScreen)
-
-        // absoluteXpath
-        run {
-            val e1 = TestElementCache.select("Search settings")
-            val absoluteXpath = e1.getAbsoluteXpath()
-            val e2 = TestElementCache.select("xpath=$absoluteXpath")
-            assertThat(e2.text).isEqualTo(e1.text)
-        }
-
-        // absoluteXpath.next
-        run {
-            val e0 = TestElementCache.select("Search settings").next()
-            val e1 = e0.next()
-            val e2 = TestElementCache.select("xpath=${e1.getAbsoluteXpath()}")
-            assertThat(e2.getAbsoluteXpath()).isEqualTo(e1.getAbsoluteXpath())
-        }
-
-        // empty
-        run {
-            val e = TestElement()
-            assertThat(e.getAbsoluteXpath()).isEqualTo("")
-        }
-
-    }
+//    @Test
+//    fun absoluteXpath() {
+//
+//        // Arrange
+//        TestElementCache.loadXml(XmlDataAndroid.SettingsTopScreen)
+//
+//        // absoluteXpath
+//        run {
+//            val e1 = TestElementCache.select("Search settings")
+//            val absoluteXpath = e1.getAbsoluteXpath()
+//            val e2 = TestElementCache.select("xpath=$absoluteXpath")
+//            assertThat(e2.text).isEqualTo(e1.text)
+//        }
+//
+//        // absoluteXpath.next
+//        run {
+//            val e0 = TestElementCache.select("Search settings").next()
+//            val e1 = e0.next()
+//            val e2 = TestElementCache.select("xpath=${e1.getAbsoluteXpath()}")
+//            assertThat(e2.getAbsoluteXpath()).isEqualTo(e1.getAbsoluteXpath())
+//        }
+//
+//        // empty
+//        run {
+//            val e = TestElement()
+//            assertThat(e.getAbsoluteXpath()).isEqualTo("")
+//        }
+//
+//    }
 
     @Test
     fun uniqueXpath() {

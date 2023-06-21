@@ -72,7 +72,7 @@ fun TestDrive.switchScreen(screenName: String): TestElement {
 
     TestLog.info("switchScreen($screenName)")
     TestDriver.switchScreen(screenName = screenName)
-    return TestDriver.it
+    return TestDriver.lastElement
 }
 
 /**

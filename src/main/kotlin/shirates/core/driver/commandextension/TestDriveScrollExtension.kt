@@ -383,13 +383,6 @@ fun TestDrive.doUntilScrollStop(
 
     fun isEndOfScroll(): Boolean {
 
-        if (imageCompare) {
-            val croppedImage = rootElement.cropImage(save = false).lastCropInfo?.croppedImage
-            val result = croppedImage.isSame(lastCroppedImage)
-            lastCroppedImage = croppedImage
-            return result
-        }
-
         if (edgeSelector != null) {
             val result = edgeElementFound(mutableListOf(edgeSelector))
             return result
@@ -400,10 +393,17 @@ fun TestDrive.doUntilScrollStop(
             return true
         }
 
-        val serialized = sourceXml //innerElements.serialize()
-        val result = serialized == lastSerialized
-        lastSerialized = serialized
-        return result
+        return if (imageCompare || testContext.useCache.not()) {
+            val croppedImage = rootElement.cropImage(save = false).lastCropInfo?.croppedImage
+            val result = croppedImage.isSame(lastCroppedImage)
+            lastCroppedImage = croppedImage
+            result
+        } else {
+            val serialized = sourceXml //innerElements.serialize()
+            val result = serialized == lastSerialized
+            lastSerialized = serialized
+            result
+        }
     }
 
     if (TestDriver.isInitialized) {
@@ -452,7 +452,7 @@ fun TestDrive.doUntilScrollStop(
 internal fun TestDrive.edgeElementFound(expressions: List<String>): Boolean {
 
     for (expression in expressions) {
-        val e = TestElementCache.select(expression = expression, throwsException = false)
+        val e = TestDriver.select(expression = expression, throwsException = false, waitSeconds = 0.0)
         if (e.isFound && e.bounds.isIncludedIn(e.getScrollableTarget().bounds)) {
             TestLog.info("edge element found. ($expression)")
             return true

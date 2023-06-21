@@ -14,13 +14,13 @@ private fun TestElement.flowCore(
     scopeElements: List<TestElement>
 ): TestElement {
 
-
     val sel = selector.copy()
     sel.pos = null
     val filteredElements = scopeElements.filterBySelector(selector = sel, safeElementOnly = safeElementOnly)
 
     val fc = FlowContainer()
-    val isThisContainingOthers = scopeElements.any { it != this && it.bounds.isIncludedIn(this.bounds) }
+    val isThisContainingOthers =
+        filteredElements.any { it.toString() != this.toString() && it.bounds.isIncludedIn(this.bounds) }
     if (isThisContainingOthers.not()) {
         fc.addElement(element = this, force = true)
     }
@@ -52,7 +52,8 @@ private fun TestElement.vflowCore(
     val filteredElements = scopeElements.filterBySelector(selector = sel, safeElementOnly = safeElementOnly)
 
     val vfc = VerticalFlowContainer()
-    val isThisContainingOthers = scopeElements.any { it != this && it.bounds.isIncludedIn(this.bounds) }
+    val isThisContainingOthers =
+        filteredElements.any { it.toString() != this.toString() && it.bounds.isIncludedIn(this.bounds) }
     if (isThisContainingOthers.not()) {
         vfc.addElement(element = this, force = true)
     }

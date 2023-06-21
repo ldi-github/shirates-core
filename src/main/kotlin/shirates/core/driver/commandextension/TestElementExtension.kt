@@ -1,6 +1,5 @@
 package shirates.core.driver.commandextension
 
-import org.apache.commons.text.StringEscapeUtils
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.RemoteWebElement
@@ -43,7 +42,7 @@ fun TestElement.clearInput(): TestElement {
         val m = TestDriver.getFocusedWebElement()
         m.clear()
         refreshCache()
-        TestDriver.lastElement = this.refreshThisElement()
+        TestDriver.lastElement = focusedElement
     }
 
     return TestDriver.lastElement
@@ -180,35 +179,6 @@ fun TestElement.getUniqueSelector(): Selector {
 }
 
 /**
- * getAbsoluteXpath
- */
-fun TestElement.getAbsoluteXpath(): String {
-
-    val list = mutableListOf<String>()
-    for (e in ancestorsAndSelf) {
-        if (e.node == null) {
-            continue
-        }
-        val nodeName = e.node!!.nodeName
-        val parent = e.parentElement
-        if (parent == null) {
-            list.add(nodeName)
-        } else {
-            val nodes = parent.children.filter { it.node?.nodeName == nodeName }
-            val index = nodes.indexOf(e) + 1
-            list.add("$nodeName[$index]")
-        }
-    }
-
-    if (list.isEmpty()) {
-        return ""
-    }
-
-    val xpath = "//" + list.joinToString("/")
-    return xpath
-}
-
-/**
  * getUniqueXpath
  */
 fun TestElement.getUniqueXpath(): String {
@@ -216,94 +186,121 @@ fun TestElement.getUniqueXpath(): String {
     if (isEmpty) {
         return ""
     }
-    if (isCacheMode.not()) {
-        return ""
+
+    val attrMap =
+        if (isAndroid) getAttrMapForAndroid()
+        else getAttrMapForIos()
+
+    val tokens = mutableListOf<String>()
+    for (key in attrMap.keys) {
+        val value = attrMap[key]
+        tokens.add("@$key='$value'")
     }
 
-    val attrMap = mutableMapOf<String, String>()
-
-    fun tryGetUniqueXpath(attrName: String, attrValue: String): String {
-
-        if (attrValue.isBlank()) {
-            return ""
-        }
-
-        attrMap[attrName] = attrValue
-
-        val condition = attrMap.map {
-            val escapedValue = StringEscapeUtils.escapeXml11(it.value)
-            "@${it.key}=\"$escapedValue\""
-        }.joinToString(" and ")
-
-        if (condition.isBlank()) {
-            return ""
-        }
-
-        val locationStep = classOrType.ifBlank { "*" }
-        val xpath = "//$locationStep[$condition]"
-
-        val elements = try {
-            TestElementCache.filterElements("xpath=$xpath", safeElementOnly = true)
-        } catch (t: Throwable) {
-            throw Exception("$t xpath=$xpath")
-        }
-        if (elements.count() == 1) {
-            return xpath
-        }
-        return ""
-    }
-
-    fun getUniqueXpathCore(): String {
-
-        var uniqueXpath: String
-
-        if (isAndroid) {
-            uniqueXpath = tryGetUniqueXpath("resource-id", id)
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("content-desc", contentDesc)
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("scrollable", scrollable)
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("bounds", "[${bounds.x1},${bounds.y1}][${bounds.x2},${bounds.y2}]")
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            return getAbsoluteXpath()
-
-        } else {
-
-            uniqueXpath = tryGetUniqueXpath("name", name)
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("label", label)
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("value", value)
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("x", bounds.x1.toString())
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("y", bounds.y1.toString())
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("width", bounds.width.toString())
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-            uniqueXpath = tryGetUniqueXpath("height", bounds.height.toString())
-            if (uniqueXpath.isNotBlank()) return uniqueXpath
-
-        }
-        return getAbsoluteXpath()
-    }
-
-    val xpath = getUniqueXpathCore()
-    TestLog.trace("xpath=$xpath")
-
+    val xpath = "//*[" + tokens.joinToString(" and ") + "]"
     return xpath
+
 }
+
+private fun TestElement.getAttrMapForAndroid(): MutableMap<String, String> {
+    val attrMap = mutableMapOf<String, String>()
+    attrMap["class"] = className
+    if (text.isNotBlank()) {
+        attrMap["text"] = text
+    }
+    if (id.isNotBlank()) {
+        attrMap["resource-id"] = id
+    }
+    if (contentDesc.isNotBlank()) {
+        attrMap["content-desc"] = contentDesc
+    }
+//        if (checkable.isNotBlank()) {
+//            attrMap["checkable"] = checkable
+//        }
+    if (checked.isNotBlank()) {
+        attrMap["checked"] = checked
+    }
+//        if (clickable.isNotBlank()) {
+//            attrMap["clickable"] = clickable
+//        }
+    if (enabled.isNotBlank()) {
+        attrMap["enabled"] = enabled
+    }
+//        if (focusable.isNotBlank()) {
+//            attrMap["focusable"] = focusable
+//        }
+    if (focused.isNotBlank()) {
+        attrMap["focused"] = focused
+    }
+//        if (longClickable.isNotBlank()) {
+//            attrMap["long-clickable"] = longClickable
+//        }
+//        if (password.isNotBlank()) {
+//            attrMap["password"] = password
+//        }
+    if (scrollable.isNotBlank()) {
+        attrMap["scrollable"] = scrollable
+    }
+    if (selected.isNotBlank()) {
+        attrMap["selected"] = selected
+    }
+    if (boundsString.isNotBlank()) {
+        attrMap["bounds"] = boundsString
+    }
+//        if (displayed.isNotBlank()) {
+//            attrMap["displayed"] = displayed
+//        }
+    return attrMap
+}
+
+private fun TestElement.getAttrMapForIos(): MutableMap<String, String> {
+    val attrMap = mutableMapOf<String, String>()
+    attrMap["type"] = type
+    if (label.isNotBlank()) {
+        attrMap["label"] = label
+    }
+    if (name.isNotBlank()) {
+        attrMap["name"] = name
+    }
+    if (value.isNotBlank()) {
+        attrMap["value"] = value
+    }
+    if (enabled.isNotBlank()) {
+        attrMap["enabled"] = enabled
+    }
+    if (visible.isNotBlank()) {
+        attrMap["visible"] = visible
+    }
+    attrMap["x"] = x
+    attrMap["y"] = y
+    attrMap["width"] = width
+    attrMap["height"] = height
+    return attrMap
+}
+
+//fun TestElement.getUniqueIosPredicate(): String {
+//
+//    if (isEmpty) {
+//        return ""
+//    }
+//
+//    val attrMap = getAttrMapForIos()
+//
+//    val tokens = mutableListOf<String>()
+//    for (key in attrMap.keys) {
+//        val value = attrMap[key]
+//        tokens.add("$key=='$value'")
+//    }
+//
+//    tokens.add("rect.x=$x")
+//    tokens.add("rect.y=$y")
+//    tokens.add("rect.width=$width")
+//    tokens.add("rect.height=$height")
+//
+//    val predicate = tokens.joinToString(" AND ")
+//    return predicate
+//
+//}
 
 /**
  * cropImage

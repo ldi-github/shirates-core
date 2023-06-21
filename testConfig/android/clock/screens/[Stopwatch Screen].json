@@ -5,10 +5,11 @@
     "[Clock(shared)]"
   ],
 
-  "identity": "~title=Stopwatch",
+  "identity": "[Title]",
 
   "selectors": {
 
+    "[Title]": "Stopwatch&&#action_bar_title",
     "[stopwatch_circle]": "#stopwatch_circle"
   }
 

@@ -34,21 +34,7 @@ fun TestDrive.parameter(name: String): String {
  */
 val TestDrive.viewport: Bounds
     get() {
-        if (TestMode.isAndroid) {
-            try {
-                val rect = capabilityRelaxed("viewportRect")
-                val bounds = Bounds(rect)
-                return bounds
-            } catch (t: Throwable) {
-                val rect = parameter("viewportRect")
-                val bounds = Bounds(rect)
-                return bounds
-            }
-        } else {
-            val r = rootElement
-            val bounds = Bounds(r.x.toInt(), r.y.toInt(), r.width.toInt() - 1, r.height.toInt() - 1)
-            return bounds
-        }
+        return rootElement.bounds
     }
 
 /**

@@ -988,7 +988,7 @@ class ScreenInfoTest : UnitTest() {
             val actual = screenInfo.expandExpression(expression = expression)
             // Assert
             assertThat(actual.getElementExpression()).isEqualTo("<Contact 1>:belowLabel")
-            assertThat(actual.getElementFriendlyExpression()).isEqualTo("[:Mail]")
+            assertThat(actual.getElementFriendlyExpression()).isEqualTo("[Contact 1][:Mail]")
             assertThat(actual.nickname).isNull()
         }
         run {

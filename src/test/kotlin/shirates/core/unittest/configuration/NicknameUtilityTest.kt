@@ -258,6 +258,15 @@ class NicknameUtilityTest : UnitTest() {
     }
 
     @Test
+    fun isRelativeNickname() {
+
+        assertThat(NicknameUtility.isRelativeNickname("[:Relative]")).isTrue()
+        assertThat(NicknameUtility.isRelativeNickname("[:Relative")).isFalse()
+        assertThat(NicknameUtility.isRelativeNickname(":Relative")).isFalse()
+        assertThat(NicknameUtility.isRelativeNickname("Relative")).isFalse()
+    }
+
+    @Test
     fun splitNicknames() {
 
         run {

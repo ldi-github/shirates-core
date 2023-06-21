@@ -19,11 +19,13 @@ class ScreenCompareResult() : CompareResult() {
             return this
         }
 
-        val screenName = TestDriver.currentScreen
-        val matched = screenNames.contains(screenName)
-        if (matched) {
-            onTrue.invoke()
-            setExecuted(condition = screenName, matched = true)
+        for (screenName in screenNames) {
+            val matched = TestDriver.isScreen(screenName)
+            if (matched) {
+                onTrue.invoke()
+                setExecuted(condition = screenName, matched = true)
+                break
+            }
         }
 
         return this
@@ -41,11 +43,12 @@ class ScreenCompareResult() : CompareResult() {
             return this
         }
 
-        val screenName = TestDriver.currentScreen
-        val matched = screenNames.contains(screenName)
-        if (matched.not()) {
-            onTrue.invoke()
-            setExecuted(condition = "$screenName not", matched = true)
+        for (screenName in screenNames) {
+            val matched = TestDriver.isScreen(screenName)
+            if (matched.not()) {
+                onTrue.invoke()
+                setExecuted(condition = "$screenName not", matched = true)
+            }
         }
 
         return this

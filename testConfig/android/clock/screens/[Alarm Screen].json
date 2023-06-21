@@ -9,7 +9,7 @@
 
   "selectors": {
 
-    "[Title]": "~title=Alarm",
+    "[Title]": "Alarm&&#action_bar_title",
     "[days_of_week]": "#days_of_week",
 
     "[:Expand alarm]": ":flow(1)",

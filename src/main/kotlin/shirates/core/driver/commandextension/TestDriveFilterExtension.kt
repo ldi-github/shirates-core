@@ -28,7 +28,7 @@ fun TestDrive.filterElements(
 ): List<TestElement> {
 
     if (useCache) {
-        syncCache(force = true)
+//        syncCache(force = true)
         return TestElementCache.filterElements(expression = expression)
     }
 
@@ -36,12 +36,11 @@ fun TestDrive.filterElements(
     val xpath = "//*" + sel.getXPathCondition()
     val elements = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
     val results = mutableListOf<TestElement>()
-    val widgets = widgets
     for (e in elements) {
         e.selector = sel
         var a = e
         for (r in sel.relativeSelectors) {
-            a = a.relative(command = r.command!!, scopeElements = widgets)
+            a = a.relative(command = r.command!!, scopeElements = elements)
         }
         results.add(a)
     }

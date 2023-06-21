@@ -1,7 +1,10 @@
 package shirates.core.driver
 
+import org.openqa.selenium.By
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElement.Companion.emptyElement
+import shirates.core.driver.commandextension.getUniqueXpath
+import shirates.core.driver.commandextension.parent
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 
@@ -19,12 +22,26 @@ val TestElement.descendantsInBounds: List<TestElement>
  */
 val TestElement.descendants: List<TestElement>
     get() {
-        if (this.descendantsCache != null) {
-            return descendantsCache!!
+        if (this.isEmpty) {
+            return mutableListOf()
         }
-        val list = mutableListOf<TestElement>()
-        addChild(this, list)
-        descendantsCache = list
+        val cacheEntry1 = descendantsCache?.firstOrNull()
+        if (testContext.useCache) {
+            if (cacheEntry1?.node != null) {
+                return descendantsCache!!
+            }
+            val list = mutableListOf<TestElement>()
+            addChild(this, list)
+            descendantsCache = list
+        } else {
+            if (cacheEntry1?.webElement != null) {
+                return descendantsCache!!
+            }
+            val xpath = this.getUniqueXpath() + "/descendant::*"
+            val list =
+                driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }.toMutableList()
+            descendantsCache = list
+        }
         return descendantsCache!!
     }
 
@@ -51,9 +68,15 @@ private fun addChild(element: TestElement, list: MutableList<TestElement>) {
  */
 val TestElement.ancestors: List<TestElement>
     get() {
-        val list = mutableListOf<TestElement>()
-        getAncestors(this, list)
-        return list
+        if (webElement == null) {
+            val list = mutableListOf<TestElement>()
+            getAncestors(this, list)
+            return list
+        } else {
+            val xpath = getUniqueXpath() + "/ancestor::*"
+            val list = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+            return list
+        }
     }
 
 /**
@@ -82,11 +105,12 @@ private fun getAncestors(element: TestElement, list: MutableList<TestElement>) {
  */
 val TestElement.siblings: List<TestElement>
     get() {
-        if (parentElement == null) {
+        val parent = parent()
+        if (parent.isEmpty) {
             return mutableListOf()
         }
 
-        return parentElement!!.children.toList()
+        return parent.children.toList()
     }
 
 /**

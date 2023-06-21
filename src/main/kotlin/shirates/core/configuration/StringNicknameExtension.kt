@@ -11,6 +11,14 @@ fun String.isValidNickname(): Boolean {
 }
 
 /**
+ * isRelativeNickname
+ */
+fun String.isRelativeNickname(): Boolean {
+
+    return NicknameUtility.isRelativeNickname(this)
+}
+
+/**
  * getNicknameText
  */
 fun String.getNicknameText(): String {

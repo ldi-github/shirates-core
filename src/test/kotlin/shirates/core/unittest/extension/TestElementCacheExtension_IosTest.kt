@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.ScreenInfo
 import shirates.core.driver.*
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.getScrollableTarget
+import shirates.core.driver.commandextension.getUniqueXpath
+import shirates.core.driver.commandextension.next
+import shirates.core.driver.commandextension.previous
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataIos
 import shirates.core.utility.element.ElementCacheUtility
@@ -366,36 +369,36 @@ class TestElementCacheExtension_IosTest : UnitTest() {
 
     }
 
-    @Test
-    fun absoluteXpath() {
-
-        // Arrange
-        TestElementCache.loadXml(XmlDataIos.SettingsTopScreen)
-
-        // absoluteXpath
-        run {
-            val e1 = TestElementCache.select("Sign in to your iPhone")
-            val absoluteXpath = e1.getAbsoluteXpath()
-            val e2 = TestElementCache.select("xpath=$absoluteXpath")
-            assertThat(e2.label).isEqualTo(e1.label)
-        }
-
-        // absoluteXpath.next
-        run {
-            val e0 = TestElementCache.select("Sign in to your iPhone")
-            val e1 = e0.next()
-            val absoluteXpath = e1.getAbsoluteXpath()
-            val e2 = TestElementCache.select("xpath=$absoluteXpath")
-            assertThat(e2.getAbsoluteXpath()).isEqualTo(e1.getAbsoluteXpath())
-        }
-
-        // empty
-        run {
-            val e = TestElement()
-            assertThat(e.getAbsoluteXpath()).isEqualTo("")
-        }
-
-    }
+//    @Test
+//    fun absoluteXpath() {
+//
+//        // Arrange
+//        TestElementCache.loadXml(XmlDataIos.SettingsTopScreen)
+//
+//        // absoluteXpath
+//        run {
+//            val e1 = TestElementCache.select("Sign in to your iPhone")
+//            val absoluteXpath = e1.getAbsoluteXpath()
+//            val e2 = TestElementCache.select("xpath=$absoluteXpath")
+//            assertThat(e2.label).isEqualTo(e1.label)
+//        }
+//
+//        // absoluteXpath.next
+//        run {
+//            val e0 = TestElementCache.select("Sign in to your iPhone")
+//            val e1 = e0.next()
+//            val absoluteXpath = e1.getAbsoluteXpath()
+//            val e2 = TestElementCache.select("xpath=$absoluteXpath")
+//            assertThat(e2.getAbsoluteXpath()).isEqualTo(e1.getAbsoluteXpath())
+//        }
+//
+//        // empty
+//        run {
+//            val e = TestElement()
+//            assertThat(e.getAbsoluteXpath()).isEqualTo("")
+//        }
+//
+//    }
 
     @Test
     fun uniqueXpath() {

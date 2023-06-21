@@ -145,7 +145,11 @@ private fun TestElement.nextPreviousCore(
     selectorForNextPrevious: Selector
 ): TestElement {
 
-    val currentIndex = targetElements.indexOf(this)
+    val current = targetElements.firstOrNull() { it.toString() == this.toString() }
+    if (current == null) {
+        return TestElement.emptyElement
+    }
+    val currentIndex = targetElements.indexOf(current)
 
     val filteredByIndex: List<TestElement>
     if (next) {

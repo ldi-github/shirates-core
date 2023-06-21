@@ -119,22 +119,22 @@ class TestElementExtensionTest : UITest() {
         }
     }
 
-    @Test
-    @Order(50)
-    fun getAbsoluteXpath() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Settings Top Screen]")
-                    e1 = it.select("General")
-                }.expectation {
-                    e2 = it.select("xpath=${e1.getAbsoluteXpath()}")
-                    e2.label.thisIs("General")
-                }
-            }
-        }
-    }
+//    @Test
+//    @Order(50)
+//    fun getAbsoluteXpath() {
+//
+//        scenario {
+//            case(1) {
+//                condition {
+//                    it.macro("[iOS Settings Top Screen]")
+//                    e1 = it.select("General")
+//                }.expectation {
+//                    e2 = it.select("xpath=${e1.getAbsoluteXpath()}")
+//                    e2.label.thisIs("General")
+//                }
+//            }
+//        }
+//    }
 
     @Test
     @Order(60)

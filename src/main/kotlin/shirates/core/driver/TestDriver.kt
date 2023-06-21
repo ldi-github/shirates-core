@@ -44,6 +44,7 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toBufferedImage
+import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -380,7 +381,7 @@ object TestDriver {
             else ScreenInfo()
         }
 
-    private var lastFireIrregularHandlerXmlSource = ""
+    private var lastFireIrregularHandlerScreenshotImage: BufferedImage? = null
 
     var isFiringIrregularHandler = false
 
@@ -389,35 +390,35 @@ object TestDriver {
      */
     fun fireIrregularHandler(force: Boolean = false) {
 
-        if (testContext.useCache.not()) {
-            return
-        }
         if (force.not()) {
             if (isFiringIrregularHandler || testContext.enableIrregularHandler.not() || TestMode.isNoLoadRun || isInitialized.not()) {
                 return
             }
         }
 
-        lastFireIrregularHandlerXmlSource = ""
+        lastFireIrregularHandlerScreenshotImage = null
 
-        for (i in 1..5) {
-            val handled = fireIrregularHandlerCore()
-            if (handled == false) {
-                break
-            }
-        }
+        fireIrregularHandlerCore()
+//        for (i in 1..5) {
+//            val handled = fireIrregularHandlerCore()
+//            if (handled == false) {
+//                break
+//            }
+//        }
     }
 
     private fun fireIrregularHandlerCore(): Boolean {
         try {
             isFiringIrregularHandler = true
 
-            if (TestElementCache.synced && TestElementCache.sourceXml == lastFireIrregularHandlerXmlSource) {
-                TestLog.trace("firing irregularHandler skipped")
-                return false
+            if (testContext.useCache) {
+                if (TestElementCache.synced && CodeExecutionContext.lastScreenshotImage == lastFireIrregularHandlerScreenshotImage) {
+                    TestLog.trace("firing irregularHandler skipped")
+                    return false
+                }
+                syncCache()
+                lastFireIrregularHandlerScreenshotImage = CodeExecutionContext.lastScreenshotImage
             }
-            syncCache()
-            lastFireIrregularHandlerXmlSource = TestElementCache.sourceXml
 
             val originalLastElement = lastElement
             try {
@@ -432,7 +433,7 @@ object TestDriver {
             isFiringIrregularHandler = false
         }
 
-        val handled = TestElementCache.sourceXml == lastFireIrregularHandlerXmlSource
+        val handled = CodeExecutionContext.lastScreenshotImage == lastFireIrregularHandlerScreenshotImage
         return handled
     }
 
@@ -957,21 +958,11 @@ object TestDriver {
                 safeElementOnly = safeElementOnly
             )
         } else {
-            if (selector.relativeSelectors.any()) {
-                throw TestDriverException(
-                    message = message(
-                        id = "relativeSelectorNotSupportedInFindingWebElement",
-                        arg1 = "select",
-                        arg2 = "$selector"
-                    )
-                )
-            }
-            selectedElement = try {
-                val webElement = testDrive.findWebElement(selector = selector)
-                TestElement(selector = selector, webElement = webElement)
-            } catch (t: Throwable) {
-                TestElement(selector = selector)
-            }
+            selectedElement = selectDirect(
+                selector = selector,
+                throwsException = false,
+                safeElementOnly = safeElementOnly
+            )
         }
         if (selector.isNegation.not()) {
             if (selectedElement.isFound) {
@@ -1028,6 +1019,57 @@ object TestDriver {
         return lastElement
     }
 
+    internal fun selectDirect(
+        selector: Selector,
+        throwsException: Boolean = true,
+        safeElementOnly: Boolean = true
+    ): TestElement {
+
+        if (selector.isEmpty) {
+            val msg = message(
+                id = "emptySelectorIsNotAllowed",
+                subject = "$selector",
+                arg1 = selector.getElementExpression(),
+                file = selector.origin
+            )
+            throw TestDriverException(msg)
+        }
+
+        if (TestMode.isNoLoadRun) {
+            lastElement = TestElement(selector = selector)
+            return lastElement
+        }
+
+        val e = try {
+            val webElement = testDrive.findWebElement(selector = selector)
+            var elm = TestElement(selector = selector, webElement = webElement)
+            for (r in selector.relativeSelectors) {
+                elm = elm.relative(
+                    relativeSelector = r,
+                    safeElementOnly = safeElementOnly,
+                    scopeElements = testDrive.widgets
+                )
+            }
+            elm.selector = selector
+            elm
+        } catch (t: Throwable) {
+            TestElement(selector = selector)
+        }
+        if (e.isEmpty) {
+            e.lastError = TestDriverException(
+                message = message(
+                    id = "elementNotFound",
+                    subject = "$selector",
+                    arg1 = selector.getElementExpression()
+                )
+            )
+            if (throwsException) {
+                throw e.lastError!!
+            }
+        }
+        return e
+    }
+
     /**
      * findImage
      */
@@ -1064,14 +1106,11 @@ object TestDriver {
         scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true,
+        waitSeconds: Double = testContext.syncWaitSeconds,
         useCache: Boolean = testContext.useCache,
     ): ImageMatchResult {
 
         lastElement = TestElement.emptyElement
-
-        if (useCache) {
-            syncCache()
-        }
 
         if (selector.image.isNullOrBlank()) {
             throw IllegalArgumentException(message(id = "imageFileNotFound", subject = selector.expression))
@@ -1082,13 +1121,17 @@ object TestDriver {
         }
 
         // Search in current screen
+        if (useCache) {
+            syncCache()
+        }
+
         var r = rootElement.isContainingImage(selector.image!!)
         if (r.result) {
             return r
         }
 
-        // Search in scroll
         if (scroll) {
+            // Search in scroll
             val actionFunc = {
                 r = rootElement.isContainingImage(selector.image!!)
                 r.result
@@ -1102,6 +1145,19 @@ object TestDriver {
                 startMarginRatio = scrollStartMarginRatio,
                 actionFunc = actionFunc
             )
+        } else {
+            // Wait for image displayed
+            SyncUtility.doUntilTrue(
+                waitSeconds = waitSeconds,
+                intervalSeconds = testContext.shortWaitSeconds,
+                refreshCache = useCache
+            ) { sc ->
+                if (sc.refreshCache.not()) {
+                    screenshot(force = true)
+                }
+                r = rootElement.isContainingImage(selector.image!!)
+                r.result
+            }
         }
 
         if (r.result.not() && throwsException) {
@@ -1527,6 +1583,9 @@ object TestDriver {
             }
             r = r && hasAnySatellite()
         }
+        if (r) {
+            currentScreen = screenName
+        }
 
         return r
     }
@@ -1742,6 +1801,9 @@ object TestDriver {
         try {
             val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             if (isAndroid) {
+                if (testContext.useCache.not()) {
+                    rootElement = testDrive.findWebElement("xpath=//*[1]").toTestElement()
+                }
                 return rootElement.packageName == packageOrBundleId
             }
 

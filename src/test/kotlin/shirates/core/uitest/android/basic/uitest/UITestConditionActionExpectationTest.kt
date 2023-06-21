@@ -140,6 +140,7 @@ class UITestConditionActionExpectationTest : UITest() {
             case(1) {
                 // Arrange
                 irregularHandlerCallCount = 0
+                invalidateCache()
                 // Act
                 condition(useHandler = true) {
                     it.exist("[Network & internet]")
@@ -149,6 +150,7 @@ class UITestConditionActionExpectationTest : UITest() {
 
                     // Arrange
                     irregularHandlerCallCount = 0
+                    invalidateCache()
                     // Act
                 }.action(useHandler = true) {
                     it.exist("[Network & internet]")
@@ -159,6 +161,7 @@ class UITestConditionActionExpectationTest : UITest() {
 
                     // Arrange
                     irregularHandlerCallCount = 0
+                    invalidateCache()
                     // Act
                 }.expectation(useHandler = true) {
                     it.screenIs("[Android Settings Top Screen]")

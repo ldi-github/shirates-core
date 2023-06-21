@@ -1,6 +1,8 @@
 package shirates.core.driver
 
+import org.openqa.selenium.By
 import shirates.core.configuration.TestProfile
+import shirates.core.driver.TestDriveObject.driver
 
 /**
  * testDrive
@@ -15,7 +17,11 @@ val testDrive: TestDrive
  */
 var rootElement: TestElement
     get() {
-        return TestElementCache.rootElement
+        if (testContext.useCache) {
+            return TestElementCache.rootElement
+        }
+        val e = driver.appiumDriver.findElement(By.xpath("//*")).toTestElement()
+        return e
     }
     set(value) {
         TestElementCache.rootElement = value

@@ -82,6 +82,13 @@ class FlowContainer {
             return null
         }
 
+        val s1 = element.toString()
+        val elements = getElements()
+        val contains = elements.any() { it.toString() == s1 }
+        if (contains) {
+            return null
+        }
+
         try {
             if (rows.isEmpty()) {
                 val row = Row(initialElement = element)

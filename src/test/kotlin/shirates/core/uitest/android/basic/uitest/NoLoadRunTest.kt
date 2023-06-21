@@ -89,11 +89,14 @@ class NoLoadRunTest : UITest() {
         assertThat(
             it.select("[8:30 AM]").below(1).select(":below(1)").selector.toString()
         ).isEqualTo("[8:30 AM]:below(2)")
-        assertThat(it.select("[8:30 AM]").select("[:Expand alarm]").selector.toString()).isEqualTo("[:Expand alarm]")
+        assertThat(
+            it.select("[8:30 AM]")
+                .select("[:Expand alarm]").selector.toString()
+        ).isEqualTo("[8:30 AM][:Expand alarm]")
 
         run {
             val sel = it.select("[8:30 AM][:Expand alarm]").selector
-            assertThat(sel.toString()).isEqualTo("[:Expand alarm]")
+            assertThat(sel.toString()).isEqualTo("[8:30 AM][:Expand alarm]")
         }
     }
 

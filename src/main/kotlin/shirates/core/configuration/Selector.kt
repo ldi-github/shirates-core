@@ -3,6 +3,7 @@ package shirates.core.configuration
 import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
+import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.rootElement
 import shirates.core.testcode.normalize
@@ -236,6 +237,10 @@ class Selector(
 
     val isRelative: Boolean
         get() {
+            if (TestMode.isNoLoadRun) {
+                val s = this.toString()
+                return s.startsWith(":") || s.startsWith("[:")
+            }
             return command?.startsWith(":") ?: false
         }
 
@@ -540,12 +545,14 @@ class Selector(
         val s = Selector()
         s.ignoreTypes = ignoreTypes
         s.expression = expression
+        s.originalExpression = originalExpression
         s.nickname = nickname
         s.section = section
         s.command = command
         s.relativeSelectors.addAll(relativeSelectors.map { it.copy() })
         s.orSelectors.addAll(orSelectors.map { it.copy() })
         s.filterMap.putAll(filterMap)
+        s.origin = origin
 
         return s
     }
@@ -714,10 +721,10 @@ class Selector(
             return originalExpression!!.toDecoratedExpression()
         }
 
-        val lastRelativeSelector = relativeSelectors.lastOrNull()
-        if (lastRelativeSelector != null && lastRelativeSelector.nickname != null) {
-            return lastRelativeSelector.nickname!!
-        }
+//        val lastRelativeSelector = relativeSelectors.lastOrNull()
+//        if (lastRelativeSelector != null && lastRelativeSelector.nickname != null) {
+//            return lastRelativeSelector.nickname!!
+//        }
 
         var exp = basePartFriendlyExpression
         if (exp != "" && exp.isRelativeSelector().not()) {

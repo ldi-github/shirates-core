@@ -9,7 +9,7 @@
 
   "selectors": {
 
-    "[Title]": "~title=Clock",
+    "[Title]": "Clock&&#action_bar_title",
     "[digital_clock]": "#digital_clock"
   }
 

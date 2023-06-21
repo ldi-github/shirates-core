@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import org.openqa.selenium.By
 import shirates.core.configuration.Selector
 import shirates.core.configuration.removeRedundantExpression
 import shirates.core.driver.*
@@ -13,8 +14,12 @@ fun TestElement.relative(
     scopeElements: List<TestElement> = elements,
 ): TestElement {
 
-    val c = command.removeRedundantExpression()
-    val relativeSelector = Selector(c)
+    val selectors = TestDriver.screenInfo.selectors
+    val exp =
+        if (selectors.containsKey(command)) selectors[command]?.expression
+        else null
+    val expression = exp ?: command.removeRedundantExpression()
+    val relativeSelector = Selector(expression)
 
     val oldSelector = this.selector
     val newSelector = this.getChainedSelector(relativeSelector = relativeSelector)
@@ -600,8 +605,19 @@ fun TestElement.parent(): TestElement {
     var e = TestElement()
     val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject) {
-        val filtered = this.ancestors.reversed()
-        e = filtered.firstOrNull() ?: TestElement.emptyElement
+
+        if (testContext.useCache) {
+            e = parentElement ?: TestElement.emptyElement
+        } else {
+            if (parentElement?.webElement != null) {
+                e = parentElement!!
+            } else {
+                val xpath = getUniqueXpath() + "/parent::*"
+                val w = driver.appiumDriver.findElement(By.xpath(xpath))
+                e = if (w != null) TestElement(webElement = w) else TestElement.emptyElement
+                parentElement = e
+            }
+        }
     }
 
     e.selector = this.getChainedSelector(relativeCommand = ":parent")

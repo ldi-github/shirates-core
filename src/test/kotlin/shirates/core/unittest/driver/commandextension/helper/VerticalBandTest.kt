@@ -26,7 +26,7 @@ class VerticalBandTest : UnitTest() {
             // Arrange
             val vband = VerticalBand(select("Settings"))
             // Act, Assert
-            assertThat(vband.canMerge(select("Settings"))).isEqualTo(true)
+            assertThat(vband.canMerge(select("Settings"))).isEqualTo(false)
             assertThat(vband.canMerge(select("#close"))).isEqualTo(false)
             assertThat(vband.canMerge(select("#menu"))).isEqualTo(false)
             assertThat(vband.canMerge(select("#image1"))).isEqualTo(true)

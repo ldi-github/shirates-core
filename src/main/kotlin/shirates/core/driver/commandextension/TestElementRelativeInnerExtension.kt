@@ -10,7 +10,7 @@ internal fun TestElement.innerFlow(
     safeElementOnly: Boolean
 ): TestElement {
 
-    val innerElements = this.descendants.toMutableList()
+    val innerElements = this.descendants.filter { it.isWidget }.toMutableList()
     return this.flow(
         selector = selector,
         safeElementOnly = safeElementOnly,

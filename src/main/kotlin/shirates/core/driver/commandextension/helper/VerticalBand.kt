@@ -16,10 +16,18 @@ class VerticalBand(internal var left: Int, internal var right: Int) {
      */
     fun canMerge(element: TestElement): Boolean {
 
+        if (members.isEmpty()) {
+            return true
+        }
         if (element.bounds.right < this.left) {
             return false
         }
         if (this.right < element.bounds.left) {
+            return false
+        }
+        val s1 = element.toString()
+        val contains = members.any() { it.toString() == s1 }
+        if (contains) {
             return false
         }
         return true

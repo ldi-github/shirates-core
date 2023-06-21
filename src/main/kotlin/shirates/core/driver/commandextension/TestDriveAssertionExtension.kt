@@ -276,7 +276,7 @@ internal fun TestDrive.screenIsOfCore(
     var matchedScreenName = ""
     val checkScreen = {
         for (name in screenNames) {
-            isScreenResult = name == screenName
+            isScreenResult = isScreen(name)
             if (isScreenResult) {
                 matchedScreenName = name
                 break

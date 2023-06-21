@@ -26,7 +26,7 @@ class HorizontalBandTest : UnitTest() {
             // Arrange
             val hband = HorizontalBand(select("#close"))
             // Act, Assert
-            assertThat(hband.canMerge(select("#close"))).isEqualTo(true)
+            assertThat(hband.canMerge(select("#close"))).isEqualTo(false)
             assertThat(hband.canMerge(select("Settings"))).isEqualTo(true)
             assertThat(hband.canMerge(select("#menu"))).isEqualTo(true)
             assertThat(hband.canMerge(select("#image1"))).isEqualTo(false)
@@ -36,7 +36,7 @@ class HorizontalBandTest : UnitTest() {
             // Arrange
             val hband = HorizontalBand(select("General"))
             // Act, Assert
-            assertThat(hband.canMerge(select("General"))).isEqualTo(true)
+            assertThat(hband.canMerge(select("General"))).isEqualTo(false)
             assertThat(hband.canMerge(select("#general-switch"))).isEqualTo(true)
             assertThat(hband.canMerge(select("Administrator"))).isEqualTo(false)
         }
