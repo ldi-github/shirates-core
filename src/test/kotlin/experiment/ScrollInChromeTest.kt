@@ -38,9 +38,9 @@ class ScrollInChromeTest : UITest() {
                     println(aaa)
                 }
 
-                var scrollableTarget = it.getScrollableTarget()
+                var scrollableTarget = it.getScrollableElement()
                 if (scrollableTarget.scrollable == "false") {
-                    scrollableTarget = it.getScrollableTarget()
+                    scrollableTarget = it.getScrollableElement()
                 }
                 val descendants = scrollableTarget.descendants
                 val firstTextElement = descendants.first { it.text.isBlank().not() }

@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.time.StopWatch
@@ -37,7 +38,7 @@ fun TestDrive.tap(
     safeMode: Boolean = true
 ): TestElement {
 
-    val testElement = TestDriver.it
+    val testElement = refreshLastElement()
 
     val command = "tap"
     val message = message(id = command, subject = "($x,$y)")
@@ -56,7 +57,7 @@ fun TestDrive.tap(
         )
     }
 
-    return lastElement
+    return refreshLastElement()
 }
 
 /**
@@ -67,7 +68,7 @@ fun TestDrive.tap(
     tapMethod: TapMethod = TapMethod.auto
 ): TestElement {
 
-    val tappedElement = TestDriver.it
+    val tappedElement = refreshLastElement()
 
     val command = "tap"
     val message = message(id = command, subject = tappedElement.subject)
@@ -89,7 +90,10 @@ private fun TestElement.tapCore(
     holdSeconds: Double,
     tapMethod: TapMethod
 ): TestElement {
+    val ms = Measure()
+
     fun click() {
+        val msClick = Measure()
         val sw = StopWatch("click")
         try {
             val me = this.getWebElement()
@@ -102,9 +106,11 @@ private fun TestElement.tapCore(
         if (PropertiesManager.enableTimeMeasureLog) {
             TestLog.write(sw.toString())
         }
+        msClick.end()
     }
 
     fun touchAction() {
+        val msTouch = Measure()
         val sw = StopWatch("touchAction")
         val b = this.bounds
         // tap by swipe
@@ -118,6 +124,7 @@ private fun TestElement.tapCore(
         if (PropertiesManager.enableTimeMeasureLog) {
             TestLog.write(sw.toString())
         }
+        msTouch.end()
     }
 
     if (PropertiesManager.enableTapElementImageLog) {
@@ -146,6 +153,7 @@ private fun TestElement.tapCore(
         lastElement.selector = originalSelector
     }
 
+    ms.end()
     return lastElement
 }
 
@@ -159,7 +167,7 @@ fun TestDrive.tap(
     handleIrregular: Boolean = true
 ): TestElement {
 
-    val testElement = TestDriver.it
+    val testElement = refreshLastElement()
 
     val command = "tap"
     val sel = getSelector(expression = expression)
@@ -199,7 +207,7 @@ fun TestDrive.tap(
         lastElement = e
     }
 
-    return TestDriver.it
+    return refreshLastElement()
 }
 
 private fun TestDrive.tapWithScrollCommandCore(
@@ -213,7 +221,7 @@ private fun TestDrive.tapWithScrollCommandCore(
     tapMethod: TapMethod
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val selector = getSelector(expression = expression)
     val message = message(id = command, subject = "$selector")

@@ -1106,5 +1106,71 @@ class ScreenInfoTest : UnitTest() {
             assertThat(screenInfo.getSelector("text1").getElementExpression()).isEqualTo("<text1>")
         }
     }
+
+    @Test
+    fun weight() {
+
+        val screenInfo = ScreenInfo(screenFile = "unitTestData/testConfig/weight/screens/[A Screen].json")
+
+        run {
+            // Arrange
+            screenInfo.weight = null
+            // Act
+            val searchWeight = screenInfo.searchWeight
+            // Assert
+            assertThat(searchWeight).isEqualTo(2)
+        }
+        run {
+            // Arrange
+            screenInfo.weight = "1"
+            // Act
+            val searchWeight = screenInfo.searchWeight
+            // Assert
+            assertThat(searchWeight).isEqualTo(3)
+        }
+        run {
+            // Arrange
+            screenInfo.weight = "10"
+            // Act
+            val searchWeight = screenInfo.searchWeight
+            // Assert
+            assertThat(searchWeight).isEqualTo(12)
+        }
+        run {
+            // Arrange
+            screenInfo.weight = "100"
+            // Act
+            val searchWeight = screenInfo.searchWeight
+            // Assert
+            assertThat(searchWeight).isEqualTo(102)
+        }
+
+        assertThatThrownBy {
+            screenInfo.weight = "1.1"
+            // Act
+            screenInfo.searchWeight
+        }.isInstanceOf(TestConfigException::class.java)
+            .hasMessage("Invalid weight(weight=1.1). Check screen file. (file=unitTestData/testConfig/weight/screens/[A Screen].json)")
+        assertThatThrownBy {
+            screenInfo.weight = "1a"
+            // Act
+            screenInfo.searchWeight
+        }.isInstanceOf(TestConfigException::class.java)
+            .hasMessage("Invalid weight(weight=1a). Check screen file. (file=unitTestData/testConfig/weight/screens/[A Screen].json)")
+    }
+
+    @Test
+    fun default() {
+
+        run {
+            val screenInfo = ScreenInfo()
+            assertThat(screenInfo.default).isEqualTo("")
+        }
+        run {
+            val screenInfo =
+                ScreenInfo(screenFile = "unitTestData/testConfig/nicknames1/screens/FunctionA/[A Screen].json")
+            assertThat(screenInfo.default).isEqualTo("[X]")
+        }
+    }
 }
 

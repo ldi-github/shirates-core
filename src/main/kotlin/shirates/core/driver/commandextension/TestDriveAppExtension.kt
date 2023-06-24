@@ -19,7 +19,7 @@ fun TestDrive.isAppInstalled(
     packageOrBundleId: String? = testContext.profile.packageOrBundleId
 ): Boolean {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     var id = packageOrBundleId
     if (appNickname?.isValidNickname() == true) {
@@ -49,7 +49,7 @@ fun TestDrive.installApp(
     appPackageFile: String = testContext.profile.appPackageFullPath,
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "installApp"
     val message = message(id = command, file = appPackageFile)
@@ -77,7 +77,7 @@ fun TestDrive.removeApp(
     packageOrBundleId: String? = testContext.profile.packageOrBundleId,
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "removeApp"
     val message = message(id = command, subject = packageOrBundleId)
@@ -99,7 +99,7 @@ fun TestDrive.terminateApp(
     appNameOrAppId: String = testContext.appIconName
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "terminateApp"
     val subject = Selector(appNameOrAppId).toString()
@@ -135,7 +135,7 @@ fun TestDrive.restartApp(
         return lastElement
     }
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "restartApp"
     val subject = Selector(appNameOrAppId).toString()
@@ -163,7 +163,7 @@ fun TestDrive.launchApp(
     fallBackToTapAppIcon: Boolean = true
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "launchApp"
     val subject = Selector(appNameOrAppIdOrActivityName).toString()

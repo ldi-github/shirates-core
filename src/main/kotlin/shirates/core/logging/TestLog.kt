@@ -389,7 +389,8 @@ object TestLog {
         result: LogType = LogType.NONE,
         resultMessage: String? = null,
         exception: Throwable? = null,
-        log: Boolean = true
+        log: Boolean = true,
+        logLineCallback: ((LogLine) -> Unit)? = null
     ): LogLine {
 
         val logLine = getLogLine(
@@ -404,6 +405,7 @@ object TestLog {
             logType = logType,
             result = result
         )
+        logLineCallback?.invoke(logLine)
 
         if (log.not()) return logLine
 
@@ -526,6 +528,11 @@ object TestLog {
             testClassName = currentTestClassName,
             testMethodName = currentTestMethodName
         )
+        val lastLine = lines.lastOrNull()
+        if (lastLine != null) {
+            logLine.timeDiffMilliseconds =
+                logLine.logDateTime.toInstant().toEpochMilli() - lastLine.logDateTime.toInstant().toEpochMilli()
+        }
         logLine.timeElapsed = logLine.logDateTime.time - sessionStartTime.time
 
         logLine.isInMacro = CodeExecutionContext.isInMacro
@@ -607,24 +614,57 @@ object TestLog {
 
         if (log.not()) return LogLine()
 
+        val stackFrame = Thread.currentThread().stackTrace[1]
+
+        return traceCore(message = message, eventName = "trace", userCalledStackFrame = stackFrame, log = log)
+    }
+
+    internal fun traceCore(
+        message: String = "",
+        eventName: String,
+        userCalledStackFrame: StackTraceElement = Thread.currentThread().stackTrace[1],
+        logLineCallback: ((LogLine) -> Unit)? = null,
+        log: Boolean = enableTrace
+    ): LogLine {
+
+        if (log.not()) return LogLine()
+
+        val calledStack = userCalledStackFrame ?: Thread.currentThread().stackTrace[1]
+
         val stacktrace = Thread.currentThread().stackTrace
-        val thisStack = stacktrace
-            .filter {
-                it.fileName == "TestLog.kt"
-                        && (it.methodName == "trace" || it.methodName == "trace\$default")
-            }.last()
-        val callerStack = stacktrace[stacktrace.indexOf(thisStack) + 1]
+        val frames = mutableListOf<StackTraceElement>()
+        for (i in 0 until stacktrace.count()) {
+            val first = stacktrace[i]
+            if (first.fileName == calledStack.fileName
+                && (first.methodName == calledStack.methodName || first.methodName == "${calledStack.methodName}\$default")
+            ) {
+                frames.add(first)
+                val second = stacktrace[i + 1]
+                frames.add(second)
+                if (second.methodName == calledStack.methodName || second.methodName == "${calledStack.methodName}\$default") {
+                    val third = stacktrace[i + 2]
+                    frames.add(third)
+                }
+                break
+            }
+        }
+        if (frames.isEmpty()) {
+            return LogLine()
+        }
+
+        val callerStack = frames.last()
         val className = callerStack.className.split(".").last()
         val methodName = callerStack.methodName
         val classAndMethodName = "$className.$methodName"
 
-        val msg = if (message.isBlank()) "[${classAndMethodName}]"
+        val msg = if (message.isBlank()) "[${classAndMethodName}] -$eventName"
         else "[${classAndMethodName}] $message"
 
         return write(
             message = msg,
             logType = LogType.TRACE,
-            log = log
+            log = log,
+            logLineCallback = logLineCallback
         )
     }
 

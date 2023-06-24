@@ -43,7 +43,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                 }.expectation {
                     val scrollableElements = rootElement.getScrollableElementsInDescendants()
                     val scrollableElement = scrollableElements.first()
-                    val target1 = scrollableElement.getScrollableTarget()
+                    val target1 = scrollableElement.getScrollableElement()
                     (target1 == scrollableElement).thisIsTrue()
                 }
             }
@@ -52,7 +52,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                     val scrollableElements = rootElement.getScrollableElementsInDescendants()
                     val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
                     val nonScrollableElement = rootElement
-                    val target2 = nonScrollableElement.getScrollableTarget()
+                    val target2 = nonScrollableElement.getScrollableElement()
                     (target2 != nonScrollableElement).thisIsTrue()
                     (target2 == largestScrollableTarget).thisIsTrue()
                 }

@@ -11,7 +11,7 @@ fun TestDrive.silent(
     proc: () -> Unit
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val context = TestDriverCommandContext(testElement)
     context.execSilentCommand() {

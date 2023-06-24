@@ -20,7 +20,7 @@ object SyncUtility {
         maxLoopCount: Int = MAX_LOOP_COUNT,
         retryOnError: Boolean = true,
         throwOnFinally: Boolean = true,
-        refreshCache: Boolean = true,
+        refreshCache: Boolean = testContext.useCache,
         onTimeout: (SyncContext) -> Unit = {},
         onMaxLoop: (SyncContext) -> Unit = {},
         onError: (SyncContext) -> Unit = {},

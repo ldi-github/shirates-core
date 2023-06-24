@@ -39,6 +39,7 @@ object Const {
     const val ENABLE_XMLSOURCE_DUMP = true
     const val ENABLE_SHELL_EXEC_LOG = false
     const val ENABLE_TIME_MEASURE_LOG = false
+    const val ENABLE_TIME_DIFF = true
     const val ENABLE_IMAGE_MATCH_DEBUG_LOG = false
     const val SCREENSHOT_SCALE = 0.5
     const val ENABLE_IMAGE_ASSERTION = true

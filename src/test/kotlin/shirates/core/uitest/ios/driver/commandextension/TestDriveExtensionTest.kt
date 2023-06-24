@@ -3,10 +3,9 @@ package shirates.core.uitest.ios.driver.commandextension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.getCurrentAppIconName
-import shirates.core.driver.commandextension.getCurrentAppName
-import shirates.core.driver.commandextension.isApp
-import shirates.core.driver.commandextension.screenshot
+import shirates.core.driver.DisableCache
+import shirates.core.driver.branchextension.ifScreenIsNot
+import shirates.core.driver.commandextension.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
@@ -83,4 +82,22 @@ class TestDriveExtensionTest : UITest() {
         assertThat(it.isApp("[App1]")).isFalse()
     }
 
+    @DisableCache
+    @Test
+    fun tapDefault() {
+
+        scenario {
+            case(1) {
+                condition {
+                    ifScreenIsNot("[General Screen]") {
+                        it.macro("[General Screen]")
+                    }
+                }.action {
+                    it.tapDefault()
+                }.expectation {
+                    it.screenIs("[iOS Settings Top Screen]")
+                }
+            }
+        }
+    }
 }

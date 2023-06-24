@@ -63,7 +63,7 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
         // Arrange
         val root = ElementCacheUtility.createTestElementFromXml(source = XmlDataAndroid.SettingsTopScreen)
         // Act
-        val scrollableTArget = root.getScrollableTarget()
+        val scrollableTArget = root.getScrollableElement()
         // Assert
         assertThat(scrollableTArget.id).isEqualTo("com.android.settings:id/main_content_scrollable_container")
     }

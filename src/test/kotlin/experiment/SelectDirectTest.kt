@@ -3,7 +3,6 @@ package experiment
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.rootElement
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/clock/testrun.properties")
@@ -362,11 +361,4 @@ class SelectDirectTest : UITest() {
 
     }
 
-    @Test
-    fun test1() {
-
-        scenario(useCache = false) {
-            rootElement
-        }
-    }
 }

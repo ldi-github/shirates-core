@@ -7,6 +7,7 @@ import shirates.core.driver.commandextension.getUniqueXpath
 import shirates.core.driver.commandextension.relative
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
 import shirates.core.utility.element.ElementCacheUtility
@@ -33,7 +34,6 @@ object TestElementCache {
         set(value) {
             field = value
             allElements = listOf()
-            TestDriver.currentScreen = UNKOWN_SCREEN_NAME
             synced = false
         }
 
@@ -145,66 +145,71 @@ object TestElementCache {
             return lastElement
         }
 
-        var e: TestElement
-        if (selector.isRelative) {
-            // get relative
-            e = lastElement.relative(
-                relativeSelectors = selector.relativeSelectors,
-                safeElementOnly = safeElementOnly,
-                scopeElements = allElements
-            )
-        } else {
-            // select in selectContext
-            var list = filterElements(
-                selector = selector,
-                throwsException = throwsException,
-                safeElementOnly = safeElementOnly,
-                selectContext = selectContext
-            )
-            val removeList = list.filter { it.isEmpty }
-            list.removeAll(removeList)
-            if (safeElementOnly) {
-                list = list.filter { it.isDummy || it.isInView }.toMutableList()
-            }
-            e = list.firstOrNull() ?: TestElement.emptyElement
-        }
-        e.lastError = null
-
-        if (e.isEmpty) {
-            e.selector = selector
-            e.lastError = TestDriverException(
-                message = message(
-                    id = "elementNotFound",
-                    subject = "$selector",
-                    arg1 = selector.getElementExpression()
+        val ms = Measure("$selector")
+        try {
+            var e: TestElement
+            if (selector.isRelative) {
+                // get relative
+                e = lastElement.relative(
+                    relativeSelectors = selector.relativeSelectors,
+                    safeElementOnly = safeElementOnly,
+                    scopeElements = allElements
                 )
-            )
-            val elms = this.allElements
-            if (elms.any() { it.id == "android:id/aerr_close" } && elms.any() { it.id == "android:id/aerr_wait" }) {
-                val alert = elms.firstOrNull() { it.id == "android:id/alertTitle" } ?: TestElement.emptyElement
-                throw RerunScenarioException(message(id = "appIsNotResponding", submessage = alert.text))
-            }
-        } else {
-            e.selector = selector
-        }
-
-        if (e.hasError) {
-            for (altSelector in selector.alternativeSelectors) {
-                e = select(selector = altSelector, throwsException = false, selectContext = selectContext)
-                if (e.isFound && altSelector.isNegation.not()) {
-                    return e
+            } else {
+                // select in selectContext
+                var list = filterElements(
+                    selector = selector,
+                    throwsException = throwsException,
+                    safeElementOnly = safeElementOnly,
+                    selectContext = selectContext
+                )
+                val removeList = list.filter { it.isEmpty }
+                list.removeAll(removeList)
+                if (safeElementOnly) {
+                    list = list.filter { it.isDummy || it.isInView }.toMutableList()
                 }
-                if (e.isDummy && altSelector.isNegation) {
-                    return e
+                e = list.firstOrNull() ?: TestElement.emptyElement
+            }
+            e.lastError = null
+
+            if (e.isEmpty) {
+                e.selector = selector
+                e.lastError = TestDriverException(
+                    message = message(
+                        id = "elementNotFound",
+                        subject = "$selector",
+                        arg1 = selector.getElementExpression()
+                    )
+                )
+                val elms = this.allElements
+                if (elms.any() { it.id == "android:id/aerr_close" } && elms.any() { it.id == "android:id/aerr_wait" }) {
+                    val alert = elms.firstOrNull() { it.id == "android:id/alertTitle" } ?: TestElement.emptyElement
+                    throw RerunScenarioException(message(id = "appIsNotResponding", submessage = alert.text))
+                }
+            } else {
+                e.selector = selector
+            }
+
+            if (e.hasError) {
+                for (altSelector in selector.alternativeSelectors) {
+                    e = select(selector = altSelector, throwsException = false, selectContext = selectContext)
+                    if (e.isFound && altSelector.isNegation.not()) {
+                        return e
+                    }
+                    if (e.isDummy && altSelector.isNegation) {
+                        return e
+                    }
                 }
             }
-        }
 
-        if (e.hasError && throwsException) {
-            throw e.lastError!!
-        }
+            if (e.hasError && throwsException) {
+                throw e.lastError!!
+            }
 
-        return e
+            return e
+        } finally {
+            ms.end()
+        }
     }
 
     /**
@@ -269,6 +274,8 @@ object TestElementCache {
             return true
         }
 
+        val ms = Measure("$selector")
+
         if (synced.not() && TestDriver.isSyncing.not()) {
             TestDriver.syncCache()
         }
@@ -280,6 +287,7 @@ object TestElementCache {
             selectContext = selectContext
         )
 
+        ms.end()
         return e.isEmpty.not()
     }
 
@@ -320,13 +328,17 @@ object TestElementCache {
             return true
         }
 
+        val ms = Measure("$selectors")
+
         for (selector in selectors) {
             val found = canSelect(selector = selector, safeElementOnly = safeElementOnly, selectContext = selectContext)
             if (found.not()) {
+                ms.end()
                 return false
             }
         }
 
+        ms.end()
         return true
     }
 

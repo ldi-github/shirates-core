@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.ScreenInfo
 import shirates.core.driver.*
-import shirates.core.driver.commandextension.getScrollableTarget
+import shirates.core.driver.commandextension.getScrollableElement
 import shirates.core.driver.commandextension.getUniqueXpath
 import shirates.core.driver.commandextension.next
 import shirates.core.driver.commandextension.previous
@@ -68,7 +68,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         val root = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
 
         // Act
-        val scrollableTArget = root.getScrollableTarget()
+        val scrollableTArget = root.getScrollableElement()
 
         // Assert
         assertThat(scrollableTArget.type).isEqualTo("XCUIElementTypeTable")

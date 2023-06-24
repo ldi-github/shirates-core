@@ -39,7 +39,7 @@ class CreatingCommandFunction1 : UITest() {
         tapMethod: TapMethod = TapMethod.auto
     ): TestElement {
 
-        val testElement = getTestElement()
+        val testElement = getThisOrRootElement()
 
         val command = "tapWithScrollDownFromTop"
         val sel = getSelector(expression = expression)

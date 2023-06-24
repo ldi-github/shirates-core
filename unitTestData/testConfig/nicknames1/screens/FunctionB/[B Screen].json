@@ -6,6 +6,7 @@
   ],
 
   "identity": "[Button B][TextBox B]",
+  "weight": "1",
 
   "selectors": {
 

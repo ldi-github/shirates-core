@@ -2,7 +2,7 @@ package shirates.core.driver
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.commandextension.canSelect
-import shirates.core.driver.commandextension.getTestElement
+import shirates.core.driver.commandextension.getThisOrRootElement
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -15,7 +15,7 @@ fun TestDrive.wait(
     waitSeconds: Double
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "wait"
     val message = message(id = command, subject = "$waitSeconds")

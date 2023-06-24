@@ -12,7 +12,7 @@ fun TestDrive.shell(
 ): ShellUtility.ShellResult {
 
     var shellResult: ShellUtility.ShellResult? = null
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "shell"
     val message = args.joinToString(" ")
@@ -34,7 +34,7 @@ fun TestDrive.shellAsync(
 ): ShellUtility.ShellResult {
 
     var shellResult: ShellUtility.ShellResult? = null
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "shellAsync"
     val message = args.joinToString(" ")

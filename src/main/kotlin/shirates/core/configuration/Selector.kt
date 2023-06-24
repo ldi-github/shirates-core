@@ -783,7 +783,9 @@ class Selector(
         val conditions = mutableListOf<String>()
         for (s in selectors) {
             val cond = s.getXPathConditionCore(packageName)
-            conditions.add(cond)
+            if (cond.isNotBlank()) {
+                conditions.add(cond)
+            }
         }
 
         val condition = if (conditions.count() == 1) {
@@ -883,9 +885,14 @@ class Selector(
         } else {
             list.addFunction("@label=%s or @value=%s", text)
         }
-        list.addFunction("contains(@label,%s) or contains(@value,%s)", textContains)
+
+        fun getEndsWith(attrName: String): String {
+            return "normalize-space(substring(@$attrName,string-length(@$attrName)-string-length(%s)+1))=%s"
+        }
+
         list.addFunction("starts-with(@label,%s) or starts-with(@value,%s)", textStartsWith)
-        list.addFunction("ends-with(@label,%s) or ends-with(@value,%s)", textEndsWith)
+        list.addFunction("contains(@label,%s) or contains(@value,%s)", textContains)
+        list.addFunction("(${getEndsWith("label")} or ${getEndsWith("value")})", textEndsWith)
         list.addFunction("matches(@label,%s) or matches(@value,%s)", textMatches)
 
         list.addFunction("@name=%s", id)
@@ -893,13 +900,13 @@ class Selector(
         list.addFunction("@name=%s", access)
         list.addFunction("starts-with(@name,%s)", accessStartsWith)
         list.addFunction("contains(@name,%s)", accessContains)
-        list.addFunction("ends-with(@name,%s)", accessEndsWith)
+        list.addFunction(getEndsWith("name"), accessEndsWith)
         list.addFunction("matches(@name,%s)", accessMatches)
 
         list.addFunction("@value=%s", value)
         list.addFunction("starts-with(@value,%s)", valueStartsWith)
         list.addFunction("contains(@value,%s)", valueContains)
-        list.addFunction("ends-with(@value,%s)", valueEndsWith)
+        list.addFunction(getEndsWith("value"), valueEndsWith)
         list.addFunction("matches(@value,%s)", valueMatches)
 
         list.addFunction("@type=%s", className)
@@ -915,9 +922,9 @@ class Selector(
         }
         val expressions = getFilterValues(value).map { XPathUtility.getQuotedText(it) }
         return if (expressions.count() == 1) {
-            formatString.format(expressions[0], expressions[0])
+            formatString.replace("%s", expressions[0])
         } else {
-            expressions.map { formatString.format(it, it) }.joinToString(" or ")
+            expressions.map { formatString.replace("%s", it) }.joinToString(" or ")
         }
     }
 

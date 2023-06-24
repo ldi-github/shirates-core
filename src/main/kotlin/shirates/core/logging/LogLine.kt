@@ -1,5 +1,6 @@
 package shirates.core.logging
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.ScrollDirection
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -12,6 +13,7 @@ data class LogLine(
     var deleted: Boolean = false,
     var lineNumber: Int = 0,
     var logDateTime: Date = dateFormatrer.parse("2000/01/01"),
+    var timeDiffMilliseconds: Long = 0,
     var message: String = "",
     var logType: LogType = LogType.NONE,
     var testScenarioId: String? = null,
@@ -77,7 +79,8 @@ data class LogLine(
          */
         fun getHeaderForConsole(): String {
 
-            return "lineNo\tlogDateTime\ttestCaseId\tlogType\tgroup\tmessage"
+            val timeDiff = if (PropertiesManager.enableTimeDiff) "\tdiff(ms)" else ""
+            return "lineNo\tlogDateTime\ttestCaseId\tlogType$timeDiff\tgroup\tmessage"
         }
 
         /**
@@ -104,7 +107,8 @@ data class LogLine(
      */
     fun toStringForConsole(): String {
 
-        return "$lineNumber\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]\t($scriptCommand)\t$message"
+        val timeDiff = if (PropertiesManager.enableTimeDiff) "\t+${timeDiffMilliseconds}" else ""
+        return "$lineNumber\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]$timeDiff\t($scriptCommand)\t$message"
     }
 
     /**

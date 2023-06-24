@@ -2,11 +2,8 @@ package shirates.core.driver
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
-import shirates.core.logging.CodeExecutionContext
-import shirates.core.logging.LogLine
-import shirates.core.logging.LogType
+import shirates.core.logging.*
 import shirates.core.logging.Message.message
-import shirates.core.logging.TestLog
 import shirates.core.utility.misc.StackTraceUtility
 import shirates.core.utility.time.StopWatch
 
@@ -80,6 +77,9 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             resumeSelector()
         }
 
+        val commandText = getCommandText(command = "select", subject = subject, arg1 = arg1, arg2 = arg2)
+        val ms = Measure(commandText)
+
         val original = CodeExecutionContext.isInSelectCommand
         try {
             callerName = StackTraceUtility.getCallerName(
@@ -89,23 +89,15 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
             pushToCommandStack()
 
-            TestLog.trace(message = callerName)
-
-            val funcName = callerName.split(".").last()
-            val msg = "$funcName $selector"
-            beginLogLine = TestLog.select(
-                message = msg,
-                subject = subject ?: callerName,
-                arg1 = arg1 ?: "",
-                arg2 = arg2 ?: "",
-                log = log
-            )
-
             CodeExecutionContext.isInSelectCommand = true
             func()
         } finally {
-            CodeExecutionContext.isInSelectCommand = original
-            endCommand()
+            try {
+                CodeExecutionContext.isInSelectCommand = original
+                endCommand()
+            } finally {
+                ms.end()
+            }
         }
 
         return beginLogLine
@@ -132,14 +124,15 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             resumeSelector()
         }
 
+        val commandText = getCommandText(command = "relative", subject = subject, arg1 = arg1, arg2 = arg2)
+        val ms = Measure(commandText)
+
         val original = CodeExecutionContext.isInRelativeCommand
         try {
             callerName = StackTraceUtility.getCallerName(
                 filterFileName = COMMAND_CONTEXT_FILE_NAME,
                 filterMethodName = "execRelativeCommand"
             )
-
-            TestLog.trace(message = callerName)
 
             pushToCommandStack()
 
@@ -154,8 +147,12 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.isInRelativeCommand = true
             func()
         } finally {
-            CodeExecutionContext.isInRelativeCommand = original
-            endCommand()
+            try {
+                CodeExecutionContext.isInRelativeCommand = original
+                endCommand()
+            } finally {
+                ms.end()
+            }
         }
 
         return beginLogLine
@@ -181,14 +178,15 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             resumeSelector()
         }
 
+        val commandText = getCommandText(command = "boolean", subject = subject, arg1 = arg1, arg2 = arg2)
+        val ms = Measure(commandText)
+
         val original = CodeExecutionContext.isInBooleanCommand
         try {
             callerName = StackTraceUtility.getCallerName(
                 filterFileName = COMMAND_CONTEXT_FILE_NAME,
                 filterMethodName = "execBooleanCommand"
             )
-
-            TestLog.trace(message = callerName)
 
             pushToCommandStack()
 
@@ -205,8 +203,12 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.isInBooleanCommand = true
             func()
         } finally {
-            CodeExecutionContext.isInBooleanCommand = original
-            endCommand()
+            try {
+                CodeExecutionContext.isInBooleanCommand = original
+                endCommand()
+            } finally {
+                ms.end()
+            }
         }
 
         return beginLogLine
@@ -229,19 +231,25 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         func: () -> Unit
     ): LogLine? {
 
-        return execOperateCommandCore(
-            command = command,
-            message = message,
-            subject = subject,
-            arg1 = arg1,
-            arg2 = arg2,
-            fileName = fileName,
-            fireEvent = fireEvent,
-            forceLog = forceLog,
-            scriptCommand = scriptCommand,
-            suppressBeforeScreenshot = suppressBeforeScreenshot,
-            func = func
-        )
+        val commandText = getCommandText(command = command, subject = subject, arg1 = arg1, arg2 = arg2)
+        val ms = Measure(commandText)
+        try {
+            return execOperateCommandCore(
+                command = command,
+                message = message,
+                subject = subject,
+                arg1 = arg1,
+                arg2 = arg2,
+                fileName = fileName,
+                fireEvent = fireEvent,
+                forceLog = forceLog,
+                scriptCommand = scriptCommand,
+                suppressBeforeScreenshot = suppressBeforeScreenshot,
+                func = func
+            )
+        } finally {
+            ms.end()
+        }
     }
 
     private fun execOperateCommandCore(
@@ -295,8 +303,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             pushToCommandStack()
             val outputLog = forceLog || CodeExecutionContext.shouldOutputLog
 
-            TestLog.trace(message = callerName)
-
             beginLogLine = TestLog.operate(
                 message = message,
                 scriptCommand = scriptCommand,
@@ -347,8 +353,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
             pushToCommandStack()
 
-            TestLog.trace(message = callerName)
-
             beginLogLine = TestLog.getLogLine(
                 message = message,
                 scriptCommand = scriptCommand,
@@ -382,8 +386,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
     ): LogLine? {
         callerName = command
 
-        val sw = StopWatch()
-
         if (TestMode.isNoLoadRun) {
             loggingOnNoLoadRun(
                 logType = LogType.CHECK,
@@ -407,36 +409,62 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 //            )
 //        }
 
-        if (fireEvent) {
-            TestDriver.fireIrregularHandler()
-            resumeSelector()
-        }
-
-        val original = CodeExecutionContext.isInCheckCommand
+        val commandText = getCommandText(command = command, subject = subject, arg1 = arg1, arg2 = arg2)
+        val ms = Measure(commandText)
         try {
-            pushToCommandStack()
+            val sw = StopWatch()
 
-            TestLog.trace(message = callerName)
+            if (fireEvent) {
+                TestDriver.fireIrregularHandler()
+                resumeSelector()
+            }
 
-            beginLogLine = TestLog.check(
-                message = message,
-                subject = subject ?: callerName,
-                arg1 = arg1 ?: "",
-                arg2 = arg2 ?: "",
-                log = log
-            )
+            val original = CodeExecutionContext.isInCheckCommand
+            try {
+                pushToCommandStack()
 
-            CodeExecutionContext.isInCheckCommand = true
-            func()
+                beginLogLine = TestLog.check(
+                    message = message,
+                    subject = subject ?: callerName,
+                    arg1 = arg1 ?: "",
+                    arg2 = arg2 ?: "",
+                    log = log
+                )
+
+                CodeExecutionContext.isInCheckCommand = true
+                func()
+            } finally {
+                CodeExecutionContext.isInCheckCommand = original
+                endCommand()
+            }
+
+            if (PropertiesManager.enableTimeMeasureLog) {
+                TestLog.info("[execCheckCommand ($command) in ${sw.elapsedSeconds}sec]")
+            }
+            return beginLogLine
         } finally {
-            CodeExecutionContext.isInCheckCommand = original
-            endCommand()
+            ms.end()
         }
+    }
 
-        if (PropertiesManager.enableTimeMeasureLog) {
-            TestLog.info("[execCheckCommand ($command) in ${sw.elapsedSeconds}sec]")
+    private fun getCommandText(
+        subject: String?,
+        arg1: String?,
+        arg2: String?,
+        command: String
+    ): String {
+        val tokens = mutableListOf<String>()
+        if (subject != null) {
+            tokens.add(subject)
         }
-        return beginLogLine
+        if (arg1 != null) {
+            tokens.add("arg1=$arg1")
+        }
+        if (arg2 != null) {
+            tokens.add("arg2=$arg2")
+        }
+        val commandText = "$command(${tokens.joinToString(",")})"
+        return commandText
     }
 
     private fun loggingOnNoLoadRun(
@@ -487,6 +515,9 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             resumeSelector()
         }
 
+        val commandText = getCommandText(command = "procedure", subject = subject, arg1 = arg1, arg2 = arg2)
+        val ms = Measure(commandText)
+
         val original = CodeExecutionContext.isInProcedureCommand
         try {
             callerName = StackTraceUtility.getCallerName(
@@ -496,8 +527,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
             pushToCommandStack()
             val outputLog = log && CodeExecutionContext.shouldOutputLog
-
-            TestLog.trace(message = callerName)
 
             beginLogLine = TestLog.procedure(
                 message = message,
@@ -510,8 +539,12 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.isInProcedureCommand = true
             func()
         } finally {
-            CodeExecutionContext.isInProcedureCommand = original
-            endCommand()
+            try {
+                CodeExecutionContext.isInProcedureCommand = original
+                endCommand()
+            } finally {
+                ms.end()
+            }
         }
 
         return beginLogLine
@@ -534,6 +567,8 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             return null
         }
 
+        val ms = Measure()
+
         val original = CodeExecutionContext.isInSilentCommand
         try {
             if (fireEvent) {
@@ -548,8 +583,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
             pushToCommandStack()
 
-            TestLog.trace(message = callerName)
-
             beginLogLine = TestLog.silent(
                 message = message,
                 subject = subject ?: callerName,
@@ -561,8 +594,12 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.isInSilentCommand = true
             func()
         } finally {
-            CodeExecutionContext.isInSilentCommand = original
-            endCommand()
+            try {
+                CodeExecutionContext.isInSilentCommand = original
+                endCommand()
+            } finally {
+                ms.end()
+            }
         }
 
         return beginLogLine
@@ -604,6 +641,8 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             throw IllegalArgumentException("os not supported($os)")
         }
 
+        val ms = Measure()
+
         val original = CodeExecutionContext.isInOSCommand
         try {
             callerName = StackTraceUtility.getCallerName(
@@ -623,8 +662,12 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.isInOSCommand = true
             func()
         } finally {
-            CodeExecutionContext.isInOSCommand = original
-            endOS()
+            try {
+                CodeExecutionContext.isInOSCommand = original
+                endOS()
+            } finally {
+                ms.end()
+            }
         }
 
         return beginLogLine
@@ -642,11 +685,17 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val osName = TestLog.os
         TestLog.os = ""
         TestLog.osStack.pop()
-        return TestLog.branch(
-            message = "} $osName",
-            scriptCommand = "os",
-            subject = osName
-        )
+
+        val ms = Measure()
+        try {
+            return TestLog.branch(
+                message = "} $osName",
+                scriptCommand = "os",
+                subject = osName
+            )
+        } finally {
+            ms.end()
+        }
     }
 
     /**
@@ -657,6 +706,8 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         expected: String,
         func: () -> Unit
     ): LogLine? {
+
+        val ms = Measure()
 
         val original = CodeExecutionContext.isInSpecialCommand
         try {
@@ -680,8 +731,12 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.isInSpecialCommand = true
             func()
         } finally {
-            CodeExecutionContext.isInSpecialCommand = original
-            endSpecial()
+            try {
+                CodeExecutionContext.isInSpecialCommand = original
+                endSpecial()
+            } finally {
+                ms.end()
+            }
         }
 
         return beginLogLine
@@ -704,11 +759,16 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         TestLog.specialCallerStack.pop()
         TestLog.specialStack.pop()
 
-        return TestLog.branch(
-            message = "} $special",
-            scriptCommand = "special",
-            subject = special
-        )
+        val ms = Measure()
+        try {
+            return TestLog.branch(
+                message = "} $special",
+                scriptCommand = "special",
+                subject = special
+            )
+        } finally {
+            ms.end()
+        }
     }
 
     /**
@@ -731,6 +791,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val originalScrollToEdgeBoost = testContext.scrollToEdgeBoost
         val originalScrollMaxCount = testContext.scrollMaxCount
 
+        val ms = Measure()
         try {
             CodeExecutionContext.withScrollDirection = scrollDirection
             testContext.swipeDurationSeconds = scrollDurationSeconds
@@ -752,12 +813,16 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
             func()
         } finally {
-            CodeExecutionContext.withScrollDirection = originalWithScrollDirection
-            testContext.swipeDurationSeconds = originalScrollDurationSeconds
-            testContext.scrollToEdgeBoost = originalScrollToEdgeBoost
-            testContext.scrollIntervalSeconds = originalScrollIntervalSeconds
-            testContext.scrollMaxCount = originalScrollMaxCount
-            endExecWithScroll(command = command)
+            try {
+                CodeExecutionContext.withScrollDirection = originalWithScrollDirection
+                testContext.swipeDurationSeconds = originalScrollDurationSeconds
+                testContext.scrollToEdgeBoost = originalScrollToEdgeBoost
+                testContext.scrollIntervalSeconds = originalScrollIntervalSeconds
+                testContext.scrollMaxCount = originalScrollMaxCount
+                endExecWithScroll(command = command)
+            } finally {
+                ms.end()
+            }
         }
 
         return beginLogLine
@@ -774,10 +839,16 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         }
         TestLog.withScrollStack.pop()
         val message = message(id = command)
-        return TestLog.withScroll(
-            message = "} $message",
-            scriptCommand = command
-        )
+
+        val ms = Measure()
+        try {
+            return TestLog.withScroll(
+                message = "} $message",
+                scriptCommand = command
+            )
+        } finally {
+            ms.end()
+        }
     }
 
 }

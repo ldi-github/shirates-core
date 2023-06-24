@@ -3,14 +3,15 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.NicknameUtility
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 
 /**
- * getTestElement
+ * getThisOrRootElement
  */
-fun TestDrive.getTestElement(): TestElement {
+fun TestDrive.getThisOrRootElement(): TestElement {
 
     return if (this is TestElement) this
     else rootElement
@@ -127,4 +128,39 @@ fun TestDrive.isApp(
     }
 
     return r
+}
+
+/**
+ * tapDefault
+ */
+fun TestDrive.tapDefault(): TestElement {
+
+    val default = TestDriver.screenInfo.default
+    if (default.isBlank()) {
+        return lastElement
+    }
+
+    tap(default)
+
+    return lastElement
+}
+
+/**
+ * closeDialogs
+ */
+fun TestDrive.closeDialogs(
+    vararg screenNicknames: String
+): TestElement {
+
+    val ms = Measure()
+    try {
+        for (screenNickname in screenNicknames) {
+            if (isScreen(screenName = screenNickname)) {
+                tapDefault()
+            }
+        }
+        return refreshLastElement()
+    } finally {
+        ms.end()
+    }
 }

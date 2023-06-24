@@ -4,31 +4,41 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.getUniqueXpath
-import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.DisableCache
 import shirates.core.driver.commandextension.select
+import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
 class AdHocTestIos : UITest() {
 
+    @DisableCache
     @Test
     @Order(10)
-    fun someTest() {
+    fun select() {
 
-        scenario {
-            case(1) {
-                condition {
-                    it.screenIs("[iOS Settings Top Screen]")
-                }.action {
-                    it.select("General")
-                    val webElements =
-//                        driver.appiumDriver.findElements(AppiumBy.iOSNsPredicateString("type=='XCUIElementTypeStaticText' AND label=='General' AND rect.x==81"))
-                        driver.appiumDriver.findElements(By.xpath(it.getUniqueXpath()))
-                    println()
-                }.expectation {
-                }
-            }
+        run {
+            val a = driver.appiumDriver.findElements(By.xpath("//*[starts-with(@label,'Gene')]"))
+            println(a)
+        }
+        run {
+            val a = driver.appiumDriver.findElements(By.xpath("//*[contains(@label,'enera')]"))
+            println(a)
+        }
+        run {
+            val a =
+                driver.appiumDriver.findElements(By.xpath("//*[normalize-space(substring(@label,string-length(@label)-string-length('eneral')+1))='eneral']"))
+            println(a)
+        }
+
+        run {
+            val e = it.select("General")
+            e.printInfo()
+        }
+
+        run {
+            val e = it.select("*eneral")
+            e.printInfo()
         }
     }
 

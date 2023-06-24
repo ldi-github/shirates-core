@@ -11,7 +11,7 @@ class AndroidSettingsDemo : UITest() {
     @Test
     fun airplaneModeSwitch() {
 
-        scenario(useCache = false) {
+        scenario {
             case(1) {
                 condition {
                     it.launchApp("Settings")

@@ -1,6 +1,9 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.driver.*
+import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.TestElement
+import shirates.core.driver.TestMode
 import shirates.core.logging.Message.message
 import shirates.core.storage.Clipboard
 import shirates.core.storage.Memo
@@ -10,7 +13,7 @@ import shirates.core.storage.Memo
  */
 fun TestDrive.clearMemo(): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "clearMemo"
     val message = message(id = command)
@@ -32,7 +35,7 @@ fun TestDrive.clearMemo(): TestElement {
  */
 fun TestDrive.writeMemo(key: String, text: String): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "writeMemo"
     val message = message(id = command, key = key, value = text)
@@ -57,7 +60,7 @@ fun TestDrive.writeMemo(key: String, text: String): TestElement {
  */
 fun TestDrive.readMemo(key: String): String {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "readMemo"
     val value = Memo.read(key = key)
@@ -86,7 +89,7 @@ fun TestDrive.memoTextAs(
     key: String
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "memoTextAs"
     val message = message(id = command, key = key, value = testElement.textOrLabel)
@@ -110,7 +113,7 @@ fun TestDrive.memoTextAs(
  */
 fun TestDrive.clipboardText(): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "clipboardText"
     val message = message(id = command, subject = testElement.subject, arg1 = testElement.textOrLabel)

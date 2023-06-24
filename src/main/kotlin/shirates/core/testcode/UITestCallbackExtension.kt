@@ -190,6 +190,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         uiTest?.beforeEach(context)
         lastElement.lastError = null
 
+        if (disableCacheAnnotation) {
+            TestLog.info("@DisableCache")
+        }
+
         val lap = testFunctionWatch.lap("setupExecuted")
         val duration = "%.1f".format(lap.durationSeconds)
         TestLog.info(message(id = "setupExecuted", arg1 = duration))

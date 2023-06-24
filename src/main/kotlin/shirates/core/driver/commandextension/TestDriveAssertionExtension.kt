@@ -140,10 +140,11 @@ fun TestDrive.screenIs(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = null,
     func: (() -> Unit)? = null
 ): TestElement {
 
-    val testElement = TestDriver.it
+    val testElement = refreshLastElement()
 
     val command = "screenIs"
     val assertMessage = message(id = command, subject = screenName)
@@ -154,7 +155,8 @@ fun TestDrive.screenIs(
             expectedScreenName = screenName,
             waitSeconds = waitSeconds,
             assertMessage = assertMessage,
-            useCache = useCache
+            useCache = useCache,
+            onIrregular = onIrregular
         )
     }
     if (func != null) {
@@ -181,7 +183,8 @@ internal fun TestDrive.screenIsCore(
     expectedScreenName: String,
     assertMessage: String,
     waitSeconds: Double,
-    useCache: Boolean = testContext.useCache
+    onIrregular: (() -> Unit)? = null,
+    useCache: Boolean
 ) {
 
     var isScreenResult = false
@@ -194,9 +197,11 @@ internal fun TestDrive.screenIsCore(
 
     if (isScreenResult.not()) {
 
-        SyncUtility.doUntilTrue(waitSeconds = waitSeconds, refreshCache = true) {
-            TestDriver.fireIrregularHandler(force = true)
+        SyncUtility.doUntilTrue(waitSeconds = waitSeconds, refreshCache = useCache) {
             val r = actionFunc()
+            if (r.not()) {
+                onIrregular?.invoke()
+            }
             r
         }
 
@@ -224,6 +229,7 @@ fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = null,
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -238,7 +244,8 @@ fun TestDrive.screenIsOf(
             screenNames = screenNames,
             waitSeconds = waitSeconds,
             assertMessage = assertMessage,
-            useCache = useCache
+            useCache = useCache,
+            onIrregular = onIrregular
         )
     }
     if (func != null) {
@@ -255,6 +262,7 @@ fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Int,
     useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = null,
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -262,6 +270,7 @@ fun TestDrive.screenIsOf(
         screenNames = screenNames,
         waitSeconds = waitSeconds.toDouble(),
         useCache = useCache,
+        onIrregular = onIrregular,
         func = func
     )
 }
@@ -270,7 +279,8 @@ internal fun TestDrive.screenIsOfCore(
     vararg screenNames: String,
     assertMessage: String,
     waitSeconds: Double,
-    useCache: Boolean = testContext.useCache
+    useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = null
 ) {
     var isScreenResult = false
     var matchedScreenName = ""
@@ -289,8 +299,11 @@ internal fun TestDrive.screenIsOfCore(
 
     if (isScreenResult.not()) {
         SyncUtility.doUntilTrue(waitSeconds = waitSeconds) {
-            TestDriver.fireIrregularHandler()
             checkScreen()
+            if (isScreenResult.not()) {
+                onIrregular?.invoke()
+            }
+            isScreenResult
         }
     }
 

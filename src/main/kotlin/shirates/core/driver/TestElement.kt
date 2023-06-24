@@ -6,11 +6,13 @@ import org.openqa.selenium.WebElement
 import org.w3c.dom.Node
 import shirates.core.configuration.Selector
 import shirates.core.configuration.TestProfile
+import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.utility.element.ElementCategory
 import shirates.core.utility.element.ElementCategoryExpressionUtility
@@ -232,8 +234,8 @@ class TestElement(
             if (isDummy) {
                 return false
             }
-            if (isWebElementMode) {
-                return true
+            if (this.bounds.isIncludedIn(rootBounds).not()) {
+                return false
             }
             if (bounds.area == 0) {
                 return false
@@ -876,5 +878,36 @@ class TestElement(
             return false
         }
         return this.bounds.isOverlapping(container.bounds)
+    }
+
+    /**
+     * getRelative
+     */
+    fun getRelative(
+        safeElementOnly: Boolean = true,
+        scopeElements: List<TestElement>? = null
+    ): TestElement {
+
+        if (selector?.relativeSelectors?.isEmpty() == true) {
+            return lastElement
+        }
+
+        val mr = Measure()
+        try {
+            val scopedElements = scopeElements ?: testDrive.widgets
+
+            var elm = this
+            for (r in selector!!.relativeSelectors) {
+                elm = elm.relative(
+                    relativeSelector = r,
+                    safeElementOnly = safeElementOnly,
+                    scopeElements = scopedElements
+                )
+            }
+            elm.selector = selector
+            return elm
+        } finally {
+            mr.end()
+        }
     }
 }
