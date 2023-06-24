@@ -24,7 +24,7 @@ object ScreenRepository {
 
     val screenInfoSearchList: List<ScreenInfo>
         get() {
-            return screenInfoMap.values.filter { it.searchWeight > 0 }.sortedByDescending { it.searchWeight }
+            return screenInfoMap.values.sortedByDescending { it.searchWeight }
         }
 
     /**

@@ -44,7 +44,7 @@ class ScreenInfoTest : UnitTest() {
         screenInfo.key = "[Screen1]"
         screenInfo.setIdentity("[nickname1][nickname2]")
         // Act, Assert
-        assertThat(screenInfo.toString()).isEqualTo("[Screen1] ([nickname1], [nickname2])")
+        assertThat(screenInfo.toString()).isEqualTo("[Screen1] ([nickname1], [nickname2]), searchWeight=2")
     }
 
     @Test

@@ -2351,7 +2351,7 @@ class Selector_AndroidTest : UnitTest() {
                     // Act, Assert
                     println(sel.getXPathCondition())
                     assertThat(sel.getXPathCondition()).isEqualTo(
-                        "[(contains(@label,'A') or contains(@value,'A') or contains(@label,'B') or contains(@value,'B') or contains(@label,'C') or contains(@value,'C')) and (ends-with(@label,'UVW') or ends-with(@value,'UVW') or ends-with(@label,'XYZ') or ends-with(@value,'XYZ'))]"
+                        "[(contains(@label,'A') or contains(@value,'A') or contains(@label,'B') or contains(@value,'B') or contains(@label,'C') or contains(@value,'C')) and ((normalize-space(substring(@label,string-length(@label)-string-length('UVW')+1))='UVW' or normalize-space(substring(@value,string-length(@value)-string-length('UVW')+1))='UVW') or (normalize-space(substring(@label,string-length(@label)-string-length('XYZ')+1))='XYZ' or normalize-space(substring(@value,string-length(@value)-string-length('XYZ')+1))='XYZ'))]"
                     )
                 }
             }
