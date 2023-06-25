@@ -170,10 +170,16 @@ class LogLineTest : UnitTest() {
     }
 
     @Test
-    fun getHeader() {
+    fun getHeaderForConsole() {
 
-        val header = LogLine.getHeader()
-        assertThat(header).isEqualTo("lineNo\tlogDateTime\ttestCaseId\tlogType\tos\tspecial\tgroup\tmessage\tlevel\tcommand\tsubject\targ1\targ2\tresult")
+        val header = LogLine.getHeaderForConsole()
+        assertThat(header).isEqualTo("lineNo\t[elapsedTime]\tlogDateTime\t{testCaseId}\t[logType]\tdiff(ms)\t(group)\tmessage")
     }
 
+    @Test
+    fun getHeaderForCommandList() {
+
+        val header = LogLine.getHeaderForCommandList()
+        assertThat(header).isEqualTo("lineNo\tlogDateTime\ttestCaseId\tlogType\tos\tspecial\tgroup\tlevel\tcommand\tmessage\tresult\texception")
+    }
 }

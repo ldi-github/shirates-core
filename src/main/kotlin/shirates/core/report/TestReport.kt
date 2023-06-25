@@ -496,7 +496,7 @@ class TestReport(
         sb.append("<td class='logType $logTypeClass $tsClass $tcClass $pClass $cae $result'>$logType</td>")
         sb.append("<td class='command $tsClass $tcClass $pClass $cae' >${a.scriptCommand}</td>")
         sb.append("<td class='$mClass $tsClass $tcClass $pClass $cae' data-filename='${a.fileName}'>${getMessageHtml(a.message)}</td>")
-        sb.append("<td class='timeElapsed $tsClass $tcClass $pClass $cae'>${a.timmeElapsedLabel}</td>")
+        sb.append("<td class='timeElapsed $tsClass $tcClass $pClass $cae'>${a.timeElapsedLabel}</td>")
         sb.append("<td class='screenshot $tsClass $tcClass $pClass $cae'>${a.screenshot}</td>")
         sb.appendLine("</tr>")
     }

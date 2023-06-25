@@ -461,7 +461,7 @@ object TestLog {
 
         try {
             if (Files.exists(monitorLogPath).not()) {
-                val bufferedText = lines.joinToString(Const.NEW_LINE)
+                val bufferedText = LogLine.getHeaderForConsole() + Const.NEW_LINE + lines.joinToString(Const.NEW_LINE)
                 monitorLogPath.toFile().writeText(bufferedText + Const.NEW_LINE)
             } else {
                 monitorLogPath.toFile().appendText(text + Const.NEW_LINE)
@@ -1430,7 +1430,7 @@ object TestLog {
                 sb.appendLine(it.toStringForCommandList())
             }
         } else {
-            sb.appendLine(LogLine.getHeader())
+            sb.appendLine(LogLine.getHeaderForConsole())
             lines.forEach() {
                 sb.appendLine(it.toString())
             }
