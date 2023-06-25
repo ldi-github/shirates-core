@@ -421,10 +421,14 @@ private fun TestDrive.doUntilScrollStopCore(
         val ms = Measure()
         try {
             val scrollInfo = TestDriver.screenInfo.scrollInfo
-            val expressions = when (direction) {
-                ScrollDirection.Down -> scrollInfo.endElements
-                ScrollDirection.Up -> scrollInfo.startElements
-                else -> mutableListOf()
+            val expressions = if (edgeSelector != null) {
+                mutableListOf(edgeSelector)
+            } else {
+                when (direction) {
+                    ScrollDirection.Down -> scrollInfo.endElements
+                    ScrollDirection.Up -> scrollInfo.startElements
+                    else -> mutableListOf()
+                }
             }
             if (edgeElementFound(expressions = expressions)) {
                 return true

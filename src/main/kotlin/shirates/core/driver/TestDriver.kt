@@ -1236,6 +1236,7 @@ object TestDriver {
             actionFunc = actionFunc
         )
 
+        lastElement = e
         if (e.hasError) {
             e.lastResult = LogType.ERROR
             if (throwsException) {
@@ -1243,7 +1244,6 @@ object TestDriver {
             }
         }
 
-        lastElement = e
         return lastElement
     }
 
