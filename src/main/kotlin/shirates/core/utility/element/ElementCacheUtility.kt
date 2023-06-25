@@ -44,20 +44,21 @@ object ElementCacheUtility {
         }
 
         val rootElement = TestElement(node = rootNode)
+        rootElement.cacheRootElement = rootElement
         TestElementCache.sourceXml = source
-        addChildren(element = rootElement)
+        addChildren(element = rootElement, rootElement = rootElement)
 
         return rootElement
     }
 
-    private fun addChildren(element: TestElement) {
+    private fun addChildren(element: TestElement, rootElement: TestElement) {
 
         for (node in element.node!!.children()) {
             if (node.nodeType == Node.ELEMENT_NODE) {
-                val e = TestElement(node = node)
+                val e = TestElement(node = node, cacheRootElement = rootElement)
                 e.parentElement = element
                 element.children.add(e)
-                addChildren(e)
+                addChildren(element = e, rootElement = rootElement)
             }
         }
     }

@@ -604,7 +604,7 @@ fun TestDrive.existInScanResults(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = TestDriver.it
+    val testElement = rootElement
 
     val command = "existInScanResults"
     val sel = getSelector(expression = expression)

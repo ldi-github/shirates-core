@@ -82,9 +82,9 @@ fun TestDrive.screenshot(
  */
 fun TestDrive.getCurrentAppIconName(): String {
     if (isAndroid) {
-        throw NotImplementedError("getCurrentAppIconName function is not supported in Android.")
+        throw NotImplementedError("getCurrentAppIconName function is for iOS. Not supported in Android.")
     } else {
-        val e = TestElementCache.select(".XCUIElementTypeApplication")
+        val e = select(".XCUIElementTypeApplication")
         return e.label
     }
 }

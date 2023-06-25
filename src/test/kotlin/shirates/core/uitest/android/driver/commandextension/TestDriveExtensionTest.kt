@@ -72,7 +72,7 @@ class TestDriveExtensionTest : UITest() {
         assertThatThrownBy {
             it.getCurrentAppIconName()
         }.isInstanceOf(NotImplementedError::class.java)
-            .hasMessage("getCurrentAppIconName function is not supported in Android.")
+            .hasMessage("getCurrentAppIconName function is for iOS. Not supported in Android.")
     }
 
     @Test
@@ -85,7 +85,7 @@ class TestDriveExtensionTest : UITest() {
         assertThatThrownBy {
             it.getCurrentAppName()
         }.isInstanceOf(NotImplementedError::class.java)
-            .hasMessage("getCurrentAppIconName function is not supported in Android.")
+            .hasMessage("getCurrentAppIconName function is for iOS. Not supported in Android.")
     }
 
     @Test

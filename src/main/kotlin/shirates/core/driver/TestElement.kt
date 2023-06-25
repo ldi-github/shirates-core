@@ -28,7 +28,8 @@ class TestElement(
     var lastError: Throwable? = null,
     var lastResult: LogType = LogType.NONE,
     var node: Node? = null,
-    var webElement: WebElement? = null
+    var webElement: WebElement? = null,
+    var cacheRootElement: TestElement? = null
 ) : TestDrive {
 
     private var toStringResult: String? = null

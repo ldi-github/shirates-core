@@ -662,47 +662,49 @@ fun TestDrive.scanElements(
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val lineNo = TestLog.lines.count() + 1
+        useCache {
+            val lineNo = TestLog.lines.count() + 1
 
-        TestElementCache.scanResults.clear()
-        TestDriver.refreshCache()
-        TestElementCache.scanResults.add(
-            ScanRecord(
-                lineNo = lineNo,
-                sourceXml = TestElementCache.sourceXml,
-                element = TestElementCache.rootElement
-            )
-        )
-        TestDriver.autoScreenshot()
-
-        val r = getScrollingInfo(direction = direction, marginRatio = startMarginRatio)
-        if (r.hasError) {
-            TestLog.trace("no scrollable element found.")
-            return@execOperateCommand
-        }
-
-        doUntilScrollStop(
-            repeat = 1,
-            maxLoopCount = maxScrollTimes,
-            direction = direction,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            edgeSelector = endSelector,
-            imageCompare = imageCompare
-        ) {
-            val lastXml = TestElementCache.scanResults.last().sourceXml
-            val thisXml = TestElementCache.sourceXml
-            if (thisXml != lastXml) {
-                TestElementCache.scanResults.add(
-                    ScanRecord(
-                        lineNo = lineNo,
-                        sourceXml = thisXml,
-                        element = rootElement
-                    )
+            TestElementCache.scanResults.clear()
+            TestDriver.refreshCache()
+            TestElementCache.scanResults.add(
+                ScanRecord(
+                    lineNo = lineNo,
+                    sourceXml = TestElementCache.sourceXml,
+                    element = TestElementCache.rootElement
                 )
+            )
+            TestDriver.autoScreenshot()
+
+            val r = getScrollingInfo(direction = direction, marginRatio = startMarginRatio)
+            if (r.hasError) {
+                TestLog.trace("no scrollable element found.")
+                return@useCache
             }
 
-            false
+            doUntilScrollStop(
+                repeat = 1,
+                maxLoopCount = maxScrollTimes,
+                direction = direction,
+                durationSeconds = durationSeconds,
+                startMarginRatio = startMarginRatio,
+                edgeSelector = endSelector,
+                imageCompare = imageCompare
+            ) {
+                val lastXml = TestElementCache.scanResults.last().sourceXml
+                val thisXml = TestElementCache.sourceXml
+                if (thisXml != lastXml) {
+                    TestElementCache.scanResults.add(
+                        ScanRecord(
+                            lineNo = lineNo,
+                            sourceXml = thisXml,
+                            element = rootElement
+                        )
+                    )
+                }
+
+                false
+            }
         }
     }
     TestLog.trace("scanElements completed.(pageCount=${TestElementCache.scanResults.count()})")

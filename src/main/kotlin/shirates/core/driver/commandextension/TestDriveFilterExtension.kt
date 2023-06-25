@@ -4,32 +4,16 @@ import org.openqa.selenium.By
 import shirates.core.driver.*
 
 /**
- * allElements
- */
-fun TestDrive.allElements(
-    useCache: Boolean
-): List<TestElement> {
-
-    if (useCache) {
-        syncCache(force = true)
-        return TestElementCache.allElements
-    }
-
-    val elements = driver.appiumDriver.findElements(By.xpath("//*")).map { TestElement(webElement = it) }
-    return elements
-}
-
-/**
  * filterElements
  */
 fun TestDrive.filterElements(
     expression: String,
-    useCache: Boolean = testContext.useCache
+    useCache: Boolean = testContext.useCache,
+    selectContext: TestElement
 ): List<TestElement> {
 
     if (useCache) {
-//        syncCache(force = true)
-        return TestElementCache.filterElements(expression = expression)
+        return TestElementCache.filterElements(expression = expression, selectContext = selectContext)
     }
 
     val sel = getSelector(expression)
@@ -48,15 +32,34 @@ fun TestDrive.filterElements(
     return results
 }
 
+private fun TestDrive.getSelectContext(): TestElement {
+
+    return getThisOrRootElement().cacheRootElement ?: rootElement
+}
+
+/**
+ * allElements
+ */
+fun TestDrive.allElements(
+    useCache: Boolean
+): List<TestElement> {
+
+    if (useCache) {
+        syncCache(force = true)
+        val selectContext = getSelectContext()
+        return selectContext.descendantsAndSelf
+    }
+
+    val elements = driver.appiumDriver.findElements(By.xpath("//*")).map { TestElement(webElement = it) }
+    return elements
+}
+
 /**
  * elements
  */
 val TestDrive.elements
     get(): List<TestElement> {
-        if (testContext.useCache) {
-            return TestElementCache.allElements
-        }
-        return driver.appiumDriver.findElements(By.xpath("//*")).map { TestElement(webElement = it) }
+        return allElements(useCache = testContext.useCache)
     }
 
 /**
@@ -64,7 +67,8 @@ val TestDrive.elements
  */
 val TestDrive.widgets
     get(): List<TestElement> {
-        return filterElements(".widget")
+        val selectContext = getSelectContext()
+        return filterElements(expression = ".widget", selectContext = selectContext)
     }
 
 /**
@@ -72,7 +76,8 @@ val TestDrive.widgets
  */
 val TestDrive.inputWidgets
     get(): List<TestElement> {
-        return filterElements(".input")
+        val selectContext = getSelectContext()
+        return filterElements(expression = ".input", selectContext = selectContext)
     }
 
 /**
@@ -80,7 +85,8 @@ val TestDrive.inputWidgets
  */
 val TestDrive.labelWidgets
     get(): List<TestElement> {
-        return filterElements(".label")
+        val selectContext = getSelectContext()
+        return filterElements(expression = ".label", selectContext = selectContext)
     }
 
 /**
@@ -88,7 +94,8 @@ val TestDrive.labelWidgets
  */
 val TestDrive.imageWidgets
     get(): List<TestElement> {
-        return filterElements(".image")
+        val selectContext = getSelectContext()
+        return filterElements(expression = ".image", selectContext = selectContext)
     }
 
 /**
@@ -96,7 +103,8 @@ val TestDrive.imageWidgets
  */
 val TestDrive.buttonWidgets
     get(): List<TestElement> {
-        return filterElements(".button")
+        val selectContext = getSelectContext()
+        return filterElements(expression = ".button", selectContext = selectContext)
     }
 
 /**
@@ -104,6 +112,7 @@ val TestDrive.buttonWidgets
  */
 val TestDrive.switchWidgets
     get(): List<TestElement> {
-        return filterElements(".switch")
+        val selectContext = getSelectContext()
+        return filterElements(expression = ".switch", selectContext = selectContext)
     }
 
