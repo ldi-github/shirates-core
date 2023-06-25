@@ -37,6 +37,7 @@ data class LogLine(
     var lastScreenshot: String = "",
     var testClassName: String = "",
     var testMethodName: String = "",
+    var mode: String = "",
     var isInMacro: Boolean = false,
     var isInCheckCommand: Boolean = false,
     var isInSilentCommand: Boolean = false,
@@ -91,7 +92,7 @@ data class LogLine(
 
         val arg1a = arg1.replace("\n", "\\n")
         val arg2a = arg2.replace("\n", "\\n")
-        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]\t$os\t$special\t($commandGroup)\t$message\t$commandLevel\t$scriptCommand\t$subject\t$arg1a\t$arg2a\t$result"
+        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]\t$os\t$special\t$mode\t($commandGroup)\t$message\t$commandLevel\t$scriptCommand\t$subject\t$arg1a\t$arg2a\t$result"
     }
 
     /**
@@ -100,7 +101,7 @@ data class LogLine(
     fun toStringForConsole(): String {
 
         val timeDiff = if (PropertiesManager.enableTimeDiff) "\t+${timeDiffMilliseconds}" else ""
-        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]$timeDiff\t($scriptCommand)\t$message"
+        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]$timeDiff\t$mode\t($scriptCommand)\t$message"
     }
 
     /**

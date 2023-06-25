@@ -335,10 +335,10 @@ class Filter(
         ): Boolean {
 
             val filterValue = selector?.visible ?: "true"
-            when (filterValue) {
-                "*" -> return true
-                "false" -> return element.isVisibleCalculated.not()
-                else -> return element.isVisibleCalculated
+            return when (filterValue) {
+                "*" -> true
+                "false" -> element.isVisibleCalculated.not()
+                else -> element.isVisibleCalculated
             }
         }
 

@@ -61,7 +61,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
         // Act
         val target1 = largestScrollableElement.getScrollableElement()
         // Assert
-        assertThat(target1).isEqualTo(largestScrollableElement)
+        assertThat(target1.toString()).isEqualTo(largestScrollableElement.toString())
 
 
         // Arrange
@@ -69,8 +69,8 @@ class TestDriveScrollExtensionTest1 : UITest() {
         val nonScrollableElement = rootElement
         val target2 = nonScrollableElement.getScrollableElement()
         // Act, Assert
-        assertThat(target2).isNotEqualTo(nonScrollableElement)
-        assertThat(target2).isEqualTo(largestScrollableTarget)
+        assertThat(target2.toString()).isNotEqualTo(nonScrollableElement.toString())
+        assertThat(target2.toString()).isEqualTo(largestScrollableTarget.toString())
     }
 
     @Unstable("[iOS Settings Top Screen] is displayed(currentScreen=, expected identity=[Settings])")

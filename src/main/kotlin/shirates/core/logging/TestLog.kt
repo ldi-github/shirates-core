@@ -4,6 +4,7 @@ import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
+import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.report.TestReport
@@ -502,6 +503,7 @@ object TestLog {
         val lineNumber = lines.count() + 1
         val commandLevel = commandStack.count()
         val commandGroupNo = userCallCommand?.beginLogLine?.commandGroupNo ?: lineNumber
+        val mode = if (testContext.useCache) "C" else "!"
 
         val logLine = LogLine(
             lineNumber = lineNumber,
@@ -518,6 +520,7 @@ object TestLog {
             arg2 = arg2.replace("\n", "\\n"),
             fileName = fileName,
             logType = logType,
+            mode = mode,
             testScenarioId = testScenarioId,
             stepNo = stepNo,
             result = result,

@@ -174,7 +174,7 @@ fun TestElement.getUniqueSelector(): Selector {
         }
     }
 
-    val uniqueXpath = getUniqueXpath().ifBlank { "//*[1]" }
+    val uniqueXpath = getUniqueXpath().ifBlank { "/*[1]" }
     return Selector("xpath=${uniqueXpath}")
 }
 
@@ -193,7 +193,7 @@ fun TestElement.getUniqueXpath(): String {
 
     val tokens = mutableListOf<String>()
     for (key in attrMap.keys) {
-        val value = attrMap[key]
+        val value = attrMap[key]!!.replace("'", "&#039;")   // escape
         tokens.add("@$key='$value'")
     }
 

@@ -82,6 +82,36 @@ fun TestDrive.select(
 }
 
 /**
+ * widget
+ */
+fun TestDrive.widget(
+    expression: String,
+    throwsException: Boolean = true,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    useCache: Boolean = testContext.useCache,
+    safeElementOnly: Boolean = true,
+    log: Boolean = false,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    TestDriver.refreshCurrentScreenWithNickname(expression)
+
+    var sel = getSelector(expression = expression)
+    if (sel.className.isNullOrBlank()) {
+        sel = getSelector(expression = "${sel.expression}&&.widget")
+    }
+    return select(
+        expression = sel.expression!!,
+        throwsException = throwsException,
+        waitSeconds = waitSeconds,
+        useCache = useCache,
+        safeElementOnly = safeElementOnly,
+        log = log,
+        func = func
+    )
+}
+
+/**
  * selectWithScrollDown
  */
 fun TestDrive.selectWithScrollDown(

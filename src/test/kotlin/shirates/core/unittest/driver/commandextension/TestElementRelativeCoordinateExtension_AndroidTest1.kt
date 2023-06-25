@@ -8,6 +8,7 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.testDrive
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 import shirates.core.utility.element.ElementCategoryExpressionUtility
@@ -1712,7 +1713,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest2)
         TestElementCache.synced = true
         ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
-        TestDriver.currentScreen = "[RelativeCoordinateTest2 Screen]"
+        TestDriver.switchScreen("[RelativeCoordinateTest2 Screen]")
 
         /**
          * |FrameLayout1|
@@ -1725,6 +1726,8 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
          *   |CheckBox1-1    |CheckBox1-2    |CheckBox1-3    |
          *   |LinearLayout1-1|LinearLayout1-2|LinearLayout1-3|
          */
+
+        testDrive.enableCache()
 
         run {
             // Arrange

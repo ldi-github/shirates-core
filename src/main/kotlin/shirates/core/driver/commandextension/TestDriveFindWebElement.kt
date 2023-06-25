@@ -46,7 +46,6 @@ private fun TestDrive.findWebElementsCore(
     if (filters.isEmpty()) {
         val list = driver.appiumDriver.findElements(By.xpath("//*"))
             .map { it.toTestElement(selector = selector) }
-            .filter { it.isSafe }
         ms.end()
         return list
     }
@@ -124,9 +123,14 @@ fun TestDrive.findWebElement(
     selector: Selector,
     timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
     throwsException: Boolean = false,
+    safeElementOnly: Boolean = true
 ): TestElement {
 
-    val testElements = findWebElementsCore(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
+    var testElements = findWebElementsCore(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
+    if (safeElementOnly) {
+        TestDriver.screenInfo.refreshOverlayElements()
+        testElements = testElements.filter { it.isSafe }
+    }
     if (testElements.isEmpty() && throwsException) {
         throw TestDriverException("Element not found. (selector=$selector)")
     }
@@ -140,10 +144,15 @@ fun TestDrive.findWebElement(
 fun TestDrive.findWebElement(
     expression: String,
     timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
+    safeElementOnly: Boolean = true
 ): TestElement {
 
     val selector = getSelector(expression = expression)
-    return findWebElement(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
+    return findWebElement(
+        selector = selector,
+        timeoutMilliseconds = timeoutMilliseconds,
+        safeElementOnly = safeElementOnly
+    )
 }
 
 private fun List<WebElement>.filterWebElements(

@@ -1,6 +1,7 @@
 package shirates.core.uitest.ios.driver.commandextension
 
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -128,7 +129,7 @@ class TestDriveAssertionExtensionTest1 : UITest() {
                     }
                     val millisec = sw.elapsedMillis
                     println(millisec)
-                    Assertions.assertThat(millisec >= 1000).isTrue()
+                    assertThat(millisec >= 1000).isTrue()
                 }
             }
             case(3) {
@@ -140,7 +141,7 @@ class TestDriveAssertionExtensionTest1 : UITest() {
                     }
                     val millisec = sw.elapsedMillis
                     println(millisec)
-                    Assertions.assertThat(millisec >= 2000).isTrue()
+                    assertThat(millisec >= 2000).isTrue()
                 }
             }
         }

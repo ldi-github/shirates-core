@@ -55,7 +55,7 @@ class TestElement(
         toStringResult = if (isAndroid) {
             "<$className index='$index' class='$className' resource-id='$id' text='$text' content-desc='$contentDesc' checked='$checked' focusable='$focused' focused='$focused' selected='$selected' scrollable='$scrollable' bounds=$boundsString>"
         } else {
-            "<$type index='$index' type='$type' enabled='$enabled' visible='$visible' name='$name' label='$label' value='$value' visible='$visible' x='$x' y='$y' width='$width' height='$height'>"
+            "<$type index='$index' type='$type' enabled='$enabled' visible='$visible' name='$name' label='$label' value='$value' x='$x' y='$y' width='$width' height='$height'>"
         }
 
         return toStringResult!!
@@ -225,6 +225,27 @@ class TestElement(
         }
 
     /**
+     * ancestorUnderScrollable
+     */
+    val ancestorUnderScrollable: TestElement
+        get() {
+            if (this.isScrollable) {
+                return emptyElement
+            }
+            val list = this.ancestorsAndSelf
+            if (list.count() <= 1) {
+                return emptyElement
+            }
+            val scrollableElement = list.firstOrNull() { it.isScrollable }
+            if (scrollableElement == null) {
+                return emptyElement
+            }
+            val ix = list.indexOf(scrollableElement)
+            val e = list[ix + 1]
+            return e
+        }
+
+    /**
      * isSafe
      */
     val isSafe: Boolean
@@ -235,9 +256,24 @@ class TestElement(
             if (isDummy) {
                 return false
             }
-            if (this.bounds.isIncludedIn(rootBounds).not()) {
-                return false
+            if (isAndroid) {
+                if (this.bounds.isIncludedIn(rootBounds).not()) {
+                    return false
+                }
+            } else {
+                val underScrollable = ancestorUnderScrollable
+                if (underScrollable.isFound && underScrollable.isScrollable.not()) {
+                    val scrollable = underScrollable.parent()
+                    if (underScrollable.bounds.isIncludedIn(scrollable.bounds).not()) {
+                        return false
+                    }
+                } else {
+                    if (this.bounds.isIncludedIn(rootBounds).not()) {
+                        return false
+                    }
+                }
             }
+
             if (bounds.area == 0) {
                 return false
             }
@@ -249,13 +285,9 @@ class TestElement(
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
-                for (overlay in TestDriver.screenInfo.scrollInfo.overlayElements) {
-                    val overlayElement =
-                        TestElementCache.select(expression = overlay, throwsException = false, safeElementOnly = true)
-                    if (overlayElement.isFound) {
-                        if (this.bounds.isOverlapping(overlayElement.bounds)) {
-                            return false
-                        }
+                for (overlayElement in TestDriver.screenInfo.overlayElements) {
+                    if (this.bounds.isOverlapping(overlayElement.bounds)) {
+                        return false
                     }
                 }
             }

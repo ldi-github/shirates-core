@@ -373,8 +373,23 @@ object TestDriver {
             }
         }
         set(value) {
+            val changed = field != value
+            if (changed) {
+                screenInfo.clearCache()
+            }
             field = value
         }
+
+    internal fun getOverlayElements(): MutableList<TestElement> {
+        val list = mutableListOf<TestElement>()
+        for (overlaySelector in screenInfo.scrollInfo.overlayElements) {
+            val o = select(expression = overlaySelector, throwsException = false, safeElementOnly = false)
+            if (o.isFound) {
+                list.add(o)
+            }
+        }
+        return list
+    }
 
     /**
      * expandExpression
@@ -1009,13 +1024,22 @@ object TestDriver {
         if (waitSeconds > 0 && isInitialized) {
             // Search until it is(not) found
             val r = SyncUtility.doUntilTrue(
-                waitSeconds = waitSeconds
+                waitSeconds = waitSeconds,
+                refreshCache = useCache
             ) {
-                val e = TestElementCache.select(
-                    selector = selector,
-                    throwsException = false,
-                    safeElementOnly = safeElementOnly
-                )
+                val e = if (useCache) {
+                    TestElementCache.select(
+                        selector = selector,
+                        throwsException = false,
+                        safeElementOnly = safeElementOnly
+                    )
+                } else {
+                    selectDirect(
+                        selector = selector,
+                        throwsException = false,
+                        safeElementOnly = safeElementOnly
+                    )
+                }
                 selectedElement = e
                 if (selector.isNegation) {
                     e.isEmpty
@@ -1065,7 +1089,7 @@ object TestDriver {
         val ms = Measure()
 
         val e = try {
-            val elm = testDrive.findWebElement(selector = selector)
+            val elm = testDrive.findWebElement(selector = selector, safeElementOnly = safeElementOnly)
             val r = if (selector.relativeSelectors.any()) {
                 elm.getRelative(safeElementOnly = safeElementOnly, scopeElements = testDrive.widgets)
             } else {
@@ -1484,8 +1508,8 @@ object TestDriver {
         val ms = Measure()
 
         val originalScreen = currentScreen
-        currentScreen = "?"
 
+        var newScreen = "?"
         for (i in 0 until screenInfoList.count()) {
             val screenInfo = screenInfoList[i]
             val screenName = screenInfo.key
@@ -1499,13 +1523,15 @@ object TestDriver {
 
             val match = isScreen(screenName = screenName)
             if (match) {
-                currentScreen = screenName
+                newScreen = screenName
                 break
             }
         }
-        val changed = currentScreen != originalScreen
-        if (changed && log) {
-            TestLog.info("currentScreen=$currentScreen")
+        currentScreen = newScreen
+        val changed = newScreen != originalScreen
+        if (changed) {
+            screenInfo.refreshOverlayElements()
+            TestLog.info("currentScreen=$currentScreen", log = log)
         }
 
         ms.end()
@@ -1522,11 +1548,9 @@ object TestDriver {
 
         if (expression.isValidNickname()) {
             val nickname = expression
-            if (screenInfo.selectors.containsKey(nickname).not()) {
-                val screenCandidates = ScreenRepository.nicknameIndex[nickname]
-                if (screenCandidates != null) {
-                    refreshCurrentScreen(screenCandidates)
-                }
+            val screenCandidates = ScreenRepository.nicknameIndex[nickname]
+            if (screenCandidates != null) {
+                refreshCurrentScreen(screenCandidates)
             }
         }
         ms.end()
@@ -1787,7 +1811,7 @@ object TestDriver {
             val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             if (isAndroid) {
                 if (testContext.useCache.not()) {
-                    rootElement = testDrive.findWebElement("xpath=//*[1]")
+                    rootElement = testDrive.findWebElement("xpath=/*[1]", safeElementOnly = false)
                 }
                 return rootElement.packageName == packageOrBundleId
             }
@@ -1801,7 +1825,7 @@ object TestDriver {
             if (testContext.useCache) {
                 syncCache()
             } else {
-                rootElement = testDrive.findWebElement("xpath=//*[1]")
+                rootElement = testDrive.findWebElement("xpath=/*[1]", safeElementOnly = false)
             }
             return rootElement.name == appName
         } catch (t: Throwable) {

@@ -6,6 +6,7 @@ import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
 import shirates.core.driver.commandextension.select
+import shirates.core.driver.commandextension.widget
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 
@@ -42,4 +43,18 @@ class AdHocTestIos : UITest() {
         }
     }
 
+    @DisableCache
+    @Test
+    @Order(20)
+    fun select2() {
+
+        run {
+            val e = it.select("General")
+            e.printInfo()
+        }
+        run {
+            val e = it.widget("General")
+            e.printInfo()
+        }
+    }
 }

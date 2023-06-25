@@ -1,10 +1,14 @@
 {
   "key": "[RelativeCoordinateTest2 Screen]",
 
-  "identity": "",
+  "identity": "[CheckBox1-3]",
 
   "include": [
     "[RelativeCoordinateTest Screen]"
-  ]
+  ],
+
+  "selectors": {
+    "[CheckBox1-3]": "#CheckBox1-3"
+  }
 
 }

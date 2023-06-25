@@ -1,6 +1,7 @@
 package shirates.core.uitest.android.driver.commandextension
 
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
@@ -132,7 +133,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 }.expectation {
                     it.textIs("Battery")
 
-                    Assertions.assertThat(it.hasError).isFalse()
+                    assertThat(it.hasError).isFalse()
                     Assertions.assertThatThrownBy {
                         it.textIs("Battery？")
                     }.isInstanceOf(TestNGException::class.java).hasMessageContaining(
@@ -158,7 +159,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                         .select("#search_action_bar")
                 }.expectation {
                     it.textIsEmpty()
-                    Assertions.assertThat(it.hasError).isFalse()
+                    assertThat(it.hasError).isFalse()
 
                     Assertions.assertThatThrownBy {
                         val e2 = it.select("#search_action_bar_title")

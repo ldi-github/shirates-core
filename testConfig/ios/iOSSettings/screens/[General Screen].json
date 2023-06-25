@@ -9,6 +9,7 @@
   "selectors": {
     "[<Settings]": "Settings&&.XCUIElementTypeButton",
     "[General]": "",
+    "[NavigationBar]": ".XCUIElementTypeNavigationBar",
 
     "[About]": "",
     "[Keyboard]": "",
@@ -18,6 +19,10 @@
     "[Dictionary]": "",
     "[Reset]": ""
   },
-  "default": "[<Settings]"
+  "default": "[<Settings]",
+
+  "scroll": {
+    "overlay-elements": "[NavigationBar]"
+  }
 
 }

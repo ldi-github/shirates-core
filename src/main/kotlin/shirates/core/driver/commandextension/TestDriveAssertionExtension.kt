@@ -613,25 +613,26 @@ fun TestDrive.existInScanResults(
 
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
+        useCache {
+            for (scanResult in TestElementCache.scanResults) {
+                TestLog.trace("from [scanResults]")
 
-        for (scanResult in TestElementCache.scanResults) {
-            TestLog.trace("from [scanResults]")
-
-            e = scanResult.element.findInDescendantsAndSelf(selector = sel, safeElementOnly = safeElementOnly)
-            if (e.isEmpty.not()) {
-                TestLog.trace("found in scanResults")
-                break
+                e = scanResult.element.findInDescendantsAndSelf(selector = sel, safeElementOnly = safeElementOnly)
+                if (e.isEmpty.not()) {
+                    TestLog.trace("found in scanResults")
+                    break
+                }
             }
-        }
 
-        TestDriver.postProcessForAssertion(
-            selectResult = e,
-            assertMessage = assertMessage,
-            dontExist = false
-        )
+            TestDriver.postProcessForAssertion(
+                selectResult = e,
+                assertMessage = assertMessage,
+                dontExist = false
+            )
 
-        if (e.hasError && throwsException) {
-            throw e.lastError!!
+            if (e.hasError && throwsException) {
+                throw e.lastError!!
+            }
         }
     }
     if (func != null) {
