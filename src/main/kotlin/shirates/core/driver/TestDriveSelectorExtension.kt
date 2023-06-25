@@ -6,8 +6,7 @@ import shirates.core.driver.commandextension.getChainedSelector
 
 fun TestDrive.getSelector(expression: String): Selector {
 
-    val screenInfo = TestDriver.screenInfo
-    val sel = screenInfo.expandExpression(expression = expression)
+    val sel = TestDriver.screenInfo.expandExpression(expression = expression)
     val newSel = sel.copy()
     if (newSel.isRelative.not()) {
         return newSel

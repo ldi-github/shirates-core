@@ -400,6 +400,8 @@ fun TestDrive.exist(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
+    TestDriver.refreshCurrentScreenWithNickname(expression)
+
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
 

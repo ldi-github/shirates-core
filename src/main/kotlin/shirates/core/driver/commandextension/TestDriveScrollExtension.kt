@@ -365,18 +365,19 @@ fun TestDrive.doUntilScrollStop(
 ): TestElement {
 
     val ms = Measure()
+
     try {
         return doUntilScrollStopCore(
-            scrollFunc,
-            direction,
-            durationSeconds,
-            startMarginRatio,
-            imageCompare,
-            edgeSelector,
-            actionFunc,
-            maxLoopCount,
-            repeat,
-            intervalSeconds
+            scrollFunc = scrollFunc,
+            direction = direction,
+            durationSeconds = durationSeconds,
+            startMarginRatio = startMarginRatio,
+            imageCompare = imageCompare,
+            edgeSelector = edgeSelector,
+            actionFunc = actionFunc,
+            maxLoopCount = maxLoopCount,
+            repeat = repeat,
+            intervalSeconds = intervalSeconds
         )
     } finally {
         ms.end()
@@ -419,13 +420,13 @@ private fun TestDrive.doUntilScrollStopCore(
 
         val ms = Measure()
         try {
-            if (edgeSelector != null) {
-                val result = edgeElementFound(mutableListOf(edgeSelector))
-                return result
+            val scrollInfo = TestDriver.screenInfo.scrollInfo
+            val expressions = when (direction) {
+                ScrollDirection.Down -> scrollInfo.endElements
+                ScrollDirection.Up -> scrollInfo.startElements
+                else -> mutableListOf()
             }
-
-            val endElements = TestDriver.screenInfo.scrollInfo.endElements.toMutableList()
-            if (edgeElementFound(endElements)) {
+            if (edgeElementFound(expressions = expressions)) {
                 return true
             }
 

@@ -396,6 +396,7 @@ object TestDriver {
     val screenInfo: ScreenInfo
         get() {
             return if (ScreenRepository.has(currentScreen)) ScreenRepository.get(currentScreen)
+            else if (ScreenRepository.has("[screen-base]")) ScreenRepository.getScreenInfo("[screen-base]")
             else ScreenInfo()
         }
 
@@ -1220,80 +1221,9 @@ object TestDriver {
         throwsException: Boolean = true
     ): TestElement {
 
-        if (testContext.useCache) {
-            lastElement = selectWithScrollInCacheMode(
-                selector = selector,
-                direction = direction,
-                durationSeconds = durationSeconds,
-                startMarginRatio = startMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-            )
-        } else {
-            lastElement = selectWithScrollInWebElementMode(
-                selector = selector,
-                direction = direction,
-                durationSeconds = durationSeconds,
-                startMarginRatio = startMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-            )
-        }
-
-        if (lastElement.hasError) {
-            lastElement.lastResult = LogType.ERROR
-            if (throwsException) {
-                throw lastElement.lastError!!
-            }
-        }
-
-        return lastElement
-    }
-
-    private fun selectWithScrollInCacheMode(
-        selector: Selector,
-        direction: ScrollDirection,
-        durationSeconds: Double,
-        startMarginRatio: Double,
-        scrollMaxCount: Int,
-        safeElementOnly: Boolean = true,
-    ): TestElement {
-
         var e = TestElement()
         val actionFunc = {
-            e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
-            if (safeElementOnly)
-                e.isSafe
-            else
-                e.isFound
-        }
-
-        testDrive.doUntilScrollStop(
-            repeat = 1,
-            maxLoopCount = scrollMaxCount,
-            direction = direction,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            actionFunc = actionFunc
-        )
-
-        return e
-    }
-
-    private fun selectWithScrollInWebElementMode(
-        selector: Selector,
-        direction: ScrollDirection,
-        durationSeconds: Double,
-        startMarginRatio: Double,
-        scrollMaxCount: Int,
-    ): TestElement {
-
-        var e = testDrive.findWebElement(selector = selector)
-        if (e.isSafe) {
-            lastElement = e
-            return lastElement
-        }
-
-        val actionFunc = {
-            e = testDrive.findWebElement(selector = selector)
+            e = select(selector = selector, throwsException = false, safeElementOnly = true)
             e.isSafe
         }
 
@@ -1306,12 +1236,15 @@ object TestDriver {
             actionFunc = actionFunc
         )
 
-        if (e.isEmpty) {
-            // Try select after scroll stops
-            e = testDrive.findWebElement(selector = selector)
+        if (e.hasError) {
+            e.lastResult = LogType.ERROR
+            if (throwsException) {
+                throw e.lastError!!
+            }
         }
 
-        return e
+        lastElement = e
+        return lastElement
     }
 
     /**
