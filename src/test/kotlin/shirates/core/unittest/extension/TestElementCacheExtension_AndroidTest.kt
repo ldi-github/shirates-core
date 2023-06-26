@@ -1,11 +1,15 @@
 package shirates.core.unittest.extension
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.ScreenInfo
-import shirates.core.driver.*
+import shirates.core.driver.TestElement
+import shirates.core.driver.TestElementCache
+import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.findInDescendantsAndSelf
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 import shirates.core.utility.element.ElementCacheUtility
@@ -294,10 +298,11 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
 
         // xpath
         run {
-            // Act
-            val e = rootElement.findInDescendantsAndSelf("xpath=//*[@content-desc='Navigate up']")
-            // Assert
-            assertThat(e.contentDesc).isEqualTo("Navigate up")
+            // Act, Assert
+            assertThatThrownBy {
+                val e = rootElement.findInDescendantsAndSelf("xpath=//*[@content-desc='Navigate up']")
+            }.isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("Unsupported noun with evaluate function. (noun=xpath)")
         }
 
         // focusable

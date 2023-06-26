@@ -8,7 +8,6 @@ import shirates.core.driver.TestElementCache
 import shirates.core.driver.branchextension.emulator
 import shirates.core.driver.branchextension.realDevice
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.descendants
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 

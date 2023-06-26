@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
-import shirates.core.driver.ancestors
 import shirates.core.driver.commandextension.relative
 import shirates.core.driver.commandextension.select
 import shirates.core.testcode.UnitTest

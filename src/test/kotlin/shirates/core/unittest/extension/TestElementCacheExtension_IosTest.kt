@@ -1,6 +1,7 @@
 package shirates.core.unittest.extension
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.ScreenInfo
@@ -357,10 +358,11 @@ class TestElementCacheExtension_IosTest : UnitTest() {
 
         // xpath
         run {
-            // Act
-            val e = rootElement.findInDescendantsAndSelf("xpath=//*[@type='XCUIElementTypeNavigationBar']")
-            // Assert
-            assertThat(e.name).isEqualTo("Settings")
+            // Act, Assert
+            assertThatThrownBy {
+                val e = rootElement.findInDescendantsAndSelf("xpath=//*[@type='XCUIElementTypeNavigationBar']")
+            }.isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("Unsupported noun with evaluate function. (noun=xpath)")
         }
 
         // focusable(for Android)

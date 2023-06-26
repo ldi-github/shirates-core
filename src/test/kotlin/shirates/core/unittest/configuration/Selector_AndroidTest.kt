@@ -2466,6 +2466,23 @@ class Selector_AndroidTest : UnitTest() {
                     assertThat(sel.getXPathCondition("package1")).isEqualTo("")
                 }
             }
+            run {
+                // Arrange
+                val sel = Selector("literal=LITERAL")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getXPathCondition("package1"))
+                    assertThat(sel.getXPathCondition("package1"))
+                        .isEqualTo("[@text='LITERAL']")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getXPathCondition())
+                    assertThat(sel.getXPathCondition())
+                        .isEqualTo("[@label='LITERAL' or @value='LITERAL']")
+                }
+            }
         }
     }
 

@@ -2,8 +2,6 @@ package shirates.core.utility.element
 
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.ancestors
-import shirates.core.driver.ancestorsAndSelf
 
 /**
  * ElementVisibilityUtility

@@ -851,6 +851,7 @@ class Selector(
     private fun addXpathFunctionsForAndroid(list: MutableList<String>, packageName: String) {
 
         list.addFunction("@text=%s", text)
+        list.addFunction("@text=%s", literal)
         list.addFunction("starts-with(@text,%s)", textStartsWith)
         list.addFunction("contains(@text,%s)", textContains)
         list.addFunction("ends-with(@text,%s)", textEndsWith)
@@ -884,6 +885,13 @@ class Selector(
             }
         } else {
             list.addFunction("@label=%s or @value=%s", text)
+        }
+        if (literal != null && literal!!.contains("\n")) {
+            for (t in literal!!.split("\n")) {
+                list.addFunction("contains(@label,%s) or contains(@value,%s)", t)
+            }
+        } else {
+            list.addFunction("@label=%s or @value=%s", literal)
         }
 
         fun getEndsWith(attrName: String): String {

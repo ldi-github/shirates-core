@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.descendants
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import utility.handleIrregulars

@@ -414,7 +414,7 @@ class Filter(
             "ignoreTypes" ->
                 evaluateIgnoreTypes(classOrType = stringValue)
 
-            else -> throw IllegalArgumentException("Unsupported noun with evaluate function. (noun=$noun)")
+            else -> throw IllegalArgumentException("Unsupported noun with evaluate function. (noun=$noun, stringValue=$stringValue)")
         }
     }
 

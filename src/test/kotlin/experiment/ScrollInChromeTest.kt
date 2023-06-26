@@ -6,7 +6,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
 import shirates.core.driver.branchextension.ifTrue
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.descendants
 import shirates.core.driver.wait
 import shirates.core.testcode.UITest
 

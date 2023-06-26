@@ -2,7 +2,6 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElement
-import shirates.core.driver.descendants
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 internal fun TestElement.innerFlow(

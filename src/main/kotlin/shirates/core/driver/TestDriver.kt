@@ -869,12 +869,7 @@ object TestDriver {
                 }
 
                 if (lastElement.selector != null) {
-                    val e =
-                        rootElement.findInDescendantsAndSelf(selector = lastElement.selector!!, safeElementOnly = true)
-                    e.lastError = lastElement.lastError
-                    if (e.isEmpty.not()) {
-                        lastElement = e
-                    }
+                    lastElement = lastElement.refreshLastElement()
                 } else {
                     lastElement = rootElement
                 }
@@ -1811,7 +1806,7 @@ object TestDriver {
             val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             if (isAndroid) {
                 if (testContext.useCache.not()) {
-                    rootElement = testDrive.findWebElement("xpath=/*[1]", safeElementOnly = false)
+                    rootElement = select("xpath=/*[1]", safeElementOnly = false)
                 }
                 return rootElement.packageName == packageOrBundleId
             }
@@ -1825,7 +1820,7 @@ object TestDriver {
             if (testContext.useCache) {
                 syncCache()
             } else {
-                rootElement = testDrive.findWebElement("xpath=/*[1]", safeElementOnly = false)
+                rootElement = select("xpath=/*[1]", safeElementOnly = false)
             }
             return rootElement.name == appName
         } catch (t: Throwable) {

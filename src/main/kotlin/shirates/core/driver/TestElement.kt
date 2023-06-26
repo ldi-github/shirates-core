@@ -75,11 +75,6 @@ class TestElement(
     }
 
     /**
-     * descendantsCache
-     */
-    internal var descendantsCache: MutableList<TestElement>? = null
-
-    /**
      * isWebElementMode
      */
     val isWebElementMode: Boolean
@@ -112,21 +107,152 @@ class TestElement(
      * parentElement
      */
     var parentElement: TestElement? = null
+        get() {
+            if (isCacheMode) {
+                return field
+            }
+
+            if (field != null) {
+                return field
+            }
+            if (this.isEmpty) {
+                return null
+            }
+            val xpath = this.getUniqueXpath() + "/parent::*[1]"
+            field = driver.appiumDriver.findElement(By.xpath(xpath)).toTestElement()
+            return field
+        }
 
     /**
      * children
      */
     var children: MutableList<TestElement> = mutableListOf()
         get() {
-            return if (isCacheMode) {
-                field
-            } else {
-                val xpath = this.getUniqueXpath() + "/child::*"
-                driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
-                    .toMutableList()
+            if (isCacheMode) {
+                return field
             }
+
+            val xpath = this.getUniqueXpath() + "/child::*"
+            field = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+                .toMutableList()
+            return field
         }
         private set
+
+    private var ancestorsCache: MutableList<TestElement>? = null
+
+    /**
+     * ancestors
+     */
+    val ancestors: List<TestElement>
+        get() {
+            if (this.isEmpty) {
+                return mutableListOf()
+            }
+            if (ancestorsCache != null) {
+                return ancestorsCache!!
+            }
+
+            if (isCacheMode) {
+                val list = mutableListOf<TestElement>()
+                getAncestors(this, list)
+                ancestorsCache = list
+                return ancestorsCache!!
+            }
+
+            val xpath = this.getUniqueXpath() + "/ancestor::*"
+            ancestorsCache = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+                .toMutableList()
+            return ancestorsCache!!
+        }
+
+    private fun getAncestors(element: TestElement, list: MutableList<TestElement>) {
+
+        val p = element.parentElement ?: return
+
+        list.add(0, p)
+        getAncestors(p, list)
+    }
+
+    /**
+     * ancestorsAndSelf
+     */
+    val ancestorsAndSelf: List<TestElement>
+        get() {
+            val list = ancestors.toMutableList()
+            list.add(this)
+            return list
+        }
+
+    private var descendantsCache: MutableList<TestElement>? = null
+
+    /**
+     * descendants
+     */
+    val descendants: List<TestElement>
+        get() {
+            if (this.isEmpty) {
+                return mutableListOf()
+            }
+            if (descendantsCache != null) {
+                return descendantsCache!!
+            }
+
+            if (isCacheMode) {
+                val list = mutableListOf<TestElement>()
+                getDecendants(this, list)
+                descendantsCache = list
+                return descendantsCache!!
+            }
+
+            val xpath = this.getUniqueXpath() + "/descendant::*"
+            descendantsCache = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+                .toMutableList()
+            return descendantsCache!!
+        }
+
+    private fun getDecendants(element: TestElement, list: MutableList<TestElement>) {
+
+        for (c in element.children) {
+            list.add(c)
+            getDecendants(c, list)
+        }
+    }
+
+    /**
+     * descendantsAndSelf
+     */
+    val descendantsAndSelf: List<TestElement>
+        get() {
+            val list = descendants.toMutableList()
+            list.add(0, this)
+            return list
+        }
+
+    private var siblingsCache: MutableList<TestElement>? = null
+
+    /**
+     * siblings
+     */
+    val siblings: List<TestElement>
+        get() {
+            if (this.isEmpty) {
+                return mutableListOf()
+            }
+            if (siblingsCache != null) {
+                return siblingsCache!!
+            }
+
+            if (isCacheMode) {
+                siblingsCache = parentElement?.children ?: mutableListOf()
+                return siblingsCache!!
+            }
+
+            val xpath = this.getUniqueXpath() + "/parent::*[1]/child::*"
+            siblingsCache = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+                .toMutableList()
+            return siblingsCache!!
+        }
 
     /**
      * hasError
@@ -681,8 +807,8 @@ class TestElement(
      */
     fun getAttribute(name: String): String {
 
-        if (node == null) {
-            return ""
+        if (webElement != null) {
+            return webElement!!.getAttribute(name)
         }
         return node?.getAttribute(name) ?: ""
     }

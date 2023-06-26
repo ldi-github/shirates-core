@@ -138,7 +138,7 @@ class FilterTest : UnitTest() {
             assertThatThrownBy {
                 f.evaluate("")
             }.isInstanceOf(java.lang.IllegalArgumentException::class.java)
-                .hasMessage("Unsupported noun with evaluate function. (noun=)")
+                .hasMessage("Unsupported noun with evaluate function. (noun=, stringValue=)")
         }
         run {
             // Arrange
@@ -148,7 +148,7 @@ class FilterTest : UnitTest() {
             assertThatThrownBy {
                 f.evaluate("2")
             }.isInstanceOf(java.lang.IllegalArgumentException::class.java)
-                .hasMessage("Unsupported noun with evaluate function. (noun=pos)")
+                .hasMessage("Unsupported noun with evaluate function. (noun=pos, stringValue=2)")
         }
         run {
             // Arrange

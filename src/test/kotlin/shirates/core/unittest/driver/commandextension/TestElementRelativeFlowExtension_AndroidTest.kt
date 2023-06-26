@@ -7,7 +7,6 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.descendants
 import shirates.core.driver.rootElement
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
