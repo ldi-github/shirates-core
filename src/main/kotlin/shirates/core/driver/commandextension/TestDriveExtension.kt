@@ -133,14 +133,16 @@ fun TestDrive.isApp(
 /**
  * tapDefault
  */
-fun TestDrive.tapDefault(): TestElement {
+fun TestDrive.tapDefault(
+    safeElementOnly: Boolean = false
+): TestElement {
 
     val default = TestDriver.screenInfo.default
     if (default.isBlank()) {
         return lastElement
     }
 
-    tap(default)
+    tap(expression = default, safeElementOnly = safeElementOnly)
 
     return lastElement
 }

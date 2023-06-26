@@ -164,7 +164,8 @@ fun TestDrive.tap(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    handleIrregular: Boolean = true
+    handleIrregular: Boolean = true,
+    safeElementOnly: Boolean = true,
 ): TestElement {
 
     val testElement = refreshLastElement()
@@ -177,7 +178,7 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = it.select(expression = expression, safeElementOnly = true)
+        val targetElement = it.select(expression = expression, safeElementOnly = safeElementOnly)
         val tapFunc = {
             silent {
                 e = targetElement.tap(holdSeconds = holdSeconds, tapMethod = tapMethod)
