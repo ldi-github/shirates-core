@@ -3,7 +3,6 @@ package shirates.core.uitest.android.basic.driver
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.opentest4j.TestAbortedException
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
@@ -44,21 +43,23 @@ class TestDriverCreateOrReuseTest : UITest() {
     @Order(20)
     fun sameConfig_sameProfile_resuse() {
 
-        TestMode.runAsAndroid {
-            if (TestLog.enableTrace.not()) {
-                throw TestAbortedException("enableTrace disabled. skipping test.")
+        val original = TestLog.enableTrace
+        try {
+            TestLog.enableTrace = true
+            TestMode.runAsAndroid {
+                assertLineCount(0, "Reusing AppiumDriver session.")
+
+                // Arrange
+                val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
+                val prof = "profile1"
+                // Act
+                setupFromConfig(conf, prof)
+                // Assert
+                assertLineCount(1, "Setting up test context.")
+                assertLineCount(1, "Reusing AppiumDriver session.")
             }
-
-            assertLineCount(0, "Reusing AppiumDriver session.")
-
-            // Arrange
-            val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
-            val prof = "profile1"
-            // Act
-            setupFromConfig(conf, prof)
-            // Assert
-            assertLineCount(1, "Setting up test context.")
-            assertLineCount(1, "Reusing AppiumDriver session.")
+        } finally {
+            TestLog.enableTrace = original
         }
     }
 
@@ -66,19 +67,21 @@ class TestDriverCreateOrReuseTest : UITest() {
     @Order(30)
     fun sameConfig_anotherProfile_recreate() {
 
-        TestMode.runAsAndroid {
-            if (TestLog.enableTrace.not()) {
-                throw TestAbortedException("enableTrace disabled. skipping test.")
+        val original = TestLog.enableTrace
+        try {
+            TestLog.enableTrace = true
+            TestMode.runAsAndroid {
+                // Arrange
+                val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
+                val prof = "profile2"
+                // Act
+                setupFromConfig(conf, prof)
+                // Assert
+                assertLineCount(2, "Setting up test context.")
+                assertLineCount(1, "Reusing AppiumDriver session.")
             }
-
-            // Arrange
-            val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
-            val prof = "profile2"
-            // Act
-            setupFromConfig(conf, prof)
-            // Assert
-            assertLineCount(2, "Setting up test context.")
-            assertLineCount(1, "Reusing AppiumDriver session.")
+        } finally {
+            TestLog.enableTrace = original
         }
     }
 
@@ -86,19 +89,21 @@ class TestDriverCreateOrReuseTest : UITest() {
     @Order(40)
     fun anotherConfig_sameProfile_recreate() {
 
-        TestMode.runAsAndroid {
-            if (TestLog.enableTrace.not()) {
-                throw TestAbortedException("enableTrace disabled. skipping test.")
+        val original = TestLog.enableTrace
+        try {
+            TestLog.enableTrace = true
+            TestMode.runAsAndroid {
+                // Arrange
+                val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData2.json"
+                val prof = "profile2"
+                // Act
+                setupFromConfig(conf, prof)
+                // Assert
+                assertLineCount(3, "Setting up test context.")
+                assertLineCount(1, "Reusing AppiumDriver session.")
             }
-
-            // Arrange
-            val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData2.json"
-            val prof = "profile2"
-            // Act
-            setupFromConfig(conf, prof)
-            // Assert
-            assertLineCount(3, "Setting up test context.")
-            assertLineCount(1, "Reusing AppiumDriver session.")
+        } finally {
+            TestLog.enableTrace = original
         }
     }
 }

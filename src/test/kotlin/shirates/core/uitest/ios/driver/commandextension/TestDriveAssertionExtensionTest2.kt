@@ -1,7 +1,7 @@
 package shirates.core.uitest.ios.driver.commandextension
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -58,7 +58,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                 }.expectation {
                     it.existInScanResults("Developer")
 
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.existInScanResults("no exist")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
@@ -90,7 +90,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                     // Arrange
                     val sw = StopWatch()
                     // Act, Assert
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         sw.start()
                         it.existAll(
                             "Settings",
@@ -110,7 +110,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
             case(3) {
                 expectation {
                     val sw = StopWatch()
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         sw.start()
                         it.existAll(
                             "Settings",
@@ -154,7 +154,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                 condition {
                     it.scrollToTop()
                 }.expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.existAllWithScrollDown(
                             "Settings",
                             "General",

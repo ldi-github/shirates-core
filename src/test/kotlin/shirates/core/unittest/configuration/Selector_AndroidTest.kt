@@ -1315,17 +1315,30 @@ class Selector_AndroidTest : UnitTest() {
 
     @Test
     fun init_expression_xpath() {
-        // Arrange, Act
-        val sel = Selector("xpath=xpath1", nickname = "[nickname1]")
-        // Assert
-        assertThat(sel.expression).isEqualTo("xpath=xpath1")
-        assertThat(sel.nickname).isEqualTo("[nickname1]")
-        assertThat(sel.toString()).isEqualTo("[nickname1]")
-        assertThat(sel.filterMap.count()).isEqualTo(1)
-        assertThat(sel.xpath).isEqualTo("xpath1")
-        assertThat(sel.getElementExpression()).isEqualTo("<xpath=xpath1>")
-        assertThat(sel.getElementFriendlyExpression()).isEqualTo("[nickname1]")
-        assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        run {
+            // Arrange, Act
+            val sel = Selector("xpath=xpath1", nickname = "[nickname1]")
+            // Assert
+            assertThat(sel.expression).isEqualTo("xpath=xpath1")
+            assertThat(sel.nickname).isEqualTo("[nickname1]")
+            assertThat(sel.toString()).isEqualTo("[nickname1]")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.xpath).isEqualTo("xpath1")
+            assertThat(sel.getElementExpression()).isEqualTo("<xpath=xpath1>")
+            assertThat(sel.getElementFriendlyExpression()).isEqualTo("[nickname1]")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+        run {
+            val sel = Selector("<xpath=//*[@text='Title1']/descendant::*[@text='Settings']>:next")
+            assertThat(sel.originalExpression).isEqualTo("<xpath=//*[@text='Title1']/descendant::*[@text='Settings']>:next")
+            assertThat(sel.expression).isEqualTo("<xpath=//*[@text='Title1']/descendant::*[@text='Settings']>:next")
+        }
+        run {
+            val expression =
+                "xpath=//*[@type='XCUIElementTypeNavigationBar']/descendant::*[(@label='Settings' or @value='Settings') and @type='XCUIElementTypeStaticText']/following::*"
+            val sel = Selector(expression)
+            assertThat(sel.originalExpression).isEqualTo(expression)
+        }
     }
 
     @Test
@@ -2275,215 +2288,587 @@ class Selector_AndroidTest : UnitTest() {
     @Test
     fun getXPathCondition() {
 
-        TestMode.runAsAndroid {
+        run {
+            // Arrange
+            val sel = Selector("A\nB\nC")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo("[@text='A\nB\nC']")
+            }
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getXPathCondition())
+                assertThat(sel.getXPathCondition()).isEqualTo(
+                    "[(contains(@label,'A') or contains(@value,'A')) and (contains(@label,'B') or contains(@value,'B')) and (contains(@label,'C') or contains(@value,'C'))]"
+                )
+            }
+
+        }
+        run {
+            // Arrange
+            val sel = Selector("text=(a|b|c)")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[@text='a' or @text='b' or @text='c']"
+                )
+            }
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getXPathCondition())
+                assertThat(sel.getXPathCondition()).isEqualTo(
+                    "[@label='a' or @value='a' or @label='b' or @value='b' or @label='c' or @value='c']"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("(a|b|c)&&textStartsWith=(ABC|DEF)")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[(@text='a' or @text='b' or @text='c') and (starts-with(@text,'ABC') or starts-with(@text,'DEF'))]"
+                )
+            }
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getXPathCondition())
+                assertThat(sel.getXPathCondition()).isEqualTo(
+                    "[(@label='a' or @value='a' or @label='b' or @value='b' or @label='c' or @value='c') and (starts-with(@label,'ABC') or starts-with(@value,'ABC') or starts-with(@label,'DEF') or starts-with(@value,'DEF'))]"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("textContains=(A|B|C)&&textEndsWith=(UVW|XYZ)")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[(contains(@text,'A') or contains(@text,'B') or contains(@text,'C')) and (ends-with(@text,'UVW') or ends-with(@text,'XYZ'))]"
+                )
+            }
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getXPathCondition())
+                assertThat(sel.getXPathCondition()).isEqualTo(
+                    "[(contains(@label,'A') or contains(@value,'A') or contains(@label,'B') or contains(@value,'B') or contains(@label,'C') or contains(@value,'C')) and ((normalize-space(substring(@label,string-length(@label)-string-length('UVW')+1))='UVW' or normalize-space(substring(@value,string-length(@value)-string-length('UVW')+1))='UVW') or (normalize-space(substring(@label,string-length(@label)-string-length('XYZ')+1))='XYZ' or normalize-space(substring(@value,string-length(@value)-string-length('XYZ')+1))='XYZ'))]"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("textMatches=^A.*Z$&&id=(id1|id2)")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[matches(@text,'^A.*Z\$') and (@resource-id='package1:id/id1' or @resource-id='package1:id/id2')]"
+                )
+            }
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getXPathCondition())
+                assertThat(sel.getXPathCondition()).isEqualTo(
+                    "[(matches(@label,'^A.*Z\$') or matches(@value,'^A.*Z\$')) and (@name='id1' or @name='id2')]"
+                )
+            }
+        }
+        run {
+
+            TestMode.runAsAndroid {
+                // Arrange
+                val sel = Selector("access=(a1|a2)&&className=(c1|c2|c3)&&focusable=true&&scrollable=false")
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[(@content-desc='a1' or @content-desc='a2') and (@class='c1' or @class='c2' or @class='c3') and @focusable='true' and @scrollable='false']"
+                )
+            }
+
+            TestMode.runAsIos {
+                // Arrange
+                val sel = Selector("className=(c1|c2|c3)")
+                // Act, Assert
+                println(sel.getXPathCondition())
+                assertThat(sel.getXPathCondition()).isEqualTo(
+                    "[@type='c1' or @type='c2' or @type='c3']"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector(".(c1|c2|c3)")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[@class='c1' or @class='c2' or @class='c3']"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("@(a1|a2)*")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[starts-with(@content-desc,'a1') or starts-with(@content-desc,'a2')]"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector(".(c1|c2)&&text1&&[2]")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[@text='text1' and (@class='c1' or @class='c2')][2]"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("１1")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo(
+                    "[@text='１1' or @text='11']"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("id=id1||id=id2")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1"))
+                    .isEqualTo("[(@resource-id='package1:id/id1' or @resource-id='package1:id/id2')]")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector()
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo("")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("literal=LITERAL")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1"))
+                    .isEqualTo("[@text='LITERAL']")
+            }
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getXPathCondition())
+                assertThat(sel.getXPathCondition())
+                    .isEqualTo("[@label='LITERAL' or @value='LITERAL']")
+            }
+        }
+    }
+
+    @Test
+    fun getFullXPath() {
+
+        run {
+            // Arrange
+            val sel = Selector()
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getFullXPath(packageName = "package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo("")
+            }
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getFullXPath())
+                assertThat(sel.getXPathCondition()).isEqualTo("")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("TEXT1")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getFullXPath(packageName = "package1"))
+                assertThat(sel.getXPathCondition("package1")).isEqualTo("[@text='TEXT1']")
+            }
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getFullXPath())
+                assertThat(sel.getXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']")
+            }
+        }
+        run {
             run {
                 // Arrange
-                val sel = Selector("A\nB\nC")
+                val sel = Selector("<TEXT1>:parent")
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo("[@text='A\nB\nC']")
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*")
                 }
-
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getXPathCondition())
-                    assertThat(sel.getXPathCondition()).isEqualTo(
-                        "[(contains(@label,'A') or contains(@value,'A')) and (contains(@label,'B') or contains(@value,'B')) and (contains(@label,'C') or contains(@value,'C'))]"
-                    )
-                }
-
-            }
-            run {
-                // Arrange
-                val sel = Selector("text=(a|b|c)")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[@text='a' or @text='b' or @text='c']"
-                    )
-                }
-
-                TestMode.runAsIos {
-                    // Act, Assert
-                    println(sel.getXPathCondition())
-                    assertThat(sel.getXPathCondition()).isEqualTo(
-                        "[@label='a' or @value='a' or @label='b' or @value='b' or @label='c' or @value='c']"
-                    )
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*")
                 }
             }
             run {
                 // Arrange
-                val sel = Selector("(a|b|c)&&textStartsWith=(ABC|DEF)")
+                val sel = Selector("<TEXT1>:parent:parent")
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[(@text='a' or @text='b' or @text='c') and (starts-with(@text,'ABC') or starts-with(@text,'DEF'))]"
-                    )
-                }
-
-                TestMode.runAsIos {
-                    // Act, Assert
-                    println(sel.getXPathCondition())
-                    assertThat(sel.getXPathCondition()).isEqualTo(
-                        "[(@label='a' or @value='a' or @label='b' or @value='b' or @label='c' or @value='c') and (starts-with(@label,'ABC') or starts-with(@value,'ABC') or starts-with(@label,'DEF') or starts-with(@value,'DEF'))]"
-                    )
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector("textContains=(A|B|C)&&textEndsWith=(UVW|XYZ)")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[(contains(@text,'A') or contains(@text,'B') or contains(@text,'C')) and (ends-with(@text,'UVW') or ends-with(@text,'XYZ'))]"
-                    )
-                }
-
-                TestMode.runAsIos {
-                    // Act, Assert
-                    println(sel.getXPathCondition())
-                    assertThat(sel.getXPathCondition()).isEqualTo(
-                        "[(contains(@label,'A') or contains(@value,'A') or contains(@label,'B') or contains(@value,'B') or contains(@label,'C') or contains(@value,'C')) and ((normalize-space(substring(@label,string-length(@label)-string-length('UVW')+1))='UVW' or normalize-space(substring(@value,string-length(@value)-string-length('UVW')+1))='UVW') or (normalize-space(substring(@label,string-length(@label)-string-length('XYZ')+1))='XYZ' or normalize-space(substring(@value,string-length(@value)-string-length('XYZ')+1))='XYZ'))]"
-                    )
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector("textMatches=^A.*Z$&&id=(id1|id2)")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[matches(@text,'^A.*Z\$') and (@resource-id='package1:id/id1' or @resource-id='package1:id/id2')]"
-                    )
-                }
-
-                TestMode.runAsIos {
-                    // Act, Assert
-                    println(sel.getXPathCondition())
-                    assertThat(sel.getXPathCondition()).isEqualTo(
-                        "[(matches(@label,'^A.*Z\$') or matches(@value,'^A.*Z\$')) and (@name='id1' or @name='id2')]"
-                    )
-                }
-            }
-            run {
-
-                TestMode.runAsAndroid {
-                    // Arrange
-                    val sel = Selector("access=(a1|a2)&&className=(c1|c2|c3)&&focusable=true&&scrollable=false")
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[(@content-desc='a1' or @content-desc='a2') and (@class='c1' or @class='c2' or @class='c3') and @focusable='true' and @scrollable='false']"
-                    )
-                }
-
-                TestMode.runAsIos {
-                    // Arrange
-                    val sel = Selector("className=(c1|c2|c3)")
-                    // Act, Assert
-                    println(sel.getXPathCondition())
-                    assertThat(sel.getXPathCondition()).isEqualTo(
-                        "[@type='c1' or @type='c2' or @type='c3']"
-                    )
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector(".(c1|c2|c3)")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[@class='c1' or @class='c2' or @class='c3']"
-                    )
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector("@(a1|a2)*")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[starts-with(@content-desc,'a1') or starts-with(@content-desc,'a2')]"
-                    )
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector(".(c1|c2)&&text1&&[2]")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[@text='text1' and (@class='c1' or @class='c2') and position()=2]"
-                    )
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector("１1")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                        "[@text='１1' or @text='11']"
-                    )
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector("id=id1||id=id2")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1"))
-                        .isEqualTo("[(@resource-id='package1:id/id1') or (@resource-id='package1:id/id2')]")
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector()
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1")).isEqualTo("")
-                }
-            }
-            run {
-                // Arrange
-                val sel = Selector("literal=LITERAL")
-
-                TestMode.runAsAndroid {
-                    // Act, Assert
-                    println(sel.getXPathCondition("package1"))
-                    assertThat(sel.getXPathCondition("package1"))
-                        .isEqualTo("[@text='LITERAL']")
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/parent::*")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getXPathCondition())
-                    assertThat(sel.getXPathCondition())
-                        .isEqualTo("[@label='LITERAL' or @value='LITERAL']")
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/parent::*")
                 }
             }
         }
+        run {
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:child")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/child::*")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/child::*")
+                }
+            }
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:child:child")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/child::*/child::*")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/child::*/child::*")
+                }
+            }
+        }
+        run {
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:sibling")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/child::*")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/child::*")
+                }
+            }
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:sibling(2):sibling(3)")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/child::*[2]/parent::*/child::*[3]")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/child::*[2]/parent::*/child::*[3]")
+                }
+            }
+        }
+        run {
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:ancestor")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/ancestor::*")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/ancestor::*")
+                }
+            }
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:ancestor(2):ancestor(3)")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/ancestor::*[2]/ancestor::*[3]")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/ancestor::*[2]/ancestor::*[3]")
+                }
+            }
+        }
+        run {
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:descendant")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/descendant::*")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/descendant::*")
+                }
+            }
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:descendant(2):descendant(3)")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/descendant::*[2]/descendant::*[3]")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/descendant::*[2]/descendant::*[3]")
+                }
+            }
+        }
+        run {
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:next")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("")
+                }
+            }
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:next(2):next(3)")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("")
+                }
+            }
+        }
+        run {
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:pre")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("")
+                }
+            }
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:pre(2):pre(3)")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("")
+                }
+            }
+        }
+        run {
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:previous")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("")
+                }
+            }
+            run {
+                // Arrange
+                val sel = Selector("<TEXT1>:previous(2):previous(3)")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("")
+                }
+            }
+        }
+
+        run {
+            run {
+                // Arrange
+                val sel = Selector("~title=TITLE1")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[(@resource-id='package1:id/action_bar' or @resource-id='package1:id/toolbar' or @resource-id='package1:id/app_bar')]/descendant::*[(@text='TITLE1' or @content-desc='TITLE1')]")
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("[(@name='action_bar' or @name='toolbar' or @name='app_bar')]/descendant::*[(@label='TITLE1' or @value='TITLE1' or @name='TITLE1')]")
+                }
+            }
+            run {
+                // Arrange
+                val sel = Selector("<~title=TITLE1>:left(2)")   // ":left" can not be converted to XPath
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath(packageName = "package1"))
+                }
+                TestMode.runAsIos {
+                    // Act, Assert
+                    println(sel.getFullXPath())
+                    assertThat(sel.getFullXPath()).isEqualTo("")
+                }
+            }
+        }
+
+        run {
+            run {
+                // Arrange
+                val sel = Selector(".android.widget.TextView&&[999]")
+
+                TestMode.runAsAndroid {
+                    // Act, Assert
+                    println(sel.getFullXPath(packageName = "package1"))
+                    assertThat(sel.getFullXPath()).isEqualTo("[@class='android.widget.TextView'][999]")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun getFullXPathConditionComplex() {
+
+        run {
+            val sel = Selector("<#id1&&[2]>:sibling(3):parent:child(2):descendant(3)")
+            TestMode.runAsAndroid {
+                // Act, Assert
+                val xpath = sel.getFullXPath(packageName = "package1")
+                println(xpath)
+                assertThat(xpath).isEqualTo("[@resource-id='package1:id/id1'][2]/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
+            }
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getFullXPath())
+                assertThat(sel.getFullXPath()).isEqualTo("[@name='id1'][2]/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
+            }
+        }
+    }
+
+    @Test
+    fun title() {
+        // Arrange
+        val sel = Selector("~title=TITLE1")
+
+        TestMode.runAsAndroid {
+            // Act, Assert
+            println(sel.getFullXPath(packageName = "package1"))
+            assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[(@resource-id='package1:id/action_bar' or @resource-id='package1:id/toolbar' or @resource-id='package1:id/app_bar')]/descendant::*[(@text='TITLE1' or @content-desc='TITLE1')]")
+        }
+        TestMode.runAsIos {
+            // Act, Assert
+            println(sel.getFullXPath())
+            assertThat(sel.getFullXPath()).isEqualTo("[(@name='action_bar' or @name='toolbar' or @name='app_bar')]/descendant::*[(@label='TITLE1' or @value='TITLE1' or @name='TITLE1')]")
+        }
+
     }
 
     @Test

@@ -72,7 +72,7 @@ object TestElementCache {
      */
     fun filterElements(
         expression: String,
-        safeElementOnly: Boolean = true,
+        inViewOnly: Boolean = false,
         selectContext: TestElement = rootElement
     ): List<TestElement> {
 
@@ -83,7 +83,7 @@ object TestElementCache {
             sel = TestDriver.expandExpression(expression = expression)
         }
 
-        val list = filterElements(selector = sel, selectContext = selectContext, safeElementOnly = safeElementOnly)
+        val list = filterElements(selector = sel, selectContext = selectContext, inViewOnly = inViewOnly)
         return list
     }
 
@@ -93,7 +93,7 @@ object TestElementCache {
     fun filterElements(
         selector: Selector,
         throwsException: Boolean = false,
-        safeElementOnly: Boolean = true,
+        inViewOnly: Boolean = false,
         selectContext: TestElement = rootElement,
     ): MutableList<TestElement> {
 
@@ -104,7 +104,7 @@ object TestElementCache {
             list = targetElements.filterBySelector(
                 selector = selector,
                 throwsException = throwsException,
-                safeElementOnly = safeElementOnly
+                inViewOnly = inViewOnly
             )
 
         } else {
@@ -126,7 +126,7 @@ object TestElementCache {
     fun select(
         selector: Selector,
         throwsException: Boolean = true,
-        safeElementOnly: Boolean = true,
+        inViewOnly: Boolean = false,
         selectContext: TestElement = rootElement
     ): TestElement {
 
@@ -152,7 +152,7 @@ object TestElementCache {
                 // get relative
                 e = lastElement.relative(
                     relativeSelectors = selector.relativeSelectors,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     scopeElements = allElements
                 )
             } else {
@@ -160,13 +160,13 @@ object TestElementCache {
                 var list = filterElements(
                     selector = selector,
                     throwsException = throwsException,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = false,
                     selectContext = selectContext
                 )
                 val removeList = list.filter { it.isEmpty }
                 list.removeAll(removeList)
-                if (safeElementOnly) {
-                    list = list.filter { it.isDummy || it.isInView }.toMutableList()
+                if (selector.isNegation.not() && inViewOnly) {
+                    list = list.filter { it.isInView }.toMutableList()
                 }
                 e = list.firstOrNull() ?: TestElement.emptyElement
             }
@@ -218,7 +218,7 @@ object TestElementCache {
     fun select(
         expression: String,
         throwsException: Boolean = true,
-        safeElementOnly: Boolean = true,
+        inViewOnly: Boolean = false,
         selectContext: TestElement = rootElement
     ): TestElement {
 
@@ -232,7 +232,7 @@ object TestElementCache {
         val e = select(
             selector = sel,
             throwsException = throwsException,
-            safeElementOnly = safeElementOnly,
+            inViewOnly = inViewOnly,
             selectContext = selectContext
         )
 
@@ -265,7 +265,7 @@ object TestElementCache {
      */
     fun canSelect(
         selector: Selector,
-        safeElementOnly: Boolean = true,
+        inViewOnly: Boolean = false,
         selectContext: TestElement = rootElement
     ): Boolean {
 
@@ -283,7 +283,7 @@ object TestElementCache {
         val e = select(
             selector = selector,
             throwsException = false,
-            safeElementOnly = safeElementOnly,
+            inViewOnly = inViewOnly,
             selectContext = selectContext
         )
 
@@ -296,7 +296,7 @@ object TestElementCache {
      */
     fun canSelect(
         expression: String,
-        safeElementOnly: Boolean = true,
+        inViewOnly: Boolean = false,
         selectContext: TestElement = rootElement
     ): Boolean {
 
@@ -312,7 +312,7 @@ object TestElementCache {
             sel = TestDriver.expandExpression(expression = expression)
         }
 
-        return canSelect(selector = sel, safeElementOnly = safeElementOnly, selectContext = selectContext)
+        return canSelect(selector = sel, inViewOnly = inViewOnly, selectContext = selectContext)
     }
 
     /**
@@ -320,7 +320,7 @@ object TestElementCache {
      */
     fun canSelectAll(
         selectors: Iterable<Selector>,
-        safeElementOnly: Boolean = true,
+        inViewOnly: Boolean = false,
         selectContext: TestElement = rootElement
     ): Boolean {
 
@@ -331,7 +331,7 @@ object TestElementCache {
         val ms = Measure("$selectors")
 
         for (selector in selectors) {
-            val found = canSelect(selector = selector, safeElementOnly = safeElementOnly, selectContext = selectContext)
+            val found = canSelect(selector = selector, inViewOnly = inViewOnly, selectContext = selectContext)
             if (found.not()) {
                 ms.end()
                 return false

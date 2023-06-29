@@ -1,6 +1,5 @@
 package shirates.core.unittest.driver
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -668,19 +667,19 @@ class TestElementCache_AndroidTest : UnitTest() {
         // Arrange
         TestElementCache.loadXml(xmlData = XmlDataAndroid.NetworkAndInternetScreen)
         // Act, Assert
-        Assertions.assertThatThrownBy {
+        assertThatThrownBy {
             TestElementCache.select("#android:id/title&&pos=0")
         }.isInstanceOf(IndexOutOfBoundsException::class.java)
             .hasMessage("pos can not be zero.")
 
         // Act, Assert
-        Assertions.assertThatThrownBy {
+        assertThatThrownBy {
             TestElementCache.select("#android:id/title&&[0]")
         }.isInstanceOf(IndexOutOfBoundsException::class.java)
             .hasMessage("pos can not be zero.")
 
         // Act, Assert
-        Assertions.assertThatThrownBy {
+        assertThatThrownBy {
             TestElementCache.select(".android.widget.ImageButton&&pos=2")
         }.isInstanceOf(IndexOutOfBoundsException::class.java)
             .hasMessage("selector.pos out of range.(pos=2, count=1)")
@@ -734,7 +733,7 @@ class TestElementCache_AndroidTest : UnitTest() {
         }
         run {
             // Act, Assert
-            Assertions.assertThatThrownBy {
+            assertThatThrownBy {
                 TestElementCache.select("#android:id/title&&pos=999")
             }.isInstanceOf(IndexOutOfBoundsException::class.java)
                 .hasMessageStartingWith("selector.pos out of range.(pos=999, count=6)")
@@ -765,13 +764,13 @@ class TestElementCache_AndroidTest : UnitTest() {
         // Arrange
         TestElementCache.loadXml(xmlData = XmlDataAndroid.SettingsTopScreen)
         // Act, Assert
-        Assertions.assertThatThrownBy {
+        assertThatThrownBy {
             TestElementCache.select("no exist")
         }.isInstanceOf(TestDriverException::class.java)
             .hasMessage(message(id = "elementNotFound", subject = "<no exist>", arg1 = "<no exist>"))
 
         // Act, Assert
-        Assertions.assertThatThrownBy {
+        assertThatThrownBy {
             TestElementCache.select("no exist", throwsException = true)
         }.isInstanceOf(TestDriverException::class.java)
             .hasMessage(message(id = "elementNotFound", subject = "<no exist>", arg1 = "<no exist>"))

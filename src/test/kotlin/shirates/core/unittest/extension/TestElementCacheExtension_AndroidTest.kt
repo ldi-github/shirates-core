@@ -32,7 +32,7 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
         // Arrange
         val e = ElementCacheUtility.createTestElementFromXml(source = XmlDataAndroid.SettingsTopScreen)
         // Assert
-        assertThat(e.parentElement).isNull()
+        assertThat(e.parentElement.isEmpty).isTrue()
         assertThat(e.children.count()).isGreaterThan(0)
         assertThat(e.index).isEqualTo("0")
         assertThat(e.packageName).isEqualTo("com.android.settings")

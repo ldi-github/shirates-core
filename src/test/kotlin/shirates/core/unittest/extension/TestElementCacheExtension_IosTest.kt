@@ -33,7 +33,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         val e = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
 
         // Assert
-        assertThat(e.parentElement).isNull()
+        assertThat(e.parentElement.isEmpty).isTrue()
         assertThat(e.children.count()).isGreaterThan(0)
         assertThat(e.index).isEqualTo("")
         assertThat(e.packageName).isEqualTo("")

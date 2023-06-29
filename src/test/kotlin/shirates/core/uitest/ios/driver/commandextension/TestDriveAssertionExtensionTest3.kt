@@ -1,6 +1,6 @@
 package shirates.core.uitest.ios.driver.commandextension
 
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -36,7 +36,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
             }
             case(2) {
                 expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.existAllInScanResults(
                             "Settings",
                             "General",
@@ -64,7 +64,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 }.expectation {
                     it.dontExist("no exist")
 
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExist("General")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<General> does not exist")
@@ -89,7 +89,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 condition {
                     it.flickBottomToTop()
                 }.expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExistWithScrollDown("Developer")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<Developer> does not exist (scroll down)")
@@ -115,7 +115,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 condition {
                     it.flickBottomToTop()
                 }.expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExistWithScrollUp("General")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<General> does not exist (scroll up)")
@@ -135,7 +135,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 }.expectation {
                     it.dontExistAll("no exist", "void", "something")
 
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExistAll("no exist", "void", "General", "something")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<General> does not exist")
@@ -156,7 +156,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 }.expectation {
                     it.dontExistInScanResults("no exist")
 
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExistInScanResults("Developer")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<Developer> doest not exist in scan results")

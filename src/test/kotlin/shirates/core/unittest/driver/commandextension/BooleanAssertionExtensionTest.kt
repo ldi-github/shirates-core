@@ -1,7 +1,7 @@
 package shirates.core.unittest.driver.commandextension
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.thisIsFalse
@@ -36,7 +36,7 @@ class BooleanAssertionExtensionTest : UnitTest() {
 
             // default message
             run {
-                Assertions.assertThatThrownBy {
+                assertThatThrownBy {
                     false.thisIsTrue()
                 }.isInstanceOf(TestNGException::class.java)
                     .hasMessage(message(id = "thisIsTrue", subject = "false") + " (actual=false)")
@@ -45,7 +45,7 @@ class BooleanAssertionExtensionTest : UnitTest() {
             // replace subject
             run {
                 val message = message(id = "thisIsTrue", subject = "false")
-                Assertions.assertThatThrownBy {
+                assertThatThrownBy {
                     false.thisIsTrue()
                 }.isInstanceOf(TestNGException::class.java)
                     .hasMessage("$message (actual=false)")
@@ -54,7 +54,7 @@ class BooleanAssertionExtensionTest : UnitTest() {
             // custom message
             run {
                 val message = "value is true"
-                Assertions.assertThatThrownBy {
+                assertThatThrownBy {
                     false.thisIsTrue(message = message)
                 }.isInstanceOf(TestNGException::class.java)
                     .hasMessage("$message (actual=false)")
@@ -84,7 +84,7 @@ class BooleanAssertionExtensionTest : UnitTest() {
 
             // default message
             run {
-                Assertions.assertThatThrownBy {
+                assertThatThrownBy {
                     true.thisIsFalse()
                 }.isInstanceOf(TestNGException::class.java)
                     .hasMessage(message(id = "thisIsFalse", subject = "true", expected = "false") + " (actual=true)")
@@ -93,7 +93,7 @@ class BooleanAssertionExtensionTest : UnitTest() {
             // replace subject
             run {
                 val message = message(id = "thisIsTrue", subject = "false", expected = "true")
-                Assertions.assertThatThrownBy {
+                assertThatThrownBy {
                     false.thisIsTrue()
                 }.isInstanceOf(TestNGException::class.java)
                     .hasMessage("$message (actual=false)")
@@ -102,7 +102,7 @@ class BooleanAssertionExtensionTest : UnitTest() {
             // custom message
             run {
                 val message = "value is false."
-                Assertions.assertThatThrownBy {
+                assertThatThrownBy {
                     true.thisIsFalse(message = message)
                 }.isInstanceOf(TestNGException::class.java)
                     .hasMessage("$message (actual=true)")

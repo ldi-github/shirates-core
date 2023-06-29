@@ -29,7 +29,7 @@ class TestElement(
     var lastResult: LogType = LogType.NONE,
     var node: Node? = null,
     var webElement: WebElement? = null,
-    var cacheRootElement: TestElement? = null
+    var cacheRootElement: TestElement? = null,
 ) : TestDrive {
 
     private var toStringResult: String? = null
@@ -53,9 +53,9 @@ class TestElement(
         }
 
         toStringResult = if (isAndroid) {
-            "<$className index='$index' class='$className' resource-id='$id' text='$text' content-desc='$contentDesc' checked='$checked' focusable='$focused' focused='$focused' selected='$selected' scrollable='$scrollable' bounds=$boundsString>"
+            "<$className class='$className' resource-id='$id' text='$text' content-desc='$contentDesc' checked='$checked' focusable='$focused' focused='$focused' selected='$selected' scrollable='$scrollable' bounds=$boundsString>"
         } else {
-            "<$type index='$index' type='$type' enabled='$enabled' visible='$visible' name='$name' label='$label' value='$value' x='$x' y='$y' width='$width' height='$height'>"
+            "<$type type='$type' enabled='$enabled' visible='$visible' name='$name' label='$label' value='$value' x='$x' y='$y' width='$width' height='$height'>"
         }
 
         return toStringResult!!
@@ -103,24 +103,37 @@ class TestElement(
      */
     var sourceCaptureFailed: Boolean = false
 
+    private var _parentElement: TestElement? = null
+
     /**
      * parentElement
      */
-    var parentElement: TestElement? = null
+    var parentElement: TestElement = this   // this is dummy (not initialized)
         get() {
-            if (isCacheMode) {
-                return field
+            if (_parentElement != null) {
+                return _parentElement!!
             }
 
-            if (field != null) {
-                return field
+            if (isCacheMode) {
+                _parentElement = emptyElement
+                return _parentElement!!
             }
-            if (this.isEmpty) {
-                return null
-            }
-            val xpath = this.getUniqueXpath() + "/parent::*[1]"
-            field = driver.appiumDriver.findElement(By.xpath(xpath)).toTestElement()
-            return field
+
+            val xpath = this.getUniqueXpath() + "/parent::*"
+            _parentElement = testDrive.findElement(timeoutMilliseconds = 0, locator = By.xpath(xpath))
+            return _parentElement!!
+        }
+        set(value) {
+            _parentElement = value
+            field = value
+        }
+
+    /**
+     * hasParent
+     */
+    val hasParent: Boolean
+        get() {
+            return parentElement.isEmpty.not()
         }
 
     /**
@@ -168,7 +181,10 @@ class TestElement(
 
     private fun getAncestors(element: TestElement, list: MutableList<TestElement>) {
 
-        val p = element.parentElement ?: return
+        val p = element.parentElement
+        if (p.isEmpty) {
+            return
+        }
 
         list.add(0, p)
         getAncestors(p, list)
@@ -244,11 +260,11 @@ class TestElement(
             }
 
             if (isCacheMode) {
-                siblingsCache = parentElement?.children ?: mutableListOf()
+                siblingsCache = parentElement.children
                 return siblingsCache!!
             }
 
-            val xpath = this.getUniqueXpath() + "/parent::*[1]/child::*"
+            val xpath = this.getUniqueXpath() + "/parent::*/child::*"
             siblingsCache = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
                 .toMutableList()
             return siblingsCache!!
@@ -362,7 +378,7 @@ class TestElement(
             if (list.count() <= 1) {
                 return emptyElement
             }
-            val scrollableElement = list.firstOrNull() { it.isScrollable }
+            val scrollableElement = list.lastOrNull() { it.isScrollable }
             if (scrollableElement == null) {
                 return emptyElement
             }
@@ -387,10 +403,13 @@ class TestElement(
                     return false
                 }
             } else {
+                if (type == "XCUIElementTypeApplication") {
+                    return false
+                }
                 val underScrollable = ancestorUnderScrollable
                 if (underScrollable.isFound && underScrollable.isScrollable.not()) {
-                    val scrollable = underScrollable.parent()
-                    if (underScrollable.bounds.isIncludedIn(scrollable.bounds).not()) {
+                    val scrollable = underScrollable.parentElement
+                    if (underScrollable.bounds.isOverlapping(scrollable.bounds).not()) {
                         return false
                     }
                 } else {
@@ -989,8 +1008,8 @@ class TestElement(
 
             if (isCacheMode) {
                 if (selector != null) {
-                    if (canSelect(selector = selector!!, safeElementOnly = true)) {
-                        e = TestElementCache.select(selector = selector!!, safeElementOnly = true)
+                    if (canSelect(selector = selector!!, inViewOnly = true)) {
+                        e = TestElementCache.select(selector = selector!!, inViewOnly = true)
                         return@execOperateCommand
                     }
                 }
@@ -1043,7 +1062,7 @@ class TestElement(
      * getRelative
      */
     fun getRelative(
-        safeElementOnly: Boolean = true,
+        inViewOnly: Boolean = false,
         scopeElements: List<TestElement>? = null
     ): TestElement {
 
@@ -1053,13 +1072,18 @@ class TestElement(
 
         val mr = Measure()
         try {
-            val scopedElements = scopeElements ?: testDrive.widgets
+            val scopedElements = if (scopeElements.isNullOrEmpty()) {
+                if (inViewOnly) rootElement.elements.filter { it.isInView }
+                else rootElement.elements
+            } else {
+                scopeElements
+            }
 
             var elm = this
             for (r in selector!!.relativeSelectors) {
                 elm = elm.relative(
                     relativeSelector = r,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     scopeElements = scopedElements
                 )
             }

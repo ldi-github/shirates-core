@@ -9,7 +9,7 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 private fun TestElement.filterCandidates(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): MutableList<TestElement> {
 
@@ -20,7 +20,7 @@ private fun TestElement.filterCandidates(
     }
 
     val filtered = targetElements
-        .filterBySelector(selector = sel, safeElementOnly = safeElementOnly)
+        .filterBySelector(selector = sel, inViewOnly = inViewOnly)
         .filter { it != this }
         .toMutableList()
 
@@ -39,7 +39,7 @@ private fun Selector.copyAndRemovePos(): Selector {
 internal fun TestElement.rightLeftCore(
     relative: RelativeDirection,
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -47,7 +47,7 @@ internal fun TestElement.rightLeftCore(
     sel.command = null
     val widgets = targetElements
         .filter { it.isWidget }
-        .filterBySelector(selector = sel, safeElementOnly = safeElementOnly)
+        .filterBySelector(selector = sel, inViewOnly = inViewOnly)
 
     val horizontalBand = HorizontalBand(this)
     for (widget in widgets) {
@@ -56,7 +56,7 @@ internal fun TestElement.rightLeftCore(
     val elms = horizontalBand.getElements()
     val candidates = filterCandidates(
         selector = sel,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = elms
     )
     val sortedElements =
@@ -81,13 +81,13 @@ internal fun TestElement.rightLeftCore(
 internal fun TestElement.belowAboveCore(
     relative: RelativeDirection,
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
     val sel = selector.copyAndRemovePos()
     val list = targetElements
-        .filterBySelector(selector = sel, safeElementOnly = safeElementOnly)
+        .filterBySelector(selector = sel, inViewOnly = inViewOnly)
 
     val verticalBand = VerticalBand(this)
     for (e in list) {
@@ -96,7 +96,7 @@ internal fun TestElement.belowAboveCore(
     val elms = verticalBand.getElements()
     val candidates = filterCandidates(
         selector = sel,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = elms
     )
     val sortedElements =
@@ -122,7 +122,7 @@ internal fun TestElement.belowAboveCore(
 
 internal fun TestElement.right(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -132,7 +132,7 @@ internal fun TestElement.right(
             rightLeftCore(
                 relative = RelativeDirection.right,
                 selector = selector,
-                safeElementOnly = safeElementOnly,
+                inViewOnly = inViewOnly,
                 targetElements = targetElements
             )
         }
@@ -145,12 +145,12 @@ internal fun TestElement.right(
  */
 fun TestElement.right(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":right($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -160,19 +160,19 @@ fun TestElement.right(
  */
 fun TestElement.right(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":right($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
 
 internal fun TestElement.rightInput(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -180,7 +180,7 @@ internal fun TestElement.rightInput(
         relativeCommand = ":rightInput",
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
 
@@ -192,7 +192,7 @@ private fun TestElement.getRelativeWidget(
     relativeCommand: String,
     selector: Selector,
     className: String,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -200,13 +200,13 @@ private fun TestElement.getRelativeWidget(
     sel.className = className
 
     val e = if (relativeCommand.startsWith(":right")) {
-        right(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+        right(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
     } else if (relativeCommand.startsWith(":left")) {
-        left(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+        left(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
     } else if (relativeCommand.startsWith(":above")) {
-        above(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+        above(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
     } else if (relativeCommand.startsWith(":below")) {
-        below(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+        below(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
     } else {
         throw NotImplementedError(relativeCommand)
     }
@@ -221,12 +221,12 @@ private fun TestElement.getRelativeWidget(
  */
 fun TestElement.rightInput(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":rightInput($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
@@ -236,19 +236,19 @@ fun TestElement.rightInput(
  */
 fun TestElement.rightInput(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":rightInput($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
 
 internal fun TestElement.rightLabel(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -256,7 +256,7 @@ internal fun TestElement.rightLabel(
         relativeCommand = ":rightLabel",
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -267,12 +267,12 @@ internal fun TestElement.rightLabel(
  */
 fun TestElement.rightLabel(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":rightLabel($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -282,19 +282,19 @@ fun TestElement.rightLabel(
  */
 fun TestElement.rightLabel(
     expression: String,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
 ): TestElement {
 
     return relative(
         command = ":rightLabel($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
 
 internal fun TestElement.rightImage(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -302,7 +302,7 @@ internal fun TestElement.rightImage(
         relativeCommand = ":rightImage",
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -313,12 +313,12 @@ internal fun TestElement.rightImage(
  */
 fun TestElement.rightImage(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":rightImage($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         imageWidgets
     )
 }
@@ -328,19 +328,19 @@ fun TestElement.rightImage(
  */
 fun TestElement.rightImage(
     expression: String,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
 ): TestElement {
 
     return relative(
         command = ":rightImage($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
 
 internal fun TestElement.rightButton(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -348,7 +348,7 @@ internal fun TestElement.rightButton(
         relativeCommand = ":rightButton",
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -359,12 +359,12 @@ internal fun TestElement.rightButton(
  */
 fun TestElement.rightButton(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":rightButton($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
@@ -374,19 +374,19 @@ fun TestElement.rightButton(
  */
 fun TestElement.rightButton(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":rightButton($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
 
 internal fun TestElement.rightSwitch(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -394,7 +394,7 @@ internal fun TestElement.rightSwitch(
         relativeCommand = ":rightSwitch",
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -405,12 +405,12 @@ internal fun TestElement.rightSwitch(
  */
 fun TestElement.rightSwitch(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":rightSwitch($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
@@ -420,19 +420,19 @@ fun TestElement.rightSwitch(
  */
 fun TestElement.rightSwitch(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":rightSwitch($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
 
 internal fun TestElement.below(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -442,7 +442,7 @@ internal fun TestElement.below(
             belowAboveCore(
                 relative = RelativeDirection.below,
                 selector = selector,
-                safeElementOnly = safeElementOnly,
+                inViewOnly = inViewOnly,
                 targetElements = targetElements
             )
         }
@@ -454,12 +454,12 @@ internal fun TestElement.below(
  */
 fun TestElement.below(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":below($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -469,19 +469,19 @@ fun TestElement.below(
  */
 fun TestElement.below(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":below($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
 
 internal fun TestElement.belowInput(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -489,7 +489,7 @@ internal fun TestElement.belowInput(
         relativeCommand = ":belowInput",
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -500,12 +500,12 @@ internal fun TestElement.belowInput(
  */
 fun TestElement.belowInput(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowInput($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
@@ -515,19 +515,19 @@ fun TestElement.belowInput(
  */
 fun TestElement.belowInput(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowInput($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
 
 internal fun TestElement.belowLabel(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -535,7 +535,7 @@ internal fun TestElement.belowLabel(
         relativeCommand = ":belowLabel",
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -546,12 +546,12 @@ internal fun TestElement.belowLabel(
  */
 fun TestElement.belowLabel(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowLabel($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
@@ -561,19 +561,19 @@ fun TestElement.belowLabel(
  */
 fun TestElement.belowLabel(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowLabel($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
 
 internal fun TestElement.belowImage(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -581,7 +581,7 @@ internal fun TestElement.belowImage(
         relativeCommand = ":belowImage",
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -592,12 +592,12 @@ internal fun TestElement.belowImage(
  */
 fun TestElement.belowImage(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowImage($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
@@ -607,19 +607,19 @@ fun TestElement.belowImage(
  */
 fun TestElement.belowImage(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowImage($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
 
 internal fun TestElement.belowButton(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -627,7 +627,7 @@ internal fun TestElement.belowButton(
         relativeCommand = ":belowButton",
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -638,12 +638,12 @@ internal fun TestElement.belowButton(
  */
 fun TestElement.belowButton(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowButton($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
@@ -653,19 +653,19 @@ fun TestElement.belowButton(
  */
 fun TestElement.belowButton(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowButton($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
 
 internal fun TestElement.belowSwitch(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -673,7 +673,7 @@ internal fun TestElement.belowSwitch(
         relativeCommand = ":belowSwitch",
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -684,12 +684,12 @@ internal fun TestElement.belowSwitch(
  */
 fun TestElement.belowSwitch(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowSwitch($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
@@ -699,19 +699,19 @@ fun TestElement.belowSwitch(
  */
 fun TestElement.belowSwitch(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":belowSwitch($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
 
 internal fun TestElement.left(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -721,7 +721,7 @@ internal fun TestElement.left(
             rightLeftCore(
                 relative = RelativeDirection.left,
                 selector = selector,
-                safeElementOnly = safeElementOnly,
+                inViewOnly = inViewOnly,
                 targetElements = targetElements
             )
         }
@@ -735,12 +735,12 @@ internal fun TestElement.left(
  */
 fun TestElement.left(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":left($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -750,19 +750,19 @@ fun TestElement.left(
  */
 fun TestElement.left(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":left($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
 
 internal fun TestElement.leftInput(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -770,7 +770,7 @@ internal fun TestElement.leftInput(
         relativeCommand = ":leftInput",
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -781,12 +781,12 @@ internal fun TestElement.leftInput(
  */
 fun TestElement.leftInput(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftInput($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
@@ -796,19 +796,19 @@ fun TestElement.leftInput(
  */
 fun TestElement.leftInput(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftInput($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
 
 internal fun TestElement.leftLabel(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -816,7 +816,7 @@ internal fun TestElement.leftLabel(
         relativeCommand = ":leftLabel",
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -827,12 +827,12 @@ internal fun TestElement.leftLabel(
  */
 fun TestElement.leftLabel(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftLabel($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
@@ -842,19 +842,19 @@ fun TestElement.leftLabel(
  */
 fun TestElement.leftLabel(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftLabel($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
 
 internal fun TestElement.leftImage(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -862,7 +862,7 @@ internal fun TestElement.leftImage(
         relativeCommand = ":leftImage",
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -873,12 +873,12 @@ internal fun TestElement.leftImage(
  */
 fun TestElement.leftImage(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftImage($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
@@ -888,19 +888,19 @@ fun TestElement.leftImage(
  */
 fun TestElement.leftImage(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftImage($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
 
 internal fun TestElement.leftButton(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -908,7 +908,7 @@ internal fun TestElement.leftButton(
         relativeCommand = ":leftButton",
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -919,12 +919,12 @@ internal fun TestElement.leftButton(
  */
 fun TestElement.leftButton(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftButton($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
@@ -934,19 +934,19 @@ fun TestElement.leftButton(
  */
 fun TestElement.leftButton(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftButton($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
 
 internal fun TestElement.leftSwitch(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -954,7 +954,7 @@ internal fun TestElement.leftSwitch(
         relativeCommand = ":leftSwitch",
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -965,12 +965,12 @@ internal fun TestElement.leftSwitch(
  */
 fun TestElement.leftSwitch(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftSwitch($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
@@ -980,19 +980,19 @@ fun TestElement.leftSwitch(
  */
 fun TestElement.leftSwitch(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":leftSwitch($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
 
 internal fun TestElement.above(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -1002,7 +1002,7 @@ internal fun TestElement.above(
             belowAboveCore(
                 relative = RelativeDirection.above,
                 selector = selector,
-                safeElementOnly = safeElementOnly,
+                inViewOnly = inViewOnly,
                 targetElements = targetElements
             )
         }
@@ -1014,12 +1014,12 @@ internal fun TestElement.above(
  */
 fun TestElement.above(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":above($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -1029,19 +1029,19 @@ fun TestElement.above(
  */
 fun TestElement.above(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":above($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
 
 internal fun TestElement.aboveInput(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -1049,7 +1049,7 @@ internal fun TestElement.aboveInput(
         relativeCommand = ":aboveInput",
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -1060,12 +1060,12 @@ internal fun TestElement.aboveInput(
  */
 fun TestElement.aboveInput(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveInput($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
@@ -1075,19 +1075,19 @@ fun TestElement.aboveInput(
  */
 fun TestElement.aboveInput(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveInput($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
 
 internal fun TestElement.aboveLabel(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -1095,7 +1095,7 @@ internal fun TestElement.aboveLabel(
         relativeCommand = ":aboveLabel",
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -1106,12 +1106,12 @@ internal fun TestElement.aboveLabel(
  */
 fun TestElement.aboveLabel(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveLabel($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
@@ -1121,19 +1121,19 @@ fun TestElement.aboveLabel(
  */
 fun TestElement.aboveLabel(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveLabel($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
 
 internal fun TestElement.aboveImage(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -1141,7 +1141,7 @@ internal fun TestElement.aboveImage(
         relativeCommand = ":aboveImage",
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -1152,12 +1152,12 @@ internal fun TestElement.aboveImage(
  */
 fun TestElement.aboveImage(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveImage($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
@@ -1167,19 +1167,19 @@ fun TestElement.aboveImage(
  */
 fun TestElement.aboveImage(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveImage($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
 
 internal fun TestElement.aboveButton(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -1187,7 +1187,7 @@ internal fun TestElement.aboveButton(
         relativeCommand = ":aboveButton",
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -1198,12 +1198,12 @@ internal fun TestElement.aboveButton(
  */
 fun TestElement.aboveButton(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveButton($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
@@ -1213,19 +1213,19 @@ fun TestElement.aboveButton(
  */
 fun TestElement.aboveButton(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveButton($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
 
 internal fun TestElement.aboveSwitch(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -1233,7 +1233,7 @@ internal fun TestElement.aboveSwitch(
         relativeCommand = ":aboveSwitch",
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = targetElements
     )
     return e
@@ -1244,12 +1244,12 @@ internal fun TestElement.aboveSwitch(
  */
 fun TestElement.aboveSwitch(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveSwitch($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
@@ -1259,12 +1259,12 @@ fun TestElement.aboveSwitch(
  */
 fun TestElement.aboveSwitch(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":aboveSwitch($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }

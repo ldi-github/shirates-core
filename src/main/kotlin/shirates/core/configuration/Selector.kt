@@ -772,7 +772,10 @@ class Selector(
     /**
      * getXPathCondition
      */
-    fun getXPathCondition(packageName: String = rootElement.packageName): String {
+    fun getXPathCondition(
+        packageName: String = rootElement.packageName,
+        withPos: Boolean = true
+    ): String {
 
         val selectors = mutableListOf<Selector>()
         if (this.expression.isNullOrBlank().not()) {
@@ -780,23 +783,31 @@ class Selector(
         }
         selectors.addAll(orSelectors)
 
-        val conditions = mutableListOf<String>()
-        for (s in selectors) {
-            val cond = s.getXPathConditionCore(packageName)
-            if (cond.isNotBlank()) {
-                conditions.add(cond)
-            }
-        }
-
-        val condition = if (conditions.count() == 1) {
-            conditions[0]
-        } else if (conditions.count() > 1) {
-            conditions.filter { it.isNotBlank() }.map { "($it)" }.joinToString(" or ")
-        } else {
+        if (selectors.isEmpty()) {
             return ""
         }
 
-        return "[$condition]"
+        val c0 = selectors[0].getXPathConditionCore(packageName)
+        val conditions = mutableListOf(c0)
+
+        for (i in 1 until selectors.count()) {
+            val s = selectors[i]
+            val c = s.getXPathConditionCore(packageName)
+            conditions.add(c)
+        }
+        var condition = conditions.joinToString(" or ")
+        if (conditions.count() > 1) {
+            condition = "($condition)"
+        }
+
+        if (condition.isNotBlank()) {
+            condition = "[$condition]"
+        }
+        if (withPos && pos != null && command != ":previous") {
+            condition = "$condition[$pos]"
+        }
+
+        return condition
     }
 
     private fun getXPathConditionCore(packageName: String): String {
@@ -808,11 +819,7 @@ class Selector(
             addXpathFunctionsForIos(list)
         }
 
-        if (pos != null) {
-            list.add("position()=$pos")
-        }
-
-        return if (list.count() == 1) {
+        val xpathCondition = if (list.count() == 1) {
             list[0]
         } else {
             val conditions = mutableListOf<String>()
@@ -824,6 +831,62 @@ class Selector(
                 }
             }
             conditions.joinToString(" and ")
+        }
+        return xpathCondition
+    }
+
+    /**
+     * getFullXPath
+     */
+    fun getFullXPath(packageName: String = rootElement.packageName): String {
+
+        if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {
+            return ""
+        }
+
+        val relSelectors = relativeSelectors
+        if (relSelectors.isEmpty()) {
+            return getXPathCondition(packageName = packageName)
+        }
+
+        val relativeXPaths = mutableListOf<String>()
+        for (r in relSelectors) {
+            val axis = getAxisFromCommand(r.command ?: "")
+            val cond = r.getXPathCondition(packageName = packageName)
+            val position = if (cond.isNotBlank()) "" else getPositionCondition(r)
+            relativeXPaths.add("/$axis::*$cond$position")
+        }
+
+        val subXPathCondition = relativeXPaths.joinToString("")
+        val fullXPathCondition = getXPathCondition(packageName = packageName) + subXPathCondition
+        return fullXPathCondition
+    }
+
+    private fun getPositionCondition(r: Selector): String {
+
+        if (r.pos == null) {
+            return ""
+        }
+        return "[${r.pos}]"
+    }
+
+    private fun isSupportedRelativeCommand(command: String?): Boolean {
+
+        if (command == null) return false
+
+        val axis = getAxisFromCommand(command = command)
+        return axis.isNotBlank()
+    }
+
+    private fun getAxisFromCommand(command: String): String {
+
+        return when (command) {
+            ":parent" -> "parent"
+            ":child" -> "child"
+            ":sibling" -> "parent::*/child"
+            ":ancestor" -> "ancestor"
+            ":descendant" -> "descendant"
+            else -> ""
         }
     }
 

@@ -1,7 +1,7 @@
 package shirates.core.uitest.android.driver.commandextension
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
@@ -22,7 +22,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 }.expectation {
                     it.dontExist("no exist")
 
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExist("Network & internet")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<Network & internet> does not exist")
@@ -46,7 +46,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 condition {
                     it.flickBottomToTop()
                 }.expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExistWithScrollDown("System")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<System> does not exist (scroll down)")
@@ -71,7 +71,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 condition {
                     it.flickBottomToTop()
                 }.expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExistWithScrollUp("Network & internet")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<Network & internet> does not exist (scroll up)")
@@ -93,7 +93,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
             }
             case(2) {
                 expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExistAll("no exist", "void", "Battery", "something")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<Battery> does not exist")
@@ -113,7 +113,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 }.expectation {
                     it.dontExistInScanResults("no exist")
 
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.dontExistInScanResults("Battery")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<Battery> doest not exist in scan results")
@@ -134,7 +134,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                     it.textIs("Battery")
 
                     assertThat(it.hasError).isFalse()
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.textIs("Battery？")
                     }.isInstanceOf(TestNGException::class.java).hasMessageContaining(
                         Message.message(
@@ -161,7 +161,7 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                     it.textIsEmpty()
                     assertThat(it.hasError).isFalse()
 
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         val e2 = it.select("#search_action_bar_title")
                         e2.textIsEmpty()
                     }.isInstanceOf(TestNGException::class.java)

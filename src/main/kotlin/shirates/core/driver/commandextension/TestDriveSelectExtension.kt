@@ -11,14 +11,14 @@ import shirates.core.logging.Message.message
  */
 fun TestDrive.filterElements(
     expression: String,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     useCache: Boolean = testContext.useCache
 ): List<TestElement> {
 
     if (useCache) {
         syncCache(force = true)
     }
-    return TestElementCache.filterElements(expression = expression, safeElementOnly = safeElementOnly)
+    return TestElementCache.filterElements(expression = expression, inViewOnly = inViewOnly)
 }
 
 /**
@@ -26,13 +26,13 @@ fun TestDrive.filterElements(
  */
 fun TestDrive.filterElements(
     selector: Selector,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     selectContext: TestElement = rootElement
 ): List<TestElement> {
 
     return TestElementCache.filterElements(
         selector = selector,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         selectContext = selectContext
     )
 }
@@ -45,7 +45,7 @@ fun TestDrive.select(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -67,7 +67,7 @@ fun TestDrive.select(
             waitSeconds = waitSeconds,
             throwsException = throwsException,
             useCache = useCache,
-            safeElementOnly = safeElementOnly
+            inViewOnly = inViewOnly
         )
     }
     if (func != null) {
@@ -89,7 +89,7 @@ fun TestDrive.widget(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -105,7 +105,7 @@ fun TestDrive.widget(
         throwsException = throwsException,
         waitSeconds = waitSeconds,
         useCache = useCache,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         log = log,
         func = func
     )
@@ -268,7 +268,7 @@ fun TestDrive.selectInScanResults(
                 expression = expression,
                 throwsException = false,
                 selectContext = scanRoot.element,
-                safeElementOnly = true
+                inViewOnly = true
             )
             if (e.isEmpty.not()) {
                 return@execSelectCommand
@@ -296,7 +296,7 @@ internal fun TestDrive.canSelect(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     waitSeconds: Double = 0.0,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): Boolean {
 
     val e = TestDriver.select(
@@ -308,7 +308,7 @@ internal fun TestDrive.canSelect(
         scrollMaxCount = scrollMaxCount,
         waitSeconds = waitSeconds,
         throwsException = false,
-        safeElementOnly = safeElementOnly
+        inViewOnly = inViewOnly
     )
 
     return e.isEmpty.not()
@@ -326,7 +326,7 @@ fun TestDrive.canSelect(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     screenName: String = TestDriver.currentScreen,
     waitSeconds: Double = 0.0,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     log: Boolean = false
 ): Boolean {
     val testElement = getThisOrRootElement()
@@ -343,7 +343,7 @@ fun TestDrive.canSelect(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             waitSeconds = waitSeconds,
-            safeElementOnly = safeElementOnly
+            inViewOnly = inViewOnly
         )
     }
     if (logLine != null) {
@@ -375,7 +375,7 @@ fun TestDrive.canSelectWithScrollDown(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            safeElementOnly = true
+            inViewOnly = true
         )
     }
     if (logLine != null) {
@@ -407,7 +407,7 @@ fun TestDrive.canSelectWithScrollUp(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            safeElementOnly = true
+            inViewOnly = true
         )
     }
     if (logLine != null) {
@@ -439,7 +439,7 @@ fun TestDrive.canSelectWithScrollRight(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            safeElementOnly = true
+            inViewOnly = true
         )
     }
     if (logLine != null) {
@@ -471,7 +471,7 @@ fun TestDrive.canSelectWithScrollLeft(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            safeElementOnly = true
+            inViewOnly = true
         )
     }
     if (logLine != null) {
@@ -540,7 +540,7 @@ fun TestDrive.canSelectAllInScanResults(
  */
 internal fun TestDrive.canSelectAll(
     selectors: Iterable<Selector>,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     log: Boolean = false
 ): Boolean {
     val testElement = refreshLastElement()
@@ -550,7 +550,7 @@ internal fun TestDrive.canSelectAll(
     val context = TestDriverCommandContext(testElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (selector in selectors) {
-            foundAll = canSelect(selector = selector, safeElementOnly = safeElementOnly)
+            foundAll = canSelect(selector = selector, inViewOnly = inViewOnly)
             if (foundAll.not()) {
                 break
             }
@@ -567,7 +567,7 @@ internal fun TestDrive.canSelectAll(
  */
 fun TestDrive.canSelectAll(
     vararg expressions: String,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     log: Boolean = false
 ): Boolean {
     val testElement = getThisOrRootElement()
@@ -578,7 +578,7 @@ fun TestDrive.canSelectAll(
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         val screenInfo = TestDriver.screenInfo
         val selectors = expressions.map { screenInfo.getSelector(expression = it) }
-        foundAll = canSelectAll(selectors = selectors, safeElementOnly = safeElementOnly)
+        foundAll = canSelectAll(selectors = selectors, inViewOnly = inViewOnly)
     }
     if (logLine != null) {
         logLine.message += " (result=$foundAll)"

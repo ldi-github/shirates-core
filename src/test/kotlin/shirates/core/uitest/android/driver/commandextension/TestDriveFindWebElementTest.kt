@@ -1,11 +1,9 @@
 package shirates.core.uitest.android.driver.commandextension
 
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.exception.TestDriverException
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -66,10 +64,8 @@ class TestDriveFindWebElementTest : UITest() {
             }
             case(7, "pos") {
                 expectation {
-                    assertThatThrownBy {
-                        it.findWebElement(".android.widget.TextView&&[999]")
-                    }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage("Element not found. (selector=<.android.widget.TextView&&[999]>)")
+                    it.findWebElement(".android.widget.TextView&&[999]")
+                        .isEmpty.thisIsTrue()
                 }
             }
             case(99) {

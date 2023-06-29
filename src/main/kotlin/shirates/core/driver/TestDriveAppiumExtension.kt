@@ -1,5 +1,7 @@
 package shirates.core.driver
 
+import org.openqa.selenium.By
+import org.openqa.selenium.NoSuchElementException
 import shirates.core.driver.TestDriver.appiumDriver
 import java.time.Duration
 
@@ -21,4 +23,20 @@ fun TestDrive.implicitWaitMilliseconds(
     }
 
     return lastElement
+}
+
+/**
+ * findElement
+ */
+internal fun TestDrive.findElement(timeoutMilliseconds: Int, locator: By): TestElement {
+
+    var e: TestElement? = null
+    try {
+        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+            e = appiumDriver.findElement(locator).toTestElement()
+        }
+    } catch (t: NoSuchElementException) {
+        e = TestElement.emptyElement
+    }
+    return e!!
 }

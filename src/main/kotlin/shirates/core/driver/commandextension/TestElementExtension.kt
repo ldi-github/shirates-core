@@ -62,7 +62,7 @@ fun TestElement.refreshThisElement(): TestElement {
 
     val e = try {
         val sel = getUniqueSelector()
-        TestDriver.select(selector = sel, throwsException = false, useCache = true, safeElementOnly = true)
+        TestDriver.select(selector = sel, throwsException = false, useCache = true, inViewOnly = true)
     } catch (t: Throwable) {
         TestLog.warn(t.message!!)
         return TestElement.emptyElement
@@ -80,7 +80,11 @@ fun TestElement.refreshSelector(): TestElement {
         return this
     }
 
-    this.selector = TestElementCache.getSelector(testElement = this)
+    if (testContext.useCache) {
+        this.selector = TestElementCache.getSelector(testElement = this)
+    } else {
+        this.selector = this.getUniqueSelector()
+    }
     return this
 }
 
@@ -119,7 +123,7 @@ fun TestElement.getWebElement(): WebElement {
     val xpath = getUniqueXpath()
     try {
         var m: WebElement? = null
-        implicitWaitMilliseconds(200) {
+        implicitWaitMilliseconds(0) {
             m = TestDriver.appiumDriver.findElement(By.xpath(xpath))
         }
         return m!!
@@ -145,7 +149,7 @@ fun TestElement.getUniqueSelector(): Selector {
 
     fun isUniqueSelector(sel: Selector): Boolean {
 
-        val elements = TestElementCache.filterElements(selector = sel, safeElementOnly = true)
+        val elements = TestElementCache.filterElements(selector = sel, inViewOnly = true)
         return elements.count() == 1
     }
 
@@ -174,7 +178,7 @@ fun TestElement.getUniqueSelector(): Selector {
         }
     }
 
-    val uniqueXpath = getUniqueXpath().ifBlank { "/*[1]" }
+    val uniqueXpath = getUniqueXpath().ifBlank { "//*[1]" }
     return Selector("xpath=${uniqueXpath}")
 }
 
@@ -390,7 +394,7 @@ fun TestElement.capture(
             throwsException = throwsException,
             waitSeconds = waitSeconds,
             useCache = useCache,
-            safeElementOnly = true
+            inViewOnly = true
         )
     }
 

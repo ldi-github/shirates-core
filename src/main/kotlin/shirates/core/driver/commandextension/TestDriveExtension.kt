@@ -13,8 +13,11 @@ import shirates.core.utility.misc.AppNameUtility
  */
 fun TestDrive.getThisOrRootElement(): TestElement {
 
-    return if (this is TestElement) this
-    else rootElement
+    if (this is TestElement) {
+        if (this.isWidget.not()) return this
+    }
+
+    return rootElement
 }
 
 /**

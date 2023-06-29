@@ -6,13 +6,13 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 internal fun TestElement.innerFlow(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val innerElements = this.descendants.filter { it.isWidget }.toMutableList()
     return this.flow(
         selector = selector,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = innerElements
     )
 }
@@ -22,12 +22,12 @@ internal fun TestElement.innerFlow(
  */
 fun TestElement.innerFlow(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerFlow($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -37,24 +37,24 @@ fun TestElement.innerFlow(
  */
 fun TestElement.innerFlow(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerFlow($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
 
 internal fun TestElement.innerLabel(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.labelTypesExpression
-    return this.innerFlow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -62,12 +62,12 @@ internal fun TestElement.innerLabel(
  */
 fun TestElement.innerLabel(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerLabel($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
@@ -77,24 +77,24 @@ fun TestElement.innerLabel(
  */
 fun TestElement.innerLabel(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerLabel($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
 
 internal fun TestElement.innerInput(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.inputTypesExpression
-    return this.innerFlow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -102,12 +102,12 @@ internal fun TestElement.innerInput(
  */
 fun TestElement.innerInput(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerInput($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
@@ -117,24 +117,24 @@ fun TestElement.innerInput(
  */
 fun TestElement.innerInput(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerInput($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
 
 internal fun TestElement.innerImage(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.imageTypesExpression
-    return this.innerFlow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -142,12 +142,12 @@ internal fun TestElement.innerImage(
  */
 fun TestElement.innerImage(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerImage($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
@@ -157,24 +157,24 @@ fun TestElement.innerImage(
  */
 fun TestElement.innerImage(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerImage($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
 
 internal fun TestElement.innerButton(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
-    return this.innerFlow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -182,12 +182,12 @@ internal fun TestElement.innerButton(
  */
 fun TestElement.innerButton(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerButton($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
@@ -197,24 +197,24 @@ fun TestElement.innerButton(
  */
 fun TestElement.innerButton(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerButton($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
 
 internal fun TestElement.innerSwitch(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.switchTypesExpression
-    return this.innerFlow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -222,12 +222,12 @@ internal fun TestElement.innerSwitch(
  */
 fun TestElement.innerSwitch(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerSwitch($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
@@ -237,12 +237,12 @@ fun TestElement.innerSwitch(
  */
 fun TestElement.innerSwitch(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerSwitch($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
@@ -250,13 +250,13 @@ fun TestElement.innerSwitch(
 
 internal fun TestElement.innerVflow(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val innerElements = this.descendants.toMutableList()
     return this.vflow(
         selector = selector,
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         targetElements = innerElements
     )
 }
@@ -266,12 +266,12 @@ internal fun TestElement.innerVflow(
  */
 fun TestElement.innerVflow(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVflow($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -281,24 +281,24 @@ fun TestElement.innerVflow(
  */
 fun TestElement.innerVflow(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVflow($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
 
 internal fun TestElement.innerVlabel(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.labelTypesExpression
-    return this.innerVflow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -306,12 +306,12 @@ internal fun TestElement.innerVlabel(
  */
 fun TestElement.innerVlabel(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVlabel($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
@@ -321,24 +321,24 @@ fun TestElement.innerVlabel(
  */
 fun TestElement.innerVlabel(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVlabel($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
 
 internal fun TestElement.innerVinput(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.inputTypesExpression
-    return this.innerVflow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -346,12 +346,12 @@ internal fun TestElement.innerVinput(
  */
 fun TestElement.innerVinput(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVinput($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
@@ -361,24 +361,24 @@ fun TestElement.innerVinput(
  */
 fun TestElement.innerVinput(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVinput($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
 
 internal fun TestElement.innerVimage(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.imageTypesExpression
-    return this.innerVflow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -386,12 +386,12 @@ internal fun TestElement.innerVimage(
  */
 fun TestElement.innerVimage(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVimage($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
@@ -401,24 +401,24 @@ fun TestElement.innerVimage(
  */
 fun TestElement.innerVimage(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVimage($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
 
 internal fun TestElement.innerVbutton(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
-    return this.innerVflow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -426,12 +426,12 @@ internal fun TestElement.innerVbutton(
  */
 fun TestElement.innerVbutton(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVbutton($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
@@ -441,24 +441,24 @@ fun TestElement.innerVbutton(
  */
 fun TestElement.innerVbutton(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVbutton($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
 
 internal fun TestElement.innerVswitch(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.switchTypesExpression
-    return this.innerVflow(selector = sel, safeElementOnly = safeElementOnly)
+    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
 }
 
 /**
@@ -466,12 +466,12 @@ internal fun TestElement.innerVswitch(
  */
 fun TestElement.innerVswitch(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVswitch($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
@@ -481,12 +481,12 @@ fun TestElement.innerVswitch(
  */
 fun TestElement.innerVswitch(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":innerVswitch($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }

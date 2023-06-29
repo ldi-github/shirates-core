@@ -1,7 +1,7 @@
 package shirates.core.unittest.utility.misc
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.*
@@ -49,7 +49,7 @@ class DateExtensionTest : UnitTest() {
             assertThat(expected).isEqualTo(actual)
         }
 
-        Assertions.assertThatThrownBy {
+        assertThatThrownBy {
             // Arrange
             val expected = "2021/08/01 01:01:01.123"
             val date = expected.toDate()

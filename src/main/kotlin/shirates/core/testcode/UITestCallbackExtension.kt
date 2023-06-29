@@ -12,6 +12,7 @@ import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.hasOsaifuKeitai
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isStub
+import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestFailException
 import shirates.core.logging.LogFileFormat
 import shirates.core.logging.LogType
@@ -39,7 +40,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         var failOfTestContext = false
         var failAnnotation: Fail? = null
         var noLoadRunOfTestContext = false
-        var disableCacheAnnotation = false
+        var enableCache: Boolean? = null
     }
 
     /**
@@ -51,7 +52,6 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failOfTestContext = false
         failAnnotation = null
         noLoadRunOfTestContext = false
-        disableCacheAnnotation = false
 
         testClassWatch = StopWatch("testClassWatch").start()
 
@@ -102,7 +102,24 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failOfTestContext = context.isMethodAnnotated(Fail::class)
         failAnnotation = context.getMethodAnnotation(Fail::class) ?: context.getClassAnnotation(Fail::class)
         noLoadRunOfTestContext = context.isAnnotated(NoLoadRun::class)
-        disableCacheAnnotation = context.isAnnotated(DisableCache::class)
+
+        if (context.isClassAnnotated(DisableCache::class) && context.isClassAnnotated(EnableCache::class)) {
+            throw TestConfigException("Do not use @EnableCache and @DisableCache on a class.")
+        }
+        if (context.isMethodAnnotated(DisableCache::class) && context.isMethodAnnotated(EnableCache::class)) {
+            throw TestConfigException("Do not use @EnableCache and @DisableCache on a function.")
+        }
+
+        if (context.isClassAnnotated(EnableCache::class)) {
+            enableCache = true
+        } else if (context.isClassAnnotated(DisableCache::class)) {
+            enableCache = false
+        }
+        if (context.isMethodAnnotated(EnableCache::class)) {
+            enableCache = true
+        } else if (context.isMethodAnnotated(DisableCache::class)) {
+            enableCache = false
+        }
 
         val requiredContext = context!!.requiredContext
         if (requiredContext.isRequired.not()) {
@@ -186,13 +203,15 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.trace("@Test fun $testMethodName()")
         TestLog.trace(context.displayName)
 
+        if (enableCache == true) {
+            testContext.enableCache = true
+        } else if (enableCache == false) {
+            testContext.enableCache = false
+        }
+
         testContext.saveState()
         uiTest?.beforeEach(context)
         lastElement.lastError = null
-
-        if (disableCacheAnnotation) {
-            TestLog.info("@DisableCache")
-        }
 
         val lap = testFunctionWatch.lap("setupExecuted")
         val duration = "%.1f".format(lap.durationSeconds)
@@ -219,22 +238,23 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         }
 
         val hasNoException = context?.executionException?.isEmpty == true
-        if (hasNoException && scenarioLines.any { it.logType == LogType.SCENARIO }.not()) {
-            val ex = TestAbortedException("scenario not implemented.")
-            TestLog.warn(ex.message!!)
-            throw ex
-        }
 
         failOfTestContext = false
         failAnnotation = null
         noLoadRunOfTestContext = false
-        disableCacheAnnotation = false
+        enableCache = null
         testContext.resumeState()
 
         testFunctionWatch.stop()
         val duration = "%.1f".format(testFunctionWatch.elapsedSeconds)
         TestLog.info(message(id = "testFunctionExecuted", arg1 = duration))
         TestLog.info("End of ${uiTest?.TestFunctionDescription}")
+
+        if (hasNoException && scenarioLines.any { it.logType == LogType.SCENARIO }.not()) {
+            val ex = TestAbortedException("scenario not implemented.")
+            TestLog.warn(ex.message!!)
+            throw ex
+        }
     }
 
     /**

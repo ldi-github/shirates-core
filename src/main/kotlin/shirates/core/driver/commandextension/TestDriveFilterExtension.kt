@@ -2,6 +2,8 @@ package shirates.core.driver.commandextension
 
 import org.openqa.selenium.By
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.isAndroid
+import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 /**
  * filterElements
@@ -16,8 +18,11 @@ fun TestDrive.filterElements(
         return TestElementCache.filterElements(expression = expression, selectContext = selectContext)
     }
 
+    val startPart =
+        if (selectContext.parentElement.isEmpty) "//*"
+        else selectContext.getUniqueXpath() + "/descendant::*"
     val sel = getSelector(expression)
-    val xpath = "//*" + sel.getXPathCondition()
+    val xpath = "${startPart}${sel.getXPathCondition()}"
     val elements = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
     val results = mutableListOf<TestElement>()
     for (e in elements) {
@@ -32,11 +37,6 @@ fun TestDrive.filterElements(
     return results
 }
 
-private fun TestDrive.getSelectContext(): TestElement {
-
-    return getThisOrRootElement().cacheRootElement ?: rootElement
-}
-
 /**
  * allElements
  */
@@ -46,7 +46,7 @@ fun TestDrive.allElements(
 
     if (useCache) {
         syncCache(force = true)
-        val selectContext = getSelectContext()
+        val selectContext = getThisOrRootElement()
         return selectContext.descendantsAndSelf
     }
 
@@ -62,13 +62,25 @@ val TestDrive.elements
         return allElements(useCache = testContext.useCache)
     }
 
+private val widgetNames = ElementCategoryExpressionUtility.widgetTypesExpression
+    .removePrefix("(").removeSuffix(")").replace("|", ",")
+
 /**
  * widgets
  */
 val TestDrive.widgets
     get(): List<TestElement> {
-        val selectContext = getSelectContext()
-        return filterElements(expression = ".widget", selectContext = selectContext)
+        val selectContext = rootElement
+        if (testContext.useCache) {
+            return filterElements(expression = ".widget", selectContext = selectContext)
+        }
+
+        val typeName = if (isAndroid) "class" else "type"
+        val condition = "[contains('$widgetNames', string(@$typeName))]"
+        val xpath =
+            if (selectContext.isEmpty) "//*$condition" else "(${selectContext.getUniqueXpath()})/descendant::*$condition"
+        val widgets = driver.appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
+        return widgets
     }
 
 /**
@@ -76,7 +88,7 @@ val TestDrive.widgets
  */
 val TestDrive.inputWidgets
     get(): List<TestElement> {
-        val selectContext = getSelectContext()
+        val selectContext = rootElement
         return filterElements(expression = ".input", selectContext = selectContext)
     }
 
@@ -85,7 +97,7 @@ val TestDrive.inputWidgets
  */
 val TestDrive.labelWidgets
     get(): List<TestElement> {
-        val selectContext = getSelectContext()
+        val selectContext = rootElement
         return filterElements(expression = ".label", selectContext = selectContext)
     }
 
@@ -94,7 +106,7 @@ val TestDrive.labelWidgets
  */
 val TestDrive.imageWidgets
     get(): List<TestElement> {
-        val selectContext = getSelectContext()
+        val selectContext = rootElement
         return filterElements(expression = ".image", selectContext = selectContext)
     }
 
@@ -103,7 +115,7 @@ val TestDrive.imageWidgets
  */
 val TestDrive.buttonWidgets
     get(): List<TestElement> {
-        val selectContext = getSelectContext()
+        val selectContext = rootElement
         return filterElements(expression = ".button", selectContext = selectContext)
     }
 
@@ -112,7 +124,7 @@ val TestDrive.buttonWidgets
  */
 val TestDrive.switchWidgets
     get(): List<TestElement> {
-        val selectContext = getSelectContext()
+        val selectContext = rootElement
         return filterElements(expression = ".switch", selectContext = selectContext)
     }
 

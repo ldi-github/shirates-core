@@ -1,7 +1,7 @@
 package shirates.core.uitest.android.driver.commandextension
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
@@ -26,7 +26,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
             case(2) {
                 expectation {
                     val sw = StopWatch()
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         sw.start()
                         it.existAll("Network & internet", "Connected devices", "Apps", "no exist", waitSeconds = 3.0)
                     }.isInstanceOf(TestNGException::class.java)
@@ -39,7 +39,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
             case(3) {
                 expectation {
                     val sw = StopWatch()
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         sw.start()
                         it.existAll("Network & internet", "Connected devices", "Apps", "no exist", waitSeconds = 2.0)
                     }.isInstanceOf(TestNGException::class.java)
@@ -86,7 +86,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                 condition {
                     it.flickAndGoUp()
                 }.expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.existAllWithScrollDown(
                             "Network & internet",
                             "Connected devices",
@@ -134,7 +134,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
             }
             case(2) {
                 expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.existAllInScanResults(
                             "Network & internet",
                             "Connected devices",

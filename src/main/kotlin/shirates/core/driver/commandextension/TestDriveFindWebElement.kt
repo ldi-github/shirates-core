@@ -50,7 +50,7 @@ private fun TestDrive.findWebElementsCore(
         return list
     }
 
-    val xpath = if (selector.xpath.isNullOrBlank()) "//*${selector.getXPathCondition()}" else selector.xpath
+    val xpath = selector.xpath ?: "//*${selector.getXPathCondition()}"
     var testElements = listOf<TestElement>()
     testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
         testElements = driver.appiumDriver.findElements(By.xpath(xpath))
@@ -76,7 +76,7 @@ fun TestDrive.findWebElements(
 private fun findElementsById(id: String, single: Boolean): List<TestElement> {
 
     if (single) {
-        val e = appiumDriver.findElement(By.id(id)).toTestElement()
+        val e = testDrive.findElement(timeoutMilliseconds = 0, By.id(id))
         return listOf(e)
     }
     return appiumDriver.findElements(By.id(id)).map { it.toTestElement() }
@@ -85,7 +85,7 @@ private fun findElementsById(id: String, single: Boolean): List<TestElement> {
 private fun findElementsByClassName(className: String, single: Boolean): List<TestElement> {
 
     if (single) {
-        val e = appiumDriver.findElement(By.className(className)).toTestElement()
+        val e = testDrive.findElement(timeoutMilliseconds = 0, By.className(className))
         return listOf(e)
     }
     return appiumDriver.findElements(By.className(className)).map { it.toTestElement() }
@@ -94,7 +94,7 @@ private fun findElementsByClassName(className: String, single: Boolean): List<Te
 private fun findElementsByXpath(xpath: String, single: Boolean): List<TestElement> {
 
     if (single) {
-        val e = appiumDriver.findElement(By.xpath(xpath)).toTestElement()
+        val e = testDrive.findElement(timeoutMilliseconds = 0, By.xpath(xpath))
         return listOf(e)
     }
     return appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
@@ -123,13 +123,13 @@ fun TestDrive.findWebElement(
     selector: Selector,
     timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
     throwsException: Boolean = false,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     var testElements = findWebElementsCore(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
-    if (safeElementOnly) {
+    if (inViewOnly) {
         TestDriver.screenInfo.refreshOverlayElements()
-        testElements = testElements.filter { it.isSafe }
+        testElements = testElements.filter { it.isInView }
     }
     if (testElements.isEmpty() && throwsException) {
         throw TestDriverException("Element not found. (selector=$selector)")
@@ -144,14 +144,14 @@ fun TestDrive.findWebElement(
 fun TestDrive.findWebElement(
     expression: String,
     timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     val selector = getSelector(expression = expression)
     return findWebElement(
         selector = selector,
         timeoutMilliseconds = timeoutMilliseconds,
-        safeElementOnly = safeElementOnly
+        inViewOnly = inViewOnly
     )
 }
 

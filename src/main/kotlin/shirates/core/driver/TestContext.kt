@@ -5,7 +5,6 @@ import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
-import shirates.core.testcode.UITestCallbackExtension
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.memberProperties
@@ -162,7 +161,7 @@ class TestContext(
             if (forceUseCache) {
                 return true
             }
-            return enableCache && UITestCallbackExtension.disableCacheAnnotation.not()
+            return enableCache
         }
 
     @SaveTarget

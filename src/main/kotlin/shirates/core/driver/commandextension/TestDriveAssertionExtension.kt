@@ -338,7 +338,7 @@ internal fun TestDrive.existCore(
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean
 ): TestElement {
 
     var e = TestElement()
@@ -374,7 +374,7 @@ internal fun TestDrive.existCore(
             throwsException = false,
             waitSeconds = waitSeconds,
             useCache = useCache,
-            safeElementOnly = safeElementOnly
+            inViewOnly = inViewOnly
         )
         TestDriver.postProcessForAssertion(
             selectResult = e,
@@ -397,6 +397,7 @@ fun TestDrive.exist(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
+    inViewOnly: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -423,7 +424,8 @@ fun TestDrive.exist(
             waitSeconds = waitSeconds,
             useCache = useCache,
             scroll = scroll,
-            direction = direction
+            direction = direction,
+            inViewOnly = inViewOnly
         )
     }
 
@@ -464,7 +466,8 @@ fun TestDrive.existWithScrollDown(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Down,
-            throwsException = throwsException
+            throwsException = throwsException,
+            inViewOnly = true
         )
     }
     if (func != null) {
@@ -504,7 +507,8 @@ fun TestDrive.existWithScrollUp(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Up,
-            throwsException = throwsException
+            throwsException = throwsException,
+            inViewOnly = true
         )
     }
     if (func != null) {
@@ -544,7 +548,8 @@ fun TestDrive.existWithScrollRight(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Right,
-            throwsException = throwsException
+            throwsException = throwsException,
+            inViewOnly = true
         )
     }
     if (func != null) {
@@ -584,7 +589,8 @@ fun TestDrive.existWithScrollLeft(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Left,
-            throwsException = throwsException
+            throwsException = throwsException,
+            inViewOnly = true
         )
     }
     if (func != null) {
@@ -600,7 +606,7 @@ fun TestDrive.existWithScrollLeft(
 fun TestDrive.existInScanResults(
     expression: String,
     throwsException: Boolean = true,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -617,7 +623,7 @@ fun TestDrive.existInScanResults(
             for (scanResult in TestElementCache.scanResults) {
                 TestLog.trace("from [scanResults]")
 
-                e = scanResult.element.findInDescendantsAndSelf(selector = sel, safeElementOnly = safeElementOnly)
+                e = scanResult.element.findInDescendantsAndSelf(selector = sel, inViewOnly = inViewOnly)
                 if (e.isEmpty.not()) {
                     TestLog.trace("found in scanResults")
                     break
@@ -690,11 +696,11 @@ fun TestDrive.existAllWithScrollDown(
  */
 fun TestDrive.existAllInScanResults(
     vararg expressions: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     for (expression in expressions) {
-        this.existInScanResults(expression = expression, safeElementOnly = safeElementOnly)
+        this.existInScanResults(expression = expression, inViewOnly = inViewOnly)
     }
 
     return lastElement
@@ -773,7 +779,7 @@ internal fun TestDrive.dontExistCore(
         waitSeconds = 0.0,
         throwsException = false,
         useCache = useCache,
-        safeElementOnly = true
+        inViewOnly = true
     )
 
     if (waitSeconds > 0.0 && scroll.not() && e.isFound) {
@@ -781,7 +787,7 @@ internal fun TestDrive.dontExistCore(
         SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds
         ) {
-            e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = true)
+            e = TestElementCache.select(selector = selector, throwsException = false, inViewOnly = true)
             if (e.isFound) {
                 refreshCache()
             }
@@ -932,7 +938,7 @@ fun TestDrive.dontExistAllInScanResult(
  */
 fun TestDrive.dontExistInScanResults(
     expression: String,
-    safeElementOnly: Boolean = true,
+    inViewOnly: Boolean = true,
     throwsException: Boolean = true
 ): TestElement {
 
@@ -949,7 +955,7 @@ fun TestDrive.dontExistInScanResults(
         for (scanRoot in TestElementCache.scanResults) {
             TestLog.trace("from [scanResults]")
 
-            e = scanRoot.element.findInDescendantsAndSelf(selector = sel, safeElementOnly = safeElementOnly)
+            e = scanRoot.element.findInDescendantsAndSelf(selector = sel, inViewOnly = inViewOnly)
             if (e.isEmpty.not()) {
                 TestLog.trace("found in scanResults")
                 break

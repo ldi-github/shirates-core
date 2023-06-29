@@ -19,7 +19,7 @@ val TestElement.descendantsInBounds: List<TestElement>
  */
 fun TestElement.findInDescendantsAndSelf(
     expression: String,
-    safeElementOnly: Boolean = false
+    inViewOnly: Boolean = false
 ): TestElement {
 
     TestLog.trace()
@@ -31,7 +31,7 @@ fun TestElement.findInDescendantsAndSelf(
         sel = TestDriver.expandExpression(expression = expression)
     }
 
-    TestDriver.lastElement = findInDescendantsAndSelf(selector = sel, safeElementOnly = safeElementOnly)
+    TestDriver.lastElement = findInDescendantsAndSelf(selector = sel, inViewOnly = inViewOnly)
 
     return TestDriver.lastElement
 }
@@ -41,12 +41,12 @@ fun TestElement.findInDescendantsAndSelf(
  */
 fun TestElement.findInDescendantsAndSelf(
     selector: Selector,
-    safeElementOnly: Boolean = false
+    inViewOnly: Boolean = false
 ): TestElement {
 
     TestLog.trace()
 
-    val elms = descendantsAndSelf.filterBySelector(selector = selector, safeElementOnly = safeElementOnly)
+    val elms = descendantsAndSelf.filterBySelector(selector = selector, inViewOnly = inViewOnly)
     var a = elms.firstOrNull()
 
     if (a == null) {

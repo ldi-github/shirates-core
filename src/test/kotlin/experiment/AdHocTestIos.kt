@@ -57,4 +57,23 @@ class AdHocTestIos : UITest() {
             e.printInfo()
         }
     }
+
+    @DisableCache
+    @Test
+    @Order(30)
+    fun select3() {
+
+//        AppiumProxy.getSource()
+//        sourceXml.printInfo()
+//
+//        e1 = it.select("~title=Settings")
+//        e1.printInfo()
+
+//        val sel = Selector("<~title=Settings>:next")
+//        sel.xpath.printInfo()
+
+        e2 = it.select("<~title=Settings>:next")
+        e2.printInfo()
+    }
+
 }

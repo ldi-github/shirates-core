@@ -1,6 +1,5 @@
 package shirates.core.uitest.ios.driver.commandextension
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
@@ -123,7 +122,7 @@ class TestDriveAssertionExtensionTest1 : UITest() {
             case(2) {
                 expectation {
                     val sw = StopWatch()
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         sw.start()
                         it.exist("no exist", waitSeconds = 1.0)
                     }
@@ -135,7 +134,7 @@ class TestDriveAssertionExtensionTest1 : UITest() {
             case(3) {
                 expectation {
                     val sw = StopWatch()
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         sw.start()
                         it.exist("no exist", waitSeconds = 2.0)
                     }

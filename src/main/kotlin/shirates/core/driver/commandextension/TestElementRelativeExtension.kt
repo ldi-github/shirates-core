@@ -10,8 +10,8 @@ import shirates.core.driver.*
  */
 fun TestElement.relative(
     command: String,
-    safeElementOnly: Boolean = true,
-    scopeElements: List<TestElement> = elements,
+    inViewOnly: Boolean = true,
+    scopeElements: List<TestElement> = rootElement.elements,
 ): TestElement {
 
     val selectors = TestDriver.screenInfo.selectors
@@ -24,10 +24,15 @@ fun TestElement.relative(
     val oldSelector = this.selector
     val newSelector = this.getChainedSelector(relativeSelector = relativeSelector)
 
+    val scoped =
+        if (inViewOnly)
+            scopeElements.filter { it.isInView }
+        else scopeElements
+
     val e = relative(
         relativeSelector = relativeSelector,
-        safeElementOnly = safeElementOnly,
-        scopeElements = scopeElements
+        inViewOnly = inViewOnly,
+        scopeElements = scoped
     )
     if (e == this) {
         e.selector = oldSelector
@@ -41,7 +46,7 @@ fun TestElement.relative(
 internal fun TestElement.relative(
     relativeSelector: Selector,
     newSelector: Selector = this.getChainedSelector(relativeSelector = relativeSelector),
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     scopeElements: List<TestElement>
 ): TestElement {
 
@@ -61,14 +66,14 @@ internal fun TestElement.relative(
                 e = this.right(
                     selector = relativeSelector,
                     targetElements = targetElements,
-                    safeElementOnly = safeElementOnly
+                    inViewOnly = inViewOnly
                 )
             }
 
             ":rightInput" -> {
                 e = this.rightInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -76,7 +81,7 @@ internal fun TestElement.relative(
             ":rightLabel" -> {
                 e = this.rightLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -84,7 +89,7 @@ internal fun TestElement.relative(
             ":rightImage" -> {
                 e = this.rightImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -92,7 +97,7 @@ internal fun TestElement.relative(
             ":rightButton" -> {
                 e = this.rightButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -100,7 +105,7 @@ internal fun TestElement.relative(
             ":rightSwitch" -> {
                 e = this.rightSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -108,7 +113,7 @@ internal fun TestElement.relative(
             ":below" -> {
                 e = this.below(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -116,7 +121,7 @@ internal fun TestElement.relative(
             ":belowInput" -> {
                 e = this.belowInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -124,7 +129,7 @@ internal fun TestElement.relative(
             ":belowLabel" -> {
                 e = this.belowLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -132,7 +137,7 @@ internal fun TestElement.relative(
             ":belowImage" -> {
                 e = this.belowImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -140,7 +145,7 @@ internal fun TestElement.relative(
             ":belowButton" -> {
                 e = this.belowButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -148,7 +153,7 @@ internal fun TestElement.relative(
             ":belowSwitch" -> {
                 e = this.belowSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -156,7 +161,7 @@ internal fun TestElement.relative(
             ":left" -> {
                 e = this.left(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -164,7 +169,7 @@ internal fun TestElement.relative(
             ":leftInput" -> {
                 e = this.leftInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -172,7 +177,7 @@ internal fun TestElement.relative(
             ":leftLabel" -> {
                 e = this.leftLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -180,7 +185,7 @@ internal fun TestElement.relative(
             ":leftImage" -> {
                 e = this.leftImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -188,7 +193,7 @@ internal fun TestElement.relative(
             ":leftButton" -> {
                 e = this.leftButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -196,7 +201,7 @@ internal fun TestElement.relative(
             ":leftSwitch" -> {
                 e = this.leftSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -204,7 +209,7 @@ internal fun TestElement.relative(
             ":above" -> {
                 e = this.above(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -212,7 +217,7 @@ internal fun TestElement.relative(
             ":aboveInput" -> {
                 e = this.aboveInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -220,7 +225,7 @@ internal fun TestElement.relative(
             ":aboveLabel" -> {
                 e = this.aboveLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -228,7 +233,7 @@ internal fun TestElement.relative(
             ":aboveImage" -> {
                 e = this.aboveImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -236,7 +241,7 @@ internal fun TestElement.relative(
             ":aboveButton" -> {
                 e = this.aboveButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -244,7 +249,7 @@ internal fun TestElement.relative(
             ":aboveSwitch" -> {
                 e = this.aboveSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -255,7 +260,7 @@ internal fun TestElement.relative(
             ":flow" -> {
                 e = this.flow(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -263,7 +268,7 @@ internal fun TestElement.relative(
             ":vflow" -> {
                 e = this.vflow(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -271,7 +276,7 @@ internal fun TestElement.relative(
             ":flowLabel", ":label" -> {
                 e = this.flowLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -279,7 +284,7 @@ internal fun TestElement.relative(
             ":flowInput", ":input" -> {
                 e = this.flowInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -287,7 +292,7 @@ internal fun TestElement.relative(
             ":flowImage", ":image" -> {
                 e = this.flowImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -295,7 +300,7 @@ internal fun TestElement.relative(
             ":flowButton", ":button" -> {
                 e = this.flowButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -303,68 +308,68 @@ internal fun TestElement.relative(
             ":flowSwitch", ":switch" -> {
                 e = this.flowSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
 
             ":innerFlow", ":inner" -> {
-                e = this.innerFlow(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerFlow(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerLabel" -> {
-                e = this.innerLabel(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerLabel(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerInput" -> {
-                e = this.innerInput(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerInput(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerImage" -> {
-                e = this.innerImage(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerImage(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerButton" -> {
-                e = this.innerButton(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerButton(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerSwitch" -> {
-                e = this.innerSwitch(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerSwitch(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerVflow", ":innerV" -> {
-                e = this.innerVflow(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVflow(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerVlabel" -> {
-                e = this.innerVlabel(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVlabel(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerVinput" -> {
-                e = this.innerVinput(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVinput(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerVimage" -> {
-                e = this.innerVimage(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVimage(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerVbutton" -> {
-                e = this.innerVbutton(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVbutton(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":innerVswitch" -> {
-                e = this.innerVswitch(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVswitch(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             /**
              * XML based
              */
             ":child" -> {
-                e = this.child(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.child(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":sibling" -> {
-                e = this.sibling(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.sibling(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":parent" -> {
@@ -372,17 +377,17 @@ internal fun TestElement.relative(
             }
 
             ":ancestor" -> {
-                e = this.ancestor(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.ancestor(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":descendant" -> {
-                e = this.descendant(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.descendant(selector = relativeSelector, inViewOnly = inViewOnly)
             }
 
             ":next" -> {
                 e = this.next(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
@@ -390,57 +395,57 @@ internal fun TestElement.relative(
             ":previous" -> {
                 e = this.previous(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
 
             ":nextInput" -> {
-                e = this.nextInput(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.nextInput(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
             }
 
             ":preInput" -> {
-                e = this.preInput(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preInput(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
             }
 
             ":nextLabel" -> {
-                e = this.nextLabel(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.nextLabel(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
             }
 
             ":preLabel" -> {
-                e = this.preLabel(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preLabel(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
             }
 
             ":nextImage" -> {
-                e = this.nextImage(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.nextImage(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
             }
 
             ":preImage" -> {
-                e = this.preImage(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preImage(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
             }
 
             ":nextButton" -> {
                 e = this.nextButton(
                     relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
 
             ":preButton" -> {
-                e = this.preButton(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preButton(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
             }
 
             ":nextSwitch" -> {
                 e = this.nextSwitch(
                     relativeSelector,
-                    safeElementOnly = safeElementOnly,
+                    inViewOnly = inViewOnly,
                     targetElements = targetElements
                 )
             }
 
             ":preSwitch" -> {
-                e = this.preSwitch(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preSwitch(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
             }
 
             // negation
@@ -472,15 +477,15 @@ internal fun TestElement.relative(
  */
 fun TestElement.relative(
     relativeSelectors: List<Selector>,
-    safeElementOnly: Boolean = true,
-    scopeElements: List<TestElement> = elements
+    inViewOnly: Boolean = true,
+    scopeElements: List<TestElement> = rootElement.elements
 ): TestElement {
 
     var e = this
     for (selector in relativeSelectors) {
         e = e.relative(
             relativeSelector = selector,
-            safeElementOnly = safeElementOnly,
+            inViewOnly = inViewOnly,
             scopeElements = scopeElements
         )
     }
@@ -490,7 +495,7 @@ fun TestElement.relative(
 
 internal fun TestElement.child(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     var e = TestElement(selector = selector)
@@ -502,7 +507,7 @@ internal fun TestElement.child(
             TestDriver.lastElement = TestElement.emptyElement
             return@execRelativeCommand
         }
-        val target = children.filterBySelector(selector = selector, safeElementOnly = safeElementOnly)
+        val target = children.filterBySelector(selector = selector, inViewOnly = inViewOnly)
         e = target.firstOrNull() ?: TestElement.emptyElement
     }
 
@@ -517,12 +522,12 @@ internal fun TestElement.child(
  */
 fun TestElement.child(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":child($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = children
     )
 }
@@ -532,19 +537,19 @@ fun TestElement.child(
  */
 fun TestElement.child(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":child($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = children
     )
 }
 
 internal fun TestElement.sibling(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     var e = TestElement(selector = selector)
@@ -552,12 +557,12 @@ internal fun TestElement.sibling(
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val te = this
         val p = te.parentElement
-        if (p == null) {
+        if (p.isEmpty) {
             TestDriver.lastElement = TestElement.emptyElement
             return@execRelativeCommand
         }
         val siblings = this.siblings
-        val targets = siblings.filterBySelector(selector = selector, safeElementOnly = safeElementOnly)
+        val targets = siblings.filterBySelector(selector = selector, inViewOnly = inViewOnly)
         e = targets.firstOrNull() ?: TestElement.emptyElement
     }
 
@@ -572,12 +577,12 @@ internal fun TestElement.sibling(
  */
 fun TestElement.sibling(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":sibling($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = parent().children
     )
 }
@@ -587,12 +592,12 @@ fun TestElement.sibling(
  */
 fun TestElement.sibling(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":sibling($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = parent().children
     )
 }
@@ -609,12 +614,11 @@ fun TestElement.parent(): TestElement {
         if (testContext.useCache) {
             e = parentElement ?: TestElement.emptyElement
         } else {
-            if (parentElement?.webElement != null) {
-                e = parentElement!!
+            if (parentElement.webElement != null) {
+                e = parentElement
             } else {
                 val xpath = getUniqueXpath() + "/parent::*"
-                val w = driver.appiumDriver.findElement(By.xpath(xpath))
-                e = if (w != null) TestElement(webElement = w) else TestElement.emptyElement
+                e = testDrive.findElement(timeoutMilliseconds = 0, By.xpath(xpath))
                 parentElement = e
             }
         }
@@ -629,14 +633,14 @@ fun TestElement.parent(): TestElement {
 
 internal fun TestElement.ancestor(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     var e = TestElement()
     val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val filtered = this.ancestors.reversed()
-            .filterBySelector(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
+            .filterBySelector(selector = selector, throwsException = false, inViewOnly = inViewOnly)
         e = filtered.firstOrNull() ?: TestElement.emptyElement
     }
 
@@ -651,10 +655,10 @@ internal fun TestElement.ancestor(
  */
 fun TestElement.ancestor(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
-    return relative(":ancestor($expression)", safeElementOnly = safeElementOnly)
+    return relative(":ancestor($expression)", inViewOnly = inViewOnly)
 }
 
 /**
@@ -662,19 +666,19 @@ fun TestElement.ancestor(
  */
 fun TestElement.ancestor(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":ancestor($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = this.ancestors
     )
 }
 
 internal fun TestElement.descendant(
     selector: Selector,
-    safeElementOnly: Boolean
+    inViewOnly: Boolean
 ): TestElement {
 
     var e = TestElement()
@@ -683,7 +687,7 @@ internal fun TestElement.descendant(
         val filtered = this.descendants.filterBySelector(
             selector = selector,
             throwsException = false,
-            safeElementOnly = safeElementOnly
+            inViewOnly = inViewOnly
         )
         e = filtered.firstOrNull() ?: TestElement.emptyElement
     }
@@ -699,12 +703,12 @@ internal fun TestElement.descendant(
  */
 fun TestElement.descendant(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":descendant($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = this.descendants
     )
 }
@@ -714,12 +718,12 @@ fun TestElement.descendant(
  */
 fun TestElement.descendant(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":descendant($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = descendants
     )
 }

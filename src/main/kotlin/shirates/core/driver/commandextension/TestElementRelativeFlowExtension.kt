@@ -10,13 +10,13 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 private fun TestElement.flowCore(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     scopeElements: List<TestElement>
 ): TestElement {
 
     val sel = selector.copy()
     sel.pos = null
-    val filteredElements = scopeElements.filterBySelector(selector = sel, safeElementOnly = safeElementOnly)
+    val filteredElements = scopeElements.filterBySelector(selector = sel, inViewOnly = inViewOnly)
 
     val fc = FlowContainer()
     val isThisContainingOthers =
@@ -33,7 +33,7 @@ private fun TestElement.flowCore(
     }
 
     val elements =
-        flowElements.filterBySelector(selector = selector, safeElementOnly = safeElementOnly)   // filter with pos
+        flowElements.filterBySelector(selector = selector, inViewOnly = inViewOnly)   // filter with pos
     val e = elements.firstOrNull() ?: TestElement()
     e.selector = this.getChainedSelector(relativeCommand = "$selector")
 
@@ -43,13 +43,13 @@ private fun TestElement.flowCore(
 
 private fun TestElement.vflowCore(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     scopeElements: List<TestElement>
 ): TestElement {
 
     val sel = selector.copy()
     sel.pos = null
-    val filteredElements = scopeElements.filterBySelector(selector = sel, safeElementOnly = safeElementOnly)
+    val filteredElements = scopeElements.filterBySelector(selector = sel, inViewOnly = inViewOnly)
 
     val vfc = VerticalFlowContainer()
     val isThisContainingOthers =
@@ -66,7 +66,7 @@ private fun TestElement.vflowCore(
     }
 
     val elements =
-        vflowElements.filterBySelector(selector = selector, safeElementOnly = safeElementOnly)   // filter with pos
+        vflowElements.filterBySelector(selector = selector, inViewOnly = inViewOnly)   // filter with pos
     val e = elements.firstOrNull() ?: TestElement()
     e.selector = this.getChainedSelector(relativeCommand = "$selector")
 
@@ -76,7 +76,7 @@ private fun TestElement.vflowCore(
 
 internal fun TestElement.flow(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -85,7 +85,7 @@ internal fun TestElement.flow(
         getElement = {
             flowCore(
                 selector = selector,
-                safeElementOnly = safeElementOnly,
+                inViewOnly = inViewOnly,
                 scopeElements = targetElements
             )
         }
@@ -99,12 +99,12 @@ internal fun TestElement.flow(
  */
 fun TestElement.flow(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flow($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -114,25 +114,25 @@ fun TestElement.flow(
  */
 fun TestElement.flow(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flow($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
 
 internal fun TestElement.flowLabel(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.labelTypesExpression
-    return flow(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+    return flow(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
 }
 
 /**
@@ -140,12 +140,12 @@ internal fun TestElement.flowLabel(
  */
 fun TestElement.flowLabel(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowLabel($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
@@ -155,25 +155,25 @@ fun TestElement.flowLabel(
  */
 fun TestElement.flowLabel(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowLabel($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
 
 internal fun TestElement.flowInput(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.inputTypesExpression
-    return flow(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+    return flow(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
 }
 
 /**
@@ -181,12 +181,12 @@ internal fun TestElement.flowInput(
  */
 fun TestElement.flowInput(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowInput($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
@@ -196,25 +196,25 @@ fun TestElement.flowInput(
  */
 fun TestElement.flowInput(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowInput($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = inputWidgets
     )
 }
 
 internal fun TestElement.flowImage(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.imageTypesExpression
-    return flow(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+    return flow(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
 }
 
 /**
@@ -222,12 +222,12 @@ internal fun TestElement.flowImage(
  */
 fun TestElement.flowImage(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowImage($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
@@ -237,25 +237,25 @@ fun TestElement.flowImage(
  */
 fun TestElement.flowImage(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowImage($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = imageWidgets
     )
 }
 
 internal fun TestElement.flowButton(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
-    return flow(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+    return flow(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
 }
 
 /**
@@ -263,12 +263,12 @@ internal fun TestElement.flowButton(
  */
 fun TestElement.flowButton(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowButton($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
@@ -278,25 +278,25 @@ fun TestElement.flowButton(
  */
 fun TestElement.flowButton(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowButton($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = buttonWidgets
     )
 }
 
 internal fun TestElement.flowSwitch(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.switchTypesExpression
-    return flow(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements)
+    return flow(selector = sel, inViewOnly = inViewOnly, targetElements = targetElements)
 }
 
 /**
@@ -304,12 +304,12 @@ internal fun TestElement.flowSwitch(
  */
 fun TestElement.flowSwitch(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowSwitch($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
@@ -319,19 +319,19 @@ fun TestElement.flowSwitch(
  */
 fun TestElement.flowSwitch(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":flowSwitch($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = switchWidgets
     )
 }
 
 internal fun TestElement.vflow(
     selector: Selector,
-    safeElementOnly: Boolean,
+    inViewOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -340,7 +340,7 @@ internal fun TestElement.vflow(
         getElement = {
             vflowCore(
                 selector = selector,
-                safeElementOnly = safeElementOnly,
+                inViewOnly = inViewOnly,
                 scopeElements = targetElements
             )
         }
@@ -352,12 +352,12 @@ internal fun TestElement.vflow(
  */
 fun TestElement.vflow(
     pos: Int = 1,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":vflow($pos)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
@@ -367,12 +367,12 @@ fun TestElement.vflow(
  */
 fun TestElement.vflow(
     expression: String,
-    safeElementOnly: Boolean = true
+    inViewOnly: Boolean = true
 ): TestElement {
 
     return relative(
         command = ":vflow($expression)",
-        safeElementOnly = safeElementOnly,
+        inViewOnly = inViewOnly,
         scopeElements = widgets
     )
 }
