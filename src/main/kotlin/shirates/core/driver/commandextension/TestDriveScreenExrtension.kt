@@ -24,6 +24,7 @@ fun TestDrive.isScreen(
 ): Boolean {
 
     if (TestMode.isNoLoadRun) {
+        TestDriver.currentScreen = screenName
         return true
     }
 

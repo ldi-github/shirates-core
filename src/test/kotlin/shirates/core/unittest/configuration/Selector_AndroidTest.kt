@@ -2355,7 +2355,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getXPathCondition("package1"))
                 assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                    "[(contains(@text,'A') or contains(@text,'B') or contains(@text,'C')) and (ends-with(@text,'UVW') or ends-with(@text,'XYZ'))]"
+                    "[(contains(@text,'A') or contains(@text,'B') or contains(@text,'C')) and ((normalize-space(substring(@text,string-length(@text) - string-length('UVW') +1))='UVW') or (normalize-space(substring(@text,string-length(@text) - string-length('XYZ') +1))='XYZ'))]"
                 )
             }
 
@@ -2363,7 +2363,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getXPathCondition())
                 assertThat(sel.getXPathCondition()).isEqualTo(
-                    "[(contains(@label,'A') or contains(@value,'A') or contains(@label,'B') or contains(@value,'B') or contains(@label,'C') or contains(@value,'C')) and ((normalize-space(substring(@label,string-length(@label)-string-length('UVW')+1))='UVW' or normalize-space(substring(@value,string-length(@value)-string-length('UVW')+1))='UVW') or (normalize-space(substring(@label,string-length(@label)-string-length('XYZ')+1))='XYZ' or normalize-space(substring(@value,string-length(@value)-string-length('XYZ')+1))='XYZ'))]"
+                    "[(contains(@label,'A') or contains(@value,'A') or contains(@label,'B') or contains(@value,'B') or contains(@label,'C') or contains(@value,'C')) and ((normalize-space(substring(@label,string-length(@label) - string-length('UVW') +1))='UVW' or normalize-space(substring(@value,string-length(@value) - string-length('UVW') +1))='UVW') or (normalize-space(substring(@label,string-length(@label) - string-length('XYZ') +1))='XYZ' or normalize-space(substring(@value,string-length(@value) - string-length('XYZ') +1))='XYZ'))]"
                 )
             }
         }
