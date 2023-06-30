@@ -558,11 +558,6 @@ object TestDriver {
 
             capabilities.setCapabilityStrict(key, profile.capabilities[key])
         }
-        if (isAndroid) {
-            capabilities.setCapability("enforceXPath1", true)
-            TestLog.info("enforceXPath1: true")
-        }
-
         val capabilityNames = capabilities.capabilityNames
         // newCommandTimeout
         if (capabilityNames.any() { it.endsWith("newCommandTimeout") }.not()) {

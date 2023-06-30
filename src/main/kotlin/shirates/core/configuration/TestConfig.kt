@@ -5,6 +5,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import shirates.core.Const
 import shirates.core.configuration.repository.DatasetRepositoryManager
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -144,8 +145,24 @@ class TestConfig(val testConfigFile: String) {
             profile.capabilities["appActivity"] = profile.startupActivity!!
         }
 
+        // Override
         setDefaultValuesFromPropertiesToTestProfile(profile = profile)
-        overwriteValuesFromPropertiesToTestProfile(profile = profile)
+        setValuesFromPropertiesToTestProfile(profile = profile)
+
+        // enforceXPath1
+        if (isAndroid && profile.capabilities.containsKey("enforceXPath1").not()) {
+            val str = profile.enforceXPath1
+            val value = if (str == null) {
+                true        // default (enforceXPath1=true)
+            } else {
+                try {
+                    str.toBoolean()
+                } catch (t: Throwable) {
+                    throw TestConfigException("enforceXPath1 must be boolean. (enforceXPath1=${profile.enforceXPath1})")
+                }
+            }
+            profile.capabilities["enforceXPath1"] = value
+        }
     }
 
     /**
@@ -182,7 +199,7 @@ class TestConfig(val testConfigFile: String) {
         }
     }
 
-    private fun overwriteValuesFromPropertiesToTestProfile(profile: TestProfile) {
+    private fun setValuesFromPropertiesToTestProfile(profile: TestProfile) {
 
         val props = PropertiesManager.properties
 

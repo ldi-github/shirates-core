@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
-import shirates.core.driver.commandextension.select
-import shirates.core.driver.commandextension.widget
+import shirates.core.driver.commandextension.*
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 
@@ -74,6 +73,25 @@ class AdHocTestIos : UITest() {
 
         e2 = it.select("<~title=Settings>:next")
         e2.printInfo()
+    }
+
+    @Test
+    fun labelEndsWith() {
+
+        useCache {
+            it.select("Privacy & Security")
+                .textIs("Privacy & Security")
+
+            it.select("*vacy & Security")
+                .textIs("Privacy & Security")
+        }
+        suppressCache {
+            it.select("Privacy & Security")
+                .textIs("Privacy & Security")
+
+            it.select("*vacy & Security")
+                .textIs("Privacy & Security")
+        }
     }
 
 }

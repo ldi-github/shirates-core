@@ -11,7 +11,7 @@ import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class AdHocTest : UITest() {
+class AdHocTestAndroid : UITest() {
 
     @Test
     @Order(10)
@@ -110,5 +110,25 @@ class AdHocTest : UITest() {
 
         compare("<Apps>:parent:child(1)", safeElementOnly = true)
         compare("<Apps>:parent:child(2)", safeElementOnly = true)
+    }
+
+    @Test
+    fun textEndsWith() {
+
+        useCache {
+            it.select("Network & internet")
+                .textIs("Network & internet")
+
+            it.select("*work & internet")
+                .textIs("Network & internet")
+        }
+        suppressCache {
+            it.select("Network & internet")
+                .textIs("Network & internet")
+
+            it.select("*work & internet")
+                .textIs("Network & internet")
+        }
+
     }
 }

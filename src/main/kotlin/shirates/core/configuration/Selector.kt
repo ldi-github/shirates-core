@@ -917,7 +917,7 @@ class Selector(
         list.addFunction("@text=%s", literal)
         list.addFunction("starts-with(@text,%s)", textStartsWith)
         list.addFunction("contains(@text,%s)", textContains)
-        list.addFunction("ends-with(@text,%s)", textEndsWith)
+        list.addFunction("(${getEndsWith("text")})", textEndsWith)
         list.addFunction("matches(@text,%s)", textMatches)
 
         if (id.isNullOrBlank().not()) {
@@ -940,6 +940,10 @@ class Selector(
         list.addFunction("@scrollable=%s", scrollable)
     }
 
+    private fun getEndsWith(attrName: String): String {
+        return "normalize-space(substring(@$attrName,string-length(@$attrName) - string-length(%s) +1))=%s"
+    }
+
     private fun addXpathFunctionsForIos(list: MutableList<String>) {
 
         if (text != null && text!!.contains("\n")) {
@@ -955,10 +959,6 @@ class Selector(
             }
         } else {
             list.addFunction("@label=%s or @value=%s", literal)
-        }
-
-        fun getEndsWith(attrName: String): String {
-            return "normalize-space(substring(@$attrName,string-length(@$attrName)-string-length(%s)+1))=%s"
         }
 
         list.addFunction("starts-with(@label,%s) or starts-with(@value,%s)", textStartsWith)
