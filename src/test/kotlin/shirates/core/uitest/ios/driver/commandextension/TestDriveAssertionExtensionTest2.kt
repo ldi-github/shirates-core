@@ -8,6 +8,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
 import shirates.core.testcode.UITest
+import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
 import shirates.core.utility.time.StopWatch
 
@@ -30,6 +31,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
         }
     }
 
+    @Unstable("Direct mode")
     @Test
     @Order(70)
     fun existWithScrollUp() {

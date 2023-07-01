@@ -22,19 +22,19 @@ class TestDriveSelectExtensionTest2 : UITest() {
                         .macro("[iOS Settings Top Screen]")
                 }.expectation {
                     describe("[nickname]")
-                    it.canSelectWithScrollDown(expression = "[Developer]").thisIsTrue()
-                    it.canSelectWithScrollDown(expression = "[General]").thisIsFalse()
-                    it.canSelectWithScrollUp(expression = "[General]").thisIsTrue()
-                    it.canSelectWithScrollUp(expression = "[Developer]").thisIsFalse()
+                    it.canSelectWithScrollDown("[Developer]").thisIsTrue("[Developer]")
+                    it.canSelectWithScrollDown("[General]").thisIsFalse("[General]")
+                    it.canSelectWithScrollUp("[General]").thisIsTrue("[General]")
+                    it.canSelectWithScrollUp("[Developer]").thisIsFalse("[Developer]")
                 }
             }
             case(2) {
                 expectation {
                     describe("text")
-                    it.canSelectWithScrollDown("Developer").thisIsTrue()
-                    it.canSelectWithScrollDown("General").thisIsFalse()
-                    it.canSelectWithScrollUp("General").thisIsTrue()
-                    it.canSelectWithScrollUp("Developer").thisIsFalse()
+                    it.canSelectWithScrollDown("Developer").thisIsTrue("Developer")
+                    it.canSelectWithScrollDown("General").thisIsFalse("General")
+                    it.canSelectWithScrollUp("General").thisIsTrue("General")
+                    it.canSelectWithScrollUp("Developer").thisIsFalse("Developer")
                 }
             }
         }

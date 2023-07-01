@@ -128,6 +128,9 @@ fun TestElement.getUniqueSelector(): Selector {
 
     fun isUniqueSelector(sel: Selector): Boolean {
 
+        if (testContext.useCache.not()) {
+            return false
+        }
         val elements = TestElementCache.filterElements(selector = sel, inViewOnly = true)
         return elements.count() == 1
     }
@@ -176,7 +179,7 @@ fun TestElement.getUniqueXpath(): String {
 
     val tokens = mutableListOf<String>()
     for (key in attrMap.keys) {
-        val value = attrMap[key]!!.replace("'", "&#039;")   // escape
+        val value = attrMap[key]!!.replace("'", "&#039;")   // escape '(apostrophe)
         tokens.add("@$key='$value'")
     }
 
