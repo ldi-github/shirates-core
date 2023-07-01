@@ -980,81 +980,91 @@ object TestDriver {
 
         lastElement = TestElement.emptyElement
 
-        // Search in current screen
         var selectedElement: TestElement
-        if (useCache) {
-            syncCache()
-            selectedElement = TestElementCache.select(
-                selector = selector,
-                throwsException = false,
-                inViewOnly = inViewOnly
-            )
-        } else {
-            selectedElement = selectDirect(
-                selector = selector,
-                throwsException = false,
-                inViewOnly = inViewOnly
-            )
-        }
-        if (selector.isNegation.not()) {
-            if (selectedElement.isFound) {
-                lastElement = selectedElement
-                return lastElement
+
+        val originalForceUseCache = testContext.forceUseCache
+        try {
+            val hasMatches = selector.hasMatches
+            testContext.forceUseCache = hasMatches
+
+            // Search in current screen
+            selectedElement = if (useCache || hasMatches) {
+                syncCache()
+                TestElementCache.select(
+                    selector = selector,
+                    throwsException = false,
+                    inViewOnly = inViewOnly
+                )
+            } else {
+                selectDirect(
+                    selector = selector,
+                    throwsException = false,
+                    inViewOnly = inViewOnly
+                )
             }
-        }
-
-        // Search in scroll
-        if (scroll) {
-            return selectWithScroll(
-                selector = selector,
-                direction = direction,
-                durationSeconds = scrollDurationSeconds,
-                startMarginRatio = scrollStartMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-                throwsException = throwsException
-            )
-        }
-
-        // Wait for seconds
-        if (waitSeconds > 0 && isInitialized) {
-            // Search until it is(not) found
-            val r = SyncUtility.doUntilTrue(
-                waitSeconds = waitSeconds,
-                refreshCache = useCache
-            ) {
-                val e = if (useCache) {
-                    TestElementCache.select(
-                        selector = selector,
-                        throwsException = false,
-                        inViewOnly = inViewOnly
-                    )
-                } else {
-                    selectDirect(
-                        selector = selector,
-                        throwsException = false,
-                        inViewOnly = inViewOnly
-                    )
-                }
-                selectedElement = e
-                if (selector.isNegation) {
-                    e.isEmpty
-                } else {
-                    e.isFound
+            if (selector.isNegation.not()) {
+                if (selectedElement.isFound) {
+                    lastElement = selectedElement
+                    return lastElement
                 }
             }
 
-            if (r.hasError) {
-                lastElement.lastError = r.error
+            // Search in scroll
+            if (scroll) {
+                return selectWithScroll(
+                    selector = selector,
+                    direction = direction,
+                    durationSeconds = scrollDurationSeconds,
+                    startMarginRatio = scrollStartMarginRatio,
+                    scrollMaxCount = scrollMaxCount,
+                    throwsException = throwsException
+                )
             }
-        }
 
-        lastElement = selectedElement
+            // Wait for seconds
+            if (waitSeconds > 0 && isInitialized) {
+                // Search until it is(not) found
+                val r = SyncUtility.doUntilTrue(
+                    waitSeconds = waitSeconds,
+                    refreshCache = useCache
+                ) {
+                    val e = if (useCache) {
+                        TestElementCache.select(
+                            selector = selector,
+                            throwsException = false,
+                            inViewOnly = inViewOnly
+                        )
+                    } else {
+                        selectDirect(
+                            selector = selector,
+                            throwsException = false,
+                            inViewOnly = inViewOnly
+                        )
+                    }
+                    selectedElement = e
+                    if (selector.isNegation) {
+                        e.isEmpty
+                    } else {
+                        e.isFound
+                    }
+                }
 
-        if (selectedElement.hasError) {
-            selectedElement.lastResult = LogType.ERROR
-            if (throwsException) {
-                throw selectedElement.lastError!!
+                if (r.hasError) {
+                    lastElement.lastError = r.error
+                }
             }
+
+            lastElement = selectedElement
+
+            if (selectedElement.hasError) {
+                selectedElement.lastResult = LogType.ERROR
+                if (throwsException) {
+                    throw selectedElement.lastError!!
+                }
+            }
+
+        } finally {
+            testContext.forceUseCache = originalForceUseCache
         }
 
         return lastElement
@@ -1775,14 +1785,16 @@ object TestDriver {
     /**
      * getFocusedWebElement
      */
-    fun getFocusedWebElement(): WebElement {
+    fun getFocusedWebElement(): TestElement {
 
-        val m = try {
-            mAppiumDriver!!.switchTo().activeElement() as WebElement
+        return try {
+            testDrive.implicitWaitMilliseconds((testContext.shortWaitSeconds * 1000).toInt()) {
+                lastElement = (mAppiumDriver!!.switchTo().activeElement() as WebElement).toTestElement()
+            }
+            lastElement
         } catch (t: Throwable) {
             throw TestDriverException(message(id = "activeElementNotFound", submessage = "$t"), cause = t)
         }
-        return m
     }
 
     private fun getFocusedElementCore(
@@ -1793,32 +1805,13 @@ object TestDriver {
             val focused = select(expression = "xpath=//*[@focused='true']", throwsException = false)
             return focused
         } else {
-            val a = try {
-                getFocusedWebElement()
+            val e = try {
+                (mAppiumDriver!!.switchTo().activeElement() as WebElement).toTestElement()
             } catch (t: Throwable) {
                 if (throwsException) throw t
                 return TestElement.emptyElement
             }
-            if (testContext.useCache.not()) {
-                return a.toTestElement()
-            }
-
-            val type = a.getAttribute("type")
-            val sel = Selector("className=$type")
-            val name = a.getAttribute("name")
-            return if (name.isNullOrBlank()) {
-                val location = a.location
-                val x = location.x
-                val y = location.y
-                val size = a.size
-                val width = size.width
-                val height = size.height
-                val xpath = "//*[@x='$x' and @y='$y' and @width='$width' and @height='$height']"
-                TestElementCache.select("xpath=$xpath", inViewOnly = true)
-            } else {
-                sel.id = name
-                TestElementCache.select(selector = sel, inViewOnly = true)
-            }
+            return e
         }
     }
 
@@ -1826,7 +1819,6 @@ object TestDriver {
      * getFocusedElement
      */
     fun getFocusedElement(
-        waitSeconds: Double = testContext.waitSecondsOnIsScreen,
         throwsException: Boolean = false
     ): TestElement {
 
@@ -1842,7 +1834,6 @@ object TestDriver {
             throw TestDriverException(message(id = "focusedElementNotFound"))
         }
 
-        element.refreshSelector()
         return element
     }
 

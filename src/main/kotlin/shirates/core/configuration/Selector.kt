@@ -244,6 +244,28 @@ class Selector(
             return command?.startsWith(":") ?: false
         }
 
+    val hasMatches: Boolean
+        get() {
+            fun hasAnyMatches(sel: Selector): Boolean {
+                return textMatches?.isNotBlank() ?: accessMatches?.isNotBlank() ?: valueMatches?.isNotBlank() ?: false
+            }
+            if (hasAnyMatches(this)) {
+                return true
+            }
+            for (s in orSelectors) {
+                if (s.hasMatches) {
+                    return true
+                }
+            }
+            for (r in relativeSelectors) {
+                if (r.hasMatches) {
+                    return true
+                }
+            }
+            return false
+        }
+
+
     val isBase: Boolean
         get() {
             return origin?.endsWith("[screen-base].json") == true

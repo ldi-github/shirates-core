@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.NicknameUtility
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -25,22 +26,20 @@ fun TestDrive.getThisOrRootElement(): TestElement {
  */
 fun TestDrive.sendKeys(
     keysToSend: CharSequence,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen
 ): TestElement {
-
-    val testElement = focusedElement
 
     val command = "sendKeys"
     val message = message(id = command, key = "$keysToSend")
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val m = TestDriver.getFocusedWebElement()
-        m.sendKeys(keysToSend)
+        val testElement = TestDriver.getFocusedElement()
+        val webElement = testElement.webElement ?: throw TestDriverException("Focused element not found.")
+        webElement.sendKeys(keysToSend)
 
         TestDriver.refreshCache()
 
-        lastElement = TestDriver.getFocusedElement(waitSeconds = waitSeconds)
+        lastElement = TestDriver.getFocusedElement()
     }
 
     return lastElement

@@ -247,14 +247,14 @@ class TestDriverTest : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    val e = TestDriver.getFocusedElement(waitSeconds = 2.0)
+                    val e = TestDriver.getFocusedElement()
                     assertThat(e.isEmpty).isEqualTo(true)
                 }
             }
             case(2) {
                 expectation {
                     assertThatThrownBy {
-                        TestDriver.getFocusedElement(waitSeconds = 2.0, throwsException = true)
+                        TestDriver.getFocusedElement(throwsException = true)
                     }.isInstanceOf(TestDriverException::class.java)
                         .hasMessage("Focused element not found.")
                 }
@@ -288,7 +288,7 @@ class TestDriverTest : UITest() {
             }
             case(3) {
                 expectation {
-                    val r = TestDriver.getFocusedElement(waitSeconds = 0.5, throwsException = false)
+                    val r = TestDriver.getFocusedElement(throwsException = false)
                     assertThat(r.isEmpty).isEqualTo(true)
                 }
             }

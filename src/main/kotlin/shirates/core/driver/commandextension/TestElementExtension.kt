@@ -39,8 +39,8 @@ fun TestElement.clearInput(): TestElement {
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message) {
-        val m = TestDriver.getFocusedWebElement()
-        m.clear()
+        val e = focusedElement
+        e.webElement?.clear()
         refreshCache()
         TestDriver.lastElement = focusedElement
     }
@@ -72,28 +72,10 @@ fun TestElement.refreshThisElement(): TestElement {
 }
 
 /**
- * refreshSelector
- */
-fun TestElement.refreshSelector(): TestElement {
-
-    if (isEmpty) {
-        return this
-    }
-
-    if (testContext.useCache) {
-        this.selector = TestElementCache.getSelector(testElement = this)
-    } else {
-        this.selector = this.getUniqueSelector()
-    }
-    return this
-}
-
-/**
  * typeChars
  */
 fun TestElement.typeChars(
     charsToSend: String,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen
 ): TestElement {
 
     val command = "sendChars"
@@ -103,10 +85,7 @@ fun TestElement.typeChars(
     context.execOperateCommand(command = command, message = message) {
 
         for (c in charsToSend) {
-            sendKeys(
-                keysToSend = c.toString() as CharSequence,
-                waitSeconds = waitSeconds
-            )
+            sendKeys(keysToSend = c.toString() as CharSequence)
         }
         refreshCache()
         TestDriver.lastElement = this.refreshThisElement()

@@ -1,9 +1,7 @@
 package shirates.core.driver
 
-import shirates.core.configuration.ScreenInfo
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.lastElement
-import shirates.core.driver.commandextension.getUniqueXpath
 import shirates.core.driver.commandextension.relative
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
@@ -342,46 +340,5 @@ object TestElementCache {
         return true
     }
 
-
-    /**
-     * getSelector
-     */
-    fun getSelector(
-        testElement: TestElement,
-        screenInfo: ScreenInfo = TestDriver.screenInfo
-    ): Selector {
-
-        if (testElement.isEmpty) {
-            return Selector()
-        }
-
-        /**
-         * Find selector in ScreenInfo
-         */
-        for (selector in screenInfo.selectors.values) {
-
-            val e = select(selector = selector, throwsException = false)
-            if (e == testElement) {
-                return selector
-            }
-        }
-
-        /**
-         * From current selector
-         */
-        if (testElement.selector != null) {
-
-            val e = select(selector = testElement.selector!!, throwsException = false)
-            if (e.isFound) {
-                return e.selector!!
-            }
-        }
-
-        /**
-         * Get unique xpath
-         */
-        val xpath = testElement.getUniqueXpath()
-        return Selector("xpath=$xpath")
-    }
 }
 
