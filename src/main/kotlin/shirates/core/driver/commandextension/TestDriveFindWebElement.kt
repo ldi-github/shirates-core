@@ -7,6 +7,7 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
 
@@ -15,7 +16,8 @@ import shirates.core.logging.Measure
  */
 fun TestDrive.findWebElements(
     selector: Selector,
-    timeoutMilliseconds: Int = 0
+    timeoutMilliseconds: Int = 0,
+    widgetOnly: Boolean = false
 ): List<TestElement> {
 
     val ms = Measure("$selector")
@@ -25,9 +27,21 @@ fun TestDrive.findWebElements(
         return webElements
     }
 
-    webElements.addAll(findWebElementsCore(selector = selector, timeoutMilliseconds = timeoutMilliseconds))
+    webElements.addAll(
+        findWebElementsCore(
+            selector = selector,
+            timeoutMilliseconds = timeoutMilliseconds,
+            widgetOnly = widgetOnly
+        )
+    )
     for (sel in selector.orSelectors) {
-        webElements.addAll(findWebElementsCore(selector = sel, timeoutMilliseconds = timeoutMilliseconds))
+        webElements.addAll(
+            findWebElementsCore(
+                selector = sel,
+                timeoutMilliseconds = timeoutMilliseconds,
+                widgetOnly = widgetOnly
+            )
+        )
     }
 
     ms.end()
@@ -37,7 +51,8 @@ fun TestDrive.findWebElements(
 
 private fun TestDrive.findWebElementsCore(
     selector: Selector,
-    timeoutMilliseconds: Int
+    timeoutMilliseconds: Int,
+    widgetOnly: Boolean
 ): List<TestElement> {
 
     val ms = Measure("$selector")
@@ -55,6 +70,9 @@ private fun TestDrive.findWebElementsCore(
     testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
         testElements = driver.appiumDriver.findElements(By.xpath(xpath))
             .map { it.toTestElement(selector = selector) }
+    }
+    if (widgetOnly) {
+        testElements = testElements.filter { it.isWidget }
     }
 
     ms.end()
@@ -123,10 +141,15 @@ fun TestDrive.findWebElement(
     selector: Selector,
     timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
     throwsException: Boolean = false,
-    inViewOnly: Boolean = true
+    inViewOnly: Boolean = true,
+    widgetOnly: Boolean = false
 ): TestElement {
 
-    var testElements = findWebElementsCore(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
+    var testElements = findWebElementsCore(
+        selector = selector,
+        timeoutMilliseconds = timeoutMilliseconds,
+        widgetOnly = widgetOnly
+    )
     if (inViewOnly) {
         TestDriver.screenInfo.refreshOverlayElements()
         testElements = testElements.filter { it.isInView }
@@ -135,6 +158,12 @@ fun TestDrive.findWebElement(
         throw TestDriverException("Element not found. (selector=$selector)")
     }
 
+    if (testElements.count() == 1) {
+        return testElements.first()
+    }
+    if (isiOS) {
+        testElements = testElements.filter { it.type != "XCUIElementTypeCell" }
+    }
     return testElements.firstOrNull() ?: TestElement(selector = selector)
 }
 

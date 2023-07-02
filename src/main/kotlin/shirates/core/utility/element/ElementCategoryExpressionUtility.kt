@@ -283,6 +283,23 @@ object ElementCategoryExpressionUtility {
     }
 
     /**
+     * getClassAlias
+     */
+    fun getClassAlias(classOrType: String): String {
+
+        val category = getCategory(classOrType = classOrType)
+        val alias = when (category) {
+            ElementCategory.LABEL -> "label"
+            ElementCategory.INPUT -> "input"
+            ElementCategory.IMAGE -> "image"
+            ElementCategory.BUTTON -> "button"
+            ElementCategory.SWITCH -> "switch"
+            else -> ""
+        }
+        return alias
+    }
+
+    /**
      * getTypesExpression
      */
     fun getTypesExpression(key: String): String {

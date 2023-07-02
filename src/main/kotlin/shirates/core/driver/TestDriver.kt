@@ -1099,26 +1099,36 @@ object TestDriver {
                 val sel = Selector("xpath=//*$fullXPathCondition")
                 testDrive.findWebElement(selector = sel, inViewOnly = inViewOnly)
             } else {
-                val baseElement = testDrive.findWebElement(selector = selector, inViewOnly = inViewOnly)
+                val baseElement =
+                    testDrive.findWebElement(selector = selector, inViewOnly = inViewOnly, widgetOnly = true)
                 if (baseElement.isEmpty) {
                     baseElement
                 } else {
                     val r = if (selector.relativeSelectors.any()) {
-                        val rt = rootElement
-                        fun List<TestElement>.filter(isInView: Boolean): List<TestElement> {
-                            if (isInView) return this.filter { it.isInView }
-                            return this
+                        val exps = mutableListOf(baseElement.classAlias)
+                        for (sel in selector.relativeSelectors) {
+                            val c = sel.command!!
+                            if (c.lowercase().contains("input")) {
+                                exps.add(".input")
+                            }
+                            if (c.lowercase().contains("label")) {
+                                exps.add(".label")
+                            }
+                            if (c.lowercase().contains("button")) {
+                                exps.add(".button")
+                            }
+                            if (c.lowercase().contains("image")) {
+                                exps.add(".image")
+                            }
+                            if (c.lowercase().contains("switch")) {
+                                exps.add(".switch")
+                            }
                         }
-
-                        val scopeElements = when (selector.command) {
-                            ":next", ":previous" -> rt.elements.filter(inViewOnly)
-                            ":nextInput", "preInput", "previousInput" -> rt.inputWidgets.filter(inViewOnly)
-                            ":nextLabel", "preLabel", "previousLabel" -> rt.labelWidgets.filter(inViewOnly)
-                            ":nextButton", "preButton", "previousButton" -> rt.buttonWidgets.filter(inViewOnly)
-                            ":nextImage", "preImage", "previousImage" -> rt.imageWidgets.filter(inViewOnly)
-                            ":nextSwitch", "preSwitch", "previousSwitch" -> rt.switchWidgets.filter(inViewOnly)
-                            else -> rt.elements.filter(inViewOnly)
-                        }
+                        val exp =
+                            if (exps.isEmpty()) ".widget"
+                            else exps.joinToString("||")
+                        val scopeElements = testDrive.filterElements(expression = exp, selectContext = rootElement)
+                            .filter { it.isInView }
                         baseElement.getRelative(inViewOnly = inViewOnly, scopeElements = scopeElements)
                     } else {
                         baseElement
