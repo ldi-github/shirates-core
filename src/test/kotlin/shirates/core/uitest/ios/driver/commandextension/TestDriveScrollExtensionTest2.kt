@@ -46,6 +46,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
             // Assert
             movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
             println("movedItem:$movedItem")
+            assertThat(movedItem.isInView).isFalse()
             assertThat(movedItem.isEmpty).isTrue()
         }
 
@@ -71,6 +72,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
             // Assert
             println("movedItem:$movedItem")
             movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
+            assertThat(movedItem.isInView).isFalse()
             assertThat(movedItem.isEmpty).isTrue()
         }
     }

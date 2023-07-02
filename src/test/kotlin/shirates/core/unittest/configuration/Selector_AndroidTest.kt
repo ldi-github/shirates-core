@@ -2498,7 +2498,7 @@ class Selector_AndroidTest : UnitTest() {
     }
 
     @Test
-    fun getFullXPath() {
+    fun getFullXPathCondition() {
 
         run {
             // Arrange
@@ -2506,12 +2506,12 @@ class Selector_AndroidTest : UnitTest() {
 
             TestMode.runAsAndroid {
                 // Act, Assert
-                println(sel.getFullXPath(packageName = "package1"))
+                println(sel.getFullXPathCondition(packageName = "package1"))
                 assertThat(sel.getXPathCondition("package1")).isEqualTo("")
             }
             TestMode.runAsIos {
                 // Act, Assert
-                println(sel.getFullXPath())
+                println(sel.getFullXPathCondition())
                 assertThat(sel.getXPathCondition()).isEqualTo("")
             }
         }
@@ -2521,12 +2521,12 @@ class Selector_AndroidTest : UnitTest() {
 
             TestMode.runAsAndroid {
                 // Act, Assert
-                println(sel.getFullXPath(packageName = "package1"))
+                println(sel.getFullXPathCondition(packageName = "package1"))
                 assertThat(sel.getXPathCondition("package1")).isEqualTo("[@text='TEXT1']")
             }
             TestMode.runAsIos {
                 // Act, Assert
-                println(sel.getFullXPath())
+                println(sel.getFullXPathCondition())
                 assertThat(sel.getXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']")
             }
         }
@@ -2537,13 +2537,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*")
                 }
             }
             run {
@@ -2552,13 +2552,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/parent::*")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/parent::*")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/parent::*")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/parent::*")
                 }
             }
         }
@@ -2569,13 +2569,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/child::*")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/child::*")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/child::*")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/child::*")
                 }
             }
             run {
@@ -2584,13 +2584,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/child::*/child::*")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/child::*/child::*")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/child::*/child::*")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/child::*/child::*")
                 }
             }
         }
@@ -2601,13 +2601,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/child::*")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/child::*")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/child::*")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/child::*")
                 }
             }
             run {
@@ -2616,13 +2616,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/child::*[2]/parent::*/child::*[3]")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/parent::*/child::*[2]/parent::*/child::*[3]")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/child::*[2]/parent::*/child::*[3]")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/parent::*/child::*[2]/parent::*/child::*[3]")
                 }
             }
         }
@@ -2633,13 +2633,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/ancestor::*")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/ancestor::*")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/ancestor::*")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/ancestor::*")
                 }
             }
             run {
@@ -2648,13 +2648,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/ancestor::*[2]/ancestor::*[3]")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/ancestor::*[2]/ancestor::*[3]")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/ancestor::*[2]/ancestor::*[3]")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/ancestor::*[2]/ancestor::*[3]")
                 }
             }
         }
@@ -2665,13 +2665,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/descendant::*")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/descendant::*")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/descendant::*")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/descendant::*")
                 }
             }
             run {
@@ -2680,13 +2680,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[@text='TEXT1']/descendant::*[2]/descendant::*[3]")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[@text='TEXT1']/descendant::*[2]/descendant::*[3]")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/descendant::*[2]/descendant::*[3]")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@label='TEXT1' or @value='TEXT1']/descendant::*[2]/descendant::*[3]")
                 }
             }
         }
@@ -2697,13 +2697,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("")
                 }
             }
             run {
@@ -2712,13 +2712,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("")
                 }
             }
         }
@@ -2729,13 +2729,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("")
                 }
             }
             run {
@@ -2744,13 +2744,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("")
                 }
             }
         }
@@ -2761,13 +2761,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("")
                 }
             }
             run {
@@ -2776,13 +2776,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("")
                 }
             }
         }
@@ -2794,13 +2794,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[(@resource-id='package1:id/action_bar' or @resource-id='package1:id/toolbar' or @resource-id='package1:id/app_bar')]/descendant::*[(@text='TITLE1' or @content-desc='TITLE1')]")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[(@resource-id='package1:id/action_bar' or @resource-id='package1:id/toolbar' or @resource-id='package1:id/app_bar')]/descendant::*[(@text='TITLE1' or @content-desc='TITLE1')]")
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("[(@name='action_bar' or @name='toolbar' or @name='app_bar')]/descendant::*[(@label='TITLE1' or @value='TITLE1' or @name='TITLE1')]")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[(@name='action_bar' or @name='toolbar' or @name='app_bar')]/descendant::*[(@label='TITLE1' or @value='TITLE1' or @name='TITLE1')]")
                 }
             }
             run {
@@ -2809,13 +2809,13 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath(packageName = "package1"))
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition(packageName = "package1"))
                 }
                 TestMode.runAsIos {
                     // Act, Assert
-                    println(sel.getFullXPath())
-                    assertThat(sel.getFullXPath()).isEqualTo("")
+                    println(sel.getFullXPathCondition())
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("")
                 }
             }
         }
@@ -2827,8 +2827,8 @@ class Selector_AndroidTest : UnitTest() {
 
                 TestMode.runAsAndroid {
                     // Act, Assert
-                    println(sel.getFullXPath(packageName = "package1"))
-                    assertThat(sel.getFullXPath()).isEqualTo("[@class='android.widget.TextView'][999]")
+                    println(sel.getFullXPathCondition(packageName = "package1"))
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@class='android.widget.TextView'][999]")
                 }
             }
         }
@@ -2841,14 +2841,14 @@ class Selector_AndroidTest : UnitTest() {
             val sel = Selector("<#id1&&[2]>:sibling(3):parent:child(2):descendant(3)")
             TestMode.runAsAndroid {
                 // Act, Assert
-                val xpath = sel.getFullXPath(packageName = "package1")
+                val xpath = sel.getFullXPathCondition(packageName = "package1")
                 println(xpath)
                 assertThat(xpath).isEqualTo("[@resource-id='package1:id/id1'][2]/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
             }
             TestMode.runAsIos {
                 // Act, Assert
-                println(sel.getFullXPath())
-                assertThat(sel.getFullXPath()).isEqualTo("[@name='id1'][2]/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
+                println(sel.getFullXPathCondition())
+                assertThat(sel.getFullXPathCondition()).isEqualTo("[@name='id1'][2]/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
             }
         }
     }
@@ -2860,13 +2860,13 @@ class Selector_AndroidTest : UnitTest() {
 
         TestMode.runAsAndroid {
             // Act, Assert
-            println(sel.getFullXPath(packageName = "package1"))
-            assertThat(sel.getFullXPath(packageName = "package1")).isEqualTo("[(@resource-id='package1:id/action_bar' or @resource-id='package1:id/toolbar' or @resource-id='package1:id/app_bar')]/descendant::*[(@text='TITLE1' or @content-desc='TITLE1')]")
+            println(sel.getFullXPathCondition(packageName = "package1"))
+            assertThat(sel.getFullXPathCondition(packageName = "package1")).isEqualTo("[(@resource-id='package1:id/action_bar' or @resource-id='package1:id/toolbar' or @resource-id='package1:id/app_bar')]/descendant::*[(@text='TITLE1' or @content-desc='TITLE1')]")
         }
         TestMode.runAsIos {
             // Act, Assert
-            println(sel.getFullXPath())
-            assertThat(sel.getFullXPath()).isEqualTo("[(@name='action_bar' or @name='toolbar' or @name='app_bar')]/descendant::*[(@label='TITLE1' or @value='TITLE1' or @name='TITLE1')]")
+            println(sel.getFullXPathCondition())
+            assertThat(sel.getFullXPathCondition()).isEqualTo("[(@name='action_bar' or @name='toolbar' or @name='app_bar')]/descendant::*[(@label='TITLE1' or @value='TITLE1' or @name='TITLE1')]")
         }
 
     }

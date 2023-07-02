@@ -388,6 +388,24 @@ class TestElement(
         }
 
     /**
+     * absoluteBounds
+     */
+    val absoluteBounds: Bounds
+        get() {
+            if (isAndroid) {
+                return this.bounds
+            }
+            val a = ancestorUnderScrollable
+            if (a.isEmpty) {
+                return this.bounds
+            }
+            if (a.bounds.top == this.bounds.top) {
+                return this.bounds
+            }
+            return a.bounds
+        }
+
+    /**
      * isSafe
      */
     val isSafe: Boolean
@@ -402,31 +420,12 @@ class TestElement(
                 if (this.bounds.isIncludedIn(rootBounds).not()) {
                     return false
                 }
-            } else {
-                if (type == "XCUIElementTypeApplication") {
-                    return false
-                }
-                val underScrollable = ancestorUnderScrollable
-                if (underScrollable.isFound && underScrollable.isScrollable.not()) {
-                    val scrollable = underScrollable.parentElement
-                    if (underScrollable.bounds.isOverlapping(scrollable.bounds).not()) {
-                        return false
-                    }
-                } else {
-                    if (this.bounds.isIncludedIn(rootBounds).not()) {
-                        return false
-                    }
-                }
             }
 
-            if (bounds.area == 0) {
+            if (type == "XCUIElementTypeApplication") {
                 return false
             }
             if (isInView.not()) {
-                return false
-            }
-            val frame = this.getScrollableElementsInAncestors().lastOrNull()
-            if (frame != null && this.isIncludedIn(frame).not()) {
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
@@ -911,7 +910,10 @@ class TestElement(
      */
     val isInView: Boolean
         get() {
-            return this.isOverlapping(rootElement)
+            if (bounds.area == 0) {
+                return false
+            }
+            return this.absoluteBounds.isOverlapping(rootBounds)
         }
 
     internal val isInXCUIElementTypeCell: Boolean

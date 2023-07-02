@@ -31,7 +31,7 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
                     it.tap("[SpotlightSearchField]")
                         .clearInput()
                         .sendKeys("safari")
-                        .tap(".button&&safari")
+                        .tap(".XCUIElementTypeOther&&safari")
                         .wait()
                         .appIs("Safari")
                 }.action {

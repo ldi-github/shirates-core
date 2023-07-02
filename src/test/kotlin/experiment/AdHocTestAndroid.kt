@@ -72,7 +72,7 @@ class AdHocTestAndroid : UITest() {
 
             val sel = Selector(expression)
             sel.printInfo()
-            sel.getFullXPath(packageName = "package1").printInfo()
+            sel.getFullXPathCondition(packageName = "package1").printInfo()
 
             val c = TestElementCache.select(selector = sel, throwsException = false, inViewOnly = safeElementOnly)
             c.printInfo()

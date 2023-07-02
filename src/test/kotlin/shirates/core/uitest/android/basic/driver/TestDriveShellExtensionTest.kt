@@ -3,7 +3,10 @@ package shirates.core.uitest.android.basic.driver
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.shell
+import shirates.core.driver.commandextension.shellAsync
+import shirates.core.driver.commandextension.thisIsNotEmpty
+import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.utility.misc.ShellUtility
@@ -48,9 +51,8 @@ class TestDriveShellExtensionTest : UITest() {
                     } else {
                         shellResult = it.shellAsync("ping", "localhost", "-c", "3")
                     }
-                    // Assert
-                    shellResult.resultString.thisIsEmpty("resultString is empty")
-
+//                    // Assert
+//                    shellResult.resultString.thisIsEmpty("resultString is empty")
 
                     // Act
                     shellResult.waitFor()

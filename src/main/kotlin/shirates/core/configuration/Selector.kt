@@ -858,9 +858,9 @@ class Selector(
     }
 
     /**
-     * getFullXPath
+     * getFullXPathCondition
      */
-    fun getFullXPath(packageName: String = rootElement.packageName): String {
+    fun getFullXPathCondition(packageName: String = rootElement.packageName): String {
 
         if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {
             return ""
