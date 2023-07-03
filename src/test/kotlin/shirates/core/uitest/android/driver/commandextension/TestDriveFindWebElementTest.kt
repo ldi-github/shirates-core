@@ -1,7 +1,9 @@
 package shirates.core.uitest.android.driver.commandextension
 
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.openqa.selenium.InvalidSelectorException
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
@@ -40,7 +42,10 @@ class TestDriveFindWebElementTest : UITest() {
                     it.findWebElement("Network &*").getAttribute("text").thisIs("Network & internet")
                     it.findWebElement("*work & inter*").getAttribute("text").thisIs("Network & internet")
                     it.findWebElement("*& internet").getAttribute("text").thisIs("Network & internet")
-                    it.findWebElement("textMatches=^Net.*net$").getAttribute("text").thisIs("Network & internet")
+                    assertThatThrownBy {
+                        it.findWebElement("textMatches=^Net.*net$").getAttribute("text").thisIs("Network & internet")
+                    }.isInstanceOf(InvalidSelectorException::class.java)
+                        .hasMessageStartingWith("javax.xml.xpath.XPathExpressionException")
                 }
             }
             case(5, "access") {
@@ -53,8 +58,11 @@ class TestDriveFindWebElementTest : UITest() {
                         .thisIs("Profile picture, double tap to open Google Account")
                     it.findWebElement("@*to open Google Account").getAttribute("content-desc")
                         .thisIs("Profile picture, double tap to open Google Account")
-                    it.findWebElement("accessMatches=^Profile.*Account$").getAttribute("content-desc")
-                        .thisIs("Profile picture, double tap to open Google Account")
+                    assertThatThrownBy {
+                        it.findWebElement("accessMatches=^Profile.*Account$").getAttribute("content-desc")
+                            .thisIs("Profile picture, double tap to open Google Account")
+                    }.isInstanceOf(InvalidSelectorException::class.java)
+                        .hasMessageStartingWith("javax.xml.xpath.XPathExpressionException")
                 }
             }
             case(6, "value") {

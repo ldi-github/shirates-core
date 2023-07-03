@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.EnableCache
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.refreshCache
 import shirates.core.driver.commandextension.restartApp
@@ -12,6 +13,7 @@ import shirates.core.driver.commandextension.textIs
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
+@EnableCache
 @Want
 @Testrun("unitTestData/testConfig/androidSettings/androidSettingsConfig.testrun.properties")
 class XPathTest : UITest() {

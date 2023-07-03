@@ -796,7 +796,6 @@ class Selector(
      */
     fun getXPathCondition(
         packageName: String = rootElement.packageName,
-        withPos: Boolean = true
     ): String {
 
         val selectors = mutableListOf<Selector>()
@@ -824,9 +823,6 @@ class Selector(
 
         if (condition.isNotBlank()) {
             condition = "[$condition]"
-        }
-        if (withPos && pos != null && command != ":previous") {
-            condition = "$condition[$pos]"
         }
 
         return condition
@@ -954,7 +950,7 @@ class Selector(
         list.addFunction("@content-desc=%s", access)
         list.addFunction("starts-with(@content-desc,%s)", accessStartsWith)
         list.addFunction("contains(@content-desc,%s)", accessContains)
-        list.addFunction("ends-with(@content-desc,%s)", accessEndsWith)
+        list.addFunction("(${getEndsWith("content-desc")})", accessEndsWith)
         list.addFunction("matches(@content-desc,%s)", accessMatches)
 
         list.addFunction("@class=%s", className)

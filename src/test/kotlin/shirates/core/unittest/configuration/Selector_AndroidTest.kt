@@ -2441,7 +2441,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getXPathCondition("package1"))
                 assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                    "[@text='text1' and (@class='c1' or @class='c2')][2]"
+                    "[@text='text1' and (@class='c1' or @class='c2')]"
                 )
             }
         }
@@ -2828,7 +2828,7 @@ class Selector_AndroidTest : UnitTest() {
                 TestMode.runAsAndroid {
                     // Act, Assert
                     println(sel.getFullXPathCondition(packageName = "package1"))
-                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@class='android.widget.TextView'][999]")
+                    assertThat(sel.getFullXPathCondition()).isEqualTo("[@class='android.widget.TextView']")
                 }
             }
         }
@@ -2843,12 +2843,12 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 val xpath = sel.getFullXPathCondition(packageName = "package1")
                 println(xpath)
-                assertThat(xpath).isEqualTo("[@resource-id='package1:id/id1'][2]/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
+                assertThat(xpath).isEqualTo("[@resource-id='package1:id/id1']/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
             }
             TestMode.runAsIos {
                 // Act, Assert
                 println(sel.getFullXPathCondition())
-                assertThat(sel.getFullXPathCondition()).isEqualTo("[@name='id1'][2]/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
+                assertThat(sel.getFullXPathCondition()).isEqualTo("[@name='id1']/parent::*/child::*[3]/parent::*/child::*[2]/descendant::*[3]")
             }
         }
     }

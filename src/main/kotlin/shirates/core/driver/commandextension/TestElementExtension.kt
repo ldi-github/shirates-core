@@ -40,7 +40,8 @@ fun TestElement.clearInput(): TestElement {
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message) {
         val e = focusedElement
-        e.webElement?.clear()
+        val we = e.webElement ?: e.getWebElement()
+        we.clear()
         refreshCache()
         TestDriver.lastElement = focusedElement
     }

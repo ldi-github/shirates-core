@@ -65,7 +65,9 @@ private fun TestDrive.findWebElementsCore(
         return list
     }
 
-    val xpath = selector.xpath ?: "//*${selector.getXPathCondition()}"
+    val xpath =
+        selector.xpath ?: if (selector.pos != null) "(//*${selector.getXPathCondition()})[${selector.pos}]"
+        else "//*${selector.getXPathCondition()}"
     var testElements = listOf<TestElement>()
     testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
         testElements = driver.appiumDriver.findElements(By.xpath(xpath))

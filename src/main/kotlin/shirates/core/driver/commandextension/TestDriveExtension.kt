@@ -34,8 +34,11 @@ fun TestDrive.sendKeys(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         val testElement = TestDriver.getFocusedElement()
-        val webElement = testElement.webElement ?: throw TestDriverException("Focused element not found.")
-        webElement.sendKeys(keysToSend)
+        if (testElement.isEmpty) {
+            throw TestDriverException("Focused element not found.")
+        }
+        val we = testElement.webElement ?: testElement.getWebElement()
+        we.sendKeys(keysToSend)
 
         TestDriver.refreshCache()
 
