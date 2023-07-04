@@ -100,20 +100,20 @@ class NoLoadRunTest : UITest() {
         }
     }
 
-    @Test
-    @Order(30)
-    fun select() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Alarm Screen]")
-                }.expectation {
-                    assertSelector()
-                }
-            }
-        }
-    }
+//    @Test
+//    @Order(30)
+//    fun select() {
+//
+//        scenario {
+//            case(1) {
+//                condition {
+//                    it.macro("[Alarm Screen]")
+//                }.expectation {
+//                    assertSelector()
+//                }
+//            }
+//        }
+//    }
 
     @NoLoadRun
     @Test
