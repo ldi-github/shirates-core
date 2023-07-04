@@ -861,6 +861,9 @@ class Selector(
         if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {
             return ""
         }
+        if (this.filterMap.values.any() { it.isNegation }) {
+            return ""
+        }
 
         val relSelectors = relativeSelectors
         if (relSelectors.isEmpty()) {

@@ -2835,6 +2835,25 @@ class Selector_AndroidTest : UnitTest() {
     }
 
     @Test
+    fun getFullXPathConditionIncludingNegation() {
+
+        run {
+            val sel = Selector("<!hoge>")
+            TestMode.runAsAndroid {
+                // Act, Assert
+                val xpath = sel.getFullXPathCondition(packageName = "package1")
+                println(xpath)
+                assertThat(xpath).isEqualTo("")     // negation not supported
+            }
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getFullXPathCondition())
+                assertThat(sel.getFullXPathCondition()).isEqualTo("")   // negation not supported
+            }
+        }
+    }
+
+    @Test
     fun getFullXPathConditionComplex() {
 
         run {
