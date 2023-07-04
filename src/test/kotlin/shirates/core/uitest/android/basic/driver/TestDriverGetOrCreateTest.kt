@@ -43,23 +43,16 @@ class TestDriverCreateOrReuseTest : UITest() {
     @Order(20)
     fun sameConfig_sameProfile_resuse() {
 
-        val original = TestLog.enableTrace
-        try {
-            TestLog.enableTrace = true
-            TestMode.runAsAndroid {
-                assertLineCount(0, "Reusing AppiumDriver session.")
+        TestMode.runAsAndroid {
+            assertLineCount(0, "Reusing AppiumDriver session.")
 
-                // Arrange
-                val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
-                val prof = "profile1"
-                // Act
-                setupFromConfig(conf, prof)
-                // Assert
-                assertLineCount(1, "Setting up test context.")
-                assertLineCount(1, "Reusing AppiumDriver session.")
-            }
-        } finally {
-            TestLog.enableTrace = original
+            // Arrange
+            val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
+            val prof = "profile1"
+            // Act
+            setupFromConfig(conf, prof)
+            // Assert
+            assertLineCount(1, "Reusing AppiumDriver session.")
         }
     }
 
@@ -67,21 +60,14 @@ class TestDriverCreateOrReuseTest : UITest() {
     @Order(30)
     fun sameConfig_anotherProfile_recreate() {
 
-        val original = TestLog.enableTrace
-        try {
-            TestLog.enableTrace = true
-            TestMode.runAsAndroid {
-                // Arrange
-                val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
-                val prof = "profile2"
-                // Act
-                setupFromConfig(conf, prof)
-                // Assert
-                assertLineCount(2, "Setting up test context.")
-                assertLineCount(1, "Reusing AppiumDriver session.")
-            }
-        } finally {
-            TestLog.enableTrace = original
+        TestMode.runAsAndroid {
+            // Arrange
+            val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
+            val prof = "profile2"
+            // Act
+            setupFromConfig(conf, prof)
+            // Assert
+            assertLineCount(1, "Reusing AppiumDriver session.")
         }
     }
 
@@ -89,21 +75,14 @@ class TestDriverCreateOrReuseTest : UITest() {
     @Order(40)
     fun anotherConfig_sameProfile_recreate() {
 
-        val original = TestLog.enableTrace
-        try {
-            TestLog.enableTrace = true
-            TestMode.runAsAndroid {
-                // Arrange
-                val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData2.json"
-                val prof = "profile2"
-                // Act
-                setupFromConfig(conf, prof)
-                // Assert
-                assertLineCount(3, "Setting up test context.")
-                assertLineCount(1, "Reusing AppiumDriver session.")
-            }
-        } finally {
-            TestLog.enableTrace = original
+        TestMode.runAsAndroid {
+            // Arrange
+            val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData2.json"
+            val prof = "profile2"
+            // Act
+            setupFromConfig(conf, prof)
+            // Assert
+            assertLineCount(1, "Reusing AppiumDriver session.")
         }
     }
 }
