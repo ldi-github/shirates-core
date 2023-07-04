@@ -1102,7 +1102,7 @@ object TestDriver {
                 testDrive.findWebElement(selector = sel, inViewOnly = inViewOnly)
             } else {
                 val baseElement =
-                    testDrive.findWebElement(selector = selector, inViewOnly = inViewOnly, widgetOnly = true)
+                    testDrive.findWebElement(selector = selector, inViewOnly = inViewOnly, widgetOnly = false)
                 if (baseElement.isEmpty) {
                     baseElement
                 } else {
