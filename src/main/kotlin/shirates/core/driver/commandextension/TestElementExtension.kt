@@ -57,13 +57,10 @@ fun TestElement.refreshThisElement(): TestElement {
     if (isEmpty) {
         return this
     }
-    if (testContext.useCache.not()) {
-        return this
-    }
 
     val e = try {
         val sel = getUniqueSelector()
-        TestDriver.select(selector = sel, throwsException = false, useCache = true, inViewOnly = true)
+        TestDriver.select(selector = sel, throwsException = false, inViewOnly = true)
     } catch (t: Throwable) {
         TestLog.warn(t.message!!)
         return TestElement.emptyElement

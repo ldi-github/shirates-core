@@ -818,7 +818,12 @@ class TestElement(
         }
     }
 
-    private val propertyCache = mutableMapOf<String, String>()
+    internal val propertyCache = mutableMapOf<String, String>()
+
+    internal fun clearPropertyCache() {
+
+        propertyCache.clear()
+    }
 
     /**
      * getAttribute

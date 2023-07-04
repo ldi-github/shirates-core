@@ -147,6 +147,8 @@ private fun TestElement.tapCore(
     if (isCacheMode) {
         syncCache(force = true)
         lastElement = this.refreshThisElement()
+    } else {
+        this.clearPropertyCache()
     }
 
     if (originalSelector != null) {
