@@ -3,6 +3,7 @@ package shirates.core.uitest.android.driver.commandextension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.EnableCache
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.invalidateCache
@@ -12,6 +13,7 @@ import shirates.core.driver.commandextension.syncCache
 import shirates.core.driver.rootElement
 import shirates.core.testcode.UITest
 
+@EnableCache
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriveCacheExtensionTest : UITest() {
 

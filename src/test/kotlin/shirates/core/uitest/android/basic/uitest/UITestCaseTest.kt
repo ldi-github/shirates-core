@@ -24,12 +24,11 @@ class UITestCaseTest : UITest() {
 
     @Test
     @Order(10)
-    fun useCache_default() {
+    fun forceUseCache_default() {
 
         scenario {
             case(1) {
                 expectation {
-                    assertThat(testContext.enableCache).isTrue()
                     assertThat(testContext.forceUseCache).isFalse()
                 }
             }
@@ -38,12 +37,11 @@ class UITestCaseTest : UITest() {
 
     @Test
     @Order(20)
-    fun useCache_true() {
+    fun forceUseCache_true() {
 
         scenario() {
             case(1, useCache = true) {
                 expectation {
-                    assertThat(testContext.enableCache).isTrue()
                     assertThat(testContext.forceUseCache).isTrue()
                 }
             }
@@ -52,12 +50,11 @@ class UITestCaseTest : UITest() {
 
     @Test
     @Order(30)
-    fun useCache_false() {
+    fun forceUseCache_false() {
 
         scenario() {
             case(1, useCache = false) {
                 expectation {
-                    assertThat(testContext.enableCache).isFalse()
                     assertThat(testContext.forceUseCache).isFalse()
                 }
             }
