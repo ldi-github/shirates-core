@@ -2495,6 +2495,24 @@ class Selector_AndroidTest : UnitTest() {
                     .isEqualTo("[@label='LITERAL' or @value='LITERAL']")
             }
         }
+        run {
+            // Arrange
+            val sel = Selector("literal!=no exist")
+
+            TestMode.runAsAndroid {
+                // Act, Assert
+                println(sel.getXPathCondition("package1"))
+                assertThat(sel.getXPathCondition("package1"))
+                    .isEqualTo("[not(@text='no exist')]")
+            }
+            TestMode.runAsIos {
+                // Arrange
+                println(sel.getXPathCondition())
+                assertThat(sel.getXPathCondition())
+                    .isEqualTo("[not(@label='no exist' or @value='no exist')]")
+            }
+        }
+
     }
 
     @Test

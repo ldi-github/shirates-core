@@ -7,7 +7,6 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
 
@@ -162,9 +161,6 @@ fun TestDrive.findWebElement(
 
     if (testElements.count() == 1) {
         return testElements.first()
-    }
-    if (isiOS) {
-        testElements = testElements.filter { it.type != "XCUIElementTypeCell" }
     }
     return testElements.firstOrNull() ?: TestElement(selector = selector)
 }

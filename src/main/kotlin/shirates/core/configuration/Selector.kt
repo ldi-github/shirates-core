@@ -911,17 +911,26 @@ class Selector(
         }
     }
 
-    private fun MutableList<String>.addFunction(formatString: String, value: String?) {
+    private fun MutableList<String>.addFunctionByFilterName(formatString: String, filterName: String) {
 
-        if (value.isNullOrBlank()) {
+        val filter = getFilter(key = filterName) ?: return
+        if (filter.value.isBlank()) {
             return
         }
+        addFunction(formatString = formatString, value = filter.value, isNegation = filter.isNegation)
+    }
+
+    private fun MutableList<String>.addFunction(formatString: String, value: String, isNegation: Boolean = false) {
 
         val decomposed = value.normalize(Normalizer.Form.NFKD)
         if (value == decomposed) {
             val exp = getAttributeCondition(formatString = formatString, value = value)
             if (exp.isNotEmpty()) {
-                this.add(exp)
+                if (isNegation) {
+                    this.add("not($exp)")
+                } else {
+                    this.add(exp)
+                }
             }
         } else {
             val exp1 = getAttributeCondition(formatString = formatString, value = value)
@@ -934,12 +943,12 @@ class Selector(
 
     private fun addXpathFunctionsForAndroid(list: MutableList<String>, packageName: String) {
 
-        list.addFunction("@text=%s", text)
-        list.addFunction("@text=%s", literal)
-        list.addFunction("starts-with(@text,%s)", textStartsWith)
-        list.addFunction("contains(@text,%s)", textContains)
-        list.addFunction("(${getEndsWith("text")})", textEndsWith)
-        list.addFunction("matches(@text,%s)", textMatches)
+        list.addFunctionByFilterName("@text=%s", "text")
+        list.addFunctionByFilterName("@text=%s", "literal")
+        list.addFunctionByFilterName("starts-with(@text,%s)", "textStartsWith")
+        list.addFunctionByFilterName("contains(@text,%s)", "textContains")
+        list.addFunctionByFilterName("(${getEndsWith("text")})", "textEndsWith")
+        list.addFunctionByFilterName("matches(@text,%s)", "textMatches")
 
         if (id.isNullOrBlank().not()) {
             var fullIds =
@@ -950,15 +959,15 @@ class Selector(
             list.addFunction("@resource-id=%s", fullIds)
         }
 
-        list.addFunction("@content-desc=%s", access)
-        list.addFunction("starts-with(@content-desc,%s)", accessStartsWith)
-        list.addFunction("contains(@content-desc,%s)", accessContains)
-        list.addFunction("(${getEndsWith("content-desc")})", accessEndsWith)
-        list.addFunction("matches(@content-desc,%s)", accessMatches)
+        list.addFunctionByFilterName("@content-desc=%s", "access")
+        list.addFunctionByFilterName("starts-with(@content-desc,%s)", "accessStartsWith")
+        list.addFunctionByFilterName("contains(@content-desc,%s)", "accessContains")
+        list.addFunctionByFilterName("(${getEndsWith("content-desc")})", "accessEndsWith")
+        list.addFunctionByFilterName("matches(@content-desc,%s)", "accessMatches")
 
-        list.addFunction("@class=%s", className)
-        list.addFunction("@focusable=%s", focusable)
-        list.addFunction("@scrollable=%s", scrollable)
+        list.addFunctionByFilterName("@class=%s", "className")
+        list.addFunctionByFilterName("@focusable=%s", "focusable")
+        list.addFunctionByFilterName("@scrollable=%s", "scrollable")
     }
 
     private fun getEndsWith(attrName: String): String {
@@ -972,36 +981,36 @@ class Selector(
                 list.addFunction("contains(@label,%s) or contains(@value,%s)", t)
             }
         } else {
-            list.addFunction("@label=%s or @value=%s", text)
+            list.addFunctionByFilterName("@label=%s or @value=%s", "text")
         }
         if (literal != null && literal!!.contains("\n")) {
             for (t in literal!!.split("\n")) {
                 list.addFunction("contains(@label,%s) or contains(@value,%s)", t)
             }
         } else {
-            list.addFunction("@label=%s or @value=%s", literal)
+            list.addFunctionByFilterName("@label=%s or @value=%s", "literal")
         }
 
-        list.addFunction("starts-with(@label,%s) or starts-with(@value,%s)", textStartsWith)
-        list.addFunction("contains(@label,%s) or contains(@value,%s)", textContains)
-        list.addFunction("(${getEndsWith("label")} or ${getEndsWith("value")})", textEndsWith)
-        list.addFunction("matches(@label,%s) or matches(@value,%s)", textMatches)
+        list.addFunctionByFilterName("starts-with(@label,%s) or starts-with(@value,%s)", "textStartsWith")
+        list.addFunctionByFilterName("contains(@label,%s) or contains(@value,%s)", "textContains")
+        list.addFunctionByFilterName("(${getEndsWith("label")} or ${getEndsWith("value")})", "textEndsWith")
+        list.addFunctionByFilterName("matches(@label,%s) or matches(@value,%s)", "textMatches")
 
-        list.addFunction("@name=%s", id)
+        list.addFunctionByFilterName("@name=%s", "id")
 
-        list.addFunction("@name=%s", access)
-        list.addFunction("starts-with(@name,%s)", accessStartsWith)
-        list.addFunction("contains(@name,%s)", accessContains)
-        list.addFunction(getEndsWith("name"), accessEndsWith)
-        list.addFunction("matches(@name,%s)", accessMatches)
+        list.addFunctionByFilterName("@name=%s", "access")
+        list.addFunctionByFilterName("starts-with(@name,%s)", "accessStartsWith")
+        list.addFunctionByFilterName("contains(@name,%s)", "accessContains")
+        list.addFunctionByFilterName(getEndsWith("name"), "accessEndsWith")
+        list.addFunctionByFilterName("matches(@name,%s)", "accessMatches")
 
-        list.addFunction("@value=%s", value)
-        list.addFunction("starts-with(@value,%s)", valueStartsWith)
-        list.addFunction("contains(@value,%s)", valueContains)
-        list.addFunction(getEndsWith("value"), valueEndsWith)
-        list.addFunction("matches(@value,%s)", valueMatches)
+        list.addFunctionByFilterName("@value=%s", "value")
+        list.addFunctionByFilterName("starts-with(@value,%s)", "valueStartsWith")
+        list.addFunctionByFilterName("contains(@value,%s)", "valueContains")
+        list.addFunctionByFilterName(getEndsWith("value"), "valueEndsWith")
+        list.addFunctionByFilterName("matches(@value,%s)", "valueMatches")
 
-        list.addFunction("@type=%s", className)
+        list.addFunctionByFilterName("@type=%s", "className")
     }
 
     /**

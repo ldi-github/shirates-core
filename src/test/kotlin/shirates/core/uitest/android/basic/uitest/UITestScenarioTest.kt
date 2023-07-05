@@ -4,12 +4,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.EnableCache
 import shirates.core.driver.TestDriverEventContext
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 
+@EnableCache
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class UITestScenarioTest : UITest() {
 
