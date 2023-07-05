@@ -14,6 +14,9 @@ fun TestDrive.filterElements(
     selectContext: TestElement
 ): List<TestElement> {
 
+    if (TestMode.isNoLoadRun) {
+        return listOf()
+    }
     if (useCache) {
         return TestElementCache.filterElements(expression = expression, selectContext = selectContext)
     }
@@ -44,6 +47,10 @@ fun TestDrive.allElements(
     useCache: Boolean
 ): List<TestElement> {
 
+    if (TestMode.isNoLoadRun) {
+        return listOf()
+    }
+
     if (useCache) {
         syncCache(force = true)
         val selectContext = getThisOrRootElement()
@@ -70,6 +77,9 @@ private val widgetNames = ElementCategoryExpressionUtility.widgetTypesExpression
  */
 val TestDrive.widgets
     get(): List<TestElement> {
+        if (TestMode.isNoLoadRun) {
+            return listOf()
+        }
         val selectContext = rootElement
         if (testContext.useCache) {
             return filterElements(expression = ".widget", selectContext = selectContext)
@@ -88,6 +98,9 @@ val TestDrive.widgets
  */
 val TestDrive.inputWidgets
     get(): List<TestElement> {
+        if (TestMode.isNoLoadRun) {
+            return listOf()
+        }
         val selectContext = rootElement
         return filterElements(expression = ".input", selectContext = selectContext)
     }
@@ -97,6 +110,9 @@ val TestDrive.inputWidgets
  */
 val TestDrive.labelWidgets
     get(): List<TestElement> {
+        if (TestMode.isNoLoadRun) {
+            return listOf()
+        }
         val selectContext = rootElement
         return filterElements(expression = ".label", selectContext = selectContext)
     }
@@ -106,6 +122,9 @@ val TestDrive.labelWidgets
  */
 val TestDrive.imageWidgets
     get(): List<TestElement> {
+        if (TestMode.isNoLoadRun) {
+            return listOf()
+        }
         val selectContext = rootElement
         return filterElements(expression = ".image", selectContext = selectContext)
     }
@@ -115,6 +134,9 @@ val TestDrive.imageWidgets
  */
 val TestDrive.buttonWidgets
     get(): List<TestElement> {
+        if (TestMode.isNoLoadRun) {
+            return listOf()
+        }
         val selectContext = rootElement
         return filterElements(expression = ".button", selectContext = selectContext)
     }
@@ -124,6 +146,9 @@ val TestDrive.buttonWidgets
  */
 val TestDrive.switchWidgets
     get(): List<TestElement> {
+        if (TestMode.isNoLoadRun) {
+            return listOf()
+        }
         val selectContext = rootElement
         return filterElements(expression = ".switch", selectContext = selectContext)
     }

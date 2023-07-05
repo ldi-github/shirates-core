@@ -76,6 +76,7 @@ fun TestDrive.pressBack(
         wait(waitSeconds = waitSeconds)
     }
 
+    TestDriver.refreshCurrentScreen()
     return TestElement.emptyElement
 }
 
@@ -101,6 +102,7 @@ fun TestDrive.pressHome(
         wait(waitSeconds = waitSeconds)
     }
 
+    TestDriver.refreshCurrentScreen()
     return TestElement.emptyElement
 }
 

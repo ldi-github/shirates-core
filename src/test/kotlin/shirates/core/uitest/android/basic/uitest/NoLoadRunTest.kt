@@ -32,21 +32,21 @@ class NoLoadRunTest : UITest() {
                     Clipboard.write("clipboard1")
                 }.expectation {
                     describe("Read 'clipboard1' from clipboard")
-                    assertThat(Clipboard.read()).isEqualTo("clipboard1")
+                    Clipboard.read().thisIs("clipboard1")
                 }
             }
             case(2) {
                 action {
                     writeClipboard("hoge")
                 }.expectation {
-                    assertThat(readClipboard()).isEqualTo("hoge")
+                    readClipboard().thisIs("hoge")
                 }
             }
             case(3) {
                 action {
                     clearClipboard()
                 }.expectation {
-                    assertThat(readClipboard()).isEmpty()
+                    readClipboard().thisIsEmpty()
                 }
             }
         }

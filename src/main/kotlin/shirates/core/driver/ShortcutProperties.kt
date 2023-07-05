@@ -16,6 +16,9 @@ val testDrive: TestDrive
  */
 var rootElement: TestElement
     get() {
+        if (TestMode.isNoLoadRun) {
+            return TestElement.emptyElement
+        }
         if (testContext.useCache) {
             return TestElementCache.rootElement
         }
