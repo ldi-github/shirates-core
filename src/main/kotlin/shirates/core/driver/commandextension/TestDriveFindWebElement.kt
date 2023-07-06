@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import shirates.core.configuration.Filter
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.appiumDriver
@@ -71,6 +72,17 @@ private fun TestDrive.findWebElementsCore(
     testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
         testElements = driver.appiumDriver.findElements(By.xpath(xpath))
             .map { it.toTestElement(selector = selector) }
+    }
+
+    val containsIgnoreType = PropertiesManager.selectIgnoreTypes.any() { xpath.contains(it) }
+    if (containsIgnoreType.not()) {
+        testElements = testElements.filter {
+            val m = Filter.isNotIgnoreTypes(
+                classOrType = it.classOrType,
+                ignoreTypes = selector.ignoreTypes
+            )
+            m
+        }
     }
     if (widgetOnly) {
         testElements = testElements.filter { it.isWidget }

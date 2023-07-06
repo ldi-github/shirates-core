@@ -74,10 +74,9 @@ fun Any?.thisIs(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        var result = this == expected
-        if (this is String && expected is String) {
-            result = this.normalize() == expected.normalize()
-        }
+        val value1 = this.toString().normalize()
+        val value2 = expected.toString().normalize()
+        val result = value1 == value2
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {

@@ -1129,7 +1129,7 @@ object TestDriver {
                         val exp =
                             if (exps.isEmpty()) ".widget"
                             else exps.joinToString("||")
-                        val scopeElements = testDrive.filterElements(expression = exp, selectContext = rootElement)
+                        val scopeElements = testDrive.findWebElements(expression = exp)
                             .filter { it.isInView }
                         baseElement.getRelative(inViewOnly = inViewOnly, scopeElements = scopeElements)
                     } else {
