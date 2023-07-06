@@ -58,12 +58,18 @@ fun TestElement.refreshThisElement(): TestElement {
         return this
     }
 
+    val originalSelector = this.selector
+
     val e = try {
         val sel = getUniqueSelector()
         TestDriver.select(selector = sel, throwsException = false, inViewOnly = true)
     } catch (t: Throwable) {
         TestLog.warn(t.message!!)
         return TestElement.emptyElement
+    }
+
+    if (originalSelector != null) {
+        e.selector = originalSelector
     }
 
     return e
