@@ -3,6 +3,7 @@ package shirates.core.uitest.android.driver.commandextension
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.commandextension.*
@@ -16,15 +17,13 @@ import shirates.helper.TestSetupHelper
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class TestElementImageExtensionTest : UITest() {
 
-    @Test
-    @Order(10)
-    fun cropImage() {
+    override fun beforeAllAfterSetup(context: ExtensionContext?) {
 
         TestSetupHelper.setupImageAndroidSettingsTopScreen()
     }
 
     @Test
-    @Order(20)
+    @Order(10)
     fun findImage() {
 
         ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
@@ -57,7 +56,7 @@ class TestElementImageExtensionTest : UITest() {
     }
 
     @Test
-    @Order(30)
+    @Order(20)
     fun exist_existWithScrollDown_imageIs_imageIsNot_isImage_imageContains() {
 
         ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))

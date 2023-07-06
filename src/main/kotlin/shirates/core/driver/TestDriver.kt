@@ -1096,10 +1096,18 @@ object TestDriver {
         val fullXPathCondition = selector.getFullXPathCondition()
         val e = try {
             val elm = if (fullXPathCondition.isNotBlank()) {
-                val sel =
-                    if (selector.pos != null) Selector("xpath=(//*$fullXPathCondition)[${selector.pos}]")
-                    else Selector("xpath=//*$fullXPathCondition")
-                testDrive.findWebElement(selector = sel, inViewOnly = inViewOnly)
+                val sel = Selector("xpath=(//*$fullXPathCondition)")
+                val elements = testDrive.findWebElements(selector = sel, inViewOnly = inViewOnly)
+                if (selector.pos != null) {
+                    val pos = selector.pos!!
+                    if (pos <= elements.count()) {
+                        elements[pos - 1]
+                    } else {
+                        TestElement.emptyElement
+                    }
+                } else {
+                    elements[0]
+                }
             } else {
                 val baseElement =
                     testDrive.findWebElement(selector = selector, inViewOnly = inViewOnly, widgetOnly = false)

@@ -6,36 +6,6 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 
-/**
- * filterElements
- */
-fun TestDrive.filterElements(
-    expression: String,
-    inViewOnly: Boolean = true,
-    useCache: Boolean = testContext.useCache
-): List<TestElement> {
-
-    if (useCache) {
-        syncCache(force = true)
-    }
-    return TestElementCache.filterElements(expression = expression, inViewOnly = inViewOnly)
-}
-
-/**
- * filterElements
- */
-fun TestDrive.filterElements(
-    selector: Selector,
-    inViewOnly: Boolean = true,
-    selectContext: TestElement = rootElement
-): List<TestElement> {
-
-    return TestElementCache.filterElements(
-        selector = selector,
-        inViewOnly = inViewOnly,
-        selectContext = selectContext
-    )
-}
 
 /**
  * select

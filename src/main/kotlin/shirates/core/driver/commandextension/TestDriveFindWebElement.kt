@@ -1,7 +1,6 @@
 package shirates.core.driver.commandextension
 
 import org.openqa.selenium.By
-import org.openqa.selenium.WebElement
 import shirates.core.configuration.Filter
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
@@ -148,6 +147,28 @@ private fun getAttrName(noun: String): String {
 }
 
 /**
+ * findWebElements
+ */
+fun TestDrive.findWebElements(
+    selector: Selector,
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
+    throwsException: Boolean = false,
+    inViewOnly: Boolean = true,
+    widgetOnly: Boolean = false
+): List<TestElement> {
+
+    var testElements = findWebElementsCore(
+        selector = selector,
+        timeoutMilliseconds = timeoutMilliseconds,
+        widgetOnly = widgetOnly
+    )
+    if (inViewOnly) {
+        testElements = testElements.filter { it.isInView }
+    }
+    return testElements
+}
+
+/**
  * findWebElement
  */
 fun TestDrive.findWebElement(
@@ -158,19 +179,16 @@ fun TestDrive.findWebElement(
     widgetOnly: Boolean = false
 ): TestElement {
 
-    var testElements = findWebElementsCore(
+    val testElements = findWebElements(
         selector = selector,
         timeoutMilliseconds = timeoutMilliseconds,
+        throwsException = throwsException,
+        inViewOnly = inViewOnly,
         widgetOnly = widgetOnly
     )
-    if (inViewOnly) {
-        TestDriver.screenInfo.refreshOverlayElements()
-        testElements = testElements.filter { it.isInView }
-    }
     if (testElements.isEmpty() && throwsException) {
         throw TestDriverException("Element not found. (selector=$selector)")
     }
-
     if (testElements.count() == 1) {
         return testElements.first()
     }
@@ -194,34 +212,3 @@ fun TestDrive.findWebElement(
     )
 }
 
-private fun List<WebElement>.filterWebElements(
-    filter: Filter
-): List<WebElement> {
-
-    val attrName = getAttrName(noun = filter.noun)
-    val webElements = when (filter.noun) {
-        "id" -> this.filter { it.getAttribute(attrName) == filter.value }
-        "className" -> this.filter { it.getAttribute(attrName) == filter.value }
-        "literal" -> this.filter { it.getAttribute(attrName) == filter.value }
-        "text", "access", "value" -> when (filter.verb) {
-            "StartsWith" -> this.filter { it.getAttribute(attrName).startsWith(filter.value) }
-            "Contains" -> this.filter { it.getAttribute(attrName).contains(filter.value) }
-            "EndsWith" -> this.filter { it.getAttribute(attrName).endsWith(filter.value) }
-            "Matches" -> this.filter { it.getAttribute(attrName).matches(Regex(filter.value)) }
-            else -> this.filter { it.getAttribute(attrName) == filter.value }
-        }
-
-        "pos" -> {
-            val ix = filter.value.toInt() - 1
-            if (ix > this.count() - 1) {
-                listOf()
-            } else {
-                listOf(this[ix])
-            }
-        }
-
-        else -> this
-    }
-
-    return webElements
-}
