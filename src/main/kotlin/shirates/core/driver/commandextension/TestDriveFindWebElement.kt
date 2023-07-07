@@ -16,7 +16,8 @@ import shirates.core.logging.Measure
 fun TestDrive.findWebElements(
     selector: Selector,
     timeoutMilliseconds: Int = 0,
-    widgetOnly: Boolean = false
+    widgetOnly: Boolean = false,
+    inViewOnly: Boolean = true
 ): List<TestElement> {
 
     val ms = Measure("$selector")
@@ -43,9 +44,14 @@ fun TestDrive.findWebElements(
         )
     }
 
+    var result: List<TestElement> = webElements
+    if (inViewOnly) {
+        result = webElements.filter { it.isInView }
+    }
+
     ms.end()
 
-    return webElements
+    return result
 }
 
 private fun TestDrive.findWebElementsCore(
@@ -147,28 +153,6 @@ private fun getAttrName(noun: String): String {
 }
 
 /**
- * findWebElements
- */
-fun TestDrive.findWebElements(
-    selector: Selector,
-    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
-    throwsException: Boolean = false,
-    inViewOnly: Boolean = true,
-    widgetOnly: Boolean = false
-): List<TestElement> {
-
-    var testElements = findWebElementsCore(
-        selector = selector,
-        timeoutMilliseconds = timeoutMilliseconds,
-        widgetOnly = widgetOnly
-    )
-    if (inViewOnly) {
-        testElements = testElements.filter { it.isInView }
-    }
-    return testElements
-}
-
-/**
  * findWebElement
  */
 fun TestDrive.findWebElement(
@@ -182,7 +166,6 @@ fun TestDrive.findWebElement(
     val testElements = findWebElements(
         selector = selector,
         timeoutMilliseconds = timeoutMilliseconds,
-        throwsException = throwsException,
         inViewOnly = inViewOnly,
         widgetOnly = widgetOnly
     )

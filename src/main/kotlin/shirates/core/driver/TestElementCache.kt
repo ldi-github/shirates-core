@@ -66,9 +66,9 @@ object TestElementCache {
     }
 
     /**
-     * filterElements
+     * findElements
      */
-    fun filterElements(
+    fun findElements(
         expression: String,
         inViewOnly: Boolean = false,
         selectContext: TestElement = rootElement
@@ -81,14 +81,14 @@ object TestElementCache {
             sel = TestDriver.expandExpression(expression = expression)
         }
 
-        val list = filterElements(selector = sel, selectContext = selectContext, inViewOnly = inViewOnly)
+        val list = findElements(selector = sel, selectContext = selectContext, inViewOnly = inViewOnly)
         return list
     }
 
     /**
-     * filterElements
+     * findElements
      */
-    fun filterElements(
+    fun findElements(
         selector: Selector,
         throwsException: Boolean = false,
         inViewOnly: Boolean = false,
@@ -155,7 +155,7 @@ object TestElementCache {
                 )
             } else {
                 // select in selectContext
-                var list = filterElements(
+                var list = findElements(
                     selector = selector,
                     throwsException = throwsException,
                     inViewOnly = false,

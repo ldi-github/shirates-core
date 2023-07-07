@@ -6,19 +6,19 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 /**
- * filterElements
+ * findElements
  */
-fun TestDrive.filterElements(
+fun TestDrive.findElements(
     expression: String,
     useCache: Boolean = testContext.useCache,
-    selectContext: TestElement
+    selectContext: TestElement = rootElement
 ): List<TestElement> {
 
     if (TestMode.isNoLoadRun) {
         return listOf()
     }
     if (useCache) {
-        return TestElementCache.filterElements(expression = expression, selectContext = selectContext)
+        return TestElementCache.findElements(expression = expression, selectContext = selectContext)
     }
 
     val startPart =
@@ -53,8 +53,7 @@ fun TestDrive.allElements(
 
     if (useCache) {
         syncCache(force = true)
-        val selectContext = getThisOrRootElement()
-        return selectContext.descendantsAndSelf
+        return rootElement.descendantsAndSelf
     }
 
     val elements = driver.appiumDriver.findElements(By.xpath("//*")).map { TestElement(webElement = it) }
@@ -82,7 +81,7 @@ val TestDrive.widgets
         }
         val selectContext = rootElement
         if (testContext.useCache) {
-            return filterElements(expression = ".widget", selectContext = selectContext)
+            return findElements(expression = ".widget", selectContext = selectContext)
         }
 
         val typeName = if (isAndroid) "class" else "type"
@@ -102,7 +101,7 @@ val TestDrive.inputWidgets
             return listOf()
         }
         val selectContext = rootElement
-        return filterElements(expression = ".input", selectContext = selectContext)
+        return findElements(expression = ".input", selectContext = selectContext)
     }
 
 /**
@@ -114,7 +113,7 @@ val TestDrive.labelWidgets
             return listOf()
         }
         val selectContext = rootElement
-        return filterElements(expression = ".label", selectContext = selectContext)
+        return findElements(expression = ".label", selectContext = selectContext)
     }
 
 /**
@@ -126,7 +125,7 @@ val TestDrive.imageWidgets
             return listOf()
         }
         val selectContext = rootElement
-        return filterElements(expression = ".image", selectContext = selectContext)
+        return findElements(expression = ".image", selectContext = selectContext)
     }
 
 /**
@@ -138,7 +137,7 @@ val TestDrive.buttonWidgets
             return listOf()
         }
         val selectContext = rootElement
-        return filterElements(expression = ".button", selectContext = selectContext)
+        return findElements(expression = ".button", selectContext = selectContext)
     }
 
 /**
@@ -150,6 +149,6 @@ val TestDrive.switchWidgets
             return listOf()
         }
         val selectContext = rootElement
-        return filterElements(expression = ".switch", selectContext = selectContext)
+        return findElements(expression = ".switch", selectContext = selectContext)
     }
 

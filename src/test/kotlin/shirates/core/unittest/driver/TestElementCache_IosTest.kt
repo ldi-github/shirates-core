@@ -26,14 +26,14 @@ class TestElementCache_IosTest : UnitTest() {
     }
 
     @Test
-    fun filterElements() {
+    fun findElements() {
 
         // Arrange
         TestElementCache.loadXml(xmlData = XmlDataIos.SettingsTopScreen)
 
         run {
             // Act
-            val elements = TestElementCache.filterElements("General")
+            val elements = TestElementCache.findElements("General")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].label).isEqualTo("General")
@@ -41,7 +41,7 @@ class TestElementCache_IosTest : UnitTest() {
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("P*")
+            val elements = TestElementCache.findElements("P*")
             // Assert
             assertThat(elements.count()).isEqualTo(3)
             assertThat(elements[0].label).isEqualTo("Privacy")
@@ -50,21 +50,21 @@ class TestElementCache_IosTest : UnitTest() {
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("*in to*")
+            val elements = TestElementCache.findElements("*in to*")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].label).isEqualTo("Sign in to your iPhone")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("textMatches=.*oto.*")
+            val elements = TestElementCache.findElements("textMatches=.*oto.*")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].label).isEqualTo("Photos")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("#Settings")
+            val elements = TestElementCache.findElements("#Settings")
             // Assert
             assertThat(elements.count()).isEqualTo(2)
             assertThat(elements[0].name).isEqualTo("Settings")
@@ -88,21 +88,21 @@ class TestElementCache_IosTest : UnitTest() {
 
         run {
             // Act
-            val elements = TestElementCache.filterElements("Keyboards")
+            val elements = TestElementCache.findElements("Keyboards")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].type).isEqualTo("XCUIElementTypeStaticText")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements(".XCUIElementTypeCell&&Keyboards")
+            val elements = TestElementCache.findElements(".XCUIElementTypeCell&&Keyboards")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].type).isEqualTo("XCUIElementTypeCell")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("Keyboards&&ignoreTypes=")
+            val elements = TestElementCache.findElements("Keyboards&&ignoreTypes=")
             // Assert
             assertThat(elements.count()).isEqualTo(2)
             assertThat(elements[0].type).isEqualTo("XCUIElementTypeCell")
@@ -110,7 +110,7 @@ class TestElementCache_IosTest : UnitTest() {
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements(".XCUIElementTypeCell&&ignoreTypes=")
+            val elements = TestElementCache.findElements(".XCUIElementTypeCell&&ignoreTypes=")
             // Assert
             assertThat(elements.count()).isEqualTo(6)
             assertThat(elements[0].type).isEqualTo("XCUIElementTypeCell")
@@ -118,7 +118,7 @@ class TestElementCache_IosTest : UnitTest() {
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("xpath=//*[@label='Motion' or @label='Spoken Content']")
+            val elements = TestElementCache.findElements("xpath=//*[@label='Motion' or @label='Spoken Content']")
             // Assert
             assertThat(elements.count()).isEqualTo(4)
             assertThat(elements[0].label).isEqualTo("Motion")
@@ -130,7 +130,7 @@ class TestElementCache_IosTest : UnitTest() {
             // Arrange
             val selector = Selector("text=Touch")
             // Act
-            val elements = TestElementCache.filterElements(selector)
+            val elements = TestElementCache.findElements(selector)
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].label).isEqualTo("Touch")
@@ -139,7 +139,7 @@ class TestElementCache_IosTest : UnitTest() {
             // Arrange
             val selector = Selector("~title=Accessibility")
             // Act
-            val elements = TestElementCache.filterElements(selector)
+            val elements = TestElementCache.findElements(selector)
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].textOrLabel).isEqualTo("Accessibility")
@@ -148,7 +148,7 @@ class TestElementCache_IosTest : UnitTest() {
             // Arrange
             val selector = Selector("value=Accessibility")
             // Act
-            val elements = TestElementCache.filterElements(selector)
+            val elements = TestElementCache.findElements(selector)
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].value).isEqualTo("Accessibility")

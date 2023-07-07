@@ -77,28 +77,28 @@ class TestElementCache_AndroidTest : UnitTest() {
     }
 
     @Test
-    fun filterElements() {
+    fun findElements() {
 
         // Arrange
         TestElementCache.loadXml(xmlData = XmlDataAndroid.NetworkAndInternetScreen)
 
         run {
             // Act
-            val elements = TestElementCache.filterElements(expression = "M*")
+            val elements = TestElementCache.findElements(expression = "M*")
             // Assert
             assertThat(elements[0].text).isEqualTo("Mobile network")
             assertThat(elements[1].text).isEqualTo("Mobile plan")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("Airplane mode")
+            val elements = TestElementCache.findElements("Airplane mode")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].text).isEqualTo("Airplane mode")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("A*")
+            val elements = TestElementCache.findElements("A*")
             // Assert
             assertThat(elements.count()).isEqualTo(3)
             assertThat(elements[0].text).startsWith("AndroidWifi")
@@ -107,7 +107,7 @@ class TestElementCache_AndroidTest : UnitTest() {
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("*wor*")
+            val elements = TestElementCache.findElements("*wor*")
             // Assert
             assertThat(elements.count()).isEqualTo(2)
             assertThat(elements[0].text).isEqualTo("Network & internet")
@@ -115,7 +115,7 @@ class TestElementCache_AndroidTest : UnitTest() {
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("textMatches=^Mobile.*")
+            val elements = TestElementCache.findElements("textMatches=^Mobile.*")
             // Assert
             assertThat(elements.count()).isEqualTo(2)
             assertThat(elements[0].text).isEqualTo("Mobile network")
@@ -123,35 +123,35 @@ class TestElementCache_AndroidTest : UnitTest() {
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("#icon_frame")
+            val elements = TestElementCache.findElements("#icon_frame")
             // Assert
             assertThat(elements.count()).isEqualTo(5)
             assertThat(elements[0].id).isEqualTo("com.android.settings:id/icon_frame")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("@Search settings")
+            val elements = TestElementCache.findElements("@Search settings")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].contentDesc).isEqualTo("Search settings")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("@Se*")
+            val elements = TestElementCache.findElements("@Se*")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].contentDesc).isEqualTo("Search settings")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements(".android.widget.ImageView")
+            val elements = TestElementCache.findElements(".android.widget.ImageView")
             // Assert
             assertThat(elements.count()).isEqualTo(5)
             assertThat(elements[0].className).isEqualTo("android.widget.ImageView")
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("xpath=//*[@resource-id='android:id/icon']")
+            val elements = TestElementCache.findElements("xpath=//*[@resource-id='android:id/icon']")
             // Assert
             assertThat(elements.count()).isEqualTo(5)
             assertThat(elements[0].id).isEqualTo("android:id/icon")
@@ -160,7 +160,7 @@ class TestElementCache_AndroidTest : UnitTest() {
             // Arrange
             val selector = Selector("text=Network & internet")
             // Act
-            val elements = TestElementCache.filterElements(selector)
+            val elements = TestElementCache.findElements(selector)
             // Assert
             assertThat(elements.count()).isEqualTo(1)
             assertThat(elements[0].text).isEqualTo("Network & internet")
@@ -169,7 +169,7 @@ class TestElementCache_AndroidTest : UnitTest() {
             // Arrange
             val selector = Selector("[Network & internet||Mobile network]:descendant(aaa)")
             // Act
-            val elements = TestElementCache.filterElements(selector)
+            val elements = TestElementCache.findElements(selector)
             // Assert
             assertThat(elements.count()).isEqualTo(0)
         }
@@ -183,31 +183,31 @@ class TestElementCache_AndroidTest : UnitTest() {
 
         run {
             // Act
-            val elements = TestElementCache.filterElements("Mobile network")
+            val elements = TestElementCache.findElements("Mobile network")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("!Mobile network")
+            val elements = TestElementCache.findElements("!Mobile network")
             // Assert
             assertThat(elements.count()).isGreaterThan(1)
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("Mobile network&&.android.widget.TextView")
+            val elements = TestElementCache.findElements("Mobile network&&.android.widget.TextView")
             // Assert
             assertThat(elements.count()).isEqualTo(1)
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("!Mobile network&&.android.widget.TextView")
+            val elements = TestElementCache.findElements("!Mobile network&&.android.widget.TextView")
             // Assert
             assertThat(elements.count()).isEqualTo(11)
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("Mobile network&&!.android.widget.TextView")
+            val elements = TestElementCache.findElements("Mobile network&&!.android.widget.TextView")
             // Assert
             assertThat(elements.count()).isEqualTo(0)
         }
@@ -649,13 +649,13 @@ class TestElementCache_AndroidTest : UnitTest() {
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("*and*")
+            val elements = TestElementCache.findElements("*and*")
             // Assert
             assertThat(elements.count() > 0).isEqualTo(true)
         }
         run {
             // Act
-            val elements = TestElementCache.filterElements("*and*&&ignoreTypes=android.widget.TextView")
+            val elements = TestElementCache.findElements("*and*&&ignoreTypes=android.widget.TextView")
             // Assert
             assertThat(elements.count()).isEqualTo(0)
         }

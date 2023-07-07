@@ -21,6 +21,9 @@ fun TestDrive.select(
 ): TestElement {
     val testElement = getThisOrRootElement()
 
+    if (useCache) {
+        syncCache()
+    }
     TestDriver.refreshCurrentScreenWithNickname(expression)
 
     val sel = getSelector(expression = expression)

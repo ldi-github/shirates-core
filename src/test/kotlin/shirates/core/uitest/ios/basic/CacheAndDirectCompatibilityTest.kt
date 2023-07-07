@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.select
+import shirates.core.driver.commandextension.syncCache
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
@@ -66,7 +67,9 @@ class CacheAndDirectCompatibilityTest : UITest() {
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    syncCache(force = true)
+                }.action {
                     e1 = it.select(".XCUIElementTypeCell&&pos=1", useCache = true)
                     e2 = it.select(".XCUIElementTypeCell&&pos=1", useCache = false)
                 }.expectation {

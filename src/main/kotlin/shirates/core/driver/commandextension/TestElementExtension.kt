@@ -135,7 +135,7 @@ fun TestElement.getUniqueSelector(): Selector {
         if (testContext.useCache.not()) {
             return false
         }
-        val elements = TestElementCache.filterElements(selector = sel, inViewOnly = true)
+        val elements = TestElementCache.findElements(selector = sel, inViewOnly = true)
         return elements.count() == 1
     }
 
