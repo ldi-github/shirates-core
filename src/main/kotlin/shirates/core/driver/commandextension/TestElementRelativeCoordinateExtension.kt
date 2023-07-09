@@ -86,12 +86,14 @@ internal fun TestElement.belowAboveCore(
 ): TestElement {
 
     val sel = selector.copyAndRemovePos()
-    val list = targetElements
+    sel.command = null
+    val widgets = targetElements
+        .filter { it.isWidget }
         .filterBySelector(selector = sel, inViewOnly = inViewOnly)
 
     val verticalBand = VerticalBand(this)
-    for (e in list) {
-        verticalBand.merge(e)
+    for (widget in widgets) {
+        verticalBand.merge(widget)
     }
     val elms = verticalBand.getElements()
     val candidates = filterCandidates(
@@ -108,9 +110,7 @@ internal fun TestElement.belowAboveCore(
             candidates.filter { it.bounds.bottom < this.bounds.bottom }
                 .sortedWith(compareByDescending<TestElement> { it.bounds.bottom }.thenBy { it.bounds.top })
                 .toMutableList()
-    val pos =
-        if (selector.pos != null) selector.pos!!
-        else 1
+    val pos = selector.pos ?: 1
     val e =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) TestElement()
         else sortedElements[pos - 1]
@@ -148,10 +148,14 @@ fun TestElement.right(
     inViewOnly: Boolean = true
 ): TestElement {
 
+    val scopedElements = widgets.toMutableList()
+    if (scopedElements.contains(this).not()) {
+        scopedElements.add(this)
+    }
     return relative(
         command = ":right($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = widgets
+        scopeElements = scopedElements
     )
 }
 

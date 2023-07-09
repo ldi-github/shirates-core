@@ -188,7 +188,7 @@ class Selector_IosTest : UnitTest() {
             // Act
             val sel = Selector(".(input|image)")
             // Assert
-            assertThat(sel.className).isEqualTo("(XCUIElementTypeTextField|XCUIElementTypeSecureTextField|XCUIElementTypeImage)")
+            assertThat(sel.className).isEqualTo("(input|image)")
         }
     }
 
@@ -200,7 +200,7 @@ class Selector_IosTest : UnitTest() {
         // Act
         val classChain = sel.getIosClassChain()
         // Assert
-        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar'`]/**/*[`type=='XCUIElementTypeStaticText' AND label=='TITLE1'`]")
+        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar'`]/**/*[`(label=='TITLE1' OR value=='TITLE1') AND type=='XCUIElementTypeStaticText'`]")
     }
 
     @Test

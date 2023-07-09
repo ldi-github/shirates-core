@@ -771,13 +771,10 @@ class ScreenInfoTest : UnitTest() {
         run {
             // Act
             val expression = "<@accessibility>:next(xpath=//*[@textMatches(^text\$)])"
-            val actual = screenInfo.getSelector(expression)
-            // Assert
-            assertThat(actual.toString()).isEqualTo("<@accessibility>:next(xpath=//*[@textMatches(^text\$)])")
-            assertThat(actual.access).isEqualTo("accessibility")
-            assertThat(actual.relativeSelectors.count()).isEqualTo(1)
-            assertThat(actual.relativeSelectors[0].command).isEqualTo(":next")
-            assertThat(actual.relativeSelectors[0].toString()).isEqualTo(":next(xpath=//*[@textMatches(^text\$)])")
+            assertThatThrownBy {
+                screenInfo.getSelector(expression)
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("xpath is not supported for relative command. (:next(xpath=//*[@textMatches(^text\$)]))")
         }
 
     }

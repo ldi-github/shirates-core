@@ -6,8 +6,8 @@ import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.rootElement
+import shirates.core.exception.TestConfigException
 import shirates.core.testcode.normalize
-import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.element.IosPredicateUtility
 import shirates.core.utility.element.XPathUtility
 import shirates.core.utility.image.ImageMatchResult
@@ -488,7 +488,7 @@ class Selector(
     init {
 
         originalExpression = expression
-        expression = expandClassAlias(expression)
+        expression = expandCommand(expression)
         parseExpression()
     }
 
@@ -536,6 +536,10 @@ class Selector(
             val exp = exps[i]
             val s = Selector(exp)
             alternativeSelectors.add(s)
+        }
+
+        if (isRelative && xpath.isNullOrBlank().not()) {
+            throw TestConfigException("xpath is not supported for relative command. (${this.originalExpression})")
         }
     }
 
@@ -833,9 +837,6 @@ class Selector(
         if (relativeSelectors.any() { it.command != ":descendant" }) {
             return ""
         }
-        if (this.filterMap.values.any() { it.isNegation }) {
-            return ""
-        }
 
         val selectors = mutableListOf<Selector>()
         if (this.expression.isNullOrBlank().not()) {
@@ -855,7 +856,7 @@ class Selector(
             val c = s.getIosPredicateCore()
             predicates.add(c)
         }
-        var predicate = predicates.joinToString(" OR ")
+        val predicate = predicates.joinToString(" OR ")
 
         return predicate
     }
@@ -1414,7 +1415,7 @@ class Selector(
         return getFilter("scrollable")?.evaluate(element = element) ?: true
     }
 
-    private fun expandClassAlias(expression: String?): String? {
+    private fun expandCommand(expression: String?): String? {
 
         if (expression == null) {
             return expression
@@ -1431,27 +1432,32 @@ class Selector(
                 } else if (exp.contains("~webTitle=")) {
                     expanded = expandWebTitle(webTitle = exp.substring("~webTitle=".length))
                 } else {
-                    if (command.startsWith(".")) {
-                        val tokens = command.removePrefix(".").removePrefix("(").removeSuffix(")").split("|")
-                        val list = mutableListOf<String>()
-                        for (token in tokens) {
-                            list.add(
-                                ElementCategoryExpressionUtility.expandWidget(token).removePrefix("(").removeSuffix(")")
-                            )
-                        }
-                        if (list.count() == 1) {
-                            val item = list[0]
-                            if (item.contains("|")) {
-                                expanded = ".($item)"
-                            } else {
-                                expanded = ".$item"
-                            }
-                        } else {
-                            expanded = ".(${list.joinToString("|")})"
-                        }
-                    } else {
-                        expanded = command
-                    }
+//                    val operator =
+//                        if (command.startsWith(".")) "."
+//                        else if (command.startsWith("className=")) "className="
+//                        else ""
+//                    if (operator.isNotBlank()) {
+//                        val tokens = command.removePrefix(operator).removePrefix("(").removeSuffix(")").split("|")
+//                        val list = mutableListOf<String>()
+//                        for (token in tokens) {
+//                            list.add(
+//                                ElementCategoryExpressionUtility.expandWidget(token).removePrefix("(").removeSuffix(")")
+//                            )
+//                        }
+//                        if (list.count() == 1) {
+//                            val item = list[0]
+//                            if (item.contains("|")) {
+//                                expanded = "$operator($item)"
+//                            } else {
+//                                expanded = "$operator$item"
+//                            }
+//                        } else {
+//                            expanded = "$operator(${list.joinToString("|")})"
+//                        }
+//                    } else {
+//                        expanded = command
+//                    }
+                    expanded = command
                 }
             } else {
                 expanded += command
@@ -1459,6 +1465,34 @@ class Selector(
         }
         return expanded
     }
+
+//    private fun expandWidget(com: String): String {
+//        val operator =
+//            if (com.startsWith(".")) "."
+//            else if (com.startsWith("className=")) "className="
+//            else ""
+//
+//        if (operator.isNotBlank()) {
+//            val tokens = com.removePrefix(".").removePrefix("className=").removePrefix("(").removeSuffix(")").split("|")
+//            val list = mutableListOf<String>()
+//            for (token in tokens) {
+//                list.add(
+//                    ElementCategoryExpressionUtility.expandWidget(token).removePrefix("(").removeSuffix(")")
+//                )
+//            }
+//            if (list.count() == 1) {
+//                val item = list[0]
+//                if (item.contains("|")) {
+//                    return "$operator($item)"
+//                } else {
+//                    return "$operator$item"
+//                }
+//            } else {
+//                return "$operator(${list.joinToString("|")})"
+//            }
+//        }
+//        return com
+//    }
 
     private fun expandTitle(title: String): String {
 

@@ -2901,7 +2901,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosClassChain())
                 assertThat(sel.getIosClassChain()).isEqualTo(
-                    ""
+                    "**/*[`name=='container1'`]"
                 )
             }
         }
@@ -2913,7 +2913,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosClassChain())
                 assertThat(sel.getIosClassChain()).isEqualTo(
-                    ""
+                    "**/*[`name=='container1'`]/**/*[`label=='title1' OR value=='title1'`]"
                 )
             }
         }
@@ -3051,7 +3051,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate())
-                    .isEqualTo("(name=='id1' OR name=='id2')")
+                    .isEqualTo("name=='id1' OR name=='id2'")
             }
         }
         run {

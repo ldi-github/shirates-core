@@ -93,6 +93,9 @@ class FilterExpressionParser(
             throw IllegalArgumentException()
         }
 
+        if (nounWithVerb == "xpath") {
+            return "xpath"
+        }
         for (noun in registeredNouns) {
             if (nounWithVerb.startsWith(noun)) {
                 return noun
