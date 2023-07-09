@@ -7,6 +7,8 @@ import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.rootElement
 import shirates.core.testcode.normalize
+import shirates.core.utility.element.ElementCategoryExpressionUtility
+import shirates.core.utility.element.IosPredicateUtility
 import shirates.core.utility.element.XPathUtility
 import shirates.core.utility.image.ImageMatchResult
 import java.awt.image.BufferedImage
@@ -233,6 +235,38 @@ class Selector(
         }
         set(value) {
             this["pos"] = value?.toString()
+        }
+
+    var x: Int?
+        get() {
+            return this["x"]?.toIntOrNull()
+        }
+        set(value) {
+            this["x"] = value?.toString()
+        }
+
+    var y: Int?
+        get() {
+            return this["y"]?.toIntOrNull()
+        }
+        set(value) {
+            this["y"] = value?.toString()
+        }
+
+    var width: Int?
+        get() {
+            return this["width"]?.toIntOrNull()
+        }
+        set(value) {
+            this["width"] = value?.toString()
+        }
+
+    var height: Int?
+        get() {
+            return this["height"]?.toIntOrNull()
+        }
+        set(value) {
+            this["height"] = value?.toString()
         }
 
     val isRelative: Boolean
@@ -792,6 +826,97 @@ class Selector(
     }
 
     /**
+     * getIosPredicate
+     */
+    fun getIosPredicate(): String {
+
+        if (relativeSelectors.any() { it.command != ":descendant" }) {
+            return ""
+        }
+        if (this.filterMap.values.any() { it.isNegation }) {
+            return ""
+        }
+
+        val selectors = mutableListOf<Selector>()
+        if (this.expression.isNullOrBlank().not()) {
+            selectors.add(this)
+        }
+        selectors.addAll(orSelectors)
+
+        if (selectors.isEmpty()) {
+            return ""
+        }
+
+        val p0 = selectors[0].getIosPredicateCore()
+        val predicates = mutableListOf(p0)
+
+        for (i in 1 until selectors.count()) {
+            val s = selectors[i]
+            val c = s.getIosPredicateCore()
+            predicates.add(c)
+        }
+        var predicate = predicates.joinToString(" OR ")
+
+        return predicate
+    }
+
+    private fun getIosPredicateCore(): String {
+        val list = mutableListOf<String>()
+
+        addIosPredicate(list)
+
+        val predicate = if (list.count() == 1) {
+            list[0]
+        } else {
+            val predicates = mutableListOf<String>()
+            for (pred in list) {
+                if (pred.contains(" AND ") || pred.contains(" OR ")) {
+                    predicates.add("($pred)")
+                } else {
+                    predicates.add(pred)
+                }
+            }
+            predicates.joinToString(" AND ")
+        }
+        return predicate
+    }
+
+    /**
+     * getIosClassChain
+     */
+    fun getIosClassChain(): String {
+
+        if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {
+            return ""
+        }
+        if (this.filterMap.values.any() { it.isNegation }) {
+            return ""
+        }
+
+        val relSelectors = relativeSelectors
+        if (relSelectors.isEmpty()) {
+            val pred = getIosPredicate()
+            if (pred.isBlank()) {
+                return "**/*"
+            }
+            return "**/*[`$pred`]"
+        }
+
+        val relativePredicates = mutableListOf<String>()
+        for (r in relSelectors) {
+            val predicate = r.getIosPredicate()
+            relativePredicates.add(predicate)
+        }
+
+        val subPredicate = relativePredicates.map { "/**/*[`$it`]" }.joinToString("")
+        val pred = getIosPredicate()
+        val predicate =
+            if (pred.isBlank()) "**/*$subPredicate"
+            else "**/*[`$pred`]$subPredicate"
+        return predicate
+    }
+
+    /**
      * getXPathCondition
      */
     fun getXPathCondition(
@@ -872,9 +997,9 @@ class Selector(
 
         val relativeXPaths = mutableListOf<String>()
         for (r in relSelectors) {
-            val axis = getAxisFromCommand(r.command ?: "")
             val cond = r.getXPathCondition(packageName = packageName)
             val position = if (cond.isNotBlank()) "" else getPositionCondition(r)
+            val axis = getAxisFromCommand(r.command ?: "")
             relativeXPaths.add("/$axis::*$cond$position")
         }
 
@@ -911,23 +1036,42 @@ class Selector(
         }
     }
 
-    private fun MutableList<String>.addFunctionByFilterName(formatString: String, filterName: String) {
-
+    private fun MutableList<String>.addFunctionByFilterName(
+        formatString: String,
+        filterName: String,
+        predicate: Boolean = false,
+        withoutQuote: Boolean = false
+    ) {
         val filter = getFilter(key = filterName) ?: return
         if (filter.value.isBlank()) {
             return
         }
-        addFunction(formatString = formatString, value = filter.value, isNegation = filter.isNegation)
+        addFunction(
+            formatString = formatString,
+            value = filter.value,
+            isNegation = filter.isNegation,
+            predicate = predicate,
+            withoutQuote = withoutQuote
+        )
     }
 
-    private fun MutableList<String>.addFunction(formatString: String, value: String, isNegation: Boolean = false) {
-
+    private fun MutableList<String>.addFunction(
+        formatString: String,
+        value: String,
+        predicate: Boolean = false,
+        withoutQuote: Boolean = false,
+        isNegation: Boolean = false,
+    ) {
         val decomposed = value.normalize(Normalizer.Form.NFKD)
         if (value == decomposed) {
-            val exp = getAttributeCondition(formatString = formatString, value = value)
+            val exp = getAttributeCondition(
+                formatString = formatString, value = value, predicate = predicate,
+                withoutQuote = withoutQuote
+            )
             if (exp.isNotEmpty()) {
                 if (isNegation) {
-                    this.add("not($exp)")
+                    val operator = if (predicate) "NOT" else "not"
+                    this.add("$operator($exp)")
                 } else {
                     this.add(exp)
                 }
@@ -936,7 +1080,8 @@ class Selector(
             val exp1 = getAttributeCondition(formatString = formatString, value = value)
             val exp2 = getAttributeCondition(formatString = formatString, value = decomposed)
             if (exp1.isNotEmpty()) {
-                this.add("$exp1 or $exp2")
+                val operator = if (predicate) "OR" else "or"
+                this.add("$exp1 $operator $exp2")
             }
         }
     }
@@ -1013,19 +1158,75 @@ class Selector(
         list.addFunctionByFilterName("@type=%s", "className")
     }
 
+    private fun addIosPredicate(list: MutableList<String>) {
+
+        if (text != null && text!!.contains("\n")) {
+            for (t in text!!.split("\n")) {
+                list.addFunction("label CONTAINS %s OR value CONTAINS %s", t, predicate = true)
+            }
+        } else {
+            list.addFunctionByFilterName("label==%s OR value==%s", "text", predicate = true)
+        }
+        if (literal != null && literal!!.contains("\n")) {
+            for (t in literal!!.split("\n")) {
+                list.addFunction("label CONTAINS %s OR value CONTAINS %s", t, predicate = true)
+            }
+        } else {
+            list.addFunctionByFilterName("label==%s OR value==%s", "literal", predicate = true)
+        }
+
+        list.addFunctionByFilterName("label BEGINSWITH %s OR value BEGINSWITH %s", "textStartsWith", predicate = true)
+        list.addFunctionByFilterName("label CONTAINS %s OR value CONTAINS %s", "textContains", predicate = true)
+        list.addFunctionByFilterName("label ENDSWITH %s OR value ENDSWITH %s", "textEndsWith", predicate = true)
+        list.addFunctionByFilterName("label MATCHES %s OR value MATCHES %s", "textMatches", predicate = true)
+
+        list.addFunctionByFilterName("name==%s", "id", predicate = true)
+
+        list.addFunctionByFilterName("name==%s", "access", predicate = true)
+        list.addFunctionByFilterName("name BEGINSWITH %s", "accessStartsWith", predicate = true)
+        list.addFunctionByFilterName("name CONTAINS %s", "accessContains", predicate = true)
+        list.addFunctionByFilterName("name ENDSWITH", "accessEndsWith", predicate = true)
+        list.addFunctionByFilterName("name MATCHES %s", "accessMatches", predicate = true)
+
+        list.addFunctionByFilterName("value==%s", "value", predicate = true)
+        list.addFunctionByFilterName("value BEGINSWITH %s)", "valueStartsWith", predicate = true)
+        list.addFunctionByFilterName("value CONTAINS %s", "valueContains", predicate = true)
+        list.addFunctionByFilterName("value ENDSWITH %s", "valueEndsWith", predicate = true)
+        list.addFunctionByFilterName("value MATCHES %s", "valueMatches", predicate = true)
+
+        list.addFunctionByFilterName("type==%s", "className", predicate = true)
+
+        list.addFunctionByFilterName("rect.x==%s", "x", predicate = true, withoutQuote = true)
+        list.addFunctionByFilterName("rect.y==%s", "y", predicate = true, withoutQuote = true)
+        list.addFunctionByFilterName("rect.width==%s", "width", predicate = true, withoutQuote = true)
+        list.addFunctionByFilterName("rect.height==%s", "height", predicate = true, withoutQuote = true)
+    }
+
     /**
      * getAttributeCondition
      */
-    internal fun getAttributeCondition(formatString: String, value: String?): String {
+    internal fun getAttributeCondition(
+        formatString: String,
+        value: String?,
+        predicate: Boolean = false,
+        withoutQuote: Boolean = false
+    ): String {
 
         if (value.isNullOrEmpty()) {
             return ""
         }
-        val expressions = getFilterValues(value).map { XPathUtility.getQuotedText(it) }
+        val filterValues = getFilterValues(value)
+        val expressions =
+            if (predicate) filterValues.map {
+                IosPredicateUtility.getQuotedText(text = it, withoutQuote = withoutQuote)
+            } else filterValues.map {
+                XPathUtility.getQuotedText(it)
+            }
         return if (expressions.count() == 1) {
             formatString.replace("%s", expressions[0])
         } else {
-            expressions.map { formatString.replace("%s", it) }.joinToString(" or ")
+            val operator = if (predicate) "OR" else "or"
+            expressions.map { formatString.replace("%s", it) }.joinToString(" $operator ")
         }
     }
 
@@ -1226,11 +1427,31 @@ class Selector(
             if (i == 0) {
                 val exp = command.toUndecoratedExpression()
                 if (exp.contains("~title=")) {
-                    expanded += expandTitle(title = exp.substring("~title=".length))
+                    expanded = expandTitle(title = exp.substring("~title=".length))
                 } else if (exp.contains("~webTitle=")) {
-                    expanded += expandWebTitle(webTitle = exp.substring("~webTitle=".length))
+                    expanded = expandWebTitle(webTitle = exp.substring("~webTitle=".length))
                 } else {
-                    expanded = command
+                    if (command.startsWith(".")) {
+                        val tokens = command.removePrefix(".").removePrefix("(").removeSuffix(")").split("|")
+                        val list = mutableListOf<String>()
+                        for (token in tokens) {
+                            list.add(
+                                ElementCategoryExpressionUtility.expandWidget(token).removePrefix("(").removeSuffix(")")
+                            )
+                        }
+                        if (list.count() == 1) {
+                            val item = list[0]
+                            if (item.contains("|")) {
+                                expanded = ".($item)"
+                            } else {
+                                expanded = ".$item"
+                            }
+                        } else {
+                            expanded = ".(${list.joinToString("|")})"
+                        }
+                    } else {
+                        expanded = command
+                    }
                 }
             } else {
                 expanded += command

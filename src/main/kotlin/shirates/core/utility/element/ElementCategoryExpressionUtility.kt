@@ -204,7 +204,7 @@ object ElementCategoryExpressionUtility {
      */
     fun expandWidget(className: String): String {
 
-        when (className) {
+        when (className.removePrefix(".")) {
 
             "label" -> return labelTypesExpression
             "input" -> return inputTypesExpression

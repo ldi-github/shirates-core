@@ -227,6 +227,10 @@ class Filter(
                 "scrollable",
                 "visible",
                 "ignoreTypes",
+                "x",
+                "y",
+                "width",
+                "height",
 
                 "xpath",
                 "pos",

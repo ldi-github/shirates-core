@@ -1,11 +1,13 @@
 package shirates.core.driver.commandextension
 
+import org.json.JSONObject
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.RemoteWebElement
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -13,6 +15,7 @@ import shirates.core.utility.escapeFileName
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.TrimObject
 import shirates.core.utility.image.saveImage
+import shirates.core.utility.misc.ReflectionUtility
 import java.io.File
 
 internal fun TestElement.getChainedSelector(relativeCommand: String): Selector {
@@ -128,44 +131,35 @@ fun TestElement.getRemoteWebElement(): RemoteWebElement {
  */
 fun TestElement.getUniqueSelector(): Selector {
 
+    this.toString()    // Capture to propertyCache
+
     val selector = Selector()
-
-    fun isUniqueSelector(sel: Selector): Boolean {
-
-        if (testContext.useCache.not()) {
-            return false
-        }
-        val elements = TestElementCache.findElements(selector = sel, inViewOnly = true)
-        return elements.count() == 1
-    }
-
-    if (textOrLabel.isNotBlank()) {
-        selector.text = textOrLabel
-        if (isUniqueSelector(selector)) {
-            return selector
-        }
-    }
-    if (access.isNotBlank()) {
-        selector.access = access
-        if (isUniqueSelector(selector)) {
-            return selector
-        }
-    }
-    if (id.isNotBlank()) {
-        selector.id = idOrName
-        if (isUniqueSelector(selector)) {
-            return selector
-        }
-    }
-    if (className.isNotBlank()) {
-        selector.className = classOrType
-        if (isUniqueSelector(selector)) {
-            return selector
+    for (key in this.propertyCache.keys) {
+        val value = this.propertyCache[key]
+        if (value.isNullOrBlank().not()) {
+            if (isAndroid) {
+                throw NotImplementedError()
+            } else if (isiOS) {
+                if (key == "rect") {
+                    val jso = JSONObject(value)
+                    selector.x = jso.getInt("x")
+                    selector.y = jso.getInt("y")
+                    selector.width = jso.getInt("width")
+                    selector.height = jso.getInt("height")
+                } else {
+                    ReflectionUtility.setValue(
+                        obj = selector,
+                        propertyName = key,
+                        value = value,
+                        warnOnMissingProperty = false
+                    )
+                }
+            }
         }
     }
 
-    val uniqueXpath = getUniqueXpath().ifBlank { "//*[1]" }
-    return Selector("xpath=${uniqueXpath}")
+    return selector
+
 }
 
 /**

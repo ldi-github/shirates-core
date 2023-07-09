@@ -19,7 +19,9 @@ class CacheAndDirectCompatibilityTest : UITest() {
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    syncCache(force = true)
+                }.action {
                     e1 = it.select("General", useCache = true)
                     e2 = it.select("General", useCache = false)
                 }.expectation {
@@ -43,7 +45,9 @@ class CacheAndDirectCompatibilityTest : UITest() {
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    syncCache(force = true)
+                }.action {
                     e1 = it.select("<General>:leftImage", useCache = true)
                     e2 = it.select("<General>:leftImage", useCache = false)
                 }.expectation {

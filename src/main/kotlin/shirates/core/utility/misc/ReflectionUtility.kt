@@ -39,14 +39,16 @@ object ReflectionUtility {
     /**
      * setValue
      */
-    fun setValue(obj: Any, propertyName: String, value: Any?) {
+    fun setValue(obj: Any, propertyName: String, value: Any?, warnOnMissingProperty: Boolean = true) {
 
         val pinfo = obj::class.memberProperties.filterIsInstance<KMutableProperty<*>>()
             .firstOrNull() { it.name == propertyName }
         if (pinfo != null) {
             pinfo.setter.call(obj, value)
         } else {
-            TestLog.warn(message(id = "notFound", subject = "Property", value = propertyName))
+            if (warnOnMissingProperty) {
+                TestLog.warn(message(id = "notFound", subject = "Property", value = propertyName))
+            }
         }
     }
 

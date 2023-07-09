@@ -14,6 +14,7 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.getWebElement
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.Measure
 import shirates.core.logging.TestLog
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.element.ElementCacheUtility
@@ -73,43 +74,48 @@ object AppiumProxy {
 
     private fun getSourceCore(): TestElement {
 
-        var source = ""
+        val ms = Measure("getSourceCore()")
+        try {
+            var source = ""
 
-        val retryMaxCount =
-            AppiumServerManager.appiumSessionStartupTimeoutSeconds / TestDriver.testContext.retryIntervalSeconds
-        val action: (RetryContext<Unit>) -> Unit = {
-            val c = it.retryCount + 1
-            if (PropertiesManager.enableGetSourceLog) {
-                TestLog.info("getSourceCore($c)")
+            val retryMaxCount =
+                AppiumServerManager.appiumSessionStartupTimeoutSeconds / TestDriver.testContext.retryIntervalSeconds
+            val action: (RetryContext<Unit>) -> Unit = {
+                val c = it.retryCount + 1
+                if (PropertiesManager.enableGetSourceLog) {
+                    TestLog.info("getSourceCore($c)")
+                }
+                source = TestDriver.appiumDriver.pageSource
             }
-            source = TestDriver.appiumDriver.pageSource
-        }
-        val retryPredicate: (RetryContext<Unit>) -> Boolean = {
-            if (isiOS) {
-                source == "" || source.contains("<AppiumAUT>\n  <XCUIElementTypeApplication")
-            } else {
-                source == ""
+            val retryPredicate: (RetryContext<Unit>) -> Boolean = {
+                if (isiOS) {
+                    source == "" || source.contains("<AppiumAUT>\n  <XCUIElementTypeApplication")
+                } else {
+                    source == ""
+                }
             }
-        }
-        RetryUtility.exec(
-            retryMaxCount = retryMaxCount.toLong(),
-            retryPredicate = retryPredicate,
-            onBeforeRetry = {},
-            action = action
-        )
+            RetryUtility.exec(
+                retryMaxCount = retryMaxCount.toLong(),
+                retryPredicate = retryPredicate,
+                onBeforeRetry = {},
+                action = action
+            )
 
-        if (source.isBlank()) {
-            return TestElement()
-        }
+            if (source.isBlank()) {
+                return TestElement()
+            }
 
-        source = source.replace("\u000b", "")    // vertical tab is not valid in XML
-        if (PropertiesManager.xmlSourceRemovePattern.isNotBlank()) {
-            val regex = PropertiesManager.xmlSourceRemovePattern.toRegex()
-            source = source.replace(regex, "")
-        }
+            source = source.replace("\u000b", "")    // vertical tab is not valid in XML
+            if (PropertiesManager.xmlSourceRemovePattern.isNotBlank()) {
+                val regex = PropertiesManager.xmlSourceRemovePattern.toRegex()
+                source = source.replace(regex, "")
+            }
 
-        val e = ElementCacheUtility.createTestElementFromXml(source = source)
-        return e
+            val e = ElementCacheUtility.createTestElementFromXml(source = source)
+            return e
+        } finally {
+            ms.end()
+        }
     }
 
     /**

@@ -2891,6 +2891,205 @@ class Selector_AndroidTest : UnitTest() {
     }
 
     @Test
+    fun getIosClassChain() {
+
+        run {
+            // Arrange
+            val sel = Selector("#container1")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosClassChain())
+                assertThat(sel.getIosClassChain()).isEqualTo(
+                    ""
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("<#container1>:descendant(title1)")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosClassChain())
+                assertThat(sel.getIosClassChain()).isEqualTo(
+                    ""
+                )
+            }
+        }
+    }
+
+    @Test
+    fun getIosPredicate() {
+
+        run {
+            // Arrange
+            val sel = Selector("A\nB\nC")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label CONTAINS 'A' OR value CONTAINS 'A') AND (label CONTAINS 'B' OR value CONTAINS 'B') AND (label CONTAINS 'C' OR value CONTAINS 'C')"
+                )
+            }
+
+        }
+        run {
+            // Arrange
+            val sel = Selector("text=(a|b|c)")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c'"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("(a|b|c)&&textStartsWith=(ABC|DEF)")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND (label BEGINSWITH 'ABC' OR value BEGINSWITH 'ABC' OR label BEGINSWITH 'DEF' OR value BEGINSWITH 'DEF')"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("textContains=(A|B|C)&&textEndsWith=(UVW|XYZ)")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label CONTAINS 'A' OR value CONTAINS 'A' OR label CONTAINS 'B' OR value CONTAINS 'B' OR label CONTAINS 'C' OR value CONTAINS 'C') AND (label ENDSWITH 'UVW' OR value ENDSWITH 'UVW' OR label ENDSWITH 'XYZ' OR value ENDSWITH 'XYZ')"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("textMatches=^A.*Z$&&id=(id1|id2)")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label MATCHES '^A.*Z\$' OR value MATCHES '^A.*Z\$') AND (name=='id1' OR name=='id2')"
+                )
+            }
+        }
+        run {
+
+            TestMode.runAsIos {
+                // Arrange
+                val sel = Selector("className=(c1|c2|c3)")
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "type=='c1' OR type=='c2' OR type=='c3'"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector(".(c1|c2|c3)")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "type=='c1' OR type=='c2' OR type=='c3'"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("@(a1|a2)*")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "name BEGINSWITH 'a1' OR name BEGINSWITH 'a2'"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector(".(c1|c2)&&text1&&[2]")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label=='text1' OR value=='text1') AND (type=='c1' OR type=='c2')"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("１1")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "label=='１1' OR value=='１1' OR label=='11' OR value=='11'"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("id=id1||id=id2")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate())
+                    .isEqualTo("(name=='id1' OR name=='id2')")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector()
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo("")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("literal=LITERAL")
+
+            TestMode.runAsIos {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate())
+                    .isEqualTo("label=='LITERAL' OR value=='LITERAL'")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("literal!=no exist")
+
+            TestMode.runAsIos {
+                // Arrange
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate())
+                    .isEqualTo("NOT(label=='no exist' OR value=='no exist')")
+            }
+        }
+
+    }
+
+    @Test
     fun title() {
         // Arrange
         val sel = Selector("~title=TITLE1")

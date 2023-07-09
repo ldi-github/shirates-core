@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import io.appium.java_client.AppiumBy
 import org.openqa.selenium.By
 import shirates.core.configuration.Filter
 import shirates.core.configuration.PropertiesManager
@@ -64,31 +65,53 @@ private fun TestDrive.findWebElementsCore(
 
     val filters = selector.filterMap.values.toList()
     if (filters.isEmpty()) {
-        val list = driver.appiumDriver.findElements(By.xpath("//*"))
-            .map { it.toTestElement(selector = selector) }
+        val list = if (isAndroid) {
+            driver.appiumDriver.findElements(By.xpath("//*"))
+                .map { it.toTestElement(selector = selector) }
+        } else {
+            driver.appiumDriver.findElements(AppiumBy.iOSClassChain("**/*"))
+                .map { it.toTestElement(selector = selector) }
+        }
         ms.end()
         return list
     }
 
-    val xpath =
-        selector.xpath ?: if (selector.pos != null) "(//*${selector.getXPathCondition()})[${selector.pos}]"
-        else "//*${selector.getXPathCondition()}"
-    var testElements = listOf<TestElement>()
-    testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
-        testElements = driver.appiumDriver.findElements(By.xpath(xpath))
-            .map { it.toTestElement(selector = selector) }
+    fun filterIgnoreTypes(testElements: List<TestElement>, condition: String): List<TestElement> {
+        val containsIgnoreType = PropertiesManager.selectIgnoreTypes.any() { condition.contains(it) }
+        if (containsIgnoreType.not()) {
+            return testElements.filter {
+                val m = Filter.isNotIgnoreTypes(
+                    classOrType = it.classOrType,
+                    ignoreTypes = selector.ignoreTypes
+                )
+                m
+            }
+        }
+        return testElements
     }
 
-    val containsIgnoreType = PropertiesManager.selectIgnoreTypes.any() { xpath.contains(it) }
-    if (containsIgnoreType.not()) {
-        testElements = testElements.filter {
-            val m = Filter.isNotIgnoreTypes(
-                classOrType = it.classOrType,
-                ignoreTypes = selector.ignoreTypes
-            )
-            m
+    var testElements = listOf<TestElement>()
+    if (isAndroid) {
+        val xpath =
+            selector.xpath ?: if (selector.pos != null) "(//*${selector.getXPathCondition()})[${selector.pos}]"
+            else "//*${selector.getXPathCondition()}"
+        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+            testElements = driver.appiumDriver.findElements(By.xpath(xpath))
+                .map { it.toTestElement(selector = selector) }
         }
+        testElements = filterIgnoreTypes(testElements = testElements, condition = xpath)
+    } else {
+        val sel = selector.copy()
+        sel.orSelectors.clear()
+        sel.relativeSelectors.clear()
+        val classChain = sel.getIosClassChain()
+        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+            testElements = driver.appiumDriver.findElements(AppiumBy.iOSClassChain(classChain))
+                .map { it.toTestElement(selector = selector) }
+        }
+        testElements = filterIgnoreTypes(testElements = testElements, condition = classChain)
     }
+
     if (widgetOnly) {
         testElements = testElements.filter { it.isWidget }
     }
@@ -112,7 +135,7 @@ fun TestDrive.findWebElements(
 private fun findElementsById(id: String, single: Boolean): List<TestElement> {
 
     if (single) {
-        val e = testDrive.findElement(timeoutMilliseconds = 0, By.id(id))
+        val e = testDrive.findWebElementBy(locator = By.id(id), timeoutMilliseconds = 0)
         return listOf(e)
     }
     return appiumDriver.findElements(By.id(id)).map { it.toTestElement() }
@@ -121,7 +144,7 @@ private fun findElementsById(id: String, single: Boolean): List<TestElement> {
 private fun findElementsByClassName(className: String, single: Boolean): List<TestElement> {
 
     if (single) {
-        val e = testDrive.findElement(timeoutMilliseconds = 0, By.className(className))
+        val e = testDrive.findWebElementBy(locator = By.className(className), timeoutMilliseconds = 0)
         return listOf(e)
     }
     return appiumDriver.findElements(By.className(className)).map { it.toTestElement() }
@@ -130,7 +153,7 @@ private fun findElementsByClassName(className: String, single: Boolean): List<Te
 private fun findElementsByXpath(xpath: String, single: Boolean): List<TestElement> {
 
     if (single) {
-        val e = testDrive.findElement(timeoutMilliseconds = 0, By.xpath(xpath))
+        val e = testDrive.findWebElementBy(locator = By.xpath(xpath), timeoutMilliseconds = 0)
         return listOf(e)
     }
     return appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
@@ -195,3 +218,35 @@ fun TestDrive.findWebElement(
     )
 }
 
+/**
+ * findWebElementBy
+ */
+internal fun TestDrive.findWebElementBy(locator: By, timeoutMilliseconds: Int): TestElement {
+
+    var e: TestElement? = null
+    try {
+        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+            e = appiumDriver.findElement(locator).toTestElement()
+        }
+    } catch (t: org.openqa.selenium.NoSuchElementException) {
+        e = TestElement.emptyElement
+        e!!.lastError = t
+    }
+    return e!!
+}
+
+/**
+ * findWebElementsBy
+ */
+internal fun TestDrive.findWebElementsBy(locator: By, timeoutMilliseconds: Int): List<TestElement> {
+
+    var elements = mutableListOf<TestElement>()
+    try {
+        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+            elements = appiumDriver.findElements(locator).map { it.toTestElement() }.toMutableList()
+        }
+    } catch (t: org.openqa.selenium.NoSuchElementException) {
+        elements.add(TestElement.emptyElement)
+    }
+    return elements
+}

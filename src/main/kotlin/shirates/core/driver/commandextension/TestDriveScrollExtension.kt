@@ -8,7 +8,6 @@ import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.isSame
 import kotlin.math.max
 import kotlin.math.min
 
@@ -412,13 +411,13 @@ private fun TestDrive.doUntilScrollStopCore(
         ms.end()
     }
 
-    var lastSerialized = scrollFrame.descendantsInBounds.serialize()
-    var lastCroppedImage =
-        if (imageCompare) scrollFrame.cropImage(save = false).lastCropInfo?.croppedImage else null
+    val msLastSerialized = Measure("lastSerialized")
+    var lastSerialized = testDrive.widgets.lastOrNull()?.toString() ?: ""
+    msLastSerialized.end()
 
     fun isEndOfScroll(): Boolean {
 
-        val ms = Measure()
+        val ms = Measure("isEndOfScroll")
         try {
             val scrollInfo = TestDriver.screenInfo.scrollInfo
             val expressions = if (edgeSelector != null) {
@@ -434,17 +433,12 @@ private fun TestDrive.doUntilScrollStopCore(
                 return true
             }
 
-            return if (imageCompare || testContext.useCache.not()) {
-                val croppedImage = rootElement.cropImage(save = false).lastCropInfo?.croppedImage
-                val result = croppedImage.isSame(lastCroppedImage)
-                lastCroppedImage = croppedImage
-                result
-            } else {
-                val serialized = sourceXml //innerElements.serialize()
-                val result = serialized == lastSerialized
-                lastSerialized = serialized
-                result
-            }
+            val msSerialized = Measure("serialized")
+            val serialized = testDrive.widgets.lastOrNull()?.toString() ?: ""
+            msSerialized.end()
+            val result = serialized == lastSerialized
+            lastSerialized = serialized
+            return result
         } finally {
             ms.end()
         }
@@ -511,7 +505,7 @@ internal fun TestDrive.edgeElementFound(expressions: List<String>): Boolean {
 
 private fun List<TestElement>.serialize(): String {
 
-    val list = this.map { it.serializeForEndOfScroll() }.sortedBy { it }
+    val list = this.map { it.toString() }
     return list.joinToString("\n")
 }
 

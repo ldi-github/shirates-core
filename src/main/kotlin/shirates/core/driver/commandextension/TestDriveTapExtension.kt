@@ -68,7 +68,7 @@ fun TestDrive.tap(
     tapMethod: TapMethod = TapMethod.auto
 ): TestElement {
 
-    val tappedElement = refreshLastElement()
+    val tappedElement = getThisOrRootElement()
 
     val command = "tap"
     val message = message(id = command, subject = tappedElement.subject)
@@ -172,7 +172,7 @@ fun TestDrive.tap(
 
     TestDriver.refreshCurrentScreenWithNickname(expression)
 
-    val testElement = refreshLastElement()
+    val testElement = rootElement
 
     val command = "tap"
     val sel = getSelector(expression = expression)

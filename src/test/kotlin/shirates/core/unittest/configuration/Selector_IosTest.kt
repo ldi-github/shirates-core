@@ -157,6 +157,53 @@ class Selector_IosTest : UnitTest() {
     }
 
     @Test
+    fun init_x_y_width_height() {
+
+        // Act
+        val selector = Selector("label=LABEL1&&x=0&&y=47&&width=390&&height=96")
+        // Assert
+        selector.toString()
+        assertThat(selector.x).isEqualTo(0)
+        assertThat(selector.y).isEqualTo(47)
+        assertThat(selector.width).isEqualTo(390)
+        assertThat(selector.height).isEqualTo(96)
+    }
+
+    @Test
+    fun init_classAlias() {
+
+        run {
+            // Act
+            val sel = Selector(".input")
+            // Assert
+            assertThat(sel.className).isEqualTo("(XCUIElementTypeTextField|XCUIElementTypeSecureTextField)")
+        }
+        run {
+            // Act
+            val sel = Selector(".image")
+            // Assert
+            assertThat(sel.className).isEqualTo("XCUIElementTypeImage")
+        }
+        run {
+            // Act
+            val sel = Selector(".(input|image)")
+            // Assert
+            assertThat(sel.className).isEqualTo("(XCUIElementTypeTextField|XCUIElementTypeSecureTextField|XCUIElementTypeImage)")
+        }
+    }
+
+    @Test
+    fun init_title_selector() {
+
+        // Arrange
+        val sel = Selector("~title=TITLE1")
+        // Act
+        val classChain = sel.getIosClassChain()
+        // Assert
+        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar'`]/**/*[`type=='XCUIElementTypeStaticText' AND label=='TITLE1'`]")
+    }
+
+    @Test
     fun evaluateValue() {
 
         val xmlDataIos = """

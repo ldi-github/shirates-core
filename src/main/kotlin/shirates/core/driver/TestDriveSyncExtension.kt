@@ -21,7 +21,7 @@ fun TestDrive.wait(
     val message = message(id = command, subject = "$waitSeconds")
 
     val context = TestDriverCommandContext(testElement)
-    context.execOperateCommand(command = command, message = message) {
+    context.execOperateCommand(command = command, message = message, fireEvent = false) {
         TestLog.trace("waiting for ${waitSeconds} seconds")
 
         Thread.sleep((waitSeconds * 1000).toLong())

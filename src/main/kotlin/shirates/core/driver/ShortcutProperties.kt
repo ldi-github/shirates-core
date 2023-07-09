@@ -2,6 +2,7 @@ package shirates.core.driver
 
 import org.openqa.selenium.By
 import shirates.core.configuration.TestProfile
+import shirates.core.driver.commandextension.findWebElementBy
 
 /**
  * testDrive
@@ -22,7 +23,7 @@ var rootElement: TestElement
         if (testContext.useCache) {
             return TestElementCache.rootElement
         }
-        return testDrive.findElement(timeoutMilliseconds = 0, locator = By.xpath("//*"))
+        return testDrive.findWebElementBy(locator = By.xpath("//*"), timeoutMilliseconds = 0)
     }
     set(value) {
         TestElementCache.rootElement = value

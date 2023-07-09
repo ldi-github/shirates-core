@@ -1,10 +1,12 @@
 package shirates.core.driver
 
+import io.appium.java_client.AppiumBy
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
 import io.appium.java_client.ios.IOSDriver
+import org.openqa.selenium.By
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.WebElement
@@ -35,6 +37,7 @@ import shirates.core.testcode.CAEPattern
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
+import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
 import shirates.core.utility.ios.IosDeviceUtility
@@ -846,7 +849,7 @@ object TestDriver {
             return this
         }
 
-        val ms = Measure()
+        val ms = Measure("refreshCache")
         try {
             isRefreshing = true
 
@@ -1091,30 +1094,35 @@ object TestDriver {
             return lastElement
         }
 
-        val ms = Measure()
+        val ms = Measure("selectDirect")
 
-        val fullXPathCondition = selector.getFullXPathCondition()
         val e = try {
-            val elm = if (fullXPathCondition.isNotBlank()) {
-                val sel = Selector("xpath=(//*$fullXPathCondition)")
-                val elements = testDrive.findWebElements(selector = sel, inViewOnly = inViewOnly)
-                if (selector.pos != null) {
-                    val pos = selector.pos!!
-                    if (pos <= elements.count()) {
-                        elements[pos - 1]
-                    } else {
-                        TestElement.emptyElement
-                    }
-                } else {
-                    elements[0]
+            var elm: TestElement? = null
+            if (isAndroid) {
+                val fullXPathCondition = selector.getFullXPathCondition()
+                if (fullXPathCondition.isNotBlank()) {
+                    elm = selectDirectByXPath(
+                        selector = selector,
+                        inViewOnly = inViewOnly,
+                        fullXPathCondition = fullXPathCondition
+                    )
                 }
-            } else {
+            } else if (isiOS) {
+                val iosClassChain = selector.getIosClassChain()
+                if (iosClassChain.isNotBlank()) {
+                    elm = selectDirectByIosClassChain(
+                        selector = selector,
+                        inViewOnly = inViewOnly
+                    )
+                }
+            }
+            if (elm == null) {
                 val baseElement =
                     testDrive.findWebElement(selector = selector, inViewOnly = inViewOnly, widgetOnly = false)
                 if (baseElement.isEmpty) {
-                    baseElement
+                    elm = baseElement
                 } else {
-                    val r = if (selector.relativeSelectors.any()) {
+                    if (selector.relativeSelectors.any()) {
                         val exps = mutableListOf(baseElement.classAlias)
                         for (sel in selector.relativeSelectors) {
                             val c = sel.command!!
@@ -1134,22 +1142,22 @@ object TestDriver {
                                 exps.add(".switch")
                             }
                         }
+                        val expandedExps = exps.map { ElementCategoryExpressionUtility.expandWidget(it) }
                         val exp =
-                            if (exps.isEmpty()) ".widget"
-                            else exps.joinToString("||")
+                            if (expandedExps.isEmpty()) ".widget"
+                            else "className=(${expandedExps.joinToString("|")})"
                         val scopeElements = testDrive.findWebElements(expression = exp)
                             .filter { it.isInView }
-                        baseElement.getRelative(inViewOnly = inViewOnly, scopeElements = scopeElements)
+                        elm = baseElement.getRelative(inViewOnly = inViewOnly, scopeElements = scopeElements)
                     } else {
-                        baseElement
+                        elm = baseElement
                     }
-                    r
                 }
             }
             elm.selector = selector
             elm
         } catch (t: Throwable) {
-            TestLog.warn(t.message!!)
+            TestLog.warn("Exception in selectDirect. selector=$selector, ${t.message}")
             TestElement(selector = selector)
         }
         if (e.isEmpty) {
@@ -1166,6 +1174,75 @@ object TestDriver {
         }
         ms.end()
         return e
+    }
+
+    private fun selectDirectByXPath(
+        selector: Selector,
+        inViewOnly: Boolean,
+        fullXPathCondition: String
+    ): TestElement {
+
+        val ms = Measure("selectDirectByXPath")
+        try {
+            if (selector.pos == null || selector.pos == 1) {
+                if (isiOS && inViewOnly) {
+                    val xpath = "//*$fullXPathCondition[@visible='true']"
+                    return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
+                } else {
+                    val xpath = "//*$fullXPathCondition"
+                    return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
+                }
+            }
+
+            val sel = Selector("xpath=(//*$fullXPathCondition)")
+            val elements = testDrive.findWebElements(selector = sel, inViewOnly = inViewOnly)
+            val pos = selector.pos!!
+            if (pos <= elements.count()) {
+                return elements[pos - 1]
+            } else {
+                return TestElement.emptyElement
+            }
+        } finally {
+            ms.end()
+        }
+    }
+
+    private fun getPredicateFromClassChain(classChain: String): String {
+
+        return classChain.removePrefix("**/*").removePrefix("[`").removeSuffix("`]")
+    }
+
+    private fun selectDirectByIosClassChain(
+        selector: Selector,
+        inViewOnly: Boolean,
+    ): TestElement {
+
+        var classChain = selector.getIosClassChain()
+        if (inViewOnly) {
+//            classChain =
+//                if (classChain == "**/*") "**/*[`visible==true`]"
+//                else {
+//                    val pred = getPredicateFromClassChain(classChain)
+//                    "**/*[`visible==true AND ($pred)`]"
+//                }
+        }
+        if (selector.className.isNullOrBlank()) {
+            val ignoreTypes = selector.ignoreTypes?.split(",") ?: PropertiesManager.selectIgnoreTypes
+            val typeCondition = ignoreTypes.map { "type=='$it'" }.joinToString(" OR ")
+            if (ignoreTypes.any()) {
+                val pred = getPredicateFromClassChain(classChain)
+                classChain =
+                    if (pred.isBlank()) "**/*[`NOT($typeCondition)`]"
+                    else "**/*[`NOT($typeCondition) AND ($pred)`]"
+            }
+        }
+        val pos = selector.pos ?: 1
+        classChain = "$classChain[$pos]"
+
+        val ms = Measure(classChain)
+        val element = testDrive.findWebElementBy(AppiumBy.iOSClassChain(classChain), timeoutMilliseconds = 0)
+        ms.end()
+        return element
     }
 
     /**
@@ -1556,19 +1633,20 @@ object TestDriver {
      */
     fun refreshCurrentScreen(
         screenInfoList: List<ScreenInfo> = ScreenRepository.screenInfoSearchList,
+        maxDepth: Int? = null,
         log: Boolean = true
     ): String {
 
-        val ms = Measure()
+        val ms = Measure("refreshCurrentScreen")
 
         val originalScreen = currentScreen
 
         val screenInfoHistory = getScreenInfoHistory()
-        var newScreen = refreshCurrentScreenCore(screenInfoHistory)
+        var newScreen = refreshCurrentScreenCore(screenInfoList = screenInfoHistory, maxDepth = maxDepth)
         if (newScreen == "?") {
             val list = screenInfoList.toMutableList()
             list.removeAll(screenInfoHistory)
-            newScreen = refreshCurrentScreenCore(list)
+            newScreen = refreshCurrentScreenCore(screenInfoList = list, maxDepth = maxDepth)
         }
         val changed = newScreen != "?" && newScreen != originalScreen
         if (changed) {
@@ -1582,9 +1660,19 @@ object TestDriver {
         return currentScreen
     }
 
-    private fun refreshCurrentScreenCore(screenInfoList: List<ScreenInfo>): String {
+    private fun refreshCurrentScreenCore(
+        screenInfoList: List<ScreenInfo>,
+        maxDepth: Int?
+    ): String {
         var newScreen = "?"
-        for (i in 0 until screenInfoList.count()) {
+        if (screenInfoList.isEmpty()) {
+            return newScreen
+        }
+        val md = maxDepth ?: Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH
+        val depth =
+            if (testContext.useCache) screenInfoList.count()
+            else Math.min(screenInfoList.count(), md)
+        for (i in 0 until depth) {
             val screenInfo = screenInfoList[i]
             val screenName = screenInfo.key
 
@@ -1658,7 +1746,7 @@ object TestDriver {
             return true
         }
 
-        val ms = Measure(screenName)
+        val ms = Measure("isScreen($screenName)")
         try {
             NicknameUtility.validateScreenName(screenName)
             val screenInfo = ScreenRepository.get(screenName)
