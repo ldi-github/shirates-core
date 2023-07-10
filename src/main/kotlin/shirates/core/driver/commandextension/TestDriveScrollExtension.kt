@@ -434,7 +434,9 @@ private fun TestDrive.doUntilScrollStopCore(
             }
 
             val msSerialized = Measure("serialized")
-            val serialized = testDrive.widgets.lastOrNull()?.toString() ?: ""
+            val serialized =
+                if (testContext.useCache) rootElement.descendants.serialize()
+                else testDrive.widgets.lastOrNull()?.toString() ?: ""
             msSerialized.end()
             val result = serialized == lastSerialized
             lastSerialized = serialized

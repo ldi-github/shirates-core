@@ -144,12 +144,10 @@ private fun TestElement.tapCore(
 
     Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
 
-    if (isCacheMode) {
-        syncCache(force = true)
-        lastElement = this.refreshThisElement()
-    } else {
-        this.clearPropertyCache()
+    if (testContext.useCache) {
+        refreshCache()
     }
+    lastElement = this.refreshThisElement()
 
     if (originalSelector != null) {
         lastElement.selector = originalSelector

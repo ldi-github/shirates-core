@@ -7,7 +7,6 @@ import org.openqa.selenium.remote.RemoteWebElement
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -15,7 +14,6 @@ import shirates.core.utility.escapeFileName
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.TrimObject
 import shirates.core.utility.image.saveImage
-import shirates.core.utility.misc.ReflectionUtility
 import java.io.File
 
 internal fun TestElement.getChainedSelector(relativeCommand: String): Selector {
@@ -134,25 +132,64 @@ fun TestElement.getUniqueSelector(): Selector {
     this.toString()    // Capture to propertyCache
 
     val selector = Selector()
-    for (key in this.propertyCache.keys) {
-        val value = this.propertyCache[key]
-        if (value.isNullOrBlank().not()) {
-            if (isAndroid) {
-                throw NotImplementedError()
-            } else if (isiOS) {
-                if (key == "rect") {
+    if (isAndroid) {
+        selector.className = className
+        if (id.isNotBlank()) {
+            selector.id = id
+        }
+        if (text.isNotBlank()) {
+            selector.text = text
+        }
+        if (access.isNotBlank()) {
+            selector.access = access
+        }
+        if (focusable.isNotBlank()) {
+            selector.focusable = focusable
+        }
+        if (scrollable.isNotBlank()) {
+            selector.scrollable = scrollable
+        }
+//        for (key in this.propertyCache.keys) {
+//            val value = this.propertyCache[key]
+//            if (value.isNullOrBlank()) {
+//                continue
+//            }
+//            when (key) {
+//                "class" -> selector.className = value
+//                "resource-id" -> selector.id = value
+//                "text" -> selector.text = value
+//                "content-desc" -> selector.access = value
+//                "focusable" -> selector.focusable = value
+//                "scrollable" -> selector.scrollable = value
+////                "width" -> selector.width = value.toIntOrNull()
+////                "height" -> selector.height = value.toIntOrNull()
+////                "bounds" -> {
+////                    val array = value.removePrefix("[").removeSuffix("]").replace("][", ",").split(",")
+////                    selector.x = array[0].toIntOrNull()
+////                    selector.y = array[1].toIntOrNull()
+////                    selector.width = array[2].toIntOrNull()
+////                    selector.height = array[3].toIntOrNull()
+////                }
+//            }
+//        }
+    } else {
+        for (key in this.propertyCache.keys) {
+            val value = this.propertyCache[key]
+            if (value.isNullOrBlank()) {
+                continue
+            }
+            when (key) {
+                "type" -> selector.className = value
+                "visible" -> selector.visible = value
+                "name" -> selector.id = value
+                "label" -> selector.text = value
+                "value" -> selector.value = value
+                "rect" -> {
                     val jso = JSONObject(value)
                     selector.x = jso.getInt("x")
                     selector.y = jso.getInt("y")
                     selector.width = jso.getInt("width")
                     selector.height = jso.getInt("height")
-                } else {
-                    ReflectionUtility.setValue(
-                        obj = selector,
-                        propertyName = key,
-                        value = value,
-                        warnOnMissingProperty = false
-                    )
                 }
             }
         }
