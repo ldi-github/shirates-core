@@ -472,6 +472,8 @@ object TestLog {
         }
     }
 
+    const val MAXIMUM_CELL_CONTENT_LENGTH = 32767
+
     internal fun getLogLine(
         message: String,
         logType: LogType = LogType.NONE,
@@ -484,9 +486,12 @@ object TestLog {
         resultMessage: String? = null,
         exception: Throwable? = null
     ): LogLine {
-        val msg = message
+        var msg = message
             .replace("\r", "\\r")
             .replace("\n", "\\n")
+        if (msg.length > MAXIMUM_CELL_CONTENT_LENGTH) {
+            msg = msg.substring(0, MAXIMUM_CELL_CONTENT_LENGTH - 1)
+        }
         val resultMsg = resultMessage ?: exception?.message ?: ""
         val special = specialStack.toList().joinToString("\n")
 
