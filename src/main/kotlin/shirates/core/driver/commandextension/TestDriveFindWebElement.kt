@@ -91,15 +91,22 @@ private fun TestDrive.findWebElementsCore(
     }
 
     var testElements = listOf<TestElement>()
-    if (isAndroid) {
-        val xpath =
-            selector.xpath ?: if (selector.pos != null) "(//*${selector.getXPathCondition()})[${selector.pos}]"
-            else "//*${selector.getXPathCondition()}"
+    if (isAndroid || selector.xpath != null || selector.className == "XCUIElementTypeApplication") {
+        val xpath = selector.xpath ?: "//*${selector.getXPathCondition()}"
         testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
             testElements = driver.appiumDriver.findElements(By.xpath(xpath))
                 .map { it.toTestElement(selector = selector) }
         }
         testElements = filterIgnoreTypes(testElements = testElements, condition = xpath)
+
+        if (selector.pos != null) {
+            val pos = selector.pos!!
+            val index = pos - 1
+            if (0 <= index && index < testElements.count()) {
+                val item = testElements[index]
+                testElements = listOf(item)
+            }
+        }
     } else {
         val sel = selector.copy()
         sel.orSelectors.clear()

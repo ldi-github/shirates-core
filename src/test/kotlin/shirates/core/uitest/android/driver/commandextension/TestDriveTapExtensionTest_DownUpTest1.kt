@@ -26,6 +26,7 @@ class TestDriveTapExtensionTest_DownUpTest1 : UITest() {
             case(2) {
                 condition {
                     it.pressBack()
+                        .screenIs("[Android Settings Top Screen]")
                 }.action {
                     it.tapWithScrollUp(expression = "[Connected devices]")
                 }.expectation {

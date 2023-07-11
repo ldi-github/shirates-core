@@ -1098,7 +1098,7 @@ object TestDriver {
 
         val e = try {
             var elm: TestElement? = null
-            if (isAndroid) {
+            if (isAndroid || selector.xpath != null || selector.className == "XCUIElementTypeApplication") {
                 val fullXPathCondition = selector.getFullXPathCondition()
                 if (fullXPathCondition.isNotBlank()) {
                     elm = selectDirectByXPath(
@@ -1108,12 +1108,12 @@ object TestDriver {
                     )
                 }
             } else if (isiOS) {
+                if (selector.visible == null && inViewOnly) {
+                    selector.visible = "true"
+                }
                 val iosClassChain = selector.getIosClassChain()
                 if (iosClassChain.isNotBlank()) {
-                    elm = selectDirectByIosClassChain(
-                        selector = selector,
-                        inViewOnly = inViewOnly
-                    )
+                    elm = selectDirectByIosClassChain(selector = selector)
                 }
             }
             if (elm == null) {
@@ -1213,19 +1213,10 @@ object TestDriver {
     }
 
     private fun selectDirectByIosClassChain(
-        selector: Selector,
-        inViewOnly: Boolean,
+        selector: Selector
     ): TestElement {
 
         var classChain = selector.getIosClassChain()
-        if (inViewOnly) {
-//            classChain =
-//                if (classChain == "**/*") "**/*[`visible==true`]"
-//                else {
-//                    val pred = getPredicateFromClassChain(classChain)
-//                    "**/*[`visible==true AND ($pred)`]"
-//                }
-        }
         if (selector.className.isNullOrBlank()) {
             val ignoreTypes = selector.ignoreTypes?.split(",") ?: PropertiesManager.selectIgnoreTypes
             val typeCondition = ignoreTypes.map { "type=='$it'" }.joinToString(" OR ")

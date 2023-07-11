@@ -1200,6 +1200,8 @@ class Selector(
 
         list.addFunctionByFilterName("type==%s", "className", predicate = true)
 
+        list.addFunctionByFilterName("visible=%s", "visible", predicate = true, withoutQuote = true)
+
         list.addFunctionByFilterName("rect.x==%s", "x", predicate = true, withoutQuote = true)
         list.addFunctionByFilterName("rect.y==%s", "y", predicate = true, withoutQuote = true)
         list.addFunctionByFilterName("rect.width==%s", "width", predicate = true, withoutQuote = true)
