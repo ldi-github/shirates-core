@@ -1236,8 +1236,6 @@ object TestDriver {
                     else "**/*[`NOT($typeCondition) AND ($pred)`]"
             }
         }
-        val pos = selector.pos ?: 1
-        classChain = "$classChain[$pos]"
 
         val ms = Measure(classChain)
         val element = testDrive.findWebElementBy(AppiumBy.iOSClassChain(classChain), timeoutMilliseconds = 0)
