@@ -1675,6 +1675,7 @@ object TestDriver {
         for (i in 0 until depth) {
             val screenInfo = screenInfoList[i]
             val screenName = screenInfo.key
+            TestLog.trace("// Trying $screenName")
 
             if (screenName.isBlank()) {
                 continue
@@ -1746,7 +1747,7 @@ object TestDriver {
             return true
         }
 
-        val ms = Measure("isScreen($screenName)")
+        val ms = Measure("■■■ Trying isScreen($screenName)")
         try {
             NicknameUtility.validateScreenName(screenName)
             val screenInfo = ScreenRepository.get(screenName)
@@ -1774,6 +1775,7 @@ object TestDriver {
             if (r) {
                 currentScreen = screenName
                 setScreenHistory(screenName)
+                TestLog.trace("Screen found. ■■■ $screenName ■■■")
             }
 
             return r

@@ -897,23 +897,26 @@ class Selector(
         val relSelectors = relativeSelectors
         if (relSelectors.isEmpty()) {
             val pred = getIosPredicate()
+            val pos = getPositionCondition(this)
             if (pred.isBlank()) {
-                return "**/*"
+                return "**/*$pos"
             }
-            return "**/*[`$pred`]"
+            return "**/*[`$pred`]$pos"
         }
 
         val relativePredicates = mutableListOf<String>()
         for (r in relSelectors) {
             val predicate = r.getIosPredicate()
-            relativePredicates.add(predicate)
+            val pos = getPositionCondition(r)
+            relativePredicates.add("/**/*[`$predicate`]$pos")
         }
 
-        val subPredicate = relativePredicates.map { "/**/*[`$it`]" }.joinToString("")
+        val subPredicate = relativePredicates.joinToString("")
         val pred = getIosPredicate()
+        val pos = getPositionCondition(this)
         val predicate =
-            if (pred.isBlank()) "**/*$subPredicate"
-            else "**/*[`$pred`]$subPredicate"
+            if (pred.isBlank()) "**/*$pos$subPredicate"
+            else "**/*[`$pred`]$pos$subPredicate"
         return predicate
     }
 
@@ -1186,11 +1189,11 @@ class Selector(
         list.addFunctionByFilterName("name==%s", "access", predicate = true)
         list.addFunctionByFilterName("name BEGINSWITH %s", "accessStartsWith", predicate = true)
         list.addFunctionByFilterName("name CONTAINS %s", "accessContains", predicate = true)
-        list.addFunctionByFilterName("name ENDSWITH", "accessEndsWith", predicate = true)
+        list.addFunctionByFilterName("name ENDSWITH %s", "accessEndsWith", predicate = true)
         list.addFunctionByFilterName("name MATCHES %s", "accessMatches", predicate = true)
 
         list.addFunctionByFilterName("value==%s", "value", predicate = true)
-        list.addFunctionByFilterName("value BEGINSWITH %s)", "valueStartsWith", predicate = true)
+        list.addFunctionByFilterName("value BEGINSWITH %s", "valueStartsWith", predicate = true)
         list.addFunctionByFilterName("value CONTAINS %s", "valueContains", predicate = true)
         list.addFunctionByFilterName("value ENDSWITH %s", "valueEndsWith", predicate = true)
         list.addFunctionByFilterName("value MATCHES %s", "valueMatches", predicate = true)
