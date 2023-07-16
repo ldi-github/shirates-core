@@ -838,15 +838,8 @@ class Selector(
             return ""
         }
 
-        val selectors = mutableListOf<Selector>()
-        if (this.expression.isNullOrBlank().not()) {
-            selectors.add(this)
-        }
+        val selectors = mutableListOf(this)
         selectors.addAll(orSelectors)
-
-        if (selectors.isEmpty()) {
-            return ""
-        }
 
         val p0 = selectors[0].getIosPredicateCore()
         val predicates = mutableListOf(p0)
@@ -866,12 +859,20 @@ class Selector(
 
         addIosPredicate(list)
 
+        if (list.any() { it.startsWith("type==") }.not()) {
+            val ignoreTypes = ignoreTypes?.split(",")?.map { it.trim() } ?: PropertiesManager.selectIgnoreTypes
+            val typeNotCondition = "NOT(${ignoreTypes.map { "type =='$it'" }.joinToString(" OR ")})"
+            list.add(typeNotCondition)
+        }
+
         val predicate = if (list.count() == 1) {
             list[0]
         } else {
             val predicates = mutableListOf<String>()
             for (pred in list) {
-                if (pred.contains(" AND ") || pred.contains(" OR ")) {
+                if (pred.startsWith("NOT(")) {
+                    predicates.add(pred)
+                } else if (pred.contains(" AND ") || pred.contains(" OR ")) {
                     predicates.add("($pred)")
                 } else {
                     predicates.add(pred)
@@ -1050,6 +1051,9 @@ class Selector(
         if (filter.value.isBlank()) {
             return
         }
+        if (filterName == "visible" && filter.value == "*") {
+            return
+        }
         addFunction(
             formatString = formatString,
             value = filter.value,
@@ -1092,13 +1096,7 @@ class Selector(
 
     private fun addXpathFunctionsForAndroid(list: MutableList<String>, packageName: String) {
 
-        list.addFunctionByFilterName("@text=%s", "text")
-        list.addFunctionByFilterName("@text=%s", "literal")
-        list.addFunctionByFilterName("starts-with(@text,%s)", "textStartsWith")
-        list.addFunctionByFilterName("contains(@text,%s)", "textContains")
-        list.addFunctionByFilterName("(${getEndsWith("text")})", "textEndsWith")
-        list.addFunctionByFilterName("matches(@text,%s)", "textMatches")
-
+        list.addFunctionByFilterName("@class=%s", "className")
         if (id.isNullOrBlank().not()) {
             var fullIds =
                 id!!.orValueToList().map { getFullyQualifiedId(id = it, packageName = packageName) }.joinToString("|")
@@ -1108,13 +1106,19 @@ class Selector(
             list.addFunction("@resource-id=%s", fullIds)
         }
 
+        list.addFunctionByFilterName("@text=%s", "text")
+        list.addFunctionByFilterName("@text=%s", "literal")
+        list.addFunctionByFilterName("starts-with(@text,%s)", "textStartsWith")
+        list.addFunctionByFilterName("contains(@text,%s)", "textContains")
+        list.addFunctionByFilterName("(${getEndsWith("text")})", "textEndsWith")
+        list.addFunctionByFilterName("matches(@text,%s)", "textMatches")
+
         list.addFunctionByFilterName("@content-desc=%s", "access")
         list.addFunctionByFilterName("starts-with(@content-desc,%s)", "accessStartsWith")
         list.addFunctionByFilterName("contains(@content-desc,%s)", "accessContains")
         list.addFunctionByFilterName("(${getEndsWith("content-desc")})", "accessEndsWith")
         list.addFunctionByFilterName("matches(@content-desc,%s)", "accessMatches")
 
-        list.addFunctionByFilterName("@class=%s", "className")
         list.addFunctionByFilterName("@focusable=%s", "focusable")
         list.addFunctionByFilterName("@scrollable=%s", "scrollable")
     }
@@ -1124,6 +1128,9 @@ class Selector(
     }
 
     private fun addXpathFunctionsForIos(list: MutableList<String>) {
+
+        list.addFunctionByFilterName("@type=%s", "className")
+        list.addFunctionByFilterName("@name=%s", "id")
 
         if (text != null && text!!.contains("\n")) {
             for (t in text!!.split("\n")) {
@@ -1145,8 +1152,6 @@ class Selector(
         list.addFunctionByFilterName("(${getEndsWith("label")} or ${getEndsWith("value")})", "textEndsWith")
         list.addFunctionByFilterName("matches(@label,%s) or matches(@value,%s)", "textMatches")
 
-        list.addFunctionByFilterName("@name=%s", "id")
-
         list.addFunctionByFilterName("@name=%s", "access")
         list.addFunctionByFilterName("starts-with(@name,%s)", "accessStartsWith")
         list.addFunctionByFilterName("contains(@name,%s)", "accessContains")
@@ -1158,11 +1163,11 @@ class Selector(
         list.addFunctionByFilterName("contains(@value,%s)", "valueContains")
         list.addFunctionByFilterName(getEndsWith("value"), "valueEndsWith")
         list.addFunctionByFilterName("matches(@value,%s)", "valueMatches")
-
-        list.addFunctionByFilterName("@type=%s", "className")
     }
 
     private fun addIosPredicate(list: MutableList<String>) {
+
+        list.addFunctionByFilterName("type==%s", "className", predicate = true)
 
         if (text != null && text!!.contains("\n")) {
             for (t in text!!.split("\n")) {
@@ -1198,9 +1203,7 @@ class Selector(
         list.addFunctionByFilterName("value ENDSWITH %s", "valueEndsWith", predicate = true)
         list.addFunctionByFilterName("value MATCHES %s", "valueMatches", predicate = true)
 
-        list.addFunctionByFilterName("type==%s", "className", predicate = true)
-
-        list.addFunctionByFilterName("visible=%s", "visible", predicate = true, withoutQuote = true)
+        list.addFunctionByFilterName("visible==%s", "visible", predicate = true, withoutQuote = true)
 
         list.addFunctionByFilterName("rect.x==%s", "x", predicate = true, withoutQuote = true)
         list.addFunctionByFilterName("rect.y==%s", "y", predicate = true, withoutQuote = true)

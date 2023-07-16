@@ -3,6 +3,7 @@ package shirates.core.unittest.configuration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
@@ -200,7 +201,75 @@ class Selector_IosTest : UnitTest() {
         // Act
         val classChain = sel.getIosClassChain()
         // Assert
-        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar'`]/**/*[`(label=='TITLE1' OR value=='TITLE1') AND type=='XCUIElementTypeStaticText'`]")
+        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar'`]/**/*[`type=='XCUIElementTypeStaticText' AND (label=='TITLE1' OR value=='TITLE1')`]")
+    }
+
+    @Test
+    fun getIosClassChain() {
+
+        // Arrange
+        val ignoreTypes = PropertiesManager.selectIgnoreTypes
+        val typeNotCondition = "NOT(${ignoreTypes.map { "type =='$it'" }.joinToString(" OR ")})"
+
+        Selector(".XCUIElementTypeStaticText").getIosClassChain()
+        Selector("title1").getIosClassChain()
+
+        run {
+            // Arrange
+            val sel = Selector()
+            // Act, Assert
+            println(sel.getIosClassChain())
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`$typeNotCondition`]")
+        }
+        run {
+            // Arrange
+            val sel = Selector("[1]")
+            // Act, Assert
+            println(sel.getIosClassChain())
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
+        }
+        run {
+            // Arrange
+            val sel = Selector("pos=1")
+            // Act, Assert
+            println(sel.getIosClassChain())
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
+        }
+        run {
+            // Arrange
+            val sel = Selector("#container1")
+            // Act, Assert
+            println(sel.getIosClassChain())
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
+        }
+        run {
+            // Arrange
+            val sel = Selector("<#container1>:descendant(title1)")
+            // Act, Assert
+            println(sel.getIosClassChain())
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]/**/*[`(label=='title1' OR value=='title1') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
+        }
+        run {
+            // Arrange
+            val sel = Selector(".XCUIElementTypeButton&&visible=true")
+            // Act, Assert
+            println(sel.getIosClassChain())
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==true`]")
+        }
+        run {
+            // Arrange
+            val sel = Selector(".XCUIElementTypeButton&&visible=false")
+            // Act, Assert
+            println(sel.getIosClassChain())
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==false`]")
+        }
+        run {
+            // Arrange
+            val sel = Selector(".XCUIElementTypeButton&&visible=*")
+            // Act, Assert
+            println(sel.getIosClassChain())
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton'`]")
+        }
     }
 
     @Test

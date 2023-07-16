@@ -1,11 +1,13 @@
 package experiment
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.testDrive
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 
@@ -76,22 +78,23 @@ class AdHocTestIos : UITest() {
     }
 
     @Test
-    fun labelEndsWith() {
+    fun allElements() {
 
-        useCache {
-            it.select("Privacy & Security")
-                .textIs("Privacy & Security")
+        scenario {
+            case(1) {
+                val allElements = testDrive.allElements(useCache = true)
+                val allElements2 = testDrive.allElements(useCache = false)
+                assertThat(allElements.count()).isEqualTo(allElements2.count())
 
-            it.select("*vacy & Security")
-                .textIs("Privacy & Security")
+                /**
+                 * Note:
+                 * The order of the elements are not equal.
+                 * XPath seems to search elements in depth first search.
+                 * iOS class chain seems to search elements in breadth first search.
+                 */
+            }
         }
-        suppressCache {
-            it.select("Privacy & Security")
-                .textIs("Privacy & Security")
 
-            it.select("*vacy & Security")
-                .textIs("Privacy & Security")
-        }
     }
 
 }

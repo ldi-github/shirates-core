@@ -29,7 +29,7 @@ class TestElement(
     var lastResult: LogType = LogType.NONE,
     var node: Node? = null,
     var webElement: WebElement? = null,
-    var cacheRootElement: TestElement? = null,
+    var rootUIElement: TestElement? = null,
 ) : TestDrive {
 
     private var toStringResult: String? = null
@@ -367,6 +367,14 @@ class TestElement(
         }
 
     /**
+     * ancestorScrollable
+     */
+    val ancestorScrollable: TestElement
+        get() {
+            return ancestorUnderScrollable.parentElement
+        }
+
+    /**
      * ancestorUnderScrollable
      */
     val ancestorUnderScrollable: TestElement
@@ -429,13 +437,61 @@ class TestElement(
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
-                for (overlayElement in TestDriver.screenInfo.overlayElements) {
-                    if (this.bounds.isOverlapping(overlayElement.bounds)) {
-                        return false
+                for (overlayElement in TestDriver.screenInfo.scrollInfo.overlayElements) {
+                    val overlay = select(
+                        expression = overlayElement,
+                        throwsException = false,
+                        waitSeconds = 0.0,
+                        inViewOnly = true
+                    )
+                    if (overlay.isFound) {
+                        if (this.bounds.isOverlapping(overlay.bounds)) {
+                            return false
+                        }
                     }
                 }
             }
             return true
+        }
+
+    /**
+     * isLabel
+     */
+    val isLabel: Boolean
+        get() {
+            return ElementCategoryExpressionUtility.isLabel(typeName = classOrType)
+        }
+
+    /**
+     * isInput
+     */
+    val isInput: Boolean
+        get() {
+            return ElementCategoryExpressionUtility.isInput(typeName = classOrType)
+        }
+
+    /**
+     * isImage
+     */
+    val isImage: Boolean
+        get() {
+            return ElementCategoryExpressionUtility.isImage(typeName = classOrType)
+        }
+
+    /**
+     * isButton
+     */
+    val isButton: Boolean
+        get() {
+            return ElementCategoryExpressionUtility.isButton(typeName = classOrType)
+        }
+
+    /**
+     * isSwitch
+     */
+    val isSwitch: Boolean
+        get() {
+            return ElementCategoryExpressionUtility.isSwitch(typeName = classOrType)
         }
 
     /**
@@ -918,7 +974,19 @@ class TestElement(
             if (bounds.area == 0) {
                 return false
             }
-            return this.absoluteBounds.isOverlapping(rootBounds)
+            if (isAndroid) {
+                return this.bounds.isIncludedIn(rootBounds)
+            }
+
+            if (this.isWidget.not()) {
+                return true
+            }
+
+            val a = ancestorScrollable
+            if (a.isFound) {
+                return this.bounds.isIncludedIn(a.bounds)
+            }
+            return this.absoluteBounds.isIncludedIn(rootBounds)
         }
 
     internal val isInXCUIElementTypeCell: Boolean

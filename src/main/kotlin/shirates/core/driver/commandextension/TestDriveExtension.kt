@@ -10,14 +10,24 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 
 /**
- * getThisOrRootElement
+ * Returns this if this is TestElement
+ * Else lastElement
  */
-fun TestDrive.getThisOrRootElement(): TestElement {
-
+internal fun TestDrive.getThisOrLastElement(): TestElement {
     if (this is TestElement) {
         return this
     }
+    return TestDriver.lastElement
+}
 
+/**
+ * Returns this if this is TestElement
+ * else rootElement
+ */
+internal fun TestDrive.getThisOrRootElement(): TestElement {
+    if (this is TestElement) {
+        return this
+    }
     return rootElement
 }
 

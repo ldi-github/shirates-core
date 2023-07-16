@@ -1,7 +1,7 @@
 package shirates.core.driver.commandextension
 
-import org.json.JSONObject
 import org.openqa.selenium.By
+import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.RemoteWebElement
 import shirates.core.configuration.Selector
@@ -61,9 +61,13 @@ fun TestElement.refreshThisElement(): TestElement {
 
     val originalSelector = this.selector
 
+    val sel = getUniqueSelector()
+    if (sel.isEmpty) {
+        return TestElement.emptyElement
+    }
+
     val e = try {
-        val sel = getUniqueSelector()
-        TestDriver.select(selector = sel, throwsException = false, inViewOnly = true)
+        TestDriver.select(selector = sel, waitSeconds = 0.0, throwsException = false, inViewOnly = true)
     } catch (t: Throwable) {
         TestLog.warn(t.message!!)
         return TestElement.emptyElement
@@ -129,7 +133,11 @@ fun TestElement.getRemoteWebElement(): RemoteWebElement {
  */
 fun TestElement.getUniqueSelector(): Selector {
 
-    this.toString()    // Capture to propertyCache
+    try {
+        this.toString()    // Capture to propertyCache
+    } catch (t: StaleElementReferenceException) {
+        return this.selector ?: Selector()
+    }
 
     val selector = Selector()
     if (isAndroid) {
@@ -149,49 +157,16 @@ fun TestElement.getUniqueSelector(): Selector {
         if (scrollable.isNotBlank()) {
             selector.scrollable = scrollable
         }
-//        for (key in this.propertyCache.keys) {
-//            val value = this.propertyCache[key]
-//            if (value.isNullOrBlank()) {
-//                continue
-//            }
-//            when (key) {
-//                "class" -> selector.className = value
-//                "resource-id" -> selector.id = value
-//                "text" -> selector.text = value
-//                "content-desc" -> selector.access = value
-//                "focusable" -> selector.focusable = value
-//                "scrollable" -> selector.scrollable = value
-////                "width" -> selector.width = value.toIntOrNull()
-////                "height" -> selector.height = value.toIntOrNull()
-////                "bounds" -> {
-////                    val array = value.removePrefix("[").removeSuffix("]").replace("][", ",").split(",")
-////                    selector.x = array[0].toIntOrNull()
-////                    selector.y = array[1].toIntOrNull()
-////                    selector.width = array[2].toIntOrNull()
-////                    selector.height = array[3].toIntOrNull()
-////                }
-//            }
-//        }
     } else {
-        for (key in this.propertyCache.keys) {
-            val value = this.propertyCache[key]
-            if (value.isNullOrBlank()) {
-                continue
-            }
-            when (key) {
-                "type" -> selector.className = value
-                "visible" -> selector.visible = value
-                "name" -> selector.id = value
-                "label" -> selector.text = value
-                "value" -> selector.value = value
-                "rect" -> {
-                    val jso = JSONObject(value)
-                    selector.x = jso.getInt("x")
-                    selector.y = jso.getInt("y")
-                    selector.width = jso.getInt("width")
-                    selector.height = jso.getInt("height")
-                }
-            }
+        selector.className = type
+        if (name.isNotBlank()) {
+            selector.id = name
+        }
+        if (label.isNotBlank()) {
+            selector.text = label
+        }
+        if (value.isNotBlank()) {
+            selector.value = value
         }
     }
 

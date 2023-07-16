@@ -55,6 +55,7 @@ import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
+import java.util.*
 
 /**
  * TestDriver
@@ -115,6 +116,21 @@ object TestDriver {
         }
 
     private var _rootBounds: Bounds? = null
+
+    /**
+     * rootElement
+     */
+    var rootElement: TestElement
+        get() {
+            if (testContext.useCache) {
+                return TestElementCache.rootElement
+            }
+            TestElementCache.rootElement = select("pos=1")
+            return TestElementCache.rootElement
+        }
+        set(value) {
+            TestElementCache.rootElement = value
+        }
 
     /**
      * rootBounds
@@ -376,10 +392,6 @@ object TestDriver {
             }
         }
         set(value) {
-            val changed = field != value
-            if (changed) {
-                screenInfo.clearCache()
-            }
             field = value
         }
 
@@ -931,6 +943,7 @@ object TestDriver {
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
         inViewOnly: Boolean = false,
+        visible: String? = null,
         log: Boolean = false
     ): TestElement {
 
@@ -951,6 +964,7 @@ object TestDriver {
                 throwsException = throwsException,
                 useCache = useCache,
                 inViewOnly = inViewOnly,
+                visible = visible
             )
         }
 
@@ -967,7 +981,8 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
-        inViewOnly: Boolean = false
+        inViewOnly: Boolean = false,
+        visible: String? = null
     ): TestElement {
 
         if (selector.isRelative) {
@@ -982,6 +997,10 @@ object TestDriver {
         }
 
         lastElement = TestElement.emptyElement
+
+        if (isiOS) {
+            selector.visible = selector.visible ?: visible
+        }
 
         var selectedElement: TestElement
 
@@ -1020,7 +1039,8 @@ object TestDriver {
                     durationSeconds = scrollDurationSeconds,
                     startMarginRatio = scrollStartMarginRatio,
                     scrollMaxCount = scrollMaxCount,
-                    throwsException = throwsException
+                    throwsException = throwsException,
+                    visible = visible
                 )
             }
 
@@ -1076,18 +1096,8 @@ object TestDriver {
     internal fun selectDirect(
         selector: Selector,
         throwsException: Boolean,
-        inViewOnly: Boolean
+        inViewOnly: Boolean,
     ): TestElement {
-
-        if (selector.isEmpty) {
-            val msg = message(
-                id = "emptySelectorIsNotAllowed",
-                subject = "$selector",
-                arg1 = selector.getElementExpression(),
-                file = selector.origin
-            )
-            throw TestDriverException(msg)
-        }
 
         if (TestMode.isNoLoadRun) {
             lastElement = TestElement(selector = selector)
@@ -1108,9 +1118,9 @@ object TestDriver {
                     )
                 }
             } else if (isiOS) {
-                if (selector.visible == null && inViewOnly) {
-                    selector.visible = "true"
-                }
+//                if (selector.visible == null && selector.className != "XCUIElementTypeImage" && inViewOnly) {
+//                    selector.visible = "true"
+//                }
                 val iosClassChain = selector.getIosClassChain()
                 if (iosClassChain.isNotBlank()) {
                     elm = selectDirectByIosClassChain(selector = selector)
@@ -1216,18 +1226,7 @@ object TestDriver {
         selector: Selector
     ): TestElement {
 
-        var classChain = selector.getIosClassChain()
-        if (selector.className.isNullOrBlank()) {
-            val ignoreTypes = selector.ignoreTypes?.split(",") ?: PropertiesManager.selectIgnoreTypes
-            val typeCondition = ignoreTypes.map { "type=='$it'" }.joinToString(" OR ")
-            if (ignoreTypes.any()) {
-                val pred = getPredicateFromClassChain(classChain)
-                classChain =
-                    if (pred.isBlank()) "**/*[`NOT($typeCondition)`]"
-                    else "**/*[`NOT($typeCondition) AND ($pred)`]"
-            }
-        }
-
+        val classChain = selector.getIosClassChain()
         val ms = Measure(classChain)
         val element = testDrive.findWebElementBy(AppiumBy.iOSClassChain(classChain), timeoutMilliseconds = 0)
         ms.end()
@@ -1360,13 +1359,20 @@ object TestDriver {
             if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
             else testContext.scrollHorizontalMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
+        visible: String? = null,
         throwsException: Boolean = true
     ): TestElement {
 
         var e = TestElement()
         val actionFunc = {
             val ms = Measure("$selector")
-            e = select(selector = selector, waitSeconds = 0.0, throwsException = false, inViewOnly = true)
+            e = select(
+                selector = selector,
+                waitSeconds = 0.0,
+                throwsException = false,
+                inViewOnly = true,
+                visible = visible
+            )
             ms.end()
             e.isSafe
         }
@@ -1400,6 +1406,7 @@ object TestDriver {
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
+        visible: String? = null,
         throwsException: Boolean = true
     ): TestElement {
         val sel = expandExpression(expression = expression)
@@ -1412,6 +1419,7 @@ object TestDriver {
                 durationSeconds = scrollDurationSeconds,
                 startMarginRatio = scrollStartMarginRatio,
                 scrollMaxCount = scrollMaxCount,
+                visible = visible,
                 throwsException = throwsException
             )
         }
@@ -1475,12 +1483,23 @@ object TestDriver {
         if (isInitialized.not()) {
             return this
         }
+
+        val screenshotTime = Date()
+
         if (force.not()) {
             if (CodeExecutionContext.shouldOutputLog.not()) {
                 return this
             }
             if (shouldTakeScreenshot.not()) {
                 return this
+            }
+            if (CodeExecutionContext.lastScreenshotTime != null) {
+                val diff = screenshotTime.time - CodeExecutionContext.lastScreenshotTime!!.time
+                val intervalMilliseconds = PropertiesManager.screenshotIntervalSeconds * 1000
+                if (diff < intervalMilliseconds) {
+                    TestLog.trace("screenshot() skipped. ($diff < $intervalMilliseconds)")
+                    return this
+                }
             }
         }
 
@@ -1513,6 +1532,8 @@ object TestDriver {
             }
 
             CodeExecutionContext.lastScreenshotImage = screenshotImage
+            CodeExecutionContext.lastScreenshotTime = screenshotTime
+
             val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toFile()
             screenshotImage.resizeAndSaveImage(
                 scale = PropertiesManager.screenshotScale,
@@ -1640,7 +1661,7 @@ object TestDriver {
         val changed = newScreen != "?" && newScreen != originalScreen
         if (changed) {
             currentScreen = newScreen
-            screenInfo.refreshOverlayElements()
+//            screenInfo.refreshOverlayElements()
             TestLog.info("currentScreen=$currentScreen", log = log)
         }
 
@@ -1657,10 +1678,10 @@ object TestDriver {
         if (screenInfoList.isEmpty()) {
             return newScreen
         }
-        val md = maxDepth ?: Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH
-        val depth =
-            if (testContext.useCache) screenInfoList.count()
-            else Math.min(screenInfoList.count(), md)
+        val md =
+            maxDepth ?: if (testContext.useCache) Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_CACHE_MODE
+            else Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_DIRECT_MODE
+        val depth = Math.min(screenInfoList.count(), md)
         for (i in 0 until depth) {
             val screenInfo = screenInfoList[i]
             val screenName = screenInfo.key
@@ -1961,9 +1982,6 @@ object TestDriver {
         try {
             val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             if (isAndroid) {
-                if (testContext.useCache.not()) {
-                    rootElement = select("xpath=//*[1]", inViewOnly = false)
-                }
                 return rootElement.packageName == packageOrBundleId
             }
 
@@ -1972,13 +1990,11 @@ object TestDriver {
                 appName = appNameOrAppId.split(".").last()
             }
 
-
             if (testContext.useCache) {
                 syncCache()
-            } else {
-                rootElement = select("xpath=//*[1]", inViewOnly = false)
             }
-            return rootElement.name == appName
+            val appElement = select(".XCUIElementTypeApplication")
+            return appElement.name == appName
         } catch (t: Throwable) {
             TestLog.info("Error in isAppCore: $t")
             return false

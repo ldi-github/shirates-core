@@ -36,6 +36,12 @@ class TestElementCache_AndroidTest : UnitTest() {
 
         run {
             // Act
+            val e = TestElementCache.select("")
+            // Assert
+            assertThat(e.toString()).isEqualTo("<android.widget.FrameLayout class='android.widget.FrameLayout' resource-id='' text='' content-desc='' checked='false' focusable='false' focused='false' selected='false' scrollable='false' bounds=[0,0][1080,2088]>")
+        }
+        run {
+            // Act
             val e = TestElementCache.select("Network & internet")
             // Assert
             assertThat(e.text).isEqualTo("Network & internet")
@@ -66,13 +72,6 @@ class TestElementCache_AndroidTest : UnitTest() {
                 TestElementCache.select("no exist")
             }.isInstanceOf(TestDriverException::class.java)
                 .hasMessage("Element not found.(selector=<no exist>, expression=<no exist>)")
-        }
-        run {
-            // Act, Assert
-            assertThatThrownBy {
-                TestElementCache.select("")
-            }.isInstanceOf(TestDriverException::class.java)
-                .hasMessage("Empty selector is not allowed. (selector=<>, expression=<>, origin=null)")
         }
     }
 

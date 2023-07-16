@@ -483,6 +483,20 @@ object PropertiesManager {
             return value
         }
 
+    /**
+     * screenshotIntervalSeconds
+     */
+    var screenshotIntervalSeconds: Double
+        get() {
+            val value =
+                getPropertyValue(propertyName = "screenshotIntervalSeconds")?.toDoubleOrNull()
+                    ?: return Const.SCREENSHOT_INTERVAL_SECOND
+            return value
+        }
+        set(value) {
+            setPropertyValue(propertyName = "screenshotIntervalSeconds", value = "$value")
+        }
+
     // Image Matching --------------------------------------------------
 
     /**

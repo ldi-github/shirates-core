@@ -2,18 +2,47 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElement
-import shirates.core.utility.element.ElementCategoryExpressionUtility
+
+internal val TestElement.innerWidgets: List<TestElement>
+    get() {
+        return this.descendants.filter { it.isWidget }.toMutableList()
+    }
+
+internal val TestElement.innerLabelWidgets: List<TestElement>
+    get() {
+        return this.descendants.filter { it.isLabel }.toMutableList()
+    }
+
+internal val TestElement.innerInputWidgets: List<TestElement>
+    get() {
+        return this.descendants.filter { it.isInput }.toMutableList()
+    }
+
+internal val TestElement.innerImageWidgets: List<TestElement>
+    get() {
+        return this.descendants.filter { it.isImage }.toMutableList()
+    }
+
+internal val TestElement.innerButtonWidgets: List<TestElement>
+    get() {
+        return this.descendants.filter { it.isButton }.toMutableList()
+    }
+
+internal val TestElement.innerSwitchWidgets: List<TestElement>
+    get() {
+        return this.descendants.filter { it.isSwitch }.toMutableList()
+    }
+
 
 internal fun TestElement.innerFlow(
     selector: Selector,
     inViewOnly: Boolean
 ): TestElement {
 
-    val innerElements = this.descendants.filter { it.isWidget }.toMutableList()
     return this.flow(
         selector = selector,
         inViewOnly = inViewOnly,
-        targetElements = innerElements
+        targetElements = innerWidgets
     )
 }
 
@@ -28,7 +57,7 @@ fun TestElement.innerFlow(
     return relative(
         command = ":innerFlow($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = widgets
+        scopeElements = innerWidgets
     )
 }
 
@@ -43,7 +72,7 @@ fun TestElement.innerFlow(
     return relative(
         command = ":innerFlow($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = widgets
+        scopeElements = innerWidgets
     )
 }
 
@@ -52,9 +81,11 @@ internal fun TestElement.innerLabel(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.labelTypesExpression
-    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
+    return this.flow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerLabelWidgets
+    )
 }
 
 /**
@@ -68,7 +99,7 @@ fun TestElement.innerLabel(
     return relative(
         command = ":innerLabel($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = labelWidgets
+        scopeElements = innerLabelWidgets
     )
 }
 
@@ -83,7 +114,7 @@ fun TestElement.innerLabel(
     return relative(
         command = ":innerLabel($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = labelWidgets
+        scopeElements = innerLabelWidgets
     )
 }
 
@@ -92,9 +123,11 @@ internal fun TestElement.innerInput(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.inputTypesExpression
-    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
+    return this.flow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerInputWidgets
+    )
 }
 
 /**
@@ -108,7 +141,7 @@ fun TestElement.innerInput(
     return relative(
         command = ":innerInput($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = inputWidgets
+        scopeElements = innerInputWidgets
     )
 }
 
@@ -123,7 +156,7 @@ fun TestElement.innerInput(
     return relative(
         command = ":innerInput($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = inputWidgets
+        scopeElements = innerInputWidgets
     )
 }
 
@@ -132,9 +165,11 @@ internal fun TestElement.innerImage(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.imageTypesExpression
-    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
+    return this.flow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerImageWidgets
+    )
 }
 
 /**
@@ -148,7 +183,7 @@ fun TestElement.innerImage(
     return relative(
         command = ":innerImage($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = imageWidgets
+        scopeElements = innerImageWidgets
     )
 }
 
@@ -163,7 +198,7 @@ fun TestElement.innerImage(
     return relative(
         command = ":innerImage($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = imageWidgets
+        scopeElements = innerImageWidgets
     )
 }
 
@@ -172,9 +207,11 @@ internal fun TestElement.innerButton(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
-    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
+    return this.flow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerButtonWidgets
+    )
 }
 
 /**
@@ -188,7 +225,7 @@ fun TestElement.innerButton(
     return relative(
         command = ":innerButton($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = buttonWidgets
+        scopeElements = innerButtonWidgets
     )
 }
 
@@ -203,7 +240,7 @@ fun TestElement.innerButton(
     return relative(
         command = ":innerButton($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = buttonWidgets
+        scopeElements = innerButtonWidgets
     )
 }
 
@@ -212,9 +249,11 @@ internal fun TestElement.innerSwitch(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.switchTypesExpression
-    return this.innerFlow(selector = sel, inViewOnly = inViewOnly)
+    return this.flow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerSwitchWidgets
+    )
 }
 
 /**
@@ -228,7 +267,7 @@ fun TestElement.innerSwitch(
     return relative(
         command = ":innerSwitch($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = switchWidgets
+        scopeElements = innerSwitchWidgets
     )
 }
 
@@ -243,21 +282,19 @@ fun TestElement.innerSwitch(
     return relative(
         command = ":innerSwitch($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = switchWidgets
+        scopeElements = innerSwitchWidgets
     )
 }
-
 
 internal fun TestElement.innerVflow(
     selector: Selector,
     inViewOnly: Boolean
 ): TestElement {
 
-    val innerElements = this.descendants.toMutableList()
     return this.vflow(
         selector = selector,
         inViewOnly = inViewOnly,
-        targetElements = innerElements
+        targetElements = innerWidgets
     )
 }
 
@@ -272,7 +309,7 @@ fun TestElement.innerVflow(
     return relative(
         command = ":innerVflow($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = widgets
+        scopeElements = innerWidgets
     )
 }
 
@@ -287,7 +324,7 @@ fun TestElement.innerVflow(
     return relative(
         command = ":innerVflow($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = widgets
+        scopeElements = innerWidgets
     )
 }
 
@@ -296,9 +333,11 @@ internal fun TestElement.innerVlabel(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.labelTypesExpression
-    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
+    return this.vflow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerLabelWidgets
+    )
 }
 
 /**
@@ -312,7 +351,7 @@ fun TestElement.innerVlabel(
     return relative(
         command = ":innerVlabel($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = labelWidgets
+        scopeElements = innerLabelWidgets
     )
 }
 
@@ -336,9 +375,11 @@ internal fun TestElement.innerVinput(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.inputTypesExpression
-    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
+    return this.vflow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerInputWidgets
+    )
 }
 
 /**
@@ -352,7 +393,7 @@ fun TestElement.innerVinput(
     return relative(
         command = ":innerVinput($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = inputWidgets
+        scopeElements = innerInputWidgets
     )
 }
 
@@ -367,7 +408,7 @@ fun TestElement.innerVinput(
     return relative(
         command = ":innerVinput($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = inputWidgets
+        scopeElements = innerInputWidgets
     )
 }
 
@@ -376,9 +417,11 @@ internal fun TestElement.innerVimage(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.imageTypesExpression
-    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
+    return this.vflow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerImageWidgets
+    )
 }
 
 /**
@@ -392,7 +435,7 @@ fun TestElement.innerVimage(
     return relative(
         command = ":innerVimage($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = imageWidgets
+        scopeElements = innerImageWidgets
     )
 }
 
@@ -407,7 +450,7 @@ fun TestElement.innerVimage(
     return relative(
         command = ":innerVimage($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = imageWidgets
+        scopeElements = innerImageWidgets
     )
 }
 
@@ -416,9 +459,11 @@ internal fun TestElement.innerVbutton(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
-    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
+    return this.vflow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerButtonWidgets
+    )
 }
 
 /**
@@ -432,7 +477,7 @@ fun TestElement.innerVbutton(
     return relative(
         command = ":innerVbutton($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = buttonWidgets
+        scopeElements = innerButtonWidgets
     )
 }
 
@@ -447,7 +492,7 @@ fun TestElement.innerVbutton(
     return relative(
         command = ":innerVbutton($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = buttonWidgets
+        scopeElements = innerButtonWidgets
     )
 }
 
@@ -456,9 +501,11 @@ internal fun TestElement.innerVswitch(
     inViewOnly: Boolean
 ): TestElement {
 
-    val sel = selector.copy()
-    sel.className = ElementCategoryExpressionUtility.switchTypesExpression
-    return this.innerVflow(selector = sel, inViewOnly = inViewOnly)
+    return this.vflow(
+        selector = selector,
+        inViewOnly = inViewOnly,
+        targetElements = innerSwitchWidgets
+    )
 }
 
 /**
@@ -472,7 +519,7 @@ fun TestElement.innerVswitch(
     return relative(
         command = ":innerVswitch($pos)",
         inViewOnly = inViewOnly,
-        scopeElements = switchWidgets
+        scopeElements = innerSwitchWidgets
     )
 }
 
@@ -487,6 +534,6 @@ fun TestElement.innerVswitch(
     return relative(
         command = ":innerVswitch($expression)",
         inViewOnly = inViewOnly,
-        scopeElements = switchWidgets
+        scopeElements = innerSwitchWidgets
     )
 }

@@ -2,6 +2,7 @@ package shirates.helper
 
 import shirates.core.driver.TestDrive
 import shirates.core.driver.TestElement
+import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.emulator
 import shirates.core.driver.branchextension.realDevice
 import shirates.core.driver.commandextension.*
@@ -16,6 +17,10 @@ object TestSetupHelper : TestDrive {
      * Setup Image Android Settings Top Screen
      */
     fun setupImageAndroidSettingsTopScreen() {
+
+        if (TestMode.isNoLoadRun) {
+            return
+        }
 
         val path = "images/androidSettingsTopScreen"
         val dir = TestLog.testResults.resolve(path)

@@ -2375,7 +2375,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getXPathCondition("package1"))
                 assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                    "[matches(@text,'^A.*Z\$') and (@resource-id='package1:id/id1' or @resource-id='package1:id/id2')]"
+                    "[(@resource-id='package1:id/id1' or @resource-id='package1:id/id2') and matches(@text,'^A.*Z\$')]"
                 )
             }
 
@@ -2383,7 +2383,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getXPathCondition())
                 assertThat(sel.getXPathCondition()).isEqualTo(
-                    "[(matches(@label,'^A.*Z\$') or matches(@value,'^A.*Z\$')) and (@name='id1' or @name='id2')]"
+                    "[(@name='id1' or @name='id2') and (matches(@label,'^A.*Z$') or matches(@value,'^A.*Z$'))]"
                 )
             }
         }
@@ -2395,7 +2395,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getXPathCondition("package1"))
                 assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                    "[(@content-desc='a1' or @content-desc='a2') and (@class='c1' or @class='c2' or @class='c3') and @focusable='true' and @scrollable='false']"
+                    "[(@class='c1' or @class='c2' or @class='c3') and (@content-desc='a1' or @content-desc='a2') and @focusable='true' and @scrollable='false']"
                 )
             }
 
@@ -2441,7 +2441,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getXPathCondition("package1"))
                 assertThat(sel.getXPathCondition("package1")).isEqualTo(
-                    "[@text='text1' and (@class='c1' or @class='c2')]"
+                    "[(@class='c1' or @class='c2') and @text='text1']"
                 )
             }
         }
@@ -2891,35 +2891,6 @@ class Selector_AndroidTest : UnitTest() {
     }
 
     @Test
-    fun getIosClassChain() {
-
-        run {
-            // Arrange
-            val sel = Selector("#container1")
-
-            TestMode.runAsIos {
-                // Act, Assert
-                println(sel.getIosClassChain())
-                assertThat(sel.getIosClassChain()).isEqualTo(
-                    "**/*[`name=='container1'`]"
-                )
-            }
-        }
-        run {
-            // Arrange
-            val sel = Selector("<#container1>:descendant(title1)")
-
-            TestMode.runAsIos {
-                // Act, Assert
-                println(sel.getIosClassChain())
-                assertThat(sel.getIosClassChain()).isEqualTo(
-                    "**/*[`name=='container1'`]/**/*[`label=='title1' OR value=='title1'`]"
-                )
-            }
-        }
-    }
-
-    @Test
     fun getIosPredicate() {
 
         run {
@@ -2930,7 +2901,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label CONTAINS 'A' OR value CONTAINS 'A') AND (label CONTAINS 'B' OR value CONTAINS 'B') AND (label CONTAINS 'C' OR value CONTAINS 'C')"
+                    "(label CONTAINS 'A' OR value CONTAINS 'A') AND (label CONTAINS 'B' OR value CONTAINS 'B') AND (label CONTAINS 'C' OR value CONTAINS 'C') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
 
@@ -2943,7 +2914,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c'"
+                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -2955,7 +2926,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND (label BEGINSWITH 'ABC' OR value BEGINSWITH 'ABC' OR label BEGINSWITH 'DEF' OR value BEGINSWITH 'DEF')"
+                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND (label BEGINSWITH 'ABC' OR value BEGINSWITH 'ABC' OR label BEGINSWITH 'DEF' OR value BEGINSWITH 'DEF') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -2967,7 +2938,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label CONTAINS 'A' OR value CONTAINS 'A' OR label CONTAINS 'B' OR value CONTAINS 'B' OR label CONTAINS 'C' OR value CONTAINS 'C') AND (label ENDSWITH 'UVW' OR value ENDSWITH 'UVW' OR label ENDSWITH 'XYZ' OR value ENDSWITH 'XYZ')"
+                    "(label CONTAINS 'A' OR value CONTAINS 'A' OR label CONTAINS 'B' OR value CONTAINS 'B' OR label CONTAINS 'C' OR value CONTAINS 'C') AND (label ENDSWITH 'UVW' OR value ENDSWITH 'UVW' OR label ENDSWITH 'XYZ' OR value ENDSWITH 'XYZ') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -2979,7 +2950,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label MATCHES '^A.*Z\$' OR value MATCHES '^A.*Z\$') AND (name=='id1' OR name=='id2')"
+                    "(label MATCHES '^A.*Z$' OR value MATCHES '^A.*Z$') AND (name=='id1' OR name=='id2') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -3015,7 +2986,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "name BEGINSWITH 'a1' OR name BEGINSWITH 'a2'"
+                    "(name BEGINSWITH 'a1' OR name BEGINSWITH 'a2') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -3027,7 +2998,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label=='text1' OR value=='text1') AND (type=='c1' OR type=='c2')"
+                    "(type=='c1' OR type=='c2') AND (label=='text1' OR value=='text1')"
                 )
             }
         }
@@ -3039,7 +3010,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "label=='１1' OR value=='１1' OR label=='11' OR value=='11'"
+                    "(label=='１1' OR value=='１1' OR label=='11' OR value=='11') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -3051,7 +3022,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate())
-                    .isEqualTo("name=='id1' OR name=='id2'")
+                    .isEqualTo("name=='id1' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication') OR name=='id2' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
             }
         }
         run {
@@ -3061,7 +3032,7 @@ class Selector_AndroidTest : UnitTest() {
             TestMode.runAsIos {
                 // Act, Assert
                 println(sel.getIosPredicate())
-                assertThat(sel.getIosPredicate()).isEqualTo("")
+                assertThat(sel.getIosPredicate()).isEqualTo("NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
             }
         }
         run {
@@ -3072,7 +3043,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate())
-                    .isEqualTo("label=='LITERAL' OR value=='LITERAL'")
+                    .isEqualTo("(label=='LITERAL' OR value=='LITERAL') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
             }
         }
         run {
@@ -3083,7 +3054,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Arrange
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate())
-                    .isEqualTo("NOT(label=='no exist' OR value=='no exist')")
+                    .isEqualTo("NOT(label=='no exist' OR value=='no exist') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
             }
         }
 

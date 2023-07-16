@@ -1,8 +1,6 @@
 package shirates.core.driver
 
-import org.openqa.selenium.By
 import shirates.core.configuration.TestProfile
-import shirates.core.driver.commandextension.findWebElementBy
 
 /**
  * testDrive
@@ -17,16 +15,10 @@ val testDrive: TestDrive
  */
 var rootElement: TestElement
     get() {
-        if (TestMode.isNoLoadRun) {
-            return TestElement.emptyElement
-        }
-        if (testContext.useCache) {
-            return TestElementCache.rootElement
-        }
-        return testDrive.findWebElementBy(locator = By.xpath("//*"), timeoutMilliseconds = 0)
+        return TestDriver.rootElement
     }
     set(value) {
-        TestElementCache.rootElement = value
+        TestDriver.rootElement = value
     }
 
 /**

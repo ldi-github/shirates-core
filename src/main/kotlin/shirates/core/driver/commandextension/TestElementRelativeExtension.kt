@@ -47,11 +47,10 @@ internal fun TestElement.relative(
     relativeSelector: Selector,
     newSelector: Selector = this.getChainedSelector(relativeSelector = relativeSelector),
     inViewOnly: Boolean,
-    scopeElements: List<TestElement>
+    scopeElements: List<TestElement>? = null
 ): TestElement {
 
     val oldSelector = this.selector
-    val targetElements = scopeElements
 
     val context = TestDriverCommandContext(this)
     var e = TestElement(selector = newSelector)
@@ -65,7 +64,7 @@ internal fun TestElement.relative(
             ":right" -> {
                 e = this.right(
                     selector = relativeSelector,
-                    targetElements = targetElements,
+                    targetElements = scopeElements ?: widgets,
                     inViewOnly = inViewOnly
                 )
             }
@@ -74,7 +73,7 @@ internal fun TestElement.relative(
                 e = this.rightInput(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
@@ -82,7 +81,7 @@ internal fun TestElement.relative(
                 e = this.rightLabel(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
@@ -90,7 +89,7 @@ internal fun TestElement.relative(
                 e = this.rightImage(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
@@ -98,7 +97,7 @@ internal fun TestElement.relative(
                 e = this.rightButton(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
@@ -106,7 +105,7 @@ internal fun TestElement.relative(
                 e = this.rightSwitch(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
@@ -114,7 +113,7 @@ internal fun TestElement.relative(
                 e = this.below(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
@@ -122,7 +121,7 @@ internal fun TestElement.relative(
                 e = this.belowInput(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
@@ -130,7 +129,7 @@ internal fun TestElement.relative(
                 e = this.belowLabel(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
@@ -138,7 +137,7 @@ internal fun TestElement.relative(
                 e = this.belowImage(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
@@ -146,7 +145,7 @@ internal fun TestElement.relative(
                 e = this.belowButton(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
@@ -154,7 +153,7 @@ internal fun TestElement.relative(
                 e = this.belowSwitch(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
@@ -162,7 +161,7 @@ internal fun TestElement.relative(
                 e = this.left(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
@@ -170,7 +169,7 @@ internal fun TestElement.relative(
                 e = this.leftInput(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
@@ -178,7 +177,7 @@ internal fun TestElement.relative(
                 e = this.leftLabel(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
@@ -186,7 +185,7 @@ internal fun TestElement.relative(
                 e = this.leftImage(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
@@ -194,7 +193,7 @@ internal fun TestElement.relative(
                 e = this.leftButton(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
@@ -202,7 +201,7 @@ internal fun TestElement.relative(
                 e = this.leftSwitch(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
@@ -210,7 +209,7 @@ internal fun TestElement.relative(
                 e = this.above(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
@@ -218,7 +217,7 @@ internal fun TestElement.relative(
                 e = this.aboveInput(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
@@ -226,7 +225,7 @@ internal fun TestElement.relative(
                 e = this.aboveLabel(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
@@ -234,7 +233,7 @@ internal fun TestElement.relative(
                 e = this.aboveImage(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
@@ -242,7 +241,7 @@ internal fun TestElement.relative(
                 e = this.aboveButton(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
@@ -250,7 +249,7 @@ internal fun TestElement.relative(
                 e = this.aboveSwitch(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
@@ -261,7 +260,7 @@ internal fun TestElement.relative(
                 e = this.flow(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
@@ -269,7 +268,7 @@ internal fun TestElement.relative(
                 e = this.vflow(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
@@ -277,7 +276,7 @@ internal fun TestElement.relative(
                 e = this.flowLabel(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
@@ -285,7 +284,7 @@ internal fun TestElement.relative(
                 e = this.flowInput(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
@@ -293,7 +292,7 @@ internal fun TestElement.relative(
                 e = this.flowImage(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
@@ -301,7 +300,7 @@ internal fun TestElement.relative(
                 e = this.flowButton(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
@@ -309,7 +308,7 @@ internal fun TestElement.relative(
                 e = this.flowSwitch(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
@@ -388,7 +387,7 @@ internal fun TestElement.relative(
                 e = this.next(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
@@ -396,56 +395,88 @@ internal fun TestElement.relative(
                 e = this.previous(
                     selector = relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":nextInput" -> {
-                e = this.nextInput(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
+                e = this.nextInput(
+                    relativeSelector,
+                    inViewOnly = inViewOnly,
+                    targetElements = scopeElements ?: innerWidgets
+                )
             }
 
             ":preInput" -> {
-                e = this.preInput(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
+                e = this.preInput(
+                    relativeSelector,
+                    inViewOnly = inViewOnly,
+                    targetElements = scopeElements ?: inputWidgets
+                )
             }
 
             ":nextLabel" -> {
-                e = this.nextLabel(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
+                e = this.nextLabel(
+                    relativeSelector,
+                    inViewOnly = inViewOnly,
+                    targetElements = scopeElements ?: labelWidgets
+                )
             }
 
             ":preLabel" -> {
-                e = this.preLabel(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
+                e = this.preLabel(
+                    relativeSelector,
+                    inViewOnly = inViewOnly,
+                    targetElements = scopeElements ?: labelWidgets
+                )
             }
 
             ":nextImage" -> {
-                e = this.nextImage(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
+                e = this.nextImage(
+                    relativeSelector,
+                    inViewOnly = inViewOnly,
+                    targetElements = scopeElements ?: imageWidgets
+                )
             }
 
             ":preImage" -> {
-                e = this.preImage(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
+                e = this.preImage(
+                    relativeSelector,
+                    inViewOnly = inViewOnly,
+                    targetElements = scopeElements ?: imageWidgets
+                )
             }
 
             ":nextButton" -> {
                 e = this.nextButton(
                     relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
             ":preButton" -> {
-                e = this.preButton(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
+                e = this.preButton(
+                    relativeSelector,
+                    inViewOnly = inViewOnly,
+                    targetElements = scopeElements ?: buttonWidgets
+                )
             }
 
             ":nextSwitch" -> {
                 e = this.nextSwitch(
                     relativeSelector,
                     inViewOnly = inViewOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
             ":preSwitch" -> {
-                e = this.preSwitch(relativeSelector, inViewOnly = inViewOnly, targetElements = targetElements)
+                e = this.preSwitch(
+                    relativeSelector,
+                    inViewOnly = inViewOnly,
+                    targetElements = scopeElements ?: switchWidgets
+                )
             }
 
             // negation

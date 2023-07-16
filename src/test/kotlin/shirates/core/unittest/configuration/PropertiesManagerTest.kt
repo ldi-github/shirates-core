@@ -818,6 +818,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun screenshotIntervalSeconds() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.screenshotIntervalSeconds).isEqualTo(Const.SCREENSHOT_INTERVAL_SECOND)
+        }
+        run {
+            // Arrange
+            val value = 1.5
+            PropertiesManager.setPropertyValue("screenshotIntervalSeconds", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.screenshotIntervalSeconds).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableImageAssertion() {
 
         run {

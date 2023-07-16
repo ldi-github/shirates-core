@@ -22,6 +22,17 @@ interface TestDrive {
         }
 
     /**
+     * toTestElement
+     */
+    val toTestElement: TestElement
+        get() {
+            if (this is TestElement) {
+                return this
+            }
+            return TestElement.emptyElement
+        }
+
+    /**
      * Returns lastElement after syncing cache.
      */
     val it: TestElement

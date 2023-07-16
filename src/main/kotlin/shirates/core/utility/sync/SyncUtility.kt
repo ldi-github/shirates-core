@@ -2,6 +2,7 @@ package shirates.core.utility.sync
 
 import shirates.core.Const
 import shirates.core.driver.TestDriver
+import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
 
 /**
@@ -45,6 +46,9 @@ object SyncUtility {
             },
             action = action
         )
+        if (TestMode.isNoLoadRun) {
+            return context
+        }
 
         WaitUtility.doUntilTrue(context)
 

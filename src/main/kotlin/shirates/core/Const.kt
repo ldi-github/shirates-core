@@ -82,6 +82,7 @@ object Const {
     const val ON_CHECK_COMMAND = true
     const val ON_SCROLLING = true
     const val MANUAL_SCREENSHOT = true
+    const val SCREENSHOT_INTERVAL_SECOND = 0.5
 
     // App operation
     const val RETRY_MAX_COUNT: Long = 2
@@ -108,7 +109,8 @@ object Const {
     const val SYNC_INTERVAL_SECONDS = 0.5
     const val BOUNDS_TO_RECT_RATIO_ANDROID = 1
     const val BOUNDS_TO_RECT_RATIO_IOS = 3
-    const val REFRESH_CURRENT_SCREEN_MAX_DEPTH = 10
+    const val REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_CACHE_MODE = 100
+    const val REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_DIRECT_MODE = 2
 
     /**
      * internal

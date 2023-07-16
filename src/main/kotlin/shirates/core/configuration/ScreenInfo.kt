@@ -2,7 +2,6 @@ package shirates.core.configuration
 
 import org.json.JSONObject
 import shirates.core.driver.TestDriver
-import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
@@ -35,27 +34,6 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
             } else 0
             return w + identityElements.count()
         }
-
-    /**
-     * Cache
-     */
-    var overlayElements = mutableListOf<TestElement>()
-
-    /**
-     * clearCache
-     */
-    fun clearCache() {
-        overlayElements.clear()
-    }
-
-    /**
-     * refreshOverlayElements
-     */
-    fun refreshOverlayElements() {
-        overlayElements.clear()
-        overlayElements.addAll(TestDriver.getOverlayElements())
-    }
-
 
     override fun toString(): String {
         val list = mutableListOf<String>()

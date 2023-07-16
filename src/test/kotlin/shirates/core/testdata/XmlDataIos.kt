@@ -31,7 +31,7 @@ object XmlDataIos {
                     </XCUIElementTypeStaticText>
                     <XCUIElementTypeTextField type="XCUIElementTypeTextField" enabled="true" visible="true" x="16" y="108" width="343" height="44" label="hoge@example.com">
                     </XCUIElementTypeTextField>
-                    <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="true" label="Dummy Image1"  width="103" height="30">
+                    <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="true" label="Dummy Image1" x="16" y="130" width="103" height="30">
                     </XCUIElementTypeImage>
                     <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" enabled="true" visible="false" x="16" y="156" width="343" height="12">
                     </XCUIElementTypeStaticText>
@@ -41,7 +41,7 @@ object XmlDataIos {
                     </XCUIElementTypeStaticText>
                     <XCUIElementTypeSecureTextField type="XCUIElementTypeSecureTextField" enabled="true" visible="true" x="16" y="196" width="343" height="44" label="password1">
                       <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="true" visible="true" x="323" y="208" width="20" height="20" name="common visibility off" label="common visibility off">
-                        <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="true" label="Dummy Image B"  width="103" height="30">
+                        <XCUIElementTypeImage type="XCUIElementTypeImage" enabled="true" visible="true" label="Dummy Image B" x="16" y="210" width="103" height="30">
                         </XCUIElementTypeImage>
                       </XCUIElementTypeButton>
                     </XCUIElementTypeSecureTextField>
@@ -783,10 +783,6 @@ object XmlDataIos {
     val NodeForRootElementNotFound = """
 <?xml version="1.0" encoding="UTF-8"?>
 <AppiumAUT>
-    <XCUIElementTypeOther type="XCUIElementTypeOther" visible="true" name="App1" label="App1">
-        <XCUIElementTypeWindow type="XCUIElementTypeWindow" visible="true">
-        </XCUIElementTypeWindow>
-    </XCUIElementTypeOther>
 </AppiumAUT>
 """.trimIndent()
 

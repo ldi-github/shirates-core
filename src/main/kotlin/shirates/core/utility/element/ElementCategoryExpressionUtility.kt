@@ -185,6 +185,41 @@ object ElementCategoryExpressionUtility {
         }
 
     /**
+     * isLabel
+     */
+    fun isLabel(typeName: String): Boolean {
+        return labelTypesExpression.contains(typeName)
+    }
+
+    /**
+     * isInput
+     */
+    fun isInput(typeName: String): Boolean {
+        return inputTypesExpression.contains(typeName)
+    }
+
+    /**
+     * isImage
+     */
+    fun isImage(typeName: String): Boolean {
+        return imageTypesExpression.contains(typeName)
+    }
+
+    /**
+     * isButton
+     */
+    fun isButton(typeName: String): Boolean {
+        return buttonTypesExpression.contains(typeName)
+    }
+
+    /**
+     * isSwitch
+     */
+    fun isSwitch(typeName: String): Boolean {
+        return switchTypesExpression.contains(typeName)
+    }
+
+    /**
      * isWidget
      */
     fun isWidget(typeName: String): Boolean {

@@ -2,6 +2,7 @@ package shirates.core.driver
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.lastElement
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.relative
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
@@ -29,7 +30,7 @@ object TestElementCache {
      * rootElement
      */
     var rootElement: TestElement = TestElement.emptyElement
-        set(value) {
+        internal set(value) {
             field = value
             allElements = listOf()
             synced = false
@@ -40,7 +41,7 @@ object TestElementCache {
      */
     var allElements: List<TestElement> = listOf()
         get() {
-            if (field.count() == 0) {
+            if (field.isEmpty()) {
                 field = rootElement.descendantsAndSelf
             }
             return field
@@ -92,6 +93,7 @@ object TestElementCache {
         selector: Selector,
         throwsException: Boolean = false,
         inViewOnly: Boolean = false,
+        visible: String? = null,
         selectContext: TestElement = rootElement,
     ): MutableList<TestElement> {
 
@@ -102,7 +104,8 @@ object TestElementCache {
             list = targetElements.filterBySelector(
                 selector = selector,
                 throwsException = throwsException,
-                inViewOnly = inViewOnly
+                inViewOnly = inViewOnly,
+                visible = visible
             )
 
         } else {
@@ -125,22 +128,17 @@ object TestElementCache {
         selector: Selector,
         throwsException: Boolean = true,
         inViewOnly: Boolean = false,
+        visible: String? = null,
         selectContext: TestElement = rootElement
     ): TestElement {
-
-        if (selector.isEmpty) {
-            val msg = message(
-                id = "emptySelectorIsNotAllowed",
-                subject = "$selector",
-                arg1 = selector.getElementExpression(),
-                file = selector.origin
-            )
-            throw TestDriverException(msg)
-        }
 
         if (TestMode.isNoLoadRun) {
             lastElement = TestElement(selector = selector)
             return lastElement
+        }
+
+        if (isiOS) {
+            selector.visible = selector.visible ?: visible
         }
 
         val ms = Measure("$selector")
@@ -159,6 +157,7 @@ object TestElementCache {
                     selector = selector,
                     throwsException = throwsException,
                     inViewOnly = false,
+                    visible = visible,
                     selectContext = selectContext
                 )
                 val removeList = list.filter { it.isEmpty }
@@ -217,6 +216,7 @@ object TestElementCache {
         expression: String,
         throwsException: Boolean = true,
         inViewOnly: Boolean = false,
+        visible: String? = null,
         selectContext: TestElement = rootElement
     ): TestElement {
 
@@ -231,6 +231,7 @@ object TestElementCache {
             selector = sel,
             throwsException = throwsException,
             inViewOnly = inViewOnly,
+            visible = visible,
             selectContext = selectContext
         )
 
@@ -264,6 +265,7 @@ object TestElementCache {
     fun canSelect(
         selector: Selector,
         inViewOnly: Boolean = false,
+        visible: String? = null,
         selectContext: TestElement = rootElement
     ): Boolean {
 
@@ -282,6 +284,7 @@ object TestElementCache {
             selector = selector,
             throwsException = false,
             inViewOnly = inViewOnly,
+            visible = visible,
             selectContext = selectContext
         )
 
@@ -295,6 +298,7 @@ object TestElementCache {
     fun canSelect(
         expression: String,
         inViewOnly: Boolean = false,
+        visible: String? = null,
         selectContext: TestElement = rootElement
     ): Boolean {
 
@@ -310,7 +314,7 @@ object TestElementCache {
             sel = TestDriver.expandExpression(expression = expression)
         }
 
-        return canSelect(selector = sel, inViewOnly = inViewOnly, selectContext = selectContext)
+        return canSelect(selector = sel, inViewOnly = inViewOnly, visible = visible, selectContext = selectContext)
     }
 
     /**
@@ -319,6 +323,7 @@ object TestElementCache {
     fun canSelectAll(
         selectors: Iterable<Selector>,
         inViewOnly: Boolean = false,
+        visible: String? = null,
         selectContext: TestElement = rootElement
     ): Boolean {
 
@@ -329,7 +334,12 @@ object TestElementCache {
         val ms = Measure("$selectors")
 
         for (selector in selectors) {
-            val found = canSelect(selector = selector, inViewOnly = inViewOnly, selectContext = selectContext)
+            val found = canSelect(
+                selector = selector,
+                inViewOnly = inViewOnly,
+                visible = visible,
+                selectContext = selectContext
+            )
             if (found.not()) {
                 ms.end()
                 return false

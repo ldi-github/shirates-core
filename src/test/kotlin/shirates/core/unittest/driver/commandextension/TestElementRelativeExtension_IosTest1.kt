@@ -165,18 +165,18 @@ class TestElementRelativeExtension_IosTest1 : UnitTest() {
 
         run {
             // Arrange
-            val e = TestElementCache.select("100% battery power")
+            val e = TestElementCache.select("#CAPTCHA Image")
             // Act
             val image1 = e.select(":preImage()")
             // Assert
-            assertThat(image1.name).isEqualTo("CAPTCHA Image")
-            assertThat(image1.selector.toString()).isEqualTo("<100% battery power>:preImage")
+            assertThat(image1.label).isEqualTo("Dummy Image B")
+            assertThat(image1.selector.toString()).isEqualTo("<#CAPTCHA Image>:preImage")
 
             // Act
             val image2 = image1.select(":preImage()")
             // Assert
-            assertThat(image2.label).isEqualTo("Dummy Image B")
-            assertThat(image2.selector.toString()).isEqualTo("<100% battery power>:preImage(2)")
+            assertThat(image2.label).isEqualTo("Dummy Image1")
+            assertThat(image2.selector.toString()).isEqualTo("<#CAPTCHA Image>:preImage(2)")
         }
         run {
             // Arrange

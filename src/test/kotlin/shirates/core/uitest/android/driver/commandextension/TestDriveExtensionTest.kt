@@ -3,6 +3,7 @@ package shirates.core.uitest.android.driver.commandextension
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.TestDriver
@@ -23,6 +24,9 @@ class TestDriveExtensionTest : UITest() {
 
     @Test
     fun screenshot() {
+
+        // Arrange
+        PropertiesManager.screenshotIntervalSeconds = 0.0
 
         run {
             // Arrange
