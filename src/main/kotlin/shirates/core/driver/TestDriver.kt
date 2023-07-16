@@ -115,8 +115,6 @@ object TestDriver {
             return refreshLastElement()
         }
 
-    private var _rootBounds: Bounds? = null
-
     /**
      * rootElement
      */
@@ -125,22 +123,28 @@ object TestDriver {
             if (testContext.useCache) {
                 return TestElementCache.rootElement
             }
-            TestElementCache.rootElement = select("pos=1")
+            val ms = Measure("rootElement")
+            TestDriver.rootElement = appiumDriver.findElement(By.xpath("//*")).toTestElement()
+            ms.end()
             return TestElementCache.rootElement
         }
         set(value) {
             TestElementCache.rootElement = value
+            rootBounds = value.bounds
         }
 
     /**
      * rootBounds
      */
-    val rootBounds: Bounds
+    var rootBounds: Bounds = Bounds()
         get() {
-            if (_rootBounds == null) {
-                _rootBounds = rootElement.bounds
+            if (field.isEmpty) {
+                field = rootElement.bounds
             }
-            return _rootBounds!!
+            return field
+        }
+        set(value) {
+            field = value
         }
 
     /**
@@ -398,7 +402,7 @@ object TestDriver {
     internal fun getOverlayElements(): MutableList<TestElement> {
         val list = mutableListOf<TestElement>()
         for (overlaySelector in screenInfo.scrollInfo.overlayElements) {
-            val o = select(expression = overlaySelector, throwsException = false, inViewOnly = false)
+            val o = select(expression = overlaySelector, throwsException = false)
             if (o.isFound) {
                 list.add(o)
             }
@@ -942,7 +946,6 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
-        inViewOnly: Boolean = false,
         visible: String? = null,
         log: Boolean = false
     ): TestElement {
@@ -963,7 +966,6 @@ object TestDriver {
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
                 useCache = useCache,
-                inViewOnly = inViewOnly,
                 visible = visible
             )
         }
@@ -981,15 +983,13 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
-        inViewOnly: Boolean = false,
         visible: String? = null
     ): TestElement {
 
         if (selector.isRelative) {
             return TestElementCache.select(
                 selector = selector,
-                throwsException = false,
-                inViewOnly = inViewOnly
+                throwsException = false
             )
         }
         if (selector.isImageSelector) {
@@ -1014,14 +1014,12 @@ object TestDriver {
                 syncCache()
                 TestElementCache.select(
                     selector = selector,
-                    throwsException = false,
-                    inViewOnly = inViewOnly
+                    throwsException = false
                 )
             } else {
                 selectDirect(
                     selector = selector,
-                    throwsException = false,
-                    inViewOnly = inViewOnly
+                    throwsException = false
                 )
             }
             if (selector.isNegation.not()) {
@@ -1054,14 +1052,12 @@ object TestDriver {
                     val e = if (useCache) {
                         TestElementCache.select(
                             selector = selector,
-                            throwsException = false,
-                            inViewOnly = inViewOnly
+                            throwsException = false
                         )
                     } else {
                         selectDirect(
                             selector = selector,
                             throwsException = false,
-                            inViewOnly = inViewOnly
                         )
                     }
                     selectedElement = e
@@ -1095,8 +1091,7 @@ object TestDriver {
 
     internal fun selectDirect(
         selector: Selector,
-        throwsException: Boolean,
-        inViewOnly: Boolean,
+        throwsException: Boolean
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {
@@ -1113,14 +1108,10 @@ object TestDriver {
                 if (fullXPathCondition.isNotBlank()) {
                     elm = selectDirectByXPath(
                         selector = selector,
-                        inViewOnly = inViewOnly,
                         fullXPathCondition = fullXPathCondition
                     )
                 }
             } else if (isiOS) {
-//                if (selector.visible == null && selector.className != "XCUIElementTypeImage" && inViewOnly) {
-//                    selector.visible = "true"
-//                }
                 val iosClassChain = selector.getIosClassChain()
                 if (iosClassChain.isNotBlank()) {
                     elm = selectDirectByIosClassChain(selector = selector)
@@ -1128,7 +1119,7 @@ object TestDriver {
             }
             if (elm == null) {
                 val baseElement =
-                    testDrive.findWebElement(selector = selector, inViewOnly = inViewOnly, widgetOnly = false)
+                    testDrive.findWebElement(selector = selector, widgetOnly = false)
                 if (baseElement.isEmpty) {
                     elm = baseElement
                 } else {
@@ -1158,7 +1149,7 @@ object TestDriver {
                             else "className=(${expandedExps.joinToString("|")})"
                         val scopeElements = testDrive.findWebElements(expression = exp)
                             .filter { it.isInView }
-                        elm = baseElement.getRelative(inViewOnly = inViewOnly, scopeElements = scopeElements)
+                        elm = baseElement.getRelative(scopeElements = scopeElements)
                     } else {
                         elm = baseElement
                     }
@@ -1188,14 +1179,13 @@ object TestDriver {
 
     private fun selectDirectByXPath(
         selector: Selector,
-        inViewOnly: Boolean,
         fullXPathCondition: String
     ): TestElement {
 
         val ms = Measure("selectDirectByXPath")
         try {
             if (selector.pos == null || selector.pos == 1) {
-                if (isiOS && inViewOnly) {
+                if (isiOS) {
                     val xpath = "//*$fullXPathCondition[@visible='true']"
                     return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
                 } else {
@@ -1204,8 +1194,8 @@ object TestDriver {
                 }
             }
 
-            val sel = Selector("xpath=(//*$fullXPathCondition)")
-            val elements = testDrive.findWebElements(selector = sel, inViewOnly = inViewOnly)
+            val xpath = "//*$fullXPathCondition"
+            val elements = testDrive.findWebElementsBy(By.xpath(xpath), timeoutMilliseconds = 0)
             val pos = selector.pos!!
             if (pos <= elements.count()) {
                 return elements[pos - 1]
@@ -1370,7 +1360,6 @@ object TestDriver {
                 selector = selector,
                 waitSeconds = 0.0,
                 throwsException = false,
-                inViewOnly = true,
                 visible = visible
             )
             ms.end()
@@ -1661,7 +1650,6 @@ object TestDriver {
         val changed = newScreen != "?" && newScreen != originalScreen
         if (changed) {
             currentScreen = newScreen
-//            screenInfo.refreshOverlayElements()
             TestLog.info("currentScreen=$currentScreen", log = log)
         }
 
@@ -1749,8 +1737,7 @@ object TestDriver {
      * isScreen
      */
     fun isScreen(
-        screenName: String,
-        inViewOnly: Boolean = false,
+        screenName: String
     ): Boolean {
 
         if (TestMode.isNoLoadRun) {
@@ -1762,17 +1749,13 @@ object TestDriver {
             NicknameUtility.validateScreenName(screenName)
             val screenInfo = ScreenRepository.get(screenName)
 
-            var r = TestDriveObject.canSelectAll(
-                selectors = screenInfo.identitySelectors,
-                inViewOnly = inViewOnly
-            )
+            var r = TestDriveObject.canSelectAll(selectors = screenInfo.identitySelectors)
             if (r && screenInfo.satelliteSelectors.any()) {
                 fun hasAnySatellite(): Boolean {
                     for (expression in screenInfo.satelliteExpressions) {
                         if (TestDriveObject.canSelect(
                                 expression = expression,
-                                screenName = screenName,
-                                inViewOnly = inViewOnly
+                                screenName = screenName
                             )
                         ) {
                             return true

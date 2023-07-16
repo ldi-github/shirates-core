@@ -2,6 +2,7 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -15,7 +16,6 @@ fun TestDrive.select(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    inViewOnly: Boolean = true,
     visible: String? = null,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -41,9 +41,20 @@ fun TestDrive.select(
             waitSeconds = waitSeconds,
             throwsException = throwsException,
             useCache = useCache,
-            inViewOnly = inViewOnly,
             visible = visible
         )
+        if (scroll) {
+            if (isAndroid) {
+                // Cancel scroll inertia
+                e = TestDriver.select(
+                    selector = sel,
+                    waitSeconds = waitSeconds,
+                    throwsException = throwsException,
+                    useCache = useCache,
+                    visible = visible
+                )
+            }
+        }
     }
     if (func != null) {
         e.func()
@@ -64,7 +75,6 @@ fun TestDrive.widget(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    inViewOnly: Boolean = true,
     visible: String? = null,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -81,7 +91,6 @@ fun TestDrive.widget(
         throwsException = throwsException,
         waitSeconds = waitSeconds,
         useCache = useCache,
-        inViewOnly = inViewOnly,
         visible = visible,
         log = log,
         func = func
@@ -249,8 +258,7 @@ fun TestDrive.selectInScanResults(
             e = TestElementCache.select(
                 expression = expression,
                 throwsException = false,
-                selectContext = scanRoot.element,
-                inViewOnly = true
+                selectContext = scanRoot.element
             )
             if (e.isEmpty.not()) {
                 return@execSelectCommand
@@ -278,7 +286,6 @@ internal fun TestDrive.canSelect(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     waitSeconds: Double = 0.0,
-    inViewOnly: Boolean = true,
     visible: String? = null
 ): Boolean {
 
@@ -291,7 +298,6 @@ internal fun TestDrive.canSelect(
         scrollMaxCount = scrollMaxCount,
         waitSeconds = waitSeconds,
         throwsException = false,
-        inViewOnly = inViewOnly,
         visible = visible
     )
 
@@ -310,7 +316,6 @@ fun TestDrive.canSelect(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     screenName: String = TestDriver.currentScreen,
     waitSeconds: Double = 0.0,
-    inViewOnly: Boolean = true,
     visible: String? = null,
     log: Boolean = false
 ): Boolean {
@@ -328,7 +333,6 @@ fun TestDrive.canSelect(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             waitSeconds = waitSeconds,
-            inViewOnly = inViewOnly,
             visible = visible
         )
     }
@@ -362,7 +366,6 @@ fun TestDrive.canSelectWithScrollDown(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            inViewOnly = true,
             visible = visible
         )
     }
@@ -396,7 +399,6 @@ fun TestDrive.canSelectWithScrollUp(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            inViewOnly = true,
             visible = visible
         )
     }
@@ -430,7 +432,6 @@ fun TestDrive.canSelectWithScrollRight(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            inViewOnly = true,
             visible = visible
         )
     }
@@ -464,7 +465,6 @@ fun TestDrive.canSelectWithScrollLeft(
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            inViewOnly = true,
             visible = visible
         )
     }
@@ -534,7 +534,6 @@ fun TestDrive.canSelectAllInScanResults(
  */
 internal fun TestDrive.canSelectAll(
     selectors: Iterable<Selector>,
-    inViewOnly: Boolean = true,
     visible: String? = null,
     log: Boolean = false
 ): Boolean {
@@ -545,7 +544,7 @@ internal fun TestDrive.canSelectAll(
     val context = TestDriverCommandContext(testElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (selector in selectors) {
-            foundAll = canSelect(selector = selector, inViewOnly = inViewOnly, visible = visible)
+            foundAll = canSelect(selector = selector, visible = visible)
             if (foundAll.not()) {
                 break
             }
@@ -562,7 +561,6 @@ internal fun TestDrive.canSelectAll(
  */
 fun TestDrive.canSelectAll(
     vararg expressions: String,
-    inViewOnly: Boolean = true,
     visible: String? = null,
     log: Boolean = false
 ): Boolean {
@@ -574,7 +572,7 @@ fun TestDrive.canSelectAll(
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         val screenInfo = TestDriver.screenInfo
         val selectors = expressions.map { screenInfo.getSelector(expression = it) }
-        foundAll = canSelectAll(selectors = selectors, inViewOnly = inViewOnly, visible = visible)
+        foundAll = canSelectAll(selectors = selectors, visible = visible)
     }
     if (logLine != null) {
         logLine.message += " (result=$foundAll)"

@@ -7,6 +7,7 @@ import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.rootElement
 import shirates.core.driver.testDrive
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
@@ -97,4 +98,11 @@ class AdHocTestIos : UITest() {
 
     }
 
+    @Test
+    fun rootElementTest() {
+
+        suppressCache {
+            rootElement.printInfo()
+        }
+    }
 }

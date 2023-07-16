@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -21,7 +22,7 @@ fun TestDrive.getTapTarget(
         .filter { it.bounds.includesPoint(x = x, y = y) }
         .sortedByDescending { it.bounds.area }
     if (expression != null) {
-        elms = elms.filterBySelector(Selector(expression), inViewOnly = true)
+        elms = elms.filterBySelector(Selector(expression))
     }
 
     return elms.lastOrNull() ?: TestElement.emptyElement
@@ -180,7 +181,7 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = it.select(expression = expression, inViewOnly = true)
+        val targetElement = it.select(expression = expression)
         if (safeElementOnly && targetElement.isSafe.not()) {
             return@execOperateCommand
         }
@@ -389,7 +390,7 @@ fun TestDrive.tapCenterOfScreen(
     val context = TestDriverCommandContext(rootElement)
     context.execOperateCommand(command = command, message = message) {
 
-        val bounds = rootElement.bounds
+        val bounds = rootBounds
         tap(x = bounds.centerX, y = bounds.centerY, holdSeconds = holdSeconds, repeat = repeat, safeMode = safeMode)
     }
 
@@ -406,7 +407,7 @@ fun TestDrive.tapCenterOf(
     safeMode: Boolean = true
 ): TestElement {
 
-    val testElement = TestDriver.select(expression = expression, inViewOnly = true)
+    val testElement = TestDriver.select(expression = expression)
 
     val command = "tapCenterOf"
     val message = message(id = command, subject = testElement.subject)

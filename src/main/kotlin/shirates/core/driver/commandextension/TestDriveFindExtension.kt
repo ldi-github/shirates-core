@@ -5,6 +5,7 @@ import org.openqa.selenium.By
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.logging.Measure
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 /**
@@ -25,16 +26,28 @@ fun TestDrive.findElements(
 
     val sel = getSelector(expression)
 
+    val ms = Measure("findElements ${expression}")
+
     val elements = if (isAndroid) {
         val startPart =
             if (selectContext.parentElement.isEmpty) "//*"
             else selectContext.getUniqueXpath() + "/descendant::*"
         val xpath = "${startPart}${sel.getXPathCondition()}"
-        driver.appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
+        val m = Measure("appiumDriver.findElements $xpath")
+        try {
+            driver.appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
+        } finally {
+            m.end()
+        }
     } else {
         val startPart = selectContext.getUniqueSelector().getIosPredicate()
         val iosClassChain = "${startPart}/${sel.getIosClassChain()}"
-        driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain)).map { it.toTestElement() }
+        val m = Measure("appiumDriver.findElements $iosClassChain")
+        try {
+            driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain)).map { it.toTestElement() }
+        } finally {
+            m.end()
+        }
     }
     val results = mutableListOf<TestElement>()
     for (e in elements) {
@@ -45,6 +58,8 @@ fun TestDrive.findElements(
         }
         results.add(a)
     }
+
+    ms.end()
 
     return results
 }
@@ -69,12 +84,17 @@ fun TestDrive.allElements(
         return rootElement.descendants  // returns except <XCUIElementTypeApplication>
     }
 
-    val elements =
-        if (isAndroid) driver.appiumDriver.findElements(By.xpath("//*")).map { TestElement(webElement = it) }
-        else driver.appiumDriver
-            .findElements(AppiumBy.iOSClassChain("**/*[`type!='A'`]"))   // Workaround to avoid duplicated elements
-            .map { TestElement(webElement = it) }
-    return elements
+    val ms = Measure("allElement")
+    try {
+        val elements =
+            if (isAndroid) driver.appiumDriver.findElements(By.xpath("//*")).map { TestElement(webElement = it) }
+            else driver.appiumDriver
+                .findElements(AppiumBy.iOSClassChain("**/*[`type!='A'`]"))   // Workaround to avoid duplicated elements
+                .map { TestElement(webElement = it) }
+        return elements
+    } finally {
+        ms.end()
+    }
 }
 
 /**

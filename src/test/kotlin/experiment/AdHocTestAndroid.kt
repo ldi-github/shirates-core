@@ -74,9 +74,9 @@ class AdHocTestAndroid : UITest() {
             sel.printInfo()
             sel.getFullXPathCondition(packageName = "package1").printInfo()
 
-            val c = TestElementCache.select(selector = sel, throwsException = false, inViewOnly = safeElementOnly)
+            val c = TestElementCache.select(selector = sel, throwsException = false)
             c.printInfo()
-            val d = TestDriver.selectDirect(selector = sel, throwsException = false, inViewOnly = safeElementOnly)
+            val d = TestDriver.selectDirect(selector = sel, throwsException = false)
             d.printInfo()
             assertThat(c.toString()).isEqualTo(d.toString())
 
@@ -130,5 +130,13 @@ class AdHocTestAndroid : UITest() {
                 .textIs("Network & internet")
         }
 
+    }
+
+    @Test
+    fun rootElement() {
+
+        suppressCache {
+            rootElement.printInfo()
+        }
     }
 }

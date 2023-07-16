@@ -1,11 +1,9 @@
 package shirates.core.configuration
 
 import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestElement
-import shirates.core.driver.TestMode
+import shirates.core.driver.*
+import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.rootElement
 import shirates.core.exception.TestConfigException
 import shirates.core.testcode.normalize
 import shirates.core.utility.element.IosPredicateUtility
@@ -832,7 +830,9 @@ class Selector(
     /**
      * getIosPredicate
      */
-    fun getIosPredicate(): String {
+    fun getIosPredicate(
+        frameBounds: Bounds? = rootBounds
+    ): String {
 
         if (relativeSelectors.any() { it.command != ":descendant" }) {
             return ""
@@ -841,12 +841,12 @@ class Selector(
         val selectors = mutableListOf(this)
         selectors.addAll(orSelectors)
 
-        val p0 = selectors[0].getIosPredicateCore()
+        val p0 = selectors[0].getIosPredicateCore(frameBounds = frameBounds)
         val predicates = mutableListOf(p0)
 
         for (i in 1 until selectors.count()) {
             val s = selectors[i]
-            val c = s.getIosPredicateCore()
+            val c = s.getIosPredicateCore(frameBounds = frameBounds)
             predicates.add(c)
         }
         val predicate = predicates.joinToString(" OR ")
@@ -854,10 +854,12 @@ class Selector(
         return predicate
     }
 
-    private fun getIosPredicateCore(): String {
+    private fun getIosPredicateCore(
+        frameBounds: Bounds?
+    ): String {
         val list = mutableListOf<String>()
 
-        addIosPredicate(list)
+        addIosPredicate(list = list, frameBounds = frameBounds)
 
         if (list.any() { it.startsWith("type==") }.not()) {
             val ignoreTypes = ignoreTypes?.split(",")?.map { it.trim() } ?: PropertiesManager.selectIgnoreTypes
@@ -886,7 +888,9 @@ class Selector(
     /**
      * getIosClassChain
      */
-    fun getIosClassChain(): String {
+    fun getIosClassChain(
+        frameBounds: Bounds? = rootBounds
+    ): String {
 
         if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {
             return ""
@@ -897,7 +901,7 @@ class Selector(
 
         val relSelectors = relativeSelectors
         if (relSelectors.isEmpty()) {
-            val pred = getIosPredicate()
+            val pred = getIosPredicate(frameBounds = frameBounds)
             val pos = getPositionCondition(this)
             if (pred.isBlank()) {
                 return "**/*$pos"
@@ -907,13 +911,13 @@ class Selector(
 
         val relativePredicates = mutableListOf<String>()
         for (r in relSelectors) {
-            val predicate = r.getIosPredicate()
+            val predicate = r.getIosPredicate(frameBounds = frameBounds)
             val pos = getPositionCondition(r)
             relativePredicates.add("/**/*[`$predicate`]$pos")
         }
 
         val subPredicate = relativePredicates.joinToString("")
-        val pred = getIosPredicate()
+        val pred = getIosPredicate(frameBounds = frameBounds)
         val pos = getPositionCondition(this)
         val predicate =
             if (pred.isBlank()) "**/*$pos$subPredicate"
@@ -1165,7 +1169,10 @@ class Selector(
         list.addFunctionByFilterName("matches(@value,%s)", "valueMatches")
     }
 
-    private fun addIosPredicate(list: MutableList<String>) {
+    private fun addIosPredicate(
+        list: MutableList<String>,
+        frameBounds: Bounds?
+    ) {
 
         list.addFunctionByFilterName("type==%s", "className", predicate = true)
 
@@ -1209,6 +1216,15 @@ class Selector(
         list.addFunctionByFilterName("rect.y==%s", "y", predicate = true, withoutQuote = true)
         list.addFunctionByFilterName("rect.width==%s", "width", predicate = true, withoutQuote = true)
         list.addFunctionByFilterName("rect.height==%s", "height", predicate = true, withoutQuote = true)
+
+        if (frameBounds != null && list.any() { it.startsWith("rect.x") }.not()) {
+            list.addFunction("rect.x>=%s", value = "0", predicate = true, withoutQuote = true)
+            list.addFunction("rect.x<%s", value = frameBounds.width.toString(), predicate = true, withoutQuote = true)
+        }
+        if (frameBounds != null && list.any() { it.startsWith("rect.y") }.not()) {
+            list.addFunction("rect.y>=%s", value = "0", predicate = true, withoutQuote = true)
+            list.addFunction("rect.y<%s", value = frameBounds.height.toString(), predicate = true, withoutQuote = true)
+        }
     }
 
     /**

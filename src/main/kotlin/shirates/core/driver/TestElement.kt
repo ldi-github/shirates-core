@@ -371,7 +371,12 @@ class TestElement(
      */
     val ancestorScrollable: TestElement
         get() {
-            return ancestorUnderScrollable.parentElement
+            val ms = Measure("ancestorScrollable")
+            try {
+                return ancestorUnderScrollable.parentElement
+            } finally {
+                ms.end()
+            }
         }
 
     /**
@@ -382,17 +387,19 @@ class TestElement(
             if (this.isScrollable) {
                 return emptyElement
             }
-            val list = this.ancestorsAndSelf
-            if (list.count() <= 1) {
-                return emptyElement
+            val ms = Measure("ancestorUnderScrollable")
+            try {
+                val list = this.ancestorsAndSelf
+                if (list.count() <= 1) {
+                    return emptyElement
+                }
+                val scrollableElement = list.lastOrNull() { it.isScrollable } ?: return emptyElement
+                val ix = list.indexOf(scrollableElement)
+                val e = list[ix + 1]
+                return e
+            } finally {
+                ms.end()
             }
-            val scrollableElement = list.lastOrNull() { it.isScrollable }
-            if (scrollableElement == null) {
-                return emptyElement
-            }
-            val ix = list.indexOf(scrollableElement)
-            val e = list[ix + 1]
-            return e
         }
 
     /**
@@ -442,7 +449,6 @@ class TestElement(
                         expression = overlayElement,
                         throwsException = false,
                         waitSeconds = 0.0,
-                        inViewOnly = true
                     )
                     if (overlay.isFound) {
                         if (this.bounds.isOverlapping(overlay.bounds)) {
@@ -1083,8 +1089,8 @@ class TestElement(
 
             if (isCacheMode) {
                 if (selector != null) {
-                    if (canSelect(selector = selector!!, inViewOnly = true)) {
-                        e = TestElementCache.select(selector = selector!!, inViewOnly = true)
+                    if (canSelect(selector = selector!!)) {
+                        e = TestElementCache.select(selector = selector!!)
                         return@execOperateCommand
                     }
                 }
@@ -1137,7 +1143,6 @@ class TestElement(
      * getRelative
      */
     fun getRelative(
-        inViewOnly: Boolean = false,
         scopeElements: List<TestElement>? = null
     ): TestElement {
 
@@ -1148,8 +1153,7 @@ class TestElement(
         val mr = Measure()
         try {
             val scopedElements = if (scopeElements.isNullOrEmpty()) {
-                if (inViewOnly) rootElement.elements.filter { it.isInView }
-                else rootElement.elements
+                rootElement.elements
             } else {
                 scopeElements
             }
@@ -1158,7 +1162,6 @@ class TestElement(
             for (r in selector!!.relativeSelectors) {
                 elm = elm.relative(
                     relativeSelector = r,
-                    inViewOnly = inViewOnly,
                     scopeElements = scopedElements
                 )
             }

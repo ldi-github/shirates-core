@@ -3,8 +3,9 @@ package shirates.core.unittest.configuration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
-import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
+import shirates.core.driver.Bounds
+import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.rootElement
@@ -197,78 +198,267 @@ class Selector_IosTest : UnitTest() {
     fun init_title_selector() {
 
         // Arrange
+        rootBounds = Bounds(0, 0, 400, 800)
         val sel = Selector("~title=TITLE1")
         // Act
         val classChain = sel.getIosClassChain()
         // Assert
-        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar'`]/**/*[`type=='XCUIElementTypeStaticText' AND (label=='TITLE1' OR value=='TITLE1')`]")
+        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]/**/*[`type=='XCUIElementTypeStaticText' AND (label=='TITLE1' OR value=='TITLE1') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]")
+    }
+
+    @Test
+    fun getIosPredicate() {
+
+        run {
+            // Arrange
+            val sel = Selector("A")
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate(frameBounds = null)).isEqualTo(
+                    "(label=='A' OR value=='A') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+        }
+
+        // Arrange
+        rootBounds = Bounds(0, 0, 400, 800)
+
+        run {
+            // Arrange
+            val sel = Selector("A\nB\nC")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label CONTAINS 'A' OR value CONTAINS 'A') AND (label CONTAINS 'B' OR value CONTAINS 'B') AND (label CONTAINS 'C' OR value CONTAINS 'C') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+
+        }
+        run {
+            // Arrange
+            val sel = Selector("text=(a|b|c)")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("(a|b|c)&&textStartsWith=(ABC|DEF)")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND (label BEGINSWITH 'ABC' OR value BEGINSWITH 'ABC' OR label BEGINSWITH 'DEF' OR value BEGINSWITH 'DEF') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("textContains=(A|B|C)&&textEndsWith=(UVW|XYZ)")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label CONTAINS 'A' OR value CONTAINS 'A' OR label CONTAINS 'B' OR value CONTAINS 'B' OR label CONTAINS 'C' OR value CONTAINS 'C') AND (label ENDSWITH 'UVW' OR value ENDSWITH 'UVW' OR label ENDSWITH 'XYZ' OR value ENDSWITH 'XYZ') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("textMatches=^A.*Z$&&id=(id1|id2)")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label MATCHES '^A.*Z$' OR value MATCHES '^A.*Z$') AND (name=='id1' OR name=='id2') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label MATCHES '^A.*Z$' OR value MATCHES '^A.*Z$') AND (name=='id1' OR name=='id2') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+        }
+        run {
+
+            run {
+                // Arrange
+                val sel = Selector("className=(c1|c2|c3)")
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(type=='c1' OR type=='c2' OR type=='c3') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector(".(c1|c2|c3)")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(type=='c1' OR type=='c2' OR type=='c3') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("@(a1|a2)*")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(name BEGINSWITH 'a1' OR name BEGINSWITH 'a2') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector(".(c1|c2)&&text1&&[2]")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(type=='c1' OR type=='c2') AND (label=='text1' OR value=='text1') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("１1")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo(
+                    "(label=='１1' OR value=='１1' OR label=='11' OR value=='11') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                )
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("id=id1||id=id2")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate())
+                    .isEqualTo("name=='id1' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication') OR name=='id2' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector()
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate()).isEqualTo("rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("literal=LITERAL")
+
+            run {
+                // Act, Assert
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate())
+                    .isEqualTo("(label=='LITERAL' OR value=='LITERAL') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
+            }
+        }
+        run {
+            // Arrange
+            val sel = Selector("literal!=no exist")
+
+            run {
+                // Arrange
+                println(sel.getIosPredicate())
+                assertThat(sel.getIosPredicate())
+                    .isEqualTo("NOT(label=='no exist' OR value=='no exist') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
+            }
+        }
+
     }
 
     @Test
     fun getIosClassChain() {
 
         // Arrange
-        val ignoreTypes = PropertiesManager.selectIgnoreTypes
-        val typeNotCondition = "NOT(${ignoreTypes.map { "type =='$it'" }.joinToString(" OR ")})"
-
-        Selector(".XCUIElementTypeStaticText").getIosClassChain()
-        Selector("title1").getIosClassChain()
+        rootBounds = Bounds(0, 0, 400, 800)
 
         run {
             // Arrange
             val sel = Selector()
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`$typeNotCondition`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
         }
         run {
             // Arrange
             val sel = Selector("[1]")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
         }
         run {
             // Arrange
             val sel = Selector("pos=1")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
         }
         run {
             // Arrange
             val sel = Selector("#container1")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
         }
         run {
             // Arrange
             val sel = Selector("<#container1>:descendant(title1)")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]/**/*[`(label=='title1' OR value=='title1') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]/**/*[`(label=='title1' OR value=='title1') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
         }
         run {
             // Arrange
             val sel = Selector(".XCUIElementTypeButton&&visible=true")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==true`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==true AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]")
         }
         run {
             // Arrange
             val sel = Selector(".XCUIElementTypeButton&&visible=false")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==false`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==false AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]")
         }
         run {
             // Arrange
             val sel = Selector(".XCUIElementTypeButton&&visible=*")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton'`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]")
         }
     }
 

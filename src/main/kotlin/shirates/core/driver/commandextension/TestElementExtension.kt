@@ -67,7 +67,7 @@ fun TestElement.refreshThisElement(): TestElement {
     }
 
     val e = try {
-        TestDriver.select(selector = sel, waitSeconds = 0.0, throwsException = false, inViewOnly = true)
+        TestDriver.select(selector = sel, waitSeconds = 0.0, throwsException = false)
     } catch (t: Throwable) {
         TestLog.warn(t.message!!)
         return TestElement.emptyElement
@@ -385,8 +385,7 @@ fun TestElement.capture(
             expression = expression,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
-            useCache = useCache,
-            inViewOnly = true
+            useCache = useCache
         )
     }
 

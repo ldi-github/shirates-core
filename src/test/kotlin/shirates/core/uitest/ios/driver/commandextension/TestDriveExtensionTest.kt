@@ -2,6 +2,8 @@ package shirates.core.uitest.ios.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
 import shirates.core.driver.branchextension.ifScreenIsNot
@@ -16,6 +18,11 @@ import shirates.core.utility.toPath
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
 class TestDriveExtensionTest : UITest() {
+
+    override fun beforeAllAfterSetup(context: ExtensionContext?) {
+
+        PropertiesManager.screenshotIntervalSeconds = 0.0
+    }
 
     @Test
     fun screenshot() {
@@ -44,7 +51,7 @@ class TestDriveExtensionTest : UITest() {
             TestLog.clear()
             // Act
             it.screenshot(filename = "filename")
-            val line = TestLog.lines.first()
+            val line = TestLog.lines.first() { it.logType != LogType.TRACE }
             // Assert
             assertThat(line.message).isEqualTo("screenshot")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)

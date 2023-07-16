@@ -35,13 +35,11 @@ internal val TestElement.innerSwitchWidgets: List<TestElement>
 
 
 internal fun TestElement.innerFlow(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerWidgets
     )
 }
@@ -50,13 +48,11 @@ internal fun TestElement.innerFlow(
  * innerFlow
  */
 fun TestElement.innerFlow(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerFlow($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerWidgets
     )
 }
@@ -65,25 +61,21 @@ fun TestElement.innerFlow(
  * innerFlow
  */
 fun TestElement.innerFlow(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerFlow($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerWidgets
     )
 }
 
 internal fun TestElement.innerLabel(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerLabelWidgets
     )
 }
@@ -92,13 +84,11 @@ internal fun TestElement.innerLabel(
  * innerLabel
  */
 fun TestElement.innerLabel(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerLabel($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerLabelWidgets
     )
 }
@@ -107,25 +97,21 @@ fun TestElement.innerLabel(
  * innerLabel
  */
 fun TestElement.innerLabel(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerLabel($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerLabelWidgets
     )
 }
 
 internal fun TestElement.innerInput(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerInputWidgets
     )
 }
@@ -134,13 +120,11 @@ internal fun TestElement.innerInput(
  * innerInput
  */
 fun TestElement.innerInput(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerInput($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerInputWidgets
     )
 }
@@ -149,25 +133,21 @@ fun TestElement.innerInput(
  * innerInput
  */
 fun TestElement.innerInput(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerInput($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerInputWidgets
     )
 }
 
 internal fun TestElement.innerImage(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerImageWidgets
     )
 }
@@ -176,13 +156,11 @@ internal fun TestElement.innerImage(
  * innerImage
  */
 fun TestElement.innerImage(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerImage($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerImageWidgets
     )
 }
@@ -191,25 +169,21 @@ fun TestElement.innerImage(
  * innerImage
  */
 fun TestElement.innerImage(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerImage($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerImageWidgets
     )
 }
 
 internal fun TestElement.innerButton(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerButtonWidgets
     )
 }
@@ -218,13 +192,11 @@ internal fun TestElement.innerButton(
  * innerButton
  */
 fun TestElement.innerButton(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerButton($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerButtonWidgets
     )
 }
@@ -233,25 +205,21 @@ fun TestElement.innerButton(
  * innerButton
  */
 fun TestElement.innerButton(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerButton($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerButtonWidgets
     )
 }
 
 internal fun TestElement.innerSwitch(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerSwitchWidgets
     )
 }
@@ -260,13 +228,11 @@ internal fun TestElement.innerSwitch(
  * innerSwitch
  */
 fun TestElement.innerSwitch(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerSwitch($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerSwitchWidgets
     )
 }
@@ -275,25 +241,21 @@ fun TestElement.innerSwitch(
  * innerSwitch
  */
 fun TestElement.innerSwitch(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerSwitch($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerSwitchWidgets
     )
 }
 
 internal fun TestElement.innerVflow(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerWidgets
     )
 }
@@ -302,13 +264,11 @@ internal fun TestElement.innerVflow(
  * innerVflow
  */
 fun TestElement.innerVflow(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerVflow($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerWidgets
     )
 }
@@ -317,25 +277,21 @@ fun TestElement.innerVflow(
  * innerVflow
  */
 fun TestElement.innerVflow(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerVflow($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerWidgets
     )
 }
 
 internal fun TestElement.innerVlabel(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerLabelWidgets
     )
 }
@@ -344,13 +300,11 @@ internal fun TestElement.innerVlabel(
  * innerVlabel
  */
 fun TestElement.innerVlabel(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerVlabel($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerLabelWidgets
     )
 }
@@ -359,25 +313,21 @@ fun TestElement.innerVlabel(
  * innerVlabel
  */
 fun TestElement.innerVlabel(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerVlabel($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = labelWidgets
     )
 }
 
 internal fun TestElement.innerVinput(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerInputWidgets
     )
 }
@@ -386,13 +336,11 @@ internal fun TestElement.innerVinput(
  * innerVinput
  */
 fun TestElement.innerVinput(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerVinput($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerInputWidgets
     )
 }
@@ -401,25 +349,21 @@ fun TestElement.innerVinput(
  * innerVinput
  */
 fun TestElement.innerVinput(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerVinput($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerInputWidgets
     )
 }
 
 internal fun TestElement.innerVimage(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerImageWidgets
     )
 }
@@ -428,13 +372,11 @@ internal fun TestElement.innerVimage(
  * innerVimage
  */
 fun TestElement.innerVimage(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerVimage($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerImageWidgets
     )
 }
@@ -443,25 +385,21 @@ fun TestElement.innerVimage(
  * innerVimage
  */
 fun TestElement.innerVimage(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerVimage($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerImageWidgets
     )
 }
 
 internal fun TestElement.innerVbutton(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerButtonWidgets
     )
 }
@@ -470,13 +408,11 @@ internal fun TestElement.innerVbutton(
  * innerVbutton
  */
 fun TestElement.innerVbutton(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerVbutton($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerButtonWidgets
     )
 }
@@ -485,25 +421,21 @@ fun TestElement.innerVbutton(
  * innerVbutton
  */
 fun TestElement.innerVbutton(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerVbutton($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerButtonWidgets
     )
 }
 
 internal fun TestElement.innerVswitch(
-    selector: Selector,
-    inViewOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        inViewOnly = inViewOnly,
         targetElements = innerSwitchWidgets
     )
 }
@@ -512,13 +444,11 @@ internal fun TestElement.innerVswitch(
  * innerVswitch
  */
 fun TestElement.innerVswitch(
-    pos: Int = 1,
-    inViewOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
     return relative(
         command = ":innerVswitch($pos)",
-        inViewOnly = inViewOnly,
         scopeElements = innerSwitchWidgets
     )
 }
@@ -527,13 +457,11 @@ fun TestElement.innerVswitch(
  * innerVswitch
  */
 fun TestElement.innerVswitch(
-    expression: String,
-    inViewOnly: Boolean = true
+    expression: String
 ): TestElement {
 
     return relative(
         command = ":innerVswitch($expression)",
-        inViewOnly = inViewOnly,
         scopeElements = innerSwitchWidgets
     )
 }

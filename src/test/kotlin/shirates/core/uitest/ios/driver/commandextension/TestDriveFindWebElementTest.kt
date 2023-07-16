@@ -78,7 +78,7 @@ class TestDriveFindWebElementTest : UITest() {
             case(99) {
                 expectation {
                     it.findWebElement("#VPN&&[2]").getAttribute("type")
-                        .thisIs("XCUIElementTypeStaticText")
+                        .thisIs("XCUIElementTypeSwitch")    // XCUIElementTypeCell is ignored (ignoreTypes)
                 }
             }
         }

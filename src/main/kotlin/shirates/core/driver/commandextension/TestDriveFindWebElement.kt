@@ -17,11 +17,10 @@ import shirates.core.logging.Measure
 fun TestDrive.findWebElements(
     selector: Selector,
     timeoutMilliseconds: Int = 0,
-    widgetOnly: Boolean = false,
-    inViewOnly: Boolean = true
+    widgetOnly: Boolean = false
 ): List<TestElement> {
 
-    val ms = Measure("$selector")
+    val ms = Measure("findWebElements $selector")
 
     val webElements = mutableListOf<TestElement>()
     if (TestMode.isNoLoadRun) {
@@ -45,14 +44,9 @@ fun TestDrive.findWebElements(
         )
     }
 
-    var result: List<TestElement> = webElements
-    if (inViewOnly) {
-        result = webElements.filter { it.isInView }
-    }
-
     ms.end()
 
-    return result
+    return webElements
 }
 
 private fun TestDrive.findWebElementsCore(
@@ -61,7 +55,7 @@ private fun TestDrive.findWebElementsCore(
     widgetOnly: Boolean
 ): List<TestElement> {
 
-    val ms = Measure("$selector")
+    val ms = Measure("findWebElementsCore $selector")
 
     val filters = selector.filterMap.values.toList()
     if (filters.isEmpty()) {
@@ -69,7 +63,9 @@ private fun TestDrive.findWebElementsCore(
             driver.appiumDriver.findElements(By.xpath("//*"))
                 .map { it.toTestElement(selector = selector) }
         } else {
-            driver.appiumDriver.findElements(AppiumBy.iOSClassChain("**/*"))
+            val sel = Selector()
+            val iosClassChain = sel.getIosClassChain()
+            driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain))
                 .map { it.toTestElement(selector = selector) }
         }
         ms.end()
@@ -105,6 +101,8 @@ private fun TestDrive.findWebElementsCore(
             if (0 <= index && index < testElements.count()) {
                 val item = testElements[index]
                 testElements = listOf(item)
+            } else {
+                testElements = listOf(TestElement.emptyElement)
             }
         }
     } else {
@@ -139,49 +137,6 @@ fun TestDrive.findWebElements(
     return findWebElements(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
 }
 
-private fun findElementsById(id: String, single: Boolean): List<TestElement> {
-
-    if (single) {
-        val e = testDrive.findWebElementBy(locator = By.id(id), timeoutMilliseconds = 0)
-        return listOf(e)
-    }
-    return appiumDriver.findElements(By.id(id)).map { it.toTestElement() }
-}
-
-private fun findElementsByClassName(className: String, single: Boolean): List<TestElement> {
-
-    if (single) {
-        val e = testDrive.findWebElementBy(locator = By.className(className), timeoutMilliseconds = 0)
-        return listOf(e)
-    }
-    return appiumDriver.findElements(By.className(className)).map { it.toTestElement() }
-}
-
-private fun findElementsByXpath(xpath: String, single: Boolean): List<TestElement> {
-
-    if (single) {
-        val e = testDrive.findWebElementBy(locator = By.xpath(xpath), timeoutMilliseconds = 0)
-        return listOf(e)
-    }
-    return appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
-}
-
-private fun getAttrName(noun: String): String {
-
-    val attrName = when (noun) {
-        "id" -> if (isAndroid) "resource-id" else "name"
-        "className" -> if (isAndroid) "class" else "type"
-        "literal" -> if (isAndroid) "text" else "label"
-        "text" -> if (isAndroid) "text" else "label"
-        "access" -> if (isAndroid) "content-desc" else "name"
-        "value" -> if (isAndroid) "text" else "value"
-        "xpath" -> ""
-        "pos" -> ""
-        else -> noun
-    }
-    return attrName
-}
-
 /**
  * findWebElement
  */
@@ -189,14 +144,12 @@ fun TestDrive.findWebElement(
     selector: Selector,
     timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
     throwsException: Boolean = false,
-    inViewOnly: Boolean = true,
     widgetOnly: Boolean = false
 ): TestElement {
 
     val testElements = findWebElements(
         selector = selector,
         timeoutMilliseconds = timeoutMilliseconds,
-        inViewOnly = inViewOnly,
         widgetOnly = widgetOnly
     )
     if (testElements.isEmpty() && throwsException) {
@@ -213,15 +166,13 @@ fun TestDrive.findWebElement(
  */
 fun TestDrive.findWebElement(
     expression: String,
-    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
-    inViewOnly: Boolean = true
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
 ): TestElement {
 
     val selector = getSelector(expression = expression)
     return findWebElement(
         selector = selector,
         timeoutMilliseconds = timeoutMilliseconds,
-        inViewOnly = inViewOnly
     )
 }
 
@@ -230,6 +181,7 @@ fun TestDrive.findWebElement(
  */
 internal fun TestDrive.findWebElementBy(locator: By, timeoutMilliseconds: Int): TestElement {
 
+    val ms = Measure("findWebElementBy $locator")
     var e: TestElement? = null
     try {
         testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
@@ -239,6 +191,7 @@ internal fun TestDrive.findWebElementBy(locator: By, timeoutMilliseconds: Int): 
         e = TestElement.emptyElement
         e!!.lastError = t
     }
+    ms.end()
     return e!!
 }
 
@@ -247,6 +200,7 @@ internal fun TestDrive.findWebElementBy(locator: By, timeoutMilliseconds: Int): 
  */
 internal fun TestDrive.findWebElementsBy(locator: By, timeoutMilliseconds: Int): List<TestElement> {
 
+    val ms = Measure("findWebElementsBy $locator")
     var elements = mutableListOf<TestElement>()
     try {
         testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
@@ -255,5 +209,6 @@ internal fun TestDrive.findWebElementsBy(locator: By, timeoutMilliseconds: Int):
     } catch (t: org.openqa.selenium.NoSuchElementException) {
         elements.add(TestElement.emptyElement)
     }
+    ms.end()
     return elements
 }

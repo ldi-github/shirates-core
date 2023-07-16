@@ -4,7 +4,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.Const
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
@@ -19,6 +21,11 @@ import java.nio.file.Files
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriverTest : UITest() {
+
+    override fun beforeAllAfterSetup(context: ExtensionContext?) {
+
+        PropertiesManager.screenshotIntervalSeconds = 0.0
+    }
 
     @Test
     @Order(10)
