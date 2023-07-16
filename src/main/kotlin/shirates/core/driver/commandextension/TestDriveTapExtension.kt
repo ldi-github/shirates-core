@@ -227,7 +227,6 @@ private fun TestDrive.tapWithScrollCommandCore(
     scrollMaxCount: Int,
     holdSeconds: Double,
     tapMethod: TapMethod,
-    visible: String? = null
 ): TestElement {
 
     val testElement = getThisOrRootElement()
@@ -243,7 +242,6 @@ private fun TestDrive.tapWithScrollCommandCore(
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            visible = visible
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         e = e.tap(holdSeconds = holdSeconds, tapMethod = tapMethod)
@@ -261,7 +259,6 @@ fun TestDrive.tapWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    visible: String? = null
 ): TestElement {
 
     val command = "tapWithScrollDown"
@@ -276,7 +273,6 @@ fun TestDrive.tapWithScrollDown(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         tapMethod = tapMethod,
-        visible = visible
     )
 
     return e
@@ -292,7 +288,6 @@ fun TestDrive.tapWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    visible: String? = null
 ): TestElement {
 
     val command = "tapWithScrollUp"
@@ -307,7 +302,6 @@ fun TestDrive.tapWithScrollUp(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         tapMethod = tapMethod,
-        visible = visible
     )
 
     return e
@@ -323,7 +317,6 @@ fun TestDrive.tapWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    visible: String? = null
 ): TestElement {
 
     val command = "tapWithScrollRight"
@@ -338,7 +331,6 @@ fun TestDrive.tapWithScrollRight(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         tapMethod = tapMethod,
-        visible = visible
     )
 
     return e
@@ -354,7 +346,6 @@ fun TestDrive.tapWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    visible: String? = null
 ): TestElement {
 
     val command = "tapWithScrollLeft"
@@ -369,7 +360,6 @@ fun TestDrive.tapWithScrollLeft(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         tapMethod = tapMethod,
-        visible = visible
     )
 
     return e

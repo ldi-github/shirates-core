@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage
 fun List<TestElement>.filterBySelector(
     selector: Selector,
     throwsException: Boolean = false,
-    visible: String? = null
 ): MutableList<TestElement> {
 
     if (selector.pos == 0) {
@@ -29,9 +28,6 @@ fun List<TestElement>.filterBySelector(
     val filtered = mutableListOf<TestElement>()
     for (sel in selectors) {
         // select
-        if (isiOS) {
-            sel.visible = sel.visible ?: visible
-        }
         val list = filterBySelectorCore(list = this, selector = sel)
 
         for (e in list) {

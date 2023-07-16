@@ -946,7 +946,6 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
-        visible: String? = null,
         log: Boolean = false
     ): TestElement {
 
@@ -966,7 +965,6 @@ object TestDriver {
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
                 useCache = useCache,
-                visible = visible
             )
         }
 
@@ -983,7 +981,6 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
-        visible: String? = null
     ): TestElement {
 
         if (selector.isRelative) {
@@ -997,10 +994,6 @@ object TestDriver {
         }
 
         lastElement = TestElement.emptyElement
-
-        if (isiOS) {
-            selector.visible = selector.visible ?: visible
-        }
 
         var selectedElement: TestElement
 
@@ -1038,7 +1031,6 @@ object TestDriver {
                     startMarginRatio = scrollStartMarginRatio,
                     scrollMaxCount = scrollMaxCount,
                     throwsException = throwsException,
-                    visible = visible
                 )
             }
 
@@ -1349,7 +1341,6 @@ object TestDriver {
             if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
             else testContext.scrollHorizontalMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
-        visible: String? = null,
         throwsException: Boolean = true
     ): TestElement {
 
@@ -1360,7 +1351,6 @@ object TestDriver {
                 selector = selector,
                 waitSeconds = 0.0,
                 throwsException = false,
-                visible = visible
             )
             ms.end()
             e.isSafe
@@ -1395,7 +1385,6 @@ object TestDriver {
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
-        visible: String? = null,
         throwsException: Boolean = true
     ): TestElement {
         val sel = expandExpression(expression = expression)
@@ -1408,7 +1397,6 @@ object TestDriver {
                 durationSeconds = scrollDurationSeconds,
                 startMarginRatio = scrollStartMarginRatio,
                 scrollMaxCount = scrollMaxCount,
-                visible = visible,
                 throwsException = throwsException
             )
         }

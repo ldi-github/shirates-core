@@ -2,7 +2,6 @@ package shirates.core.driver
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElement.Companion.emptyElement
-import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 
@@ -20,7 +19,6 @@ val TestElement.descendantsInBounds: List<TestElement>
  */
 fun TestElement.findInDescendantsAndSelf(
     expression: String,
-    visible: String? = null,
 ): TestElement {
 
     TestLog.trace()
@@ -30,10 +28,6 @@ fun TestElement.findInDescendantsAndSelf(
         sel = Selector(expression = expression)
     } else {
         sel = TestDriver.expandExpression(expression = expression)
-    }
-
-    if (isiOS) {
-        sel.visible = sel.visible ?: visible
     }
 
     TestDriver.lastElement = findInDescendantsAndSelf(selector = sel)
@@ -46,12 +40,11 @@ fun TestElement.findInDescendantsAndSelf(
  */
 fun TestElement.findInDescendantsAndSelf(
     selector: Selector,
-    visible: String? = null,
 ): TestElement {
 
     TestLog.trace()
 
-    val elms = descendantsAndSelf.filterBySelector(selector = selector, visible = visible)
+    val elms = descendantsAndSelf.filterBySelector(selector = selector)
     var a = elms.firstOrNull()
 
     if (a == null) {
