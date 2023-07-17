@@ -180,7 +180,7 @@
     - [Adapting to changes in OS message](in_action/adapting_to_environments/adapting_to_changes_in_os_messages.md)
 - Handling irregulars
     - [Irregular Handler(Global Handler)](in_action/handling_irregulars/irregular_handler.md)
-    - [Screen Handler](in_action/handling_irregulars/)
+    - [Screen Handler(onScreen function)](in_action/handling_irregulars/screen_handler.md)
 - Test Fixture
     - [Test fixture](in_action/test_fixture/test_fixture.md)
 - Image matching
