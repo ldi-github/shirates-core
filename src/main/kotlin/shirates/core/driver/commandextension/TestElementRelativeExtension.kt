@@ -5,6 +5,7 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.removeRedundantExpression
 import shirates.core.driver.*
 import shirates.core.logging.Measure
+import shirates.core.logging.Message
 
 /**
  * relative
@@ -41,11 +42,42 @@ fun TestElement.relative(
     }
 }
 
+private val commandsAllowedInDirectAccessMode = listOf(
+    ":child",
+    ":sibling",
+    ":parent",
+    ":ancestor",
+    ":descendant",
+    ":next",
+    ":previous",
+    ":nextInput",
+    ":preInput",
+    ":nextLabel",
+    ":preLabel",
+    ":nextImage",
+    ":preImage",
+    ":nextButton",
+    ":preButton",
+    ":nextSwitch",
+    ":preSwitch",
+    ":not"
+)
+
 internal fun TestElement.relative(
     relativeSelector: Selector,
     newSelector: Selector = this.getChainedSelector(relativeSelector = relativeSelector),
     scopeElements: List<TestElement>? = null
 ): TestElement {
+
+    if (testContext.useCache.not()) {
+        if (commandsAllowedInDirectAccessMode.contains(relativeSelector.command).not()) {
+            Message.message(
+                id = "relativeSelectorNotSupportedInDirectAccessMode",
+                arg1 = relativeSelector.toString(),
+                arg2 = relativeSelector.expression
+            )
+        }
+    }
 
     val oldSelector = this.selector
 

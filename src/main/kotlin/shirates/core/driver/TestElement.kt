@@ -1,5 +1,6 @@
 package shirates.core.driver
 
+import io.appium.java_client.AppiumBy
 import org.json.JSONObject
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
@@ -221,9 +222,16 @@ class TestElement(
                 return descendantsCache!!
             }
 
-            val xpath = this.getUniqueXpath() + "/descendant::*"
-            descendantsCache = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
-                .toMutableList()
+            if (isAndroid) {
+                val xpath = this.getUniqueXpath() + "/descendant::*"
+                descendantsCache =
+                    driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+                        .toMutableList()
+            } else {
+                val iosClassChain = this.getUniqueSelector().getIosClassChain() + "/**/*"
+                descendantsCache = driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain))
+                    .map { it.toTestElement() }.toMutableList()
+            }
             return descendantsCache!!
         }
 

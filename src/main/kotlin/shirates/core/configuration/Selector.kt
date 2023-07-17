@@ -276,6 +276,23 @@ class Selector(
             return command?.startsWith(":") ?: false
         }
 
+    /**
+     * isContainingRelative
+     */
+    val isContainingRelative: Boolean
+        get() {
+            if (isRelative) {
+                return true
+            }
+            if (relativeSelectors.any()) {
+                return true
+            }
+            if (orSelectors.any() { it.isContainingRelative }) {
+                return true
+            }
+            return alternativeSelectors.any() { it.isContainingRelative }
+        }
+
     val hasMatches: Boolean
         get() {
             fun hasAnyMatches(sel: Selector): Boolean {
@@ -1217,14 +1234,18 @@ class Selector(
         list.addFunctionByFilterName("rect.width==%s", "width", predicate = true, withoutQuote = true)
         list.addFunctionByFilterName("rect.height==%s", "height", predicate = true, withoutQuote = true)
 
-        if (frameBounds != null && list.any() { it.startsWith("rect.x") }.not()) {
-            list.addFunction("rect.x>=%s", value = "0", predicate = true, withoutQuote = true)
-            list.addFunction("rect.x<%s", value = frameBounds.width.toString(), predicate = true, withoutQuote = true)
-        }
-        if (frameBounds != null && list.any() { it.startsWith("rect.y") }.not()) {
-            list.addFunction("rect.y>=%s", value = "0", predicate = true, withoutQuote = true)
-            list.addFunction("rect.y<%s", value = frameBounds.height.toString(), predicate = true, withoutQuote = true)
-        }
+        /**
+         * Filtering elements in view by position was abandoned.
+         * Location is not reliable in iOS (XCUITest).
+         */
+//        if (frameBounds != null && list.any() { it.startsWith("rect.x") }.not()) {
+//            list.addFunction("rect.x>=%s", value = "0", predicate = true, withoutQuote = true)
+//            list.addFunction("rect.x<%s", value = frameBounds.width.toString(), predicate = true, withoutQuote = true)
+//        }
+//        if (frameBounds != null && list.any() { it.startsWith("rect.y") }.not()) {
+//            list.addFunction("rect.y>=%s", value = "0", predicate = true, withoutQuote = true)
+//            list.addFunction("rect.y<%s", value = frameBounds.height.toString(), predicate = true, withoutQuote = true)
+//        }
     }
 
     /**

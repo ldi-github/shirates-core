@@ -10,8 +10,9 @@ You can access elements with direct access mode.
 ### Cons.
 
 - Slower than cache mode when get many elements
-- Relative selector is not available
-- currentScreen is not set automatically. You have to set currentScreen with `screenIs`/`switchScreen` function manually
+- Direction based/Flow based relative selector is not available
+- `currentScreen` is not set automatically. You have to set `currentScreen` with `screenIs`/`switchScreen` function
+  manually
   before using selector nickname
 - Other functions may be restricted
 

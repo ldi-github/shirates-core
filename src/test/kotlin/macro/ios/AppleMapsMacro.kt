@@ -31,6 +31,9 @@ object AppleMapsMacro : TestDrive {
         if (it.canSelect("Close")) {
             it.tap()
         }
+        if (it.canSelect("Dismiss")) {
+            it.tap()
+        }
         if (it.canSelect("What’s New in Maps")) {
             it.tap("Continue")
             it.wait()
