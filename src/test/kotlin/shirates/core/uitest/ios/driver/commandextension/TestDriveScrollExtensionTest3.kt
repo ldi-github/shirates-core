@@ -1,6 +1,6 @@
 package shirates.core.uitest.ios.driver.commandextension
 
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -8,7 +8,6 @@ import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestDriverEventContext
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.descendants
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import utility.handleIrregulars
@@ -53,7 +52,7 @@ class TestDriveScrollExtensionTest3 : UITest() {
         // Assert
         val lastItem =
             it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }
-        Assertions.assertThat(lastItem.label)
+        assertThat(lastItem.label)
             .isEqualTo("The graphics performance HUD shows framerate, GPU time, memory usage, and can log performance data for later analysis.")
     }
 
@@ -64,14 +63,14 @@ class TestDriveScrollExtensionTest3 : UITest() {
         // Arrange
         it.macro("[Developer Screen]")
         TestElementCache.scanResults.clear()
-        Assertions.assertThat(TestElementCache.scanResults.count() == 0).isTrue()
+        assertThat(TestElementCache.scanResults.count() == 0).isTrue()
         // Act
         it.scanElements()
         // Assert
-        Assertions.assertThat(TestElementCache.scanResults.count() > 0).isTrue()
-        Assertions.assertThat(TestElementCache.scanResults.first().element.descendants.any() { it.label == "Dark Appearance" })
+        assertThat(TestElementCache.scanResults.count() > 0).isTrue()
+        assertThat(TestElementCache.scanResults.first().element.descendants.any() { it.label == "Dark Appearance" })
             .isTrue()
-        Assertions.assertThat(TestElementCache.scanResults.last().element.descendants.any() { it.label == "Enable MIDI-CI" })
+        assertThat(TestElementCache.scanResults.last().element.descendants.any() { it.label == "Enable MIDI-CI" })
             .isTrue()
     }
 

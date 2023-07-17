@@ -268,6 +268,93 @@
 
 これにより画面ニックネーム`[Screen A]`で`[Header Title]`、`[Footer Button A]`、`[Footer Button A]`を使用することができます。
 
+## パフォーマンスと安定性のチューニング
+
+### weight
+
+shirates-core は現在の画面名(currentScreen)を自動で決定します。
+非常に多くの画面ニックネームファイルを作成すると処理が遅くなります。
+画面ニックネームファイルに重みを付けることができます。
+大きい数字の方が優先度は高くなります。
+
+```
+  "key": "[General Screen]",
+
+  "identity": "~title=General",
+  "weight": "100"
+```
+
+### start-elements, end-elements
+
+下方向へスクロール（または上方向へスクロール）する場合、shirates-coreはスクロールの終端を自動で検出します。
+**start-elements** / **end-elements** をヒントとして記述することができます。
+これによりスクロール時のパフォーマンスが向上します。
+
+```
+  "scroll": {
+    "start-elements": "[Profile Icon]",
+    "end-elements": "[Developer]"
+  }
+```
+
+You can specify multiple elements as follows.
+
+```
+"[Element A][Element B]"
+```
+
+### overlay-elements
+
+スクロールしてからタップする場合、対象の要素は他の要素の下に隠れている場合があります。
+この状況においてはタップするとテストケースが失敗します。
+**overlay-elements** を記述することでこれを避けることができます。
+
+```
+  "scroll": {
+    "overlay-elements": "[NavigationBar]"
+  }
+```
+
+## その他
+
+### default
+
+画面のデフォルトの要素を **default** で指定できます。
+
+```json
+{
+  "key": "[General Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=General",
+  "weight": "100",
+
+  "selectors": {
+    "[<Settings]": "Settings&&.XCUIElementTypeButton",
+    "[General]": "",
+    "[NavigationBar]": ".XCUIElementTypeNavigationBar",
+
+    "[About]": "",
+    "[Keyboard]": "",
+    "[Game Controller]": "",
+    "[Fonts]": "",
+    "[Language & Region]": "",
+    "[Dictionary]": "",
+    "[Reset]": ""
+  },
+  "default": "[<Settings]",
+
+  "scroll": {
+    "overlay-elements": "[NavigationBar]"
+  }
+
+}
+```
+
+`tapDefault` 関数を使用するとdefaultで指定された要素をタップすることができます。
+
 ### Link
 
 - [セレクターニックネーム](selector_nickname_ja.md)

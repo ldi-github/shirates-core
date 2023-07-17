@@ -3,9 +3,9 @@ package shirates.core.uitest.android.driver.commandextension
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.openqa.selenium.InvalidSelectorException
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.exception.TestDriverException
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -18,7 +18,8 @@ class TestDriveFindWebElementTest : UITest() {
         scenario {
             case(1, "id") {
                 expectation {
-                    it.findWebElement("#com.android.settings:id/homepage_title").getAttribute("text").thisIs("Settings")
+                    it.findWebElement("#com.android.settings:id/homepage_title").getAttribute("text")
+                        .thisIs("Settings")
                     it.findWebElement("#homepage_title").getAttribute("text").thisIs("Settings")
                 }
             }
@@ -41,7 +42,10 @@ class TestDriveFindWebElementTest : UITest() {
                     it.findWebElement("Network &*").getAttribute("text").thisIs("Network & internet")
                     it.findWebElement("*work & inter*").getAttribute("text").thisIs("Network & internet")
                     it.findWebElement("*& internet").getAttribute("text").thisIs("Network & internet")
-                    it.findWebElement("textMatches=^Net.*net$").getAttribute("text").thisIs("Network & internet")
+                    assertThatThrownBy {
+                        it.findWebElement("textMatches=^Net.*net$").getAttribute("text").thisIs("Network & internet")
+                    }.isInstanceOf(InvalidSelectorException::class.java)
+                        .hasMessageStartingWith("javax.xml.xpath.XPathExpressionException")
                 }
             }
             case(5, "access") {
@@ -54,8 +58,11 @@ class TestDriveFindWebElementTest : UITest() {
                         .thisIs("Profile picture, double tap to open Google Account")
                     it.findWebElement("@*to open Google Account").getAttribute("content-desc")
                         .thisIs("Profile picture, double tap to open Google Account")
-                    it.findWebElement("accessMatches=^Profile.*Account$").getAttribute("content-desc")
-                        .thisIs("Profile picture, double tap to open Google Account")
+                    assertThatThrownBy {
+                        it.findWebElement("accessMatches=^Profile.*Account$").getAttribute("content-desc")
+                            .thisIs("Profile picture, double tap to open Google Account")
+                    }.isInstanceOf(InvalidSelectorException::class.java)
+                        .hasMessageStartingWith("javax.xml.xpath.XPathExpressionException")
                 }
             }
             case(6, "value") {
@@ -65,10 +72,8 @@ class TestDriveFindWebElementTest : UITest() {
             }
             case(7, "pos") {
                 expectation {
-                    assertThatThrownBy {
-                        it.findWebElement(".android.widget.TextView&&[999]")
-                    }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage("Element not found. (selector=<.android.widget.TextView&&[999]>)")
+                    it.findWebElement(".android.widget.TextView&&[999]")
+                        .isEmpty.thisIsTrue()
                 }
             }
             case(99) {
@@ -80,30 +85,6 @@ class TestDriveFindWebElementTest : UITest() {
                 }
             }
         }
-    }
-
-    @Test
-    @Order(20)
-    fun canFindWebElementTest() {
-
-        scenario {
-            case(1) {
-                expectation {
-                    it.canFindWebElement("Network & internet").thisIsTrue()
-                    it.canFindWebElement("Network & internet2").thisIsFalse()
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(30)
-    fun relativeSelector_exception() {
-
-        assertThatThrownBy {
-            it.findWebElement("<Network & internet>:belowLabel")
-        }.isInstanceOf(TestDriverException::class.java)
-            .hasMessage("Relative selector is not supported in finding WebElement. Use cache mode.(selector=<Network & internet>:belowLabel, expression=<Network & internet>:belowLabel)")
     }
 
 }

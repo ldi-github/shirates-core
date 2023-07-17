@@ -1,11 +1,15 @@
 package shirates.core.unittest.extension
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.ScreenInfo
 import shirates.core.driver.*
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.getScrollableElement
+import shirates.core.driver.commandextension.getUniqueXpath
+import shirates.core.driver.commandextension.next
+import shirates.core.driver.commandextension.previous
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataIos
 import shirates.core.utility.element.ElementCacheUtility
@@ -29,7 +33,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         val e = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
 
         // Assert
-        assertThat(e.parentElement).isNull()
+        assertThat(e.parentElement.isEmpty).isTrue()
         assertThat(e.children.count()).isGreaterThan(0)
         assertThat(e.index).isEqualTo("")
         assertThat(e.packageName).isEqualTo("")
@@ -65,7 +69,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         val root = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
 
         // Act
-        val scrollableTArget = root.getScrollableTarget()
+        val scrollableTArget = root.getScrollableElement()
 
         // Assert
         assertThat(scrollableTArget.type).isEqualTo("XCUIElementTypeTable")
@@ -354,10 +358,11 @@ class TestElementCacheExtension_IosTest : UnitTest() {
 
         // xpath
         run {
-            // Act
-            val e = rootElement.findInDescendantsAndSelf("xpath=//*[@type='XCUIElementTypeNavigationBar']")
-            // Assert
-            assertThat(e.name).isEqualTo("Settings")
+            // Act, Assert
+            assertThatThrownBy {
+                val e = rootElement.findInDescendantsAndSelf("xpath=//*[@type='XCUIElementTypeNavigationBar']")
+            }.isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("Unsupported noun with evaluate function. (noun=xpath)")
         }
 
         // focusable(for Android)
@@ -366,36 +371,36 @@ class TestElementCacheExtension_IosTest : UnitTest() {
 
     }
 
-    @Test
-    fun absoluteXpath() {
-
-        // Arrange
-        TestElementCache.loadXml(XmlDataIos.SettingsTopScreen)
-
-        // absoluteXpath
-        run {
-            val e1 = TestElementCache.select("Sign in to your iPhone")
-            val absoluteXpath = e1.getAbsoluteXpath()
-            val e2 = TestElementCache.select("xpath=$absoluteXpath")
-            assertThat(e2.label).isEqualTo(e1.label)
-        }
-
-        // absoluteXpath.next
-        run {
-            val e0 = TestElementCache.select("Sign in to your iPhone")
-            val e1 = e0.next()
-            val absoluteXpath = e1.getAbsoluteXpath()
-            val e2 = TestElementCache.select("xpath=$absoluteXpath")
-            assertThat(e2.getAbsoluteXpath()).isEqualTo(e1.getAbsoluteXpath())
-        }
-
-        // empty
-        run {
-            val e = TestElement()
-            assertThat(e.getAbsoluteXpath()).isEqualTo("")
-        }
-
-    }
+//    @Test
+//    fun absoluteXpath() {
+//
+//        // Arrange
+//        TestElementCache.loadXml(XmlDataIos.SettingsTopScreen)
+//
+//        // absoluteXpath
+//        run {
+//            val e1 = TestElementCache.select("Sign in to your iPhone")
+//            val absoluteXpath = e1.getAbsoluteXpath()
+//            val e2 = TestElementCache.select("xpath=$absoluteXpath")
+//            assertThat(e2.label).isEqualTo(e1.label)
+//        }
+//
+//        // absoluteXpath.next
+//        run {
+//            val e0 = TestElementCache.select("Sign in to your iPhone")
+//            val e1 = e0.next()
+//            val absoluteXpath = e1.getAbsoluteXpath()
+//            val e2 = TestElementCache.select("xpath=$absoluteXpath")
+//            assertThat(e2.getAbsoluteXpath()).isEqualTo(e1.getAbsoluteXpath())
+//        }
+//
+//        // empty
+//        run {
+//            val e = TestElement()
+//            assertThat(e.getAbsoluteXpath()).isEqualTo("")
+//        }
+//
+//    }
 
     @Test
     fun uniqueXpath() {

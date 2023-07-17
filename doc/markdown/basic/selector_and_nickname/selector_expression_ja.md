@@ -26,34 +26,36 @@ it.select("About phone||About emulated device") // textフィルターを"||"(or
 
 Shiratesの **フィルター式** は画面要素をフィルターするための条件を記述するための式です。
 
-| フィルター            | 完全形                       | 短縮形         | Androidの属性   | iOSの属性  |
-|:-----------------|:--------------------------|:------------|:-------------|:--------|
-| text             | text=text1                | text1       | text         | label   |
-| textStartsWith   | textStartsWith=text1      | text1*      | text         | label   |
-| textContains     | textContains=text1        | \*text1*    | text         | label   |
-| textEndsWith     | textEndsWith=text1        | *text1      | text         | label   |
-| textMatches      | textMatches=^text$        | n/a         | text         | label   |
-| literal          | literal=literal1          | 'literal1'  | text         | label   |
-| id               | id=id1                    | #id1        | resource-id  | name    |
-| access           | access=access1            | @access1    | content-desc | name    |
-| accessStartsWith | accessStartsWith=access1  | @access1*   | content-desc | name    |
-| accessContains   | accessContains=access1    | @\*access1* | content-desc | name    |
-| accessEndsWith   | accessEndsWith=access1    | @*access1   | content-desc | name    |
-| accessMatches    | accessMatches=^access1$   | n/a         | content-desc | name    |
-| value            | value=value1              | n/a         | text         | value   |
-| valueStartsWith  | valueStartsWith=value1    | n/a         | text         | value   |
-| valueContains    | valueContains=value1      | n/a         | text         | value   |
-| valueEndsWith    | valueEndsWith=value1      | n/a         | text         | value   |
-| valueMatches     | valueMatches=^value1$     | n/a         | text         | value   |
-| class            | class=class1              | .class1     | class        | type    |
-| focusable        | focusable=true            | n/a         | focusable    | n/a     |
-| scrollable       | scrollable=true           | n/a         | scrollable   | n/a     |
-| selected         | selected=true             | n/a         | selected     | n/a     |
-| visible          | visible=true              | n/a         | n/a          | visible |
-| xpath            | xpath=//*[@text='text1']  | n/a         | (任意の属性)      | (任意の属性) |
-| pos              | pos=2                     | [2]         | n/a          | n/a     |
-| ignoreTypes      | ignoreTypes=Class1,Class2 | n/a         | class        | type    |
-| image            | image=image1.png          | image1.png  | n/a          | n/a     |
+| フィルター            | 完全形                       | 短縮形         | Androidの属性   | iOSの属性  | 備考   |
+|:-----------------|:--------------------------|:------------|:-------------|:--------|:-----|
+| text             | text=text1                | text1       | text         | label   |      |
+| textStartsWith   | textStartsWith=text1      | text1*      | text         | label   |      |
+| textContains     | textContains=text1        | \*text1*    | text         | label   |      |
+| textEndsWith     | textEndsWith=text1        | *text1      | text         | label   |      |
+| textMatches      | textMatches=^text$        | n/a         | text         | label   |      |
+| literal          | literal=literal1          | 'literal1'  | text         | label   |      |
+| id               | id=id1                    | #id1        | resource-id  | name    |      |
+| access           | access=access1            | @access1    | content-desc | name    |      |
+| accessStartsWith | accessStartsWith=access1  | @access1*   | content-desc | name    |      |
+| accessContains   | accessContains=access1    | @\*access1* | content-desc | name    |      |
+| accessEndsWith   | accessEndsWith=access1    | @*access1   | content-desc | name    |      |
+| accessMatches    | accessMatches=^access1$   | n/a         | content-desc | name    |      |
+| value            | value=value1              | n/a         | text         | value   |      |
+| valueStartsWith  | valueStartsWith=value1    | n/a         | text         | value   |      |
+| valueContains    | valueContains=value1      | n/a         | text         | value   |      |
+| valueEndsWith    | valueEndsWith=value1      | n/a         | text         | value   |      |
+| valueMatches     | valueMatches=^value1$     | n/a         | text         | value   |      |
+| class            | class=class1              | .class1     | class        | type    |      |
+| focusable        | focusable=true            | n/a         | focusable    | n/a     |      |
+| scrollable       | scrollable=true           | n/a         | scrollable   | n/a     |      |
+| selected         | selected=true             | n/a         | selected     | n/a     |      |
+| visible          | visible=true              | n/a         | n/a          | visible | ※非推奨 |
+| xpath            | xpath=//*[@text='text1']  | n/a         | (任意の属性)      | (任意の属性) |      |
+| pos              | pos=2                     | [2]         | n/a          | n/a     |      |
+| ignoreTypes      | ignoreTypes=Class1,Class2 | n/a         | class        | type    |      |
+| image            | image=image1.png          | image1.png  | n/a          | n/a     |      |
+
+※iOSのvisible属性は要素が画面に表示されているかどうかの判定には利用できないので非推奨です。
 
 ## フィルターにおける複数値の指定
 

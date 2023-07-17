@@ -2,6 +2,7 @@ package shirates.core.configuration.repository
 
 import shirates.core.configuration.ScreenInfo
 import shirates.core.configuration.Selector
+import shirates.core.configuration.isValidNickname
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
@@ -19,16 +20,11 @@ object ScreenRepository {
     lateinit var importDirectories: List<Path>
 
     val screenInfoMap = mutableMapOf<String, ScreenInfo>()
+    val nicknameIndex = mutableMapOf<String, MutableList<ScreenInfo>>()
 
-    private val mScreenInfoList = mutableListOf<ScreenInfo>()
-    val screenInfoList: List<ScreenInfo>
+    val screenInfoSearchList: List<ScreenInfo>
         get() {
-            if (mScreenInfoList.isEmpty()) {
-                mScreenInfoList.addAll(
-                    screenInfoMap.toList().map { it.second }.sortedByDescending { it.identitySelectors.count() }
-                )
-            }
-            return mScreenInfoList
+            return screenInfoMap.values.sortedByDescending { it.searchWeight }
         }
 
     /**
@@ -36,7 +32,6 @@ object ScreenRepository {
      */
     fun clear() {
         screenInfoMap.clear()
-        mScreenInfoList.clear()
     }
 
     /**
@@ -101,6 +96,7 @@ object ScreenRepository {
         this.clear()
 
         loadFromFiles()
+        updateNicknameIndex()
     }
 
     internal fun loadFromFiles() {
@@ -196,4 +192,21 @@ object ScreenRepository {
         screenInfo.scrollInfo.importFrom(includedScreenInfo.scrollInfo)
     }
 
+    /**
+     * updateNicknameIndex
+     */
+    fun updateNicknameIndex() {
+
+        nicknameIndex.clear()
+        for (screenInfo in screenInfoSearchList.toList()) {
+            val nicknames = screenInfo.selectors.values.map { it.nickname ?: "" }.filter { it.isValidNickname() }
+            for (nickname in nicknames) {
+                val screensForNickname =
+                    if (nicknameIndex.containsKey(nickname)) nicknameIndex[nickname]!!
+                    else mutableListOf()
+                screensForNickname.add(screenInfo)
+                nicknameIndex[nickname] = screensForNickname
+            }
+        }
+    }
 }

@@ -20,10 +20,10 @@ class iOSPressKey1 : UITest() {
                     it.macro("[iOS Search Screen]")
                     it.select("[SpotlightSearchField]")
                         .clearInput()
-                        .sendKeys("safa")
-                        .tap("Safari")
+                        .sendKeys("safari")
+                        .tap("safari")
                         .wait()
-                        .appIs("Safari")
+                        .appIs("[Safari]")
                 }.action {
                     it.pressBack()
                 }.expectation {

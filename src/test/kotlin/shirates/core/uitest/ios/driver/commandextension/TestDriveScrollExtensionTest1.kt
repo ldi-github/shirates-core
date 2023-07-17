@@ -59,18 +59,18 @@ class TestDriveScrollExtensionTest1 : UITest() {
         val scrollableElements = rootElement.getScrollableElementsInDescendants()
         val largestScrollableElement = scrollableElements.filter { it.isVisible }.maxByOrNull { it.bounds.area }!!
         // Act
-        val target1 = largestScrollableElement.getScrollableTarget()
+        val target1 = largestScrollableElement.getScrollableElement()
         // Assert
-        assertThat(target1).isEqualTo(largestScrollableElement)
+        assertThat(target1.toString()).isEqualTo(largestScrollableElement.toString())
 
 
         // Arrange
         val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
         val nonScrollableElement = rootElement
-        val target2 = nonScrollableElement.getScrollableTarget()
+        val target2 = nonScrollableElement.getScrollableElement()
         // Act, Assert
-        assertThat(target2).isNotEqualTo(nonScrollableElement)
-        assertThat(target2).isEqualTo(largestScrollableTarget)
+        assertThat(target2.toString()).isNotEqualTo(nonScrollableElement.toString())
+        assertThat(target2.toString()).isEqualTo(largestScrollableTarget.toString())
     }
 
     @Unstable("[iOS Settings Top Screen] is displayed(currentScreen=, expected identity=[Settings])")

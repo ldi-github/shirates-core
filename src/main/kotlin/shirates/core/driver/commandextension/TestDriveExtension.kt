@@ -3,17 +3,31 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.NicknameUtility
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 
 /**
- * getTestElement
+ * Returns this if this is TestElement
+ * Else lastElement
  */
-fun TestDrive.getTestElement(): TestElement {
+internal fun TestDrive.getThisOrLastElement(): TestElement {
+    if (this is TestElement) {
+        return this
+    }
+    return TestDriver.lastElement
+}
 
-    return if (this is TestElement) this
-    else rootElement
+/**
+ * Returns this if this is TestElement
+ * else rootElement
+ */
+internal fun TestDrive.getThisOrRootElement(): TestElement {
+    if (this is TestElement) {
+        return this
+    }
+    return rootElement
 }
 
 /**
@@ -21,22 +35,23 @@ fun TestDrive.getTestElement(): TestElement {
  */
 fun TestDrive.sendKeys(
     keysToSend: CharSequence,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen
 ): TestElement {
-
-    val testElement = focusedElement
 
     val command = "sendKeys"
     val message = message(id = command, key = "$keysToSend")
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val m = TestDriver.getFocusedWebElement()
-        m.sendKeys(keysToSend)
+        val testElement = TestDriver.getFocusedElement()
+        if (testElement.isEmpty) {
+            throw TestDriverException("Focused element not found.")
+        }
+        val we = testElement.webElement ?: testElement.getWebElement()
+        we.sendKeys(keysToSend)
 
         TestDriver.refreshCache()
 
-        lastElement = TestDriver.getFocusedElement(waitSeconds = waitSeconds)
+        lastElement = TestDriver.getFocusedElement()
     }
 
     return lastElement
@@ -81,10 +96,9 @@ fun TestDrive.screenshot(
  */
 fun TestDrive.getCurrentAppIconName(): String {
     if (isAndroid) {
-        throw NotImplementedError("getCurrentAppIconName function is not supported in Android.")
+        throw NotImplementedError("getCurrentAppIconName function is for iOS. Not supported in Android.")
     } else {
-        val e = TestElementCache.select(".XCUIElementTypeApplication")
-        return e.label
+        return rootElement.label
     }
 }
 
@@ -127,4 +141,21 @@ fun TestDrive.isApp(
     }
 
     return r
+}
+
+/**
+ * tapDefault
+ */
+fun TestDrive.tapDefault(
+    safeElementOnly: Boolean = false
+): TestElement {
+
+    val default = TestDriver.screenInfo.default
+    if (default.isBlank()) {
+        return lastElement
+    }
+
+    tap(expression = default, safeElementOnly = safeElementOnly)
+
+    return lastElement
 }

@@ -53,6 +53,7 @@ class TestProfile(var profileName: String = "") {
     var packageOrBundleId: String? = null
     var startupPackageOrBundleId: String? = null
     var startupActivity: String? = null
+    var enforceXPath1: String? = null
 
     // Appium Proxy --------------------------------------------------
     var appiumProxyReadTimeoutSeconds: String? = null

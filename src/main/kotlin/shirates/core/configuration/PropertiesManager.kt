@@ -447,6 +447,16 @@ object PropertiesManager {
         }
 
     /**
+     * enableTimeDiff
+     */
+    val enableTimeDiff: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableTimeDiff")
+                ?: return Const.ENABLE_TIME_DIFF
+            return value == "true"
+        }
+
+    /**
      * enableImageMatchDebugLog
      */
     val enableImageMatchDebugLog: Boolean
@@ -471,6 +481,20 @@ object PropertiesManager {
             }
 
             return value
+        }
+
+    /**
+     * screenshotIntervalSeconds
+     */
+    var screenshotIntervalSeconds: Double
+        get() {
+            val value =
+                getPropertyValue(propertyName = "screenshotIntervalSeconds")?.toDoubleOrNull()
+                    ?: return Const.SCREENSHOT_INTERVAL_SECOND
+            return value
+        }
+        set(value) {
+            setPropertyValue(propertyName = "screenshotIntervalSeconds", value = "$value")
         }
 
     // Image Matching --------------------------------------------------

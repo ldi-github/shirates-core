@@ -18,16 +18,29 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
     var key: String = ""
     val includes = mutableListOf<String>()
     val identityElements = mutableListOf<String>()
+    var weight: String? = null
     val satelliteExpressions = mutableListOf<String>()
     val selectors = mutableMapOf<String, Selector>()
+    var default: String = ""
     val scrollInfo = ScrollInfo()
+    val searchWeight: Int
+        get() {
+            val w = if (weight != null) {
+                try {
+                    weight!!.toInt()
+                } catch (t: Throwable) {
+                    throw TestConfigException(message(id = "invalidScreenWeight", subject = weight, file = screenFile))
+                }
+            } else 0
+            return w + identityElements.count()
+        }
 
     override fun toString(): String {
         val list = mutableListOf<String>()
         for (token in identityElements) {
             list.add(token)
         }
-        return "$key (${list.joinToString()})"
+        return "$key (${list.joinToString()}), searchWeight=$searchWeight"
     }
 
     /**
@@ -174,6 +187,13 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
     fun loadFromFile(screenFile: String): JSONObject {
 
         val jso = loadFromFileCore(screenFile)
+
+        if (jso.has("weight")) {
+            this.weight = jso.getString("weight")
+        }
+        if (jso.has("default")) {
+            this.default = jso.getString("default")
+        }
 
         if (jso.has("selectors")) {
             setSelectors(jso, screenFile)

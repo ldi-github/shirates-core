@@ -115,8 +115,8 @@ fun pressBack() {
                 it.macro("[iOS Search Screen]")
                 it.select("[SpotlightSearchField]")
                     .clearInput()
-                    .sendKeys("safa")
-                    .tap("Safari")
+                    .sendKeys("safari")
+                    .tap("safari")
                     .wait()
                     .appIs("[Safari]")
             }.action {

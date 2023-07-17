@@ -1,5 +1,6 @@
 package shirates.core.logging
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.ScrollDirection
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -12,6 +13,7 @@ data class LogLine(
     var deleted: Boolean = false,
     var lineNumber: Int = 0,
     var logDateTime: Date = dateFormatrer.parse("2000/01/01"),
+    var timeDiffMilliseconds: Long = 0,
     var message: String = "",
     var logType: LogType = LogType.NONE,
     var testScenarioId: String? = null,
@@ -35,6 +37,7 @@ data class LogLine(
     var lastScreenshot: String = "",
     var testClassName: String = "",
     var testMethodName: String = "",
+    var mode: String = "",
     var isInMacro: Boolean = false,
     var isInCheckCommand: Boolean = false,
     var isInSilentCommand: Boolean = false,
@@ -65,19 +68,12 @@ data class LogLine(
         private val dateFormatrer = SimpleDateFormat("yyyy/MM/dd")
 
         /**
-         * getHeader
-         */
-        fun getHeader(): String {
-
-            return "lineNo\tlogDateTime\ttestCaseId\tlogType\tos\tspecial\tgroup\tmessage\tlevel\tcommand\tsubject\targ1\targ2\tresult"
-        }
-
-        /**
          * getHeaderForConsole
          */
         fun getHeaderForConsole(): String {
 
-            return "lineNo\tlogDateTime\ttestCaseId\tlogType\tgroup\tmessage"
+            val timeDiff = if (PropertiesManager.enableTimeDiff) "\tdiff(ms)" else ""
+            return "lineNo\t[elapsedTime]\tlogDateTime\t{testCaseId}\t[logType]$timeDiff\t(group)\tmessage"
         }
 
         /**
@@ -96,7 +92,7 @@ data class LogLine(
 
         val arg1a = arg1.replace("\n", "\\n")
         val arg2a = arg2.replace("\n", "\\n")
-        return "$lineNumber\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]\t$os\t$special\t($commandGroup)\t$message\t$commandLevel\t$scriptCommand\t$subject\t$arg1a\t$arg2a\t$result"
+        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]\t$os\t$special\t$mode\t($commandGroup)\t$message\t$commandLevel\t$scriptCommand\t$subject\t$arg1a\t$arg2a\t$result"
     }
 
     /**
@@ -104,7 +100,8 @@ data class LogLine(
      */
     fun toStringForConsole(): String {
 
-        return "$lineNumber\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]\t($scriptCommand)\t$message"
+        val timeDiff = if (PropertiesManager.enableTimeDiff) "\t+${timeDiffMilliseconds}" else ""
+        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t[${logType.label}]$timeDiff\t$mode\t($scriptCommand)\t$message"
     }
 
     /**
@@ -138,9 +135,9 @@ data class LogLine(
         }
 
     /**
-     * timmeElapsedLabel
+     * timeElapsedLabel
      */
-    val timmeElapsedLabel: String
+    val timeElapsedLabel: String
         get() {
             val du = Duration.ofMillis(timeElapsed)
             return "%02d:%02d:%02d".format(du.toHoursPart(), du.toMinutesPart(), du.toSecondsPart())

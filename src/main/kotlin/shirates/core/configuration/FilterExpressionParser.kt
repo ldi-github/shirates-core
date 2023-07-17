@@ -93,6 +93,9 @@ class FilterExpressionParser(
             throw IllegalArgumentException()
         }
 
+        if (nounWithVerb == "xpath") {
+            return "xpath"
+        }
         for (noun in registeredNouns) {
             if (nounWithVerb.startsWith(noun)) {
                 return noun
@@ -146,7 +149,7 @@ class FilterExpressionParser(
             if (s.startsWith("*") && this.endsWith("*")) return "Contains"
         }
         if (s.length >= 2) {
-            if (s.endsWith("*")) return "StartsWith"
+            if (s.endsWith("*") && s.endsWith("::*").not()) return "StartsWith"
             if (s.startsWith("*")) return "EndsWith"
         }
         return null

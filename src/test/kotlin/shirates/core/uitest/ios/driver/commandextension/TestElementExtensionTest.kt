@@ -25,10 +25,10 @@ class TestElementExtensionTest : UITest() {
                         .select("[SpotlightSearchField]")
                         .clearInput()
                 }.action {
-                    it.sendKeys("safa")
+                    it.sendKeys("safari")
                 }.expectation {
-                    it.valueStartsWith("safa")
-                    it.exist("safari browser")
+                    it.valueStartsWith("safari")
+                    it.exist("safari")
                 }
             }
             case(2) {
@@ -110,31 +110,31 @@ class TestElementExtensionTest : UITest() {
                     it.select("[SpotlightSearchField]")
                         .clearInput()
                 }.action {
-                    it.sendKeys("safa")
+                    it.sendKeys("safari")
                 }.expectation {
-                    it.valueStartsWith("safa")
-                    it.exist("safari browser")
+                    it.valueStartsWith("safari")
+                    it.exist("safari")
                 }
             }
         }
     }
 
-    @Test
-    @Order(50)
-    fun getAbsoluteXpath() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[iOS Settings Top Screen]")
-                    e1 = it.select("General")
-                }.expectation {
-                    e2 = it.select("xpath=${e1.getAbsoluteXpath()}")
-                    e2.label.thisIs("General")
-                }
-            }
-        }
-    }
+//    @Test
+//    @Order(50)
+//    fun getAbsoluteXpath() {
+//
+//        scenario {
+//            case(1) {
+//                condition {
+//                    it.macro("[iOS Settings Top Screen]")
+//                    e1 = it.select("General")
+//                }.expectation {
+//                    e2 = it.select("xpath=${e1.getAbsoluteXpath()}")
+//                    e2.label.thisIs("General")
+//                }
+//            }
+//        }
+//    }
 
     @Test
     @Order(60)

@@ -23,7 +23,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                         .macro("[Play Store Screen]")
                 }.expectation {
                     val scrollableElements = rootElement.getScrollableElementsInDescendants()
-                    (scrollableElements.count() > 0).thisIsTrue()
+                    (scrollableElements.isNotEmpty()).thisIsTrue()
                     for (e in scrollableElements) {
                         e.isScrollable.thisIsTrue()
                     }
@@ -43,7 +43,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                 }.expectation {
                     val scrollableElements = rootElement.getScrollableElementsInDescendants()
                     val scrollableElement = scrollableElements.first()
-                    val target1 = scrollableElement.getScrollableTarget()
+                    val target1 = scrollableElement.getScrollableElement()
                     (target1 == scrollableElement).thisIsTrue()
                 }
             }
@@ -52,9 +52,9 @@ class TestDriveScrollExtensionTest1 : UITest() {
                     val scrollableElements = rootElement.getScrollableElementsInDescendants()
                     val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
                     val nonScrollableElement = rootElement
-                    val target2 = nonScrollableElement.getScrollableTarget()
-                    (target2 != nonScrollableElement).thisIsTrue()
-                    (target2 == largestScrollableTarget).thisIsTrue()
+                    val target2 = nonScrollableElement.getScrollableElement()
+                    (target2.toString() != nonScrollableElement.toString()).thisIsTrue()
+                    (target2.toString() == largestScrollableTarget.toString()).thisIsTrue()
                 }
             }
         }

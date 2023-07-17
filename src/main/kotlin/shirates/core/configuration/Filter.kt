@@ -227,6 +227,10 @@ class Filter(
                 "scrollable",
                 "visible",
                 "ignoreTypes",
+                "x",
+                "y",
+                "width",
+                "height",
 
                 "xpath",
                 "pos",
@@ -335,10 +339,10 @@ class Filter(
         ): Boolean {
 
             val filterValue = selector?.visible ?: "true"
-            when (filterValue) {
-                "*" -> return true
-                "false" -> return element.isVisibleCalculated.not()
-                else -> return element.isVisibleCalculated
+            return when (filterValue) {
+                "*" -> true
+                "false" -> element.isVisibleCalculated.not()
+                else -> element.isVisibleCalculated
             }
         }
 
@@ -414,7 +418,7 @@ class Filter(
             "ignoreTypes" ->
                 evaluateIgnoreTypes(classOrType = stringValue)
 
-            else -> throw IllegalArgumentException("Unsupported noun with evaluate function. (noun=$noun)")
+            else -> throw IllegalArgumentException("Unsupported noun with evaluate function. (noun=$noun, stringValue=$stringValue)")
         }
     }
 

@@ -101,7 +101,7 @@ class ScreenRepositoryTest : UnitTest() {
         // Assert
         assertThat(ScreenRepository.screensDirectory).isEqualTo("unitTestData/testConfig/nicknames1/screens".toPath())
         assertThat(ScreenRepository.screenInfoMap.count()).isEqualTo(11)
-        assertThat(ScreenRepository.screenInfoList.count()).isEqualTo(11)
+        assertThat(ScreenRepository.screenInfoSearchList.count()).isEqualTo(11)
 
         /**
          * global
@@ -438,6 +438,19 @@ class ScreenRepositoryTest : UnitTest() {
             val selector = ScreenRepository.getSelector(screenName = "[A Screen]", nickName = "[Label A]")
             // Assert
             assertThat(selector.expression).isEqualTo("text=textA")
+        }
+
+    }
+
+    @Test
+    fun nicknameIndex() {
+
+        // Arrange, Act
+        ScreenRepository.setup("unitTestData/testConfig/weight/screens".toPath())
+        run {
+            val nicknameIndex = ScreenRepository.nicknameIndex
+            // Assert
+            assertThat(nicknameIndex.count()).isEqualTo(18)
         }
 
     }

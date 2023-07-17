@@ -282,6 +282,16 @@ class BoundsTest : UnitTest() {
     }
 
     @Test
+    fun isOverlapping() {
+
+        // Arrange
+        val label = Bounds("[36,138][81,158]")
+        val overlay = Bounds("[0,47][389,142]")
+        // Act, Assert
+        assertThat(label.isOverlapping(overlay)).isTrue()
+    }
+
+    @Test
     fun toScaledRect() {
 
         // Arrange

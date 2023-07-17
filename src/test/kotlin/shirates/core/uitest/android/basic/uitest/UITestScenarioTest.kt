@@ -4,12 +4,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.EnableCache
 import shirates.core.driver.TestDriverEventContext
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 
+@EnableCache
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class UITestScenarioTest : UITest() {
 
@@ -59,66 +61,6 @@ class UITestScenarioTest : UITest() {
                 expectation {
                     assertThat(testContext.enableCache).isFalse()
                     assertThat(testContext.forceUseCache).isFalse()
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(40)
-    fun useHandler_default() {
-
-        // Arrange
-        irregularHandlerCallCount = 0
-        // Act
-        scenario {
-            case(1) {
-                action {
-                    it.exist("[Network & internet]")
-                }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
-                    // Assert
-                    assertThat(irregularHandlerCallCount).isGreaterThan(0)
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(50)
-    fun useHandler_true() {
-
-        // Arrange
-        irregularHandlerCallCount = 0
-        // Act
-        scenario(useHandler = true) {
-            case(1) {
-                action {
-                    it.exist("[Network & internet]")
-                }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
-                    // Assert
-                    assertThat(irregularHandlerCallCount).isGreaterThan(0)
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(60)
-    fun useHandler_false() {
-
-        // Arrange
-        irregularHandlerCallCount = 0
-        // Act
-        scenario(useHandler = false) {
-            case(1) {
-                action {
-                    it.exist("[Network & internet]")
-                }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
-                    // Assert
-                    assertThat(irregularHandlerCallCount).isEqualTo(0)
                 }
             }
         }

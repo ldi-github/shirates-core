@@ -70,14 +70,6 @@ class BooleanCompareResult(val value: Boolean, val command: String) : CompareRes
             return this
         }
 
-        if (command == "onScreen") {
-            if (history.isEmpty()) {
-                onElse.invoke()
-                setExecuted(condition = "not", matched = true)
-            }
-            return this
-        }
-
         if (history.isEmpty()) {
             throw BranchException(message(id = "ifElseIsNotPermitted"))
         }

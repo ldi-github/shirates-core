@@ -3,6 +3,8 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.rootBounds
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.time.StopWatch
@@ -20,7 +22,7 @@ fun TestDrive.getTapTarget(
         .filter { it.bounds.includesPoint(x = x, y = y) }
         .sortedByDescending { it.bounds.area }
     if (expression != null) {
-        elms = elms.filterBySelector(Selector(expression), safeElementOnly = true)
+        elms = elms.filterBySelector(Selector(expression))
     }
 
     return elms.lastOrNull() ?: TestElement.emptyElement
@@ -34,10 +36,10 @@ fun TestDrive.tap(
     y: Int,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
-    safeMode: Boolean = true
+    safeMode: Boolean = false
 ): TestElement {
 
-    val testElement = TestDriver.it
+    val testElement = refreshLastElement()
 
     val command = "tap"
     val message = message(id = command, subject = "($x,$y)")
@@ -56,7 +58,7 @@ fun TestDrive.tap(
         )
     }
 
-    return lastElement
+    return refreshLastElement()
 }
 
 /**
@@ -67,7 +69,7 @@ fun TestDrive.tap(
     tapMethod: TapMethod = TapMethod.auto
 ): TestElement {
 
-    val tappedElement = TestDriver.it
+    val tappedElement = getThisOrRootElement()
 
     val command = "tap"
     val message = message(id = command, subject = tappedElement.subject)
@@ -89,7 +91,10 @@ private fun TestElement.tapCore(
     holdSeconds: Double,
     tapMethod: TapMethod
 ): TestElement {
+    val ms = Measure()
+
     fun click() {
+        val msClick = Measure()
         val sw = StopWatch("click")
         try {
             val me = this.getWebElement()
@@ -102,9 +107,11 @@ private fun TestElement.tapCore(
         if (PropertiesManager.enableTimeMeasureLog) {
             TestLog.write(sw.toString())
         }
+        msClick.end()
     }
 
     fun touchAction() {
+        val msTouch = Measure()
         val sw = StopWatch("touchAction")
         val b = this.bounds
         // tap by swipe
@@ -118,6 +125,7 @@ private fun TestElement.tapCore(
         if (PropertiesManager.enableTimeMeasureLog) {
             TestLog.write(sw.toString())
         }
+        msTouch.end()
     }
 
     if (PropertiesManager.enableTapElementImageLog) {
@@ -137,15 +145,16 @@ private fun TestElement.tapCore(
 
     Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
 
-    if (isCacheMode) {
-        syncCache(force = true)
-        lastElement = this.refreshThisElement()
+    if (testContext.useCache) {
+        refreshCache()
     }
+    lastElement = this.refreshThisElement()
 
     if (originalSelector != null) {
         lastElement.selector = originalSelector
     }
 
+    ms.end()
     return lastElement
 }
 
@@ -156,10 +165,13 @@ fun TestDrive.tap(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    handleIrregular: Boolean = true
+    handleIrregular: Boolean = true,
+    safeElementOnly: Boolean = false,
 ): TestElement {
 
-    val testElement = TestDriver.it
+    TestDriver.refreshCurrentScreenWithNickname(expression)
+
+    val testElement = rootElement
 
     val command = "tap"
     val sel = getSelector(expression = expression)
@@ -169,7 +181,11 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = it.select(expression = expression, safeElementOnly = true)
+        val targetElement = it.select(expression = expression)
+        if (safeElementOnly && targetElement.isSafe.not()) {
+            return@execOperateCommand
+        }
+
         val tapFunc = {
             silent {
                 e = targetElement.tap(holdSeconds = holdSeconds, tapMethod = tapMethod)
@@ -199,7 +215,7 @@ fun TestDrive.tap(
         lastElement = e
     }
 
-    return TestDriver.it
+    return refreshLastElement()
 }
 
 private fun TestDrive.tapWithScrollCommandCore(
@@ -210,10 +226,10 @@ private fun TestDrive.tapWithScrollCommandCore(
     scrollStartMarginRatio: Double,
     scrollMaxCount: Int,
     holdSeconds: Double,
-    tapMethod: TapMethod
+    tapMethod: TapMethod,
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val selector = getSelector(expression = expression)
     val message = message(id = command, subject = "$selector")
@@ -225,7 +241,7 @@ private fun TestDrive.tapWithScrollCommandCore(
             direction = direction,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
-            scrollMaxCount = scrollMaxCount
+            scrollMaxCount = scrollMaxCount,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         e = e.tap(holdSeconds = holdSeconds, tapMethod = tapMethod)
@@ -242,7 +258,7 @@ fun TestDrive.tapWithScrollDown(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    tapMethod: TapMethod = TapMethod.auto
+    tapMethod: TapMethod = TapMethod.auto,
 ): TestElement {
 
     val command = "tapWithScrollDown"
@@ -256,7 +272,7 @@ fun TestDrive.tapWithScrollDown(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        tapMethod = tapMethod
+        tapMethod = tapMethod,
     )
 
     return e
@@ -271,7 +287,7 @@ fun TestDrive.tapWithScrollUp(
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    tapMethod: TapMethod = TapMethod.auto
+    tapMethod: TapMethod = TapMethod.auto,
 ): TestElement {
 
     val command = "tapWithScrollUp"
@@ -285,7 +301,7 @@ fun TestDrive.tapWithScrollUp(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        tapMethod = tapMethod
+        tapMethod = tapMethod,
     )
 
     return e
@@ -300,7 +316,7 @@ fun TestDrive.tapWithScrollRight(
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    tapMethod: TapMethod = TapMethod.auto
+    tapMethod: TapMethod = TapMethod.auto,
 ): TestElement {
 
     val command = "tapWithScrollRight"
@@ -314,7 +330,7 @@ fun TestDrive.tapWithScrollRight(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        tapMethod = tapMethod
+        tapMethod = tapMethod,
     )
 
     return e
@@ -329,7 +345,7 @@ fun TestDrive.tapWithScrollLeft(
     scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    tapMethod: TapMethod = TapMethod.auto
+    tapMethod: TapMethod = TapMethod.auto,
 ): TestElement {
 
     val command = "tapWithScrollLeft"
@@ -343,7 +359,7 @@ fun TestDrive.tapWithScrollLeft(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        tapMethod = tapMethod
+        tapMethod = tapMethod,
     )
 
     return e
@@ -364,7 +380,7 @@ fun TestDrive.tapCenterOfScreen(
     val context = TestDriverCommandContext(rootElement)
     context.execOperateCommand(command = command, message = message) {
 
-        val bounds = rootElement.bounds
+        val bounds = rootBounds
         tap(x = bounds.centerX, y = bounds.centerY, holdSeconds = holdSeconds, repeat = repeat, safeMode = safeMode)
     }
 
@@ -381,7 +397,7 @@ fun TestDrive.tapCenterOf(
     safeMode: Boolean = true
 ): TestElement {
 
-    val testElement = TestDriver.select(expression = expression, safeElementOnly = true)
+    val testElement = TestDriver.select(expression = expression)
 
     val command = "tapCenterOf"
     val message = message(id = command, subject = testElement.subject)

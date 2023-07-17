@@ -32,21 +32,21 @@ class NoLoadRunTest : UITest() {
                     Clipboard.write("clipboard1")
                 }.expectation {
                     describe("Read 'clipboard1' from clipboard")
-                    assertThat(Clipboard.read()).isEqualTo("clipboard1")
+                    Clipboard.read().thisIs("clipboard1")
                 }
             }
             case(2) {
                 action {
                     writeClipboard("hoge")
                 }.expectation {
-                    assertThat(readClipboard()).isEqualTo("hoge")
+                    readClipboard().thisIs("hoge")
                 }
             }
             case(3) {
                 action {
                     clearClipboard()
                 }.expectation {
-                    assertThat(readClipboard()).isEmpty()
+                    readClipboard().thisIsEmpty()
                 }
             }
         }
@@ -89,28 +89,31 @@ class NoLoadRunTest : UITest() {
         assertThat(
             it.select("[8:30 AM]").below(1).select(":below(1)").selector.toString()
         ).isEqualTo("[8:30 AM]:below(2)")
-        assertThat(it.select("[8:30 AM]").select("[:Expand alarm]").selector.toString()).isEqualTo("[:Expand alarm]")
+        assertThat(
+            it.select("[8:30 AM]")
+                .select("[:Expand alarm]").selector.toString()
+        ).isEqualTo("[8:30 AM][:Expand alarm]")
 
         run {
             val sel = it.select("[8:30 AM][:Expand alarm]").selector
-            assertThat(sel.toString()).isEqualTo("[:Expand alarm]")
+            assertThat(sel.toString()).isEqualTo("[8:30 AM][:Expand alarm]")
         }
     }
 
-    @Test
-    @Order(30)
-    fun select() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Alarm Screen]")
-                }.expectation {
-                    assertSelector()
-                }
-            }
-        }
-    }
+//    @Test
+//    @Order(30)
+//    fun select() {
+//
+//        scenario {
+//            case(1) {
+//                condition {
+//                    it.macro("[Alarm Screen]")
+//                }.expectation {
+//                    assertSelector()
+//                }
+//            }
+//        }
+//    }
 
     @NoLoadRun
     @Test

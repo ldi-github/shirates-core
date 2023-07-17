@@ -1,9 +1,11 @@
 package shirates.core.uitest.android.basic.uitest
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
+import shirates.core.driver.EnableCache
 import shirates.core.driver.commandextension.disableCache
 import shirates.core.driver.commandextension.enableCache
 import shirates.core.driver.commandextension.suppressCache
@@ -13,15 +15,67 @@ import shirates.core.testcode.UITest
 import shirates.core.testcode.UITestCallbackExtension
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class DisableCacheTest1 : UITest() {
+class EnableDisableCacheTest : UITest() {
 
     @Test
-    fun test1() {
+    @Order(10)
+    fun withoutCacheAnnotation() {
 
+        // Arrange
+        val enableCacheExpected = UITestCallbackExtension.enableCache ?: testContext.enableCache
         // Assert
-        assertThat(UITestCallbackExtension.disableCacheAnnotation).isFalse()
+        assertThat(UITestCallbackExtension.enableCache).isNull()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableCache).isTrue()
+        assertThat(testContext.enableCache).isEqualTo(enableCacheExpected)
+        assertThat(testContext.useCache).isEqualTo(enableCacheExpected)
+
+        // Act
+        suppressCache {
+            // Assert
+            assertThat(testContext.forceUseCache).isFalse()
+            assertThat(testContext.enableCache).isFalse()
+            assertThat(testContext.useCache).isFalse()
+            // Act
+            useCache {
+                // Assert
+                assertThat(testContext.forceUseCache).isTrue()
+                assertThat(testContext.enableCache).isFalse()
+                assertThat(testContext.useCache).isTrue()
+                // Act
+                suppressCache {
+                    // Assert
+                    assertThat(testContext.forceUseCache).isFalse()
+                    assertThat(testContext.enableCache).isFalse()
+                    assertThat(testContext.useCache).isFalse()
+                }
+                // Assert
+                assertThat(testContext.forceUseCache).isTrue()
+                assertThat(testContext.enableCache).isFalse()
+                assertThat(testContext.useCache).isTrue()
+            }
+            // Assert
+            assertThat(testContext.forceUseCache).isFalse()
+            assertThat(testContext.enableCache).isFalse()
+            assertThat(testContext.useCache).isFalse()
+        }
+        // Assert
+        assertThat(UITestCallbackExtension.enableCache).isNull()
+        assertThat(testContext.forceUseCache).isFalse()
+        assertThat(testContext.enableCache).isEqualTo(enableCacheExpected)
+        assertThat(testContext.useCache).isEqualTo(testContext.enableCache)
+    }
+
+    @EnableCache
+    @Test
+    @Order(20)
+    fun withEnableCache() {
+
+        // Arrange
+        val enableCacheExpected = UITestCallbackExtension.enableCache ?: testContext.enableCache
+        // Assert
+        assertThat(UITestCallbackExtension.enableCache).isTrue()
+        assertThat(testContext.forceUseCache).isFalse()
+        assertThat(testContext.enableCache).isEqualTo(enableCacheExpected)
         assertThat(testContext.useCache).isTrue()
 
         // Act
@@ -54,20 +108,23 @@ class DisableCacheTest1 : UITest() {
             assertThat(testContext.useCache).isFalse()
         }
         // Assert
-        assertThat(UITestCallbackExtension.disableCacheAnnotation).isFalse()
+        assertThat(UITestCallbackExtension.enableCache).isTrue()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableCache).isTrue()
-        assertThat(testContext.useCache).isTrue()
+        assertThat(testContext.enableCache).isEqualTo(enableCacheExpected)
+        assertThat(testContext.useCache).isEqualTo(testContext.enableCache)
     }
 
-    @Test
     @DisableCache
-    fun test2() {
+    @Test
+    @Order(30)
+    fun withDisableCache() {
 
+        // Arrange
+        val enableCacheExpected = UITestCallbackExtension.enableCache ?: testContext.enableCache
         // Assert
-        assertThat(UITestCallbackExtension.disableCacheAnnotation).isTrue()
+        assertThat(UITestCallbackExtension.enableCache).isFalse()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableCache).isTrue()
+        assertThat(testContext.enableCache).isEqualTo(enableCacheExpected)
         assertThat(testContext.useCache).isFalse()
 
         // Act
@@ -100,24 +157,25 @@ class DisableCacheTest1 : UITest() {
             assertThat(testContext.useCache).isFalse()
         }
         // Assert
-        assertThat(UITestCallbackExtension.disableCacheAnnotation).isTrue()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableCache).isTrue()
-        assertThat(testContext.useCache).isFalse()
+        assertThat(testContext.enableCache).isEqualTo(enableCacheExpected)
+        assertThat(testContext.useCache).isEqualTo(testContext.enableCache)
     }
 
     @Test
-    fun test3() {
+    @Order(40)
+    fun disableCacheDynamic() {
 
-        // Assert
-        assertThat(UITestCallbackExtension.disableCacheAnnotation).isFalse()
+        // Arrange
+        val enableCacheExpected = UITestCallbackExtension.enableCache ?: testContext.enableCache        // Assert
+        assertThat(UITestCallbackExtension.enableCache).isNull()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableCache).isTrue()
-        assertThat(testContext.useCache).isTrue()
+        assertThat(testContext.enableCache).isEqualTo(enableCacheExpected)
+        assertThat(testContext.useCache).isEqualTo(enableCacheExpected)
         // Act
         disableCache()
         // Assert
-        assertThat(UITestCallbackExtension.disableCacheAnnotation).isFalse()
+        assertThat(UITestCallbackExtension.enableCache).isNull()
         assertThat(testContext.forceUseCache).isFalse()
         assertThat(testContext.enableCache).isFalse()
         assertThat(testContext.useCache).isFalse()
@@ -146,9 +204,9 @@ class DisableCacheTest1 : UITest() {
             assertThat(testContext.useCache).isTrue()
         }
         // Assert
-        assertThat(UITestCallbackExtension.disableCacheAnnotation).isFalse()
+        assertThat(UITestCallbackExtension.enableCache).isNull()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableCache).isFalse()
-        assertThat(testContext.useCache).isFalse()
+        assertThat(testContext.enableCache).isEqualTo(enableCacheExpected)
+        assertThat(testContext.useCache).isEqualTo(testContext.enableCache)
     }
 }

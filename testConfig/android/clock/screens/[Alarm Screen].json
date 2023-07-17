@@ -5,10 +5,11 @@
     "[Clock(shared)]"
   ],
 
-  "identity": "[days_of_week]",
+  "identity": "[Title]",
 
   "selectors": {
 
+    "[Title]": "Alarm&&#action_bar_title",
     "[days_of_week]": "#days_of_week",
 
     "[:Expand alarm]": ":flow(1)",

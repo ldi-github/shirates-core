@@ -101,7 +101,7 @@ class ScreenCompareResultTest : UITest() {
             }
             case(2) {
                 expectation {
-                    ifScreenIs("[Connected devices]") {
+                    ifScreenIs("[Connected devices Screen]") {
                         NG("never called")
                     }.not {
                         OK("called")
@@ -136,7 +136,7 @@ class ScreenCompareResultTest : UITest() {
                         OK("called")
                     }
 
-                    ifScreenIsNot("[Connected devices]") {
+                    ifScreenIsNot("[Connected devices Screen]") {
                         OK("called")
                     }.not {
                         NG("never called")

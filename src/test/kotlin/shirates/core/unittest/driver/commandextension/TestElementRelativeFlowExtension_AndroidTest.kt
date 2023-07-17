@@ -7,7 +7,6 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.descendants
 import shirates.core.driver.rootElement
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
@@ -55,8 +54,8 @@ class TestElementRelativeFlowExtension_AndroidTest : UnitTest() {
             // Arrange
             val targetElements = rootElement.descendants.filter { it.id.contains("3-1") }
             // Act, Assert
-            assertThat(e.flow(Selector("[1]"), true, TestElementCache.allElements).id).isEqualTo("EditText2-1")
-            assertThat(e.flow(Selector("[1]"), true, targetElements).id).isEqualTo("TextView3-1")
+            assertThat(e.flow(Selector("[1]"), TestElementCache.allElements).id).isEqualTo("EditText2-1")
+            assertThat(e.flow(Selector("[1]"), targetElements).id).isEqualTo("TextView3-1")
         }
 
         // flow(pos)
@@ -161,10 +160,10 @@ class TestElementRelativeFlowExtension_AndroidTest : UnitTest() {
             // Arrange
             val targetElements = rootElement.descendants.filter { it.id.contains("EditText") }
             // Act, Assert
-            assertThat(e.vflow(Selector("[1]"), true, TestElementCache.allElements).id).isEqualTo("EditText3-1")
-            assertThat(e.vflow(Selector("[2]"), true, TestElementCache.allElements).id).isEqualTo("ImageView1-1")
-            assertThat(e.vflow(Selector("[1]"), true, targetElements).id).isEqualTo("EditText3-1")
-            assertThat(e.vflow(Selector("[2]"), true, targetElements).isEmpty).isTrue()
+            assertThat(e.vflow(Selector("[1]"), TestElementCache.allElements).id).isEqualTo("EditText3-1")
+            assertThat(e.vflow(Selector("[2]"), TestElementCache.allElements).id).isEqualTo("ImageView1-1")
+            assertThat(e.vflow(Selector("[1]"), targetElements).id).isEqualTo("EditText3-1")
+            assertThat(e.vflow(Selector("[2]"), targetElements).isEmpty).isTrue()
         }
 
         // flow(pos)

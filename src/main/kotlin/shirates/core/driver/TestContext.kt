@@ -3,9 +3,9 @@ package shirates.core.driver
 import shirates.core.Const
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.eventextension.TestDriverOnScreenContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
-import shirates.core.testcode.UITestCallbackExtension
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.memberProperties
@@ -162,7 +162,7 @@ class TestContext(
             if (forceUseCache) {
                 return true
             }
-            return enableCache && UITestCallbackExtension.disableCacheAnnotation.not()
+            return enableCache
         }
 
     @SaveTarget
@@ -199,8 +199,13 @@ class TestContext(
 
     var irregularHandler: (() -> Unit)? = null
 
+    val screenHandlers = mutableMapOf<String, ((TestDriverOnScreenContext) -> Unit)?>()
+
     @SaveTarget
     var enableIrregularHandler = true
+
+    @SaveTarget
+    var enableScreenHandler = true
 
     internal val saveTargetProperties = this::class.memberProperties.filterIsInstance<KMutableProperty<*>>()
         .filter {

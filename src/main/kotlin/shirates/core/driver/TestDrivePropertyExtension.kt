@@ -2,8 +2,9 @@ package shirates.core.driver
 
 import org.openqa.selenium.Capabilities
 import shirates.core.configuration.repository.ParameterRepository
-import shirates.core.driver.commandextension.getScrollableTarget
-import shirates.core.driver.commandextension.getTestElement
+import shirates.core.driver.TestDriver.rootBounds
+import shirates.core.driver.commandextension.getScrollableElement
+import shirates.core.driver.commandextension.getThisOrRootElement
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.getCapabilityRelaxed
 
@@ -34,21 +35,7 @@ fun TestDrive.parameter(name: String): String {
  */
 val TestDrive.viewport: Bounds
     get() {
-        if (TestMode.isAndroid) {
-            try {
-                val rect = capabilityRelaxed("viewportRect")
-                val bounds = Bounds(rect)
-                return bounds
-            } catch (t: Throwable) {
-                val rect = parameter("viewportRect")
-                val bounds = Bounds(rect)
-                return bounds
-            }
-        } else {
-            val r = rootElement
-            val bounds = Bounds(r.x.toInt(), r.y.toInt(), r.width.toInt() - 1, r.height.toInt() - 1)
-            return bounds
-        }
+        return rootBounds
     }
 
 /**
@@ -168,8 +155,8 @@ val TestDrive.appIconName: String
  */
 val TestDrive.scrollFrame: TestElement
     get() {
-        val testElement = getTestElement()
-        TestDriver.lastElement = testElement.getScrollableTarget()
+        val testElement = getThisOrRootElement()
+        TestDriver.lastElement = testElement.getScrollableElement()
         return TestDriver.lastElement
     }
 

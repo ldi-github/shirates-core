@@ -1,8 +1,8 @@
 package shirates.core.driver
 
 import shirates.core.configuration.Selector
-import shirates.core.driver.commandextension.getTestElement
-import shirates.core.driver.commandextension.refreshCache
+import shirates.core.driver.commandextension.canSelect
+import shirates.core.driver.commandextension.getThisOrRootElement
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -15,13 +15,13 @@ fun TestDrive.wait(
     waitSeconds: Double
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "wait"
     val message = message(id = command, subject = "$waitSeconds")
 
     val context = TestDriverCommandContext(testElement)
-    context.execOperateCommand(command = command, message = message) {
+    context.execOperateCommand(command = command, message = message, fireEvent = false) {
         TestLog.trace("waiting for ${waitSeconds} seconds")
 
         Thread.sleep((waitSeconds * 1000).toLong())
@@ -73,19 +73,18 @@ fun TestDrive.waitForClose(
 
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
-        var closeTarget = TestElement.emptyElement
+
+        var found = false
 
         SyncUtility.doUntilTrue(
-            waitSeconds = waitSeconds
+            waitSeconds = waitSeconds,
+            refreshCache = testContext.useCache
         ) {
-            closeTarget = TestElementCache.select(selector = sel, throwsException = false)
-            if (closeTarget.isFound) {
-                refreshCache()
-            }
-            closeTarget.isEmpty
+            found = canSelect(selector = sel)
+            found.not()
         }
 
-        if (throwsException && closeTarget.isFound) {
+        if (throwsException && found) {
             throw TestDriverException(
                 message = message(
                     id = "waitForCloseFailed",
@@ -114,17 +113,17 @@ fun TestDrive.waitForDisplay(
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
-        var element = TestElement(selector = sel)
+        var found = false
 
         SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds,
+            refreshCache = testContext.useCache
         ) {
-            element = TestElementCache.select(selector = sel, throwsException = false)
-            element.isFound
+            found = canSelect(selector = sel)
+            found
         }
-        lastElement = element
 
-        if (throwsException && element.isEmpty) {
+        if (throwsException && found.not()) {
             throw TestDriverException(
                 message = message(
                     id = "waitForDisplayFailed",

@@ -11,15 +11,16 @@
   "startupActivity": "com.android.settings.Settings",
 
   "capabilities": {
-    "deviceName": "English",
-    "platformVersion": "10",
     "language": "en",
     "locale": "US"
   },
 
   "profiles": [
     {
-      "profileName": "profile1"
+      "profileName": "profile1",
+      "capabilities": {
+        "avd": "Pixel_3a_Android_12_"
+      }
     },
     {
       "profileName": "profile2"

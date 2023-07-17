@@ -2,6 +2,7 @@ package shirates.core.utility.sync
 
 import shirates.core.Const
 import shirates.core.driver.TestDriver
+import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
 
 /**
@@ -20,7 +21,7 @@ object SyncUtility {
         maxLoopCount: Int = MAX_LOOP_COUNT,
         retryOnError: Boolean = true,
         throwOnFinally: Boolean = true,
-        refreshCache: Boolean = true,
+        refreshCache: Boolean = testContext.useCache,
         onTimeout: (SyncContext) -> Unit = {},
         onMaxLoop: (SyncContext) -> Unit = {},
         onError: (SyncContext) -> Unit = {},
@@ -45,6 +46,9 @@ object SyncUtility {
             },
             action = action
         )
+        if (TestMode.isNoLoadRun) {
+            return context
+        }
 
         WaitUtility.doUntilTrue(context)
 

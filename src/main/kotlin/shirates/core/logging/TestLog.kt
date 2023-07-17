@@ -4,6 +4,7 @@ import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
+import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.report.TestReport
@@ -389,7 +390,8 @@ object TestLog {
         result: LogType = LogType.NONE,
         resultMessage: String? = null,
         exception: Throwable? = null,
-        log: Boolean = true
+        log: Boolean = true,
+        logLineCallback: ((LogLine) -> Unit)? = null
     ): LogLine {
 
         val logLine = getLogLine(
@@ -404,6 +406,7 @@ object TestLog {
             logType = logType,
             result = result
         )
+        logLineCallback?.invoke(logLine)
 
         if (log.not()) return logLine
 
@@ -459,7 +462,7 @@ object TestLog {
 
         try {
             if (Files.exists(monitorLogPath).not()) {
-                val bufferedText = lines.joinToString(Const.NEW_LINE)
+                val bufferedText = LogLine.getHeaderForConsole() + Const.NEW_LINE + lines.joinToString(Const.NEW_LINE)
                 monitorLogPath.toFile().writeText(bufferedText + Const.NEW_LINE)
             } else {
                 monitorLogPath.toFile().appendText(text + Const.NEW_LINE)
@@ -468,6 +471,8 @@ object TestLog {
             println(t)
         }
     }
+
+    const val MAXIMUM_CELL_CONTENT_LENGTH = 32767
 
     internal fun getLogLine(
         message: String,
@@ -481,9 +486,12 @@ object TestLog {
         resultMessage: String? = null,
         exception: Throwable? = null
     ): LogLine {
-        val msg = message
+        var msg = message
             .replace("\r", "\\r")
             .replace("\n", "\\n")
+        if (msg.length > MAXIMUM_CELL_CONTENT_LENGTH) {
+            msg = msg.substring(0, MAXIMUM_CELL_CONTENT_LENGTH - 1)
+        }
         val resultMsg = resultMessage ?: exception?.message ?: ""
         val special = specialStack.toList().joinToString("\n")
 
@@ -500,6 +508,7 @@ object TestLog {
         val lineNumber = lines.count() + 1
         val commandLevel = commandStack.count()
         val commandGroupNo = userCallCommand?.beginLogLine?.commandGroupNo ?: lineNumber
+        val mode = if (testContext.useCache) "C" else "!"
 
         val logLine = LogLine(
             lineNumber = lineNumber,
@@ -516,6 +525,7 @@ object TestLog {
             arg2 = arg2.replace("\n", "\\n"),
             fileName = fileName,
             logType = logType,
+            mode = mode,
             testScenarioId = testScenarioId,
             stepNo = stepNo,
             result = result,
@@ -526,6 +536,11 @@ object TestLog {
             testClassName = currentTestClassName,
             testMethodName = currentTestMethodName
         )
+        val lastLine = lines.lastOrNull()
+        if (lastLine != null) {
+            logLine.timeDiffMilliseconds =
+                logLine.logDateTime.toInstant().toEpochMilli() - lastLine.logDateTime.toInstant().toEpochMilli()
+        }
         logLine.timeElapsed = logLine.logDateTime.time - sessionStartTime.time
 
         logLine.isInMacro = CodeExecutionContext.isInMacro
@@ -607,24 +622,57 @@ object TestLog {
 
         if (log.not()) return LogLine()
 
+        val stackFrame = Thread.currentThread().stackTrace[1]
+
+        return traceCore(message = message, eventName = "trace", userCalledStackFrame = stackFrame, log = log)
+    }
+
+    internal fun traceCore(
+        message: String = "",
+        eventName: String,
+        userCalledStackFrame: StackTraceElement = Thread.currentThread().stackTrace[1],
+        logLineCallback: ((LogLine) -> Unit)? = null,
+        log: Boolean = enableTrace
+    ): LogLine {
+
+        if (log.not()) return LogLine()
+
+        val calledStack = userCalledStackFrame ?: Thread.currentThread().stackTrace[1]
+
         val stacktrace = Thread.currentThread().stackTrace
-        val thisStack = stacktrace
-            .filter {
-                it.fileName == "TestLog.kt"
-                        && (it.methodName == "trace" || it.methodName == "trace\$default")
-            }.last()
-        val callerStack = stacktrace[stacktrace.indexOf(thisStack) + 1]
+        val frames = mutableListOf<StackTraceElement>()
+        for (i in 0 until stacktrace.count()) {
+            val first = stacktrace[i]
+            if (first.fileName == calledStack.fileName
+                && (first.methodName == calledStack.methodName || first.methodName == "${calledStack.methodName}\$default")
+            ) {
+                frames.add(first)
+                val second = stacktrace[i + 1]
+                frames.add(second)
+                if (second.methodName == calledStack.methodName || second.methodName == "${calledStack.methodName}\$default") {
+                    val third = stacktrace[i + 2]
+                    frames.add(third)
+                }
+                break
+            }
+        }
+        if (frames.isEmpty()) {
+            return LogLine()
+        }
+
+        val callerStack = frames.last()
         val className = callerStack.className.split(".").last()
         val methodName = callerStack.methodName
         val classAndMethodName = "$className.$methodName"
 
-        val msg = if (message.isBlank()) "[${classAndMethodName}]"
+        val msg = if (message.isBlank()) "[${classAndMethodName}] -$eventName"
         else "[${classAndMethodName}] $message"
 
         return write(
             message = msg,
             logType = LogType.TRACE,
-            log = log
+            log = log,
+            logLineCallback = logLineCallback
         )
     }
 
@@ -1390,7 +1438,7 @@ object TestLog {
                 sb.appendLine(it.toStringForCommandList())
             }
         } else {
-            sb.appendLine(LogLine.getHeader())
+            sb.appendLine(LogLine.getHeaderForConsole())
             lines.forEach() {
                 sb.appendLine(it.toString())
             }

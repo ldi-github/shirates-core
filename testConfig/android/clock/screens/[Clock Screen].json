@@ -5,10 +5,11 @@
     "[Clock(shared)]"
   ],
 
-  "identity": "[digital_clock]",
+  "identity": "[Title]",
 
   "selectors": {
 
+    "[Title]": "Clock&&#action_bar_title",
     "[digital_clock]": "#digital_clock"
   }
 

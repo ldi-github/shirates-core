@@ -2,11 +2,12 @@ package shirates.core.uitest.ios.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.getCurrentAppIconName
-import shirates.core.driver.commandextension.getCurrentAppName
-import shirates.core.driver.commandextension.isApp
-import shirates.core.driver.commandextension.screenshot
+import shirates.core.driver.DisableCache
+import shirates.core.driver.branchextension.ifScreenIsNot
+import shirates.core.driver.commandextension.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
@@ -17,6 +18,11 @@ import shirates.core.utility.toPath
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
 class TestDriveExtensionTest : UITest() {
+
+    override fun beforeAllAfterSetup(context: ExtensionContext?) {
+
+        PropertiesManager.screenshotIntervalSeconds = 0.0
+    }
 
     @Test
     fun screenshot() {
@@ -45,7 +51,7 @@ class TestDriveExtensionTest : UITest() {
             TestLog.clear()
             // Act
             it.screenshot(filename = "filename")
-            val line = TestLog.lines.first()
+            val line = TestLog.lines.first() { it.logType != LogType.TRACE }
             // Assert
             assertThat(line.message).isEqualTo("screenshot")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)
@@ -83,4 +89,22 @@ class TestDriveExtensionTest : UITest() {
         assertThat(it.isApp("[App1]")).isFalse()
     }
 
+    @DisableCache
+    @Test
+    fun tapDefault() {
+
+        scenario {
+            case(1) {
+                condition {
+                    ifScreenIsNot("[General Screen]") {
+                        it.macro("[General Screen]")
+                    }
+                }.action {
+                    it.tapDefault()
+                }.expectation {
+                    it.screenIs("[iOS Settings Top Screen]")
+                }
+            }
+        }
+    }
 }

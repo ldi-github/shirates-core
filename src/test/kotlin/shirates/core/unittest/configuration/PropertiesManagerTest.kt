@@ -744,6 +744,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableTimeDiff() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableTimeDiff).isEqualTo(Const.ENABLE_TIME_DIFF)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_TIME_DIFF.not()
+            PropertiesManager.setPropertyValue("enableTimeDiff", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableTimeDiff).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun imageMatchDetailLog() {
 
         run {
@@ -796,6 +814,24 @@ class PropertiesManagerTest : UnitTest() {
                 PropertiesManager.screenshotScale
             }.isInstanceOf(TestConfigException::class.java)
                 .hasMessage("screenshotScale is allowed from 0.1 to 1.0. (1.1)")
+        }
+    }
+
+    @Test
+    fun screenshotIntervalSeconds() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.screenshotIntervalSeconds).isEqualTo(Const.SCREENSHOT_INTERVAL_SECOND)
+        }
+        run {
+            // Arrange
+            val value = 1.5
+            PropertiesManager.setPropertyValue("screenshotIntervalSeconds", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.screenshotIntervalSeconds).isEqualTo(value)
         }
     }
 

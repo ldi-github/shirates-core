@@ -27,34 +27,37 @@ it.select("About phone||About emulated device") // text filters combined with "|
 
 Shirates **Filter expression** is expression describing conditions to filter screen elements.
 
-| filter           | formal                    | abbreviation | Android attribute | iOS attribute |
-|:-----------------|:--------------------------|:-------------|:------------------|:--------------|
-| text             | text=text1                | text1        | text              | label         |
-| textStartsWith   | textStartsWith=text1      | text1*       | text              | label         |
-| textContains     | textContains=text1        | \*text1*     | text              | label         |
-| textEndsWith     | textEndsWith=text1        | *text1       | text              | label         |
-| textMatches      | textMatches=^text$        | n/a          | text              | label         |
-| literal          | literal=literal1          | 'literal1'   | text              | label         |
-| id               | id=id1                    | #id1         | resource-id       | name          |
-| access           | access=access1            | @access1     | content-desc      | name          |
-| accessStartsWith | accessStartsWith=access1  | @access1*    | content-desc      | name          |
-| accessContains   | accessContains=access1    | @\*access1*  | content-desc      | name          |
-| accessEndsWith   | accessEndsWith=access1    | @*access1    | content-desc      | name          |
-| accessMatches    | accessMatches=^access1$   | n/a          | content-desc      | name          |
-| value            | value=value1              | n/a          | text              | value         |
-| valueStartsWith  | valueStartsWith=value1    | n/a          | text              | value         |
-| valueContains    | valueContains=value1      | n/a          | text              | value         |
-| valueEndsWith    | valueEndsWith=value1      | n/a          | text              | value         |
-| valueMatches     | valueMatches=^value1$     | n/a          | text              | value         |
-| class            | class=class1              | .class1      | class             | type          |
-| focusable        | focusable=true            | n/a          | focusable         | n/a           |
-| scrollable       | scrollable=true           | n/a          | scrollable        | n/a           |
-| selected         | selected=true             | n/a          | selected          | n/a           |
-| visible          | visible=true              | n/a          | n/a               | visible       |
-| xpath            | xpath=//*[@text='text1']  | n/a          | (arbitrary)       | (arbitrary)   |
-| pos              | pos=2                     | [2]          | n/a               | n/a           |
-| ignoreTypes      | ignoreTypes=Class1,Class2 | n/a          | class             | type          |
-| image            | image=image1.png          | image1.png   | n/a               | n/a           |
+| filter           | formal                    | abbreviation | Android attribute | iOS attribute | remarks    |
+|:-----------------|:--------------------------|:-------------|:------------------|:--------------|:-----------|
+| text             | text=text1                | text1        | text              | label         |            |
+| textStartsWith   | textStartsWith=text1      | text1*       | text              | label         |            |
+| textContains     | textContains=text1        | \*text1*     | text              | label         |            |
+| textEndsWith     | textEndsWith=text1        | *text1       | text              | label         |            |
+| textMatches      | textMatches=^text$        | n/a          | text              | label         |            |
+| literal          | literal=literal1          | 'literal1'   | text              | label         |            |
+| id               | id=id1                    | #id1         | resource-id       | name          |            |
+| access           | access=access1            | @access1     | content-desc      | name          |            |
+| accessStartsWith | accessStartsWith=access1  | @access1*    | content-desc      | name          |            |
+| accessContains   | accessContains=access1    | @\*access1*  | content-desc      | name          |            |
+| accessEndsWith   | accessEndsWith=access1    | @*access1    | content-desc      | name          |            |
+| accessMatches    | accessMatches=^access1$   | n/a          | content-desc      | name          |            |
+| value            | value=value1              | n/a          | text              | value         |            |
+| valueStartsWith  | valueStartsWith=value1    | n/a          | text              | value         |            |
+| valueContains    | valueContains=value1      | n/a          | text              | value         |            |
+| valueEndsWith    | valueEndsWith=value1      | n/a          | text              | value         |            |
+| valueMatches     | valueMatches=^value1$     | n/a          | text              | value         |            |
+| class            | class=class1              | .class1      | class             | type          |            |
+| focusable        | focusable=true            | n/a          | focusable         | n/a           |            |
+| scrollable       | scrollable=true           | n/a          | scrollable        | n/a           |            |
+| selected         | selected=true             | n/a          | selected          | n/a           |            |
+| visible          | visible=true              | n/a          | n/a               | visible       | deprecated |
+| xpath            | xpath=//*[@text='text1']  | n/a          | (arbitrary)       | (arbitrary)   |            |
+| pos              | pos=2                     | [2]          | n/a               | n/a           |            |
+| ignoreTypes      | ignoreTypes=Class1,Class2 | n/a          | class             | type          |            |
+| image            | image=image1.png          | image1.png   | n/a               | n/a           |            |
+
+Note: The visibility attribute in iOS is deprecated because it cannot be used to determine whether an element is visible
+on the screen.
 
 ## Multiple values in filter
 

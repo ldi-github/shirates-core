@@ -1,47 +1,85 @@
 package shirates.core.driver.commandextension
 
+import org.openqa.selenium.By
 import shirates.core.configuration.Selector
 import shirates.core.configuration.removeRedundantExpression
 import shirates.core.driver.*
+import shirates.core.logging.Measure
+import shirates.core.logging.Message
 
 /**
  * relative
  */
 fun TestElement.relative(
     command: String,
-    safeElementOnly: Boolean = true,
-    scopeElements: List<TestElement> = TestElementCache.allElements,
+    scopeElements: List<TestElement> = rootElement.elements,
 ): TestElement {
 
-    val c = command.removeRedundantExpression()
-    val relativeSelector = Selector(c)
+    val ms = Measure("relative command=$command")
+    try {
+        val selectors = TestDriver.screenInfo.selectors
+        val exp =
+            if (selectors.containsKey(command)) selectors[command]?.expression
+            else null
+        val expression = exp ?: command.removeRedundantExpression()
+        val relativeSelector = Selector(expression)
 
-    val oldSelector = this.selector
-    val newSelector = this.getChainedSelector(relativeSelector = relativeSelector)
+        val oldSelector = this.selector
+        val newSelector = this.getChainedSelector(relativeSelector = relativeSelector)
 
-    val e = relative(
-        relativeSelector = relativeSelector,
-        safeElementOnly = safeElementOnly,
-        scopeElements = scopeElements
-    )
-    if (e == this) {
-        e.selector = oldSelector
-    } else {
-        e.selector = newSelector
+        val e = relative(
+            relativeSelector = relativeSelector,
+            scopeElements = scopeElements
+        )
+        if (e == this) {
+            e.selector = oldSelector
+        } else {
+            e.selector = newSelector
+        }
+        return e
+    } finally {
+        ms.end()
     }
-
-    return e
 }
+
+private val commandsAllowedInDirectAccessMode = listOf(
+    ":child",
+    ":sibling",
+    ":parent",
+    ":ancestor",
+    ":descendant",
+    ":next",
+    ":previous",
+    ":nextInput",
+    ":preInput",
+    ":nextLabel",
+    ":preLabel",
+    ":nextImage",
+    ":preImage",
+    ":nextButton",
+    ":preButton",
+    ":nextSwitch",
+    ":preSwitch",
+    ":not"
+)
 
 internal fun TestElement.relative(
     relativeSelector: Selector,
     newSelector: Selector = this.getChainedSelector(relativeSelector = relativeSelector),
-    safeElementOnly: Boolean,
-    scopeElements: List<TestElement>
+    scopeElements: List<TestElement>? = null
 ): TestElement {
 
+    if (testContext.useCache.not()) {
+        if (commandsAllowedInDirectAccessMode.contains(relativeSelector.command).not()) {
+            Message.message(
+                id = "relativeSelectorNotSupportedInDirectAccessMode",
+                arg1 = relativeSelector.toString(),
+                arg2 = relativeSelector.expression
+            )
+        }
+    }
+
     val oldSelector = this.selector
-    val targetElements = scopeElements
 
     val context = TestDriverCommandContext(this)
     var e = TestElement(selector = newSelector)
@@ -55,192 +93,168 @@ internal fun TestElement.relative(
             ":right" -> {
                 e = this.right(
                     selector = relativeSelector,
-                    targetElements = targetElements,
-                    safeElementOnly = safeElementOnly
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":rightInput" -> {
                 e = this.rightInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
             ":rightLabel" -> {
                 e = this.rightLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
             ":rightImage" -> {
                 e = this.rightImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
             ":rightButton" -> {
                 e = this.rightButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
             ":rightSwitch" -> {
                 e = this.rightSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
             ":below" -> {
                 e = this.below(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":belowInput" -> {
                 e = this.belowInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
             ":belowLabel" -> {
                 e = this.belowLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
             ":belowImage" -> {
                 e = this.belowImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
             ":belowButton" -> {
                 e = this.belowButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
             ":belowSwitch" -> {
                 e = this.belowSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
             ":left" -> {
                 e = this.left(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":leftInput" -> {
                 e = this.leftInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
             ":leftLabel" -> {
                 e = this.leftLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
             ":leftImage" -> {
                 e = this.leftImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
             ":leftButton" -> {
                 e = this.leftButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
             ":leftSwitch" -> {
                 e = this.leftSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
             ":above" -> {
                 e = this.above(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":aboveInput" -> {
                 e = this.aboveInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
             ":aboveLabel" -> {
                 e = this.aboveLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
             ":aboveImage" -> {
                 e = this.aboveImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
             ":aboveButton" -> {
                 e = this.aboveButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
             ":aboveSwitch" -> {
                 e = this.aboveSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
@@ -250,116 +264,109 @@ internal fun TestElement.relative(
             ":flow" -> {
                 e = this.flow(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":vflow" -> {
                 e = this.vflow(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":flowLabel", ":label" -> {
                 e = this.flowLabel(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: labelWidgets
                 )
             }
 
             ":flowInput", ":input" -> {
                 e = this.flowInput(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: inputWidgets
                 )
             }
 
             ":flowImage", ":image" -> {
                 e = this.flowImage(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: imageWidgets
                 )
             }
 
             ":flowButton", ":button" -> {
                 e = this.flowButton(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
             ":flowSwitch", ":switch" -> {
                 e = this.flowSwitch(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
             ":innerFlow", ":inner" -> {
-                e = this.innerFlow(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerFlow(selector = relativeSelector)
             }
 
             ":innerLabel" -> {
-                e = this.innerLabel(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerLabel(selector = relativeSelector)
             }
 
             ":innerInput" -> {
-                e = this.innerInput(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerInput(selector = relativeSelector)
             }
 
             ":innerImage" -> {
-                e = this.innerImage(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerImage(selector = relativeSelector)
             }
 
             ":innerButton" -> {
-                e = this.innerButton(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerButton(selector = relativeSelector)
             }
 
             ":innerSwitch" -> {
-                e = this.innerSwitch(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerSwitch(selector = relativeSelector)
             }
 
             ":innerVflow", ":innerV" -> {
-                e = this.innerVflow(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVflow(selector = relativeSelector)
             }
 
             ":innerVlabel" -> {
-                e = this.innerVlabel(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVlabel(selector = relativeSelector)
             }
 
             ":innerVinput" -> {
-                e = this.innerVinput(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVinput(selector = relativeSelector)
             }
 
             ":innerVimage" -> {
-                e = this.innerVimage(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVimage(selector = relativeSelector)
             }
 
             ":innerVbutton" -> {
-                e = this.innerVbutton(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVbutton(selector = relativeSelector)
             }
 
             ":innerVswitch" -> {
-                e = this.innerVswitch(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.innerVswitch(selector = relativeSelector)
             }
 
             /**
              * XML based
              */
             ":child" -> {
-                e = this.child(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.child(selector = relativeSelector)
             }
 
             ":sibling" -> {
-                e = this.sibling(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.sibling(selector = relativeSelector)
             }
 
             ":parent" -> {
@@ -367,75 +374,95 @@ internal fun TestElement.relative(
             }
 
             ":ancestor" -> {
-                e = this.ancestor(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.ancestor(selector = relativeSelector)
             }
 
             ":descendant" -> {
-                e = this.descendant(selector = relativeSelector, safeElementOnly = safeElementOnly)
+                e = this.descendant(selector = relativeSelector)
             }
 
             ":next" -> {
                 e = this.next(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":previous" -> {
                 e = this.previous(
                     selector = relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: widgets
                 )
             }
 
             ":nextInput" -> {
-                e = this.nextInput(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.nextInput(
+                    relativeSelector,
+                    targetElements = scopeElements ?: innerWidgets
+                )
             }
 
             ":preInput" -> {
-                e = this.preInput(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preInput(
+                    relativeSelector,
+                    targetElements = scopeElements ?: inputWidgets
+                )
             }
 
             ":nextLabel" -> {
-                e = this.nextLabel(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.nextLabel(
+                    relativeSelector,
+                    targetElements = scopeElements ?: labelWidgets
+                )
             }
 
             ":preLabel" -> {
-                e = this.preLabel(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preLabel(
+                    relativeSelector,
+                    targetElements = scopeElements ?: labelWidgets
+                )
             }
 
             ":nextImage" -> {
-                e = this.nextImage(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.nextImage(
+                    relativeSelector,
+                    targetElements = scopeElements ?: imageWidgets
+                )
             }
 
             ":preImage" -> {
-                e = this.preImage(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preImage(
+                    relativeSelector,
+                    targetElements = scopeElements ?: imageWidgets
+                )
             }
 
             ":nextButton" -> {
                 e = this.nextButton(
                     relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: buttonWidgets
                 )
             }
 
             ":preButton" -> {
-                e = this.preButton(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preButton(
+                    relativeSelector,
+                    targetElements = scopeElements ?: buttonWidgets
+                )
             }
 
             ":nextSwitch" -> {
                 e = this.nextSwitch(
                     relativeSelector,
-                    safeElementOnly = safeElementOnly,
-                    targetElements = targetElements
+                    targetElements = scopeElements ?: switchWidgets
                 )
             }
 
             ":preSwitch" -> {
-                e = this.preSwitch(relativeSelector, safeElementOnly = safeElementOnly, targetElements = targetElements)
+                e = this.preSwitch(
+                    relativeSelector,
+                    targetElements = scopeElements ?: switchWidgets
+                )
             }
 
             // negation
@@ -467,15 +494,13 @@ internal fun TestElement.relative(
  */
 fun TestElement.relative(
     relativeSelectors: List<Selector>,
-    safeElementOnly: Boolean = true,
-    scopeElements: List<TestElement> = TestElementCache.allElements
+    scopeElements: List<TestElement> = rootElement.elements
 ): TestElement {
 
     var e = this
     for (selector in relativeSelectors) {
         e = e.relative(
             relativeSelector = selector,
-            safeElementOnly = safeElementOnly,
             scopeElements = scopeElements
         )
     }
@@ -484,8 +509,7 @@ fun TestElement.relative(
 }
 
 internal fun TestElement.child(
-    selector: Selector,
-    safeElementOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     var e = TestElement(selector = selector)
@@ -497,7 +521,7 @@ internal fun TestElement.child(
             TestDriver.lastElement = TestElement.emptyElement
             return@execRelativeCommand
         }
-        val target = children.filterBySelector(selector = selector, safeElementOnly = safeElementOnly)
+        val target = children.filterBySelector(selector = selector)
         e = target.firstOrNull() ?: TestElement.emptyElement
     }
 
@@ -511,27 +535,30 @@ internal fun TestElement.child(
  * child
  */
 fun TestElement.child(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":child($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":child($expression)",
+        scopeElements = children
+    )
 }
 
 /**
  * child
  */
 fun TestElement.child(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":child($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":child($pos)",
+        scopeElements = children
+    )
 }
 
 internal fun TestElement.sibling(
-    selector: Selector,
-    safeElementOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     var e = TestElement(selector = selector)
@@ -539,12 +566,12 @@ internal fun TestElement.sibling(
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val te = this
         val p = te.parentElement
-        if (p == null) {
+        if (p.isEmpty) {
             TestDriver.lastElement = TestElement.emptyElement
             return@execRelativeCommand
         }
         val siblings = this.siblings
-        val targets = siblings.filterBySelector(selector = selector, safeElementOnly = safeElementOnly)
+        val targets = siblings.filterBySelector(selector = selector)
         e = targets.firstOrNull() ?: TestElement.emptyElement
     }
 
@@ -559,21 +586,25 @@ internal fun TestElement.sibling(
  */
 fun TestElement.sibling(
     expression: String,
-    safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":sibling($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":sibling($expression)",
+        scopeElements = parent().children
+    )
 }
 
 /**
  * sibling
  */
 fun TestElement.sibling(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":sibling($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":sibling($pos)",
+        scopeElements = parent().children
+    )
 }
 
 /**
@@ -584,8 +615,18 @@ fun TestElement.parent(): TestElement {
     var e = TestElement()
     val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject) {
-        val filtered = this.ancestors.reversed()
-        e = filtered.firstOrNull() ?: TestElement.emptyElement
+
+        if (testContext.useCache) {
+            e = parentElement ?: TestElement.emptyElement
+        } else {
+            if (parentElement.webElement != null) {
+                e = parentElement
+            } else {
+                val xpath = getUniqueXpath() + "/parent::*"
+                e = testDrive.findWebElementBy(locator = By.xpath(xpath), timeoutMilliseconds = 0)
+                parentElement = e
+            }
+        }
     }
 
     e.selector = this.getChainedSelector(relativeCommand = ":parent")
@@ -596,15 +637,14 @@ fun TestElement.parent(): TestElement {
 }
 
 internal fun TestElement.ancestor(
-    selector: Selector,
-    safeElementOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     var e = TestElement()
     val context = TestDriverCommandContext(this)
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val filtered = this.ancestors.reversed()
-            .filterBySelector(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
+            .filterBySelector(selector = selector, throwsException = false)
         e = filtered.firstOrNull() ?: TestElement.emptyElement
     }
 
@@ -619,26 +659,26 @@ internal fun TestElement.ancestor(
  */
 fun TestElement.ancestor(
     expression: String,
-    safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":ancestor($expression)", safeElementOnly = safeElementOnly)
+    return relative(":ancestor($expression)")
 }
 
 /**
  * ancestor
  */
 fun TestElement.ancestor(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":ancestor($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":ancestor($pos)",
+        scopeElements = this.ancestors
+    )
 }
 
 internal fun TestElement.descendant(
-    selector: Selector,
-    safeElementOnly: Boolean
+    selector: Selector
 ): TestElement {
 
     var e = TestElement()
@@ -646,8 +686,7 @@ internal fun TestElement.descendant(
     context.execRelativeCommand(subject = subject, arg1 = selector.nickname) {
         val filtered = this.descendants.filterBySelector(
             selector = selector,
-            throwsException = false,
-            safeElementOnly = safeElementOnly
+            throwsException = false
         )
         e = filtered.firstOrNull() ?: TestElement.emptyElement
     }
@@ -662,22 +701,26 @@ internal fun TestElement.descendant(
  * descendant
  */
 fun TestElement.descendant(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":descendant($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":descendant($expression)",
+        scopeElements = this.descendants
+    )
 }
 
 /**
  * descendant
  */
 fun TestElement.descendant(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":descendant($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":descendant($pos)",
+        scopeElements = descendants
+    )
 }
 
 /**

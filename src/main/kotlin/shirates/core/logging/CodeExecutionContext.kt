@@ -5,6 +5,7 @@ import shirates.core.driver.ScrollDirection
 import shirates.core.driver.testContext
 import shirates.core.utility.image.CropInfo
 import java.awt.image.BufferedImage
+import java.util.*
 
 object CodeExecutionContext {
 
@@ -108,6 +109,11 @@ object CodeExecutionContext {
      * lastScreenshotImage
      */
     var lastScreenshotImage: BufferedImage? = null
+
+    /**
+     * lastScreenshotTime
+     */
+    var lastScreenshotTime: Date? = null
 
     /**
      * lastCropInfo

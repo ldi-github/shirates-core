@@ -55,7 +55,7 @@ class Swipe1 : UITest() {
                 }.expectation {
                     output("[Battery].bounds: ${it.bounds}")
                         .dontExist("[Notifications]")
-                        .exist("[Battery]")
+                        .exist("[Storage]")
                 }
             }
             case(2) {

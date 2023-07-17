@@ -1,6 +1,6 @@
 package shirates.core.uitest.android.driver.commandextension
 
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.ScrollDirection
@@ -69,7 +69,7 @@ class TestDriveSelectExtensionTest3 : UITest() {
 
             case(99) {
                 expectation {
-                    Assertions.assertThatThrownBy {
+                    assertThatThrownBy {
                         it.selectInScanResults("no exist", log = true)
                     }.isInstanceOf(TestDriverException::class.java)
                         .hasMessage(Message.message(id = "elementNotFoundInScanResults", subject = "<no exist>"))

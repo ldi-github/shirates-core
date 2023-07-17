@@ -1,10 +1,12 @@
 package shirates.core.driver
 
+import io.appium.java_client.AppiumBy
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
 import io.appium.java_client.ios.IOSDriver
+import org.openqa.selenium.By
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.WebElement
@@ -20,12 +22,15 @@ import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.eventextension.TestDriverOnScreenContext
+import shirates.core.driver.eventextension.removeScreenHandler
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
@@ -34,6 +39,7 @@ import shirates.core.testcode.CAEPattern
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
+import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
 import shirates.core.utility.ios.IosDeviceUtility
@@ -44,12 +50,14 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toBufferedImage
+import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
+import java.util.*
 
 /**
  * TestDriver
@@ -110,11 +118,41 @@ object TestDriver {
         }
 
     /**
+     * rootElement
+     */
+    var rootElement: TestElement
+        get() {
+            if (testContext.useCache) {
+                return TestElementCache.rootElement
+            }
+            val ms = Measure("rootElement")
+            TestDriver.rootElement = appiumDriver.findElement(By.xpath("//*")).toTestElement()
+            ms.end()
+            return TestElementCache.rootElement
+        }
+        set(value) {
+            TestElementCache.rootElement = value
+            rootBounds = value.bounds
+        }
+
+    /**
+     * rootBounds
+     */
+    var rootBounds: Bounds = Bounds()
+        get() {
+            if (field.isEmpty) {
+                field = rootElement.bounds
+            }
+            return field
+        }
+        set(value) {
+            field = value
+        }
+
+    /**
      * refreshLastElement
      */
     fun refreshLastElement(): TestElement {
-
-        TestLog.trace()
 
         if (TestMode.isNoLoadRun) {
             return lastElement
@@ -128,6 +166,8 @@ object TestDriver {
             return lastElement
         }
 
+        val ms = Measure("$lastElement")
+
         syncCache()
 
         if (lastElement.isEmpty.not()) {
@@ -136,6 +176,8 @@ object TestDriver {
         if (lastElement.isEmpty) {
             lastElement = rootElement
         }
+
+        ms.end()
 
         return lastElement
     }
@@ -328,6 +370,7 @@ object TestDriver {
     fun quit() {
 
         TestLog.info("Quitting TestDriver.")
+        val ms = Measure()
         invalidateCache()
         try {
             mAppiumDriver?.quit()
@@ -337,6 +380,7 @@ object TestDriver {
             }
         } finally {
             mAppiumDriver = null
+            ms.end()
         }
 
         clearContext()
@@ -355,7 +399,19 @@ object TestDriver {
         }
         set(value) {
             field = value
+            fireScreenHandler(screenName = value)
         }
+
+    internal fun getOverlayElements(): MutableList<TestElement> {
+        val list = mutableListOf<TestElement>()
+        for (overlaySelector in screenInfo.scrollInfo.overlayElements) {
+            val o = select(expression = overlaySelector, throwsException = false)
+            if (o.isFound) {
+                list.add(o)
+            }
+        }
+        return list
+    }
 
     /**
      * expandExpression
@@ -377,10 +433,11 @@ object TestDriver {
     val screenInfo: ScreenInfo
         get() {
             return if (ScreenRepository.has(currentScreen)) ScreenRepository.get(currentScreen)
+            else if (ScreenRepository.has("[screen-base]")) ScreenRepository.getScreenInfo("[screen-base]")
             else ScreenInfo()
         }
 
-    private var lastFireIrregularHandlerXmlSource = ""
+    private var lastFireIrregularHandlerScreenshotImage: BufferedImage? = null
 
     var isFiringIrregularHandler = false
 
@@ -389,35 +446,29 @@ object TestDriver {
      */
     fun fireIrregularHandler(force: Boolean = false) {
 
-        if (testContext.useCache.not()) {
-            return
-        }
         if (force.not()) {
             if (isFiringIrregularHandler || testContext.enableIrregularHandler.not() || TestMode.isNoLoadRun || isInitialized.not()) {
                 return
             }
         }
 
-        lastFireIrregularHandlerXmlSource = ""
+        lastFireIrregularHandlerScreenshotImage = null
 
-        for (i in 1..5) {
-            val handled = fireIrregularHandlerCore()
-            if (handled == false) {
-                break
-            }
-        }
+        fireIrregularHandlerCore()
     }
 
     private fun fireIrregularHandlerCore(): Boolean {
         try {
             isFiringIrregularHandler = true
 
-            if (TestElementCache.synced && TestElementCache.sourceXml == lastFireIrregularHandlerXmlSource) {
-                TestLog.trace("firing irregularHandler skipped")
-                return false
+            if (testContext.useCache) {
+                if (TestElementCache.synced && CodeExecutionContext.lastScreenshotImage == lastFireIrregularHandlerScreenshotImage) {
+                    TestLog.trace("firing irregularHandler skipped")
+                    return false
+                }
+                syncCache()
+                lastFireIrregularHandlerScreenshotImage = CodeExecutionContext.lastScreenshotImage
             }
-            syncCache()
-            lastFireIrregularHandlerXmlSource = TestElementCache.sourceXml
 
             val originalLastElement = lastElement
             try {
@@ -432,8 +483,44 @@ object TestDriver {
             isFiringIrregularHandler = false
         }
 
-        val handled = TestElementCache.sourceXml == lastFireIrregularHandlerXmlSource
+        val handled = CodeExecutionContext.lastScreenshotImage == lastFireIrregularHandlerScreenshotImage
         return handled
+    }
+
+    var firingScreenHandlerScreens = mutableListOf<String>()
+
+    /**
+     * fireScreenHandler
+     */
+    fun fireScreenHandler(screenName: String): TestDriverOnScreenContext {
+
+        val context = TestDriverOnScreenContext(screenName = screenName)
+
+        if (firingScreenHandlerScreens.contains(screenName)) {
+            return context
+        }
+
+        try {
+            firingScreenHandlerScreens.add(screenName)
+
+            if (testContext.enableScreenHandler.not()) {
+                return context
+            }
+
+            if (testContext.screenHandlers.containsKey(screenName)) {
+                val handler = testContext.screenHandlers[screenName]!!
+                context.fired = true
+                handler(context)
+                if (context.keep.not()) {
+                    testDrive.removeScreenHandler(screenName)
+                }
+            }
+        } finally {
+            if (firingScreenHandlerScreens.contains(screenName)) {
+                firingScreenHandlerScreens.remove(screenName)
+            }
+        }
+        return context
     }
 
     /**
@@ -444,6 +531,8 @@ object TestDriver {
         if (TestMode.isNoLoadRun) {
             return
         }
+
+        val ms = Measure()
 
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
@@ -506,6 +595,7 @@ object TestDriver {
 
         profile.completeProfile()
 
+        ms.end()
         TestLog.info("AppiumDriver initialized.")
     }
 
@@ -584,6 +674,7 @@ object TestDriver {
         profile: TestProfile,
         terminateEmulatorProcess: Boolean
     ) {
+        val ms = Measure()
 
         // Restart device
         restartAndroidDevice(profile = profile, terminateEmulatorProcess = terminateEmulatorProcess)
@@ -591,6 +682,8 @@ object TestDriver {
         // Restart Appium Server
         TestLog.info("Restarting AppiumServer.")
         AppiumServerManager.restartAppiumProcess()
+
+        ms.end()
     }
 
     private fun restartAndroidDevice(profile: TestProfile, terminateEmulatorProcess: Boolean) {
@@ -755,7 +848,6 @@ object TestDriver {
         }
     }
 
-
     private fun healthCheckForAndroid(profile: TestProfile) {
         /**
          * Check udid.
@@ -812,6 +904,7 @@ object TestDriver {
             return this
         }
 
+        val ms = Measure("refreshCache")
         try {
             isRefreshing = true
 
@@ -834,12 +927,7 @@ object TestDriver {
                 }
 
                 if (lastElement.selector != null) {
-                    val e =
-                        rootElement.findInDescendantsAndSelf(selector = lastElement.selector!!, safeElementOnly = true)
-                    e.lastError = lastElement.lastError
-                    if (e.isEmpty.not()) {
-                        lastElement = e
-                    }
+                    lastElement = lastElement.refreshLastElement()
                 } else {
                     lastElement = rootElement
                 }
@@ -847,6 +935,7 @@ object TestDriver {
             }
         } finally {
             isRefreshing = false
+            ms.end()
         }
 
         return this
@@ -896,9 +985,10 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
-        safeElementOnly: Boolean = true,
         log: Boolean = false
     ): TestElement {
+
+        refreshCurrentScreenWithNickname(expression)
 
         val sel = expandExpression(expression = expression)
         var e = TestElement(selector = sel)
@@ -914,7 +1004,6 @@ object TestDriver {
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
                 useCache = useCache,
-                safeElementOnly = safeElementOnly,
             )
         }
 
@@ -931,14 +1020,12 @@ object TestDriver {
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
-        safeElementOnly: Boolean = true
     ): TestElement {
 
         if (selector.isRelative) {
             return TestElementCache.select(
                 selector = selector,
-                throwsException = false,
-                safeElementOnly = safeElementOnly
+                throwsException = false
             )
         }
         if (selector.isImageSelector) {
@@ -947,88 +1034,224 @@ object TestDriver {
 
         lastElement = TestElement.emptyElement
 
-        if (useCache) {
-            syncCache()
-        }
-
-        // Search in current screen
         var selectedElement: TestElement
-        if (testContext.useCache) {
-            selectedElement = TestElementCache.select(
-                selector = selector,
-                throwsException = false,
-                safeElementOnly = safeElementOnly
-            )
-        } else {
-            if (selector.relativeSelectors.any()) {
-                throw TestDriverException(
-                    message = message(
-                        id = "relativeSelectorNotSupportedInFindingWebElement",
-                        arg1 = "select",
-                        arg2 = "$selector"
-                    )
-                )
-            }
-            selectedElement = try {
-                val webElement = testDrive.findWebElement(selector = selector)
-                TestElement(selector = selector, webElement = webElement)
-            } catch (t: Throwable) {
-                TestElement(selector = selector)
-            }
-        }
-        if (selector.isNegation.not()) {
-            if (selectedElement.isFound) {
-                lastElement = selectedElement
-                return lastElement
-            }
-        }
 
-        // Search in scroll
-        if (scroll) {
-            return selectWithScroll(
-                selector = selector,
-                direction = direction,
-                durationSeconds = scrollDurationSeconds,
-                startMarginRatio = scrollStartMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-                throwsException = throwsException
-            )
-        }
+        val originalForceUseCache = testContext.forceUseCache
+        try {
+            val hasMatches = selector.hasMatches
+            testContext.forceUseCache = hasMatches
 
-        // Wait for seconds
-        if (waitSeconds > 0 && isInitialized) {
-            // Search until it is(not) found
-            val r = SyncUtility.doUntilTrue(
-                waitSeconds = waitSeconds
-            ) {
-                val e = TestElementCache.select(
+            // Search in current screen
+            selectedElement = if (useCache || hasMatches) {
+                syncCache()
+                TestElementCache.select(
                     selector = selector,
-                    throwsException = false,
-                    safeElementOnly = safeElementOnly
+                    throwsException = false
                 )
-                selectedElement = e
-                if (selector.isNegation) {
-                    e.isEmpty
-                } else {
-                    e.isFound
+            } else {
+                selectDirect(
+                    selector = selector,
+                    throwsException = false
+                )
+            }
+            if (selector.isNegation.not()) {
+                if (selectedElement.isFound) {
+                    lastElement = selectedElement
+                    return lastElement
                 }
             }
 
-            if (r.hasError) {
-                lastElement.lastError = r.error
+            // Search in scroll
+            if (scroll) {
+                return selectWithScroll(
+                    selector = selector,
+                    direction = direction,
+                    durationSeconds = scrollDurationSeconds,
+                    startMarginRatio = scrollStartMarginRatio,
+                    scrollMaxCount = scrollMaxCount,
+                    throwsException = throwsException,
+                )
             }
-        }
 
-        lastElement = selectedElement
+            // Wait for seconds
+            if (waitSeconds > 0 && isInitialized) {
+                // Search until it is(not) found
+                val r = SyncUtility.doUntilTrue(
+                    waitSeconds = waitSeconds,
+                    refreshCache = useCache
+                ) {
+                    val e = if (useCache) {
+                        TestElementCache.select(
+                            selector = selector,
+                            throwsException = false
+                        )
+                    } else {
+                        selectDirect(
+                            selector = selector,
+                            throwsException = false,
+                        )
+                    }
+                    selectedElement = e
+                    if (selector.isNegation) {
+                        e.isEmpty
+                    } else {
+                        e.isFound
+                    }
+                }
 
-        if (selectedElement.hasError) {
-            selectedElement.lastResult = LogType.ERROR
-            if (throwsException) {
-                throw selectedElement.lastError!!
+                if (r.hasError) {
+                    lastElement.lastError = r.error
+                }
             }
+
+            lastElement = selectedElement
+
+            if (selectedElement.hasError) {
+                selectedElement.lastResult = LogType.ERROR
+                if (throwsException) {
+                    throw selectedElement.lastError!!
+                }
+            }
+
+        } finally {
+            testContext.forceUseCache = originalForceUseCache
         }
 
         return lastElement
+    }
+
+    internal fun selectDirect(
+        selector: Selector,
+        throwsException: Boolean
+    ): TestElement {
+
+        if (TestMode.isNoLoadRun) {
+            lastElement = TestElement(selector = selector)
+            return lastElement
+        }
+
+        val ms = Measure("selectDirect")
+
+        val e = try {
+            var elm: TestElement? = null
+            if (isAndroid || selector.xpath != null || selector.className == "XCUIElementTypeApplication") {
+                val fullXPathCondition = selector.getFullXPathCondition()
+                if (fullXPathCondition.isNotBlank()) {
+                    elm = selectDirectByXPath(
+                        selector = selector,
+                        fullXPathCondition = fullXPathCondition
+                    )
+                }
+            } else if (isiOS) {
+                val iosClassChain = selector.getIosClassChain()
+                if (iosClassChain.isNotBlank()) {
+                    elm = selectDirectByIosClassChain(selector = selector)
+                }
+            }
+            if (elm == null) {
+                val baseElement =
+                    testDrive.findWebElement(selector = selector, widgetOnly = false)
+                if (baseElement.isEmpty) {
+                    elm = baseElement
+                } else {
+                    if (selector.relativeSelectors.any()) {
+                        val exps = mutableListOf(baseElement.classAlias)
+                        for (sel in selector.relativeSelectors) {
+                            val c = sel.command!!
+                            if (c.lowercase().contains("input")) {
+                                exps.add(".input")
+                            }
+                            if (c.lowercase().contains("label")) {
+                                exps.add(".label")
+                            }
+                            if (c.lowercase().contains("button")) {
+                                exps.add(".button")
+                            }
+                            if (c.lowercase().contains("image")) {
+                                exps.add(".image")
+                            }
+                            if (c.lowercase().contains("switch")) {
+                                exps.add(".switch")
+                            }
+                        }
+                        val expandedExps = exps.map { ElementCategoryExpressionUtility.expandWidget(it) }
+                        val exp =
+                            if (expandedExps.isEmpty()) ".widget"
+                            else "className=(${expandedExps.joinToString("|")})"
+                        val scopeElements = testDrive.findWebElements(expression = exp)
+                            .filter { it.isInView }
+                        elm = baseElement.getRelative(scopeElements = scopeElements)
+                    } else {
+                        elm = baseElement
+                    }
+                }
+            }
+            elm.selector = selector
+            elm
+        } catch (t: Throwable) {
+            TestLog.warn("Exception in selectDirect. selector=$selector, ${t.message}")
+            TestElement(selector = selector)
+        }
+        if (e.isEmpty) {
+            e.lastError = TestDriverException(
+                message = message(
+                    id = "elementNotFound",
+                    subject = "$selector",
+                    arg1 = selector.getElementExpression()
+                )
+            )
+            if (throwsException) {
+                throw e.lastError!!
+            }
+        }
+        ms.end()
+        return e
+    }
+
+    private fun selectDirectByXPath(
+        selector: Selector,
+        fullXPathCondition: String
+    ): TestElement {
+
+        val ms = Measure("selectDirectByXPath")
+        try {
+            if (selector.pos == null || selector.pos == 1) {
+                if (isiOS) {
+                    val xpath = "//*$fullXPathCondition[@visible='true']"
+                    return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
+                } else {
+                    val xpath = "//*$fullXPathCondition"
+                    return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
+                }
+            }
+
+            val xpath = "//*$fullXPathCondition"
+            val elements = testDrive.findWebElementsBy(By.xpath(xpath), timeoutMilliseconds = 0)
+            val pos = selector.pos!!
+            if (pos <= elements.count()) {
+                return elements[pos - 1]
+            } else {
+                return TestElement.emptyElement
+            }
+        } finally {
+            ms.end()
+        }
+    }
+
+    private fun getPredicateFromClassChain(classChain: String): String {
+
+        return classChain.removePrefix("**/*").removePrefix("[`").removeSuffix("`]")
+    }
+
+    private fun selectDirectByIosClassChain(
+        selector: Selector
+    ): TestElement {
+
+        val classChain = selector.getIosClassChain()
+        val ms = Measure(classChain)
+        val element = testDrive.findWebElementBy(AppiumBy.iOSClassChain(classChain), timeoutMilliseconds = 0)
+        ms.end()
+        return element
     }
 
     /**
@@ -1067,14 +1290,11 @@ object TestDriver {
         scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true,
+        waitSeconds: Double = testContext.syncWaitSeconds,
         useCache: Boolean = testContext.useCache,
     ): ImageMatchResult {
 
         lastElement = TestElement.emptyElement
-
-        if (useCache) {
-            syncCache()
-        }
 
         if (selector.image.isNullOrBlank()) {
             throw IllegalArgumentException(message(id = "imageFileNotFound", subject = selector.expression))
@@ -1085,13 +1305,17 @@ object TestDriver {
         }
 
         // Search in current screen
+        if (useCache) {
+            syncCache()
+        }
+
         var r = rootElement.isContainingImage(selector.image!!)
         if (r.result) {
             return r
         }
 
-        // Search in scroll
         if (scroll) {
+            // Search in scroll
             val actionFunc = {
                 r = rootElement.isContainingImage(selector.image!!)
                 r.result
@@ -1105,6 +1329,19 @@ object TestDriver {
                 startMarginRatio = scrollStartMarginRatio,
                 actionFunc = actionFunc
             )
+        } else {
+            // Wait for image displayed
+            SyncUtility.doUntilTrue(
+                waitSeconds = waitSeconds,
+                intervalSeconds = testContext.shortWaitSeconds,
+                refreshCache = useCache
+            ) { sc ->
+                if (sc.refreshCache.not()) {
+                    screenshot(force = true)
+                }
+                r = rootElement.isContainingImage(selector.image!!)
+                r.result
+            }
         }
 
         if (r.result.not() && throwsException) {
@@ -1146,83 +1383,15 @@ object TestDriver {
         throwsException: Boolean = true
     ): TestElement {
 
-        if (testContext.useCache) {
-            lastElement = selectWithScrollInCacheMode(
-                selector = selector,
-                direction = direction,
-                durationSeconds = durationSeconds,
-                startMarginRatio = startMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-            )
-        } else {
-            lastElement = selectWithScrollInWebElementMode(
-                selector = selector,
-                direction = direction,
-                durationSeconds = durationSeconds,
-                startMarginRatio = startMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-            )
-        }
-
-        if (lastElement.hasError) {
-            lastElement.lastResult = LogType.ERROR
-            if (throwsException) {
-                throw lastElement.lastError!!
-            }
-        }
-
-        return lastElement
-    }
-
-    private fun selectWithScrollInCacheMode(
-        selector: Selector,
-        direction: ScrollDirection,
-        durationSeconds: Double,
-        startMarginRatio: Double,
-        scrollMaxCount: Int,
-        safeElementOnly: Boolean = true,
-    ): TestElement {
-
         var e = TestElement()
         val actionFunc = {
-            e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = safeElementOnly)
-            if (safeElementOnly)
-                e.isSafe
-            else
-                e.isFound
-        }
-
-        testDrive.doUntilScrollStop(
-            repeat = 1,
-            maxLoopCount = scrollMaxCount,
-            direction = direction,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            actionFunc = actionFunc
-        )
-
-        return e
-    }
-
-    private fun selectWithScrollInWebElementMode(
-        selector: Selector,
-        direction: ScrollDirection,
-        durationSeconds: Double,
-        startMarginRatio: Double,
-        scrollMaxCount: Int,
-    ): TestElement {
-
-        val we = testDrive.findWebElement(selector = selector)
-        var e = TestElement(selector = selector, webElement = we)
-        if (e.isSafe) {
-            if (e.isSafe) {
-                lastElement = e
-                return lastElement
-            }
-        }
-
-        val actionFunc = {
-            e = testDrive.findWebElement(selector = selector).toTestElement(selector = selector)
+            val ms = Measure("$selector")
+            e = select(
+                selector = selector,
+                waitSeconds = 0.0,
+                throwsException = false,
+            )
+            ms.end()
             e.isSafe
         }
 
@@ -1235,12 +1404,15 @@ object TestDriver {
             actionFunc = actionFunc
         )
 
-        if (e.isEmpty) {
-            // Try select after scroll stops
-            e = testDrive.findWebElement(selector = selector).toTestElement(selector = selector)
+        lastElement = e
+        if (e.hasError) {
+            e.lastResult = LogType.ERROR
+            if (throwsException) {
+                throw e.lastError!!
+            }
         }
 
-        return e
+        return lastElement
     }
 
     /**
@@ -1327,12 +1499,23 @@ object TestDriver {
         if (isInitialized.not()) {
             return this
         }
+
+        val screenshotTime = Date()
+
         if (force.not()) {
             if (CodeExecutionContext.shouldOutputLog.not()) {
                 return this
             }
             if (shouldTakeScreenshot.not()) {
                 return this
+            }
+            if (CodeExecutionContext.lastScreenshotTime != null) {
+                val diff = screenshotTime.time - CodeExecutionContext.lastScreenshotTime!!.time
+                val intervalMilliseconds = PropertiesManager.screenshotIntervalSeconds * 1000
+                if (diff < intervalMilliseconds) {
+                    TestLog.trace("screenshot() skipped. ($diff < $intervalMilliseconds)")
+                    return this
+                }
             }
         }
 
@@ -1365,6 +1548,8 @@ object TestDriver {
             }
 
             CodeExecutionContext.lastScreenshotImage = screenshotImage
+            CodeExecutionContext.lastScreenshotTime = screenshotTime
+
             val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toFile()
             screenshotImage.resizeAndSaveImage(
                 scale = PropertiesManager.screenshotScale,
@@ -1472,13 +1657,50 @@ object TestDriver {
     /**
      * refreshCurrentScreen
      */
-    fun refreshCurrentScreen(): String {
+    fun refreshCurrentScreen(
+        screenInfoList: List<ScreenInfo> = ScreenRepository.screenInfoSearchList,
+        maxDepth: Int? = null,
+        log: Boolean = true
+    ): String {
 
-        val screenInfoList = ScreenRepository.screenInfoList
+        val ms = Measure("refreshCurrentScreen")
 
-        for (i in 0 until screenInfoList.count()) {
+        val originalScreen = currentScreen
+
+        val screenInfoHistory = getScreenInfoHistory()
+        var newScreen = refreshCurrentScreenCore(screenInfoList = screenInfoHistory, maxDepth = maxDepth)
+        if (newScreen == "?") {
+            val list = screenInfoList.toMutableList()
+            list.removeAll(screenInfoHistory)
+            newScreen = refreshCurrentScreenCore(screenInfoList = list, maxDepth = maxDepth)
+        }
+        val changed = newScreen != "?" && newScreen != originalScreen
+        if (changed) {
+            currentScreen = newScreen
+            TestLog.info("currentScreen=$currentScreen", log = log)
+        }
+
+        ms.end()
+
+        return currentScreen
+    }
+
+    private fun refreshCurrentScreenCore(
+        screenInfoList: List<ScreenInfo>,
+        maxDepth: Int?
+    ): String {
+        var newScreen = "?"
+        if (screenInfoList.isEmpty()) {
+            return newScreen
+        }
+        val md =
+            maxDepth ?: if (testContext.useCache) Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_CACHE_MODE
+            else Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_DIRECT_MODE
+        val depth = Math.min(screenInfoList.count(), md)
+        for (i in 0 until depth) {
             val screenInfo = screenInfoList[i]
             val screenName = screenInfo.key
+            TestLog.trace("// Trying $screenName")
 
             if (screenName.isBlank()) {
                 continue
@@ -1489,49 +1711,97 @@ object TestDriver {
 
             val match = isScreen(screenName = screenName)
             if (match) {
-                currentScreen = screenName
-                return currentScreen
+                newScreen = screenName
+                break
             }
         }
+        return newScreen
+    }
 
-        currentScreen = ""
-        return currentScreen
+    /**
+     * refreshCurrentScreenWithNickname
+     */
+    fun refreshCurrentScreenWithNickname(expression: String) {
+
+        if (screenInfo.selectors.any() { it.key == expression }) {
+            return
+        }
+
+        val ms = Measure(expression)
+
+        if (expression.isValidNickname()) {
+            val nickname = expression
+            val screenCandidates = ScreenRepository.nicknameIndex[nickname]
+            if (screenCandidates != null) {
+                refreshCurrentScreen(screenCandidates)
+            }
+        }
+        ms.end()
+    }
+
+    private val screenNameHistory = mutableListOf<String>()
+
+    private fun setScreenHistory(screenName: String) {
+
+        val ix = screenNameHistory.indexOf(screenName)
+        if (ix >= 0) {
+            screenNameHistory.removeAt(ix)
+        }
+        screenNameHistory.add(0, screenName)
+    }
+
+    private fun getScreenInfoHistory(): List<ScreenInfo> {
+        val list = mutableListOf<ScreenInfo>()
+        for (screenName in screenNameHistory) {
+            if (ScreenRepository.has(screenName)) {
+                list.add(ScreenRepository[screenName])
+            }
+        }
+        return list
     }
 
     /**
      * isScreen
      */
     fun isScreen(
-        screenName: String,
-        safeElementOnly: Boolean = false,
+        screenName: String
     ): Boolean {
 
         if (TestMode.isNoLoadRun) {
             return true
         }
 
-        NicknameUtility.validateScreenName(screenName)
-        val repo = ScreenRepository.get(screenName)
+        val ms = Measure("■■■ Trying isScreen($screenName)")
+        try {
+            NicknameUtility.validateScreenName(screenName)
+            val screenInfo = ScreenRepository.get(screenName)
 
-        var r = TestDriveObject.canSelectAll(selectors = repo.identitySelectors, safeElementOnly = safeElementOnly)
-        if (r && repo.satelliteSelectors.any()) {
-            fun hasAnySatellite(): Boolean {
-                for (expression in repo.satelliteExpressions) {
-                    if (TestDriveObject.canSelect(
-                            expression = expression,
-                            screenName = screenName,
-                            safeElementOnly = safeElementOnly
-                        )
-                    ) {
-                        return true
+            var r = TestDriveObject.canSelectAll(selectors = screenInfo.identitySelectors)
+            if (r && screenInfo.satelliteSelectors.any()) {
+                fun hasAnySatellite(): Boolean {
+                    for (expression in screenInfo.satelliteExpressions) {
+                        if (TestDriveObject.canSelect(
+                                expression = expression,
+                                screenName = screenName
+                            )
+                        ) {
+                            return true
+                        }
                     }
+                    return false
                 }
-                return false
+                r = r && hasAnySatellite()
             }
-            r = r && hasAnySatellite()
-        }
+            if (r) {
+                currentScreen = screenName
+                setScreenHistory(screenName)
+                TestLog.trace("Screen found. ■■■ $screenName ■■■")
+            }
 
-        return r
+            return r
+        } finally {
+            ms.end()
+        }
     }
 
     internal var isSyncing = false
@@ -1582,12 +1852,11 @@ object TestDriver {
                         /**
                          * Synced
                          */
-                        refreshCurrentScreen()
-                        val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
                         TestLog.info(
-                            "Synced. (elapsed=${sw.elapsedSeconds}, currentScreen=$screenName)",
+                            "Synced. (elapsed=${sw.elapsedSeconds}",
                             log = enableSyncLog
                         )
+                        refreshCurrentScreen()
                         return@execSilentCommand
                     }
 
@@ -1646,14 +1915,16 @@ object TestDriver {
     /**
      * getFocusedWebElement
      */
-    fun getFocusedWebElement(): WebElement {
+    fun getFocusedWebElement(): TestElement {
 
-        val m = try {
-            mAppiumDriver!!.switchTo().activeElement() as WebElement
+        return try {
+            testDrive.implicitWaitMilliseconds((testContext.shortWaitSeconds * 1000).toInt()) {
+                lastElement = (mAppiumDriver!!.switchTo().activeElement() as WebElement).toTestElement()
+            }
+            lastElement
         } catch (t: Throwable) {
             throw TestDriverException(message(id = "activeElementNotFound", submessage = "$t"), cause = t)
         }
-        return m
     }
 
     private fun getFocusedElementCore(
@@ -1661,32 +1932,16 @@ object TestDriver {
     ): TestElement {
 
         if (isAndroid) {
-            val focused = TestElementCache.allElements.firstOrNull() { it.focused == "true" }
-            return focused ?: TestElement()
+            val focused = select(expression = "xpath=//*[@focused='true']", throwsException = false)
+            return focused
         } else {
-            val a = try {
-                getFocusedWebElement()
+            val e = try {
+                (mAppiumDriver!!.switchTo().activeElement() as WebElement).toTestElement()
             } catch (t: Throwable) {
                 if (throwsException) throw t
                 return TestElement.emptyElement
             }
-
-            val type = a.getAttribute("type")
-            val sel = Selector("className=$type")
-            val name = a.getAttribute("name")
-            return if (name.isNullOrBlank()) {
-                val location = a.location
-                val x = location.x
-                val y = location.y
-                val size = a.size
-                val width = size.width
-                val height = size.height
-                val xpath = "//*[@x='$x' and @y='$y' and @width='$width' and @height='$height']"
-                TestElementCache.select("xpath=$xpath", safeElementOnly = true)
-            } else {
-                sel.id = name
-                TestElementCache.select(selector = sel, safeElementOnly = true)
-            }
+            return e
         }
     }
 
@@ -1694,7 +1949,6 @@ object TestDriver {
      * getFocusedElement
      */
     fun getFocusedElement(
-        waitSeconds: Double = testContext.waitSecondsOnIsScreen,
         throwsException: Boolean = false
     ): TestElement {
 
@@ -1704,19 +1958,12 @@ object TestDriver {
 
         refreshCache()
 
-        var element = TestElement()
-        val r = SyncUtility.doUntilTrue(
-            waitSeconds = waitSeconds
-        ) {
-            element = getFocusedElementCore(throwsException = throwsException)
-            element.isFound
-        }
+        val element = getFocusedElementCore(throwsException = throwsException)
 
         if (element.isEmpty && throwsException) {
-            throw TestDriverException(message(id = "focusedElementNotFound"), cause = r.error)
+            throw TestDriverException(message(id = "focusedElementNotFound"))
         }
 
-        element.refreshSelector()
         return element
     }
 
@@ -1753,13 +2000,11 @@ object TestDriver {
                 appName = appNameOrAppId.split(".").last()
             }
 
-
             if (testContext.useCache) {
                 syncCache()
-            } else {
-                rootElement = testDrive.findWebElement("xpath=//*[1]").toTestElement()
             }
-            return rootElement.name == appName
+            val appElement = select(".XCUIElementTypeApplication")
+            return appElement.name == appName
         } catch (t: Throwable) {
             TestLog.info("Error in isAppCore: $t")
             return false

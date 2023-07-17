@@ -44,6 +44,7 @@ class TestProfileTest : UnitTest() {
         assertThat(p1.packageOrBundleId).isNull()
         assertThat(p1.startupPackageOrBundleId).isNull()
         assertThat(p1.startupActivity).isNull()
+        assertThat(p1.enforceXPath1).isNull()
 
         // Appium Proxy --------------------------------------------------
         assertThat(p1.appiumProxyReadTimeoutSeconds).isNull()

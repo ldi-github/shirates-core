@@ -1,0 +1,28 @@
+{
+  "key": "[A10 Screen]",
+
+  "include": [
+    "[Common Footer]"
+  ],
+
+  "identity": "[Title][X]",
+  "weight": "10",
+
+  "selectors": {
+
+    "[@a and @i]": "@a<#android>,@i<#ios>",
+
+    "[Title]": "",
+    "[Title*]": "",
+    "[X]": "id=close",
+    "[Button A]": "id=idA",
+    "{TextBox A}": "xpath=xpathA"
+  },
+
+  "scroll": {
+    "start-elements": "[start-elementA][start-elementB]",
+    "end-elements": "[end-elementA][end-elementB]",
+    "overlay-elements": "[overlay-elementA][overlay-elementB]"
+  }
+
+}

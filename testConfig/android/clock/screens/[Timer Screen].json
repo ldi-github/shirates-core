@@ -2,12 +2,16 @@
   "key": "[Timer Screen]",
 
   "include": [
-    "[Clock(shared)]"
+    "[Clock(shared)]",
+    "[Relative(shared)]"
   ],
 
-  "identity": "[Timer setup time]",
+  "identity": "[Title]",
 
   "selectors": {
+    "[Title]": "Timer&&#action_bar_title",
+    "[More options]": "@More options",
+
     "[Timer setup time]": "#timer_setup_time",
     "[1]": "#timer_setup_digit_1",
     "[2]": "#timer_setup_digit_2",

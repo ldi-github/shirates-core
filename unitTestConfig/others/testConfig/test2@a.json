@@ -13,7 +13,7 @@
   },
 
   "capabilities": {
-    "avd": "Pixel_3a_Android_12_-01",
+    "avd": "Pixel_3a_Android_12_",
     "language": "en",
     "locale": "US"
   },

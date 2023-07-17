@@ -3,6 +3,7 @@ package shirates.core.uitest.android.driver.commandextension
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.commandextension.*
@@ -16,21 +17,13 @@ import shirates.helper.TestSetupHelper
 @Testrun("testConfig/android/calendar/testrun.properties")
 class TestElementImageExtensionTest2 : UITest() {
 
-    @Test
-    @Order(10)
-    fun setupImage() {
+    override fun beforeAllAfterSetup(context: ExtensionContext?) {
 
-        scenario {
-            case(1) {
-                condition {
-                    TestSetupHelper.setupImageCalendarWeekScreen()
-                }
-            }
-        }
+        TestSetupHelper.setupImageCalendarWeekScreen()
     }
 
     @Test
-    @Order(20)
+    @Order(10)
     fun findImage() {
 
         ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
@@ -66,7 +59,7 @@ class TestElementImageExtensionTest2 : UITest() {
     }
 
     @Test
-    @Order(30)
+    @Order(20)
     fun exist() {
 
         ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
@@ -112,7 +105,7 @@ class TestElementImageExtensionTest2 : UITest() {
     }
 
     @Test
-    @Order(40)
+    @Order(30)
     fun imageSelectorNotSupported() {
 
         ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))

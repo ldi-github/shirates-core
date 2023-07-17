@@ -15,86 +15,10 @@ val TestElement.descendantsInBounds: List<TestElement>
     }
 
 /**
- * descendants
- */
-val TestElement.descendants: List<TestElement>
-    get() {
-        if (this.descendantsCache != null) {
-            return descendantsCache!!
-        }
-        val list = mutableListOf<TestElement>()
-        addChild(this, list)
-        descendantsCache = list
-        return descendantsCache!!
-    }
-
-/**
- * descendantsAndSelf
- */
-val TestElement.descendantsAndSelf: List<TestElement>
-    get() {
-        val list = descendants.toMutableList()
-        list.add(0, this)
-        return list
-    }
-
-private fun addChild(element: TestElement, list: MutableList<TestElement>) {
-
-    for (c in element.children) {
-        list.add(c)
-        addChild(c, list)
-    }
-}
-
-/**
- * ancestors
- */
-val TestElement.ancestors: List<TestElement>
-    get() {
-        val list = mutableListOf<TestElement>()
-        getAncestors(this, list)
-        return list
-    }
-
-/**
- * ancestorsAndSelf
- */
-val TestElement.ancestorsAndSelf: List<TestElement>
-    get() {
-        val list = ancestors.toMutableList()
-        list.add(this)
-        return list
-    }
-
-private fun getAncestors(element: TestElement, list: MutableList<TestElement>) {
-
-    if (element.parentElement == null) {
-        return
-    }
-
-    list.add(0, element.parentElement!!)
-
-    getAncestors(element.parentElement!!, list)
-}
-
-/**
- * siblings
- */
-val TestElement.siblings: List<TestElement>
-    get() {
-        if (parentElement == null) {
-            return mutableListOf()
-        }
-
-        return parentElement!!.children.toList()
-    }
-
-/**
  * findInDescendantsAndSelf
  */
 fun TestElement.findInDescendantsAndSelf(
     expression: String,
-    safeElementOnly: Boolean = true
 ): TestElement {
 
     TestLog.trace()
@@ -106,7 +30,7 @@ fun TestElement.findInDescendantsAndSelf(
         sel = TestDriver.expandExpression(expression = expression)
     }
 
-    TestDriver.lastElement = findInDescendantsAndSelf(selector = sel, safeElementOnly = safeElementOnly)
+    TestDriver.lastElement = findInDescendantsAndSelf(selector = sel)
 
     return TestDriver.lastElement
 }
@@ -116,13 +40,11 @@ fun TestElement.findInDescendantsAndSelf(
  */
 fun TestElement.findInDescendantsAndSelf(
     selector: Selector,
-    safeElementOnly: Boolean = true
 ): TestElement {
 
     TestLog.trace()
 
-    val elms =
-        TestElementCache.filterElements(selector = selector, safeElementOnly = safeElementOnly, selectContext = this)
+    val elms = descendantsAndSelf.filterBySelector(selector = selector)
     var a = elms.firstOrNull()
 
     if (a == null) {

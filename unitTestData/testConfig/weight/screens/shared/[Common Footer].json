@@ -1,0 +1,17 @@
+{
+  "key": "[Common Footer]",
+
+  "selectors": {
+
+    "[Menu X]": "id=idX",
+    "[Menu Y]": "xpath=xpathY",
+    "[Menu Z]": "text=textZ"
+  },
+
+  "scroll": {
+    "start-elements": "",
+    "end-elements": "",
+    "overlay-elements": "[Menu X][Menu Y][Menu Z]"
+  }
+
+}

@@ -1,4 +1,4 @@
-# Irregular Handler
+# Irregular Handler (Global Handler)
 
 In smartphone apps, irregular screens are often inserted in the middle of screen transitions.
 
@@ -114,7 +114,8 @@ class IrregularHandler1 : UITest() {
 
 **Note:**
 
-- A lot of procedure in irregularHandler may cause performance problem.
+- A lot of procedure in irregularHandler may cause performance problem. Consider
+  using [Screen Handler](screen_handler.md) instead.
 - Logging is suppressed while executing irregularHandler delegate function by default.
 
 ## suppressHandler

@@ -25,6 +25,11 @@ class HorizontalBand(internal var top: Int, internal var bottom: Int) {
         if (this.bottom <= element.bounds.top) {
             return false
         }
+        val s1 = element.toString()
+        val contains = members.any() { it.toString() == s1 }
+        if (contains) {
+            return false
+        }
         return true
     }
 
@@ -42,13 +47,11 @@ class HorizontalBand(internal var top: Int, internal var bottom: Int) {
             return false
         }
 
-        if (members.contains(element).not()) {
-            members.add(element)
-            members.sortWith(compareBy<TestElement> { it.bounds.left }
-                .thenBy { it.bounds.top }
-                .thenBy { -it.bounds.area })
-            refreshTopAndBottom()
-        }
+        members.add(element)
+        members.sortWith(compareBy<TestElement> { it.bounds.left }
+            .thenBy { it.bounds.top }
+            .thenBy { -it.bounds.area })
+        refreshTopAndBottom()
         return true
     }
 

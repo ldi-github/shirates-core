@@ -140,6 +140,7 @@ fun TestDrive.screenIs(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = null,
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -154,7 +155,8 @@ fun TestDrive.screenIs(
             expectedScreenName = screenName,
             waitSeconds = waitSeconds,
             assertMessage = assertMessage,
-            useCache = useCache
+            useCache = useCache,
+            onIrregular = onIrregular
         )
     }
     if (func != null) {
@@ -181,7 +183,8 @@ internal fun TestDrive.screenIsCore(
     expectedScreenName: String,
     assertMessage: String,
     waitSeconds: Double,
-    useCache: Boolean = testContext.useCache
+    onIrregular: (() -> Unit)? = null,
+    useCache: Boolean
 ) {
 
     var isScreenResult = false
@@ -194,9 +197,15 @@ internal fun TestDrive.screenIsCore(
 
     if (isScreenResult.not()) {
 
-        SyncUtility.doUntilTrue(waitSeconds = waitSeconds, refreshCache = true) {
-            TestDriver.fireIrregularHandler(force = true)
+        SyncUtility.doUntilTrue(
+            waitSeconds = waitSeconds,
+            intervalSeconds = PropertiesManager.screenshotIntervalSeconds,
+            refreshCache = useCache
+        ) {
             val r = actionFunc()
+            if (r.not()) {
+                onIrregular?.invoke()
+            }
             r
         }
 
@@ -224,6 +233,7 @@ fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = null,
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -238,7 +248,8 @@ fun TestDrive.screenIsOf(
             screenNames = screenNames,
             waitSeconds = waitSeconds,
             assertMessage = assertMessage,
-            useCache = useCache
+            useCache = useCache,
+            onIrregular = onIrregular
         )
     }
     if (func != null) {
@@ -255,6 +266,7 @@ fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Int,
     useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = null,
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -262,6 +274,7 @@ fun TestDrive.screenIsOf(
         screenNames = screenNames,
         waitSeconds = waitSeconds.toDouble(),
         useCache = useCache,
+        onIrregular = onIrregular,
         func = func
     )
 }
@@ -270,13 +283,14 @@ internal fun TestDrive.screenIsOfCore(
     vararg screenNames: String,
     assertMessage: String,
     waitSeconds: Double,
-    useCache: Boolean = testContext.useCache
+    useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = null
 ) {
     var isScreenResult = false
     var matchedScreenName = ""
     val checkScreen = {
         for (name in screenNames) {
-            isScreenResult = name == screenName
+            isScreenResult = isScreen(name)
             if (isScreenResult) {
                 matchedScreenName = name
                 break
@@ -289,8 +303,11 @@ internal fun TestDrive.screenIsOfCore(
 
     if (isScreenResult.not()) {
         SyncUtility.doUntilTrue(waitSeconds = waitSeconds) {
-            TestDriver.fireIrregularHandler()
             checkScreen()
+            if (isScreenResult.not()) {
+                onIrregular?.invoke()
+            }
+            isScreenResult
         }
     }
 
@@ -325,7 +342,6 @@ internal fun TestDrive.existCore(
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    safeElementOnly: Boolean = true
 ): TestElement {
 
     var e = TestElement()
@@ -361,7 +377,6 @@ internal fun TestDrive.existCore(
             throwsException = false,
             waitSeconds = waitSeconds,
             useCache = useCache,
-            safeElementOnly = safeElementOnly
         )
         TestDriver.postProcessForAssertion(
             selectResult = e,
@@ -387,6 +402,8 @@ fun TestDrive.exist(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
+    TestDriver.refreshCurrentScreenWithNickname(expression)
+
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
 
@@ -408,7 +425,7 @@ fun TestDrive.exist(
             waitSeconds = waitSeconds,
             useCache = useCache,
             scroll = scroll,
-            direction = direction
+            direction = direction,
         )
     }
 
@@ -431,7 +448,7 @@ fun TestDrive.existWithScrollDown(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = TestDriver.it
+    val testElement = getThisOrLastElement()
 
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)
@@ -449,7 +466,7 @@ fun TestDrive.existWithScrollDown(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Down,
-            throwsException = throwsException
+            throwsException = throwsException,
         )
     }
     if (func != null) {
@@ -489,7 +506,7 @@ fun TestDrive.existWithScrollUp(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Up,
-            throwsException = throwsException
+            throwsException = throwsException,
         )
     }
     if (func != null) {
@@ -529,7 +546,7 @@ fun TestDrive.existWithScrollRight(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Right,
-            throwsException = throwsException
+            throwsException = throwsException,
         )
     }
     if (func != null) {
@@ -569,7 +586,7 @@ fun TestDrive.existWithScrollLeft(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Left,
-            throwsException = throwsException
+            throwsException = throwsException,
         )
     }
     if (func != null) {
@@ -585,11 +602,10 @@ fun TestDrive.existWithScrollLeft(
 fun TestDrive.existInScanResults(
     expression: String,
     throwsException: Boolean = true,
-    safeElementOnly: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = TestDriver.it
+    val testElement = rootElement
 
     val command = "existInScanResults"
     val sel = getSelector(expression = expression)
@@ -598,25 +614,28 @@ fun TestDrive.existInScanResults(
 
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
+        useCache {
+            for (scanResult in TestElementCache.scanResults) {
+                TestLog.trace("from [scanResults]")
 
-        for (scanResult in TestElementCache.scanResults) {
-            TestLog.trace("from [scanResults]")
-
-            e = scanResult.element.findInDescendantsAndSelf(selector = sel, safeElementOnly = safeElementOnly)
-            if (e.isEmpty.not()) {
-                TestLog.trace("found in scanResults")
-                break
+                e = scanResult.element.findInDescendantsAndSelf(
+                    selector = sel,
+                )
+                if (e.isEmpty.not()) {
+                    TestLog.trace("found in scanResults")
+                    break
+                }
             }
-        }
 
-        TestDriver.postProcessForAssertion(
-            selectResult = e,
-            assertMessage = assertMessage,
-            dontExist = false
-        )
+            TestDriver.postProcessForAssertion(
+                selectResult = e,
+                assertMessage = assertMessage,
+                dontExist = false
+            )
 
-        if (e.hasError && throwsException) {
-            throw e.lastError!!
+            if (e.hasError && throwsException) {
+                throw e.lastError!!
+            }
         }
     }
     if (func != null) {
@@ -633,7 +652,7 @@ fun TestDrive.existInScanResults(
 fun TestDrive.existAll(
     vararg expressions: String,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    useCache: Boolean = testContext.useCache
+    useCache: Boolean = testContext.useCache,
 ): TestElement {
 
     var wsec = waitSeconds
@@ -645,7 +664,7 @@ fun TestDrive.existAll(
         this.exist(
             expression = expression,
             waitSeconds = wsec,
-            useCache = useCache
+            useCache = useCache,
         )
         if (sw.elapsedMillis > waitSeconds * 1000) {
             wsec = 0.0
@@ -659,7 +678,7 @@ fun TestDrive.existAll(
  * existAllWithScrollDown
  */
 fun TestDrive.existAllWithScrollDown(
-    vararg expressions: String
+    vararg expressions: String,
 ): TestElement {
 
     for (expression in expressions) {
@@ -674,11 +693,10 @@ fun TestDrive.existAllWithScrollDown(
  */
 fun TestDrive.existAllInScanResults(
     vararg expressions: String,
-    safeElementOnly: Boolean = true
 ): TestElement {
 
     for (expression in expressions) {
-        this.existInScanResults(expression = expression, safeElementOnly = safeElementOnly)
+        this.existInScanResults(expression = expression)
     }
 
     return lastElement
@@ -688,7 +706,7 @@ internal fun TestDrive.dontExist(
     selector: Selector,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
-    useCache: Boolean = testContext.useCache
+    useCache: Boolean = testContext.useCache,
 ): TestElement {
 
     val testElement = TestDriver.it
@@ -725,7 +743,7 @@ internal fun TestDrive.dontExist(
             selector = selector,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
-            useCache = useCache
+            useCache = useCache,
         )
     }
 
@@ -757,7 +775,6 @@ internal fun TestDrive.dontExistCore(
         waitSeconds = 0.0,
         throwsException = false,
         useCache = useCache,
-        safeElementOnly = true
     )
 
     if (waitSeconds > 0.0 && scroll.not() && e.isFound) {
@@ -765,7 +782,10 @@ internal fun TestDrive.dontExistCore(
         SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds
         ) {
-            e = TestElementCache.select(selector = selector, throwsException = false, safeElementOnly = true)
+            e = TestElementCache.select(
+                selector = selector,
+                throwsException = false,
+            )
             if (e.isFound) {
                 refreshCache()
             }
@@ -916,7 +936,6 @@ fun TestDrive.dontExistAllInScanResult(
  */
 fun TestDrive.dontExistInScanResults(
     expression: String,
-    safeElementOnly: Boolean = true,
     throwsException: Boolean = true
 ): TestElement {
 
@@ -933,7 +952,7 @@ fun TestDrive.dontExistInScanResults(
         for (scanRoot in TestElementCache.scanResults) {
             TestLog.trace("from [scanResults]")
 
-            e = scanRoot.element.findInDescendantsAndSelf(selector = sel, safeElementOnly = safeElementOnly)
+            e = scanRoot.element.findInDescendantsAndSelf(selector = sel)
             if (e.isEmpty.not()) {
                 TestLog.trace("found in scanResults")
                 break

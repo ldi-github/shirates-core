@@ -108,7 +108,6 @@
     - [Platform property (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](basic/function_property/branch/platform_properties.md)
     - [Osaifukeitai function (osaifuKeitai, osaifuKeitaiNot)](basic/function_property/branch/osaifu_keitai_branch_functions.md)
     - [Special branch function (specialTag)](basic/function_property/branch/special_branch_functions.md)
-    - [Screen branch function (onScreen)](basic/function_property/branch/screen_branch_functions.md)
 - Editing and Keyboard operations
     - [sendKeys](basic/function_property/editing_and_keyboard_operations/sendkeys.md)
     - [clearInput](basic/function_property/editing_and_keyboard_operations/clearinput.md)
@@ -180,7 +179,8 @@
     - [Configuring tapAppIcon function](in_action/adapting_to_environments/configuring_tap_appIcon_function.md)
     - [Adapting to changes in OS message](in_action/adapting_to_environments/adapting_to_changes_in_os_messages.md)
 - Handling irregulars
-    - [Irregular Handler](in_action/handling_irregulars/irregular_handler.md)
+    - [Irregular Handler(Global Handler)](in_action/handling_irregulars/irregular_handler.md)
+    - [Screen Handler](in_action/handling_irregulars/)
 - Test Fixture
     - [Test fixture](in_action/test_fixture/test_fixture.md)
 - Image matching

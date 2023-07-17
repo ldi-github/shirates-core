@@ -4,17 +4,17 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.CodeExecutionContext
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.isSame
 import kotlin.math.max
 import kotlin.math.min
 
 
 internal fun TestDrive.getScrollableElementsInDescendants(): List<TestElement> {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     if (isAndroid) {
         return testElement.descendants.filter { it.isScrollable }
@@ -25,7 +25,7 @@ internal fun TestDrive.getScrollableElementsInDescendants(): List<TestElement> {
 
 internal fun TestDrive.getScrollableElementsInAncestors(): List<TestElement> {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     return if (isAndroid) {
         testElement.ancestors.filter { it.isScrollable }
@@ -34,9 +34,9 @@ internal fun TestDrive.getScrollableElementsInAncestors(): List<TestElement> {
     }
 }
 
-internal fun TestDrive.getScrollableTarget(): TestElement {
+internal fun TestDrive.getScrollableElement(): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
     if (testElement.isScrollable) {
         return testElement
     }
@@ -71,7 +71,7 @@ private fun TestDrive.scrollCommand(
     startMarginRatio: Double,
     swipeAction: (ScrollingInfo) -> Unit
 ) {
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
@@ -209,7 +209,7 @@ private fun TestDrive.scrollToEdgeCommand(
     edgeSelector: String?,
     imageCompare: Boolean
 ) {
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
@@ -363,7 +363,40 @@ fun TestDrive.doUntilScrollStop(
     actionFunc: (() -> Boolean)? = null
 ): TestElement {
 
+    val ms = Measure()
+
+    try {
+        return doUntilScrollStopCore(
+            scrollFunc = scrollFunc,
+            direction = direction,
+            durationSeconds = durationSeconds,
+            startMarginRatio = startMarginRatio,
+            imageCompare = imageCompare,
+            edgeSelector = edgeSelector,
+            actionFunc = actionFunc,
+            maxLoopCount = maxLoopCount,
+            repeat = repeat,
+            intervalSeconds = intervalSeconds
+        )
+    } finally {
+        ms.end()
+    }
+}
+
+private fun TestDrive.doUntilScrollStopCore(
+    scrollFunc: (() -> Unit)?,
+    direction: ScrollDirection,
+    durationSeconds: Double,
+    startMarginRatio: Double,
+    imageCompare: Boolean,
+    edgeSelector: String?,
+    actionFunc: (() -> Boolean)?,
+    maxLoopCount: Int,
+    repeat: Int,
+    intervalSeconds: Double
+): TestElement {
     val scroll = scrollFunc ?: {
+        val ms = Measure()
         suppressHandler {
             if (direction.isDown) {
                 scrollDown(durationSeconds = durationSeconds, startMarginRatio = startMarginRatio)
@@ -375,35 +408,42 @@ fun TestDrive.doUntilScrollStop(
                 scrollLeft(durationSeconds = durationSeconds, startMarginRatio = startMarginRatio)
             }
         }
+        ms.end()
     }
 
-    var lastSerialized = scrollFrame.descendantsInBounds.serialize()
-    var lastCroppedImage =
-        if (imageCompare) scrollFrame.cropImage(save = false).lastCropInfo?.croppedImage else null
+    val msLastSerialized = Measure("lastSerialized")
+    var lastSerialized = testDrive.widgets.lastOrNull()?.toString() ?: ""
+    msLastSerialized.end()
 
     fun isEndOfScroll(): Boolean {
 
-        if (imageCompare) {
-            val croppedImage = rootElement.cropImage(save = false).lastCropInfo?.croppedImage
-            val result = croppedImage.isSame(lastCroppedImage)
-            lastCroppedImage = croppedImage
+        val ms = Measure("isEndOfScroll")
+        try {
+            val scrollInfo = TestDriver.screenInfo.scrollInfo
+            val expressions = if (edgeSelector != null) {
+                mutableListOf(edgeSelector)
+            } else {
+                when (direction) {
+                    ScrollDirection.Down -> scrollInfo.endElements
+                    ScrollDirection.Up -> scrollInfo.startElements
+                    else -> mutableListOf()
+                }
+            }
+            if (edgeElementFound(expressions = expressions)) {
+                return true
+            }
+
+            val msSerialized = Measure("serialized")
+            val serialized =
+                if (testContext.useCache) rootElement.descendants.serialize()
+                else testDrive.widgets.lastOrNull()?.toString() ?: ""
+            msSerialized.end()
+            val result = serialized == lastSerialized
+            lastSerialized = serialized
             return result
+        } finally {
+            ms.end()
         }
-
-        if (edgeSelector != null) {
-            val result = edgeElementFound(mutableListOf(edgeSelector))
-            return result
-        }
-
-        val endElements = TestDriver.screenInfo.scrollInfo.endElements.toMutableList()
-        if (edgeElementFound(endElements)) {
-            return true
-        }
-
-        val serialized = sourceXml //innerElements.serialize()
-        val result = serialized == lastSerialized
-        lastSerialized = serialized
-        return result
     }
 
     if (TestDriver.isInitialized) {
@@ -415,6 +455,7 @@ fun TestDrive.doUntilScrollStop(
             }
         }
 
+        val ms = Measure("doUntilScrollStop-loop")
         val original = CodeExecutionContext.isScrolling
         try {
             CodeExecutionContext.isScrolling = true
@@ -443,6 +484,7 @@ fun TestDrive.doUntilScrollStop(
             }
         } finally {
             CodeExecutionContext.isScrolling = original
+            ms.end()
         }
     }
 
@@ -452,8 +494,8 @@ fun TestDrive.doUntilScrollStop(
 internal fun TestDrive.edgeElementFound(expressions: List<String>): Boolean {
 
     for (expression in expressions) {
-        val e = TestElementCache.select(expression = expression, throwsException = false)
-        if (e.isFound && e.bounds.isIncludedIn(e.getScrollableTarget().bounds)) {
+        val e = TestDriver.select(expression = expression, throwsException = false, waitSeconds = 0.0)
+        if (e.isFound && e.bounds.isIncludedIn(e.getScrollableElement().bounds)) {
             TestLog.info("edge element found. ($expression)")
             return true
         } else {
@@ -465,7 +507,7 @@ internal fun TestDrive.edgeElementFound(expressions: List<String>): Boolean {
 
 private fun List<TestElement>.serialize(): String {
 
-    val list = this.map { it.serializeForEndOfScroll() }.sortedBy { it }
+    val list = this.map { it.toString() }
     return list.joinToString("\n")
 }
 
@@ -478,7 +520,7 @@ fun TestDrive.withScrollDown(
     proc: () -> Unit
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
     val command = "withScrollDown"
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
@@ -504,7 +546,7 @@ fun TestDrive.withScrollUp(
     proc: () -> Unit
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
     val command = "withScrollUp"
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
@@ -530,7 +572,7 @@ fun TestDrive.withScrollRight(
     proc: () -> Unit
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
     val command = "withScrollRight"
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
@@ -556,7 +598,7 @@ fun TestDrive.withScrollLeft(
     proc: () -> Unit
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
     val command = "withScrollLeft"
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
@@ -580,7 +622,7 @@ fun TestDrive.suppressWithScroll(
     proc: () -> Unit
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
     val command = "suppressWithScroll"
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
@@ -609,54 +651,56 @@ fun TestDrive.scanElements(
     imageCompare: Boolean = false
 ): TestElement {
 
-    val testElement = getTestElement()
+    val testElement = getThisOrRootElement()
 
     val command = "scanElements"
     val message = message(id = command, arg1 = direction.toString())
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        val lineNo = TestLog.lines.count() + 1
+        useCache {
+            val lineNo = TestLog.lines.count() + 1
 
-        TestElementCache.scanResults.clear()
-        TestDriver.refreshCache()
-        TestElementCache.scanResults.add(
-            ScanRecord(
-                lineNo = lineNo,
-                sourceXml = TestElementCache.sourceXml,
-                element = TestElementCache.rootElement
-            )
-        )
-        TestDriver.autoScreenshot()
-
-        val r = getScrollingInfo(direction = direction, marginRatio = startMarginRatio)
-        if (r.hasError) {
-            TestLog.trace("no scrollable element found.")
-            return@execOperateCommand
-        }
-
-        doUntilScrollStop(
-            repeat = 1,
-            maxLoopCount = maxScrollTimes,
-            direction = direction,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            edgeSelector = endSelector,
-            imageCompare = imageCompare
-        ) {
-            val lastXml = TestElementCache.scanResults.last().sourceXml
-            val thisXml = TestElementCache.sourceXml
-            if (thisXml != lastXml) {
-                TestElementCache.scanResults.add(
-                    ScanRecord(
-                        lineNo = lineNo,
-                        sourceXml = thisXml,
-                        element = rootElement
-                    )
+            TestElementCache.scanResults.clear()
+            TestDriver.refreshCache()
+            TestElementCache.scanResults.add(
+                ScanRecord(
+                    lineNo = lineNo,
+                    sourceXml = TestElementCache.sourceXml,
+                    element = TestElementCache.rootElement
                 )
+            )
+            TestDriver.autoScreenshot()
+
+            val r = getScrollingInfo(direction = direction, marginRatio = startMarginRatio)
+            if (r.hasError) {
+                TestLog.trace("no scrollable element found.")
+                return@useCache
             }
 
-            false
+            doUntilScrollStop(
+                repeat = 1,
+                maxLoopCount = maxScrollTimes,
+                direction = direction,
+                durationSeconds = durationSeconds,
+                startMarginRatio = startMarginRatio,
+                edgeSelector = endSelector,
+                imageCompare = imageCompare
+            ) {
+                val lastXml = TestElementCache.scanResults.last().sourceXml
+                val thisXml = TestElementCache.sourceXml
+                if (thisXml != lastXml) {
+                    TestElementCache.scanResults.add(
+                        ScanRecord(
+                            lineNo = lineNo,
+                            sourceXml = thisXml,
+                            element = rootElement
+                        )
+                    )
+                }
+
+                false
+            }
         }
     }
     TestLog.trace("scanElements completed.(pageCount=${TestElementCache.scanResults.count()})")
@@ -778,7 +822,7 @@ private fun TestDrive.getScrollingInfo(
         else testContext.scrollHorizontalMarginRatio
 ): ScrollingInfo {
 
-    val scrollableTarget = getScrollableTarget()
+    val scrollableTarget = getScrollableElement()
     val r = ScrollingInfo(
         errorMessage = "",
         scrollableBounds = scrollableTarget.bounds,

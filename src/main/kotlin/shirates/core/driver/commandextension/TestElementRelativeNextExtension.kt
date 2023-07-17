@@ -9,7 +9,6 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 internal fun TestElement.next(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -26,14 +25,12 @@ internal fun TestElement.next(
             e = nextPreviousCore(
                 next = false,
                 targetElements = targetElements,
-                safeElementOnly = safeElementOnly,
                 selectorForNextPrevious = sel
             )
         } else {
             e = nextPreviousCore(
                 next = true,
                 targetElements = targetElements,
-                safeElementOnly = safeElementOnly,
                 selectorForNextPrevious = selector
             )
         }
@@ -49,27 +46,28 @@ internal fun TestElement.next(
  * next
  */
 fun TestElement.next(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":next($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":next($expression)"
+    )
 }
 
 /**
  * next
  */
 fun TestElement.next(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":next($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":next($pos)"
+    )
 }
 
 internal fun TestElement.previous(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -84,14 +82,12 @@ internal fun TestElement.previous(
             sel.pos = Math.abs(sel.pos!!)
             e = nextPreviousCore(
                 next = true,
-                safeElementOnly = safeElementOnly,
                 targetElements = targetElements,
                 selectorForNextPrevious = sel
             )
         } else {
             e = nextPreviousCore(
                 next = false,
-                safeElementOnly = safeElementOnly,
                 targetElements = targetElements,
                 selectorForNextPrevious = selector
             )
@@ -109,31 +105,36 @@ internal fun TestElement.previous(
  */
 fun TestElement.previous(
     expression: String,
-    safeElementOnly: Boolean = true
 ): TestElement {
 
-    return relative(":previous($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":previous($expression)",
+    )
 }
 
 /**
  * previous
  */
 fun TestElement.previous(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":previous($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":previous($pos)"
+    )
 }
 
 private fun TestElement.nextPreviousCore(
     next: Boolean,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>,
     selectorForNextPrevious: Selector
 ): TestElement {
 
-    val currentIndex = targetElements.indexOf(this)
+    val current = targetElements.firstOrNull() { it.toString() == this.toString() }
+    if (current == null) {
+        return TestElement.emptyElement
+    }
+    val currentIndex = targetElements.indexOf(current)
 
     val filteredByIndex: List<TestElement>
     if (next) {
@@ -147,7 +148,7 @@ private fun TestElement.nextPreviousCore(
         sel.pos = -1 * sel.pos!!
     }
     var filtered = filteredByIndex
-    filtered = filtered.filterBySelector(selector = sel, safeElementOnly = safeElementOnly)
+    filtered = filtered.filterBySelector(selector = sel)
 
     var e = if (next) filtered.firstOrNull()
     else filtered.lastOrNull()
@@ -190,7 +191,6 @@ internal fun TestElement.execRelativeCommand(
 
 internal fun TestElement.nextLabel(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -198,7 +198,7 @@ internal fun TestElement.nextLabel(
     sel.className = ElementCategoryExpressionUtility.labelTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -206,27 +206,28 @@ internal fun TestElement.nextLabel(
  * nextLabel
  */
 fun TestElement.nextLabel(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":nextLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextLabel($pos)"
+    )
 }
 
 /**
  * nextLabel
  */
 fun TestElement.nextLabel(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":nextLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextLabel($expression)"
+    )
 }
 
 internal fun TestElement.preLabel(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>,
 ): TestElement {
 
@@ -234,7 +235,7 @@ internal fun TestElement.preLabel(
     sel.className = ElementCategoryExpressionUtility.labelTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -242,27 +243,28 @@ internal fun TestElement.preLabel(
  * preLabel
  */
 fun TestElement.preLabel(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":preLabel($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preLabel($pos)"
+    )
 }
 
 /**
  * preLabel
  */
 fun TestElement.preLabel(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":preLabel($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preLabel($expression)"
+    )
 }
 
 internal fun TestElement.nextInput(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>,
 ): TestElement {
 
@@ -270,7 +272,7 @@ internal fun TestElement.nextInput(
     sel.className = ElementCategoryExpressionUtility.inputTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -278,27 +280,28 @@ internal fun TestElement.nextInput(
  * nextInput
  */
 fun TestElement.nextInput(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":nextInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextInput($pos)"
+    )
 }
 
 /**
  * nextInput
  */
 fun TestElement.nextInput(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":nextInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextInput($expression)"
+    )
 }
 
 internal fun TestElement.preInput(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -306,7 +309,7 @@ internal fun TestElement.preInput(
     sel.className = ElementCategoryExpressionUtility.inputTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -314,27 +317,28 @@ internal fun TestElement.preInput(
  * preInput
  */
 fun TestElement.preInput(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":preInput($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preInput($pos)",
+    )
 }
 
 /**
  * preInput
  */
 fun TestElement.preInput(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":preInput($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preInput($expression)"
+    )
 }
 
 internal fun TestElement.nextImage(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -342,7 +346,7 @@ internal fun TestElement.nextImage(
     sel.className = ElementCategoryExpressionUtility.imageTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -350,27 +354,28 @@ internal fun TestElement.nextImage(
  * nextImage
  */
 fun TestElement.nextImage(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":nextImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextImage($pos)"
+    )
 }
 
 /**
  * nextImage
  */
 fun TestElement.nextImage(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":nextImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextImage($expression)"
+    )
 }
 
 internal fun TestElement.preImage(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -378,7 +383,7 @@ internal fun TestElement.preImage(
     sel.className = ElementCategoryExpressionUtility.imageTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -386,27 +391,28 @@ internal fun TestElement.preImage(
  * preImage
  */
 fun TestElement.preImage(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":preImage($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preImage($pos)"
+    )
 }
 
 /**
  * preImage
  */
 fun TestElement.preImage(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":preImage($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preImage($expression)"
+    )
 }
 
 internal fun TestElement.nextButton(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -414,7 +420,7 @@ internal fun TestElement.nextButton(
     sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -422,27 +428,28 @@ internal fun TestElement.nextButton(
  * nextButton
  */
 fun TestElement.nextButton(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":nextButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextButton($pos)"
+    )
 }
 
 /**
  * nextButton
  */
 fun TestElement.nextButton(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":nextButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextButton($expression)"
+    )
 }
 
 internal fun TestElement.preButton(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -450,7 +457,7 @@ internal fun TestElement.preButton(
     sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -458,27 +465,28 @@ internal fun TestElement.preButton(
  * preButton
  */
 fun TestElement.preButton(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":preButton($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preButton($pos)"
+    )
 }
 
 /**
  * preButton
  */
 fun TestElement.preButton(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":preButton($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preButton($expression)"
+    )
 }
 
 internal fun TestElement.nextSwitch(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -486,7 +494,7 @@ internal fun TestElement.nextSwitch(
     sel.className = ElementCategoryExpressionUtility.switchTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -494,27 +502,28 @@ internal fun TestElement.nextSwitch(
  * nextSwitch
  */
 fun TestElement.nextSwitch(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":nextSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextSwitch($pos)"
+    )
 }
 
 /**
  * nextSwitch
  */
 fun TestElement.nextSwitch(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":nextSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":nextSwitch($expression)"
+    )
 }
 
 internal fun TestElement.preSwitch(
     selector: Selector,
-    safeElementOnly: Boolean,
     targetElements: List<TestElement>
 ): TestElement {
 
@@ -522,7 +531,7 @@ internal fun TestElement.preSwitch(
     sel.className = ElementCategoryExpressionUtility.switchTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, safeElementOnly = safeElementOnly, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements) }
     )
 }
 
@@ -530,21 +539,23 @@ internal fun TestElement.preSwitch(
  * preSwitch
  */
 fun TestElement.preSwitch(
-    pos: Int = 1,
-    safeElementOnly: Boolean = true
+    pos: Int = 1
 ): TestElement {
 
-    return relative(":preSwitch($pos)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preSwitch($pos)"
+    )
 }
 
 /**
  * preSwitch
  */
 fun TestElement.preSwitch(
-    expression: String,
-    safeElementOnly: Boolean = true
+    expression: String
 ): TestElement {
 
-    return relative(":preSwitch($expression)", safeElementOnly = safeElementOnly)
+    return relative(
+        command = ":preSwitch($expression)"
+    )
 }
 

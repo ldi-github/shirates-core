@@ -1,6 +1,6 @@
 package shirates.core.logging
 
-import shirates.core.driver.TestDriver
+import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestElement
 
 
@@ -11,7 +11,7 @@ fun Any?.printInfo(message: String? = this.toString()): TestElement {
 
     TestLog.info(message = message ?: "")
 
-    return TestDriver.it
+    return lastElement
 }
 
 /**
@@ -21,7 +21,7 @@ fun Any?.printWarn(message: String? = this.toString()): TestElement {
 
     TestLog.warn(message = message ?: "")
 
-    return TestDriver.it
+    return lastElement
 }
 
 /**
@@ -31,5 +31,5 @@ fun Any?.printLog(logType: LogType = LogType.NONE, message: String? = this.toStr
 
     TestLog.write(message = message!!, logType = logType)
 
-    return TestDriver.it
+    return lastElement
 }

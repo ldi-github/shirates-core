@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "4.5.3"
+version = "5.0.0"
 
 val appiumClientVersion = "8.5.0"
 
@@ -116,10 +116,10 @@ configurations.all {
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "15"
+        kotlinOptions.jvmTarget = "17"
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "15"
+        kotlinOptions.jvmTarget = "17"
     }
     val sourcesJar by creating(Jar::class) {
         archiveClassifier.set("sources")

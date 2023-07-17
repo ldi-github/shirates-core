@@ -4,7 +4,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.Const
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
@@ -19,6 +21,11 @@ import java.nio.file.Files
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriverTest : UITest() {
+
+    override fun beforeAllAfterSetup(context: ExtensionContext?) {
+
+        PropertiesManager.screenshotIntervalSeconds = 0.0
+    }
 
     @Test
     @Order(10)
@@ -247,14 +254,14 @@ class TestDriverTest : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    val e = TestDriver.getFocusedElement(waitSeconds = 2.0)
+                    val e = TestDriver.getFocusedElement()
                     assertThat(e.isEmpty).isEqualTo(true)
                 }
             }
             case(2) {
                 expectation {
                     assertThatThrownBy {
-                        TestDriver.getFocusedElement(waitSeconds = 2.0, throwsException = true)
+                        TestDriver.getFocusedElement(throwsException = true)
                     }.isInstanceOf(TestDriverException::class.java)
                         .hasMessage("Focused element not found.")
                 }
@@ -288,7 +295,7 @@ class TestDriverTest : UITest() {
             }
             case(3) {
                 expectation {
-                    val r = TestDriver.getFocusedElement(waitSeconds = 0.5, throwsException = false)
+                    val r = TestDriver.getFocusedElement(throwsException = false)
                     assertThat(r.isEmpty).isEqualTo(true)
                 }
             }

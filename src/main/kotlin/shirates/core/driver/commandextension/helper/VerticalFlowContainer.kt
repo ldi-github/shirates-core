@@ -82,6 +82,13 @@ class VerticalFlowContainer {
             return null
         }
 
+        val s1 = element.toString()
+        val elements = getElements()
+        val contains = elements.any() { it.toString() == s1 }
+        if (contains) {
+            return null
+        }
+
         try {
             if (columns.isEmpty()) {
                 val column = Column(initialElement = element)

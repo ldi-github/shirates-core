@@ -15,10 +15,10 @@ val testDrive: TestDrive
  */
 var rootElement: TestElement
     get() {
-        return TestElementCache.rootElement
+        return TestDriver.rootElement
     }
     set(value) {
-        TestElementCache.rootElement = value
+        TestDriver.rootElement = value
     }
 
 /**

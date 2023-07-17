@@ -3,7 +3,6 @@ package shirates.core.utility.element
 import org.w3c.dom.Node
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestElementCache
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
@@ -26,38 +25,30 @@ object ElementCacheUtility {
         val xmlRemoved = source.replace("\r\n", "")
         val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         val document = documentBuilder.parse(xmlRemoved.byteInputStream())
-        val rootNode: Node?
         val mode = testContext.platformName
-        if (isAndroid) {
-            val list = XPathUtility.getNodesByXpath(node = document, expression = "//*")
-            rootNode = if (list.count() >= 2) list[1] else null
-            if (rootNode == null) {
-                throw TestDriverException(message(id = "nodeForRootElementNotFound", arg1 = mode, arg2 = source))
-            }
-        } else {
-            rootNode =
-                XPathUtility.getNodesByXpath(node = document, expression = "//XCUIElementTypeApplication[1]")
-                    .firstOrNull()
-            if (rootNode == null) {
-                throw TestDriverException(message(id = "nodeForRootElementNotFound", arg1 = mode, arg2 = source))
-            }
-        }
 
-        val rootElement = TestElement(node = rootNode)
+        val list = XPathUtility.getNodesByXpath(node = document, expression = "//*")
+        if (list.count() < 2) throw TestDriverException(
+            message(id = "nodeForRootElementNotFound", arg1 = mode, arg2 = source)
+        )
+        val rootUINode = list[1]    // Skip <hierarchy> on Android/<AppiumAUT> on iOS
+
+        val rootUIElement = TestElement(node = rootUINode)
+        rootUIElement.rootUIElement = rootUIElement
         TestElementCache.sourceXml = source
-        addChildren(element = rootElement)
+        addChildren(element = rootUIElement, rootUIElement = rootUIElement)
 
-        return rootElement
+        return rootUIElement
     }
 
-    private fun addChildren(element: TestElement) {
+    private fun addChildren(element: TestElement, rootUIElement: TestElement) {
 
         for (node in element.node!!.children()) {
             if (node.nodeType == Node.ELEMENT_NODE) {
-                val e = TestElement(node = node)
+                val e = TestElement(node = node, rootUIElement = rootUIElement)
                 e.parentElement = element
                 element.children.add(e)
-                addChildren(e)
+                addChildren(element = e, rootUIElement = rootUIElement)
             }
         }
     }

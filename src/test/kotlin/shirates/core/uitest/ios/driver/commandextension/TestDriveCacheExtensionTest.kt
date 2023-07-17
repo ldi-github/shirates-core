@@ -9,13 +9,17 @@ import shirates.core.driver.commandextension.invalidateCache
 import shirates.core.driver.commandextension.refreshCache
 import shirates.core.driver.commandextension.refreshCacheOnInvalidated
 import shirates.core.driver.commandextension.syncCache
+import shirates.core.driver.testContext
 import shirates.core.testcode.UITest
+
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
 class TestDriveCacheExtensionTest : UITest() {
 
     @Test
     fun refreshCache() {
+
+        testContext.forceUseCache = true
 
         // Arrange
         TestElementCache.sourceXml = ""
@@ -36,6 +40,8 @@ class TestDriveCacheExtensionTest : UITest() {
     @Test
     fun invalidateCache_refreshCacheOnInvalidated() {
 
+        testContext.forceUseCache = true
+
         // Arrange
         TestElementCache.sourceXml = ""
         TestElementCache.synced = true
@@ -54,6 +60,8 @@ class TestDriveCacheExtensionTest : UITest() {
 
     @Test
     fun syncCache() {
+
+        testContext.forceUseCache = true
 
         run {
             // Arrange

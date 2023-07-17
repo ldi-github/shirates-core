@@ -5,10 +5,12 @@
   ],
 
   "identity": "~title=General",
+  "weight": "100",
 
   "selectors": {
     "[<Settings]": "Settings&&.XCUIElementTypeButton",
     "[General]": "",
+    "[NavigationBar]": ".XCUIElementTypeNavigationBar",
 
     "[About]": "",
     "[Keyboard]": "",
@@ -17,6 +19,11 @@
     "[Language & Region]": "",
     "[Dictionary]": "",
     "[Reset]": ""
+  },
+  "default": "[<Settings]",
+
+  "scroll": {
+    "overlay-elements": "[NavigationBar]"
   }
 
 }

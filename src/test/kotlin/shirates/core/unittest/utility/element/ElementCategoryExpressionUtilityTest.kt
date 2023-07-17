@@ -225,6 +225,141 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
     }
 
     @Test
+    fun isLabel() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            val p = ElementCategoryExpressionUtility.elementCategoryExpressionProperties
+            p["android.extraWidgetTypes"] = "android.view.View"
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isLabel("android.widget.TextView")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isLabel("android.widget.EditText")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("android.widget.ImageView")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("android.widget.Button")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("android.widget.ImageButton")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("android.widget.CheckBox")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("android.widget.Switch")).isFalse()
+        }
+        TestMode.runAsIos {
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isLabel("XCUIElementTypeStaticText")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isLabel("XCUIElementTypeTextField")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("XCUIElementTypeSecureTextField")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("XCUIElementTypeImage")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("XCUIElementTypeButton")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isLabel("XCUIElementTypeSwitch")).isFalse()
+        }
+    }
+
+    @Test
+    fun isInput() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            val p = ElementCategoryExpressionUtility.elementCategoryExpressionProperties
+            p["android.extraWidgetTypes"] = "android.view.View"
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isInput("android.widget.TextView")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isInput("android.widget.EditText")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isInput("android.widget.ImageView")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isInput("android.widget.Button")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isInput("android.widget.ImageButton")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isInput("android.widget.CheckBox")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isInput("android.widget.Switch")).isFalse()
+        }
+        TestMode.runAsIos {
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isInput("XCUIElementTypeStaticText")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isInput("XCUIElementTypeTextField")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isInput("XCUIElementTypeSecureTextField")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isInput("XCUIElementTypeImage")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isInput("XCUIElementTypeButton")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isInput("XCUIElementTypeSwitch")).isFalse()
+        }
+    }
+
+    @Test
+    fun isImage() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            val p = ElementCategoryExpressionUtility.elementCategoryExpressionProperties
+            p["android.extraWidgetTypes"] = "android.view.View"
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isImage("android.widget.TextView")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("android.widget.EditText")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("android.widget.ImageView")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isImage("android.widget.Button")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("android.widget.ImageButton")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("android.widget.CheckBox")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("android.widget.Switch")).isFalse()
+        }
+        TestMode.runAsIos {
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isImage("XCUIElementTypeStaticText")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("XCUIElementTypeTextField")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("XCUIElementTypeSecureTextField")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("XCUIElementTypeImage")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isImage("XCUIElementTypeButton")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isImage("XCUIElementTypeSwitch")).isFalse()
+        }
+    }
+
+    @Test
+    fun isButton() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            val p = ElementCategoryExpressionUtility.elementCategoryExpressionProperties
+            p["android.extraWidgetTypes"] = "android.view.View"
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isButton("android.widget.TextView")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isButton("android.widget.EditText")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isButton("android.widget.ImageView")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isButton("android.widget.Button")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isButton("android.widget.ImageButton")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isButton("android.widget.CheckBox")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isButton("android.widget.Switch")).isFalse()
+        }
+        TestMode.runAsIos {
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isButton("XCUIElementTypeStaticText")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isButton("XCUIElementTypeTextField")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isButton("XCUIElementTypeSecureTextField")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isButton("XCUIElementTypeImage")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isButton("XCUIElementTypeButton")).isTrue()
+            assertThat(ElementCategoryExpressionUtility.isButton("XCUIElementTypeSwitch")).isFalse()
+        }
+    }
+
+    @Test
+    fun isSwitch() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            val p = ElementCategoryExpressionUtility.elementCategoryExpressionProperties
+            p["android.extraWidgetTypes"] = "android.view.View"
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isSwitch("android.widget.TextView")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("android.widget.EditText")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("android.widget.ImageView")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("android.widget.Button")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("android.widget.ImageButton")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("android.widget.CheckBox")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("android.widget.Switch")).isTrue()
+        }
+        TestMode.runAsIos {
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.isSwitch("XCUIElementTypeStaticText")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("XCUIElementTypeTextField")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("XCUIElementTypeSecureTextField")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("XCUIElementTypeImage")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("XCUIElementTypeButton")).isFalse()
+            assertThat(ElementCategoryExpressionUtility.isSwitch("XCUIElementTypeSwitch")).isTrue()
+        }
+    }
+
+    @Test
     fun getCategoryByElement() {
 
         TestMode.runAsAndroid {

@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage
 fun List<TestElement>.filterBySelector(
     selector: Selector,
     throwsException: Boolean = false,
-    safeElementOnly: Boolean = true
 ): MutableList<TestElement> {
 
     if (selector.pos == 0) {
@@ -29,7 +28,7 @@ fun List<TestElement>.filterBySelector(
     val filtered = mutableListOf<TestElement>()
     for (sel in selectors) {
         // select
-        val list = filterBySelectorCore(list = this, selector = sel, safeElementOnly = safeElementOnly)
+        val list = filterBySelectorCore(list = this, selector = sel)
 
         for (e in list) {
             // get relative
@@ -37,7 +36,7 @@ fun List<TestElement>.filterBySelector(
                 val exps = selector.expandRelativeExpressions()
                 var relative = e
                 for (exp in exps) {
-                    relative = relative.relative(command = exp, safeElementOnly = safeElementOnly, scopeElements = this)
+                    relative = relative.relative(command = exp, scopeElements = this)
                 }
                 relative.selector = selector
                 if (relative.isEmpty.not() && filtered.contains(relative).not()) {
@@ -90,8 +89,7 @@ fun List<TestElement>.filterBySelector(
 
 private fun filterBySelectorCore(
     list: List<TestElement>,
-    selector: Selector,
-    safeElementOnly: Boolean
+    selector: Selector
 ): MutableList<TestElement> {
 
     var result = list
@@ -145,12 +143,6 @@ private fun filterBySelectorCore(
         result = result.filter { e ->
             val m = Filter.matchVisible(element = e, selector = selector)
             m
-        }
-    }
-
-    if (safeElementOnly) {
-        result = result.filter {
-            it.isInView
         }
     }
 

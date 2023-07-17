@@ -130,6 +130,14 @@ object NicknameUtility {
     }
 
     /**
+     * isRelativeNickname
+     */
+    fun isRelativeNickname(nickname: String): Boolean {
+
+        return isValidNickname(nickname) && nickname.startsWith("[:")
+    }
+
+    /**
      * splitNicknames
      */
     fun splitNicknames(text: String): List<String> {

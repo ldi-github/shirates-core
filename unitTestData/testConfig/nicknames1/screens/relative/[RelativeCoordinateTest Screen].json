@@ -1,9 +1,15 @@
 {
   "key": "[RelativeCoordinateTest Screen]",
 
-  "identity": "",
+  "identity": "[IDENTITY]",
 
   "selectors": {
+    "[IDENTITY]": "#CheckBox3-1||#NavigationBar3-1",
+
+    "[A]": "",
+    "[B]": "",
+    "[A:Right]": "[A][:Right]",
+
     "[:Right]": ":right",
     "[:Right(2)]": ":right(2)",
     "[:Right(3)]": ":right(3)",

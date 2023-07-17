@@ -1,0 +1,25 @@
+{
+  "key": "[screen-base]",
+
+  "selectors": {
+
+    "[Global Selector 1]": "",
+    "[Global Selector 2]": "",
+
+    "[Start Element 1]": "",
+    "[Start Element 2]": "",
+    "[End Element 1]": "",
+    "[End Element 2]": "",
+    "[Overlay Element 1]": "",
+    "[Overlay Element 2]": "",
+
+    "[X]": "@a<#close>,@i<@close>",
+    "[?]": "@a<#help>,@i<@help>"
+  },
+
+  "scroll": {
+    "start-elements": "[Start Element 1][Start Element 2]",
+    "end-elements": "[End Element 1][End Element 2]",
+    "overlay-elements": "[Overlay Element 1][Overlay Element 2]"
+  }
+}

@@ -1,12 +1,11 @@
 package shirates.core.uitest.ios.driver.commandextension
 
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.descendants
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import utility.handleIrregulars
@@ -30,39 +29,51 @@ class TestDriveScrollExtensionTest2 : UITest() {
             it.macro("[Developer Screen]")
             val lastItem =
                 it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }
+            println("lastItem:$lastItem")
+            val lastBounds = lastItem.bounds
             val title = lastItem.label
             // Act
             it.scrollDown(durationSeconds = 5.0)
             // Assert
-            var movedItem = it.select(title)
-            Assertions.assertThat(movedItem.bounds.centerY < lastItem.bounds.centerY).isTrue()
+            var movedItem = it.widget(title)
+            println("movedItem:$movedItem")
+            println("${movedItem.bounds.centerY} < ${lastBounds.centerY}")
+            assertThat(movedItem.bounds.centerY < lastBounds.centerY).isTrue()
 
 
             // Act
             it.scrollDown()
             // Assert
-            movedItem = it.select(title, throwsException = false, waitSeconds = 0.0)
-            Assertions.assertThat(movedItem.isEmpty).isTrue()
+            movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
+            println("movedItem:$movedItem")
+            assertThat(movedItem.isInView).isFalse()
+            assertThat(movedItem.isEmpty).isTrue()
         }
 
         run {
             // Arrange
             val firstItem =
                 it.select(".XCUIElementTypeTable").descendants.first { it.type == "XCUIElementTypeStaticText" && it.isVisible }
+            println("firstItem:$firstItem")
+            val firstBounds = firstItem.bounds
             val title = firstItem.label
 
             // Act
             it.scrollUp(durationSeconds = 5.0)
             // Assert
-            var movedItem = it.select(title, throwsException = false, waitSeconds = 0.0)
-            Assertions.assertThat(firstItem.bounds.centerY < movedItem.bounds.centerY).isTrue()
+            var movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
+            println("movedItem:$movedItem")
+            println("${firstBounds.centerY} < ${movedItem.bounds.centerY}")
+            assertThat(firstBounds.centerY < movedItem.bounds.centerY).isTrue()
 
 
             // Act
             it.scrollUp()
             // Assert
-            movedItem = it.select(title, throwsException = false, waitSeconds = 0.0)
-            Assertions.assertThat(movedItem.isEmpty).isTrue()
+            println("movedItem:$movedItem")
+            movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
+            assertThat(movedItem.isInView).isFalse()
+            assertThat(movedItem.isEmpty).isTrue()
         }
     }
 
@@ -77,7 +88,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
         // Assert
         val lastItem =
             it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }
-        Assertions.assertThat(lastItem.label)
+        assertThat(lastItem.label)
             .isEqualTo("The graphics performance HUD shows framerate, GPU time, memory usage, and can log performance data for later analysis.")
 
 
@@ -86,7 +97,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
         // Assert
         val firstItem =
             it.select(".XCUIElementTypeTable").descendants.first { it.type == "XCUIElementTypeStaticText" && it.isVisible }
-        Assertions.assertThat(firstItem.label).isEqualTo("Dark Appearance")
+        assertThat(firstItem.label).isEqualTo("Dark Appearance")
     }
 
 
