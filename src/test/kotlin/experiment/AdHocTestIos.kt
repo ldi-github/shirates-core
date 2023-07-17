@@ -105,4 +105,10 @@ class AdHocTestIos : UITest() {
             rootElement.printInfo()
         }
     }
+
+    @Test
+    fun handlerTest() {
+
+
+    }
 }

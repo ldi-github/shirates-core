@@ -61,3 +61,23 @@ fun TestDrive.disableHandler(): TestElement {
 
     return TestDriver.it
 }
+
+/**
+ * enableScreenHandler
+ */
+fun TestDrive.enableScreenHandler(): TestElement {
+
+    TestDriver.testContext.enableScreenHandler = true
+
+    return TestDriver.it
+}
+
+/**
+ * disableScreenHandler
+ */
+fun TestDrive.disableScreenHandler(): TestElement {
+
+    TestDriver.testContext.enableScreenHandler = false
+
+    return TestDriver.it
+}

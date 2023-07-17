@@ -269,6 +269,89 @@ You can include other screen nickname files using `include`.
 Now you can use selector nicknames `[Header Title]`, `[Footer Button A]`, `[Footer Button A]` in screen
 nickname `[Screen A]`.
 
+## Tuning performance and stability
+
+### weight
+
+shirates-core automatically determines the current screen. A lot of screen nickname files makes it slow.
+You can specify weight on the screen nickname file. Larger number is hi priority.
+
+```
+  "key": "[General Screen]",
+
+  "identity": "~title=General",
+  "weight": "100"
+```
+
+### start-elements, end-elements
+
+On scrolling down/scrolling up, shirates-core automatically detects the edge of scroll. You can specify
+**start-elements** / **end-elements** as hint.
+This improves performance on scrolling.
+
+```
+  "scroll": {
+    "start-elements": "[Profile Icon]",
+    "end-elements": "[Developer]"
+  }
+```
+
+You can specify multiple elements as follows.
+
+```
+"[Element A][Element B]"
+```
+
+### overlay-elements
+
+On tapping with scrolling, the target element may hide under some other element(s).
+In this situation, tapping the element make the test case to fail.
+To avoid this, you can specify **overlay-elements**.
+
+```
+  "scroll": {
+    "overlay-elements": "[NavigationBar]"
+  }
+```
+
+### default
+
+You can specify default elmenent using **default**.
+
+```json
+{
+  "key": "[General Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=General",
+  "weight": "100",
+
+  "selectors": {
+    "[<Settings]": "Settings&&.XCUIElementTypeButton",
+    "[General]": "",
+    "[NavigationBar]": ".XCUIElementTypeNavigationBar",
+
+    "[About]": "",
+    "[Keyboard]": "",
+    "[Game Controller]": "",
+    "[Fonts]": "",
+    "[Language & Region]": "",
+    "[Dictionary]": "",
+    "[Reset]": ""
+  },
+  "default": "[<Settings]",
+
+  "scroll": {
+    "overlay-elements": "[NavigationBar]"
+  }
+
+}
+```
+
+And you can tap the element using `tapDefault` function.
+
 ### Link
 
 - [Selector nickname](selector_nickname.md)

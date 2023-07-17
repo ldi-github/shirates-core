@@ -180,7 +180,8 @@
     - [Configuring tapAppIcon function](in_action/adapting_to_environments/configuring_tap_appIcon_function.md)
     - [Adapting to changes in OS message](in_action/adapting_to_environments/adapting_to_changes_in_os_messages.md)
 - Handling irregulars
-    - [Irregular Handler](in_action/handling_irregulars/irregular_handler.md)
+    - [Irregular Handler(Global Handler)](in_action/handling_irregulars/irregular_handler.md)
+    - [Screen Handler](in_action/handling_irregulars/)
 - Test Fixture
     - [Test fixture](in_action/test_fixture/test_fixture.md)
 - Image matching

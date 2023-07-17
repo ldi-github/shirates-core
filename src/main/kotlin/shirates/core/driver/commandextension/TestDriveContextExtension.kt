@@ -5,7 +5,6 @@ import shirates.core.driver.testContext
 
 fun <T> TestDrive.withContext(
     useCache: Boolean? = null,
-    useHandler: Boolean? = null,
     func: () -> T
 ): T {
     val context = testContext
@@ -24,24 +23,14 @@ fun <T> TestDrive.withContext(
                 context.enableCache = false
             }
         }
-        if (useHandler != null) {
-            if (useHandler) {
-                testContext.enableIrregularHandler = true
-            } else {
-                testContext.enableIrregularHandler = false
-            }
-        }
 
         return func()
     } finally {
-        if (useHandler != null) {
-            val blockName = if (useHandler) "useHandler" else "suppressHandler"
-            context.enableIrregularHandler = original.enableIrregularHandler
-        }
         if (useCache != null) {
             val blockName = if (useCache) "useCache" else "suppressCache"
             context.forceUseCache = original.forceUseCache
             context.enableCache = original.enableCache
+            context.enableIrregularHandler = original.enableIrregularHandler
         }
     }
 }

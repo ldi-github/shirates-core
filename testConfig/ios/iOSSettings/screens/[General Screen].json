@@ -5,6 +5,7 @@
   ],
 
   "identity": "~title=General",
+  "weight": "100",
 
   "selectors": {
     "[<Settings]": "Settings&&.XCUIElementTypeButton",

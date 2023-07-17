@@ -444,7 +444,6 @@ abstract class UITest : TestDrive {
         desc: String = currentDisplayName,
         launchApp: Boolean = true,
         useCache: Boolean? = null,
-        useHandler: Boolean? = null,
         testProc: () -> Unit
     ) {
         if (CodeExecutionContext.isInScenario) {
@@ -463,7 +462,6 @@ abstract class UITest : TestDrive {
         try {
             withContext(
                 useCache = useCache,
-                useHandler = useHandler
             ) {
                 scenarioCore(
                     scenarioId = scenarioId,
@@ -678,7 +676,6 @@ abstract class UITest : TestDrive {
         stepNo: Int,
         desc: String? = null,
         useCache: Boolean? = null,
-        useHandler: Boolean? = null,
         proc: () -> Unit
     ) {
 
@@ -695,8 +692,7 @@ abstract class UITest : TestDrive {
         try {
             CodeExecutionContext.isInCase = true
             withContext(
-                useCache = useCache,
-                useHandler = useHandler
+                useCache = useCache
             ) {
                 caseCore(stepNo, desc, proc)
             }
@@ -800,7 +796,6 @@ abstract class UITest : TestDrive {
      */
     fun condition(
         useCache: Boolean? = null,
-        useHandler: Boolean? = null,
         conditionFunc: () -> Unit
     ): CAEPattern {
 
@@ -808,7 +803,6 @@ abstract class UITest : TestDrive {
 
         return CAEPattern.condition(
             useCache = useCache,
-            useHandler = useHandler,
             conditionFunc = conditionFunc
         )
     }
@@ -818,7 +812,6 @@ abstract class UITest : TestDrive {
      */
     fun action(
         useCache: Boolean? = null,
-        useHandler: Boolean? = null,
         actionFunc: () -> Unit
     ): CAEPattern {
 
@@ -826,7 +819,6 @@ abstract class UITest : TestDrive {
 
         return CAEPattern.action(
             useCache = useCache,
-            useHandler = useHandler,
             actionFunc = actionFunc
         )
     }
@@ -836,7 +828,6 @@ abstract class UITest : TestDrive {
      */
     fun expectation(
         useCache: Boolean? = null,
-        useHandler: Boolean? = null,
         expectationFunc: () -> Unit
     ): CAEPattern {
 
@@ -844,7 +835,6 @@ abstract class UITest : TestDrive {
 
         return CAEPattern.expectation(
             useCache = useCache,
-            useHandler = useHandler,
             expectationFunc = expectationFunc
         )
     }

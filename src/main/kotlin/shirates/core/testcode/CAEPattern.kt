@@ -37,7 +37,6 @@ object CAEPattern {
      */
     fun condition(
         useCache: Boolean? = null,
-        useHandler: Boolean? = null,
         conditionFunc: () -> Unit
     ): CAEPattern {
 
@@ -76,8 +75,7 @@ object CAEPattern {
             TestLog.condition(message(funcName))
 
             testDrive.withContext(
-                useCache = useCache,
-                useHandler = useHandler
+                useCache = useCache
             ) {
                 conditionFunc()
             }
@@ -97,7 +95,6 @@ object CAEPattern {
      */
     fun action(
         useCache: Boolean? = null,
-        useHandler: Boolean? = null,
         actionFunc: () -> Unit
     ): CAEPattern {
 
@@ -136,8 +133,7 @@ object CAEPattern {
             TestLog.action(message(funcName))
 
             testDrive.withContext(
-                useCache = useCache,
-                useHandler = useHandler
+                useCache = useCache
             ) {
                 actionFunc()
             }
@@ -157,7 +153,6 @@ object CAEPattern {
      */
     fun expectation(
         useCache: Boolean? = null,
-        useHandler: Boolean? = null,
         expectationFunc: () -> Unit
     ): CAEPattern {
 
@@ -202,8 +197,7 @@ object CAEPattern {
             }
 
             testDrive.withContext(
-                useCache = useCache,
-                useHandler = useHandler
+                useCache = useCache
             ) {
                 expectationFunc()
             }

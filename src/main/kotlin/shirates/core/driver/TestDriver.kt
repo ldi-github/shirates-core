@@ -22,6 +22,8 @@ import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.eventextension.TestDriverOnScreenContext
+import shirates.core.driver.eventextension.removeScreenHandler
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
@@ -397,6 +399,7 @@ object TestDriver {
         }
         set(value) {
             field = value
+            fireScreenHandler(screenName = value)
         }
 
     internal fun getOverlayElements(): MutableList<TestElement> {
@@ -482,6 +485,42 @@ object TestDriver {
 
         val handled = CodeExecutionContext.lastScreenshotImage == lastFireIrregularHandlerScreenshotImage
         return handled
+    }
+
+    var firingScreenHandlerScreens = mutableListOf<String>()
+
+    /**
+     * fireScreenHandler
+     */
+    fun fireScreenHandler(screenName: String): TestDriverOnScreenContext {
+
+        val context = TestDriverOnScreenContext(screenName = screenName)
+
+        if (firingScreenHandlerScreens.contains(screenName)) {
+            return context
+        }
+
+        try {
+            firingScreenHandlerScreens.add(screenName)
+
+            if (testContext.enableScreenHandler.not()) {
+                return context
+            }
+
+            if (testContext.screenHandlers.containsKey(screenName)) {
+                val handler = testContext.screenHandlers[screenName]!!
+                context.fired = true
+                handler(context)
+                if (context.keep.not()) {
+                    testDrive.removeScreenHandler(screenName)
+                }
+            }
+        } finally {
+            if (firingScreenHandlerScreens.contains(screenName)) {
+                firingScreenHandlerScreens.remove(screenName)
+            }
+        }
+        return context
     }
 
     /**

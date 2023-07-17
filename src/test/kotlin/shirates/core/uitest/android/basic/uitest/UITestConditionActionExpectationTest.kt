@@ -114,106 +114,6 @@ class UITestConditionActionExpectationTest : UITest() {
     }
 
     @Test
-    @Order(40)
-    fun useHandler_default() {
-
-        // Arrange
-        irregularHandlerCallCount = 0
-        // Act
-        scenario() {
-            case(1) {
-                action {
-                    it.exist("[Network & internet]")
-                }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
-                    // Assert
-                    assertThat(testContext.enableIrregularHandler).isTrue()
-                    assertThat(irregularHandlerCallCount).isGreaterThan(0)
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(50)
-    fun useHandler_true() {
-
-        scenario() {
-            case(1) {
-                // Arrange
-                irregularHandlerCallCount = 0
-                invalidateCache()
-                // Act
-                condition(useHandler = true) {
-                    it.exist("[Network & internet]")
-                    // Assert
-                    assertThat(testContext.enableIrregularHandler).isTrue()
-                    irregularHandlerCallCount.thisIsGreaterThan(0)
-
-                    // Arrange
-                    irregularHandlerCallCount = 0
-                    invalidateCache()
-                    // Act
-                }.action(useHandler = true) {
-                    it.exist("[Network & internet]")
-
-                    // Assert
-                    assertThat(testContext.enableIrregularHandler).isTrue()
-                    irregularHandlerCallCount.thisIsGreaterThan(0)
-
-                    // Arrange
-                    irregularHandlerCallCount = 0
-                    invalidateCache()
-                    // Act
-                }.expectation(useHandler = true) {
-                    it.screenIs("[Android Settings Top Screen]")
-                    // Assert
-                    assertThat(testContext.enableIrregularHandler).isTrue()
-                    irregularHandlerCallCount.thisIsGreaterThan(0)
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(60)
-    fun useHandler_false() {
-
-        scenario() {
-            case(1) {
-                // Arrange
-                irregularHandlerCallCount = 0
-                // Act
-                condition(useHandler = false) {
-                    it.exist("[Network & internet]")
-                    // Assert
-                    assertThat(testContext.enableIrregularHandler).isFalse()
-                    irregularHandlerCallCount.thisIs(0)
-
-                    // Arrange
-                    irregularHandlerCallCount = 0
-                    // Act
-                }.action(useHandler = false) {
-                    it.exist("[Network & internet]")
-
-                    // Assert
-                    assertThat(testContext.enableIrregularHandler).isFalse()
-                    irregularHandlerCallCount.thisIs(0)
-
-                    // Arrange
-                    irregularHandlerCallCount = 0
-                    // Act
-                }.expectation(useHandler = false) {
-                    it.screenIs("[Android Settings Top Screen]")
-                    // Assert
-                    assertThat(testContext.enableIrregularHandler).isFalse()
-                    irregularHandlerCallCount.thisIs(0)
-                }
-            }
-        }
-    }
-
-    @Test
     @Order(70)
     fun complex1() {
 
@@ -234,24 +134,24 @@ class UITestConditionActionExpectationTest : UITest() {
         assertThat(testContext.enableIrregularHandler).isTrue()
 
         // Act
-        scenario(useCache = true, useHandler = true) {
+        scenario(useCache = true) {
             // Assert
             assertThat(testContext.enableCache).isTrue()
             assertThat(testContext.forceUseCache).isTrue()
             assertThat(testContext.enableIrregularHandler).isTrue()
 
             // Act
-            case(1, useCache = false, useHandler = false) {
+            case(1, useCache = false) {
                 // Assert
                 assertThat(testContext.enableCache).isFalse()
                 assertThat(testContext.forceUseCache).isFalse()
                 assertThat(testContext.enableIrregularHandler).isFalse()
 
-                condition(useCache = true, useHandler = true) {
+                condition(useCache = true) {
 
-                }.action(useCache = true, useHandler = true) {
+                }.action(useCache = true) {
 
-                }.expectation(useCache = true, useHandler = true) {
+                }.expectation(useCache = true) {
 
                 }
             }
