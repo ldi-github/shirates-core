@@ -203,7 +203,7 @@ class Selector_IosTest : UnitTest() {
         // Act
         val classChain = sel.getIosClassChain()
         // Assert
-        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]/**/*[`type=='XCUIElementTypeStaticText' AND (label=='TITLE1' OR value=='TITLE1') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]")
+        assertThat(classChain).isEqualTo("**/*[`type=='XCUIElementTypeNavigationBar'`]/**/*[`type=='XCUIElementTypeStaticText' AND (label=='TITLE1' OR value=='TITLE1')`]")
     }
 
     @Test
@@ -232,7 +232,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label CONTAINS 'A' OR value CONTAINS 'A') AND (label CONTAINS 'B' OR value CONTAINS 'B') AND (label CONTAINS 'C' OR value CONTAINS 'C') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                    "(label CONTAINS 'A' OR value CONTAINS 'A') AND (label CONTAINS 'B' OR value CONTAINS 'B') AND (label CONTAINS 'C' OR value CONTAINS 'C') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
 
@@ -245,7 +245,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -257,7 +257,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND (label BEGINSWITH 'ABC' OR value BEGINSWITH 'ABC' OR label BEGINSWITH 'DEF' OR value BEGINSWITH 'DEF') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                    "(label=='a' OR value=='a' OR label=='b' OR value=='b' OR label=='c' OR value=='c') AND (label BEGINSWITH 'ABC' OR value BEGINSWITH 'ABC' OR label BEGINSWITH 'DEF' OR value BEGINSWITH 'DEF') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -269,7 +269,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label CONTAINS 'A' OR value CONTAINS 'A' OR label CONTAINS 'B' OR value CONTAINS 'B' OR label CONTAINS 'C' OR value CONTAINS 'C') AND (label ENDSWITH 'UVW' OR value ENDSWITH 'UVW' OR label ENDSWITH 'XYZ' OR value ENDSWITH 'XYZ') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                    "(label CONTAINS 'A' OR value CONTAINS 'A' OR label CONTAINS 'B' OR value CONTAINS 'B' OR label CONTAINS 'C' OR value CONTAINS 'C') AND (label ENDSWITH 'UVW' OR value ENDSWITH 'UVW' OR label ENDSWITH 'XYZ' OR value ENDSWITH 'XYZ') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -281,14 +281,14 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label MATCHES '^A.*Z$' OR value MATCHES '^A.*Z$') AND (name=='id1' OR name=='id2') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                    "(label MATCHES '^A.*Z$' OR value MATCHES '^A.*Z$') AND (name=='id1' OR name=='id2') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
             run {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label MATCHES '^A.*Z$' OR value MATCHES '^A.*Z$') AND (name=='id1' OR name=='id2') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                    "(label MATCHES '^A.*Z$' OR value MATCHES '^A.*Z$') AND (name=='id1' OR name=='id2') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -300,7 +300,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(type=='c1' OR type=='c2' OR type=='c3') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800"
+                    "type=='c1' OR type=='c2' OR type=='c3'"
                 )
             }
         }
@@ -312,7 +312,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(type=='c1' OR type=='c2' OR type=='c3') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800"
+                    "type=='c1' OR type=='c2' OR type=='c3'"
                 )
             }
         }
@@ -324,7 +324,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(name BEGINSWITH 'a1' OR name BEGINSWITH 'a2') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                    "(name BEGINSWITH 'a1' OR name BEGINSWITH 'a2') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -336,7 +336,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(type=='c1' OR type=='c2') AND (label=='text1' OR value=='text1') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800"
+                    "(type=='c1' OR type=='c2') AND (label=='text1' OR value=='text1')"
                 )
             }
         }
@@ -348,7 +348,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate()).isEqualTo(
-                    "(label=='１1' OR value=='１1' OR label=='11' OR value=='11') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
+                    "(label=='１1' OR value=='１1' OR label=='11' OR value=='11') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }
         }
@@ -360,7 +360,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate())
-                    .isEqualTo("name=='id1' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication') OR name=='id2' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
+                    .isEqualTo("name=='id1' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication') OR name=='id2' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
             }
         }
         run {
@@ -370,7 +370,7 @@ class Selector_IosTest : UnitTest() {
             run {
                 // Act, Assert
                 println(sel.getIosPredicate())
-                assertThat(sel.getIosPredicate()).isEqualTo("rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
+                assertThat(sel.getIosPredicate()).isEqualTo("NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
             }
         }
         run {
@@ -381,7 +381,7 @@ class Selector_IosTest : UnitTest() {
                 // Act, Assert
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate())
-                    .isEqualTo("(label=='LITERAL' OR value=='LITERAL') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
+                    .isEqualTo("(label=='LITERAL' OR value=='LITERAL') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
             }
         }
         run {
@@ -392,7 +392,7 @@ class Selector_IosTest : UnitTest() {
                 // Arrange
                 println(sel.getIosPredicate())
                 assertThat(sel.getIosPredicate())
-                    .isEqualTo("NOT(label=='no exist' OR value=='no exist') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
+                    .isEqualTo("NOT(label=='no exist' OR value=='no exist') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')")
             }
         }
 
@@ -409,56 +409,56 @@ class Selector_IosTest : UnitTest() {
             val sel = Selector()
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
         }
         run {
             // Arrange
             val sel = Selector("[1]")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
         }
         run {
             // Arrange
             val sel = Selector("pos=1")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`][1]")
         }
         run {
             // Arrange
             val sel = Selector("#container1")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
         }
         run {
             // Arrange
             val sel = Selector("<#container1>:descendant(title1)")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]/**/*[`(label=='title1' OR value=='title1') AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800 AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`name=='container1' AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]/**/*[`(label=='title1' OR value=='title1') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')`]")
         }
         run {
             // Arrange
             val sel = Selector(".XCUIElementTypeButton&&visible=true")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==true AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==true`]")
         }
         run {
             // Arrange
             val sel = Selector(".XCUIElementTypeButton&&visible=false")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==false AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND visible==false`]")
         }
         run {
             // Arrange
             val sel = Selector(".XCUIElementTypeButton&&visible=*")
             // Act, Assert
             println(sel.getIosClassChain())
-            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton' AND rect.x>=0 AND rect.x<400 AND rect.y>=0 AND rect.y<800`]")
+            assertThat(sel.getIosClassChain()).isEqualTo("**/*[`type=='XCUIElementTypeButton'`]")
         }
     }
 

@@ -12,7 +12,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
-import shirates.core.driver.wait
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -209,7 +208,6 @@ class TestDriverTest : UITest() {
                 try {
                     testContext.manualScreenshot = true
                     TestDriver.screenshot(filename = "screenshot4.png")
-                    wait()
                 } finally {
                     testContext.manualScreenshot = original
                 }

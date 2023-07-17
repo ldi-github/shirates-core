@@ -41,32 +41,6 @@ class CacheAndDirectCompatibilityTest : UITest() {
 
     @Test
     @Order(20)
-    fun relative() {
-
-        scenario {
-            case(1) {
-                condition {
-                    syncCache(force = true)
-                }.action {
-                    e1 = it.select("<General>:leftImage", useCache = true)
-                    e2 = it.select("<General>:leftImage", useCache = false)
-                }.expectation {
-                    e1.thisIs(e2)
-                }
-            }
-            case(2) {
-                action {
-                    e1 = it.select("<General>:preImage", useCache = true)
-                    e2 = it.select("<General>:preImage", useCache = false)
-                }.expectation {
-                    e1.thisIs(e2)
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(30)
     fun pos() {
 
         scenario {

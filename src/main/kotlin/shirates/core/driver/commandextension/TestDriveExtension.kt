@@ -4,7 +4,6 @@ import shirates.core.configuration.NicknameUtility
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
@@ -159,24 +158,4 @@ fun TestDrive.tapDefault(
     tap(expression = default, safeElementOnly = safeElementOnly)
 
     return lastElement
-}
-
-/**
- * closeDialogs
- */
-fun TestDrive.closeDialogs(
-    vararg screenNicknames: String
-): TestElement {
-
-    val ms = Measure()
-    try {
-        for (screenNickname in screenNicknames) {
-            if (isScreen(screenName = screenNickname)) {
-                tapDefault()
-            }
-        }
-        return refreshLastElement()
-    } finally {
-        ms.end()
-    }
 }

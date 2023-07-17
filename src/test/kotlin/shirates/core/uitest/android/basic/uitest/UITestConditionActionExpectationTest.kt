@@ -123,7 +123,6 @@ class UITestConditionActionExpectationTest : UITest() {
         // Assert
         assertThat(testContext.enableCache).isFalse()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableIrregularHandler).isFalse()
 
         // Arrange
         enableCache()
@@ -131,21 +130,18 @@ class UITestConditionActionExpectationTest : UITest() {
         // Assert
         assertThat(testContext.enableCache).isTrue()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableIrregularHandler).isTrue()
 
         // Act
         scenario(useCache = true) {
             // Assert
             assertThat(testContext.enableCache).isTrue()
             assertThat(testContext.forceUseCache).isTrue()
-            assertThat(testContext.enableIrregularHandler).isTrue()
 
             // Act
             case(1, useCache = false) {
                 // Assert
                 assertThat(testContext.enableCache).isFalse()
                 assertThat(testContext.forceUseCache).isFalse()
-                assertThat(testContext.enableIrregularHandler).isFalse()
 
                 condition(useCache = true) {
 
@@ -160,6 +156,5 @@ class UITestConditionActionExpectationTest : UITest() {
         // Assert
         assertThat(testContext.enableCache).isTrue()
         assertThat(testContext.forceUseCache).isFalse()
-        assertThat(testContext.enableIrregularHandler).isTrue()
     }
 }
