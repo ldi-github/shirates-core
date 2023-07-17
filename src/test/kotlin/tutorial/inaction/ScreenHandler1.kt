@@ -17,11 +17,9 @@ class ScreenHandler1 : UITest() {
 
         onScreen("[Network & internet Screen]") { c ->
             printWarn("${c.screenName} is displayed.")
-            c.removeHandler()
         }
         onScreen("[System Screen]") { c ->
             printWarn("${c.screenName} is displayed.")
-            c.removeHandler()
         }
 
         scenario {
