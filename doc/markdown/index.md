@@ -108,7 +108,6 @@
     - [Platform property (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](basic/function_property/branch/platform_properties.md)
     - [Osaifukeitai function (osaifuKeitai, osaifuKeitaiNot)](basic/function_property/branch/osaifu_keitai_branch_functions.md)
     - [Special branch function (specialTag)](basic/function_property/branch/special_branch_functions.md)
-    - [Screen branch function (onScreen)](basic/function_property/branch/screen_branch_functions.md)
 - Editing and Keyboard operations
     - [sendKeys](basic/function_property/editing_and_keyboard_operations/sendkeys.md)
     - [clearInput](basic/function_property/editing_and_keyboard_operations/clearinput.md)

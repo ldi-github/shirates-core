@@ -108,7 +108,6 @@
     - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](basic/function_property/branch/platform_properties_ja.md)
     - [おサイフケータイ関数 (osaifuKeitai, osaifuKeitaiNot)](basic/function_property/branch/osaifu_keitai_branch_functions_ja.md)
     - [スペシャルタグ分岐関数 (specialTag)](basic/function_property/branch/special_branch_functions_ja.md)
-    - [画面分岐関数 (onScreen)](basic/function_property/branch/screen_branch_functions_ja.md)
 - 編集とキーボード操作を行う
     - [sendKeys](basic/function_property/editing_and_keyboard_operations/sendkeys_ja.md)
     - [clearInput](basic/function_property/editing_and_keyboard_operations/clearinput_ja.md)
