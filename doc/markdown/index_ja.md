@@ -179,7 +179,8 @@
     - [tapAppIcon関数を構成する](in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md)
     - [OSのメッセージの変更に適応する](in_action/adapting_to_environments/adapting_to_changes_in_os_messages_ja.md)
 - イレギュラーを処理する
-    - [イレギュラーハンドラー](in_action/handling_irregulars/irregular_handler_ja.md)
+    - [イレギュラーハンドラー(グローバルハンドラー)](in_action/handling_irregulars/irregular_handler_ja.md)
+    - [スクリーンハンドラー(onScreen関数)](in_action/handling_irregulars/screen_handler_ja.md)
 - テストフィクスチャ
     - [テストフィクスチャ](in_action/test_fixture/test_fixture_ja.md)
 - 画像マッチング

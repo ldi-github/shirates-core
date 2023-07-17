@@ -12,7 +12,7 @@ import shirates.core.utility.misc.AppNameUtility
  * Returns this if this is TestElement
  * Else lastElement
  */
-internal fun TestDrive.getThisOrLastElement(): TestElement {
+fun TestDrive.getThisOrLastElement(): TestElement {
     if (this is TestElement) {
         return this
     }
@@ -23,7 +23,7 @@ internal fun TestDrive.getThisOrLastElement(): TestElement {
  * Returns this if this is TestElement
  * else rootElement
  */
-internal fun TestDrive.getThisOrRootElement(): TestElement {
+fun TestDrive.getThisOrRootElement(): TestElement {
     if (this is TestElement) {
         return this
     }
