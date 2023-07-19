@@ -25,10 +25,14 @@ fun TestDrive.onScreen(
  * removeScreenHandler
  */
 fun TestDrive.removeScreenHandler(
+    screenName: String,
     vararg screenNames: String
 ): TestElement {
 
-    for (screenName in screenNames) {
+    val list = screenNames.toMutableList()
+    list.add(0, screenName)
+
+    for (screenName in list) {
         if (testContext.screenHandlers.containsKey(screenName)) {
             testContext.screenHandlers.remove(screenName)
         }

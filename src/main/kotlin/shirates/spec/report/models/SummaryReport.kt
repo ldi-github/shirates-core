@@ -176,7 +176,8 @@ class SummaryReport(
 
     private fun setupTemplateWorksheet() {
 
-        templateWorkbook = ExcelUtility.getWorkbook(baseName = "TestSpec.xlsx")
+        val logLanguage = worksheetDataList.first().logLanguage
+        templateWorkbook = ExcelUtility.getWorkbook(baseName = "TestSpec.xlsx", logLanguage = logLanguage)
         summaryWorksheet = templateWorkbook.worksheets("Summary")
 
         templateWorkbook.removeSheet("CommandList")
