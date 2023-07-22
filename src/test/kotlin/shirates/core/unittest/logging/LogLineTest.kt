@@ -173,7 +173,7 @@ class LogLineTest : UnitTest() {
     fun getHeaderForConsole() {
 
         val header = LogLine.getHeaderForConsole()
-        assertThat(header).isEqualTo("lineNo\t[elapsedTime]\tlogDateTime\t{testCaseId}\t[logType]\tdiff(ms)\t(group)\tmessage")
+        assertThat(header).isEqualTo("lineNo\t[elapsedTime]\tlogDateTime\t{testCaseId}\tmacroDepth\tmacroName\t[logType]\tdiff(ms)\t(group)\tmessage")
     }
 
     @Test

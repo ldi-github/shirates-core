@@ -1694,7 +1694,7 @@ object TestDriver {
             return newScreen
         }
         val md =
-            maxDepth ?: if (testContext.useCache) Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_CACHE_MODE
+            maxDepth ?: if (testContext.useCache) screenInfoList.count()
             else Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_DIRECT_MODE
         val depth = Math.min(screenInfoList.count(), md)
         for (i in 0 until depth) {

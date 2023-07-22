@@ -23,7 +23,6 @@ class CodeExecutionContextTest : UnitTest() {
         // Act
         context.isInCheckCommand = true
         context.isInSilentCommand = true
-        context.isInMacro = true
         context.isInOSCommand = true
         context.isInBooleanCommand = true
         context.isInSelectCommand = true
@@ -41,6 +40,7 @@ class CodeExecutionContextTest : UnitTest() {
         context.lastScreenshotImage = BufferedImage(100, 200, 1)
         context.lastCropInfo = CropInfo()
         context.lastScreenshotXmlSource = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        CodeExecutionContext.macroStack.add("Macro1")
         assertNotCleared()
         context.clear()
         // Assert
@@ -133,11 +133,10 @@ class CodeExecutionContextTest : UnitTest() {
             // Arrange
             CodeExecutionContext.clear()
             // Act, Assert
-            CodeExecutionContext.isInMacro = false
             assertThat(CodeExecutionContext.shouldOutputLog).isTrue()
 
             // Arrange
-            CodeExecutionContext.isInMacro = true
+            CodeExecutionContext.macroStack.add("Macro1")
             // Act, Assert
             assertThat(CodeExecutionContext.shouldOutputLog).isFalse()
 

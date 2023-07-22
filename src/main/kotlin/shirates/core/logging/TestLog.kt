@@ -543,7 +543,9 @@ object TestLog {
         }
         logLine.timeElapsed = logLine.logDateTime.time - sessionStartTime.time
 
-        logLine.isInMacro = CodeExecutionContext.isInMacro
+        logLine.macroStackDepth = CodeExecutionContext.macroStack.count()
+        logLine.macroName =
+            CodeExecutionContext.macroStack.lastOrNull() ?: "-"
         logLine.isInCheckCommand = CodeExecutionContext.isInCheckCommand
         logLine.isInSilentCommand = CodeExecutionContext.isInSilentCommand
         logLine.isInOSCommand = CodeExecutionContext.isInOSCommand
