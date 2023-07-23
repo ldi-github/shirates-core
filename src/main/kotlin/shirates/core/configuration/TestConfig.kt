@@ -188,9 +188,7 @@ class TestConfig(val testConfigFile: String) {
          */
         for (prop in props) {
             val pinfo = TestProfile::class.memberProperties.firstOrNull() { it.name == prop.key }
-            if (pinfo == null) {
-                TestLog.trace(message(id = "notFound", subject = "Property", value = prop.key.toString()))
-            } else {
+            if (pinfo != null) {
                 val value = pinfo.getter.call(profile)
                 if (value == null) {
                     ReflectionUtility.setValue(obj = profile, propertyName = pinfo.name, value = prop.value)

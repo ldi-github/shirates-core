@@ -1,6 +1,5 @@
 package shirates.core.logging
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.ScrollDirection
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -69,12 +68,19 @@ data class LogLine(
         private val dateFormatrer = SimpleDateFormat("yyyy/MM/dd")
 
         /**
+         * getHeaderForToString
+         */
+        fun getHeaderForToString(): String {
+
+            return "lineNo\t[elapsedTime]\tlogDateTime\t{testCaseId}\tmacroDepth\tmacroName\t[logType]\tos\tspecial\ttimeDiff\tmode\t(group)\tmessage\tcommandLevel\tcommand\tsubject\targ1a\targ2a\tresult"
+        }
+
+        /**
          * getHeaderForConsole
          */
         fun getHeaderForConsole(): String {
 
-            val timeDiff = if (PropertiesManager.enableTimeDiff) "\tdiff(ms)" else ""
-            return "lineNo\t[elapsedTime]\tlogDateTime\t{testCaseId}\tmacroDepth\tmacroName\t[logType]$timeDiff\t(group)\tmessage"
+            return "lineNo\t[elapsedTime]\tlogDateTime\t{testCaseId}\tmacroDepth\tmacroName\t[logType]\ttimeDiff\tmode\t(group)\tmessage"
         }
 
         /**
@@ -93,7 +99,7 @@ data class LogLine(
 
         val arg1a = arg1.replace("\n", "\\n")
         val arg2a = arg2.replace("\n", "\\n")
-        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t${macroStackDepth}\t${macroName}\t[${logType.label}]\t$os\t$special\t$mode\t($commandGroup)\t$message\t$commandLevel\t$scriptCommand\t$subject\t$arg1a\t$arg2a\t$result"
+        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t${macroStackDepth}\t${macroName}\t[${logType.label}]\t$os\t$special\t+$timeDiffMilliseconds\t$mode\t($commandGroup)\t$message\t$commandLevel\t$scriptCommand\t$subject\t$arg1a\t$arg2a\t$result"
     }
 
     /**
@@ -101,8 +107,7 @@ data class LogLine(
      */
     fun toStringForConsole(): String {
 
-        val timeDiff = if (PropertiesManager.enableTimeDiff) "\t+${timeDiffMilliseconds}" else ""
-        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t${macroStackDepth}\t${macroName}\t[${logType.label}]$timeDiff\t$mode\t($scriptCommand)\t$message"
+        return "$lineNumber\t[$timeElapsedLabel]\t$logDateTimeLabel\t{$testCaseId}\t${macroStackDepth}\t${macroName}\t[${logType.label}]\t+$timeDiffMilliseconds\t$mode\t($commandGroup)\t$message"
     }
 
     /**

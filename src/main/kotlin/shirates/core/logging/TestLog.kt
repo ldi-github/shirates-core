@@ -1440,7 +1440,7 @@ object TestLog {
                 sb.appendLine(it.toStringForCommandList())
             }
         } else {
-            sb.appendLine(LogLine.getHeaderForConsole())
+            sb.appendLine(LogLine.getHeaderForToString())
             lines.forEach() {
                 sb.appendLine(it.toString())
             }
