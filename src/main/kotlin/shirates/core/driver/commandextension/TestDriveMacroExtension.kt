@@ -22,11 +22,10 @@ fun TestDrive.macro(
         if (args.any()) "$message (${args.joinToString(", ")})"
         else message
 
-    CodeExecutionContext.macroStack.add(macroName)
-
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = msg, suppressBeforeScreenshot = true) {
         try {
+            CodeExecutionContext.macroStack.add(macroName)
             MacroRepository.call(macroName = macroName, args = args)
         } catch (t: InvocationTargetException) {
             if (onError == null) {
