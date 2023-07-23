@@ -24,7 +24,15 @@ object CodeExecutionContext {
     /**
      * isInMacro
      */
-    var isInMacro = false
+    val isInMacro: Boolean
+        get() {
+            return macroStack.any()
+        }
+
+    /**
+     * macroStack
+     */
+    var macroStack = mutableListOf<String>()
 
     /**
      * isInOSCommand
@@ -133,7 +141,7 @@ object CodeExecutionContext {
         /**
          * Command
          */
-        isInMacro = false
+        macroStack.clear()
         isInCheckCommand = false
         isInSilentCommand = false
         isInOSCommand = false

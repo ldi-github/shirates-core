@@ -4,6 +4,8 @@
 
 ## scenarioを再実行する手順
 
+scenarioが再実行される場合は以下の手順で実行されます。
+
 1. Appium Serverを終了します
 2. デバイスを再起動します
 3. Appium Serverを起動します
@@ -22,7 +24,7 @@
 | Terminating app time out. (Android)               | ex. `'com.android.settings' is still running after 500ms timeout` |
 | Could not proxy command to the remote server.     | デバイスへのコマンド送信に失敗した (ex. `socket hang up`, `connect ECONNREFUSED`)  |
 
-## scenarioの再実行を手動で要求する
+## scenarioの再実行をコードで要求する
 
 エラーをハンドリングして **RerunScenarioException** をスローすることでscenarioを再実行することができます。
 

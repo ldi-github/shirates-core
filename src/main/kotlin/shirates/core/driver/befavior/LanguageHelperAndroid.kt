@@ -130,10 +130,6 @@ object LanguageHelperAndroid : TestDrive {
             return languageAndRegion
         }
 
-        if (TestMode.isNoLoadRun) {
-            return languageAndRegion
-        }
-
         gotoLocaleSettings()
 
 

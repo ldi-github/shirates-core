@@ -22,8 +22,7 @@ import java.nio.file.Files
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriverTest : UITest() {
 
-    override fun beforeAllAfterSetup(context: ExtensionContext?) {
-
+    override fun beforeEach(context: ExtensionContext?) {
         PropertiesManager.screenshotIntervalSeconds = 0.0
     }
 

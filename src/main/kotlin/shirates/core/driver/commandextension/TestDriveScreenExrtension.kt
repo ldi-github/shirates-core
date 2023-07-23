@@ -62,7 +62,8 @@ fun TestDrive.waitScreenOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    irregularHandler: (() -> Unit)? = testContext.irregularHandler
+    irregularHandler: (() -> Unit)? = testContext.irregularHandler,
+    onTrue: (() -> Unit)? = null
 ): TestElement {
 
     val command = "waitScreenOf"
@@ -74,7 +75,8 @@ fun TestDrive.waitScreenOf(
         screenNames = screenNames,
         waitSeconds = waitSeconds,
         useCache = useCache,
-        irregularHandler = irregularHandler
+        irregularHandler = irregularHandler,
+        onTrue = onTrue
     )
 
     return lastElement
@@ -84,8 +86,9 @@ internal fun TestDrive.waitScreenOfCore(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    irregularHandler: (() -> Unit)? = testContext.irregularHandler
-): String {
+    irregularHandler: (() -> Unit)? = testContext.irregularHandler,
+    onTrue: (() -> Unit)? = null
+) {
 
     fun ofScreen(): String {
         for (screenName in screenNames) {
@@ -99,7 +102,8 @@ internal fun TestDrive.waitScreenOfCore(
     var currentScreenName = ofScreen()
     if (currentScreenName.isNotBlank()) {
         TestDriver.switchScreen(screenName = currentScreenName)
-        return currentScreenName
+        onTrue?.invoke()
+        return
     }
 
     var screenFound = false
@@ -143,7 +147,7 @@ internal fun TestDrive.waitScreenOfCore(
 
     syncCache(force = useCache)
 
-    return currentScreenName
+    onTrue?.invoke()
 }
 
 /**
@@ -152,7 +156,8 @@ internal fun TestDrive.waitScreenOfCore(
 fun TestDrive.waitScreen(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    irregularHandler: (() -> Unit)? = testContext.irregularHandler
+    irregularHandler: (() -> Unit)? = testContext.irregularHandler,
+    onTrue: (() -> Unit)? = null
 ): TestElement {
 
     val command = "waitScreen"
@@ -160,7 +165,12 @@ fun TestDrive.waitScreen(
     if (PropertiesManager.enableSyncLog) {
         TestLog.write(message = message, logType = LogType.INFO, scriptCommand = command)
     }
-    waitScreenOfCore(screenName, waitSeconds = waitSeconds, irregularHandler = irregularHandler)
+    waitScreenOfCore(
+        screenName,
+        waitSeconds = waitSeconds,
+        irregularHandler = irregularHandler,
+        onTrue = onTrue
+    )
 
     return lastElement
 }

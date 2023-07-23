@@ -42,7 +42,7 @@ wave1008@SNB-M1 Practice1 %
 
 ## Example 3
 
-You can set [parameters](../../basic/parameter/parameters.md) via environment variables using "`SR_*`" prefix.
+You can set [parameters](../../basic/parameter/parameters.md) via environment variables using "`SR_`" prefix.
 
 1. Rewrite `runtest.sh` as follows.
 

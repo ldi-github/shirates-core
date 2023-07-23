@@ -6,6 +6,8 @@ test results stable.
 
 ## Rerun scenario procedure
 
+In case of rerunning scenario, following steps are performed.
+
 1. Shut down Appium Server process
 2. Reboot device
 3. Start Appium Server process
@@ -24,7 +26,7 @@ Rerun is executed in these situation.
 | Terminating app time out. (Android)               | ex. `'com.android.settings' is still running after 500ms timeout`                    |
 | Could not proxy command to the remote server.     | Sending command to the device failed. (ex. `socket hang up`, `connect ECONNREFUSED`) |
 
-## Requesting rerun scenario manually
+## Requesting rerun scenario in code
 
 You can handle error and request rerun scenario with throwing **RerunScenarioException**.
 

@@ -217,6 +217,10 @@ td {
     background-color: #EEFFFF;
 }
 
+.macro {
+    min-width: 250px;
+}
+
 .logType {
     text-align: center;
     min-width: 80px;

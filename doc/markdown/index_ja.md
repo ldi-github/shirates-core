@@ -175,6 +175,7 @@
 - デバッグ
     - [ソースXMLをファイルで確認する](in_action/debugging/watching_source_xml_in_file_ja.md)
     - [ソースXMLをデバッガーで確認する](in_action/debugging/watching_source_xml_in_debugger_ja.md)
+    - [内部実行ステップのトレース](in_action/debugging/tracing_internal_execution_steps_ja.md)
 - さまざまな環境に適応する
     - [tapAppIcon関数を構成する](in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md)
     - [OSのメッセージの変更に適応する](in_action/adapting_to_environments/adapting_to_changes_in_os_messages_ja.md)
