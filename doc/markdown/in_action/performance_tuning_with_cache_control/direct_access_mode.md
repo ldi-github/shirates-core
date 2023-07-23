@@ -4,7 +4,7 @@ You can access elements with direct access mode.
 
 ### Pros.
 
-- Can avoid severe performance problem of getPageSource
+- Can avoid severe performance problem of getPageSource in iOS
 - Fast to get **a few** elements in the screen with many elements
 
 ### Cons.
