@@ -340,6 +340,14 @@ class SpecWorksheetModel(
                 val subject = logLine.message.replace(msg, "")
                 logLine.arrangedMessage = subject
             }
+
+            "textIs" -> {
+                val first = current.expectations.firstOrNull()
+                if (first != null) {
+                    val subject = first.removePrefix(SpecResourceUtility.bullet)
+                    logLine.arrangedMessage = logLine.message.replace(subject, "")
+                }
+            }
         }
     }
 
@@ -380,10 +388,8 @@ class SpecWorksheetModel(
                     if (logLine.message.contains(current.target).not() && current.expectations.any()) {
                         newCase()
                     }
-                    arrangeTarget(logLine)
-                } else if (logLine.group == "exist") {
-                    arrangeTarget(logLine)
                 }
+                arrangeTarget(logLine)
                 expectation(logLine)
             }
 

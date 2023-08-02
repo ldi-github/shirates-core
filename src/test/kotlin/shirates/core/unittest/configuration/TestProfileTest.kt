@@ -976,6 +976,34 @@ class TestProfileTest : UnitTest() {
             assertThat(p.appBuild).isEqualTo("9999")
             assertThat(p.appEnvironment).isEqualTo("Staging2")
         }
+        run {
+            // Arrange
+            val p = getProfileForIos()
+            p.appPackageFile = "Staging2_(9999)_20230120.app.zip"
+            p.appVersion = "v([0-9]+\\.[0-9]+\\.[0-9]+)"
+            p.appBuild = "\\(([0-9]+)\\)"
+            p.appEnvironment = "(Stub|Staging2|Staging)"
+            // Act
+            p.getMetadataFromFileName()
+            // Assert
+            assertThat(p.appVersion).isEqualTo("")
+            assertThat(p.appBuild).isEqualTo("9999")
+            assertThat(p.appEnvironment).isEqualTo("Staging2")
+        }
+        run {
+            // Arrange
+            val p = getProfileForIos()
+            p.appPackageFile = "Staging2_v1.2.3_20230120.app.zip"
+            p.appVersion = "v([0-9]+\\.[0-9]+\\.[0-9]+)"
+            p.appBuild = "\\(([0-9]+)\\)"
+            p.appEnvironment = "(Stub|Staging2|Staging)"
+            // Act
+            p.getMetadataFromFileName()
+            // Assert
+            assertThat(p.appVersion).isEqualTo("1.2.3")
+            assertThat(p.appBuild).isEqualTo("")
+            assertThat(p.appEnvironment).isEqualTo("Staging2")
+        }
     }
 
 }
