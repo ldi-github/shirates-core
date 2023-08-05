@@ -33,54 +33,7 @@ class SpecReportTest : UITest() {
     @DisplayName("calculate 123+456")
     fun s10() {
 
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Restart Calculator]")
-                    it.screenIs("[Calculator Main Screen]")
-                }.action {
-                    it
-                        .tap("[1]")
-                        .tap("[2]")
-                        .tap("[3]")
-                }.expectation {
-                    it.select("[formula]")
-                        .textIs("123")
-                }
-            }
-
-            case(2) {
-                action {
-                    it.tap("[+]")
-                }.expectation {
-                    it.select("[formula]")
-                        .textIs("123+")
-                }
-            }
-
-            case(3) {
-                action {
-                    it
-                        .tap("[4]")
-                        .tap("[5]")
-                        .tap("[6]")
-                }.expectation {
-                    it.select("[formula]")
-                        .textIs("123+456")
-                    it.select("[result preview]")
-                        .textIs("579")
-                }
-            }
-
-            case(4) {
-                action {
-                    it.tap("[=]")
-                }.expectation {
-                    it.select("[result final]")
-                        .textIs("579")
-                }
-            }
-        }
+        scenarioCore()
     }
 
     //    @NoLoadRun
@@ -88,6 +41,11 @@ class SpecReportTest : UITest() {
     @Order(20)
     @DisplayName("calculate 123+456")
     fun s20() {
+
+        scenarioCore()
+    }
+
+    private fun scenarioCore() {
 
         scenario {
             case(1) {
@@ -165,8 +123,7 @@ class SpecReportTest : UITest() {
             deviceModel = deviceModel,
             platformVersion = platformVersion,
             ok = 4,
-            notImpl = 1,
-            total = 5
+            total = 4
         )
 
         val date = Date().format("yyyy/MM/dd")
@@ -226,10 +183,8 @@ class SpecReportTest : UITest() {
                 step = "4",
                 action = "- Tap [=]",
                 expectation = "- [result final] is \"579\"",
-                auto = "A",
-                result = "NOTIMPL",
-                testDate = date,
-                tester = "auto"
+                auto = "M",
+                result = "N/A"
             )
 
             assertRow(

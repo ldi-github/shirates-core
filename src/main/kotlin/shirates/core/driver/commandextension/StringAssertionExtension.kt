@@ -24,7 +24,7 @@ fun Any?.thisIsEmpty(
 
     val command = "thisIsEmpty"
     val subject = if (this is TestElement) this.subject else this.toString()
-    val assertMessage = message ?: message(id = command, subject = subject)
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
@@ -47,7 +47,7 @@ fun Any?.thisIsNotEmpty(
 ): Any? {
 
     val command = "thisIsNotEmpty"
-    val assertMessage = message ?: message(id = command, subject = this.toString())
+    val assertMessage = message ?: message(id = command, subject = this.toString(), replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
@@ -70,7 +70,7 @@ fun Any?.thisIsBlank(
 ): Any? {
 
     val command = "thisIsBlank"
-    val assertMessage = message ?: message(id = command, subject = this.toString())
+    val assertMessage = message ?: message(id = command, subject = this.toString(), replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
@@ -89,7 +89,7 @@ fun Any?.thisIsNotBlank(
 ): Any? {
 
     val command = "thisIsNotBlank"
-    val assertMessage = message ?: message(id = command, subject = this.toString())
+    val assertMessage = message ?: message(id = command, subject = this.toString(), replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
@@ -109,7 +109,8 @@ fun Any?.thisContains(
 ): Any? {
 
     val command = "thisContains"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = expected)
+    val assertMessage =
+        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$this", arg1 = expected) {
@@ -129,7 +130,8 @@ fun Any?.thisContainsNot(
 ): Any? {
 
     val command = "thisContainsNot"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = expected)
+    val assertMessage =
+        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
@@ -149,7 +151,8 @@ fun Any?.thisStartsWith(
 ): Any? {
 
     val command = "thisStartsWith"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = expected)
+    val assertMessage =
+        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
@@ -169,7 +172,8 @@ fun Any?.thisStartsWithNot(
 ): Any? {
 
     val command = "thisStartsWithNot"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = expected)
+    val assertMessage =
+        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
@@ -211,7 +215,8 @@ fun Any?.thisEndsWith(
 ): Any? {
 
     val command = "thisEndsWith"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = expected)
+    val assertMessage =
+        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
@@ -231,7 +236,8 @@ fun Any?.thisEndsWithNot(
 ): Any? {
 
     val command = "thisEndsWithNot"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = expected)
+    val assertMessage =
+        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
@@ -251,7 +257,8 @@ fun Any?.thisMatches(
 ): Any? {
 
     val command = "thisMatches"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = expected)
+    val assertMessage =
+        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
@@ -271,7 +278,8 @@ fun Any?.thisMatchesNot(
 ): Any? {
 
     val command = "thisMatchesNot"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = expected)
+    val assertMessage =
+        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {

@@ -38,7 +38,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                         .tap(".XCUIElementTypeSearchField")
                 }.expectation {
                     // Act
-                    val scrollableElements = rootElement.getScrollableElementsInDescendants()
+                    val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     // Assert
                     assertThat(scrollableElements.count()).isGreaterThanOrEqualTo(2)
                     for (e in scrollableElements) {
@@ -56,7 +56,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
         // Arrange
         it.macro("[Apple Maps Top Screen]")
             .screenIs("[Apple Maps Top Screen]")
-        val scrollableElements = rootElement.getScrollableElementsInDescendants()
+        val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
         val largestScrollableElement = scrollableElements.filter { it.isVisible }.maxByOrNull { it.bounds.area }!!
         // Act
         val target1 = largestScrollableElement.getScrollableElement()

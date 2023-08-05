@@ -10,14 +10,14 @@
 | :flowImage    | :image  | ウィジェットフロー上にあるimage         |
 | :flowButton   | :button | ウィジェットフロー上にあるbutton        |
 | :flowSwitch   | :switch | ウィジェットフロー上にあるswitch        |
-| :innerFlow    | :inner  | コンテナ内ウィジェットフロー上にあるウィジェット   |
+| :innerWidget  | :inner  | コンテナ内ウィジェットフロー上にあるウィジェット   |
 | :innerLabel   | -       | コンテナ内ウィジェットフロー上にあるlabel    |
 | :innerInput   | -       | コンテナ内ウィジェットフロー上にあるinput    |
 | :innerImage   | -       | コンテナ内ウィジェットフロー上にあるimage    |
 | :innerButton  | -       | コンテナ内ウィジェットフロー上にあるbutton   |
 | :innerSwitch  | -       | コンテナ内ウィジェットフロー上にあるswitch   |
 | :vflow        | -       | 垂直ウィジェットフロー上にあるウィジェット      |
-| :innerVflow   | :innerV | コンテナ内垂直ウィジェットフロー上にあるウィジェット |
+| :innerVWidget | :innerV | コンテナ内垂直ウィジェットフロー上にあるウィジェット |
 | :innerVlabel  | -       | コンテナ内垂直ウィジェットフロー上にあるlabel  |
 | :innerVinput  | -       | コンテナ内垂直ウィジェットフロー上にあるinput  |
 | :innerVimage  | -       | コンテナ内垂直ウィジェットフロー上にあるimage  |

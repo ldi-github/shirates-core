@@ -5,11 +5,8 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.ScreenInfo
-import shirates.core.driver.TestElement
-import shirates.core.driver.TestElementCache
-import shirates.core.driver.TestMode
+import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.findInDescendantsAndSelf
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 import shirates.core.utility.element.ElementCacheUtility
@@ -65,9 +62,9 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
     fun getScrollableTarget() {
 
         // Arrange
-        val root = ElementCacheUtility.createTestElementFromXml(source = XmlDataAndroid.SettingsTopScreen)
+        rootElement = ElementCacheUtility.createTestElementFromXml(source = XmlDataAndroid.SettingsTopScreen)
         // Act
-        val scrollableTArget = root.getScrollableElement()
+        val scrollableTArget = rootElement.getScrollableElement()
         // Assert
         assertThat(scrollableTArget.id).isEqualTo("com.android.settings:id/main_content_scrollable_container")
     }

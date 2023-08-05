@@ -1,0 +1,22 @@
+{
+  "key": "[Language & Region Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Language & Region",
+  "weight": "100",
+
+  "selectors": {
+    "[<General]": "General&&.XCUIElementTypeButton",
+    "[Language & Region]": "",
+    "[Edit]": "",
+    "[NavigationBar]": ".XCUIElementTypeNavigationBar"
+
+  },
+
+  "scroll": {
+    "overlay-elements": "[NavigationBar]"
+  }
+
+}

@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
-import shirates.core.driver.commandextension.innerFlow
-import shirates.core.driver.commandextension.innerVflow
+import shirates.core.driver.commandextension.innerVWidget
+import shirates.core.driver.commandextension.innerWidget
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataIos
 
@@ -25,7 +25,7 @@ class TestElementRelativeInnerExtension_IosTest : UnitTest() {
     }
 
     @Test
-    fun innerFlow() {
+    fun innerWidget() {
         /**
          * |XCUIElementTypeCell1|
          *   |Other1-1|StaticText1-1|TextField1-1|SecureTextField1-1|Image1-1|Button1-1|Switch1-1|NavigationBar1-1|
@@ -33,61 +33,61 @@ class TestElementRelativeInnerExtension_IosTest : UnitTest() {
          *   |Other3-1|StaticText3-1|TextField3-1|SecureTextField3-1|Image3-1|Button3-1|Switch3-1|NavigationBar3-1|
          */
 
-        // innerFlow()
+        // innerWidget()
         run {
             // Arrange
             val e = TestElementCache.select(".XCUIElementTypeCell")
             // Act, Assert
-            assertThat(e.innerFlow().name).isEqualTo("StaticText1-1")
-            assertThat(e.innerFlow().selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerFlow")
+            assertThat(e.innerWidget().name).isEqualTo("StaticText1-1")
+            assertThat(e.innerWidget().selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerWidget")
         }
 
-        // innerFlow()
+        // innerWidget()
         run {
             // Arrange
             val e = TestElementCache.select("#StaticText1-1")
             // Act, Assert
-            assertThat(e.innerFlow().isEmpty).isEqualTo(true)
-            assertThat(e.innerFlow().selector.toString()).isEqualTo("<#StaticText1-1>:innerFlow")
+            assertThat(e.innerWidget().isEmpty).isEqualTo(true)
+            assertThat(e.innerWidget().selector.toString()).isEqualTo("<#StaticText1-1>:innerWidget")
         }
 
-        // innerFlow(pos)
+        // innerWidget(pos)
         run {
             // Arrange
             val e = TestElementCache.select(".XCUIElementTypeCell")
             // Act, Assert
-            assertThat(e.innerFlow(1).name).isEqualTo("StaticText1-1")
-            assertThat(e.innerFlow(1).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerFlow")
+            assertThat(e.innerWidget(1).name).isEqualTo("StaticText1-1")
+            assertThat(e.innerWidget(1).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerWidget")
 
-            assertThat(e.innerFlow(2).name).isEqualTo("TextField1-1")
-            assertThat(e.innerFlow(2).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerFlow(2)")
+            assertThat(e.innerWidget(2).name).isEqualTo("TextField1-1")
+            assertThat(e.innerWidget(2).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerWidget(2)")
 
-            assertThat(e.innerFlow(3).name).isEqualTo("SecureTextField1-1")
-            assertThat(e.innerFlow(4).name).isEqualTo("Image1-1")
-            assertThat(e.innerFlow(5).name).isEqualTo("Button1-1")
-            assertThat(e.innerFlow(6).name).isEqualTo("Switch1-1")
+            assertThat(e.innerWidget(3).name).isEqualTo("SecureTextField1-1")
+            assertThat(e.innerWidget(4).name).isEqualTo("Image1-1")
+            assertThat(e.innerWidget(5).name).isEqualTo("Button1-1")
+            assertThat(e.innerWidget(6).name).isEqualTo("Switch1-1")
 
-            assertThat(e.innerFlow(7).name).isEqualTo("StaticText2-1")
-            assertThat(e.innerFlow(8).name).isEqualTo("TextField2-1")
-            assertThat(e.innerFlow(9).name).isEqualTo("SecureTextField2-1")
-            assertThat(e.innerFlow(10).name).isEqualTo("Image2-1")
-            assertThat(e.innerFlow(11).name).isEqualTo("Button2-1")
-            assertThat(e.innerFlow(12).name).isEqualTo("Switch2-1")
+            assertThat(e.innerWidget(7).name).isEqualTo("StaticText2-1")
+            assertThat(e.innerWidget(8).name).isEqualTo("TextField2-1")
+            assertThat(e.innerWidget(9).name).isEqualTo("SecureTextField2-1")
+            assertThat(e.innerWidget(10).name).isEqualTo("Image2-1")
+            assertThat(e.innerWidget(11).name).isEqualTo("Button2-1")
+            assertThat(e.innerWidget(12).name).isEqualTo("Switch2-1")
 
-            assertThat(e.innerFlow(13).name).isEqualTo("StaticText3-1")
-            assertThat(e.innerFlow(14).name).isEqualTo("TextField3-1")
-            assertThat(e.innerFlow(15).name).isEqualTo("SecureTextField3-1")
-            assertThat(e.innerFlow(16).name).isEqualTo("Image3-1")
-            assertThat(e.innerFlow(17).name).isEqualTo("Button3-1")
-            assertThat(e.innerFlow(18).name).isEqualTo("Switch3-1")
+            assertThat(e.innerWidget(13).name).isEqualTo("StaticText3-1")
+            assertThat(e.innerWidget(14).name).isEqualTo("TextField3-1")
+            assertThat(e.innerWidget(15).name).isEqualTo("SecureTextField3-1")
+            assertThat(e.innerWidget(16).name).isEqualTo("Image3-1")
+            assertThat(e.innerWidget(17).name).isEqualTo("Button3-1")
+            assertThat(e.innerWidget(18).name).isEqualTo("Switch3-1")
 
-            assertThat(e.innerFlow(19).isEmpty).isEqualTo(true)
-            assertThat(e.innerFlow(19).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerFlow(19)")
+            assertThat(e.innerWidget(19).isEmpty).isEqualTo(true)
+            assertThat(e.innerWidget(19).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerWidget(19)")
         }
     }
 
     @Test
-    fun innerVflow() {
+    fun innerVWidget() {
         /**
          * |XCUIElementTypeCell1|
          *   |Other1-1|StaticText1-1|TextField1-1|SecureTextField1-1|Image1-1|Button1-1|Switch1-1|NavigationBar1-1|
@@ -95,57 +95,57 @@ class TestElementRelativeInnerExtension_IosTest : UnitTest() {
          *   |Other3-1|StaticText3-1|TextField3-1|SecureTextField3-1|Image3-1|Button3-1|Switch3-1|NavigationBar3-1|
          */
 
-        // innerVflow()
+        // innerVWidget()
         run {
             // Arrange
             val e = TestElementCache.select(".XCUIElementTypeCell")
             // Act, Assert
-            assertThat(e.innerVflow().name).isEqualTo("StaticText1-1")
-            assertThat(e.innerVflow().selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerVflow")
+            assertThat(e.innerVWidget().name).isEqualTo("StaticText1-1")
+            assertThat(e.innerVWidget().selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerVWidget")
         }
 
-        // innerVflow()
+        // innerVWidget()
         run {
             // Arrange
             val e = TestElementCache.select("#StaticText1-1")
             // Act, Assert
-            assertThat(e.innerVflow().isEmpty).isEqualTo(true)
-            assertThat(e.innerVflow().selector.toString()).isEqualTo("<#StaticText1-1>:innerVflow")
+            assertThat(e.innerVWidget().isEmpty).isEqualTo(true)
+            assertThat(e.innerVWidget().selector.toString()).isEqualTo("<#StaticText1-1>:innerVWidget")
         }
 
-        // innerVflow(pos)
+        // innerVWidget(pos)
         run {
             // Arrange
             val e = TestElementCache.select(".XCUIElementTypeCell")
             // Act, Assert
-            assertThat(e.innerVflow(1).name).isEqualTo("StaticText1-1")
-            assertThat(e.innerVflow(1).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerVflow")
-            assertThat(e.innerVflow(2).name).isEqualTo("StaticText2-1")
-            assertThat(e.innerVflow(2).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerVflow(2)")
-            assertThat(e.innerVflow(3).name).isEqualTo("StaticText3-1")
-            assertThat(e.innerVflow(3).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerVflow(3)")
+            assertThat(e.innerVWidget(1).name).isEqualTo("StaticText1-1")
+            assertThat(e.innerVWidget(1).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerVWidget")
+            assertThat(e.innerVWidget(2).name).isEqualTo("StaticText2-1")
+            assertThat(e.innerVWidget(2).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerVWidget(2)")
+            assertThat(e.innerVWidget(3).name).isEqualTo("StaticText3-1")
+            assertThat(e.innerVWidget(3).selector.toString()).isEqualTo("<.XCUIElementTypeCell>:innerVWidget(3)")
 
-            assertThat(e.innerVflow(4).name).isEqualTo("TextField1-1")
-            assertThat(e.innerVflow(5).name).isEqualTo("TextField2-1")
-            assertThat(e.innerVflow(6).name).isEqualTo("TextField3-1")
+            assertThat(e.innerVWidget(4).name).isEqualTo("TextField1-1")
+            assertThat(e.innerVWidget(5).name).isEqualTo("TextField2-1")
+            assertThat(e.innerVWidget(6).name).isEqualTo("TextField3-1")
 
-            assertThat(e.innerVflow(7).name).isEqualTo("SecureTextField1-1")
-            assertThat(e.innerVflow(8).name).isEqualTo("SecureTextField2-1")
-            assertThat(e.innerVflow(9).name).isEqualTo("SecureTextField3-1")
+            assertThat(e.innerVWidget(7).name).isEqualTo("SecureTextField1-1")
+            assertThat(e.innerVWidget(8).name).isEqualTo("SecureTextField2-1")
+            assertThat(e.innerVWidget(9).name).isEqualTo("SecureTextField3-1")
 
-            assertThat(e.innerVflow(10).name).isEqualTo("Image1-1")
-            assertThat(e.innerVflow(11).name).isEqualTo("Image2-1")
-            assertThat(e.innerVflow(12).name).isEqualTo("Image3-1")
+            assertThat(e.innerVWidget(10).name).isEqualTo("Image1-1")
+            assertThat(e.innerVWidget(11).name).isEqualTo("Image2-1")
+            assertThat(e.innerVWidget(12).name).isEqualTo("Image3-1")
 
-            assertThat(e.innerVflow(13).name).isEqualTo("Button1-1")
-            assertThat(e.innerVflow(14).name).isEqualTo("Button2-1")
-            assertThat(e.innerVflow(15).name).isEqualTo("Button3-1")
+            assertThat(e.innerVWidget(13).name).isEqualTo("Button1-1")
+            assertThat(e.innerVWidget(14).name).isEqualTo("Button2-1")
+            assertThat(e.innerVWidget(15).name).isEqualTo("Button3-1")
 
-            assertThat(e.innerVflow(16).name).isEqualTo("Switch1-1")
-            assertThat(e.innerVflow(17).name).isEqualTo("Switch2-1")
-            assertThat(e.innerVflow(18).name).isEqualTo("Switch3-1")
+            assertThat(e.innerVWidget(16).name).isEqualTo("Switch1-1")
+            assertThat(e.innerVWidget(17).name).isEqualTo("Switch2-1")
+            assertThat(e.innerVWidget(18).name).isEqualTo("Switch3-1")
 
-            assertThat(e.innerVflow(19).isEmpty).isEqualTo(true)
+            assertThat(e.innerVWidget(19).isEmpty).isEqualTo(true)
         }
     }
 

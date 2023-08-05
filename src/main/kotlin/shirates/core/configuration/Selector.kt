@@ -342,9 +342,9 @@ class Selector(
             return flowCommandBaseNames.any { (command ?: "").startsWith(it) }
         }
 
-    val isInnerFlowBased: Boolean
+    val isInnerWidgetBased: Boolean
         get() {
-            return innerFlowCommandBaseNames.any { (command ?: "").startsWith(it) }
+            return innerWidgetCommandBaseNames.any { (command ?: "").startsWith(it) }
         }
 
     val isXmlBased: Boolean
@@ -412,11 +412,13 @@ class Selector(
             ":vflow"
         )
 
-        val innerFlowCommandBaseNames = listOf(
-            ":innerFlow", ":inner",
+        val innerWidgetCommandBaseNames = listOf(
+            ":innerWidget", ":inner",
             ":innerLabel", ":innerInput", ":innerImage", ":innerButton", ":innerSwitch",
-            ":innerVflow", ":innerV",
-            ":innerVlabel", ":innerVinput", ":innerVimage", ":innerVbutton", ":innerVswitch"
+            ":innerVWidget", ":innerV",
+            ":innerVlabel", ":innerVinput", ":innerVimage", ":innerVbutton", ":innerVswitch",
+            ":cellWidget", ":cell",
+            ":cellLabel", ":cellInput", ":cellImage", ":cellButton", ":cellSwitch"
         )
 
         val xmlCommandBaseNames = listOf(
@@ -450,7 +452,7 @@ class Selector(
                 if (_relativeCommandBaseNames == null) {
                     val list = mutableListOf<String>()
                     list.addAll(flowCommandBaseNames)
-                    list.addAll(innerFlowCommandBaseNames)
+                    list.addAll(innerWidgetCommandBaseNames)
                     list.addAll(xmlCommandBaseNames)
                     list.addAll(coordinateCommandBaseNames)
                     list.addAll(otherCommandBaseNames)

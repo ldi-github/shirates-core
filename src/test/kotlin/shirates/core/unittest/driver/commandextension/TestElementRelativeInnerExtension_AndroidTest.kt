@@ -25,7 +25,7 @@ class TestElementRelativeInnerExtension_AndroidTest : UnitTest() {
     }
 
     @Test
-    fun innerFlow() {
+    fun innerWidget() {
         /**
          * |FrameLayout1|
          *   |FrameLayout1-1|TextView1-1|EditText1-1|ImageView1-1|ImageButton1-1|Switch1-1|CheckBox1-1|LinearLayout1-1|
@@ -38,59 +38,59 @@ class TestElementRelativeInnerExtension_AndroidTest : UnitTest() {
 
         run {
             // Act, Assert
-            val innerFlow = e.innerFlow()
-            assertThat(innerFlow.id).isEqualTo("TextView1-1")
-            assertThat(innerFlow.selector.toString()).isEqualTo("<#FrameLayout1>:innerFlow")
+            val innerWidget = e.innerWidget()
+            assertThat(innerWidget.id).isEqualTo("TextView1-1")
+            assertThat(innerWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerWidget")
         }
         run {
             // Act, Assert
-            val innerFlow = e.innerFlow("[1]")
-            assertThat(innerFlow.id).isEqualTo("TextView1-1")
-            assertThat(innerFlow.selector.toString()).isEqualTo("<#FrameLayout1>:innerFlow")
+            val innerWidget = e.innerWidget("[1]")
+            assertThat(innerWidget.id).isEqualTo("TextView1-1")
+            assertThat(innerWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerWidget")
         }
         run {
             // Act, Assert
-            val innerFlow = e.innerFlow(2)
-            assertThat(innerFlow.id).isEqualTo("EditText1-1")
-            assertThat(innerFlow.selector.toString()).isEqualTo("<#FrameLayout1>:innerFlow(2)")
+            val innerWidget = e.innerWidget(2)
+            assertThat(innerWidget.id).isEqualTo("EditText1-1")
+            assertThat(innerWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerWidget(2)")
         }
         run {
             // Act, Assert
-            val innerFlow = e.innerFlow(6)
-            assertThat(innerFlow.id).isEqualTo("CheckBox1-1")
-            assertThat(innerFlow.selector.toString()).isEqualTo("<#FrameLayout1>:innerFlow(6)")
+            val innerWidget = e.innerWidget(6)
+            assertThat(innerWidget.id).isEqualTo("CheckBox1-1")
+            assertThat(innerWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerWidget(6)")
         }
         run {
             // Act, Assert
-            val innerFlow = e.innerFlow(7)
-            assertThat(innerFlow.id).isEqualTo("TextView2-1")
-            assertThat(innerFlow.selector.toString()).isEqualTo("<#FrameLayout1>:innerFlow(7)")
+            val innerWidget = e.innerWidget(7)
+            assertThat(innerWidget.id).isEqualTo("TextView2-1")
+            assertThat(innerWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerWidget(7)")
         }
         run {
             // Act, Assert
-            val innerFlow = e.innerFlow(18)
-            assertThat(innerFlow.id).isEqualTo("CheckBox3-1")
-            assertThat(innerFlow.selector.toString()).isEqualTo("<#FrameLayout1>:innerFlow(18)")
+            val innerWidget = e.innerWidget(18)
+            assertThat(innerWidget.id).isEqualTo("CheckBox3-1")
+            assertThat(innerWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerWidget(18)")
         }
         run {
             // Act, Assert
-            val innerFlow = e.innerFlow(19)
-            assertThat(innerFlow.isEmpty).isEqualTo(true)
-            assertThat(innerFlow.selector.toString()).isEqualTo("<#FrameLayout1>:innerFlow(19)")
+            val innerWidget = e.innerWidget(19)
+            assertThat(innerWidget.isEmpty).isEqualTo(true)
+            assertThat(innerWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerWidget(19)")
         }
 
-        e.innerFlow("*Text*&&[1]").printInfo()
-        e.innerFlow("*Text*&&[2]").printInfo()
-        e.innerFlow("*Text*&&[3]").printInfo()
-        e.innerFlow("*Text*&&[4]").printInfo()
-        e.innerFlow("*Text*&&[5]").printInfo()
-        e.innerFlow("*Text*&&[6]").printInfo()
+        e.innerWidget("*Text*&&[1]").printInfo()
+        e.innerWidget("*Text*&&[2]").printInfo()
+        e.innerWidget("*Text*&&[3]").printInfo()
+        e.innerWidget("*Text*&&[4]").printInfo()
+        e.innerWidget("*Text*&&[5]").printInfo()
+        e.innerWidget("*Text*&&[6]").printInfo()
 
         run {
             // Act, Assert
-            val innerFlow = e.innerFlow("*Text*&&[4]")
-            assertThat(innerFlow.id).isEqualTo("EditText2-1")
-            assertThat(innerFlow.selector.toString()).isEqualTo("<#FrameLayout1>:innerFlow(*Text*&&[4])")
+            val innerWidget = e.innerWidget("*Text*&&[4]")
+            assertThat(innerWidget.id).isEqualTo("EditText2-1")
+            assertThat(innerWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerWidget(*Text*&&[4])")
         }
     }
 
@@ -385,7 +385,7 @@ class TestElementRelativeInnerExtension_AndroidTest : UnitTest() {
     }
 
     @Test
-    fun innerVflow() {
+    fun innerVWidget() {
         /**
          * |FrameLayout1|
          *   |FrameLayout1-1|TextView1-1|EditText1-1|ImageView1-1|ImageButton1-1|Switch1-1|CheckBox1-1|LinearLayout1-1|
@@ -398,57 +398,57 @@ class TestElementRelativeInnerExtension_AndroidTest : UnitTest() {
 
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow()
-            assertThat(innerVflow.id).isEqualTo("TextView1-1")
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow")
+            val innerVWidget = e.innerVWidget()
+            assertThat(innerVWidget.id).isEqualTo("TextView1-1")
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget")
         }
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow("[1]")
-            assertThat(innerVflow.id).isEqualTo("TextView1-1")
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow")
+            val innerVWidget = e.innerVWidget("[1]")
+            assertThat(innerVWidget.id).isEqualTo("TextView1-1")
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget")
         }
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow(2)
-            assertThat(innerVflow.id).isEqualTo("TextView2-1")
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow(2)")
+            val innerVWidget = e.innerVWidget(2)
+            assertThat(innerVWidget.id).isEqualTo("TextView2-1")
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget(2)")
         }
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow(3)
-            assertThat(innerVflow.id).isEqualTo("TextView3-1")
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow(3)")
+            val innerVWidget = e.innerVWidget(3)
+            assertThat(innerVWidget.id).isEqualTo("TextView3-1")
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget(3)")
         }
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow(4)
-            assertThat(innerVflow.id).isEqualTo("EditText1-1")
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow(4)")
+            val innerVWidget = e.innerVWidget(4)
+            assertThat(innerVWidget.id).isEqualTo("EditText1-1")
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget(4)")
         }
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow(6)
-            assertThat(innerVflow.id).isEqualTo("EditText3-1")
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow(6)")
+            val innerVWidget = e.innerVWidget(6)
+            assertThat(innerVWidget.id).isEqualTo("EditText3-1")
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget(6)")
         }
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow(7)
-            assertThat(innerVflow.id).isEqualTo("ImageView1-1")
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow(7)")
+            val innerVWidget = e.innerVWidget(7)
+            assertThat(innerVWidget.id).isEqualTo("ImageView1-1")
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget(7)")
         }
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow(18)
-            assertThat(innerVflow.id).isEqualTo("CheckBox3-1")
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow(18)")
+            val innerVWidget = e.innerVWidget(18)
+            assertThat(innerVWidget.id).isEqualTo("CheckBox3-1")
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget(18)")
         }
         run {
             // Act, Assert
-            val innerVflow = e.innerVflow(19)
-            assertThat(innerVflow.isEmpty).isTrue()
-            assertThat(innerVflow.selector.toString()).isEqualTo("<#FrameLayout1>:innerVflow(19)")
+            val innerVWidget = e.innerVWidget(19)
+            assertThat(innerVWidget.isEmpty).isTrue()
+            assertThat(innerVWidget.selector.toString()).isEqualTo("<#FrameLayout1>:innerVWidget(19)")
         }
     }
 

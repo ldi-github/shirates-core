@@ -2,6 +2,7 @@ package shirates.spec.report.models
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogType
+import shirates.core.logging.Message
 import shirates.core.logging.Message.message
 import shirates.spec.code.custom.DefaultTranslator.escapeForCode
 import shirates.spec.report.entity.Frame
@@ -335,19 +336,18 @@ class SpecWorksheetModel(
                 }
             }
 
-            "exist" -> {
-                val msg = message(id = "exist", subject = "")
+            "exist", "existInCell" -> {
+                val msg = message(id = logLine.group, subject = "")
                 val subject = logLine.message.replace(msg, "")
                 logLine.arrangedMessage = subject
             }
 
-            "textIs" -> {
-                val first = current.expectations.firstOrNull()
-                if (first != null) {
-                    val subject = first.removePrefix(SpecResourceUtility.bullet)
-                    logLine.arrangedMessage = logLine.message.replace(subject, "")
+            else ->
+                if (logLine.group.endsWith("Is")) {
+                    if (target.isNotBlank()) {
+                        logLine.arrangedMessage = Message.getRelativeRemovedMessage(logLine.message).removePrefix(":")
+                    }
                 }
-            }
         }
     }
 

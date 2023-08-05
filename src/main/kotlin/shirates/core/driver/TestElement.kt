@@ -217,7 +217,7 @@ class TestElement(
 
             if (isCacheMode) {
                 val list = mutableListOf<TestElement>()
-                getDecendants(this, list)
+                getDescendants(this, list)
                 descendantsCache = list
                 return descendantsCache!!
             }
@@ -235,11 +235,11 @@ class TestElement(
             return descendantsCache!!
         }
 
-    private fun getDecendants(element: TestElement, list: MutableList<TestElement>) {
+    private fun getDescendants(element: TestElement, list: MutableList<TestElement>) {
 
         for (c in element.children) {
             list.add(c)
-            getDecendants(c, list)
+            getDescendants(c, list)
         }
     }
 
@@ -1038,6 +1038,10 @@ class TestElement(
      */
     val subject: String
         get() {
+            if (altSubject.isNotBlank()) {
+                return altSubject
+            }
+
             if (selector == null && isEmpty) {
                 return "(empty)"
             }
@@ -1054,6 +1058,11 @@ class TestElement(
             s = getUniqueSelector().toString()
             return s
         }
+
+    /**
+     * altSubject
+     */
+    var altSubject: String = ""
 
     /**
      * category

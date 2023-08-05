@@ -143,7 +143,7 @@ class SelectDirectTest : UITest() {
     }
 
     @Test
-    fun relative_innerFlow() {
+    fun relative_innerWidget() {
 
         scenario {
             case(1) {
@@ -151,59 +151,59 @@ class SelectDirectTest : UITest() {
                     it.macro("[Timer Screen]")
                 }.expectation {
                     val e1 = it.select("#navigation_bar")
-                    e1.innerFlow().classIs("android.widget.ImageView")
-                    e1.relative(":innerFlow").classIs("android.widget.ImageView")
+                    e1.innerWidget().classIs("android.widget.ImageView")
+                    e1.relative(":innerWidget").classIs("android.widget.ImageView")
 
-                    e1.innerFlow(5).classIs("android.widget.ImageView")
-                    e1.relative(":innerFlow(5)").classIs("android.widget.ImageView")
+                    e1.innerWidget(5).classIs("android.widget.ImageView")
+                    e1.relative(":innerWidget(5)").classIs("android.widget.ImageView")
 
-                    e1.innerFlow(6).textIs("Alarm")
-                    e1.relative(":innerFlow(6)").textIs("Alarm")
+                    e1.innerWidget(6).textIs("Alarm")
+                    e1.relative(":innerWidget(6)").textIs("Alarm")
                 }.expectation(useCache = false) {
                     val e1 = it.select("#navigation_bar")
-                    e1.innerFlow().classIs("android.widget.ImageView")
-                    e1.relative(":innerFlow").classIs("android.widget.ImageView")
+                    e1.innerWidget().classIs("android.widget.ImageView")
+                    e1.relative(":innerWidget").classIs("android.widget.ImageView")
 
-                    e1.innerFlow(5).classIs("android.widget.ImageView")
-                    e1.relative(":innerFlow(5)").classIs("android.widget.ImageView")
+                    e1.innerWidget(5).classIs("android.widget.ImageView")
+                    e1.relative(":innerWidget(5)").classIs("android.widget.ImageView")
 
-                    e1.innerFlow(6).textIs("Alarm")
-                    e1.relative(":innerFlow(6)").textIs("Alarm")
+                    e1.innerWidget(6).textIs("Alarm")
+                    e1.relative(":innerWidget(6)").textIs("Alarm")
                 }
             }
             case(2) {
                 expectation {
                     val e1 = it.select("#timer_setup")
-                    e1.innerFlow("pos=1").textIs("00h 00m 00s")
-                    e1.relative(":innerFlow(pos=1)").textIs("00h 00m 00s")
+                    e1.innerWidget("pos=1").textIs("00h 00m 00s")
+                    e1.relative(":innerWidget(pos=1)").textIs("00h 00m 00s")
 
-                    e1.innerFlow("pos=2").textIs("1")
-                    e1.relative(":innerFlow(pos=2)").textIs("1")
+                    e1.innerWidget("pos=2").textIs("1")
+                    e1.relative(":innerWidget(pos=2)").textIs("1")
 
-                    e1.innerFlow("pos=3").textIs("2")
-                    e1.relative(":innerFlow(pos=3)").textIs("2")
+                    e1.innerWidget("pos=3").textIs("2")
+                    e1.relative(":innerWidget(pos=3)").textIs("2")
 
-                    e1.innerFlow("pos=4").textIs("3")
-                    e1.relative(":innerFlow(pos=4)").textIs("3")
+                    e1.innerWidget("pos=4").textIs("3")
+                    e1.relative(":innerWidget(pos=4)").textIs("3")
 
-                    e1.innerFlow("pos=5").textIs("4")
-                    e1.relative(":innerFlow(pos=5)").textIs("4")
+                    e1.innerWidget("pos=5").textIs("4")
+                    e1.relative(":innerWidget(pos=5)").textIs("4")
                 }.expectation(useCache = false) {
                     val e1 = it.select("#timer_setup")
-                    e1.innerFlow("pos=1").textIs("00h 00m 00s")
-                    e1.relative(":innerFlow(pos=1)").textIs("00h 00m 00s")
+                    e1.innerWidget("pos=1").textIs("00h 00m 00s")
+                    e1.relative(":innerWidget(pos=1)").textIs("00h 00m 00s")
 
-                    e1.innerFlow("pos=2").textIs("1")
-                    e1.relative(":innerFlow(pos=2)").textIs("1")
+                    e1.innerWidget("pos=2").textIs("1")
+                    e1.relative(":innerWidget(pos=2)").textIs("1")
 
-                    e1.innerFlow("pos=3").textIs("2")
-                    e1.relative(":innerFlow(pos=3)").textIs("2")
+                    e1.innerWidget("pos=3").textIs("2")
+                    e1.relative(":innerWidget(pos=3)").textIs("2")
 
-                    e1.innerFlow("pos=4").textIs("3")
-                    e1.relative(":innerFlow(pos=4)").textIs("3")
+                    e1.innerWidget("pos=4").textIs("3")
+                    e1.relative(":innerWidget(pos=4)").textIs("3")
 
-                    e1.innerFlow("pos=5").textIs("4")
-                    e1.relative(":innerFlow(pos=5)").textIs("4")
+                    e1.innerWidget("pos=5").textIs("4")
+                    e1.relative(":innerWidget(pos=5)").textIs("4")
                 }
             }
         }

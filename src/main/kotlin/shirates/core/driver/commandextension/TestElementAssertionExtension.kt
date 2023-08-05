@@ -3,9 +3,9 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
+import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 
 /**
@@ -17,7 +17,7 @@ fun TestElement.idIs(
 ): TestElement {
 
     val command = "idIs"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -40,7 +40,7 @@ fun TestElement.textIs(
 ): TestElement {
 
     val command = "textIs"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -59,7 +59,7 @@ fun TestElement.valueIs(
 ): TestElement {
 
     val command = "valueIs"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -78,7 +78,7 @@ fun TestElement.accessIs(
 ): TestElement {
 
     val command = "accessIs"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -96,7 +96,7 @@ fun TestElement.textIsNot(
 ): TestElement {
 
     val command = "textIsNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -114,7 +114,7 @@ fun TestElement.valueIsNot(
 ): TestElement {
 
     val command = "valueIsNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -132,7 +132,7 @@ fun TestElement.accessIsNot(
 ): TestElement {
 
     val command = "accessIsNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -150,7 +150,7 @@ fun TestElement.textContains(
 ): TestElement {
 
     val command = "textContains"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -168,7 +168,7 @@ fun TestElement.valueContains(
 ): TestElement {
 
     val command = "valueContains"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -186,7 +186,7 @@ fun TestElement.accessContains(
 ): TestElement {
 
     val command = "accessContains"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -204,7 +204,7 @@ fun TestElement.textContainsNot(
 ): TestElement {
 
     val command = "textContainsNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -222,7 +222,7 @@ fun TestElement.valueContainsNot(
 ): TestElement {
 
     val command = "valueContainsNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -240,7 +240,7 @@ fun TestElement.accessContainsNot(
 ): TestElement {
 
     val command = "accessContainsNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -258,7 +258,7 @@ fun TestElement.textStartsWith(
 ): TestElement {
 
     val command = "textStartsWith"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -276,7 +276,7 @@ fun TestElement.valueStartsWith(
 ): TestElement {
 
     val command = "valueStartsWith"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -294,7 +294,7 @@ fun TestElement.accessStartsWith(
 ): TestElement {
 
     val command = "accessStartsWith"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -313,7 +313,7 @@ fun TestElement.textStartsWithNot(
 ): TestElement {
 
     val command = "textStartsWithNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -331,7 +331,7 @@ fun TestElement.valueStartsWithNot(
 ): TestElement {
 
     val command = "valueStartsWithNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -349,7 +349,7 @@ fun TestElement.accessStartsWithNot(
 ): TestElement {
 
     val command = "accessStartsWithNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -367,7 +367,7 @@ fun TestElement.textEndsWith(
 ): TestElement {
 
     val command = "textEndsWith"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -385,7 +385,7 @@ fun TestElement.valueEndsWith(
 ): TestElement {
 
     val command = "valueEndsWith"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -403,7 +403,7 @@ fun TestElement.accessEndsWith(
 ): TestElement {
 
     val command = "accessEndsWith"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -421,7 +421,7 @@ fun TestElement.textEndsWithNot(
 ): TestElement {
 
     val command = "textEndsWithNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -439,7 +439,7 @@ fun TestElement.valueEndsWithNot(
 ): TestElement {
 
     val command = "valueEndsWithNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -457,7 +457,7 @@ fun TestElement.accessEndsWithNot(
 ): TestElement {
 
     val command = "accessEndsWithNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -475,7 +475,7 @@ fun TestElement.textMatches(
 ): TestElement {
 
     val command = "textMatches"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -493,7 +493,7 @@ fun TestElement.valueMatches(
 ): TestElement {
 
     val command = "valueMatches"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -511,7 +511,7 @@ fun TestElement.accessMatches(
 ): TestElement {
 
     val command = "accessMatches"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -529,7 +529,7 @@ fun TestElement.textMatchesNot(
 ): TestElement {
 
     val command = "textMatchesNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -547,7 +547,7 @@ fun TestElement.valueMatchesNot(
 ): TestElement {
 
     val command = "valueMatchesNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -565,7 +565,7 @@ fun TestElement.accessMatchesNot(
 ): TestElement {
 
     val command = "accessMatchesNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -581,7 +581,7 @@ fun TestElement.accessMatchesNot(
 fun TestElement.textIsEmpty(): TestElement {
 
     val command = "textIsEmpty"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
@@ -597,7 +597,7 @@ fun TestElement.textIsEmpty(): TestElement {
 fun TestElement.valueIsEmpty(): TestElement {
 
     val command = "valueIsEmpty"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
@@ -613,7 +613,7 @@ fun TestElement.valueIsEmpty(): TestElement {
 fun TestElement.accessIsEmpty(): TestElement {
 
     val command = "accessIsEmpty"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
@@ -630,7 +630,7 @@ fun TestElement.accessIsEmpty(): TestElement {
 fun TestElement.textIsNotEmpty(): TestElement {
 
     val command = "textIsNotEmpty"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
@@ -646,7 +646,7 @@ fun TestElement.textIsNotEmpty(): TestElement {
 fun TestElement.valueIsNotEmpty(): TestElement {
 
     val command = "valueIsNotEmpty"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
@@ -662,7 +662,7 @@ fun TestElement.valueIsNotEmpty(): TestElement {
 fun TestElement.accessIsNotEmpty(): TestElement {
 
     val command = "accessIsNotEmpty"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
@@ -681,7 +681,7 @@ fun TestElement.checkedIs(
 ): TestElement {
 
     val command = "checkedIs"
-    val assertMessage = message ?: message(id = command, subject = subject, expected = expected)
+    val assertMessage = message ?: message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     var e = this
@@ -726,7 +726,7 @@ internal fun TestElement.checkedIsCore(
 fun TestElement.checkIsON(): TestElement {
 
     val command = "checkIsON"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
@@ -743,7 +743,7 @@ fun TestElement.checkIsON(): TestElement {
 fun TestElement.checkIsOFF(): TestElement {
 
     val command = "checkIsOFF"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
@@ -763,7 +763,7 @@ fun TestElement.enabledIs(
 ): TestElement {
 
     val command = "enabledIs"
-    val assertMessage = message ?: message(id = command, subject = subject, expected = expected)
+    val assertMessage = message ?: message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -782,7 +782,7 @@ fun TestElement.enabledIsTrue(
 ): TestElement {
 
     val command = "enabledIsTrue"
-    val assertMessage = message ?: message(id = command, subject = subject)
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
@@ -801,7 +801,7 @@ fun TestElement.enabledIsFalse(
 ): TestElement {
 
     val command = "enabledIsFalse"
-    val assertMessage = message ?: message(id = command, subject = subject)
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
@@ -818,7 +818,7 @@ fun TestElement.enabledIsFalse(
 fun TestElement.buttonIsActive(): TestElement {
 
     val command = "buttonIsActive"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = subject) {
@@ -835,7 +835,7 @@ fun TestElement.buttonIsActive(): TestElement {
 fun TestElement.buttonIsNotActive(): TestElement {
 
     val command = "buttonIsNotActive"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = subject) {
@@ -855,7 +855,7 @@ fun TestElement.selectedIs(
 ): TestElement {
 
     val command = "selectedIs"
-    val assertMessage = message ?: message(id = command, subject = subject, expected = expected)
+    val assertMessage = message ?: message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -871,7 +871,7 @@ fun TestElement.selectedIs(
 fun TestElement.selectedIsTrue(): TestElement {
 
     val command = "selectedIsTrue"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
@@ -887,7 +887,7 @@ fun TestElement.selectedIsTrue(): TestElement {
 fun TestElement.selectedIsFalse(): TestElement {
 
     val command = "selectedIsFalse"
-    val assertMessage = message(id = command, subject = subject)
+    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
@@ -906,7 +906,7 @@ fun TestElement.displayedIs(
 ): TestElement {
 
     val command = "displayedIs"
-    val assertMessage = message ?: message(id = command, subject = subject, expected = expected)
+    val assertMessage = message ?: message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
@@ -927,7 +927,13 @@ fun TestElement.attributeIs(
 ): TestElement {
 
     val command = "attributeIs"
-    val assertMessage = message ?: message(id = command, subject = subject, field1 = attributeName, expected = expected)
+    val assertMessage = message ?: message(
+        id = command,
+        subject = subject,
+        field1 = attributeName,
+        expected = expected,
+        replaceRelative = true
+    )
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(
@@ -954,7 +960,13 @@ fun TestElement.attributeIsNot(
 ): TestElement {
 
     val command = "attributeIsNot"
-    val assertMessage = message ?: message(id = command, subject = subject, field1 = attributeName, expected = expected)
+    val assertMessage = message ?: message(
+        id = command,
+        subject = subject,
+        field1 = attributeName,
+        expected = expected,
+        replaceRelative = true
+    )
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(
@@ -979,7 +991,7 @@ fun TestElement.classIs(
 ): TestElement {
 
     val command = "classIs"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = this.subject, arg1 = expected) {
@@ -997,7 +1009,7 @@ fun TestElement.classIsNot(
 ): TestElement {
 
     val command = "classIsNot"
-    val assertMessage = message(id = command, subject = subject, expected = expected)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -1005,4 +1017,74 @@ fun TestElement.classIsNot(
     }
 
     return this
+}
+
+/**
+ * existInCell
+ */
+fun TestElement.existInCell(
+    expression: String,
+    throwsException: Boolean = true
+): TestElement {
+
+    val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
+
+    val testElement = TestDriver.it
+
+    val command = "existInCell"
+    val assertMessage = message(id = command, subject = e.subject, replaceRelative = true)
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
+
+        e = this.innerElements.filterBySelector(selector = sel, throwsException = false).firstOrNull()
+            ?: TestElement.emptyElement
+        TestDriver.postProcessForAssertion(
+            selectResult = e,
+            assertMessage = assertMessage
+        )
+    }
+
+    if (e.hasError && throwsException) {
+        throw e.lastError!!
+    }
+
+    return e
+}
+
+/**
+ * dontExistInCell
+ */
+fun TestElement.dontExistInCell(
+    expression: String,
+    throwsException: Boolean = true
+): TestElement {
+
+    val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
+
+    val testElement = TestDriver.it
+
+    val command = "dontExistInCell"
+    val assertMessage = message(id = command, subject = e.subject, replaceRelative = true)
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
+
+        val a = this.getAncestorAt(level = 1)
+        e = a.innerWidgets.filterBySelector(selector = sel, throwsException = false).firstOrNull()
+            ?: TestElement.emptyElement
+        TestDriver.postProcessForAssertion(
+            selectResult = e,
+            assertMessage = assertMessage,
+            dontExist = true
+        )
+    }
+
+    if ((e.isFound || e.lastResult == LogType.ERROR) && throwsException) {
+        throw e.lastError!!
+    }
+
+    return e
 }
