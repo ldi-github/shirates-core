@@ -1024,7 +1024,7 @@ class TestElement(
                 return false
             }
             if (isAndroid) {
-                return (scrollable == "true")
+                return (scrollable == "true" || className == "android.support.v7.widget.RecyclerView")
             } else {
                 if (type == "") {
                     return false
