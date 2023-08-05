@@ -10,14 +10,14 @@
 | :flowImage        | :image  | image in widget flow                                   |
 | :flowButton       | :button | button in widget flow                                  |
 | :flowSwitch       | :switch | switch in widget flow                                  |
-| :innerFlow        | :inner  | widget in widget flow inside of the container          |
+| :innerWidget      | :inner  | widget in widget flow inside of the container          |
 | :innerLabel       | -       | label in widget flow inside of the container           |
 | :innerInput       | -       | input in widget flow inside of the container           |
 | :innerImage       | -       | image in widget flow inside of the container           |
 | :innerButton      | -       | button in widget flow inside of the container          |
 | :innerSwitch      | -       | switch in widget flow inside of the container          |
 | :vflow            | -       | widget in vertical widget flow                         |
-| :innerVflow       | :innerV | widget in vertical widget flow inside of the container |
+| :innerVWidget     | :innerV | widget in vertical widget flow inside of the container |
 | :innerVlabel      | -       | label in vertical widget flow inside of the container  |
 | :innerVinput      | -       | input in vertical widget flow inside of the container  |
 | :innerVimage      | -       | image in vertical widget flow inside of the container  |

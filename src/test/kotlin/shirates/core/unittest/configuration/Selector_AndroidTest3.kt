@@ -71,7 +71,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector()
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -79,7 +79,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector("text1")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -87,7 +87,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":flow")
             assertThat(sel.isFlowBased).isTrue()
-            assertThat(sel.isInnerFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -95,15 +95,15 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":flowInput")
             assertThat(sel.isFlowBased).isTrue()
-            assertThat(sel.isInnerFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
         run {
-            val sel = Selector(":innerFlow")
+            val sel = Selector(":innerWidget")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -111,7 +111,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerLabel")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -119,7 +119,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerInput")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -127,7 +127,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerImage")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -135,7 +135,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerButton")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -143,15 +143,15 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerSwitch")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
         run {
-            val sel = Selector(":innerVflow")
+            val sel = Selector(":innerVWidget")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -159,7 +159,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerVlabel")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -167,7 +167,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerVinput")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -175,7 +175,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerVimage")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -183,7 +183,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerVbutton")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -191,7 +191,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":innerVswitch")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isTrue()
+            assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -199,7 +199,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":parent")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isTrue()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
@@ -207,7 +207,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":right")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isTrue()
             assertThat(sel.isOtherBased).isFalse()
@@ -215,15 +215,63 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val sel = Selector(":rightLabel")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isTrue()
             assertThat(sel.isOtherBased).isFalse()
         }
         run {
+            val sel = Selector(":cellWidget")
+            assertThat(sel.isFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isTrue()
+            assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isCoordinateBased).isFalse()
+            assertThat(sel.isOtherBased).isFalse()
+        }
+        run {
+            val sel = Selector(":cellLabel")
+            assertThat(sel.isFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isTrue()
+            assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isCoordinateBased).isFalse()
+            assertThat(sel.isOtherBased).isFalse()
+        }
+        run {
+            val sel = Selector(":cellInput")
+            assertThat(sel.isFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isTrue()
+            assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isCoordinateBased).isFalse()
+            assertThat(sel.isOtherBased).isFalse()
+        }
+        run {
+            val sel = Selector(":cellImage")
+            assertThat(sel.isFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isTrue()
+            assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isCoordinateBased).isFalse()
+            assertThat(sel.isOtherBased).isFalse()
+        }
+        run {
+            val sel = Selector(":cellButton")
+            assertThat(sel.isFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isTrue()
+            assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isCoordinateBased).isFalse()
+            assertThat(sel.isOtherBased).isFalse()
+        }
+        run {
+            val sel = Selector(":cellSwitch")
+            assertThat(sel.isFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isTrue()
+            assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isCoordinateBased).isFalse()
+            assertThat(sel.isOtherBased).isFalse()
+        }
+        run {
             val sel = Selector(":not")
             assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isTrue()
@@ -237,11 +285,13 @@ class Selector_AndroidTest3 : UnitTest() {
             ":flow", ":label", ":input", ":image", ":button", ":switch",
             ":vflow"
         )
-        assertThat(Selector.innerFlowCommandBaseNames).containsExactlyInAnyOrder(
-            ":innerFlow", ":inner",
+        assertThat(Selector.innerWidgetCommandBaseNames).containsExactlyInAnyOrder(
+            ":innerWidget", ":inner",
             ":innerLabel", ":innerInput", ":innerImage", ":innerButton", ":innerSwitch",
-            ":innerVflow", ":innerV",
-            ":innerVlabel", ":innerVinput", ":innerVimage", ":innerVbutton", ":innerVswitch"
+            ":innerVWidget", ":innerV",
+            ":innerVlabel", ":innerVinput", ":innerVimage", ":innerVbutton", ":innerVswitch",
+            ":cellWidget", ":cell",
+            ":cellLabel", ":cellInput", ":cellImage", ":cellButton", ":cellSwitch"
         )
         assertThat(Selector.xmlCommandBaseNames).containsExactlyInAnyOrder(
             ":parent", ":child", ":sibling", ":ancestor", ":descendant", ":next", ":pre", ":previous"
@@ -255,7 +305,7 @@ class Selector_AndroidTest3 : UnitTest() {
         run {
             val list = mutableListOf<String>()
             list.addAll(Selector.flowCommandBaseNames)
-            list.addAll(Selector.innerFlowCommandBaseNames)
+            list.addAll(Selector.innerWidgetCommandBaseNames)
             list.addAll(Selector.xmlCommandBaseNames)
             list.addAll(Selector.coordinateCommandBaseNames)
             list.addAll(Selector.otherCommandBaseNames)

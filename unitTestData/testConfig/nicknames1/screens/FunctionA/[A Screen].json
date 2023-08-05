@@ -41,12 +41,14 @@
     "[by className]": "className=className1",
     "[by xpath]": "xpath=xpathA",
 
-    "[by access,text,className]": "@access1&&text1&&.className1"
+    "[by access,text,className]": "@access1&&text1&&.className1",
 
+    "[Scrollable]": "#scrollable"
   },
   "default": "[X]",
 
   "scroll": {
+    "scrollable": "[Scrollable]",
     "start-elements": "[start-elementA][start-elementB]",
     "end-elements": "[end-elementA][end-elementB]",
     "overlay-elements": "[overlay-elementA][overlay-elementB]"

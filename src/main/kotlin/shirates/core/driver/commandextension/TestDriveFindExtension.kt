@@ -76,7 +76,6 @@ fun TestDrive.allElements(
     }
 
     if (useCache) {
-        syncCache(force = true)
         if (isAndroid) {
             return rootElement.descendantsAndSelf
         }

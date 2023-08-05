@@ -310,52 +310,112 @@ internal fun TestElement.relative(
                 )
             }
 
-            ":innerFlow", ":inner" -> {
-                e = this.innerFlow(selector = relativeSelector)
+            ":innerWidget", ":inner" -> {
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerWidget(selector = sel)
             }
 
             ":innerLabel" -> {
-                e = this.innerLabel(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerLabel(selector = sel)
             }
 
             ":innerInput" -> {
-                e = this.innerInput(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerInput(selector = sel)
             }
 
             ":innerImage" -> {
-                e = this.innerImage(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerImage(selector = sel)
             }
 
             ":innerButton" -> {
-                e = this.innerButton(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerButton(selector = sel)
             }
 
             ":innerSwitch" -> {
-                e = this.innerSwitch(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerSwitch(selector = sel)
             }
 
-            ":innerVflow", ":innerV" -> {
-                e = this.innerVflow(selector = relativeSelector)
+            ":innerVWidget", ":innerV" -> {
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerVWidget(selector = sel)
             }
 
             ":innerVlabel" -> {
-                e = this.innerVlabel(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerVlabel(selector = sel)
             }
 
             ":innerVinput" -> {
-                e = this.innerVinput(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerVinput(selector = sel)
             }
 
             ":innerVimage" -> {
-                e = this.innerVimage(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerVimage(selector = sel)
             }
 
             ":innerVbutton" -> {
-                e = this.innerVbutton(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerVbutton(selector = sel)
             }
 
             ":innerVswitch" -> {
-                e = this.innerVswitch(selector = relativeSelector)
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.innerVswitch(selector = sel)
+            }
+
+            ":cellWidget", ":cell" -> {
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.cellWidget(selector = sel)
+            }
+
+            ":cellLabel" -> {
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.cellLabel(selector = sel)
+            }
+
+            ":cellInput" -> {
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.cellInput(selector = sel)
+            }
+
+            ":cellImage" -> {
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.cellImage(selector = sel)
+            }
+
+            ":cellButton" -> {
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.cellButton(selector = sel)
+            }
+
+            ":cellSwitch" -> {
+                val sel = relativeSelector.copy()
+                sel.command = null
+                e = this.cellSwitch(selector = sel)
             }
 
             /**
@@ -535,26 +595,44 @@ internal fun TestElement.child(
  * child
  */
 fun TestElement.child(
-    expression: String
+    expression: String,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    return relative(
+    val e = relative(
         command = ":child($expression)",
         scopeElements = children
     )
+
+    lastElement = e
+
+    if (func != null) {
+        e.func()
+    }
+
+    return lastElement
 }
 
 /**
  * child
  */
 fun TestElement.child(
-    pos: Int = 1
+    pos: Int = 1,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    return relative(
+    val e = relative(
         command = ":child($pos)",
         scopeElements = children
     )
+
+    lastElement = e
+
+    if (func != null) {
+        e.func()
+    }
+
+    return lastElement
 }
 
 internal fun TestElement.sibling(
@@ -598,19 +676,30 @@ fun TestElement.sibling(
  * sibling
  */
 fun TestElement.sibling(
-    pos: Int = 1
+    pos: Int = 1,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    return relative(
+    val e = relative(
         command = ":sibling($pos)",
         scopeElements = parent().children
     )
+
+    lastElement = e
+
+    if (func != null) {
+        e.func()
+    }
+
+    return lastElement
 }
 
 /**
  * parent
  */
-fun TestElement.parent(): TestElement {
+fun TestElement.parent(
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
 
     var e = TestElement()
     val context = TestDriverCommandContext(this)
@@ -632,6 +721,10 @@ fun TestElement.parent(): TestElement {
     e.selector = this.getChainedSelector(relativeCommand = ":parent")
 
     lastElement = e
+
+    if (func != null) {
+        e.func()
+    }
 
     return lastElement
 }
@@ -659,22 +752,40 @@ internal fun TestElement.ancestor(
  */
 fun TestElement.ancestor(
     expression: String,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    return relative(":ancestor($expression)")
+    val e = relative(":ancestor($expression)")
+
+    lastElement = e
+
+    if (func != null) {
+        e.func()
+    }
+
+    return lastElement
 }
 
 /**
  * ancestor
  */
 fun TestElement.ancestor(
-    pos: Int = 1
+    pos: Int = 1,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    return relative(
+    val e = relative(
         command = ":ancestor($pos)",
         scopeElements = this.ancestors
     )
+
+    lastElement = e
+
+    if (func != null) {
+        e.func()
+    }
+
+    return lastElement
 }
 
 internal fun TestElement.descendant(
@@ -701,26 +812,44 @@ internal fun TestElement.descendant(
  * descendant
  */
 fun TestElement.descendant(
-    expression: String
+    expression: String,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    return relative(
+    val e = relative(
         command = ":descendant($expression)",
         scopeElements = this.descendants
     )
+
+    lastElement = e
+
+    if (func != null) {
+        e.func()
+    }
+
+    return lastElement
 }
 
 /**
  * descendant
  */
 fun TestElement.descendant(
-    pos: Int = 1
+    pos: Int = 1,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    return relative(
+    val e = relative(
         command = ":descendant($pos)",
         scopeElements = descendants
     )
+
+    lastElement = e
+
+    if (func != null) {
+        e.func()
+    }
+
+    return lastElement
 }
 
 /**

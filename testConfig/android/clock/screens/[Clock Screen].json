@@ -8,9 +8,12 @@
   "identity": "[Title]",
 
   "selectors": {
+    "[Toolbar]": "#toolbar",
+    "[Title]": "#action_bar_title",
+    "[More options]": "@More options",
 
-    "[Title]": "Clock&&#action_bar_title",
     "[digital_clock]": "#digital_clock"
+
   }
 
 }

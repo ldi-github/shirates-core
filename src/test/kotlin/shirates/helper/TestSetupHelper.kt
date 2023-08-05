@@ -90,11 +90,11 @@ object TestSetupHelper : TestDrive {
         it.select(".android.support.v7.widget.RecyclerView") {
             cropItems("1")
         }
-        it.swipeToLeft()
+        it.flickToLeft()
         it.select(".android.support.v7.widget.RecyclerView") {
             cropItems("2")
         }
-        it.swipeToLeft()
+        it.flickToLeft()
         it.select(".android.support.v7.widget.RecyclerView") {
             cropItems("3")
         }

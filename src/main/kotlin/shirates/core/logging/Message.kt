@@ -1,12 +1,14 @@
 package shirates.core.logging
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import shirates.core.configuration.PropertiesManager
 import shirates.spec.exception.FileFormatException
 import shirates.spec.utilily.*
 
 object Message {
 
     val messageRepo = mutableMapOf<String, MutableMap<String, MessageRecord>>()
+    val relativeMessageRepo = mutableMapOf<String, MutableList<Pair<String, MessageRecord>>>()
 
     /**
      * getMessageMap
@@ -28,10 +30,10 @@ object Message {
     fun setup() {
 
         val workbook = ExcelUtility.getWorkbook(baseName = "message.xlsx", logLanguage = "")
-        loadMessageheet(workbook = workbook)
+        loadMessageSheet(workbook = workbook)
     }
 
-    fun loadMessageheet(workbook: XSSFWorkbook) {
+    fun loadMessageSheet(workbook: XSSFWorkbook) {
 
         if (workbook.worksheets.firstOrNull() { it.sheetName.lowercase() == "message" } == null)
             throw FileFormatException("message sheet is required.")
@@ -61,7 +63,66 @@ object Message {
                 map[id] = record
             }
             messageRepo[columnName] = map
+
+            val relativeList = mutableListOf<Pair<String, MessageRecord>>()
+            for (key in map.keys) {
+                if (key.startsWith(":")) {
+                    val record = map[key]!!
+                    relativeList.add(Pair(key, record))
+                }
+            }
+            relativeMessageRepo[columnName] = relativeList.sortedByDescending { it.first.length }.toMutableList()
         }
+    }
+
+    /**
+     * getRelativeMessageList
+     */
+    fun getRelativeMessageList(language: String = PropertiesManager.logLanguage): MutableList<Pair<String, MessageRecord>> {
+
+        return relativeMessageRepo[language.ifBlank { "default" }]!!
+    }
+
+    /**
+     * replaceRelative
+     */
+    fun replaceRelative(message: String): String {
+
+        var m = message
+        val relativeList = getRelativeMessageList()
+        for (item in relativeList) {
+            val record = item.second
+            m = m.replace(record.id, record.message)
+        }
+        return m
+    }
+
+    /**
+     * getIndexOfRelative
+     */
+    fun getIndexOfRelative(message: String): Int {
+
+        val relativeList = getRelativeMessageList()
+        for (item in relativeList) {
+            val record = item.second
+            val index = message.indexOf(record.message)
+            if (index >= 0) {
+                return index
+            }
+        }
+        return -1
+    }
+
+    /**
+     * getRelativeRemovedMessage
+     */
+    fun getRelativeRemovedMessage(message: String): String {
+
+        val index = getIndexOfRelative(message = message)
+        if (index < 0) {
+            return message
+        }
+        return message.substring(index)
     }
 
     /**
@@ -87,7 +148,8 @@ object Message {
         arg2: String? = null,
         submessage: String? = null,
         condition: String? = null,
-        lang: String = TestLog.logLanguage
+        lang: String = TestLog.logLanguage,
+        replaceRelative: Boolean = false
     ): String {
 
         val messageMap = getMessageMap(lang)
@@ -114,6 +176,9 @@ object Message {
             message = message.replace(placeHolder("arg2"), arg2 ?: "null")
             message = message.replace(placeHolder("submessage"), submessage ?: "null")
             message = message.replace(placeHolder("condition"), condition ?: "null")
+            if (replaceRelative) {
+                message = replaceRelative(message = message)
+            }
         } else {
             message = "message not found.(id=$id" +
                     arg("subject", subject) +

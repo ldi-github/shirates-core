@@ -114,6 +114,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
             for (selector in screenBaseInfo.selectors) {
                 putSelector(selector = selector.value)
             }
+            scrollInfo.scrollable = screenBaseInfo.scrollInfo.scrollable
             scrollInfo.startElements.addAll(screenBaseInfo.scrollInfo.startElements)
             scrollInfo.endElements.addAll(screenBaseInfo.scrollInfo.endElements)
             scrollInfo.overlayElements.addAll(screenBaseInfo.scrollInfo.overlayElements)
@@ -214,6 +215,10 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
     private fun setScroll(jso: JSONObject) {
 
         val scroll = jso.getJSONObject("scroll")
+        val scrollable = scroll.getValue("scrollable")
+        if (scrollable.isNotBlank()) {
+            scrollInfo.scrollable = scrollable
+        }
         scrollInfo.startElements.addAll(
             NicknameUtility.splitNicknames(
                 scroll.getValue("start-elements")
