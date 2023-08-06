@@ -56,6 +56,11 @@ internal fun TestDrive.getScrollableElement(
         return descendants.first()
     }
 
+    val rootDescendants = rootElement.getScrollableElementsInDescendantsAndSelf()
+    if (rootDescendants.any()) {
+        return rootDescendants.first()
+    }
+
     return rootElement
 }
 
