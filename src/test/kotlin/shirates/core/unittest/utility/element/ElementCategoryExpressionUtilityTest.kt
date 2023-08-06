@@ -31,6 +31,7 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
             assertThat(p["android.buttonTypes"]).isEqualTo("android.widget.Button|android.widget.ImageButton|android.widget.CheckBox")
             assertThat(p["android.switchTypes"]).isEqualTo("android.widget.Switch")
             assertThat(p["android.extraWidgetTypes"]).isEqualTo("android.view.View")
+            assertThat(p["android.scrollableTypes"]).isEqualTo("androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView")
 
             assertThat(p["ios.labelTypes"]).isEqualTo("XCUIElementTypeStaticText")
             assertThat(p["ios.inputTypes"]).isEqualTo("XCUIElementTypeTextField|XCUIElementTypeSecureTextField")
@@ -169,8 +170,13 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
     }
 
     @Test
-    fun iosScrollableTypesExpression() {
+    fun scrollableTypesExpression() {
 
+        TestMode.runAsAndroid {
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.androidScrollableTypesExpression)
+                .isEqualTo("(androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView)")
+        }
         TestMode.runAsIos {
             // Act, Assert
             assertThat(ElementCategoryExpressionUtility.iosScrollableTypesExpression)

@@ -163,6 +163,17 @@ object ElementCategoryExpressionUtility {
     )
 
     /**
+     * androidScrollableTypesExpression
+     */
+    var androidScrollableTypesExpression: String = ""
+        get() {
+            if (field.isBlank()) {
+                field = getTypesExpression("android.scrollableTypes")
+            }
+            return field
+        }
+
+    /**
      * iosScrollableTypesExpression
      */
     var iosScrollableTypesExpression: String = ""

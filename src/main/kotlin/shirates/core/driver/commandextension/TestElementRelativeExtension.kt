@@ -706,7 +706,7 @@ fun TestElement.parent(
     context.execRelativeCommand(subject = subject) {
 
         if (testContext.useCache) {
-            e = parentElement ?: TestElement.emptyElement
+            e = parentElement
         } else {
             if (parentElement.webElement != null) {
                 e = parentElement
