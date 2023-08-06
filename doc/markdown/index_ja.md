@@ -91,7 +91,7 @@
     - [文字列の検証](basic/function_property/asserting_any_value/string_assertion_ja.md)
 - 存在することを検証する
     - [要素が存在することの検証](basic/function_property/asserting_existence/existance_assertion_ja.md)
-    - [セルの内部に要素が存在することの検証](basic/function_property/asserting_existence/existance_in_cell_assertion_ja.md)
+    - [セルの内部に要素が存在することの検証](basic/function_property/asserting_existence/in_cell_existance_assertion_ja.md)
     - [画面が表示されていることの検証](basic/function_property/asserting_existence/screen_is_ja.md)
 - 画像を検証する
     - [画像の検証](basic/function_property/asserting_image/image_assertion_ja.md)

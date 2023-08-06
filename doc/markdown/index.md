@@ -91,7 +91,7 @@
     - [String value assertion](basic/function_property/asserting_any_value/string_assertion.md)
 - Asserting existence
     - [Existence assertion](basic/function_property/asserting_existence/existance_assertion.md)
-    - [Existence assertion in cell](basic/function_property/asserting_existence/existance_in_cell_assertion.md)
+    - [Existence assertion in cell](basic/function_property/asserting_existence/in_cell_existance_assertion.md)
     - [Screen assertion](basic/function_property/asserting_existence/screen_is.md)
 - Asserting image
     - [Image assertion](basic/function_property/asserting_image/image_assertion.md)
