@@ -1,6 +1,7 @@
 package shirates.core.uitest.ios.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.PropertiesManager
@@ -24,6 +25,7 @@ class TestDriveExtensionTest : UITest() {
         PropertiesManager.screenshotIntervalSeconds = 0.0
     }
 
+    @Order(10)
     @Test
     fun screenshot() {
 
@@ -65,6 +67,7 @@ class TestDriveExtensionTest : UITest() {
         }
     }
 
+    @Order(20)
     @Test
     fun currentAppIconName() {
 
@@ -74,6 +77,7 @@ class TestDriveExtensionTest : UITest() {
         assertThat(it.getCurrentAppIconName()).isEqualTo("Settings")
     }
 
+    @Order(30)
     @Test
     fun currentAppName() {
 
@@ -82,6 +86,7 @@ class TestDriveExtensionTest : UITest() {
         assertThat(it.getCurrentAppName()).isEqualTo("Settings")
     }
 
+    @Order(40)
     @Test
     fun isApp() {
 
@@ -89,6 +94,7 @@ class TestDriveExtensionTest : UITest() {
         assertThat(it.isApp("[App1]")).isFalse()
     }
 
+    @Order(50)
     @DisableCache
     @Test
     fun tapDefault() {
