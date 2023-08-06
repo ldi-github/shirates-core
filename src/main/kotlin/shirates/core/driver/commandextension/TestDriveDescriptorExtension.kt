@@ -1,8 +1,8 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.driver.TestDrive
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
+import shirates.core.driver.*
+import shirates.core.exception.TestDriverException
+import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 
 /**
@@ -162,4 +162,90 @@ fun TestDrive.codeblock(
     func()
 
     return lastElement
+}
+
+/**
+ * cell
+ */
+fun TestDrive.cell(
+    expression: String? = null,
+    throwsException: Boolean = true,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    useCache: Boolean = testContext.useCache,
+    log: Boolean = true,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    val testElement =
+        if (expression == null) {
+            val e = this.toTestElement
+            if (e.isEmpty && throwsException && TestMode.isNoLoadRun.not())
+                throw TestDriverException(message(id = "cellIsEmpty", subject = e.subject))
+            e
+        } else {
+            select(
+                expression = expression,
+                throwsException = throwsException,
+                waitSeconds = waitSeconds,
+                useCache = useCache,
+                log = log
+            )
+        }
+
+    val target = testElement.subject
+
+    val context = TestDriverCommandContext(testElement)
+    context.execLogCommand(message = target, subject = testElement.subject) {
+        TestLog.target(targetName = target)
+    }
+
+    func?.invoke(testElement)
+
+    return testElement
+}
+
+/**
+ * cellOf
+ */
+fun TestDrive.cellOf(
+    expression: String,
+    throwsException: Boolean = true,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    useCache: Boolean = testContext.useCache,
+    log: Boolean = true,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    val testElement = select(
+        expression = expression,
+        throwsException = throwsException,
+        waitSeconds = waitSeconds,
+        useCache = useCache,
+        log = log
+    )
+
+    val ancestorScrollableElements = testElement.getScrollableElementsInAncestorsAndSelf()
+    val cell =
+        if (ancestorScrollableElements.any()) {
+            val scrollableElement = ancestorScrollableElements.last()
+            val ancestorsAndSelf = testElement.ancestorsAndSelf
+            val index = ancestorsAndSelf.indexOf(scrollableElement)
+            val cellIndex = index + 1
+            ancestorsAndSelf[cellIndex]
+        } else
+            testElement.getAncestorAt(level = 1)
+    cell.selector = testElement.selector!!.getChainedSelector(":cellOf($expression)")
+    if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
+        throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
+
+    val target = message(id = "cellOf", subject = testElement.subject)
+
+    val context = TestDriverCommandContext(testElement)
+    context.execLogCommand(message = target, subject = testElement.subject) {
+        TestLog.target(targetName = target)
+    }
+
+    func?.invoke(cell)
+
+    return cell
 }

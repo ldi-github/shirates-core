@@ -66,10 +66,10 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun getScrollableTarget() {
 
         // Arrange
-        val root = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
+        rootElement = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
 
         // Act
-        val scrollableTArget = root.getScrollableElement()
+        val scrollableTArget = rootElement.getScrollableElement()
 
         // Assert
         assertThat(scrollableTArget.type).isEqualTo("XCUIElementTypeTable")

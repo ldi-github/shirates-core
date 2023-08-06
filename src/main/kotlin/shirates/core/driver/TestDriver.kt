@@ -1853,7 +1853,7 @@ object TestDriver {
                          * Synced
                          */
                         TestLog.info(
-                            "Synced. (elapsed=${sw.elapsedSeconds}",
+                            "Synced. (elapsed=${sw.elapsedSeconds})",
                             log = enableSyncLog
                         )
                         refreshCurrentScreen()

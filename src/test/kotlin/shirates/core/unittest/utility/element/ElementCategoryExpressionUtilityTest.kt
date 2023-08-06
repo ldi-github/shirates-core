@@ -24,13 +24,14 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
             val p = util.elementCategoryExpressionProperties
             p["android.extraWidgetTypes"] = "android.view.View"
             // Assert
-            assertThat(p.count()).isEqualTo(14)
+            assertThat(p.count()).isEqualTo(15)
             assertThat(p["android.labelTypes"]).isEqualTo("android.widget.TextView")
             assertThat(p["android.inputTypes"]).isEqualTo("android.widget.EditText")
             assertThat(p["android.imageTypes"]).isEqualTo("android.widget.ImageView")
             assertThat(p["android.buttonTypes"]).isEqualTo("android.widget.Button|android.widget.ImageButton|android.widget.CheckBox")
             assertThat(p["android.switchTypes"]).isEqualTo("android.widget.Switch")
             assertThat(p["android.extraWidgetTypes"]).isEqualTo("android.view.View")
+            assertThat(p["android.scrollableTypes"]).isEqualTo("androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView")
 
             assertThat(p["ios.labelTypes"]).isEqualTo("XCUIElementTypeStaticText")
             assertThat(p["ios.inputTypes"]).isEqualTo("XCUIElementTypeTextField|XCUIElementTypeSecureTextField")
@@ -169,8 +170,13 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
     }
 
     @Test
-    fun iosScrollableTypesExpression() {
+    fun scrollableTypesExpression() {
 
+        TestMode.runAsAndroid {
+            // Act, Assert
+            assertThat(ElementCategoryExpressionUtility.androidScrollableTypesExpression)
+                .isEqualTo("(androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView)")
+        }
         TestMode.runAsIos {
             // Act, Assert
             assertThat(ElementCategoryExpressionUtility.iosScrollableTypesExpression)

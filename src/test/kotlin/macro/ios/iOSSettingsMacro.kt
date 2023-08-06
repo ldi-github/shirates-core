@@ -77,4 +77,25 @@ object iOSSettingsMacro {
         it.tapWithScrollDown("Keyboard")
             .screenIs("[Keyboards Screen]")
     }
+
+    @Macro("[Language & Region Screen]")
+    fun languageAndRegionScreen() {
+
+        it.refreshCache()
+
+        if (it.isScreen("[Language & Region Screen]")) {
+            if (it.canSelect(".XCUIElementTypeOther&&PREFERRED LANGUAGES")) {
+                return
+            }
+            it.flickTopToBottom()
+            if (it.canSelect(".XCUIElementTypeOther&&PREFERRED LANGUAGES")) {
+                return
+            }
+        }
+
+        settingsGeneralScreen()
+        it.tap("General")
+        it.tap("Language & Region")
+            .screenIs("[Language & Region Screen]")
+    }
 }

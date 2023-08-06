@@ -152,42 +152,37 @@ class ScreenRepositoryTest : UnitTest() {
                 screenInfo.screenFile?.replace(File.separator, "/")
             ).endsWith("unitTestData/testConfig/nicknames1/screens/FunctionA/[A Screen].json")
             assertThat(screenInfo.identitySelectors.count()).isEqualTo(2)
-            run {
-                assertThat(screenInfo.scrollInfo.startElements)
-                    .containsAll(
-                        listOf(
-                            "[Start Element 1]",
-                            "[Start Element 2]",
-                            "[start-elementA]",
-                            "[start-elementB]"
-                        )
+            assertThat(screenInfo.scrollInfo.scrollable).isEqualTo("[Scrollable]")
+            assertThat(screenInfo.scrollInfo.startElements)
+                .containsAll(
+                    listOf(
+                        "[Start Element 1]",
+                        "[Start Element 2]",
+                        "[start-elementA]",
+                        "[start-elementB]"
                     )
-            }
-            run {
-                assertThat(screenInfo.scrollInfo.endElements)
-                    .containsAll(
-                        listOf(
-                            "[End Element 1]",
-                            "[End Element 2]",
-                            "[end-elementA]",
-                            "[end-elementB]"
-                        )
+                )
+            assertThat(screenInfo.scrollInfo.endElements)
+                .containsAll(
+                    listOf(
+                        "[End Element 1]",
+                        "[End Element 2]",
+                        "[end-elementA]",
+                        "[end-elementB]"
                     )
-            }
-            run {
-                assertThat(screenInfo.scrollInfo.overlayElements)
-                    .containsAll(
-                        listOf(
-                            "[Overlay Element 1]",
-                            "[Overlay Element 1]",
-                            "[overlay-elementA]",
-                            "[overlay-elementB]",
-                            "[Menu X]",
-                            "[Menu Y]",
-                            "[Menu Z]"
-                        )
+                )
+            assertThat(screenInfo.scrollInfo.overlayElements)
+                .containsAll(
+                    listOf(
+                        "[Overlay Element 1]",
+                        "[Overlay Element 1]",
+                        "[overlay-elementA]",
+                        "[overlay-elementB]",
+                        "[Menu X]",
+                        "[Menu Y]",
+                        "[Menu Z]"
                     )
-            }
+                )
 
             assertThat(screenInfo.key).isEqualTo("[A Screen]")
 

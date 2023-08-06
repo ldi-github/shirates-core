@@ -4,6 +4,7 @@ package shirates.core.configuration
  * ScrollInfo
  */
 class ScrollInfo {
+    var scrollable: String = ""
     val startElements = mutableListOf<String>()
     val endElements = mutableListOf<String>()
     val overlayElements = mutableListOf<String>()
@@ -22,6 +23,9 @@ class ScrollInfo {
      */
     fun importFrom(scrollInfo: ScrollInfo) {
 
+        if (scrollable.isBlank()) {
+            scrollable = scrollInfo.scrollable
+        }
         startElements.merge(scrollInfo.startElements)
         endElements.merge(scrollInfo.endElements)
         overlayElements.merge(scrollInfo.overlayElements)

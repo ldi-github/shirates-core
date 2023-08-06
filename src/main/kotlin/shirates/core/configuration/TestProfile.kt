@@ -532,6 +532,8 @@ class TestProfile(var profileName: String = "") {
             val mr = appVersion.toRegex().find(appPackageFile ?: "")
             if (mr?.groups?.count() == 2) {
                 appVersion = mr.groupValues[1]
+            } else {
+                appVersion = ""
             }
         }
         // appBuild
@@ -539,6 +541,8 @@ class TestProfile(var profileName: String = "") {
             val mr = appBuild.toRegex().find(appPackageFile ?: "")
             if (mr?.groups?.count() == 2) {
                 appBuild = mr.groupValues[1]
+            } else {
+                appBuild = ""
             }
         }
 

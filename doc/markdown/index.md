@@ -90,7 +90,8 @@
     - [Any value assertion](basic/function_property/asserting_any_value/any_value_assertion.md)
     - [String value assertion](basic/function_property/asserting_any_value/string_assertion.md)
 - Asserting existence
-    - [Existence assertion](basic/function_property/asserting_existence/exist_dontExist.md)
+    - [Existence assertion](basic/function_property/asserting_existence/existance_assertion.md)
+    - [Existence assertion in cell](basic/function_property/asserting_existence/in_cell_existance_assertion.md)
     - [Screen assertion](basic/function_property/asserting_existence/screen_is.md)
 - Asserting image
     - [Image assertion](basic/function_property/asserting_image/image_assertion.md)
@@ -175,7 +176,7 @@
 - Debugging
     - [Watching sourceXML in file](in_action/debugging/watching_source_xml_in_file.md)
     - [Watching sourceXML in debugger](in_action/debugging/watching_source_xml_in_debugger.md)
-    - [Traching internal execution steps](in_action/debugging/tracing_internal_execution_steps.md)
+    - [Tracing internal execution steps](in_action/debugging/tracing_internal_execution_steps.md)
 - Adapting to various environments
     - [Configuring tapAppIcon function](in_action/adapting_to_environments/configuring_tap_appIcon_function.md)
     - [Adapting to changes in OS message](in_action/adapting_to_environments/adapting_to_changes_in_os_messages.md)

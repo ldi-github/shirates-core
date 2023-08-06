@@ -115,23 +115,28 @@ fun TestElement.swipeHorizontalTo(
  * swipeToTop
  */
 fun TestElement.swipeToTop(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    repeat: Int = 1
+    repeat: Int = 1,
+    stickToEdge: Boolean = true
 ): TestElement {
+
+    val scrollableElement = getScrollableElement(scrollable)
 
     val command = "swipeToTop"
     val message = message(id = command, subject = subject)
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        val b = this.bounds
+        val b = bounds
         val startOffsetY = (startOffsetRatio * b.height).toInt()
+        val endMargin = if (stickToEdge) b.height / 2 else 0
         swipePointToPoint(
             startX = b.centerX,
             startY = b.centerY + startOffsetY,
             endX = b.centerX,
-            endY = viewport.top,
+            endY = scrollableElement.bounds.top + endMargin,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
@@ -141,9 +146,29 @@ fun TestElement.swipeToTop(
 }
 
 /**
+ * swipeOutTop
+ */
+fun TestElement.swipeOutTop(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
+    startOffsetRatio: Double = 0.0,
+    durationSeconds: Double = testContext.swipeDurationSeconds,
+    repeat: Int = 1
+): TestElement {
+
+    return swipeToTop(
+        scrollable = scrollable,
+        startOffsetRatio = startOffsetRatio,
+        durationSeconds = durationSeconds,
+        repeat = repeat,
+        stickToEdge = false
+    )
+}
+
+/**
  * flickToTop
  */
 fun TestElement.flickToTop(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1
@@ -154,10 +179,11 @@ fun TestElement.flickToTop(
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        swipeToTop(
+        swipeOutTop(
+            scrollable = scrollable,
             startOffsetRatio = startOffsetRatio,
             durationSeconds = durationSeconds,
-            repeat = repeat
+            repeat = repeat,
         )
     }
 
@@ -168,10 +194,14 @@ fun TestElement.flickToTop(
  * swipeToBottom
  */
 fun TestElement.swipeToBottom(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    repeat: Int = 1
+    repeat: Int = 1,
+    stickToEdge: Boolean = true
 ): TestElement {
+
+    val scrollableElement = getScrollableElement(scrollable)
 
     val command = "swipeToBottom"
     val message = message(id = command, subject = subject)
@@ -180,11 +210,12 @@ fun TestElement.swipeToBottom(
     context.execOperateCommand(command = command, message = message, subject = subject) {
         val b = bounds
         val startOffsetY = (startOffsetRatio * b.height).toInt()
+        val endMargin = if (stickToEdge) b.height / 2 else 0
         swipePointToPoint(
             startX = b.centerX,
             startY = b.centerY + startOffsetY,
             endX = b.centerX,
-            endY = viewport.bottom,
+            endY = scrollableElement.bounds.bottom - endMargin,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
@@ -194,9 +225,29 @@ fun TestElement.swipeToBottom(
 }
 
 /**
+ * swipeOutBottom
+ */
+fun TestElement.swipeOutBottom(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
+    startOffsetRatio: Double = 0.0,
+    durationSeconds: Double = testContext.swipeDurationSeconds,
+    repeat: Int = 1
+): TestElement {
+
+    return swipeToBottom(
+        scrollable = scrollable,
+        startOffsetRatio = startOffsetRatio,
+        durationSeconds = durationSeconds,
+        repeat = repeat,
+        stickToEdge = false
+    )
+}
+
+/**
  * flickToBottom
  */
 fun TestElement.flickToBottom(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1
@@ -207,7 +258,8 @@ fun TestElement.flickToBottom(
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        swipeToBottom(
+        swipeOutBottom(
+            scrollable = scrollable,
             startOffsetRatio = startOffsetRatio,
             durationSeconds = durationSeconds,
             repeat = repeat
@@ -221,9 +273,12 @@ fun TestElement.flickToBottom(
  * swipeToCenter
  */
 fun TestElement.swipeToCenter(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1
 ): TestElement {
+
+    val scrollableElement = getScrollableElement(scrollable)
 
     val command = "swipeToCenter"
     val message = message(id = command, subject = subject)
@@ -234,8 +289,8 @@ fun TestElement.swipeToCenter(
         swipePointToPoint(
             startX = b.centerX,
             startY = b.centerY,
-            endX = viewport.centerX,
-            endY = viewport.centerY,
+            endX = scrollableElement.bounds.centerX,
+            endY = scrollableElement.bounds.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
@@ -248,10 +303,14 @@ fun TestElement.swipeToCenter(
  * swipeToRight
  */
 fun TestElement.swipeToRight(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    repeat: Int = 1
+    repeat: Int = 1,
+    stickToEdge: Boolean = true
 ): TestElement {
+
+    val scrollableElement = getScrollableElement(scrollable)
 
     val command = "swipeToRight"
     val message = message(id = command, subject = subject)
@@ -260,10 +319,11 @@ fun TestElement.swipeToRight(
     context.execOperateCommand(command = command, message = message, subject = subject) {
         val b = bounds
         val offsetX = (startOffsetRatio * b.width).toInt()
+        val endMargin = if (stickToEdge) b.width / 2 else 0
         swipePointToPoint(
             startX = b.centerX + offsetX,
             startY = b.centerY,
-            endX = viewport.right,
+            endX = scrollableElement.bounds.right - endMargin,
             endY = b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat
@@ -274,9 +334,29 @@ fun TestElement.swipeToRight(
 }
 
 /**
+ * swipeOutRight
+ */
+fun TestElement.swipeOutRight(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
+    startOffsetRatio: Double = 0.0,
+    durationSeconds: Double = testContext.swipeDurationSeconds,
+    repeat: Int = 1
+): TestElement {
+
+    return swipeToRight(
+        scrollable = scrollable,
+        startOffsetRatio = startOffsetRatio,
+        durationSeconds = durationSeconds,
+        repeat = repeat,
+        stickToEdge = false
+    )
+}
+
+/**
  * flickToRight
  */
 fun TestElement.flickToRight(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1
@@ -287,7 +367,8 @@ fun TestElement.flickToRight(
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        swipeToRight(
+        swipeOutRight(
+            scrollable = scrollable,
             startOffsetRatio = startOffsetRatio,
             durationSeconds = durationSeconds,
             repeat = repeat
@@ -301,10 +382,14 @@ fun TestElement.flickToRight(
  * swipeToLeft
  */
 fun TestElement.swipeToLeft(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    repeat: Int = 1
+    repeat: Int = 1,
+    stickToEdge: Boolean = true
 ): TestElement {
+
+    val scrollableElement = getScrollableElement(scrollable)
 
     val command = "swipeToLeft"
     val message = message(id = command, subject = subject)
@@ -313,10 +398,11 @@ fun TestElement.swipeToLeft(
     context.execOperateCommand(command = command, message = message, arg1 = subject) {
         val b = bounds
         val offsetX = (startOffsetRatio * b.width).toInt()
+        val endMargin = if (stickToEdge) b.width / 2 else 0
         swipePointToPoint(
             startX = b.centerX + offsetX,
             startY = b.centerY,
-            endX = viewport.left,
+            endX = scrollableElement.bounds.left + endMargin,
             endY = b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat
@@ -327,9 +413,29 @@ fun TestElement.swipeToLeft(
 }
 
 /**
+ * swipeOutLeft
+ */
+fun TestElement.swipeOutLeft(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
+    startOffsetRatio: Double = 0.0,
+    durationSeconds: Double = testContext.swipeDurationSeconds,
+    repeat: Int = 1
+): TestElement {
+
+    return swipeToLeft(
+        scrollable = scrollable,
+        startOffsetRatio = startOffsetRatio,
+        durationSeconds = durationSeconds,
+        repeat = repeat,
+        stickToEdge = false
+    )
+}
+
+/**
  * flickToLeft
  */
 fun TestElement.flickToLeft(
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1
@@ -340,7 +446,8 @@ fun TestElement.flickToLeft(
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        swipeToLeft(
+        swipeOutLeft(
+            scrollable = scrollable,
             startOffsetRatio = startOffsetRatio,
             durationSeconds = durationSeconds,
             repeat = repeat
