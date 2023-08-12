@@ -319,7 +319,11 @@ object ElementCategoryExpressionUtility {
             return ElementCategory.EXTRA_WIDGET
         }
 
-        if (isiOS) {
+        if (isAndroid) {
+            if (androidScrollableTypesExpression.contains(classOrType)) {
+                return ElementCategory.SCROLLABLE
+            }
+        } else if (isiOS) {
             if (iosScrollableTypesExpression.contains(classOrType)) {
                 return ElementCategory.SCROLLABLE
             }

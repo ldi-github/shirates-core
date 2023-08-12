@@ -1024,7 +1024,10 @@ class TestElement(
                 return false
             }
             if (isAndroid) {
-                return (scrollable == "true" || className == "android.support.v7.widget.RecyclerView")
+                if (className == "") {
+                    return false
+                }
+                return ElementCategoryExpressionUtility.androidScrollableTypesExpression.contains(className)
             } else {
                 if (type == "") {
                     return false
