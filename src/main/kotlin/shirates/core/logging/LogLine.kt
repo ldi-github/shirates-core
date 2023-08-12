@@ -169,12 +169,18 @@ data class LogLine(
      */
     val isForSimple: Boolean
         get() {
+            if (commandGroup == "macro" && commandLevel > 1) {
+                return false
+            }
 
             when (logType) {
 
                 LogType.CHECK -> {
-                    if (scriptCommand == "screenIs") {
+                    if (isNoLoadRun) {
                         return true
+                    }
+                    if (scriptCommand == "screenIs") {
+                        return false
                     }
                     return false
                 }
