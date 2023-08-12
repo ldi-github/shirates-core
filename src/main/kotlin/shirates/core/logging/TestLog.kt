@@ -850,7 +850,7 @@ object TestLog {
 
     private fun getCommandContextLogLine(): LogLine? {
 
-        if (commandStack.count() == 0) {
+        if (commandStack.isEmpty()) {
             return null
         }
 
@@ -1477,9 +1477,10 @@ object TestLog {
      */
     fun outputLogDetail(format: LogFileFormat) {
 
+        val detailLines = lines.filter { it.isForDetail }
         outputLogFile(
             filterName = "detail",
-            logLines = lines,
+            logLines = detailLines,
             format = format
         )
     }

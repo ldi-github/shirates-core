@@ -170,27 +170,31 @@ data class LogLine(
     val isForSimple: Boolean
         get() {
 
-            if (logType == LogType.SILENT) {
-                return false
-            }
-            if (logType == LogType.TRACE) {
-                return false
-            }
-            if (logType == LogType.INFO) {
-                return false
-            }
-            if (logType == LogType.NONE) {
-                return true
-            }
-            if (logType == LogType.SCREENSHOT && withScrollDirection != null) {
-                return false
-            }
-            if (logType == LogType.OPERATE) {
-                if (scriptCommand.startsWith("scroll") && withScrollDirection != null) {
+            when (logType) {
+
+                LogType.SILENT,
+                LogType.TRACE,
+                LogType.INFO,
+                LogType.CHECK,
+                LogType.SELECT,
+                LogType.BOOLEAN -> {
                     return false
                 }
-            }
 
+                LogType.OPERATE -> {
+                    if (scriptCommand.startsWith("scroll") && withScrollDirection != null) {
+                        return false
+                    }
+                }
+
+                LogType.SCREENSHOT -> {
+                    if (withScrollDirection != null) {
+                        return false
+                    }
+                }
+
+                else -> {}
+            }
             return true
         }
 
