@@ -172,12 +172,10 @@ data class LogLine(
 
             when (logType) {
 
-                LogType.SILENT,
-                LogType.TRACE,
-                LogType.INFO,
-                LogType.CHECK,
-                LogType.SELECT,
-                LogType.BOOLEAN -> {
+                LogType.CHECK -> {
+                    if (scriptCommand == "screenIs") {
+                        return true
+                    }
                     return false
                 }
 
@@ -191,6 +189,14 @@ data class LogLine(
                     if (withScrollDirection != null) {
                         return false
                     }
+                }
+
+                LogType.SILENT,
+                LogType.TRACE,
+                LogType.INFO,
+                LogType.SELECT,
+                LogType.BOOLEAN -> {
+                    return false
                 }
 
                 else -> {}

@@ -271,14 +271,6 @@ class SpecReportNoLoadRunTest : UITest() {
                 rowNum = 19,
                 id = 10,
                 target = "T1",
-                expectation = "- <exist T1>",
-                os = "Android",
-                auto = "A",
-                result = "N/A"
-            )
-            assertRow(
-                rowNum = 20,
-                id = 11,
                 expectation = "(specialTag S1)\n" +
                         "- describe S1-1\n" +
                         "- describe S1-2\n" +
@@ -289,8 +281,8 @@ class SpecReportNoLoadRunTest : UITest() {
                 result = "N/A"
             )
             assertRow(
-                rowNum = 21,
-                id = 12,
+                rowNum = 20,
+                id = 11,
                 target = "[AAA Screen]",
                 expectation = "- is displayed",
                 os = "iOS",
@@ -298,17 +290,9 @@ class SpecReportNoLoadRunTest : UITest() {
                 result = "N/A"
             )
             assertRow(
-                rowNum = 22,
-                id = 13,
+                rowNum = 21,
+                id = 12,
                 target = "T1",
-                expectation = "- <exist T1>",
-                os = "iOS",
-                auto = "A",
-                result = "N/A"
-            )
-            assertRow(
-                rowNum = 23,
-                id = 14,
                 expectation = "(S2)\n" +
                         "- describe S2-1\n" +
                         "- describe S2-2\n" +
@@ -319,22 +303,22 @@ class SpecReportNoLoadRunTest : UITest() {
                 result = "N/A"
             )
             assertRow(
-                rowNum = 24,
-                id = 15,
+                rowNum = 22,
+                id = 13,
                 target = "T2",
                 expectation = "(S1)\n" +
                         "- describe S1-1\n" +
                         "- manual S1-1\n" +
                         "- describe S1-2\n" +
                         "- manual S1-2",
-                os = "Android",
                 special = "S1",
+                os = "Android",
                 auto = "M",
                 result = "N/A"
             )
             assertRow(
-                rowNum = 25,
-                id = 16,
+                rowNum = 23,
+                id = 14,
                 expectation = "(S2)\n" +
                         "- describe S2-1\n" +
                         "- manual S2-1\n" +
