@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement
 import org.w3c.dom.Node
 import shirates.core.configuration.Selector
 import shirates.core.configuration.TestProfile
-import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*

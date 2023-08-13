@@ -22,6 +22,14 @@ var rootElement: TestElement
     }
 
 /**
+ * rootBounds
+ */
+val rootBounds: Bounds
+    get() {
+        return TestElementCache.rootBounds
+    }
+
+/**
  * sourceXml
  */
 val sourceXml: String

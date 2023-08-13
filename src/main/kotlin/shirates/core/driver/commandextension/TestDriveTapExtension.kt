@@ -3,7 +3,6 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog

@@ -2,7 +2,6 @@ package shirates.core.driver
 
 import org.openqa.selenium.Capabilities
 import shirates.core.configuration.repository.ParameterRepository
-import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.commandextension.getScrollableElement
 import shirates.core.driver.commandextension.getThisOrRootElement
 import shirates.core.exception.TestDriverException

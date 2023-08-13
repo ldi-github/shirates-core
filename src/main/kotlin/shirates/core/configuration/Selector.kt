@@ -2,7 +2,6 @@ package shirates.core.configuration
 
 import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.testcode.normalize

@@ -4,8 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Selector
-import shirates.core.driver.Bounds
-import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.rootElement
@@ -198,7 +196,6 @@ class Selector_IosTest : UnitTest() {
     fun init_title_selector() {
 
         // Arrange
-        rootBounds = Bounds(0, 0, 400, 800)
         val sel = Selector("~title=TITLE1")
         // Act
         val classChain = sel.getIosClassChain()
@@ -222,7 +219,6 @@ class Selector_IosTest : UnitTest() {
         }
 
         // Arrange
-        rootBounds = Bounds(0, 0, 400, 800)
 
         run {
             // Arrange
@@ -402,7 +398,6 @@ class Selector_IosTest : UnitTest() {
     fun getIosClassChain() {
 
         // Arrange
-        rootBounds = Bounds(0, 0, 400, 800)
 
         run {
             // Arrange

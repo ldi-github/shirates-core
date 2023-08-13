@@ -36,6 +36,20 @@ object TestElementCache {
         }
 
     /**
+     * rootBounds
+     */
+    var rootBounds: Bounds = Bounds()
+        get() {
+            if (field.isEmpty) {
+                field = rootElement.bounds
+            }
+            return field
+        }
+        set(value) {
+            field = value
+        }
+
+    /**
      * allElements
      */
     var allElements: List<TestElement> = listOf()
