@@ -32,6 +32,7 @@ object TestElementCache {
         internal set(value) {
             field = value
             allElements = listOf()
+            rootBounds = value.bounds
             synced = false
         }
 
