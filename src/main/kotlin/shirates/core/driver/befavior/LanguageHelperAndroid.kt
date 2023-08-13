@@ -148,6 +148,10 @@ object LanguageHelperAndroid : TestDrive {
         it.select("<$languageAndRegion>:right(#dragHandle)")
             .swipeVerticalTo(endY = 0)
 
+        if (canSelect("#android:id/button1")) {
+            it.tap()
+        }
+
         val currentLanguageAndRegion = it.select("#com.android.settings:id/label&&[1]").text
         if (currentLanguageAndRegion != languageAndRegion) {
             throw TestDriverException("Failed to set to $languageAndRegion")
