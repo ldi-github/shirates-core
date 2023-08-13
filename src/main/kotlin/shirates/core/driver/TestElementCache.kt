@@ -32,22 +32,15 @@ object TestElementCache {
         internal set(value) {
             field = value
             allElements = listOf()
-            rootBounds = value.bounds
             synced = false
         }
 
     /**
      * rootBounds
      */
-    var rootBounds: Bounds = Bounds()
+    val rootBounds: Bounds
         get() {
-            if (field.isEmpty) {
-                field = rootElement.bounds
-            }
-            return field
-        }
-        set(value) {
-            field = value
+            return rootElement.bounds
         }
 
     /**
