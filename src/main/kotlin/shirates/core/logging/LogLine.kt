@@ -169,28 +169,44 @@ data class LogLine(
      */
     val isForSimple: Boolean
         get() {
+            if (commandGroup == "macro" && commandLevel > 1) {
+                return false
+            }
 
-            if (logType == LogType.SILENT) {
-                return false
-            }
-            if (logType == LogType.TRACE) {
-                return false
-            }
-            if (logType == LogType.INFO) {
-                return false
-            }
-            if (logType == LogType.NONE) {
-                return true
-            }
-            if (logType == LogType.SCREENSHOT && withScrollDirection != null) {
-                return false
-            }
-            if (logType == LogType.OPERATE) {
-                if (scriptCommand.startsWith("scroll") && withScrollDirection != null) {
+            when (logType) {
+
+                LogType.CHECK -> {
+                    if (isNoLoadRun) {
+                        return true
+                    }
+                    if (scriptCommand == "screenIs") {
+                        return false
+                    }
                     return false
                 }
-            }
 
+                LogType.OPERATE -> {
+                    if (scriptCommand.startsWith("scroll") && withScrollDirection != null) {
+                        return false
+                    }
+                }
+
+                LogType.SCREENSHOT -> {
+                    if (withScrollDirection != null) {
+                        return false
+                    }
+                }
+
+                LogType.SILENT,
+                LogType.TRACE,
+                LogType.INFO,
+                LogType.SELECT,
+                LogType.BOOLEAN -> {
+                    return false
+                }
+
+                else -> {}
+            }
             return true
         }
 

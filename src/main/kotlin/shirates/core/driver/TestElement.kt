@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement
 import org.w3c.dom.Node
 import shirates.core.configuration.Selector
 import shirates.core.configuration.TestProfile
-import shirates.core.driver.TestDriver.rootBounds
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
@@ -1024,7 +1023,13 @@ class TestElement(
                 return false
             }
             if (isAndroid) {
-                return (scrollable == "true" || className == "android.support.v7.widget.RecyclerView")
+                if (className == "") {
+                    return false
+                }
+                if (scrollable == "true") {
+                    return true
+                }
+                return ElementCategoryExpressionUtility.androidScrollableTypesExpression.contains(className)
             } else {
                 if (type == "") {
                     return false

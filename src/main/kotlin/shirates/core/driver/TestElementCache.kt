@@ -36,6 +36,14 @@ object TestElementCache {
         }
 
     /**
+     * rootBounds
+     */
+    val rootBounds: Bounds
+        get() {
+            return rootElement.bounds
+        }
+
+    /**
      * allElements
      */
     var allElements: List<TestElement> = listOf()

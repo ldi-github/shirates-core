@@ -126,27 +126,12 @@ object TestDriver {
                 return TestElementCache.rootElement
             }
             val ms = Measure("rootElement")
-            TestDriver.rootElement = appiumDriver.findElement(By.xpath("//*")).toTestElement()
+            TestElementCache.rootElement = appiumDriver.findElement(By.xpath("//*")).toTestElement()
             ms.end()
             return TestElementCache.rootElement
         }
         set(value) {
             TestElementCache.rootElement = value
-            rootBounds = value.bounds
-        }
-
-    /**
-     * rootBounds
-     */
-    var rootBounds: Bounds = Bounds()
-        get() {
-            if (field.isEmpty) {
-                field = rootElement.bounds
-            }
-            return field
-        }
-        set(value) {
-            field = value
         }
 
     /**
