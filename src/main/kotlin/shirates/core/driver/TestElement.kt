@@ -1027,6 +1027,9 @@ class TestElement(
                 if (className == "") {
                     return false
                 }
+                if (scrollable == "true") {
+                    return true
+                }
                 return ElementCategoryExpressionUtility.androidScrollableTypesExpression.contains(className)
             } else {
                 if (type == "") {
