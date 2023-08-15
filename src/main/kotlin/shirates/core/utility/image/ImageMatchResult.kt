@@ -12,9 +12,10 @@ class ImageMatchResult(
     var scale: Double = 1.0,
     var threshold: Double = 0.0,
     var image: BufferedImage? = null,
-    var templateImage: BufferedImage? = null
+    var templateImage: BufferedImage? = null,
+    var templateImageFile: String? = null
 ) : TestDrive {
     override fun toString(): String {
-        return "result=$result, scale=$scale, threshold=$threshold, x=$x, y=$y, score=${score.absoluteValue}"
+        return "result=$result, scale=$scale, threshold=$threshold, x=$x, y=$y, score=${score.absoluteValue}, templateImageFile=$templateImageFile"
     }
 }

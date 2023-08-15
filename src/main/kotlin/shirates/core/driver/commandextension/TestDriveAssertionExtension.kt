@@ -6,6 +6,7 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
+import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -14,6 +15,7 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
+import java.io.FileNotFoundException
 
 /**
  * appIs
@@ -350,22 +352,32 @@ internal fun TestDrive.existCore(
         if (PropertiesManager.enableImageAssertion.not()) {
             return manual(message = message)
         }
-        val r = TestDriver.findImage(
-            selector = selector,
-            scroll = scroll,
-            direction = direction,
-            scrollDurationSeconds = scrollDurationSeconds,
-            scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollMaxCount = scrollMaxCount,
-            throwsException = false,
-            useCache = useCache
-        )
-        e.selector = selector
-        TestDriver.postProcessForImageAssertion(
-            e = e,
-            imageMatchResult = r,
-            assertMessage = message
-        )
+        try {
+            val r = TestDriver.findImage(
+                selector = selector,
+                scroll = scroll,
+                direction = direction,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = false,
+                useCache = useCache
+            )
+            e.selector = selector
+            if (r.result) {
+                e.isDummy = true
+                e.propertyCache["bounds"] = "[${r.x},${r.y}][${r.templateImage!!.width},${r.templateImage!!.height}]"
+            }
+            TestDriver.postProcessForImageAssertion(
+                e = e,
+                imageMatchResult = r,
+                assertMessage = message
+            )
+        } catch (t: FileNotFoundException) {
+            TestLog.info(t.message!!)
+            manual(message)
+        }
+
     } else {
         e = TestDriver.select(
             selector = selector,
@@ -378,6 +390,9 @@ internal fun TestDrive.existCore(
             waitSeconds = waitSeconds,
             useCache = useCache,
         )
+
+        screenshot()
+
         TestDriver.postProcessForAssertion(
             selectResult = e,
             assertMessage = message
@@ -427,6 +442,71 @@ fun TestDrive.exist(
             scroll = scroll,
             direction = direction,
         )
+    }
+
+    if (func != null) {
+        e.func()
+    }
+
+    return e
+}
+
+/**
+ * existImageOf
+ */
+fun TestDrive.existImageOf(
+    expression: String,
+    throwsException: Boolean = true,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    useCache: Boolean = testContext.useCache,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    TestDriver.refreshCurrentScreenWithNickname(expression)
+
+    val sel = getSelector(expression = expression)
+    var e = TestElement(selector = sel)
+
+    val testElement = TestDriver.it
+
+    val command = "existImageOf"
+    val assertMessage = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
+
+        val scroll = CodeExecutionContext.withScrollDirection != null
+        val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
+
+        e = existCore(
+            message = assertMessage,
+            selector = sel,
+            throwsException = throwsException,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+            scroll = scroll,
+            direction = direction,
+        )
+        if (e.hasError && throwsException) {
+            throw e.lastError!!
+        }
+
+        if (e.isFound && e.isDummy.not()) {
+            val imageMatchResult = e.isImage(expression = expression, cropImage = true)
+            if (imageMatchResult.result.not()) {
+                if (imageMatchResult.templateImage == null) {
+                    manual(assertMessage)
+                } else {
+                    val lastEffectiveLog = TestLog.lines.last() { it.result.isEffectiveType }
+                    lastEffectiveLog.result = LogType.NG
+                    val msg = "$assertMessage ($imageMatchResult)"
+                    e.lastError = TestNGException(message = msg, cause = TestDriverException(msg))
+                    if (throwsException) {
+                        throw e.lastError!!
+                    }
+                }
+            }
+        }
     }
 
     if (func != null) {

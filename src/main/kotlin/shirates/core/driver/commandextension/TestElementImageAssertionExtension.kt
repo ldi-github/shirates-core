@@ -17,30 +17,55 @@ import shirates.core.utility.sync.SyncUtility
  * isImage
  */
 fun TestElement.isImage(
-    expression: String
+    expression: String,
+    cropImage: Boolean = true
 ): ImageMatchResult {
 
     val testElement = this
 
     var sel = TestDriver.screenInfo.getSelector(expression = expression)
     if (sel.image.isNullOrBlank()) {
-        sel = Selector("image=$expression")
+        sel = Selector("image=$expression.png")
     }
 
     val context = TestDriverCommandContext(testElement)
     var r = ImageMatchResult(result = false)
     context.execBooleanCommand(subject = expression) {
 
-        silent {
-            testElement.cropImage(save = true)
-        }
-        val image = testElement.lastCropInfo?.croppedImage
-        r = sel.evaluateImageEqualsTo(image = image)
+        r = isImageCore(
+            selector = sel,
+            cropImage = cropImage
+        )
     }
 
     TestDriver.lastElement = testElement
 
     return r
+}
+
+internal fun TestElement.isImageCore(
+    selector: Selector,
+    cropImage: Boolean = true
+): ImageMatchResult {
+    val imageMatchResult: ImageMatchResult
+    if (cropImage) {
+        silent {
+            this.cropImage(save = true)
+        }
+    }
+    val image = this.lastCropInfo?.croppedImage
+    imageMatchResult = selector.evaluateImageEqualsTo(image = image)
+    if (imageMatchResult.result.not() && cropImage) {
+        silent {
+            val s = selector.image!!.removeSuffix(".png")
+            val fileName = "$s${TestDriver.suffixForImage}.png"
+            imageMatchResult.image?.saveImage(TestLog.directoryForLog.resolve(fileName).toFile())
+
+            val fileName2 = "${TestLog.lines.count() + 1}_$fileName"
+            imageMatchResult.templateImage?.saveImage(TestLog.directoryForLog.resolve(fileName2).toFile())
+        }
+    }
+    return imageMatchResult
 }
 
 /**
@@ -116,7 +141,7 @@ fun TestElement.imageContains(
  * imageIs
  */
 fun TestElement.imageIs(
-    expression: String,
+    expression: String = this.selector.toString(),
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
 ): TestElement {
 

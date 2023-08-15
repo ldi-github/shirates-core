@@ -137,6 +137,7 @@ class TestDriveExtensionTest : UITest() {
                         .isImage("Explore(selected).png").thisIsTrue()
                     it.select("#transportation_tab_strip_button").imageIs("Go.png?t=1.5")
                         .isImage("Go.png?t=1.5").thisIsTrue()
+                    it.existImageOf("Go.png")
                 }
             }
             case(2) {

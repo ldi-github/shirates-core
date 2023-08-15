@@ -40,6 +40,7 @@ import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.element.ElementCategoryExpressionUtility
+import shirates.core.utility.getCapabilityRelaxed
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
 import shirates.core.utility.ios.IosDeviceUtility
@@ -1267,6 +1268,22 @@ object TestDriver {
         )
     }
 
+    internal val suffixForImage: String
+        get() {
+            if (isInitialized.not()) {
+                return if (isAndroid) "@a" else "@i"
+            }
+            val platformMajor = testProfile.platformVersion.split(".").first()
+            val suffix = if (isAndroid) {
+                val deviceScreenSize = capabilities.getCapabilityRelaxed("deviceScreenSize")
+                "@a${platformMajor}_$deviceScreenSize"
+            } else {
+                val deviceName = capabilities.getCapabilityRelaxed("deviceName")
+                "@i${platformMajor}_$deviceName"
+            }
+            return suffix
+        }
+
     internal fun findImage(
         selector: Selector,
         scroll: Boolean = false,
@@ -1282,7 +1299,10 @@ object TestDriver {
         lastElement = TestElement.emptyElement
 
         if (selector.image.isNullOrBlank()) {
-            throw IllegalArgumentException(message(id = "imageFileNotFound", subject = selector.expression))
+            if (selector.nickname.isNullOrBlank()) {
+                throw IllegalArgumentException(message(id = "imageFileNotFound", subject = selector.expression))
+            }
+            selector.image = "${selector.nickname}.png"
         }
         val filePath = ImageFileRepository.getFilePath(selector.image!!)
         if (Files.exists(filePath).not()) {

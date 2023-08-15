@@ -1,7 +1,7 @@
 package shirates.core.configuration.repository
 
 import shirates.core.configuration.ImageInfo
-import shirates.core.driver.TestMode.platformAnnotation
+import shirates.core.driver.TestDriver
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -81,7 +81,7 @@ object ImageFileRepository {
     fun getFileName(imageExpression: String): String {
 
         val imageInfo = ImageInfo(imageExpression)
-        val suffix: String = platformAnnotation
+        val suffix: String = TestDriver.suffixForImage
         if (suffix.isNotBlank()) {
             val fileNameWithSuffix = imageInfo.fileName.fileNameWithSuffix(suffix)
             if (imageFileMap.containsKey(fileNameWithSuffix)) {
@@ -103,6 +103,7 @@ object ImageFileRepository {
     fun getImageFileEntry(imageExpression: String): ImageFileEntry {
 
         val resolvedFileName = getFileName(imageExpression)
+        TestLog.trace("resolvedFileName=$resolvedFileName")
         val value =
             imageFileMap.values.firstOrNull { it.fileName == resolvedFileName || it.filePath.toString() == imageExpression }
         if (value != null) {
