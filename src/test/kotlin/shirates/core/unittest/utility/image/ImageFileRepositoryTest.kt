@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.TestMode
-import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
@@ -64,11 +63,21 @@ class ImageFileRepositoryTest : UnitTest() {
             // Act
             ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/maps/screens".toPath())
             // Assert
-            assertThat(ImageFileRepository.getFileName(imageExpression = "tower_of_the_sun_face.png"))
-                .isEqualTo("tower_of_the_sun_face@a.png")
-            assertThat(ImageFileRepository.getFileName(imageExpression = "tower_of_the_sun_face.png?s=0.5&t=10"))
-                .isEqualTo("tower_of_the_sun_face@a.png")
-            assertThat(ImageFileRepository.getFileName("NotExist.png")).isEqualTo("NotExist.png")
+            run {
+                val entry = ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun_face.png")
+                assertThat(entry.fileName).isEqualTo("tower_of_the_sun_face@a.png")
+            }
+            run {
+                val entry =
+                    ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun_face.png?s=0.5&t=10")
+                assertThat(entry.fileName).isEqualTo("tower_of_the_sun_face@a.png")
+            }
+            run {
+                assertThatThrownBy {
+                    ImageFileRepository.getImageFileEntry(imageExpression = "NotExist.png")
+                }.isInstanceOf(FileNotFoundException::class.java)
+                    .hasMessage("Image file not found. (expression=NotExist.png)")
+            }
         }
     }
 
@@ -95,20 +104,6 @@ class ImageFileRepositoryTest : UnitTest() {
     }
 
     @Test
-    fun getFileName() {
-
-        run {
-            // Arrange
-            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/maps/screens".toPath())
-            // Act, Assert
-            assertThat(ImageFileRepository.getFileName(imageExpression = "tower_of_the_sun.png"))
-                .isEqualTo("tower_of_the_sun.png")
-            assertThat(ImageFileRepository.getFileName(imageExpression = "tower_of_the_sun_face.png"))
-                .isEqualTo("tower_of_the_sun_face@a.png")
-        }
-    }
-
-    @Test
     fun getImageFileEntry() {
 
         // Arrange
@@ -124,7 +119,7 @@ class ImageFileRepositoryTest : UnitTest() {
             // Act
             assertThatThrownBy {
                 ImageFileRepository.getImageFileEntry(imageExpression = "NotExistFile.png")
-            }.isInstanceOf(TestConfigException::class.java)
+            }.isInstanceOf(FileNotFoundException::class.java)
                 .hasMessage("Image file not found. (expression=NotExistFile.png)")
         }
     }

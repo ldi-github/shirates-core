@@ -1284,6 +1284,21 @@ object TestDriver {
             return suffix
         }
 
+    internal val suffixForImageDefault: String
+        get() {
+            if (isInitialized.not()) {
+                return if (isAndroid) "@a" else "@i"
+            }
+            val suffix = if (isAndroid) {
+                val deviceScreenSize = capabilities.getCapabilityRelaxed("deviceScreenSize")
+                "@a_$deviceScreenSize"
+            } else {
+                val deviceName = capabilities.getCapabilityRelaxed("deviceName")
+                "@i_$deviceName"
+            }
+            return suffix
+        }
+
     internal fun findImage(
         selector: Selector,
         scroll: Boolean = false,

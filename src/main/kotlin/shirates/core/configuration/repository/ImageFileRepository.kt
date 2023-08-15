@@ -2,12 +2,12 @@ package shirates.core.configuration.repository
 
 import shirates.core.configuration.ImageInfo
 import shirates.core.driver.TestDriver
-import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.BufferedImageUtility
 import java.awt.image.BufferedImage
 import java.io.File
+import java.io.FileNotFoundException
 import java.nio.file.Path
 
 /**
@@ -75,26 +75,25 @@ object ImageFileRepository {
         return imageFileEntry
     }
 
-    /**
-     * getFileName
-     */
-    fun getFileName(imageExpression: String): String {
-
-        val imageInfo = ImageInfo(imageExpression)
-        val suffix: String = TestDriver.suffixForImage
-        if (suffix.isNotBlank()) {
-            val fileNameWithSuffix = imageInfo.fileName.fileNameWithSuffix(suffix)
-            if (imageFileMap.containsKey(fileNameWithSuffix)) {
-                return fileNameWithSuffix
-            }
-        }
-        return imageInfo.fileName
-    }
-
     private fun String.fileNameWithSuffix(suffix: String): String {
 
         val fileNameWithSuffix = "${this.removeSuffix(".png")}$suffix.png"
         return fileNameWithSuffix
+    }
+
+    private fun getImageFileEntryCore(
+        imageExpression: String,
+        suffix: String
+    ): ImageFileEntry? {
+
+        val imageInfo = ImageInfo(imageExpression)
+        val fileNameWithSuffix = imageInfo.fileName.fileNameWithSuffix(suffix)
+        if (imageFileMap.containsKey(fileNameWithSuffix)) {
+            val entry = imageFileMap[fileNameWithSuffix]!!
+            TestLog.trace("imageExpression=$imageExpression, resolvedFileName=${entry.fileName}")
+            return entry
+        }
+        return null
     }
 
     /**
@@ -102,15 +101,11 @@ object ImageFileRepository {
      */
     fun getImageFileEntry(imageExpression: String): ImageFileEntry {
 
-        val resolvedFileName = getFileName(imageExpression)
-        TestLog.trace("resolvedFileName=$resolvedFileName")
-        val value =
-            imageFileMap.values.firstOrNull { it.fileName == resolvedFileName || it.filePath.toString() == imageExpression }
-        if (value != null) {
-            return value
-        }
-
-        throw TestConfigException(message = message(id = "imageFileNotFound", subject = imageExpression))
+        val entry = getImageFileEntryCore(imageExpression = imageExpression, suffix = TestDriver.suffixForImage)
+            ?: getImageFileEntryCore(imageExpression = imageExpression, suffix = TestDriver.suffixForImageDefault)
+            ?: getImageFileEntryCore(imageExpression = imageExpression, suffix = "")
+            ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))
+        return entry
     }
 
     /**
