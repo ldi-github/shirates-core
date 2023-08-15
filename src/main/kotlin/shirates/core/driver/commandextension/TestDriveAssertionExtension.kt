@@ -344,6 +344,7 @@ internal fun TestDrive.existCore(
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
     var e = TestElement()
@@ -371,7 +372,8 @@ internal fun TestDrive.existCore(
             TestDriver.postProcessForImageAssertion(
                 e = e,
                 imageMatchResult = r,
-                assertMessage = message
+                assertMessage = message,
+                log = log
             )
         } catch (t: FileNotFoundException) {
             TestLog.info(t.message!!)
@@ -395,7 +397,8 @@ internal fun TestDrive.existCore(
 
         TestDriver.postProcessForAssertion(
             selectResult = e,
-            assertMessage = message
+            assertMessage = message,
+            log = log
         )
     }
 
@@ -452,9 +455,9 @@ fun TestDrive.exist(
 }
 
 /**
- * existImageOf
+ * existImage
  */
-fun TestDrive.existImageOf(
+fun TestDrive.existImage(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -469,7 +472,7 @@ fun TestDrive.existImageOf(
 
     val testElement = TestDriver.it
 
-    val command = "existImageOf"
+    val command = "existImage"
     val assertMessage = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(testElement)
@@ -486,6 +489,7 @@ fun TestDrive.existImageOf(
             useCache = useCache,
             scroll = scroll,
             direction = direction,
+            log = false
         )
         if (e.hasError && throwsException) {
             throw e.lastError!!
@@ -493,13 +497,22 @@ fun TestDrive.existImageOf(
 
         if (e.isFound && e.isDummy.not()) {
             val imageMatchResult = e.isImage(expression = expression, cropImage = true)
-            if (imageMatchResult.result.not()) {
+            if (imageMatchResult.result) {
+                TestDriver.postProcessForImageAssertion(
+                    e = e,
+                    imageMatchResult = imageMatchResult,
+                    assertMessage = assertMessage
+                )
+            } else {
                 if (imageMatchResult.templateImage == null) {
                     manual(assertMessage)
                 } else {
-                    val lastEffectiveLog = TestLog.lines.last() { it.result.isEffectiveType }
-                    lastEffectiveLog.result = LogType.NG
                     val msg = "$assertMessage ($imageMatchResult)"
+                    TestDriver.postProcessForImageAssertion(
+                        e = e,
+                        imageMatchResult = imageMatchResult,
+                        assertMessage = msg
+                    )
                     e.lastError = TestNGException(message = msg, cause = TestDriverException(msg))
                     if (throwsException) {
                         throw e.lastError!!
