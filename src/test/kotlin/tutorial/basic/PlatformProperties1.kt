@@ -8,6 +8,7 @@ import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.driver.platformMajorVersion
 import shirates.core.driver.platformName
 import shirates.core.driver.platformVersion
 import shirates.core.testcode.UITest
@@ -27,6 +28,9 @@ class PlatformProperties1 : UITest() {
 
                     platformVersion
                         .thisIs("12")
+
+                    platformMajorVersion
+                        .thisIs(12)
 
                     isAndroid
                         .thisIsTrue()

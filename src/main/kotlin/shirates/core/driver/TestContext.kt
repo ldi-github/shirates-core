@@ -199,6 +199,8 @@ class TestContext(
 
     var irregularHandler: (() -> Unit)? = null
 
+    var onLaunchHandler: (() -> Unit)? = null
+
     val screenHandlers = mutableMapOf<String, ((TestDriverOnScreenContext) -> Unit)?>()
 
     @SaveTarget

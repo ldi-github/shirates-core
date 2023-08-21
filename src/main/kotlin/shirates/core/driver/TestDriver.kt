@@ -2066,12 +2066,9 @@ object TestDriver {
         return lastElement
     }
 
-    /**
-     * launchApp
-     *
-     */
     fun launchAppCore(
-        packageOrBundleIdOrActivity: String
+        packageOrBundleIdOrActivity: String,
+        onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
     ): TestElement {
 
         if (packageOrBundleIdOrActivity.isBlank()) {
@@ -2089,9 +2086,10 @@ object TestDriver {
         if (isAndroid) {
             TestDriveObjectAndroid.launchAndroidApp(
                 udid = testProfile.udid,
-                packageNameOrActivityName = packageOrBundleIdOrActivity
+                packageNameOrActivityName = packageOrBundleIdOrActivity,
+                onLaunchHandler = onLaunchHandler
             )
-            syncCache(force = true)
+            refreshCache()
             SyncUtility.doUntilTrue {
                 isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
             }
@@ -2105,7 +2103,14 @@ object TestDriver {
             try {
                 testDrive.terminateApp(appNameOrAppId = bundleId)
                 TestLog.info("Launching app. (bundleId=$bundleId)")
-                TestDriveObjectIos.launchIosApp(udid = testProfile.udid, bundleId = bundleId, log = true)
+                TestDriveObjectIos.launchIosApp(
+                    udid = testProfile.udid,
+                    bundleId = bundleId,
+                    onLaunchHandler = onLaunchHandler,
+                    log = true
+                )
+                refreshCache()
+                onLaunchHandler?.invoke()
             } catch (t: Throwable) {
                 TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
 
@@ -2167,8 +2172,10 @@ object TestDriver {
          * Restart device
          */
         if (isAndroid) {
-            val device = AndroidDeviceUtility.currentAndroidDeviceInfo!!
-            AndroidDeviceUtility.reboot(udid = device.udid)
+            val device = AndroidDeviceUtility.currentAndroidDeviceInfo
+            if (device != null) {
+                AndroidDeviceUtility.reboot(udid = device.udid)
+            }
         } else if (isiOS && isSimulator) {
 //            IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
 //            IosDeviceUtility.stopSimulator(udid = testProfile.udid)

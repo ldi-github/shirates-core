@@ -51,12 +51,12 @@ internal fun TestDrive.getScrollableElement(
         return ancestors.first()
     }
 
-    val descendants = testElement.getScrollableElementsInDescendantsAndSelf()
+    val descendants = testElement.getScrollableElementsInDescendantsAndSelf().sortedByDescending { it.bounds.area }
     if (descendants.any()) {
         return descendants.first()
     }
 
-    val rootDescendants = rootElement.getScrollableElementsInDescendantsAndSelf()
+    val rootDescendants = rootElement.getScrollableElementsInDescendantsAndSelf().sortedByDescending { it.bounds.area }
     if (rootDescendants.any()) {
         return rootDescendants.first()
     }
