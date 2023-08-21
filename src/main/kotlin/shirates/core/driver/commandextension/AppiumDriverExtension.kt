@@ -93,7 +93,7 @@ internal fun AppiumDriver.terminateApp(packageOrBundleId: String?) {
         try {
             TestDriver.androidDriver.terminateApp(packageOrBundleId)
         } catch (t: Throwable) {
-            TestLog.warn(t.toString())
+            TestLog.info(t.toString())
         }
     } else {
         TestDriver.iosDriver.terminateApp(packageOrBundleId)
