@@ -1108,8 +1108,13 @@ object TestDriver {
                 // Search until it is(not) found
                 val r = SyncUtility.doUntilTrue(
                     waitSeconds = waitSeconds,
-                    refreshCache = useCache
-                ) {
+                    refreshCache = useCache,
+                    onBeforeRetry = { sc ->
+                        if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
+                            testContext.onSelectErrorHandler!!.invoke()
+                        }
+                    }
+                ) { sc ->
                     val e = if (useCache) {
                         TestElementCache.select(
                             selector = selector,
@@ -1122,15 +1127,18 @@ object TestDriver {
                         )
                     }
                     selectedElement = e
-                    if (selector.isNegation) {
+                    val result = if (selector.isNegation) {
                         e.isEmpty
                     } else {
                         e.isFound
                     }
+
+                    result
                 }
 
                 if (r.hasError) {
                     lastElement.lastError = r.error
+
                 }
             }
 
