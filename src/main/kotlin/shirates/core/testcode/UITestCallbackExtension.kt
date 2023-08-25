@@ -171,6 +171,9 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             testBase.setEventHandlers(eventContext)
             testContext.irregularHandler = eventContext.irregularHandler
             testContext.onLaunchHandler = eventContext.onLaunchHandler
+            testContext.onSelectErrorHandler = eventContext.onSelectErrorHandler
+            testContext.onExistErrorHandler = eventContext.onExistErrorHandler
+            testContext.onScreenErrorHandler = eventContext.onScreenErrorHandler
 
             // printCapabilities
             if (TestLog.capabilityPrinted.not()) {

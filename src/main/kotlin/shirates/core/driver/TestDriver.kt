@@ -1008,6 +1008,50 @@ object TestDriver {
         useCache: Boolean = testContext.useCache,
     ): TestElement {
 
+        fun executeSelect(): TestElement {
+            return selectCore(
+                selector = selector,
+                useCache = useCache,
+                scroll = scroll,
+                direction = direction,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = throwsException,
+                waitSeconds = waitSeconds
+            )
+        }
+
+        /**
+         * Execute with error handler
+         */
+        if (throwsException && testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
+            return try {
+                executeSelect()
+            } catch (t: Throwable) {
+                TestLog.info(t.message!!)
+                testDrive.suppressHandler {
+                    testContext.onSelectErrorHandler!!.invoke()
+                }
+                executeSelect()
+            }
+        }
+
+        return executeSelect()
+
+    }
+
+    private fun selectCore(
+        selector: Selector,
+        useCache: Boolean,
+        scroll: Boolean,
+        direction: ScrollDirection,
+        scrollDurationSeconds: Double,
+        scrollStartMarginRatio: Double,
+        scrollMaxCount: Int,
+        throwsException: Boolean,
+        waitSeconds: Double
+    ): TestElement {
         if (selector.isRelative) {
             return TestElementCache.select(
                 selector = selector,

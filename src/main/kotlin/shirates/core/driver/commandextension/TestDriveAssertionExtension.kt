@@ -12,6 +12,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
@@ -207,6 +208,9 @@ internal fun TestDrive.screenIsCore(
             val r = actionFunc()
             if (r.not()) {
                 onIrregular?.invoke()
+                if (testContext.enableIrregularHandler && testContext.onScreenErrorHandler != null) {
+                    testContext.onScreenErrorHandler!!.invoke()
+                }
             }
             r
         }
@@ -354,16 +358,21 @@ internal fun TestDrive.existCore(
             return manual(message = message)
         }
         try {
-            val r = TestDriver.findImage(
-                selector = selector,
-                scroll = scroll,
-                direction = direction,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-                throwsException = false,
-                useCache = useCache
-            )
+            fun findImage(): ImageMatchResult {
+                return TestDriver.findImage(
+                    selector = selector,
+                    scroll = scroll,
+                    direction = direction,
+                    scrollDurationSeconds = scrollDurationSeconds,
+                    scrollStartMarginRatio = scrollStartMarginRatio,
+                    scrollMaxCount = scrollMaxCount,
+                    throwsException = false,
+                    useCache = useCache
+                )
+            }
+
+            var r = findImage()
+
             e.selector = selector
             if (r.result) {
                 e.isDummy = true
@@ -375,23 +384,39 @@ internal fun TestDrive.existCore(
                 assertMessage = message,
                 log = log
             )
+
+            if (e.hasError && throwsException && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
+                testDrive.suppressHandler {
+                    testContext.onExistErrorHandler!!.invoke()
+                }
+                r = findImage()
+                TestDriver.postProcessForImageAssertion(
+                    e = e,
+                    imageMatchResult = r,
+                    assertMessage = message,
+                    log = log
+                )
+            }
         } catch (t: FileNotFoundException) {
             TestLog.info(t.message!!)
             manual(message)
         }
 
     } else {
-        e = TestDriver.select(
-            selector = selector,
-            scroll = scroll,
-            direction = direction,
-            scrollDurationSeconds = scrollDurationSeconds,
-            scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollMaxCount = scrollMaxCount,
-            throwsException = false,
-            waitSeconds = waitSeconds,
-            useCache = useCache,
-        )
+        fun executeSelect(): TestElement {
+            return TestDriver.select(
+                selector = selector,
+                scroll = scroll,
+                direction = direction,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = false,
+                waitSeconds = waitSeconds,
+                useCache = useCache,
+            )
+        }
+        e = executeSelect()
 
         screenshot()
 
@@ -400,6 +425,24 @@ internal fun TestDrive.existCore(
             assertMessage = message,
             log = log
         )
+
+        /**
+         * Retrying with error handler
+         */
+        if (e.hasError && throwsException && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
+            testDrive.suppressHandler {
+                testContext.onExistErrorHandler!!.invoke()
+            }
+            e = executeSelect()
+
+            screenshot()
+
+            TestDriver.postProcessForAssertion(
+                selectResult = e,
+                assertMessage = message,
+                log = log
+            )
+        }
     }
 
     if (e.hasError && throwsException) {
@@ -467,7 +510,12 @@ fun TestDrive.existImage(
 
     TestDriver.refreshCurrentScreenWithNickname(expression)
 
-    val sel = getSelector(expression = expression)
+    val s = runCatching { getSelector(expression = expression) }.getOrNull()
+    if (s == null && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
+        testContext.onExistErrorHandler!!.invoke()
+    }
+    val sel = s ?: getSelector(expression = expression)
+
     var e = TestElement(selector = sel)
 
     val testElement = TestDriver.it

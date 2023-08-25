@@ -10,33 +10,43 @@
     "[<-]": "@Navigate up",
     "[Network & internet]": "@Network & internet",
 
+    "[Internet Icon]": "[Internet]:leftImage",
     "[Internet]": "",
     "{Internet}": "[Internet]:label",
 
+    "[Calls & SMS Icon]": "[Calls & SMS]:leftImage",
     "[Calls & SMS]": "",
     "{Calls & SMS}": "[Calls & SMS]:label",
 
+    "[SIMs Icon]": "[SIMs]:leftImage",
     "[SIMs]": "",
     "{SIMs}": "[SIMs]:label",
 
+    "[Airplane mode Icon]": "[Airplane mode]:leftImage",
     "[Airplane mode]": "",
     "{Airplane mode switch}": "[Airplane mode]:switch",
 
+    "[Hotspot & tethering Icon]": "[Hotspot & tethering]:leftImage",
     "[Hotspot & tethering]": "",
     "{Hotspot & tethering}": "[Hotspot & tethering]:label",
 
+    "[Data Saver Icon]": "[Data Saver]:leftImage",
     "[Data Saver]": "",
     "{Data Saver}": "[Data Saver]:label",
 
+    "[VPN Icon]": "[VPN]:leftImage",
     "[VPN]": "",
     "{VPN}": "[VPN]:label",
 
+    "[Mobile plan Icon]": "[Mobile plan]:leftImage",
     "[Mobile plan]": "",
     "{Mobile plan}": "[Mobile plan]:label",
 
+    "[Private DNS Icon]": "[Private DNS]:leftImage",
     "[Private DNS]": "",
     "{Private DNS}": "[Private DNS]:label",
 
+    "[Adaptive connectivity Icon]": "[Adaptive connectivity]:leftImage",
     "[Adaptive connectivity]": "",
     "{Adaptive connectivity}": "[Adaptive connectivity]:label"
   },
