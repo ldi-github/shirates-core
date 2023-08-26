@@ -1,24 +1,24 @@
-# On Error Handler
+# エラーハンドラー(On Error Handler)
 
-You can write error handling procedure using these handlers.
+以下のハンドラーを利用してエラー処理を書くことができます。
 
-| Name                 | Description                                           |   
-|----------------------|-------------------------------------------------------|
-| onSelectErrorHandler | Called when select function could not find an element |
-| onExistErrorHandler  | Called when exist function results in NG              |
-| onScreenErrorHandler | Called when screenIs function results in NG           |
+| 名前                   | 説明                           |   
+|----------------------|------------------------------|
+| onSelectErrorHandler | select関数が要素を見つけられなかった時に呼ばれます |
+| onExistErrorHandler  | exist関数がNGになった時に呼ばれます        |
+| onScreenErrorHandler | screenIs関数がNGになった時に呼ばれます     |
 
 ### OnSelectErrorHandler1.kt
 
 (`kotlin/tutorial/inaction/OnSelectErrorHandler1.kt`)
 
-#### Description
+#### 解説
 
-1. When you try to get an element of `Airplane mode` with the select function, `onSelectErrorHandler` is called
-   because the element does not exist on the screen.
-   is called because the element does not exist on the screen.
-2. The element of `Network & internet` is tapped as the currently displayed screen is `[Android Settings Top Screen]`.
-3. select is retried, and you can get the element of `Airplane mode` this time.
+1. select関数で`Airplane mode`の要素を取得しようとすると、画面に要素が存在しないので`onSelectErrorHandler`
+   が呼ばれます
+2. `onSelectErrorHandler`において、現在表示されている画面が`[Android Settings Top Screen]`なので`Network & internet`
+   がタップされ、`[Network & internet Screen]`が表示されます。
+3. selectがリトライされて今度は`Airplae mode`の要素を取得することができます
 
 ```kotlin
 package tutorial.inaction
@@ -202,4 +202,4 @@ class OnScreenErrorHandler1 : UITest() {
 
 ### Link
 
-- [index](../../index.md)
+- [index](../../index_ja.md)

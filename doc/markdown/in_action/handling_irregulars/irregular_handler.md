@@ -115,7 +115,7 @@ class IrregularHandler1 : UITest() {
 **Note:**
 
 - A lot of procedure in irregularHandler may cause performance problem. Consider
-  using [Screen Handler](screen_handler.md) instead.
+  using [On Error Handler](on_error_handler.md) or [Screen Handler](screen_handler.md) instead.
 - Logging is suppressed while executing irregularHandler delegate function by default.
 
 ## suppressHandler
