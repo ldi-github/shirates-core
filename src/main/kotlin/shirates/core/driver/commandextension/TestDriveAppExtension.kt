@@ -160,7 +160,8 @@ fun TestDrive.restartApp(
  */
 fun TestDrive.launchApp(
     appNameOrAppIdOrActivityName: String = testContext.appIconName,
-    fallBackToTapAppIcon: Boolean = true
+    fallBackToTapAppIcon: Boolean = true,
+    onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
 ): TestElement {
 
     val testElement = TestElement.emptyElement
@@ -194,10 +195,16 @@ fun TestDrive.launchApp(
         }
 
         if (isAndroid) {
-            TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
+            TestDriver.launchAppCore(
+                packageOrBundleIdOrActivity = packageOrBundleId,
+                onLaunchHandler = onLaunchHandler
+            )
         } else if (TestMode.isiOS) {
             if (isSimulator) {
-                TestDriver.launchAppCore(packageOrBundleIdOrActivity = packageOrBundleId)
+                TestDriver.launchAppCore(
+                    packageOrBundleIdOrActivity = packageOrBundleId,
+                    onLaunchHandler = onLaunchHandler
+                )
             } else {
                 TestDriver.tapAppIconCore(appNameOrAppIdOrActivityName)
                 SyncUtility.doUntilTrue {

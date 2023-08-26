@@ -40,6 +40,7 @@ import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.element.ElementCategoryExpressionUtility
+import shirates.core.utility.getCapabilityRelaxed
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
 import shirates.core.utility.ios.IosDeviceUtility
@@ -1007,6 +1008,50 @@ object TestDriver {
         useCache: Boolean = testContext.useCache,
     ): TestElement {
 
+        fun executeSelect(): TestElement {
+            return selectCore(
+                selector = selector,
+                useCache = useCache,
+                scroll = scroll,
+                direction = direction,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = throwsException,
+                waitSeconds = waitSeconds
+            )
+        }
+
+        /**
+         * Execute with error handler
+         */
+        if (throwsException && testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
+            return try {
+                executeSelect()
+            } catch (t: Throwable) {
+                TestLog.info(t.message!!)
+                testDrive.suppressHandler {
+                    testContext.onSelectErrorHandler!!.invoke()
+                }
+                executeSelect()
+            }
+        }
+
+        return executeSelect()
+
+    }
+
+    private fun selectCore(
+        selector: Selector,
+        useCache: Boolean,
+        scroll: Boolean,
+        direction: ScrollDirection,
+        scrollDurationSeconds: Double,
+        scrollStartMarginRatio: Double,
+        scrollMaxCount: Int,
+        throwsException: Boolean,
+        waitSeconds: Double
+    ): TestElement {
         if (selector.isRelative) {
             return TestElementCache.select(
                 selector = selector,
@@ -1063,8 +1108,13 @@ object TestDriver {
                 // Search until it is(not) found
                 val r = SyncUtility.doUntilTrue(
                     waitSeconds = waitSeconds,
-                    refreshCache = useCache
-                ) {
+                    refreshCache = useCache,
+                    onBeforeRetry = { sc ->
+                        if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
+                            testContext.onSelectErrorHandler!!.invoke()
+                        }
+                    }
+                ) { sc ->
                     val e = if (useCache) {
                         TestElementCache.select(
                             selector = selector,
@@ -1077,15 +1127,18 @@ object TestDriver {
                         )
                     }
                     selectedElement = e
-                    if (selector.isNegation) {
+                    val result = if (selector.isNegation) {
                         e.isEmpty
                     } else {
                         e.isFound
                     }
+
+                    result
                 }
 
                 if (r.hasError) {
                     lastElement.lastError = r.error
+
                 }
             }
 
@@ -1267,6 +1320,37 @@ object TestDriver {
         )
     }
 
+    internal val suffixForImage: String
+        get() {
+            if (isInitialized.not()) {
+                return if (isAndroid) "@a" else "@i"
+            }
+            val platformMajor = testProfile.platformVersion.split(".").first()
+            val suffix = if (isAndroid) {
+                val deviceScreenSize = capabilities.getCapabilityRelaxed("deviceScreenSize")
+                "@a${platformMajor}_$deviceScreenSize"
+            } else {
+                val deviceName = capabilities.getCapabilityRelaxed("deviceName")
+                "@i${platformMajor}_$deviceName"
+            }
+            return suffix
+        }
+
+    internal val suffixForImageDefault: String
+        get() {
+            if (isInitialized.not()) {
+                return if (isAndroid) "@a" else "@i"
+            }
+            val suffix = if (isAndroid) {
+                val deviceScreenSize = capabilities.getCapabilityRelaxed("deviceScreenSize")
+                "@a_$deviceScreenSize"
+            } else {
+                val deviceName = capabilities.getCapabilityRelaxed("deviceName")
+                "@i_$deviceName"
+            }
+            return suffix
+        }
+
     internal fun findImage(
         selector: Selector,
         scroll: Boolean = false,
@@ -1282,7 +1366,10 @@ object TestDriver {
         lastElement = TestElement.emptyElement
 
         if (selector.image.isNullOrBlank()) {
-            throw IllegalArgumentException(message(id = "imageFileNotFound", subject = selector.expression))
+            if (selector.nickname.isNullOrBlank()) {
+                throw IllegalArgumentException(message(id = "imageFileNotFound", subject = selector.expression))
+            }
+            selector.image = "${selector.nickname}.png"
         }
         val filePath = ImageFileRepository.getFilePath(selector.image!!)
         if (Files.exists(filePath).not()) {
@@ -2031,12 +2118,9 @@ object TestDriver {
         return lastElement
     }
 
-    /**
-     * launchApp
-     *
-     */
     fun launchAppCore(
-        packageOrBundleIdOrActivity: String
+        packageOrBundleIdOrActivity: String,
+        onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
     ): TestElement {
 
         if (packageOrBundleIdOrActivity.isBlank()) {
@@ -2054,9 +2138,10 @@ object TestDriver {
         if (isAndroid) {
             TestDriveObjectAndroid.launchAndroidApp(
                 udid = testProfile.udid,
-                packageNameOrActivityName = packageOrBundleIdOrActivity
+                packageNameOrActivityName = packageOrBundleIdOrActivity,
+                onLaunchHandler = onLaunchHandler
             )
-            syncCache(force = true)
+            refreshCache()
             SyncUtility.doUntilTrue {
                 isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
             }
@@ -2070,7 +2155,14 @@ object TestDriver {
             try {
                 testDrive.terminateApp(appNameOrAppId = bundleId)
                 TestLog.info("Launching app. (bundleId=$bundleId)")
-                TestDriveObjectIos.launchIosApp(udid = testProfile.udid, bundleId = bundleId, log = true)
+                TestDriveObjectIos.launchIosApp(
+                    udid = testProfile.udid,
+                    bundleId = bundleId,
+                    onLaunchHandler = onLaunchHandler,
+                    log = true
+                )
+                refreshCache()
+                onLaunchHandler?.invoke()
             } catch (t: Throwable) {
                 TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
 
@@ -2132,8 +2224,10 @@ object TestDriver {
          * Restart device
          */
         if (isAndroid) {
-            val device = AndroidDeviceUtility.currentAndroidDeviceInfo!!
-            AndroidDeviceUtility.reboot(udid = device.udid)
+            val device = AndroidDeviceUtility.currentAndroidDeviceInfo
+            if (device != null) {
+                AndroidDeviceUtility.reboot(udid = device.udid)
+            }
         } else if (isiOS && isSimulator) {
 //            IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
 //            IosDeviceUtility.stopSimulator(udid = testProfile.udid)

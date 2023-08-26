@@ -208,7 +208,7 @@ fun TestDrive.cell(
  * cellOf
  */
 fun TestDrive.cellOf(
-    expression: String,
+    expression: String? = null,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
@@ -216,13 +216,15 @@ fun TestDrive.cellOf(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = select(
-        expression = expression,
-        throwsException = throwsException,
-        waitSeconds = waitSeconds,
-        useCache = useCache,
-        log = log
-    )
+    val testElement =
+        if (expression == null) it
+        else select(
+            expression = expression,
+            throwsException = throwsException,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+            log = log
+        )
 
     val ancestorScrollableElements = testElement.getScrollableElementsInAncestorsAndSelf()
     val cell =

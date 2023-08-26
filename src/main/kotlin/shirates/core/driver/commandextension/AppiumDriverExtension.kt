@@ -90,7 +90,11 @@ internal fun AppiumDriver.terminateApp(packageOrBundleId: String?) {
         throw IllegalAccessException(message(id = "required", subject = "packageOrBundleId", value = packageOrBundleId))
     }
     if (isAndroid) {
-        TestDriver.androidDriver.terminateApp(packageOrBundleId)
+        try {
+            TestDriver.androidDriver.terminateApp(packageOrBundleId)
+        } catch (t: Throwable) {
+            TestLog.info(t.toString())
+        }
     } else {
         TestDriver.iosDriver.terminateApp(packageOrBundleId)
     }

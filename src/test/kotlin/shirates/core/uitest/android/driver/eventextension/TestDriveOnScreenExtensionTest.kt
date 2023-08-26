@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.eventextension.onScreen
 import shirates.core.driver.testContext
@@ -76,7 +75,7 @@ class TestDriveOnScreenExtensionTest : UITest() {
                     assertThat(testContext.screenHandlers.count()).isEqualTo(2)
                     disableScreenHandler()
                 }.action {
-                    it.tap("[Network & internet]")
+                    it.tapWithScrollUp("[Network & internet]")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                     assertThat(testContext.screenHandlers.count()).isEqualTo(2)

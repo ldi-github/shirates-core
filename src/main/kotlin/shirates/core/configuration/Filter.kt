@@ -70,13 +70,28 @@ class Filter(
     var templateImage: BufferedImage? = null
         get() {
             if (noun != "image") return null
-            val imageInfo = ImageInfo(value)
             if (field == null) {
-                field = ImageFileRepository.getBufferedImage(imageInfo.fileName)
+                val imageFileEntry = getImageFileEntry()
+                field = imageFileEntry.bufferedImage
             }
             return field
         }
         internal set
+
+    var templateImageFile: String? = null
+        get() {
+            if (noun != "image") return null
+            if (field == null) {
+                val imageFileEntry = getImageFileEntry()
+                field = imageFileEntry.filePath.toString()
+            }
+            return field
+        }
+
+    private fun getImageFileEntry(): ImageFileRepository.ImageFileEntry {
+        val imageInfo = ImageInfo(value)
+        return ImageFileRepository.getImageFileEntry(imageExpression = imageInfo.fileName)
+    }
 
     val scale: Double
         get() {
@@ -431,7 +446,9 @@ class Filter(
         threshold: Double = this.threshold,
     ): ImageMatchResult {
 
-        val tmp1 = kotlin.runCatching { templateImage }.onFailure {
+        val tmp1 = kotlin.runCatching {
+            templateImage
+        }.onFailure {
             image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
         }.getOrNull()
         val imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
@@ -441,6 +458,9 @@ class Filter(
             threshold = threshold
         )
         imageMatchResult.result = imageMatchResult.result.reverseIfNegation()
+        if (tmp1 != null) {
+            imageMatchResult.templateImageFile = templateImageFile
+        }
         return imageMatchResult
     }
 

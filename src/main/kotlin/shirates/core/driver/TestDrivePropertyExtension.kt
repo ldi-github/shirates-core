@@ -142,6 +142,23 @@ val TestDrive.platformVersion: String
     }
 
 /**
+ * platformMajorVersion
+ * (os major version)
+ */
+val TestDrive.platformMajorVersion: Int
+    get() {
+        val tokens = platformVersion.split(".")
+        if (tokens.any()) {
+            val value = tokens[0].toIntOrNull()
+            if (value != null) {
+                return value
+            }
+        }
+
+        return -1
+    }
+
+/**
  * appIconName
  */
 val TestDrive.appIconName: String

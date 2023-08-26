@@ -8,7 +8,6 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
-import shirates.core.exception.TestConfigException
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 import shirates.core.testdata.XmlDataIos
@@ -71,7 +70,7 @@ class FilterTest : UnitTest() {
             // Arrange
             assertThatThrownBy {
                 Filter("image=NotRegistered.png").templateImage
-            }.isInstanceOf(TestConfigException::class.java)
+            }.isInstanceOf(FileNotFoundException::class.java)
                 .hasMessage("Image file not found. (expression=NotRegistered.png)")
         }
     }

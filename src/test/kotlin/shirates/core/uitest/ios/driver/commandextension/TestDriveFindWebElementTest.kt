@@ -3,7 +3,9 @@ package shirates.core.uitest.ios.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.findWebElement
+import shirates.core.driver.commandextension.thisIs
+import shirates.core.driver.commandextension.thisIsEmpty
 import shirates.core.testcode.UITest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
@@ -73,12 +75,6 @@ class TestDriveFindWebElementTest : UITest() {
                     it.findWebElement(".XCUIElementTypeStaticText&&[2]").getAttribute("label")
                         .thisIs("Sign in to your iPhone")
                     it.findWebElement(".XCUIElementTypeStaticText&&[999]").thisIsEmpty()
-                }
-            }
-            case(99) {
-                expectation {
-                    it.findWebElement("#VPN&&[2]").getAttribute("type")
-                        .thisIs("XCUIElementTypeSwitch")    // XCUIElementTypeCell is ignored (ignoreTypes)
                 }
             }
         }

@@ -881,6 +881,9 @@ class TestElement(
                     return ""
                 }
             }
+            if (propertyCache.containsKey(name)) {
+                return propertyCache[name]!!
+            }
             return ""
         } finally {
 //            sw.printInfo()

@@ -183,7 +183,7 @@ class TestReport(
         sb.appendLine("    </div>")
         sb.appendLine("    <div id='separator'></div>")
         sb.appendLine("    <div class='image-gallery'>")
-        val screenshotFiles = screenshotLines.map { it.lastScreenshot }.sortedBy { it }.distinct()
+        val screenshotFiles = screenshotLines.map { it.lastScreenshot }.distinct()
         screenshotFiles.forEach { screenshotFile ->
             sb.appendLine("        <div class='image-frame'>")
             val text = htmlEscape(screenshotFile)

@@ -123,7 +123,9 @@ class IrregularHandler1_ja : UITest() {
 
 **注意:**
 
-- irregularHandler にたくさんの処理を入れるとパフォーマンスの問題を引き起こす可能性があります。代わりに[スクリーンハンドラー](screen_handler_ja.md)の利用を検討してください
+- irregularHandler
+  にたくさんの処理を入れるとパフォーマンスの問題を引き起こす可能性があります。代わりに [エラーハンドラー](on_error_handler_ja.md)
+  または [スクリーンハンドラー](screen_handler_ja.md) の利用を検討してください
 - irregularHandlerの処理中はログ出力はデフォルトでは抑制されます
 
 ## suppressHandler

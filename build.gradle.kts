@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "5.2.1"
+version = "5.3.0"
 
 val appiumClientVersion = "8.5.0"
 

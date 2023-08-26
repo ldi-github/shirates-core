@@ -1,6 +1,7 @@
 package shirates.helper
 
 import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.emulator
@@ -27,10 +28,11 @@ object TestSetupHelper : TestDrive {
         if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
         fun crop(nickname: String) {
+            val suffix = TestDriver.suffixForImage
             it.selectWithScrollDown(nickname)
                 .cropImage()
                 .lastCropInfo!!.croppedImage!!
-                .saveImage(TestLog.testResults.resolve("$path/$nickname").toString())
+                .saveImage(TestLog.testResults.resolve("$path/$nickname$suffix").toString())
         }
 
         it.macro("[Android Settings Top Screen]")

@@ -34,6 +34,7 @@ class TestElementImageExtensionTest : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.findImage("[Network & internet Icon].png").thisIsTrue()
+                    it.findImage("[Network & internet Icon]").thisIsTrue()
                     it.findImageWithScrollDown("[Display Icon].png").thisIsTrue()
                     it.findImageWithScrollUp("[Connected devices Icon].png").thisIsTrue()
                 }

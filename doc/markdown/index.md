@@ -182,6 +182,7 @@
     - [Adapting to changes in OS message](in_action/adapting_to_environments/adapting_to_changes_in_os_messages.md)
 - Handling irregulars
     - [Irregular Handler(Global Handler)](in_action/handling_irregulars/irregular_handler.md)
+    - [On Error Handler](in_action/handling_irregulars/on_error_handler.md)
     - [Screen Handler(onScreen function)](in_action/handling_irregulars/screen_handler.md)
 - Test Fixture
     - [Test fixture](in_action/test_fixture/test_fixture.md)

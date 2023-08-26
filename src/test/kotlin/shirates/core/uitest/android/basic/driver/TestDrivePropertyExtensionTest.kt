@@ -112,4 +112,12 @@ class TestDrivePropertyExtensionTest : UITest() {
         }
     }
 
+    @Test
+    fun platformMajorVersion() {
+
+        // Act, Assert
+        val expected = driver.appiumDriver.capabilities.getCapabilityRelaxed("platformVersion").toInt()
+        assertThat(platformMajorVersion).isEqualTo(expected)
+    }
+
 }

@@ -15,6 +15,7 @@ import shirates.core.utility.sync.SyncUtility
 internal fun TestDriveObjectIos.launchIosApp(
     udid: String,
     bundleId: String,
+    onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
     log: Boolean = PropertiesManager.enableShellExecLog
 ): TestElement {
 
@@ -36,11 +37,13 @@ internal fun TestDriveObjectIos.launchIosApp(
             IosDeviceUtility.terminateSpringBoardByUdid(udid = udid, log = log)
             TestLog.info("Retrying launchApp.")
             launchIosAppCore(udid = udid, bundleId = bundleId, log = log)
+            onLaunchHandler?.invoke()
             false
         } else if (isApp) {
             TestLog.info("App launched. ($bundleId)")
             true
         } else {
+            onLaunchHandler?.invoke()
             false
         }
     }
@@ -66,6 +69,7 @@ internal fun launchIosAppCore(
     val args = listOf("xcrun", "simctl", "launch", udid, bundleId)
 
     val r = ShellUtility.executeCommand(args = args.toTypedArray(), log = log)
+    testDrive.invalidateCache()
     val message = r.waitForResultString()
     if (r.hasError) {
         throw TestDriverException(

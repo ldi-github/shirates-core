@@ -2,6 +2,7 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriveObjectAndroid
+import shirates.core.driver.testContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
@@ -15,6 +16,7 @@ import shirates.core.utility.sync.WaitUtility
 internal fun TestDriveObjectAndroid.launchAndroidApp(
     udid: String,
     packageNameOrActivityName: String,
+    onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
     log: Boolean = PropertiesManager.enableShellExecLog
 ): ShellUtility.ShellResult {
 
@@ -30,9 +32,14 @@ internal fun TestDriveObjectAndroid.launchAndroidApp(
         if (packageNameOrActivityName.contains("/")) packageNameOrActivityName
         else getMainActivity(udid = udid, packageName = packageNameOrActivityName)
     val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", activityName, log = log)
+    invalidateCache()
 
     WaitUtility.doUntilTrue {
-        isAndroidAppRunning(udid = udid, packageName = packageName)
+        val running = isAndroidAppRunning(udid = udid, packageName = packageName)
+        if (running.not()) {
+            onLaunchHandler?.invoke()
+        }
+        running
     }
 
     return r
@@ -48,6 +55,7 @@ internal fun TestDriveObjectAndroid.terminateAndroidApp(
 ): ShellUtility.ShellResult {
 
     val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "force-stop", packageName, log = log)
+    invalidateCache()
 
     WaitUtility.doUntilTrue {
         isAndroidAppRunning(udid = udid, packageName = packageName).not()

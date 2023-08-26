@@ -9,6 +9,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
+import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestMode.hasOsaifuKeitai
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isStub
@@ -169,6 +170,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             val eventContext = TestDriverEventContext()
             testBase.setEventHandlers(eventContext)
             testContext.irregularHandler = eventContext.irregularHandler
+            testContext.onLaunchHandler = eventContext.onLaunchHandler
+            testContext.onSelectErrorHandler = eventContext.onSelectErrorHandler
+            testContext.onExistErrorHandler = eventContext.onExistErrorHandler
+            testContext.onScreenErrorHandler = eventContext.onScreenErrorHandler
 
             // printCapabilities
             if (TestLog.capabilityPrinted.not()) {

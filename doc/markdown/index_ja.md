@@ -183,6 +183,7 @@
 - イレギュラーを処理する
     - [イレギュラーハンドラー(グローバルハンドラー)](in_action/handling_irregulars/irregular_handler_ja.md)
     - [スクリーンハンドラー(onScreen関数)](in_action/handling_irregulars/screen_handler_ja.md)
+    - [エラーハンドラー](in_action/handling_irregulars/on_error_handler_ja.md)
 - テストフィクスチャ
     - [テストフィクスチャ](in_action/test_fixture/test_fixture_ja.md)
 - 画像マッチング
