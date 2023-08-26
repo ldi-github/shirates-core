@@ -36,17 +36,20 @@ class TestElementCellExtensionTest : UITest() {
             case(2) {
                 expectation {
                     it.cellOf("Gamepad") {
-                        cellWidget(1).textIs("Game Controller")
-                        cellWidget(2).textIs("Gamepad")
-                        cellWidget(3).textIs("Connected")
+                        cellWidget(1).textIs("Gamepad, Connected")
+                        cellWidget(2).textIs("Game Controller")
+                        cellWidget(3).textIs("Gamepad")
+                        cellWidget(4).textIs("Connected")
+                        cellWidget(5).type.thisIs("XCUIElementTypeImage")
                     }
                     it.cellOf("Identify Controller") {
                         cellWidget(1).textIs("Identify Controller")
                     }
                     it.cellOf("Default") {
-                        cellWidget(1).textIs("Game Controller")
-                        cellWidget(2).textIs("Default")
-                        cellWidget(3).textIs("1 controllers")
+                        cellWidget(1).textIs("Default, 1 controllers")
+                        cellWidget(2).textIs("Game Controller")
+                        cellWidget(3).textIs("Default")
+                        cellWidget(4).textIs("1 controllers")
                     }
                 }
             }
