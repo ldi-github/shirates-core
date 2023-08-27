@@ -494,6 +494,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableRelativeCommandTranslation() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableRelativeCommandTranslation).isEqualTo(Const.ENABLE_RELATIVE_COMMAND_TRANSLATION)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_RELATIVE_COMMAND_TRANSLATION.not()
+            PropertiesManager.setPropertyValue("enableRelativeCommandTranslation", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRelativeCommandTranslation).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun testListDir() {
 
         TestLog.directoryMap

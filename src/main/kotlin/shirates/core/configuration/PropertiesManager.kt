@@ -321,6 +321,16 @@ object PropertiesManager {
         }
 
     /**
+     * enableRelativeCommandTranslation
+     */
+    val enableRelativeCommandTranslation: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableRelativeCommandTranslation")
+                ?: return Const.ENABLE_RELATIVE_COMMAND_TRANSLATION
+            return value == "true"
+        }
+
+    /**
      * testListDir
      */
     val testListDir: String
