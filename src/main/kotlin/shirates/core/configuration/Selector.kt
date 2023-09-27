@@ -4,6 +4,7 @@ import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
+import shirates.core.logging.Message.message
 import shirates.core.testcode.normalize
 import shirates.core.utility.element.IosPredicateUtility
 import shirates.core.utility.element.XPathUtility
@@ -797,11 +798,6 @@ class Selector(
             return originalExpression!!.toDecoratedExpression()
         }
 
-//        val lastRelativeSelector = relativeSelectors.lastOrNull()
-//        if (lastRelativeSelector != null && lastRelativeSelector.nickname != null) {
-//            return lastRelativeSelector.nickname!!
-//        }
-
         var exp = basePartFriendlyExpression
         if (exp != "" && exp.isRelativeSelector().not()) {
             exp = exp.toDecoratedExpression()
@@ -814,7 +810,14 @@ class Selector(
         exps.addAll(alternativeSelectors.map { it.getElementFriendlyExpression() })
         val elementFriendlyExpression = exps.joinToString("|||")
 
-        return elementFriendlyExpression
+        var result = elementFriendlyExpression
+        if (PropertiesManager.enableRelativeCommandTranslation) {
+            val msg = message(id = elementFriendlyExpression)
+            if (msg.startsWith("message not found.").not()) {
+                result = elementFriendlyExpression.replace(result, msg)
+            }
+        }
+        return result
     }
 
     /**

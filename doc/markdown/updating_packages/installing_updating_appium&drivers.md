@@ -5,22 +5,18 @@
 ### Installing
 
 ```
-npm install -g appium@next
+npm install -g appium
 appium -v
 ```
-
-**Note:** Appium 2.0 is going to release. "@next" is required to install 2.0
 
 ### Re-Installing
 
 ```
 appium -v
 npm uninstall -g appium
-npm install -g appium@next
+npm install -g appium
 appium -v
 ```
-
-**Note:** Appium 2.0 is going to release. "@next" is required to install 2.0
 
 See [Tested Environments](../environments.md) to get tested version.
 
@@ -81,7 +77,7 @@ appium -v
 appium driver list
 
 npm uninstall -g appium
-npm install -g appium@next
+npm install -g appium
 
 appium driver uninstall uiautomator2
 appium driver uninstall xcuitest

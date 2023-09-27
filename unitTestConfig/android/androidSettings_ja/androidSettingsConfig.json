@@ -1,0 +1,27 @@
+{
+  "testConfigName": "androidSettingsConfig",
+
+  "appIconName": "設定",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "settings": {
+    "always_finish_activities": "0"
+  },
+
+  "dataset": {
+  },
+
+  "screens": {
+  },
+
+  "capabilities": {
+    "platformVersion": "12",
+    "language": "ja",
+    "locale": "JP"
+  }
+
+}

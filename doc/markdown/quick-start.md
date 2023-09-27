@@ -1,5 +1,9 @@
 # Quick Start
 
+## Environment
+
+See [Tested Environments](environments.md) before installation.
+
 ## Installation
 
 Install following prerequisite tools.
@@ -98,11 +102,9 @@ npm uninstall -g appium
 Install appium 2.0 using npm.
 
 ```
-npm install -g appium@next
+npm install -g appium
 appium -v
 ```
-
-**Note:** Appium 2.0 is going to release. "@next" is required to install 2.0
 
 See [Tested Environments](environments.md) to get tested version.
 
@@ -112,7 +114,7 @@ If you have already installed appium, uninstall it and install it again.
 ```
 appium -v
 npm uninstall -g appium
-npm install -g appium@next
+npm install -g appium
 appium -v
 ```
 
@@ -126,7 +128,7 @@ wave1008@SNB-M1 ~ % npm uninstall -g appium
 removed 437 packages, and audited 1 package in 816ms
 
 found 0 vulnerabilities
-wave1008@SNB-M1 ~ % npm install -g appium@next
+wave1008@SNB-M1 ~ % npm install -g appium
 
 added 426 packages, and audited 427 packages in 16s
 

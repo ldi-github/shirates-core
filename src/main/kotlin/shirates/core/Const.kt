@@ -24,6 +24,7 @@ object Const {
     const val ENABLE_TEST_LIST = true
     const val ENABLE_TEST_CLASS_LIST = true
     const val ENABLE_SPEC_REPORT = true
+    const val ENABLE_RELATIVE_COMMAND_TRANSLATION = true
     const val MUST = true
     const val SHOULD = true
     const val WANT = true
