@@ -1,5 +1,9 @@
 # クイックスタート
 
+## 環境
+
+インストールの前に [Tested Environments](environments.md) を確認してください。
+
 ## インストール
 
 以下の前提となるツールをインストールしてください。
@@ -97,11 +101,9 @@ npm uninstall -g appium
 npmでAppium 2.0をインストールしてください。
 
 ```
-npm install -g appium@next
+npm install -g appium
 appium -v
 ```
-
-**注意:** Appium 2.0 はリリース予定です。 2.0をインストールするには"@next" を付与してください。
 
 参照 [テスト済みの環境](environments.md)
 
@@ -111,7 +113,7 @@ Appiumをすでにインストールしている場合はアンインストー�
 ```
 appium -v
 npm uninstall -g appium
-npm install -g appium@next
+npm install -g appium
 appium -v
 ```
 
@@ -125,7 +127,7 @@ wave1008@SNB-M1 ~ % npm uninstall -g appium
 removed 437 packages, and audited 1 package in 816ms
 
 found 0 vulnerabilities
-wave1008@SNB-M1 ~ % npm install -g appium@next
+wave1008@SNB-M1 ~ % npm install -g appium
 
 added 426 packages, and audited 427 packages in 16s
 
@@ -226,7 +228,8 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
    ![](_images/create_avd_2.png)
 
 
-5. `S/API Level 31/Android 12.0 (Google Play)` を選択して`Next`をクリックします。 (**Calculator**アプリをデモで使用するのでGoogle Play
+5. `S/API Level 31/Android 12.0 (Google Play)` を選択して`Next`をクリックします。 (**Calculator**アプリをデモで使用するのでGoogle
+   Play
    Storeが必要です)。 M1 Macの場合は**arm64** イメージを、 それ以外の場合は **x86_64** イメージを選択します。<br>
    ![](_images/create_avd_3.png)
 
@@ -318,7 +321,8 @@ AndroidSettingsDemo@a.xlsx
 
 1. **Device Manager**でAndroid 12 のAVDを起動します。
 2. **Google Playストア** を開いて **電卓(Calculator)**(Google LLC)をインストールします。
-3. IntelliJでこのプロジェクトを開き、`src/test/Kotlin/demo/CalculatorDemo`を右クリックして **Debug 'CalculatorDemo'** を選択します。
+3. IntelliJでこのプロジェクトを開き、`src/test/Kotlin/demo/CalculatorDemo`を右クリックして **Debug 'CalculatorDemo'**
+   を選択します。
 4. 電卓アプリのテストが実行されます。
 
 ![](_images/calculator_demo.png)
@@ -331,7 +335,8 @@ AndroidSettingsDemo@a.xlsx
 
 ![](_images/setup_ios_simulator.png)
 
-2. shirates-core プロジェクトをIntelliJで開き,`src/test/Kotlin/demo/iOSSettingsDemo` を右クリックして **Debug 'iOSSettingsDemo'**
+2. shirates-core プロジェクトをIntelliJで開き,`src/test/Kotlin/demo/iOSSettingsDemo` を右クリックして **Debug '
+   iOSSettingsDemo'**
    を選択します。
 3. iOSの設定アプリのテストが実行されます。
 
