@@ -4,6 +4,7 @@
 
 - iOS 17 is not supported yet.
 - Xcode 15 is not supported yet. Use Xcode 14.
+- macOS Sonoma does not support Xcode 14.
 
 ## Tested Environments
 
