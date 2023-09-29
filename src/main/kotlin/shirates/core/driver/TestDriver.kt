@@ -12,6 +12,7 @@ import org.openqa.selenium.OutputType
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.DesiredCapabilities
 import shirates.core.Const
+import shirates.core.UserVar
 import shirates.core.configuration.*
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ParameterRepository
@@ -40,6 +41,7 @@ import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.element.ElementCategoryExpressionUtility
+import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.getCapabilityRelaxed
 import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
@@ -520,6 +522,15 @@ object TestDriver {
 
         val ms = Measure()
 
+        lockFile(filePath = UserVar.downloads.resolve(".createAppiumDriver")){
+            createAppiumDriverCore(profile = profile)
+        }
+
+        ms.end()
+        TestLog.info("AppiumDriver initialized.")
+    }
+
+    private fun createAppiumDriverCore(profile: TestProfile) {
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
 
@@ -580,9 +591,6 @@ object TestDriver {
         }
 
         profile.completeProfile()
-
-        ms.end()
-        TestLog.info("AppiumDriver initialized.")
     }
 
     private fun setCapabilities(
