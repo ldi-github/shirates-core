@@ -121,22 +121,19 @@ appium -v
 
 ```
 wave1008@SNB-M1 ~ % appium -v
-2.0.0-beta.33
+2.0.1
 wave1008@SNB-M1 ~ % npm uninstall -g appium
 
-removed 437 packages, and audited 1 package in 816ms
-
-found 0 vulnerabilities
+removed 483 packages in 890ms
 wave1008@SNB-M1 ~ % npm install -g appium
+npm WARN deprecated typedoc-plugin-resolve-crossmodule-references@0.3.3: Upgrade to typedoc >= 0.24 and remove typedoc-plugin-resolve-crossmodule-references from your dependencies
 
-added 426 packages, and audited 427 packages in 16s
+added 483 packages in 4s
 
-62 packages are looking for funding
+57 packages are looking for funding
   run `npm fund` for details
-
-found 0 vulnerabilities
-wave1008@SNB-M1 ~ % appium -v                 
-2.0.0-beta.35
+wave1008@SNB-M1 ~ % appium -v
+2.1.3
 wave1008@SNB-M1 ~ % 
 ```
 
