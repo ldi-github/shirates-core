@@ -1,6 +1,7 @@
 package shirates.core.utility.ios
 
 import shirates.core.Const
+import shirates.core.UserVar
 import shirates.core.configuration.ProfileNameParser
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
@@ -432,4 +433,28 @@ object IosDeviceUtility {
         return ShellUtility.executeCommand("killall", "-HUP", "SpringBoard", log = log)
     }
 
+    /**
+     * getWebDriverAgentDirectories
+     */
+    fun getWebDriverAgentDirectories(): List<String> {
+
+        val derivedDataPath = "${UserVar.USER_HOME}/Library/Developer/Xcode/DerivedData".toPath()
+        if (Files.exists(derivedDataPath).not()) {
+            return listOf()
+        }
+        return derivedDataPath.toFile().list()?.filter { it.startsWith("WebDriverAgent-") }
+            ?.map { "$derivedDataPath/$it" } ?: listOf()
+    }
+
+    /**
+     * getWebDriverAgentDirectory
+     */
+    fun getWebDriverAgentDirectory(): String {
+
+        val dir = getWebDriverAgentDirectories().firstOrNull() ?: ""
+        if (dir.isEmpty()) {
+            return ""
+        }
+        return dir
+    }
 }

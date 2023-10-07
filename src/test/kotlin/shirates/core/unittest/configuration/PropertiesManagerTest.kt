@@ -935,6 +935,30 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableWdaInstallOptimization() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableWdaInstallOptimization).isEqualTo(Const.ENABLE_WDA_INSTALL_OPTIMIZATION)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableWdaInstallOptimization", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableWdaInstallOptimization).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableWdaInstallOptimization", value.toString())
+            assertThat(PropertiesManager.enableWdaInstallOptimization).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableHealthCheck() {
 
         run {

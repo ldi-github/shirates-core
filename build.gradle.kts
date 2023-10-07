@@ -13,9 +13,9 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "5.3.1"
+version = "5.4.0-SNAPSHOT"
 
-val appiumClientVersion = "8.5.0"
+val appiumClientVersion = "8.5.1"
 
 val userHome = System.getProperty("user.home")
 
