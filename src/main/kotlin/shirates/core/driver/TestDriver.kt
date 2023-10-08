@@ -37,13 +37,12 @@ import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
+import shirates.core.utility.*
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.file.FileLockUtility.lockFile
-import shirates.core.utility.getCapabilityRelaxed
-import shirates.core.utility.getUdid
 import shirates.core.utility.image.*
 import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.misc.AppNameUtility
@@ -52,7 +51,6 @@ import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
-import shirates.core.utility.toBufferedImage
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileNotFoundException
@@ -522,7 +520,7 @@ object TestDriver {
 
         val ms = Measure()
 
-        lockFile(filePath = UserVar.downloads.resolve(".createAppiumDriver")){
+        lockFile(filePath = UserVar.downloads.resolve(".createAppiumDriver")) {
             createAppiumDriverCore(profile = profile)
         }
 
@@ -530,7 +528,31 @@ object TestDriver {
         TestLog.info("AppiumDriver initialized.")
     }
 
+    private fun wdaInstallOptimization(profile: TestProfile) {
+        TestLog.info("Optimizing installing WebDriverAgent.")
+        val wdaDirectory = IosDeviceUtility.getWebDriverAgentDirectory()
+        if (Files.exists(wdaDirectory.toPath()).not()) {
+            TestLog.info("WebDriverAgent directory not found.")
+            return
+        }
+        // Check existence of app file
+        val appFiles = File(wdaDirectory).walkTopDown().filter { it.name == "WebDriverAgentRunner-Runner.app" }
+        if (appFiles.any().not()) {
+            TestLog.info("WebDriverAgentRunner-Runner.app not found.")
+            return
+        }
+
+        TestLog.info("Using prebuiltWDA in $wdaDirectory")
+        profile.capabilities.set("appium:usePrebuiltWDA", true)
+        profile.capabilities.set("appium:derivedDataPath", wdaDirectory)
+    }
+
     private fun createAppiumDriverCore(profile: TestProfile) {
+
+        if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
+            wdaInstallOptimization(profile = profile)
+        }
+
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
 

@@ -24,7 +24,7 @@ fun TestDrive.getThisOrLastElement(): TestElement {
  * else rootElement
  */
 fun TestDrive.getThisOrRootElement(): TestElement {
-    if (this is TestElement && this.isEmpty.not()) {
+    if (this is TestElement) {
         return this
     }
     return rootElement

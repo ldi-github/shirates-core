@@ -2,9 +2,24 @@
 
 ## Notice
 
-- iOS 15 is not supported yet.
+- iOS 17 is not supported yet.
 
 ## Tested Environments
+
+2023/10/8
+
+- macOS Sonoma 14.0
+- node v20.7.0
+- Appium 2.1.3
+- java-client v8.5.1
+- uiautomator2@2.29.10
+- xcuitest@5.6.0
+- Android Studio Giraffe | 2022.3.1 Patch 2
+- Android Emulator Pixel 3a(Android 12)
+- Xcode 15.0
+- iOS Simulator iPhone 14(iOS 16.4)
+
+<hr>
 
 2023/10/1
 

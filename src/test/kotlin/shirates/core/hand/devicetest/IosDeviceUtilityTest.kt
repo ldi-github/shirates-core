@@ -140,4 +140,19 @@ class IosDeviceUtilityTest : UnitTest() {
         IosDeviceUtility.stopSimulator(udid = iosDeviceInfo.udid)
     }
 
+    @Test
+    @Order(13)
+    fun getWebDriverAgentDirectories() {
+
+        val directories = IosDeviceUtility.getWebDriverAgentDirectories()
+        directories.forEach { println(it) }
+    }
+
+    @Test
+    @Order(14)
+    fun getWebDriverAgentDirectory() {
+
+        val dir = IosDeviceUtility.getWebDriverAgentDirectory()
+        println(dir)
+    }
 }

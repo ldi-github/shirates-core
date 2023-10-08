@@ -545,6 +545,15 @@ object PropertiesManager {
             return value
         }
 
+    // Emulator/Simulator
+
+    val enableWdaInstallOptimization: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableWdaInstallOptimization")
+                ?: return Const.ENABLE_WDA_INSTALL_OPTIMIZATION
+            return value == "true"
+        }
+
     // TestDriver --------------------------------------------------
 
     /**
