@@ -4,9 +4,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.*
+import shirates.core.driver.TestDriverEventContext
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.rootElement
+import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
@@ -30,22 +32,36 @@ class TestDriveScrollExtensionTest1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Apple Maps Top Screen]")
-                        .ifCanSelect("Not Now") {
-                            it.tap()
-                        }
-                        .screenIs("[Apple Maps Top Screen]")
-                        .tap(".XCUIElementTypeSearchField")
+                    it.macro("[iOS Settings Top Screen]")
                 }.expectation {
-                    // Act
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
-                    // Assert
-                    assertThat(scrollableElements.count()).isGreaterThanOrEqualTo(2)
                     for (e in scrollableElements) {
+                        e.printInfo()
                         e.isScrollable.thisIsTrue()
                     }
+                    scrollableElements.count().thisIs(1)
+                    scrollableElements.filter { it.type == "XCUIElementTypeTable" }.count().thisIs(1)
                 }
             }
+            case(2) {
+                condition {
+                    it.macro("[Apple Maps Top Screen]")
+                    ifCanSelect("Cancel") {
+                        it.tap()
+                    }
+                }.expectation {
+                    val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
+                    for (e in scrollableElements) {
+                        e.printInfo()
+                        e.isScrollable.thisIsTrue()
+                    }
+                    scrollableElements.count().thisIs(3)
+                    scrollableElements.count { it.type == "XCUIElementTypeMap" }.thisIs(1)
+                    scrollableElements.count { it.type == "XCUIElementTypeTable" }.thisIs(1)
+                    scrollableElements.count { it.type == "XCUIElementTypeCollectionView" }.thisIs(1)
+                }
+            }
+
         }
     }
 
