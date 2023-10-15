@@ -2,6 +2,7 @@
 
 ## Notice
 
+- uiautomator2 v2.30.0 or later is not supported. Use v2.29.11 or earlier.
 - iOS 17 is not supported yet.
 
 ## Tested Environments
