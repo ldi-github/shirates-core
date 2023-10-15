@@ -118,26 +118,6 @@ npm install -g appium
 appium -v
 ```
 
-#### Example
-
-```
-wave1008@SNB-M1 ~ % appium -v
-2.0.1
-wave1008@SNB-M1 ~ % npm uninstall -g appium
-
-removed 483 packages in 890ms
-wave1008@SNB-M1 ~ % npm install -g appium
-npm WARN deprecated typedoc-plugin-resolve-crossmodule-references@0.3.3: Upgrade to typedoc >= 0.24 and remove typedoc-plugin-resolve-crossmodule-references from your dependencies
-
-added 483 packages in 4s
-
-57 packages are looking for funding
-  run `npm fund` for details
-wave1008@SNB-M1 ~ % appium -v
-2.1.3
-wave1008@SNB-M1 ~ % 
-```
-
 <br>
 
 ### UIAutomator2 driver
@@ -145,7 +125,7 @@ wave1008@SNB-M1 ~ %
 Install UIAutomator2 driver.
 
 ```
-appium driver install uiautomator2
+appium driver install uiautomator2@2.29.11
 ```
 
 <br>
@@ -154,7 +134,7 @@ If you have already installed the driver, uninstall it and install it again.
 ```
 appium driver list
 appium driver uninstall uiautomator2
-appium driver install uiautomator2
+appium driver install uiautomator2@2.29.11
 appium driver list
 ```
 
