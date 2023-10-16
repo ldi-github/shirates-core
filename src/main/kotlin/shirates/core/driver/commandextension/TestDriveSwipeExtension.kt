@@ -1,12 +1,15 @@
 package shirates.core.driver.commandextension
 
 import org.openqa.selenium.InvalidElementStateException
+import org.openqa.selenium.interactions.Pause
+import org.openqa.selenium.interactions.PointerInput
+import org.openqa.selenium.interactions.Sequence
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.proxy.AppiumProxy
+import java.time.Duration
 import kotlin.math.max
 import kotlin.math.min
 
@@ -114,10 +117,32 @@ internal fun TestDrive.swipePointToPointCore(
     fun swipeFunc() {
 
         val sc = swipeContext
-        val json = """
-{"actions":[{"action":"press","options":{"x":${sc.startX},"y":${sc.startY}}},{"action":"wait","options":{"ms":${sc.durationSeconds * 1000}}},{"action":"moveTo","options":{"x":${sc.endX},"y":${sc.endY}}},{"action":"release","options":{}}]}
-        """.trimIndent()
-        AppiumProxy.invoke("touch/perform", json)
+        val finger = PointerInput(PointerInput.Kind.TOUCH, "finger")
+        val sequence = Sequence(finger, 0)
+        sequence.addAction(
+            finger.createPointerMove(
+                Duration.ofSeconds(0),
+                PointerInput.Origin.viewport(),
+                sc.startX,
+                sc.startY
+            )
+        )
+        sequence.addAction(
+            finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg())
+        )
+        sequence.addAction(
+            Pause(finger, Duration.ofSeconds(0))
+        )
+        sequence.addAction(
+            finger.createPointerMove(
+                Duration.ofSeconds(sc.durationSeconds.toLong()),
+                PointerInput.Origin.viewport(), sc.endX, sc.endY
+            )
+        )
+        sequence.addAction(
+            finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg())
+        )
+        driver.appiumDriver.perform(mutableListOf(sequence))
 
         TestDriver.invalidateCache()
         if (testContext.onScrolling) {
