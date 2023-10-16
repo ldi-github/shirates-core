@@ -144,11 +144,11 @@ internal fun TestDrive.swipePointToPointCore(
             finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg())
         )
         sequence.addAction(
-            Pause(finger, Duration.ofSeconds(0))
+            Pause(finger, Duration.ofMillis(0))
         )
         sequence.addAction(
             finger.createPointerMove(
-                Duration.ofSeconds(sc.durationSeconds.toLong()),
+                Duration.ofMillis((sc.durationSeconds * 1000).toLong()),
                 PointerInput.Origin.viewport(), sc.endX, sc.endY
             )
         )
