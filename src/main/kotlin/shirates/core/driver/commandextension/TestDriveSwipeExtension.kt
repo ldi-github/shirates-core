@@ -134,7 +134,7 @@ internal fun TestDrive.swipePointToPointCore(
 
         sequence.addAction(
             finger.createPointerMove(
-                Duration.ofSeconds(0),
+                Duration.ofMillis(0),
                 PointerInput.Origin.viewport(),
                 sc.startX,
                 sc.startY
