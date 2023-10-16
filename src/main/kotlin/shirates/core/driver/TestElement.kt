@@ -874,7 +874,10 @@ class TestElement(
                     return propertyCache[name]!!
                 }
                 try {
-                    val value = webElement!!.getAttribute(name)
+                    var value = webElement!!.getAttribute(name)
+                    if(value == "null"){
+                        value = ""
+                    }
                     propertyCache[name] = value
                     return value
                 } catch (t: Throwable) {

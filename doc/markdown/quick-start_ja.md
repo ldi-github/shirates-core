@@ -124,7 +124,7 @@ appium -v
 UIAutomator2ドライバーをインストールしてください。
 
 ```
-appium driver install uiautomator2@2.29.11
+appium driver install uiautomator2
 ```
 
 <br>
@@ -133,7 +133,7 @@ appium driver install uiautomator2@2.29.11
 ```
 appium driver list
 appium driver uninstall uiautomator2
-appium driver install uiautomator2@2.29.11
+appium driver install uiautomator2
 appium driver list
 ```
 

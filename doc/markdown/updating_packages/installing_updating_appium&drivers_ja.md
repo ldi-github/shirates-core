@@ -27,7 +27,7 @@ appium -v
 ### インストール
 
 ```
-appium driver install uiautomator2@2.29.11
+appium driver install uiautomator2
 appium driver list
 ```
 
@@ -36,7 +36,7 @@ appium driver list
 ```
 appium driver list
 appium driver uninstall uiautomator2
-appium driver install uiautomator2@2.29.11
+appium driver install uiautomator2
 appium driver list
 ```
 
@@ -82,7 +82,7 @@ npm install -g appium
 appium driver uninstall uiautomator2
 appium driver uninstall xcuitest
 
-appium driver install uiautomator2@2.29.11
+appium driver install uiautomator2
 appium driver install xcuitest
 
 appium -v
