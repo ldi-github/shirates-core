@@ -139,7 +139,7 @@ private fun TestElement.tapCore(
     } else if (tapMethod == TapMethod.touchAction) {
         touchAction()
     } else if (tapMethod == TapMethod.auto) {
-        touchAction()
+        click()
     }
 
     Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
