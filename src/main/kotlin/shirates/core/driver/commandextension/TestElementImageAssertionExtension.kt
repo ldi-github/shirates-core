@@ -2,10 +2,7 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
-import shirates.core.driver.testContext
+import shirates.core.driver.*
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
@@ -58,7 +55,7 @@ internal fun TestElement.isImageCore(
     if (imageMatchResult.result.not() && cropImage) {
         silent {
             val s = selector.image!!.removeSuffix(".png")
-            val fileName = "$s${TestDriver.suffixForImage}.png"
+            val fileName = "$s${testDrive.platformAndViewportSize}.png"
             imageMatchResult.image?.saveImage(TestLog.directoryForLog.resolve(fileName).toFile())
 
             val fileName2 = "${TestLog.lines.count() + 1}_$fileName"

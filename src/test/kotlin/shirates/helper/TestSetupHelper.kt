@@ -1,9 +1,6 @@
 package shirates.helper
 
-import shirates.core.driver.TestDrive
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestElement
-import shirates.core.driver.TestMode
+import shirates.core.driver.*
 import shirates.core.driver.branchextension.emulator
 import shirates.core.driver.branchextension.realDevice
 import shirates.core.driver.commandextension.*
@@ -28,7 +25,7 @@ object TestSetupHelper : TestDrive {
         if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
         fun crop(nickname: String) {
-            val suffix = TestDriver.suffixForImage
+            val suffix = testDrive.platformAndViewportSize
             it.selectWithScrollDown(nickname)
                 .cropImage()
                 .lastCropInfo!!.croppedImage!!

@@ -1,7 +1,10 @@
 package shirates.core.configuration.repository
 
 import shirates.core.configuration.ImageInfo
-import shirates.core.driver.TestDriver
+import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.platformAnnotation
+import shirates.core.driver.testDrive
+import shirates.core.driver.viewport
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.BufferedImageUtility
@@ -31,6 +34,10 @@ object ImageFileRepository {
                 }
                 return field
             }
+
+        override fun toString(): String {
+            return "$fileName, $filePath"
+        }
     }
 
     /**
@@ -83,17 +90,13 @@ object ImageFileRepository {
 
     private fun getImageFileEntryCore(
         imageExpression: String,
-        suffix: String
+        tag: String = ""
     ): ImageFileEntry? {
 
         val imageInfo = ImageInfo(imageExpression)
-        val fileNameWithSuffix = imageInfo.fileName.fileNameWithSuffix(suffix)
-        if (imageFileMap.containsKey(fileNameWithSuffix)) {
-            val entry = imageFileMap[fileNameWithSuffix]!!
-            TestLog.trace("imageExpression=$imageExpression, resolvedFileName=${entry.fileName}")
-            return entry
-        }
-        return null
+        val fname = imageInfo.fileName.removeSuffix(".png") + tag
+        val imageFiles = imageFileMap.values.filter { it.fileName.startsWith(fname) }.sortedByDescending { it.fileName }
+        return imageFiles.firstOrNull()
     }
 
     /**
@@ -101,10 +104,17 @@ object ImageFileRepository {
      */
     fun getImageFileEntry(imageExpression: String): ImageFileEntry {
 
-        val entry = getImageFileEntryCore(imageExpression = imageExpression, suffix = TestDriver.suffixForImage)
-            ?: getImageFileEntryCore(imageExpression = imageExpression, suffix = TestDriver.suffixForImageDefault)
-            ?: getImageFileEntryCore(imageExpression = imageExpression, suffix = "")
-            ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))
+        val vp = testDrive.viewport
+        val offset = if (isAndroid) -1 else 0
+        val width = (vp.width + offset).toString()
+        val height = (vp.height + offset).toString()
+
+        val entry =
+            getImageFileEntryCore(imageExpression = imageExpression, tag = "${platformAnnotation}_${width}x${height}")
+                ?: getImageFileEntryCore(imageExpression = imageExpression, tag = "${platformAnnotation}_${width}")
+                ?: getImageFileEntryCore(imageExpression = imageExpression, tag = "${platformAnnotation}.png")
+                ?: getImageFileEntryCore(imageExpression = imageExpression, tag = ".png")
+                ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))
         return entry
     }
 

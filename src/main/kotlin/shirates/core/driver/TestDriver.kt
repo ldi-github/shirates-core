@@ -1350,37 +1350,6 @@ object TestDriver {
         )
     }
 
-    internal val suffixForImage: String
-        get() {
-            if (isInitialized.not()) {
-                return if (isAndroid) "@a" else "@i"
-            }
-            val platformMajor = testProfile.platformVersion.split(".").first()
-            val suffix = if (isAndroid) {
-                val deviceScreenSize = capabilities.getCapabilityRelaxed("deviceScreenSize")
-                "@a${platformMajor}_$deviceScreenSize"
-            } else {
-                val deviceName = capabilities.getCapabilityRelaxed("deviceName")
-                "@i${platformMajor}_$deviceName"
-            }
-            return suffix
-        }
-
-    internal val suffixForImageDefault: String
-        get() {
-            if (isInitialized.not()) {
-                return if (isAndroid) "@a" else "@i"
-            }
-            val suffix = if (isAndroid) {
-                val deviceScreenSize = capabilities.getCapabilityRelaxed("deviceScreenSize")
-                "@a_$deviceScreenSize"
-            } else {
-                val deviceName = capabilities.getCapabilityRelaxed("deviceName")
-                "@i_$deviceName"
-            }
-            return suffix
-        }
-
     internal fun findImage(
         selector: Selector,
         scroll: Boolean = false,
@@ -1947,6 +1916,9 @@ object TestDriver {
                 for (i in 1..maxLoopCount) {
                     TestLog.info("Syncing ($i)", log = enableSyncLog)
                     refreshCache(currentScreenRefresh = false)
+                    if (lastXml.isBlank()) {
+                        TestLog.info(testDrive.platformAndViewportSize)
+                    }
 
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
