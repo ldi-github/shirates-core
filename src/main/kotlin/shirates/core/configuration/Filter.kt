@@ -71,8 +71,7 @@ class Filter(
         get() {
             if (noun != "image") return null
             if (field == null) {
-                val imageFileEntry = getImageFileEntry()
-                field = imageFileEntry.bufferedImage
+                templateImageFile
             }
             return field
         }
@@ -82,8 +81,14 @@ class Filter(
         get() {
             if (noun != "image") return null
             if (field == null) {
-                val imageFileEntry = getImageFileEntry()
-                field = imageFileEntry.filePath.toString()
+                try {
+                    val imageFileEntry = getImageFileEntry()
+                    field = imageFileEntry.filePath.toString()
+                    templateImage = imageFileEntry.bufferedImage
+                } catch (t: Throwable) {
+                    templateImage = null
+                    TestLog.trace(t.message!!)
+                }
             }
             return field
         }
@@ -458,9 +463,7 @@ class Filter(
             threshold = threshold
         )
         imageMatchResult.result = imageMatchResult.result.reverseIfNegation()
-        if (tmp1 != null) {
-            imageMatchResult.templateImageFile = templateImageFile
-        }
+        imageMatchResult.templateImageFile = templateImageFile
         return imageMatchResult
     }
 
@@ -473,9 +476,12 @@ class Filter(
         threshold: Double = this.threshold
     ): ImageMatchResult {
 
-        val tmp1 = kotlin.runCatching { templateImage }.onFailure {
+        getImageFileEntry()
+
+        val tmp1 = templateImage
+        if (tmp1 == null) {
             image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
-        }.getOrNull()
+        }
 
         if (image.isSame(tmp1) && isNegation.not()) {
             return ImageMatchResult(
@@ -493,6 +499,7 @@ class Filter(
             templateImage = tmp1,
             threshold = threshold
         )
+        imageMatchResult.templateImageFile = templateImageFile
         imageMatchResult.result = imageMatchResult.result.reverseIfNegation()
         return imageMatchResult
     }

@@ -1384,6 +1384,17 @@ object TestDriver {
         if (r.result) {
             return r
         }
+        if (scroll.not() && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
+            // Handle irregular
+            testDrive.suppressHandler {
+                testContext.onExistErrorHandler!!.invoke()
+            }
+            // Retry
+            r = rootElement.isContainingImage(selector.image!!)
+            if (r.result) {
+                return r
+            }
+        }
 
         if (scroll) {
             // Search in scroll
@@ -1917,7 +1928,7 @@ object TestDriver {
                     TestLog.info("Syncing ($i)", log = enableSyncLog)
                     refreshCache(currentScreenRefresh = false)
                     if (lastXml.isBlank()) {
-                        TestLog.info(testDrive.platformAndViewportSize)
+                        TestLog.info(testDrive.imageSizeProfile)
                     }
 
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)

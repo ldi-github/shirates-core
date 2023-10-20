@@ -38,18 +38,26 @@ val TestDrive.viewport: Bounds
     }
 
 /**
- * platformAndViewportSize
+ * viewportSize
  */
-internal val TestDrive.platformAndViewportSize: String
+internal fun TestDrive.viewportSize(): String {
+    val vp = viewport
+    val offset = if (TestMode.isAndroid) -1 else 0
+    val width = vp.width + offset
+    val height = vp.height + offset
+    val viewport = if (vp.isEmpty) "" else "${width}x${height}"
+    return viewport
+}
+
+/**
+ * imageSizeProfile
+ */
+internal val TestDrive.imageSizeProfile: String
     get() {
         if (TestDriver.isInitialized.not()) {
             return TestMode.platformAnnotation
         }
-        val vp = viewport
-        val offset = if (TestMode.isAndroid) -1 else 0
-        val width = vp.width + offset
-        val height = vp.height + offset
-        val viewport = if (vp.isEmpty) "" else "${width}x${height}"
+        val viewport = viewportSize()
 
         return "${TestMode.platformAnnotation}_${viewport}"
     }

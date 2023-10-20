@@ -25,7 +25,7 @@ object TestSetupHelper : TestDrive {
         if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
         fun crop(nickname: String) {
-            val suffix = testDrive.platformAndViewportSize
+            val suffix = testDrive.imageSizeProfile
             it.selectWithScrollDown(nickname)
                 .cropImage()
                 .lastCropInfo!!.croppedImage!!

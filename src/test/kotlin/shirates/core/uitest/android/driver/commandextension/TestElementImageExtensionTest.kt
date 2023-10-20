@@ -7,10 +7,14 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.imageSizeProfile
 import shirates.core.driver.rootElement
+import shirates.core.driver.testDrive
+import shirates.core.exception.TestNGException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
+import shirates.core.utility.listFiles
 import shirates.helper.TestSetupHelper
 
 @Want
@@ -92,6 +96,50 @@ class TestElementImageExtensionTest : UITest() {
                 }
             }
         }
+    }
+
+    @Test
+    @Order(30)
+    fun existImage() {
+
+        val dir = TestLog.testResults.resolve("images/androidSettingsTopScreen")
+
+        // Create an image for finding image by file name
+        val batteryIconFile = dir.listFiles().first { it.name.startsWith("[Battery Icon]") }
+        batteryIconFile.copyTo(dir.resolve("[Battery Icon2].png").toFile(), overwrite = true)
+
+        // Override [Notifications Icon].png by [App Icon].png
+        val appsIconFile = dir.listFiles().first { it.name.startsWith("[Apps Icon]") }
+        appsIconFile.copyTo(
+            dir.resolve("[Notifications Icon]${testDrive.imageSizeProfile}.png").toFile(),
+            overwrite = true
+        )
+
+        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.existImage("[Battery Icon]")
+                }
+            }
+            case(2) {
+                expectation {
+                    it.existImage("[Battery Icon2]")
+                }
+            }
+            case(3) {
+                expectation {
+                    assertThatThrownBy {
+                        it.existImage("[Notifications Icon]")
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessageStartingWith("Image of [Notifications Icon] exists")
+                }
+            }
+        }
+
     }
 
 }

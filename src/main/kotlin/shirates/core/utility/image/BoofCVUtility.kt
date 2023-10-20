@@ -68,7 +68,7 @@ object BoofCVUtility {
             image = image,
             templateImage = templateImage
         )
-        TestLog.info(imageMatchResult.toString())
+        TestLog.trace(imageMatchResult.toString())
         return imageMatchResult
     }
 
@@ -96,8 +96,8 @@ object BoofCVUtility {
         }
         val img1 = image.resizeNotSmallerThanTemplate(templateImage)
 
-        val scaledImage = img1.resize(scale = scale)
-        val scaledTemplateImage = templateImage.resize(scale = scale)
+        val scaledImage = if (scale != 1.0) img1.resize(scale = scale) else img1
+        val scaledTemplateImage = if (scale != 1.0) templateImage.resize(scale = scale) else templateImage
 
         /**
          * First match
@@ -154,7 +154,7 @@ object BoofCVUtility {
                 templateImage = templateImage
             )
             if (result || PropertiesManager.enableImageMatchDebugLog) {
-                TestLog.info(imageMatchResult.toString())
+                TestLog.trace(imageMatchResult.toString())
             }
             if (result) {
                 return imageMatchResult
@@ -168,7 +168,7 @@ object BoofCVUtility {
             image = image,
             templateImage = templateImage
         )
-        TestLog.info(imageMatchResult.toString())
+        TestLog.trace(imageMatchResult.toString())
         return imageMatchResult
     }
 }

@@ -68,10 +68,7 @@ class FilterTest : UnitTest() {
         }
         run {
             // Arrange
-            assertThatThrownBy {
-                Filter("image=NotRegistered.png").templateImage
-            }.isInstanceOf(FileNotFoundException::class.java)
-                .hasMessage("Image file not found. (expression=NotRegistered.png)")
+            assertThat(Filter("image=NotRegistered.png").templateImage).isNull()
         }
     }
 
@@ -2209,9 +2206,11 @@ class FilterTest : UnitTest() {
                 .getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun_middle.png")
             val filter = Filter("image=tower_of_the_sun_face.png")
             ImageFileRepository.clear()
-            assertThatThrownBy {
-                filter.evaluateImageEqualsTo(image)
-            }.isInstanceOf(FileNotFoundException::class.java)
+            // Act
+            val r = filter.evaluateImageEqualsTo(image)
+            // Assert
+            assertThat(r.templateImageFile).isNull()
+            assertThat(r.result).isFalse()
         }
     }
 

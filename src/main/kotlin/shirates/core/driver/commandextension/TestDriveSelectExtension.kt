@@ -43,7 +43,6 @@ fun TestDrive.select(
         )
         if (scroll) {
             if (isAndroid) {
-                // Cancel scroll inertia
                 e = TestDriver.select(
                     selector = sel,
                     waitSeconds = waitSeconds,
@@ -54,7 +53,7 @@ fun TestDrive.select(
         }
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     if (TestMode.isNoLoadRun) {
         e.selector = sel
@@ -120,7 +119,7 @@ fun TestDrive.selectWithScrollDown(
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -154,7 +153,7 @@ fun TestDrive.selectWithScrollUp(
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -188,7 +187,7 @@ fun TestDrive.selectWithScrollRight(
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -222,7 +221,7 @@ fun TestDrive.selectWithScrollLeft(
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -262,7 +261,7 @@ fun TestDrive.selectInScanResults(
         }
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement

@@ -607,7 +607,7 @@ fun TestElement.child(
     lastElement = e
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return lastElement
@@ -629,7 +629,7 @@ fun TestElement.child(
     lastElement = e
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return lastElement
@@ -688,7 +688,7 @@ fun TestElement.sibling(
     lastElement = e
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return lastElement
@@ -723,7 +723,7 @@ fun TestElement.parent(
     lastElement = e
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return lastElement
@@ -760,7 +760,7 @@ fun TestElement.ancestor(
     lastElement = e
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return lastElement
@@ -782,7 +782,7 @@ fun TestElement.ancestor(
     lastElement = e
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return lastElement
@@ -824,7 +824,7 @@ fun TestElement.descendant(
     lastElement = e
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return lastElement
@@ -846,7 +846,7 @@ fun TestElement.descendant(
     lastElement = e
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return lastElement
