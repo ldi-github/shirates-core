@@ -122,18 +122,25 @@ class TestElementImageExtensionTest : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.existImage("[Battery Icon]")
+                    it.existImage("[Battery Icon]")     // nickname [Battery Icon] is defined, OK
                 }
             }
             case(2) {
                 expectation {
-                    it.existImage("[Battery Icon2]")
+                    it.existImage("[Battery Icon2]")    // nickname [Battery Icon2] is not defined, OK
+                }
+            }
+            case(3) {
+                expectation {
+                    withScrollDown {
+                        it.existImage("[Display Icon]")     // nickname [Display Icon] is defined, OK
+                    }
                 }
             }
             case(3) {
                 expectation {
                     assertThatThrownBy {
-                        it.existImage("[Notifications Icon]")
+                        it.existImage("[Notifications Icon]")   // image is not found, NG
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessageStartingWith("Image of [Notifications Icon] exists")
                 }

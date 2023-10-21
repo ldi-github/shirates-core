@@ -460,6 +460,9 @@ class TestElement(
      */
     val isSafe: Boolean
         get() {
+            if (imageMatched) {
+                return true
+            }
             if (isEmpty) {
                 return false
             }
@@ -479,14 +482,16 @@ class TestElement(
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
-                for (overlayElement in TestDriver.screenInfo.scrollInfo.overlayElements) {
-                    val overlay = select(
-                        expression = overlayElement,
-                        throwsException = false,
-                        waitSeconds = 0.0,
-                    )
-                    if (overlay.isFound) {
-                        if (this.bounds.isOverlapping(overlay.bounds)) {
+                val overlayElements = TestDriver.screenInfo.scrollInfo.overlayElements
+                if (overlayElements.any()) {
+                    for (overlayElement in overlayElements) {
+                        val overlay = TestDriver.select(
+                            expression = overlayElement,
+                            scroll = false,
+                            throwsException = false,
+                            waitSeconds = 0.0,
+                        )
+                        if (overlay.isFound && this.bounds.isOverlapping(overlay.bounds)) {
                             return false
                         }
                     }
