@@ -18,6 +18,7 @@ import shirates.core.utility.element.ElementCategory
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getAttribute
 import shirates.core.utility.image.CropInfo
+import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.time.StopWatch
 
 /**
@@ -366,11 +367,38 @@ class TestElement(
         }
 
     /**
+     * hasImageMatchResult
+     */
+    val hasImageMatchResult: Boolean
+        get() {
+            return imageMatchResult != null
+        }
+
+    /**
+     * imageMatchResult
+     */
+    var imageMatchResult: ImageMatchResult? = null
+
+    /**
+     * imageMatched
+     */
+    val imageMatched: Boolean
+        get() {
+            return imageMatchResult?.result ?: false
+        }
+
+    /**
      * isFound
      */
     val isFound: Boolean
         get() {
-            return isEmpty.not()
+            if (imageMatchResult != null) {
+                return imageMatchResult!!.result
+            } else if (isDummy) {
+                return true
+            } else {
+                return isEmpty.not()
+            }
         }
 
     /**
@@ -875,7 +903,7 @@ class TestElement(
                 }
                 try {
                     var value = webElement!!.getAttribute(name)
-                    if(value == "null"){
+                    if (value == "null") {
                         value = ""
                     }
                     propertyCache[name] = value

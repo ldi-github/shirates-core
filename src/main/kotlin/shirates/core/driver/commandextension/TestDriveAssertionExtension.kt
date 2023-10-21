@@ -6,7 +6,6 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
-import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -15,7 +14,6 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
-import java.io.FileNotFoundException
 
 /**
  * appIs
@@ -350,8 +348,23 @@ internal fun TestDrive.existCore(
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
-    fun executeSelect(): TestElement {
-        return TestDriver.select(
+    if (selector.isImageSelector) {
+        return existImageCore(
+            expression = selector.expression!!,
+            throwsException = throwsException,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+            scroll = scroll,
+            direction = direction
+        )
+    }
+
+    val e = actionWithOnExistErrorHandler(
+        message = message,
+        throwsException = throwsException,
+        log = log
+    ) {
+        TestDriver.select(
             selector = selector,
             scroll = scroll,
             direction = direction,
@@ -364,8 +377,21 @@ internal fun TestDrive.existCore(
         )
     }
 
-    var e = executeSelect()
+    if (e.hasError && throwsException) {
+        throw e.lastError!!
+    }
 
+    return e
+}
+
+private fun TestDrive.actionWithOnExistErrorHandler(
+    message: String,
+    throwsException: Boolean,
+    log: Boolean = CodeExecutionContext.shouldOutputLog,
+    action: () -> TestElement
+): TestElement {
+
+    var e = action()
     screenshot()
 
     TestDriver.postProcessForAssertion(
@@ -374,15 +400,15 @@ internal fun TestDrive.existCore(
         log = log
     )
 
-    /**
-     * Retrying with error handler
-     */
     if (e.hasError && throwsException && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
+        /**
+         * Retrying with error handler
+         */
+        TestLog.info("Calling onExistErrorHandler.")
         testDrive.suppressHandler {
             testContext.onExistErrorHandler!!.invoke()
         }
-        e = executeSelect()
-
+        e = action()
         screenshot()
 
         TestDriver.postProcessForAssertion(
@@ -391,11 +417,6 @@ internal fun TestDrive.existCore(
             log = log
         )
     }
-
-    if (e.hasError && throwsException) {
-        throw e.lastError!!
-    }
-
     return e
 }
 
@@ -455,8 +476,92 @@ fun TestDrive.existImage(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    TestDriver.refreshCurrentScreenWithNickname(expression)
+    TestDriver.refreshCurrentScreenWithNickname(expression = expression)
 
+    val scroll = CodeExecutionContext.withScrollDirection != null
+    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
+
+    val e = existImageCore(
+        expression = expression,
+        throwsException = throwsException,
+        waitSeconds = waitSeconds,
+        useCache = useCache,
+        scroll = scroll,
+        direction = direction
+    )
+
+    if (func != null) {
+        func(e)
+    }
+
+    return e
+}
+
+private fun TestDrive.existImageCore(
+    expression: String,
+    throwsException: Boolean,
+    waitSeconds: Double,
+    useCache: Boolean,
+    scroll: Boolean = false,
+    direction: ScrollDirection = ScrollDirection.Down
+): TestElement {
+    val testElement = TestDriver.it
+
+    val command = "existImage"
+    val sel = getSelectorForExistImage(expression = expression)
+    val assertMessage = message(id = command, subject = "$sel")
+    var e = TestElement(selector = sel)
+
+    if (PropertiesManager.enableImageAssertion.not()) {
+        manual(message = assertMessage)
+        return e
+    }
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
+        if (sel.isImageSelector) {
+            e = actionWithOnExistErrorHandler(
+                throwsException = throwsException,
+                message = assertMessage
+            ) {
+                findImage(
+                    sel = sel,
+                    scroll = scroll,
+                    direction = direction,
+                    useCache = useCache,
+                )
+            }
+        } else {
+            e = actionWithOnExistErrorHandler(
+                throwsException = throwsException,
+                message = assertMessage
+            ) {
+                selectElementAndCompareImage(
+                    expression = expression,
+                    sel = sel,
+                    waitSeconds = waitSeconds,
+                    scroll = scroll,
+                    direction = direction,
+                    useCache = useCache,
+                )
+            }
+        }
+    }
+
+    // manual (template file not found)
+    if (e.hasImageMatchResult.not()) {
+        manual(assertMessage)
+        return e
+    }
+
+    if (e.hasError && throwsException) {
+        throw e.lastError!!
+    }
+
+    return e
+}
+
+private fun TestDrive.getSelectorForExistImage(expression: String): Selector {
     // Try getting registered selector in current screen
     val s = runCatching { getSelector(expression = expression) }.getOrNull()
     // Handle irregular
@@ -470,151 +575,64 @@ fun TestDrive.existImage(
         // If there is no selector, create an image selector.
         Selector(expression.removeSuffix(".png") + ".png")
     }
-
-    val testElement = TestDriver.it
-
-    val command = "existImage"
-    val assertMessage = message(id = command, subject = "$sel")
-    var e = TestElement(selector = sel)
-
-    val context = TestDriverCommandContext(testElement)
-    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
-
-        val scroll = CodeExecutionContext.withScrollDirection != null
-        val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
-
-        e = if (sel.isImageSelector) {
-            existImageByFindingImage(
-                assertMessage = assertMessage,
-                sel = sel,
-                scroll = scroll,
-                direction = direction,
-                useCache = useCache,
-                throwsException = throwsException
-            )
-        } else {
-            existImageBySelectingAndComparingImage(
-                expression = expression,
-                assertMessage = assertMessage,
-                sel = sel,
-                waitSeconds = waitSeconds,
-                scroll = scroll,
-                direction = direction,
-                useCache = useCache,
-                throwsException = throwsException
-            )
-        }
-    }
-
-    if (func != null) {
-        func(e)
-    }
-
-    return e
+    return sel
 }
 
-private fun TestDrive.existImageByFindingImage(
-    assertMessage: String,
+private fun findImage(
     sel: Selector,
     scroll: Boolean,
     direction: ScrollDirection,
     useCache: Boolean,
-    throwsException: Boolean
 ): TestElement {
 
     val e = TestElement(selector = sel)
-    e.isDummy = true
 
-    if (PropertiesManager.enableImageAssertion.not()) {
-        manual(message = assertMessage)
-        return e
-    }
-    try {
-        val r = TestDriver.findImage(
-            selector = sel,
-            scroll = scroll,
-            direction = direction,
-            scrollDurationSeconds = testContext.swipeDurationSeconds,
-            scrollStartMarginRatio = testContext.scrollVerticalMarginRatio,
-            scrollMaxCount = testContext.scrollMaxCount,
-            throwsException = false,
-            useCache = useCache
-        )
-        TestLog.info(r.toString())
-        if (r.result) {
-            e.propertyCache["bounds"] =
-                "[${r.x},${r.y}][${r.templateImage!!.width},${r.templateImage!!.height}]"
-        }
-        TestDriver.postProcessForImageAssertion(
-            e = e,
-            imageMatchResult = r,
-            assertMessage = assertMessage,
-            log = CodeExecutionContext.shouldOutputLog
-        )
-    } catch (t: FileNotFoundException) {
-        TestLog.info(t.message!!)
-        manual(assertMessage)
+    val r = TestDriver.findImage(
+        selector = sel,
+        scroll = scroll,
+        direction = direction,
+        scrollDurationSeconds = testContext.swipeDurationSeconds,
+        scrollStartMarginRatio = testContext.scrollVerticalMarginRatio,
+        scrollMaxCount = testContext.scrollMaxCount,
+        throwsException = false,
+        useCache = useCache
+    )
+    if (r.templateImageFile == null) {
+        TestLog.warn("File not found for $sel")
         return e
     }
 
-    if (e.hasError && throwsException) {
-        throw e.lastError!!
+    e.imageMatchResult = r
+    if (r.result) {
+        e.propertyCache["bounds"] =
+            "[${r.x},${r.y}][${r.templateImage!!.width},${r.templateImage!!.height}]"
     }
 
     return e
 }
 
-private fun TestDrive.existImageBySelectingAndComparingImage(
+private fun selectElementAndCompareImage(
     expression: String,
-    assertMessage: String,
     sel: Selector,
     waitSeconds: Double,
     scroll: Boolean,
     direction: ScrollDirection,
     useCache: Boolean,
-    throwsException: Boolean,
 ): TestElement {
 
     // Select the element
-    val e = existCore(
-        message = assertMessage,
+    val e = TestDriver.select(
         selector = sel,
-        throwsException = false,
-        waitSeconds = waitSeconds,
-        useCache = useCache,
         scroll = scroll,
         direction = direction,
-        log = false
+        throwsException = false,
+        waitSeconds = waitSeconds,
+        useCache = useCache
     )
-    if (e.hasError && throwsException) {
-        throw e.lastError!!
-    }
-
     // Compare the image of the element to the template image
-    val imageMatchResult = e.isImage(expression = expression, cropImage = true)
-    TestLog.info(imageMatchResult.toString())
+    e.imageMatchResult = e.isImage(expression = expression, cropImage = true)
 
-    // manual (template file not found)
-    if (imageMatchResult.templateImage == null) {
-        manual(assertMessage)
-        return e
-    }
-
-    TestDriver.postProcessForImageAssertion(
-        e = e,
-        imageMatchResult = imageMatchResult,
-        assertMessage = assertMessage
-    )
-
-    // NG/Error
-    if (imageMatchResult.result.not()) {
-        TestLog.info(imageMatchResult.toString())
-        val msg = "$assertMessage ($imageMatchResult)"
-        e.lastError = TestNGException(message = msg, cause = TestDriverException(msg))
-        if (throwsException) {
-            throw e.lastError!!
-        }
-    }
+    TestLog.info(e.imageMatchResult.toString())
 
     return e
 }
@@ -902,7 +920,6 @@ internal fun TestDrive.dontExist(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$selector") {
         if (selector.isImageSelector) {
             if (PropertiesManager.enableImageAssertion.not()) {
-                e = testElement
                 manual(message = assertMessage)
                 return@execCheckCommand
             }
@@ -917,17 +934,15 @@ internal fun TestDrive.dontExist(
                 },
                 negation = true
             )
-            e = testElement
-            return@execCheckCommand
+        } else {
+            e = dontExistCore(
+                message = assertMessage,
+                selector = selector,
+                throwsException = throwsException,
+                waitSeconds = waitSeconds,
+                useCache = useCache,
+            )
         }
-
-        e = dontExistCore(
-            message = assertMessage,
-            selector = selector,
-            throwsException = throwsException,
-            waitSeconds = waitSeconds,
-            useCache = useCache,
-        )
     }
 
     return e
@@ -997,7 +1012,8 @@ fun TestDrive.dontExist(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
-    useCache: Boolean = testContext.useCache
+    useCache: Boolean = testContext.useCache,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     var sel = getSelector(expression = expression)
@@ -1010,12 +1026,18 @@ fun TestDrive.dontExist(
         }
     }
 
-    return dontExist(
+    val e = dontExist(
         selector = sel,
         throwsException = throwsException,
         waitSeconds = waitSeconds,
         useCache = useCache
     )
+
+    if (func != null) {
+        func(e)
+    }
+
+    return e
 }
 
 /**

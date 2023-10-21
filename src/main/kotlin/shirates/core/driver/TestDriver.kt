@@ -322,11 +322,11 @@ object TestDriver {
 
     internal fun postProcessForImageAssertion(
         e: TestElement,
-        imageMatchResult: ImageMatchResult,
         assertMessage: String,
         log: Boolean = CodeExecutionContext.shouldOutputLog,
         dontExist: Boolean = false
     ) {
+        val imageMatchResult = e.imageMatchResult!!
         if (dontExist && imageMatchResult.result.not() || dontExist.not() && imageMatchResult.result) {
             e.lastResult = TestLog.getOKType()
             if (log) {
@@ -1370,9 +1370,14 @@ object TestDriver {
             }
             selector.image = "${selector.nickname}.png"
         }
-        val filePath = ImageFileRepository.getFilePath(selector.image!!)
-        if (Files.exists(filePath).not()) {
-            throw FileNotFoundException(message(id = "imageFileNotFound", subject = selector.image))
+        val filePath = runCatching {
+            ImageFileRepository.getFilePath(selector.image!!)
+        }.getOrNull()
+        if (filePath == null || Files.exists(filePath).not()) {
+            if (throwsException) {
+                throw FileNotFoundException(message(id = "imageFileNotFound", subject = selector.image))
+            }
+            return ImageMatchResult(result = false)
         }
 
         // Search in current screen

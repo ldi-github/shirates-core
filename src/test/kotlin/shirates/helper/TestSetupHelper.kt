@@ -61,6 +61,38 @@ object TestSetupHelper : TestDrive {
     }
 
     /**
+     * Setup Image Android Settings Top Screen
+     */
+    fun setupImageAndroidSettingsNetworkAndInternetScreen() {
+
+        if (TestMode.isNoLoadRun) {
+            return
+        }
+
+        val path = "images/androidSettingsNetworkAndInternetScreen"
+        val dir = TestLog.testResults.resolve(path)
+        if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
+
+        fun crop(nickname: String) {
+            val suffix = testDrive.imageSizeProfile
+            it.selectWithScrollDown(nickname)
+                .cropImage()
+                .lastCropInfo!!.croppedImage!!
+                .saveImage(TestLog.testResults.resolve("$path/$nickname$suffix").toString())
+        }
+
+        it.macro("[Network & internet Screen]")
+
+        crop("[Internet Icon]")
+        crop("[Calls & SMS Icon]")
+        crop("[SIMs Icon]")
+        crop("[Airplane mode Icon]")
+        crop("[Hotspot & tethering Icon]")
+        crop("[Data Saver Icon]")
+        crop("[VPN Icon]")
+    }
+
+    /**
      * Setup Image Calendar Week Screen
      */
     fun setupImageCalendarWeekScreen() {

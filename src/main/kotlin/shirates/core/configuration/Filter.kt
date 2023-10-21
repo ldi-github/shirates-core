@@ -451,11 +451,10 @@ class Filter(
         threshold: Double = this.threshold,
     ): ImageMatchResult {
 
-        val tmp1 = kotlin.runCatching {
-            templateImage
-        }.onFailure {
+        val tmp1 = templateImage
+        if (tmp1 == null) {
             image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
-        }.getOrNull()
+        }
         val imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
             image = image,
             templateImage = tmp1,

@@ -3,19 +3,17 @@ package shirates.core.uitest.android.basic.driver
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.TestDriverEventContext
+import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.branchextension.ifScreenIs
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
+import shirates.core.logging.TestLog
 import shirates.core.logging.printWarn
 import shirates.core.testcode.UITest
+import shirates.helper.TestSetupHelper
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriverTest_onErrorHandler : UITest() {
-
-    override fun setEventHandlers(context: TestDriverEventContext) {
-
-    }
 
     @Test
     @Order(10)
@@ -55,9 +53,15 @@ class TestDriverTest_onErrorHandler : UITest() {
         scenario {
             case(1) {
                 condition {
+                    it.terminateApp()
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.exist("Airplane mode", waitSeconds = 1.0)
+                    it.exist("Airplane mode", waitSeconds = 1.0) {
+                        imageMatched.thisIsFalse()
+                        isFound.thisIsTrue()
+                        isDummy.thisIsFalse()
+                        isEmpty.thisIsFalse()
+                    }
                     it.screenIs("[Network & internet Screen]")
                 }
             }
@@ -75,12 +79,21 @@ class TestDriverTest_onErrorHandler : UITest() {
             }
         }
 
+        TestSetupHelper.setupImageAndroidSettingsNetworkAndInternetScreen()
+        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
+
         scenario {
             case(1) {
                 condition {
+                    it.terminateApp()
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.existImage("[Airplane mode Icon]")
+                    it.existImage("[Airplane mode Icon]") {
+                        imageMatched.thisIsTrue()
+                        isFound.thisIsTrue()
+                        isDummy.thisIsFalse()
+                        isEmpty.thisIsFalse()
+                    }
                     it.screenIs("[Network & internet Screen]")
                 }
             }

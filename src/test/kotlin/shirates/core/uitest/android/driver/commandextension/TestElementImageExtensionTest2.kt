@@ -69,8 +69,21 @@ class TestElementImageExtensionTest2 : UITest() {
                 condition {
                     it.macro("[Calendar Week Screen]")
                 }.expectation {
-                    it.exist("[Day1-1].png", waitSeconds = 0.2)
-                        .dontExist("[Day2-1].png", waitSeconds = 0.2)
+                    it
+                        .exist("[Day1-1].png", waitSeconds = 0.2) {
+                            imageMatched.thisIsTrue()
+                            hasImageMatchResult.thisIsTrue()
+                            isFound.thisIsTrue()
+                            isDummy.thisIsFalse()
+                            isEmpty.thisIsTrue()
+                        }
+                        .dontExist("[Day2-1].png", waitSeconds = 0.2) {
+                            imageMatched.thisIsFalse()
+                            hasImageMatchResult.thisIsFalse()
+                            isFound.thisIsFalse()
+                            isDummy.thisIsFalse()
+                            isEmpty.thisIsTrue()
+                        }
                         .existWithScrollRight("[Day2-1].png", scrollDurationSeconds = 0.2)
                         .dontExist("[Day1-1].png")
                         .existWithScrollLeft("[Day1-1].png", scrollDurationSeconds = 0.2)
@@ -92,7 +105,7 @@ class TestElementImageExtensionTest2 : UITest() {
                             it.exist("[Day2-2].png")
                         }
                         suppressWithScroll {
-                            it.exist("[Day3-3].png", throwsException = false).thisIsEmpty()
+                            it.dontExist("[Day3-3].png")
                         }
                         it.exist("[Day3-3].png")
                     }
