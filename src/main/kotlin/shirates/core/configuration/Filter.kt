@@ -15,6 +15,7 @@ import shirates.core.utility.image.ImageMatchUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
 import java.awt.image.BufferedImage
+import java.nio.file.Files
 
 class Filter(
     val filterExpression: String,
@@ -453,6 +454,9 @@ class Filter(
 
         val tmp1 = templateImage
         if (tmp1 == null) {
+            if (Files.exists(TestLog.directoryForLog).not()) {
+                TestLog.directoryForLog.toFile().mkdirs()
+            }
             image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
         }
         val imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
