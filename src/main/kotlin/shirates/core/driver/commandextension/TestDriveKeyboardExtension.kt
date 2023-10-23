@@ -5,6 +5,7 @@ import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.Message.message
 
 /**
@@ -36,12 +37,15 @@ fun TestDrive.hideKeyboard(
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        try {
-            // hideKeyboard() may fail. https://github.com/appium/appium/issues/15073
+        if (isiOS) {
+            // hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
+            val keyboard = select(".XCUIElementTypeKeyboard")
+            val label = keyboard.aboveLabel()
+            if (keyboard.isFound && label.isFound) {
+                label.click()
+            }
+        } else {
             TestDriver.appiumDriver.hideKeyboard()
-        } catch (t: Throwable) {
-            // workaround
-            rootElement.getWebElement().click()
         }
         invalidateCache()
         wait(waitSeconds = waitSeconds)

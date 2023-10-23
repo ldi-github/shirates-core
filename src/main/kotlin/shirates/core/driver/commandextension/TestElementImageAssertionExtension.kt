@@ -44,14 +44,16 @@ internal fun TestElement.isImageCore(
     selector: Selector,
     cropImage: Boolean = true
 ): ImageMatchResult {
-    val imageMatchResult: ImageMatchResult
+    if (this.isEmpty) {
+        return ImageMatchResult(result = false)
+    }
     if (cropImage) {
         silent {
             this.cropImage(save = true)
         }
     }
     val image = this.lastCropInfo?.croppedImage
-    imageMatchResult = selector.evaluateImageEqualsTo(image = image)
+    val imageMatchResult = selector.evaluateImageEqualsTo(image = image)
     if (imageMatchResult.result.not() && cropImage) {
         silent {
             val s = selector.image!!.removeSuffix(".png")

@@ -1040,6 +1040,7 @@ fun TestElement.existInCell(
 
         e = this.innerElements.filterBySelector(selector = sel, throwsException = false).firstOrNull()
             ?: TestElement.emptyElement
+        e.selector = sel
         TestDriver.postProcessForAssertion(
             selectResult = e,
             assertMessage = assertMessage

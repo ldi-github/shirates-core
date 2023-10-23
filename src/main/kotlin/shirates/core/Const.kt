@@ -45,7 +45,7 @@ object Const {
     const val ENABLE_IMAGE_ASSERTION = true
     const val IMAGE_MATCHING_SCALE = 0.25
     const val IMAGE_MATCHING_THRESHOLD = 1.0
-    const val IMAGE_MATCHING_CANDIDATE_COUNT = 20
+    const val IMAGE_MATCHING_CANDIDATE_COUNT = 5
     const val ENABLE_WDA_INSTALL_OPTIMIZATION = true
     const val ENABLE_HEALTH_CHECK = true
     const val TAP_TEST_SELECTOR = ".label"

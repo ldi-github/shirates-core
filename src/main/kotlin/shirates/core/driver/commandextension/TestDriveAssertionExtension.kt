@@ -335,7 +335,7 @@ internal fun TestDrive.screenIsOfCore(
 }
 
 internal fun TestDrive.existCore(
-    message: String,
+    assertMessage: String,
     selector: Selector,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -350,8 +350,9 @@ internal fun TestDrive.existCore(
 
     if (selector.isImageSelector) {
         return existImageCore(
-            expression = selector.expression!!,
-            throwsException = throwsException,
+            sel = selector,
+            assertMessage = assertMessage,
+            throwsException = false,
             waitSeconds = waitSeconds,
             useCache = useCache,
             scroll = scroll,
@@ -360,7 +361,7 @@ internal fun TestDrive.existCore(
     }
 
     val e = actionWithOnExistErrorHandler(
-        message = message,
+        message = assertMessage,
         throwsException = throwsException,
         log = log
     ) {
@@ -448,7 +449,7 @@ fun TestDrive.exist(
         val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
@@ -470,42 +471,13 @@ fun TestDrive.exist(
  */
 fun TestDrive.existImage(
     expression: String,
-    throwsException: Boolean = true,
+    throwsException: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     TestDriver.refreshCurrentScreenWithNickname(expression = expression)
-
-    val scroll = CodeExecutionContext.withScrollDirection != null
-    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
-
-    val e = existImageCore(
-        expression = expression,
-        throwsException = throwsException,
-        waitSeconds = waitSeconds,
-        useCache = useCache,
-        scroll = scroll,
-        direction = direction
-    )
-
-    if (func != null) {
-        func(e)
-    }
-
-    return e
-}
-
-private fun TestDrive.existImageCore(
-    expression: String,
-    throwsException: Boolean,
-    waitSeconds: Double,
-    useCache: Boolean,
-    scroll: Boolean = false,
-    direction: ScrollDirection = ScrollDirection.Down
-): TestElement {
-    val testElement = TestDriver.it
 
     val command = "existImage"
     val sel = getSelectorForExistImage(expression = expression)
@@ -517,45 +489,88 @@ private fun TestDrive.existImageCore(
         return e
     }
 
+    val scroll = CodeExecutionContext.withScrollDirection != null
+    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
+
+    val testElement = TestDriver.it
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
-        if (sel.isImageSelector) {
-            e = actionWithOnExistErrorHandler(
-                throwsException = throwsException,
-                message = assertMessage
-            ) {
-                findImage(
-                    sel = sel,
-                    scroll = scroll,
-                    direction = direction,
-                    useCache = useCache,
-                )
-            }
-        } else {
-            e = actionWithOnExistErrorHandler(
-                throwsException = throwsException,
-                message = assertMessage
-            ) {
-                selectElementAndCompareImage(
-                    expression = expression,
-                    sel = sel,
-                    waitSeconds = waitSeconds,
-                    scroll = scroll,
-                    direction = direction,
-                    useCache = useCache,
-                )
-            }
+
+        e = existImageCore(
+            sel = sel,
+            assertMessage = assertMessage,
+            throwsException = throwsException,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+            scroll = scroll,
+            direction = direction
+        )
+    }
+
+    if (func != null) {
+        func(e)
+    }
+
+    return e
+}
+
+private fun TestDrive.existImageCore(
+    sel: Selector,
+    assertMessage: String,
+    throwsException: Boolean,
+    waitSeconds: Double,
+    useCache: Boolean,
+    scroll: Boolean = false,
+    direction: ScrollDirection = ScrollDirection.Down
+): TestElement {
+
+    var e = TestElement(selector = sel)
+
+    if (PropertiesManager.enableImageAssertion.not()) {
+        manual(message = assertMessage)
+        return e
+    }
+
+    if (sel.isImageSelector) {
+        e = actionWithOnExistErrorHandler(
+            throwsException = throwsException,
+            message = assertMessage
+        ) {
+            findImage(
+                sel = sel,
+                scroll = scroll,
+                direction = direction,
+                useCache = useCache,
+            )
+        }
+    } else {
+        e = actionWithOnExistErrorHandler(
+            throwsException = throwsException,
+            message = assertMessage
+        ) {
+            selectElementAndCompareImage(
+                sel = sel,
+                waitSeconds = waitSeconds,
+                scroll = scroll,
+                direction = direction,
+                useCache = useCache,
+            )
         }
     }
 
     // manual (template file not found)
-    if (e.hasImageMatchResult.not()) {
+    if (e.imageMatchResult?.templateImageFile == null) {
         manual(assertMessage)
         return e
     }
 
-    if (e.hasError && throwsException) {
-        throw e.lastError!!
+    if (e.hasError) {
+        if (throwsException) {
+            throw e.lastError!!
+        } else {
+            manual(assertMessage)
+            return e
+        }
     }
 
     return e
@@ -612,7 +627,6 @@ private fun findImage(
 }
 
 private fun selectElementAndCompareImage(
-    expression: String,
     sel: Selector,
     waitSeconds: Double,
     scroll: Boolean,
@@ -630,7 +644,7 @@ private fun selectElementAndCompareImage(
         useCache = useCache
     )
     // Compare the image of the element to the template image
-    e.imageMatchResult = e.isImage(expression = expression, cropImage = true)
+    e.imageMatchResult = e.isImage(expression = "$sel", cropImage = true)
 
     TestLog.info(e.imageMatchResult.toString())
 
@@ -660,7 +674,7 @@ fun TestDrive.existWithScrollDown(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
@@ -700,7 +714,7 @@ fun TestDrive.existWithScrollUp(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
@@ -740,7 +754,7 @@ fun TestDrive.existWithScrollRight(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
@@ -780,7 +794,7 @@ fun TestDrive.existWithScrollLeft(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
