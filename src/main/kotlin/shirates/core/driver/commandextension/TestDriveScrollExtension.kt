@@ -111,7 +111,7 @@ fun TestDrive.scrollDown(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewPort = viewport,
+                viewport = rootBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -143,7 +143,7 @@ fun TestDrive.scrollUp(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewPort = viewport,
+                viewport = rootBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -175,7 +175,7 @@ fun TestDrive.scrollRight(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewPort = viewport,
+                viewport = rootBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -207,7 +207,7 @@ fun TestDrive.scrollLeft(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewPort = viewport,
+                viewport = rootBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -760,7 +760,7 @@ fun TestDrive.scanElements(
 private class ScrollingInfo(
     val errorMessage: String,
     val scrollableBounds: Bounds,
-    val viewPort: Bounds,
+    val viewport: Bounds,
     val direction: ScrollDirection,
     val marginRatio: Double,
 ) {
@@ -771,22 +771,22 @@ private class ScrollingInfo(
 
     val leftEdge: Int
         get() {
-            return max(scrollableBounds.left, viewPort.left)
+            return max(scrollableBounds.left, viewport.left)
         }
 
     val rightEdge: Int
         get() {
-            return min(scrollableBounds.right, viewPort.right)
+            return min(scrollableBounds.right, viewport.right)
         }
 
     val topEdge: Int
         get() {
-            return max(scrollableBounds.top, viewPort.top)
+            return max(scrollableBounds.top, viewport.top)
         }
 
     val bottomEdge: Int
         get() {
-            return min(scrollableBounds.bottom, viewPort.bottom)
+            return min(scrollableBounds.bottom, viewport.bottom)
         }
 
     val adjustedScrollableBounds: Bounds
@@ -875,7 +875,7 @@ private fun TestDrive.getScrollingInfo(
     val r = ScrollingInfo(
         errorMessage = "",
         scrollableBounds = scrollableElement.bounds,
-        viewPort = viewport,
+        viewport = rootBounds,
         direction = direction,
         marginRatio = marginRatio
     )

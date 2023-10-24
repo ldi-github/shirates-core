@@ -8,7 +8,7 @@ import shirates.core.driver.branchextension.ifCanSelectNot
 import shirates.core.driver.branchextension.ifStringIs
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.platformVersion
-import shirates.core.driver.viewport
+import shirates.core.driver.rootBounds
 import shirates.core.exception.TestConfigException
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
@@ -35,7 +35,7 @@ object AndroidMacro : TestDrive {
                 startX = 20,
                 startY = 10,
                 endX = 20,
-                endY = viewport.bottom
+                endY = rootBounds.bottom
             )
             if ((platformVersion.toIntOrNull() ?: 0) < 12) {
                 throw TestConfigException("Use android 12 or greater")
@@ -44,7 +44,7 @@ object AndroidMacro : TestDrive {
                 startX = 20,
                 startY = 10,
                 endX = 20,
-                endY = viewport.bottom
+                endY = rootBounds.bottom
             )
             it.select("@Airplane mode")
                 .text
@@ -67,7 +67,7 @@ object AndroidMacro : TestDrive {
                 startX = 20,
                 startY = 10,
                 endX = 20,
-                endY = viewport.bottom
+                endY = rootBounds.bottom
             )
             if ((platformVersion.toIntOrNull() ?: 0) < 12) {
                 throw TestConfigException("Use android 12 or greater")
@@ -76,7 +76,7 @@ object AndroidMacro : TestDrive {
                 startX = 20,
                 startY = 10,
                 endX = 20,
-                endY = viewport.bottom
+                endY = rootBounds.bottom
             )
 
             it.select("@Airplane mode")

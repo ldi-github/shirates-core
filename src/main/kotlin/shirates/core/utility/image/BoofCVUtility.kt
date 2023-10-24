@@ -123,7 +123,7 @@ object BoofCVUtility {
                 y = startY,
                 width = nonScaledTemplateImage.width,
                 height = nonScaledTemplateImage.height,
-                margin = 0
+                margin = 10
             )
 
             /**

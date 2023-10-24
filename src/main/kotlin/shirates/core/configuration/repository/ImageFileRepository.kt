@@ -1,10 +1,9 @@
 package shirates.core.configuration.repository
 
 import shirates.core.configuration.ImageInfo
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.platformAnnotation
+import shirates.core.driver.imageProfile
 import shirates.core.driver.testDrive
-import shirates.core.driver.viewport
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.BufferedImageUtility
@@ -104,14 +103,14 @@ object ImageFileRepository {
      */
     fun getImageFileEntry(imageExpression: String): ImageFileEntry {
 
-        val vp = testDrive.viewport
-        val offset = if (isAndroid) -1 else 0
-        val width = (vp.width + offset).toString()
-        val height = (vp.height + offset).toString()
+        val imageProfile = testDrive.imageProfile
+        val ix = imageProfile.lastIndexOf("x")
+        val imageProfileHeightRemoved =
+            if (ix >= 0) imageProfile.substring(0, imageProfile.lastIndexOf("x")) else imageProfile
 
         val entry =
-            getImageFileEntryCore(imageExpression = imageExpression, tag = "${platformAnnotation}_${width}x${height}")
-                ?: getImageFileEntryCore(imageExpression = imageExpression, tag = "${platformAnnotation}_${width}")
+            getImageFileEntryCore(imageExpression = imageExpression, tag = imageProfile)
+                ?: getImageFileEntryCore(imageExpression = imageExpression, tag = imageProfileHeightRemoved)
                 ?: getImageFileEntryCore(imageExpression = imageExpression, tag = "${platformAnnotation}.png")
                 ?: getImageFileEntryCore(imageExpression = imageExpression, tag = ".png")
                 ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))

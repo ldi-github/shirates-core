@@ -30,36 +30,26 @@ fun TestDrive.parameter(name: String): String {
 }
 
 /**
- * viewport
+ * imageProfile
  */
-val TestDrive.viewport: Bounds
-    get() {
-        return rootBounds
-    }
-
-/**
- * viewportSize
- */
-internal fun TestDrive.viewportSize(): String {
-    val vp = viewport
-    val offset = if (TestMode.isAndroid) -1 else 0
-    val width = vp.width + offset
-    val height = vp.height + offset
-    val viewport = if (vp.isEmpty) "" else "${width}x${height}"
-    return viewport
-}
-
-/**
- * imageSizeProfile
- */
-internal val TestDrive.imageSizeProfile: String
+val TestDrive.imageProfile: String
     get() {
         if (TestDriver.isInitialized.not()) {
             return TestMode.platformAnnotation
         }
-        val viewport = viewportSize()
 
-        return "${TestMode.platformAnnotation}_${viewport}"
+        val viewportRect = capabilities.getCapabilityRelaxed("viewportRect")
+        if (viewportRect.isNotBlank()) {
+            val b = Bounds(viewportRect)
+            return "${TestMode.platformAnnotation}_${b.width}x${b.height}"
+        }
+
+        val b = rootBounds
+        if (b.isEmpty) {
+            return TestMode.platformAnnotation
+        }
+
+        return "${TestMode.platformAnnotation}_${b.width}x${b.height}"
     }
 
 /**

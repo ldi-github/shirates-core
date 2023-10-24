@@ -1933,7 +1933,7 @@ object TestDriver {
                     TestLog.info("Syncing ($i)", log = enableSyncLog)
                     refreshCache(currentScreenRefresh = false)
                     if (lastXml.isBlank()) {
-                        TestLog.info(testDrive.imageSizeProfile)
+                        TestLog.info("imageProfile: ${testDrive.imageProfile}")
                     }
 
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)

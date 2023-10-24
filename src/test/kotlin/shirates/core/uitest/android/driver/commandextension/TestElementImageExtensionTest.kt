@@ -7,15 +7,15 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.imageSizeProfile
+import shirates.core.driver.imageProfile
 import shirates.core.driver.rootElement
 import shirates.core.driver.testDrive
-import shirates.core.exception.TestNGException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.utility.listFiles
 import shirates.helper.TestSetupHelper
+import java.nio.file.Files
 
 @Want
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -111,7 +111,7 @@ class TestElementImageExtensionTest : UITest() {
         // Override [Notifications Icon].png by [App Icon].png
         val appsIconFile = dir.listFiles().first { it.name.startsWith("[Apps Icon]") }
         appsIconFile.copyTo(
-            dir.resolve("[Notifications Icon]${testDrive.imageSizeProfile}.png").toFile(),
+            dir.resolve("[Notifications Icon]${testDrive.imageProfile}.png").toFile(),
             overwrite = true
         )
 
@@ -137,12 +137,21 @@ class TestElementImageExtensionTest : UITest() {
                     }
                 }
             }
-            case(3) {
-                expectation {
-                    assertThatThrownBy {
-                        it.existImage("[Notifications Icon]")   // image is not found, NG
-                    }.isInstanceOf(TestNGException::class.java)
-                        .hasMessageStartingWith("Image of [Notifications Icon] exists")
+            case(4) {
+                val fileName = "[Notifications Icon]${testDrive.imageProfile}.png"
+                fun isImageSaved(): Boolean {
+                    return Files.exists(TestLog.directoryForLog.resolve(fileName))
+                }
+
+                condition {
+                    isImageSaved().thisIsFalse("Image not exist. ($fileName)")
+                }.expectation {
+                    it.existImage("[Notifications Icon]")   // image is not found, "manual" log is output
+                    // Assert
+                    val lastTestLog = TestLog.lastTestLog!!
+                    lastTestLog.logType.toString().thisIs("MANUAL")
+                    lastTestLog.message.thisIs("Image of [Notifications Icon] exists")
+                    isImageSaved().thisIsTrue("Image saved. ($fileName)")
                 }
             }
         }

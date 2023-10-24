@@ -25,7 +25,7 @@ object TestSetupHelper : TestDrive {
         if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
         fun crop(nickname: String) {
-            val suffix = testDrive.imageSizeProfile
+            val suffix = testDrive.imageProfile
             it.selectWithScrollDown(nickname)
                 .cropImage()
                 .lastCropInfo!!.croppedImage!!
@@ -74,7 +74,7 @@ object TestSetupHelper : TestDrive {
         if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
         fun crop(nickname: String) {
-            val suffix = testDrive.imageSizeProfile
+            val suffix = testDrive.imageProfile
             it.selectWithScrollDown(nickname)
                 .cropImage()
                 .lastCropInfo!!.croppedImage!!

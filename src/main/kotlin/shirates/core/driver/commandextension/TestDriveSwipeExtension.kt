@@ -35,8 +35,8 @@ fun TestDrive.swipePointToPoint(
     val testElement = rootElement
 
     val sc = SwipeContext(
-        swipeFrame = viewport,
-        viewPort = viewport,
+        swipeFrame = rootBounds,
+        viewport = rootBounds,
         startX = startX,
         startY = startY,
         endX = endX,
@@ -67,7 +67,7 @@ fun TestDrive.swipePointToPoint(
 
 internal class SwipeContext(
     var swipeFrame: Bounds,
-    var viewPort: Bounds,
+    var viewport: Bounds,
     var startX: Int,
     var startY: Int,
     var endX: Int,
@@ -78,10 +78,10 @@ internal class SwipeContext(
 ) {
     init {
         if (safeMode) {
-            val leftEdge = max(swipeFrame.left, viewPort.left)
-            val rightEdge = min(swipeFrame.right, viewPort.right)
-            val topEdge = max(swipeFrame.top, viewPort.top)
-            val bottomEdge = min(swipeFrame.bottom, viewPort.bottom)
+            val leftEdge = max(swipeFrame.left, viewport.left)
+            val rightEdge = min(swipeFrame.right, viewport.right)
+            val topEdge = max(swipeFrame.top, viewport.top)
+            val bottomEdge = min(swipeFrame.bottom, viewport.bottom)
 
             if (startX < leftEdge) {
                 startX = leftEdge

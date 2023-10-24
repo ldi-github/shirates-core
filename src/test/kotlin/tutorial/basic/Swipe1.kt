@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.rootBounds
 import shirates.core.driver.scrollFrame
-import shirates.core.driver.viewport
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -84,10 +84,10 @@ class Swipe1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
                     it.swipePointToPoint(
-                        startX = viewport.centerX,
-                        startY = viewport.centerY,
-                        endX = viewport.centerX,
-                        endY = viewport.top
+                        startX = rootBounds.centerX,
+                        startY = rootBounds.centerY,
+                        endX = rootBounds.centerX,
+                        endY = rootBounds.top
                     )
                 }.expectation {
 
@@ -97,10 +97,10 @@ class Swipe1 : UITest() {
             case(2) {
                 action {
                     it.swipePointToPoint(
-                        startX = viewport.centerX,
-                        startY = viewport.centerY,
-                        endX = viewport.centerX,
-                        endY = viewport.bottom,
+                        startX = rootBounds.centerX,
+                        startY = rootBounds.centerY,
+                        endX = rootBounds.centerX,
+                        endY = rootBounds.bottom,
                         durationSeconds = 0.2
                     )
                 }.expectation {
@@ -288,7 +288,7 @@ class Swipe1 : UITest() {
             case(2) {
                 action {
                     it.select("Messages")
-                        .swipeHorizontalTo(viewport.right)
+                        .swipeHorizontalTo(rootBounds.right)
                 }.expectation {
                 }
             }
