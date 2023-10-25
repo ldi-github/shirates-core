@@ -291,8 +291,10 @@ object TestDriver {
         TestLog.info("swipeDurationSeconds: ${testContext.swipeDurationSeconds}")
         TestLog.info("flickDurationSeconds: ${testContext.flickDurationSeconds}")
         TestLog.info("swipeMarginRatio: ${testContext.swipeMarginRatio}")
-        TestLog.info("scrollVerticalMarginRatio: ${testContext.scrollVerticalMarginRatio}")
-        TestLog.info("scrollHorizontalMarginRatio: ${testContext.scrollHorizontalMarginRatio}")
+        TestLog.info("scrollVerticalStartMarginRatio: ${testContext.scrollVerticalStartMarginRatio}")
+        TestLog.info("scrollVerticalEndMarginRatio: ${testContext.scrollVerticalEndMarginRatio}")
+        TestLog.info("scrollHorizontalStartMarginRatio: ${testContext.scrollHorizontalStartMarginRatio}")
+        TestLog.info("scrollHorizontalEndMarginRatio: ${testContext.scrollHorizontalEndMarginRatio}")
         TestLog.info("tapHoldSeconds: ${testContext.tapHoldSeconds}")
         TestLog.info("tapAppIconMethod: ${testContext.tapAppIconMethod}")
         TestLog.info("tapAppIconMacro: ${testContext.tapAppIconMacro}")
@@ -996,7 +998,8 @@ object TestDriver {
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+        scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
@@ -1016,6 +1019,7 @@ object TestDriver {
                 direction = direction,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
@@ -1031,7 +1035,8 @@ object TestDriver {
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
@@ -1046,6 +1051,7 @@ object TestDriver {
                 direction = direction,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds
@@ -1078,6 +1084,7 @@ object TestDriver {
         direction: ScrollDirection,
         scrollDurationSeconds: Double,
         scrollStartMarginRatio: Double,
+        scrollEndMarginRatio: Double,
         scrollMaxCount: Int,
         throwsException: Boolean,
         waitSeconds: Double
@@ -1128,6 +1135,7 @@ object TestDriver {
                     direction = direction,
                     durationSeconds = scrollDurationSeconds,
                     startMarginRatio = scrollStartMarginRatio,
+                    endMarginRatio = scrollEndMarginRatio,
                     scrollMaxCount = scrollMaxCount,
                     throwsException = throwsException,
                 )
@@ -1330,7 +1338,8 @@ object TestDriver {
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
@@ -1344,6 +1353,7 @@ object TestDriver {
             direction = direction,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = throwsException,
             useCache = useCache
@@ -1352,14 +1362,15 @@ object TestDriver {
 
     internal fun findImage(
         selector: Selector,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
-        scrollMaxCount: Int = testContext.scrollMaxCount,
-        throwsException: Boolean = true,
+        scroll: Boolean,
+        direction: ScrollDirection,
+        scrollDurationSeconds: Double,
+        scrollStartMarginRatio: Double,
+        scrollEndMarginRatio: Double,
+        scrollMaxCount: Int,
+        throwsException: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
-        useCache: Boolean = testContext.useCache,
+        useCache: Boolean
     ): ImageMatchResult {
 
         lastElement = TestElement.emptyElement
@@ -1414,6 +1425,7 @@ object TestDriver {
                 direction = direction,
                 durationSeconds = scrollDurationSeconds,
                 startMarginRatio = scrollStartMarginRatio,
+                endMarginRatio = scrollEndMarginRatio,
                 actionFunc = actionFunc
             )
         } else {
@@ -1463,9 +1475,8 @@ object TestDriver {
         selector: Selector,
         direction: ScrollDirection = ScrollDirection.Down,
         durationSeconds: Double = testContext.swipeDurationSeconds,
-        startMarginRatio: Double =
-            if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
-            else testContext.scrollHorizontalMarginRatio,
+        startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true
     ): TestElement {
@@ -1488,6 +1499,7 @@ object TestDriver {
             direction = direction,
             durationSeconds = durationSeconds,
             startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio,
             actionFunc = actionFunc
         )
 
@@ -1509,7 +1521,8 @@ object TestDriver {
         expression: String,
         direction: ScrollDirection = ScrollDirection.Down,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true
     ): TestElement {
@@ -1521,7 +1534,8 @@ object TestDriver {
                 selector = sel,
                 direction = direction,
                 durationSeconds = scrollDurationSeconds,
-                startMarginRatio = scrollStartMarginRatio,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 throwsException = throwsException
             )

@@ -26,3 +26,13 @@ val ScrollDirection.isLeft: Boolean
     get() {
         return this == ScrollDirection.Left
     }
+
+val ScrollDirection.isVertical: Boolean
+    get() {
+        return isDown || isUp
+    }
+
+val ScrollDirection.isHorizontal: Boolean
+    get() {
+        return isLeft || isRight
+    }

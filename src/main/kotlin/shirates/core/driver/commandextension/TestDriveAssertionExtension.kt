@@ -343,7 +343,8 @@ internal fun TestDrive.existCore(
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
@@ -371,6 +372,7 @@ internal fun TestDrive.existCore(
             direction = direction,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = false,
             waitSeconds = waitSeconds,
@@ -540,6 +542,7 @@ private fun TestDrive.existImageCore(
                 sel = sel,
                 scroll = scroll,
                 direction = direction,
+                waitSeconds = waitSeconds,
                 useCache = useCache,
             )
         }
@@ -597,6 +600,7 @@ private fun findImage(
     sel: Selector,
     scroll: Boolean,
     direction: ScrollDirection,
+    waitSeconds: Double,
     useCache: Boolean,
 ): TestElement {
 
@@ -607,9 +611,11 @@ private fun findImage(
         scroll = scroll,
         direction = direction,
         scrollDurationSeconds = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio = testContext.scrollVerticalMarginRatio,
+        scrollStartMarginRatio = testContext.scrollStartMarginRatio(direction),
+        scrollEndMarginRatio = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount = testContext.scrollMaxCount,
         throwsException = false,
+        waitSeconds = waitSeconds,
         useCache = useCache
     )
     if (r.templateImageFile == null) {
@@ -658,7 +664,8 @@ fun TestDrive.existWithScrollDown(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -679,6 +686,7 @@ fun TestDrive.existWithScrollDown(
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Down,
             throwsException = throwsException,
@@ -698,7 +706,8 @@ fun TestDrive.existWithScrollUp(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -719,6 +728,7 @@ fun TestDrive.existWithScrollUp(
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Up,
             throwsException = throwsException,
@@ -738,7 +748,8 @@ fun TestDrive.existWithScrollRight(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -759,6 +770,7 @@ fun TestDrive.existWithScrollRight(
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Right,
             throwsException = throwsException,
@@ -778,7 +790,8 @@ fun TestDrive.existWithScrollLeft(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -799,6 +812,7 @@ fun TestDrive.existWithScrollLeft(
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Left,
             throwsException = throwsException,
@@ -971,7 +985,8 @@ internal fun TestDrive.dontExistCore(
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     scrollMaxCount: Int = testContext.scrollMaxCount,
 ): TestElement {
 
@@ -983,6 +998,7 @@ internal fun TestDrive.dontExistCore(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         waitSeconds = 0.0,
         throwsException = false,
@@ -1093,7 +1109,8 @@ fun TestDrive.dontExistWithScrollUp(
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
 ): TestElement {
 
@@ -1115,6 +1132,7 @@ fun TestDrive.dontExistWithScrollUp(
             direction = ScrollDirection.Up,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount
         )
     }

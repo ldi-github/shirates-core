@@ -78,8 +78,8 @@ class TestProfileTest : UnitTest() {
         assertThat(p1.swipeDurationSeconds).isNull()
         assertThat(p1.flickDurationSeconds).isNull()
         assertThat(p1.swipeMarginRatio).isNull()
-        assertThat(p1.scrollVerticalMarginRatio).isNull()
-        assertThat(p1.scrollHorizontalMarginRatio).isNull()
+        assertThat(p1.scrollVerticalStartMarginRatio).isNull()
+        assertThat(p1.scrollHorizontalStartMarginRatio).isNull()
         assertThat(p1.scrollMaxCount).isNull()
         assertThat(p1.tapHoldSeconds).isNull()
         assertThat(p1.enableCache).isNull()
@@ -438,8 +438,10 @@ class TestProfileTest : UnitTest() {
         p.swipeDurationSeconds = "6.6"
         p.flickDurationSeconds = "7.7"
         p.swipeMarginRatio = "0.1"
-        p.scrollVerticalMarginRatio = "0.1"
-        p.scrollHorizontalMarginRatio = "0.1"
+        p.scrollVerticalStartMarginRatio = "0.1"
+        p.scrollVerticalEndMarginRatio = "0.0"
+        p.scrollHorizontalStartMarginRatio = "0.1"
+        p.scrollHorizontalEndMarginRatio = "0.0"
         p.scrollMaxCount = "10"
         p.tapHoldSeconds = "8.8"
         p.syncWaitSeconds = "9.9"
@@ -477,8 +479,10 @@ class TestProfileTest : UnitTest() {
         p.swipeDurationSeconds = "6.6"
         p.flickDurationSeconds = "7.7"
         p.swipeMarginRatio = "0.1"
-        p.scrollVerticalMarginRatio = "0.1"
-        p.scrollHorizontalMarginRatio = "0.1"
+        p.scrollVerticalStartMarginRatio = "0.1"
+        p.scrollVerticalEndMarginRatio = "0.0"
+        p.scrollHorizontalStartMarginRatio = "0.1"
+        p.scrollHorizontalEndMarginRatio = "0.0"
         p.tapHoldSeconds = "8.8"
         p.syncWaitSeconds = "9.9"
         p.syncMaxLoopCount = "9"
@@ -692,18 +696,32 @@ class TestProfileTest : UnitTest() {
             message = "Numeric format error.(swipeMarginRatio=a)",
             validValue = "2.1"
         )
-        // scrollVerticalMarginRatio
+        // scrollVerticalStartMarginRatio
         validateProperty(
-            propertyName = "scrollVerticalMarginRatio",
+            propertyName = "scrollVerticalStartMarginRatio",
             errorValue = "a",
-            message = "Numeric format error.(scrollVerticalMarginRatio=a)",
+            message = "Numeric format error.(scrollVerticalStartMarginRatio=a)",
             validValue = "2.1"
         )
-        // scrollHorizontalMarginRatio
+        // scrollVerticalEndMarginRatio
         validateProperty(
-            propertyName = "scrollHorizontalMarginRatio",
+            propertyName = "scrollVerticalEndMarginRatio",
             errorValue = "a",
-            message = "Numeric format error.(scrollHorizontalMarginRatio=a)",
+            message = "Numeric format error.(scrollVerticalEndMarginRatio=a)",
+            validValue = "2.1"
+        )
+        // scrollHorizontalStartMarginRatio
+        validateProperty(
+            propertyName = "scrollHorizontalStartMarginRatio",
+            errorValue = "a",
+            message = "Numeric format error.(scrollHorizontalStartMarginRatio=a)",
+            validValue = "2.1"
+        )
+        // scrollHorizontalEndMarginRatio
+        validateProperty(
+            propertyName = "scrollHorizontalEndMarginRatio",
+            errorValue = "a",
+            message = "Numeric format error.(scrollHorizontalEndMarginRatio=a)",
             validValue = "2.1"
         )
         // scrollMaxCount

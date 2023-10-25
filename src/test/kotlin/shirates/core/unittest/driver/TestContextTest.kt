@@ -219,8 +219,10 @@ class TestContextTest : UnitTest() {
         context.swipeDurationSeconds = 999.0
         context.flickDurationSeconds = 999.0
         context.swipeMarginRatio = 999.0
-        context.scrollVerticalMarginRatio = 999.0
-        context.scrollHorizontalMarginRatio = 999.0
+        context.scrollVerticalStartMarginRatio = 999.0
+        context.scrollVerticalEndMarginRatio = 999.0
+        context.scrollHorizontalStartMarginRatio = 999.0
+        context.scrollHorizontalEndMarginRatio = 999.0
         context.scrollToEdgeBoost = 99
         context.scrollIntervalSeconds = 999.9
         context.scrollMaxCount = 99

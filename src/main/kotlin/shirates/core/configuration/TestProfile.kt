@@ -87,8 +87,10 @@ class TestProfile(var profileName: String = "") {
     var swipeDurationSeconds: String? = null
     var flickDurationSeconds: String? = null
     var swipeMarginRatio: String? = null
-    var scrollVerticalMarginRatio: String? = null
-    var scrollHorizontalMarginRatio: String? = null
+    var scrollVerticalStartMarginRatio: String? = null
+    var scrollVerticalEndMarginRatio: String? = null
+    var scrollHorizontalStartMarginRatio: String? = null
+    var scrollHorizontalEndMarginRatio: String? = null
     var scrollToEdgeBoost: String? = null
     var scrollIntervalSeconds: String? = null
     var scrollMaxCount: String? = null
@@ -450,11 +452,17 @@ class TestProfile(var profileName: String = "") {
         // swipeMarginRatio
         validateNumeric("swipeMarginRatio")
 
-        // scrollVerticalMarginRatio
-        validateNumeric("scrollVerticalMarginRatio")
+        // scrollVerticalStartMarginRatio
+        validateNumeric("scrollVerticalStartMarginRatio")
 
-        // scrollHorizontalMarginRatio
-        validateNumeric("scrollHorizontalMarginRatio")
+        // scrollVerticalEndMarginRatio
+        validateNumeric("scrollVerticalEndMarginRatio")
+
+        // scrollHorizontalStartMarginRatio
+        validateNumeric("scrollHorizontalStartMarginRatio")
+
+        // scrollHorizontalEndMarginRatio
+        validateNumeric("scrollHorizontalEndMarginRatio")
 
         // scrollToEdgeBoost
         validateNumeric("scrollToEdgeBoost")

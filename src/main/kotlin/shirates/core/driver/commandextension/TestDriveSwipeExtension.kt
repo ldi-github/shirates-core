@@ -474,7 +474,7 @@ fun TestDrive.flickCenterToRight(
  * swipeLeftToRight
  */
 fun TestDrive.swipeLeftToRight(
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -507,7 +507,7 @@ fun TestDrive.swipeLeftToRight(
  * flickLeftToRight
  */
 fun TestDrive.flickLeftToRight(
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -535,7 +535,7 @@ fun TestDrive.flickLeftToRight(
  * swipeRightToLeft
  */
 fun TestDrive.swipeRightToLeft(
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -568,7 +568,7 @@ fun TestDrive.swipeRightToLeft(
  * flickRightToLeft
  */
 fun TestDrive.flickRightToLeft(
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -596,7 +596,7 @@ fun TestDrive.flickRightToLeft(
  * swipeBottomToTop
  */
 fun TestDrive.swipeBottomToTop(
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -630,7 +630,7 @@ fun TestDrive.swipeBottomToTop(
  * flickBottomToTop
  */
 fun TestDrive.flickBottomToTop(
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -658,7 +658,7 @@ fun TestDrive.flickBottomToTop(
  * flickAndGoDown
  */
 fun TestDrive.flickAndGoDown(
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -686,7 +686,7 @@ fun TestDrive.flickAndGoDown(
  * flickAndGoRight
  */
 fun TestDrive.flickAndGoRight(
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -714,7 +714,7 @@ fun TestDrive.flickAndGoRight(
  * flickAndGoLeft
  */
 fun TestDrive.flickAndGoLeft(
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -742,7 +742,7 @@ fun TestDrive.flickAndGoLeft(
  * swipeTopToBottom
  */
 fun TestDrive.swipeTopToBottom(
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -776,7 +776,7 @@ fun TestDrive.swipeTopToBottom(
  * flickAndGoUp
  */
 fun TestDrive.flickAndGoUp(
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true
@@ -803,7 +803,7 @@ fun TestDrive.flickAndGoUp(
  * flickTopToBottom
  */
 fun TestDrive.flickTopToBottom(
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     safeMode: Boolean = true

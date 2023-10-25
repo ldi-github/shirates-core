@@ -34,9 +34,13 @@
 
   "swipeMarginRatio": "0.25",
 
-  "scrollVerticalMarginRatio": "0.15",
+  "scrollVerticalStartMarginRatio": "0.15",
 
-  "scrollHorizontalMarginRatio": "0.2",
+  "scrollVerticalEndMarginRatio": "0.1",
+
+  "scrollHorizontalStartMarginRatio": "0.2",
+
+  "scrollHorizontalEndMarginRatio": "0.05",
 
   "scrollMaxCount": "7",
 
@@ -56,7 +60,7 @@
 
   "retryIntervalSeconds": "3.0",
 
-  "#testResults" : "",
+  "#testResults": "",
 
   "#appPackageDir": "",
 
@@ -106,7 +110,7 @@
 
       "retryIntervalSeconds": "3.5",
 
-      "#testResults" : "",
+      "#testResults": "",
 
       "capabilities": {
         "platformVersion": "9",
