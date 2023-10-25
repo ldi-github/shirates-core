@@ -469,10 +469,8 @@ class TestElement(
             if (isDummy) {
                 return false
             }
-            if (isAndroid) {
-                if (this.bounds.isIncludedIn(rootBounds).not()) {
-                    return false
-                }
+            if (this.bounds.isIncludedIn(rootBounds).not()) {
+                return false
             }
 
             if (type == "XCUIElementTypeApplication") {
