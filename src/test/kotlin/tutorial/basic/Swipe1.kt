@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootBounds
-import shirates.core.driver.scrollFrame
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -47,14 +46,12 @@ class Swipe1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                         .exist("[Notifications]")
                         .exist("[Battery]")
-                        .output("scrollFrame: ${it.scrollFrame}")
                 }.action {
                     it.select("[Battery]")
-                        .swipeToCenter()
-                        .swipeToTop(durationSeconds = 10.0)
+                        .swipeToCenterOfScreen()
+                        .swipeToTopOfScreen(durationSeconds = 10.0)
                 }.expectation {
-                    output("[Battery].bounds: ${it.bounds}")
-                        .dontExist("[Notifications]")
+                    it.dontExist("[Notifications]")
                         .exist("[Storage]")
                 }
             }
@@ -64,10 +61,9 @@ class Swipe1 : UITest() {
                         .exist("[Privacy]")
                 }.action {
                     it.select("[Security]")
-                        .swipeToBottom(durationSeconds = 10.0)
+                        .swipeToBottomOfScreen(durationSeconds = 10.0)
                 }.expectation {
-                    output("[Security].bounds: ${it.bounds}")
-                        .exist("[Security]")
+                    it.exist("[Security]")
                         .dontExist("[Privacy]")
                 }
             }

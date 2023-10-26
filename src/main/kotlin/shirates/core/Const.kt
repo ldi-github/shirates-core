@@ -96,7 +96,7 @@ object Const {
     const val WAIT_SECONDS_FOR_CONNECTION_ENABLED = 8.0
     const val SWIPE_DURATION_SECONDS = 3.0
     const val FLICK_DURATION_SECONDS = 0.3
-    const val SWIPE_MARGIN_RATIO = 0.1
+    const val SWIPE_MARGIN_RATIO = 0.0
     const val SCROLL_VERTICAL_START_MARGIN_RATIO = 0.2
     const val SCROLL_VERTICAL_END_MARGIN_RATIO = 0.1
     const val SCROLL_HORIZONTAL_START_MARGIN_RATIO = 0.2
@@ -128,6 +128,9 @@ object Const {
     /**
      * others
      */
+    const val ANDROID_STATBAR_HEIGHT = 66
+    const val IOS_STATBAR_HEIGHT = 47
+
     const val JQUERY_SOURCE = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"
     const val TESTRUN_PROPERTIES = "testConfig/testrun.properties"
     const val TESTRUN_GLOBAL_PROPERTIES = "testrun.global.properties"

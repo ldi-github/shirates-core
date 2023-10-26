@@ -5,6 +5,7 @@ package shirates.core.configuration
  */
 class ScrollInfo {
     var scrollable: String = ""
+    val headerElements = mutableListOf<String>()
     val startElements = mutableListOf<String>()
     val endElements = mutableListOf<String>()
     val overlayElements = mutableListOf<String>()
@@ -26,6 +27,7 @@ class ScrollInfo {
         if (scrollable.isBlank()) {
             scrollable = scrollInfo.scrollable
         }
+        headerElements.merge(scrollInfo.headerElements)
         startElements.merge(scrollInfo.startElements)
         endElements.merge(scrollInfo.endElements)
         overlayElements.merge(scrollInfo.overlayElements)

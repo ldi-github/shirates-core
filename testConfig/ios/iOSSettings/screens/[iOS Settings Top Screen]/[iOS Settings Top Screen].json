@@ -12,28 +12,54 @@
 
     "[NavigationBar]": ".XCUIElementTypeNavigationBar",
 
-    "[General Icon]": "[General]:preImage",
-    "[General Image]": "image=[General Icon].png",
+    "[Screen Time Icon]": "[Screen Time]:leftImage",
+    "[Screen Time]": "",
+
+    "[General Icon]": "[General]:leftImage",
     "[General]": "",
 
-    "[Accessibility Icon]": "[Accessibility]:preImage",
-    "[Accessibility Image]": "image=[Accessibility Icon].png",
+    "[Accessibility Icon]": "[Accessibility]:leftImage",
     "[Accessibility]": "",
 
-    "[Privacy & Security Icon]": "[Privacy & Security]:preImage",
-    "[Privacy & Security Image]": "image=[Privacy & Security Icon].png",
+    "[Privacy & Security Icon]": "[Privacy & Security]:leftImage",
     "[Privacy & Security]": "",
 
-    "[Passwords Icon]": "[Passwords]:preImage",
-    "[Passwords Image]": "image=[Passwords Icon].png",
+    "[Passwords Icon]": "[Passwords]:leftImage",
     "[Passwords]": "",
 
-    "[Developer Icon]": "[Developer]:preImage",
-    "[Developer Image]": "image=[Developer Icon].png",
+    "[Safari Icon]": "[Safari]:leftImage",
+    "[Safari]": "",
+
+    "[News Icon]": "[News]:leftImage",
+    "[News]": "",
+
+    "[Translate Icon]": "[Safari]:leftImage",
+    "[Translate]": "",
+
+    "[Maps Icon]": "[Safari]:leftImage",
+    "[Maps]": "",
+
+    "[Shortcuts Icon]": "[Safari]:leftImage",
+    "[Shortcuts]": "",
+
+    "[Health Icon]": "[Safari]:leftImage",
+    "[Health]": "",
+
+    "[Siri & Search Icon]": "[Safari]:leftImage",
+    "[Siri & Search]": "",
+
+    "[Photos Icon]": "[Safari]:leftImage",
+    "[Photos]": "",
+
+    "[Game Center Icon]": "[Safari]:leftImage",
+    "[Game Center]": "",
+
+    "[Developer Icon]": "[Developer]:leftImage",
     "[Developer]": ""
   },
 
   "scroll": {
+    "header-elements": "[NavigationBar]",
     "start-elements": "[Profile Icon]",
     "end-elements": "",
     "overlay-elements": "[NavigationBar]"
