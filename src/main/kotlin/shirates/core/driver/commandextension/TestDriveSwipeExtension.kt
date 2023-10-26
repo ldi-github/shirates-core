@@ -155,7 +155,12 @@ internal fun TestDrive.swipePointToPointCore(
         sequence.addAction(
             finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg())
         )
-        driver.appiumDriver.perform(mutableListOf(sequence))
+        try {
+            driver.appiumDriver.perform(mutableListOf(sequence))
+        } catch (t: InvalidElementStateException) {
+            TestLog.trace(t.message!!)
+            //  https://github.com/appium/java-client/issues/2045
+        }
     }
 
     fun swipeFunc() {
@@ -177,23 +182,10 @@ internal fun TestDrive.swipePointToPointCore(
         CodeExecutionContext.isScrolling = true
 
         for (i in 1..swipeContext.repeat) {
-
             if (swipeContext.repeat > 1) {
                 TestLog.trace("$i")
             }
-
-            try {
-                swipeFunc()
-            } catch (t: InvalidElementStateException) {
-                if (testContext.useCache) {
-                    // retry once
-                    TestLog.info("Swipe did not complete successfully. Retrying once")
-                    refreshCache()
-                    swipeFunc()
-                } else {
-                    throw t
-                }
-            }
+            swipeFunc()
         }
     } finally {
         CodeExecutionContext.isScrolling = original
