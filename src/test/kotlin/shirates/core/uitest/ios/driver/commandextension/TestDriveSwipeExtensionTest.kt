@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.rootBounds
 import shirates.core.driver.testContext
 import shirates.core.testcode.UITest
 
@@ -124,4 +125,48 @@ class TestDriveSwipeExtensionTest : UITest() {
             }
         }
     }
+
+    @Test
+    @Order(50)
+    fun swipeToCenter_swipeToTop_swipeToBottom() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Settings Top Screen]")
+                }.action {
+                    it.select("[Safari]")
+                        .swipeToCenterOfScreen()
+                }.expectation {
+                    val b = it.bounds
+                    val low = b.top
+                    val high = b.bottom
+                    (low <= rootBounds.centerY).thisIsTrue("$low <= ${rootBounds.centerY}")
+                    (rootBounds.centerY <= high).thisIsTrue("${rootBounds.centerY} <= $high")
+                }
+            }
+            case(2) {
+                action {
+                    it.select("General")
+                        .swipeToTopOfScreen(durationSeconds = 3.0)
+                }.expectation {
+                    val b = it.bounds
+                    val low = select(".XCUIElementTypeNavigationBar").bounds.bottom + 1
+                    val high = low + b.height - 1
+                    (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
+                    (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
+                }
+            }
+            case(3) {
+                condition {
+                    it.exist("[Photos]")
+                }.action {
+                    it.select("[Photos]")
+                        .swipeToBottomOfScreen(durationSeconds = 3.0)
+                }.expectation {
+                }
+            }
+        }
+    }
+
 }

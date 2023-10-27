@@ -1,0 +1,14 @@
+{
+  "key": "[iOS Home Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[Home screen icons]",
+
+  "selectors": {
+    "[Home screen icons]": "#Home screen icons"
+
+  }
+
+}

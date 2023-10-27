@@ -349,7 +349,7 @@ fun TestElement.swipeToCenter(
         if (ofScreen) rootElement
         else getScrollableElement(scrollable)
     val endY =
-        if (ofScreen) (scrollFrame.bounds.height - statBarHeight) / 2
+        if (ofScreen) rootElement.bounds.height / 2
         else scrollFrame.bounds.centerY
 
     val command = "swipeToCenter"
