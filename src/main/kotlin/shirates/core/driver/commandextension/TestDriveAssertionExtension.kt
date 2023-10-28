@@ -473,7 +473,7 @@ fun TestDrive.exist(
  */
 fun TestDrive.existImage(
     expression: String,
-    throwsException: Boolean = false,
+    throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     func: (TestElement.() -> Unit)? = null
@@ -561,19 +561,16 @@ private fun TestDrive.existImageCore(
         }
     }
 
-    // manual (template file not found)
-    if (e.imageMatchResult?.templateImageFile == null) {
-        manual(assertMessage)
-        return e
-    }
-
-    if (e.hasError) {
-        if (throwsException) {
-            throw e.lastError!!
-        } else {
+    if (e.imageMatchResult != null) {
+        if (e.imageMatchResult!!.templateImageFile == null) {
+            // manual (template file not found)
             manual(assertMessage)
             return e
         }
+    }
+
+    if (e.hasError && throwsException) {
+        throw e.lastError!!
     }
 
     return e
@@ -649,6 +646,9 @@ private fun selectElementAndCompareImage(
         waitSeconds = waitSeconds,
         useCache = useCache
     )
+    if (e.isFound.not()) {
+        return e
+    }
     // Compare the image of the element to the template image
     e.imageMatchResult = e.isImage(expression = "$sel", cropImage = true)
 

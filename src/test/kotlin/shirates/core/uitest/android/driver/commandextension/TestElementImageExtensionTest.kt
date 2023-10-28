@@ -10,6 +10,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.imageProfile
 import shirates.core.driver.rootElement
 import shirates.core.driver.testDrive
+import shirates.core.exception.TestNGException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
@@ -146,11 +147,12 @@ class TestElementImageExtensionTest : UITest() {
                 condition {
                     isImageSaved().thisIsFalse("Image not exist. ($fileName)")
                 }.expectation {
-                    it.existImage("[Notifications Icon]")   // image is not found, "manual" log is output
                     // Assert
+                    assertThatThrownBy {
+                        it.existImage("[Notifications Icon]")   // element found, image does not match, NG
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("Image of [Notifications Icon] exists")
                     val lastTestLog = TestLog.lastTestLog!!
-                    lastTestLog.logType.toString().thisIs("MANUAL")
-                    lastTestLog.message.thisIs("Image of [Notifications Icon] exists")
                     isImageSaved().thisIsTrue("Image saved. ($fileName)")
                 }
             }

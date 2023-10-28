@@ -74,7 +74,7 @@ class AssertingImage2 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.existImage("[No exist template file]")   // manual
+                    it.existImage("[Settings]")   // manual
                 }
             }
         }
