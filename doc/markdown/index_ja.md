@@ -95,6 +95,7 @@
     - [画面が表示されていることの検証](basic/function_property/asserting_existence/screen_is_ja.md)
 - 画像を検証する
     - [画像の検証](basic/function_property/asserting_image/image_assertion_ja.md)
+    - [画像の検証（existImage）](basic/function_property/asserting_image/image_assertion_exist_image_ja.md)
 - その他を検証する
     - [アプリが表示されていることの検証](basic/function_property/asserting_others/app_assertion_ja.md)
     - [キーボードが表示されていることの検証](basic/function_property/asserting_others/keyboard_assertion_ja.md)

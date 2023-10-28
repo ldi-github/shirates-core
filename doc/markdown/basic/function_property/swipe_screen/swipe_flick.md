@@ -14,7 +14,8 @@ You can swipe or flick screen using these functions.
 | swipeToRight                | Swipe the element to right                                      | flickToRight                     |
 | swipeToBottom               | Swipe the element to bottom                                     | flickToBottom                    |
 | swipeToLeft                 | Swipe the element to left                                       | flickToLeft                      |
-| swipeToCenter               | Swipe the element to center                                     | n/a                              |
+| swipeToCenter               | Swipe the element to center of the scroll area                  | n/a                              |
+| swipeToCenterOfScreen       | Swipe the element to center of screen                           | n/a                              |
 | swipeCenterToTop            | Swipe from center to top                                        | flickCenterToTop                 |
 | swipeCenterToRight          | Swipe from center to right                                      | flickCenterToRight               |
 | swipeCenterToBottom         | Swipe from center to bottom                                     | flickCenterToBottom              |

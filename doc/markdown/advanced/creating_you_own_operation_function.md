@@ -47,7 +47,7 @@ using **execOperateCommand** function of **TestDriverCommandContext** object.
 private fun TestDrive.tapWithScrollDownFromTop(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto
 ): TestElement {

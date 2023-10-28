@@ -1,15 +1,24 @@
-# Image assertion
-
-You can assert image using these functions.
+# Image matching and assertion
 
 ## functions
+
+### Image Matching
+
+You can try image matching using these functions.
+
+| function          | return type      |
+|:------------------|------------------|
+| isImage           | ImageMatchResult |
+| isContainingImage | ImageMatchResult |
+
+### Image Assertion
+
+You can assert image using these functions.
 
 | function                |
 |:------------------------|
 | imageIs                 |
 | imageContains           |
-| isImage                 |
-| isContainingImage       |
 | exist                   |
 | existWithScrollDown     |
 | existWithScrollUp       |

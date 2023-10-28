@@ -14,7 +14,8 @@
 | swipeToRight                | 要素を画面の右までスワイプします            | flickToRight                     |
 | swipeToBottom               | 要素を画面の下までスワイプします            | flickToBottom                    |
 | swipeToLeft                 | 要素を画面の左までスワイプします            | flickToLeft                      |
-| swipeToCenter               | 要素を画面の中心までスワイプします           | n/a                              |
+| swipeToCenter               | 要素をスクロールエリアの中心までスワイプします     | n/a                              |
+| swipeToCenterOfScreen       | 要素を画面の中心までスワイプします           | n/a                              |
 | swipeCenterToTop            | 画面の中心から上へスワイプします            | flickCenterToTop                 |
 | swipeCenterToRight          | 画面の中心から右へスワイプします            | flickCenterToRight               |
 | swipeCenterToBottom         | 画面の中心から下へスワイプします            | flickCenterToBottom              |

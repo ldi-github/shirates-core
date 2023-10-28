@@ -1,15 +1,24 @@
 # 画像の検証
 
-これらの関数を使用して画像の検証を行うことができます。
-
 ## 関数
+
+### 画像マッチング
+
+これらの関数を使用して画像マッチングを試行することができます。
+
+| 関数                | 戻り値の型            |
+|:------------------|------------------|
+| isImage           | ImageMatchResult |
+| isContainingImage | ImageMatchResult |
+
+### 画像の検証
+
+これらの関数を使用して画像の検証を行うことができます。
 
 | 関数                      |
 |:------------------------|
 | imageIs                 |
 | imageContains           |
-| isImage                 |
-| isContainingImage       |
 | exist                   |
 | existWithScrollDown     |
 | existWithScrollUp       |
