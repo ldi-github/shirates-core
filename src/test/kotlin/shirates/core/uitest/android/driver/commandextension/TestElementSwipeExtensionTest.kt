@@ -35,6 +35,7 @@ class TestElementSwipeExtensionTest : UITest() {
             case(2) {
                 action {
                     from = it.select("Battery")
+                    target = it.select("Apps")
                     it.swipeElementToElement(startElement = from, endElement = target)
                 }.expectation {
                     val current = it.select("Battery")
