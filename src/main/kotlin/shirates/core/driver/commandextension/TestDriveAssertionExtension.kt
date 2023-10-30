@@ -473,6 +473,7 @@ fun TestDrive.exist(
  */
 fun TestDrive.existImage(
     expression: String,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
@@ -500,6 +501,7 @@ fun TestDrive.existImage(
 
         e = existImageCore(
             sel = sel,
+            threshold = threshold,
             assertMessage = assertMessage,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
@@ -518,6 +520,7 @@ fun TestDrive.existImage(
 
 private fun TestDrive.existImageCore(
     sel: Selector,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
     assertMessage: String,
     throwsException: Boolean,
     waitSeconds: Double,
@@ -540,6 +543,7 @@ private fun TestDrive.existImageCore(
         ) {
             findImage(
                 sel = sel,
+                threshold = threshold,
                 scroll = scroll,
                 direction = direction,
                 waitSeconds = waitSeconds,
@@ -553,6 +557,7 @@ private fun TestDrive.existImageCore(
         ) {
             selectElementAndCompareImage(
                 sel = sel,
+                threshold = threshold,
                 waitSeconds = waitSeconds,
                 scroll = scroll,
                 direction = direction,
@@ -595,6 +600,7 @@ private fun TestDrive.getSelectorForExistImage(expression: String): Selector {
 
 private fun findImage(
     sel: Selector,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
     scroll: Boolean,
     direction: ScrollDirection,
     waitSeconds: Double,
@@ -605,6 +611,7 @@ private fun findImage(
 
     val r = TestDriver.findImage(
         selector = sel,
+        threshold = threshold,
         scroll = scroll,
         direction = direction,
         scrollDurationSeconds = testContext.swipeDurationSeconds,
@@ -631,6 +638,7 @@ private fun findImage(
 
 private fun selectElementAndCompareImage(
     sel: Selector,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
     scroll: Boolean,
     direction: ScrollDirection,
@@ -650,7 +658,7 @@ private fun selectElementAndCompareImage(
         return e
     }
     // Compare the image of the element to the template image
-    e.imageMatchResult = e.isImage(expression = "$sel", cropImage = true)
+    e.imageMatchResult = e.isImage(expression = "$sel", threshold = threshold, cropImage = true)
 
     TestLog.info(e.imageMatchResult.toString())
 

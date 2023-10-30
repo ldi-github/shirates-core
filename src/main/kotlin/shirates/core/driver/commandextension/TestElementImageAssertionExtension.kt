@@ -15,6 +15,7 @@ import shirates.core.utility.sync.SyncUtility
  */
 fun TestElement.isImage(
     expression: String,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
     cropImage: Boolean = true
 ): ImageMatchResult {
 
@@ -31,6 +32,7 @@ fun TestElement.isImage(
 
         r = isImageCore(
             selector = sel,
+            threshold = threshold,
             cropImage = cropImage
         )
     }
@@ -42,6 +44,7 @@ fun TestElement.isImage(
 
 internal fun TestElement.isImageCore(
     selector: Selector,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
     cropImage: Boolean = true
 ): ImageMatchResult {
     if (this.isEmpty) {
@@ -53,7 +56,7 @@ internal fun TestElement.isImageCore(
         }
     }
     val image = this.lastCropInfo?.croppedImage
-    val imageMatchResult = selector.evaluateImageEqualsTo(image = image)
+    val imageMatchResult = selector.evaluateImageEqualsTo(image = image, threshold = threshold)
     if (imageMatchResult.result.not() && cropImage) {
         silent {
             val s = selector.image!!.removeSuffix(".png")
@@ -71,7 +74,8 @@ internal fun TestElement.isImageCore(
  * isContainingImage
  */
 fun TestElement.isContainingImage(
-    expression: String
+    expression: String,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
 ): ImageMatchResult {
 
     val testElement = this
@@ -88,7 +92,7 @@ fun TestElement.isContainingImage(
         silent {
             testElement.cropImage(save = true)
             val image = testElement.lastCropInfo?.croppedImage
-            r = sel.evaluateImageContainedIn(image = image)
+            r = sel.evaluateImageContainedIn(image = image, threshold = threshold)
         }
     }
 

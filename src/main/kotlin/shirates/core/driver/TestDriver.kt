@@ -1362,6 +1362,7 @@ object TestDriver {
 
     internal fun findImage(
         selector: Selector,
+        threshold: Double = PropertiesManager.imageMatchingThreshold,
         scroll: Boolean,
         direction: ScrollDirection,
         scrollDurationSeconds: Double,
@@ -1396,7 +1397,7 @@ object TestDriver {
             syncCache()
         }
 
-        var r = rootElement.isContainingImage(selector.image!!)
+        var r = rootElement.isContainingImage(selector.image!!, threshold = threshold)
         if (r.result) {
             return r
         }

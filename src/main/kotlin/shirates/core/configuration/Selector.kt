@@ -1293,8 +1293,8 @@ class Selector(
      */
     fun evaluateImageEqualsTo(
         image: BufferedImage?,
-        scale: Double = ImageInfo(this.image).scale,
-        threshold: Double = ImageInfo(this.image).threshold
+        scale: Double = PropertiesManager.imageMatchingScale,
+        threshold: Double = PropertiesManager.imageMatchingThreshold
     ): ImageMatchResult {
 
         return getFilter("image")?.evaluateImageEqualsTo(image = image, scale = scale, threshold = threshold)
@@ -1311,8 +1311,8 @@ class Selector(
      */
     fun evaluateImageContainedIn(
         image: BufferedImage?,
-        scale: Double = ImageInfo(this.image).scale,
-        threshold: Double = ImageInfo(this.image).threshold
+        scale: Double = PropertiesManager.imageMatchingScale,
+        threshold: Double = PropertiesManager.imageMatchingThreshold
     ): ImageMatchResult {
 
         return getFilter("image")?.evaluateImageContainedIn(image = image, scale = scale, threshold = threshold)
