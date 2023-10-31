@@ -2174,6 +2174,7 @@ object TestDriver {
                 packageNameOrActivityName = packageOrBundleIdOrActivity,
                 onLaunchHandler = onLaunchHandler
             )
+            Thread.sleep(1500)
             refreshCache()
             SyncUtility.doUntilTrue {
                 isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
@@ -2194,6 +2195,7 @@ object TestDriver {
                     onLaunchHandler = onLaunchHandler,
                     log = true
                 )
+                Thread.sleep(1500)
                 refreshCache()
                 onLaunchHandler?.invoke()
             } catch (t: Throwable) {
