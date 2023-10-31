@@ -204,9 +204,14 @@ internal fun TestDrive.screenIsCore(
         ) {
             val r = actionFunc()
             if (r.not()) {
-                onIrregular?.invoke()
+                testDrive.screenshot()
+                if (onIrregular != null) {
+                    onIrregular.invoke()
+                    refreshCache()
+                }
                 if (testContext.enableIrregularHandler && testContext.onScreenErrorHandler != null) {
                     testContext.onScreenErrorHandler!!.invoke()
+                    refreshCache()
                 }
             }
             r

@@ -2,6 +2,7 @@ package shirates.core.configuration
 
 import shirates.core.configuration.Selector.Companion.getFilterValues
 import shirates.core.configuration.repository.ImageFileRepository
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
@@ -14,6 +15,7 @@ import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.ImageMatchUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
+import shirates.core.utility.toPath
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 
@@ -96,7 +98,11 @@ class Filter(
 
     private fun getImageFileEntry(): ImageFileRepository.ImageFileEntry {
         val imageInfo = ImageInfo(value)
-        return ImageFileRepository.getImageFileEntry(imageExpression = imageInfo.fileName)
+        val screenDirectory = TestDriver.screenInfo.screenFile.toPath().parent.toString()
+        return ImageFileRepository.getImageFileEntry(
+            imageExpression = imageInfo.fileName,
+            screenDirectory = screenDirectory
+        )
     }
 
     val scale: Double

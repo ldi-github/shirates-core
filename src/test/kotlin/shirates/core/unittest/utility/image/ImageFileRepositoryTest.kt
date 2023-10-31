@@ -94,12 +94,28 @@ class ImageFileRepositoryTest : UnitTest() {
             // Assert
             assertThat(entry.filePath).isEqualTo(filePath)
             assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(1)
+            assertThat(ImageFileRepository.imageFileMap.values.first().count()).isEqualTo(1)
             assertThat(TestLog.lastTestLog?.message?.startsWith("Image file name duplicated.")).isFalse()
 
             // Act
-            ImageFileRepository.setFile(filePath = filePath)
+            ImageFileRepository.setFile(filePath = filePath)    // Set same file
+            // Assert
             assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(1)
-            assertThat(TestLog.lastTestLog?.message?.startsWith("Image file name duplicated.")).isTrue()
+            assertThat(ImageFileRepository.imageFileMap.values.first().count()).isEqualTo(1)
+
+            // Arrange
+            val filePath2 = "unitTestConfig/android/maps2/screens/images/tower_of_the_sun.png".toPath()
+            // Act
+            ImageFileRepository.setFile(filePath = filePath2)    // Set another file, same fileName
+            // Assert
+            assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(1)
+            assertThat(ImageFileRepository.imageFileMap.values.first().count()).isEqualTo(2)
+
+            // Act
+            ImageFileRepository.setFile(filePath = filePath2)    // Set same file
+            // Assert
+            assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(1)
+            assertThat(ImageFileRepository.imageFileMap.values.first().count()).isEqualTo(2)
         }
     }
 
@@ -121,6 +137,32 @@ class ImageFileRepositoryTest : UnitTest() {
                 ImageFileRepository.getImageFileEntry(imageExpression = "NotExistFile.png")
             }.isInstanceOf(FileNotFoundException::class.java)
                 .hasMessage("Image file not found. (expression=NotExistFile.png)")
+        }
+    }
+
+    @Test
+    fun getImageFileEntry_same_file_name() {
+
+        // Arrange
+        ImageFileRepository.setup(screenDirectory = "unitTestConfig/others/app1/screens".toPath())
+
+        run {
+            // Act
+            val entry = ImageFileRepository.getImageFileEntry(
+                imageExpression = "[Image1].png",
+                screenDirectory = "unitTestConfig/others/app1/screens/screen1"
+            )
+            // Assert
+            assertThat(entry.filePath).isEqualTo("unitTestConfig/others/app1/screens/screen1/image/[Image1].png".toPath())
+        }
+        run {
+            // Act
+            val entry = ImageFileRepository.getImageFileEntry(
+                imageExpression = "[Image1].png",
+                screenDirectory = "unitTestConfig/others/app1/screens/screen2"
+            )
+            // Assert
+            assertThat(entry.filePath).isEqualTo("unitTestConfig/others/app1/screens/screen2/image/[Image1].png".toPath())
         }
     }
 
