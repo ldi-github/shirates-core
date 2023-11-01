@@ -40,7 +40,7 @@ object BoofCVUtility {
         scale: Double,
         threshold: Double
     ): ImageMatchResult {
-        if (image == null || templateImage == null || image.width != templateImage.width || image.height != templateImage.height) {
+        if (image == null || templateImage == null) {
             return ImageMatchResult(
                 result = false,
                 scale = scale,
