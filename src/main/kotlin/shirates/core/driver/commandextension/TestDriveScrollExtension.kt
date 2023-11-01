@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
@@ -898,9 +899,25 @@ private fun TestDrive.getScrollingInfo(
     endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
 ): ScrollingInfo {
 
+    if (isAndroid || (isiOS && isKeyboardShown.not())) {
+        val r = ScrollingInfo(
+            errorMessage = "",
+            scrollableBounds = scrollableElement.bounds,
+            viewport = rootBounds,
+            direction = direction,
+            startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio
+        )
+        return r
+    }
+
+    val keyboardElement = select(".XCUIElementTypeKeyboard")
+    val b = scrollableElement.bounds
+    val height = keyboardElement.bounds.top - b.top
+    val scrollBounds = Bounds(left = b.left, top = b.top, width = b.width, height = height)
     val r = ScrollingInfo(
         errorMessage = "",
-        scrollableBounds = scrollableElement.bounds,
+        scrollableBounds = scrollBounds,
         viewport = rootBounds,
         direction = direction,
         startMarginRatio = startMarginRatio,
