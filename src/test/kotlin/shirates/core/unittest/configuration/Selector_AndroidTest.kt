@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Selector
 import shirates.core.configuration.Selector.Companion.orValueToList
 import shirates.core.configuration.repository.ImageFileRepository
+import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.UnitTest
@@ -534,16 +535,15 @@ class Selector_AndroidTest : UnitTest() {
     @Test
     fun init_image() {
 
-        ImageFileRepository.setup(
-            screenDirectory = "testConfig/android/maps/screens".toPath(),
-            importDirectories = listOf("unitTestConfig/android/maps/screens".toPath())
-        )
+        val screensDirectory = "unitTestConfig/android/image/screens".toPath()
+        ScreenRepository.setup(screensDirectory = screensDirectory)
+        ImageFileRepository.setup(screenDirectory = screensDirectory)
 
         run {
             // Arrange, Act
             val sel = Selector("image=tower_of_the_sun_face.png")
             val templateImage =
-                BufferedImageUtility.getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun_face.png")
+                BufferedImageUtility.getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun_face.png")
             // Assert
             assertThat(sel.expression).isEqualTo("image=tower_of_the_sun_face.png")
             assertThat(sel.nickname).isNull()
@@ -642,7 +642,7 @@ class Selector_AndroidTest : UnitTest() {
         run {
             // Arrange
             val image =
-                BufferedImageUtility.getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun.png")
+                BufferedImageUtility.getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun.png")
             val sel = Selector()
             assertThat(sel.image).isNull()
             // Act
@@ -653,7 +653,7 @@ class Selector_AndroidTest : UnitTest() {
         run {
             // Arrange
             val image =
-                BufferedImageUtility.getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun.png")
+                BufferedImageUtility.getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun.png")
             val sel = Selector()
             assertThat(sel.image).isNull()
             // Act

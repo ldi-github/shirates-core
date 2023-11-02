@@ -454,7 +454,6 @@ class Filter(
      */
     fun evaluateImageEqualsTo(
         image: BufferedImage?,
-        scale: Double = this.scale,
         threshold: Double = this.threshold,
     ): ImageMatchResult {
 
@@ -468,7 +467,6 @@ class Filter(
         val imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
             image = image,
             templateImage = tmp1,
-            scale = scale,
             threshold = threshold
         )
         imageMatchResult.result = imageMatchResult.result.reverseIfNegation()

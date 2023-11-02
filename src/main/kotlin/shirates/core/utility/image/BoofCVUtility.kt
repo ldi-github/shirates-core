@@ -37,23 +37,27 @@ object BoofCVUtility {
     fun evaluateImageEqualsTo(
         image: BufferedImage?,
         templateImage: BufferedImage?,
-        scale: Double,
         threshold: Double
     ): ImageMatchResult {
         if (image == null || templateImage == null) {
             return ImageMatchResult(
                 result = false,
-                scale = scale,
+                scale = 1.0,
                 threshold = threshold,
                 image = image,
                 templateImage = templateImage
             )
         }
 
-        val match = findMatches(
-            image = image.toGrayF32()!!,
-            templateImage = templateImage.toGrayF32()!!
-        ).firstOrNull()
+        val match = try {
+            findMatches(
+                image = image.toGrayF32()!!,
+                templateImage = templateImage.toGrayF32()!!
+            ).firstOrNull()
+        } catch (t: Throwable) {
+            TestLog.trace(t.message!!)
+            null
+        }
 
         val result =
             if (match == null) false
@@ -63,7 +67,7 @@ object BoofCVUtility {
             x = match?.x ?: Int.MIN_VALUE,
             y = match?.y ?: Int.MIN_VALUE,
             score = match?.score ?: Double.MIN_VALUE,
-            scale = scale,
+            scale = 1.0,
             threshold = threshold,
             image = image,
             templateImage = templateImage

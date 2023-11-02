@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Filter
 import shirates.core.configuration.Selector
 import shirates.core.configuration.repository.ImageFileRepository
+import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.testcode.UnitTest
@@ -50,7 +51,9 @@ class FilterTest : UnitTest() {
     fun templateImage() {
 
         // Arrange
-        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/maps/screens".toPath())
+        val screensDirectory = "unitTestConfig/android/image/screens".toPath()
+        ScreenRepository.setup(screensDirectory = screensDirectory)
+        ImageFileRepository.setup(screenDirectory = screensDirectory)
 
         run {
             // Arrange
@@ -60,7 +63,7 @@ class FilterTest : UnitTest() {
 
             // Arrange
             val image =
-                BufferedImageUtility.getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_golden_face.png")
+                BufferedImageUtility.getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_golden_face.png")
             // Act
             f.templateImage = image
             // Assert
@@ -530,7 +533,9 @@ class FilterTest : UnitTest() {
     @Test
     fun image() {
 
-        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/maps/screens".toPath())
+        val screensDirectory = "unitTestConfig/android/image/screens".toPath()
+        ScreenRepository.setup(screensDirectory = screensDirectory)
+        ImageFileRepository.setup(screenDirectory = screensDirectory)
 
         run {
             // Arrange, Act
@@ -2201,9 +2206,9 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            ImageFileRepository.setup("unitTestConfig/android/maps/screens".toPath())
+            ImageFileRepository.setup("unitTestConfig/android/image/screens".toPath())
             val image = BufferedImageUtility
-                .getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun_middle.png")
+                .getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun_middle.png")
             val filter = Filter("image=tower_of_the_sun_face.png")
             ImageFileRepository.clear()
             // Act
@@ -2219,9 +2224,9 @@ class FilterTest : UnitTest() {
 
         run {
             // Arrange
-            ImageFileRepository.setup("unitTestConfig/android/maps/screens".toPath())
+            ImageFileRepository.setup("unitTestConfig/android/image/screens".toPath())
             val image = BufferedImageUtility
-                .getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun_middle.png")
+                .getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun_middle.png")
             val filter = Filter("image=tower_of_the_sun_face.png")
             ImageFileRepository.clear()
             assertThatThrownBy {

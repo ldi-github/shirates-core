@@ -784,7 +784,7 @@ fun TestDrive.scanElements(
     return lastElement
 }
 
-private class ScrollingInfo(
+internal class ScrollingInfo(
     val errorMessage: String,
     val scrollableBounds: Bounds,
     val viewport: Bounds,
@@ -892,7 +892,7 @@ private class ScrollingInfo(
         }
 }
 
-private fun TestDrive.getScrollingInfo(
+internal fun TestDrive.getScrollingInfo(
     scrollableElement: TestElement,
     direction: ScrollDirection,
     startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
