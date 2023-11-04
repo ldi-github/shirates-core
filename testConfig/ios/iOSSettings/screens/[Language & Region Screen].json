@@ -16,7 +16,7 @@
   },
 
   "scroll": {
-    "overlay-elements": "[NavigationBar]"
+    "header-elements": "[NavigationBar]"
   }
 
 }

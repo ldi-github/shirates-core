@@ -60,8 +60,9 @@
 
   "scroll": {
     "header-elements": "[NavigationBar]",
+    "footer-elements": "",
+    "overlay-elements": "",
     "start-elements": "[Profile Icon]",
-    "end-elements": "",
-    "overlay-elements": "[NavigationBar]"
+    "end-elements": ""
   }
 }

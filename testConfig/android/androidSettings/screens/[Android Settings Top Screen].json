@@ -2,7 +2,12 @@
   "key": "[Android Settings Top Screen]",
 
   "identity": "#recycler_view",
-  "satellites": ["Battery", "Accessibility", "Passwords & accounts", "Tips & support"],
+  "satellites": [
+    "Battery",
+    "Accessibility",
+    "Passwords & accounts",
+    "Tips & support"
+  ],
 
   "selectors": {
     "[Account Avatar]": "#account_avatar",
@@ -95,8 +100,9 @@
   },
 
   "scroll": {
+    "header-elements": "[Search Button][Search settings]",
+    "overlay-elements": "",
     "start-elements": "[Network & internet]",
-    "end-elements": "{Tips & support}",
-    "overlay-elements": "[Search Button][Search settings]"
+    "end-elements": "{Tips & support}"
   }
 }

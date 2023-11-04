@@ -510,6 +510,7 @@ class TestElement(
                  */
                 val s = TestDriver.screenInfo.scrollInfo
                 val overlayElements = s.overlayElements
+                var r = true
                 if (overlayElements.any()) {
                     for (overlayElement in overlayElements) {
                         val overlay = TestDriver.select(
@@ -518,10 +519,16 @@ class TestElement(
                             throwsException = false,
                             waitSeconds = 0.0,
                         )
+                        if (overlay == this) {
+                            return true
+                        }
                         if (overlay.isFound && this.bounds.isOverlapping(overlay.bounds)) {
-                            return false
+                            r = false
                         }
                     }
+                }
+                if (r.not()) {
+                    return false
                 }
             }
             return true

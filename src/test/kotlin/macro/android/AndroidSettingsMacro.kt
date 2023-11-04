@@ -12,7 +12,7 @@ object AndroidSettingsMacro : TestDrive {
     fun androidSettingsTopScreen() {
 
         if (it.isScreen("[Android Settings Top Screen]")) {
-            it.selectWithScrollUp("Settings")
+            it.selectWithScrollUp("Network & internet")
             return
         }
 
