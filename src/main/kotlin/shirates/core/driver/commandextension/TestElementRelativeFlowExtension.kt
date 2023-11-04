@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
+import shirates.core.driver.Bounds
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
 import shirates.core.driver.commandextension.helper.FlowContainer
@@ -10,12 +11,13 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 private fun TestElement.flowCore(
     selector: Selector,
-    scopeElements: List<TestElement>
+    scopeElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.pos = null
-    val filteredElements = scopeElements.filterBySelector(selector = sel)
+    val filteredElements = scopeElements.filterBySelector(selector = sel, frame = frame)
 
     val fc = FlowContainer()
     val isThisContainingOthers =
@@ -42,12 +44,13 @@ private fun TestElement.flowCore(
 
 private fun TestElement.vflowCore(
     selector: Selector,
-    scopeElements: List<TestElement>
+    scopeElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.pos = null
-    val filteredElements = scopeElements.filterBySelector(selector = sel)
+    val filteredElements = scopeElements.filterBySelector(selector = sel, frame = frame)
 
     val vfc = VerticalFlowContainer()
     val isThisContainingOthers =
@@ -74,7 +77,8 @@ private fun TestElement.vflowCore(
 
 internal fun TestElement.flow(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = execRelativeCommand(
@@ -82,7 +86,8 @@ internal fun TestElement.flow(
         getElement = {
             flowCore(
                 selector = selector,
-                scopeElements = targetElements
+                scopeElements = targetElements,
+                frame = frame
             )
         }
     )
@@ -94,12 +99,14 @@ internal fun TestElement.flow(
  * flow
  */
 fun TestElement.flow(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flow($pos)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
@@ -107,35 +114,40 @@ fun TestElement.flow(
  * flow
  */
 fun TestElement.flow(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flow($expression)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.flowLabel(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.labelTypesExpression
-    return flow(selector = sel, targetElements = targetElements)
+    return flow(selector = sel, targetElements = targetElements, frame = frame)
 }
 
 /**
  * flowLabel
  */
 fun TestElement.flowLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowLabel($pos)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
@@ -143,35 +155,40 @@ fun TestElement.flowLabel(
  * flowLabel
  */
 fun TestElement.flowLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowLabel($expression)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.flowInput(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.inputTypesExpression
-    return flow(selector = sel, targetElements = targetElements)
+    return flow(selector = sel, targetElements = targetElements, frame = frame)
 }
 
 /**
  * flowInput
  */
 fun TestElement.flowInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowInput($pos)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
@@ -179,35 +196,40 @@ fun TestElement.flowInput(
  * flowInput
  */
 fun TestElement.flowInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowInput($expression)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.flowImage(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.imageTypesExpression
-    return flow(selector = sel, targetElements = targetElements)
+    return flow(selector = sel, targetElements = targetElements, frame = frame)
 }
 
 /**
  * flowImage
  */
 fun TestElement.flowImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowImage($pos)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
@@ -215,35 +237,40 @@ fun TestElement.flowImage(
  * flowImage
  */
 fun TestElement.flowImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowImage($expression)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.flowButton(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
-    return flow(selector = sel, targetElements = targetElements)
+    return flow(selector = sel, targetElements = targetElements, frame = frame)
 }
 
 /**
  * flowButton
  */
 fun TestElement.flowButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowButton($pos)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
@@ -251,35 +278,40 @@ fun TestElement.flowButton(
  * flowButton
  */
 fun TestElement.flowButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowButton($expression)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.flowSwitch(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.switchTypesExpression
-    return flow(selector = sel, targetElements = targetElements)
+    return flow(selector = sel, targetElements = targetElements, frame = frame)
 }
 
 /**
  * flowSwitch
  */
 fun TestElement.flowSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowSwitch($pos)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
@@ -287,18 +319,21 @@ fun TestElement.flowSwitch(
  * flowSwitch
  */
 fun TestElement.flowSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":flowSwitch($expression)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.vflow(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     return execRelativeCommand(
@@ -306,7 +341,8 @@ internal fun TestElement.vflow(
         getElement = {
             vflowCore(
                 selector = selector,
-                scopeElements = targetElements
+                scopeElements = targetElements,
+                frame = frame
             )
         }
     )
@@ -316,12 +352,14 @@ internal fun TestElement.vflow(
  * vflow
  */
 fun TestElement.vflow(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":vflow($pos)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
@@ -329,11 +367,13 @@ fun TestElement.vflow(
  * vflow
  */
 fun TestElement.vflow(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":vflow($expression)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }

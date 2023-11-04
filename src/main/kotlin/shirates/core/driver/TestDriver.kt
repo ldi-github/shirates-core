@@ -1003,6 +1003,7 @@ object TestDriver {
         scrollMaxCount: Int = testContext.scrollMaxCount,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
+        frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         log: Boolean = false
     ): TestElement {
@@ -1023,6 +1024,7 @@ object TestDriver {
                 scrollMaxCount = scrollMaxCount,
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
+                frame = frame,
                 useCache = useCache,
             )
         }
@@ -1040,6 +1042,7 @@ object TestDriver {
         scrollMaxCount: Int = testContext.scrollMaxCount,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
+        frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
     ): TestElement {
 
@@ -1054,7 +1057,8 @@ object TestDriver {
                 scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 throwsException = throwsException,
-                waitSeconds = waitSeconds
+                waitSeconds = waitSeconds,
+                frame = frame
             )
         }
 
@@ -1087,7 +1091,8 @@ object TestDriver {
         scrollEndMarginRatio: Double,
         scrollMaxCount: Int,
         throwsException: Boolean,
-        waitSeconds: Double
+        waitSeconds: Double,
+        frame: Bounds?
     ): TestElement {
         if (selector.isRelative) {
             return TestElementCache.select(
@@ -1113,7 +1118,8 @@ object TestDriver {
                 syncCache()
                 TestElementCache.select(
                     selector = selector,
-                    throwsException = false
+                    throwsException = false,
+                    frame = frame
                 )
             } else {
                 selectDirect(
@@ -1198,7 +1204,8 @@ object TestDriver {
 
     internal fun selectDirect(
         selector: Selector,
-        throwsException: Boolean
+        throwsException: Boolean,
+        frame: Bounds? = null
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {
@@ -1215,13 +1222,14 @@ object TestDriver {
                 if (fullXPathCondition.isNotBlank()) {
                     elm = selectDirectByXPath(
                         selector = selector,
-                        fullXPathCondition = fullXPathCondition
+                        fullXPathCondition = fullXPathCondition,
+                        frame = frame
                     )
                 }
             } else if (isiOS) {
                 val iosClassChain = selector.getIosClassChain()
                 if (iosClassChain.isNotBlank()) {
-                    elm = selectDirectByIosClassChain(selector = selector)
+                    elm = selectDirectByIosClassChain(selector = selector, frame = frame)
                 }
             }
             if (elm == null) {
@@ -1262,6 +1270,9 @@ object TestDriver {
                     }
                 }
             }
+            if (elm.isFound && frame != null && elm.bounds.isIncludedIn(frame).not()) {
+                elm = TestElement.emptyElement
+            }
             elm.selector = selector
             elm
         } catch (t: Throwable) {
@@ -1286,7 +1297,8 @@ object TestDriver {
 
     private fun selectDirectByXPath(
         selector: Selector,
-        fullXPathCondition: String
+        fullXPathCondition: String,
+        frame: Bounds? = null
     ): TestElement {
 
         val ms = Measure("selectDirectByXPath")
@@ -1294,15 +1306,27 @@ object TestDriver {
             if (selector.pos == null || selector.pos == 1) {
                 if (isiOS) {
                     val xpath = "//*$fullXPathCondition[@visible='true']"
-                    return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
+                    return testDrive.findWebElementBy(
+                        locator = By.xpath(xpath),
+                        timeoutMilliseconds = 0,
+                        frame = frame
+                    )
                 } else {
                     val xpath = "//*$fullXPathCondition"
-                    return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
+                    return testDrive.findWebElementBy(
+                        locator = By.xpath(xpath),
+                        timeoutMilliseconds = 0,
+                        frame = frame
+                    )
                 }
             }
 
             val xpath = "//*$fullXPathCondition"
-            val elements = testDrive.findWebElementsBy(By.xpath(xpath), timeoutMilliseconds = 0)
+            val elements = testDrive.findWebElementsBy(
+                locator = By.xpath(xpath),
+                timeoutMilliseconds = 0,
+                frame = frame
+            )
             val pos = selector.pos!!
             if (pos <= elements.count()) {
                 return elements[pos - 1]
@@ -1319,13 +1343,18 @@ object TestDriver {
         return classChain.removePrefix("**/*").removePrefix("[`").removeSuffix("`]")
     }
 
-    private fun selectDirectByIosClassChain(
-        selector: Selector
+    internal fun selectDirectByIosClassChain(
+        selector: Selector,
+        frame: Bounds? = null
     ): TestElement {
 
         val classChain = selector.getIosClassChain()
         val ms = Measure(classChain)
-        val element = testDrive.findWebElementBy(AppiumBy.iOSClassChain(classChain), timeoutMilliseconds = 0)
+        val element = testDrive.findWebElementBy(
+            locator = AppiumBy.iOSClassChain(classChain),
+            timeoutMilliseconds = 0,
+            frame = frame
+        )
         ms.end()
         return element
     }
@@ -1485,10 +1514,20 @@ object TestDriver {
         var e = TestElement()
         val actionFunc = {
             val ms = Measure("$selector")
+
+            val scrollableElement = testDrive.getScrollableElement()
+            val scrollingInfo = testDrive.getScrollingInfo(
+                scrollableElement = scrollableElement,
+                direction = direction,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio
+            )
+
             e = select(
                 selector = selector,
                 waitSeconds = 0.0,
                 throwsException = false,
+                frame = scrollingInfo.safeBounds
             )
             ms.end()
             e.isSafe
@@ -1878,7 +1917,7 @@ object TestDriver {
             NicknameUtility.validateScreenName(screenName)
             val screenInfo = ScreenRepository.get(screenName)
 
-            var r = TestDriveObject.canSelectAll(selectors = screenInfo.identitySelectors)
+            var r = TestDriveObject.canSelectAll(selectors = screenInfo.identitySelectors, frame = null)
             if (r && screenInfo.satelliteSelectors.any()) {
                 fun hasAnySatellite(): Boolean {
                     for (expression in screenInfo.satelliteExpressions) {

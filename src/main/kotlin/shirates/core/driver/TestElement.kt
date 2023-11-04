@@ -480,7 +480,36 @@ class TestElement(
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
-                val overlayElements = TestDriver.screenInfo.scrollInfo.overlayElements
+                /**
+                 * Safe boundary check in scrollable view
+                 */
+                val scrollableElement = this.getScrollableElementsInAncestorsAndSelf().firstOrNull()
+                if (scrollableElement != null && scrollableElement.isScrollable) {
+                    val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
+                    if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
+                        return false
+                    }
+                }
+
+                if (isiOS) {
+                    /**
+                     * Keyboard overlapping check
+                     */
+                    if (testContext.useCache) {
+                        val keyboard = testDrive.getKeyboardInIos()
+                        if (keyboard.isFound) {
+                            if (this.bounds.isOverlapping(keyboard.bounds)) {
+                                return false
+                            }
+                        }
+                    }
+                }
+
+                /**
+                 * Overlay check
+                 */
+                val s = TestDriver.screenInfo.scrollInfo
+                val overlayElements = s.overlayElements
                 if (overlayElements.any()) {
                     for (overlayElement in overlayElements) {
                         val overlay = TestDriver.select(

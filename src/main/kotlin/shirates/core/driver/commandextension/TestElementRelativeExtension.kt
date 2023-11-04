@@ -13,6 +13,7 @@ import shirates.core.logging.Message
 fun TestElement.relative(
     command: String,
     scopeElements: List<TestElement> = rootElement.elements,
+    frame: Bounds? = null
 ): TestElement {
 
     val ms = Measure("relative command=$command")
@@ -29,7 +30,8 @@ fun TestElement.relative(
 
         val e = relative(
             relativeSelector = relativeSelector,
-            scopeElements = scopeElements
+            scopeElements = scopeElements,
+            frame = frame
         )
         if (e == this) {
             e.selector = oldSelector
@@ -66,7 +68,8 @@ private val commandsAllowedInDirectAccessMode = listOf(
 internal fun TestElement.relative(
     relativeSelector: Selector,
     newSelector: Selector = this.getChainedSelector(relativeSelector = relativeSelector),
-    scopeElements: List<TestElement>? = null
+    scopeElements: List<TestElement>? = null,
+    frame: Bounds? = null
 ): TestElement {
 
     if (testContext.useCache.not()) {
@@ -93,168 +96,192 @@ internal fun TestElement.relative(
             ":right" -> {
                 e = this.right(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets
+                    targetElements = scopeElements ?: widgets,
+                    frame = frame
                 )
             }
 
             ":rightInput" -> {
                 e = this.rightInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets
+                    targetElements = scopeElements ?: inputWidgets,
+                    frame = frame
                 )
             }
 
             ":rightLabel" -> {
                 e = this.rightLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets
+                    targetElements = scopeElements ?: labelWidgets,
+                    frame = frame
                 )
             }
 
             ":rightImage" -> {
                 e = this.rightImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets
+                    targetElements = scopeElements ?: imageWidgets,
+                    frame = frame
                 )
             }
 
             ":rightButton" -> {
                 e = this.rightButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets
+                    targetElements = scopeElements ?: buttonWidgets,
+                    frame = frame
                 )
             }
 
             ":rightSwitch" -> {
                 e = this.rightSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets
+                    targetElements = scopeElements ?: switchWidgets,
+                    frame = frame
                 )
             }
 
             ":below" -> {
                 e = this.below(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets
+                    targetElements = scopeElements ?: widgets,
+                    frame = frame
                 )
             }
 
             ":belowInput" -> {
                 e = this.belowInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets
+                    targetElements = scopeElements ?: inputWidgets,
+                    frame = frame
                 )
             }
 
             ":belowLabel" -> {
                 e = this.belowLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets
+                    targetElements = scopeElements ?: labelWidgets,
+                    frame = frame
                 )
             }
 
             ":belowImage" -> {
                 e = this.belowImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets
+                    targetElements = scopeElements ?: imageWidgets,
+                    frame = frame
                 )
             }
 
             ":belowButton" -> {
                 e = this.belowButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets
+                    targetElements = scopeElements ?: buttonWidgets,
+                    frame = frame
                 )
             }
 
             ":belowSwitch" -> {
                 e = this.belowSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets
+                    targetElements = scopeElements ?: switchWidgets,
+                    frame = frame
                 )
             }
 
             ":left" -> {
                 e = this.left(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets
+                    targetElements = scopeElements ?: widgets,
+                    frame = frame
                 )
             }
 
             ":leftInput" -> {
                 e = this.leftInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets
+                    targetElements = scopeElements ?: inputWidgets,
+                    frame = frame
                 )
             }
 
             ":leftLabel" -> {
                 e = this.leftLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets
+                    targetElements = scopeElements ?: labelWidgets,
+                    frame = frame
                 )
             }
 
             ":leftImage" -> {
                 e = this.leftImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets
+                    targetElements = scopeElements ?: imageWidgets,
+                    frame = frame
                 )
             }
 
             ":leftButton" -> {
                 e = this.leftButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets
+                    targetElements = scopeElements ?: buttonWidgets,
+                    frame = frame
                 )
             }
 
             ":leftSwitch" -> {
                 e = this.leftSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets
+                    targetElements = scopeElements ?: switchWidgets,
+                    frame = frame
                 )
             }
 
             ":above" -> {
                 e = this.above(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets
+                    targetElements = scopeElements ?: widgets,
+                    frame = frame
                 )
             }
 
             ":aboveInput" -> {
                 e = this.aboveInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets
+                    targetElements = scopeElements ?: inputWidgets,
+                    frame = frame
                 )
             }
 
             ":aboveLabel" -> {
                 e = this.aboveLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets
+                    targetElements = scopeElements ?: labelWidgets,
+                    frame = frame
                 )
             }
 
             ":aboveImage" -> {
                 e = this.aboveImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets
+                    targetElements = scopeElements ?: imageWidgets,
+                    frame = frame
                 )
             }
 
             ":aboveButton" -> {
                 e = this.aboveButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets
+                    targetElements = scopeElements ?: buttonWidgets,
+                    frame = frame
                 )
             }
 
             ":aboveSwitch" -> {
                 e = this.aboveSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets
+                    targetElements = scopeElements ?: switchWidgets,
+                    frame = frame
                 )
             }
 
@@ -264,158 +291,165 @@ internal fun TestElement.relative(
             ":flow" -> {
                 e = this.flow(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets
+                    targetElements = scopeElements ?: widgets,
+                    frame = frame
                 )
             }
 
             ":vflow" -> {
                 e = this.vflow(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets
+                    targetElements = scopeElements ?: widgets,
+                    frame = frame
                 )
             }
 
             ":flowLabel", ":label" -> {
                 e = this.flowLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets
+                    targetElements = scopeElements ?: labelWidgets,
+                    frame = frame
                 )
             }
 
             ":flowInput", ":input" -> {
                 e = this.flowInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets
+                    targetElements = scopeElements ?: inputWidgets,
+                    frame = frame
                 )
             }
 
             ":flowImage", ":image" -> {
                 e = this.flowImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets
+                    targetElements = scopeElements ?: imageWidgets,
+                    frame = frame
                 )
             }
 
             ":flowButton", ":button" -> {
                 e = this.flowButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets
+                    targetElements = scopeElements ?: buttonWidgets,
+                    frame = frame
                 )
             }
 
             ":flowSwitch", ":switch" -> {
                 e = this.flowSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets
+                    targetElements = scopeElements ?: switchWidgets,
+                    frame = frame
                 )
             }
 
             ":innerWidget", ":inner" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerWidget(selector = sel)
+                e = this.innerWidget(selector = sel, frame = frame)
             }
 
             ":innerLabel" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerLabel(selector = sel)
+                e = this.innerLabel(selector = sel, frame = frame)
             }
 
             ":innerInput" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerInput(selector = sel)
+                e = this.innerInput(selector = sel, frame = frame)
             }
 
             ":innerImage" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerImage(selector = sel)
+                e = this.innerImage(selector = sel, frame = frame)
             }
 
             ":innerButton" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerButton(selector = sel)
+                e = this.innerButton(selector = sel, frame = frame)
             }
 
             ":innerSwitch" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerSwitch(selector = sel)
+                e = this.innerSwitch(selector = sel, frame = frame)
             }
 
             ":innerVWidget", ":innerV" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerVWidget(selector = sel)
+                e = this.innerVWidget(selector = sel, frame = frame)
             }
 
             ":innerVlabel" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerVlabel(selector = sel)
+                e = this.innerVlabel(selector = sel, frame = frame)
             }
 
             ":innerVinput" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerVinput(selector = sel)
+                e = this.innerVinput(selector = sel, frame = frame)
             }
 
             ":innerVimage" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerVimage(selector = sel)
+                e = this.innerVimage(selector = sel, frame = frame)
             }
 
             ":innerVbutton" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerVbutton(selector = sel)
+                e = this.innerVbutton(selector = sel, frame = frame)
             }
 
             ":innerVswitch" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.innerVswitch(selector = sel)
+                e = this.innerVswitch(selector = sel, frame = frame)
             }
 
             ":cellWidget", ":cell" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.cellWidget(selector = sel)
+                e = this.cellWidget(selector = sel, frame = frame)
             }
 
             ":cellLabel" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.cellLabel(selector = sel)
+                e = this.cellLabel(selector = sel, frame = frame)
             }
 
             ":cellInput" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.cellInput(selector = sel)
+                e = this.cellInput(selector = sel, frame = frame)
             }
 
             ":cellImage" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.cellImage(selector = sel)
+                e = this.cellImage(selector = sel, frame = frame)
             }
 
             ":cellButton" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.cellButton(selector = sel)
+                e = this.cellButton(selector = sel, frame = frame)
             }
 
             ":cellSwitch" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null
-                e = this.cellSwitch(selector = sel)
+                e = this.cellSwitch(selector = sel, frame = frame)
             }
 
             /**
@@ -444,84 +478,96 @@ internal fun TestElement.relative(
             ":next" -> {
                 e = this.next(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets
+                    targetElements = scopeElements ?: widgets,
+                    frame = frame
                 )
             }
 
             ":previous" -> {
                 e = this.previous(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets
+                    targetElements = scopeElements ?: widgets,
+                    frame = frame
                 )
             }
 
             ":nextInput" -> {
                 e = this.nextInput(
                     relativeSelector,
-                    targetElements = scopeElements ?: innerWidgets
+                    targetElements = scopeElements ?: innerWidgets,
+                    frame = frame
                 )
             }
 
             ":preInput" -> {
                 e = this.preInput(
                     relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets
+                    targetElements = scopeElements ?: inputWidgets,
+                    frame = frame
                 )
             }
 
             ":nextLabel" -> {
                 e = this.nextLabel(
                     relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets
+                    targetElements = scopeElements ?: labelWidgets,
+                    frame = frame
                 )
             }
 
             ":preLabel" -> {
                 e = this.preLabel(
                     relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets
+                    targetElements = scopeElements ?: labelWidgets,
+                    frame = frame
                 )
             }
 
             ":nextImage" -> {
                 e = this.nextImage(
                     relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets
+                    targetElements = scopeElements ?: imageWidgets,
+                    frame = frame
                 )
             }
 
             ":preImage" -> {
                 e = this.preImage(
                     relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets
+                    targetElements = scopeElements ?: imageWidgets,
+                    frame = frame
                 )
             }
 
             ":nextButton" -> {
                 e = this.nextButton(
                     relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets
+                    targetElements = scopeElements ?: buttonWidgets,
+                    frame = frame
                 )
             }
 
             ":preButton" -> {
                 e = this.preButton(
                     relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets
+                    targetElements = scopeElements ?: buttonWidgets,
+                    frame = frame
                 )
             }
 
             ":nextSwitch" -> {
                 e = this.nextSwitch(
                     relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets
+                    targetElements = scopeElements ?: switchWidgets,
+                    frame = frame
                 )
             }
 
             ":preSwitch" -> {
                 e = this.preSwitch(
                     relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets
+                    targetElements = scopeElements ?: switchWidgets,
+                    frame = frame
                 )
             }
 
@@ -554,14 +600,16 @@ internal fun TestElement.relative(
  */
 fun TestElement.relative(
     relativeSelectors: List<Selector>,
-    scopeElements: List<TestElement> = rootElement.elements
+    scopeElements: List<TestElement> = rootElement.elements,
+    frame: Bounds? = null
 ): TestElement {
 
     var e = this
     for (selector in relativeSelectors) {
         e = e.relative(
             relativeSelector = selector,
-            scopeElements = scopeElements
+            scopeElements = scopeElements,
+            frame = frame
         )
     }
 

@@ -2,7 +2,6 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -15,7 +14,9 @@ fun TestDrive.select(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    frame: Bounds? = rootBounds,
     useCache: Boolean = testContext.useCache,
+    updateLastElement: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -39,18 +40,9 @@ fun TestDrive.select(
             direction = direction,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
+            frame = frame,
             useCache = useCache,
         )
-        if (scroll) {
-            if (isAndroid) {
-                e = TestDriver.select(
-                    selector = sel,
-                    waitSeconds = waitSeconds,
-                    throwsException = throwsException,
-                    useCache = useCache,
-                )
-            }
-        }
     }
     if (func != null) {
         func(e)
@@ -59,8 +51,10 @@ fun TestDrive.select(
         e.selector = sel
     }
 
-    lastElement = e
-    return lastElement
+    if (updateLastElement) {
+        lastElement = e
+    }
+    return e
 }
 
 /**
@@ -70,6 +64,7 @@ fun TestDrive.widget(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    frame: Bounds? = rootBounds,
     useCache: Boolean = testContext.useCache,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -85,6 +80,7 @@ fun TestDrive.widget(
         expression = sel.expression!!,
         throwsException = throwsException,
         waitSeconds = waitSeconds,
+        frame = frame,
         useCache = useCache,
         log = log,
         func = func
@@ -255,7 +251,7 @@ fun TestDrive.selectInScanResults(
             e = TestElementCache.select(
                 expression = expression,
                 throwsException = false,
-                selectContext = scanRoot.element
+                selectContext = scanRoot.element,
             )
             if (e.isEmpty.not()) {
                 return@execSelectCommand
@@ -284,6 +280,7 @@ internal fun TestDrive.canSelect(
     scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     scrollMaxCount: Int = testContext.scrollMaxCount,
     waitSeconds: Double = 0.0,
+    frame: Bounds? = null
 ): Boolean {
 
     val e = TestDriver.select(
@@ -296,6 +293,7 @@ internal fun TestDrive.canSelect(
         scrollMaxCount = scrollMaxCount,
         waitSeconds = waitSeconds,
         throwsException = false,
+        frame = frame
     )
 
     return e.isEmpty.not()
@@ -531,6 +529,7 @@ fun TestDrive.canSelectAllInScanResults(
  */
 internal fun TestDrive.canSelectAll(
     selectors: Iterable<Selector>,
+    frame: Bounds?,
     log: Boolean = false
 ): Boolean {
     val testElement = refreshLastElement()
@@ -540,7 +539,7 @@ internal fun TestDrive.canSelectAll(
     val context = TestDriverCommandContext(testElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (selector in selectors) {
-            foundAll = canSelect(selector = selector)
+            foundAll = canSelect(selector = selector, frame = frame)
             if (foundAll.not()) {
                 break
             }
@@ -557,6 +556,7 @@ internal fun TestDrive.canSelectAll(
  */
 fun TestDrive.canSelectAll(
     vararg expressions: String,
+    frame: Bounds? = null,
     log: Boolean = false
 ): Boolean {
     val testElement = getThisOrRootElement()
@@ -567,7 +567,7 @@ fun TestDrive.canSelectAll(
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         val screenInfo = TestDriver.screenInfo
         val selectors = expressions.map { screenInfo.getSelector(expression = it) }
-        foundAll = canSelectAll(selectors = selectors)
+        foundAll = canSelectAll(selectors = selectors, frame = frame)
     }
     if (logLine != null) {
         logLine.message += " (result=$foundAll)"

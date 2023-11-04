@@ -121,14 +121,13 @@ fun TestElement.swipeToTop(
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
-    stickToEdge: Boolean = true,
-    statBarHeight: Int = PropertiesManager.statBarHeight
+    stickToEdge: Boolean = true
 ): TestElement {
 
     val scrollFrame =
         if (ofScreen) rootElement
         else getScrollableElement(scrollable)
-    val headerBottom = getHeaderBottom(statBarHeight = statBarHeight)
+    val headerBottom = TestDriver.screenInfo.scrollInfo.getHeaderBottom()
 
     val command = "swipeToTop"
     val message = message(id = command, subject = subject)
@@ -151,13 +150,6 @@ fun TestElement.swipeToTop(
     return this.refreshThisElement()
 }
 
-private fun TestElement.getHeaderBottom(statBarHeight: Int): Int {
-    val headerElements = TestDriver.screenInfo.scrollInfo.headerElements.map { select(expression = it) }
-    val sortedElements = headerElements.sortedBy { it.bounds.bottom }
-    val headerBottom = sortedElements.lastOrNull()?.bounds?.bottom ?: statBarHeight
-    return headerBottom
-}
-
 /**
  * swipeToTopOfScreen
  */
@@ -165,8 +157,7 @@ fun TestElement.swipeToTopOfScreen(
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
-    stickToEdge: Boolean = true,
-    statBarHeight: Int = PropertiesManager.statBarHeight
+    stickToEdge: Boolean = true
 ): TestElement {
 
     return swipeToTop(
@@ -174,8 +165,7 @@ fun TestElement.swipeToTopOfScreen(
         startOffsetRatio = startOffsetRatio,
         durationSeconds = durationSeconds,
         repeat = repeat,
-        stickToEdge = stickToEdge,
-        statBarHeight = statBarHeight
+        stickToEdge = stickToEdge
     )
 }
 

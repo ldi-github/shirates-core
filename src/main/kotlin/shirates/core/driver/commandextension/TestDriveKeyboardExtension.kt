@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import com.google.common.collect.ImmutableMap
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
+import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
@@ -42,10 +43,12 @@ fun TestDrive.hideKeyboard(
     context.execOperateCommand(command = command, message = message) {
         if (isiOS) {
             // hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
-            val keyboard = select(".XCUIElementTypeKeyboard")
-            val label = keyboard.aboveLabel()
-            if (keyboard.isFound && label.isFound) {
-                label.click()
+            val keyboard = testDrive.getKeyboardInIos()
+            if (keyboard.isFound) {
+                val label = keyboard.aboveLabel()
+                if (label.isFound) {
+                    label.click()
+                }
             }
         } else {
             TestDriver.appiumDriver.hideKeyboard()
@@ -57,6 +60,21 @@ fun TestDrive.hideKeyboard(
 
     lastElement = this.focusedElement
     return lastElement
+}
+
+internal fun TestDrive.getKeyboardInIos(): TestElement {
+
+    if (isiOS.not()) {
+        return TestElement.emptyElement
+    }
+
+    if (testContext.useCache) {
+        return TestElementCache.allElements.firstOrNull() { it.type == "XCUIElementTypeKeyboard" }
+            ?: TestElement.emptyElement
+    }
+
+    val selector = Selector(".XCUIElementTypeKeyboard")
+    return TestDriver.selectDirectByIosClassChain(selector, frame = null)
 }
 
 /**

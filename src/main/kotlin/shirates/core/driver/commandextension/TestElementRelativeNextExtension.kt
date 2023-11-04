@@ -1,15 +1,13 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
-import shirates.core.driver.filterBySelector
+import shirates.core.driver.*
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 internal fun TestElement.next(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds? = null
 ): TestElement {
 
     var e = TestElement()
@@ -25,13 +23,15 @@ internal fun TestElement.next(
             e = nextPreviousCore(
                 next = false,
                 targetElements = targetElements,
-                selectorForNextPrevious = sel
+                selectorForNextPrevious = sel,
+                frame = frame
             )
         } else {
             e = nextPreviousCore(
                 next = true,
                 targetElements = targetElements,
-                selectorForNextPrevious = selector
+                selectorForNextPrevious = selector,
+                frame = frame
             )
         }
     }
@@ -46,11 +46,13 @@ internal fun TestElement.next(
  * next
  */
 fun TestElement.next(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":next($expression)"
+        command = ":next($expression)",
+        frame = frame
     )
 }
 
@@ -58,17 +60,20 @@ fun TestElement.next(
  * next
  */
 fun TestElement.next(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":next($pos)"
+        command = ":next($pos)",
+        frame = frame
     )
 }
 
 internal fun TestElement.previous(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     var e = TestElement()
@@ -83,13 +88,15 @@ internal fun TestElement.previous(
             e = nextPreviousCore(
                 next = true,
                 targetElements = targetElements,
-                selectorForNextPrevious = sel
+                selectorForNextPrevious = sel,
+                frame = frame
             )
         } else {
             e = nextPreviousCore(
                 next = false,
                 targetElements = targetElements,
-                selectorForNextPrevious = selector
+                selectorForNextPrevious = selector,
+                frame = frame
             )
         }
     }
@@ -105,10 +112,12 @@ internal fun TestElement.previous(
  */
 fun TestElement.previous(
     expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":previous($expression)",
+        frame = frame
     )
 }
 
@@ -116,18 +125,21 @@ fun TestElement.previous(
  * previous
  */
 fun TestElement.previous(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":previous($pos)"
+        command = ":previous($pos)",
+        frame = frame
     )
 }
 
 private fun TestElement.nextPreviousCore(
     next: Boolean,
     targetElements: List<TestElement>,
-    selectorForNextPrevious: Selector
+    selectorForNextPrevious: Selector,
+    frame: Bounds?
 ): TestElement {
 
     val current = targetElements.firstOrNull() { it.toString() == this.toString() }
@@ -148,7 +160,7 @@ private fun TestElement.nextPreviousCore(
         sel.pos = -1 * sel.pos!!
     }
     var filtered = filteredByIndex
-    filtered = filtered.filterBySelector(selector = sel)
+    filtered = filtered.filterBySelector(selector = sel, frame = frame)
 
     var e = if (next) filtered.firstOrNull()
     else filtered.lastOrNull()
@@ -191,14 +203,15 @@ internal fun TestElement.execRelativeCommand(
 
 internal fun TestElement.nextLabel(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.labelTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -206,11 +219,13 @@ internal fun TestElement.nextLabel(
  * nextLabel
  */
 fun TestElement.nextLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextLabel($pos)"
+        command = ":nextLabel($pos)",
+        frame = frame
     )
 }
 
@@ -218,24 +233,27 @@ fun TestElement.nextLabel(
  * nextLabel
  */
 fun TestElement.nextLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextLabel($expression)"
+        command = ":nextLabel($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.preLabel(
     selector: Selector,
     targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.labelTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -243,11 +261,13 @@ internal fun TestElement.preLabel(
  * preLabel
  */
 fun TestElement.preLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preLabel($pos)"
+        command = ":preLabel($pos)",
+        frame = frame
     )
 }
 
@@ -255,24 +275,27 @@ fun TestElement.preLabel(
  * preLabel
  */
 fun TestElement.preLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preLabel($expression)"
+        command = ":preLabel($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.nextInput(
     selector: Selector,
     targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.inputTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -280,11 +303,13 @@ internal fun TestElement.nextInput(
  * nextInput
  */
 fun TestElement.nextInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextInput($pos)"
+        command = ":nextInput($pos)",
+        frame = frame
     )
 }
 
@@ -292,24 +317,27 @@ fun TestElement.nextInput(
  * nextInput
  */
 fun TestElement.nextInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextInput($expression)"
+        command = ":nextInput($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.preInput(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.inputTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -317,11 +345,13 @@ internal fun TestElement.preInput(
  * preInput
  */
 fun TestElement.preInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":preInput($pos)",
+        frame = frame
     )
 }
 
@@ -329,24 +359,27 @@ fun TestElement.preInput(
  * preInput
  */
 fun TestElement.preInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preInput($expression)"
+        command = ":preInput($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.nextImage(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.imageTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -354,11 +387,13 @@ internal fun TestElement.nextImage(
  * nextImage
  */
 fun TestElement.nextImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextImage($pos)"
+        command = ":nextImage($pos)",
+        frame = frame
     )
 }
 
@@ -366,24 +401,27 @@ fun TestElement.nextImage(
  * nextImage
  */
 fun TestElement.nextImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextImage($expression)"
+        command = ":nextImage($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.preImage(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.imageTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -391,11 +429,13 @@ internal fun TestElement.preImage(
  * preImage
  */
 fun TestElement.preImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preImage($pos)"
+        command = ":preImage($pos)",
+        frame = frame
     )
 }
 
@@ -403,24 +443,27 @@ fun TestElement.preImage(
  * preImage
  */
 fun TestElement.preImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preImage($expression)"
+        command = ":preImage($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.nextButton(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -428,11 +471,13 @@ internal fun TestElement.nextButton(
  * nextButton
  */
 fun TestElement.nextButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextButton($pos)"
+        command = ":nextButton($pos)",
+        frame = frame
     )
 }
 
@@ -440,24 +485,27 @@ fun TestElement.nextButton(
  * nextButton
  */
 fun TestElement.nextButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextButton($expression)"
+        command = ":nextButton($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.preButton(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.buttonTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -465,11 +513,13 @@ internal fun TestElement.preButton(
  * preButton
  */
 fun TestElement.preButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preButton($pos)"
+        command = ":preButton($pos)",
+        frame = frame
     )
 }
 
@@ -477,24 +527,27 @@ fun TestElement.preButton(
  * preButton
  */
 fun TestElement.preButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preButton($expression)"
+        command = ":preButton($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.nextSwitch(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.switchTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { next(selector = sel, targetElements = targetElements) }
+        getElement = { next(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -502,11 +555,13 @@ internal fun TestElement.nextSwitch(
  * nextSwitch
  */
 fun TestElement.nextSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextSwitch($pos)"
+        command = ":nextSwitch($pos)",
+        frame = frame
     )
 }
 
@@ -514,24 +569,27 @@ fun TestElement.nextSwitch(
  * nextSwitch
  */
 fun TestElement.nextSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":nextSwitch($expression)"
+        command = ":nextSwitch($expression)",
+        frame = frame
     )
 }
 
 internal fun TestElement.preSwitch(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = ElementCategoryExpressionUtility.switchTypesExpression
     return execRelativeCommand(
         relativeSelector = sel,
-        getElement = { previous(selector = sel, targetElements = targetElements) }
+        getElement = { previous(selector = sel, targetElements = targetElements, frame = frame) }
     )
 }
 
@@ -539,11 +597,13 @@ internal fun TestElement.preSwitch(
  * preSwitch
  */
 fun TestElement.preSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preSwitch($pos)"
+        command = ":preSwitch($pos)",
+        frame = frame
     )
 }
 
@@ -551,11 +611,13 @@ fun TestElement.preSwitch(
  * preSwitch
  */
 fun TestElement.preSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
-        command = ":preSwitch($expression)"
+        command = ":preSwitch($expression)",
+        frame = frame
     )
 }
 

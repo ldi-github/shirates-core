@@ -17,7 +17,8 @@ import shirates.core.logging.Measure
 fun TestDrive.findWebElements(
     selector: Selector,
     timeoutMilliseconds: Int = 0,
-    widgetOnly: Boolean = false
+    widgetOnly: Boolean = false,
+    frame: Bounds? = null
 ): List<TestElement> {
 
     val ms = Measure("findWebElements $selector")
@@ -31,7 +32,8 @@ fun TestDrive.findWebElements(
         findWebElementsCore(
             selector = selector,
             timeoutMilliseconds = timeoutMilliseconds,
-            widgetOnly = widgetOnly
+            widgetOnly = widgetOnly,
+            frame = frame
         )
     )
     for (sel in selector.orSelectors) {
@@ -39,7 +41,8 @@ fun TestDrive.findWebElements(
             findWebElementsCore(
                 selector = sel,
                 timeoutMilliseconds = timeoutMilliseconds,
-                widgetOnly = widgetOnly
+                widgetOnly = widgetOnly,
+                frame = frame
             )
         )
     }
@@ -52,14 +55,15 @@ fun TestDrive.findWebElements(
 private fun TestDrive.findWebElementsCore(
     selector: Selector,
     timeoutMilliseconds: Int,
-    widgetOnly: Boolean
+    widgetOnly: Boolean,
+    frame: Bounds? = null
 ): List<TestElement> {
 
     val ms = Measure("findWebElementsCore $selector")
 
     val filters = selector.filterMap.values.toList()
     if (filters.isEmpty()) {
-        val list = if (isAndroid) {
+        var list = if (isAndroid) {
             driver.appiumDriver.findElements(By.xpath("//*"))
                 .map { it.toTestElement(selector = selector) }
         } else {
@@ -67,6 +71,9 @@ private fun TestDrive.findWebElementsCore(
             val iosClassChain = sel.getIosClassChain()
             driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain))
                 .map { it.toTestElement(selector = selector) }
+        }
+        if (frame != null) {
+            list = list.filter { it.bounds.isIncludedIn(frame) }
         }
         ms.end()
         return list
@@ -121,6 +128,10 @@ private fun TestDrive.findWebElementsCore(
         testElements = testElements.filter { it.isWidget }
     }
 
+    if (frame != null) {
+        testElements = testElements.filter { it.bounds.isIncludedIn(frame) }
+    }
+
     ms.end()
     return testElements
 }
@@ -130,11 +141,12 @@ private fun TestDrive.findWebElementsCore(
  */
 fun TestDrive.findWebElements(
     expression: String,
-    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
+    frame: Bounds? = null
 ): List<TestElement> {
 
     val selector = getSelector(expression = expression)
-    return findWebElements(selector = selector, timeoutMilliseconds = timeoutMilliseconds)
+    return findWebElements(selector = selector, timeoutMilliseconds = timeoutMilliseconds, frame = frame)
 }
 
 /**
@@ -144,13 +156,15 @@ fun TestDrive.findWebElement(
     selector: Selector,
     timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
     throwsException: Boolean = false,
-    widgetOnly: Boolean = false
+    widgetOnly: Boolean = false,
+    frame: Bounds? = null
 ): TestElement {
 
     val testElements = findWebElements(
         selector = selector,
         timeoutMilliseconds = timeoutMilliseconds,
-        widgetOnly = widgetOnly
+        widgetOnly = widgetOnly,
+        frame = frame
     )
     if (testElements.isEmpty() && throwsException) {
         throw TestDriverException("Element not found. (selector=$selector)")
@@ -166,26 +180,40 @@ fun TestDrive.findWebElement(
  */
 fun TestDrive.findWebElement(
     expression: String,
-    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond
+    timeoutMilliseconds: Int = testContext.findWebElementTimeoutMillisecond,
+    frame: Bounds? = null
 ): TestElement {
 
     val selector = getSelector(expression = expression)
     return findWebElement(
         selector = selector,
         timeoutMilliseconds = timeoutMilliseconds,
+        frame = frame
     )
 }
 
 /**
  * findWebElementBy
  */
-internal fun TestDrive.findWebElementBy(locator: By, timeoutMilliseconds: Int): TestElement {
+internal fun TestDrive.findWebElementBy(
+    locator: By,
+    timeoutMilliseconds: Int,
+    frame: Bounds? = null
+): TestElement {
 
     val ms = Measure("findWebElementBy $locator")
     var e: TestElement? = null
     try {
-        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
-            e = appiumDriver.findElement(locator).toTestElement()
+        if (frame == null) {
+            testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+                e = appiumDriver.findElement(locator).toTestElement()
+            }
+        } else {
+            testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+                var elms = appiumDriver.findElements(locator).map { it.toTestElement() }
+                elms = elms.filter { it.bounds.isIncludedIn(frame) }
+                e = elms.firstOrNull()
+            }
         }
     } catch (t: org.openqa.selenium.NoSuchElementException) {
         e = TestElement.emptyElement
@@ -198,13 +226,20 @@ internal fun TestDrive.findWebElementBy(locator: By, timeoutMilliseconds: Int): 
 /**
  * findWebElementsBy
  */
-internal fun TestDrive.findWebElementsBy(locator: By, timeoutMilliseconds: Int): List<TestElement> {
+internal fun TestDrive.findWebElementsBy(
+    locator: By,
+    timeoutMilliseconds: Int,
+    frame: Bounds? = null
+): List<TestElement> {
 
     val ms = Measure("findWebElementsBy $locator")
     var elements = mutableListOf<TestElement>()
     try {
         testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
             elements = appiumDriver.findElements(locator).map { it.toTestElement() }.toMutableList()
+            if (frame != null) {
+                elements = elements.filter { it.bounds.isIncludedIn(frame) }.toMutableList()
+            }
         }
     } catch (t: org.openqa.selenium.NoSuchElementException) {
         elements.add(TestElement.emptyElement)

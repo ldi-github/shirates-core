@@ -9,7 +9,8 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 private fun TestElement.filterCandidates(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds? = null
 ): MutableList<TestElement> {
 
     val sel = selector.copy()
@@ -19,7 +20,7 @@ private fun TestElement.filterCandidates(
     }
 
     val filtered = targetElements
-        .filterBySelector(selector = sel)
+        .filterBySelector(selector = sel, frame = frame)
         .filter { it != this }
         .toMutableList()
 
@@ -38,7 +39,8 @@ private fun Selector.copyAndRemovePos(): Selector {
 internal fun TestElement.rightLeftCore(
     relative: RelativeDirection,
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copyAndRemovePos()
@@ -54,7 +56,8 @@ internal fun TestElement.rightLeftCore(
     val elms = horizontalBand.getElements()
     val candidates = filterCandidates(
         selector = sel,
-        targetElements = elms
+        targetElements = elms,
+        frame = frame
     )
     val sortedElements =
         if (relative.isRight)
@@ -78,7 +81,8 @@ internal fun TestElement.rightLeftCore(
 internal fun TestElement.belowAboveCore(
     relative: RelativeDirection,
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val sel = selector.copyAndRemovePos()
@@ -94,7 +98,8 @@ internal fun TestElement.belowAboveCore(
     val elms = verticalBand.getElements()
     val candidates = filterCandidates(
         selector = sel,
-        targetElements = elms
+        targetElements = elms,
+        frame = frame
     )
     val sortedElements =
         if (relative.isBelow)
@@ -117,7 +122,8 @@ internal fun TestElement.belowAboveCore(
 
 internal fun TestElement.right(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = execRelativeCommand(
@@ -126,7 +132,8 @@ internal fun TestElement.right(
             rightLeftCore(
                 relative = RelativeDirection.right,
                 selector = selector,
-                targetElements = targetElements
+                targetElements = targetElements,
+                frame = frame
             )
         }
     )
@@ -137,7 +144,8 @@ internal fun TestElement.right(
  * right
  */
 fun TestElement.right(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     val scopedElements = widgets.toMutableList()
@@ -146,7 +154,8 @@ fun TestElement.right(
     }
     return relative(
         command = ":right($pos)",
-        scopeElements = scopedElements
+        scopeElements = scopedElements,
+        frame = frame
     )
 }
 
@@ -154,25 +163,29 @@ fun TestElement.right(
  * right
  */
 fun TestElement.right(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":right($expression)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.rightInput(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":rightInput",
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
 
     lastElement = e
@@ -183,20 +196,21 @@ private fun TestElement.getRelativeWidget(
     relativeCommand: String,
     selector: Selector,
     className: String,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds? = null
 ): TestElement {
 
     val sel = selector.copy()
     sel.className = className
 
     val e = if (relativeCommand.startsWith(":right")) {
-        right(selector = sel, targetElements = targetElements)
+        right(selector = sel, targetElements = targetElements, frame = frame)
     } else if (relativeCommand.startsWith(":left")) {
-        left(selector = sel, targetElements = targetElements)
+        left(selector = sel, targetElements = targetElements, frame = frame)
     } else if (relativeCommand.startsWith(":above")) {
-        above(selector = sel, targetElements = targetElements)
+        above(selector = sel, targetElements = targetElements, frame = frame)
     } else if (relativeCommand.startsWith(":below")) {
-        below(selector = sel, targetElements = targetElements)
+        below(selector = sel, targetElements = targetElements, frame = frame)
     } else {
         throw NotImplementedError(relativeCommand)
     }
@@ -210,12 +224,14 @@ private fun TestElement.getRelativeWidget(
  * rightInput
  */
 fun TestElement.rightInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightInput($pos)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
@@ -223,25 +239,29 @@ fun TestElement.rightInput(
  * rightInput
  */
 fun TestElement.rightInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightInput($expression)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.rightLabel(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":rightLabel",
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -250,12 +270,14 @@ internal fun TestElement.rightLabel(
  * rightLabel
  */
 fun TestElement.rightLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightLabel($pos)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
@@ -263,25 +285,29 @@ fun TestElement.rightLabel(
  * rightLabel
  */
 fun TestElement.rightLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightLabel($expression)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.rightImage(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":rightImage",
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -290,12 +316,14 @@ internal fun TestElement.rightImage(
  * rightImage
  */
 fun TestElement.rightImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightImage($pos)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
@@ -303,25 +331,29 @@ fun TestElement.rightImage(
  * rightImage
  */
 fun TestElement.rightImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightImage($expression)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.rightButton(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":rightButton",
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -330,12 +362,14 @@ internal fun TestElement.rightButton(
  * rightButton
  */
 fun TestElement.rightButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightButton($pos)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
@@ -343,25 +377,29 @@ fun TestElement.rightButton(
  * rightButton
  */
 fun TestElement.rightButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightButton($expression)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.rightSwitch(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":rightSwitch",
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -370,12 +408,14 @@ internal fun TestElement.rightSwitch(
  * rightSwitch
  */
 fun TestElement.rightSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightSwitch($pos)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
@@ -383,18 +423,21 @@ fun TestElement.rightSwitch(
  * rightSwitch
  */
 fun TestElement.rightSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightSwitch($expression)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.below(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     return execRelativeCommand(
@@ -403,7 +446,8 @@ internal fun TestElement.below(
             belowAboveCore(
                 relative = RelativeDirection.below,
                 selector = selector,
-                targetElements = targetElements
+                targetElements = targetElements,
+                frame = frame
             )
         }
     )
@@ -413,12 +457,14 @@ internal fun TestElement.below(
  * below
  */
 fun TestElement.below(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":below($pos)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
@@ -426,25 +472,29 @@ fun TestElement.below(
  * below
  */
 fun TestElement.below(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":below($expression)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.belowInput(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":belowInput",
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -453,12 +503,14 @@ internal fun TestElement.belowInput(
  * belowInput
  */
 fun TestElement.belowInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowInput($pos)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
@@ -466,25 +518,29 @@ fun TestElement.belowInput(
  * belowInput
  */
 fun TestElement.belowInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowInput($expression)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.belowLabel(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":belowLabel",
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -493,12 +549,14 @@ internal fun TestElement.belowLabel(
  * belowLabel
  */
 fun TestElement.belowLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowLabel($pos)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
@@ -506,25 +564,29 @@ fun TestElement.belowLabel(
  * belowLabel
  */
 fun TestElement.belowLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowLabel($expression)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.belowImage(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":belowImage",
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -533,12 +595,14 @@ internal fun TestElement.belowImage(
  * belowImage
  */
 fun TestElement.belowImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowImage($pos)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
@@ -546,25 +610,29 @@ fun TestElement.belowImage(
  * belowImage
  */
 fun TestElement.belowImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowImage($expression)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.belowButton(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":belowButton",
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -573,12 +641,14 @@ internal fun TestElement.belowButton(
  * belowButton
  */
 fun TestElement.belowButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowButton($pos)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
@@ -586,25 +656,29 @@ fun TestElement.belowButton(
  * belowButton
  */
 fun TestElement.belowButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowButton($expression)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.belowSwitch(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":belowSwitch",
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -613,12 +687,14 @@ internal fun TestElement.belowSwitch(
  * belowSwitch
  */
 fun TestElement.belowSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowSwitch($pos)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
@@ -626,18 +702,21 @@ fun TestElement.belowSwitch(
  * belowSwitch
  */
 fun TestElement.belowSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowSwitch($expression)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.left(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = execRelativeCommand(
@@ -646,7 +725,8 @@ internal fun TestElement.left(
             rightLeftCore(
                 relative = RelativeDirection.left,
                 selector = selector,
-                targetElements = targetElements
+                targetElements = targetElements,
+                frame = frame
             )
         }
     )
@@ -658,12 +738,14 @@ internal fun TestElement.left(
  * left
  */
 fun TestElement.left(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":left($pos)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
@@ -671,25 +753,29 @@ fun TestElement.left(
  * left
  */
 fun TestElement.left(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":left($expression)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.leftInput(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":leftInput",
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -698,12 +784,14 @@ internal fun TestElement.leftInput(
  * leftInput
  */
 fun TestElement.leftInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftInput($pos)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
@@ -711,25 +799,29 @@ fun TestElement.leftInput(
  * leftInput
  */
 fun TestElement.leftInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftInput($expression)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.leftLabel(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":leftLabel",
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -738,12 +830,14 @@ internal fun TestElement.leftLabel(
  * leftLabel
  */
 fun TestElement.leftLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftLabel($pos)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
@@ -751,25 +845,29 @@ fun TestElement.leftLabel(
  * leftLabel
  */
 fun TestElement.leftLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftLabel($expression)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.leftImage(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":leftImage",
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -778,12 +876,14 @@ internal fun TestElement.leftImage(
  * leftImage
  */
 fun TestElement.leftImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftImage($pos)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
@@ -791,25 +891,29 @@ fun TestElement.leftImage(
  * leftImage
  */
 fun TestElement.leftImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftImage($expression)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.leftButton(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":leftButton",
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -818,12 +922,14 @@ internal fun TestElement.leftButton(
  * leftButton
  */
 fun TestElement.leftButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftButton($pos)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
@@ -831,25 +937,29 @@ fun TestElement.leftButton(
  * leftButton
  */
 fun TestElement.leftButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftButton($expression)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.leftSwitch(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":leftSwitch",
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -858,12 +968,14 @@ internal fun TestElement.leftSwitch(
  * leftSwitch
  */
 fun TestElement.leftSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftSwitch($pos)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
@@ -871,18 +983,21 @@ fun TestElement.leftSwitch(
  * leftSwitch
  */
 fun TestElement.leftSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftSwitch($expression)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.above(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     return execRelativeCommand(
@@ -891,7 +1006,8 @@ internal fun TestElement.above(
             belowAboveCore(
                 relative = RelativeDirection.above,
                 selector = selector,
-                targetElements = targetElements
+                targetElements = targetElements,
+                frame = frame
             )
         }
     )
@@ -901,12 +1017,14 @@ internal fun TestElement.above(
  * above
  */
 fun TestElement.above(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":above($pos)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
@@ -914,25 +1032,29 @@ fun TestElement.above(
  * above
  */
 fun TestElement.above(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":above($expression)",
-        scopeElements = widgets
+        scopeElements = widgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.aboveInput(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":aboveInput",
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -941,12 +1063,14 @@ internal fun TestElement.aboveInput(
  * aboveInput
  */
 fun TestElement.aboveInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveInput($pos)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
@@ -954,25 +1078,29 @@ fun TestElement.aboveInput(
  * aboveInput
  */
 fun TestElement.aboveInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveInput($expression)",
-        scopeElements = inputWidgets
+        scopeElements = inputWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.aboveLabel(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":aboveLabel",
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -981,12 +1109,14 @@ internal fun TestElement.aboveLabel(
  * aboveLabel
  */
 fun TestElement.aboveLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveLabel($pos)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
@@ -994,18 +1124,21 @@ fun TestElement.aboveLabel(
  * aboveLabel
  */
 fun TestElement.aboveLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveLabel($expression)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.aboveImage(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
@@ -1021,12 +1154,14 @@ internal fun TestElement.aboveImage(
  * aboveImage
  */
 fun TestElement.aboveImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveImage($pos)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
@@ -1034,25 +1169,29 @@ fun TestElement.aboveImage(
  * aboveImage
  */
 fun TestElement.aboveImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveImage($expression)",
-        scopeElements = imageWidgets
+        scopeElements = imageWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.aboveButton(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":aboveButton",
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -1061,12 +1200,14 @@ internal fun TestElement.aboveButton(
  * aboveButton
  */
 fun TestElement.aboveButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveButton($pos)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
@@ -1074,25 +1215,29 @@ fun TestElement.aboveButton(
  * aboveButton
  */
 fun TestElement.aboveButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveButton($expression)",
-        scopeElements = buttonWidgets
+        scopeElements = buttonWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.aboveSwitch(
     selector: Selector,
-    targetElements: List<TestElement>
+    targetElements: List<TestElement>,
+    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(
         relativeCommand = ":aboveSwitch",
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
+        frame = frame
     )
     return e
 }
@@ -1101,12 +1246,14 @@ internal fun TestElement.aboveSwitch(
  * aboveSwitch
  */
 fun TestElement.aboveSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveSwitch($pos)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }
 
@@ -1114,11 +1261,13 @@ fun TestElement.aboveSwitch(
  * aboveSwitch
  */
 fun TestElement.aboveSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveSwitch($expression)",
-        scopeElements = switchWidgets
+        scopeElements = switchWidgets,
+        frame = frame
     )
 }

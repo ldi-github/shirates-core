@@ -9,8 +9,6 @@ import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
 import shirates.core.logging.TestLog
-import kotlin.math.max
-import kotlin.math.min
 
 
 internal fun TestElement.getScrollableElementsInDescendantsAndSelf(): List<TestElement> {
@@ -84,6 +82,7 @@ private fun TestDrive.scrollCommand(
     val message = message(id = command)
     val context = TestDriverCommandContext(scrollableElement)
     context.execOperateCommand(command = command, message = message) {
+
         val r = getScrollingInfo(
             scrollableElement = scrollableElement,
             direction = direction,
@@ -741,6 +740,7 @@ fun TestDrive.scanElements(
             TestDriver.autoScreenshot()
 
             val scrollableElement = getScrollableElement(scrollable)
+            val s = TestDriver.screenInfo.scrollInfo
             val r = getScrollingInfo(
                 scrollableElement = scrollableElement,
                 direction = direction,
@@ -784,120 +784,16 @@ fun TestDrive.scanElements(
     return lastElement
 }
 
-internal class ScrollingInfo(
-    val errorMessage: String,
-    val scrollableBounds: Bounds,
-    val viewport: Bounds,
-    val direction: ScrollDirection,
-    val startMarginRatio: Double,
-    val endMarginRatio: Double
-) {
-    val hasError: Boolean
-        get() {
-            return errorMessage.isBlank().not()
-        }
-
-    val leftEdge: Int
-        get() {
-            return max(scrollableBounds.left, viewport.left)
-        }
-
-    val rightEdge: Int
-        get() {
-            return min(scrollableBounds.right, viewport.right)
-        }
-
-    val topEdge: Int
-        get() {
-            return max(scrollableBounds.top, viewport.top)
-        }
-
-    val bottomEdge: Int
-        get() {
-            return min(scrollableBounds.bottom, viewport.bottom)
-        }
-
-    val adjustedScrollableBounds: Bounds
-        get() {
-            return Bounds(
-                left = leftEdge,
-                top = topEdge,
-                width = rightEdge - leftEdge + 1,
-                height = bottomEdge - topEdge + 1
-            )
-        }
-
-    val leftMargin: Int
-        get() {
-            if (direction.isVertical) return 0
-            val marginRatio = if (direction.isLeft) startMarginRatio else endMarginRatio
-            return (adjustedScrollableBounds.width * marginRatio).toInt()
-        }
-
-    val rightMargin: Int
-        get() {
-            if (direction.isVertical) return 0
-            val marginRatio = if (direction.isRight) startMarginRatio else endMarginRatio
-            return (adjustedScrollableBounds.width * marginRatio).toInt()
-        }
-
-    val topMargin: Int
-        get() {
-            if (direction.isHorizontal) return 0
-            val marginRatio = if (direction.isUp) startMarginRatio else endMarginRatio
-            return (adjustedScrollableBounds.height * marginRatio).toInt()
-        }
-
-    val bottomMargin: Int
-        get() {
-            if (direction.isHorizontal) return 0
-            val marginRatio = if (direction.isDown) startMarginRatio else endMarginRatio
-            return (adjustedScrollableBounds.height * marginRatio).toInt()
-        }
-
-    val startY: Int
-        get() {
-            return when (direction) {
-                ScrollDirection.Down -> bottomEdge - bottomMargin
-                ScrollDirection.Up -> topEdge + topMargin
-                else -> adjustedScrollableBounds.centerY
-            }
-        }
-
-    val endY: Int
-        get() {
-            return when (direction) {
-                ScrollDirection.Down -> topEdge + topMargin
-                ScrollDirection.Up -> bottomEdge - bottomMargin
-                else -> adjustedScrollableBounds.centerY
-            }
-        }
-
-    val startX: Int
-        get() {
-            return when (direction) {
-                ScrollDirection.Right -> rightEdge - rightMargin
-                ScrollDirection.Left -> leftEdge + leftMargin
-                else -> adjustedScrollableBounds.centerX
-            }
-        }
-
-    val endX: Int
-        get() {
-            return when (direction) {
-                ScrollDirection.Right -> leftEdge + leftMargin
-                ScrollDirection.Left -> rightEdge - rightMargin
-                else -> adjustedScrollableBounds.centerX
-            }
-        }
-}
-
 internal fun TestDrive.getScrollingInfo(
     scrollableElement: TestElement,
-    direction: ScrollDirection,
+    direction: ScrollDirection = ScrollDirection.None,
     startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
     endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
 ): ScrollingInfo {
+
+    val s = TestDriver.screenInfo.scrollInfo
+    val headerBottom = s.getHeaderBottom()
+    val footerTop = s.getFooterTop()
 
     if (isAndroid || (isiOS && isKeyboardShown.not())) {
         val r = ScrollingInfo(
@@ -906,12 +802,14 @@ internal fun TestDrive.getScrollingInfo(
             viewport = rootBounds,
             direction = direction,
             startMarginRatio = startMarginRatio,
-            endMarginRatio = endMarginRatio
+            endMarginRatio = endMarginRatio,
+            headerBottom = headerBottom,
+            footerTop = footerTop
         )
         return r
     }
 
-    val keyboardElement = select(".XCUIElementTypeKeyboard")
+    val keyboardElement = testDrive.getKeyboardInIos()
     val b = scrollableElement.bounds
     val height = keyboardElement.bounds.top - b.top
     val scrollBounds = Bounds(left = b.left, top = b.top, width = b.width, height = height)
@@ -921,7 +819,9 @@ internal fun TestDrive.getScrollingInfo(
         viewport = rootBounds,
         direction = direction,
         startMarginRatio = startMarginRatio,
-        endMarginRatio = endMarginRatio
+        endMarginRatio = endMarginRatio,
+        headerBottom = headerBottom,
+        footerTop = footerTop
     )
     return r
 }

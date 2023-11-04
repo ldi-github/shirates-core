@@ -165,7 +165,7 @@ fun TestDrive.tap(
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
     handleIrregular: Boolean = true,
-    safeElementOnly: Boolean = false,
+    safeElementOnly: Boolean = true
 ): TestElement {
 
     TestDriver.refreshCurrentScreenWithNickname(expression)
@@ -216,6 +216,22 @@ fun TestDrive.tap(
 
     return refreshLastElement()
 }
+
+/**
+ * tapKey
+ */
+fun TestDrive.tapKey(
+    expression: String,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds
+): TestElement {
+
+    return tap(
+        expression = expression,
+        holdSeconds = holdSeconds,
+        safeElementOnly = false
+    )
+}
+
 
 private fun TestDrive.tapWithScrollCommandCore(
     expression: String,
