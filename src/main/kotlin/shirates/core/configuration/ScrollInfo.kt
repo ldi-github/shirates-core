@@ -1,8 +1,7 @@
 package shirates.core.configuration
 
-import shirates.core.driver.commandextension.select
+import shirates.core.driver.TestElementCache
 import shirates.core.driver.rootBounds
-import shirates.core.driver.testDrive
 
 /**
  * ScrollInfo
@@ -44,7 +43,8 @@ class ScrollInfo {
      */
     fun getHeaderBottom(): Int {
         val statBarHeight = PropertiesManager.statBarHeight
-        val headerElements = headerElements.map { testDrive.select(expression = it) }
+        val headerElements = headerElements.map { TestElementCache.select(expression = it, throwsException = false) }
+            .filter { it.isFound }
         val sortedElements = headerElements.sortedBy { it.bounds.bottom }
         val headerBottom = sortedElements.lastOrNull()?.bounds?.bottom ?: statBarHeight
         return headerBottom
@@ -54,7 +54,8 @@ class ScrollInfo {
      * getFooterTop
      */
     fun getFooterTop(): Int {
-        val footerElements = footerElements.map { testDrive.select(expression = it) }
+        val footerElements = footerElements.map { TestElementCache.select(expression = it, throwsException = false) }
+            .filter { it.isFound }
         val sortedElements = footerElements.sortedBy { it.bounds.top }
         val footerTop = sortedElements.firstOrNull()?.bounds?.top ?: (rootBounds.bottom + 1)
         return footerTop

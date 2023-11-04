@@ -740,7 +740,6 @@ fun TestDrive.scanElements(
             TestDriver.autoScreenshot()
 
             val scrollableElement = getScrollableElement(scrollable)
-            val s = TestDriver.screenInfo.scrollInfo
             val r = getScrollingInfo(
                 scrollableElement = scrollableElement,
                 direction = direction,
