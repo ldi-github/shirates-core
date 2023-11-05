@@ -1,5 +1,6 @@
 package shirates.core.driver
 
+import shirates.core.configuration.PropertiesManager
 import kotlin.math.max
 import kotlin.math.min
 
@@ -30,17 +31,17 @@ class ScrollingInfo(
 
     val topEdge: Int
         get() {
-            val headerBottom = headerBottom ?: -1
+            val headerBottom = headerBottom ?: PropertiesManager.statBarHeight
             val m1 = max(scrollableBounds.top, viewport.top)
-            val m2 = max(m1, headerBottom + 1)
+            val m2 = max(m1, headerBottom)
             return m2
         }
 
     val bottomEdge: Int
         get() {
-            val footerTop = footerTop ?: (rootBounds.bottom + 1)
+            val footerTop = footerTop ?: rootBounds.bottom
             val m1 = min(scrollableBounds.bottom, viewport.bottom)
-            val m2 = min(m1, footerTop - 1)
+            val m2 = min(m1, footerTop)
             return m2
         }
 
@@ -132,4 +133,7 @@ class ScrollingInfo(
             )
         }
 
+    override fun toString(): String {
+        return "safeBounds=$safeBounds, scrollableBounds=$scrollableBounds, viewport=$viewport, direction=$direction, startMarginRatio=$startMarginRatio, endMarginRatio=$endMarginRatio, headerBottom=$headerBottom, footerTop=$footerTop, "
+    }
 }
