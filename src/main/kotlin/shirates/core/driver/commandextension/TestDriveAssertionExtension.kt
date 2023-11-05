@@ -479,7 +479,7 @@ fun TestDrive.exist(
 fun TestDrive.existImage(
     expression: String,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
-    throwsException: Boolean = true,
+    throwsException: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     func: (TestElement.() -> Unit)? = null
@@ -491,11 +491,6 @@ fun TestDrive.existImage(
     val sel = getSelectorForExistImage(expression = expression)
     val assertMessage = message(id = command, subject = "$sel")
     var e = TestElement(selector = sel)
-
-    if (PropertiesManager.enableImageAssertion.not()) {
-        manual(message = assertMessage)
-        return e
-    }
 
     val scroll = CodeExecutionContext.withScrollDirection != null
     val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
@@ -536,12 +531,12 @@ private fun TestDrive.existImageCore(
 
     var e = TestElement(selector = sel)
 
-    if (PropertiesManager.enableImageAssertion.not()) {
-        manual(message = assertMessage)
-        return e
-    }
-
     if (sel.isImageSelector) {
+        if (PropertiesManager.enableImageAssertion.not()) {
+            manual(message = assertMessage)
+            return e
+        }
+
         e = actionWithOnExistErrorHandler(
             throwsException = throwsException,
             message = assertMessage
@@ -571,12 +566,10 @@ private fun TestDrive.existImageCore(
         }
     }
 
-    if (e.imageMatchResult != null) {
-        if (e.imageMatchResult!!.templateImageFile == null) {
-            // manual (template file not found)
-            manual(assertMessage)
-            return e
-        }
+    val isTemplateImageNull = e.imageMatchResult != null && e.imageMatchResult!!.templateImageFile == null
+    if (PropertiesManager.enableImageAssertion.not() || isTemplateImageNull) {
+        manual(assertMessage)
+        return e
     }
 
     if (e.hasError && throwsException) {
@@ -664,7 +657,6 @@ private fun selectElementAndCompareImage(
     }
     // Compare the image of the element to the template image
     e.imageMatchResult = e.isImage(expression = "$sel", threshold = threshold, cropImage = true)
-
     TestLog.info(e.imageMatchResult.toString())
 
     return e
