@@ -3,6 +3,8 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.isiOS
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -218,13 +220,19 @@ fun TestDrive.tap(
 }
 
 /**
- * tapKey
+ * tapSoftwareKey
  */
-fun TestDrive.tapKey(
+fun TestDrive.tapSoftwareKey(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds
 ): TestElement {
 
+    if (isiOS.not()) {
+        throw TestDriverException(message(id = "tapSoftwareKeyNotSupported"))
+    }
+    if (isKeyboardShown.not()) {
+        throw TestDriverException(message(id = "failedToTapSoftwareKey"))
+    }
     return tap(
         expression = expression,
         holdSeconds = holdSeconds,

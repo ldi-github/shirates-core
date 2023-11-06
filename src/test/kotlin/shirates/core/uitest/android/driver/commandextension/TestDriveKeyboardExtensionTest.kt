@@ -168,4 +168,25 @@ class TestDriveKeyboardExtensionTest : UITest() {
         }
     }
 
+    @Test
+    fun tapSoftwareKey() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                        .tap("#search_action_bar_title")
+                        .screenIs("[Android Settings Search Screen]")
+                }.expectation {
+                    try {
+                        it.tapSoftwareKey("search")
+                        NG()
+                    } catch (t: Throwable) {
+                        OK(t.message!!)
+                    }
+                }
+            }
+        }
+
+    }
 }
