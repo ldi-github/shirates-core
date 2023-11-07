@@ -11,6 +11,7 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
@@ -480,14 +481,16 @@ class TestElement(
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
-                /**
-                 * Safe boundary check in scrollable view
-                 */
-                val scrollableElement = this.getScrollableElementsInAncestorsAndSelf().firstOrNull()
-                if (scrollableElement != null && scrollableElement.isScrollable) {
-                    val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
-                    if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
-                        return false
+                if (CodeExecutionContext.isScrolling) {
+                    /**
+                     * Safe boundary check in scrollable view
+                     */
+                    val scrollableElement = this.getScrollableElementsInAncestorsAndSelf().firstOrNull()
+                    if (scrollableElement != null && scrollableElement.isScrollable) {
+                        val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
+                        if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
+                            return false
+                        }
                     }
                 }
 
