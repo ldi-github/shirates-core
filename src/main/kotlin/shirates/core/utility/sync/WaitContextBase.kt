@@ -8,6 +8,7 @@ interface WaitContextBase<T> : TestDrive {
     var waitSeconds: Double
     var intervalSeconds: Double
     var maxLoopCount: Int
+    var overMaxLoopCount: Boolean
     var error: Throwable?
     var retryOnError: Boolean
     var throwOnFinally: Boolean

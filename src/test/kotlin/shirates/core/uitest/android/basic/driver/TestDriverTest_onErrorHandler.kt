@@ -3,16 +3,14 @@ package shirates.core.uitest.android.basic.driver
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.branchextension.ifScreenIs
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
-import shirates.core.logging.TestLog
 import shirates.core.logging.printWarn
 import shirates.core.testcode.UITest
 import shirates.helper.TestSetupHelper
 
-@Testrun("unitTestConfig/android/androidSettings/testrun.properties")
+@Testrun("testConfig/android/androidSettings/testrun.properties")
 class TestDriverTest_onErrorHandler : UITest() {
 
     @Test
@@ -70,6 +68,19 @@ class TestDriverTest_onErrorHandler : UITest() {
 
     @Test
     @Order(30)
+    fun existImageSetup() {
+
+        TestSetupHelper.setupImageAndroidSettingsTopScreen()
+        TestSetupHelper.setupImageAndroidSettingsNetworkAndInternetScreen()
+    }
+
+    /**
+     * Run existImageSetup()
+     * to set up image files
+     * before execute this test
+     */
+    @Test
+    @Order(32)
     fun existImage() {
 
         testContext.onExistErrorHandler = {
@@ -78,9 +89,6 @@ class TestDriverTest_onErrorHandler : UITest() {
                 it.tap("Network & internet")
             }
         }
-
-        TestSetupHelper.setupImageAndroidSettingsNetworkAndInternetScreen()
-        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
 
         scenario {
             case(1) {

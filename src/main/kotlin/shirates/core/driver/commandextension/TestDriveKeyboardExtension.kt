@@ -45,9 +45,13 @@ fun TestDrive.hideKeyboard(
             // hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
             val keyboard = testDrive.getKeyboardInIos()
             if (keyboard.isFound) {
-                val label = keyboard.aboveLabel()
-                if (label.isFound) {
-                    label.click()
+                if (canSelect("Siri Suggestions")) {
+                    swipeCenterToTop()
+                } else {
+                    val label = keyboard.aboveLabel()
+                    if (label.isFound) {
+                        label.click()
+                    }
                 }
             }
         } else {

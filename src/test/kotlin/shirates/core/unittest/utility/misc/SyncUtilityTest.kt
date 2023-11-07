@@ -68,7 +68,7 @@ class SyncUtilityTest : UnitTest() {
         run {
             // Act
             val c = SyncUtility.doUntilTrue(
-                throwOnFinally = false,
+                throwOnError = false,
                 maxLoopCount = 5,
                 onMaxLoop = { sc ->
                     println("onMaxLoop count=${sc.count}")
@@ -109,7 +109,7 @@ class SyncUtilityTest : UnitTest() {
         run {
             // Act
             val c = SyncUtility.doUntilTrue(
-                throwOnFinally = false,
+                throwOnError = false,
                 onError = { sc ->
                     if (sc.count == 3) {
                         sc.cancelRetry = true

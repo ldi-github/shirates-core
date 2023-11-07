@@ -6,8 +6,10 @@ import shirates.core.driver.branchextension.realDevice
 import shirates.core.driver.commandextension.*
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.saveImage
+import shirates.core.utility.toPath
 import java.io.File
 import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 object TestSetupHelper : TestDrive {
 
@@ -20,16 +22,14 @@ object TestSetupHelper : TestDrive {
             return
         }
 
-        val path = "images/androidSettingsTopScreen"
-        val dir = TestLog.testResults.resolve(path)
-        if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
+        val path = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
 
         fun crop(nickname: String) {
             val suffix = testDrive.imageProfile
             it.selectWithScrollDown(nickname)
                 .cropImage()
                 .lastCropInfo!!.croppedImage!!
-                .saveImage(TestLog.testResults.resolve("$path/$nickname$suffix").toString())
+                .saveImage(path.resolve("$nickname$suffix").toString())
         }
 
         it.macro("[Android Settings Top Screen]")
@@ -69,7 +69,7 @@ object TestSetupHelper : TestDrive {
             return
         }
 
-        val path = "images/androidSettingsNetworkAndInternetScreen"
+        val path = "testConfig/android/androidSettings/screens/images/androidSettingsNetworkAndInternetScreen".toPath()
         val dir = TestLog.testResults.resolve(path)
         if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
@@ -78,7 +78,7 @@ object TestSetupHelper : TestDrive {
             it.selectWithScrollDown(nickname)
                 .cropImage()
                 .lastCropInfo!!.croppedImage!!
-                .saveImage(TestLog.testResults.resolve("$path/$nickname$suffix").toString())
+                .saveImage(path.resolve("$nickname$suffix").toString())
         }
 
         it.macro("[Network & internet Screen]")
@@ -97,7 +97,7 @@ object TestSetupHelper : TestDrive {
      */
     fun setupImageCalendarWeekScreen() {
 
-        val path = "images/calendarWeekScreen"
+        val path = "testConfig/android/calendar/screens/images/calendarWeekScreen".toPath()
         val dir = TestLog.testResults.resolve(path)
         if (Files.exists(dir).not()) File(dir.toUri()).mkdirs()
 
@@ -105,7 +105,7 @@ object TestSetupHelper : TestDrive {
 
             cropImage()
                 .lastCropInfo!!.croppedImage!!
-                .saveImage(TestLog.testResults.resolve("$path/$fileName").toString())
+                .saveImage(path.resolve(fileName).toString())
         }
 
         fun TestElement.cropItems(dayN: String): List<TestElement> {
@@ -129,6 +129,61 @@ object TestSetupHelper : TestDrive {
         it.select(".android.support.v7.widget.RecyclerView") {
             cropItems("3")
         }
+    }
+
+    fun croppingImagesInNetworkAndInternetScreen() {
+
+        it.macro("[Android Settings Top Screen]")
+        val d = "testConfig/android/androidSettings/screens/images"
+        it.select("[Network & internet]").cropAndCopy("[Network & internet].png", directory = d)
+        it.selectWithScrollDown("[Display]").cropAndCopy("[Display].png", directory = d)
+        it.selectWithScrollDown("[Tips & support]").cropAndCopy("[Tips & support].png", directory = d)
+    }
+
+    fun croppingMapsImages() {
+
+        it.macro("[Maps Top Screen]")
+            .screenIs("[Maps Top Screen]")
+            .wait()     // wait for animation to complete
+        val d = "testConfig/android/maps/screens/images"
+
+        rootElement.cropImage("[Maps Top Screen].png")
+        it.select("[Explore Tab]").cropAndCopy("[Explore Tab Image(selected)].png", directory = d)
+        it.select("[Go Tab]").cropAndCopy("[Go Tab Image].png", directory = d)
+        it.select("[Saved Tab]").cropAndCopy("[Saved Tab Image].png", directory = d)
+        it.select("[Contribute Tab]").cropAndCopy("[Contribute Tab Image].png", directory = d)
+        it.select("[Updates Tab]").cropAndCopy("[Updates Tab Image].png", directory = d)
+
+        it.tap("[Go Tab]")
+            .screenIs("[Maps Go Screen]")
+            .wait()
+        it.select("[Explore Tab]").cropAndCopy("[Explore Tab Image].png", directory = d)
+        it.select("[Go Tab]").cropAndCopy("[Go Tab Image(selected)].png", directory = d)
+
+        it.tap("[Saved Tab]")
+            .wait()     // wait for animation to complete
+        it.select("[Saved Tab]").cropAndCopy("[Saved Tab Image(selected)].png", directory = d)
+
+        it.tap("[Contribute Tab]")
+            .wait()     // wait for animation to complete
+        it.select("[Contribute Tab]").cropAndCopy("[Contribute Tab Image(selected)].png", directory = d)
+
+        it.tap("[Updates Tab]")
+            .wait()     // wait for animation to complete
+        it.select("[Updates Tab]").cropAndCopy("[Updates Tab Image(selected)].png", directory = d)
+    }
+
+    private fun TestElement.cropAndCopy(fileName: String, directory: String) {
+
+        this.cropImage(fileName = fileName)
+
+        val targetDir = directory.toPath()
+        if (Files.exists(targetDir).not()) {
+            Files.createDirectory(targetDir)
+        }
+        val source = TestLog.directoryForLog.resolve(fileName)
+        val target = targetDir.resolve(fileName)
+        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING)
     }
 
 }

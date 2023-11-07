@@ -1083,6 +1083,7 @@ object TestDriver {
 
     private fun selectCore(
         selector: Selector,
+        frame: Bounds?,
         useCache: Boolean,
         scroll: Boolean,
         direction: ScrollDirection,
@@ -1091,8 +1092,7 @@ object TestDriver {
         scrollEndMarginRatio: Double,
         scrollMaxCount: Int,
         throwsException: Boolean,
-        waitSeconds: Double,
-        frame: Bounds?
+        waitSeconds: Double
     ): TestElement {
         if (selector.isRelative) {
             return TestElementCache.select(
@@ -1138,6 +1138,7 @@ object TestDriver {
             if (scroll) {
                 return selectWithScroll(
                     selector = selector,
+                    frame = frame,
                     direction = direction,
                     durationSeconds = scrollDurationSeconds,
                     startMarginRatio = scrollStartMarginRatio,
@@ -1503,6 +1504,7 @@ object TestDriver {
      */
     fun selectWithScroll(
         selector: Selector,
+        frame: Bounds? = rootBounds,
         direction: ScrollDirection = ScrollDirection.Down,
         durationSeconds: Double = testContext.swipeDurationSeconds,
         startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1515,19 +1517,11 @@ object TestDriver {
         val actionFunc = {
             val ms = Measure("$selector")
 
-            val scrollableElement = testDrive.getScrollableElement()
-            val scrollingInfo = testDrive.getScrollingInfo(
-                scrollableElement = scrollableElement,
-                direction = direction,
-                startMarginRatio = startMarginRatio,
-                endMarginRatio = endMarginRatio
-            )
-
             e = select(
                 selector = selector,
                 waitSeconds = 0.0,
                 throwsException = false,
-                frame = scrollingInfo.safeBounds
+                frame = frame
             )
             ms.end()
             e.isSafe
@@ -1680,6 +1674,10 @@ object TestDriver {
             throw TestDriverException("appiumDriver is null")
         }
 
+        if (testContext.waitSecondsForAnimationComplete != 0.0) {
+            Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
+        }
+
         try {
             val screenshot = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES)
             val screenshotImage = screenshot.toBufferedImage()
@@ -1800,7 +1798,6 @@ object TestDriver {
      */
     fun refreshCurrentScreen(
         screenInfoList: List<ScreenInfo> = ScreenRepository.screenInfoSearchList,
-        maxDepth: Int? = null,
         log: Boolean = true
     ): String {
 
@@ -1808,13 +1805,7 @@ object TestDriver {
 
         val originalScreen = currentScreen
 
-        val screenInfoHistory = getScreenInfoHistory()
-        var newScreen = refreshCurrentScreenCore(screenInfoList = screenInfoHistory, maxDepth = maxDepth)
-        if (newScreen == "?") {
-            val list = screenInfoList.toMutableList()
-            list.removeAll(screenInfoHistory)
-            newScreen = refreshCurrentScreenCore(screenInfoList = list, maxDepth = maxDepth)
-        }
+        val newScreen = refreshCurrentScreenInCandidates(screenInfoList = screenInfoList)
         val changed = newScreen != "?" && newScreen != originalScreen
         if (changed) {
             currentScreen = newScreen
@@ -1826,20 +1817,16 @@ object TestDriver {
         return currentScreen
     }
 
-    private fun refreshCurrentScreenCore(
-        screenInfoList: List<ScreenInfo>,
-        maxDepth: Int?
+    private fun refreshCurrentScreenInCandidates(
+        screenInfoList: List<ScreenInfo>
     ): String {
         var newScreen = "?"
         if (screenInfoList.isEmpty()) {
             return newScreen
         }
-        val md =
-            maxDepth ?: if (testContext.useCache) screenInfoList.count()
-            else Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_DIRECT_MODE
-        val depth = Math.min(screenInfoList.count(), md)
-        for (i in 0 until depth) {
-            val screenInfo = screenInfoList[i]
+        val sortedList = screenInfoList.sortedByDescending { it.searchWeight }
+        for (i in 0 until sortedList.count()) {
+            val screenInfo = sortedList[i]
             val screenName = screenInfo.key
             TestLog.trace("// Trying $screenName")
 

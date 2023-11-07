@@ -144,6 +144,9 @@ object ImageFileRepository {
                 imageExpression = imageExpression,
                 tag = ".png",
                 screenDirectory = screenDirectory
+            ) ?: getImageFileEntryCore(
+                imageExpression = imageExpression,
+                tag = ".png"
             ) ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))
         return entry
     }

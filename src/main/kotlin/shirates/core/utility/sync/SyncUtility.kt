@@ -4,6 +4,7 @@ import shirates.core.Const
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
+import shirates.core.exception.TestDriverException
 
 /**
  * SyncUtility
@@ -20,7 +21,8 @@ object SyncUtility {
         intervalSeconds: Double = Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
         maxLoopCount: Int = MAX_LOOP_COUNT,
         retryOnError: Boolean = true,
-        throwOnFinally: Boolean = true,
+        throwOnError: Boolean = true,
+        throwOnOverMaxLoopCount: Boolean = true,
         refreshCache: Boolean = testContext.useCache,
         onBeforeRetry: (SyncContext) -> Unit = { c ->
             if ((c as RefreshCacheInterface).refreshCache) {
@@ -55,8 +57,11 @@ object SyncUtility {
         if (context.error?.message?.startsWith("timeout") == true) {
             context.error = null
         }
-        if (throwOnFinally) {
+        if (throwOnError) {
             context.throwIfError()
+        }
+        if (context.overMaxLoopCount && throwOnOverMaxLoopCount) {
+            throw TestDriverException("Over maxLoopCount. (maxLoopCount=${context.maxLoopCount})")
         }
 
         return context
