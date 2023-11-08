@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
-import shirates.helper.TestSetupHelper
+import shirates.helper.ImageSetupHelper
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class FindImage1 : UITest() {
@@ -14,7 +14,7 @@ class FindImage1 : UITest() {
     @Order(10)
     fun croppingImages() {
 
-        TestSetupHelper.croppingImagesInNetworkAndInternetScreen()
+        ImageSetupHelper.croppingImagesInNetworkAndInternetScreen()
     }
 
     /**

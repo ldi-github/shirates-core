@@ -3,35 +3,34 @@ package shirates.core.uitest.android.driver.commandextension
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
-import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.imageProfile
 import shirates.core.driver.rootElement
 import shirates.core.driver.testDrive
 import shirates.core.exception.TestNGException
-import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.utility.listFiles
-import shirates.helper.TestSetupHelper
+import shirates.core.utility.toPath
+import shirates.helper.ImageSetupHelper
+import java.io.FileNotFoundException
 import java.nio.file.Files
 
 @Want
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class TestElementImageExtensionTest : UITest() {
 
-    override fun beforeAllAfterSetup(context: ExtensionContext?) {
+    @Test
+    @Order(1)
+    fun setupImage() {
 
-        TestSetupHelper.setupImageAndroidSettingsTopScreen()
+        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
     }
 
     @Test
     @Order(10)
     fun findImage() {
-
-        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
 
         scenario {
             case(1) {
@@ -64,8 +63,6 @@ class TestElementImageExtensionTest : UITest() {
     @Test
     @Order(20)
     fun exist_existWithScrollDown_imageIs_imageIsNot_isImage_imageContains() {
-
-        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
 
         scenario {
             case(1, "exist, dontExist, existWithScrollDown") {
@@ -100,60 +97,59 @@ class TestElementImageExtensionTest : UITest() {
     }
 
     @Test
-    @Order(30)
+    @Order(999)
     fun existImage() {
 
-        val dir = TestLog.testResults.resolve("images/androidSettingsTopScreen")
-
-        // Create an image for finding image by file name
-        val batteryIconFile = dir.listFiles().first { it.name.startsWith("[Battery Icon]") }
-        batteryIconFile.copyTo(dir.resolve("[Battery Icon2].png").toFile(), overwrite = true)
-
-        // Override [Notifications Icon].png by [App Icon].png
-        val appsIconFile = dir.listFiles().first { it.name.startsWith("[Apps Icon]") }
-        appsIconFile.copyTo(
-            dir.resolve("[Notifications Icon]${testDrive.imageProfile}.png").toFile(),
-            overwrite = true
-        )
-
-        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
+        val dir = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
+        if (Files.exists(dir)) {
+            dir.toFile().deleteRecursively()
+        }
+        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.existImage("[Battery Icon]")     // nickname [Battery Icon] is defined, OK
+                    it.existImage("[Battery Icon]")     // nickname [Battery Icon] is defined, file exists, OK
                 }
             }
             case(2) {
-                expectation {
-                    it.existImage("[Battery Icon2]")    // nickname [Battery Icon2] is not defined, OK
+                condition {
+                    // Create an image for finding image by file name
+                    val batteryIconFile = dir.listFiles().firstOrNull() { it.name.startsWith("[Battery Icon]") }
+                        ?: throw FileNotFoundException("[Battery Icon].png")
+                    batteryIconFile.copyTo(dir.resolve("[Battery Icon2].png").toFile(), overwrite = true)
+                }.expectation {
+                    it.existImage("[Battery Icon2]")    // nickname [Battery Icon2] is not defined, but file exists, OK
                 }
             }
             case(3) {
                 expectation {
                     withScrollDown {
-                        it.existImage("[Display Icon]")     // nickname [Display Icon] is defined, OK
+                        it.existImage("[Display Icon]")     // nickname [Display Icon] is defined, file exists, OK
                     }
                 }
             }
             case(4) {
-                val fileName = "[Notifications Icon]${testDrive.imageProfile}.png"
-                fun isImageSaved(): Boolean {
-                    return Files.exists(TestLog.directoryForLog.resolve(fileName))
-                }
-
                 condition {
-                    isImageSaved().thisIsFalse("Image not exist. ($fileName)")
+                    // Override [Notifications Icon].png by [App Icon].png
+                    val appsIconFile = dir.listFiles().first { it.name.startsWith("[Apps Icon]") }
+                    appsIconFile.copyTo(
+                        dir.resolve("[Notifications Icon]${testDrive.imageProfile}.png").toFile(),
+                        overwrite = true
+                    )
                 }.expectation {
+                    it.existImage("[Notifications Icon]")   // element found, image does not match, WARN
+
                     // Assert
                     assertThatThrownBy {
-                        it.existImage("[Notifications Icon]")   // element found, image does not match, NG
+                        it.existImage(
+                            "[Notifications Icon]",
+                            throwsException = true
+                        )   // element found, image does not match, exception thrown
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("Image of [Notifications Icon] exists")
-                    val lastTestLog = TestLog.lastTestLog!!
-                    isImageSaved().thisIsTrue("Image saved. ($fileName)")
                 }
             }
         }

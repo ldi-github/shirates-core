@@ -6,6 +6,7 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
+import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -509,6 +510,13 @@ fun TestDrive.existImage(
             scroll = scroll,
             direction = direction
         )
+
+        if (e.imageMatchResult?.result == false) {
+            if (throwsException) {
+                throw TestDriverException("$assertMessage (${e.imageMatchResult})")
+            }
+            TestLog.warn("$assertMessage (${e.imageMatchResult})")
+        }
     }
 
     if (func != null) {

@@ -8,7 +8,7 @@ import shirates.core.driver.branchextension.ifImageIsNot
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.select
 import shirates.core.testcode.UITest
-import shirates.helper.TestSetupHelper
+import shirates.helper.ImageSetupHelper
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class IfImageIs1 : UITest() {
@@ -17,7 +17,7 @@ class IfImageIs1 : UITest() {
     @Order(0)
     fun setupImage() {
 
-        TestSetupHelper.setupImageAndroidSettingsTopScreen()
+        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
     }
 
     @Test

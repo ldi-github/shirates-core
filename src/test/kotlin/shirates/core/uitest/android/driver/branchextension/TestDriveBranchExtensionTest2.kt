@@ -8,7 +8,7 @@ import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.*
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
-import shirates.helper.TestSetupHelper
+import shirates.helper.ImageSetupHelper
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriveBranchExtensionTest2 : UITest() {
@@ -17,14 +17,12 @@ class TestDriveBranchExtensionTest2 : UITest() {
     @Order(0)
     fun setupImage() {
 
-        TestSetupHelper.setupImageAndroidSettingsTopScreen()
+        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
     }
 
     @Test
     @Order(10)
     fun ifImageExist_ifImageExistNot() {
-
-        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
 
         var ifImageExistCalled = false
         var ifImageExistNotCalled = false
@@ -75,8 +73,6 @@ class TestDriveBranchExtensionTest2 : UITest() {
     @Test
     @Order(20)
     fun ifImageIs_ifImageIsNot() {
-
-        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
 
         var ifImageIsCalled = false
         var ifImageIsNotCalled = false
@@ -186,8 +182,6 @@ class TestDriveBranchExtensionTest2 : UITest() {
     @Test
     @Order(30)
     fun imageMatchResult_ifTrue_ifFalse() {
-
-        ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
 
         scenario {
             case(1) {

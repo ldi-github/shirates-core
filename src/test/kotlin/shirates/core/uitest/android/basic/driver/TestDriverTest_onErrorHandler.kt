@@ -8,7 +8,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.logging.printWarn
 import shirates.core.testcode.UITest
-import shirates.helper.TestSetupHelper
+import shirates.helper.ImageSetupHelper
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class TestDriverTest_onErrorHandler : UITest() {
@@ -70,8 +70,8 @@ class TestDriverTest_onErrorHandler : UITest() {
     @Order(30)
     fun existImageSetup() {
 
-        TestSetupHelper.setupImageAndroidSettingsTopScreen()
-        TestSetupHelper.setupImageAndroidSettingsNetworkAndInternetScreen()
+        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+        ImageSetupHelper.setupImageAndroidSettingsNetworkAndInternetScreen()
     }
 
     /**

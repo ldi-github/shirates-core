@@ -9,7 +9,7 @@ import shirates.core.driver.commandextension.withScrollDown
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.utility.toPath
-import shirates.helper.TestSetupHelper
+import shirates.helper.ImageSetupHelper
 import java.nio.file.Files
 import kotlin.io.path.copyTo
 
@@ -20,7 +20,7 @@ class AssertingImage2 : UITest() {
     @Order(0)
     fun setupImage() {
 
-        TestSetupHelper.setupImageAndroidSettingsTopScreen()
+        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
         val files = Files.list(TestLog.testResults.resolve("images/androidSettingsTopScreen")).toList()
         val p = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
         if (Files.exists(p).not()) {
