@@ -415,7 +415,9 @@ fun TestDrive.doUntilScrollStop(
 
     val ms = Measure()
 
+    val original = CodeExecutionContext.isScrolling
     try {
+        CodeExecutionContext.isScrolling = true
         return doUntilScrollStopCore(
             scrollable = scrollable,
             scrollFunc = scrollFunc,
@@ -431,6 +433,7 @@ fun TestDrive.doUntilScrollStop(
             intervalSeconds = intervalSeconds
         )
     } finally {
+        CodeExecutionContext.isScrolling = original
         ms.end()
     }
 }
@@ -530,10 +533,7 @@ private fun TestDrive.doUntilScrollStopCore(
         }
 
         val ms = Measure("doUntilScrollStop-loop")
-        val original = CodeExecutionContext.isScrolling
         try {
-            CodeExecutionContext.isScrolling = true
-
             for (i in 1..maxLoopCount) {
                 for (j in 1..repeat) {
                     scroll()
@@ -557,7 +557,6 @@ private fun TestDrive.doUntilScrollStopCore(
                 }
             }
         } finally {
-            CodeExecutionContext.isScrolling = original
             ms.end()
         }
     }

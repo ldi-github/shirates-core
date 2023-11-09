@@ -7,7 +7,6 @@ import org.openqa.selenium.interactions.Sequence
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
@@ -177,18 +176,11 @@ internal fun TestDrive.swipePointToPointCore(
         }
     }
 
-    val original = CodeExecutionContext.isScrolling
-    try {
-        CodeExecutionContext.isScrolling = true
-
-        for (i in 1..swipeContext.repeat) {
-            if (swipeContext.repeat > 1) {
-                TestLog.trace("$i")
-            }
-            swipeFunc()
+    for (i in 1..swipeContext.repeat) {
+        if (swipeContext.repeat > 1) {
+            TestLog.trace("$i")
         }
-    } finally {
-        CodeExecutionContext.isScrolling = original
+        swipeFunc()
     }
     TestDriver.autoScreenshot()
 
