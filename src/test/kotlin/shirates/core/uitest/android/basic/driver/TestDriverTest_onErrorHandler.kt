@@ -70,8 +70,10 @@ class TestDriverTest_onErrorHandler : UITest() {
     @Order(30)
     fun existImageSetup() {
 
-        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
-        ImageSetupHelper.setupImageAndroidSettingsNetworkAndInternetScreen()
+        scenario {
+            ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+            ImageSetupHelper.setupImageAndroidSettingsNetworkAndInternetScreen()
+        }
     }
 
     /**

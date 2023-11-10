@@ -3,10 +3,8 @@ package shirates.core.uitest.android.driver.branchextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.*
-import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.helper.ImageSetupHelper
 
@@ -17,7 +15,9 @@ class TestDriveBranchExtensionTest2 : UITest() {
     @Order(0)
     fun setupImage() {
 
-        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+        scenario {
+            ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+        }
     }
 
     @Test

@@ -14,7 +14,9 @@ class FindImage1 : UITest() {
     @Order(10)
     fun croppingImages() {
 
-        ImageSetupHelper.SetupImagesInNetworkAndInternetScreen()
+        scenario {
+            ImageSetupHelper.SetupImagesInNetworkAndInternetScreen()
+        }
     }
 
     /**

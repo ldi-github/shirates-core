@@ -18,7 +18,9 @@ class TestElementImageExtensionTest2 : UITest() {
     @Order(0)
     fun setupImage() {
 
-        ImageSetupHelper.setupImageCalendarWeekScreen()
+        scenario {
+            ImageSetupHelper.setupImageCalendarWeekScreen()
+        }
     }
 
     @Test

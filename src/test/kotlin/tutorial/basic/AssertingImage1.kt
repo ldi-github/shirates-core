@@ -14,7 +14,9 @@ class AssertingImage1 : UITest() {
     @Order(0)
     fun setupImage() {
 
-        ImageSetupHelper.SetupImagesMapsTopScreen()
+        scenario {
+            ImageSetupHelper.SetupImagesMapsTopScreen()
+        }
     }
 
     @Test

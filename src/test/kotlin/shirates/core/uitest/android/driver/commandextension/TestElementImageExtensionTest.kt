@@ -25,7 +25,9 @@ class TestElementImageExtensionTest : UITest() {
     @Order(0)
     fun setupImage() {
 
-        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+        scenario {
+            ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+        }
     }
 
     @Test
