@@ -356,7 +356,7 @@ internal fun TestDrive.existCore(
 ): TestElement {
 
     if (selector.isImageSelector) {
-        return existImageCore(
+        val e = existImageCore(
             sel = selector,
             assertMessage = assertMessage,
             throwsException = false,
@@ -365,12 +365,14 @@ internal fun TestDrive.existCore(
             scroll = scroll,
             direction = direction
         )
+        if (e.hasError && throwsException) {
+            throw e.lastError!!
+        }
     }
 
     val e = actionWithOnExistErrorHandler(
         message = assertMessage,
-        throwsException = throwsException,
-        log = log
+        throwsException = throwsException
     ) {
         TestDriver.select(
             selector = selector,
@@ -389,6 +391,9 @@ internal fun TestDrive.existCore(
     if (e.hasError && throwsException) {
         throw e.lastError!!
     }
+    if (log) {
+        TestLog.ok(message = assertMessage)
+    }
 
     return e
 }
@@ -396,7 +401,6 @@ internal fun TestDrive.existCore(
 private fun TestDrive.actionWithOnExistErrorHandler(
     message: String,
     throwsException: Boolean,
-    log: Boolean = CodeExecutionContext.shouldOutputLog,
     action: () -> TestElement
 ): TestElement {
 
@@ -406,7 +410,7 @@ private fun TestDrive.actionWithOnExistErrorHandler(
     TestDriver.postProcessForAssertion(
         selectResult = e,
         assertMessage = message,
-        log = log
+        log = false
     )
 
     if (e.hasError && throwsException && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
@@ -423,7 +427,7 @@ private fun TestDrive.actionWithOnExistErrorHandler(
         TestDriver.postProcessForAssertion(
             selectResult = e,
             assertMessage = message,
-            log = log
+            log = false
         )
     }
     return e
@@ -494,7 +498,7 @@ fun TestDrive.existImage(
     var e = TestElement(selector = sel)
 
     val scroll = CodeExecutionContext.withScrollDirection != null
-    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
+    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.None
 
     val testElement = TestDriver.it
     val context = TestDriverCommandContext(testElement)
@@ -516,6 +520,64 @@ fun TestDrive.existImage(
                 throw TestDriverException("$assertMessage (${e.imageMatchResult})")
             }
             TestLog.warn("$assertMessage (${e.imageMatchResult})")
+            TestLog.manual(assertMessage)
+        }
+    }
+
+    if (func != null) {
+        func(e)
+    }
+
+    return e
+}
+
+/**
+ * dontExistImage
+ */
+fun TestDrive.dontExistImage(
+    expression: String,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
+    throwsException: Boolean = true,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    useCache: Boolean = testContext.useCache,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    TestDriver.refreshCurrentScreenWithNickname(expression = expression)
+
+    val command = "dontExistImage"
+    val sel = getSelectorForExistImage(expression = expression)
+    val assertMessage = message(id = command, subject = "$sel")
+    var e = TestElement(selector = sel)
+
+    val scroll = CodeExecutionContext.withScrollDirection != null
+    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.None
+
+    val testElement = TestDriver.it
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
+
+        e = existImageCore(
+            sel = sel,
+            threshold = threshold,
+            assertMessage = assertMessage,
+            throwsException = false,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+            scroll = scroll,
+            direction = direction
+        )
+
+        TestDriver.postProcessForImageAssertion(
+            e = e,
+            assertMessage = assertMessage,
+            log = true,
+            dontExist = true
+        )
+        if (e.imageMatchResult?.result == true) {
+            if (throwsException) {
+                throw TestNGException("$assertMessage (${e.imageMatchResult})")
+            }
         }
     }
 
@@ -579,6 +641,12 @@ private fun TestDrive.existImageCore(
         manual(assertMessage)
         return e
     }
+
+    TestDriver.postProcessForImageAssertion(
+        e = e,
+        assertMessage = assertMessage,
+        log = true
+    )
 
     if (e.hasError && throwsException) {
         throw e.lastError!!

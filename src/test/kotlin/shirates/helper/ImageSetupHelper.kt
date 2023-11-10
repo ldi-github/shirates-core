@@ -30,7 +30,7 @@ object ImageSetupHelper : TestDrive {
         }
 
         val dir = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
-        if(Files.exists(dir).not()) dir.toFile().mkdirs()
+        if (Files.exists(dir).not()) dir.toFile().mkdirs()
 
         it.macro("[Android Settings Top Screen]")
 
@@ -125,17 +125,23 @@ object ImageSetupHelper : TestDrive {
         }
     }
 
-    fun croppingImagesInNetworkAndInternetScreen() {
+    /**
+     * Setup Image Network & internet Screen
+     */
+    fun SetupImagesInNetworkAndInternetScreen() {
 
         it.macro("[Android Settings Top Screen]")
         val dir = "testConfig/android/androidSettings/screens/images".toPath()
-        if(Files.exists(dir).not()) dir.toFile().mkdirs()
+        if (Files.exists(dir).not()) dir.toFile().mkdirs()
         it.select("[Network & internet]").cropTo(dir)
         it.selectWithScrollDown("[Display]").cropTo(dir)
         it.selectWithScrollDown("[Tips & support]").cropTo(dir)
     }
 
-    fun croppingMapsImages() {
+    /**
+     * Setup Image Maps Top Screen
+     */
+    fun SetupImagesMapsTopScreen() {
 
         it.macro("[Maps Top Screen]")
             .screenIs("[Maps Top Screen]")
@@ -144,8 +150,8 @@ object ImageSetupHelper : TestDrive {
 
         rootElement.cropImage("[Maps Top Screen].png")
         it.select("[Explore Tab]").cropTo(dir, "[Explore Tab Image(selected)].png")
-        it.select("[Go Tab]").cropTo(dir,"[Go Tab Image].png")
-        it.select("[Saved Tab]").cropTo(dir,"[Saved Tab Image].png")
+        it.select("[Go Tab]").cropTo(dir, "[Go Tab Image].png")
+        it.select("[Saved Tab]").cropTo(dir, "[Saved Tab Image].png")
         it.select("[Contribute Tab]").cropTo(dir, "[Contribute Tab Image].png")
         it.select("[Updates Tab]").cropTo(dir, "[Updates Tab Image].png")
 

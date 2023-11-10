@@ -22,7 +22,7 @@ import java.nio.file.Files
 class TestElementImageExtensionTest : UITest() {
 
     @Test
-    @Order(1)
+    @Order(0)
     fun setupImage() {
 
         ImageSetupHelper.setupImageAndroidSettingsTopScreen()
@@ -69,9 +69,11 @@ class TestElementImageExtensionTest : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.exist("[Network & internet Icon].png", waitSeconds = 0.5)
-                        .dontExist("[Display Icon].png")
-                        .existWithScrollDown("[Display Icon].png")
+                    it.existImage("[Network & internet Icon].png", waitSeconds = 0.5)
+                        .dontExistImage("[Display Icon].png")
+                        .withScrollDown {
+                            it.existImage("[Display Icon].png")
+                        }
                 }
             }
             case(2, "imageIs, imageIsNot, isImage") {

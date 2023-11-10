@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
+import shirates.helper.ImageSetupHelper
 
 @Testrun("testConfig/android/maps/testrun.properties")
 class AssertingImage1 : UITest() {
 
-    /**
-     * Note:
-     *
-     * Run CroppingImages1.kt(tutorial.inaction.CroppingImages1)
-     * before running this sample
-     * to set up template image files.
-     */
+    @Test
+    @Order(0)
+    fun setupImage() {
+
+        ImageSetupHelper.SetupImagesMapsTopScreen()
+    }
 
     @Test
     @Order(10)

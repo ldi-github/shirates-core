@@ -15,7 +15,7 @@ import shirates.helper.ImageSetupHelper
 class TestElementImageExtensionTest2 : UITest() {
 
     @Test
-    @Order(1)
+    @Order(0)
     fun setupImage() {
 
         ImageSetupHelper.setupImageCalendarWeekScreen()
@@ -57,7 +57,7 @@ class TestElementImageExtensionTest2 : UITest() {
 
     @Test
     @Order(20)
-    fun exist() {
+    fun existImage() {
 
         scenario {
             case(1) {
@@ -65,47 +65,55 @@ class TestElementImageExtensionTest2 : UITest() {
                     it.macro("[Calendar Week Screen]")
                 }.expectation {
                     it
-                        .exist("[Day1-1].png", waitSeconds = 0.2) {
+                        .existImage("[Day1-1].png", waitSeconds = 0.2) {
                             imageMatched.thisIsTrue()
                             hasImageMatchResult.thisIsTrue()
                             isFound.thisIsTrue()
                             isDummy.thisIsFalse()
                             isEmpty.thisIsTrue()
                         }
-                        .dontExist("[Day2-1].png", waitSeconds = 0.2) {
+                        .dontExistImage("[Day2-1].png", waitSeconds = 0.2) {
                             imageMatched.thisIsFalse()
-                            hasImageMatchResult.thisIsFalse()
+                            hasImageMatchResult.thisIsTrue()
                             isFound.thisIsFalse()
                             isDummy.thisIsFalse()
                             isEmpty.thisIsTrue()
                         }
-                        .existWithScrollRight("[Day2-1].png", scrollDurationSeconds = 0.2)
-                        .dontExist("[Day1-1].png")
-                        .existWithScrollLeft("[Day1-1].png", scrollDurationSeconds = 0.2)
+                        .withScrollRight(scrollDurationSeconds = 0.2) {
+                            it.existImage("[Day2-1].png")
+                        }
+                        .dontExistImage("[Day1-1].png")
+                        .withScrollLeft(scrollDurationSeconds = 0.2) {
+                            it.existImage("[Day1-1].png")
+                        }
                 }
             }
             case(2) {
                 expectation {
                     withScrollRight(scrollDurationSeconds = 0.2, scrollMaxCount = 3) {
-                        it.exist("[Day2-2].png", waitSeconds = 0.2)
-                        it.existWithScrollLeft("[Day1-2].png", scrollDurationSeconds = 0.2)
-                        it.exist("[Day3-3].png")
+                        it.existImage("[Day2-2].png", waitSeconds = 0.2)
+                        withScrollLeft(scrollDurationSeconds = 0.2) {
+                            it.existImage("[Day1-2].png")
+                        }
+                        it.existImage("[Day3-3].png")
                         withScrollLeft(scrollDurationSeconds = 0.2, scrollMaxCount = 3) {
-                            it.exist("[Day2-1].png")
-                            it.existWithScrollRight("[Day3-1].png", scrollDurationSeconds = 0.2)
-                            it.exist("[Day1-1].png")
-                            withScrollRight() {
-                                it.exist("[Day3-1].png")
+                            it.existImage("[Day2-1].png")
+                            withScrollRight(scrollDurationSeconds = 0.2) {
+                                it.existImage("[Day3-1].png")
                             }
-                            it.exist("[Day2-2].png")
+                            it.existImage("[Day1-1].png")
+                            withScrollRight() {
+                                it.existImage("[Day3-1].png")
+                            }
+                            it.existImage("[Day2-2].png")
                         }
                         suppressWithScroll {
-                            it.dontExist("[Day3-3].png")
+                            it.dontExistImage("[Day3-3].png")
                         }
-                        it.exist("[Day3-3].png")
+                        it.existImage("[Day3-3].png")
                     }
                     withScrollLeft {
-                        it.exist("[Day1-1].png")
+                        it.existImage("[Day1-1].png")
                     }
                 }
             }
