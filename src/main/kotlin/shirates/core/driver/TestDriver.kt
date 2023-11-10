@@ -328,11 +328,13 @@ object TestDriver {
         log: Boolean = CodeExecutionContext.shouldOutputLog,
         dontExist: Boolean = false
     ) {
-        val imageMatchResult = e.imageMatchResult!!
-        if (dontExist && imageMatchResult.result.not() || dontExist.not() && imageMatchResult.result) {
-            e.lastResult = TestLog.getOKType()
-            if (log) {
-                TestLog.ok(message = assertMessage)
+        val imageMatchResult = e.imageMatchResult
+        if (imageMatchResult != null) {
+            if (dontExist && imageMatchResult.result.not() || dontExist.not() && imageMatchResult.result) {
+                e.lastResult = TestLog.getOKType()
+                if (log) {
+                    TestLog.ok(message = assertMessage)
+                }
             }
         } else {
             e.lastResult = LogType.NG
