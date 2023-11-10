@@ -27,17 +27,20 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[iOS Search Screen]")
-                    it.tap("[SpotlightSearchField]")
-                        .clearInput()
-                        .sendKeys("safari")
-                        .tap(".XCUIElementTypeOther&&safari")
+                    it.macro("[Apple Maps Top Screen]")
+                    it.appIs("Maps")
+                    it.tap("[Search Maps]")
+                        .sendKeys("tokyo tower")
+                        .tapSoftwareKey("search")
                         .wait()
+                        .tap("Website")
+                        .tap("Open in Safari")
+                        .wait(10.0)
                         .appIs("Safari")
                 }.action {
                     it.pressBack()
                 }.expectation {
-                    it.screenIs("[iOS Search Screen]")
+                    it.appIs("Maps")
                 }
             }
         }
