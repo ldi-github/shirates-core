@@ -24,31 +24,31 @@ The function returns `TestElement` object.
 (`kotlin/tutorial/basic/Select1.kt`)
 
 ```kotlin
-@Test
-@Order(10)
-fun select() {
+    @Test
+    @Order(10)
+    fun select() {
 
-    scenario {
-        case(1) {
-            action {
-                it.select("Settings", log = true)
-                output(it)
+        scenario {
+            case(1) {
+                action {
+                    it.select("Settings", log = true)
+                    output(it)
+                }
             }
-        }
-        case(2) {
-            action {
-                it.selectWithScrollDown("System", log = true)
-                output(it)
+            case(2) {
+                action {
+                    it.selectWithScrollDown("System", log = true)
+                    output(it)
+                }
             }
-        }
-        case(3) {
-            action {
-                it.selectWithScrollUp("Settings", log = true)
-                output(it)
+            case(3) {
+                action {
+                    it.selectWithScrollUp("Settings", log = true)
+                    output(it)
+                }
             }
         }
     }
-}
 ```
 
 #### Note
@@ -91,21 +91,21 @@ lineNo	logDateTime	testCaseId	logType	os	special	group	message	level	command	sub
 (`kotlin/tutorial/basic/Select1.kt`)
 
 ```kotlin
-@Test
-@Order(20)
-fun selectInScanElements() {
+    @Test
+    @Order(20)
+    fun selectInScanElements() {
 
-    scenario {
-        case(1) {
-            action {
-                it.scanElements()
-                    .selectInScanResults("Settings", log = true)
-                    .selectInScanResults("Accessibility", log = true)
-                    .selectInScanResults("System", log = true)
+        scenario {
+            case(1) {
+                action {
+                    it.scanElements()
+                        .selectInScanResults("Settings", log = true)
+                        .selectInScanResults("Accessibility", log = true)
+                        .selectInScanResults("System", log = true)
+                }
             }
         }
     }
-}
 ```
 
 #### Note

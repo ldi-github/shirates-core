@@ -26,23 +26,23 @@
 (`kotlin/tutorial/basic/AndroidPressKey1.kt`)
 
 ```kotlin
-@Test
-@Order(10)
-fun pressBack() {
+    @Test
+    @Order(10)
+    fun pressBack() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Network & internet Screen]")
-            }.action {
-                it.pressBack()
-            }.expectation {
-                it.screenIs("[Android Settings Top Screen]")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Network & internet Screen]")
+                }.action {
+                    it.pressBack()
+                }.expectation {
+                    it.screenIs("[Android Settings Top Screen]")
+                }
             }
-        }
 
+        }
     }
-}
 ```
 
 ## pressHome (Android)
@@ -52,23 +52,23 @@ fun pressBack() {
 (`kotlin/tutorial/basic/AndroidPressKey1.kt`)
 
 ```kotlin
-@Test
-@Order(20)
-fun pressHome() {
+    @Test
+    @Order(20)
+    fun pressHome() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Network & internet Screen]")
-            }.action {
-                it.pressHome()
-            }.expectation {
-                it.screenIs("[Pixel Home Screen]")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Network & internet Screen]")
+                }.action {
+                    it.pressHome()
+                }.expectation {
+                    it.screenIs("[Pixel Home Screen]")
+                }
             }
-        }
 
+        }
     }
-}
 ```
 
 ## pressSearch (Android)

@@ -9,26 +9,26 @@ You can suppress logging using **silent** function.
 (`kotlin/tutorial/basic/SilentAndProcedure1.kt`)
 
 ```kotlin
-@Test
-@Order(10)
-fun silent1() {
+    @Test
+    @Order(10)
+    fun silent1() {
 
-    scenario {
-        case(1) {
-            condition {
-                macro("[Android Settings Top Screen]")
-            }.action {
-                describe("Tap [System]")
-                silent {
-                    it.scrollToBottom()
-                        .tap("[System]")
+        scenario {
+            case(1) {
+                condition {
+                    macro("[Android Settings Top Screen]")
+                }.action {
+                    describe("Tap [System]")
+                    silent {
+                        it.scrollToBottom()
+                            .tap("[System]")
+                    }
+                }.expectation {
+                    it.screenIs("[System Screen]")
                 }
-            }.expectation {
-                it.screenIs("[System Screen]")
             }
         }
     }
-}
 ```
 
 ### Html-Report
@@ -47,25 +47,25 @@ You can use **procedure** function instead of describe + silent.
 ### SilentAndProcedure1.kt
 
 ```kotlin
-@Test
-@Order(20)
-fun procedure1() {
+    @Test
+    @Order(20)
+    fun procedure1() {
 
-    scenario {
-        case(1) {
-            condition {
-                macro("[Android Settings Top Screen]")
-            }.action {
-                procedure("Tap [System]") {
-                    it.scrollToBottom()
-                        .tap("[System]")
+        scenario {
+            case(1) {
+                condition {
+                    macro("[Android Settings Top Screen]")
+                }.action {
+                    procedure("Tap [System]") {
+                        it.scrollToBottom()
+                            .tap("[System]")
+                    }
+                }.expectation {
+                    it.screenIs("[System Screen]")
                 }
-            }.expectation {
-                it.screenIs("[System Screen]")
             }
         }
     }
-}
 ```
 
 ### Html-Report

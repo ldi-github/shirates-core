@@ -40,22 +40,22 @@ it.select("<First Name>:rightInput")
 (`kotlin/tutorial/basic/RelativeSelector1.kt`)
 
 ```kotlin
-@Test
-fun select() {
+    @Test
+    fun select() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Calculator Main Screen]")
-            }.expectation {
-                it.select("<@1>:rightButton").accessIs("2")
-                it.select("<@1>:rightButton:rightButton").accessIs("3")
-                it.select("<@1>:rightButton(2)").accessIs("3")
-                it.select("[1]:rightButton(2)").accessIs("3")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Calculator Main Screen]")
+                }.expectation {
+                    it.select("<@1>:rightButton").accessIs("2")
+                    it.select("<@1>:rightButton:rightButton").accessIs("3")
+                    it.select("<@1>:rightButton(2)").accessIs("3")
+                    it.select("[1]:rightButton(2)").accessIs("3")
+                }
             }
         }
     }
-}
 ```
 
 ### [Calculator Main Screen].json
@@ -135,39 +135,39 @@ it.select("<Label1>[:Right button]")
 (`kotlin/tutorial/basic/RelativeSelector1.kt`)
 
 ```kotlin
-@Test
-fun select_with_nickname() {
+    @Test
+    fun select_with_nickname() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Calculator Main Screen]")
-            }.expectation {
-                it.select("<@1>[:Right button]").accessIs("2")
-                it.select("[1][:Below button]").accessIs("0")
-                it.select("[1]:rightButton(2)[:Left button]").accessIs("2")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Calculator Main Screen]")
+                }.expectation {
+                    it.select("<@1>[:Right button]").accessIs("2")
+                    it.select("[1][:Below button]").accessIs("0")
+                    it.select("[1]:rightButton(2)[:Left button]").accessIs("2")
+                }
             }
-        }
-        case(2) {
-            expectation {
-                it.select("[5]").select("[:Right button]").accessIs("6")
-                it.select("[5]").select("[:Below button]").accessIs("2")
-                it.select("[5]").select("[:Left button]").accessIs("4")
-                it.select("[5]").select("[:Above button]").accessIs("8")
+            case(2) {
+                expectation {
+                    it.select("[5]").select("[:Right button]").accessIs("6")
+                    it.select("[5]").select("[:Below button]").accessIs("2")
+                    it.select("[5]").select("[:Left button]").accessIs("4")
+                    it.select("[5]").select("[:Above button]").accessIs("8")
+                }
             }
-        }
-        case(3) {
-            expectation {
-                it.select("[5]").apply {
-                    select("[:Right button]").accessIs("6")
-                    select("[:Below button]").accessIs("2")
-                    select("[:Left button]").accessIs("4")
-                    select("[:Above button]").accessIs("8")
+            case(3) {
+                expectation {
+                    it.select("[5]").apply {
+                        select("[:Right button]").accessIs("6")
+                        select("[:Below button]").accessIs("2")
+                        select("[:Left button]").accessIs("4")
+                        select("[:Above button]").accessIs("8")
+                    }
                 }
             }
         }
     }
-}
 ```
 
 ### Link

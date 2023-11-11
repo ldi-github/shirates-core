@@ -14,55 +14,70 @@ You can use special branch functions for image.
 (`kotlin/tutorial/basic/IfImageIs1.kt`)
 
 ```kotlin
-@Test
-@Order(0)
-fun setupImage() {
+package tutorial.basic
 
-    TestSetupHelper.setupImageAndroidSettingsTopScreen()
-}
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.branchextension.ifImageIs
+import shirates.core.driver.branchextension.ifImageIsNot
+import shirates.core.driver.commandextension.macro
+import shirates.core.driver.commandextension.select
+import shirates.core.testcode.UITest
+import shirates.helper.ImageSetupHelper
 
-@Test
-@Order(10)
-fun ifImageIsTest() {
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class IfImageIs1 : UITest() {
 
-    ImageFileRepository.setup(screenDirectory = TestLog.testResults.resolve("images"))
+    @Test
+    @Order(0)
+    fun setupImage() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.expectation {
-                it.select("[Network & internet Icon]")
-                    .ifImageIs("[Network & internet Icon].png") {
-                        OK("ifImageIs called")
-                    }.ifElse {
-                        NG()
-                    }
-                it.select("[Network & internet Icon]")
-                    .ifImageIsNot("[Network & internet Icon].png") {
-                        NG()
-                    }.ifElse {
-                        OK("ifElse called")
-                    }
+        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+    }
+
+    @Test
+    @Order(10)
+    fun ifImageIsTest() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.select("[Network & internet Icon]")
+                        .ifImageIs("[Network & internet Icon].png") {
+                            OK("ifImageIs called")
+                        }.ifElse {
+                            NG()
+                        }
+                    it.select("[Network & internet Icon]")
+                        .ifImageIsNot("[Network & internet Icon].png") {
+                            NG()
+                        }.ifElse {
+                            OK("ifElse called")
+                        }
+                }
             }
-        }
-        case(2) {
-            expectation {
-                it.select("[Network & internet Icon]")
-                    .ifImageIs("[App Icon].png") {
-                        NG()
-                    }.ifElse {
-                        OK("ifElse called")
-                    }
-                it.select("[Network & internet Icon]")
-                    .ifImageIsNot("[App Icon].png") {
-                        OK("ifImageIsNot called")
-                    }.ifElse {
-                        NG()
-                    }
+            case(2) {
+                expectation {
+                    it.select("[Network & internet Icon]")
+                        .ifImageIs("[App Icon].png") {
+                            NG()
+                        }.ifElse {
+                            OK("ifElse called")
+                        }
+                    it.select("[Network & internet Icon]")
+                        .ifImageIsNot("[App Icon].png") {
+                            OK("ifImageIsNot called")
+                        }.ifElse {
+                            NG()
+                        }
+                }
             }
         }
     }
+
 }
 ```
 

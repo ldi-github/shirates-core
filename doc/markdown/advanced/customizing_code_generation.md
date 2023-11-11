@@ -27,6 +27,10 @@ You can customize code generation by **Translator** interface.
 package shirates.spec.code.custom
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.logging.Message
+import shirates.core.logging.Message.message
+import shirates.core.logging.MessageRecord
+import shirates.core.logging.TestLog
 import shirates.spec.code.entity.Case
 import shirates.spec.code.entity.Target
 import shirates.spec.utilily.*
@@ -34,25 +38,64 @@ import shirates.spec.utilily.*
 interface Translator {
 
     /**
-     * escape
+     * escapeForCode
      */
-    fun escape(message: String): String {
+    fun escapeForCode(message: String): String {
+
+        var result = message
 
         if (PropertiesManager.logLanguage == "ja") {
-            return message.replace("\\", "¥")
+            result = result.replace("\\", "¥")
         } else {
-            return message.replace("\\", "\\\\")
+            result = result.replace("\\", "\\\\")
         }
+        result = result
+            .replace("\"", "\\\"")
+            .replace("\n", " ")
+
+        return result
     }
 
     /**
-     * format
+     * formatArg
      */
-    fun format(message: String): String {
+    fun formatArg(message: String): String {
 
-        var msg = escape(message)
-        msg = msg.removePrefix(SpecResourceUtility.bullet).removeBrackets().removeJapaneseBrackets()
+        var msg = escapeForCode(message)
+        msg = msg.removePrefix(SpecResourceUtility.bullet)
         return msg
+    }
+
+    /**
+     * getScreenNickName
+     */
+    fun getScreenNickName(
+        message: String
+    ): String {
+
+        /**
+         * "[*Screen]"
+         */
+        for (keyword in Keywords.screenKeywords) {
+            val msg = formatArg(message)
+            val screenNickname = msg.getGroupValue(".*(\\[.*$keyword]).*".toRegex())
+            if (screenNickname.isNotBlank()) {
+                return screenNickname
+            }
+        }
+
+        /**
+         * "*Screen* -> [* Screen]
+         */
+        val replaced = formatArg(message).removeJapaneseBrackets().removeBrackets()
+        for (keyword in Keywords.screenKeywords) {
+            val screenName = replaced.getGroupValue("(.*$keyword).*".toRegex())
+            if (screenName.isNotBlank()) {
+                return "[$screenName]"
+            }
+        }
+
+        return ""
     }
 
     /**
@@ -83,26 +126,14 @@ interface Translator {
         if (message.contains("を")) {
             val list = message.split("を").toMutableList()
             list.removeLast()
-            val s = format(list.joinToString())
+            val s = formatArg(list.joinToString())
             return "<$s>"
         }
-
-        return ""
-    }
-
-    /**
-     * getScreenNickName
-     */
-    fun getScreenNickName(
-        message: String
-    ): String {
-
-        val replaced = message.removeJapaneseBrackets().removeBrackets()
-        for (keyword in Keywords.screenKeywords) {
-            val screenName = replaced.getGroupValue(".*(\\.*$keyword.*).*".toRegex())
-            if (screenName.isNotBlank()) {
-                return "[$screenName]"
-            }
+        if (message.contains(" is ")) {
+            val list = message.split(" is ").toMutableList()
+            list.removeLast()
+            val s = formatArg(list.joinToString())
+            return "<$s>"
         }
 
         return ""
@@ -114,45 +145,75 @@ interface Translator {
     fun messageToFunction(message: String, defaultFunc: String = "manual"): String {
 
         val subject = getSubject(message)
+        val screenNickname = getScreenNickName(message)
 
-        if (subject.isNotBlank()) {
-            if (message.isDisplayed) {
-                if (subject.isScreen) {
-                    return "screenIs(\"$subject\")"
-                } else {
-                    if (message.isAssertion) {
-                        return "exist(\"${subject}\")"
-                    }
-                    return "manual(\"$message\")"
-                }
+        if (screenNickname.isNotBlank() && message.isDisplayedAssertion) {
+            return "screenIs(\"$screenNickname\")"
+        }
+        if (subject.isNotBlank() && (message.isDisplayedAssertion || message.isExistenceAssertion)) {
+            return "exist(\"$subject\")"
+        }
+
+        /**
+         * Match with message master
+         */
+        val matchedMessage = matchWithMessageMaster(message = message)
+        if (matchedMessage.isNotBlank()) {
+            return matchedMessage
+        }
+
+        if (defaultFunc == "macro") {
+            val arg = formatArg(message)
+            return "$defaultFunc(\"[$arg]\")"
+        } else {
+            val msg = escapeForCode(message)
+            return "$defaultFunc(\"$msg\")"
+        }
+    }
+
+    /**
+     * matchWithMessageMaster
+     */
+    fun matchWithMessageMaster(message: String): String {
+
+        val messageMap = Message.getMessageMap(TestLog.logLanguage)
+        val codeMap = Message.getMessageMap("code")
+        val candidates = mutableMapOf<MessageRecord, String>()
+
+        for (key in codeMap.keys) {
+            val code = codeMap[key]!!
+            if (code.message.isBlank() || code.message == "-") {
+                continue
             }
-            if (message.contains("アイコンをタップする") || message.lowercase().contains("tap app icon")) {
-                return "tapAppIcon(\"$subject\")"
-            }
-            if (message.contains("タップする") || message.lowercase().contains("tap ")) {
-                return "tap(\"$subject\")"
-            }
-            if (message.contains("がON") || message.lowercase().endsWith(" is on")) {
-                return "select(\"$subject\").checkIsON()"
-            }
-            if (message.contains("がOFF") || message.lowercase().endsWith(" is off")) {
-                return "select(\"$subject\").checkIsOFF()"
+            val messageTemplate = messageMap[key]!!.message
+            val match = """\$\{(.+?)}""".toRegex().findAll(messageTemplate)
+            val groupValues = match.toList().map { it.groupValues }
+            var pattern = messageMap[code.id]!!.message
+            pattern = pattern.escapeForRegex()
+            for (value in groupValues) {
+                val value0 = value.get(0).escapeForRegex()
+                val value1 = value.get(1).escapeForRegex()
+                pattern = pattern.replace(value0, """(?<$value1>.+)""")
             }
 
-            if (message.isAssertion) {
-                val valueEN = message.getGroupValue(".* is \"(.*)\"".toRegex())
-                if (valueEN.isNotBlank()) {
-                    return "select(\"$subject\").textIs(\"$valueEN\")"
+            val m = pattern.toRegex().matchEntire(message)
+            if (m != null) {
+                val map = mutableMapOf<String, String>()
+                map["lang"] = "code"
+                map["id"] = code.id
+                for (i in 1 until m.groupValues.count()) {
+                    val name = groupValues[i - 1].get(1)
+                    val value = escapeForCode(m.groupValues[i])
+                    map[name] = value
                 }
-                val valueJP = message.getGroupValue(".*の値が\"(.*)\"であること.*".toRegex())
-                if (valueJP.isNotBlank()) {
-                    return "select(\"$subject\").textIs(\"$valueJP\")"
-                }
+                val result = message(map)
+                candidates[code] = result
             }
         }
 
-        val arg = format(message)
-        return "$defaultFunc(\"$arg\")"
+        val key = candidates.keys.sortedBy { it.id.length }.lastOrNull() ?: return ""
+        val result = candidates[key]!!
+        return result
     }
 
     /**
@@ -170,7 +231,9 @@ interface Translator {
 
         val screenNickname = getScreenNickName(message = message)
         if (screenNickname.isNotBlank()) {
-            return "macro(\"$screenNickname\")"
+            if (message.isDisplayedAssertion) {
+                return "screenIs(\"$screenNickname\")"
+            }
         }
 
         return messageToFunction(message = message, defaultFunc = defaultFunc)
@@ -185,7 +248,7 @@ interface Translator {
         defaultFunc: String = "manual"
     ): String {
 
-        return messageToFunction(message = message, defaultFunc = defaultFunc)
+        return conditionMessageToFunction(case = case, message = message, defaultFunc = defaultFunc)
     }
 
     /**
@@ -197,11 +260,11 @@ interface Translator {
 
         val screenNickName = getScreenNickName(message = target)
         if (screenNickName.isNotBlank()) {
-            return "it.target(\"$screenNickName\")"
+            return "target(\"$screenNickName\")"
         }
 
-        val escaped = escape(target.replace("\n", ""))
-        return "it.target(\"$escaped\")"
+        val escaped = escapeForCode(target.replace("\n", ""))
+        return "target(\"$escaped\")"
     }
 
     /**
@@ -213,26 +276,26 @@ interface Translator {
         defaultFunc: String = "manual"
     ): String {
 
-        if (target?.target != null) {
-            if (message.isDisplayed) {
-                if (target.target.isScreen) {
-                    val screenNickName = getScreenNickName(target.target)
-                    return "screenIs(\"$screenNickName\")"
-                } else {
-                    if (message.isAssertion) {
-                        return "exist(\"${target.target}\")"
-                    }
-                    return "manual(\"$message\")"
-                }
-            }
-            val functionPart = messageToFunction(message = message, defaultFunc = defaultFunc)
-            if (functionPart.isNotBlank()) {
-                return functionPart
-            }
+        val targetItem = target?.target ?: ""
+        val targetScreenNickname = getScreenNickName(targetItem)
+        if (targetScreenNickname.isNotBlank() && message.isDisplayedAssertion) {
+            return "screenIs(\"$targetScreenNickname\")"
+        }
+        if (targetItem.isNotBlank() && (message.isDisplayedAssertion || message.isExistenceAssertion)) {
+            return "exist(\"$targetItem\")"
         }
 
-        val arg = format(message)
-        return "$defaultFunc(\"$arg\")"
+        val screenNickname = getScreenNickName(message)
+        if (screenNickname.isNotBlank() && message.isDisplayedAssertion) {
+            return "screenIs(\"$screenNickname\")"
+        }
+
+        val subject = getSubject(message)
+        if (subject.isNotBlank() && (message.isDisplayedAssertion || message.isExistenceAssertion)) {
+            return "exist(\"$subject\")"
+        }
+
+        return messageToFunction(message = message, defaultFunc = defaultFunc)
     }
 
     /**
@@ -254,6 +317,7 @@ interface Translator {
      */
     fun atEndOfCondition(lines: MutableList<String>) {
 
+        reformatLines(lines)
     }
 
     /**
@@ -261,6 +325,7 @@ interface Translator {
      */
     fun atEndOfAction(lines: MutableList<String>) {
 
+        reformatLines(lines)
     }
 
     /**
@@ -276,17 +341,97 @@ interface Translator {
     fun atEndOfTarget(lines: MutableList<String>) {
 
         // Remove `target` if `screenIs` succeeds
-        if (lines.count() >= 2 && lines[1].startsWith("it.screenIs(")) {
-            if (lines[0].startsWith("it.target(")) {
-                lines.removeAt(0)
+        if (lines.count() >= 2) {
+            val line = lines[1]
+            if (line.startsWith("screenIs(") || line.startsWith("onScreen(")) {
+                if (lines[0].startsWith("target(")) {
+                    lines.removeAt(0)
+                }
             }
         }
 
-        for ((i, line) in lines.withIndex()) {
-            if (i > 0) {
-                if (lines[i - 1].endsWith("{").not())
-                    lines[i] = line.removePrefix("it")
+        reformatLines(lines)
+    }
+
+    /**
+     * reformatLines
+     */
+    fun reformatLines(lines: MutableList<String>) {
+
+        fun String.mustRemoveIt(): Boolean {
+            if (this.startsWith("\"") ||
+                this.startsWith("}") ||
+                this.startsWith("true") ||
+                this.startsWith("false") ||
+                this.startsWith("onScreen(")
+            ) {
+                return true
             }
+
+            return false
+        }
+
+        fun appendIt(i: Int): String {
+            var line = lines[i]
+            if (line.mustRemoveIt()) {
+                return line
+            }
+            if (i == 0) {
+                if (line.mustRemoveIt() ||
+                    line.endsWith("{")
+                ) {
+                    // NOP
+                } else {
+                    line = "it.$line"
+                }
+            } else {
+                val previousLine = lines[i - 1]
+                if (previousLine.mustRemoveIt() ||
+                    previousLine.endsWith("{") ||
+                    previousLine.contains("readMemo") ||
+                    previousLine.contains("readClipboard") ||
+                    previousLine.contains("stringIs") ||
+                    previousLine.contains("booleanIs")
+                ) {
+                    line = "it.$line"
+                } else {
+                    if (previousLine.mustRemoveIt().not()) {
+                        line = ".$line"
+                    }
+                }
+            }
+            return line
+        }
+
+        val tempLines = lines.toList()
+        lines.clear()
+        var blockOpenIndex = 0
+        val blockOpenMap = mutableMapOf<Int, Boolean>()
+        for (i in 0 until tempLines.count()) {
+            val line = tempLines[i]
+
+            if (line.endsWith("{")) {
+                blockOpenIndex++
+                blockOpenMap[blockOpenIndex] = true
+            }
+            if (line.startsWith("}")) {
+                blockOpenMap.remove(blockOpenIndex)
+                blockOpenIndex--
+            }
+            lines.add(line)
+        }
+        for (i in 1..blockOpenMap.count()) {
+            lines.add("}")
+        }
+
+        for (i in 0 until lines.count()) {
+            var line = lines[i]
+
+            if (line.startsWith("it.").not()) {
+                line = appendIt(i)
+            }
+
+            lines[i] = line
         }
     }
 
@@ -303,53 +448,53 @@ interface Translator {
 ### AndroidSettingsDemo.kt
 
 ```kotlin
-package generated
+package demo
 
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.*
-import shirates.core.testcode.*
+import shirates.core.testcode.UITest
 
-@SheetName("AndroidSettingsDemo")
+@Testrun("testConfig/android/androidSettings/testrun.properties")
 class AndroidSettingsDemo : UITest() {
 
-    @NoLoadRun
     @Test
-    @DisplayName("airplaneModeSwitch()")
-    fun S1010() {
+    fun airplaneModeSwitch() {
 
         scenario {
             case(1) {
                 condition {
-                    it.manual("Tap app icon <Settings>")
+                    it.launchApp("Settings")
                         .screenIs("[Android Settings Top Screen]")
                 }.action {
-                    it.manual("Tap [Network & internet]")
+                    it.tap("[Network & internet]")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                 }
             }
+
             case(2) {
                 condition {
-                    it.manual("{Airplane mode switch} is OFF")
+                    it.select("{Airplane mode switch}")
+                        .checkIsOFF()
                 }.action {
-                    it.manual("Tap {Airplane mode switch}")
+                    it.tap("{Airplane mode switch}")
                 }.expectation {
-                    it.manual("{Airplane mode switch} is ON")
+                    it.select("{Airplane mode switch}")
+                        .checkIsON()
                 }
             }
+
             case(3) {
                 action {
-                    it.manual("Tap {Airplane mode switch}")
+                    it.tap("{Airplane mode switch}")
                 }.expectation {
-                    it.manual("{Airplane mode switch} is OFF")
+                    it.select("{Airplane mode switch}")
+                        .checkIsOFF()
                 }
             }
         }
     }
-
 }
 ```
 

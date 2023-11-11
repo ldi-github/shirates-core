@@ -35,31 +35,31 @@
 (`kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
-@Test
-@Order(10)
-fun swipeTo_swipeToAdjust() {
+    @Test
+    @Order(10)
+    fun swipeTo_swipeToAdjust() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.action {
-                it.select("[Battery]")
-                    .swipeTo("[Network & internet]")
-            }.expectation {
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    it.select("[Battery]")
+                        .swipeTo("[Network & internet]")
+                }.expectation {
+                }
             }
-        }
-        case(2) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.action {
-                it.select("[Battery]")
-                    .swipeToAdjust("[Network & internet]")
-            }.expectation {
+            case(2) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    it.select("[Battery]")
+                        .swipeToAdjust("[Network & internet]")
+                }.expectation {
+                }
             }
         }
     }
-}
 ```
 
 **swipeTo** は正確ではないですが速いです。
@@ -77,42 +77,39 @@ fun swipeTo_swipeToAdjust() {
 (`kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
-@Test
-@Order(20)
-fun swipeToCenter_swipeToTop_swipeToBottom() {
+    @Test
+    @Order(20)
+    fun swipeToCenter_swipeToTop_swipeToBottom() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-                    .exist("[Notifications]")
-                    .exist("[Battery]")
-                    .output("scrollFrame: ${it.scrollFrame}")
-            }.action {
-                it.select("[Battery]")
-                    .swipeToCenter()
-                    .swipeToTop(durationSeconds = 10.0)
-            }.expectation {
-                output("[Battery].bounds: ${it.bounds}")
-                    .dontExist("[Notifications]")
-                    .exist("[Battery]")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                        .exist("[Notifications]")
+                        .exist("[Battery]")
+                }.action {
+                    it.select("[Battery]")
+                        .swipeToCenterOfScreen()
+                        .swipeToTopOfScreen(durationSeconds = 10.0)
+                }.expectation {
+                    it.dontExist("[Notifications]")
+                        .exist("[Storage]")
+                }
             }
-        }
-        case(2) {
-            condition {
-                it.exist("[Security]")
-                    .exist("[Privacy]")
-            }.action {
-                it.select("[Security]")
-                    .swipeToBottom(durationSeconds = 10.0)
-            }.expectation {
-                output("[Security].bounds: ${it.bounds}")
-                    .exist("[Security]")
-                    .dontExist("[Privacy]")
+            case(2) {
+                condition {
+                    it.exist("[Security]")
+                        .exist("[Privacy]")
+                }.action {
+                    it.select("[Security]")
+                        .swipeToBottomOfScreen(durationSeconds = 10.0)
+                }.expectation {
+                    it.exist("[Security]")
+                        .dontExist("[Privacy]")
+                }
             }
         }
     }
-}
 ```
 
 ## swipePointToPoint
@@ -122,41 +119,41 @@ fun swipeToCenter_swipeToTop_swipeToBottom() {
 (`kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
-@Test
-@Order(30)
-fun swipePointToPoint() {
+    @Test
+    @Order(30)
+    fun swipePointToPoint() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.action {
-                it.swipePointToPoint(
-                    startX = viewport.centerX,
-                    startY = viewport.centerY,
-                    endX = viewport.centerX,
-                    endY = viewport.top
-                )
-            }.expectation {
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    it.swipePointToPoint(
+                        startX = rootBounds.centerX,
+                        startY = rootBounds.centerY,
+                        endX = rootBounds.centerX,
+                        endY = rootBounds.top
+                    )
+                }.expectation {
 
+                }
             }
-        }
 
-        case(2) {
-            action {
-                it.swipePointToPoint(
-                    startX = viewport.centerX,
-                    startY = viewport.centerY,
-                    endX = viewport.centerX,
-                    endY = viewport.bottom,
-                    durationSeconds = 0.2
-                )
-            }.expectation {
+            case(2) {
+                action {
+                    it.swipePointToPoint(
+                        startX = rootBounds.centerX,
+                        startY = rootBounds.centerY,
+                        endX = rootBounds.centerX,
+                        endY = rootBounds.bottom,
+                        durationSeconds = 0.2
+                    )
+                }.expectation {
 
+                }
             }
         }
     }
-}
 ```
 
 **Swipe1.kt** にはより豊富なサンプルがあるのでソースコードを参照してください。

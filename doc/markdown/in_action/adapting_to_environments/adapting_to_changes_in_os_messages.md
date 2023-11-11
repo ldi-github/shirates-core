@@ -19,18 +19,7 @@ The following is **Location Permissions** dialog for Android 10.
 You can tap **"Allow only while using the app"** using `tap` function.
 
 ```kotlin
-@Test
-@Order(10)
-fun original() {
-
-    scenario {
-        case(1) {
-            action {
-                it.tap("Allow only while using the app")
-            }
-        }
-    }
-}
+it.tap("Allow only while using the app")
 ```
 
 When upgrading from Android 10 to 11, **"Allow only while using the app"** changes to **"While using the app"**.
@@ -44,7 +33,7 @@ In this case, you might adapt your test code using conditional `if-else` branch.
 ### Using conditional branch
 
 ```kotlin
-if (platformVersion.toInt() < 11) {
+if (platformMajorVersion < 11) {
     it.tap("Allow only while using the app")
 } else {
     it.tap("While using the app")

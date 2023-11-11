@@ -17,6 +17,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.TestElement
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
+import shirates.core.driver.wait
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 import shirates.core.utility.toPath

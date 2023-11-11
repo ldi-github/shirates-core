@@ -12,7 +12,8 @@ it.tapAppIcon("Chrome")
 
 ## パラメーターの構成
 
-Androidデバイスではハードウェアの製造者がホーム画面やアプリのランチャーに独自のグラフィカルユーザーインターフェース(GUI)をインストールすることがあります。
+Androidデバイスではハードウェアの製造者がホーム画面やアプリのランチャーに独自のグラフィカルユーザーインターフェース(GUI)
+をインストールすることがあります。
 **tapAppIconMethod** や **tapAppIconMacro** をプロファイルのパラメーターに設定することでアプリのアイコンをタップする際の動作を指定することができます。
 
 参照 [パラメーター](../../basic/parameter/parameters_ja.md).
@@ -61,6 +62,16 @@ Androidデバイスではハードウェアの製造者がホーム画面やア�
 (`kotlin/macro/common/TapAppIconMacro.kt`)
 
 ```kotlin
+package macro.common
+
+import shirates.core.driver.TestDrive
+import shirates.core.driver.branchextension.android
+import shirates.core.driver.branchextension.ios
+import shirates.core.driver.commandextension.*
+import shirates.core.driver.wait
+import shirates.core.macro.Macro
+import shirates.core.macro.MacroObject
+
 @MacroObject
 object TapAppIconMacro : TestDrive {
 

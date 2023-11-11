@@ -7,6 +7,7 @@ import shirates.core.driver.commandextension.imageIs
 import shirates.core.driver.commandextension.imageIsNot
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.select
+import shirates.core.driver.platformMajorVersion
 import shirates.core.driver.platformVersion
 import shirates.core.testcode.UITest
 
@@ -20,7 +21,7 @@ class AssertingAnyValue2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformVersion.toIntOrNull() != 13) {
+                    if (platformMajorVersion != 13) {
                         SKIP_SCENARIO("This test scenario requires Android 13. (actual=$platformVersion)")
                     }
                     it.macro("[Maps Top Screen]")
@@ -46,7 +47,7 @@ class AssertingAnyValue2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformVersion.toIntOrNull() != 13) {
+                    if (platformMajorVersion != 13) {
                         SKIP_SCENARIO("This test scenario requires Android 13. (actual=$platformVersion)")
                     }
                     it.macro("[Maps Top Screen]")
@@ -66,7 +67,7 @@ class AssertingAnyValue2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformVersion.toIntOrNull() != 13) {
+                    if (platformMajorVersion != 13) {
                         SKIP_SCENARIO("This test scenario requires Android 13. (actual=$platformVersion)")
                     }
                     it.macro("[Maps Top Screen]")

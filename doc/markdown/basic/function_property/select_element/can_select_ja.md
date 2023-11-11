@@ -23,38 +23,38 @@
 (`kotlin/tutorial/basic/CanSelect1.kt`)
 
 ```kotlin
-@Test
-@Order(10)
-fun canSelect() {
+    @Test
+    @Order(10)
+    fun canSelect() {
 
-    scenario {
-        case(1) {
-            action {
-                it.canSelect("Settings", log = true)
+        scenario {
+            case(1) {
+                action {
+                    it.canSelect("Settings", log = true)
+                }
             }
-        }
-        case(2) {
-            action {
-                it.canSelectWithScrollDown("System", log = true)
+            case(2) {
+                action {
+                    it.canSelectWithScrollDown("System", log = true)
+                }
             }
-        }
-        case(3) {
-            action {
-                it.canSelectWithScrollUp("Settings", log = true)
+            case(3) {
+                action {
+                    it.canSelectWithScrollUp("Settings", log = true)
+                }
             }
-        }
-        case(4) {
-            action {
-                it.canSelectAllWithScrollDown("Settings", "System", log = true)
+            case(4) {
+                action {
+                    it.canSelectAllWithScrollDown("Settings", "System", log = true)
+                }
             }
-        }
-        case(5) {
-            action {
-                it.canSelectAllWithScrollUp("Settings", "System", log = true)
+            case(5) {
+                action {
+                    it.canSelectAllWithScrollUp("Settings", "System", log = true)
+                }
             }
         }
     }
-}
 ```
 
 #### 注意
@@ -112,29 +112,29 @@ lineNo	logDateTime	testCaseId	logType	os	special	group	message	level	command	sub
 (`kotlin/tutorial/basic/CanSelect1.kt`)
 
 ```kotlin
-@Test
-@Order(20)
-fun canSelectInScanElements() {
+    @Test
+    @Order(20)
+    fun canSelectInScanElements() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.scanElements()
-            }.action {
-                it.canSelectInScanResults("Settings", log = true)
-                it.canSelectInScanResults("Accessibility", log = true)
-                it.canSelectInScanResults("System", log = true)
-                it.canSelectInScanResults("Foo", log = true)
+        scenario {
+            case(1) {
+                condition {
+                    it.scanElements()
+                }.action {
+                    it.canSelectInScanResults("Settings", log = true)
+                    it.canSelectInScanResults("Accessibility", log = true)
+                    it.canSelectInScanResults("System", log = true)
+                    it.canSelectInScanResults("Foo", log = true)
+                }
             }
-        }
-        case(2) {
-            action {
-                it.canSelectAllInScanResults("Settings", "Accessibility", "System", log = true)
-                it.canSelectAllInScanResults("Settings", "Accessibility", "Foo", log = true)
+            case(2) {
+                action {
+                    it.canSelectAllInScanResults("Settings", "Accessibility", "System", log = true)
+                    it.canSelectAllInScanResults("Settings", "Accessibility", "Foo", log = true)
+                }
             }
         }
     }
-}
 ```
 
 #### 注意

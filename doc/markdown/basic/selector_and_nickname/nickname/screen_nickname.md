@@ -283,16 +283,16 @@ You can specify weight on the screen nickname file. Larger number is hi priority
   "weight": "100"
 ```
 
-### start-elements, end-elements
+### header-elements, footer-elements
 
-On scrolling down/scrolling up, shirates-core automatically detects the edge of scroll. You can specify
-**start-elements** / **end-elements** as hint.
-This improves performance on scrolling.
+On scrolling down/scrolling up, shirates-core automatically detects scrollable area. You can specify
+**header-elements** / **footer-elements** as hint.
+Headers and footers are excluded from scrollable area. This provides safe scrolling and tapping.
 
 ```
   "scroll": {
-    "start-elements": "[Profile Icon]",
-    "end-elements": "[Developer]"
+    "header-elements": "[Header Bar]",
+    "footer-elements": "[Footer Navigation]"
   }
 ```
 
@@ -312,6 +312,25 @@ To avoid this, you can specify **overlay-elements**.
   "scroll": {
     "overlay-elements": "[NavigationBar]"
   }
+```
+
+### start-elements, end-elements
+
+On scrolling down/scrolling up, shirates-core automatically detects the edge of scroll. You can specify
+**start-elements** / **end-elements** as hint.
+This improves performance on scrolling.
+
+```
+  "scroll": {
+    "start-elements": "[Profile Icon]",
+    "end-elements": "[Developer]"
+  }
+```
+
+You can specify multiple elements as follows.
+
+```
+"[Element A][Element B]"
 ```
 
 ### default

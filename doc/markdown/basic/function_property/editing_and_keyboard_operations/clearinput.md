@@ -9,28 +9,28 @@ You can clear value of input widget using **clearInput** function.
 (`kotlin/tutorial/basic/AndroidSendKeys1.kt`)
 
 ```kotlin
-@Test
-@Order(20)
-fun clearInput() {
+    @Test
+    @Order(20)
+    fun clearInput() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.restartApp()
-                    .macro("[Android Settings Search Screen]")
-                    .select("[Search Box]")
-                    .textIs("Search settings")
-                    .sendKeys("clock")
-                    .textIs("clock")
-            }.action {
-                it.clearInput()
-            }.expectation {
-                it.select("[Search Box]")
-                    .textIs("Search settings")
+        scenario {
+            case(1) {
+                condition {
+                    it.restartApp()
+                        .macro("[Android Settings Search Screen]")
+                        .select("[Search Box]")
+                        .textIs("Search settings")
+                        .sendKeys("clock")
+                        .textIs("clock")
+                }.action {
+                    it.clearInput()
+                }.expectation {
+                    it.select("[Search Box]")
+                        .textIs("Search settings")
+                }
             }
         }
     }
-}
 ```
 
 ### Link

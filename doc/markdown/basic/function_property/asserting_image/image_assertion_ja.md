@@ -55,25 +55,31 @@
   "key": "[Clock(shared)]",
 
   "selectors": {
-    "[Alarm Tab]": "#tab_menu_alarm",
+    "[Alarm]": "Alarm&&!#action_bar_title",
+    "[Alarm Tab]": "@Alarm",
     "[Alarm Image]": "Alarm.png",
     "[Alarm Image(selected)]": "Alarm(selected).png",
 
-    "[Clock Tab]": "#tab_menu_clock",
+    "[Clock]": "Clock&&!#action_bar_title",
+    "[Clock Tab]": "@Clock",
     "[Clock Image]": "Clock.png",
     "[Clock Image(selected)]": "Clock(selected).png",
 
-    "[Timer Tab]": "#tab_menu_timer",
+    "[Timer]": "Timer&&!#action_bar_title",
+    "[Timer Tab]": "@Timer",
     "[Timer Image]": "Timer.png",
     "[Timer Image(selected)]": "Timer(selected).png",
 
-    "[Stopwatch Tab]": "#tab_menu_stopwatch",
+    "[Stopwatch]": "Stopwatch&&!#action_bar_title",
+    "[Stopwatch Tab]": "@Stopwatch",
     "[Stopwatch Image]": "Stopwatch.png",
     "[Stopwatch Image(selected)]": "Stopwatch(selected).png",
 
-    "[Bedtime Tab]": "#tab_menu_bedtime",
+    "[Bedtime]": "Bedtime&&!#action_bar_title",
+    "[Bedtime Tab]": "@Bedtime",
     "[Bedtime Image]": "Bedtime.png",
     "[Bedtime Image(selected)]": "Bedtime(selected).png"
+
   }
 
 }
@@ -93,17 +99,19 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
+import shirates.helper.ImageSetupHelper
 
 @Testrun("testConfig/android/maps/testrun.properties")
 class AssertingImage1 : UITest() {
 
-    /**
-     * Note:
-     *
-     * Run CroppingImages1.kt(tutorial.inaction.CroppingImages1)
-     * before running this sample
-     * to set up template image files.
-     */
+    @Test
+    @Order(0)
+    fun setupImage() {
+
+        scenario {
+            ImageSetupHelper.SetupImagesMapsTopScreen()
+        }
+    }
 
     @Test
     @Order(10)

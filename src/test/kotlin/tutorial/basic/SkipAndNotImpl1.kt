@@ -7,7 +7,7 @@ import shirates.core.driver.commandextension.output
 import shirates.core.driver.commandextension.tap
 import shirates.core.driver.commandextension.textIs
 import shirates.core.driver.commandextension.textIsNot
-import shirates.core.driver.platformVersion
+import shirates.core.driver.platformMajorVersion
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -20,8 +20,8 @@ class SkipAndNotImpl1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    output("platformVersion=$platformVersion")
-                    if ((platformVersion.toIntOrNull() ?: 0) > 5) {
+                    output("platformMajorVersion=$platformMajorVersion")
+                    if (platformMajorVersion > 5) {
                         SKIP_CASE("case(1) skipped.")   // Skip execution of commands (log only)
                     }
                 }.action {
@@ -48,8 +48,8 @@ class SkipAndNotImpl1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    output("platformVersion=$platformVersion")
-                    if ((platformVersion.toIntOrNull() ?: 0) > 5) {
+                    output("platformMajorVersion=$platformMajorVersion")
+                    if (platformMajorVersion > 5) {
                         SKIP_SCENARIO()     // Skip execution of commands (log only)
                     }
                 }.action {

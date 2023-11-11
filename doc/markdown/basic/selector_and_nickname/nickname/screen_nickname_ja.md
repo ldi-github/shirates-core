@@ -191,9 +191,11 @@
 "**identity**" と "**satellites**"の組み合わせは画面をユニークに識別します。
 スクロール可能なビューの場合、画面をユニークに識別するための要素が常に表示されるとは限りません。
 この場合は"sattelites"で補完してユニークな識別子を構成することができます。
-例えば、`#recycler_view&&Battery`と `#recycler_view&&Accessibility` はそれぞれ`[Android Settings Top Screen]`をユニークに識別することができます。
+例えば、`#recycler_view&&Battery`と `#recycler_view&&Accessibility` はそれぞれ`[Android Settings Top Screen]`
+をユニークに識別することができます。
 
-"**selectors**"セクションにおいてセレクターニックネームを定義できます。上記の場合、 [相対セレクター](../relative_selector/relative_selector_ja.md)
+"**selectors**"
+セクションにおいてセレクターニックネームを定義できます。上記の場合、 [相対セレクター](../relative_selector/relative_selector_ja.md)
 が使用されています。
 
 ## 画面ニックネームの共有
@@ -284,20 +286,21 @@ shirates-core は現在の画面名(currentScreen)を自動で決定します。
   "weight": "100"
 ```
 
-### start-elements, end-elements
+### header-elements, footer-elements
 
-下方向へスクロール（または上方向へスクロール）する場合、shirates-coreはスクロールの終端を自動で検出します。
-**start-elements** / **end-elements** をヒントとして記述することができます。
-これによりスクロール時のパフォーマンスが向上します。
+スクロールダウン/スクロールアップ時に、shirates-coreが自動的にスクロール可能な領域を検出します。
+ヒントとして、**header-elements** / **footer-elements** を指定することができます。
+ヘッダとフッタはスクロール可能領域から除外されます。
+これにより、安全なスクロールとタップが可能になります。
 
 ```
   "scroll": {
-    "start-elements": "[Profile Icon]",
-    "end-elements": "[Developer]"
+    "header-elements": "[Header Bar]",
+    "footer-elements": "[Footer Navigation]"
   }
 ```
 
-You can specify multiple elements as follows.
+以下のように複数の要素を指定することができます。
 
 ```
 "[Element A][Element B]"
@@ -313,6 +316,31 @@ You can specify multiple elements as follows.
   "scroll": {
     "overlay-elements": "[NavigationBar]"
   }
+```
+
+以下のように複数の要素を指定することができます。
+
+```
+"[Element A][Element B]"
+```
+
+### start-elements, end-elements
+
+下方向へスクロール（または上方向へスクロール）する場合、shirates-coreはスクロールの終端を自動で検出します。
+**start-elements** / **end-elements** をヒントとして記述することができます。
+これによりスクロール時のパフォーマンスが向上します。
+
+```
+  "scroll": {
+    "start-elements": "[Profile Icon]",
+    "end-elements": "[Developer]"
+  }
+```
+
+以下のように複数の要素を指定することができます。
+
+```
+"[Element A][Element B]"
 ```
 
 ## その他

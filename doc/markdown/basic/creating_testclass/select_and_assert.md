@@ -7,32 +7,46 @@ You can select an element and assert its properties.
 (`kotlin/tutorial/basic/SelectAndAssert1.kt`)
 
 ```kotlin
-@Test
-@Order(10)
-fun selectAndAssert1_OK() {
+package tutorial.basic
 
-    scenario {
-        case(1) {
-            expectation {
-                it.select("Settings")
-                    .textIs("Settings")   // OK
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.select
+import shirates.core.driver.commandextension.textIs
+import shirates.core.testcode.UITest
+
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class SelectAndAssert1 : UITest() {
+
+    @Test
+    @Order(10)
+    fun selectAndAssert1_OK() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    it.select("Settings")
+                        .textIs("Settings")   // OK
+                }
             }
         }
     }
-}
 
-@Test
-@Order(20)
-fun selectAndAssert2_NG() {
+    @Test
+    @Order(20)
+    fun selectAndAssert2_NG() {
 
-    scenario {
-        case(1) {
-            expectation {
-                it.select("Settings")
-                    .textIs("Network & internet")   // NG
+        scenario {
+            case(1) {
+                expectation {
+                    it.select("Settings")
+                        .textIs("Network & internet")   // NG
+                }
             }
         }
     }
+
 }
 ```
 

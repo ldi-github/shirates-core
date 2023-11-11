@@ -15,43 +15,43 @@
 (`kotlin/tutorial/basic/AssertingOthers1.kt`)
 
 ```kotlin
-@Test
-@Order(50)
-fun packageIs_OK() {
+    @Test
+    @Order(50)
+    fun packageIs_OK() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.expectation {
-                it.packageIs("com.android.settings")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.packageIs("com.android.settings")
+                }
             }
-        }
 
-        case(2) {
-            action {
-                it.launchApp("Chrome")
-            }.expectation {
-                it.packageIs("com.android.chrome")
-            }
-        }
-    }
-}
-
-@Test
-@Order(60)
-fun packageIs_NG() {
-
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.expectation {
-                it.packageIs("com.android.chrome")
+            case(2) {
+                action {
+                    it.launchApp("Chrome")
+                }.expectation {
+                    it.packageIs("com.android.chrome")
+                }
             }
         }
     }
-}
+
+    @Test
+    @Order(60)
+    fun packageIs_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.packageIs("com.android.chrome")
+                }
+            }
+        }
+    }
 ```
 
 ### Link
