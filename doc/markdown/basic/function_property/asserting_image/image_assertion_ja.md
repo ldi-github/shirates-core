@@ -15,18 +15,12 @@
 
 これらの関数を使用して画像の検証を行うことができます。
 
-| 関数                      |
-|:------------------------|
-| imageIs                 |
-| imageContains           |
-| exist                   |
-| existWithScrollDown     |
-| existWithScrollUp       |
-| existWithScrollRight    |
-| existWithScrollLeft     |
-| dontExist               |
-| dontExistWithScrollDown |
-| dontExistWithScrollUp   |
+| 関数             |
+|:---------------|
+| imageIs        |
+| imageContains  |
+| existImage     |
+| dontExistImage |
 
 ## 例
 

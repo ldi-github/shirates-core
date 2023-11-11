@@ -1,4 +1,4 @@
-# Image matching and assertion
+# Image assertion
 
 ## functions
 
@@ -15,18 +15,12 @@ You can try image matching using these functions.
 
 You can assert image using these functions.
 
-| function                |
-|:------------------------|
-| imageIs                 |
-| imageContains           |
-| exist                   |
-| existWithScrollDown     |
-| existWithScrollUp       |
-| existWithScrollRight    |
-| existWithScrollLeft     |
-| dontExist               |
-| dontExistWithScrollDown |
-| dontExistWithScrollUp   |
+| function       |
+|:---------------|
+| imageIs        |
+| imageContains  |
+| existImage     |
+| dontExistImage |
 
 ## Example
 
