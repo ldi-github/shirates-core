@@ -18,99 +18,111 @@ You can assert any value using these functions.
 (`kotlin/tutorial/basic/AssertingAnyValue1.kt`)
 
 ```kotlin
-@Test
-@Order(10)
-fun stringAssertion_OK() {
+package tutorial.basic
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.expectation {
-                "string1"
-                    .thisIs("string1")
-                    .thisIsNot("string2")
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.*
+import shirates.core.testcode.UITest
 
-                    .thisStartsWith("s")
-                    .thisStartsWithNot("t")
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class AssertingAnyValue1 : UITest() {
 
-                    .thisContains("ring")
-                    .thisContainsNot("square")
+    @Test
+    @Order(10)
+    fun stringAssertion_OK() {
 
-                    .thisEndsWith("ring1")
-                    .thisEndsWithNot("ring2")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    "string1"
+                        .thisIs("string1")
+                        .thisIsNot("string2")
 
-                    .thisMatches("^str.*")
-                    .thisMatchesNot("^tex.*")
+                        .thisStartsWith("s")
+                        .thisStartsWithNot("t")
+
+                        .thisContains("ring")
+                        .thisContainsNot("square")
+
+                        .thisEndsWith("ring1")
+                        .thisEndsWithNot("ring2")
+
+                        .thisMatches("^str.*")
+                        .thisMatchesNot("^tex.*")
+                }
             }
-        }
 
-        case(2) {
-            expectation {
-                "".thisIsEmpty()
-                "hoge".thisIsNotEmpty()
+            case(2) {
+                expectation {
+                    "".thisIsEmpty()
+                    "hoge".thisIsNotEmpty()
 
-                " ".thisIsBlank()
-                "hoge".thisIsNotBlank()
+                    " ".thisIsBlank()
+                    "hoge".thisIsNotBlank()
+                }
             }
-        }
 
-    }
-}
-
-@Test
-@Order(20)
-fun stringAssertion_NG() {
-
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.expectation {
-                "string1"
-                    .thisContains("square")
-            }
         }
     }
-}
 
-@Test
-@Order(30)
-fun booleanAssertion_OK() {
+    @Test
+    @Order(20)
+    fun stringAssertion_NG() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.expectation {
-                true.thisIsTrue()
-                false.thisIsFalse()
-
-                true.thisIsTrue("The value is true")
-                false.thisIsFalse("The value is false")
-            }
-        }
-        case(2) {
-            expectation {
-                it.isApp("Settings")
-                    .thisIsTrue("This app is <Settings>")
-                it.isApp("Chrome")
-                    .thisIsFalse("This app is not <Chrome>")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    "string1"
+                        .thisContains("square")
+                }
             }
         }
     }
-}
 
-@Test
-@Order(40)
-fun booleanAssertion_NG() {
+    @Test
+    @Order(30)
+    fun booleanAssertion_OK() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.expectation {
-                false.thisIsTrue()
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    true.thisIsTrue()
+                    false.thisIsFalse()
+
+                    true.thisIsTrue("The value is true")
+                    false.thisIsFalse("The value is false")
+                }
+            }
+            case(2) {
+                expectation {
+                    it.isApp("Settings")
+                        .thisIsTrue("This app is <Settings>")
+                    it.isApp("Chrome")
+                        .thisIsFalse("This app is not <Chrome>")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(40)
+    fun booleanAssertion_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    false.thisIsTrue()
+                }
             }
         }
     }

@@ -15,8 +15,9 @@
   },
 
   "scroll": {
+    "header-elements": "[Use developer options bar]",
     "start-elements": "",
     "end-elements": "",
-    "overlay-elements": "[Use developer options bar]"
+    "overlay-elements": ""
   }
 }

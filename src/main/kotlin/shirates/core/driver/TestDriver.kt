@@ -291,8 +291,10 @@ object TestDriver {
         TestLog.info("swipeDurationSeconds: ${testContext.swipeDurationSeconds}")
         TestLog.info("flickDurationSeconds: ${testContext.flickDurationSeconds}")
         TestLog.info("swipeMarginRatio: ${testContext.swipeMarginRatio}")
-        TestLog.info("scrollVerticalMarginRatio: ${testContext.scrollVerticalMarginRatio}")
-        TestLog.info("scrollHorizontalMarginRatio: ${testContext.scrollHorizontalMarginRatio}")
+        TestLog.info("scrollVerticalStartMarginRatio: ${testContext.scrollVerticalStartMarginRatio}")
+        TestLog.info("scrollVerticalEndMarginRatio: ${testContext.scrollVerticalEndMarginRatio}")
+        TestLog.info("scrollHorizontalStartMarginRatio: ${testContext.scrollHorizontalStartMarginRatio}")
+        TestLog.info("scrollHorizontalEndMarginRatio: ${testContext.scrollHorizontalEndMarginRatio}")
         TestLog.info("tapHoldSeconds: ${testContext.tapHoldSeconds}")
         TestLog.info("tapAppIconMethod: ${testContext.tapAppIconMethod}")
         TestLog.info("tapAppIconMacro: ${testContext.tapAppIconMacro}")
@@ -322,15 +324,17 @@ object TestDriver {
 
     internal fun postProcessForImageAssertion(
         e: TestElement,
-        imageMatchResult: ImageMatchResult,
         assertMessage: String,
         log: Boolean = CodeExecutionContext.shouldOutputLog,
         dontExist: Boolean = false
     ) {
-        if (dontExist && imageMatchResult.result.not() || dontExist.not() && imageMatchResult.result) {
-            e.lastResult = TestLog.getOKType()
-            if (log) {
-                TestLog.ok(message = assertMessage)
+        val imageMatchResult = e.imageMatchResult
+        if (imageMatchResult != null) {
+            if (dontExist && imageMatchResult.result.not() || dontExist.not() && imageMatchResult.result) {
+                e.lastResult = TestLog.getOKType()
+                if (log) {
+                    TestLog.ok(message = assertMessage)
+                }
             }
         } else {
             e.lastResult = LogType.NG
@@ -532,13 +536,13 @@ object TestDriver {
         TestLog.info("Optimizing installing WebDriverAgent.")
         val wdaDirectory = IosDeviceUtility.getWebDriverAgentDirectory()
         if (Files.exists(wdaDirectory.toPath()).not()) {
-            TestLog.info("WebDriverAgent directory not found.")
+            TestLog.info("WebDriverAgent directory not found. Optimization skipped.")
             return
         }
         // Check existence of app file
         val appFiles = File(wdaDirectory).walkTopDown().filter { it.name == "WebDriverAgentRunner-Runner.app" }
         if (appFiles.any().not()) {
-            TestLog.info("WebDriverAgentRunner-Runner.app not found.")
+            TestLog.info("WebDriverAgentRunner-Runner.app not found. Optimization skipped.")
             return
         }
 
@@ -996,10 +1000,12 @@ object TestDriver {
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+        scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
+        frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         log: Boolean = false
     ): TestElement {
@@ -1016,9 +1022,11 @@ object TestDriver {
                 direction = direction,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
+                frame = frame,
                 useCache = useCache,
             )
         }
@@ -1031,10 +1039,12 @@ object TestDriver {
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
+        frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
     ): TestElement {
 
@@ -1046,9 +1056,11 @@ object TestDriver {
                 direction = direction,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 throwsException = throwsException,
-                waitSeconds = waitSeconds
+                waitSeconds = waitSeconds,
+                frame = frame
             )
         }
 
@@ -1073,11 +1085,13 @@ object TestDriver {
 
     private fun selectCore(
         selector: Selector,
+        frame: Bounds?,
         useCache: Boolean,
         scroll: Boolean,
         direction: ScrollDirection,
         scrollDurationSeconds: Double,
         scrollStartMarginRatio: Double,
+        scrollEndMarginRatio: Double,
         scrollMaxCount: Int,
         throwsException: Boolean,
         waitSeconds: Double
@@ -1106,7 +1120,8 @@ object TestDriver {
                 syncCache()
                 TestElementCache.select(
                     selector = selector,
-                    throwsException = false
+                    throwsException = false,
+                    frame = frame
                 )
             } else {
                 selectDirect(
@@ -1125,9 +1140,11 @@ object TestDriver {
             if (scroll) {
                 return selectWithScroll(
                     selector = selector,
+                    frame = frame,
                     direction = direction,
                     durationSeconds = scrollDurationSeconds,
                     startMarginRatio = scrollStartMarginRatio,
+                    endMarginRatio = scrollEndMarginRatio,
                     scrollMaxCount = scrollMaxCount,
                     throwsException = throwsException,
                 )
@@ -1190,7 +1207,8 @@ object TestDriver {
 
     internal fun selectDirect(
         selector: Selector,
-        throwsException: Boolean
+        throwsException: Boolean,
+        frame: Bounds? = null
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {
@@ -1207,13 +1225,14 @@ object TestDriver {
                 if (fullXPathCondition.isNotBlank()) {
                     elm = selectDirectByXPath(
                         selector = selector,
-                        fullXPathCondition = fullXPathCondition
+                        fullXPathCondition = fullXPathCondition,
+                        frame = frame
                     )
                 }
             } else if (isiOS) {
                 val iosClassChain = selector.getIosClassChain()
                 if (iosClassChain.isNotBlank()) {
-                    elm = selectDirectByIosClassChain(selector = selector)
+                    elm = selectDirectByIosClassChain(selector = selector, frame = frame)
                 }
             }
             if (elm == null) {
@@ -1254,6 +1273,9 @@ object TestDriver {
                     }
                 }
             }
+            if (elm.isFound && frame != null && elm.bounds.isIncludedIn(frame).not()) {
+                elm = TestElement.emptyElement
+            }
             elm.selector = selector
             elm
         } catch (t: Throwable) {
@@ -1278,7 +1300,8 @@ object TestDriver {
 
     private fun selectDirectByXPath(
         selector: Selector,
-        fullXPathCondition: String
+        fullXPathCondition: String,
+        frame: Bounds? = null
     ): TestElement {
 
         val ms = Measure("selectDirectByXPath")
@@ -1286,15 +1309,27 @@ object TestDriver {
             if (selector.pos == null || selector.pos == 1) {
                 if (isiOS) {
                     val xpath = "//*$fullXPathCondition[@visible='true']"
-                    return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
+                    return testDrive.findWebElementBy(
+                        locator = By.xpath(xpath),
+                        timeoutMilliseconds = 0,
+                        frame = frame
+                    )
                 } else {
                     val xpath = "//*$fullXPathCondition"
-                    return testDrive.findWebElementBy(By.xpath(xpath), timeoutMilliseconds = 0)
+                    return testDrive.findWebElementBy(
+                        locator = By.xpath(xpath),
+                        timeoutMilliseconds = 0,
+                        frame = frame
+                    )
                 }
             }
 
             val xpath = "//*$fullXPathCondition"
-            val elements = testDrive.findWebElementsBy(By.xpath(xpath), timeoutMilliseconds = 0)
+            val elements = testDrive.findWebElementsBy(
+                locator = By.xpath(xpath),
+                timeoutMilliseconds = 0,
+                frame = frame
+            )
             val pos = selector.pos!!
             if (pos <= elements.count()) {
                 return elements[pos - 1]
@@ -1311,13 +1346,18 @@ object TestDriver {
         return classChain.removePrefix("**/*").removePrefix("[`").removeSuffix("`]")
     }
 
-    private fun selectDirectByIosClassChain(
-        selector: Selector
+    internal fun selectDirectByIosClassChain(
+        selector: Selector,
+        frame: Bounds? = null
     ): TestElement {
 
         val classChain = selector.getIosClassChain()
         val ms = Measure(classChain)
-        val element = testDrive.findWebElementBy(AppiumBy.iOSClassChain(classChain), timeoutMilliseconds = 0)
+        val element = testDrive.findWebElementBy(
+            locator = AppiumBy.iOSClassChain(classChain),
+            timeoutMilliseconds = 0,
+            frame = frame
+        )
         ms.end()
         return element
     }
@@ -1330,7 +1370,8 @@ object TestDriver {
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
@@ -1344,53 +1385,25 @@ object TestDriver {
             direction = direction,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = throwsException,
             useCache = useCache
         )
     }
 
-    internal val suffixForImage: String
-        get() {
-            if (isInitialized.not()) {
-                return if (isAndroid) "@a" else "@i"
-            }
-            val platformMajor = testProfile.platformVersion.split(".").first()
-            val suffix = if (isAndroid) {
-                val deviceScreenSize = capabilities.getCapabilityRelaxed("deviceScreenSize")
-                "@a${platformMajor}_$deviceScreenSize"
-            } else {
-                val deviceName = capabilities.getCapabilityRelaxed("deviceName")
-                "@i${platformMajor}_$deviceName"
-            }
-            return suffix
-        }
-
-    internal val suffixForImageDefault: String
-        get() {
-            if (isInitialized.not()) {
-                return if (isAndroid) "@a" else "@i"
-            }
-            val suffix = if (isAndroid) {
-                val deviceScreenSize = capabilities.getCapabilityRelaxed("deviceScreenSize")
-                "@a_$deviceScreenSize"
-            } else {
-                val deviceName = capabilities.getCapabilityRelaxed("deviceName")
-                "@i_$deviceName"
-            }
-            return suffix
-        }
-
     internal fun findImage(
         selector: Selector,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
-        scrollMaxCount: Int = testContext.scrollMaxCount,
-        throwsException: Boolean = true,
+        threshold: Double = PropertiesManager.imageMatchingThreshold,
+        scroll: Boolean,
+        direction: ScrollDirection,
+        scrollDurationSeconds: Double,
+        scrollStartMarginRatio: Double,
+        scrollEndMarginRatio: Double,
+        scrollMaxCount: Int,
+        throwsException: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
-        useCache: Boolean = testContext.useCache,
+        useCache: Boolean
     ): ImageMatchResult {
 
         lastElement = TestElement.emptyElement
@@ -1401,9 +1414,14 @@ object TestDriver {
             }
             selector.image = "${selector.nickname}.png"
         }
-        val filePath = ImageFileRepository.getFilePath(selector.image!!)
-        if (Files.exists(filePath).not()) {
-            throw FileNotFoundException(message(id = "imageFileNotFound", subject = selector.image))
+        val filePath = runCatching {
+            ImageFileRepository.getFilePath(selector.image!!)
+        }.getOrNull()
+        if (filePath == null || Files.exists(filePath).not()) {
+            if (throwsException) {
+                throw FileNotFoundException(message(id = "imageFileNotFound", subject = selector.image))
+            }
+            return ImageMatchResult(result = false)
         }
 
         // Search in current screen
@@ -1411,9 +1429,20 @@ object TestDriver {
             syncCache()
         }
 
-        var r = rootElement.isContainingImage(selector.image!!)
+        var r = rootElement.isContainingImage(selector.image!!, threshold = threshold)
         if (r.result) {
             return r
+        }
+        if (scroll.not() && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
+            // Handle irregular
+            testDrive.suppressHandler {
+                testContext.onExistErrorHandler!!.invoke()
+            }
+            // Retry
+            r = rootElement.isContainingImage(selector.image!!)
+            if (r.result) {
+                return r
+            }
         }
 
         if (scroll) {
@@ -1429,6 +1458,7 @@ object TestDriver {
                 direction = direction,
                 durationSeconds = scrollDurationSeconds,
                 startMarginRatio = scrollStartMarginRatio,
+                endMarginRatio = scrollEndMarginRatio,
                 actionFunc = actionFunc
             )
         } else {
@@ -1476,11 +1506,11 @@ object TestDriver {
      */
     fun selectWithScroll(
         selector: Selector,
+        frame: Bounds? = rootBounds,
         direction: ScrollDirection = ScrollDirection.Down,
         durationSeconds: Double = testContext.swipeDurationSeconds,
-        startMarginRatio: Double =
-            if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
-            else testContext.scrollHorizontalMarginRatio,
+        startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true
     ): TestElement {
@@ -1488,10 +1518,12 @@ object TestDriver {
         var e = TestElement()
         val actionFunc = {
             val ms = Measure("$selector")
+
             e = select(
                 selector = selector,
                 waitSeconds = 0.0,
                 throwsException = false,
+                frame = frame
             )
             ms.end()
             e.isSafe
@@ -1503,6 +1535,7 @@ object TestDriver {
             direction = direction,
             durationSeconds = durationSeconds,
             startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio,
             actionFunc = actionFunc
         )
 
@@ -1524,7 +1557,8 @@ object TestDriver {
         expression: String,
         direction: ScrollDirection = ScrollDirection.Down,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true
     ): TestElement {
@@ -1536,7 +1570,8 @@ object TestDriver {
                 selector = sel,
                 direction = direction,
                 durationSeconds = scrollDurationSeconds,
-                startMarginRatio = scrollStartMarginRatio,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 throwsException = throwsException
             )
@@ -1639,6 +1674,10 @@ object TestDriver {
 
         if (mAppiumDriver == null) {
             throw TestDriverException("appiumDriver is null")
+        }
+
+        if (testContext.waitSecondsForAnimationComplete != 0.0) {
+            Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
         }
 
         try {
@@ -1761,7 +1800,6 @@ object TestDriver {
      */
     fun refreshCurrentScreen(
         screenInfoList: List<ScreenInfo> = ScreenRepository.screenInfoSearchList,
-        maxDepth: Int? = null,
         log: Boolean = true
     ): String {
 
@@ -1769,13 +1807,7 @@ object TestDriver {
 
         val originalScreen = currentScreen
 
-        val screenInfoHistory = getScreenInfoHistory()
-        var newScreen = refreshCurrentScreenCore(screenInfoList = screenInfoHistory, maxDepth = maxDepth)
-        if (newScreen == "?") {
-            val list = screenInfoList.toMutableList()
-            list.removeAll(screenInfoHistory)
-            newScreen = refreshCurrentScreenCore(screenInfoList = list, maxDepth = maxDepth)
-        }
+        val newScreen = refreshCurrentScreenInCandidates(screenInfoList = screenInfoList)
         val changed = newScreen != "?" && newScreen != originalScreen
         if (changed) {
             currentScreen = newScreen
@@ -1787,20 +1819,16 @@ object TestDriver {
         return currentScreen
     }
 
-    private fun refreshCurrentScreenCore(
-        screenInfoList: List<ScreenInfo>,
-        maxDepth: Int?
+    private fun refreshCurrentScreenInCandidates(
+        screenInfoList: List<ScreenInfo>
     ): String {
         var newScreen = "?"
         if (screenInfoList.isEmpty()) {
             return newScreen
         }
-        val md =
-            maxDepth ?: if (testContext.useCache) screenInfoList.count()
-            else Const.REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_DIRECT_MODE
-        val depth = Math.min(screenInfoList.count(), md)
-        for (i in 0 until depth) {
-            val screenInfo = screenInfoList[i]
+        val sortedList = screenInfoList.sortedByDescending { it.searchWeight }
+        for (i in 0 until sortedList.count()) {
+            val screenInfo = sortedList[i]
             val screenName = screenInfo.key
             TestLog.trace("// Trying $screenName")
 
@@ -1878,7 +1906,7 @@ object TestDriver {
             NicknameUtility.validateScreenName(screenName)
             val screenInfo = ScreenRepository.get(screenName)
 
-            var r = TestDriveObject.canSelectAll(selectors = screenInfo.identitySelectors)
+            var r = TestDriveObject.canSelectAll(selectors = screenInfo.identitySelectors, frame = null)
             if (r && screenInfo.satelliteSelectors.any()) {
                 fun hasAnySatellite(): Boolean {
                     for (expression in screenInfo.satelliteExpressions) {
@@ -1947,6 +1975,9 @@ object TestDriver {
                 for (i in 1..maxLoopCount) {
                     TestLog.info("Syncing ($i)", log = enableSyncLog)
                     refreshCache(currentScreenRefresh = false)
+                    if (lastXml.isBlank()) {
+                        TestLog.info("imageProfile: ${testDrive.imageProfile}")
+                    }
 
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
@@ -2171,6 +2202,7 @@ object TestDriver {
                 packageNameOrActivityName = packageOrBundleIdOrActivity,
                 onLaunchHandler = onLaunchHandler
             )
+            Thread.sleep(1500)
             refreshCache()
             SyncUtility.doUntilTrue {
                 isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
@@ -2191,6 +2223,7 @@ object TestDriver {
                     onLaunchHandler = onLaunchHandler,
                     log = true
                 )
+                Thread.sleep(1500)
                 refreshCache()
                 onLaunchHandler?.invoke()
             } catch (t: Throwable) {

@@ -3,6 +3,7 @@ package shirates.core.configuration
 import shirates.core.Const
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.testProfile
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -215,6 +216,36 @@ object PropertiesManager {
                     file = testrunFile
                 )
             )
+        }
+
+    /**
+     * statBarHeight
+     */
+    val statBarHeight: Int
+        get() {
+            val p = getPropertyValue("${os}.statBarHeight")
+            val value = p?.toIntOrNull()
+            if (value != null) {
+                return value
+            }
+
+            if (os == "android") {
+                return Const.ANDROID_STATBAR_HEIGHT
+            }
+
+            val m = testProfile.deviceName.removePrefix("iPhone ")
+            return if (m.startsWith("SE")) 20
+            else if (m.startsWith("15")) 47
+            else if (m.startsWith("14")) 47
+            else if (m.startsWith("13")) 47
+            else if (m.startsWith("12")) 47
+            else if (m.startsWith("11")) 48
+            else if (m.startsWith("X")) 44
+            else if (m.startsWith("8")) 20
+            else if (m.startsWith("7")) 20
+            else if (m.startsWith("6")) 20
+            else if (m.startsWith("5")) 20
+            else return Const.IOS_STATBAR_HEIGHT
         }
 
     // Priority --------------------------------------------------

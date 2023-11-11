@@ -137,7 +137,7 @@ object LanguageHelperAndroid : TestDrive {
             return languageAndRegion
         }
 
-        if (canSelect("#com.android.settings:id/label&&$language").not()) {
+        if (it.canSelect("#com.android.settings:id/label&&$languageAndRegion").not()) {
             addLanguage(language = language, region = region)
         }
 
@@ -148,7 +148,7 @@ object LanguageHelperAndroid : TestDrive {
         it.select("<$languageAndRegion>:right(#dragHandle)")
             .swipeVerticalTo(endY = 0)
 
-        if (canSelect("#android:id/button1")) {
+        if (it.canSelect("#android:id/button1")) {
             it.tap()
         }
 

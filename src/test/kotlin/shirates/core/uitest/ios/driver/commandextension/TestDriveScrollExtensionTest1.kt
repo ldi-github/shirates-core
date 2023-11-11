@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
+import shirates.core.driver.TestElement
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
@@ -56,9 +57,14 @@ class TestDriveScrollExtensionTest1 : UITest() {
                         e.isScrollable.thisIsTrue()
                     }
                     scrollableElements.count().thisIs(3)
-                    scrollableElements.count { it.type == "XCUIElementTypeMap" }.thisIs(1)
-                    scrollableElements.count { it.type == "XCUIElementTypeTable" }.thisIs(1)
-                    scrollableElements.count { it.type == "XCUIElementTypeCollectionView" }.thisIs(1)
+                    fun TestElement.thisIsScrollable() {
+                        val r =
+                            this.type == "XCUIElementTypeMap" || this.type == "XCUIElementTypeTable" || this.type == "XCUIElementTypeCollectionView"
+                        r.thisIsTrue("This is XCUIElementTypeMap or XCUIElementTypeTable or XCUIElementTypeCollectionView")
+                    }
+                    scrollableElements[0].thisIsScrollable()
+                    scrollableElements[1].thisIsScrollable()
+                    scrollableElements[2].thisIsScrollable()
                 }
             }
 

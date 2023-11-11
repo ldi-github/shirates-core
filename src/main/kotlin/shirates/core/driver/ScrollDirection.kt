@@ -4,7 +4,8 @@ enum class ScrollDirection {
     Down,
     Up,
     Right,
-    Left
+    Left,
+    None
 }
 
 val ScrollDirection.isDown: Boolean
@@ -25,4 +26,19 @@ val ScrollDirection.isRight: Boolean
 val ScrollDirection.isLeft: Boolean
     get() {
         return this == ScrollDirection.Left
+    }
+
+val ScrollDirection.isNone: Boolean
+    get() {
+        return this == ScrollDirection.None
+    }
+
+val ScrollDirection.isVertical: Boolean
+    get() {
+        return isDown || isUp
+    }
+
+val ScrollDirection.isHorizontal: Boolean
+    get() {
+        return isLeft || isRight
     }

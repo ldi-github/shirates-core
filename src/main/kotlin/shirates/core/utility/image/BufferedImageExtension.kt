@@ -8,6 +8,7 @@ import shirates.core.utility.toPath
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.io.File
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import javax.imageio.ImageIO
 import javax.imageio.ImageWriter
@@ -62,6 +63,11 @@ fun BufferedImage.saveImage(
 
     if (log) {
         TestLog.info(message = file.name)
+    }
+
+    val dir = file.toPath().parent
+    if(Files.exists(file.toPath().parent).not()){
+        throw FileNotFoundException("Failed to save file. Directory not found. (directory=$dir, file=${file.name})")
     }
 
     val outputStream = file.outputStream()

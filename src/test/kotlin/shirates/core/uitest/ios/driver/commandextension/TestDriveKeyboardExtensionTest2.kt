@@ -20,7 +20,6 @@ class TestDriveKeyboardExtensionTest2 : UITest() {
                 condition {
                     it.macro("[iOS Search Screen]")
                         .tap("#SpotlightSearchField")
-                        .clearInput()
                         .sendKeys("appium")
                         .keyboardIsShown()
                 }.action {
@@ -42,7 +41,6 @@ class TestDriveKeyboardExtensionTest2 : UITest() {
                 condition {
                     it.macro("[iOS Search Screen]")
                         .tap("#SpotlightSearchField")
-                        .clearInput()
                         .sendKeys("appium")
                         .keyboardIsShown()
                 }.action {
@@ -52,6 +50,37 @@ class TestDriveKeyboardExtensionTest2 : UITest() {
                 }
             }
         }
+    }
+
+    @Test
+    @Order(50)
+    fun tapSoftwareKey() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Search Screen]")
+                        .tap("#SpotlightSearchField")
+                        .sendKeys("appium")
+                        .keyboardIsShown()
+                }.action {
+                    it.tapSoftwareKey("search")
+                }.expectation {
+                    it.keyboardIsNotShown()
+                }
+            }
+            case(2) {
+                expectation {
+                    try {
+                        it.tapSoftwareKey("search")
+                        NG()
+                    } catch (t: Throwable) {
+                        OK(t.message!!)
+                    }
+                }
+            }
+        }
+
     }
 
 }

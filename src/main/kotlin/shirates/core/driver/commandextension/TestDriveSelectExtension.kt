@@ -2,7 +2,6 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -15,7 +14,9 @@ fun TestDrive.select(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    frame: Bounds? = rootBounds,
     useCache: Boolean = testContext.useCache,
+    updateLastElement: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -39,29 +40,21 @@ fun TestDrive.select(
             direction = direction,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
+            frame = frame,
             useCache = useCache,
         )
-        if (scroll) {
-            if (isAndroid) {
-                // Cancel scroll inertia
-                e = TestDriver.select(
-                    selector = sel,
-                    waitSeconds = waitSeconds,
-                    throwsException = throwsException,
-                    useCache = useCache,
-                )
-            }
-        }
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     if (TestMode.isNoLoadRun) {
         e.selector = sel
     }
 
-    lastElement = e
-    return lastElement
+    if (updateLastElement) {
+        lastElement = e
+    }
+    return e
 }
 
 /**
@@ -71,6 +64,7 @@ fun TestDrive.widget(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    frame: Bounds? = rootBounds,
     useCache: Boolean = testContext.useCache,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -86,6 +80,7 @@ fun TestDrive.widget(
         expression = sel.expression!!,
         throwsException = throwsException,
         waitSeconds = waitSeconds,
+        frame = frame,
         useCache = useCache,
         log = log,
         func = func
@@ -98,7 +93,8 @@ fun TestDrive.widget(
 fun TestDrive.selectWithScrollDown(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     log: Boolean = false,
@@ -115,12 +111,13 @@ fun TestDrive.selectWithScrollDown(
             direction = ScrollDirection.Down,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
+            endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = throwsException
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -132,7 +129,8 @@ fun TestDrive.selectWithScrollDown(
 fun TestDrive.selectWithScrollUp(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     log: Boolean = false,
@@ -149,12 +147,13 @@ fun TestDrive.selectWithScrollUp(
             direction = ScrollDirection.Up,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
+            endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = throwsException
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -166,7 +165,8 @@ fun TestDrive.selectWithScrollUp(
 fun TestDrive.selectWithScrollRight(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     log: Boolean = false,
@@ -183,12 +183,13 @@ fun TestDrive.selectWithScrollRight(
             direction = ScrollDirection.Right,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
+            endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = throwsException
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -200,7 +201,8 @@ fun TestDrive.selectWithScrollRight(
 fun TestDrive.selectWithScrollLeft(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     log: Boolean = false,
@@ -217,12 +219,13 @@ fun TestDrive.selectWithScrollLeft(
             direction = ScrollDirection.Left,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
+            endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             throwsException = throwsException
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -248,7 +251,7 @@ fun TestDrive.selectInScanResults(
             e = TestElementCache.select(
                 expression = expression,
                 throwsException = false,
-                selectContext = scanRoot.element
+                selectContext = scanRoot.element,
             )
             if (e.isEmpty.not()) {
                 return@execSelectCommand
@@ -262,7 +265,7 @@ fun TestDrive.selectInScanResults(
         }
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
     lastElement = e
     return lastElement
@@ -273,9 +276,11 @@ internal fun TestDrive.canSelect(
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     scrollMaxCount: Int = testContext.scrollMaxCount,
     waitSeconds: Double = 0.0,
+    frame: Bounds? = null
 ): Boolean {
 
     val e = TestDriver.select(
@@ -284,9 +289,11 @@ internal fun TestDrive.canSelect(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         waitSeconds = waitSeconds,
         throwsException = false,
+        frame = frame
     )
 
     return e.isEmpty.not()
@@ -300,7 +307,8 @@ fun TestDrive.canSelect(
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     scrollMaxCount: Int = testContext.scrollMaxCount,
     screenName: String = TestDriver.currentScreen,
     waitSeconds: Double = 0.0,
@@ -318,6 +326,7 @@ fun TestDrive.canSelect(
             direction = direction,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             waitSeconds = waitSeconds,
         )
@@ -334,7 +343,8 @@ fun TestDrive.canSelect(
 fun TestDrive.canSelectWithScrollDown(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
@@ -350,6 +360,7 @@ fun TestDrive.canSelectWithScrollDown(
             direction = ScrollDirection.Down,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
         )
     }
@@ -365,7 +376,8 @@ fun TestDrive.canSelectWithScrollDown(
 fun TestDrive.canSelectWithScrollUp(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
@@ -381,6 +393,7 @@ fun TestDrive.canSelectWithScrollUp(
             direction = ScrollDirection.Up,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
         )
     }
@@ -396,7 +409,8 @@ fun TestDrive.canSelectWithScrollUp(
 fun TestDrive.canSelectWithScrollRight(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
@@ -412,6 +426,7 @@ fun TestDrive.canSelectWithScrollRight(
             direction = ScrollDirection.Right,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
         )
     }
@@ -427,7 +442,8 @@ fun TestDrive.canSelectWithScrollRight(
 fun TestDrive.canSelectWithScrollLeft(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
@@ -443,6 +459,7 @@ fun TestDrive.canSelectWithScrollLeft(
             direction = ScrollDirection.Left,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
         )
     }
@@ -512,6 +529,7 @@ fun TestDrive.canSelectAllInScanResults(
  */
 internal fun TestDrive.canSelectAll(
     selectors: Iterable<Selector>,
+    frame: Bounds?,
     log: Boolean = false
 ): Boolean {
     val testElement = refreshLastElement()
@@ -521,7 +539,7 @@ internal fun TestDrive.canSelectAll(
     val context = TestDriverCommandContext(testElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (selector in selectors) {
-            foundAll = canSelect(selector = selector)
+            foundAll = canSelect(selector = selector, frame = frame)
             if (foundAll.not()) {
                 break
             }
@@ -538,6 +556,7 @@ internal fun TestDrive.canSelectAll(
  */
 fun TestDrive.canSelectAll(
     vararg expressions: String,
+    frame: Bounds? = null,
     log: Boolean = false
 ): Boolean {
     val testElement = getThisOrRootElement()
@@ -548,7 +567,7 @@ fun TestDrive.canSelectAll(
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         val screenInfo = TestDriver.screenInfo
         val selectors = expressions.map { screenInfo.getSelector(expression = it) }
-        foundAll = canSelectAll(selectors = selectors)
+        foundAll = canSelectAll(selectors = selectors, frame = frame)
     }
     if (logLine != null) {
         logLine.message += " (result=$foundAll)"
@@ -562,7 +581,8 @@ fun TestDrive.canSelectAll(
 fun TestDrive.canSelectAllWithScrollDown(
     vararg expressions: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
@@ -577,6 +597,7 @@ fun TestDrive.canSelectAllWithScrollDown(
                 expression = expression,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 log = log
             )
@@ -600,7 +621,8 @@ fun TestDrive.canSelectAllWithScrollDown(
 fun TestDrive.canSelectAllWithScrollUp(
     vararg expressions: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
@@ -615,6 +637,7 @@ fun TestDrive.canSelectAllWithScrollUp(
                 expression = expression,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
             )
             if (result.not()) {
@@ -637,7 +660,8 @@ fun TestDrive.canSelectAllWithScrollUp(
 fun TestDrive.canSelectAllWithScrollRight(
     vararg expressions: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
@@ -652,6 +676,7 @@ fun TestDrive.canSelectAllWithScrollRight(
                 expression = expression,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
             )
             if (result.not()) {
@@ -674,7 +699,8 @@ fun TestDrive.canSelectAllWithScrollRight(
 fun TestDrive.canSelectAllWithScrollLeft(
     vararg expressions: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
@@ -689,6 +715,7 @@ fun TestDrive.canSelectAllWithScrollLeft(
                 expression = expression,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
             )
             if (result.not()) {

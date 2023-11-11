@@ -93,8 +93,11 @@
     - [要素が存在することの検証](basic/function_property/asserting_existence/existance_assertion_ja.md)
     - [セルの内部に要素が存在することの検証](basic/function_property/asserting_existence/in_cell_existance_assertion_ja.md)
     - [画面が表示されていることの検証](basic/function_property/asserting_existence/screen_is_ja.md)
+- 画像を見つける
+    - [find image](basic/function_property/find_image/find_image_ja.md)
 - 画像を検証する
     - [画像の検証](basic/function_property/asserting_image/image_assertion_ja.md)
+    - [画像が存在することの検証（existImage, dontExistImage）](basic/function_property/asserting_image/asserting_existence_of_image_ja.md)
 - その他を検証する
     - [アプリが表示されていることの検証](basic/function_property/asserting_others/app_assertion_ja.md)
     - [キーボードが表示されていることの検証](basic/function_property/asserting_others/keyboard_assertion_ja.md)
@@ -136,8 +139,6 @@
 - ロギング
     - [info, warn](basic/function_property/logging/info_warn_ja.md)
     - [silent, procedure](basic/function_property/logging/silent_and_procedure_function_ja.md)
-- 画像を見つける
-    - [find image](basic/function_property/find_image/find_image_ja.md)
 - 外部コマンドを実行する
     - [shell](basic/function_property/external_command/shell_ja.md)
 

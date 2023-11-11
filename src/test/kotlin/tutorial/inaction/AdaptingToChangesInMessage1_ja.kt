@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.tap
-import shirates.core.driver.platformVersion
+import shirates.core.driver.platformMajorVersion
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -35,7 +35,7 @@ class AdaptingToChangesInMessage1_ja : UITest() {
         scenario {
             case(1) {
                 action {
-                    if ((platformVersion.toIntOrNull() ?: 0) < 11) {
+                    if (platformMajorVersion < 11) {
                         it.tap("アプリの使用中のみ許可")
                     } else {
                         it.tap("アプリの使用時のみ")

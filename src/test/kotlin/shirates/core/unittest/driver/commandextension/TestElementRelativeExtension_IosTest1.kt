@@ -50,24 +50,24 @@ class TestElementRelativeExtension_IosTest1 : UnitTest() {
     fun previous() {
 
         // Arrange
-        val e = TestElementCache.select("Mail Address")
+        val e = TestElementCache.select("Skip")
         // Act
         val previous1 = e.select(":previous()")
         // Assert
         assertThat(previous1.type).isEqualTo("XCUIElementTypeOther")
-        assertThat(previous1.selector.toString()).isEqualTo("<Mail Address>:previous")
+        assertThat(previous1.selector.toString()).isEqualTo("<Skip>:previous")
 
         // Act
         val previous2 = previous1.select(":previous()")
         // Assert
-        assertThat(previous2.type).isEqualTo("XCUIElementTypeScrollView")
-        assertThat(previous2.selector.toString()).isEqualTo("<Mail Address>:previous(2)")
+        assertThat(previous2.type).isEqualTo("XCUIElementTypeButton")
+        assertThat(previous2.selector.toString()).isEqualTo("<Skip>:previous(2)")
 
         // Act
         val previousButton = e.select(":previous(.XCUIElementTypeButton)")
         // Assert
-        assertThat(previousButton.label).isEqualTo("Skip")
-        assertThat(previousButton.selector.toString()).isEqualTo("<Mail Address>:previous(.XCUIElementTypeButton)")
+        assertThat(previousButton.y).isEqualTo("20")
+        assertThat(previousButton.selector.toString()).isEqualTo("<Skip>:previous(.XCUIElementTypeButton)")
     }
 
     @Test
@@ -165,33 +165,18 @@ class TestElementRelativeExtension_IosTest1 : UnitTest() {
 
         run {
             // Arrange
-            val e = TestElementCache.select("#CAPTCHA Image")
+            val e = TestElementCache.select("Confirm Password")
             // Act
             val image1 = e.select(":preImage()")
             // Assert
             assertThat(image1.label).isEqualTo("Dummy Image B")
-            assertThat(image1.selector.toString()).isEqualTo("<#CAPTCHA Image>:preImage")
+            assertThat(image1.selector.toString()).isEqualTo("<Confirm Password>:preImage")
 
             // Act
             val image2 = image1.select(":preImage()")
             // Assert
             assertThat(image2.label).isEqualTo("Dummy Image1")
-            assertThat(image2.selector.toString()).isEqualTo("<#CAPTCHA Image>:preImage(2)")
-        }
-        run {
-            // Arrange
-            val e = TestElementCache.select("100% battery power")
-            // Act
-            val image1 = e.select(":preImage()")
-            // Assert
-            assertThat(image1.name).isEqualTo("CAPTCHA Image")
-            assertThat(image1.selector.toString()).isEqualTo("<100% battery power>:preImage")
-
-            // Act
-            val image2 = image1.select(":preImage()")
-            // Assert
-            assertThat(image2.label).isEqualTo("Dummy Image B")
-            assertThat(image2.selector.toString()).isEqualTo("<100% battery power>:preImage(2)")
+            assertThat(image2.selector.toString()).isEqualTo("<Confirm Password>:preImage(2)")
         }
     }
 

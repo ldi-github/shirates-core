@@ -2,6 +2,8 @@ package shirates.core.driver
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.lastElement
+import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.commandextension.getKeyboardInIos
 import shirates.core.driver.commandextension.relative
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
@@ -99,9 +101,22 @@ object TestElementCache {
         selector: Selector,
         throwsException: Boolean = false,
         selectContext: TestElement = rootElement,
+        frame: Bounds? = null
     ): MutableList<TestElement> {
 
-        val targetElements = selectContext.descendantsAndSelf
+        var targetElements = selectContext.descendantsAndSelf
+        if (frame != null) {
+            targetElements = targetElements.filter { it.bounds.isIncludedIn(frame) }
+            if (isiOS) {
+                /**
+                 * Keyboard overlapping check
+                 */
+                val keyboard = testDrive.getKeyboardInIos()
+                if (keyboard.isFound) {
+                    targetElements = targetElements.filter { it.bounds.isOverlapping(keyboard.bounds).not() }
+                }
+            }
+        }
 
         var list = mutableListOf<TestElement>()
         if (selector.xpath == null) {
@@ -129,7 +144,8 @@ object TestElementCache {
     fun select(
         selector: Selector,
         throwsException: Boolean = true,
-        selectContext: TestElement = rootElement
+        selectContext: TestElement = rootElement,
+        frame: Bounds? = null
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {
@@ -144,18 +160,18 @@ object TestElementCache {
                 // get relative
                 e = lastElement.relative(
                     relativeSelectors = selector.relativeSelectors,
-                    scopeElements = allElements
+                    scopeElements = allElements,
+                    frame = frame
                 )
             } else {
                 // select in selectContext
-                val list = findElements(
+                val list: List<TestElement> = findElements(
                     selector = selector,
                     throwsException = throwsException,
-                    selectContext = selectContext
+                    selectContext = selectContext,
+                    frame = frame
                 )
-                val removeList = list.filter { it.isEmpty }
-                list.removeAll(removeList)
-                e = list.firstOrNull() ?: TestElement.emptyElement
+                e = list.firstOrNull { it.isEmpty.not() } ?: TestElement.emptyElement
             }
             e.lastError = null
 
@@ -179,7 +195,12 @@ object TestElementCache {
 
             if (e.hasError) {
                 for (altSelector in selector.alternativeSelectors) {
-                    e = select(selector = altSelector, throwsException = false, selectContext = selectContext)
+                    e = select(
+                        selector = altSelector,
+                        throwsException = false,
+                        selectContext = selectContext,
+                        frame = frame
+                    )
                     if (e.isFound && altSelector.isNegation.not()) {
                         return e
                     }
@@ -205,7 +226,8 @@ object TestElementCache {
     fun select(
         expression: String,
         throwsException: Boolean = true,
-        selectContext: TestElement = rootElement
+        selectContext: TestElement = rootElement,
+        frame: Bounds? = rootBounds
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {
@@ -218,7 +240,8 @@ object TestElementCache {
         val e = select(
             selector = sel,
             throwsException = throwsException,
-            selectContext = selectContext
+            selectContext = selectContext,
+            frame = frame
         )
 
         return e

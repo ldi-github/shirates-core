@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Selector
+import shirates.core.driver.Bounds
 import shirates.core.driver.TestElement
 
 internal val TestElement.innerElements: List<TestElement>
@@ -40,12 +41,14 @@ internal val TestElement.innerSwitchWidgets: List<TestElement>
 
 
 internal fun TestElement.innerWidget(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        targetElements = innerWidgets
+        targetElements = innerWidgets,
+        frame = frame
     )
 }
 
@@ -53,12 +56,14 @@ internal fun TestElement.innerWidget(
  * innerWidget
  */
 fun TestElement.innerWidget(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerWidget($pos)",
-        scopeElements = innerWidgets
+        scopeElements = innerWidgets,
+        frame = frame
     )
 }
 
@@ -66,22 +71,26 @@ fun TestElement.innerWidget(
  * innerWidget
  */
 fun TestElement.innerWidget(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerWidget($expression)",
-        scopeElements = innerWidgets
+        scopeElements = innerWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerLabel(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds? = null
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        targetElements = innerLabelWidgets
+        targetElements = innerLabelWidgets,
+        frame = frame
     )
 }
 
@@ -89,12 +98,14 @@ internal fun TestElement.innerLabel(
  * innerLabel
  */
 fun TestElement.innerLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerLabel($pos)",
-        scopeElements = innerLabelWidgets
+        scopeElements = innerLabelWidgets,
+        frame = frame
     )
 }
 
@@ -102,22 +113,26 @@ fun TestElement.innerLabel(
  * innerLabel
  */
 fun TestElement.innerLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerLabel($expression)",
-        scopeElements = innerLabelWidgets
+        scopeElements = innerLabelWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerInput(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        targetElements = innerInputWidgets
+        targetElements = innerInputWidgets,
+        frame = frame
     )
 }
 
@@ -125,12 +140,14 @@ internal fun TestElement.innerInput(
  * innerInput
  */
 fun TestElement.innerInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerInput($pos)",
-        scopeElements = innerInputWidgets
+        scopeElements = innerInputWidgets,
+        frame = frame
     )
 }
 
@@ -138,22 +155,26 @@ fun TestElement.innerInput(
  * innerInput
  */
 fun TestElement.innerInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerInput($expression)",
-        scopeElements = innerInputWidgets
+        scopeElements = innerInputWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerImage(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        targetElements = innerImageWidgets
+        targetElements = innerImageWidgets,
+        frame = frame
     )
 }
 
@@ -161,12 +182,14 @@ internal fun TestElement.innerImage(
  * innerImage
  */
 fun TestElement.innerImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerImage($pos)",
-        scopeElements = innerImageWidgets
+        scopeElements = innerImageWidgets,
+        frame = frame
     )
 }
 
@@ -174,22 +197,26 @@ fun TestElement.innerImage(
  * innerImage
  */
 fun TestElement.innerImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerImage($expression)",
-        scopeElements = innerImageWidgets
+        scopeElements = innerImageWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerButton(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        targetElements = innerButtonWidgets
+        targetElements = innerButtonWidgets,
+        frame = frame
     )
 }
 
@@ -197,12 +224,14 @@ internal fun TestElement.innerButton(
  * innerButton
  */
 fun TestElement.innerButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerButton($pos)",
-        scopeElements = innerButtonWidgets
+        scopeElements = innerButtonWidgets,
+        frame = frame
     )
 }
 
@@ -210,22 +239,26 @@ fun TestElement.innerButton(
  * innerButton
  */
 fun TestElement.innerButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerButton($expression)",
-        scopeElements = innerButtonWidgets
+        scopeElements = innerButtonWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerSwitch(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        targetElements = innerSwitchWidgets
+        targetElements = innerSwitchWidgets,
+        frame = frame
     )
 }
 
@@ -233,12 +266,14 @@ internal fun TestElement.innerSwitch(
  * innerSwitch
  */
 fun TestElement.innerSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerSwitch($pos)",
-        scopeElements = innerSwitchWidgets
+        scopeElements = innerSwitchWidgets,
+        frame = frame
     )
 }
 
@@ -246,22 +281,26 @@ fun TestElement.innerSwitch(
  * innerSwitch
  */
 fun TestElement.innerSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerSwitch($expression)",
-        scopeElements = innerSwitchWidgets
+        scopeElements = innerSwitchWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerVWidget(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        targetElements = innerWidgets
+        targetElements = innerWidgets,
+        frame = frame
     )
 }
 
@@ -269,12 +308,14 @@ internal fun TestElement.innerVWidget(
  * innerVWidget
  */
 fun TestElement.innerVWidget(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVWidget($pos)",
-        scopeElements = innerWidgets
+        scopeElements = innerWidgets,
+        frame = frame
     )
 }
 
@@ -282,22 +323,26 @@ fun TestElement.innerVWidget(
  * innerVWidget
  */
 fun TestElement.innerVWidget(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVWidget($expression)",
-        scopeElements = innerWidgets
+        scopeElements = innerWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerVlabel(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        targetElements = innerLabelWidgets
+        targetElements = innerLabelWidgets,
+        frame = frame
     )
 }
 
@@ -305,12 +350,14 @@ internal fun TestElement.innerVlabel(
  * innerVlabel
  */
 fun TestElement.innerVlabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVlabel($pos)",
-        scopeElements = innerLabelWidgets
+        scopeElements = innerLabelWidgets,
+        frame = frame
     )
 }
 
@@ -318,22 +365,26 @@ fun TestElement.innerVlabel(
  * innerVlabel
  */
 fun TestElement.innerVlabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVlabel($expression)",
-        scopeElements = labelWidgets
+        scopeElements = labelWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerVinput(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        targetElements = innerInputWidgets
+        targetElements = innerInputWidgets,
+        frame = frame
     )
 }
 
@@ -341,12 +392,14 @@ internal fun TestElement.innerVinput(
  * innerVinput
  */
 fun TestElement.innerVinput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVinput($pos)",
-        scopeElements = innerInputWidgets
+        scopeElements = innerInputWidgets,
+        frame = frame
     )
 }
 
@@ -354,22 +407,26 @@ fun TestElement.innerVinput(
  * innerVinput
  */
 fun TestElement.innerVinput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVinput($expression)",
-        scopeElements = innerInputWidgets
+        scopeElements = innerInputWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerVimage(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        targetElements = innerImageWidgets
+        targetElements = innerImageWidgets,
+        frame = frame
     )
 }
 
@@ -377,12 +434,14 @@ internal fun TestElement.innerVimage(
  * innerVimage
  */
 fun TestElement.innerVimage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVimage($pos)",
-        scopeElements = innerImageWidgets
+        scopeElements = innerImageWidgets,
+        frame = frame
     )
 }
 
@@ -390,22 +449,26 @@ fun TestElement.innerVimage(
  * innerVimage
  */
 fun TestElement.innerVimage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVimage($expression)",
-        scopeElements = innerImageWidgets
+        scopeElements = innerImageWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerVbutton(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        targetElements = innerButtonWidgets
+        targetElements = innerButtonWidgets,
+        frame = frame
     )
 }
 
@@ -413,12 +476,14 @@ internal fun TestElement.innerVbutton(
  * innerVbutton
  */
 fun TestElement.innerVbutton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVbutton($pos)",
-        scopeElements = innerButtonWidgets
+        scopeElements = innerButtonWidgets,
+        frame = frame
     )
 }
 
@@ -426,22 +491,26 @@ fun TestElement.innerVbutton(
  * innerVbutton
  */
 fun TestElement.innerVbutton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVbutton($expression)",
-        scopeElements = innerButtonWidgets
+        scopeElements = innerButtonWidgets,
+        frame = frame
     )
 }
 
 internal fun TestElement.innerVswitch(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.vflow(
         selector = selector,
-        targetElements = innerSwitchWidgets
+        targetElements = innerSwitchWidgets,
+        frame = frame
     )
 }
 
@@ -449,12 +518,14 @@ internal fun TestElement.innerVswitch(
  * innerVswitch
  */
 fun TestElement.innerVswitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVswitch($pos)",
-        scopeElements = innerSwitchWidgets
+        scopeElements = innerSwitchWidgets,
+        frame = frame
     )
 }
 
@@ -462,12 +533,14 @@ fun TestElement.innerVswitch(
  * innerVswitch
  */
 fun TestElement.innerVswitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":innerVswitch($expression)",
-        scopeElements = innerSwitchWidgets
+        scopeElements = innerSwitchWidgets,
+        frame = frame
     )
 }
 
@@ -482,21 +555,24 @@ internal fun TestElement.getAncestorAt(level: Int): TestElement {
 }
 
 internal fun TestElement.cellWidget(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds? = null
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        targetElements = this.innerWidgets
+        targetElements = this.innerWidgets,
+        frame = frame
     )
 }
 
 private fun TestElement.cellCore(
-    command: String
+    command: String,
+    frame: Bounds?
 ): TestElement {
 
     val oldSelector = this.selector
-    val e = relative(command = command)
+    val e = relative(command = command, frame = frame)
     if (e == this) {
         e.selector = oldSelector
     }
@@ -507,30 +583,34 @@ private fun TestElement.cellCore(
  * cellWidget
  */
 fun TestElement.cellWidget(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellWidget($pos)")
+    return cellCore(command = ":cellWidget($pos)", frame = frame)
 }
 
 /**
  * cellWidget
  */
 fun TestElement.cellWidget(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellWidget($expression)")
+    return cellCore(command = ":cellWidget($expression)", frame = frame)
 }
 
 
 internal fun TestElement.cellLabel(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return this.flow(
         selector = selector,
-        targetElements = this.innerLabelWidgets
+        targetElements = this.innerLabelWidgets,
+        frame = frame
     )
 }
 
@@ -538,30 +618,34 @@ internal fun TestElement.cellLabel(
  * cellLabel
  */
 fun TestElement.cellLabel(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellLabel($pos)")
+    return cellCore(command = ":cellLabel($pos)", frame = frame)
 }
 
 /**
  * cellLabel
  */
 fun TestElement.cellLabel(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellLabel($expression)")
+    return cellCore(command = ":cellLabel($expression)", frame = frame)
 }
 
 
 internal fun TestElement.cellInput(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return flow(
         selector = selector,
-        targetElements = this.innerInputWidgets
+        targetElements = this.innerInputWidgets,
+        frame = frame
     )
 }
 
@@ -569,30 +653,34 @@ internal fun TestElement.cellInput(
  * cellInput
  */
 fun TestElement.cellInput(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellInput($pos)")
+    return cellCore(command = ":cellInput($pos)", frame = frame)
 }
 
 /**
  * cellInput
  */
 fun TestElement.cellInput(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellInput($expression)")
+    return cellCore(command = ":cellInput($expression)", frame = frame)
 }
 
 
 internal fun TestElement.cellImage(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return flow(
         selector = selector,
-        targetElements = this.innerImageWidgets
+        targetElements = this.innerImageWidgets,
+        frame = frame
     )
 }
 
@@ -600,30 +688,34 @@ internal fun TestElement.cellImage(
  * cellImage
  */
 fun TestElement.cellImage(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellImage($pos)")
+    return cellCore(command = ":cellImage($pos)", frame = frame)
 }
 
 /**
  * cellImage
  */
 fun TestElement.cellImage(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellImage($expression)")
+    return cellCore(command = ":cellImage($expression)", frame = frame)
 }
 
 
 internal fun TestElement.cellButton(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds? = null
 ): TestElement {
 
     return flow(
         selector = selector,
-        targetElements = this.innerButtonWidgets
+        targetElements = this.innerButtonWidgets,
+        frame = frame
     )
 }
 
@@ -631,30 +723,34 @@ internal fun TestElement.cellButton(
  * cellButton
  */
 fun TestElement.cellButton(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellButton($pos)")
+    return cellCore(command = ":cellButton($pos)", frame = frame)
 }
 
 /**
  * cellButton
  */
 fun TestElement.cellButton(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellButton($expression)")
+    return cellCore(command = ":cellButton($expression)", frame = frame)
 }
 
 
 internal fun TestElement.cellSwitch(
-    selector: Selector
+    selector: Selector,
+    frame: Bounds?
 ): TestElement {
 
     return flow(
         selector = selector,
-        targetElements = this.innerSwitchWidgets
+        targetElements = this.innerSwitchWidgets,
+        frame = frame
     )
 }
 
@@ -662,18 +758,20 @@ internal fun TestElement.cellSwitch(
  * cellSwitch
  */
 fun TestElement.cellSwitch(
-    pos: Int = 1
+    pos: Int = 1,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellSwitch($pos)")
+    return cellCore(command = ":cellSwitch($pos)", frame = frame)
 }
 
 /**
  * cellSwitch
  */
 fun TestElement.cellSwitch(
-    expression: String
+    expression: String,
+    frame: Bounds? = null
 ): TestElement {
 
-    return cellCore(command = ":cellSwitch($expression)")
+    return cellCore(command = ":cellSwitch($expression)", frame = frame)
 }

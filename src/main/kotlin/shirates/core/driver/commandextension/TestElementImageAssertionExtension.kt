@@ -2,10 +2,7 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
-import shirates.core.driver.testContext
+import shirates.core.driver.*
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
@@ -18,7 +15,8 @@ import shirates.core.utility.sync.SyncUtility
  */
 fun TestElement.isImage(
     expression: String,
-    cropImage: Boolean = true
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
+    cropImage: Boolean = true,
 ): ImageMatchResult {
 
     val testElement = this
@@ -34,6 +32,7 @@ fun TestElement.isImage(
 
         r = isImageCore(
             selector = sel,
+            threshold = threshold,
             cropImage = cropImage
         )
     }
@@ -45,20 +44,23 @@ fun TestElement.isImage(
 
 internal fun TestElement.isImageCore(
     selector: Selector,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
     cropImage: Boolean = true
 ): ImageMatchResult {
-    val imageMatchResult: ImageMatchResult
+    if (this.isEmpty) {
+        return ImageMatchResult(result = false)
+    }
     if (cropImage) {
         silent {
             this.cropImage(save = true)
         }
     }
     val image = this.lastCropInfo?.croppedImage
-    imageMatchResult = selector.evaluateImageEqualsTo(image = image)
+    val imageMatchResult = selector.evaluateImageEqualsTo(image = image, threshold = threshold)
     if (imageMatchResult.result.not() && cropImage) {
         silent {
             val s = selector.image!!.removeSuffix(".png")
-            val fileName = "$s${TestDriver.suffixForImage}.png"
+            val fileName = "$s${testDrive.imageProfile}.png"
             imageMatchResult.image?.saveImage(TestLog.directoryForLog.resolve(fileName).toFile())
 
             val fileName2 = "${TestLog.lines.count() + 1}_$fileName"
@@ -72,7 +74,8 @@ internal fun TestElement.isImageCore(
  * isContainingImage
  */
 fun TestElement.isContainingImage(
-    expression: String
+    expression: String,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
 ): ImageMatchResult {
 
     val testElement = this
@@ -88,10 +91,9 @@ fun TestElement.isContainingImage(
 
         silent {
             testElement.cropImage(save = true)
+            val image = testElement.lastCropInfo?.croppedImage
+            r = sel.evaluateImageContainedIn(image = image, threshold = threshold)
         }
-        val image = testElement.lastCropInfo?.croppedImage
-
-        r = sel.evaluateImageContainedIn(image = image)
     }
 
     TestDriver.lastElement = testElement
@@ -105,6 +107,7 @@ fun TestElement.isContainingImage(
 fun TestElement.imageContains(
     expression: String,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     val command = "imageContains"
@@ -134,6 +137,10 @@ fun TestElement.imageContains(
 
     TestDriver.lastElement = testElement
 
+    if (func != null) {
+        func(this)
+    }
+
     return TestDriver.lastElement
 }
 
@@ -143,6 +150,7 @@ fun TestElement.imageContains(
 fun TestElement.imageIs(
     expression: String = this.selector.toString(),
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     val command = "imageIs"
@@ -168,6 +176,10 @@ fun TestElement.imageIs(
 
     TestDriver.lastElement = testElement
 
+    if (func != null) {
+        func(this)
+    }
+
     return TestDriver.lastElement
 }
 
@@ -177,6 +189,7 @@ fun TestElement.imageIs(
 fun TestElement.imageIsNot(
     expression: String,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     val command = "imageIsNot"
@@ -202,6 +215,10 @@ fun TestElement.imageIsNot(
     )
 
     TestDriver.lastElement = refreshLastElement()
+
+    if (func != null) {
+        func(this)
+    }
 
     return TestDriver.lastElement
 }

@@ -2,12 +2,14 @@ package shirates.core.uitest.android.driver.commandextension
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.PropertiesManager.statBarHeight
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.rootBounds
 import shirates.core.testcode.UITest
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class TestDriveSwipeExtensionTest1 : UITest() {
+class TestDriveSwipeExtensionTest : UITest() {
 
     @Order(10)
     @Test
@@ -108,19 +110,68 @@ class TestDriveSwipeExtensionTest1 : UITest() {
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                        .select("Storage")
+                        .swipeToCenterOfScreen()
                     e1 = it.select("Storage")
                     e2 = it.select("Display")
+                }.action {
                     e1.swipeVerticalTo(endY = e2.bounds.top, durationSeconds = 5.0)
-
                 }.expectation {
                     e3 = it.select("Storage")
                     val abs = Math.abs(e3.bounds.centerY - e2.bounds.centerY)
-                    (abs < e3.bounds.height).thisIsTrue("|${e3.bounds.centerY} - ${e2.bounds.centerY}| < ${abs}")
+                    (abs < e3.bounds.height).thisIsTrue("${abs} < ${e3.bounds.height}")
                 }
             }
         }
     }
 
+    @Test
+    @Order(50)
+    fun swipeToCenter_swipeToTop_swipeToBottom() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    it.select("[Battery]")
+                        .swipeToCenterOfScreen()
+                }.expectation {
+                    val b = it.bounds
+                    val low = b.top
+                    val high = b.bottom
+                    (low <= rootBounds.centerY).thisIsTrue("$low <= ${rootBounds.centerY}")
+                    (rootBounds.centerY <= high).thisIsTrue("${rootBounds.centerY} <= $high")
+                }
+            }
+            case(2) {
+                condition {
+                    it.selectWithScrollDown("[Display]")
+                        .swipeToCenterOfScreen()
+                }.action {
+                    it.swipeToTopOfScreen(durationSeconds = 3.0)
+                }.expectation {
+                    val b = it.bounds
+                    val low = statBarHeight + 1
+                    val high = low + b.height - 1
+                    (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
+                    (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
+                }
+            }
+            case(3) {
+                action {
+                    it.swipeToBottomOfScreen(durationSeconds = 3.0)
+                }.expectation {
+                    val b = it.bounds
+                    val low = rootBounds.bottom - b.height + 1
+                    val high = rootBounds.bottom
+                    (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
+                    (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
+                }
+            }
+        }
+    }
 
 }

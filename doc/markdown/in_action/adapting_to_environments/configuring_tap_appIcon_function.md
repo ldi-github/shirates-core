@@ -62,6 +62,16 @@ Specify macro name that you created.
 (`kotlin/macro/common/TapAppIconMacro.kt`)
 
 ```kotlin
+package macro.common
+
+import shirates.core.driver.TestDrive
+import shirates.core.driver.branchextension.android
+import shirates.core.driver.branchextension.ios
+import shirates.core.driver.commandextension.*
+import shirates.core.driver.wait
+import shirates.core.macro.Macro
+import shirates.core.macro.MacroObject
+
 @MacroObject
 object TapAppIconMacro : TestDrive {
 

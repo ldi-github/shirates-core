@@ -24,7 +24,7 @@ class ImageFileRepositoryTest : UnitTest() {
 
         run {
             // Arrange
-            val filePath = "unitTestConfig/android/maps/screens/images/tower_of_the_sun_face.png".toPath()
+            val filePath = "unitTestConfig/android/image/screens/images/tower_of_the_sun_face.png".toPath()
             // Act
             val entry = ImageFileRepository.ImageFileEntry(filePath = filePath)
             // Assert
@@ -34,7 +34,7 @@ class ImageFileRepositoryTest : UnitTest() {
 
             // Arrange
             val image =
-                BufferedImageUtility.getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun_face.png")
+                BufferedImageUtility.getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun_face.png")
             // Act
             entry.bufferedImage = image
             // Assert
@@ -42,7 +42,7 @@ class ImageFileRepositoryTest : UnitTest() {
         }
         run {
             // Arrange
-            val filePath = "unitTestConfig/android/maps/screens/images/NotExistFile.png".toPath()
+            val filePath = "unitTestConfig/android/image/screens/images/NotExistFile.png".toPath()
             // Act
             val entry = ImageFileRepository.ImageFileEntry(filePath = filePath)
             // Assert
@@ -61,7 +61,7 @@ class ImageFileRepositoryTest : UnitTest() {
 
         run {
             // Act
-            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/maps/screens".toPath())
+            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
             // Assert
             run {
                 val entry = ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun_face.png")
@@ -88,18 +88,34 @@ class ImageFileRepositoryTest : UnitTest() {
             // Arrange
             ImageFileRepository.clear()
             assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(0)
-            val filePath = "unitTestConfig/android/maps/screens/images/tower_of_the_sun.png".toPath()
+            val filePath = "unitTestConfig/android/image/screens/images/tower_of_the_sun.png".toPath()
             // Act
             val entry = ImageFileRepository.setFile(filePath = filePath)
             // Assert
             assertThat(entry.filePath).isEqualTo(filePath)
             assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(1)
+            assertThat(ImageFileRepository.imageFileMap.values.first().count()).isEqualTo(1)
             assertThat(TestLog.lastTestLog?.message?.startsWith("Image file name duplicated.")).isFalse()
 
             // Act
-            ImageFileRepository.setFile(filePath = filePath)
+            ImageFileRepository.setFile(filePath = filePath)    // Set same file
+            // Assert
             assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(1)
-            assertThat(TestLog.lastTestLog?.message?.startsWith("Image file name duplicated.")).isTrue()
+            assertThat(ImageFileRepository.imageFileMap.values.first().count()).isEqualTo(1)
+
+            // Arrange
+            val filePath2 = "unitTestConfig/android/image2/screens/images/tower_of_the_sun.png".toPath()
+            // Act
+            ImageFileRepository.setFile(filePath = filePath2)    // Set another file, same fileName
+            // Assert
+            assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(1)
+            assertThat(ImageFileRepository.imageFileMap.values.first().count()).isEqualTo(2)
+
+            // Act
+            ImageFileRepository.setFile(filePath = filePath2)    // Set same file
+            // Assert
+            assertThat(ImageFileRepository.imageFileMap.count()).isEqualTo(1)
+            assertThat(ImageFileRepository.imageFileMap.values.first().count()).isEqualTo(2)
         }
     }
 
@@ -107,13 +123,13 @@ class ImageFileRepositoryTest : UnitTest() {
     fun getImageFileEntry() {
 
         // Arrange
-        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/maps/screens".toPath())
+        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
 
         run {
             // Act
             val entry = ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun.png")
             // Assert
-            assertThat(entry.filePath).isEqualTo("unitTestConfig/android/maps/screens/images/tower_of_the_sun.png".toPath())
+            assertThat(entry.filePath).isEqualTo("unitTestConfig/android/image/screens/images/tower_of_the_sun.png".toPath())
         }
         run {
             // Act
@@ -125,17 +141,43 @@ class ImageFileRepositoryTest : UnitTest() {
     }
 
     @Test
+    fun getImageFileEntry_same_file_name() {
+
+        // Arrange
+        ImageFileRepository.setup(screenDirectory = "unitTestConfig/others/app1/screens".toPath())
+
+        run {
+            // Act
+            val entry = ImageFileRepository.getImageFileEntry(
+                imageExpression = "[Image1].png",
+                screenDirectory = "unitTestConfig/others/app1/screens/screen1"
+            )
+            // Assert
+            assertThat(entry.filePath).isEqualTo("unitTestConfig/others/app1/screens/screen1/image/[Image1].png".toPath())
+        }
+        run {
+            // Act
+            val entry = ImageFileRepository.getImageFileEntry(
+                imageExpression = "[Image1].png",
+                screenDirectory = "unitTestConfig/others/app1/screens/screen2"
+            )
+            // Assert
+            assertThat(entry.filePath).isEqualTo("unitTestConfig/others/app1/screens/screen2/image/[Image1].png".toPath())
+        }
+    }
+
+    @Test
     fun getFilePath() {
 
         // Arrange
-        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/maps/screens".toPath())
+        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
 
         run {
             // Act
             val filePath = ImageFileRepository.getFilePath("tower_of_the_sun.png?s=0.5&t=10")
             // Assert
             val expected =
-                "unitTestConfig/android/maps/screens/images/tower_of_the_sun.png".toPath()
+                "unitTestConfig/android/image/screens/images/tower_of_the_sun.png".toPath()
             assertThat(filePath).isEqualTo(expected)
         }
         run {
@@ -143,7 +185,7 @@ class ImageFileRepositoryTest : UnitTest() {
             val filePath = ImageFileRepository.getFilePath("tower_of_the_sun_face.png?s=0.5&t=10")
             // Assert
             val expected =
-                "unitTestConfig/android/maps/screens/images/@a/tower_of_the_sun_face@a.png".toPath()
+                "unitTestConfig/android/image/screens/images/@a/tower_of_the_sun_face@a.png".toPath()
             assertThat(filePath).isEqualTo(expected)
         }
     }
@@ -153,12 +195,12 @@ class ImageFileRepositoryTest : UnitTest() {
 
         run {
             // Arrange
-            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/maps/screens".toPath())
+            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
             // Act
             val bufferedImage = ImageFileRepository.getBufferedImage("tower_of_the_sun_face.png?s=0.5&t=10")
             // Assert
             val expected =
-                BufferedImageUtility.getBufferedImage("unitTestConfig/android/maps/screens/images/tower_of_the_sun_face.png")
+                BufferedImageUtility.getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun_face.png")
             assertThat(bufferedImage.isSame(expected)).isTrue()
         }
     }

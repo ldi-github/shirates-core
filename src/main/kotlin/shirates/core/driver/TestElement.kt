@@ -11,6 +11,7 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
@@ -18,6 +19,7 @@ import shirates.core.utility.element.ElementCategory
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getAttribute
 import shirates.core.utility.image.CropInfo
+import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.time.StopWatch
 
 /**
@@ -366,11 +368,38 @@ class TestElement(
         }
 
     /**
+     * hasImageMatchResult
+     */
+    val hasImageMatchResult: Boolean
+        get() {
+            return imageMatchResult != null
+        }
+
+    /**
+     * imageMatchResult
+     */
+    var imageMatchResult: ImageMatchResult? = null
+
+    /**
+     * imageMatched
+     */
+    val imageMatched: Boolean
+        get() {
+            return imageMatchResult?.result ?: false
+        }
+
+    /**
      * isFound
      */
     val isFound: Boolean
         get() {
-            return isEmpty.not()
+            if (imageMatchResult != null) {
+                return imageMatchResult!!.result
+            } else if (isDummy) {
+                return true
+            } else {
+                return isEmpty.not()
+            }
         }
 
     /**
@@ -432,16 +461,17 @@ class TestElement(
      */
     val isSafe: Boolean
         get() {
+            if (imageMatched) {
+                return true
+            }
             if (isEmpty) {
                 return false
             }
             if (isDummy) {
                 return false
             }
-            if (isAndroid) {
-                if (this.bounds.isIncludedIn(rootBounds).not()) {
-                    return false
-                }
+            if (this.bounds.isIncludedIn(rootBounds).not()) {
+                return false
             }
 
             if (type == "XCUIElementTypeApplication") {
@@ -451,17 +481,57 @@ class TestElement(
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
-                for (overlayElement in TestDriver.screenInfo.scrollInfo.overlayElements) {
-                    val overlay = select(
-                        expression = overlayElement,
-                        throwsException = false,
-                        waitSeconds = 0.0,
-                    )
-                    if (overlay.isFound) {
-                        if (this.bounds.isOverlapping(overlay.bounds)) {
+                if (CodeExecutionContext.isScrolling) {
+                    /**
+                     * Safe boundary check in scrollable view
+                     */
+                    val scrollableElement = this.getScrollableElementsInAncestorsAndSelf().firstOrNull()
+                    if (scrollableElement != null && scrollableElement.isScrollable) {
+                        val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
+                        if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
                             return false
                         }
                     }
+                }
+
+                if (isiOS) {
+                    /**
+                     * Keyboard overlapping check
+                     */
+                    if (testContext.useCache) {
+                        val keyboard = testDrive.getKeyboardInIos()
+                        if (keyboard.isFound) {
+                            if (this.bounds.isOverlapping(keyboard.bounds)) {
+                                return false
+                            }
+                        }
+                    }
+                }
+
+                /**
+                 * Overlay check
+                 */
+                val s = TestDriver.screenInfo.scrollInfo
+                val overlayElements = s.overlayElements
+                var r = true
+                if (overlayElements.any()) {
+                    for (overlayElement in overlayElements) {
+                        val overlay = TestDriver.select(
+                            expression = overlayElement,
+                            scroll = false,
+                            throwsException = false,
+                            waitSeconds = 0.0,
+                        )
+                        if (overlay == this) {
+                            return true
+                        }
+                        if (overlay.isFound && this.bounds.isOverlapping(overlay.bounds)) {
+                            r = false
+                        }
+                    }
+                }
+                if (r.not()) {
+                    return false
                 }
             }
             return true
@@ -875,7 +945,7 @@ class TestElement(
                 }
                 try {
                     var value = webElement!!.getAttribute(name)
-                    if(value == "null"){
+                    if (value == "null") {
                         value = ""
                     }
                     propertyCache[name] = value

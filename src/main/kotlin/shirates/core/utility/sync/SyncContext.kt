@@ -6,6 +6,7 @@ class SyncContext(
     override var waitSeconds: Double,
     override var intervalSeconds: Double,
     override var maxLoopCount: Int,
+    override var overMaxLoopCount: Boolean = false,
     override var error: Throwable? = null,
     override var retryOnError: Boolean,
     override var throwOnFinally: Boolean,

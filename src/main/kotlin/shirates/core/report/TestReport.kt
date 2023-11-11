@@ -506,10 +506,13 @@ class TestReport(
     private fun getMessageHtml(message: String): String {
 
         // set hyperlink when screenshot
-        if (message.endsWith(".png") && message.startsWith("Image of ").not()) {
-            val fileName = message.toPath().fileName.toString()
-            val msg = "<a href='${fileName}'>${htmlEscape(fileName)}</a>"
-            return msg
+        if (message.endsWith(".png")) {
+            val filePath = message.toPath()
+            if (Files.exists(filePath)) {
+                val fileName = filePath.fileName.toString()
+                val msg = "<a href='${fileName}'>${htmlEscape(fileName)}</a>"
+                return msg
+            }
         }
 
         return htmlEscape(message)

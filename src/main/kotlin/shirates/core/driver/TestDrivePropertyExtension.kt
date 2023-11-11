@@ -30,11 +30,26 @@ fun TestDrive.parameter(name: String): String {
 }
 
 /**
- * viewport
+ * imageProfile
  */
-val TestDrive.viewport: Bounds
+val TestDrive.imageProfile: String
     get() {
-        return rootBounds
+        if (TestDriver.isInitialized.not()) {
+            return TestMode.platformAnnotation
+        }
+
+        val viewportRect = capabilities.getCapabilityRelaxed("viewportRect")
+        if (viewportRect.isNotBlank()) {
+            val b = Bounds(viewportRect)
+            return "${TestMode.platformAnnotation}_${b.width}x${b.height}"
+        }
+
+        val b = rootBounds
+        if (b.isEmpty) {
+            return TestMode.platformAnnotation
+        }
+
+        return "${TestMode.platformAnnotation}_${b.width}x${b.height}"
     }
 
 /**

@@ -14,7 +14,7 @@ package tutorial.inaction
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.function.output
+import shirates.core.driver.commandextension.output
 import shirates.core.testcode.Must
 import shirates.core.testcode.Should
 import shirates.core.testcode.UITest

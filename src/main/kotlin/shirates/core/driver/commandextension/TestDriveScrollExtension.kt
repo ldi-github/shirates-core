@@ -3,13 +3,12 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
 import shirates.core.logging.TestLog
-import kotlin.math.max
-import kotlin.math.min
 
 
 internal fun TestElement.getScrollableElementsInDescendantsAndSelf(): List<TestElement> {
@@ -77,15 +76,18 @@ private fun TestDrive.scrollCommand(
     command: String,
     direction: ScrollDirection,
     startMarginRatio: Double,
+    endMarginRatio: Double,
     swipeAction: (ScrollingInfo) -> Unit
 ) {
     val message = message(id = command)
     val context = TestDriverCommandContext(scrollableElement)
     context.execOperateCommand(command = command, message = message) {
+
         val r = getScrollingInfo(
             scrollableElement = scrollableElement,
             direction = direction,
-            marginRatio = startMarginRatio
+            startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio
         )
         swipeAction(r)
         TestDriver.autoScreenshot()
@@ -98,7 +100,8 @@ private fun TestDrive.scrollCommand(
 fun TestDrive.scrollDown(
     scrollable: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio
 ): TestElement {
 
     val scrollableElement = getScrollableElement(scrollable)
@@ -106,12 +109,13 @@ fun TestDrive.scrollDown(
         scrollableElement = scrollableElement,
         command = "scrollDown",
         direction = ScrollDirection.Down,
-        startMarginRatio = startMarginRatio
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio
     ) { s ->
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewPort = viewport,
+                viewport = rootBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -130,7 +134,8 @@ fun TestDrive.scrollDown(
 fun TestDrive.scrollUp(
     scrollable: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio
 ): TestElement {
 
     val scrollableElement = getScrollableElement(scrollable)
@@ -138,12 +143,13 @@ fun TestDrive.scrollUp(
         scrollableElement = scrollableElement,
         command = "scrollUp",
         direction = ScrollDirection.Up,
-        startMarginRatio = startMarginRatio
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio
     ) { s ->
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewPort = viewport,
+                viewport = rootBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -162,7 +168,8 @@ fun TestDrive.scrollUp(
 fun TestDrive.scrollRight(
     scrollable: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio
 ): TestElement {
 
     val scrollableElement = getScrollableElement(scrollable)
@@ -170,12 +177,13 @@ fun TestDrive.scrollRight(
         scrollableElement = scrollableElement,
         command = "scrollRight",
         direction = ScrollDirection.Right,
-        startMarginRatio = startMarginRatio
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio
     ) { s ->
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewPort = viewport,
+                viewport = rootBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -194,7 +202,8 @@ fun TestDrive.scrollRight(
 fun TestDrive.scrollLeft(
     scrollable: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio
 ): TestElement {
 
     val scrollableElement = getScrollableElement(scrollable)
@@ -202,12 +211,13 @@ fun TestDrive.scrollLeft(
         scrollableElement = scrollableElement,
         command = "scrollLeft",
         direction = ScrollDirection.Left,
-        startMarginRatio = startMarginRatio
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio
     ) { s ->
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewPort = viewport,
+                viewport = rootBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -227,6 +237,7 @@ private fun TestDrive.scrollToEdgeCommand(
     direction: ScrollDirection,
     flick: Boolean,
     startMarginRatio: Double,
+    endMarginRatio: Double,
     repeat: Int,
     intervalSeconds: Double,
     edgeSelector: String?,
@@ -242,6 +253,7 @@ private fun TestDrive.scrollToEdgeCommand(
             direction = direction,
             flick = flick,
             startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio,
             repeat = repeat,
             intervalSeconds = intervalSeconds,
             edgeSelector = edgeSelector,
@@ -257,7 +269,8 @@ private fun TestDrive.scrollToEdgeCommand(
  */
 fun TestDrive.scrollToBottom(
     scrollable: String = "",
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
     flick: Boolean = true,
@@ -273,6 +286,7 @@ fun TestDrive.scrollToBottom(
         maxLoopCount = maxLoopCount,
         flick = flick,
         startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
         repeat = repeat,
         intervalSeconds = intervalSeconds,
         edgeSelector = edgeSelector,
@@ -287,7 +301,8 @@ fun TestDrive.scrollToBottom(
  */
 fun TestDrive.scrollToTop(
     scrollable: String = "",
-    startMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
     flick: Boolean = true,
@@ -303,6 +318,7 @@ fun TestDrive.scrollToTop(
         maxLoopCount = maxLoopCount,
         flick = flick,
         startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
         repeat = repeat,
         intervalSeconds = intervalSeconds,
         edgeSelector = edgeSelector,
@@ -317,7 +333,8 @@ fun TestDrive.scrollToTop(
  */
 fun TestDrive.scrollToRightEdge(
     scrollable: String = "",
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
     flick: Boolean = true,
@@ -333,6 +350,7 @@ fun TestDrive.scrollToRightEdge(
         maxLoopCount = maxLoopCount,
         flick = flick,
         startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
         repeat = repeat,
         intervalSeconds = intervalSeconds,
         edgeSelector = edgeSelector,
@@ -347,7 +365,8 @@ fun TestDrive.scrollToRightEdge(
  */
 fun TestDrive.scrollToLeftEdge(
     scrollable: String = "",
-    startMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
     flick: Boolean = true,
@@ -363,6 +382,7 @@ fun TestDrive.scrollToLeftEdge(
         maxLoopCount = maxLoopCount,
         flick = flick,
         startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
         repeat = repeat,
         intervalSeconds = intervalSeconds,
         edgeSelector = edgeSelector,
@@ -383,9 +403,8 @@ fun TestDrive.doUntilScrollStop(
     durationSeconds: Double =
         if (flick) testContext.flickDurationSeconds
         else testContext.swipeDurationSeconds,
-    startMarginRatio: Double =
-        if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
-        else testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     repeat: Int = 1,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
     edgeSelector: String? = null,
@@ -396,13 +415,16 @@ fun TestDrive.doUntilScrollStop(
 
     val ms = Measure()
 
+    val original = CodeExecutionContext.isScrolling
     try {
+        CodeExecutionContext.isScrolling = true
         return doUntilScrollStopCore(
             scrollable = scrollable,
             scrollFunc = scrollFunc,
             direction = direction,
             durationSeconds = durationSeconds,
             startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio,
             imageCompare = imageCompare,
             edgeSelector = edgeSelector,
             actionFunc = actionFunc,
@@ -411,6 +433,7 @@ fun TestDrive.doUntilScrollStop(
             intervalSeconds = intervalSeconds
         )
     } finally {
+        CodeExecutionContext.isScrolling = original
         ms.end()
     }
 }
@@ -421,6 +444,7 @@ private fun TestDrive.doUntilScrollStopCore(
     direction: ScrollDirection,
     durationSeconds: Double,
     startMarginRatio: Double,
+    endMarginRatio: Double,
     imageCompare: Boolean,
     edgeSelector: String?,
     actionFunc: (() -> Boolean)?,
@@ -435,25 +459,29 @@ private fun TestDrive.doUntilScrollStopCore(
                 scrollDown(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
-                    startMarginRatio = startMarginRatio
+                    startMarginRatio = startMarginRatio,
+                    endMarginRatio = endMarginRatio
                 )
             } else if (direction.isUp) {
                 scrollUp(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
-                    startMarginRatio = startMarginRatio
+                    startMarginRatio = startMarginRatio,
+                    endMarginRatio = endMarginRatio
                 )
             } else if (direction.isRight) {
                 scrollRight(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
-                    startMarginRatio = startMarginRatio
+                    startMarginRatio = startMarginRatio,
+                    endMarginRatio = endMarginRatio
                 )
             } else if (direction.isLeft) {
                 scrollLeft(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
-                    startMarginRatio = startMarginRatio
+                    startMarginRatio = startMarginRatio,
+                    endMarginRatio = endMarginRatio
                 )
             }
         }
@@ -505,10 +533,7 @@ private fun TestDrive.doUntilScrollStopCore(
         }
 
         val ms = Measure("doUntilScrollStop-loop")
-        val original = CodeExecutionContext.isScrolling
         try {
-            CodeExecutionContext.isScrolling = true
-
             for (i in 1..maxLoopCount) {
                 for (j in 1..repeat) {
                     scroll()
@@ -532,7 +557,6 @@ private fun TestDrive.doUntilScrollStopCore(
                 }
             }
         } finally {
-            CodeExecutionContext.isScrolling = original
             ms.end()
         }
     }
@@ -687,9 +711,8 @@ fun TestDrive.suppressWithScroll(
 fun TestDrive.scanElements(
     scrollable: String = "",
     direction: ScrollDirection = ScrollDirection.Down,
-    startMarginRatio: Double =
-        if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
-        else testContext.scrollHorizontalMarginRatio,
+    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     maxScrollTimes: Int = testContext.scrollMaxCount,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     endSelector: String? = null,
@@ -719,7 +742,8 @@ fun TestDrive.scanElements(
             val r = getScrollingInfo(
                 scrollableElement = scrollableElement,
                 direction = direction,
-                marginRatio = startMarginRatio
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio
             )
             if (r.hasError) {
                 TestLog.trace("no scrollable element found.")
@@ -733,6 +757,7 @@ fun TestDrive.scanElements(
                 direction = direction,
                 durationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
                 edgeSelector = endSelector,
                 imageCompare = imageCompare
             ) {
@@ -757,127 +782,44 @@ fun TestDrive.scanElements(
     return lastElement
 }
 
-private class ScrollingInfo(
-    val errorMessage: String,
-    val scrollableBounds: Bounds,
-    val viewPort: Bounds,
-    val direction: ScrollDirection,
-    val marginRatio: Double,
-) {
-    val hasError: Boolean
-        get() {
-            return errorMessage.isBlank().not()
-        }
-
-    val leftEdge: Int
-        get() {
-            return max(scrollableBounds.left, viewPort.left)
-        }
-
-    val rightEdge: Int
-        get() {
-            return min(scrollableBounds.right, viewPort.right)
-        }
-
-    val topEdge: Int
-        get() {
-            return max(scrollableBounds.top, viewPort.top)
-        }
-
-    val bottomEdge: Int
-        get() {
-            return min(scrollableBounds.bottom, viewPort.bottom)
-        }
-
-    val adjustedScrollableBounds: Bounds
-        get() {
-            return Bounds(
-                left = leftEdge,
-                top = topEdge,
-                width = rightEdge - leftEdge + 1,
-                height = bottomEdge - topEdge + 1
-            )
-        }
-
-    val leftMargin: Int
-        get() {
-            return if (direction.isLeft)
-                (adjustedScrollableBounds.width * marginRatio).toInt()
-            else 0
-        }
-
-    val rightMargin: Int
-        get() {
-            return if (direction.isRight)
-                (adjustedScrollableBounds.width * marginRatio).toInt()
-            else 0
-        }
-
-    val topMargin: Int
-        get() {
-            return if (direction.isUp)
-                (adjustedScrollableBounds.height * marginRatio).toInt()
-            else 0
-        }
-
-    val bottomMargin: Int
-        get() {
-            return if (direction.isDown)
-                (adjustedScrollableBounds.height * marginRatio).toInt()
-            else 0
-        }
-
-    val startY: Int
-        get() {
-            return when (direction) {
-                ScrollDirection.Down -> bottomEdge - bottomMargin
-                ScrollDirection.Up -> topEdge + topMargin
-                else -> adjustedScrollableBounds.centerY
-            }
-        }
-
-    val endY: Int
-        get() {
-            return when (direction) {
-                ScrollDirection.Down -> topEdge
-                ScrollDirection.Up -> bottomEdge
-                else -> adjustedScrollableBounds.centerY
-            }
-        }
-
-    val startX: Int
-        get() {
-            return when (direction) {
-                ScrollDirection.Right -> rightEdge - rightMargin
-                ScrollDirection.Left -> leftEdge + leftMargin
-                else -> adjustedScrollableBounds.centerX
-            }
-        }
-
-    val endX: Int
-        get() {
-            return when (direction) {
-                ScrollDirection.Right -> leftEdge
-                ScrollDirection.Left -> rightEdge
-                else -> adjustedScrollableBounds.centerX
-            }
-        }
-}
-
-private fun TestDrive.getScrollingInfo(
+internal fun TestDrive.getScrollingInfo(
     scrollableElement: TestElement,
-    direction: ScrollDirection,
-    marginRatio: Double =
-        if (direction.isDown || direction.isUp) testContext.scrollVerticalMarginRatio
-        else testContext.scrollHorizontalMarginRatio
+    direction: ScrollDirection = ScrollDirection.None,
+    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
 ): ScrollingInfo {
 
+    val s = TestDriver.screenInfo.scrollInfo
+    val headerBottom = s.getHeaderBottom()
+    val footerTop = s.getFooterTop()
+
+    if (isAndroid || (isiOS && isKeyboardShown.not())) {
+        val r = ScrollingInfo(
+            errorMessage = "",
+            scrollableBounds = scrollableElement.bounds,
+            viewport = rootBounds,
+            direction = direction,
+            startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio,
+            headerBottom = headerBottom,
+            footerTop = footerTop
+        )
+        return r
+    }
+
+    val keyboardElement = testDrive.getKeyboardInIos()
+    val b = scrollableElement.bounds
+    val height = keyboardElement.bounds.top - b.top
+    val scrollBounds = Bounds(left = b.left, top = b.top, width = b.width, height = height)
     val r = ScrollingInfo(
         errorMessage = "",
-        scrollableBounds = scrollableElement.bounds,
-        viewPort = viewport,
+        scrollableBounds = scrollBounds,
+        viewport = rootBounds,
         direction = direction,
-        marginRatio = marginRatio
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
+        headerBottom = headerBottom,
+        footerTop = footerTop
     )
     return r
 }

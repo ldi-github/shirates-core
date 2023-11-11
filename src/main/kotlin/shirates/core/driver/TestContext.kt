@@ -129,12 +129,20 @@ class TestContext(
     var swipeMarginRatio = profile.swipeMarginRatio?.toDoubleOrNull() ?: Const.SWIPE_MARGIN_RATIO
 
     @SaveTarget
-    var scrollVerticalMarginRatio =
-        profile.scrollVerticalMarginRatio?.toDoubleOrNull() ?: Const.SCROLL_VERTICAL_MARGIN_RATIO
+    var scrollVerticalStartMarginRatio =
+        profile.scrollVerticalStartMarginRatio?.toDoubleOrNull() ?: Const.SCROLL_VERTICAL_START_MARGIN_RATIO
 
     @SaveTarget
-    var scrollHorizontalMarginRatio =
-        profile.scrollHorizontalMarginRatio?.toDoubleOrNull() ?: Const.SCROLL_HORIZONTAL_MARGIN_RATIO
+    var scrollVerticalEndMarginRatio =
+        profile.scrollVerticalEndMarginRatio?.toDoubleOrNull() ?: Const.SCROLL_VERTICAL_END_MARGIN_RATIO
+
+    @SaveTarget
+    var scrollHorizontalStartMarginRatio =
+        profile.scrollHorizontalStartMarginRatio?.toDoubleOrNull() ?: Const.SCROLL_HORIZONTAL_START_MARGIN_RATIO
+
+    @SaveTarget
+    var scrollHorizontalEndMarginRatio =
+        profile.scrollHorizontalEndMarginRatio?.toDoubleOrNull() ?: Const.SCROLL_HORIZONTAL_END_MARGIN_RATIO
 
     @SaveTarget
     var scrollToEdgeBoost = profile.scrollToEdgeBoost?.toIntOrNull() ?: Const.SCROLL_TO_EDGE_BOOST
@@ -249,5 +257,21 @@ class TestContext(
                 it.setter.call(this, data[it.name])
             }
         }
+    }
+
+    /**
+     * scrollStartMarginRatio
+     */
+    fun scrollStartMarginRatio(direction: ScrollDirection): Double {
+
+        return if (direction.isVertical) scrollVerticalStartMarginRatio else scrollHorizontalStartMarginRatio
+    }
+
+    /**
+     * scrollEndMarginRatio
+     */
+    fun scrollEndMarginRatio(direction: ScrollDirection): Double {
+
+        return if (direction.isVertical) scrollVerticalEndMarginRatio else scrollHorizontalEndMarginRatio
     }
 }

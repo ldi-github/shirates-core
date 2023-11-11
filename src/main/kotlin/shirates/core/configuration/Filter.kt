@@ -2,6 +2,7 @@ package shirates.core.configuration
 
 import shirates.core.configuration.Selector.Companion.getFilterValues
 import shirates.core.configuration.repository.ImageFileRepository
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
@@ -14,7 +15,9 @@ import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.ImageMatchUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
+import shirates.core.utility.toPath
 import java.awt.image.BufferedImage
+import java.nio.file.Files
 
 class Filter(
     val filterExpression: String,
@@ -71,8 +74,7 @@ class Filter(
         get() {
             if (noun != "image") return null
             if (field == null) {
-                val imageFileEntry = getImageFileEntry()
-                field = imageFileEntry.bufferedImage
+                templateImageFile
             }
             return field
         }
@@ -82,15 +84,25 @@ class Filter(
         get() {
             if (noun != "image") return null
             if (field == null) {
-                val imageFileEntry = getImageFileEntry()
-                field = imageFileEntry.filePath.toString()
+                try {
+                    val imageFileEntry = getImageFileEntry()
+                    field = imageFileEntry.filePath.toString()
+                    templateImage = imageFileEntry.bufferedImage
+                } catch (t: Throwable) {
+                    templateImage = null
+                    TestLog.trace(t.message!!)
+                }
             }
             return field
         }
 
     private fun getImageFileEntry(): ImageFileRepository.ImageFileEntry {
         val imageInfo = ImageInfo(value)
-        return ImageFileRepository.getImageFileEntry(imageExpression = imageInfo.fileName)
+        val screenDirectory = TestDriver.screenInfo.screenFile.toPath().parent.toString()
+        return ImageFileRepository.getImageFileEntry(
+            imageExpression = imageInfo.fileName,
+            screenDirectory = screenDirectory
+        )
     }
 
     val scale: Double
@@ -442,25 +454,23 @@ class Filter(
      */
     fun evaluateImageEqualsTo(
         image: BufferedImage?,
-        scale: Double = this.scale,
         threshold: Double = this.threshold,
     ): ImageMatchResult {
 
-        val tmp1 = kotlin.runCatching {
-            templateImage
-        }.onFailure {
+        val tmp1 = templateImage
+        if (tmp1 == null) {
+            if (Files.exists(TestLog.directoryForLog).not()) {
+                TestLog.directoryForLog.toFile().mkdirs()
+            }
             image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
-        }.getOrNull()
+        }
         val imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
             image = image,
             templateImage = tmp1,
-            scale = scale,
             threshold = threshold
         )
         imageMatchResult.result = imageMatchResult.result.reverseIfNegation()
-        if (tmp1 != null) {
-            imageMatchResult.templateImageFile = templateImageFile
-        }
+        imageMatchResult.templateImageFile = templateImageFile
         return imageMatchResult
     }
 
@@ -473,9 +483,12 @@ class Filter(
         threshold: Double = this.threshold
     ): ImageMatchResult {
 
-        val tmp1 = kotlin.runCatching { templateImage }.onFailure {
+        getImageFileEntry()
+
+        val tmp1 = templateImage
+        if (tmp1 == null) {
             image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
-        }.getOrNull()
+        }
 
         if (image.isSame(tmp1) && isNegation.not()) {
             return ImageMatchResult(
@@ -493,6 +506,7 @@ class Filter(
             templateImage = tmp1,
             threshold = threshold
         )
+        imageMatchResult.templateImageFile = templateImageFile
         imageMatchResult.result = imageMatchResult.result.reverseIfNegation()
         return imageMatchResult
     }

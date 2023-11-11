@@ -12,11 +12,9 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
-import java.io.FileNotFoundException
 
 /**
  * appIs
@@ -207,9 +205,14 @@ internal fun TestDrive.screenIsCore(
         ) {
             val r = actionFunc()
             if (r.not()) {
-                onIrregular?.invoke()
+                testDrive.screenshot()
+                if (onIrregular != null) {
+                    onIrregular.invoke()
+                    refreshCache()
+                }
                 if (testContext.enableIrregularHandler && testContext.onScreenErrorHandler != null) {
                     testContext.onScreenErrorHandler!!.invoke()
+                    refreshCache()
                 }
             }
             r
@@ -338,7 +341,7 @@ internal fun TestDrive.screenIsOfCore(
 }
 
 internal fun TestDrive.existCore(
-    message: String,
+    assertMessage: String,
     selector: Selector,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -346,109 +349,87 @@ internal fun TestDrive.existCore(
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
-    var e = TestElement()
-
     if (selector.isImageSelector) {
-        if (PropertiesManager.enableImageAssertion.not()) {
-            return manual(message = message)
-        }
-        try {
-            fun findImage(): ImageMatchResult {
-                return TestDriver.findImage(
-                    selector = selector,
-                    scroll = scroll,
-                    direction = direction,
-                    scrollDurationSeconds = scrollDurationSeconds,
-                    scrollStartMarginRatio = scrollStartMarginRatio,
-                    scrollMaxCount = scrollMaxCount,
-                    throwsException = false,
-                    useCache = useCache
-                )
-            }
-
-            var r = findImage()
-
-            e.selector = selector
-            if (r.result) {
-                e.isDummy = true
-                e.propertyCache["bounds"] = "[${r.x},${r.y}][${r.templateImage!!.width},${r.templateImage!!.height}]"
-            }
-            TestDriver.postProcessForImageAssertion(
-                e = e,
-                imageMatchResult = r,
-                assertMessage = message,
-                log = log
-            )
-
-            if (e.hasError && throwsException && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
-                testDrive.suppressHandler {
-                    testContext.onExistErrorHandler!!.invoke()
-                }
-                r = findImage()
-                TestDriver.postProcessForImageAssertion(
-                    e = e,
-                    imageMatchResult = r,
-                    assertMessage = message,
-                    log = log
-                )
-            }
-        } catch (t: FileNotFoundException) {
-            TestLog.info(t.message!!)
-            manual(message)
-        }
-
-    } else {
-        fun executeSelect(): TestElement {
-            return TestDriver.select(
-                selector = selector,
-                scroll = scroll,
-                direction = direction,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-                throwsException = false,
-                waitSeconds = waitSeconds,
-                useCache = useCache,
-            )
-        }
-        e = executeSelect()
-
-        screenshot()
-
-        TestDriver.postProcessForAssertion(
-            selectResult = e,
-            assertMessage = message,
-            log = log
+        val e = existImageCore(
+            sel = selector,
+            assertMessage = assertMessage,
+            throwsException = false,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+            scroll = scroll,
+            direction = direction
         )
-
-        /**
-         * Retrying with error handler
-         */
-        if (e.hasError && throwsException && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
-            testDrive.suppressHandler {
-                testContext.onExistErrorHandler!!.invoke()
-            }
-            e = executeSelect()
-
-            screenshot()
-
-            TestDriver.postProcessForAssertion(
-                selectResult = e,
-                assertMessage = message,
-                log = log
-            )
+        if (e.hasError && throwsException) {
+            throw e.lastError!!
         }
+    }
+
+    val e = actionWithOnExistErrorHandler(
+        message = assertMessage,
+        throwsException = throwsException
+    ) {
+        TestDriver.select(
+            selector = selector,
+            scroll = scroll,
+            direction = direction,
+            scrollDurationSeconds = scrollDurationSeconds,
+            scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
+            scrollMaxCount = scrollMaxCount,
+            throwsException = false,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+        )
     }
 
     if (e.hasError && throwsException) {
         throw e.lastError!!
     }
+    if (log) {
+        TestLog.ok(message = assertMessage)
+    }
 
+    return e
+}
+
+private fun TestDrive.actionWithOnExistErrorHandler(
+    message: String,
+    throwsException: Boolean,
+    action: () -> TestElement
+): TestElement {
+
+    var e = action()
+    screenshot()
+
+    TestDriver.postProcessForAssertion(
+        selectResult = e,
+        assertMessage = message,
+        log = false
+    )
+
+    if (e.hasError && throwsException && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
+        /**
+         * Retrying with error handler
+         */
+        TestLog.info("Calling onExistErrorHandler.")
+        testDrive.suppressHandler {
+            testContext.onExistErrorHandler!!.invoke()
+        }
+        e = action()
+        screenshot()
+
+        TestDriver.postProcessForAssertion(
+            selectResult = e,
+            assertMessage = message,
+            log = false
+        )
+    }
     return e
 }
 
@@ -480,7 +461,7 @@ fun TestDrive.exist(
         val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
@@ -491,7 +472,7 @@ fun TestDrive.exist(
     }
 
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return e
@@ -502,77 +483,255 @@ fun TestDrive.exist(
  */
 fun TestDrive.existImage(
     expression: String,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
+    throwsException: Boolean = false,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    useCache: Boolean = testContext.useCache,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    TestDriver.refreshCurrentScreenWithNickname(expression = expression)
+
+    val command = "existImage"
+    val sel = getSelectorForExistImage(expression = expression)
+    val assertMessage = message(id = command, subject = "$sel")
+    var e = TestElement(selector = sel)
+
+    val scroll = CodeExecutionContext.withScrollDirection != null
+    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.None
+
+    val testElement = TestDriver.it
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
+
+        e = existImageCore(
+            sel = sel,
+            threshold = threshold,
+            assertMessage = assertMessage,
+            throwsException = throwsException,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+            scroll = scroll,
+            direction = direction
+        )
+
+        if (e.imageMatchResult?.result == false) {
+            if (throwsException) {
+                throw TestDriverException("$assertMessage (${e.imageMatchResult})")
+            }
+            TestLog.warn("$assertMessage (${e.imageMatchResult})")
+            TestLog.manual(assertMessage)
+        }
+    }
+
+    if (func != null) {
+        func(e)
+    }
+
+    return e
+}
+
+/**
+ * dontExistImage
+ */
+fun TestDrive.dontExistImage(
+    expression: String,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    TestDriver.refreshCurrentScreenWithNickname(expression)
+    TestDriver.refreshCurrentScreenWithNickname(expression = expression)
 
-    val s = runCatching { getSelector(expression = expression) }.getOrNull()
-    if (s == null && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
-        testContext.onExistErrorHandler!!.invoke()
-    }
-    val sel = s ?: getSelector(expression = expression)
-
+    val command = "dontExistImage"
+    val sel = getSelectorForExistImage(expression = expression)
+    val assertMessage = message(id = command, subject = "$sel")
     var e = TestElement(selector = sel)
 
+    val scroll = CodeExecutionContext.withScrollDirection != null
+    val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.None
+
     val testElement = TestDriver.it
-
-    val command = "existImage"
-    val assertMessage = message(id = command, subject = "$sel")
-
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
-        val scroll = CodeExecutionContext.withScrollDirection != null
-        val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
-
-        e = existCore(
-            message = assertMessage,
-            selector = sel,
-            throwsException = throwsException,
+        e = existImageCore(
+            sel = sel,
+            threshold = threshold,
+            assertMessage = assertMessage,
+            throwsException = false,
             waitSeconds = waitSeconds,
             useCache = useCache,
             scroll = scroll,
             direction = direction,
-            log = false
+            dontExist = true,
         )
-        if (e.hasError && throwsException) {
-            throw e.lastError!!
-        }
 
-        if (e.isFound && e.isDummy.not()) {
-            val imageMatchResult = e.isImage(expression = expression, cropImage = true)
-            if (imageMatchResult.result) {
-                TestDriver.postProcessForImageAssertion(
-                    e = e,
-                    imageMatchResult = imageMatchResult,
-                    assertMessage = assertMessage
-                )
-            } else {
-                if (imageMatchResult.templateImage == null) {
-                    manual(assertMessage)
-                } else {
-                    val msg = "$assertMessage ($imageMatchResult)"
-                    TestDriver.postProcessForImageAssertion(
-                        e = e,
-                        imageMatchResult = imageMatchResult,
-                        assertMessage = msg
-                    )
-                    e.lastError = TestNGException(message = msg, cause = TestDriverException(msg))
-                    if (throwsException) {
-                        throw e.lastError!!
-                    }
-                }
+        if (e.imageMatchResult?.result == true) {
+            if (throwsException) {
+                throw TestNGException("$assertMessage (${e.imageMatchResult})")
             }
         }
     }
 
     if (func != null) {
-        e.func()
+        func(e)
     }
+
+    return e
+}
+
+private fun TestDrive.existImageCore(
+    sel: Selector,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
+    assertMessage: String,
+    throwsException: Boolean,
+    waitSeconds: Double,
+    useCache: Boolean,
+    scroll: Boolean = false,
+    direction: ScrollDirection = ScrollDirection.Down,
+    dontExist: Boolean = false,
+    log: Boolean = CodeExecutionContext.shouldOutputLog
+): TestElement {
+
+    var e = TestElement(selector = sel)
+
+    if (sel.isImageSelector) {
+        if (PropertiesManager.enableImageAssertion.not()) {
+            manual(message = assertMessage)
+            return e
+        }
+
+        e = actionWithOnExistErrorHandler(
+            throwsException = throwsException,
+            message = assertMessage
+        ) {
+            findImage(
+                sel = sel,
+                threshold = threshold,
+                scroll = scroll,
+                direction = direction,
+                waitSeconds = waitSeconds,
+                useCache = useCache,
+            )
+        }
+    } else {
+        e = actionWithOnExistErrorHandler(
+            throwsException = throwsException,
+            message = assertMessage
+        ) {
+            selectElementAndCompareImage(
+                sel = sel,
+                threshold = threshold,
+                waitSeconds = waitSeconds,
+                scroll = scroll,
+                direction = direction,
+                useCache = useCache,
+            )
+        }
+    }
+
+    val isTemplateImageNull = e.imageMatchResult != null && e.imageMatchResult!!.templateImageFile == null
+    if (PropertiesManager.enableImageAssertion.not() || isTemplateImageNull) {
+        manual(assertMessage)
+        return e
+    }
+
+    TestDriver.postProcessForImageAssertion(
+        e = e,
+        assertMessage = assertMessage,
+        log = log,
+        dontExist = dontExist
+    )
+
+    if (e.hasError && throwsException) {
+        throw e.lastError!!
+    }
+
+    return e
+}
+
+private fun TestDrive.getSelectorForExistImage(expression: String): Selector {
+    // Try getting registered selector in current screen
+    val s = runCatching { getSelector(expression = expression) }.getOrNull()
+    // Handle irregular
+    if (s == null && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
+        testContext.onExistErrorHandler!!.invoke()
+    }
+    val sel = s ?: try {
+        // Try getting registered selector in current screen again
+        getSelector(expression = expression)
+    } catch (t: Throwable) {
+        // If there is no selector, create an image selector.
+        Selector(expression.removeSuffix(".png") + ".png")
+    }
+    return sel
+}
+
+private fun findImage(
+    sel: Selector,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
+    scroll: Boolean,
+    direction: ScrollDirection,
+    waitSeconds: Double,
+    useCache: Boolean,
+): TestElement {
+
+    val e = TestElement(selector = sel)
+
+    val r = TestDriver.findImage(
+        selector = sel,
+        threshold = threshold,
+        scroll = scroll,
+        direction = direction,
+        scrollDurationSeconds = testContext.swipeDurationSeconds,
+        scrollStartMarginRatio = testContext.scrollStartMarginRatio(direction),
+        scrollEndMarginRatio = testContext.scrollEndMarginRatio(direction),
+        scrollMaxCount = testContext.scrollMaxCount,
+        throwsException = false,
+        waitSeconds = waitSeconds,
+        useCache = useCache
+    )
+    if (r.templateImageFile == null) {
+        TestLog.warn("File not found for $sel")
+        return e
+    }
+
+    e.imageMatchResult = r
+    if (r.result) {
+        e.propertyCache["bounds"] =
+            "[${r.x},${r.y}][${r.templateImage!!.width},${r.templateImage!!.height}]"
+    }
+
+    return e
+}
+
+private fun selectElementAndCompareImage(
+    sel: Selector,
+    threshold: Double = PropertiesManager.imageMatchingThreshold,
+    waitSeconds: Double,
+    scroll: Boolean,
+    direction: ScrollDirection,
+    useCache: Boolean,
+): TestElement {
+
+    // Select the element
+    val e = TestDriver.select(
+        selector = sel,
+        scroll = scroll,
+        direction = direction,
+        throwsException = false,
+        waitSeconds = waitSeconds,
+        useCache = useCache
+    )
+    if (e.isFound.not()) {
+        return e
+    }
+    // Compare the image of the element to the template image
+    e.imageMatchResult = e.isImage(expression = "$sel", threshold = threshold, cropImage = true)
+    TestLog.info(e.imageMatchResult.toString())
 
     return e
 }
@@ -584,7 +743,8 @@ fun TestDrive.existWithScrollDown(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -600,18 +760,19 @@ fun TestDrive.existWithScrollDown(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Down,
             throwsException = throwsException,
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return e
@@ -624,7 +785,8 @@ fun TestDrive.existWithScrollUp(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -640,18 +802,19 @@ fun TestDrive.existWithScrollUp(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Up,
             throwsException = throwsException,
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return e
@@ -664,7 +827,8 @@ fun TestDrive.existWithScrollRight(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -680,18 +844,19 @@ fun TestDrive.existWithScrollRight(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Right,
             throwsException = throwsException,
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return e
@@ -704,7 +869,8 @@ fun TestDrive.existWithScrollLeft(
     expression: String,
     throwsException: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -720,18 +886,19 @@ fun TestDrive.existWithScrollLeft(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
-            message = assertMessage,
+            assertMessage = assertMessage,
             selector = sel,
             scroll = true,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             direction = ScrollDirection.Left,
             throwsException = throwsException,
         )
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     return e
@@ -780,7 +947,7 @@ fun TestDrive.existInScanResults(
         }
     }
     if (func != null) {
-        e.func()
+        func(e)
     }
 
     lastElement = e
@@ -860,7 +1027,6 @@ internal fun TestDrive.dontExist(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$selector") {
         if (selector.isImageSelector) {
             if (PropertiesManager.enableImageAssertion.not()) {
-                e = testElement
                 manual(message = assertMessage)
                 return@execCheckCommand
             }
@@ -875,17 +1041,15 @@ internal fun TestDrive.dontExist(
                 },
                 negation = true
             )
-            e = testElement
-            return@execCheckCommand
+        } else {
+            e = dontExistCore(
+                message = assertMessage,
+                selector = selector,
+                throwsException = throwsException,
+                waitSeconds = waitSeconds,
+                useCache = useCache,
+            )
         }
-
-        e = dontExistCore(
-            message = assertMessage,
-            selector = selector,
-            throwsException = throwsException,
-            waitSeconds = waitSeconds,
-            useCache = useCache,
-        )
     }
 
     return e
@@ -900,7 +1064,8 @@ internal fun TestDrive.dontExistCore(
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     scrollMaxCount: Int = testContext.scrollMaxCount,
 ): TestElement {
 
@@ -912,6 +1077,7 @@ internal fun TestDrive.dontExistCore(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         waitSeconds = 0.0,
         throwsException = false,
@@ -955,7 +1121,8 @@ fun TestDrive.dontExist(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
-    useCache: Boolean = testContext.useCache
+    useCache: Boolean = testContext.useCache,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     var sel = getSelector(expression = expression)
@@ -968,12 +1135,18 @@ fun TestDrive.dontExist(
         }
     }
 
-    return dontExist(
+    val e = dontExist(
         selector = sel,
         throwsException = throwsException,
         waitSeconds = waitSeconds,
         useCache = useCache
     )
+
+    if (func != null) {
+        func(e)
+    }
+
+    return e
 }
 
 /**
@@ -1015,7 +1188,8 @@ fun TestDrive.dontExistWithScrollUp(
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
 ): TestElement {
 
@@ -1037,6 +1211,7 @@ fun TestDrive.dontExistWithScrollUp(
             direction = ScrollDirection.Up,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount
         )
     }

@@ -3,8 +3,10 @@ package shirates.core.driver.commandextension
 import com.google.common.collect.ImmutableMap
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
+import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.Message.message
 
 /**
@@ -19,6 +21,9 @@ val TestDrive.isKeyboardShown: Boolean
         if (isAndroid) {
             return TestDriver.androidDriver.isKeyboardShown
         } else {
+            if (canSelect(".XCUIElementTypeKeyboard")) {
+                return true
+            }
             return TestDriver.iosDriver.isKeyboardShown
         }
     }
@@ -36,12 +41,21 @@ fun TestDrive.hideKeyboard(
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        try {
-            // hideKeyboard() may fail. https://github.com/appium/appium/issues/15073
+        if (isiOS) {
+            // hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
+            val keyboard = testDrive.getKeyboardInIos()
+            if (keyboard.isFound) {
+                if (canSelect("Siri Suggestions")) {
+                    swipeCenterToTop()
+                } else {
+                    val label = keyboard.aboveLabel()
+                    if (label.isFound) {
+                        label.click()
+                    }
+                }
+            }
+        } else {
             TestDriver.appiumDriver.hideKeyboard()
-        } catch (t: Throwable) {
-            // workaround
-            rootElement.getWebElement().click()
         }
         invalidateCache()
         wait(waitSeconds = waitSeconds)
@@ -50,6 +64,21 @@ fun TestDrive.hideKeyboard(
 
     lastElement = this.focusedElement
     return lastElement
+}
+
+internal fun TestDrive.getKeyboardInIos(): TestElement {
+
+    if (isiOS.not()) {
+        return TestElement.emptyElement
+    }
+
+    if (testContext.useCache) {
+        return TestElementCache.allElements.firstOrNull() { it.type == "XCUIElementTypeKeyboard" }
+            ?: TestElement.emptyElement
+    }
+
+    val selector = Selector(".XCUIElementTypeKeyboard")
+    return TestDriver.selectDirectByIosClassChain(selector, frame = null)
 }
 
 /**
@@ -121,7 +150,7 @@ fun TestDrive.pressEnter(
         if (isAndroid) {
             TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.ENTER))
         } else {
-            tap("#Return||#Go||#Search||#Done")  // Keys.ENTER never works. So tap software key.
+            tapSoftwareKey("#Return||#Go||#Search||#Done")  // Keys.ENTER never works. So tap software key.
         }
         invalidateCache()
         wait(waitSeconds = waitSeconds)

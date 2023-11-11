@@ -82,10 +82,9 @@ object WaitUtility {
                 Thread.sleep((context.intervalSeconds * 1000).toLong())
             }
 
+            context.overMaxLoopCount = true
             context.onMaxLoop(context as T)
 
-            val msg = "over maxLoopCount(${context.maxLoopCount})"
-            context.error = TestDriverException(msg)
             return context
         }
 

@@ -33,7 +33,8 @@ class CreatingCommandFunction1 : UITest() {
     private fun TestDrive.tapWithScrollDownFromTop(
         expression: String,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+        scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+        scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         holdSeconds: Double = testContext.tapHoldSeconds,
         tapMethod: TapMethod = TapMethod.auto
@@ -51,6 +52,7 @@ class CreatingCommandFunction1 : UITest() {
                 expression = expression,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 holdSeconds = holdSeconds,
                 tapMethod = tapMethod

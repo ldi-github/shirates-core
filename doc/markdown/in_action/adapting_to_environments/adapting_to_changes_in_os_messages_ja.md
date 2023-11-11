@@ -19,18 +19,7 @@ OSのメッセージの変更がこの原因である可能性があります。
 `tap`関数を使用して **"アプリの使用中のみ許可"** をタップすることができます。
 
 ```kotlin
-@Test
-@Order(10)
-fun original() {
-
-    scenario {
-        case(1) {
-            action {
-                it.tap("アプリの使用中のみ許可")
-            }
-        }
-    }
-}
+it.tap("アプリの使用中のみ許可")
 ```
 
 Android 10 から 11へアップグレードした場合は **"アプリの使用中のみ許可"** は **"アプリの使用時のみ"** に変更されます。
@@ -44,7 +33,7 @@ Android 10 から 11へアップグレードした場合は **"アプリの使�
 ### 条件分岐の使用
 
 ```kotlin
-if (platformVersion.toInt() < 11) {
+if (platformMajorVersion < 11) {
     it.tap("アプリの使用中のみ許可")
 } else {
     it.tap("アプリの使用時のみ")

@@ -3,6 +3,8 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.isiOS
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -165,7 +167,7 @@ fun TestDrive.tap(
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
     handleIrregular: Boolean = true,
-    safeElementOnly: Boolean = false,
+    safeElementOnly: Boolean = true
 ): TestElement {
 
     TestDriver.refreshCurrentScreenWithNickname(expression)
@@ -217,12 +219,35 @@ fun TestDrive.tap(
     return refreshLastElement()
 }
 
+/**
+ * tapSoftwareKey
+ */
+fun TestDrive.tapSoftwareKey(
+    expression: String,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds
+): TestElement {
+
+    if (isiOS.not()) {
+        throw TestDriverException(message(id = "tapSoftwareKeyNotSupported"))
+    }
+    if (isKeyboardShown.not()) {
+        throw TestDriverException(message(id = "failedToTapSoftwareKey"))
+    }
+    return tap(
+        expression = expression,
+        holdSeconds = holdSeconds,
+        safeElementOnly = false
+    )
+}
+
+
 private fun TestDrive.tapWithScrollCommandCore(
     expression: String,
     command: String,
     direction: ScrollDirection,
     scrollDurationSeconds: Double,
     scrollStartMarginRatio: Double,
+    scrollEndMarginRatio: Double,
     scrollMaxCount: Int,
     holdSeconds: Double,
     tapMethod: TapMethod,
@@ -240,6 +265,7 @@ private fun TestDrive.tapWithScrollCommandCore(
             direction = direction,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
+            endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
@@ -254,7 +280,8 @@ private fun TestDrive.tapWithScrollCommandCore(
 fun TestDrive.tapWithScrollDown(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
@@ -269,6 +296,7 @@ fun TestDrive.tapWithScrollDown(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         tapMethod = tapMethod,
@@ -283,7 +311,8 @@ fun TestDrive.tapWithScrollDown(
 fun TestDrive.tapWithScrollUp(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
@@ -298,6 +327,7 @@ fun TestDrive.tapWithScrollUp(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         tapMethod = tapMethod,
@@ -312,7 +342,8 @@ fun TestDrive.tapWithScrollUp(
 fun TestDrive.tapWithScrollRight(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
@@ -327,6 +358,7 @@ fun TestDrive.tapWithScrollRight(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         tapMethod = tapMethod,
@@ -341,7 +373,8 @@ fun TestDrive.tapWithScrollRight(
 fun TestDrive.tapWithScrollLeft(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollHorizontalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
@@ -356,6 +389,7 @@ fun TestDrive.tapWithScrollLeft(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         tapMethod = tapMethod,

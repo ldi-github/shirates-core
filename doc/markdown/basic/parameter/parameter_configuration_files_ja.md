@@ -40,7 +40,8 @@ class Test1 : UITest() {
 
 **testrun.global.properties**ファイルはプロジェクトディレクト下に配置されるファイルです。
 このファイルは固定名であり、`@Testrun`アノテーションで指定する必要はありません。
-このファイルで設定したパラメーターはプロジェクト内の全てのテストに適用されますが、他の構成ファイル(`testrun.properties` or `testConfig.json`)でオーバーライドされます。
+このファイルで設定したパラメーターはプロジェクト内の全てのテストに適用されますが、他の構成ファイル(`testrun.properties`
+or `testConfig.json`)でオーバーライドされます。
 
 ## testrunファイルの例
 
@@ -144,8 +145,10 @@ appiumArgs=--session-override --relaxed-security
 #swipeDurationSeconds=
 #flickDurationSeconds=
 #swipeMarginRatio=
-#scrollVerticalMarginRatio=
-#scrollHorizontalMarginRatio=
+#scrollVerticalStartMarginRatio=
+#scrollVerticalEndMarginRatio=
+#scrollHorizontalStartMarginRatio=
+#scrollHorizontalEndMarginRatio=
 #tapHoldSeconds=
 #syncWaitSeconds=
 
@@ -189,7 +192,8 @@ android.configFile=testConfig/android/androidSettings/androidSettingsConfig.json
 android.profile=Android 12
 ```
 
-**testConfig**ファイルにおいては、テスト用のデバイスに対するプロファイルを定義し、Appiumの`desired capabilities`を設定することができます。
+**testConfig**ファイルにおいては、テスト用のデバイスに対するプロファイルを定義し、Appiumの`desired capabilities`
+を設定することができます。
 
 ```
 {

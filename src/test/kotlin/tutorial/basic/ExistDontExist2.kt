@@ -3,46 +3,38 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.dontExist
-import shirates.core.driver.commandextension.exist
+import shirates.core.driver.commandextension.dontExistImage
+import shirates.core.driver.commandextension.existImage
 import shirates.core.driver.commandextension.macro
 import shirates.core.testcode.UITest
+import shirates.helper.ImageSetupHelper
 
 @Testrun("testConfig/android/maps/testrun.properties")
 class ExistDontExist2 : UITest() {
 
-    /**
-     * Note:
-     *
-     * Run CroppingImages1.kt(tutorial.inaction.CroppingImages1)
-     * before running this sample
-     * to set up template image files.
-     */
+    @Test
+    @Order(0)
+    fun setupImage() {
+
+        scenario {
+            ImageSetupHelper.SetupImagesMapsTopScreen()
+        }
+    }
 
     @Test
     @Order(10)
-    fun exist_image_OK() {
+    fun existImage_OK() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it
-                        .exist("[Explore Tab Image(selected)]")
-                        .dontExist("[Explore Tab Image]")
-
-                        .exist("[Go Tab Image]")
-                        .dontExist("[Go Tab Image(selected)]")
-
-                        .exist("[Saved Tab Image]")
-                        .dontExist("[Saved Tab Image(selected)]")
-
-                        .exist("[Contribute Tab Image]")
-                        .dontExist("[Contribute Tab Image(selected)]")
-
-                        .exist("[Updates Tab Image]")
-                        .dontExist("[Updates Tab Image(selected)]")
+                    it.existImage("[Explore Tab Image(selected)]")
+                        .existImage("[Go Tab Image]")
+                        .existImage("[Saved Tab Image]")
+                        .existImage("[Contribute Tab Image]")
+                        .existImage("[Updates Tab Image]")
                 }
             }
         }
@@ -51,16 +43,14 @@ class ExistDontExist2 : UITest() {
 
     @Test
     @Order(20)
-    fun exist_image_NG() {
+    fun existImage_WARN() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it
-                        .dontExist("[Explore Tab Image]")   // OK
-                        .exist("[Explore Tab Image]")   // NG
+                    it.existImage("[Explore Tab Image]")   // WARN
                 }
             }
         }
@@ -68,16 +58,44 @@ class ExistDontExist2 : UITest() {
 
     @Test
     @Order(30)
-    fun dont_exist_image_NG() {
+    fun existImage_NG() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it
-                        .exist("[Explore Tab Image(selected)]")     // OK
-                        .dontExist("[Explore Tab Image(selected)]") // NG
+                    it.existImage("[Explore Tab Image]", throwsException = true)   // NG
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(40)
+    fun dontExistImage_OK() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Maps Top Screen]")
+                }.expectation {
+                    it.dontExistImage("[Explore Tab Image]") // OK
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(50)
+    fun dontExistImage_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Maps Top Screen]")
+                }.expectation {
+                    it.dontExistImage("[Explore Tab Image(selected)]") // NG
                 }
             }
         }

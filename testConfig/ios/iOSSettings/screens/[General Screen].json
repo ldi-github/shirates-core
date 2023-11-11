@@ -23,7 +23,7 @@
   "default": "[<Settings]",
 
   "scroll": {
-    "overlay-elements": "[NavigationBar]"
+    "header-elements": "[NavigationBar]"
   }
 
 }

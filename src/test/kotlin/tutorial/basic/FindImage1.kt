@@ -1,22 +1,33 @@
 package tutorial.basic
 
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
+import shirates.helper.ImageSetupHelper
 
-@Testrun("unitTestConfig/android/androidSettings/testrun.properties")
+@Testrun("testConfig/android/androidSettings/testrun.properties")
 class FindImage1 : UITest() {
+
+    @Test
+    @Order(10)
+    fun croppingImages() {
+
+        scenario {
+            ImageSetupHelper.SetupImagesInNetworkAndInternetScreen()
+        }
+    }
 
     /**
      * Note:
      *
-     * Run CroppingImages2.kt(tutorial.inaction.CroppingImages2)
-     * before running this sample
-     * to set up template image files.
+     * Run croppingImages()
+     * to set up template image files
+     * before running this sample.
      */
-
     @Test
+    @Order(20)
     fun findImage() {
 
         scenario {
@@ -24,17 +35,17 @@ class FindImage1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.findImage("[Network & internet].png")
-                    it.findImageWithScrollDown("[Display].png")
-                    it.findImageWithScrollDown("[Tips & support].png")
-                    it.findImageWithScrollUp("[Display].png")
-                    it.findImageWithScrollUp("[Network & internet].png")
+                    it.findImage("[Network & internet Icon].png")
+                    it.findImageWithScrollDown("[Display Icon].png")
+                    it.findImageWithScrollDown("[Tips & support Icon].png")
+                    it.findImageWithScrollUp("[Display Icon].png")
+                    it.findImageWithScrollUp("[Network & internet Icon].png")
                 }.expectation {
-                    it.exist("[Network & internet].png")
-                    it.existWithScrollDown("[Display].png")
-                    it.existWithScrollDown("[Tips & support].png")
-                    it.existWithScrollUp("[Display].png")
-                    it.existWithScrollUp("[Network & internet].png")
+                    it.exist("[Network & internet Icon].png")
+                    it.existWithScrollDown("[Display Icon].png")
+                    it.existWithScrollDown("[Tips & support Icon].png")
+                    it.existWithScrollUp("[Display Icon].png")
+                    it.existWithScrollUp("[Network & internet Icon].png")
                 }
             }
         }

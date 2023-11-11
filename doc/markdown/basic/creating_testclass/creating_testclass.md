@@ -143,8 +143,8 @@ Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/an
 37	2023/03/11 06:24:14.042	{}	[info]	()	swipeDurationSeconds: 3.0
 38	2023/03/11 06:24:14.042	{}	[info]	()	flickDurationSeconds: 0.3
 39	2023/03/11 06:24:14.043	{}	[info]	()	swipeMarginRatio: 0.1
-40	2023/03/11 06:24:14.043	{}	[info]	()	scrollVerticalMarginRatio: 0.2
-41	2023/03/11 06:24:14.044	{}	[info]	()	scrollHorizontalMarginRatio: 0.2
+40	2023/03/11 06:24:14.043	{}	[info]	()	scrollVerticalStartMarginRatio: 0.2
+41	2023/03/11 06:24:14.044	{}	[info]	()	scrollHorizontalStartMarginRatio: 0.2
 42	2023/03/11 06:24:14.044	{}	[info]	()	tapHoldSeconds: 0.2
 43	2023/03/11 06:24:14.044	{}	[info]	()	tapAppIconMethod: auto
 44	2023/03/11 06:24:14.044	{}	[info]	()	tapAppIconMacro: 

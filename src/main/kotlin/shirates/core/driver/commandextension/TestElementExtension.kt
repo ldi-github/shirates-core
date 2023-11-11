@@ -310,11 +310,11 @@ fun TestElement.cropImage(
 
     val command = "cropImage"
     val subject = this.selector?.nickname ?: this.selector?.originalExpression ?: this.subject
-    val message = message(id = command, file = fileName)
     if (TestMode.isNoLoadRun.not() && this.isEmpty) {
-        TestLog.operate(message = message, scriptCommand = command, subject = subject, log = true)
+        TestLog.info("cropImage skipped because the element is empty.")
         return this
     }
+    val message = message(id = command, file = fileName)
 
     val trimObject = TrimObject(trim)
     val rect = bounds.toRect()

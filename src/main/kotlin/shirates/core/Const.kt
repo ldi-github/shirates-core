@@ -45,7 +45,7 @@ object Const {
     const val ENABLE_IMAGE_ASSERTION = true
     const val IMAGE_MATCHING_SCALE = 0.25
     const val IMAGE_MATCHING_THRESHOLD = 1.0
-    const val IMAGE_MATCHING_CANDIDATE_COUNT = 20
+    const val IMAGE_MATCHING_CANDIDATE_COUNT = 5
     const val ENABLE_WDA_INSTALL_OPTIMIZATION = true
     const val ENABLE_HEALTH_CHECK = true
     const val TAP_TEST_SELECTOR = ".label"
@@ -96,9 +96,11 @@ object Const {
     const val WAIT_SECONDS_FOR_CONNECTION_ENABLED = 8.0
     const val SWIPE_DURATION_SECONDS = 3.0
     const val FLICK_DURATION_SECONDS = 0.3
-    const val SWIPE_MARGIN_RATIO = 0.1
-    const val SCROLL_VERTICAL_MARGIN_RATIO = 0.2
-    const val SCROLL_HORIZONTAL_MARGIN_RATIO = 0.2
+    const val SWIPE_MARGIN_RATIO = 0.0
+    const val SCROLL_VERTICAL_START_MARGIN_RATIO = 0.15
+    const val SCROLL_VERTICAL_END_MARGIN_RATIO = 0.1
+    const val SCROLL_HORIZONTAL_START_MARGIN_RATIO = 0.2
+    const val SCROLL_HORIZONTAL_END_MARGIN_RATIO = 0.1
     const val SCROLL_TO_EDGE_BOOST = 1
     const val SCROLL_INTERVAL_SECONDS = 0.5
     const val SCROLL_MAX_COUNT = 20
@@ -110,7 +112,6 @@ object Const {
     const val SYNC_INTERVAL_SECONDS = 0.5
     const val BOUNDS_TO_RECT_RATIO_ANDROID = 1
     const val BOUNDS_TO_RECT_RATIO_IOS = 3
-    const val REFRESH_CURRENT_SCREEN_MAX_DEPTH_ON_DIRECT_MODE = 2
 
     /**
      * internal
@@ -126,6 +127,9 @@ object Const {
     /**
      * others
      */
+    const val ANDROID_STATBAR_HEIGHT = 66
+    const val IOS_STATBAR_HEIGHT = 47
+
     const val JQUERY_SOURCE = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"
     const val TESTRUN_PROPERTIES = "testConfig/testrun.properties"
     const val TESTRUN_GLOBAL_PROPERTIES = "testrun.global.properties"

@@ -93,8 +93,11 @@
     - [Existence assertion](basic/function_property/asserting_existence/existance_assertion.md)
     - [Existence assertion in cell](basic/function_property/asserting_existence/in_cell_existance_assertion.md)
     - [Screen assertion](basic/function_property/asserting_existence/screen_is.md)
+- Find image
+    - [find image](basic/function_property/find_image/find_image.md)
 - Asserting image
     - [Image assertion](basic/function_property/asserting_image/image_assertion.md)
+    - [Existence assertion of image (existImage, dontExistImage)](basic/function_property/asserting_image/image_assertion.md)
 - Asserting others
     - [App assertion](basic/function_property/asserting_others/app_assertion.md)
     - [Keyboard assertion](basic/function_property/asserting_others/keyboard_assertion.md)
@@ -136,8 +139,6 @@
 - Logging
     - [info, warn](basic/function_property/logging/info_warn.md)
     - [silent, procedure](basic/function_property/logging/silent_and_procedure_function.md)
-- Find image
-    - [find image](basic/function_property/find_image/find_image.md)
 - External command
     - [shell](basic/function_property/external_command/shell.md)
 

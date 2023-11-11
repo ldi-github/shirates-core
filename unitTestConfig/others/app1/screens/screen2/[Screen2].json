@@ -1,0 +1,11 @@
+{
+  "testConfigName": "Screen2",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings"
+
+}

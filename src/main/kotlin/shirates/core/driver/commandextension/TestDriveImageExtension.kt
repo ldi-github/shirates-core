@@ -12,6 +12,10 @@ fun TestDrive.findImage(
     expression: String,
     scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
     direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
+    scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+    scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
+    scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = false,
     useCache: Boolean = testContext.useCache,
     log: Boolean = true
@@ -24,6 +28,10 @@ fun TestDrive.findImage(
         expression = expression,
         scroll = scroll,
         direction = direction,
+        scrollDurationSeconds = scrollDurationSeconds,
+        scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
+        scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
         useCache = useCache,
         log = log
@@ -33,14 +41,15 @@ fun TestDrive.findImage(
 internal fun TestDrive.findImageCore(
     command: String,
     expression: String,
-    scroll: Boolean = false,
-    direction: ScrollDirection = ScrollDirection.Down,
-    scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
-    scrollMaxCount: Int = testContext.scrollMaxCount,
-    throwsException: Boolean = false,
-    useCache: Boolean = testContext.useCache,
-    log: Boolean = false
+    scroll: Boolean,
+    direction: ScrollDirection,
+    scrollDurationSeconds: Double,
+    scrollStartMarginRatio: Double,
+    scrollEndMarginRatio: Double,
+    scrollMaxCount: Int,
+    throwsException: Boolean,
+    useCache: Boolean,
+    log: Boolean
 ): ImageMatchResult {
 
     val testElement = TestDriver.it
@@ -58,6 +67,7 @@ internal fun TestDrive.findImageCore(
                 direction = direction,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
                 throwsException = throwsException,
                 useCache = useCache
@@ -82,7 +92,8 @@ internal fun TestDrive.findImageCore(
 fun TestDrive.findImageWithScrollDown(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
@@ -99,6 +110,7 @@ fun TestDrive.findImageWithScrollDown(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
         useCache = useCache,
@@ -112,7 +124,8 @@ fun TestDrive.findImageWithScrollDown(
 fun TestDrive.findImageWithScrollUp(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
@@ -129,6 +142,7 @@ fun TestDrive.findImageWithScrollUp(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
         useCache = useCache,
@@ -142,7 +156,8 @@ fun TestDrive.findImageWithScrollUp(
 fun TestDrive.findImageWithScrollRight(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
@@ -159,6 +174,7 @@ fun TestDrive.findImageWithScrollRight(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
         useCache = useCache,
@@ -172,7 +188,8 @@ fun TestDrive.findImageWithScrollRight(
 fun TestDrive.findImageWithScrollLeft(
     expression: String,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollVerticalMarginRatio,
+    scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
@@ -189,6 +206,7 @@ fun TestDrive.findImageWithScrollLeft(
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
         useCache = useCache,

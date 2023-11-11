@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.platformAnnotation
 import shirates.core.testcode.UITest
 import shirates.core.utility.getCapabilityRelaxed
 
@@ -27,6 +28,14 @@ class TestDrivePropertyExtensionTest : UITest() {
     fun appIconName() {
 
         assertThat(appIconName).isEqualTo("Settings")
+    }
+
+    @Test
+    fun imageProfile() {
+
+        val viewportRect = capabilities.getCapabilityRelaxed("viewportRect")
+        val b = Bounds(viewportRect)
+        assertThat(imageProfile).isEqualTo("${platformAnnotation}_${b.width}x${b.height}")
     }
 
     @Test

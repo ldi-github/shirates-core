@@ -115,6 +115,8 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
                 putSelector(selector = selector.value)
             }
             scrollInfo.scrollable = screenBaseInfo.scrollInfo.scrollable
+            scrollInfo.headerElements.addAll(screenBaseInfo.scrollInfo.headerElements)
+            scrollInfo.footerElements.addAll(screenBaseInfo.scrollInfo.footerElements)
             scrollInfo.startElements.addAll(screenBaseInfo.scrollInfo.startElements)
             scrollInfo.endElements.addAll(screenBaseInfo.scrollInfo.endElements)
             scrollInfo.overlayElements.addAll(screenBaseInfo.scrollInfo.overlayElements)
@@ -219,6 +221,21 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
         if (scrollable.isNotBlank()) {
             scrollInfo.scrollable = scrollable
         }
+        scrollInfo.headerElements.addAll(
+            NicknameUtility.splitNicknames(
+                scroll.getValue("header-elements")
+            )
+        )
+        scrollInfo.footerElements.addAll(
+            NicknameUtility.splitNicknames(
+                scroll.getValue("footer-elements")
+            )
+        )
+        scrollInfo.overlayElements.addAll(
+            NicknameUtility.splitNicknames(
+                scroll.getValue("overlay-elements")
+            )
+        )
         scrollInfo.startElements.addAll(
             NicknameUtility.splitNicknames(
                 scroll.getValue("start-elements")
@@ -227,11 +244,6 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
         scrollInfo.endElements.addAll(
             NicknameUtility.splitNicknames(
                 scroll.getValue("end-elements")
-            )
-        )
-        scrollInfo.overlayElements.addAll(
-            NicknameUtility.splitNicknames(
-                scroll.getValue("overlay-elements")
             )
         )
     }

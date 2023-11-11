@@ -63,13 +63,14 @@ class SyncUtilityTest : UnitTest() {
                 false
             }
         }.isInstanceOf(TestDriverException::class.java)
-            .hasMessage("over maxLoopCount(5)")
+            .hasMessage("Over maxLoopCount. (maxLoopCount=5)")
 
         run {
             // Act
             val c = SyncUtility.doUntilTrue(
-                throwOnFinally = false,
+                throwOnError = false,
                 maxLoopCount = 5,
+                throwOnOverMaxLoopCount = false,
                 onMaxLoop = { sc ->
                     println("onMaxLoop count=${sc.count}")
                 }
@@ -82,8 +83,8 @@ class SyncUtilityTest : UnitTest() {
             assertThat(c.count).isEqualTo(5)
             assertThat(c.isTimeOut).isFalse()
             assertThat(c.elapsedSecondsOnTimeout).isNull()
-            assertThat(c.hasError).isTrue()
-            assertThat(c.error?.message).isEqualTo("over maxLoopCount(${c.maxLoopCount})")
+            assertThat(c.hasError).isFalse()
+            assertThat(c.error?.message).isNull()
         }
 
     }
@@ -109,7 +110,7 @@ class SyncUtilityTest : UnitTest() {
         run {
             // Act
             val c = SyncUtility.doUntilTrue(
-                throwOnFinally = false,
+                throwOnError = false,
                 onError = { sc ->
                     if (sc.count == 3) {
                         sc.cancelRetry = true

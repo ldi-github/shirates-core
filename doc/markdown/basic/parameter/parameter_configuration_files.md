@@ -146,8 +146,10 @@ appiumArgs=--session-override --relaxed-security
 #swipeDurationSeconds=
 #flickDurationSeconds=
 #swipeMarginRatio=
-#scrollVerticalMarginRatio=
-#scrollHorizontalMarginRatio=
+#scrollVerticalStartMarginRatio=
+#scrollVerticalEndMarginRatio=
+#scrollHorizontalStartMarginRatio=
+#scrollHorizontalEndMarginRatio=
 #tapHoldSeconds=
 #syncWaitSeconds=
 

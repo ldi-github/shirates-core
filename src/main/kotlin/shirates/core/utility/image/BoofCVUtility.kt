@@ -37,23 +37,27 @@ object BoofCVUtility {
     fun evaluateImageEqualsTo(
         image: BufferedImage?,
         templateImage: BufferedImage?,
-        scale: Double,
         threshold: Double
     ): ImageMatchResult {
-        if (image == null || templateImage == null || image.width != templateImage.width || image.height != templateImage.height) {
+        if (image == null || templateImage == null) {
             return ImageMatchResult(
                 result = false,
-                scale = scale,
+                scale = 1.0,
                 threshold = threshold,
                 image = image,
                 templateImage = templateImage
             )
         }
 
-        val match = findMatches(
-            image = image.toGrayF32()!!,
-            templateImage = templateImage.toGrayF32()!!
-        ).firstOrNull()
+        val match = try {
+            findMatches(
+                image = image.toGrayF32()!!,
+                templateImage = templateImage.toGrayF32()!!
+            ).firstOrNull()
+        } catch (t: Throwable) {
+            TestLog.trace(t.message!!)
+            null
+        }
 
         val result =
             if (match == null) false
@@ -63,12 +67,12 @@ object BoofCVUtility {
             x = match?.x ?: Int.MIN_VALUE,
             y = match?.y ?: Int.MIN_VALUE,
             score = match?.score ?: Double.MIN_VALUE,
-            scale = scale,
+            scale = 1.0,
             threshold = threshold,
             image = image,
             templateImage = templateImage
         )
-        TestLog.info(imageMatchResult.toString())
+        TestLog.trace(imageMatchResult.toString())
         return imageMatchResult
     }
 
@@ -96,8 +100,8 @@ object BoofCVUtility {
         }
         val img1 = image.resizeNotSmallerThanTemplate(templateImage)
 
-        val scaledImage = img1.resize(scale = scale)
-        val scaledTemplateImage = templateImage.resize(scale = scale)
+        val scaledImage = if (scale != 1.0) img1.resize(scale = scale) else img1
+        val scaledTemplateImage = if (scale != 1.0) templateImage.resize(scale = scale) else templateImage
 
         /**
          * First match
@@ -154,7 +158,7 @@ object BoofCVUtility {
                 templateImage = templateImage
             )
             if (result || PropertiesManager.enableImageMatchDebugLog) {
-                TestLog.info(imageMatchResult.toString())
+                TestLog.trace(imageMatchResult.toString())
             }
             if (result) {
                 return imageMatchResult
@@ -168,7 +172,7 @@ object BoofCVUtility {
             image = image,
             templateImage = templateImage
         )
-        TestLog.info(imageMatchResult.toString())
+        TestLog.trace(imageMatchResult.toString())
         return imageMatchResult
     }
 }

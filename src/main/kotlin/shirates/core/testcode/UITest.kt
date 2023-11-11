@@ -17,7 +17,10 @@ import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.isAppInstalled
+import shirates.core.driver.commandextension.launchApp
+import shirates.core.driver.commandextension.tapAppIcon
+import shirates.core.driver.commandextension.withContext
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -478,7 +481,8 @@ abstract class UITest : TestDrive {
                 message.contains("AppiumProxy.getSource() timed out") ||
                 message.contains("Could not start a new session. Response code 500.") ||
                 message.contains(" is still running after") ||
-                message.contains("Could not proxy command to the remote server.")
+                message.contains("Could not proxy command to the remote server.") ||
+                message.contains("current thread is not owner")
             ) {
                 TestLog.getLinesOfCurrentTestScenario().forEach {
                     it.deleted = true

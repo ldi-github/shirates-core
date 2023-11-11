@@ -62,11 +62,11 @@ class iOSPressKey1 : UITest() {
                         .swipeCenterToBottom()
                         .tap("#SpotlightSearchField")
                         .clearInput()
-                        .sendKeys("safari")
+                        .sendKeys("safari browser")
                 }.action {
                     it.pressEnter()
                 }.expectation {
-                    it.appIs("Safari")
+                    it.exist("safari browser")
                 }
             }
         }

@@ -74,6 +74,7 @@ class DoUntilTrue1 : UITest() {
                 }.action {
                     doUntilTrue(
                         maxLoopCount = 2,
+                        throwOnOverMaxLoopCount = false,
                         onMaxLoop = { c ->
                             SKIP_SCENARIO("MaxLoopCount. (maxLoopCount=${c.maxLoopCount})")
                         }
