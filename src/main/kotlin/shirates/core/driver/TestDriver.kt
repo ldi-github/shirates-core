@@ -536,13 +536,13 @@ object TestDriver {
         TestLog.info("Optimizing installing WebDriverAgent.")
         val wdaDirectory = IosDeviceUtility.getWebDriverAgentDirectory()
         if (Files.exists(wdaDirectory.toPath()).not()) {
-            TestLog.info("WebDriverAgent directory not found. Optimization skipped.")
+            TestLog.info("WebDriverAgent directory not found.")
             return
         }
         // Check existence of app file
         val appFiles = File(wdaDirectory).walkTopDown().filter { it.name == "WebDriverAgentRunner-Runner.app" }
         if (appFiles.any().not()) {
-            TestLog.info("WebDriverAgentRunner-Runner.app not found. Optimization skipped.")
+            TestLog.info("WebDriverAgentRunner-Runner.app not found.")
             return
         }
 
@@ -553,17 +553,8 @@ object TestDriver {
 
     private fun createAppiumDriverCore(profile: TestProfile) {
 
-        if (isiOS) {
-            // WDA optimization (iOS)
-            if (PropertiesManager.enableWdaInstallOptimization) {
-                wdaInstallOptimization(profile = profile)
-            }
-            // autoLaunch capability default
-            val hasAutoLaunchKey =
-                profile.capabilities.containsKey("appium:autoLaunch") || profile.capabilities.containsKey("autoLaunch")
-            if (hasAutoLaunchKey.not()) {
-                profile.capabilities.set("appium:autoLaunch", false)
-            }
+        if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
+            wdaInstallOptimization(profile = profile)
         }
 
         val capabilities = DesiredCapabilities()
