@@ -22,14 +22,6 @@ class AssertingImage2 : UITest() {
 
         scenario {
             ImageSetupHelper.setupImageAndroidSettingsTopScreen()
-            val files = Files.list(TestLog.testResults.resolve("images/androidSettingsTopScreen")).toList()
-            val p = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
-            if (Files.exists(p).not()) {
-                p.toFile().mkdirs()
-            }
-            for (file in files) {
-                file.copyTo(p.resolve(file.fileName), overwrite = true)
-            }
         }
     }
 

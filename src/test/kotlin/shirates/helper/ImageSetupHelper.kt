@@ -146,7 +146,8 @@ object ImageSetupHelper : TestDrive {
         it.macro("[Maps Top Screen]")
             .screenIs("[Maps Top Screen]")
             .wait()     // wait for animation to complete
-        val dir = "testConfig/android/maps/screens/images".toPath()
+        val dir = "testConfig/android/maps/screens/images/mapsTopScreen".toPath()
+        if(Files.exists(dir).not()) dir.toFile().mkdirs()
 
         rootElement.cropImage("[Maps Top Screen].png")
         it.select("[Explore Tab]").cropTo(dir, "[Explore Tab Image(selected)].png")

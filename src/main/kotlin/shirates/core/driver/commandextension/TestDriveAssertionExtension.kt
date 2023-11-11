@@ -565,15 +565,10 @@ fun TestDrive.dontExistImage(
             waitSeconds = waitSeconds,
             useCache = useCache,
             scroll = scroll,
-            direction = direction
+            direction = direction,
+            dontExist = true,
         )
 
-        TestDriver.postProcessForImageAssertion(
-            e = e,
-            assertMessage = assertMessage,
-            log = true,
-            dontExist = true
-        )
         if (e.imageMatchResult?.result == true) {
             if (throwsException) {
                 throw TestNGException("$assertMessage (${e.imageMatchResult})")
@@ -596,7 +591,9 @@ private fun TestDrive.existImageCore(
     waitSeconds: Double,
     useCache: Boolean,
     scroll: Boolean = false,
-    direction: ScrollDirection = ScrollDirection.Down
+    direction: ScrollDirection = ScrollDirection.Down,
+    dontExist: Boolean = false,
+    log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
     var e = TestElement(selector = sel)
@@ -645,7 +642,8 @@ private fun TestDrive.existImageCore(
     TestDriver.postProcessForImageAssertion(
         e = e,
         assertMessage = assertMessage,
-        log = true
+        log = log,
+        dontExist = dontExist
     )
 
     if (e.hasError && throwsException) {

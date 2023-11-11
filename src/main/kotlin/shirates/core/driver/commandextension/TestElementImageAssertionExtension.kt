@@ -16,7 +16,7 @@ import shirates.core.utility.sync.SyncUtility
 fun TestElement.isImage(
     expression: String,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
-    cropImage: Boolean = true
+    cropImage: Boolean = true,
 ): ImageMatchResult {
 
     val testElement = this
@@ -107,6 +107,7 @@ fun TestElement.isContainingImage(
 fun TestElement.imageContains(
     expression: String,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     val command = "imageContains"
@@ -136,6 +137,10 @@ fun TestElement.imageContains(
 
     TestDriver.lastElement = testElement
 
+    if (func != null) {
+        func(this)
+    }
+
     return TestDriver.lastElement
 }
 
@@ -145,6 +150,7 @@ fun TestElement.imageContains(
 fun TestElement.imageIs(
     expression: String = this.selector.toString(),
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     val command = "imageIs"
@@ -170,6 +176,10 @@ fun TestElement.imageIs(
 
     TestDriver.lastElement = testElement
 
+    if (func != null) {
+        func(this)
+    }
+
     return TestDriver.lastElement
 }
 
@@ -179,6 +189,7 @@ fun TestElement.imageIs(
 fun TestElement.imageIsNot(
     expression: String,
     waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     val command = "imageIsNot"
@@ -204,6 +215,10 @@ fun TestElement.imageIsNot(
     )
 
     TestDriver.lastElement = refreshLastElement()
+
+    if (func != null) {
+        func(this)
+    }
 
     return TestDriver.lastElement
 }
