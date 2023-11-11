@@ -11,7 +11,7 @@ import shirates.core.testcode.Want
 import utility.handleIrregulars
 
 @Want
-@Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
+@Testrun("testConfig/ios/iOSSettings/testrun.properties")
 class TestDriveKeyboardExtensionTest1 : UITest() {
 
     override fun setEventHandlers(context: TestDriverEventContext) {

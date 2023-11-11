@@ -438,6 +438,11 @@ abstract class UITest : TestDrive {
     var currentDisplayName = ""
     var currentOrder = null as Int?
 
+    private fun getLaunchApp(): Boolean {
+
+        return capabilityRelaxed("autoLaunch") != "true"
+    }
+
     /**
      * scenario
      */
@@ -445,7 +450,7 @@ abstract class UITest : TestDrive {
         scenarioId: String? = currentTestMethodName,
         order: Int? = currentOrder,
         desc: String = currentDisplayName,
-        launchApp: Boolean = true,
+        launchApp: Boolean = getLaunchApp(),
         useCache: Boolean? = null,
         testProc: () -> Unit
     ) {
