@@ -20,6 +20,10 @@ class TestContext(
     var appiumProxyReadTimeoutSeconds =
         profile.appiumProxyReadTimeoutSeconds?.toDoubleOrNull() ?: Const.APPIUM_PROXY_READ_TIMEOUT_SECONDS
 
+    @SaveTarget
+    var appiumProxyGetSourceTimeoutSeconds =
+        profile.appiumProxyReadTimeoutSeconds?.toDoubleOrNull() ?: Const.APPIUM_PROXY_GET_SOURCE_TIMEOUT_SECONDS
+
     // TestDriver --------------------------------------------------
 
     @SaveTarget

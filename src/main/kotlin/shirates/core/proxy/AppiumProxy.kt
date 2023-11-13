@@ -58,6 +58,7 @@ object AppiumProxy {
         }
 
         WaitUtility.doUntilTrue(
+            waitSeconds = testContext.appiumProxyGetSourceTimeoutSeconds,
             onMaxLoop = {
                 throw TestDriverException("AppiumProxy.getSource() reached maxLoop count.(maxLoopCount=${it.maxLoopCount})")
             },

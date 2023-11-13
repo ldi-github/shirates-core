@@ -72,6 +72,7 @@ object Const {
     const val APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS: Double = 5.0
     const val APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS: Double = 30.0
     const val APPIUM_PROXY_READ_TIMEOUT_SECONDS: Double = 20.0
+    const val APPIUM_PROXY_GET_SOURCE_TIMEOUT_SECONDS: Double = 60.0
 
     // Screenshot
     const val AUTO_SCREEN_SHOT = true
@@ -117,7 +118,7 @@ object Const {
      * internal
      */
     internal const val SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
-    internal const val WAIT_UTILITY_WAIT_SECONDS: Double = 30.0
+    internal const val WAIT_UTILITY_WAIT_SECONDS: Double = 60.0
     internal const val WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
     internal const val SHELL_RESULT_WAIT_FOR_SECONDS: Double = 30.0
     internal const val EMULATOR_REBOOT_WAIT_SECONDS: Double = 60.0
