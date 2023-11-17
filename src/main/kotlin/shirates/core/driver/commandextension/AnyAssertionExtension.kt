@@ -5,7 +5,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.testcode.normalize
+import shirates.core.testcode.preprocessForComparison
 
 /**
  * assertEquals
@@ -74,8 +74,8 @@ fun Any?.thisIs(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val value1 = this.toString().normalize()
-        val value2 = expected.toString().normalize()
+        val value1 = this.toString().preprocessForComparison()
+        val value2 = expected.toString().preprocessForComparison()
         val result = value1 == value2
         if (result) {
             TestLog.ok(message = assertMessage)

@@ -1,21 +1,36 @@
 package shirates.core.testcode
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.utility.misc.StringUtility
 import java.text.Normalizer
 
 /**
- * cleansing
- * trim, remove control character, and remove ZERO WIDTH SPACE(U+200B)
+ * preprocessForComparison
  */
-fun String.cleansing(): String {
+fun String.preprocessForComparison(
+    keepLF: Boolean = PropertiesManager.keepLF,
+    keepTAB: Boolean = PropertiesManager.keepTAB,
+    waveDashToFullWidthTilde: Boolean = PropertiesManager.waveDashToFullWidthTilde,
+    compressWhitespaceCharacters: Boolean = PropertiesManager.compressWhitespaceCharacters,
+    trimString: Boolean = PropertiesManager.trimString,
+): String {
 
-    return StringUtility.cleansing(this)
+    return StringUtility.preprocessForComparison(
+        this,
+        keepLF = keepLF,
+        keepTAB = keepTAB,
+        waveDashToFullWidthTilde = waveDashToFullWidthTilde,
+        compressWhitespaceCharacters = compressWhitespaceCharacters,
+        trimString = trimString
+    )
 }
 
 /**
  * normalize
  */
-fun String.normalize(unicodeForm: Normalizer.Form = Normalizer.Form.NFKC): String {
+fun String.normalize(
+    unicodeForm: Normalizer.Form = Normalizer.Form.NFC
+): String {
 
     return StringUtility.normalize(text = this, unicodeForm = unicodeForm)
 }

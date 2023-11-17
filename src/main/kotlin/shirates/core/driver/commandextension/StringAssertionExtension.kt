@@ -6,6 +6,7 @@ import shirates.core.driver.TestElement
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.preprocessForComparison
 
 private fun rep(value: String?): String {
 
@@ -74,7 +75,7 @@ fun Any?.thisIsBlank(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val match = this?.toString()?.isBlank()
+        val match = this?.toString()?.preprocessForComparison()?.isBlank()
         thisCore(match = match, assertMessage = assertMessage)
     }
 
@@ -93,7 +94,7 @@ fun Any?.thisIsNotBlank(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val match = ((this != null) && this.toString().isNotBlank())
+        val match = ((this != null) && this.toString().preprocessForComparison().isNotBlank())
         thisCore(match = match, assertMessage = assertMessage)
     }
 
@@ -114,7 +115,7 @@ fun Any?.thisContains(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$this", arg1 = expected) {
-        val match = this?.toString()?.contains(expected)
+        val match = this?.toString()?.preprocessForComparison()?.contains(expected)
         thisCore(match = match, assertMessage = assertMessage)
     }
 
@@ -135,7 +136,7 @@ fun Any?.thisContainsNot(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.contains(expected)
+        val match = this?.toString()?.preprocessForComparison()?.contains(expected)
         thisCoreNot(match = match, assertMessage = assertMessage)
     }
 
@@ -156,7 +157,7 @@ fun Any?.thisStartsWith(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.startsWith(expected)
+        val match = this?.toString()?.preprocessForComparison()?.startsWith(expected)
         thisCore(match, assertMessage)
     }
 
@@ -177,7 +178,7 @@ fun Any?.thisStartsWithNot(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.startsWith(expected)
+        val match = this?.toString()?.preprocessForComparison()?.startsWith(expected)
         thisCoreNot(match, assertMessage)
     }
 
@@ -220,7 +221,7 @@ fun Any?.thisEndsWith(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val result = this?.toString()?.endsWith(expected)
+        val result = this?.toString()?.preprocessForComparison()?.endsWith(expected)
         thisCore(result, assertMessage)
     }
 
@@ -241,7 +242,7 @@ fun Any?.thisEndsWithNot(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.endsWith(expected)
+        val match = this?.toString()?.preprocessForComparison()?.endsWith(expected)
         thisCoreNot(match, assertMessage)
     }
 
@@ -262,7 +263,7 @@ fun Any?.thisMatches(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.matches(Regex(expected))
+        val match = this?.toString()?.preprocessForComparison()?.matches(Regex(expected))
         thisCore(match = match, assertMessage = assertMessage)
     }
 
@@ -283,7 +284,7 @@ fun Any?.thisMatchesNot(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.matches(Regex(expected))
+        val match = this?.toString()?.preprocessForComparison()?.matches(Regex(expected))
         thisCoreNot(match = match, assertMessage = assertMessage)
     }
 

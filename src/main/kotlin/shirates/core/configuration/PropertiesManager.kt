@@ -576,8 +576,73 @@ object PropertiesManager {
             return value
         }
 
+    // String Matching --------------------------------------------------
+
+    /**
+     * enableStringCompareOptimization
+     */
+    val enableStringCompareOptimization: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableStringCompareOptimization")
+                ?: return Const.ENABLE_STRING_COMPARE_OPTIMIZATION
+            return value == "true"
+        }
+
+    /**
+     * keepLF
+     */
+    val keepLF: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "keepLF")
+                ?: return Const.KEEP_LF
+            return value == "true"
+        }
+
+    /**
+     * keepTAB
+     */
+    val keepTAB: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "keepTAB")
+                ?: return Const.KEEP_TAB
+            return value == "true"
+        }
+
+    /**
+     * waveDashToFullWidthTilde
+     */
+    val waveDashToFullWidthTilde: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "waveDashToFullWidthTilde")
+                ?: return Const.WAVE_DASH_TO_FULL_WIDTH_TILDE
+            return value == "true"
+        }
+
+    /**
+     * compressWhitespaceCharacters
+     */
+    val compressWhitespaceCharacters: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "compressWhitespaceCharacters")
+                ?: return Const.COMPRESS_WHITESPACE_CHARACTORS
+            return value == "true"
+        }
+
+    /**
+     * trimString
+     */
+    val trimString: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "trimString")
+                ?: return Const.TRIM_STRING
+            return value == "true"
+        }
+
     // Emulator/Simulator
 
+    /**
+     * enableWdaInstallOptimization
+     */
     val enableWdaInstallOptimization: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableWdaInstallOptimization")

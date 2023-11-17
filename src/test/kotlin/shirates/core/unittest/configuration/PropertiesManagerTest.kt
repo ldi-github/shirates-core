@@ -835,6 +835,159 @@ class PropertiesManagerTest : UnitTest() {
         }
     }
 
+    // enableStringCompareOptimization
+    @Test
+    fun enableStringCompareOptimization() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableStringCompareOptimization).isEqualTo(Const.ENABLE_STRING_COMPARE_OPTIMIZATION)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableStringCompareOptimization", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableStringCompareOptimization).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableStringCompareOptimization", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableStringCompareOptimization).isEqualTo(value)
+        }
+    }
+
+    // keepLF
+    @Test
+    fun keepLF() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.keepLF).isEqualTo(Const.KEEP_LF)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("keepLF", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.keepLF).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("keepLF", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.keepLF).isEqualTo(value)
+        }
+    }
+
+    // keepTAB
+    @Test
+    fun keepTAB() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.keepTAB).isEqualTo(Const.KEEP_TAB)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("keepTAB", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.keepTAB).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("keepTAB", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.keepTAB).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun waveDashToFullWidthTilde() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.waveDashToFullWidthTilde).isEqualTo(Const.WAVE_DASH_TO_FULL_WIDTH_TILDE)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("waveDashToFullWidthTilde", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.waveDashToFullWidthTilde).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("waveDashToFullWidthTilde", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.waveDashToFullWidthTilde).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun compressWhitespaceCharacters() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.compressWhitespaceCharacters).isEqualTo(Const.COMPRESS_WHITESPACE_CHARACTORS)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("compressWhitespaceCharacters", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.compressWhitespaceCharacters).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("compressWhitespaceCharacters", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.compressWhitespaceCharacters).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun trimString() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.trimString).isEqualTo(Const.TRIM_STRING)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("trimString", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.trimString).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("trimString", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.trimString).isEqualTo(value)
+        }
+    }
+
     @Test
     fun enableImageAssertion() {
 
@@ -954,6 +1107,7 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             val value = false
             PropertiesManager.setPropertyValue("enableWdaInstallOptimization", value.toString())
+            // Act, Assert
             assertThat(PropertiesManager.enableWdaInstallOptimization).isEqualTo(value)
         }
     }
