@@ -36,7 +36,7 @@ class StringAssertionExtensionTest {
             assertThatThrownBy {
                 string1.thisIs("A")
             }.isInstanceOf(TestNGException::class.java)
-                .hasMessage(message(id = "thisIs", expected = "A") + " (actual=\"null\")")
+                .hasMessage(message(id = "thisIs", subject = "", expected = "A") + " (actual=\"\")")
         }
     }
 
@@ -68,13 +68,7 @@ class StringAssertionExtensionTest {
             assertThatThrownBy {
                 string1.thisIsNot(null)
             }.isInstanceOf(TestNGException::class.java)
-                .hasMessage(
-                    message(
-                        id = "thisIsNot",
-                        subject = string1.toString(),
-                        expected = null
-                    ) + " (actual=\"null\")"
-                )
+                .hasMessage(message(id = "thisIsNot", subject = "", expected = "") + " (actual=\"\")")
         }
     }
 
@@ -98,7 +92,7 @@ class StringAssertionExtensionTest {
             val string1: String? = null
             // Act, Assert
             string1.thisIsEmpty()
-            assertThat(TestLog.lastTestLog?.message).isEqualTo("\"null\" is empty")
+            assertThat(TestLog.lastTestLog?.message).isEqualTo("\"\" is empty")
         }
         run {
             // Arrange
@@ -129,7 +123,7 @@ class StringAssertionExtensionTest {
             assertThatThrownBy {
                 "".thisIsNotEmpty()
             }.isInstanceOf(TestNGException::class.java)
-                .hasMessage(message(id = "thisIsNotEmpty", subject = "") + " (actual=\"\")")
+                .hasMessage("\"\" is not empty (actual=\"\")")
         }
         run {
             // Arrange
@@ -138,7 +132,7 @@ class StringAssertionExtensionTest {
             assertThatThrownBy {
                 string1.thisIsNotEmpty()
             }.isInstanceOf(TestNGException::class.java)
-                .hasMessage("\"null\" is not empty (actual=\"\")")
+                .hasMessage("\"\" is not empty (actual=\"\")")
         }
     }
 
@@ -148,6 +142,13 @@ class StringAssertionExtensionTest {
         run {
             // Act, Assert
             "".thisIsBlank()
+            assertThat(TestLog.lastTestLog?.message).isEqualTo("\"\" is blank")
+        }
+        run {
+            // Arrange
+            val string1: String? = null
+            // Act, Assert
+            string1.thisIsBlank()
             assertThat(TestLog.lastTestLog?.message).isEqualTo("\"\" is blank")
         }
         run {
@@ -167,16 +168,6 @@ class StringAssertionExtensionTest {
             }.isInstanceOf(TestNGException::class.java)
                 .hasMessage(message(id = "thisIsBlank", subject = "A") + " (actual=\"A\")")
         }
-        run {
-            // Arrange
-            val string1: String? = null
-            // Act, Assert
-            assertThatThrownBy {
-                string1.thisIsBlank()
-            }.isInstanceOf(TestNGException::class.java)
-                .hasMessage(message(id = "thisIsBlank", subject = string1.toString()) + " (actual=null)")
-        }
-
     }
 
     @Test
@@ -214,7 +205,7 @@ class StringAssertionExtensionTest {
                 val string1: String? = null
                 string1.thisIsNotBlank()
             }.isInstanceOf(TestNGException::class.java)
-                .hasMessage(message(id = "thisIsNotBlank", subject = "null") + " (actual=null)")
+                .hasMessage(message(id = "thisIsNotBlank", subject = "") + " (actual=\"\")")
         }
     }
 

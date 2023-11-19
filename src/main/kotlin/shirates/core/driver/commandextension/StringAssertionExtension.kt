@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestElement
@@ -8,32 +9,30 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.testcode.preprocessForComparison
 
-private fun rep(value: String?): String {
-
-    if (value == null) {
-        return "null"
-    }
-    return "\"$value\""
-}
-
 /**
  * thisIsEmpty
  */
 fun Any?.thisIsEmpty(
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisIsEmpty"
-    val subject = if (this is TestElement) this.subject else this.toString()
-    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
-
-    val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage) {
-        if (this is TestElement) {
-            val msg = message ?: message(id = "thisIsEmptyElement", subject = this.subject)
-            this.isEmpty.thisIsTrue(message = msg)
-        } else {
-            (this ?: "").thisIs(expected = "", message = assertMessage)
+    if (this is TestElement) {
+        val subject = this.subject
+        val assertMessage = message ?: message(id = "thisIsEmptyElement", subject = subject, replaceRelative = true)
+        val context = TestDriverCommandContext(null)
+        context.execCheckCommand(command = command, message = assertMessage) {
+            val result = this.isEmpty
+            result.thisCore(match = result, assertMessage = assertMessage)
+        }
+    } else {
+        val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization, trimString = false)
+        val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
+        val context = TestDriverCommandContext(null)
+        context.execCheckCommand(command = command, message = assertMessage) {
+            val result = value.isBlank()
+            value.thisCore(match = result, assertMessage = assertMessage)
         }
     }
 
@@ -44,19 +43,26 @@ fun Any?.thisIsEmpty(
  * thisIsNotEmpty
  */
 fun Any?.thisIsNotEmpty(
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisIsNotEmpty"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), replaceRelative = true)
-
-    val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage) {
-        if (this is TestElement) {
-            val msg = message ?: message(id = "thisIsNotEmptyElement", subject = this.subject)
-            this.isEmpty.thisIsFalse(message = msg)
-        } else {
-            (this ?: "").thisIsNot(expected = "", message = assertMessage)
+    if (this is TestElement) {
+        val subject = this.subject
+        val assertMessage = message ?: message(id = "thisIsNotEmptyElement", subject = subject)
+        val context = TestDriverCommandContext(this)
+        context.execCheckCommand(command = command, message = assertMessage) {
+            val result = this.isEmpty.not()
+            result.thisCore(match = result, assertMessage = assertMessage)
+        }
+    } else {
+        val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization, trimString = false)
+        val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
+        val context = TestDriverCommandContext(null)
+        context.execCheckCommand(command = command, message = assertMessage) {
+            val result = value.isBlank().not()
+            value.thisCore(match = result, assertMessage = assertMessage)
         }
     }
 
@@ -67,16 +73,18 @@ fun Any?.thisIsNotEmpty(
  * thisIsBlank
  */
 fun Any?.thisIsBlank(
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisIsBlank"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), replaceRelative = true)
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization, trimString = false)
+    val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val match = this?.toString()?.preprocessForComparison()?.isBlank()
-        thisCore(match = match, assertMessage = assertMessage)
+        val match = value.isBlank()
+        value.thisCore(match = match, assertMessage = assertMessage)
     }
 
     return this
@@ -86,16 +94,18 @@ fun Any?.thisIsBlank(
  * thisIsNotBlank
  */
 fun Any?.thisIsNotBlank(
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisIsNotBlank"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), replaceRelative = true)
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization, trimString = false)
+    val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val match = ((this != null) && this.toString().preprocessForComparison().isNotBlank())
-        thisCore(match = match, assertMessage = assertMessage)
+        val match = value.isNotBlank()
+        value.thisCore(match = match, assertMessage = assertMessage)
     }
 
     return this
@@ -106,17 +116,20 @@ fun Any?.thisIsNotBlank(
  */
 fun Any?.thisContains(
     expected: String,
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisContains"
+    val containedText = expected.preprocessForComparison(optimization = optimization)
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
     val assertMessage =
-        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
+        message ?: message(id = command, subject = value, expected = containedText, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage, subject = "$this", arg1 = expected) {
-        val match = this?.toString()?.preprocessForComparison()?.contains(expected)
-        thisCore(match = match, assertMessage = assertMessage)
+    context.execCheckCommand(command = command, message = assertMessage, subject = value, arg1 = containedText) {
+        val match = value.contains(containedText)
+        value.thisCore(match = match, assertMessage = assertMessage)
     }
 
     return this
@@ -127,17 +140,20 @@ fun Any?.thisContains(
  */
 fun Any?.thisContainsNot(
     expected: String,
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisContainsNot"
+    val containedText = expected.preprocessForComparison()
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
     val assertMessage =
-        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
+        message ?: message(id = command, subject = value, expected = containedText, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.preprocessForComparison()?.contains(expected)
-        thisCoreNot(match = match, assertMessage = assertMessage)
+    context.execCheckCommand(command = command, message = assertMessage, arg1 = containedText) {
+        val match = value.contains(containedText)
+        value.thisCoreNot(match = match, assertMessage = assertMessage)
     }
 
     return this
@@ -148,17 +164,20 @@ fun Any?.thisContainsNot(
  */
 fun Any?.thisStartsWith(
     expected: String,
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisStartsWith"
+    val startingText = expected.preprocessForComparison()
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
     val assertMessage =
-        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
+        message ?: message(id = command, subject = value, expected = startingText, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.preprocessForComparison()?.startsWith(expected)
-        thisCore(match, assertMessage)
+    context.execCheckCommand(command = command, message = assertMessage, arg1 = startingText) {
+        val match = value.startsWith(startingText)
+        value.thisCore(match = match, assertMessage = assertMessage)
     }
 
     return this
@@ -169,17 +188,20 @@ fun Any?.thisStartsWith(
  */
 fun Any?.thisStartsWithNot(
     expected: String,
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisStartsWithNot"
+    val startingText = expected.preprocessForComparison()
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
     val assertMessage =
-        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
+        message ?: message(id = command, subject = value, expected = startingText, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.preprocessForComparison()?.startsWith(expected)
-        thisCoreNot(match, assertMessage)
+    context.execCheckCommand(command = command, message = assertMessage, arg1 = startingText) {
+        val match = value.startsWith(startingText)
+        value.thisCoreNot(match = match, assertMessage = assertMessage)
     }
 
     return this
@@ -190,7 +212,7 @@ private fun Any?.thisCore(match: Boolean?, assertMessage: String) {
     if (r) {
         TestLog.ok(message = assertMessage)
     } else {
-        val errorMessage = "$assertMessage (actual=${rep(this?.toString())})"
+        val errorMessage = "$assertMessage (actual=\"${this}\")"
         TestDriver.lastElement.lastError = TestNGException(errorMessage)
         throw TestDriver.lastElement.lastError!!
     }
@@ -201,7 +223,7 @@ private fun Any?.thisCoreNot(match: Boolean?, assertMessage: String) {
     if (r) {
         TestLog.ok(message = assertMessage)
     } else {
-        val errorMessage = "$assertMessage (actual=${rep(this?.toString())})"
+        val errorMessage = "$assertMessage (actual=\"${this}\")"
         TestDriver.lastElement.lastError = TestNGException(errorMessage)
         throw TestDriver.lastElement.lastError!!
     }
@@ -212,17 +234,20 @@ private fun Any?.thisCoreNot(match: Boolean?, assertMessage: String) {
  */
 fun Any?.thisEndsWith(
     expected: String,
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisEndsWith"
+    val endingText = expected.preprocessForComparison()
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
     val assertMessage =
-        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
+        message ?: message(id = command, subject = value, expected = endingText, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val result = this?.toString()?.preprocessForComparison()?.endsWith(expected)
-        thisCore(result, assertMessage)
+    context.execCheckCommand(command = command, message = assertMessage, arg1 = endingText) {
+        val result = value.endsWith(endingText)
+        value.thisCore(match = result, assertMessage = assertMessage)
     }
 
     return this
@@ -232,18 +257,21 @@ fun Any?.thisEndsWith(
  * thisEndsWithNot
  */
 fun Any?.thisEndsWithNot(
-    expected: String,
-    message: String? = null
+    endingText: String,
+    message: String? = null,
+    enableStringCompareOptimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisEndsWithNot"
+    val contained = endingText.preprocessForComparison()
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = enableStringCompareOptimization)
     val assertMessage =
-        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
+        message ?: message(id = command, subject = value, expected = contained, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.preprocessForComparison()?.endsWith(expected)
-        thisCoreNot(match, assertMessage)
+    context.execCheckCommand(command = command, message = assertMessage, arg1 = contained) {
+        val match = value.endsWith(contained)
+        value.thisCoreNot(match = match, assertMessage = assertMessage)
     }
 
     return this
@@ -254,17 +282,19 @@ fun Any?.thisEndsWithNot(
  */
 fun Any?.thisMatches(
     expected: String,
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisMatches"
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
     val assertMessage =
-        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
+        message ?: message(id = command, subject = value, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.preprocessForComparison()?.matches(Regex(expected))
-        thisCore(match = match, assertMessage = assertMessage)
+        val match = value.matches(Regex(expected))
+        value.thisCore(match = match, assertMessage = assertMessage)
     }
 
     return this
@@ -275,17 +305,19 @@ fun Any?.thisMatches(
  */
 fun Any?.thisMatchesNot(
     expected: String,
-    message: String? = null
+    message: String? = null,
+    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
 ): Any? {
 
     val command = "thisMatchesNot"
+    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
     val assertMessage =
-        message ?: message(id = command, subject = this.toString(), expected = expected, replaceRelative = true)
+        message ?: message(id = command, subject = value, expected = expected, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
-        val match = this?.toString()?.preprocessForComparison()?.matches(Regex(expected))
-        thisCoreNot(match = match, assertMessage = assertMessage)
+        val match = value.matches(Regex(expected))
+        value.thisCoreNot(match = match, assertMessage = assertMessage)
     }
 
     return this

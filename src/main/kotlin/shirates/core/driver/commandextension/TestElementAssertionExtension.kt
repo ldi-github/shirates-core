@@ -425,7 +425,7 @@ fun TestElement.textEndsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisEndsWithNot(expected = expected, message = assertMessage)
+        textOrLabel.thisEndsWithNot(endingText = expected, message = assertMessage)
     }
 
     return this
@@ -443,7 +443,7 @@ fun TestElement.valueEndsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisEndsWithNot(expected = expected, message = assertMessage)
+        textOrValue.thisEndsWithNot(endingText = expected, message = assertMessage)
     }
 
     return this
@@ -461,7 +461,7 @@ fun TestElement.accessEndsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        access.thisEndsWithNot(expected = expected, message = assertMessage)
+        access.thisEndsWithNot(endingText = expected, message = assertMessage)
     }
 
     return this
