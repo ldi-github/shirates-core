@@ -40,7 +40,7 @@ object StringUtility {
         result = removeInvisibleFormattingIndicator(text = result)
         result = replaceNBSPtoSpace(text = result)
 
-        if (trimString) {
+        if (trimString && result.isNotBlank()) {
             result = trim(text = result)
         }
         if (waveDashToFullWidthTilde) {

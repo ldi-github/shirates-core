@@ -3,10 +3,12 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
+import shirates.core.testcode.preprocessForComparison
 
 /**
  * idIs
@@ -23,9 +25,9 @@ fun TestElement.idIs(
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
         if (auto) {
             val fqid = getFullyQualifiedId(id = expected)
-            idOrName.thisIs(expected = fqid, message = assertMessage)
+            idOrName.thisIs(expected = fqid, message = assertMessage, strict = true)
         } else {
-            idOrName.thisIs(expected = expected, message = assertMessage)
+            idOrName.thisIs(expected = expected, message = assertMessage, strict = true)
         }
     }
 
@@ -36,16 +38,18 @@ fun TestElement.idIs(
  * textIs
  */
 fun TestElement.textIs(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textIs"
-    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
+    val expected2 = expected.preprocessForComparison(strict = strict)
+    val assertMessage = message(id = command, subject = subject, expected = expected2, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
         val str = textOrLabelOrValue
-        str.thisIs(expected = expected, message = assertMessage)
+        str.thisIs(expected = expected2, message = assertMessage, strict = strict)
     }
 
     return this
@@ -55,7 +59,8 @@ fun TestElement.textIs(
  * valueIs
  */
 fun TestElement.valueIs(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueIs"
@@ -63,7 +68,7 @@ fun TestElement.valueIs(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisIs(expected = expected, message = assertMessage)
+        textOrValue.thisIs(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -82,7 +87,7 @@ fun TestElement.accessIs(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        access.thisIs(expected = expected, message = assertMessage)
+        access.thisIs(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -92,7 +97,8 @@ fun TestElement.accessIs(
  * textIsNot
  */
 fun TestElement.textIsNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textIsNot"
@@ -100,7 +106,7 @@ fun TestElement.textIsNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisIsNot(expected = expected, message = assertMessage)
+        textOrLabel.thisIsNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -110,7 +116,8 @@ fun TestElement.textIsNot(
  * valueIsNot
  */
 fun TestElement.valueIsNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueIsNot"
@@ -118,7 +125,7 @@ fun TestElement.valueIsNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisIsNot(expected = expected, message = assertMessage)
+        textOrValue.thisIsNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -136,7 +143,7 @@ fun TestElement.accessIsNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        access.thisIsNot(expected = expected, message = assertMessage)
+        access.thisIsNot(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -146,7 +153,8 @@ fun TestElement.accessIsNot(
  * textContains
  */
 fun TestElement.textContains(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textContains"
@@ -154,7 +162,7 @@ fun TestElement.textContains(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisContains(expected = expected, message = assertMessage)
+        textOrLabel.thisContains(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -164,7 +172,8 @@ fun TestElement.textContains(
  * valueContains
  */
 fun TestElement.valueContains(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueContains"
@@ -172,7 +181,7 @@ fun TestElement.valueContains(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisContains(expected = expected, message = assertMessage)
+        textOrValue.thisContains(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -190,7 +199,7 @@ fun TestElement.accessContains(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        access.thisContains(expected = expected, message = assertMessage)
+        access.thisContains(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -200,7 +209,8 @@ fun TestElement.accessContains(
  * textContainsNot
  */
 fun TestElement.textContainsNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textContainsNot"
@@ -208,7 +218,7 @@ fun TestElement.textContainsNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisContainsNot(expected = expected, message = assertMessage)
+        textOrLabel.thisContainsNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -218,7 +228,8 @@ fun TestElement.textContainsNot(
  * valueContainsNot
  */
 fun TestElement.valueContainsNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueContainsNot"
@@ -226,7 +237,7 @@ fun TestElement.valueContainsNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisContainsNot(expected = expected, message = assertMessage)
+        textOrValue.thisContainsNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -244,7 +255,7 @@ fun TestElement.accessContainsNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        access.thisContainsNot(expected = expected, message = assertMessage)
+        access.thisContainsNot(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -272,7 +283,8 @@ fun TestElement.textStartsWith(
  * valueStartsWith
  */
 fun TestElement.valueStartsWith(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueStartsWith"
@@ -280,7 +292,7 @@ fun TestElement.valueStartsWith(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisStartsWith(expected = expected, message = assertMessage)
+        textOrValue.thisStartsWith(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -298,7 +310,7 @@ fun TestElement.accessStartsWith(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        access.thisStartsWith(expected = expected, message = assertMessage)
+        access.thisStartsWith(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -309,7 +321,8 @@ fun TestElement.accessStartsWith(
  * textStartsWithNot
  */
 fun TestElement.textStartsWithNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textStartsWithNot"
@@ -317,7 +330,7 @@ fun TestElement.textStartsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisStartsWithNot(expected = expected, message = assertMessage)
+        textOrLabel.thisStartsWithNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -327,7 +340,8 @@ fun TestElement.textStartsWithNot(
  * valueStartsWithNot
  */
 fun TestElement.valueStartsWithNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueStartsWithNot"
@@ -335,7 +349,7 @@ fun TestElement.valueStartsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisStartsWithNot(expected = expected, message = assertMessage)
+        textOrValue.thisStartsWithNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -353,7 +367,7 @@ fun TestElement.accessStartsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        access.thisStartsWithNot(expected = expected, message = assertMessage)
+        access.thisStartsWithNot(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -363,7 +377,8 @@ fun TestElement.accessStartsWithNot(
  * textEndsWith
  */
 fun TestElement.textEndsWith(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textEndsWith"
@@ -371,7 +386,7 @@ fun TestElement.textEndsWith(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisEndsWith(expected = expected, message = assertMessage)
+        textOrLabel.thisEndsWith(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -381,7 +396,8 @@ fun TestElement.textEndsWith(
  * valueEndsWith
  */
 fun TestElement.valueEndsWith(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueEndsWith"
@@ -389,7 +405,7 @@ fun TestElement.valueEndsWith(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisEndsWith(expected = expected, message = assertMessage)
+        textOrValue.thisEndsWith(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -407,7 +423,7 @@ fun TestElement.accessEndsWith(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        access.thisEndsWith(expected = expected, message = assertMessage)
+        access.thisEndsWith(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -417,7 +433,8 @@ fun TestElement.accessEndsWith(
  * textEndsWithNot
  */
 fun TestElement.textEndsWithNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textEndsWithNot"
@@ -425,7 +442,7 @@ fun TestElement.textEndsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisEndsWithNot(endingText = expected, message = assertMessage)
+        textOrLabel.thisEndsWithNot(endingText = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -435,7 +452,8 @@ fun TestElement.textEndsWithNot(
  * valueEndsWithNot
  */
 fun TestElement.valueEndsWithNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueEndsWithNot"
@@ -443,7 +461,7 @@ fun TestElement.valueEndsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisEndsWithNot(endingText = expected, message = assertMessage)
+        textOrValue.thisEndsWithNot(endingText = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -461,7 +479,7 @@ fun TestElement.accessEndsWithNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        access.thisEndsWithNot(endingText = expected, message = assertMessage)
+        access.thisEndsWithNot(endingText = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -471,7 +489,8 @@ fun TestElement.accessEndsWithNot(
  * textMatches
  */
 fun TestElement.textMatches(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textMatches"
@@ -479,7 +498,7 @@ fun TestElement.textMatches(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisMatches(expected = expected, message = assertMessage)
+        textOrLabel.thisMatches(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -489,7 +508,8 @@ fun TestElement.textMatches(
  * valueMatches
  */
 fun TestElement.valueMatches(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueMatches"
@@ -497,7 +517,7 @@ fun TestElement.valueMatches(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisMatches(expected = expected, message = assertMessage)
+        textOrValue.thisMatches(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -515,7 +535,7 @@ fun TestElement.accessMatches(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        access.thisMatches(expected = expected, message = assertMessage)
+        access.thisMatches(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -525,7 +545,8 @@ fun TestElement.accessMatches(
  * textMatchesNot
  */
 fun TestElement.textMatchesNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "textMatchesNot"
@@ -533,7 +554,7 @@ fun TestElement.textMatchesNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        textOrLabel.thisMatchesNot(expected = expected, message = assertMessage)
+        textOrLabel.thisMatchesNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -543,7 +564,8 @@ fun TestElement.textMatchesNot(
  * valueMatchesNot
  */
 fun TestElement.valueMatchesNot(
-    expected: String
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): TestElement {
 
     val command = "valueMatchesNot"
@@ -551,7 +573,7 @@ fun TestElement.valueMatchesNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        textOrValue.thisMatchesNot(expected = expected, message = assertMessage)
+        textOrValue.thisMatchesNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -569,7 +591,7 @@ fun TestElement.accessMatchesNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
-        access.thisMatchesNot(expected = expected, message = assertMessage)
+        access.thisMatchesNot(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -578,14 +600,16 @@ fun TestElement.accessMatchesNot(
 /**
  * textIsEmpty
  */
-fun TestElement.textIsEmpty(): TestElement {
+fun TestElement.textIsEmpty(
+    strict: Boolean = PropertiesManager.strictCompareMode
+): TestElement {
 
     val command = "textIsEmpty"
     val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
-        textOrLabel.thisIs(expected = "", message = assertMessage)
+        textOrLabel.thisIs(expected = "", message = assertMessage, strict = strict)
     }
 
     return this
@@ -594,14 +618,16 @@ fun TestElement.textIsEmpty(): TestElement {
 /**
  * valueIsEmpty
  */
-fun TestElement.valueIsEmpty(): TestElement {
+fun TestElement.valueIsEmpty(
+    strict: Boolean = PropertiesManager.strictCompareMode
+): TestElement {
 
     val command = "valueIsEmpty"
     val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
-        textOrValue.thisIs(expected = "", message = assertMessage)
+        textOrValue.thisIs(expected = "", message = assertMessage, strict = strict)
     }
 
     return this
@@ -617,7 +643,7 @@ fun TestElement.accessIsEmpty(): TestElement {
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
-        access.thisIs(expected = "", message = assertMessage)
+        access.thisIs(expected = "", message = assertMessage, strict = true)
     }
 
     return this
@@ -627,14 +653,16 @@ fun TestElement.accessIsEmpty(): TestElement {
 /**
  * textIsNotEmpty
  */
-fun TestElement.textIsNotEmpty(): TestElement {
+fun TestElement.textIsNotEmpty(
+    strict: Boolean = PropertiesManager.strictCompareMode
+): TestElement {
 
     val command = "textIsNotEmpty"
     val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
-        textOrLabel.thisIsNot(expected = "", message = assertMessage)
+        textOrLabel.thisIsNot(expected = "", message = assertMessage, strict = strict)
     }
 
     return this
@@ -643,14 +671,16 @@ fun TestElement.textIsNotEmpty(): TestElement {
 /**
  * valueIsNotEmpty
  */
-fun TestElement.valueIsNotEmpty(): TestElement {
+fun TestElement.valueIsNotEmpty(
+    strict: Boolean = PropertiesManager.strictCompareMode
+): TestElement {
 
     val command = "valueIsNotEmpty"
     val assertMessage = message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
-        textOrValue.thisIsNot(expected = "", message = assertMessage)
+        textOrValue.thisIsNot(expected = "", message = assertMessage, strict = strict)
     }
 
     return this
@@ -923,7 +953,8 @@ fun TestElement.displayedIs(
 fun TestElement.attributeIs(
     attributeName: String,
     expected: String,
-    message: String? = null
+    message: String? = null,
+    strict: Boolean = true
 ): TestElement {
 
     val command = "attributeIs"
@@ -944,7 +975,7 @@ fun TestElement.attributeIs(
         arg2 = expected
     ) {
         val actual = getProperty(attributeName)
-        actual.thisIs(expected = expected, message = assertMessage)
+        actual.thisIs(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -956,7 +987,8 @@ fun TestElement.attributeIs(
 fun TestElement.attributeIsNot(
     attributeName: String,
     expected: String,
-    message: String? = null
+    message: String? = null,
+    strict: Boolean = true
 ): TestElement {
 
     val command = "attributeIsNot"
@@ -977,7 +1009,7 @@ fun TestElement.attributeIsNot(
         arg2 = expected
     ) {
         val actual = getProperty(attributeName)
-        actual.thisIsNot(expected = expected, message = assertMessage)
+        actual.thisIsNot(expected = expected, message = assertMessage, strict = strict)
     }
 
     return this
@@ -995,7 +1027,7 @@ fun TestElement.classIs(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = this.subject, arg1 = expected) {
-        classOrType.thisIs(expected = expected, message = assertMessage)
+        classOrType.thisIs(expected = expected, message = assertMessage, strict = true)
     }
 
     return this
@@ -1013,7 +1045,7 @@ fun TestElement.classIsNot(
 
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        classOrType.thisIsNot(expected = expected, message = assertMessage)
+        classOrType.thisIsNot(expected = expected, message = assertMessage, strict = true)
     }
 
     return this

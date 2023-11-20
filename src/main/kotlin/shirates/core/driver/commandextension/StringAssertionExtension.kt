@@ -31,7 +31,7 @@ fun Any?.thisIsEmpty(
         val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
         val context = TestDriverCommandContext(null)
         context.execCheckCommand(command = command, message = assertMessage) {
-            val result = value.isBlank()
+            val result = (value == "")
             value.thisCore(match = result, assertMessage = assertMessage)
         }
     }
@@ -61,7 +61,7 @@ fun Any?.thisIsNotEmpty(
         val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
         val context = TestDriverCommandContext(null)
         context.execCheckCommand(command = command, message = assertMessage) {
-            val result = value.isBlank().not()
+            val result = (value != "")
             value.thisCore(match = result, assertMessage = assertMessage)
         }
     }
@@ -145,7 +145,7 @@ fun Any?.thisContainsNot(
 ): Any? {
 
     val command = "thisContainsNot"
-    val containedText = expected.preprocessForComparison()
+    val containedText = expected.preprocessForComparison(strict = strict)
     val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = containedText, replaceRelative = true)
@@ -169,7 +169,7 @@ fun Any?.thisStartsWith(
 ): Any? {
 
     val command = "thisStartsWith"
-    val startingText = expected.preprocessForComparison()
+    val startingText = expected.preprocessForComparison(strict = strict)
     val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = startingText, replaceRelative = true)
@@ -193,7 +193,7 @@ fun Any?.thisStartsWithNot(
 ): Any? {
 
     val command = "thisStartsWithNot"
-    val startingText = expected.preprocessForComparison()
+    val startingText = expected.preprocessForComparison(strict = strict)
     val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = startingText, replaceRelative = true)
@@ -239,7 +239,7 @@ fun Any?.thisEndsWith(
 ): Any? {
 
     val command = "thisEndsWith"
-    val endingText = expected.preprocessForComparison()
+    val endingText = expected.preprocessForComparison(strict = strict)
     val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = endingText, replaceRelative = true)
@@ -263,7 +263,7 @@ fun Any?.thisEndsWithNot(
 ): Any? {
 
     val command = "thisEndsWithNot"
-    val contained = endingText.preprocessForComparison()
+    val contained = endingText.preprocessForComparison(strict = strict)
     val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = contained, replaceRelative = true)
