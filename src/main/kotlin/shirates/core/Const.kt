@@ -58,7 +58,7 @@ object Const {
      * testConfig common properties
      */
 
-    // String matching
+    // String Comparing
     const val ENABLE_STRICT_COMPARE_MODE = false
     const val KEEP_LF = false
     const val KEEP_TAB = false

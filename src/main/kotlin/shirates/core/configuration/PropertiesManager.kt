@@ -576,7 +576,7 @@ object PropertiesManager {
             return value
         }
 
-    // String Matching --------------------------------------------------
+    // String Comparing --------------------------------------------------
 
     /**
      * strictCompareMode
