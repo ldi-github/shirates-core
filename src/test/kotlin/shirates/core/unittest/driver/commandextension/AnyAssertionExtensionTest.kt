@@ -55,36 +55,36 @@ class AnyAssertionExtensionTest : UnitTest() {
     }
 
     @Test
-    fun assertEqualsTest_optimization() {
+    fun assertEqualsTest_strict() {
 
         TestMode.runAsExpectationBlock {
 
             run {
-                // optimization = true
+                // strict = false
                 run {
                     assertEquals(" A ", "A")    // trimmed (" A " -> "A")
                     val message = "Assert that \"A\" equals \"A\""
                     assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
                 }
-                // optimization = false
+                // strict = true
                 run {
                     assertThatThrownBy {
-                        assertEquals(" A ", "A", optimization = false)
+                        assertEquals(" A ", "A", strict = true)
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("Assert that \" A \" equals \"A\" (arg1=\" A \", arg2=\"A\")")
                 }
             }
             run {
-                // optimization = true
+                // strict = false
                 run {
                     assertEquals("A\t\nB", "A B")    // replaced to space and compressed ("A\t\nB" -> "A B")
                     val message = "Assert that \"A B\" equals \"A B\""
                     assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
                 }
-                // optimization = false
+                // strict = true
                 run {
                     assertThatThrownBy {
-                        assertEquals("A\t\nB", "A B", optimization = false)
+                        assertEquals("A\t\nB", "A B", strict = true)
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("Assert that \"A\t\nB\" equals \"A B\" (arg1=\"A\t\nB\", arg2=\"A B\")")
                 }
@@ -92,31 +92,31 @@ class AnyAssertionExtensionTest : UnitTest() {
             run {
                 val W = Const.WAVE_DASH
                 val F = Const.FULLWIDTH_TILDE
-                // optimization = true
+                // strict = false
                 run {
                     assertEquals("$W$F", "$F$F")    // replaced (WAVE_DASH -> FULL_WIDTH_TILDE)
                     val message = "Assert that \"$F$F\" equals \"$F$F\""
                     assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
                 }
-                // optimization = false
+                // strict = true
                 run {
                     assertThatThrownBy {
-                        assertEquals("$W$F", "$F$F", optimization = false)
+                        assertEquals("$W$F", "$F$F", strict = true)
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("Assert that \"$W$F\" equals \"$F$F\" (arg1=\"$W$F\", arg2=\"$F$F\")")
                 }
             }
             run {
-                // optimization = true
+                // strict = false
                 run {
                     assertEquals("A  B", "A B")    // compressed ("A  B" -> "A B")
                     val message = "Assert that \"A B\" equals \"A B\""
                     assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
                 }
-                // optimization = false
+                // strict = true
                 run {
                     assertThatThrownBy {
-                        assertEquals("A  B", "A B", optimization = false)
+                        assertEquals("A  B", "A B", strict = true)
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("Assert that \"A  B\" equals \"A B\" (arg1=\"A  B\", arg2=\"A B\")")
                 }

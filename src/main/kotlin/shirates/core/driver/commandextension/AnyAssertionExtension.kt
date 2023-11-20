@@ -15,12 +15,12 @@ fun Any?.assertEquals(
     arg1: Any?,
     arg2: Any?,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "assertEquals"
-    val value1 = (arg1?.toString() ?: "").preprocessForComparison(optimization = optimization)
-    val value2 = (arg2?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value1 = (arg1?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value2 = (arg2?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage = message ?: message(id = command, arg1 = value1, arg2 = value2)
 
     val context = TestDriverCommandContext(null)
@@ -45,12 +45,12 @@ fun Any?.assertEqualsNot(
     arg1: Any?,
     arg2: Any?,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "assertEqualsNot"
-    val value1 = (arg1?.toString() ?: "").preprocessForComparison(optimization = optimization)
-    val value2 = (arg2?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value1 = (arg1?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value2 = (arg2?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage = message ?: message(id = command, arg1 = value1, arg2 = value2)
 
     val context = TestDriverCommandContext(null)
@@ -74,12 +74,12 @@ fun Any?.assertEqualsNot(
 fun Any?.thisIs(
     expected: Any?,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisIs"
-    val value1 = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
-    val value2 = (expected?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value1 = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value2 = (expected?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage = message ?: message(id = command, subject = value1, expected = value2)
 
     val context = TestDriverCommandContext(null)
@@ -103,12 +103,12 @@ fun Any?.thisIs(
 fun Any?.thisIsNot(
     expected: Any?,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisIsNot"
-    val value1 = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
-    val value2 = (expected?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value1 = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value2 = (expected?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage = message ?: message(id = command, subject = value1, expected = value2)
 
     val context = TestDriverCommandContext(null)

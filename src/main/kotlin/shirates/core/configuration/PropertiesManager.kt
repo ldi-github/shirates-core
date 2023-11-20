@@ -579,12 +579,12 @@ object PropertiesManager {
     // String Matching --------------------------------------------------
 
     /**
-     * enableStringCompareOptimization
+     * strictCompareMode
      */
-    val enableStringCompareOptimization: Boolean
+    val strictCompareMode: Boolean
         get() {
-            val value = getPropertyValue(propertyName = "enableStringCompareOptimization")
-                ?: return Const.ENABLE_STRING_COMPARE_OPTIMIZATION
+            val value = getPropertyValue(propertyName = "strictCompareMode")
+                ?: return Const.ENABLE_STRICT_COMPARE_MODE
             return value == "true"
         }
 

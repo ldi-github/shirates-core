@@ -835,29 +835,29 @@ class PropertiesManagerTest : UnitTest() {
         }
     }
 
-    // enableStringCompareOptimization
+    // strictCompareMode
     @Test
-    fun enableStringCompareOptimization() {
+    fun strictCompareMode() {
 
         run {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.enableStringCompareOptimization).isEqualTo(Const.ENABLE_STRING_COMPARE_OPTIMIZATION)
+            assertThat(PropertiesManager.strictCompareMode).isEqualTo(Const.ENABLE_STRICT_COMPARE_MODE)
         }
         run {
             // Arrange
             val value = true
-            PropertiesManager.setPropertyValue("enableStringCompareOptimization", value.toString())
+            PropertiesManager.setPropertyValue("strictCompareMode", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.enableStringCompareOptimization).isEqualTo(value)
+            assertThat(PropertiesManager.strictCompareMode).isEqualTo(value)
         }
         run {
             // Arrange
             val value = false
-            PropertiesManager.setPropertyValue("enableStringCompareOptimization", value.toString())
+            PropertiesManager.setPropertyValue("strictCompareMode", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.enableStringCompareOptimization).isEqualTo(value)
+            assertThat(PropertiesManager.strictCompareMode).isEqualTo(value)
         }
     }
 

@@ -15,7 +15,7 @@ object StringUtility {
      */
     fun preprocessForComparison(
         text: String,
-        optimization: Boolean = PropertiesManager.enableStringCompareOptimization,
+        strict: Boolean = PropertiesManager.strictCompareMode,
         keepLF: Boolean = PropertiesManager.keepLF,
         keepTAB: Boolean = PropertiesManager.keepTAB,
         waveDashToFullWidthTilde: Boolean = PropertiesManager.waveDashToFullWidthTilde,
@@ -23,7 +23,7 @@ object StringUtility {
         trimString: Boolean = PropertiesManager.trimString,
     ): String {
 
-        if (optimization.not()) {
+        if (strict) {
             return text
         }
 

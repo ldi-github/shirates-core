@@ -14,12 +14,12 @@ class StringUtilityTest : UnitTest() {
     fun preprocessForComparison() {
 
         /**
-         * enableStringCompareOptimization
+         * strictCompareMode
          */
         run {
             // Arrange
             val text = " abc "
-            PropertiesManager.setPropertyValue("enableStringCompareOptimization", "false")
+            PropertiesManager.setPropertyValue("strictCompareMode", "true")
             // Act
             val actual = StringUtility.preprocessForComparison(text)
             // Assert
@@ -28,7 +28,7 @@ class StringUtilityTest : UnitTest() {
         run {
             // Arrange
             val text = " abc "
-            PropertiesManager.setPropertyValue("enableStringCompareOptimization", "true")
+            PropertiesManager.setPropertyValue("strictCompareMode", "false")
             // Act
             val actual = StringUtility.preprocessForComparison(text)
             // Assert

@@ -59,7 +59,7 @@ object Const {
      */
 
     // String matching
-    const val ENABLE_STRING_COMPARE_OPTIMIZATION = true
+    const val ENABLE_STRICT_COMPARE_MODE = false
     const val KEEP_LF = false
     const val KEEP_TAB = false
     const val WAVE_DASH_TO_FULL_WIDTH_TILDE = true

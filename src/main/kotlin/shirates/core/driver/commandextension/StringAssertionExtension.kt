@@ -14,7 +14,7 @@ import shirates.core.testcode.preprocessForComparison
  */
 fun Any?.thisIsEmpty(
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisIsEmpty"
@@ -27,7 +27,7 @@ fun Any?.thisIsEmpty(
             result.thisCore(match = result, assertMessage = assertMessage)
         }
     } else {
-        val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization, trimString = false)
+        val value = (this?.toString() ?: "").preprocessForComparison(strict = strict, trimString = false)
         val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
         val context = TestDriverCommandContext(null)
         context.execCheckCommand(command = command, message = assertMessage) {
@@ -44,7 +44,7 @@ fun Any?.thisIsEmpty(
  */
 fun Any?.thisIsNotEmpty(
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisIsNotEmpty"
@@ -57,7 +57,7 @@ fun Any?.thisIsNotEmpty(
             result.thisCore(match = result, assertMessage = assertMessage)
         }
     } else {
-        val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization, trimString = false)
+        val value = (this?.toString() ?: "").preprocessForComparison(strict = strict, trimString = false)
         val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
         val context = TestDriverCommandContext(null)
         context.execCheckCommand(command = command, message = assertMessage) {
@@ -74,11 +74,11 @@ fun Any?.thisIsNotEmpty(
  */
 fun Any?.thisIsBlank(
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisIsBlank"
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization, trimString = false)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict, trimString = false)
     val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
@@ -95,11 +95,11 @@ fun Any?.thisIsBlank(
  */
 fun Any?.thisIsNotBlank(
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisIsNotBlank"
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization, trimString = false)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict, trimString = false)
     val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
@@ -117,12 +117,12 @@ fun Any?.thisIsNotBlank(
 fun Any?.thisContains(
     expected: String,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisContains"
-    val containedText = expected.preprocessForComparison(optimization = optimization)
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val containedText = expected.preprocessForComparison(strict = strict)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = containedText, replaceRelative = true)
 
@@ -141,12 +141,12 @@ fun Any?.thisContains(
 fun Any?.thisContainsNot(
     expected: String,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisContainsNot"
     val containedText = expected.preprocessForComparison()
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = containedText, replaceRelative = true)
 
@@ -165,12 +165,12 @@ fun Any?.thisContainsNot(
 fun Any?.thisStartsWith(
     expected: String,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisStartsWith"
     val startingText = expected.preprocessForComparison()
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = startingText, replaceRelative = true)
 
@@ -189,12 +189,12 @@ fun Any?.thisStartsWith(
 fun Any?.thisStartsWithNot(
     expected: String,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisStartsWithNot"
     val startingText = expected.preprocessForComparison()
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = startingText, replaceRelative = true)
 
@@ -235,12 +235,12 @@ private fun Any?.thisCoreNot(match: Boolean?, assertMessage: String) {
 fun Any?.thisEndsWith(
     expected: String,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisEndsWith"
     val endingText = expected.preprocessForComparison()
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = endingText, replaceRelative = true)
 
@@ -259,12 +259,12 @@ fun Any?.thisEndsWith(
 fun Any?.thisEndsWithNot(
     endingText: String,
     message: String? = null,
-    enableStringCompareOptimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisEndsWithNot"
     val contained = endingText.preprocessForComparison()
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = enableStringCompareOptimization)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = contained, replaceRelative = true)
 
@@ -283,11 +283,11 @@ fun Any?.thisEndsWithNot(
 fun Any?.thisMatches(
     expected: String,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisMatches"
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = expected, replaceRelative = true)
 
@@ -306,11 +306,11 @@ fun Any?.thisMatches(
 fun Any?.thisMatchesNot(
     expected: String,
     message: String? = null,
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisMatchesNot"
-    val value = (this?.toString() ?: "").preprocessForComparison(optimization = optimization)
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = expected, replaceRelative = true)
 

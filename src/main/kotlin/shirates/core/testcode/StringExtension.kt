@@ -8,7 +8,7 @@ import java.text.Normalizer
  * preprocessForComparison
  */
 fun String.preprocessForComparison(
-    optimization: Boolean = PropertiesManager.enableStringCompareOptimization,
+    strict: Boolean = PropertiesManager.strictCompareMode,
     keepLF: Boolean = PropertiesManager.keepLF,
     keepTAB: Boolean = PropertiesManager.keepTAB,
     waveDashToFullWidthTilde: Boolean = PropertiesManager.waveDashToFullWidthTilde,
@@ -17,8 +17,8 @@ fun String.preprocessForComparison(
 ): String {
 
     return StringUtility.preprocessForComparison(
-        this,
-        optimization = optimization,
+        text = this,
+        strict = strict,
         keepLF = keepLF,
         keepTAB = keepTAB,
         waveDashToFullWidthTilde = waveDashToFullWidthTilde,
