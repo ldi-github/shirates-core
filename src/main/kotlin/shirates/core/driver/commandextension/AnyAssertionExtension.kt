@@ -29,7 +29,7 @@ fun Any?.assertEquals(
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (arg1=$arg1, arg2=$arg2)"
+            val errorMessage = "$assertMessage (arg1=\"$arg1\", arg2=\"$arg2\")"
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }
@@ -59,7 +59,7 @@ fun Any?.assertEqualsNot(
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (arg1=$value1, arg2=$value2)"
+            val errorMessage = "$assertMessage (arg1=\"$value1\", arg2=\"$value2\")"
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }

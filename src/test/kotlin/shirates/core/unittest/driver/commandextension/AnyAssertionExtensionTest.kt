@@ -3,6 +3,7 @@ package shirates.core.unittest.driver.commandextension
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import shirates.core.Const
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.assertEquals
@@ -17,7 +18,7 @@ import shirates.core.testcode.UnitTest
 class AnyAssertionExtensionTest : UnitTest() {
 
     @Test
-    fun assertEqualsTest() {
+    fun assertEqualsTest_message() {
 
         TestMode.runAsExpectationBlock {
 
@@ -39,7 +40,7 @@ class AnyAssertionExtensionTest : UnitTest() {
                 assertThatThrownBy {
                     assertEquals("A", "B")
                 }.isInstanceOf(TestNGException::class.java)
-                    .hasMessage(message)
+                    .hasMessage("Assert that \"A\" equals \"B\" (arg1=\"A\", arg2=\"B\")")
             }
             // NG, custom message
             run {
@@ -47,7 +48,78 @@ class AnyAssertionExtensionTest : UnitTest() {
                 assertThatThrownBy {
                     assertEquals("A", "B", message = message)
                 }.isInstanceOf(TestNGException::class.java)
-                    .hasMessage("$message (arg1=A, arg2=B)")
+                    .hasMessage("$message (arg1=\"A\", arg2=\"B\")")
+            }
+        }
+
+    }
+
+    @Test
+    fun assertEqualsTest_optimization() {
+
+        TestMode.runAsExpectationBlock {
+
+            run {
+                // optimization = true
+                run {
+                    assertEquals(" A ", "A")    // trimmed (" A " -> "A")
+                    val message = "Assert that \"A\" equals \"A\""
+                    assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
+                }
+                // optimization = false
+                run {
+                    assertThatThrownBy {
+                        assertEquals(" A ", "A", optimization = false)
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("Assert that \" A \" equals \"A\" (arg1=\" A \", arg2=\"A\")")
+                }
+            }
+            run {
+                // optimization = true
+                run {
+                    assertEquals("A\t\nB", "A B")    // replaced to space and compressed ("A\t\nB" -> "A B")
+                    val message = "Assert that \"A B\" equals \"A B\""
+                    assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
+                }
+                // optimization = false
+                run {
+                    assertThatThrownBy {
+                        assertEquals("A\t\nB", "A B", optimization = false)
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("Assert that \"A\t\nB\" equals \"A B\" (arg1=\"A\t\nB\", arg2=\"A B\")")
+                }
+            }
+            run {
+                val W = Const.WAVE_DASH
+                val F = Const.FULLWIDTH_TILDE
+                // optimization = true
+                run {
+                    assertEquals("$W$F", "$F$F")    // replaced (WAVE_DASH -> FULL_WIDTH_TILDE)
+                    val message = "Assert that \"$F$F\" equals \"$F$F\""
+                    assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
+                }
+                // optimization = false
+                run {
+                    assertThatThrownBy {
+                        assertEquals("$W$F", "$F$F", optimization = false)
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("Assert that \"$W$F\" equals \"$F$F\" (arg1=\"$W$F\", arg2=\"$F$F\")")
+                }
+            }
+            run {
+                // optimization = true
+                run {
+                    assertEquals("A  B", "A B")    // compressed ("A  B" -> "A B")
+                    val message = "Assert that \"A B\" equals \"A B\""
+                    assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
+                }
+                // optimization = false
+                run {
+                    assertThatThrownBy {
+                        assertEquals("A  B", "A B", optimization = false)
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("Assert that \"A  B\" equals \"A B\" (arg1=\"A  B\", arg2=\"A B\")")
+                }
             }
         }
 
@@ -72,7 +144,7 @@ class AnyAssertionExtensionTest : UnitTest() {
             }
             // NG, default message
             run {
-                val message = message(id = "assertEqualsNot", arg1 = "A", arg2 = "A") + " (arg1=A, arg2=A)"
+                val message = message(id = "assertEqualsNot", arg1 = "A", arg2 = "A") + " (arg1=\"A\", arg2=\"A\")"
                 assertThatThrownBy {
                     assertEqualsNot("A", "A")
                 }.isInstanceOf(TestNGException::class.java)
@@ -84,7 +156,7 @@ class AnyAssertionExtensionTest : UnitTest() {
                 assertThatThrownBy {
                     assertEqualsNot("A", "A", message = message)
                 }.isInstanceOf(TestNGException::class.java)
-                    .hasMessage("$message (arg1=A, arg2=A)")
+                    .hasMessage("$message (arg1=\"A\", arg2=\"A\")")
             }
         }
 
@@ -140,9 +212,16 @@ class AnyAssertionExtensionTest : UnitTest() {
                 assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
             }
             run {
-                val e1 = Selector("<text1>")
-                val e2 = e1
-                e1.thisIs(e2)
+                val s1 = Selector("<text1>")
+                val s2 = s1
+                s1.thisIs(s2)
+                val message = message(id = "thisIs", subject = "<text1>", expected = "<text1>")
+                assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
+            }
+            run {
+                val s1 = Selector("<text1>")
+                val s2 = Selector("<text1>")
+                s1.thisIs(s2)
                 val message = message(id = "thisIs", subject = "<text1>", expected = "<text1>")
                 assertThat(TestLog.lines.last { it.logType.isOKType }.message).isEqualTo(message)
             }
