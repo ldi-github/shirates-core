@@ -59,7 +59,11 @@ internal fun String.replaceDirectoryForLog(): String {
 fun String?.toPath(): Path {
 
     val text = (this ?: "").replaceUserHome()
-    return Path.of(text).toAbsolutePath()
+    try {
+        return Path.of(text).toAbsolutePath()
+    } catch (t: Throwable) {
+        return Path.of(text.replace(":", ""))
+    }
 }
 
 /**

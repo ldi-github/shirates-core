@@ -195,6 +195,7 @@ class TestContextTest : UnitTest() {
         originalData.putAll(context.saveData)
         // Appium Proxy --------------------------------------------------
         context.appiumProxyReadTimeoutSeconds = 9.9
+        context.appiumProxyGetSourceTimeoutSeconds = 9.9
         // TestDriver --------------------------------------------------
         context.reuseDriver = !context.reuseDriver
         context.retryMaxCount = 999

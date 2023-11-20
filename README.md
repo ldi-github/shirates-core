@@ -4,10 +4,6 @@
 
 **shirates-core** is core library.
 
-## Notice
-
-- iOS 17 is not supported yet.
-
 ## Document
 
 - [in English](https://ldi-github.github.io/shirates-core/)

@@ -84,6 +84,18 @@ stubServerUrl=http://stub1
 ### StubProxy1.kt
 
 ```kotlin
+package tutorial.advanced
+
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.branchextension.stubNot
+import shirates.core.driver.commandextension.thisIs
+import shirates.core.proxy.dataPattern
+import shirates.core.proxy.getDataPattern
+import shirates.core.proxy.resetDataPattern
+import shirates.core.testcode.UITest
+
 @Testrun("testConfig/android/stubExample/testrun.properties")
 class StubProxy1 : UITest() {
 
@@ -100,7 +112,7 @@ class StubProxy1 : UITest() {
                     resetDataPattern()
                 }.expectation {
                     getDataPattern("CustomerList")
-                        .stringIs("default")
+                        .thisIs("default")
                 }
             }
             case(2) {
@@ -108,7 +120,7 @@ class StubProxy1 : UITest() {
                     dataPattern("CustomerList", "customer/01")
                 }.expectation {
                     getDataPattern("CustomerList")
-                        .stringIs("customer/01")
+                        .thisIs("customer/01")
                 }
             }
         }

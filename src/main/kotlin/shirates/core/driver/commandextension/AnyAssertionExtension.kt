@@ -1,11 +1,12 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.testcode.normalize
+import shirates.core.testcode.preprocessForComparison
 
 /**
  * assertEquals
@@ -13,19 +14,22 @@ import shirates.core.testcode.normalize
 fun Any?.assertEquals(
     arg1: Any?,
     arg2: Any?,
-    message: String? = null
+    message: String? = null,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "assertEquals"
-    val assertMessage = message ?: message(id = command, arg1 = "$arg1", arg2 = "$arg2")
+    val value1 = (arg1?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value2 = (arg2?.toString() ?: "").preprocessForComparison(strict = strict)
+    val assertMessage = message ?: message(id = command, arg1 = value1, arg2 = value2)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val result = arg1 == arg2
+        val result = (value1 == value2)
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (arg1=$arg1, arg2=$arg2)"
+            val errorMessage = "$assertMessage (arg1=\"$arg1\", arg2=\"$arg2\")"
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }
@@ -40,19 +44,22 @@ fun Any?.assertEquals(
 fun Any?.assertEqualsNot(
     arg1: Any?,
     arg2: Any?,
-    message: String? = null
+    message: String? = null,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "assertEqualsNot"
-    val assertMessage = message ?: message(id = command, arg1 = "$arg1", arg2 = "$arg2")
+    val value1 = (arg1?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value2 = (arg2?.toString() ?: "").preprocessForComparison(strict = strict)
+    val assertMessage = message ?: message(id = command, arg1 = value1, arg2 = value2)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val result = arg1 != arg2
+        val result = (value1 != value2)
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (arg1=$arg1, arg2=$arg2)"
+            val errorMessage = "$assertMessage (arg1=\"$value1\", arg2=\"$value2\")"
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }
@@ -66,21 +73,22 @@ fun Any?.assertEqualsNot(
  */
 fun Any?.thisIs(
     expected: Any?,
-    message: String? = null
+    message: String? = null,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisIs"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = "$expected")
+    val value1 = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value2 = (expected?.toString() ?: "").preprocessForComparison(strict = strict)
+    val assertMessage = message ?: message(id = command, subject = value1, expected = value2)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val value1 = this.toString().normalize()
-        val value2 = expected.toString().normalize()
-        val result = value1 == value2
+        val result = (value1 == value2)
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (actual=\"$this\")"
+            val errorMessage = "$assertMessage (actual=\"$value1\")"
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }
@@ -94,19 +102,22 @@ fun Any?.thisIs(
  */
 fun Any?.thisIsNot(
     expected: Any?,
-    message: String? = null
+    message: String? = null,
+    strict: Boolean = PropertiesManager.strictCompareMode
 ): Any? {
 
     val command = "thisIsNot"
-    val assertMessage = message ?: message(id = command, subject = this.toString(), expected = "$expected")
+    val value1 = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value2 = (expected?.toString() ?: "").preprocessForComparison(strict = strict)
+    val assertMessage = message ?: message(id = command, subject = value1, expected = value2)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
-        val result = this != expected
+        val result = (value1 != value2)
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (actual=\"$this\")"
+            val errorMessage = "$assertMessage (actual=\"$value1\")"
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }

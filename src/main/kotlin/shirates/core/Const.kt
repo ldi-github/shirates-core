@@ -58,6 +58,14 @@ object Const {
      * testConfig common properties
      */
 
+    // String Comparing
+    const val ENABLE_STRICT_COMPARE_MODE = false
+    const val KEEP_LF = false
+    const val KEEP_TAB = false
+    const val WAVE_DASH_TO_FULL_WIDTH_TILDE = true
+    const val TRIM_STRING = true
+    const val COMPRESS_WHITESPACE_CHARACTORS = true
+
     // Emulator/Simulator
     const val EMULATOR_OPTIONS = "-no-boot-anim -no-snapshot"
     const val DEVICE_STARTUP_TIMEOUT_SECONDS: Double = 60.0
@@ -72,6 +80,7 @@ object Const {
     const val APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS: Double = 5.0
     const val APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS: Double = 30.0
     const val APPIUM_PROXY_READ_TIMEOUT_SECONDS: Double = 20.0
+    const val APPIUM_PROXY_GET_SOURCE_TIMEOUT_SECONDS: Double = 60.0
 
     // Screenshot
     const val AUTO_SCREEN_SHOT = true
@@ -117,7 +126,7 @@ object Const {
      * internal
      */
     internal const val SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
-    internal const val WAIT_UTILITY_WAIT_SECONDS: Double = 30.0
+    internal const val WAIT_UTILITY_WAIT_SECONDS: Double = 60.0
     internal const val WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS: Double = 0.2
     internal const val SHELL_RESULT_WAIT_FOR_SECONDS: Double = 30.0
     internal const val EMULATOR_REBOOT_WAIT_SECONDS: Double = 60.0
@@ -146,4 +155,14 @@ object Const {
 
     const val ANDROID_WEBTITLE_SELECTOR = ".android.webkit.WebView&&\${webTitle}"
     const val IOS_WEBTITLE_SELECTOR = "<.XCUIElementTypeWebView>:descendant(\${webTitle}&&visible=*)"
+
+    const val WAVE_DASH = '\u301C'
+    const val FULLWIDTH_TILDE = '\uFF5E'
+    const val LF = '\u000A'
+    const val CR = '\u000D'
+    const val TAB = '\u0009'
+    const val NBSP = '\u00A0'
+    const val ZERO_WIDTH_SPACE = '\u200B'
+    const val ZERO_WIDTH_NBSP = '\uFEFF'
+    const val ZENKAKU_SPACE = '　'
 }

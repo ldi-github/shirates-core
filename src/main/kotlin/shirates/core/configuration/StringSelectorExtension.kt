@@ -97,8 +97,8 @@ internal fun String.getPosFromFilterExpression(parseNumberAsPos: Boolean = false
         return null
     }
 
-    val trimed = this.trim('[', ']')
-    return trimed.toIntOrNull()
+    val trimmed = this.trim('[', ']')
+    return trimmed.toIntOrNull()
 }
 
 /**

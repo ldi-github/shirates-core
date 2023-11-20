@@ -48,7 +48,7 @@ class TestElementExtensionTest : UITest() {
                 }.action {
                     e2 = e1.refreshThisElement()
                 }.expectation {
-                    assertEqualsNot(e1, e2, "e1 is not equal to e2")
+                    assertEquals(e1, e2, "e1 is equal to e2")
                 }
             }
         }

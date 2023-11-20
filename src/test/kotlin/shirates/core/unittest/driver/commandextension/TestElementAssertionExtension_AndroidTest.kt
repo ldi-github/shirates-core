@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.Const
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
@@ -12,6 +13,7 @@ import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
+import shirates.core.utility.setAttribute
 
 class TestElementAssertionExtension_AndroidTest : UnitTest() {
 
@@ -81,6 +83,106 @@ class TestElementAssertionExtension_AndroidTest : UnitTest() {
             e.textIs("no exist")
         }.isInstanceOf(TestNGException::class.java)
             .hasMessage("<#search_action_bar_title> is \"no exist\" (actual=\"Search settings\")")
+    }
+
+    @Test
+    fun textIs_strict() {
+
+        TestElementCache.loadXml(xmlData = XmlDataAndroid.SettingsTopScreen, synced = true)
+
+        run {
+            // Arrange
+            val e = TestElementCache.select("")
+            e.node.setAttribute("text", "  ")
+
+            /**
+             * White spaces are compressed to a single space (strict = false)
+             */
+            // Act, Assert
+            e.textIs(" ")
+
+            /**
+             * Literally interpreted (strict = true)
+             */
+            // Act, Assert
+            assertThatThrownBy {
+                e.textIs(" ", strict = true)
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<> is \" \" (actual=\"  \")")
+        }
+        run {
+            // Arrange
+            val e = TestElementCache.select("")
+            e.node.setAttribute("text", " A\t\nB ")
+
+            /**
+             * TAB and LF are replaced to a space and compressed to single space
+             * then trimmed (strict = false)
+             */
+            // Act, Assert
+            e.textIs("A B")
+            e.textIs(" A  B ")
+
+            /**
+             * Literally interpreted (strict = true)
+             */
+            e.textIs(" A\t\nB ", strict = true)
+            // Act, Assert
+            assertThatThrownBy {
+                e.textIs("A B", strict = true)
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<> is \"A B\" (actual=\" A\t\nB \")")
+        }
+        run {
+            // Arrange
+            val e = TestElementCache.select("")
+            e.node.setAttribute("text", "\t\n")
+
+            /**
+             * TAB and LF are replaced to a space and compressed to single space (strict = false)
+             */
+            // Act, Assert
+            e.textIs(" ")
+            e.textIs("\n\n")
+            assertThatThrownBy {
+                e.textIs("")
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<> is \"\" (actual=\" \")")
+
+            /**
+             * Literally interpreted (strict = true)
+             */
+            // Act, Assert
+            e.textIs("\t\n", strict = true)
+            assertThatThrownBy {
+                e.textIs(" ", strict = true)
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<> is \" \" (actual=\"\t\n\")")
+        }
+        run {
+            val W = Const.WAVE_DASH
+            val F = Const.FULLWIDTH_TILDE
+            // Arrange
+            val e = TestElementCache.select("")
+            e.node.setAttribute("text", "$W$F")
+
+            /**
+             * WAVE_DASH is replaced to FULL_WIDTH_TILDE (strict = false)
+             */
+            // Act, Assert
+            e.textIs("$W$F")
+            e.textIs("$F$F")
+
+            /**
+             * Literally interpreted (strict = true)
+             */
+            // Act, Assert
+            e.textIs("$W$F", strict = true)
+            assertThatThrownBy {
+                e.textIs("$F$F", strict = true)
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<> is \"$F$F\" (actual=\"$W$F\")")
+        }
     }
 
     @Test
@@ -204,6 +306,85 @@ class TestElementAssertionExtension_AndroidTest : UnitTest() {
             e.textContains("no exist")
         }.isInstanceOf(TestNGException::class.java)
             .hasMessage("<#search_action_bar_title> contains \"no exist\" (actual=\"Search settings\")")
+    }
+
+    @Test
+    fun textContains_strict() {
+
+        TestElementCache.loadXml(xmlData = XmlDataAndroid.SettingsTopScreen, synced = true)
+
+        run {
+            // Arrange
+            val e = TestElementCache.select("")
+            e.node.setAttribute("text", "A  B C")
+
+            /**
+             * White spaces are compressed to a single space (strict = false)
+             */
+            // Act, Assert
+            e.textContains("A B C")
+
+            /**
+             * Literally interpreted (strict = true)
+             */
+            // Act, Assert
+            e.textContains("A  B", strict = true)
+            e.textContains("B C", strict = true)
+            assertThatThrownBy {
+                e.textContains("A B C", strict = true)
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<> contains \"A B C\" (actual=\"A  B C\")")
+        }
+        run {
+            // Arrange
+            val e = TestElementCache.select("")
+            e.node.setAttribute("text", "A\tB\tC\nD\tE\tF")
+
+            /**
+             * TAB and LF are replaced to a space and compressed to single space
+             * then trimmed (strict = false)
+             */
+            // Act, Assert
+            e.textContains("A B C")
+            e.textContains("C D E")
+            e.textContains("D E F")
+
+            /**
+             * Literally interpreted (strict = true)
+             */
+            e.textContains("A\tB\tC", strict = true)
+            e.textContains("C\nD\tE", strict = true)
+            e.textContains("D\tE\tF", strict = true)
+            // Act, Assert
+            assertThatThrownBy {
+                e.textContains("A B C", strict = true)
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<> contains \"A B C\" (actual=\"A\tB\tC\nD\tE\tF\")")
+        }
+        run {
+            val W = Const.WAVE_DASH
+            val F = Const.FULLWIDTH_TILDE
+            // Arrange
+            val e = TestElementCache.select("")
+            e.node.setAttribute("text", " $W$F ")
+
+            /**
+             * WAVE_DASH is replaced to FULL_WIDTH_TILDE (strict = false)
+             */
+            // Act, Assert
+            e.textContains("$W$F")
+            e.textContains("$F$F")
+
+            /**
+             * Literally interpreted (strict = true)
+             */
+            // Act, Assert
+            e.textContains("$W$F", strict = true)
+            assertThatThrownBy {
+                e.textContains("$F$F", strict = true)
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<> contains \"$F$F\" (actual=\" $W$F \")")
+        }
     }
 
     @Test
