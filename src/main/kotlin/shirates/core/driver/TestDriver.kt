@@ -1811,6 +1811,7 @@ object TestDriver {
         val changed = newScreen != "?" && newScreen != originalScreen
         if (changed) {
             currentScreen = newScreen
+            screenshot()
             TestLog.info("currentScreen=$currentScreen", log = log)
         }
 
