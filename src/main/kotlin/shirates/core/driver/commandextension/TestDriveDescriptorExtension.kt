@@ -2,6 +2,7 @@ package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 
@@ -199,7 +200,13 @@ fun TestDrive.cell(
         TestLog.target(targetName = target)
     }
 
-    func?.invoke(testElement)
+    val original = CodeExecutionContext.isInCell
+    try {
+        CodeExecutionContext.isInCell = true
+        func?.invoke(testElement)
+    } finally {
+        CodeExecutionContext.isInCell = original
+    }
 
     return testElement
 }
@@ -247,7 +254,13 @@ fun TestDrive.cellOf(
         TestLog.target(targetName = target)
     }
 
-    func?.invoke(cell)
+    val original = CodeExecutionContext.isInCell
+    try {
+        CodeExecutionContext.isInCell = true
+        func?.invoke(cell)
+    } finally {
+        CodeExecutionContext.isInCell = original
+    }
 
     return cell
 }

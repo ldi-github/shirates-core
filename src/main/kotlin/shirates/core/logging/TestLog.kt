@@ -259,6 +259,16 @@ object TestLog {
         }
 
     /**
+     * branchCallerStack
+     */
+    var branchCallerStack = Stack<String>()
+
+    /**
+     * branchStack
+     */
+    var branchStack = Stack<String>()
+
+    /**
      * specialCallerStack
      */
     var specialCallerStack = Stack<String>()

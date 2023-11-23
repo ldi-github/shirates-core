@@ -18,7 +18,6 @@ import shirates.spec.utilily.cells
 import shirates.spec.utilily.text
 import shirates.spec.utilily.worksheets
 import java.nio.file.Files
-import java.util.*
 
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
@@ -102,7 +101,7 @@ class SpecReportLoadRunTest : UITest() {
                 id = 2,
                 step = "1",
                 condition = "- [Network & internet Screen]",
-                action = "android {\n- Tap [Internet]\n}",
+                action = "android {\n- Tap [Internet]\n} android",
                 target = "[Internet Screen]",
                 expectation = "- is displayed",
                 auto = "A",

@@ -18,6 +18,7 @@ object StringUtility {
         strict: Boolean = PropertiesManager.strictCompareMode,
         keepLF: Boolean = PropertiesManager.keepLF,
         keepTAB: Boolean = PropertiesManager.keepTAB,
+        keepZenkakuSpace: Boolean = PropertiesManager.keepZenkakuSpace,
         waveDashToFullWidthTilde: Boolean = PropertiesManager.waveDashToFullWidthTilde,
         compressWhitespaceCharacters: Boolean = PropertiesManager.compressWhitespaceCharacters,
         trimString: Boolean = PropertiesManager.trimString,
@@ -39,6 +40,7 @@ object StringUtility {
         result = removeControlCharacters(text = result, keepLF = keepLF)
         result = removeInvisibleFormattingIndicator(text = result)
         result = replaceNBSPtoSpace(text = result)
+        result = replaceZstoSpace(text = result, keepZenkakuSpace = keepZenkakuSpace)
 
         if (trimString && result.isNotBlank()) {
             result = trim(text = result)
@@ -60,7 +62,7 @@ object StringUtility {
         text: String
     ): String {
 
-        return text.replace("${Const.LF}", " ").replace("${Const.CR}", "")
+        return text.replace(Const.LF, " ").replace(Const.CR, "")
     }
 
     /**
@@ -70,31 +72,31 @@ object StringUtility {
         text: String
     ): String {
 
-        return text.replace("${Const.TAB}", " ")
+        return text.replace(Const.TAB, " ")
     }
 
     private val escapedLF = "/@LF@/"
 
     private fun String.escapeLF(): String {
 
-        return this.replace("${Const.LF}", escapedLF)
+        return this.replace(Const.LF, escapedLF)
     }
 
     private fun String.unescapeLF(): String {
 
-        return this.replace(escapedLF, "${Const.LF}")
+        return this.replace(escapedLF, Const.LF)
     }
 
     private val escapedTAB = "/@TAB@/"
 
     private fun String.escapeTAB(): String {
 
-        return this.replace("${Const.TAB}", escapedTAB)
+        return this.replace(Const.TAB, escapedTAB)
     }
 
     private fun String.unescapeTAB(): String {
 
-        return this.replace(escapedTAB, "${Const.TAB}")
+        return this.replace(escapedTAB, Const.TAB)
     }
 
     /**
@@ -152,7 +154,7 @@ object StringUtility {
         text: String
     ): String {
 
-        return text.replace("${Const.ZERO_WIDTH_SPACE}", "").replace("${Const.ZERO_WIDTH_NBSP}", "")
+        return text.replace(Const.ZERO_WIDTH_SPACE, "").replace(Const.ZERO_WIDTH_NBSP, "")
     }
 
     /**
@@ -162,7 +164,30 @@ object StringUtility {
         text: String
     ): String {
 
-        return text.replace("${Const.NBSP}", " ")
+        return text.replace(Const.NBSP, " ")
+    }
+
+    private val escapedZentakuSpace = "/@ZENKAKU_SPACE@/"
+
+    /**
+     * replaceZstoSpace
+     */
+    fun replaceZstoSpace(
+        text: String,
+        keepZenkakuSpace: Boolean = PropertiesManager.keepZenkakuSpace
+    ): String {
+
+        var result = text
+        if (keepZenkakuSpace) {
+            result = text.replace(Const.ZENKAKU_SPACE, escapedZentakuSpace)
+        }
+        result = result.replace(Const.ZsCategorySpaces[0], " ")
+        result = result.replace("\\p{Z}".toRegex(), " ")
+        if (keepZenkakuSpace) {
+            result = result.replace(escapedZentakuSpace, Const.ZENKAKU_SPACE)
+        }
+
+        return result
     }
 
     /**

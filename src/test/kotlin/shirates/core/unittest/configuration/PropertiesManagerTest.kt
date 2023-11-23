@@ -914,6 +914,31 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun keepZenkakuSpace() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.keepZenkakuSpace).isEqualTo(Const.KEEP_ZENKAKU_SPACE)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("keepZenkakuSpace", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.keepZenkakuSpace).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("keepZenkakuSpace", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.keepZenkakuSpace).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun waveDashToFullWidthTilde() {
 
         run {

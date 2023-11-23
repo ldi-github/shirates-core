@@ -90,7 +90,7 @@ class SpecWorksheetModel(
                     ) {
                         newCase()
                     }
-                    if (current.type != "scenario" && (current.result.isBlank() || current.result == notApplicable)) {
+                    if (current.type != "scenario" || current.result == notApplicable) {
                         current.os = os
                         current.special = special
                         if (frame != Frame.EXPECTATION) {
@@ -98,6 +98,9 @@ class SpecWorksheetModel(
                         }
                     }
                 } else if (logLine.message.startsWith("}")) {
+                    if (frame != Frame.EXPECTATION) {
+                        addDescription(logLine)
+                    }
                     if (logLine.command == "os") {
                         os = ""
                         if (frame != Frame.EXPECTATION) {
@@ -108,9 +111,6 @@ class SpecWorksheetModel(
                         if (frame != Frame.EXPECTATION) {
                             current.special = ""
                         }
-                    }
-                    if (frame != Frame.EXPECTATION) {
-                        addDescription(logLine)
                     }
                 }
             }
@@ -504,9 +504,6 @@ class SpecWorksheetModel(
         if (frame != Frame.EXPECTATION) {
             if (logLine.logType == "branch") {
                 msg = logLine.message
-                if (msg.startsWith("}")) {
-                    msg = "}"
-                }
             }
         }
 
@@ -553,11 +550,14 @@ class SpecWorksheetModel(
     fun expectation(logLine: LogLine): LineObject {
 
         val bulletLocal =
-            if (logLine.logType == LogType.CAPTION.label) ""
-            else if (logLine.logType == LogType.OUTPUT.label) ""
-            else if (logLine.logType == LogType.COMMENT.label) ""
-            else if (logLine.logType == LogType.WITHSCROLL.label) ""
-            else bullet
+            when (logLine.logType) {
+                LogType.CAPTION.label -> ""
+                LogType.OUTPUT.label -> ""
+                LogType.COMMENT.label -> ""
+                LogType.WITHSCROLL.label -> ""
+                LogType.BRANCH.label -> ""
+                else -> bullet
+            }
         val m = logLine.arrangedMessage.ifBlank { logLine.message }
         val msg = "$bulletLocal$m"
         current.expectations.add(msg)

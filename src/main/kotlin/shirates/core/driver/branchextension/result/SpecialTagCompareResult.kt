@@ -20,7 +20,7 @@ class SpecialTagCompareResult() : CompareResult() {
         val matched = TestMode.isNoLoadRun || testContext.profile.hasSpecialTag(specialTag)
         if (matched) {
             val context = TestDriverCommandContext(null)
-            context.execSpecial(subject = "special", expected = specialTag) {
+            context.execSpecial(subject = "special", condition = specialTag) {
                 onTrue.invoke()
             }
         }
@@ -43,7 +43,7 @@ class SpecialTagCompareResult() : CompareResult() {
         val expected = "not(${history.map { it.condition }.joinToString(",")})"
 
         val context = TestDriverCommandContext(null)
-        context.execSpecial(subject = "special", expected = expected) {
+        context.execSpecial(subject = "special", condition = expected) {
             onOthers.invoke()
         }
         setExecuted(condition = "not", matched = true)

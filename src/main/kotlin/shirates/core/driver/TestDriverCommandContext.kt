@@ -699,11 +699,85 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
     }
 
     /**
+     * execBranch
+     */
+    fun execBranch(
+        command: String,
+        condition: String,
+        func: () -> Unit
+    ): LogLine? {
+
+        val ms = Measure()
+
+        val original = CodeExecutionContext.isInSpecialCommand
+        try {
+            callerName = StackTraceUtility.getCallerName(
+                filterFileName = COMMAND_CONTEXT_FILE_NAME,
+                filterMethodName = "execBranch"
+            )
+
+            TestLog.branchCallerStack.push(callerName)
+
+            TestLog.branchStack.push(condition)
+
+            val log = CodeExecutionContext.isInSilentCommand.not()
+            beginLogLine = TestLog.branch(
+                message = "$condition {",
+                scriptCommand = command,
+                subject = condition,
+                log = log
+            )
+
+            CodeExecutionContext.isInSpecialCommand = true
+            func()
+        } finally {
+            try {
+                CodeExecutionContext.isInSpecialCommand = original
+                endBranch()
+            } finally {
+                ms.end()
+            }
+        }
+
+        return beginLogLine
+    }
+
+    /**
+     * endBranch
+     */
+    fun endBranch(): LogLine {
+
+        val lastCallerName = TestLog.branchCallerStack.peek()
+        if (callerName != lastCallerName) {
+            throw IllegalCallerException("endBranch() must be called in ${lastCallerName}, but called in ${callerName}")
+        }
+
+        var condition = ""
+        if (TestLog.branchStack.any()) {
+            condition = TestLog.branchStack.peek()
+        }
+        TestLog.branchCallerStack.pop()
+        TestLog.branchStack.pop()
+
+        val ms = Measure()
+        try {
+            val log = CodeExecutionContext.isInSilentCommand.not()
+            return TestLog.branch(
+                message = "} $condition",
+                scriptCommand = beginLogLine?.scriptCommand,
+                log = log
+            )
+        } finally {
+            ms.end()
+        }
+    }
+
+    /**
      * execSpecial
      */
     fun execSpecial(
         subject: String,
-        expected: String,
+        condition: String,
         func: () -> Unit
     ): LogLine? {
 
@@ -718,14 +792,15 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
             TestLog.specialCallerStack.push(callerName)
 
-            val special = expected
-            TestLog.specialStack.push(special)
+            TestLog.specialStack.push(condition)
 
+            val log = CodeExecutionContext.isInSilentCommand.not()
             beginLogLine = TestLog.branch(
-                message = "$special {",
+                message = "$condition {",
                 scriptCommand = "special",
                 subject = subject,
-                arg1 = expected
+                arg1 = condition,
+                log = log
             )
 
             CodeExecutionContext.isInSpecialCommand = true
@@ -752,19 +827,21 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             throw IllegalCallerException("endSpecial() must be called in ${lastCallerName}, but called in ${callerName}")
         }
 
-        var special = ""
+        var condition = ""
         if (TestLog.specialStack.any()) {
-            special = TestLog.specialStack.peek()
+            condition = TestLog.specialStack.peek()
         }
         TestLog.specialCallerStack.pop()
         TestLog.specialStack.pop()
 
         val ms = Measure()
         try {
+            val log = CodeExecutionContext.isInSilentCommand.not()
             return TestLog.branch(
-                message = "} $special",
+                message = "} $condition",
                 scriptCommand = "special",
-                subject = special
+                subject = condition,
+                log = log
             )
         } finally {
             ms.end()

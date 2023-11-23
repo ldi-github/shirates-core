@@ -72,7 +72,7 @@ fun TestDrive.emulator(
     }
 
     val context = TestDriverCommandContext(null)
-    context.execSpecial(subject = command, expected = command) {
+    context.execSpecial(subject = command, condition = command) {
         onTrue()
     }
 
@@ -95,7 +95,7 @@ fun TestDrive.simulator(
     }
 
     val context = TestDriverCommandContext(null)
-    context.execSpecial(subject = command, expected = command) {
+    context.execSpecial(subject = command, condition = command) {
         onTrue()
     }
 
@@ -118,7 +118,7 @@ fun TestDrive.virtualDevice(
     }
 
     val context = TestDriverCommandContext(null)
-    context.execSpecial(subject = command, expected = command) {
+    context.execSpecial(subject = command, condition = command) {
         onTrue()
     }
 
@@ -141,7 +141,7 @@ fun TestDrive.realDevice(
     }
 
     val context = TestDriverCommandContext(null)
-    context.execSpecial(subject = command, expected = command) {
+    context.execSpecial(subject = command, condition = command) {
         onTrue()
     }
 
@@ -198,7 +198,7 @@ fun TestDrive.osaifuKeitai(
     }
 
     val context = TestDriverCommandContext(null)
-    context.execSpecial(subject = "osaifu", expected = message(id = "osaifuKeitai")) {
+    context.execSpecial(subject = "osaifu", condition = message(id = "osaifuKeitai")) {
         onTrue()
     }
 
@@ -219,7 +219,7 @@ fun TestDrive.osaifuKeitaiNot(
     }
 
     val context = TestDriverCommandContext(null)
-    context.execSpecial(subject = "osaifu", expected = message(id = "osaifuKeitaiNot")) {
+    context.execSpecial(subject = "osaifu", condition = message(id = "osaifuKeitaiNot")) {
         onTrue()
     }
 
@@ -256,7 +256,7 @@ fun TestDrive.stub(
     }
 
     val context = TestDriverCommandContext(null)
-    context.execSpecial(subject = command, expected = command) {
+    context.execSpecial(subject = command, condition = command) {
         onTrue()
     }
 
@@ -279,7 +279,7 @@ fun TestDrive.stubNot(
     }
 
     val context = TestDriverCommandContext(null)
-    context.execSpecial(subject = command, expected = command) {
+    context.execSpecial(subject = command, condition = command) {
         onTrue()
     }
 
