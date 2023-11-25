@@ -17,6 +17,7 @@ class LineObject(var type: String) {
     var environment = ""
     var build = ""
     var supplement = ""
+    var indentLevel = 0
 
     /**
      * isEmpty
@@ -39,6 +40,35 @@ class LineObject(var type: String) {
                     supplement.isBlank()
             return r
         }
+
+    /**
+     * incrementIndent
+     */
+    fun incrementIndent(): Int {
+
+        indentLevel++
+        return indentLevel
+    }
+
+    /**
+     * decrementIndent
+     */
+    fun decrementIndent(): Int {
+
+        indentLevel--
+        if (indentLevel < 0) {
+            indentLevel = 0
+        }
+        return indentLevel
+    }
+
+    /**
+     * resetIndent
+     */
+    fun resetIndent(): Int {
+        indentLevel = 0
+        return indentLevel
+    }
 
     /**
      * clear

@@ -6,7 +6,10 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.hasOsaifuKeitai
 import shirates.core.driver.branchextension.*
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.describe
+import shirates.core.driver.commandextension.macro
+import shirates.core.driver.commandextension.thisIsFalse
+import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.testcode.UITest
 import shirates.core.utility.host.HostOSUtility
 
@@ -272,7 +275,7 @@ class TestDriveBranchExtensionTest : UITest() {
                     testRuntimeOnly {
                         describe("testRuntimeOnly called")
                         testRuntimeOnlyCalled = true
-                    }.not {
+                    }.ifElse {
                         describe("testRuntimeOnlyNot called")
                         testRuntimeOnlyNotCalled = true
                     }
@@ -289,7 +292,7 @@ class TestDriveBranchExtensionTest : UITest() {
                         testRuntimeOnly {
                             describe("testRuntimeOnly called")
                             testRuntimeOnlyCalled = true
-                        }.not {
+                        }.ifElse {
                             describe("testRuntimeOnlyNot called")
                             testRuntimeOnlyNotCalled = true
                         }

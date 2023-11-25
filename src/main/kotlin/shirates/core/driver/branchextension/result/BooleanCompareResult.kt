@@ -1,6 +1,7 @@
 package shirates.core.driver.branchextension.result
 
 import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.exception.BranchException
 import shirates.core.logging.Message.message
@@ -14,21 +15,24 @@ class BooleanCompareResult(val value: Boolean, val command: String) : CompareRes
      * ifTrue
      */
     fun ifTrue(
+        message: String = message(id = command),
         onTrue: () -> Unit
     ): BooleanCompareResult {
 
         val condition = "true"
 
-        if (TestMode.isNoLoadRun.not()) {
-            if (hasExecuted(condition)) {
-                throw BranchException(message(id = "branchConditionAlreadyUsed", subject = condition))
-            }
+        if (hasExecuted(condition) && TestMode.isNoLoadRun.not()) {
+            throw BranchException(message(id = "branchConditionAlreadyUsed", subject = condition))
         }
 
         val matched = value
         if (matched || TestMode.isNoLoadRun) {
-            onTrue.invoke()
+            val context = TestDriverCommandContext(null)
+            context.execBranch(command = command, condition = message) {
+                onTrue.invoke()
+            }
         }
+
         setExecuted(condition = condition, matched = matched)
 
         return this
@@ -38,21 +42,24 @@ class BooleanCompareResult(val value: Boolean, val command: String) : CompareRes
      * ifFalse
      */
     fun ifFalse(
+        message: String = message(id = command),
         onFalse: () -> Unit
     ): BooleanCompareResult {
 
         val condition = "false"
 
-        if (TestMode.isNoLoadRun.not()) {
-            if (hasExecuted(condition)) {
-                throw BranchException(message(id = "branchConditionAlreadyUsed", subject = condition))
-            }
+        if (hasExecuted(condition) && TestMode.isNoLoadRun.not()) {
+            throw BranchException(message(id = "branchConditionAlreadyUsed", subject = condition))
         }
 
         val matched = !value
         if (matched || TestMode.isNoLoadRun) {
-            onFalse.invoke()
+            val context = TestDriverCommandContext(null)
+            context.execBranch(command = command, condition = message) {
+                onFalse.invoke()
+            }
         }
+
         setExecuted(condition = condition, matched = matched)
 
         return this
@@ -62,33 +69,32 @@ class BooleanCompareResult(val value: Boolean, val command: String) : CompareRes
      * ifElse
      */
     fun ifElse(
+        message: String = message(id = "ifElse"),
         onElse: () -> Unit
     ): BooleanCompareResult {
 
-        if (TestMode.isNoLoadRun) {
-            onElse()
-            return this
-        }
-
-        if (history.isEmpty()) {
+        if (history.isEmpty() && TestMode.isNoLoadRun.not()) {
             throw BranchException(message(id = "ifElseIsNotPermitted"))
         }
 
-        if (hasExecuted("true")) {
-            return ifFalse(onElse)
-        } else {
-            return ifTrue(onElse)
+        val condition = "else"
+
+        if (hasExecuted(condition) && TestMode.isNoLoadRun.not()) {
+            throw BranchException(message(id = "branchConditionAlreadyUsed", subject = condition))
         }
+
+        val matched = history.any() { it.matched }.not()
+        if (matched || TestMode.isNoLoadRun) {
+            val context = TestDriverCommandContext(null)
+            context.execBranch(command = command, condition = message) {
+                onElse.invoke()
+            }
+        }
+
+        setExecuted(condition = condition, matched = matched)
+
+        return this
     }
 
-    /**
-     * not
-     */
-    fun not(
-        onElse: () -> Unit
-    ): BooleanCompareResult {
-
-        return ifElse(onElse)
-    }
 }
 

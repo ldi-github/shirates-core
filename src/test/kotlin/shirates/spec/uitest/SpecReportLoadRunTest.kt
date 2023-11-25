@@ -101,7 +101,7 @@ class SpecReportLoadRunTest : UITest() {
                 id = 2,
                 step = "1",
                 condition = "- [Network & internet Screen]",
-                action = "android {\n- Tap [Internet]\n} android",
+                action = "android {\n  - Tap [Internet]\n}",
                 target = "[Internet Screen]",
                 expectation = "- is displayed",
                 auto = "A",

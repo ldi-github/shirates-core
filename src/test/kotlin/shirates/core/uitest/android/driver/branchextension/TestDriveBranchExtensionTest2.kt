@@ -167,7 +167,7 @@ class TestDriveBranchExtensionTest2 : UITest() {
                         .ifImageIs("[App Icon].png") {
                             describe("ifImageIs('[App Icon].png') called")
                             ifImageIsCalled = true  // never called
-                        }.not {
+                        }.ifElse {
                             describe("not called")
                             notCalled = true   // called
                         }

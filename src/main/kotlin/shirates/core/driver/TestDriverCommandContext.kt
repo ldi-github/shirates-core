@@ -701,16 +701,16 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
     /**
      * execBranch
      */
-    fun execBranch(
+    fun <R> execBranch(
         command: String,
         condition: String,
-        func: () -> Unit
-    ): LogLine? {
+        func: () -> R
+    ): R {
 
         val ms = Measure()
 
         val original = CodeExecutionContext.isInSpecialCommand
-        try {
+        return try {
             callerName = StackTraceUtility.getCallerName(
                 filterFileName = COMMAND_CONTEXT_FILE_NAME,
                 filterMethodName = "execBranch"
@@ -738,8 +738,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 ms.end()
             }
         }
-
-        return beginLogLine
     }
 
     /**

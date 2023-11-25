@@ -64,18 +64,22 @@ class SpecWorksheetModel(
 
             LogType.CONDITION.label -> {
                 frame = Frame.CONDITION
+                current.resetIndent()
             }
 
             LogType.ACTION.label -> {
                 frame = Frame.ACTION
+                current.resetIndent()
             }
 
             LogType.TARGET.label -> {
                 target(logLine)
+                current.resetIndent()
             }
 
             LogType.EXPECTATION.label -> {
                 frame = Frame.EXPECTATION
+                current.resetIndent()
             }
 
             LogType.BRANCH.label -> {
@@ -93,12 +97,22 @@ class SpecWorksheetModel(
                     if (current.type != "scenario" || current.result == notApplicable) {
                         current.os = os
                         current.special = special
-                        if (frame != Frame.EXPECTATION) {
+                        if (frame == Frame.EXPECTATION) {
+                            if (logLine.command != "os" && logLine.command != "special") {
+                                addDescription(logLine)
+                            }
+                        } else {
                             addDescription(logLine)
                         }
                     }
+                    current.incrementIndent()
                 } else if (logLine.message.startsWith("}")) {
-                    if (frame != Frame.EXPECTATION) {
+                    current.decrementIndent()
+                    if (frame == Frame.EXPECTATION) {
+                        if (logLine.command != "os" && logLine.command != "special") {
+                            addDescription(logLine)
+                        }
+                    } else {
                         addDescription(logLine)
                     }
                     if (logLine.command == "os") {
@@ -484,6 +498,17 @@ class SpecWorksheetModel(
         return current
     }
 
+    private val INDENT = "  "
+
+    private fun getIndent(level: Int): String {
+
+        val sb = StringBuilder()
+        for (i in 1..level) {
+            sb.append(INDENT)
+        }
+        return sb.toString()
+    }
+
     private fun getMessage(logLine: LogLine): String {
 
         val lastStepNo = lineObjects.filter { it.step.isNotBlank() }.lastOrNull()?.step
@@ -492,6 +517,7 @@ class SpecWorksheetModel(
             current.step = logLine.stepNo
         }
 
+        val indent = getIndent(level = current.indentLevel)
         val bulletLocal =
             when (logLine.logType) {
                 LogType.CAPTION.label -> ""
@@ -500,11 +526,16 @@ class SpecWorksheetModel(
                 else -> bullet
             }
 
-        var msg = "$bulletLocal${logLine.message}"
+        var msg = "$indent$bulletLocal${logLine.message}"
         if (frame != Frame.EXPECTATION) {
             if (logLine.logType == "branch") {
-                msg = logLine.message
+                msg = "$indent${logLine.message}"
             }
+        }
+
+        if (msg.trim().startsWith("} ")) {
+            val ix = msg.indexOf("}")
+            msg = msg.substring(0, ix + 1)
         }
 
         return msg
@@ -559,7 +590,11 @@ class SpecWorksheetModel(
                 else -> bullet
             }
         val m = logLine.arrangedMessage.ifBlank { logLine.message }
-        val msg = "$bulletLocal$m"
+        var msg = "$bulletLocal$m"
+        if (msg.trim().startsWith("} ")) {
+            val ix = msg.indexOf("}")
+            msg = msg.substring(0, ix + 1)
+        }
         current.expectations.add(msg)
 
         return current

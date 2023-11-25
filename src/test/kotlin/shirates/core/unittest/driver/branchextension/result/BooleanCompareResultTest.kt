@@ -29,19 +29,19 @@ class BooleanCompareResultTest {
     @Test
     fun onFalse() {
 
-        var onTrueCalled = false
         var onFalseCalled = false
+        var onElseCalled = false
 
         BooleanCompareResult(value = false, command = "")
-            .ifTrue(onTrue = {
-                onTrueCalled = true
-            })
-            .ifElse(onElse = {
+            .ifFalse(onFalse = {
                 onFalseCalled = true
             })
+            .ifElse(onElse = {
+                onElseCalled = true
+            })
 
-        assertThat(onTrueCalled).isFalse()
         assertThat(onFalseCalled).isTrue()
+        assertThat(onElseCalled).isFalse()
     }
 
     @Test
@@ -123,7 +123,7 @@ class BooleanCompareResultTest {
             assertThat(ifElseCalled).isFalse()
             assertThat(r.history.count()).isEqualTo(2)
             assertThat(r.history[0].toString()).isEqualTo("condition=true, matched=true")
-            assertThat(r.history[1].toString()).isEqualTo("condition=false, matched=false")
+            assertThat(r.history[1].toString()).isEqualTo("condition=else, matched=false")
         }
         run {
             // Arrange
@@ -140,62 +140,7 @@ class BooleanCompareResultTest {
             assertThat(ifElseCalled).isTrue()
             assertThat(r.history.count()).isEqualTo(2)
             assertThat(r.history[0].toString()).isEqualTo("condition=false, matched=false")
-            assertThat(r.history[1].toString()).isEqualTo("condition=true, matched=true")
-        }
-    }
-
-    @Test
-    fun not() {
-
-        run {
-            // Arrange
-            var ifTrueCalled = false
-            var ifFalseCalled = false
-            val r = BooleanCompareResult(value = true, command = "")
-            // Act
-            r.ifTrue {
-                ifTrueCalled = true
-            }
-            // Assert
-            assertThat(ifTrueCalled).isEqualTo(true)
-            assertThat(ifFalseCalled).isEqualTo(false)
-            assertThat(r.history.count()).isEqualTo(1)
-            assertThat(r.history[0].toString()).isEqualTo("condition=true, matched=true")
-
-            // Act
-            r.not {
-                ifFalseCalled = true
-            }
-            // Assert
-            assertThat(ifTrueCalled).isEqualTo(true)
-            assertThat(ifFalseCalled).isEqualTo(false)
-            assertThat(r.history.count()).isEqualTo(2)
-            assertThat(r.history[1].toString()).isEqualTo("condition=false, matched=false")
-        }
-        run {
-            // Arrange
-            var ifTrueCalled = false
-            var ifFalseCalled = false
-            val r = BooleanCompareResult(value = false, command = "")
-            // Act
-            r.ifTrue {
-                ifTrueCalled = true
-            }
-            // Assert
-            assertThat(ifTrueCalled).isEqualTo(false)
-            assertThat(ifFalseCalled).isEqualTo(false)
-            assertThat(r.history.count()).isEqualTo(1)
-            assertThat(r.history[0].toString()).isEqualTo("condition=true, matched=false")
-
-            // Act
-            r.not {
-                ifFalseCalled = true
-            }
-            // Assert
-            assertThat(ifTrueCalled).isEqualTo(false)
-            assertThat(ifFalseCalled).isEqualTo(true)
-            assertThat(r.history.count()).isEqualTo(2)
-            assertThat(r.history[1].toString()).isEqualTo("condition=false, matched=true")
+            assertThat(r.history[1].toString()).isEqualTo("condition=else, matched=true")
         }
     }
 

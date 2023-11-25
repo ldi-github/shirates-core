@@ -16,16 +16,19 @@ class TestDriveAppExtensionTest : UITest() {
         scenario {
             case(1) {
                 expectation {
-                    it.isAppInstalled(appNickname = "[Settings]").thisIsTrue()
-                    it.isAppInstalled(appNickname = "[Maps]").thisIsTrue()
-                    it.isAppInstalled(appNickname = "[App1]").thisIsFalse()
+                    it.isAppInstalled(appNickname = "[Settings]").thisIsTrue("isAppInstalled([Settings]) is true")
+                    it.isAppInstalled(appNickname = "[Maps]").thisIsTrue("isAppInstalled([Maps]) is true")
+                    it.isAppInstalled(appNickname = "[App1]").thisIsFalse("isAppInstalled([App1]) is false")
                 }
             }
             case(2) {
                 expectation {
-                    it.isAppInstalled(packageOrBundleId = "com.apple.Preferences").thisIsTrue()
-                    it.isAppInstalled(packageOrBundleId = "com.apple.Maps").thisIsTrue()
-                    it.isAppInstalled(packageOrBundleId = "example.com.app1").thisIsFalse()
+                    it.isAppInstalled(packageOrBundleId = "com.apple.Preferences")
+                        .thisIsTrue("isAppInstalled(com.apple.Preferences) is true")
+                    it.isAppInstalled(packageOrBundleId = "com.apple.Maps")
+                        .thisIsTrue("isAppInstalled(com.apple.Maps) is true")
+                    it.isAppInstalled(packageOrBundleId = "example.com.app1")
+                        .thisIsFalse("isAppInstalled(example.com.app1) is false")
                 }
             }
         }

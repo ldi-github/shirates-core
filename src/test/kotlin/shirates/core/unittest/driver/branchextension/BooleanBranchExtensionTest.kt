@@ -165,7 +165,7 @@ class BooleanBranchExtensionTest {
             }.ifElse {
             }
         }.isInstanceOf(BranchException::class.java)
-            .hasMessage(message(id = "branchConditionAlreadyUsed", subject = "false"))
+            .hasMessage(message(id = "branchConditionAlreadyUsed", subject = "else"))
     }
 
     @Test
@@ -199,6 +199,6 @@ class BooleanBranchExtensionTest {
             }.ifElse {
             }
         }.isInstanceOf(BranchException::class.java)
-            .hasMessage(message(id = "branchConditionAlreadyUsed", subject = "false"))
+            .hasMessage(message(id = "branchConditionAlreadyUsed", subject = "else"))
     }
 }
