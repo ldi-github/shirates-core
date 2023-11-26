@@ -3,19 +3,27 @@ package shirates.core.driver.branchextension
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
 import shirates.core.driver.branchextension.result.BooleanCompareResult
+import shirates.core.logging.Message.message
 import shirates.core.utility.image.ImageMatchResult
 
 /**
  * ifTrue
  */
-fun ImageMatchResult.ifTrue(onTrue: (TestElement) -> Unit): BooleanCompareResult {
+fun ImageMatchResult.ifTrue(
+    message: String? = null,
+    onTrue: (TestElement) -> Unit
+): BooleanCompareResult {
 
-    val command = "ifTrue"
+    val command = "ImageMatchResult.ifTrue"
     val value = this.result
+    val msg = message ?: message(id = command, subject = templateSubject)
+
     val result = BooleanCompareResult(value = value, command = command)
-    result.ifTrue(onTrue = {
-        onTrue(TestDriver.lastElement)
-    })
+    result.ifTrue(
+        message = msg,
+        onTrue = {
+            onTrue(TestDriver.lastElement)
+        })
 
     return result
 }
@@ -23,14 +31,21 @@ fun ImageMatchResult.ifTrue(onTrue: (TestElement) -> Unit): BooleanCompareResult
 /**
  * ifFalse
  */
-fun ImageMatchResult.ifFalse(onFalse: (TestElement) -> Unit): BooleanCompareResult {
+fun ImageMatchResult.ifFalse(
+    message: String? = null,
+    onFalse: (TestElement) -> Unit
+): BooleanCompareResult {
 
-    val command = "ifFalse"
+    val command = "ImageMatchResult.ifFalse"
     val value = this.result
+    val msg = message ?: message(id = command, subject = templateSubject)
+
     val result = BooleanCompareResult(value = value, command = command)
-    result.ifFalse(onFalse = {
-        onFalse(TestDriver.lastElement)
-    })
+    result.ifFalse(
+        message = msg,
+        onFalse = {
+            onFalse(TestDriver.lastElement)
+        })
 
     return result
 }

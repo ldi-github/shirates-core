@@ -27,7 +27,7 @@ import java.util.*
 
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class SpecReportBranchExtensionTest2 : UITest() {
+class SpecReport_ifScreenIsTest : UITest() {
 
     @NoLoadRun
     @Test
@@ -110,10 +110,10 @@ class SpecReportBranchExtensionTest2 : UITest() {
     override fun finally() {
 
         var filePath =
-            TestLog.directoryForLog.resolve("SpecReportBranchExtensionTest2/SpecReportBranchExtensionTest2.xlsx")
+            TestLog.directoryForLog.resolve("SpecReport_ifScreenIsTest/SpecReport_ifScreenIsTest.xlsx")
         if (Files.exists(filePath).not()) {
             filePath =
-                TestLog.directoryForLog.resolve("SpecReportBranchExtensionTest2/SpecReportBranchExtensionTest2@a.xlsx")
+                TestLog.directoryForLog.resolve("SpecReport_ifScreenIsTest/SpecReport_ifScreenIsTest@a.xlsx")
         }
         val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("SheetName1")
 
@@ -130,7 +130,7 @@ class SpecReportBranchExtensionTest2 : UITest() {
         ws.assertHeader(
             testConfigName = "Settings",
             sheetName = "SheetName1",
-            testClassName = "SpecReportBranchExtensionTest2",
+            testClassName = "SpecReport_ifScreenIsTest",
             profileName = "Pixel 3a API 31(Android 12)",
             deviceModel = deviceModel,
             platformVersion = platformVersion,

@@ -14,6 +14,10 @@ class ScreenCompareResult() : CompareResult() {
         vararg screenNames: String
     ): Boolean {
 
+        if (TestMode.isNoLoadRun) {
+            return true
+        }
+
         for (screenName in screenNames) {
             if (TestDriver.isScreen(screenName)) {
                 return true
@@ -32,6 +36,28 @@ class ScreenCompareResult() : CompareResult() {
         return screenNames[0]
     }
 
+    private fun ifScreenCore(
+        screenNames: Array<out String>,
+        command: String,
+        matched: Boolean,
+        func: () -> Unit
+    ) {
+        if (screenNames.isEmpty()) {
+            throw IllegalArgumentException("screenNames is required.")
+        }
+
+        val subject = getSubject(screenNames = screenNames)
+        val message = message(id = command, subject = subject)
+
+        if (matched || TestMode.isNoLoadRun) {
+            val context = TestDriverCommandContext(null)
+            context.execBranch(command = command, condition = message) {
+                func.invoke()
+                setExecuted(condition = message, matched = true, message = message)
+            }
+        }
+    }
+
     /**
      * ifScreenIs
      */
@@ -40,25 +66,10 @@ class ScreenCompareResult() : CompareResult() {
         onTrue: () -> Unit
     ): ScreenCompareResult {
 
-        if (screenNames.isEmpty()) {
-            throw IllegalArgumentException("screenNames is required.")
-        }
-
-        val matched = anyScreenMatched(screenNames = screenNames)
-        if (matched.not() && TestMode.isNoLoadRun.not()) {
-            return this
-        }
-
         val command = "ifScreenIs"
-        val subject = getSubject(screenNames = screenNames)
-        val condition = message(id = command, subject = subject)
+        val matched = anyScreenMatched(screenNames = screenNames)
 
-        val context = TestDriverCommandContext(null)
-        context.execBranch(command = command, condition = condition) {
-
-            onTrue.invoke()
-            setExecuted(condition = condition, matched = true)
-        }
+        ifScreenCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
 
         return this
     }
@@ -71,25 +82,10 @@ class ScreenCompareResult() : CompareResult() {
         onTrue: () -> Unit
     ): ScreenCompareResult {
 
-        if (screenNames.isEmpty()) {
-            throw IllegalArgumentException("screenNames is required.")
-        }
-
-        val matched = anyScreenMatched(screenNames = screenNames)
-        if (matched && TestMode.isNoLoadRun.not()) {
-            return this
-        }
-
         val command = "ifScreenIsNot"
-        val subject = getSubject(screenNames = screenNames)
-        val condition = message(id = "ifScreenIsNot", subject = subject)
+        val matched = anyScreenMatched(screenNames = screenNames).not()
 
-        val context = TestDriverCommandContext(null)
-        context.execBranch(command = command, condition = condition) {
-
-            onTrue.invoke()
-            setExecuted(condition = condition, matched = true)
-        }
+        ifScreenCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
 
         return this
     }
@@ -106,13 +102,17 @@ class ScreenCompareResult() : CompareResult() {
         }
 
         val command = "ifElse"
-        val condition = message(id = "ifElse")
+        var message = message(id = "ifElse")
+        if (history.any() && TestMode.isNoLoadRun.not()) {
+            val msg = history.map { it.message }.joinToString("\n") + "\n$message"
+            message = "$msg\n$message"
+        }
 
         val context = TestDriverCommandContext(null)
-        context.execBranch(command = command, condition = condition) {
+        context.execBranch(command = command, condition = message) {
 
             onOthers.invoke()
-            setExecuted(condition = condition, matched = true)
+            setExecuted(condition = message, matched = true, message = message)
         }
 
         return this

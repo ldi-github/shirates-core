@@ -50,11 +50,13 @@ class IosDeviceUtilityTest : UnitTest() {
         }
     }
 
+    val profileName = "iPhone SE (3rd generation)"
+
     @Test
     @Order(5)
     fun startSimulator() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val profile = TestProfile(profileName = profileName)
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
         val r = IosDeviceUtility.startSimulator(iosDeviceInfo = iosDeviceInfo)
@@ -75,7 +77,7 @@ class IosDeviceUtilityTest : UnitTest() {
     @Order(6)
     fun isInstalled() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val profile = TestProfile(profileName = profileName)
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
         val isInstalled = IosDeviceUtility.isInstalled(
@@ -90,7 +92,7 @@ class IosDeviceUtilityTest : UnitTest() {
     @Order(8)
     fun setAppleLanguages() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val profile = TestProfile(profileName = profileName)
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
         IosLanguageUtility.setAppleLanguages(udid = iosDeviceInfo.udid, "ja-JP", "en-US")
@@ -100,7 +102,7 @@ class IosDeviceUtilityTest : UnitTest() {
     @Order(9)
     fun setLanguage() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val profile = TestProfile(profileName = profileName)
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
         if (iosDeviceInfo.status == "Shutdown") {
@@ -116,7 +118,7 @@ class IosDeviceUtilityTest : UnitTest() {
     @Order(10)
     fun restartSimulator() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val profile = TestProfile(profileName = profileName)
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
         IosDeviceUtility.restartSimulator(udid = iosDeviceInfo.udid)
     }
@@ -125,7 +127,7 @@ class IosDeviceUtilityTest : UnitTest() {
     @Order(11)
     fun terminateSpringBoardByUdid() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val profile = TestProfile(profileName = profileName)
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
         IosDeviceUtility.terminateSpringBoardByUdid(iosDeviceInfo.udid, log = true)
     }
@@ -134,7 +136,7 @@ class IosDeviceUtilityTest : UnitTest() {
     @Order(12)
     fun stopSimulator() {
 
-        val profile = TestProfile(profileName = "iPhone 14(iOS 16.2)")
+        val profile = TestProfile(profileName = profileName)
         val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
 
         IosDeviceUtility.stopSimulator(udid = iosDeviceInfo.udid)

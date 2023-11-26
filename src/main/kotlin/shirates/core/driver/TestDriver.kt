@@ -1421,7 +1421,7 @@ object TestDriver {
             if (throwsException) {
                 throw FileNotFoundException(message(id = "imageFileNotFound", subject = selector.image))
             }
-            return ImageMatchResult(result = false)
+            return ImageMatchResult(result = false, templateSubject = selector.image)
         }
 
         // Search in current screen

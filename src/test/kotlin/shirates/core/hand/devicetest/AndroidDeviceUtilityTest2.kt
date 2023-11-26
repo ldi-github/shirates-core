@@ -23,7 +23,7 @@ class AndroidDeviceUtilityTest2 : UITest() {
             androidDeviceInfo
         }
         var emulator2 = run {
-            val profile = TestProfile(profileName = "Resizable (Experimental) API 33")
+            val profile = TestProfile(profileName = "Pixel 7 API 34(Android 14)")
             val androidDeviceInfo = AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
             androidDeviceInfo
         }

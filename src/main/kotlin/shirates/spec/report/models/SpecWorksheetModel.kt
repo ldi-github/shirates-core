@@ -475,7 +475,7 @@ class SpecWorksheetModel(
      */
     fun case(): LineObject {
 
-        if (current.type == "scenario" || current.step.isNotBlank()) {
+        if (current.type == "scenario" || current.isEmpty.not()) {
             newCase()
         }
 
@@ -493,7 +493,9 @@ class SpecWorksheetModel(
             newCase()
         }
         val msg = getMessage(logLine)
-        current.conditions.add(msg)
+        msg.split("\\n").forEach {
+            current.conditions.add(it)
+        }
 
         return current
     }
@@ -550,7 +552,9 @@ class SpecWorksheetModel(
             newCase()
         }
         val msg = getMessage(logLine)
-        current.actions.add(msg)
+        msg.split("\\n").forEach {
+            current.actions.add(it)
+        }
 
         return current
     }
@@ -595,7 +599,9 @@ class SpecWorksheetModel(
             val ix = msg.indexOf("}")
             msg = msg.substring(0, ix + 1)
         }
-        current.expectations.add(msg)
+        msg.split("\\n").forEach {
+            current.expectations.add(it)
+        }
 
         return current
     }

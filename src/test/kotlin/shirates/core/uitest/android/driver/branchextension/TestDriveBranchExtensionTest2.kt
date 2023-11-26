@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.*
+import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.UITest
 import shirates.helper.ImageSetupHelper
 
@@ -16,14 +17,33 @@ class TestDriveBranchExtensionTest2 : UITest() {
     fun setupImage() {
 
         scenario {
-            ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+            case(1) {
+                action {
+                    describe("Setting up image")
+                    ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+                }.expectation {
+                    OK()
+                }
+            }
         }
     }
 
+    @NoLoadRun
     @Test
     @Order(10)
-    fun ifImageExist_ifImageExistNot() {
+    fun s10() {
 
+        scenarioS10()
+    }
+
+    @Test
+    @Order(11)
+    fun s11() {
+
+        scenarioS10()
+    }
+
+    private fun scenarioS10() {
         var ifImageExistCalled = false
         var ifImageExistNotCalled = false
         fun clear() {
@@ -46,8 +66,8 @@ class TestDriveBranchExtensionTest2 : UITest() {
                         ifImageExistNotCalled = true     // called
                     }
                 }.expectation {
-                    ifImageExistCalled.thisIsFalse("ifImageExistCalled=$ifImageExistCalled")
-                    ifImageExistNotCalled.thisIsTrue("ifImageExistNotCalled=$ifImageExistNotCalled")
+                    ifImageExistCalled.thisIsFalse("ifImageExistCalled is false")
+                    ifImageExistNotCalled.thisIsTrue("ifImageExistNotCalled is true")
                 }
             }
             case(2) {
@@ -63,17 +83,29 @@ class TestDriveBranchExtensionTest2 : UITest() {
                         ifImageExistCalled = true
                     }
                 }.expectation {
-                    ifImageExistCalled.thisIsTrue("ifImageExistCalled=$ifImageExistCalled")
-                    ifImageExistNotCalled.thisIsFalse("ifImageExistNotCalled=$ifImageExistNotCalled")
+                    ifImageExistCalled.thisIsTrue("ifImageExistCalled is true")
+                    ifImageExistNotCalled.thisIsFalse("ifImageExistNotCalled is false")
                 }
             }
         }
     }
 
+    @NoLoadRun
     @Test
     @Order(20)
-    fun ifImageIs_ifImageIsNot() {
+    fun s20() {
 
+        scenarioS20()
+    }
+
+    @Test
+    @Order(20)
+    fun s21() {
+
+        scenarioS20()
+    }
+
+    private fun scenarioS20() {
         var ifImageIsCalled = false
         var ifImageIsNotCalled = false
         var ifElseCalled = false
@@ -98,12 +130,12 @@ class TestDriveBranchExtensionTest2 : UITest() {
                         }
                     it.select("[Connected devices Icon]")
                         .ifImageIsNot("[Apps Icon].png") {
-                            describe("ifImageIsNot('[Connected devices Icon].png') called")
+                            describe("ifImageIsNot('[Apps Icon].png') called")
                             ifImageIsNotCalled = true     // called
                         }
                 }.expectation {
-                    ifImageIsCalled.thisIsFalse("ifImageIsCalled=$ifImageIsCalled")
-                    ifImageIsNotCalled.thisIsTrue("ifImageIsNotCalled=$ifImageIsNotCalled")
+                    ifImageIsCalled.thisIsFalse("ifImageIsCalled is false")
+                    ifImageIsNotCalled.thisIsTrue("ifImageIsNotCalled is true")
                 }
             }
             case(2) {
@@ -121,8 +153,8 @@ class TestDriveBranchExtensionTest2 : UITest() {
                             ifImageIsNotCalled = true   //never called
                         }
                 }.expectation {
-                    ifImageIsCalled.thisIsTrue("ifImageIsCalled=$ifImageIsCalled")
-                    ifImageIsNotCalled.thisIsFalse("ifImageIsNotCalled=$ifImageIsNotCalled")
+                    ifImageIsCalled.thisIsTrue("ifImageIsCalled is true")
+                    ifImageIsNotCalled.thisIsFalse("ifImageIsNotCalled is false")
                 }
             }
             case(3) {
@@ -138,8 +170,8 @@ class TestDriveBranchExtensionTest2 : UITest() {
                             ifElseCalled = true   // never called
                         }
                 }.expectation {
-                    ifImageIsCalled.thisIsTrue("ifImageIsCalled=$ifImageIsCalled")
-                    ifElseCalled.thisIsFalse("ifElseCalled=$ifElseCalled")
+                    ifImageIsCalled.thisIsTrue("ifImageIsCalled is true")
+                    ifElseCalled.thisIsFalse("ifElseCalled is false")
                 }
             }
             case(4) {
@@ -155,8 +187,8 @@ class TestDriveBranchExtensionTest2 : UITest() {
                             ifElseCalled = true   // called
                         }
                 }.expectation {
-                    ifImageIsCalled.thisIsFalse("ifImageIsCalled=$ifImageIsCalled")
-                    ifElseCalled.thisIsTrue("ifElseCalled=$ifElseCalled")
+                    ifImageIsCalled.thisIsFalse("ifImageIsCalled is false")
+                    ifElseCalled.thisIsTrue("ifElseCalled is true")
                 }
             }
             case(5) {
@@ -172,17 +204,29 @@ class TestDriveBranchExtensionTest2 : UITest() {
                             notCalled = true   // called
                         }
                 }.expectation {
-                    ifImageIsCalled.thisIsFalse("ifImageIsCalled=$ifImageIsCalled")
-                    notCalled.thisIsTrue("notCalled=$notCalled")
+                    ifImageIsCalled.thisIsFalse("ifImageIsCalled is false")
+                    notCalled.thisIsTrue("notCalled is true")
                 }
             }
         }
     }
 
+    @NoLoadRun
     @Test
     @Order(30)
-    fun imageMatchResult_ifTrue_ifFalse() {
+    fun s30() {
 
+        scenarioS30()
+    }
+
+    @Test
+    @Order(31)
+    fun s31() {
+
+        scenarioS30()
+    }
+
+    private fun scenarioS30() {
         scenario {
             case(1) {
                 condition {

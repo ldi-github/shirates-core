@@ -17,10 +17,7 @@ import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.commandextension.isAppInstalled
-import shirates.core.driver.commandextension.launchApp
-import shirates.core.driver.commandextension.tapAppIcon
-import shirates.core.driver.commandextension.withContext
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -391,6 +388,10 @@ abstract class UITest : TestDrive {
      */
     open fun OK(message: String = "", scriptCommand: String = "ok") {
 
+        if (TestMode.isNoLoadRun) {
+            describe(message = message)
+            return
+        }
         TestLog.ok(message = message, scriptCommand = scriptCommand, log = true)
     }
 
@@ -399,6 +400,10 @@ abstract class UITest : TestDrive {
      */
     open fun NG(message: String = "") {
 
+        if (TestMode.isNoLoadRun) {
+            describe(message = message)
+            return
+        }
         throw TestNGException(message)
     }
 

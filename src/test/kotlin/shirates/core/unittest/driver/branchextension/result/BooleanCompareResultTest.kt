@@ -3,6 +3,8 @@ package shirates.core.unittest.driver.branchextension.result
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import shirates.core.driver.branchextension.ifFalse
+import shirates.core.driver.branchextension.ifTrue
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.exception.BranchException
 
@@ -49,25 +51,25 @@ class BooleanCompareResultTest {
 
         run {
             // Arrange
-            val r = BooleanCompareResult(value = true, command = "")
-            assertThat(r.anyMatched).isEqualTo(false)
+            val result = BooleanCompareResult(value = true, command = "")
+            assertThat(result.anyMatched).isEqualTo(false)
             // Act
-            r.ifFalse {
+            result.ifFalse {
 
             }
             // Assert
-            assertThat(r.anyMatched).isEqualTo(false)
+            assertThat(result.anyMatched).isEqualTo(false)
 
             // Act
-            r.ifTrue {
+            result.ifTrue {
 
             }
             // Assert
-            assertThat(r.anyMatched).isEqualTo(true)
+            assertThat(result.anyMatched).isEqualTo(true)
 
             // Act, Assert
             assertThatThrownBy {
-                r.ifTrue {
+                result.ifTrue {
 
                 }
             }.isInstanceOf(BranchException::class.java)
@@ -75,21 +77,21 @@ class BooleanCompareResultTest {
         }
         run {
             // Arrange
-            val r = BooleanCompareResult(value = false, command = "")
-            assertThat(r.anyMatched).isEqualTo(false)
+            val result = BooleanCompareResult(value = false, command = "")
+            assertThat(result.anyMatched).isEqualTo(false)
             // Act
-            r.ifTrue {
+            result.ifTrue {
 
             }
             // Assert
-            assertThat(r.anyMatched).isEqualTo(false)
+            assertThat(result.anyMatched).isEqualTo(false)
 
             // Act
-            r.ifFalse {
+            result.ifFalse {
 
             }
             // Assert
-            assertThat(r.anyMatched).isEqualTo(true)
+            assertThat(result.anyMatched).isEqualTo(true)
         }
     }
 
@@ -98,10 +100,10 @@ class BooleanCompareResultTest {
 
         run {
             // Arrange
-            val r = BooleanCompareResult(value = true, command = "")
+            val result = BooleanCompareResult(value = true, command = "")
             // Act
             assertThatThrownBy {
-                r.ifElse { }
+                result.ifElse { }
             }.isInstanceOf(BranchException::class.java)
                 .hasMessage("call ifTrue or ifFalse before calling ifElse.")
 
@@ -110,37 +112,35 @@ class BooleanCompareResultTest {
             // Arrange
             var ifTrueCalled = false
             var ifElseCalled = false
-            val r = BooleanCompareResult(value = true, command = "")
-            r.ifTrue {
+            val result = true.ifTrue {
                 ifTrueCalled = true
             }
             // Act
-            r.ifElse {
+            result.ifElse {
                 ifElseCalled = true
             }
             // Assert
             assertThat(ifTrueCalled).isTrue()
             assertThat(ifElseCalled).isFalse()
-            assertThat(r.history.count()).isEqualTo(2)
-            assertThat(r.history[0].toString()).isEqualTo("condition=true, matched=true")
-            assertThat(r.history[1].toString()).isEqualTo("condition=else, matched=false")
+            assertThat(result.history.count()).isEqualTo(2)
+            assertThat(result.history[0].toString()).isEqualTo("condition=true, matched=true, message=if true")
+            assertThat(result.history[1].toString()).isEqualTo("condition=else, matched=false, message=if true\nif else")
         }
         run {
             // Arrange
             var ifFalseCalled = false
             var ifElseCalled = false
-            val r = BooleanCompareResult(value = true, command = "")
-            r.ifFalse {
+            val result = true.ifFalse {
                 ifFalseCalled = true
             }
-            r.ifElse {
+            result.ifElse {
                 ifElseCalled = true
             }
             assertThat(ifFalseCalled).isFalse()
             assertThat(ifElseCalled).isTrue()
-            assertThat(r.history.count()).isEqualTo(2)
-            assertThat(r.history[0].toString()).isEqualTo("condition=false, matched=false")
-            assertThat(r.history[1].toString()).isEqualTo("condition=else, matched=true")
+            assertThat(result.history.count()).isEqualTo(2)
+            assertThat(result.history[0].toString()).isEqualTo("condition=false, matched=false, message=if false")
+            assertThat(result.history[1].toString()).isEqualTo("condition=else, matched=true, message=if false\nif else")
         }
     }
 

@@ -6,6 +6,7 @@ import kotlin.math.absoluteValue
 
 class ImageMatchResult(
     var result: Boolean,
+    var templateSubject: String?,
     var x: Int = Int.MIN_VALUE,
     var y: Int = Int.MIN_VALUE,
     var score: Double = Double.MIN_VALUE,
@@ -13,7 +14,7 @@ class ImageMatchResult(
     var threshold: Double = 0.0,
     var image: BufferedImage? = null,
     var templateImage: BufferedImage? = null,
-    var templateImageFile: String? = null
+    var templateImageFile: String? = null,
 ) : TestDrive {
     override fun toString(): String {
         return "result=$result, scale=$scale, threshold=$threshold, x=$x, y=$y, score=${score.absoluteValue}, templateImageFile=$templateImageFile"

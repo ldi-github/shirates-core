@@ -3,6 +3,8 @@ package shirates.core.driver.branchextension.result
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
+import shirates.core.exception.BranchException
+import shirates.core.logging.Message.message
 
 /**
  * SpecialTagCompareResult
@@ -17,36 +19,50 @@ class SpecialTagCompareResult() : CompareResult() {
         onTrue: () -> Unit
     ): SpecialTagCompareResult {
 
-        val matched = TestMode.isNoLoadRun || testContext.profile.hasSpecialTag(specialTag)
-        if (matched) {
+        val matched = testContext.profile.hasSpecialTag(specialTag)
+        if (matched || TestMode.isNoLoadRun) {
             val context = TestDriverCommandContext(null)
             context.execSpecial(subject = "special", condition = specialTag) {
                 onTrue.invoke()
             }
         }
-        setExecuted(condition = specialTag, matched = matched)
+        setExecuted(condition = specialTag, matched = matched, message = specialTag)
 
         return this
     }
 
     /**
-     * notMatched
+     * ifElse
      */
-    fun notMatched(
-        onOthers: () -> Unit
+    fun ifElse(
+        message: String = message(id = "ifElse"),
+        onElse: () -> Unit
     ): SpecialTagCompareResult {
 
-        if (anyMatched) {
-            return this
+        if (history.isEmpty() && TestMode.isNoLoadRun.not()) {
+            throw BranchException(message(id = "ifElseIsNotPermitted"))
         }
 
-        val expected = "not(${history.map { it.condition }.joinToString(",")})"
+        val command = "ifElse"
+        val condition = "else"
 
-        val context = TestDriverCommandContext(null)
-        context.execSpecial(subject = "special", condition = expected) {
-            onOthers.invoke()
+        if (hasExecuted(condition) && TestMode.isNoLoadRun.not()) {
+            throw BranchException(message(id = "branchConditionAlreadyUsed", subject = condition))
         }
-        setExecuted(condition = "not", matched = true)
+
+        val msg =
+            if (history.any() && TestMode.isNoLoadRun.not())
+                history.map { it.message }.joinToString("\n") + "\n$message"
+            else message
+        val matched = history.any() { it.matched }.not()
+        if (matched || TestMode.isNoLoadRun) {
+            val context = TestDriverCommandContext(null)
+            context.execBranch(command = command, condition = msg) {
+                onElse.invoke()
+            }
+        }
+
+        setExecuted(condition = condition, matched = matched, message = msg)
 
         return this
     }

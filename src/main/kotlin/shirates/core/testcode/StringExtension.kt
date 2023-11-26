@@ -7,7 +7,7 @@ import java.text.Normalizer
 /**
  * preprocessForComparison
  */
-fun String.preprocessForComparison(
+fun String?.preprocessForComparison(
     strict: Boolean = PropertiesManager.strictCompareMode,
     keepLF: Boolean = PropertiesManager.keepLF,
     keepTAB: Boolean = PropertiesManager.keepTAB,
@@ -17,7 +17,7 @@ fun String.preprocessForComparison(
 ): String {
 
     return StringUtility.preprocessForComparison(
-        text = this,
+        text = this ?: "",
         strict = strict,
         keepLF = keepLF,
         keepTAB = keepTAB,

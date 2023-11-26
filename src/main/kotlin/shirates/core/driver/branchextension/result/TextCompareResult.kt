@@ -1,26 +1,48 @@
 package shirates.core.driver.branchextension.result
 
+import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.TestMode
+import shirates.core.exception.BranchException
+import shirates.core.logging.Message.message
+import shirates.core.testcode.preprocessForComparison
+
 /**
  * TextCompareResult
  */
 class TextCompareResult(val text: String?) : CompareResult() {
 
+    private fun ifStringCore(
+        matched: Boolean,
+        command: String,
+        message: String,
+        onTrue: () -> Unit
+    ) {
+        if (matched || TestMode.isNoLoadRun) {
+            val context = TestDriverCommandContext(null)
+            context.execBranch(command = command, condition = message) {
+                onTrue.invoke()
+            }
+        }
+
+        setExecuted(condition = message, matched = matched, message = message)
+    }
+
     /**
      * ifStringIs
      */
-    fun ifStringIs(value: String?, onTrue: () -> Unit): TextCompareResult {
+    fun ifStringIs(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        val condition = "ifStringIs"
+        val command = "ifStringIs"
+        val v = value.preprocessForComparison()
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
 
-        if (value == null) {
-            return this
-        }
-
-        val matched = value == text
-        if (matched) {
-            onTrue.invoke()
-        }
-        setExecuted(condition = condition, matched = matched)
+        val matched = (v == t)
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
 
         return this
     }
@@ -28,22 +50,21 @@ class TextCompareResult(val text: String?) : CompareResult() {
     /**
      * ifStartsWith
      */
-    fun ifStartsWith(value: String?, onTrue: () -> Unit): TextCompareResult {
+    fun ifStartsWith(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        val condition = "ifStartsWith"
+        val command = "ifStartsWith"
+        val v = value.preprocessForComparison()
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
 
-        if (value == null) {
-            return this
-        }
-        if (text == null) {
-            return this
-        }
-
-        val matched = text.startsWith(value)
-        if (matched) {
-            onTrue.invoke()
-        }
-        setExecuted(condition = condition, matched = matched)
+        val matched =
+            if (v.isEmpty()) false
+            else t.startsWith(v)
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
 
         return this
     }
@@ -51,22 +72,21 @@ class TextCompareResult(val text: String?) : CompareResult() {
     /**
      * ifContains
      */
-    fun ifContains(value: String?, onTrue: () -> Unit): TextCompareResult {
+    fun ifContains(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        val condition = "ifContains"
+        val command = "ifContains"
+        val v = value.preprocessForComparison()
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
 
-        if (value == null) {
-            return this
-        }
-        if (text == null) {
-            return this
-        }
-
-        val matched = text.contains(value)
-        if (matched) {
-            onTrue.invoke()
-        }
-        setExecuted(condition = condition, matched = matched)
+        val matched =
+            if (v.isEmpty()) false
+            else t.contains(v)
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
 
         return this
     }
@@ -74,22 +94,21 @@ class TextCompareResult(val text: String?) : CompareResult() {
     /**
      * ifEndsWith
      */
-    fun ifEndsWith(value: String?, onTrue: () -> Unit): TextCompareResult {
+    fun ifEndsWith(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        val condition = "ifEndsWith"
+        val command = "ifEndsWith"
+        val v = value.preprocessForComparison()
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
 
-        if (value == null) {
-            return this
-        }
-        if (text == null) {
-            return this
-        }
-
-        val matched = text.endsWith(value)
-        if (matched) {
-            onTrue.invoke()
-        }
-        setExecuted(condition = condition, matched = matched)
+        val matched =
+            if (v.isEmpty()) false
+            else t.endsWith(v)
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
 
         return this
     }
@@ -97,22 +116,20 @@ class TextCompareResult(val text: String?) : CompareResult() {
     /**
      * ifMatches
      */
-    fun ifMatches(regex: String?, onTrue: () -> Unit): TextCompareResult {
+    fun ifMatches(
+        regex: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        val condition = "ifMatches"
+        val command = "ifMatches"
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = regex)
 
-        if (text == null) {
-            return this
-        }
-        if (regex == null) {
-            return this
-        }
-
-        val matched = text.matches(Regex(regex))
-        if (matched) {
-            onTrue.invoke()
-        }
-        setExecuted(condition = condition, matched = matched)
+        val matched =
+            if (regex.isNullOrEmpty()) false
+            else t.matches(regex.toRegex())
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
 
         return this
     }
@@ -120,16 +137,33 @@ class TextCompareResult(val text: String?) : CompareResult() {
     /**
      * ifElse
      */
-    fun ifElse(onElse: () -> Unit): TextCompareResult {
+    fun ifElse(
+        message: String? = null,
+        onElse: () -> Unit
+    ): TextCompareResult {
 
-        val condition = "ifElse"
+        val command = "ifElse"
+        val msg = message ?: message(id = command)
 
-        if (anyMatched) {
-            return this
+        if (history.isEmpty() && TestMode.isNoLoadRun.not()) {
+            throw BranchException(message(id = "ifElseIsNotPermitted"))
         }
 
-        onElse.invoke()
-        setExecuted(condition = condition, matched = true)
+        val condition = "else"
+
+        if (hasExecuted(condition) && TestMode.isNoLoadRun.not()) {
+            throw BranchException(message(id = "branchConditionAlreadyUsed", subject = condition))
+        }
+
+        val matched = history.any() { it.matched }.not()
+        if (matched || TestMode.isNoLoadRun) {
+            val context = TestDriverCommandContext(null)
+            context.execBranch(command = command, condition = msg) {
+                onElse.invoke()
+            }
+        }
+
+        setExecuted(condition = condition, matched = matched, message = msg)
 
         return this
     }
@@ -137,61 +171,108 @@ class TextCompareResult(val text: String?) : CompareResult() {
     /**
      * elseIfStringIs
      */
-    fun elseIfStringIs(value: String?, onTrue: () -> Unit): TextCompareResult {
+    fun elseIfStringIs(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        if (anyMatched) {
-            return this
-        }
+        val command = "elseIfStringIs"
+        val v = value.preprocessForComparison()
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
 
-        return ifStringIs(value = value, onTrue = onTrue)
+        val matched = (v == t) && anyMatched.not()
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
+
+        return this
     }
 
     /**
      * elseIfStartsWith
      */
-    fun elseIfStartsWith(value: String?, onTrue: () -> Unit): TextCompareResult {
+    fun elseIfStartsWith(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        if (anyMatched) {
-            return this
-        }
+        val command = "elseIfStartsWith"
+        val v = value.preprocessForComparison()
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
 
-        return ifStartsWith(value = value, onTrue = onTrue)
+        val matched =
+            if (v.isEmpty()) false
+            else t.startsWith(v) && anyMatched.not()
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
+
+        return this
     }
 
     /**
      * elseIfContains
      */
-    fun elseIfContains(value: String?, onTrue: () -> Unit): TextCompareResult {
+    fun elseIfContains(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        if (anyMatched) {
-            return this
-        }
+        val command = "elseIfContains"
+        val v = value.preprocessForComparison()
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
 
-        return ifContains(value = value, onTrue = onTrue)
+        val matched =
+            if (v.isEmpty()) false
+            else t.contains(v) && anyMatched.not()
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
+
+        return this
     }
 
     /**
      * elseIfEndsWith
      */
-    fun elseIfEndsWith(value: String?, onTrue: () -> Unit): TextCompareResult {
+    fun elseIfEndsWith(
+        value: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        if (anyMatched) {
-            return this
-        }
+        val command = "elseIfEndsWith"
+        val v = value.preprocessForComparison()
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = v)
 
-        return ifEndsWith(value = value, onTrue = onTrue)
+        val matched =
+            if (v.isEmpty()) false
+            else t.endsWith(v) && anyMatched.not()
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
+
+        return this
     }
 
     /**
      * elseIfMatches
      */
-    fun elseIfMatches(regex: String?, onTrue: () -> Unit): TextCompareResult {
+    fun elseIfMatches(
+        regex: String?,
+        message: String? = null,
+        onTrue: () -> Unit
+    ): TextCompareResult {
 
-        if (anyMatched) {
-            return this
-        }
+        val command = "elseIfMatches"
+        val t = text.preprocessForComparison()
+        val msg = message ?: message(id = command, subject = t, value = regex)
 
-        return ifMatches(regex = regex, onTrue = onTrue)
+        val matched =
+            if (regex.isNullOrEmpty()) false
+            else t.matches(regex.toRegex()) && anyMatched.not()
+        ifStringCore(matched = matched, command = command, message = msg, onTrue = onTrue)
+
+        return this
     }
 
 }

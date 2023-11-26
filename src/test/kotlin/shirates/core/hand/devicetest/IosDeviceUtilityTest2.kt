@@ -17,12 +17,12 @@ class IosDeviceUtilityTest2 : UITest() {
 
         // Arrange
         val iPhone1 = run {
-            val profile = TestProfile(profileName = "iPhone 14 Pro(iOS 16.0)")
+            val profile = TestProfile(profileName = "iPhone 14")
             val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
             iosDeviceInfo
         }
         val iPhone2 = run {
-            val profile = TestProfile(profileName = "iPhone 14(iOS 16.0)-01")
+            val profile = TestProfile(profileName = "iPhone 15")
             val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
             iosDeviceInfo
         }

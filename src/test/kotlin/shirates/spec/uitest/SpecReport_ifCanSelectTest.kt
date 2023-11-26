@@ -26,7 +26,7 @@ import java.util.*
 
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class SpecReportBranchExtensionTest3 : UITest() {
+class SpecReport_ifCanSelectTest : UITest() {
 
     @NoLoadRun
     @Test
@@ -113,10 +113,10 @@ class SpecReportBranchExtensionTest3 : UITest() {
     override fun finally() {
 
         var filePath =
-            TestLog.directoryForLog.resolve("SpecReportBranchExtensionTest3/SpecReportBranchExtensionTest3.xlsx")
+            TestLog.directoryForLog.resolve("SpecReport_ifCanSelectTest/SpecReport_ifCanSelectTest.xlsx")
         if (Files.exists(filePath).not()) {
             filePath =
-                TestLog.directoryForLog.resolve("SpecReportBranchExtensionTest3/SpecReportBranchExtensionTest3@a.xlsx")
+                TestLog.directoryForLog.resolve("SpecReport_ifCanSelectTest/SpecReport_ifCanSelectTest@a.xlsx")
         }
         val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("SheetName1")
 
@@ -133,7 +133,7 @@ class SpecReportBranchExtensionTest3 : UITest() {
         ws.assertHeader(
             testConfigName = "Settings",
             sheetName = "SheetName1",
-            testClassName = "SpecReportBranchExtensionTest3",
+            testClassName = "SpecReport_ifCanSelectTest",
             profileName = "Pixel 3a API 31(Android 12)",
             deviceModel = deviceModel,
             platformVersion = platformVersion,
@@ -318,6 +318,8 @@ if can select [Network & internet] {
 if can select [Connected devices] {
   - in ifCanSelect
 }
+if can select [System]
+if can select [Tips & support]
 if else {
   - in ifElse
 }
@@ -329,6 +331,8 @@ if can select [Network & internet] {
 if can select [Connected devices] {
   - in ifCanSelect
 }
+if can select [System]
+if can select [Tips & support]
 if else {
   - in ifElse
 }
@@ -340,6 +344,8 @@ if can select [Network & internet] {
 if can select [Connected devices] {
 - in ifCanSelect
 }
+if can select [System]
+if can select [Tips & support]
 if else {
 - in ifElse
 }
@@ -351,6 +357,8 @@ if else {
                 id = 6,
                 step = "2",
                 condition = """
+if can not select [Network & internet]
+if can not select [Connected devices]
 if else {
   - in ifElse
 }
@@ -362,6 +370,8 @@ if can not select [Tips & support] {
 }
 """.trimIndent(),
                 action = """
+if can not select [Network & internet]
+if can not select [Connected devices]
 if else {
   - in ifElse
 }
@@ -373,6 +383,8 @@ if can not select [Tips & support] {
 }
 """.trimIndent(),
                 expectation = """
+if can not select [Network & internet]
+if can not select [Connected devices]
 if else {
 - in ifElse
 }

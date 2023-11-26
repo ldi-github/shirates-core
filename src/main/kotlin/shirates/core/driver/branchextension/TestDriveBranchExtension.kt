@@ -310,7 +310,7 @@ fun TestDrive.testRuntimeOnly(
     val command = "testRuntimeOnly"
     val isRuntime = TestMode.isNoLoadRun.not()
     val result = BooleanCompareResult(value = isRuntime, command = command)
-    result.setExecuted(condition = "true", matched = result.value)
+    result.setExecuted(condition = "true", matched = result.value, message = "testRuntimeOnly")
     if (result.value) {
         onTrue.invoke()
     }
@@ -367,17 +367,17 @@ fun TestDrive.ifCanSelect(
     val result =
         if (this is BooleanCompareResult) this
         else BooleanCompareResult(value = canSelect, command = command)
-    val condition = message(id = command, subject = expression)
+    val message = message(id = command, subject = expression)
 
     if (matched || TestMode.isNoLoadRun) {
         val context = TestDriverCommandContext(null)
-        context.execBranch(command = command, condition = condition) {
+        context.execBranch(command = command, condition = message) {
 
             onTrue.invoke()
         }
     }
 
-    result.setExecuted(condition = condition, matched = matched)
+    result.setExecuted(condition = message, matched = matched, message = message)
 
     return result
 }
@@ -402,18 +402,18 @@ fun TestDrive.ifCanSelectNot(
     val result =
         if (this is BooleanCompareResult) this
         else BooleanCompareResult(value = matched, command = command)
-    val condition = message(id = command, subject = expression)
+    val message = message(id = command, subject = expression)
 
     if (matched || TestMode.isNoLoadRun) {
 
         val context = TestDriverCommandContext(null)
-        context.execBranch(command = command, condition = condition) {
+        context.execBranch(command = command, condition = message) {
 
             onTrue.invoke()
         }
     }
 
-    result.setExecuted(condition = condition, matched = matched)
+    result.setExecuted(condition = message, matched = matched, message = message)
 
     return result
 }
@@ -435,8 +435,20 @@ fun TestDrive.ifImageExist(
         direction = direction,
         log = false
     )
-    val result = BooleanCompareResult(value = imageMatchResult.result, command = command)
-    result.ifTrue(onTrue = onTrue)
+    val matched = imageMatchResult.result
+    val result =
+        if (this is BooleanCompareResult) this
+        else BooleanCompareResult(value = matched, command = command)
+    val message = message(id = command, subject = expression)
+
+    if (matched || TestMode.isNoLoadRun) {
+        val context = TestDriverCommandContext(null)
+        context.execBranch(command = command, condition = message) {
+            onTrue.invoke()
+        }
+    }
+
+    result.setExecuted(condition = message, matched = matched, message = message)
 
     return result
 }
@@ -458,20 +470,29 @@ fun TestDrive.ifImageExistNot(
         direction = direction,
         log = false
     )
-    val result = if (this is BooleanCompareResult) this
-    else BooleanCompareResult(value = imageMatchResult.result.not(), command = command)
-    result.ifTrue(onTrue = onTrue)
+    val matched = imageMatchResult.result.not()
+    val result =
+        if (this is BooleanCompareResult) this
+        else BooleanCompareResult(value = matched, command = command)
+    val message = message(id = command, subject = expression)
+
+    if (matched || TestMode.isNoLoadRun) {
+        val context = TestDriverCommandContext(null)
+        context.execBranch(command = command, condition = message) {
+            onTrue.invoke()
+        }
+    }
+
+    result.setExecuted(condition = message, matched = matched, message = message)
 
     return result
 }
 
 internal fun TestDrive.ifImageIsCore(
     vararg expression: String,
-    command: String,
     waitSeconds: Double,
     negation: Boolean,
-    onTrue: (() -> Unit)
-): BooleanCompareResult {
+): Boolean {
 
     val testElement = TestDriver.it
 
@@ -491,10 +512,17 @@ internal fun TestDrive.ifImageIsCore(
         r
     }
 
-    val result = BooleanCompareResult(value = r, command = command)
-    result.ifTrue(onTrue = onTrue)
+    return r
+}
 
-    return result
+private fun getSubject(
+    vararg expression: String
+): String {
+
+    if (expression.count() >= 2) {
+        return "(${expression.joinToString(" or ")})"
+    }
+    return expression[0]
 }
 
 /**
@@ -508,13 +536,27 @@ fun TestDrive.ifImageIs(
 
     val command = "ifImageIs"
 
-    val result = ifImageIsCore(
+    val imageIs = ifImageIsCore(
         expression = expression,
-        command = command,
         waitSeconds = waitSeconds,
         negation = false,
-        onTrue = onTrue
     )
+    val matched = imageIs
+    val result = BooleanCompareResult(value = matched, command = command)
+    val subject = getSubject(expression = expression)
+    val message = message(id = command, subject = subject)
+
+    if (matched || TestMode.isNoLoadRun) {
+
+        val context = TestDriverCommandContext(null)
+        context.execBranch(command = command, condition = message) {
+
+            onTrue.invoke()
+        }
+    }
+
+    result.setExecuted(condition = message, matched = matched, message = message)
+
     return result
 }
 
@@ -528,14 +570,26 @@ fun TestDrive.ifImageIsNot(
 ): BooleanCompareResult {
 
     val command = "ifImageIsNot"
-
-    val result = ifImageIsCore(
+    val matched = ifImageIsCore(
         expression = expression,
-        command = command,
         waitSeconds = waitSeconds,
         negation = true,
-        onTrue = onTrue
     )
+    val result = BooleanCompareResult(value = matched, command = command)
+    val subject = getSubject(expression = expression)
+    val message = message(id = command, subject = subject)
+
+    if (matched || TestMode.isNoLoadRun) {
+
+        val context = TestDriverCommandContext(null)
+        context.execBranch(command = command, condition = message) {
+
+            onTrue.invoke()
+        }
+    }
+
+    result.setExecuted(condition = message, matched = matched, message = message)
+
     return result
 }
 
@@ -544,10 +598,14 @@ fun TestDrive.ifImageIsNot(
  */
 fun TestDrive.ifTrue(
     value: Boolean,
+    message: String = message(id = "ifTrue"),
     onTrue: (TestElement) -> Unit
 ): BooleanCompareResult {
 
-    return value.ifTrue(onTrue = onTrue)
+    return value.ifTrue(
+        message = message,
+        onTrue = onTrue
+    )
 }
 
 /**
@@ -555,8 +613,12 @@ fun TestDrive.ifTrue(
  */
 fun TestDrive.ifFalse(
     value: Boolean,
+    message: String = message(id = "ifFalse"),
     onFalse: (TestElement) -> Unit
 ): BooleanCompareResult {
 
-    return value.ifFalse(onFalse = onFalse)
+    return value.ifFalse(
+        message = message,
+        onFalse = onFalse
+    )
 }
