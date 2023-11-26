@@ -108,6 +108,7 @@
     - [分岐関数 (ifCanSelect, ifCanSelectNot)](basic/function_property/branch/ifcanselect_ja.md)
     - [分岐関数 (ifImageExist, ifImageExistNot)](basic/function_property/branch/ifimageexist_ja.md)
     - [分岐関数 (ifImageIs, ifImageIsNot)](basic/function_property/branch/ifimageis_ja.md)
+    - [分岐関数 (ifStringIs, ifStartsWith, etc)](basic/function_property/branch/ifString_ja.md)
     - [プラットフォーム関数 (android, ios, emulator, simulator, virtualDevice, realDevice)](basic/function_property/branch/platform_branch_functions_ja.md)
     - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](basic/function_property/branch/platform_properties_ja.md)
     - [おサイフケータイ関数 (osaifuKeitai, osaifuKeitaiNot)](basic/function_property/branch/osaifu_keitai_branch_functions_ja.md)

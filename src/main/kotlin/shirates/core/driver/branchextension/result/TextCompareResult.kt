@@ -138,12 +138,11 @@ class TextCompareResult(val text: String?) : CompareResult() {
      * ifElse
      */
     fun ifElse(
-        message: String? = null,
+        message: String = message(id = "ifElse"),
         onElse: () -> Unit
     ): TextCompareResult {
 
         val command = "ifElse"
-        val msg = message ?: message(id = command)
 
         if (history.isEmpty() && TestMode.isNoLoadRun.not()) {
             throw BranchException(message(id = "ifElseIsNotPermitted"))
@@ -155,6 +154,10 @@ class TextCompareResult(val text: String?) : CompareResult() {
             throw BranchException(message(id = "branchConditionAlreadyUsed", subject = condition))
         }
 
+        val msg =
+            if (history.any() && TestMode.isNoLoadRun.not())
+                history.map { it.message }.joinToString("\n") + "\n$message"
+            else message
         val matched = history.any() { it.matched }.not()
         if (matched || TestMode.isNoLoadRun) {
             val context = TestDriverCommandContext(null)

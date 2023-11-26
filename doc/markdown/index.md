@@ -108,6 +108,7 @@
     - [Branch function (ifCanSelect, ifCanSelectNot)](basic/function_property/branch/ifcanselect.md)
     - [Branch function (ifImageExist, ifImageExistNot)](basic/function_property/branch/ifimageexist.md)
     - [Branch function (ifImageIs, ifImageIsNot)](basic/function_property/branch/ifimageis.md)
+    - [Branch function (ifStringIs, ifStartsWith, etc)](basic/function_property/branch/ifString.md)
     - [Platform function (android, ios, emulator, simulator, virtualDevice, realDevice)](basic/function_property/branch/platform_branch_functions.md)
     - [Platform property (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](basic/function_property/branch/platform_properties.md)
     - [Osaifukeitai function (osaifuKeitai, osaifuKeitaiNot)](basic/function_property/branch/osaifu_keitai_branch_functions.md)
