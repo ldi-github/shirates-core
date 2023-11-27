@@ -429,12 +429,18 @@ fun TestDrive.ifImageExist(
 ): BooleanCompareResult {
 
     val command = "ifImageExist"
-    val imageMatchResult = findImage(
-        expression = expression,
-        scroll = scroll,
-        direction = direction,
-        log = false
-    )
+    val sel = getSelector(expression = expression)
+    val e =
+        if (sel.image.isNullOrBlank()) TestElementCache.select(expression = expression, throwsException = false)
+        else TestElement.emptyElement
+    val imageMatchResult =
+        if (e.isFound) e.isImage(expression = expression)
+        else findImage(
+            expression = expression,
+            scroll = scroll,
+            direction = direction,
+            log = false
+        )
     val matched = imageMatchResult.result
     val result =
         if (this is BooleanCompareResult) this
@@ -464,12 +470,18 @@ fun TestDrive.ifImageExistNot(
 ): BooleanCompareResult {
 
     val command = "ifImageExistNot"
-    val imageMatchResult = findImage(
-        expression = expression,
-        scroll = scroll,
-        direction = direction,
-        log = false
-    )
+    val sel = getSelector(expression = expression)
+    val e =
+        if (sel.image.isNullOrBlank()) TestElementCache.select(expression = expression, throwsException = false)
+        else TestElement.emptyElement
+    val imageMatchResult =
+        if (e.isFound) e.isImage(expression = expression)
+        else findImage(
+            expression = expression,
+            scroll = scroll,
+            direction = direction,
+            log = false
+        )
     val matched = imageMatchResult.result.not()
     val result =
         if (this is BooleanCompareResult) this
