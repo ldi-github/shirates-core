@@ -374,3 +374,4 @@ tasks.register<JavaExec>("md2html") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("md2html.Executor")
 }
+
