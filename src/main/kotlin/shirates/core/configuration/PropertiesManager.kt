@@ -609,6 +609,16 @@ object PropertiesManager {
         }
 
     /**
+     * keepZenkakuSpace
+     */
+    val keepZenkakuSpace: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "keepZenkakuSpace")
+                ?: return Const.KEEP_ZENKAKU_SPACE
+            return value == "true"
+        }
+
+    /**
      * waveDashToFullWidthTilde
      */
     val waveDashToFullWidthTilde: Boolean

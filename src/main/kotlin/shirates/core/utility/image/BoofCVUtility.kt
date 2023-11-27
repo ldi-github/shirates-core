@@ -42,6 +42,7 @@ object BoofCVUtility {
         if (image == null || templateImage == null) {
             return ImageMatchResult(
                 result = false,
+                templateSubject = null,
                 scale = 1.0,
                 threshold = threshold,
                 image = image,
@@ -64,6 +65,7 @@ object BoofCVUtility {
             else (match.score.absoluteValue <= threshold)
         val imageMatchResult = ImageMatchResult(
             result = result,
+            templateSubject = null,
             x = match?.x ?: Int.MIN_VALUE,
             y = match?.y ?: Int.MIN_VALUE,
             score = match?.score ?: Double.MIN_VALUE,
@@ -92,6 +94,7 @@ object BoofCVUtility {
         if (image == null || templateImage == null) {
             return ImageMatchResult(
                 result = false,
+                templateSubject = null,
                 scale = scale,
                 threshold = threshold,
                 image = image,
@@ -149,6 +152,7 @@ object BoofCVUtility {
             val resultY = if (match == null) Int.MIN_VALUE else match.y + startY
             val imageMatchResult = ImageMatchResult(
                 result = result,
+                templateSubject = null,
                 x = resultX,
                 y = resultY,
                 score = match?.score ?: Double.MIN_VALUE,
@@ -167,6 +171,7 @@ object BoofCVUtility {
 
         val imageMatchResult = ImageMatchResult(
             result = false,
+            templateSubject = null,
             scale = scale,
             threshold = threshold,
             image = image,

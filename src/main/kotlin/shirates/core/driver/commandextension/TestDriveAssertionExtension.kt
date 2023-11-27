@@ -444,6 +444,10 @@ fun TestDrive.exist(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
+    if (CodeExecutionContext.isInCell && this is TestElement) {
+        return existInCell(expression = expression, throwsException = throwsException)
+    }
+
     TestDriver.refreshCurrentScreenWithNickname(expression)
 
     val sel = getSelector(expression = expression)
@@ -1124,6 +1128,10 @@ fun TestDrive.dontExist(
     useCache: Boolean = testContext.useCache,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
+
+    if (CodeExecutionContext.isInCell && this is TestElement) {
+        return dontExistInCell(expression = expression, throwsException = throwsException)
+    }
 
     var sel = getSelector(expression = expression)
     if (sel.isImageSelector) {

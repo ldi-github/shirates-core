@@ -45,12 +45,12 @@ class SpecialTag1 : UITest() {
                 }.expectation {
                     specialTag("Tag1") {
                         OK("specialTag(\"Tag1\") called")
-                    }.notMatched {
+                    }.ifElse {
                         describe("Tag1 not called")
                     }
                     specialTag("Tag2") {
                         OK("specialTag(\"Tag2\") called")
-                    }.notMatched {
+                    }.ifElse {
                         describe("Tag2 not called")
                     }
                 }

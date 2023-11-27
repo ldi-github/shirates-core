@@ -19,17 +19,17 @@ class TestElementCellExtensionTest : UITest() {
                         .tap("Game Controller")
                 }.expectation {
                     it.cellOf("Gamepad") {
-                        existInCell("Game Controller")
-                        existInCell("Gamepad")
-                        existInCell("Connected")
+                        exist("Game Controller")
+                        exist("Gamepad")
+                        exist("Connected")
                     }
                     it.cellOf("Identify Controller") {
-                        existInCell("Identify Controller")
+                        exist("Identify Controller")
                     }
                     it.cellOf("Default") {
-                        existInCell("Game Controller")
-                        existInCell("Default")
-                        existInCell("1 controllers")
+                        exist("Game Controller")
+                        exist("Default")
+                        exist("1 controllers")
                     }
                 }
             }

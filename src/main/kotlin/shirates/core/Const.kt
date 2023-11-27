@@ -62,6 +62,7 @@ object Const {
     const val ENABLE_STRICT_COMPARE_MODE = false
     const val KEEP_LF = false
     const val KEEP_TAB = false
+    const val KEEP_ZENKAKU_SPACE = true
     const val WAVE_DASH_TO_FULL_WIDTH_TILDE = true
     const val TRIM_STRING = true
     const val COMPRESS_WHITESPACE_CHARACTORS = true
@@ -156,13 +157,33 @@ object Const {
     const val ANDROID_WEBTITLE_SELECTOR = ".android.webkit.WebView&&\${webTitle}"
     const val IOS_WEBTITLE_SELECTOR = "<.XCUIElementTypeWebView>:descendant(\${webTitle}&&visible=*)"
 
-    const val WAVE_DASH = '\u301C'
-    const val FULLWIDTH_TILDE = '\uFF5E'
-    const val LF = '\u000A'
-    const val CR = '\u000D'
-    const val TAB = '\u0009'
-    const val NBSP = '\u00A0'
-    const val ZERO_WIDTH_SPACE = '\u200B'
-    const val ZERO_WIDTH_NBSP = '\uFEFF'
-    const val ZENKAKU_SPACE = '　'
+    const val WAVE_DASH = "\u301C"
+    const val FULLWIDTH_TILDE = "\uFF5E"
+    const val LF = "\u000A"
+    const val CR = "\u000D"
+    const val TAB = "\u0009"
+    const val NBSP = "\u00A0"
+    const val ZERO_WIDTH_SPACE = "\u200B"
+    const val ZERO_WIDTH_NBSP = "\uFEFF"
+    const val ZENKAKU_SPACE = "　"   // IDEOGRAPHIC SPACE
+    val ZsCategorySpaces = listOf(
+        // Unicode White_Space(Zs) Category
+        "\u0020",   // Space(SP)
+        "\u00A0",   // No-Break Space(NBSP)
+        "\u1680",   // Ogham Space Mark
+        "\u2000",   // En Quad
+        "\u2001",   // Em Quad
+        "\u2002",   // En Space
+        "\u2003",   // Em Space
+        "\u2004",   // Three-Per-Em Space
+        "\u2005",   // Four-Per-Em Space
+        "\u2006",   // Six-Per-Em Space
+        "\u2007",   // Figure Space
+        "\u2008",   // Punctuation Space
+        "\u2009",   // Thin Space
+        "\u200A",   // Hair Space
+        "\u202F",   // Narrow No-Break Space(NNBSP)
+        "\u205F",   // Medium Mathematical Space(MMSP)
+        "\u3000",   // Ideographic Space
+    )
 }

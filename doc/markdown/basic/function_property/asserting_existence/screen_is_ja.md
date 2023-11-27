@@ -70,7 +70,7 @@ class ScreenIsAndIsScreen1 : UITest() {
 
     @Test
     @Order(30)
-    fun isScreen_true() {
+    fun isScreen_ifTrue() {
 
         scenario {
             case(1) {
@@ -78,7 +78,7 @@ class ScreenIsAndIsScreen1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.isScreen("[Android Settings Top Screen]")
-                        .ifTrue {
+                        .ifTrue("If screen is [Android Settings Top Screen]") {
                             OK("This is [Android Settings Top Screen]")
                         }
                 }
@@ -88,7 +88,7 @@ class ScreenIsAndIsScreen1 : UITest() {
 
     @Test
     @Order(40)
-    fun isScreen_false() {
+    fun isScreen_ifFalse() {
 
         scenario {
             case(1) {
@@ -96,7 +96,7 @@ class ScreenIsAndIsScreen1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.isScreen("[System Screen]")
-                        .ifFalse {
+                        .ifFalse("If screen is not [System Screen]") {
                             OK("This is not [System Screen]")
                         }
                 }

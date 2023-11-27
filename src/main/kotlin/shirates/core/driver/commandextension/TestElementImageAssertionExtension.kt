@@ -27,7 +27,7 @@ fun TestElement.isImage(
     }
 
     val context = TestDriverCommandContext(testElement)
-    var r = ImageMatchResult(result = false)
+    var r = ImageMatchResult(result = false, templateSubject = expression)
     context.execBooleanCommand(subject = expression) {
 
         r = isImageCore(
@@ -48,7 +48,7 @@ internal fun TestElement.isImageCore(
     cropImage: Boolean = true
 ): ImageMatchResult {
     if (this.isEmpty) {
-        return ImageMatchResult(result = false)
+        return ImageMatchResult(result = false, templateSubject = selector.toString())
     }
     if (cropImage) {
         silent {
@@ -67,6 +67,7 @@ internal fun TestElement.isImageCore(
             imageMatchResult.templateImage?.saveImage(TestLog.directoryForLog.resolve(fileName2).toFile())
         }
     }
+    imageMatchResult.templateSubject = selector.toString()
     return imageMatchResult
 }
 
@@ -86,13 +87,14 @@ fun TestElement.isContainingImage(
     }
 
     val context = TestDriverCommandContext(testElement)
-    var r = ImageMatchResult(result = false)
+    var r = ImageMatchResult(result = false, templateSubject = expression)
     context.execBooleanCommand(subject = expression) {
 
         silent {
             testElement.cropImage(save = true)
             val image = testElement.lastCropInfo?.croppedImage
             r = sel.evaluateImageContainedIn(image = image, threshold = threshold)
+            r.templateSubject = expression
         }
     }
 
@@ -260,7 +262,7 @@ internal fun imageAssertionCoreCore(
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = testElement.selector.toString()) {
 
-        var matchResult = ImageMatchResult(result = false)
+        var matchResult = ImageMatchResult(result = false, templateSubject = expectedSelector.toString())
         var r = false
         SyncUtility.doUntilTrue(waitSeconds = waitSeconds) {
             matchResult = action()

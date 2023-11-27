@@ -9,7 +9,7 @@ You can use special branch functions for image.
 | ifImageIs    | The code block is executed when specified image matches the image of the element        |
 | ifImageIsNot | The code block is executed when specified image does not match the image of the element |
 
-### IfImageExist1.kt
+### IfImageIs1.kt
 
 (`kotlin/tutorial/basic/IfImageIs1.kt`)
 

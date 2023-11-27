@@ -259,6 +259,16 @@ object TestLog {
         }
 
     /**
+     * branchCallerStack
+     */
+    var branchCallerStack = Stack<String>()
+
+    /**
+     * branchStack
+     */
+    var branchStack = Stack<String>()
+
+    /**
      * specialCallerStack
      */
     var specialCallerStack = Stack<String>()
@@ -493,7 +503,7 @@ object TestLog {
             msg = msg.substring(0, MAXIMUM_CELL_CONTENT_LENGTH - 1)
         }
         val resultMsg = resultMessage ?: exception?.message ?: ""
-        val special = specialStack.toList().joinToString("\n")
+        val special = specialStack.toList().joinToString("/")
 
         var group = commandStack.toList().firstOrNull()?.callerName ?: ""
         if (group.contains(".")) {

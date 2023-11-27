@@ -64,18 +64,22 @@ class SpecWorksheetModel(
 
             LogType.CONDITION.label -> {
                 frame = Frame.CONDITION
+                current.resetIndent()
             }
 
             LogType.ACTION.label -> {
                 frame = Frame.ACTION
+                current.resetIndent()
             }
 
             LogType.TARGET.label -> {
                 target(logLine)
+                current.resetIndent()
             }
 
             LogType.EXPECTATION.label -> {
                 frame = Frame.EXPECTATION
+                current.resetIndent()
             }
 
             LogType.BRANCH.label -> {
@@ -90,14 +94,27 @@ class SpecWorksheetModel(
                     ) {
                         newCase()
                     }
-                    if (current.type != "scenario" && (current.result.isBlank() || current.result == notApplicable)) {
+                    if (current.type != "scenario" || current.result == notApplicable) {
                         current.os = os
                         current.special = special
-                        if (frame != Frame.EXPECTATION) {
+                        if (frame == Frame.EXPECTATION) {
+                            if (logLine.command != "os" && logLine.command != "special") {
+                                addDescription(logLine)
+                            }
+                        } else {
                             addDescription(logLine)
                         }
                     }
+                    current.incrementIndent()
                 } else if (logLine.message.startsWith("}")) {
+                    current.decrementIndent()
+                    if (frame == Frame.EXPECTATION) {
+                        if (logLine.command != "os" && logLine.command != "special") {
+                            addDescription(logLine)
+                        }
+                    } else {
+                        addDescription(logLine)
+                    }
                     if (logLine.command == "os") {
                         os = ""
                         if (frame != Frame.EXPECTATION) {
@@ -108,9 +125,6 @@ class SpecWorksheetModel(
                         if (frame != Frame.EXPECTATION) {
                             current.special = ""
                         }
-                    }
-                    if (frame != Frame.EXPECTATION) {
-                        addDescription(logLine)
                     }
                 }
             }
@@ -461,7 +475,7 @@ class SpecWorksheetModel(
      */
     fun case(): LineObject {
 
-        if (current.type == "scenario" || current.step.isNotBlank()) {
+        if (current.type == "scenario" || current.isEmpty.not()) {
             newCase()
         }
 
@@ -479,9 +493,22 @@ class SpecWorksheetModel(
             newCase()
         }
         val msg = getMessage(logLine)
-        current.conditions.add(msg)
+        msg.split("\\n").forEach {
+            current.conditions.add(it)
+        }
 
         return current
+    }
+
+    private val INDENT = "  "
+
+    private fun getIndent(level: Int): String {
+
+        val sb = StringBuilder()
+        for (i in 1..level) {
+            sb.append(INDENT)
+        }
+        return sb.toString()
     }
 
     private fun getMessage(logLine: LogLine): String {
@@ -492,6 +519,7 @@ class SpecWorksheetModel(
             current.step = logLine.stepNo
         }
 
+        val indent = getIndent(level = current.indentLevel)
         val bulletLocal =
             when (logLine.logType) {
                 LogType.CAPTION.label -> ""
@@ -500,14 +528,16 @@ class SpecWorksheetModel(
                 else -> bullet
             }
 
-        var msg = "$bulletLocal${logLine.message}"
+        var msg = "$indent$bulletLocal${logLine.message}"
         if (frame != Frame.EXPECTATION) {
             if (logLine.logType == "branch") {
-                msg = logLine.message
-                if (msg.startsWith("}")) {
-                    msg = "}"
-                }
+                msg = "$indent${logLine.message}"
             }
+        }
+
+        if (msg.trim().startsWith("} ")) {
+            val ix = msg.indexOf("}")
+            msg = msg.substring(0, ix + 1)
         }
 
         return msg
@@ -522,7 +552,9 @@ class SpecWorksheetModel(
             newCase()
         }
         val msg = getMessage(logLine)
-        current.actions.add(msg)
+        msg.split("\\n").forEach {
+            current.actions.add(it)
+        }
 
         return current
     }
@@ -553,14 +585,23 @@ class SpecWorksheetModel(
     fun expectation(logLine: LogLine): LineObject {
 
         val bulletLocal =
-            if (logLine.logType == LogType.CAPTION.label) ""
-            else if (logLine.logType == LogType.OUTPUT.label) ""
-            else if (logLine.logType == LogType.COMMENT.label) ""
-            else if (logLine.logType == LogType.WITHSCROLL.label) ""
-            else bullet
+            when (logLine.logType) {
+                LogType.CAPTION.label -> ""
+                LogType.OUTPUT.label -> ""
+                LogType.COMMENT.label -> ""
+                LogType.WITHSCROLL.label -> ""
+                LogType.BRANCH.label -> ""
+                else -> bullet
+            }
         val m = logLine.arrangedMessage.ifBlank { logLine.message }
-        val msg = "$bulletLocal$m"
-        current.expectations.add(msg)
+        var msg = "$bulletLocal$m"
+        if (msg.trim().startsWith("} ")) {
+            val ix = msg.indexOf("}")
+            msg = msg.substring(0, ix + 1)
+        }
+        msg.split("\\n").forEach {
+            current.expectations.add(it)
+        }
 
         return current
     }

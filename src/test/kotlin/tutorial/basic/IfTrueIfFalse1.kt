@@ -47,4 +47,32 @@ class IfTrueIfFalse1 : UITest() {
         }
     }
 
+    @Test
+    @Order(20)
+    fun ifTrueIfFalse_withMessage() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    isEmulator
+                        .ifTrue("on emulator") {
+                            it.tapWithScrollDown("About emulated device")
+                        }
+                        .ifElse("on real device") {
+                            it.tapWithScrollDown("About phone")
+                        }
+                }.expectation {
+                    isEmulator
+                        .ifTrue("on emulator") {
+                            it.exist("@About emulated device")
+                        }
+                        .ifElse("on real device") {
+                            it.exist("@About phone")
+                        }
+                }
+            }
+        }
+    }
 }

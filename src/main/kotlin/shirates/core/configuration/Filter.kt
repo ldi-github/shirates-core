@@ -493,6 +493,7 @@ class Filter(
         if (image.isSame(tmp1) && isNegation.not()) {
             return ImageMatchResult(
                 result = true,
+                templateSubject = null,
                 scale = scale,
                 threshold = threshold,
                 image = image,

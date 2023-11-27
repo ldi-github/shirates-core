@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "6.1.0"
+version = "6.2.0"
 
 val appiumClientVersion = "8.5.1"
 
@@ -374,3 +374,4 @@ tasks.register<JavaExec>("md2html") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("md2html.Executor")
 }
+

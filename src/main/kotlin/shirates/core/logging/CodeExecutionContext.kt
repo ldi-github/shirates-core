@@ -75,6 +75,11 @@ object CodeExecutionContext {
     var isScrolling = false
 
     /**
+     * isInCell
+     */
+    var isInCell = false
+
+    /**
      * withScrollDirection
      */
     var withScrollDirection: ScrollDirection? = null

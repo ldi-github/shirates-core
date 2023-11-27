@@ -20,9 +20,9 @@ open class CompareResult() : TestDrive {
     /**
      * setExecuted
      */
-    fun setExecuted(condition: String, matched: Boolean) {
+    fun setExecuted(condition: String, matched: Boolean, message: String) {
 
-        mHistory.add(BranchExecutionState(condition, matched))
+        mHistory.add(BranchExecutionState(condition = condition, matched = matched, message = message))
     }
 
     /**

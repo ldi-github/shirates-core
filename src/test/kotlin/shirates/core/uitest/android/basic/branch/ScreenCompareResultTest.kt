@@ -1,12 +1,16 @@
 package shirates.core.uitest.android.basic.branch
 
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifScreenIs
+import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ifScreenIsNot
 import shirates.core.driver.branchextension.result.ScreenCompareResult
+import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.macro
+import shirates.core.exception.TestDriverException
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
@@ -22,18 +26,52 @@ class ScreenCompareResultTest : UITest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                }.expectation {
+                }.action {
                     val result = ScreenCompareResult()
                     result
-                        .ifScreenIs("[Network & internet Screen]", onTrue = {
+                        .ifScreenIs("[Network & internet Screen]") {
+                            describe("never called")
+                        }
+                        .ifScreenIs("[Android Settings Top Screen]") {
+                            describe("called")
+                        }
+                        .ifScreenIs("[Android Settings Top Screen]", "[Network & internet Screen]") {
+                            describe("called")
+                        }
+                        .ifElse {
+                            describe("never called")
+                        }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(2)
+                    assertThat(result.history[0].condition).isEqualTo("if screen is [Android Settings Top Screen]")
+                    assertThat(result.history[0].matched).isTrue()
+                    assertThat(result.history[1].condition).isEqualTo("if screen is ([Android Settings Top Screen] or [Network & internet Screen])")
+                    assertThat(result.history[1].matched).isTrue()
+                }.expectation {
+                    android {
+                        OK("called")
+                    }
+
+                    val result = ScreenCompareResult()
+                    result
+                        .ifScreenIs("[Network & internet Screen]") {
                             NG("never called")
-                        })
-                        .ifScreenIs("[Android Settings Top Screen]", onTrue = {
+                        }
+                        .ifScreenIs("[Android Settings Top Screen]") {
                             OK("called")
-                        })
+                        }
+                        .ifScreenIs("[Android Settings Top Screen]", "[Network & internet Screen]") {
+                            OK("called")
+                        }
                         .ifElse {
                             NG("never called")
                         }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(2)
+                    assertThat(result.history[0].condition).isEqualTo("if screen is [Android Settings Top Screen]")
+                    assertThat(result.history[0].matched).isTrue()
+                    assertThat(result.history[1].condition).isEqualTo("if screen is ([Android Settings Top Screen] or [Network & internet Screen])")
+                    assertThat(result.history[1].matched).isTrue()
                 }
             }
             case(2) {
@@ -42,42 +80,75 @@ class ScreenCompareResultTest : UITest() {
                 }.expectation {
                     val result = ScreenCompareResult()
                     result
-                        .ifScreenIs("[Network & internet Screen]", onTrue = {
+                        .ifScreenIs("[Network & internet Screen]") {
                             OK("called")
-                        })
-                        .ifScreenIs("[Android Settings Top Screen]", onTrue = {
+                        }
+                        .ifScreenIs("[Android Settings Top Screen]") {
                             NG("never called")
-                        })
+                        }
                         .ifElse {
                             NG("never called")
                         }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(1)
+                    assertThat(result.history[0].condition).isEqualTo("if screen is [Network & internet Screen]")
+                    assertThat(result.history[0].matched).isTrue()
                 }
             }
             case(3) {
+                expectation {
+                    val result = ScreenCompareResult()
+                    result
+                        .ifScreenIs("[About phone Screen]") {
+                            OK("called")
+                        }
+                    assertThat(result.anyMatched).isFalse()
+                    assertThat(result.history.count()).isEqualTo(0)
+                }
+            }
+            case(4) {
                 condition {
                     it.macro("[Connected devices Screen]")
                 }.expectation {
                     val result = ScreenCompareResult()
                     result
-                        .ifScreenIs("[Network & internet Screen]", onTrue = {
+                        .ifScreenIs("[Network & internet Screen]") {
                             NG("never called")
-                        })
-                        .ifScreenIs("[Android Settings Top Screen]", onTrue = {
+                        }
+                        .ifScreenIs("[Android Settings Top Screen]") {
                             NG("never called")
-                        })
+                        }
                         .ifElse {
                             OK("called")
                         }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(1)
+                    assertThat(result.history[0].condition).isEqualTo("if else")
+                    assertThat(result.history[0].matched).isTrue()
                 }
             }
-            case(4) {
+            case(5) {
                 expectation {
                     val result = ScreenCompareResult()
-                    result.ifScreenIs {
-                        NG("never called")
-                    }.ifElse {
-                        OK("called")
-                    }
+                    assertThatThrownBy {
+                        result
+                            .ifScreenIs {
+                                NG("never called")
+                            }
+                    }.isInstanceOf(IllegalArgumentException::class.java)
+                        .hasMessage("screenNames is required.")
+                }
+            }
+            case(6) {
+                expectation {
+                    val result = ScreenCompareResult()
+                    assertThatThrownBy {
+                        result
+                            .ifScreenIs("[not exist screen]") {
+                                NG("never called")
+                            }
+                    }.isInstanceOf(TestDriverException::class.java)
+                        .hasMessage("key is not registered.(key='[not exist screen]')")
                 }
             }
         }
@@ -85,36 +156,56 @@ class ScreenCompareResultTest : UITest() {
 
     @Order(20)
     @Test
-    fun ifScreenIs_not() {
+    fun ifScreenIsNot_ifElse() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    ifScreenIs("[Android Settings Top Screen]") {
-                        OK("called")
-                    }.not {
-                        NG("never called")
-                    }
+                    val result = ScreenCompareResult()
+                    result
+                        .ifScreenIs("[Android Settings Top Screen]") {
+                            OK("called")
+                        }
+                        .ifScreenIsNot("[Android Settings Top Screen]") {
+                            NG("never called")
+                        }
+                        .ifScreenIsNot("[Network & internet Screen]") {
+                            OK("called")
+                        }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(2)
+                    assertThat(result.history[0].condition).isEqualTo("if screen is [Android Settings Top Screen]")
+                    assertThat(result.history[0].matched).isTrue()
+                    assertThat(result.history[1].condition).isEqualTo("if screen is not [Network & internet Screen]")
+                    assertThat(result.history[1].matched).isTrue()
                 }
             }
             case(2) {
                 expectation {
-                    ifScreenIs("[Connected devices Screen]") {
-                        NG("never called")
-                    }.not {
-                        OK("called")
-                    }
+                    val result = ScreenCompareResult()
+                    result
+                        .ifScreenIsNot("[Network & internet Screen]", "[Connected devices Screen]") {
+                            OK("called")
+                        }
+                        .ifElse {
+                            NG("never called")
+                        }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(1)
+                    assertThat(result.history[0].condition).isEqualTo("if screen is not ([Network & internet Screen] or [Connected devices Screen])")
+                    assertThat(result.history[0].matched).isTrue()
                 }
             }
             case(3) {
                 expectation {
-                    ifScreenIsNot {
-                        NG("Never called")
-                    }.ifElse {
-                        OK("called")
-                    }
+                    assertThatThrownBy {
+                        ifScreenIsNot {
+                            NG("Never called")
+                        }
+                    }.isInstanceOf(IllegalArgumentException::class.java)
+                        .hasMessage("screenNames is required.")
                 }
             }
         }
@@ -123,32 +214,6 @@ class ScreenCompareResultTest : UITest() {
 
     @Order(30)
     @Test
-    fun ifScreenIsNot_not() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    ifScreenIsNot("[Android Settings Top Screen]") {
-                        NG("never called")
-                    }.not {
-                        OK("called")
-                    }
-
-                    ifScreenIsNot("[Connected devices Screen]") {
-                        OK("called")
-                    }.not {
-                        NG("never called")
-                    }
-                }
-            }
-        }
-
-    }
-
-    @Order(40)
-    @Test
     fun multipleCallTest() {
 
         scenario {
@@ -156,45 +221,65 @@ class ScreenCompareResultTest : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    ifScreenIs("[Android Settings Top Screen]") {
-                        OK("called")
-                    }.ifScreenIs("[Android Settings Top Screen]") {
-                        OK("called")
-                    }.not {
-                        NG("never called")
-                    }.not {
-                        NG("never called")
-                    }
+                    val result = ScreenCompareResult()
+                    result
+                        .ifScreenIs("[Android Settings Top Screen]") {
+                            OK("called")
+                        }.ifScreenIs("[Android Settings Top Screen]") {
+                            OK("called")
+                        }.ifElse {
+                            NG("never called")
+                        }.ifElse {
+                            NG("never called")
+                        }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(2)
+                    assertThat(result.history[0].condition).isEqualTo("if screen is [Android Settings Top Screen]")
+                    assertThat(result.history[0].matched).isTrue()
+                    assertThat(result.history[1].condition).isEqualTo("if screen is [Android Settings Top Screen]")
+                    assertThat(result.history[1].matched).isTrue()
                 }
             }
             case(2) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    ifScreenIsNot("[Android Settings Top Screen]") {
-                        NG("never called")
-                    }.ifScreenIsNot("[Android Settings Top Screen]") {
-                        NG("never called")
-                    }.not {
-                        OK("called")
-                    }.not {
-                        NG("never called")
-                    }
+                    val result = ScreenCompareResult()
+                    result
+                        .ifScreenIsNot("[Android Settings Top Screen]") {
+                            NG("never called")
+                        }.ifScreenIsNot("[Android Settings Top Screen]") {
+                            NG("never called")
+                        }.ifElse {
+                            OK("called")
+                        }.ifElse {
+                            NG("never called")
+                        }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(1)
+                    assertThat(result.history[0].condition).isEqualTo("if else")
+                    assertThat(result.history[0].matched).isTrue()
                 }
             }
             case(3) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    ifScreenIsNot("[Android Settings Top Screen]") {
-                        NG("never called")
-                    }.ifScreenIs("[Android Settings Top Screen]") {
-                        OK("called")
-                    }.not {
-                        NG("never called")
-                    }.not {
-                        OK("called")
-                    }
+                    val result = ScreenCompareResult()
+                    result
+                        .ifScreenIsNot("[Android Settings Top Screen]") {
+                            NG("never called")
+                        }.ifScreenIs("[Android Settings Top Screen]") {
+                            OK("called")
+                        }.ifElse {
+                            NG("never called")
+                        }.ifElse {
+                            NG("never called")
+                        }
+                    assertThat(result.anyMatched).isTrue()
+                    assertThat(result.history.count()).isEqualTo(1)
+                    assertThat(result.history[0].condition).isEqualTo("if screen is [Android Settings Top Screen]")
+                    assertThat(result.history[0].matched).isTrue()
                 }
             }
         }

@@ -9,7 +9,7 @@
 | ifImageIs    | 指定した画像に要素の画像がマッチする場合にコードブロックが実行されます  |
 | ifImageIsNot | 指定した画像に要素の画像がマッチしない場合にコードブロックが実行されます |
 
-### IfImageExist1.kt
+### IfImageIs1.kt
 
 (`kotlin/tutorial/basic/IfImageIs1.kt`)
 

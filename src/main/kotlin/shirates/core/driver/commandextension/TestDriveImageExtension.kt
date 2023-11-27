@@ -58,7 +58,7 @@ internal fun TestDrive.findImageCore(
     val message = message(id = command, subject = sel.toString())
 
     val context = TestDriverCommandContext(testElement)
-    var r = ImageMatchResult(result = false)
+    var r = ImageMatchResult(result = false, templateSubject = expression)
     val action = {
         context.execOperateCommand(command = command, message = message, subject = sel.toString()) {
             r = TestDriver.findImage(

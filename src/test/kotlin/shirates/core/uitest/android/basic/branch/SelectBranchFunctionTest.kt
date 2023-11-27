@@ -24,7 +24,7 @@ class SelectBranchFunctionTest : UITest() {
             // Act
             ifCanSelect("no exist") {
                 ifCanSelectCalled = true     // never called
-            }.not {
+            }.ifElse {
                 notCalled = true
             }
             // Assert
@@ -38,7 +38,7 @@ class SelectBranchFunctionTest : UITest() {
             // Act
             ifCanSelect("Connected devices") {
                 ifCanSelectCalled = true     // called
-            }.not {
+            }.ifElse {
                 notCalled = true    // never called
             }
             // Assert
@@ -72,7 +72,7 @@ class SelectBranchFunctionTest : UITest() {
             // Act
             ifCanSelectNot("no exist") {
                 ifCanSelectNotCalled = true     // called
-            }.not {
+            }.ifElse {
                 notCalled = true    // never called
             }
             // Assert
@@ -86,7 +86,7 @@ class SelectBranchFunctionTest : UITest() {
             // Act
             ifCanSelectNot("Connected devices") {
                 ifCanSelectNotCalled = true     // never called
-            }.not {
+            }.ifElse {
                 notCalled = true    // called
             }
             // Assert

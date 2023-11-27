@@ -223,6 +223,30 @@ class StringUtilityTest : UnitTest() {
     }
 
     @Test
+    fun replaceZstoSpace() {
+
+        run {
+            // Arrange
+            val text = Const.ZsCategorySpaces.joinToString("")
+            // Act
+            val actual = StringUtility.replaceZstoSpace(text)
+            // Assert
+            var expected = text.replace("\\p{Zs}".toRegex(), " ")
+            expected = expected.substring(0, expected.length - 1) + Const.ZENKAKU_SPACE
+            assertThat(actual).isEqualTo(expected)
+        }
+        run {
+            // Arrange
+            val text = Const.ZsCategorySpaces.joinToString("")
+            // Act
+            val actual = StringUtility.replaceZstoSpace(text, keepZenkakuSpace = false)
+            // Assert
+            val expected = text.replace("\\p{Zs}".toRegex(), " ")
+            assertThat(actual).isEqualTo(expected)
+        }
+    }
+
+    @Test
     fun trim() {
 
         run {

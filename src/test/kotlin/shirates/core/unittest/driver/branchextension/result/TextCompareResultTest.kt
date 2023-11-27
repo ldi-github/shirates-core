@@ -185,7 +185,7 @@ class TextCompareResultTest {
             // Act
             action(result, value = null)
             // Assert
-            assertThat(ifStringIs).isFalse()
+            assertThat(ifStringIs).isTrue()
             assertThat(elseIfStringIs).isFalse()
             assertThat(ifStartsWith).isFalse()
             assertThat(elseIfStartsWith).isFalse()
@@ -195,7 +195,7 @@ class TextCompareResultTest {
             assertThat(elseIfEndsWith).isFalse()
             assertThat(ifMatches).isFalse()
             assertThat(elseIfMatches).isFalse()
-            assertThat(ifElse).isTrue()
+            assertThat(ifElse).isFalse()
 
         }
         run {
@@ -224,7 +224,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.ifStringIs("The Internet", onTrue = {
             called = true
@@ -247,7 +247,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.elseIfStringIs("The Internet", onTrue = {
             called = true
@@ -271,7 +271,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.ifStartsWith("The In", onTrue = {
             called = true
@@ -294,7 +294,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.elseIfStartsWith("The In", onTrue = {
             called = true
@@ -318,7 +318,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.ifContains("e Int", onTrue = {
             called = true
@@ -341,7 +341,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.elseIfContains("e Int", onTrue = {
             called = true
@@ -365,7 +365,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.ifEndsWith("rnet", onTrue = {
             called = true
@@ -388,7 +388,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.elseIfEndsWith("rnet", onTrue = {
             called = true
@@ -411,7 +411,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.ifMatches("^The.*t$", onTrue = {
             called = true
@@ -442,7 +442,7 @@ class TextCompareResultTest {
 
         // Arrange
         var called = false
-        val result = TextCompareResult("The Internet")
+        val result = TextCompareResult(text = "The Internet")
         // Act
         result.elseIfMatches("^The.*t$", onTrue = {
             called = true
