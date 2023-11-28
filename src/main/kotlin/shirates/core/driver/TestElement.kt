@@ -1133,6 +1133,9 @@ class TestElement(
 
             s = selector?.toString()
             if (s != null && s.isNotBlank() && selector?.xpath == null) {
+                if (CodeExecutionContext.isInCell) {
+                    return s.split(">:", "]:").last()
+                }
                 return s
             }
 
