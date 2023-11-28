@@ -221,46 +221,6 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isOtherBased).isFalse()
         }
         run {
-            val sel = Selector(":cellLabel")
-            assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerWidgetBased).isTrue()
-            assertThat(sel.isXmlBased).isFalse()
-            assertThat(sel.isCoordinateBased).isFalse()
-            assertThat(sel.isOtherBased).isFalse()
-        }
-        run {
-            val sel = Selector(":cellInput")
-            assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerWidgetBased).isTrue()
-            assertThat(sel.isXmlBased).isFalse()
-            assertThat(sel.isCoordinateBased).isFalse()
-            assertThat(sel.isOtherBased).isFalse()
-        }
-        run {
-            val sel = Selector(":cellImage")
-            assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerWidgetBased).isTrue()
-            assertThat(sel.isXmlBased).isFalse()
-            assertThat(sel.isCoordinateBased).isFalse()
-            assertThat(sel.isOtherBased).isFalse()
-        }
-        run {
-            val sel = Selector(":cellButton")
-            assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerWidgetBased).isTrue()
-            assertThat(sel.isXmlBased).isFalse()
-            assertThat(sel.isCoordinateBased).isFalse()
-            assertThat(sel.isOtherBased).isFalse()
-        }
-        run {
-            val sel = Selector(":cellSwitch")
-            assertThat(sel.isFlowBased).isFalse()
-            assertThat(sel.isInnerWidgetBased).isTrue()
-            assertThat(sel.isXmlBased).isFalse()
-            assertThat(sel.isCoordinateBased).isFalse()
-            assertThat(sel.isOtherBased).isFalse()
-        }
-        run {
             val sel = Selector(":not")
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isFalse()

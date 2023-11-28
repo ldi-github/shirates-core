@@ -9,7 +9,7 @@ import shirates.core.testcode.UITest
 class TestElementCellExtensionTest : UITest() {
 
     @Test
-    fun targetCell_existInCell_cellLabel() {
+    fun cellOfTest() {
 
         scenario {
             case(1) {
