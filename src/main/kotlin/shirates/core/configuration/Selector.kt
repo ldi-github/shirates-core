@@ -417,8 +417,6 @@ class Selector(
             ":innerLabel", ":innerInput", ":innerImage", ":innerButton", ":innerSwitch",
             ":innerVWidget", ":innerV",
             ":innerVlabel", ":innerVinput", ":innerVimage", ":innerVbutton", ":innerVswitch",
-            ":cellWidget", ":cell",
-            ":cellLabel", ":cellInput", ":cellImage", ":cellButton", ":cellSwitch"
         )
 
         val xmlCommandBaseNames = listOf(

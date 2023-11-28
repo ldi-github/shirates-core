@@ -93,20 +93,17 @@ class SpecReportTest2 : UITest() {
                         existInCell("[9:00 AM ON/OFF]")
                     }
                 }.expectation {
-                    /**
-                     * cellWidget
-                     */
                     it.cellOf("[8:30 AM]") {
-                        cellWidget(1).textIs("8:30 AM")
-                        cellWidget(2).idIs("arrow")
-                        cellWidget(3).textIs("Mon, Tue, Wed, Thu, Fri")
-                        cellWidget(4).idIs("onoff")
+                        innerWidget(1).textIs("8:30 AM")
+                        innerWidget(2).idIs("arrow")
+                        innerWidget(3).textIs("Mon, Tue, Wed, Thu, Fri")
+                        innerWidget(4).idIs("onoff")
                     }
                     it.cellOf("[9:00 AM]") {
-                        cellWidget(1).textIs("9:00 AM")
-                        cellWidget(2).idIs("arrow")
-                        cellWidget(3).textIs("Sun, Sat")
-                        cellWidget(4).idIs("onoff")
+                        innerWidget(1).textIs("9:00 AM")
+                        innerWidget(2).idIs("arrow")
+                        innerWidget(3).textIs("Sun, Sat")
+                        innerWidget(4).idIs("onoff")
                     }
                 }
             }
@@ -251,10 +248,10 @@ class SpecReportTest2 : UITest() {
                 rowNum = 19,
                 id = 10,
                 target = "Cell of [8:30 AM]",
-                expectation = "- cellWidget is \"8:30 AM\"\n" +
-                        "- cellWidget(2).idOrName is \"arrow\"\n" +
-                        "- cellWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
-                        "- cellWidget(4).idOrName is \"onoff\"",
+                expectation = "- innerWidget is \"8:30 AM\"\n" +
+                        "- innerWidget(2).idOrName is \"arrow\"\n" +
+                        "- innerWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
+                        "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
                 result = "N/A"
             )
@@ -262,10 +259,10 @@ class SpecReportTest2 : UITest() {
                 rowNum = 20,
                 id = 11,
                 target = "Cell of [9:00 AM]",
-                expectation = "- cellWidget is \"9:00 AM\"\n" +
-                        "- cellWidget(2).idOrName is \"arrow\"\n" +
-                        "- cellWidget(3) is \"Sun, Sat\"\n" +
-                        "- cellWidget(4).idOrName is \"onoff\"",
+                expectation = "- innerWidget is \"9:00 AM\"\n" +
+                        "- innerWidget(2).idOrName is \"arrow\"\n" +
+                        "- innerWidget(3) is \"Sun, Sat\"\n" +
+                        "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
                 result = "N/A"
             )
@@ -384,10 +381,10 @@ class SpecReportTest2 : UITest() {
                 rowNum = 30,
                 id = 21,
                 target = "Cell of [8:30 AM]",
-                expectation = "- cellWidget is \"8:30 AM\"\n" +
-                        "- cellWidget(2).idOrName is \"arrow\"\n" +
-                        "- cellWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
-                        "- cellWidget(4).idOrName is \"onoff\"",
+                expectation = "- innerWidget is \"8:30 AM\"\n" +
+                        "- innerWidget(2).idOrName is \"arrow\"\n" +
+                        "- innerWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
+                        "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "A",
                 result = "OK",
                 testDate = date,
@@ -397,10 +394,10 @@ class SpecReportTest2 : UITest() {
                 rowNum = 31,
                 id = 22,
                 target = "Cell of [9:00 AM]",
-                expectation = "- cellWidget is \"9:00 AM\"\n" +
-                        "- cellWidget(2).idOrName is \"arrow\"\n" +
-                        "- cellWidget(3) is \"Sun, Sat\"\n" +
-                        "- cellWidget(4).idOrName is \"onoff\"",
+                expectation = "- innerWidget is \"9:00 AM\"\n" +
+                        "- innerWidget(2).idOrName is \"arrow\"\n" +
+                        "- innerWidget(3) is \"Sun, Sat\"\n" +
+                        "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "A",
                 result = "OK",
                 testDate = date,

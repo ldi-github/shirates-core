@@ -416,41 +416,6 @@ internal fun TestElement.relative(
                 e = this.innerVswitch(selector = sel, frame = frame)
             }
 
-            ":cellWidget", ":cell" -> {
-                val sel = relativeSelector.copy()
-                sel.command = null
-                e = this.cellWidget(selector = sel, frame = frame)
-            }
-
-            ":cellLabel" -> {
-                val sel = relativeSelector.copy()
-                sel.command = null
-                e = this.cellLabel(selector = sel, frame = frame)
-            }
-
-            ":cellInput" -> {
-                val sel = relativeSelector.copy()
-                sel.command = null
-                e = this.cellInput(selector = sel, frame = frame)
-            }
-
-            ":cellImage" -> {
-                val sel = relativeSelector.copy()
-                sel.command = null
-                e = this.cellImage(selector = sel, frame = frame)
-            }
-
-            ":cellButton" -> {
-                val sel = relativeSelector.copy()
-                sel.command = null
-                e = this.cellButton(selector = sel, frame = frame)
-            }
-
-            ":cellSwitch" -> {
-                val sel = relativeSelector.copy()
-                sel.command = null
-                e = this.cellSwitch(selector = sel, frame = frame)
-            }
 
             /**
              * XML based
