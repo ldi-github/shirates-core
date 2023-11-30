@@ -20,7 +20,8 @@ class SpecLine(
     var supplement: String = "",
     var suspend: String = "",
     var ticketNo: String = "",
-    var remarks: String = ""
+    var remarks: String = "",
+    var importantMessage: String = ""
 ) {
 
     /**

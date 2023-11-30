@@ -1,18 +1,16 @@
 package shirates.spec.report.models
 
 import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.spec.report.entity.SpecReportData
-import shirates.spec.utilily.cells
-import shirates.spec.utilily.rows
-import shirates.spec.utilily.saveAs
+import shirates.spec.utilily.*
 
 class SpecWriter(val specReport: SpecReport) {
 
     val templateWorkbook = specReport.templateWorkbook
-    val templateWorksheet = specReport.templateWorksheet
+    val worksheet = specReport.worksheet
     val commandListWorksheet = specReport.commandListWorksheet
 
     init {
@@ -25,13 +23,14 @@ class SpecWriter(val specReport: SpecReport) {
     fun outputWorkbook() {
 
         outputCommandList()
-        outputSpecSheet(templateWorksheet = templateWorksheet, worksheetData = specReport.data)
+        outputSpecSheet(templateWorkbook = templateWorkbook, worksheetData = specReport.data)
 
         /**
          * save
          */
-        val sheetIndex = templateWorkbook.sheetIterator().asSequence().indexOf(templateWorksheet)
+        val sheetIndex = templateWorkbook.sheetIterator().asSequence().indexOf(worksheet)
         templateWorkbook.setSheetName(sheetIndex, specReport.data.sheetName)
+        templateWorkbook.removeSheet("Template")
         templateWorkbook.forceFormulaRecalculation = true
         templateWorkbook.saveAs(specReport.outputFilePath)
         println("Saved: ${specReport.outputFilePath}")
@@ -68,7 +67,17 @@ class SpecWriter(val specReport: SpecReport) {
         /**
          * outputSpecSheet
          */
-        fun outputSpecSheet(templateWorksheet: XSSFSheet, worksheetData: SpecReportData) {
+        fun outputSpecSheet(
+            templateWorkbook: XSSFWorkbook,
+            worksheetData: SpecReportData,
+            newSheetName: String? = null
+        ) {
+
+            val worksheet =
+                if (newSheetName != null)
+                    templateWorkbook.copySheet(templateSheetName = "TestSpec", newSheetName = newSheetName)
+                else templateWorkbook.worksheets("TestSpec")
+            val templateWorksheet = templateWorkbook.worksheets("Template")
 
             fun XSSFRow.setString(key: String, col: Int, value: String) {
 
@@ -88,25 +97,44 @@ class SpecWriter(val specReport: SpecReport) {
 
             with(worksheetData) {
                 val sp = sheetPosition
+                val policy = org.apache.poi.ss.usermodel.CellCopyPolicy.Builder().cellStyle(true).build()
 
                 var rowNum = 0
                 for (i in 0 until specLines.count()) {
                     val specLine = specLines[i]
+                    val deleted = specLine.result == SpecResourceUtility.deleted
                     rowNum = sp.RowHeader + 1 + i
-                    val row = templateWorksheet.rows(rowNum)
+                    val row = worksheet.rows(rowNum)
 
                     /**
                      * copy template cells
                      */
                     if (specLine.type == "scenario") {
-                        if (i > 0) {
-                            val policy = org.apache.poi.ss.usermodel.CellCopyPolicy.Builder().cellStyle(true).build()
+                        for (c in 1..19) {
+                            val fromCell =
+                                if (deleted) templateWorksheet.rows(sp.RowHeader + 3).cells(c)
+                                else templateWorksheet.rows(sp.RowHeader + 1).cells(c)
+                            val cell = worksheet.rows(rowNum).cells(c)
+                            cell.copyCellFrom(fromCell, policy)
+                        }
+                    } else {
+                        if (deleted) {
                             for (c in 1..19) {
-                                val fromCell = templateWorksheet.rows(sp.RowHeader + 1).cells(c)
-                                val cell = templateWorksheet.rows(rowNum).cells(c)
+                                val fromCell = templateWorksheet.rows(sp.RowHeader + 4).cells(c)
+                                val cell = worksheet.rows(rowNum).cells(c)
                                 cell.copyCellFrom(fromCell, policy)
                             }
                         }
+                    }
+
+                    /**
+                     * Important message
+                     */
+                    if (specLine.importantMessage.isNotBlank()) {
+                        val cell = worksheet.rows(rowNum).cells(3)
+                        cell.setCellValue(specLine.importantMessage)
+                        cell.cellStyle.wrapText = false
+                        cell.setFontRed()
                     }
 
                     /**
@@ -155,50 +183,50 @@ class SpecWriter(val specReport: SpecReport) {
                 var scenarioRow: Int
                 var last = 0
                 for (n in sp.RowHeader..maxRow) {
-                    val step = templateWorksheet.cells(n, sp.colStep).toString()
+                    val step = worksheet.cells(n, sp.colStep).toString()
                     val isScenario = step != "" && step.toIntOrNull() == null
                     if (isScenario) {
                         scenarioRow = n
                         if (lastScenarioRow != 0) {
-                            templateWorksheet.groupRow(lastScenarioRow, scenarioRow - 2)
+                            worksheet.groupRow(lastScenarioRow, scenarioRow - 2)
                         }
                         lastScenarioRow = scenarioRow
                     }
                     last = n
                 }
                 if (last > 0) {
-                    templateWorksheet.groupRow(lastScenarioRow, last)
+                    worksheet.groupRow(lastScenarioRow, last)
                 }
 
                 /**
                  * delete rows
                  */
-                for (i in templateWorksheet.lastRowNum + 1 downTo rowNum + 1) {
-                    templateWorksheet.removeRow(templateWorksheet.rows(i))
+                for (i in worksheet.lastRowNum + 1 downTo rowNum + 1) {
+                    worksheet.removeRow(worksheet.rows(i))
                 }
 
                 /**
                  * set header
                  */
-                templateWorksheet.cells("A1").setCellValue(appIconName)
-                templateWorksheet.cells("D1").setCellValue(sheetName)
-                templateWorksheet.cells("D2").setCellValue(testClassName)
-                templateWorksheet.cells("D3").setCellValue(profileName)
-                templateWorksheet.cells("D4").setCellValue(deviceModel)
-                templateWorksheet.cells("D5").setCellValue(platformVersion)
+                worksheet.cells("A1").setCellValue(appIconName)
+                worksheet.cells("D1").setCellValue(sheetName)
+                worksheet.cells("D2").setCellValue(testClassName)
+                worksheet.cells("D3").setCellValue(profileName)
+                worksheet.cells("D4").setCellValue(deviceModel)
+                worksheet.cells("D5").setCellValue(platformVersion)
                 if (noLoadRun) {
-                    templateWorksheet.cells("E1")
+                    worksheet.cells("E1")
                         .setCellValue(shirates.spec.utilily.SpecResourceUtility.noLoadRunMode)
                 }
                 this.refresh()
-                templateWorksheet.cells("F1").setCellValue("TestDateTime: ${testDateTime}")
-                templateWorksheet.cells("H4").setCellValue(okCount.toDouble())
-                templateWorksheet.cells("H5").setCellValue(ngCount.toDouble())
-                templateWorksheet.cells("H6").setCellValue(errorCount.toDouble())
-                templateWorksheet.cells("K3").setCellValue(suspendedCount.toDouble())
-                templateWorksheet.cells("K4").setCellValue(manualCount.toDouble())
-                templateWorksheet.cells("K5").setCellValue(skipCount.toDouble())
-                templateWorksheet.cells("K6").setCellValue(notImplCount.toDouble())
+                worksheet.cells("F1").setCellValue("TestDateTime: ${testDateTime}")
+                worksheet.cells("H4").setCellValue(okCount.toDouble())
+                worksheet.cells("H5").setCellValue(ngCount.toDouble())
+                worksheet.cells("H6").setCellValue(errorCount.toDouble())
+                worksheet.cells("K3").setCellValue(suspendedCount.toDouble())
+                worksheet.cells("K4").setCellValue(manualCount.toDouble())
+                worksheet.cells("K5").setCellValue(skipCount.toDouble())
+                worksheet.cells("K6").setCellValue(notImplCount.toDouble())
             }
         }
 

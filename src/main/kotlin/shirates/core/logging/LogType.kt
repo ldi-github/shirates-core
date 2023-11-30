@@ -37,6 +37,16 @@ enum class LogType(val label: String) {
     ERROR("ERROR"),
 
     /**
+     * DELETED
+     */
+    DELETED("DELETED"),
+
+    /**
+     * IMPORTANT
+     */
+    IMPORTANT("IMPORTANT"),
+
+    /**
      * --------------------------------------------------
      * for test results
      * --------------------------------------------------

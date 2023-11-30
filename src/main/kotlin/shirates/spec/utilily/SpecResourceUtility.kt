@@ -1,8 +1,8 @@
 package shirates.spec.utilily
 
-import shirates.spec.SpecConst
 import shirates.core.logging.TestLog
 import shirates.core.utility.file.ResourceUtility
+import shirates.spec.SpecConst
 import java.util.*
 
 object SpecResourceUtility {
@@ -72,6 +72,14 @@ object SpecResourceUtility {
     val suspended: String
         get() {
             return getString("result.suspended")
+        }
+
+    /**
+     * deleted
+     */
+    val deleted: String
+        get() {
+            return getString("result.deleted")
         }
 
     /**

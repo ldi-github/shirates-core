@@ -18,6 +18,7 @@ class LineObject(var type: String) {
     var build = ""
     var supplement = ""
     var indentLevel = 0
+    var importantMessage = ""
 
     /**
      * isEmpty
@@ -110,6 +111,7 @@ class LineObject(var type: String) {
         s.build = build
         s.tester = tester
         s.supplement = supplement
+        s.importantMessage = importantMessage
 
         return s
     }
@@ -123,6 +125,6 @@ class LineObject(var type: String) {
         val action = actions.joinToString("\\n")
         val expectation = expectations.joinToString("\\n")
 
-        return "$id\t$step\t$condition\t$action\t$target\t$expectation\t$os\t$special\t$auto\t$result\t$date\t$tester\t$environment\t$build\t$supplement"
+        return "$id\t$step\t$condition\t$action\t$target\t$expectation\t$os\t$special\t$auto\t$result\t$date\t$tester\t$environment\t$build\t$supplement\t$importantMessage"
     }
 }
