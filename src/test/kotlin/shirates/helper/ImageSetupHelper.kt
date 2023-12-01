@@ -145,34 +145,29 @@ object ImageSetupHelper : TestDrive {
 
         it.macro("[Maps Top Screen]")
             .screenIs("[Maps Top Screen]")
-            .wait()     // wait for animation to complete
         val dir = "testConfig/android/maps/screens/images/mapsTopScreen".toPath()
-        if(Files.exists(dir).not()) dir.toFile().mkdirs()
+        if (Files.exists(dir).not()) dir.toFile().mkdirs()
 
         rootElement.cropImage("[Maps Top Screen].png")
-        it.select("[Explore Tab]").cropTo(dir, "[Explore Tab Image(selected)].png")
-        it.select("[Go Tab]").cropTo(dir, "[Go Tab Image].png")
-        it.select("[Saved Tab]").cropTo(dir, "[Saved Tab Image].png")
-        it.select("[Contribute Tab]").cropTo(dir, "[Contribute Tab Image].png")
-        it.select("[Updates Tab]").cropTo(dir, "[Updates Tab Image].png")
+        it.select("[Explore Tab(selected)]").cropTo(dir)
+        it.select("[Go Tab]").cropTo(dir)
+        it.select("[Saved Tab]").cropTo(dir)
+        it.select("[Contribute Tab]").cropTo(dir)
+        it.select("[Updates Tab]").cropTo(dir)
 
         it.tap("[Go Tab]")
             .screenIs("[Maps Go Screen]")
-            .wait()
-        it.select("[Explore Tab]").cropTo(dir, "[Explore Tab Image].png")
-        it.select("[Go Tab]").cropTo(dir, "[Go Tab Image(selected)].png")
+        it.select("[Explore Tab]").cropTo(dir)
+        it.select("[Go Tab(selected)]").cropTo(dir)
 
         it.tap("[Saved Tab]")
-            .wait()     // wait for animation to complete
-        it.select("[Saved Tab]").cropTo(dir, "[Saved Tab Image(selected)].png")
+        it.select("[Saved Tab(selected)]").cropTo(dir)
 
         it.tap("[Contribute Tab]")
-            .wait()     // wait for animation to complete
-        it.select("[Contribute Tab]").cropTo(dir, "[Contribute Tab Image(selected)].png")
+        it.select("[Contribute Tab(selected)]").cropTo(dir)
 
         it.tap("[Updates Tab]")
-            .wait()     // wait for animation to complete
-        it.select("[Updates Tab]").cropTo(dir, "[Updates Tab Image(selected)].png")
+        it.select("[Updates Tab(selected)]").cropTo(dir)
     }
 
 }

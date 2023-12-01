@@ -5,28 +5,18 @@
 
     "[Explore Tab]": "#explore_tab_strip_button",
     "[Explore Tab(selected)]": "#explore_tab_strip_button&&selected=true",
-    "[Explore Tab Image]": "[Explore Tab Image].png",
-    "[Explore Tab Image(selected)]": "[Explore Tab Image(selected)].png",
 
     "[Go Tab]": "#transportation_tab_strip_button",
     "[Go Tab(selected)]": "#transportation_tab_strip_button&&selected=true",
-    "[Go Tab Image]": "[Go Tab Image].png",
-    "[Go Tab Image(selected)]": "[Go Tab Image(selected)].png",
 
     "[Saved Tab]": "#saved_tab_strip_button",
     "[Saved Tab(selected)]": "#saved_tab_strip_button&&selected=true",
-    "[Saved Tab Image]": "[Saved Tab Image].png",
-    "[Saved Tab Image(selected)]": "[Saved Tab Image(selected)].png",
 
     "[Contribute Tab]": "#contribute_tab_strip_button",
     "[Contribute Tab(selected)]": "#contribute_tab_strip_button&&selected=true",
-    "[Contribute Tab Image]": "[Contribute Tab Image].png",
-    "[Contribute Tab Image(selected)]": "[Contribute Tab Image(selected)].png",
 
     "[Updates Tab]": "#updates_tab_strip_button",
-    "[Updates Tab(selected)]": "#updates_tab_strip_button&&selected=true",
-    "[Updates Tab Image]": "[Updates Tab Image].png",
-    "[Updates Tab Image(selected)]": "[Updates Tab Image(selected)].png"
+    "[Updates Tab(selected)]": "#updates_tab_strip_button&&selected=true"
   }
 
 }
