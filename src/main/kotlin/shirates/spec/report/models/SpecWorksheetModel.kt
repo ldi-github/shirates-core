@@ -108,12 +108,35 @@ class SpecWorksheetModel(
                     current.incrementIndent()
                 } else if (logLine.message.startsWith("}")) {
                     current.decrementIndent()
-                    if (frame == Frame.EXPECTATION) {
-                        if (logLine.command != "os" && logLine.command != "special") {
+
+                    fun List<String>.isOpen(): Boolean {
+                        val last = this.lastOrNull()
+                        if (last?.endsWith("{") == true) {
+                            return true
+                        }
+                        return false
+                    }
+
+                    if (frame == Frame.CONDITION) {
+                        if (current.conditions.isOpen()) {
+                            current.conditions.removeLast()
+                        } else {
                             addDescription(logLine)
                         }
-                    } else {
-                        addDescription(logLine)
+                    } else if (frame == Frame.ACTION) {
+                        if (current.actions.isOpen()) {
+                            current.actions.removeLast()
+                        } else {
+                            addDescription(logLine)
+                        }
+                    } else if (frame == Frame.EXPECTATION) {
+                        if (current.expectations.isOpen()) {
+                            current.expectations.removeLast()
+                        } else {
+                            if (logLine.command != "os" && logLine.command != "special") {
+                                addDescription(logLine)
+                            }
+                        }
                     }
                     if (logLine.command == "os") {
                         os = ""
