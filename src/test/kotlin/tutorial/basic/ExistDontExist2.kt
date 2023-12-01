@@ -17,7 +17,7 @@ class ExistDontExist2 : UITest() {
     fun setupImage() {
 
         scenario {
-            ImageSetupHelper.SetupImagesMapsTopScreen()
+            ImageSetupHelper.setupImagesMapsTopScreen()
         }
     }
 

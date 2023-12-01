@@ -63,7 +63,7 @@ object ImageSetupHelper : TestDrive {
     }
 
     /**
-     * Setup Image Android Settings Top Screen
+     * Setup Image Android Settings Network and Internet Screen
      */
     fun setupImageAndroidSettingsNetworkAndInternetScreen() {
 
@@ -126,22 +126,9 @@ object ImageSetupHelper : TestDrive {
     }
 
     /**
-     * Setup Image Network & internet Screen
-     */
-    fun SetupImagesInNetworkAndInternetScreen() {
-
-        it.macro("[Android Settings Top Screen]")
-        val dir = "testConfig/android/androidSettings/screens/images".toPath()
-        if (Files.exists(dir).not()) dir.toFile().mkdirs()
-        it.select("[Network & internet]").cropTo(dir)
-        it.selectWithScrollDown("[Display]").cropTo(dir)
-        it.selectWithScrollDown("[Tips & support]").cropTo(dir)
-    }
-
-    /**
      * Setup Image Maps Top Screen
      */
-    fun SetupImagesMapsTopScreen() {
+    fun setupImagesMapsTopScreen() {
 
         it.macro("[Maps Top Screen]")
             .screenIs("[Maps Top Screen]")

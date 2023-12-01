@@ -16,53 +16,67 @@
 | findImageWithScrollRight | selectorにマッチする画像を検索します（右方向スクロールあり） |
 | findImageWithScrollLeft  | selectorにマッチする画像を検索します（左方向スクロールあり） |
 
-## 例1
+### FindImage1.kt
 
-### FindImage1_prepare.kt
+(`kotlin/tutorial/basic/FindImage1.kt`)
 
-(`kotlin/tutorial/basic/FindImage1_prepare.kt`)
-
-`prepareImage()`を実行してテスト用の画像ファイルを作成します。
+`findImage()`を実行して画像マッチングのデモを行います。
 
 ```kotlin
 package tutorial.basic
 
-import org.apache.commons.io.FileUtils
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.TestElement
 import shirates.core.driver.commandextension.*
-import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
-import java.io.File
-import java.nio.file.Path
+import shirates.helper.ImageSetupHelper
 
-@Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class FindImage1_prepare : UITest() {
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class FindImage1 : UITest() {
 
-    private fun TestElement.cropAndCopy(fileName: String, directory: Path = TestLog.directoryForLog): TestElement {
+    @Test
+    @Order(10)
+    fun croppingImages() {
 
-        this.cropImage(fileName)
-        FileUtils.copyFile(
-            directory.resolve(fileName).toFile(),
-            File("unitTestConfig/android/androidSettings/screens/images/$fileName")
-        )
-        return this
+        scenario {
+            ImageSetupHelper.setupImageAndroidSettingsTopScreen()
+        }
     }
 
     @Test
-    fun prepareImage() {
+    @Order(20)
+    fun findImage() {
 
         scenario {
-            condition {
-                it.screenIs("[Android Settings Top Screen]")
-            }.action {
-                it.select("Network & internet").leftImage().cropAndCopy("Network & internet.png")
-                it.selectWithScrollDown("Display").leftImage().cropAndCopy("Display.png")
-                it.selectWithScrollDown("Tips & support").leftImage().cropAndCopy("Tips & support.png")
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    withScrollDown {
+                        it.findImage("[Network & internet Icon].png")
+                        it.findImage("[Display Icon].png")
+                        it.findImage("[Tips & support Icon].png")
+                    }
+                    withScrollUp {
+                        it.findImage("[Display Icon].png")
+                        it.findImage("[Network & internet Icon].png")
+                    }
+                }.expectation {
+                    withScrollDown {
+                        it.existImage("[Network & internet Icon].png")
+                        it.existImage("[Display Icon].png")
+                        it.existImage("[Tips & support Icon].png")
+                    }
+                    withScrollUp {
+                        it.existImage("[Display Icon].png")
+                        it.existImage("[Network & internet Icon].png")
+                    }
+                }
             }
         }
     }
+
 }
 ```
 
@@ -73,38 +87,6 @@ class FindImage1_prepare : UITest() {
 画像ファイルは`unitTestConfig/android/androidSettings/screens/images/`ディレクトリにコピーされます。
 
 ![](../../_images/prepare_image.png)
-
-### FindImage1.kt
-
-(`kotlin/tutorial/basic/FindImage1.kt`)
-
-`findImage()`を実行して画像マッチングのデモを行います。
-
-```kotlin
-@Test
-fun findImage() {
-
-    scenario {
-        case(1) {
-            condition {
-                it.screenIs("[Android Settings Top Screen]")
-            }.action {
-                it.findImage("Network & internet.png")
-                it.findImageWithScrollDown("Display.png")
-                it.findImageWithScrollDown("Tips & support.png")
-                it.findImageWithScrollUp("Display.png")
-                it.findImageWithScrollUp("Network & internet.png")
-            }.expectation {
-                it.exist("Network & internet.png")
-                it.existWithScrollDown("Display.png")
-                it.existWithScrollDown("Tips & support.png")
-                it.existWithScrollUp("Display.png")
-                it.existWithScrollUp("Network & internet.png")
-            }
-        }
-    }
-}
-```
 
 ### 注意
 
