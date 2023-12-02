@@ -26,6 +26,7 @@ Shirates has these custom annotations.
 | @DisableCache   | Class, Function | Disable cache                                                                                                               |
 | @NoLoadRun      | Class, Function | Run the test as No-Load-Run(NLR) mode ([see](../in_action/designing_and_implementing_test/designing_test_in_code_first.md)) |
 | @Unstable       | Class, Function | Describes the test is unstable                                                                                              |
+| @Deleted        | Class, Function | Describes the test is deleted                                                                                               |
 | @Fail           | Function        | Describes that the test fails                                                                                               |
 | @Must           | Class, Function | Priority annotation ([see](../in_action/filtering_tests_with_priority/must_should_want.md))                                 |
 | @Should         | Class, Function | Priority annotation ([see](../in_action/filtering_tests_with_priority/must_should_want.md))                                 |

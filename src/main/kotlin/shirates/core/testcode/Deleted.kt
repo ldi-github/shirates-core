@@ -1,7 +1,7 @@
 package shirates.core.testcode
 
 /**
- * ToBeDeleted
+ * Deleted
  */
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 annotation class Deleted(val description: String) {
