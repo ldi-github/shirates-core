@@ -143,17 +143,20 @@ object ImageSetupHelper : TestDrive {
         it.select("[Updates Tab]").cropTo(dir)
 
         it.tap("[Go Tab]")
-            .screenIs("[Maps Go Screen]")
+            .wait()
         it.select("[Explore Tab]").cropTo(dir)
         it.select("[Go Tab(selected)]").cropTo(dir)
 
         it.tap("[Saved Tab]")
+            .wait()
         it.select("[Saved Tab(selected)]").cropTo(dir)
 
         it.tap("[Contribute Tab]")
+            .wait()
         it.select("[Contribute Tab(selected)]").cropTo(dir)
 
         it.tap("[Updates Tab]")
+            .wait()
         it.select("[Updates Tab(selected)]").cropTo(dir)
     }
 
