@@ -151,7 +151,7 @@ fun TestElement.imageContains(
  */
 fun TestElement.imageIs(
     expression: String = this.selector.toString(),
-    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
+    waitSeconds: Double = testContext.shortWaitSeconds,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 

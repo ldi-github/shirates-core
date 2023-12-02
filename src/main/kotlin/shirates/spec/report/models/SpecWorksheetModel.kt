@@ -108,12 +108,35 @@ class SpecWorksheetModel(
                     current.incrementIndent()
                 } else if (logLine.message.startsWith("}")) {
                     current.decrementIndent()
-                    if (frame == Frame.EXPECTATION) {
-                        if (logLine.command != "os" && logLine.command != "special") {
+
+                    fun List<String>.isOpen(): Boolean {
+                        val last = this.lastOrNull()
+                        if (last?.endsWith("{") == true) {
+                            return true
+                        }
+                        return false
+                    }
+
+                    if (frame == Frame.CONDITION) {
+                        if (current.conditions.isOpen()) {
+                            current.conditions.removeLast()
+                        } else {
                             addDescription(logLine)
                         }
-                    } else {
-                        addDescription(logLine)
+                    } else if (frame == Frame.ACTION) {
+                        if (current.actions.isOpen()) {
+                            current.actions.removeLast()
+                        } else {
+                            addDescription(logLine)
+                        }
+                    } else if (frame == Frame.EXPECTATION) {
+                        if (current.expectations.isOpen()) {
+                            current.expectations.removeLast()
+                        } else {
+                            if (logLine.command != "os" && logLine.command != "special") {
+                                addDescription(logLine)
+                            }
+                        }
                     }
                     if (logLine.command == "os") {
                         os = ""
@@ -224,6 +247,17 @@ class SpecWorksheetModel(
                     setResult(logLine)
                 }
             }
+
+            LogType.IMPORTANT.label -> {
+                if (logLine.message.isNotBlank()) {
+                    newCase()
+                    current.importantMessage = logLine.message
+                }
+            }
+        }
+
+        if (logLine.result == "DELETED") {
+            current.result = SpecResourceUtility.deleted
         }
 
     }
@@ -489,7 +523,11 @@ class SpecWorksheetModel(
      */
     fun condition(logLine: LogLine): LineObject {
 
-        if (current.actions.isNotEmpty() || current.target.isNotBlank() || current.expectations.isNotEmpty()) {
+        if (current.actions.isNotEmpty() ||
+            current.target.isNotBlank() ||
+            current.expectations.isNotEmpty() ||
+            current.importantMessage.isNotBlank()
+        ) {
             newCase()
         }
         val msg = getMessage(logLine)
@@ -548,7 +586,10 @@ class SpecWorksheetModel(
      */
     fun action(logLine: LogLine): LineObject {
 
-        if (current.target.isNotBlank() || current.expectations.isNotEmpty()) {
+        if (current.target.isNotBlank() ||
+            current.expectations.isNotEmpty() ||
+            current.importantMessage.isNotBlank()
+        ) {
             newCase()
         }
         val msg = getMessage(logLine)

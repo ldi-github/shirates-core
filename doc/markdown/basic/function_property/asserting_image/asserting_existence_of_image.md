@@ -41,11 +41,11 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.existImage("[Explore Tab Image(selected)]")
-                        .existImage("[Go Tab Image]")
-                        .existImage("[Saved Tab Image]")
-                        .existImage("[Contribute Tab Image]")
-                        .existImage("[Updates Tab Image]")
+                    it.existImage("[Explore Tab(selected)]")
+                        .existImage("[Go Tab]")
+                        .existImage("[Saved Tab]")
+                        .existImage("[Contribute Tab]")
+                        .existImage("[Updates Tab]")
                 }
             }
         }
@@ -61,7 +61,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.existImage("[Explore Tab Image]")   // WARN
+                    it.existImage("[Explore Tab]")   // WARN
                 }
             }
         }
@@ -76,7 +76,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.existImage("[Explore Tab Image]", throwsException = true)   // NG
+                    it.existImage("[Explore Tab]", throwsException = true)   // NG
                 }
             }
         }
@@ -91,7 +91,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.dontExistImage("[Explore Tab Image]") // OK
+                    it.dontExistImage("[Explore Tab]") // OK
                 }
             }
         }
@@ -106,7 +106,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.dontExistImage("[Explore Tab Image(selected)]") // NG
+                    it.dontExistImage("[Explore Tab(selected)]") // NG
                 }
             }
         }
@@ -124,25 +124,25 @@ class ExistDontExist2 : UITest() {
    Image matching will be executed on calling `existImage()`.
 
 ```kotlin
-   @Test
-   @Order(10)
-   fun existImage_OK() {
+    @Test
+    @Order(10)
+    fun existImage_OK() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.existImage("[Explore Tab Image(selected)]")
-                        .existImage("[Go Tab Image]")
-                        .existImage("[Saved Tab Image]")
-                        .existImage("[Contribute Tab Image]")
-                        .existImage("[Updates Tab Image]")
+                    it.existImage("[Explore Tab(selected)]")
+                        .existImage("[Go Tab]")
+                        .existImage("[Saved Tab]")
+                        .existImage("[Contribute Tab]")
+                        .existImage("[Updates Tab]")
                 }
             }
         }
 
-   }
+    }
 ```
 
 ![img_1.png](../../_images/image_assertion_exist_image_maps_top_screen_1.png) <br><br>
@@ -160,7 +160,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.existImage("[Explore Tab Image]")   // WARN
+                    it.existImage("[Explore Tab]")   // WARN
                 }
             }
         }
@@ -181,7 +181,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.existImage("[Explore Tab Image]", throwsException = true)   // NG
+                    it.existImage("[Explore Tab]", throwsException = true)   // NG
                 }
             }
         }
@@ -202,7 +202,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.dontExistImage("[Explore Tab Image]") // OK
+                    it.dontExistImage("[Explore Tab]") // OK
                 }
             }
         }
@@ -223,7 +223,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.dontExistImage("[Explore Tab Image(selected)]") // NG
+                    it.dontExistImage("[Explore Tab(selected)]") // NG
                 }
             }
         }

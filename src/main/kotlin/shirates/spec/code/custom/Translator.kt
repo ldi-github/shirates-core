@@ -181,7 +181,9 @@ interface Translator {
                     map[name] = value
                 }
                 val result = message(map)
-                candidates[code] = result
+                if (result.contains("InCell").not()) {
+                    candidates[code] = result
+                }
             }
         }
 

@@ -52,11 +52,11 @@ class LaunchApp2 : UITest() {
             }
             case(5) {
                 condition {
-                    it.terminateApp("[Freeform]")
+                    it.terminateApp("[Maps]")
                 }.action {
-                    it.launchApp("[Freeform]")
+                    it.launchApp("[Maps]")
                 }.expectation {
-                    it.appIs("[Freeform]")
+                    it.appIs("[Maps]")
                 }
             }
         }

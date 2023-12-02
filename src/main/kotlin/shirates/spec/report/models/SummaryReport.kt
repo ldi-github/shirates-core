@@ -146,12 +146,15 @@ class SummaryReport(
                 val data = g.value[i]
                 data1.specLines.addAll(data.specLines)
             }
-            val sname =
+            val newSheetName =
                 if (sheetName.length > 31) sheetName.substring(sheetName.length - 31)   // Cutting sheetName
                 else sheetName
-            println("Writing sheet: $sname")
-            val sheet = templateWorkbook.copySheet(templateSheetName = "TestSpec", newSheetName = sname)
-            SpecWriter.outputSpecSheet(templateWorksheet = sheet, worksheetData = data1)
+            println("Writing sheet: $newSheetName")
+            SpecWriter.outputSpecSheet(
+                templateWorkbook = templateWorkbook,
+                newSheetName = newSheetName,
+                worksheetData = data1
+            )
         }
     }
 

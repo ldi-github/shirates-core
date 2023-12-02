@@ -15,7 +15,7 @@ class AssertingImage1 : UITest() {
     fun setupImage() {
 
         scenario {
-            ImageSetupHelper.SetupImagesMapsTopScreen()
+            ImageSetupHelper.setupImagesMapsTopScreen()
         }
     }
 
@@ -28,8 +28,8 @@ class AssertingImage1 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab Image(selected)]")     // OK
-                    it.select("[Explore Tab]").isImage("[Explore Tab Image(selected)]").thisIsTrue()      // OK
+                    it.select("[Explore Tab]").imageIs("[Explore Tab(selected)]")     // OK
+                    it.select("[Explore Tab]").isImage("[Explore Tab(selected)]").thisIsTrue()      // OK
                 }
             }
         }
@@ -44,7 +44,7 @@ class AssertingImage1 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.select("[Go Tab]").imageIs("[Go Tab Image(selected)]")     // NG
+                    it.select("[Go Tab]").imageIs("[Go Tab(selected)]")     // NG
                 }
             }
         }
@@ -59,55 +59,55 @@ class AssertingImage1 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab Image(selected)]")
-                    it.select("[Go Tab]").imageIs("[Go Tab Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Tab Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Tab Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Tab Image]")
+                    it.select("[Explore Tab]").imageIs("[Explore Tab(selected)]")
+                    it.select("[Go Tab]").imageIs("[Go Tab]")
+                    it.select("[Saved Tab]").imageIs("[Saved Tab]")
+                    it.select("[Contribute Tab]").imageIs("[Contribute Tab]")
+                    it.select("[Updates Tab]").imageIs("[Updates Tab]")
                 }
             }
             case(2) {
                 action {
                     it.tap("[Go Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab Image]")
-                    it.select("[Go Tab]").imageIs("[Go Tab Image(selected)]")
-                    it.select("[Saved Tab]").imageIs("[Saved Tab Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Tab Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Tab Image]")
+                    it.select("[Explore Tab]").imageIs("[Explore Tab]")
+                    it.select("[Go Tab]").imageIs("[Go Tab(selected)]")
+                    it.select("[Saved Tab]").imageIs("[Saved Tab]")
+                    it.select("[Contribute Tab]").imageIs("[Contribute Tab]")
+                    it.select("[Updates Tab]").imageIs("[Updates Tab]")
                 }
             }
             case(3) {
                 action {
                     it.tap("[Saved Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab Image]")
-                    it.select("[Go Tab]").imageIs("[Go Tab Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Tab Image(selected)]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Tab Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Tab Image]")
+                    it.select("[Explore Tab]").imageIs("[Explore Tab]")
+                    it.select("[Go Tab]").imageIs("[Go Tab]")
+                    it.select("[Saved Tab]").imageIs("[Saved Tab(selected)]")
+                    it.select("[Contribute Tab]").imageIs("[Contribute Tab]")
+                    it.select("[Updates Tab]").imageIs("[Updates Tab]")
                 }
             }
             case(4) {
                 action {
                     it.tap("[Contribute Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab Image]")
-                    it.select("[Go Tab]").imageIs("[Go Tab Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Tab Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Tab Image(selected)]")
-                    it.select("[Updates Tab]").imageIs("[Updates Tab Image]")
+                    it.select("[Explore Tab]").imageIs("[Explore Tab]")
+                    it.select("[Go Tab]").imageIs("[Go Tab]")
+                    it.select("[Saved Tab]").imageIs("[Saved Tab]")
+                    it.select("[Contribute Tab]").imageIs("[Contribute Tab(selected)]")
+                    it.select("[Updates Tab]").imageIs("[Updates Tab]")
                 }
             }
             case(5) {
                 action {
                     it.tap("[Updates Tab]")
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab Image]")
-                    it.select("[Go Tab]").imageIs("[Go Tab Image]")
-                    it.select("[Saved Tab]").imageIs("[Saved Tab Image]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Tab Image]")
-                    it.select("[Updates Tab]").imageIs("[Updates Tab Image(selected)]")
+                    it.select("[Explore Tab]").imageIs("[Explore Tab]")
+                    it.select("[Go Tab]").imageIs("[Go Tab]")
+                    it.select("[Saved Tab]").imageIs("[Saved Tab]")
+                    it.select("[Contribute Tab]").imageIs("[Contribute Tab]")
+                    it.select("[Updates Tab]").imageIs("[Updates Tab(selected)]")
                 }
             }
         }

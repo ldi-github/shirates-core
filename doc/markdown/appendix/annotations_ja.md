@@ -26,6 +26,7 @@ Shiratesには以下のカスタムアノテーションがあります。
 | @DisableCache   | クラス, 関数 | キャッシュを無効にする                                                                                                       |
 | @NoLoadRun      | クラス, 関数 | テストを無負荷実行モード(NLRモード)で実行する ([参照](../in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)) |
 | @Unstable       | クラス, 関数 | テストが不安定であることを宣言する                                                                                                 |
+| @Deleted        | クラス, 関数 | テストが削除予定であることを宣言する                                                                                                |
 | @Fail           | 関数      | テストがFailすることを宣言する                                                                                                 |
 | @Must           | クラス, 関数 | 優先度アノテーション ([参照](../in_action/filtering_tests_with_priority/must_should_want_ja.md))                              |
 | @Should         | クラス, 関数 | 優先度アノテーション ([参照](../in_action/filtering_tests_with_priority/must_should_want_ja.md))                              |

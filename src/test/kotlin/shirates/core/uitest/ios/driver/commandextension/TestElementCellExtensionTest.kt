@@ -9,7 +9,7 @@ import shirates.core.testcode.UITest
 class TestElementCellExtensionTest : UITest() {
 
     @Test
-    fun targetCell_existInCell_cellLabel() {
+    fun cellOfTest() {
 
         scenario {
             case(1) {
@@ -36,20 +36,20 @@ class TestElementCellExtensionTest : UITest() {
             case(2) {
                 expectation {
                     it.cellOf("Gamepad") {
-                        cellWidget(1).textIs("Gamepad, Connected")
-                        cellWidget(2).textIs("Game Controller")
-                        cellWidget(3).textIs("Gamepad")
-                        cellWidget(4).textIs("Connected")
-                        cellWidget(5).type.thisIs("XCUIElementTypeImage")
+                        innerWidget(1).textIs("Gamepad, Connected")
+                        innerWidget(2).textIs("Game Controller")
+                        innerWidget(3).textIs("Gamepad")
+                        innerWidget(4).textIs("Connected")
+                        innerWidget(5).type.thisIs("XCUIElementTypeImage")
                     }
                     it.cellOf("Identify Controller") {
-                        cellWidget(1).textIs("Identify Controller")
+                        innerWidget(1).textIs("Identify Controller")
                     }
                     it.cellOf("Default") {
-                        cellWidget(1).textIs("Default, 1 controllers")
-                        cellWidget(2).textIs("Game Controller")
-                        cellWidget(3).textIs("Default")
-                        cellWidget(4).textIs("1 controllers")
+                        innerWidget(1).textIs("Default, 1 controllers")
+                        innerWidget(2).textIs("Game Controller")
+                        innerWidget(3).textIs("Default")
+                        innerWidget(4).textIs("1 controllers")
                     }
                 }
             }

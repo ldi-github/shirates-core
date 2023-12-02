@@ -40,6 +40,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         var uiTest: UITest? = null
         var failOfTestContext = false
         var failAnnotation: Fail? = null
+        var deletedAnnotation: Deleted? = null
         var noLoadRunOfTestContext = false
         var enableCache: Boolean? = null
     }
@@ -102,7 +103,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         EnvUtility.reset()
         failOfTestContext = context.isMethodAnnotated(Fail::class)
         failAnnotation = context.getMethodAnnotation(Fail::class) ?: context.getClassAnnotation(Fail::class)
-        noLoadRunOfTestContext = context.isAnnotated(NoLoadRun::class)
+        deletedAnnotation = context.getMethodAnnotation(Deleted::class) ?: context.getClassAnnotation(Deleted::class)
+        noLoadRunOfTestContext = context.isAnnotated(NoLoadRun::class) || context.isAnnotated(Deleted::class)
 
         if (context.isClassAnnotated(DisableCache::class) && context.isClassAnnotated(EnableCache::class)) {
             throw TestConfigException("Do not use @EnableCache and @DisableCache on a class.")

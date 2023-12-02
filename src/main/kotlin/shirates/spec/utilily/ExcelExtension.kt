@@ -1,12 +1,10 @@
 package shirates.spec.utilily
 
+import org.apache.poi.hssf.util.HSSFColor
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.util.CellReference
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.apache.poi.xssf.usermodel.*
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -15,8 +13,12 @@ import java.nio.file.Path
  */
 fun XSSFWorkbook.worksheets(sheetName: String): XSSFSheet {
 
-    val s = this.getSheet(sheetName)
-    return s
+    try {
+        val s = this.getSheet(sheetName)
+        return s
+    } catch (t: Throwable) {
+        throw IllegalArgumentException("Sheet not found. (sheetName=$sheetName)")
+    }
 }
 
 /**
@@ -170,3 +172,38 @@ val XSSFCell.text: String
             else -> this.toString()
         }
     }
+
+/**
+ * copyCellStyle
+ */
+fun XSSFWorkbook.copyCellStyle(cellStyle: XSSFCellStyle): XSSFCellStyle {
+
+    return ExcelUtility.copyCellStyle(this, cellStyle)
+}
+
+/**
+ * newCellStyle
+ */
+fun XSSFCell.newCellStyle(): XSSFCell {
+
+    this.cellStyle = this.sheet.workbook.copyCellStyle(this.cellStyle)
+    return this
+}
+
+/**
+ * setFontColor
+ */
+fun XSSFCell.setFontColor(color: HSSFColor.HSSFColorPredefined): XSSFCell {
+
+    this.newCellStyle().cellStyle.font.setColor(color.index)
+    return this
+}
+
+/**
+ * setFontRed
+ */
+fun XSSFCell.setFontRed(): XSSFCell {
+
+    this.setFontColor(HSSFColor.HSSFColorPredefined.RED)
+    return this
+}

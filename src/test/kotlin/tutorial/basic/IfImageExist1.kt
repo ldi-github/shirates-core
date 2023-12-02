@@ -31,13 +31,13 @@ class IfImageExist1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    ifImageExist("[Network & internet Icon].png") {
+                    ifImageExist("[Network & internet Icon]") {
                         OK("ifImageExist called")
                     }.ifElse {
                         NG()
                     }
 
-                    ifImageExistNot("[System Icon].png") {
+                    ifImageExistNot("[System Icon]") {
                         OK("ifImageExistNot called")
                     }.ifElse {
                         NG()
@@ -48,13 +48,13 @@ class IfImageExist1 : UITest() {
                 action {
                     it.scrollToBottom()
                 }.expectation {
-                    ifImageExist("[Network & internet Icon].png") {
+                    ifImageExist("[Network & internet Icon]") {
                         NG()
                     }.ifElse {
                         OK("ifElse called")
                     }
 
-                    ifImageExistNot("[System Icon].png") {
+                    ifImageExistNot("[System Icon]") {
                         NG()
                     }.ifElse {
                         OK("ifElse called")

@@ -15,17 +15,10 @@ class FindImage1 : UITest() {
     fun croppingImages() {
 
         scenario {
-            ImageSetupHelper.SetupImagesInNetworkAndInternetScreen()
+            ImageSetupHelper.setupImageAndroidSettingsTopScreen()
         }
     }
 
-    /**
-     * Note:
-     *
-     * Run croppingImages()
-     * to set up template image files
-     * before running this sample.
-     */
     @Test
     @Order(20)
     fun findImage() {
@@ -35,17 +28,25 @@ class FindImage1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.findImage("[Network & internet Icon].png")
-                    it.findImageWithScrollDown("[Display Icon].png")
-                    it.findImageWithScrollDown("[Tips & support Icon].png")
-                    it.findImageWithScrollUp("[Display Icon].png")
-                    it.findImageWithScrollUp("[Network & internet Icon].png")
+                    withScrollDown {
+                        it.findImage("[Network & internet Icon].png")
+                        it.findImage("[Display Icon].png")
+                        it.findImage("[Tips & support Icon].png")
+                    }
+                    withScrollUp {
+                        it.findImage("[Display Icon].png")
+                        it.findImage("[Network & internet Icon].png")
+                    }
                 }.expectation {
-                    it.exist("[Network & internet Icon].png")
-                    it.existWithScrollDown("[Display Icon].png")
-                    it.existWithScrollDown("[Tips & support Icon].png")
-                    it.existWithScrollUp("[Display Icon].png")
-                    it.existWithScrollUp("[Network & internet Icon].png")
+                    withScrollDown {
+                        it.existImage("[Network & internet Icon].png")
+                        it.existImage("[Display Icon].png")
+                        it.existImage("[Tips & support Icon].png")
+                    }
+                    withScrollUp {
+                        it.existImage("[Display Icon].png")
+                        it.existImage("[Network & internet Icon].png")
+                    }
                 }
             }
         }

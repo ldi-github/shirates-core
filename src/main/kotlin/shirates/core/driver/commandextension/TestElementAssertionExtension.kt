@@ -6,7 +6,6 @@ import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.testcode.preprocessForComparison
 
@@ -1105,9 +1104,9 @@ fun TestElement.dontExistInCell(
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
-        val a = this.getAncestorAt(level = 1)
-        e = a.innerWidgets.filterBySelector(selector = sel, throwsException = false).firstOrNull()
+        e = this.innerWidgets.filterBySelector(selector = sel, throwsException = false).firstOrNull()
             ?: TestElement.emptyElement
+        e.selector = sel
         TestDriver.postProcessForAssertion(
             selectResult = e,
             assertMessage = assertMessage,
@@ -1115,7 +1114,7 @@ fun TestElement.dontExistInCell(
         )
     }
 
-    if ((e.isFound || e.lastResult == LogType.ERROR) && throwsException) {
+    if (e.hasError && throwsException) {
         throw e.lastError!!
     }
 

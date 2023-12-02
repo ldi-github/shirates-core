@@ -16,6 +16,7 @@ class SpecReport(
 ) {
     lateinit var data: SpecReportData
     lateinit var templateWorkbook: XSSFWorkbook
+    lateinit var worksheet: XSSFSheet
     lateinit var templateWorksheet: XSSFSheet
     lateinit var commandListWorksheet: XSSFSheet
 
@@ -50,8 +51,9 @@ class SpecReport(
         templateWorkbook = ExcelUtility.getWorkbook("TestSpec.xlsx", logLanguage = data.logLanguage)
         templateWorkbook.removeSheet("Summary")
         commandListWorksheet = templateWorkbook.worksheets("CommandList")
-        templateWorksheet = templateWorkbook.worksheets("TestSpec")
-        data.sheetPosition = SpecSheetPosition(sheet = templateWorksheet, headerFirstColumnName = "ID")
+        worksheet = templateWorkbook.worksheets("TestSpec")
+        templateWorksheet = templateWorkbook.worksheets("Template")
+        data.sheetPosition = SpecSheetPosition(sheet = worksheet, headerFirstColumnName = "ID")
     }
 
     private fun transformLines() {

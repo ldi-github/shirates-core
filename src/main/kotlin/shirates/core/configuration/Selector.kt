@@ -417,8 +417,6 @@ class Selector(
             ":innerLabel", ":innerInput", ":innerImage", ":innerButton", ":innerSwitch",
             ":innerVWidget", ":innerV",
             ":innerVlabel", ":innerVinput", ":innerVimage", ":innerVbutton", ":innerVswitch",
-            ":cellWidget", ":cell",
-            ":cellLabel", ":cellInput", ":cellImage", ":cellButton", ":cellSwitch"
         )
 
         val xmlCommandBaseNames = listOf(
@@ -812,9 +810,13 @@ class Selector(
 
         var result = elementFriendlyExpression
         if (PropertiesManager.enableRelativeCommandTranslation) {
-            val msg = message(id = elementFriendlyExpression)
-            if (msg.startsWith("message not found.").not()) {
-                result = elementFriendlyExpression.replace(result, msg)
+            val ix = elementFriendlyExpression.indexOf("(")
+            val first = if (ix < 0) elementFriendlyExpression else elementFriendlyExpression.substring(0, ix)
+            val second = if (ix < 0) "" else elementFriendlyExpression.substring(ix)
+            val firstFriendly = message(id = first)
+            if (firstFriendly.startsWith("message not found.").not()) {
+                val friendlyName = "$firstFriendly$second"
+                result = elementFriendlyExpression.replace(result, friendlyName)
             }
         }
         return result

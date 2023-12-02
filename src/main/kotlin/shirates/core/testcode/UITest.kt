@@ -515,6 +515,12 @@ abstract class UITest : TestDrive {
                 throw t
             }
         } finally {
+            if (UITestCallbackExtension.deletedAnnotation != null) {
+                val scenarioLines = TestLog.lines.filter { it.testScenarioId == scenarioId }
+                for (line in scenarioLines) {
+                    line.result = LogType.DELETED
+                }
+            }
             CodeExecutionContext.isInScenario = false
 
             sw.stop()
@@ -550,6 +556,13 @@ abstract class UITest : TestDrive {
 
         TestLog.testScenarioId = scenarioId!!
         val scenarioLog = TestLog.scenario(testScenarioId = scenarioId, order = order, log = true, desc = desc)
+
+        if (UITestCallbackExtension.deletedAnnotation != null) {
+            TestLog.write(
+                message = UITestCallbackExtension.deletedAnnotation!!.description,
+                logType = LogType.IMPORTANT
+            )
+        }
 
         try {
             val fail = UITestCallbackExtension.failAnnotation
