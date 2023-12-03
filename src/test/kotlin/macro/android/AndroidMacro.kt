@@ -5,11 +5,8 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ifCanSelectNot
-import shirates.core.driver.branchextension.ifStringIs
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.platformMajorVersion
-import shirates.core.driver.rootBounds
-import shirates.core.exception.TestConfigException
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 import shirates.core.utility.getUdid
@@ -31,29 +28,21 @@ object AndroidMacro : TestDrive {
         android {
             it.pressHome()
                 .pressHome()
-            it.swipePointToPoint(
-                startX = 20,
-                startY = 10,
-                endX = 20,
-                endY = rootBounds.bottom
-            )
-            if (platformMajorVersion < 12) {
-                throw TestConfigException("Use android 12 or greater")
+            it.flickTopToBottom(startMarginRatio = 0.0)
+                .flickTopToBottom()
+
+            if (platformMajorVersion == 11) {
+                it.select("#quick_settings_container")
+                    .flickCenterToLeft()
             }
-            it.swipePointToPoint(
-                startX = 20,
-                startY = 10,
-                endX = 20,
-                endY = rootBounds.bottom
-            )
-            it.select("@Airplane mode")
-                .text
-                .ifStringIs("Off") {
+
+            if (canSelect("@Airplane mode")) {
+                if (it.isChecked.not()) {
                     it.tap()
                 }
-            it.select("@Airplane mode")
-                .textIs("On")
-            it.pressHome()
+                it.select("@Airplane mode")
+                    .checkIsON()
+            }
         }
     }
 
@@ -63,32 +52,22 @@ object AndroidMacro : TestDrive {
         android {
             it.pressHome()
                 .pressHome()
-            it.swipePointToPoint(
-                startX = 20,
-                startY = 10,
-                endX = 20,
-                endY = rootBounds.bottom
-            )
-            if (platformMajorVersion < 12) {
-                throw TestConfigException("Use android 12 or greater")
-            }
-            it.swipePointToPoint(
-                startX = 20,
-                startY = 10,
-                endX = 20,
-                endY = rootBounds.bottom
-            )
+            it.flickTopToBottom(startMarginRatio = 0.0)
+                .flickTopToBottom()
 
-            it.select("@Airplane mode")
-                .text
-                .ifStringIs("On") {
+            if (platformMajorVersion == 11) {
+                it.select("#quick_settings_container")
+                    .flickCenterToLeft()
+            }
+
+            if (canSelect("@Airplane mode")) {
+                if (it.isChecked) {
                     it.tap()
                 }
-            it.select("@Airplane mode")
-                .textIs("Off")
-            it.pressHome()
+                it.select("@Airplane mode")
+                    .checkIsOFF()
+            }
         }
-
     }
 
     @Macro("setLanguage")
