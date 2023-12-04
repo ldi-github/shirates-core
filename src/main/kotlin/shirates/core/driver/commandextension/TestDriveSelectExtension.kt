@@ -20,6 +20,10 @@ fun TestDrive.select(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
+    if (CodeExecutionContext.isInCell && this is TestElement) {
+        return this.innerWidget(expression = expression)
+    }
+
     val testElement = getThisOrRootElement()
 
     if (useCache) {
