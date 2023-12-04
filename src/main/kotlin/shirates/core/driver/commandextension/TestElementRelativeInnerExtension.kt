@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
 import shirates.core.driver.TestElement
+import shirates.core.driver.getSelector
 
 internal val TestElement.innerElements: List<TestElement>
     get() {
@@ -75,8 +76,10 @@ fun TestElement.innerWidget(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerWidget($expression)",
+        command = ":innerWidget($exp)",
         scopeElements = innerWidgets,
         frame = frame
     )
@@ -117,8 +120,10 @@ fun TestElement.innerLabel(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerLabel($expression)",
+        command = ":innerLabel($exp)",
         scopeElements = innerLabelWidgets,
         frame = frame
     )
@@ -159,8 +164,10 @@ fun TestElement.innerInput(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerInput($expression)",
+        command = ":innerInput($exp)",
         scopeElements = innerInputWidgets,
         frame = frame
     )
@@ -201,8 +208,10 @@ fun TestElement.innerImage(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerImage($expression)",
+        command = ":innerImage($exp)",
         scopeElements = innerImageWidgets,
         frame = frame
     )
@@ -243,8 +252,10 @@ fun TestElement.innerButton(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerButton($expression)",
+        command = ":innerButton($exp)",
         scopeElements = innerButtonWidgets,
         frame = frame
     )
@@ -285,8 +296,10 @@ fun TestElement.innerSwitch(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerSwitch($expression)",
+        command = ":innerSwitch($exp)",
         scopeElements = innerSwitchWidgets,
         frame = frame
     )
@@ -327,8 +340,10 @@ fun TestElement.innerVWidget(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerVWidget($expression)",
+        command = ":innerVWidget($exp)",
         scopeElements = innerWidgets,
         frame = frame
     )
@@ -369,8 +384,10 @@ fun TestElement.innerVlabel(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerVlabel($expression)",
+        command = ":innerVlabel($exp)",
         scopeElements = labelWidgets,
         frame = frame
     )
@@ -411,8 +428,10 @@ fun TestElement.innerVinput(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerVinput($expression)",
+        command = ":innerVinput($exp)",
         scopeElements = innerInputWidgets,
         frame = frame
     )
@@ -453,8 +472,10 @@ fun TestElement.innerVimage(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerVimage($expression)",
+        command = ":innerVimage($exp)",
         scopeElements = innerImageWidgets,
         frame = frame
     )
@@ -495,8 +516,10 @@ fun TestElement.innerVbutton(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerVbutton($expression)",
+        command = ":innerVbutton($exp)",
         scopeElements = innerButtonWidgets,
         frame = frame
     )
@@ -537,8 +560,10 @@ fun TestElement.innerVswitch(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":innerVswitch($expression)",
+        command = ":innerVswitch($exp)",
         scopeElements = innerSwitchWidgets,
         frame = frame
     )
