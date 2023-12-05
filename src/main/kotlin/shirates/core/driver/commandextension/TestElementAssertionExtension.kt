@@ -1050,10 +1050,7 @@ fun TestElement.classIsNot(
     return this
 }
 
-/**
- * existInCell
- */
-fun TestElement.existInCell(
+internal fun TestElement.existInCell(
     expression: String,
     throwsException: Boolean = true
 ): TestElement {
@@ -1085,10 +1082,7 @@ fun TestElement.existInCell(
     return e
 }
 
-/**
- * dontExistInCell
- */
-fun TestElement.dontExistInCell(
+internal fun TestElement.dontExistInCell(
     expression: String,
     throwsException: Boolean = true
 ): TestElement {

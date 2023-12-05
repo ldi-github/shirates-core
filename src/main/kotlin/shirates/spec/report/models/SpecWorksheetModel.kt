@@ -74,7 +74,6 @@ class SpecWorksheetModel(
 
             LogType.TARGET.label -> {
                 target(logLine)
-                current.resetIndent()
             }
 
             LogType.EXPECTATION.label -> {
@@ -90,15 +89,17 @@ class SpecWorksheetModel(
                         special = logLine.special
                     }
 
-                    if (current.expectations.isNotEmpty() && (current.os != os || current.special != special)
-                    ) {
+                    if (current.expectations.isNotEmpty() && (current.os != os || current.special != special)) {
                         newCase()
                     }
                     if (current.type != "scenario" || current.result == notApplicable) {
                         current.os = os
                         current.special = special
                         if (frame == Frame.EXPECTATION) {
-                            if (logLine.command != "os" && logLine.command != "special") {
+                            if (logLine.command == "cellOf" || logLine.command == "cell") {
+                                logLine.message = logLine.message.removeSuffix("{").trim()
+                                target(logLine)
+                            } else if (logLine.command != "os" && logLine.command != "special") {
                                 addDescription(logLine)
                             }
                         } else {
@@ -133,7 +134,9 @@ class SpecWorksheetModel(
                         if (current.expectations.isOpen()) {
                             current.expectations.removeLast()
                         } else {
-                            if (logLine.command != "os" && logLine.command != "special") {
+                            if (logLine.command == "cellOf" || logLine.command == "cell") {
+                                // NOP
+                            } else if (logLine.command != "os" && logLine.command != "special") {
                                 addDescription(logLine)
                             }
                         }
@@ -616,6 +619,8 @@ class SpecWorksheetModel(
         current.os = logLine.os
         current.special = logLine.special
         this.target = logLine.message
+
+        current.resetIndent()
 
         return current
     }

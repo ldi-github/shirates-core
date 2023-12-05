@@ -48,49 +48,49 @@ class SpecReportTest2 : UITest() {
                     it.macro("[Alarm Screen]")
                 }.expectation {
                     it.cell("[Cell of 8:30 AM]") {
-                        existInCell("[8:30 AM]")
-                        existInCell("[8:30 AM Expand alarm]")
-                        existInCell("[8:30 AM Days of week]")
-                        existInCell("[8:30 AM ON/OFF]")
+                        exist("[8:30 AM]")
+                        exist("[8:30 AM Expand alarm]")
+                        exist("[8:30 AM Days of week]")
+                        exist("[8:30 AM ON/OFF]")
                     }
                     it.select("<9:00 AM>:parent").cell {
-                        existInCell("9:00 AM")
-                        existInCell("#arrow")
-                        existInCell("Sun, Sat")
-                        existInCell("#onoff")
+                        exist("9:00 AM")
+                        exist("#arrow")
+                        exist("Sun, Sat")
+                        exist("#onoff")
                     }
                     it.cellOf("8:30 AM") {
-                        existInCell("8:30 AM")
-                        existInCell("#arrow")
-                        existInCell("Mon, Tue, Wed, Thu, Fri")
-                        existInCell("#onoff")
+                        exist("8:30 AM")
+                        exist("#arrow")
+                        exist("Mon, Tue, Wed, Thu, Fri")
+                        exist("#onoff")
                     }
                     it.cellOf("9:00 AM") {
-                        existInCell("9:00 AM")
-                        existInCell("#arrow")
-                        existInCell("Sun, Sat")
-                        existInCell("#onoff")
+                        exist("9:00 AM")
+                        exist("#arrow")
+                        exist("Sun, Sat")
+                        exist("#onoff")
                     }
                     it.cell("#tab_menu_alarm") {
-                        existInCell("#navigation_bar_item_icon_container")
-                        existInCell("#navigation_bar_item_large_label_view")
+                        exist("#navigation_bar_item_icon_container")
+                        exist("#navigation_bar_item_large_label_view")
                     }
                     it.cell("#tab_menu_clock") {
-                        existInCell("#navigation_bar_item_icon_container")
-                        existInCell("#navigation_bar_item_labels_group")
+                        exist("#navigation_bar_item_icon_container")
+                        exist("#navigation_bar_item_labels_group")
                     }
                 }.expectation {
                     it.cellOf("[8:30 AM]") {
-                        existInCell("[8:30 AM]")
-                        existInCell("[8:30 AM Expand alarm]")
-                        existInCell("[8:30 AM Days of week]")
-                        existInCell("[8:30 AM ON/OFF]")
+                        exist("[8:30 AM]")
+                        exist("[8:30 AM Expand alarm]")
+                        exist("[8:30 AM Days of week]")
+                        exist("[8:30 AM ON/OFF]")
                     }
                     it.cellOf("[9:00 AM]") {
-                        existInCell("[9:00 AM]")
-                        existInCell("[9:00 AM Expand alarm]")
-                        existInCell("[9:00 AM Days of week]")
-                        existInCell("[9:00 AM ON/OFF]")
+                        exist("[9:00 AM]")
+                        exist("[9:00 AM Expand alarm]")
+                        exist("[9:00 AM Days of week]")
+                        exist("[9:00 AM ON/OFF]")
                     }
                 }.expectation {
                     it.cellOf("[8:30 AM]") {

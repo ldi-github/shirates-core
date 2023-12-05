@@ -177,6 +177,8 @@ fun TestDrive.cell(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
+    val command = "cell"
+
     val testElement =
         if (expression == null) {
             val e = this.toTestElement
@@ -193,19 +195,17 @@ fun TestDrive.cell(
             )
         }
 
-    val target = testElement.subject
+    val target = message(id = command, subject = testElement.subject)
 
     val context = TestDriverCommandContext(testElement)
-    context.execLogCommand(message = target, subject = testElement.subject) {
-        TestLog.target(targetName = target)
-    }
-
-    val original = CodeExecutionContext.isInCell
-    try {
-        CodeExecutionContext.isInCell = true
-        func?.invoke(testElement)
-    } finally {
-        CodeExecutionContext.isInCell = original
+    context.execBranch(command = command, condition = target) {
+        val original = CodeExecutionContext.isInCell
+        try {
+            CodeExecutionContext.isInCell = true
+            func?.invoke(testElement)
+        } finally {
+            CodeExecutionContext.isInCell = original
+        }
     }
 
     return testElement
@@ -222,6 +222,8 @@ fun TestDrive.cellOf(
     log: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
+
+    val command = "cellOf"
 
     val testElement =
         if (expression == null) it
@@ -247,19 +249,17 @@ fun TestDrive.cellOf(
     if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
         throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
 
-    val target = message(id = "cellOf", subject = testElement.subject)
+    val target = message(id = command, subject = testElement.subject)
 
     val context = TestDriverCommandContext(testElement)
-    context.execLogCommand(message = target, subject = testElement.subject) {
-        TestLog.target(targetName = target)
-    }
-
-    val original = CodeExecutionContext.isInCell
-    try {
-        CodeExecutionContext.isInCell = true
-        func?.invoke(cell)
-    } finally {
-        CodeExecutionContext.isInCell = original
+    context.execBranch(command = command, condition = target) {
+        val original = CodeExecutionContext.isInCell
+        try {
+            CodeExecutionContext.isInCell = true
+            func?.invoke(cell)
+        } finally {
+            CodeExecutionContext.isInCell = original
+        }
     }
 
     return cell

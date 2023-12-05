@@ -167,8 +167,10 @@ fun TestElement.right(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":right($expression)",
+        command = ":right($exp)",
         scopeElements = widgets,
         frame = frame
     )
@@ -243,8 +245,10 @@ fun TestElement.rightInput(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":rightInput($expression)",
+        command = ":rightInput($exp)",
         scopeElements = inputWidgets,
         frame = frame
     )
@@ -289,8 +293,10 @@ fun TestElement.rightLabel(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":rightLabel($expression)",
+        command = ":rightLabel($exp)",
         scopeElements = labelWidgets,
         frame = frame
     )
@@ -335,8 +341,10 @@ fun TestElement.rightImage(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":rightImage($expression)",
+        command = ":rightImage($exp)",
         scopeElements = imageWidgets,
         frame = frame
     )
@@ -381,8 +389,10 @@ fun TestElement.rightButton(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":rightButton($expression)",
+        command = ":rightButton($exp)",
         scopeElements = buttonWidgets,
         frame = frame
     )
@@ -427,8 +437,10 @@ fun TestElement.rightSwitch(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":rightSwitch($expression)",
+        command = ":rightSwitch($exp)",
         scopeElements = switchWidgets,
         frame = frame
     )
@@ -476,8 +488,10 @@ fun TestElement.below(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":below($expression)",
+        command = ":below($exp)",
         scopeElements = widgets,
         frame = frame
     )
@@ -522,8 +536,10 @@ fun TestElement.belowInput(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":belowInput($expression)",
+        command = ":belowInput($exp)",
         scopeElements = inputWidgets,
         frame = frame
     )
@@ -568,8 +584,10 @@ fun TestElement.belowLabel(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":belowLabel($expression)",
+        command = ":belowLabel($exp)",
         scopeElements = labelWidgets,
         frame = frame
     )
@@ -614,8 +632,10 @@ fun TestElement.belowImage(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":belowImage($expression)",
+        command = ":belowImage($exp)",
         scopeElements = imageWidgets,
         frame = frame
     )
@@ -660,8 +680,10 @@ fun TestElement.belowButton(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":belowButton($expression)",
+        command = ":belowButton($exp)",
         scopeElements = buttonWidgets,
         frame = frame
     )
@@ -706,8 +728,10 @@ fun TestElement.belowSwitch(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":belowSwitch($expression)",
+        command = ":belowSwitch($exp)",
         scopeElements = switchWidgets,
         frame = frame
     )
@@ -757,8 +781,10 @@ fun TestElement.left(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":left($expression)",
+        command = ":left($exp)",
         scopeElements = widgets,
         frame = frame
     )
@@ -803,8 +829,10 @@ fun TestElement.leftInput(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":leftInput($expression)",
+        command = ":leftInput($exp)",
         scopeElements = inputWidgets,
         frame = frame
     )
@@ -849,8 +877,10 @@ fun TestElement.leftLabel(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":leftLabel($expression)",
+        command = ":leftLabel($exp)",
         scopeElements = labelWidgets,
         frame = frame
     )
@@ -895,8 +925,10 @@ fun TestElement.leftImage(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":leftImage($expression)",
+        command = ":leftImage($exp)",
         scopeElements = imageWidgets,
         frame = frame
     )
@@ -941,8 +973,10 @@ fun TestElement.leftButton(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":leftButton($expression)",
+        command = ":leftButton($exp)",
         scopeElements = buttonWidgets,
         frame = frame
     )
@@ -987,8 +1021,10 @@ fun TestElement.leftSwitch(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":leftSwitch($expression)",
+        command = ":leftSwitch($exp)",
         scopeElements = switchWidgets,
         frame = frame
     )
@@ -1036,8 +1072,10 @@ fun TestElement.above(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":above($expression)",
+        command = ":above($exp)",
         scopeElements = widgets,
         frame = frame
     )
@@ -1082,8 +1120,10 @@ fun TestElement.aboveInput(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":aboveInput($expression)",
+        command = ":aboveInput($exp)",
         scopeElements = inputWidgets,
         frame = frame
     )
@@ -1128,8 +1168,10 @@ fun TestElement.aboveLabel(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":aboveLabel($expression)",
+        command = ":aboveLabel($exp)",
         scopeElements = labelWidgets,
         frame = frame
     )
@@ -1173,8 +1215,10 @@ fun TestElement.aboveImage(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":aboveImage($expression)",
+        command = ":aboveImage($exp)",
         scopeElements = imageWidgets,
         frame = frame
     )
@@ -1219,8 +1263,10 @@ fun TestElement.aboveButton(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":aboveButton($expression)",
+        command = ":aboveButton($exp)",
         scopeElements = buttonWidgets,
         frame = frame
     )
@@ -1265,8 +1311,10 @@ fun TestElement.aboveSwitch(
     frame: Bounds? = null
 ): TestElement {
 
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
     return relative(
-        command = ":aboveSwitch($expression)",
+        command = ":aboveSwitch($exp)",
         scopeElements = switchWidgets,
         frame = frame
     )
