@@ -109,7 +109,7 @@ class TestElementImageExtensionTest2 : UITest() {
                             }
                             it.existImage("[Day2-2].png")
                         }
-                        suppressWithScroll {
+                        withoutScroll {
                             it.dontExistImage("[Day3-3].png")
                         }
                         it.existImage("[Day3-3].png")

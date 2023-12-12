@@ -4,16 +4,21 @@
 
 ## スクロール関数
 
-| 関数                | 説明                   |
-|:------------------|:---------------------|
-| scrollDown        | 下方向にスクロールします         |
-| scrollUp          | 上方向にスクロールします         |
-| scrollRight       | 右方向にスクロールします         |
-| scrollLeft        | 左方向にスクロールします         |
-| scrollToBottom    | スクロール領域の下端までスクロールします |
-| scrollToTop       | スクロール領域の上端までスクロールします |
-| scrollToRightEdge | スクロール領域の右端までスクロールします |
-| scrollToLeftEdge  | スクロール領域の左端までスクロールします |
+| 関数                | 説明                    |
+|:------------------|:----------------------|
+| scrollDown        | 下方向にスクロールします          |
+| scrollUp          | 上方向にスクロールします          |
+| scrollRight       | 右方向にスクロールします          |
+| scrollLeft        | 左方向にスクロールします          |
+| scrollToBottom    | スクロール領域の下端までスクロールします  |
+| scrollToTop       | スクロール領域の上端までスクロールします  |
+| scrollToRightEdge | スクロール領域の右端までスクロールします  |
+| scrollToLeftEdge  | スクロール領域の左端までスクロールします  |
+| withScrollDown    | 下方向にスクロールしながら要素を選択します |
+| withScrollUp      | 上方向にスクロールしながら要素を選択します |
+| withScrollRight   | 右方向にスクロールしながら要素を選択します |
+| withScrollLeft    | 左方向にスクロールしながら要素を選択します |
+| withoutScroll     | スクロールしないで要素を選択肢ます     |
 
 ## 例
 

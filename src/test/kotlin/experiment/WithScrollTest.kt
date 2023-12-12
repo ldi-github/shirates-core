@@ -24,7 +24,7 @@ class WithScrollTest : UITest() {
                         withScrollUp {
                             it.exist("[Accessibility]")
 
-                            suppressWithScroll {
+                            withoutScroll {
                                 it.exist("[Accessibility]")
                                     .existWithScrollDown("[System]")
                             }
