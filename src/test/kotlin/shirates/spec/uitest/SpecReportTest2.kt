@@ -163,7 +163,7 @@ class SpecReportTest2 : UITest() {
                 step = "1",
                 condition = "- [Alarm Screen]",
                 action = "",
-                target = "[Cell of 8:30 AM]",
+                target = "Cell [Cell of 8:30 AM]",
                 expectation = "- [8:30 AM]\n" +
                         "- [8:30 AM Expand alarm]\n" +
                         "- [8:30 AM Days of week]\n" +
@@ -174,7 +174,7 @@ class SpecReportTest2 : UITest() {
             assertRow(
                 rowNum = 12,
                 id = 3,
-                target = "<9:00 AM>:parent",
+                target = "Cell <9:00 AM>:parent",
                 expectation = "- <9:00 AM>\n" +
                         "- <#arrow>\n" +
                         "- <Sun, Sat>\n" +
@@ -207,7 +207,7 @@ class SpecReportTest2 : UITest() {
             assertRow(
                 rowNum = 15,
                 id = 6,
-                target = "<#tab_menu_alarm>",
+                target = "Cell <#tab_menu_alarm>",
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_large_label_view>",
                 auto = "M",
@@ -216,7 +216,7 @@ class SpecReportTest2 : UITest() {
             assertRow(
                 rowNum = 16,
                 id = 7,
-                target = "<#tab_menu_clock>",
+                target = "Cell <#tab_menu_clock>",
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_labels_group>",
                 auto = "M",
@@ -280,7 +280,7 @@ class SpecReportTest2 : UITest() {
                 step = "1",
                 condition = "- [Alarm Screen]",
                 action = "",
-                target = "[Cell of 8:30 AM]",
+                target = "Cell [Cell of 8:30 AM]",
                 expectation = "- [8:30 AM]\n" +
                         "- [8:30 AM Expand alarm]\n" +
                         "- [8:30 AM Days of week]\n" +
@@ -293,7 +293,7 @@ class SpecReportTest2 : UITest() {
             assertRow(
                 rowNum = 23,
                 id = 14,
-                target = "<9:00 AM>:parent",
+                target = "Cell <9:00 AM>:parent",
                 expectation = "- <9:00 AM>\n" +
                         "- <#arrow>\n" +
                         "- <Sun, Sat>\n" +
@@ -332,7 +332,7 @@ class SpecReportTest2 : UITest() {
             assertRow(
                 rowNum = 26,
                 id = 17,
-                target = "<#tab_menu_alarm>",
+                target = "Cell <#tab_menu_alarm>",
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_large_label_view>",
                 auto = "A",
@@ -343,7 +343,7 @@ class SpecReportTest2 : UITest() {
             assertRow(
                 rowNum = 27,
                 id = 18,
-                target = "<#tab_menu_clock>",
+                target = "Cell <#tab_menu_clock>",
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_labels_group>",
                 auto = "A",

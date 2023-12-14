@@ -502,6 +502,7 @@ object TestLog {
         if (msg.length > MAXIMUM_CELL_CONTENT_LENGTH) {
             msg = msg.substring(0, MAXIMUM_CELL_CONTENT_LENGTH - 1)
         }
+        msg = getIndentString() + msg
         val resultMsg = resultMessage ?: exception?.message ?: ""
         val special = specialStack.toList().joinToString("/")
 
@@ -576,6 +577,40 @@ object TestLog {
         logLine.isInExpectation = CodeExecutionContext.isInExpectation
 
         return logLine
+    }
+
+    internal var indentLevel = 0
+
+    internal fun incrementIndentLevel(): Int {
+
+        indentLevel++
+        return indentLevel
+    }
+
+    internal fun decrementIndentLevel(): Int {
+
+        indentLevel--
+        if (indentLevel < 0) {
+            indentLevel = 0
+        }
+        return indentLevel
+    }
+
+//    private fun createIndentMap(): MutableMap<Int, String> {
+//
+//        val map = mutableMapOf<Int, String>()
+//        map[0] = ""
+//        for (i in 1..50) {
+//            map[i] = "".padStart(i * 4)
+//        }
+//        return map
+//    }
+
+//    private val indentMap = createIndentMap()
+
+    internal fun getIndentString(level: Int = indentLevel): String {
+
+        return " ".repeat(level * 4)
     }
 
     /**

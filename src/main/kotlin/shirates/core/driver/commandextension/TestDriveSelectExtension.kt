@@ -318,6 +318,10 @@ fun TestDrive.canSelect(
     waitSeconds: Double = 0.0,
     log: Boolean = false
 ): Boolean {
+    if (CodeExecutionContext.isInCell && this is TestElement) {
+        return this.innerWidget(expression = expression).isFound
+    }
+
     val testElement = getThisOrRootElement()
 
     val sel = TestDriver.expandExpression(expression = expression, screenName = screenName)

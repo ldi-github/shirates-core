@@ -357,7 +357,8 @@ fun TestDrive.ifCanSelect(
 ): BooleanCompareResult {
 
     val command = "ifCanSelect"
-    val canSelect = TestDriver.it.canSelect(
+    TestDriver.it
+    val canSelect = this.canSelect(
         expression = expression,
         scroll = scroll,
         direction = direction
@@ -367,7 +368,8 @@ fun TestDrive.ifCanSelect(
     val result =
         if (this is BooleanCompareResult) this
         else BooleanCompareResult(value = canSelect, command = command)
-    val message = message(id = command, subject = expression)
+    val sel = getSelector(expression = expression)
+    val message = message(id = command, subject = sel.toString())
 
     if (matched || TestMode.isNoLoadRun) {
         val context = TestDriverCommandContext(null)
@@ -393,7 +395,8 @@ fun TestDrive.ifCanSelectNot(
 ): BooleanCompareResult {
 
     val command = "ifCanSelectNot"
-    val canSelect = TestDriver.it.canSelect(
+    TestDriver.it
+    val canSelect = canSelect(
         expression = expression,
         scroll = scroll,
         direction = direction
@@ -402,7 +405,8 @@ fun TestDrive.ifCanSelectNot(
     val result =
         if (this is BooleanCompareResult) this
         else BooleanCompareResult(value = matched, command = command)
-    val message = message(id = command, subject = expression)
+    val sel = getSelector(expression = expression)
+    val message = message(id = command, subject = sel.toString())
 
     if (matched || TestMode.isNoLoadRun) {
 

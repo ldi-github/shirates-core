@@ -82,7 +82,7 @@ class SpecWorksheetModel(
             }
 
             LogType.BRANCH.label -> {
-                if (logLine.message.endsWith("{")) {
+                if (logLine.message.trim().endsWith("{")) {
                     if (logLine.command == "os") {
                         os = logLine.os
                     } else if (logLine.command == "special") {
@@ -97,7 +97,7 @@ class SpecWorksheetModel(
                         current.special = special
                         if (frame == Frame.EXPECTATION) {
                             if (logLine.command == "cellOf" || logLine.command == "cell") {
-                                logLine.message = logLine.message.removeSuffix("{").trim()
+                                logLine.message = logLine.message.trim().removeSuffix("{")
                                 target(logLine)
                             } else if (logLine.command != "os" && logLine.command != "special") {
                                 addDescription(logLine)
@@ -107,7 +107,7 @@ class SpecWorksheetModel(
                         }
                     }
                     current.incrementIndent()
-                } else if (logLine.message.startsWith("}")) {
+                } else if (logLine.message.trim().startsWith("}")) {
                     current.decrementIndent()
 
                     fun List<String>.isOpen(): Boolean {
@@ -226,13 +226,13 @@ class SpecWorksheetModel(
             }
 
             LogType.SKIP_CASE.label -> {
-                logLine.message = "SKIP_CASE(${logLine.message})"
+                logLine.message = "SKIP_CASE(${logLine.message.trim()})"
                 addDescription(logLine)
                 setResult(logLine)
             }
 
             LogType.SKIP_SCENARIO.label -> {
-                logLine.message = "SKIP_SCENARIO(${logLine.message})"
+                logLine.message = "SKIP_SCENARIO(${logLine.message.trim()})"
                 addDescription(logLine)
                 setResult(logLine)
             }
@@ -244,7 +244,7 @@ class SpecWorksheetModel(
             LogType.ERROR.label -> {
                 if (logLine.message.startsWith("@Fail(")) {
                     current.result = "ERROR"
-                    current.supplement = logLine.message
+                    current.supplement = logLine.message.trim()
                 } else {
                     addDescription(logLine)
                     setResult(logLine)
@@ -254,7 +254,7 @@ class SpecWorksheetModel(
             LogType.IMPORTANT.label -> {
                 if (logLine.message.isNotBlank()) {
                     newCase()
-                    current.importantMessage = logLine.message
+                    current.importantMessage = logLine.message.trim()
                 }
             }
         }
@@ -380,7 +380,7 @@ class SpecWorksheetModel(
 
             "screenIs" -> {
                 val msg = message(id = "screenIs", subject = "")
-                val subject = logLine.message.replace(msg, "")
+                val subject = logLine.message.trim().replace(msg, "")
                 if (subject.isNotBlank()) {
                     current.target = escapeForCode(subject)
                     logLine.arrangedMessage = SpecResourceUtility.isDisplayed
@@ -389,14 +389,15 @@ class SpecWorksheetModel(
 
             "exist", "existInCell" -> {
                 val msg = message(id = logLine.group, subject = "")
-                val subject = logLine.message.replace(msg, "")
+                val subject = logLine.message.trim().replace(msg, "")
                 logLine.arrangedMessage = subject
             }
 
             else ->
                 if (logLine.group.endsWith("Is")) {
                     if (target.isNotBlank()) {
-                        logLine.arrangedMessage = Message.getRelativeRemovedMessage(logLine.message).removePrefix(":")
+                        logLine.arrangedMessage =
+                            Message.getRelativeRemovedMessage(logLine.message.trim()).removePrefix(":")
                     }
                 }
         }
@@ -499,7 +500,7 @@ class SpecWorksheetModel(
 
         current.type = "scenario"
         current.step = logLine.testCaseId
-        current.conditions.add(logLine.message)
+        current.conditions.add(logLine.message.trim())
         current.target = ""
         current.os = ""
         current.special = ""
@@ -569,10 +570,10 @@ class SpecWorksheetModel(
                 else -> bullet
             }
 
-        var msg = "$indent$bulletLocal${logLine.message}"
+        var msg = "$indent$bulletLocal${logLine.message.trim()}"
         if (frame != Frame.EXPECTATION) {
             if (logLine.logType == "branch") {
-                msg = "$indent${logLine.message}"
+                msg = "$indent${logLine.message.trim()}"
             }
         }
 
@@ -608,17 +609,17 @@ class SpecWorksheetModel(
      */
     fun target(logLine: LogLine): LineObject {
 
-        val target = logLine.message
+        val target = logLine.message.trim()
         if (current.expectations.isNotEmpty() &&
             current.expectations.last().isNotBlank() &&
             target.isNotBlank() && current.target != target
         ) {
             newCase()
         }
-        current.target = logLine.message
+        current.target = logLine.message.trim()
         current.os = logLine.os
         current.special = logLine.special
-        this.target = logLine.message
+        this.target = logLine.message.trim()
 
         current.resetIndent()
 
@@ -639,7 +640,7 @@ class SpecWorksheetModel(
                 LogType.BRANCH.label -> ""
                 else -> bullet
             }
-        val m = logLine.arrangedMessage.ifBlank { logLine.message }
+        val m = logLine.arrangedMessage.ifBlank { logLine.message.trim() }
         var msg = "$bulletLocal$m"
         if (msg.trim().startsWith("} ")) {
             val ix = msg.indexOf("}")
