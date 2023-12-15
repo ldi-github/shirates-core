@@ -12,6 +12,7 @@ import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataIos
+import java.util.*
 
 
 class TestElementAssertionExtension_IosTest : UnitTest() {
@@ -550,6 +551,28 @@ class TestElementAssertionExtension_IosTest : UnitTest() {
     }
 
     @Test
+    fun textMatchesDateFormat() {
+
+        if (Locale.getDefault().toString() == "ja_JP") {
+            // Arrange
+            TestElementCache.loadXml(xmlData = XmlDataIos.DateAndTime_ja, synced = true)
+            val e = TestElementCache.select("2023年12月15日 金曜日")
+            // Act, Assert
+            e.textMatchesDateFormat("yyyy年M月d日 E曜日")
+            // Assert
+            val log = TestLog.lines.last() { it.scriptCommand == "textMatchesDateFormat" }
+            assertThat(log.message).isEqualTo("<2023年12月15日 金曜日> matches date format \"yyyy年M月d日 E曜日\"")
+            assertThat(log.logType).isEqualTo(LogType.ok)
+
+            // Act, Assert
+            assertThatThrownBy {
+                e.textMatchesDateFormat("yyyy/M/d(E)")
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<2023年12月15日 金曜日> matches date format \"yyyy/M/d(E)\" (actual=\"2023年12月15日 金曜日\")")
+        }
+    }
+
+    @Test
     fun valueMatches() {
 
         // Arrange
@@ -567,6 +590,28 @@ class TestElementAssertionExtension_IosTest : UnitTest() {
             e.valueMatches("no exist")
         }.isInstanceOf(TestNGException::class.java)
             .hasMessage("<value=First Name>.value matches \"no exist\" (actual=\"First Name\")")
+    }
+
+    @Test
+    fun valueMatchesDateFormat() {
+
+        if (Locale.getDefault().toString() == "ja_JP") {
+            // Arrange
+            TestElementCache.loadXml(xmlData = XmlDataIos.DateAndTime_ja, synced = true)
+            val e = TestElementCache.select("value=2023年12月15日 金曜日")
+            // Act, Assert
+            e.valueMatchesDateFormat("yyyy年M月d日 E曜日")
+            // Assert
+            val log = TestLog.lines.last() { it.scriptCommand == "valueMatchesDateFormat" }
+            assertThat(log.message).isEqualTo("<value=2023年12月15日 金曜日>.value matches date format \"yyyy年M月d日 E曜日\"")
+            assertThat(log.logType).isEqualTo(LogType.ok)
+
+            // Act, Assert
+            assertThatThrownBy {
+                e.valueMatchesDateFormat("yyyy/M/d(E)")
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("<value=2023年12月15日 金曜日>.value matches date format \"yyyy/M/d(E)\" (actual=\"2023年12月15日 金曜日\")")
+        }
     }
 
     @Test

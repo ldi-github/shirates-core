@@ -9,6 +9,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import java.util.*
 
 class StringAssertionExtensionTest {
 
@@ -683,6 +684,32 @@ class StringAssertionExtensionTest {
             assertThatThrownBy {
                 "A\tB\nC".thisMatchesNot("A\\tB\\nC", strict = true)
             }.isInstanceOf(TestNGException::class.java)
+        }
+    }
+
+    @Test
+    fun thisMatchesDateFormat() {
+
+        val ja = Locale.getDefault().toString() == "ja_JP"
+
+        run {
+            "2023/12/15".thisMatchesDateFormat("yyyy/MM/dd")
+        }
+        if (ja) {
+            "2023/12/15(金)".thisMatchesDateFormat("yyyy/MM/dd(E)")
+            "2023/12/15金曜日".thisMatchesDateFormat("yyyy/MM/ddE曜日")
+        }
+
+        assertThatThrownBy {
+            "12/15/2023".thisMatchesDateFormat("yyyy/MM/dd")
+        }.isInstanceOf(TestNGException::class.java)
+            .hasMessage("\"12/15/2023\" matches date format \"yyyy/MM/dd\" (actual=\"12/15/2023\")")
+
+        if (ja) {
+            assertThatThrownBy {
+                "2023/12/15(土)".thisMatchesDateFormat("yyyy/MM/dd(E)")
+            }.isInstanceOf(TestNGException::class.java)
+                .hasMessage("\"2023/12/15(土)\" matches date format \"yyyy/MM/dd(E)\" (actual=\"2023/12/15(土)\")")
         }
     }
 

@@ -4,20 +4,21 @@
 
 ## 関数
 
-| 関数                |
-|:------------------|
-| textIs            |
-| textIsNot         |
-| textStartsWith    |
-| textStartsWithNot |
-| textContains      |
-| textContainsNot   |
-| textEndsWith      |
-| textEndsWithNot   |
-| textMatches       |
-| textMatchesNot    |
-| textIsEmpty       |
-| textIsNotEmpty    |
+| 関数                    |
+|:----------------------|
+| textIs                |
+| textIsNot             |
+| textStartsWith        |
+| textStartsWithNot     |
+| textContains          |
+| textContainsNot       |
+| textEndsWith          |
+| textEndsWithNot       |
+| textMatches           |
+| textMatchesNot        |
+| textMatchesDateFormat |
+| textIsEmpty           |
+| textIsNotEmpty        |
 
 ### 注意
 

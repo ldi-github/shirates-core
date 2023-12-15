@@ -4,20 +4,21 @@ You can assert the value of `text` or `label` or `value` attribute of the elemen
 
 ## functions
 
-| function          |
-|:------------------|
-| textIs            |
-| textIsNot         |
-| textStartsWith    |
-| textStartsWithNot |
-| textContains      |
-| textContainsNot   |
-| textEndsWith      |
-| textEndsWithNot   |
-| textMatches       |
-| textMatchesNot    |
-| textIsEmpty       |
-| textIsNotEmpty    |
+| function              |
+|:----------------------|
+| textIs                |
+| textIsNot             |
+| textStartsWith        |
+| textStartsWithNot     |
+| textContains          |
+| textContainsNot       |
+| textEndsWith          |
+| textEndsWithNot       |
+| textMatches           |
+| textMatchesNot        |
+| textMatchesDateFormat |
+| textIsEmpty           |
+| textIsNotEmpty        |
 
 ### Note
 

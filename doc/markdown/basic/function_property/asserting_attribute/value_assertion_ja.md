@@ -8,20 +8,21 @@
 
 ## 関数
 
-| 関数                 |
-|:-------------------|
-| valueIs            |
-| valueIsNot         |
-| valueStartsWith    |
-| valueStartsWithNot |
-| valueContains      |
-| valueContainsNot   |
-| valueEndsWith      |
-| valueEndsWithNot   |
-| valueMatches       |
-| valueMatchesNot    |
-| valueIsEmpty       |
-| valueIsNotEmpty    |
+| 関数                     |
+|:-----------------------|
+| valueIs                |
+| valueIsNot             |
+| valueStartsWith        |
+| valueStartsWithNot     |
+| valueContains          |
+| valueContainsNot       |
+| valueEndsWith          |
+| valueEndsWithNot       |
+| valueMatches           |
+| valueMatchesDateFormat |
+| valueMatchesNot        |
+| valueIsEmpty           |
+| valueIsNotEmpty        |
 
 ## 例
 

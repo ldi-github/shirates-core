@@ -8,6 +8,8 @@ import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.testcode.preprocessForComparison
+import shirates.core.utility.format
+import shirates.core.utility.toDate
 
 /**
  * thisIsEmpty
@@ -318,6 +320,35 @@ fun Any?.thisMatchesNot(
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
         val match = value.matches(Regex(expected))
         value.thisCoreNot(match = match, assertMessage = assertMessage)
+    }
+
+    return this
+}
+
+/**
+ * thisMatchesDateFormat
+ */
+fun Any?.thisMatchesDateFormat(
+    expected: String,
+    message: String? = null,
+    strict: Boolean = true
+): Any? {
+
+    val command = "thisMatchesDateFormat"
+    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val assertMessage =
+        message ?: message(id = command, subject = value, expected = expected, replaceRelative = false)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
+        val match = try {
+            val date = value.replace("曜日", "").toDate(pattern = expected.replace("曜日", ""))
+            val roundTripValue = date.format(pattern = expected)
+            value == roundTripValue
+        } catch (t: Throwable) {
+            false
+        }
+        value.thisCore(match = match, assertMessage = assertMessage)
     }
 
     return this

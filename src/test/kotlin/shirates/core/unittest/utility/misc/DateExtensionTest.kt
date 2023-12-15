@@ -46,8 +46,37 @@ class DateExtensionTest : UnitTest() {
             // Act
             val actual = date.format("yyyy/MM/dd HH:mm:ss.SSS")
             // Assert
-            assertThat(expected).isEqualTo(actual)
+            assertThat(actual).isEqualTo(expected)
         }
+//        run {
+//            // Arrange
+//            val expected = "Fri, 15 Dec 2023 00:01:02.123 -0700"
+//            val date = expected.toDate(pattern = "EEE, d MMM yyyy HH:mm:ss.SSS Z", tz = "-0700")
+//            // Act
+//            val actual = date.format("EEE, d MMM yyyy HH:mm:ss.SSS Z", tz = "-0700")
+//            // Assert
+//            assertThat(actual).isEqualTo(expected)
+//        }
+//        run {
+//            // Arrange
+//            val expected = "2023年12月15日(金) 160102"
+//            val date =
+//                expected.toDate(pattern = "yyyy年MM月dd日(E) HHmmss", tz = "+0900")
+//            // Act
+//            val actual = date.format("yyyy年MM月dd日(E) HH時mm分ss秒", tz = "+0900")
+//            // Assert
+//            assertThat(actual).isEqualTo(expected)
+//        }
+//        run {
+//            // Arrange
+//            val expected = "2023年12月15日金曜日 160102"
+//            val date =
+//                expected.toDate(pattern = "yyyy年MM月dd日E曜日 HHmmss", tz = "+0900")
+//            // Act
+//            val actual = date.format("yyyy年MM月dd日E曜日 HH時mm分ss秒", tz = "+0900")
+//            // Assert
+//            assertThat(actual).isEqualTo(expected)
+//        }
 
         assertThatThrownBy {
             // Arrange
