@@ -10,7 +10,8 @@ You can change running parameters by parameter configuration files.
 ## testrun.properties
 
 **testrun.properties** file is testrun file that can be placed anywhere in the project and can have an arbitrary name.
-This file should be designated in test setup procedure by [@Testrun](../creating_testclass) annotation.
+This file should be designated in test setup procedure
+by [@Testrun annotation](../creating_testclass/creating_testclass.md).
 
 ```kotlin
 @Testrun("testConfig/android/androidSettings/testrun.properties")
