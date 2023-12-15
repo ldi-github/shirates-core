@@ -504,6 +504,25 @@ fun TestElement.textMatches(
 }
 
 /**
+ * textMatchesDateFormat
+ */
+fun TestElement.textMatchesDateFormat(
+    expected: String,
+    strict: Boolean = true
+): TestElement {
+
+    val command = "textMatchesDateFormat"
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
+
+    val context = TestDriverCommandContext(this)
+    context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
+        textOrLabel.thisMatchesDateFormat(expected = expected, message = assertMessage, strict = strict)
+    }
+
+    return this
+}
+
+/**
  * valueMatches
  */
 fun TestElement.valueMatches(
@@ -521,6 +540,26 @@ fun TestElement.valueMatches(
 
     return this
 }
+
+/**
+ * valueMatchesDateFormat
+ */
+fun TestElement.valueMatchesDateFormat(
+    expected: String,
+    strict: Boolean = true
+): TestElement {
+
+    val command = "valueMatchesDateFormat"
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
+
+    val context = TestDriverCommandContext(this)
+    context.execCheckCommand(command = command, assertMessage, subject = subject, arg1 = expected) {
+        textOrValue.thisMatchesDateFormat(expected = expected, message = assertMessage, strict = strict)
+    }
+
+    return this
+}
+
 
 /**
  * accessMatches
@@ -1050,10 +1089,7 @@ fun TestElement.classIsNot(
     return this
 }
 
-/**
- * existInCell
- */
-fun TestElement.existInCell(
+internal fun TestElement.existInCell(
     expression: String,
     throwsException: Boolean = true
 ): TestElement {
@@ -1085,10 +1121,7 @@ fun TestElement.existInCell(
     return e
 }
 
-/**
- * dontExistInCell
- */
-fun TestElement.dontExistInCell(
+internal fun TestElement.dontExistInCell(
     expression: String,
     throwsException: Boolean = true
 ): TestElement {

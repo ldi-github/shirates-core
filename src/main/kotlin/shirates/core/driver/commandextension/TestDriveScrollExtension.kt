@@ -685,13 +685,13 @@ fun TestDrive.withScrollLeft(
 }
 
 /**
- * suppressWithScroll
+ * withoutScroll
  */
-fun TestDrive.suppressWithScroll(
+fun TestDrive.withoutScroll(
     proc: () -> Unit
 ): TestElement {
 
-    val command = "suppressWithScroll"
+    val command = "withoutScroll"
     val message = message(id = command)
     val context = TestDriverCommandContext(lastElement)
     context.execWithScroll(

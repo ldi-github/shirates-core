@@ -660,9 +660,11 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             )
 
             CodeExecutionContext.isInOSCommand = true
+            TestLog.incrementIndentLevel()
             func()
         } finally {
             try {
+                TestLog.decrementIndentLevel()
                 CodeExecutionContext.isInOSCommand = original
                 endOS()
             } finally {
@@ -729,9 +731,11 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             )
 
             CodeExecutionContext.isInSpecialCommand = true
+            TestLog.incrementIndentLevel()
             func()
         } finally {
             try {
+                TestLog.decrementIndentLevel()
                 CodeExecutionContext.isInSpecialCommand = original
                 endBranch()
             } finally {
@@ -802,9 +806,11 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             )
 
             CodeExecutionContext.isInSpecialCommand = true
+            TestLog.incrementIndentLevel()
             func()
         } finally {
             try {
+                TestLog.decrementIndentLevel()
                 CodeExecutionContext.isInSpecialCommand = original
                 endSpecial()
             } finally {

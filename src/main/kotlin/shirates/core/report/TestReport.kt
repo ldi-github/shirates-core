@@ -515,7 +515,15 @@ class TestReport(
             }
         }
 
-        return htmlEscape(message)
+        var msg = message
+
+        val trimmed = message.trimStart()
+        val trimmedLength = message.length - trimmed.length
+        if (trimmedLength > 0) {
+            msg = Const.NBSP.repeat(trimmedLength) + msg
+        }
+
+        return htmlEscape(msg)
     }
 
     private fun htmlEscape(message: String): String {

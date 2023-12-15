@@ -4,12 +4,10 @@ You can check existence of element **in the cell** using these functions.
 
 ## Functions
 
-| function        | description                                       | return value                                                  |
-|:----------------|:--------------------------------------------------|:--------------------------------------------------------------|
-| cell            | Selects a cell with a selector expression.        | TestElement                                                   |
-| cellOf          | Select a cell with a member element.              | TestElement                                                   |
-| existInCell     | Assert that the element exists in the cell        | TestElement(if exists)<br>TestNGException(if doesn't exist)   |
-| dontExistInCell | Assert that the element doesn't exist in the cell | empty element(if doesn't exist)<br>TestNGException(if exists) |
+| function | description                                | return value |
+|:---------|:-------------------------------------------|:-------------|
+| cell     | Selects a cell with a selector expression. | TestElement  |
+| cellOf   | Select a cell with a member element.       | TestElement  |
 
 ## Cell
 
@@ -38,33 +36,32 @@ class ExistDontExistInCellAndroid : UITest() {
 
     @Test
     @Order(10)
-    fun existInCell_OK() {
+    fun exist_in_cellOf_OK() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.parent()
                     it.cell("<Network & internet>:ancestor(2)") {
-                        existInCell("Network & internet")
-                        existInCell("Mobile, Wi‑Fi, hotspot")
+                        exist("Network & internet")
+                        exist("Mobile, Wi‑Fi, hotspot")
                     }
                     it.cell("<Connected devices>:ancestor(2)") {
-                        existInCell("Connected devices")
-                        existInCell("Bluetooth, pairing")
+                        exist("Connected devices")
+                        exist("Bluetooth, pairing")
                     }
                 }
             }
             case(2) {
                 expectation {
                     it.cellOf("Network & internet") {
-                        existInCell("Network & internet")
-                        existInCell("Mobile, Wi‑Fi, hotspot")
+                        exist("Network & internet")
+                        exist("Mobile, Wi‑Fi, hotspot")
                     }
                     it.cellOf("Connected devices") {
-                        existInCell("Connected devices")
-                        existInCell("Bluetooth, pairing")
+                        exist("Connected devices")
+                        exist("Bluetooth, pairing")
                     }
                 }
             }
@@ -73,7 +70,7 @@ class ExistDontExistInCellAndroid : UITest() {
 
     @Test
     @Order(20)
-    fun existInCell_NG() {
+    fun exist_in_cellOf_NG() {
 
         scenario {
             case(1) {
@@ -81,8 +78,8 @@ class ExistDontExistInCellAndroid : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.cellOf("Network & internet") {
-                        existInCell("Network & internet")
-                        existInCell("A cat")
+                        exist("Network & internet")
+                        exist("A cat")
                     }
                 }
             }
@@ -91,7 +88,7 @@ class ExistDontExistInCellAndroid : UITest() {
 
     @Test
     @Order(30)
-    fun dontExistInCell_OK() {
+    fun dontExist_in_cellOf_OK() {
 
         scenario {
             case(1) {
@@ -99,12 +96,12 @@ class ExistDontExistInCellAndroid : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.cellOf("Network & internet") {
-                        existInCell("Network & internet")
-                        dontExistInCell("A cat")
+                        exist("Network & internet")
+                        dontExist("A cat")
                     }
                     it.cellOf("Connected devices") {
-                        existInCell("Connected devices")
-                        dontExistInCell("A dog")
+                        exist("Connected devices")
+                        dontExist("A dog")
                     }
                 }
             }
@@ -113,7 +110,7 @@ class ExistDontExistInCellAndroid : UITest() {
 
     @Test
     @Order(40)
-    fun dontExistInCell_NG() {
+    fun dontExist_in_cellOf_NG() {
 
         scenario {
             case(1) {
@@ -121,7 +118,7 @@ class ExistDontExistInCellAndroid : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.cellOf("Network & internet") {
-                        dontExistInCell("Network & internet")
+                        dontExist("Network & internet")
                     }
                 }
             }
@@ -155,32 +152,24 @@ class ExistDontExistInCellIos : UITest() {
 
     @Test
     @Order(10)
-    fun existInCell_OK() {
+    fun exist_in_cell_OK() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Language & Region Screen]")
                 }.expectation {
-                    it.cell(".XCUIElementTypeOther&&#PREFERRED LANGUAGES") {
-                        existInCell("PREFERRED LANGUAGES")
-                    }
-                    it.cell(".XCUIElementTypeCell&&English") {
-                        existInCell("English")
-                        existInCell("iPhone Language")
-                        existInCell("Reorder English")
+                    it.cell(".XCUIElementTypeCell&&value=iPhone Language") {
+                        exist("English")
+                        exist("iPhone Language")
                     }
                 }
             }
             case(2) {
                 expectation {
-                    it.cellOf("PREFERRED LANGUAGES") {
-                        existInCell("PREFERRED LANGUAGES")
-                    }
-                    it.cellOf("English") {
-                        existInCell("English")
-                        existInCell("iPhone Language")
-                        existInCell("Reorder English")
+                    it.cellOf("iPhone Language") {
+                        exist("English")
+                        exist("iPhone Language")
                     }
                 }
             }
@@ -189,16 +178,16 @@ class ExistDontExistInCellIos : UITest() {
 
     @Test
     @Order(20)
-    fun existInCell_NG() {
+    fun exist_in_cell_NG() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Language & Region Screen]")
                 }.expectation {
-                    it.cell(".XCUIElementTypeCell&&English") {
-                        existInCell("English")
-                        existInCell("A bird")
+                    it.cellOf("iPhone Language") {
+                        exist("English")
+                        exist("A cat")
                     }
                 }
             }
@@ -207,20 +196,15 @@ class ExistDontExistInCellIos : UITest() {
 
     @Test
     @Order(30)
-    fun dontExistInCell_OK() {
+    fun dontExist_in_cell_OK() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Language & Region Screen]")
                 }.expectation {
-                    it.cellOf("PREFERRED LANGUAGES") {
-                        existInCell("PREFERRED LANGUAGES")
-                        dontExistInCell("A cat")
-                    }
-                    it.cellOf("English") {
-                        existInCell("English")
-                        dontExistInCell("A dog")
+                    it.cellOf("iPhone Language") {
+                        dontExist("A dog")
                     }
                 }
             }
@@ -229,15 +213,15 @@ class ExistDontExistInCellIos : UITest() {
 
     @Test
     @Order(40)
-    fun dontExistInCell_NG() {
+    fun dontExist_in_cell_NG() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Language & Region Screen]")
                 }.expectation {
-                    it.cellOf("English") {
-                        dontExistInCell("English")
+                    it.cellOf("iPhone Language") {
+                        dontExist("English")
                     }
                 }
             }

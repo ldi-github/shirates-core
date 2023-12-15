@@ -8,20 +8,21 @@ This is for **iOS only**.
 
 ## functions
 
-| function           |
-|:-------------------|
-| valueIs            |
-| valueIsNot         |
-| valueStartsWith    |
-| valueStartsWithNot |
-| valueContains      |
-| valueContainsNot   |
-| valueEndsWith      |
-| valueEndsWithNot   |
-| valueMatches       |
-| valueMatchesNot    |
-| valueIsEmpty       |
-| valueIsNotEmpty    |
+| function               |
+|:-----------------------|
+| valueIs                |
+| valueIsNot             |
+| valueStartsWith        |
+| valueStartsWithNot     |
+| valueContains          |
+| valueContainsNot       |
+| valueEndsWith          |
+| valueEndsWithNot       |
+| valueMatches           |
+| valueMatchesNot        |
+| valueMatchesDateFormat |
+| valueIsEmpty           |
+| valueIsNotEmpty        |
 
 ## Example
 

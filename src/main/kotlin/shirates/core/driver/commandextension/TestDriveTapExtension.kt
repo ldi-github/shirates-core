@@ -5,6 +5,7 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -169,6 +170,12 @@ fun TestDrive.tap(
     handleIrregular: Boolean = true,
     safeElementOnly: Boolean = true
 ): TestElement {
+
+    if (CodeExecutionContext.isInCell && this is TestElement) {
+        val e = this.innerWidget(expression = expression)
+        e.tap()
+        return lastElement
+    }
 
     TestDriver.refreshCurrentScreenWithNickname(expression)
 

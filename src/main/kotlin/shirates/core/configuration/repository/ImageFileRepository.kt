@@ -1,6 +1,7 @@
 package shirates.core.configuration.repository
 
 import shirates.core.configuration.ImageInfo
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.platformAnnotation
 import shirates.core.driver.imageProfile
 import shirates.core.driver.testDrive
@@ -109,7 +110,12 @@ object ImageFileRepository {
         val imageInfo = ImageInfo(imageExpression)
         val fname = imageInfo.fileName.removeSuffix(".png") + tag
         val allEntries = getAllImageFileEntries()
-        val imageFiles = allEntries.filter { it.fileName.startsWith(fname) }.sortedByDescending { it.fileName }
+        val excludedAnnotation1 = if (isAndroid) "@i_" else "@a_"
+        val excludedAnnotation2 = if (isAndroid) "@i." else "@a."
+        val entries = allEntries.filter {
+            it.fileName.contains(excludedAnnotation1).not() && it.fileName.contains(excludedAnnotation2).not()
+        }
+        val imageFiles = entries.filter { it.fileName.startsWith(fname) }.sortedByDescending { it.fileName }
         if (screenDirectory != null) {
             val files = imageFiles.filter { it.filePath.toString().contains(screenDirectory) }
             return files.firstOrNull()
@@ -147,6 +153,13 @@ object ImageFileRepository {
             ) ?: getImageFileEntryCore(
                 imageExpression = imageExpression,
                 tag = ".png"
+            ) ?: getImageFileEntryCore(
+                imageExpression = imageExpression,
+                tag = "",
+                screenDirectory = screenDirectory
+            ) ?: getImageFileEntryCore(
+                imageExpression = imageExpression,
+                tag = ""
             ) ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))
         return entry
     }

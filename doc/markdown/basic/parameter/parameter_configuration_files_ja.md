@@ -10,7 +10,7 @@
 ## testrun.properties
 
 **testrun.properties**ファイルはプロジェクト内の任意の場所に任意の名前で配置できます。
-このファイルは [@Testrunアノテーション](../creating_testclass_ja)によってテストのセットアップ中に指定されます。
+このファイルは [@Testrunアノテーション](../creating_testclass/creating_testclass_ja.md )によってテストのセットアップ中に指定されます。
 
 ```kotlin
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -38,10 +38,10 @@ class Test1 : UITest() {
 
 ## testrun.global.properties
 
-**testrun.global.properties**ファイルはプロジェクトディレクト下に配置されるファイルです。
+**testrun.global.properties**ファイルはプロジェクトディレクトリ下に配置されるファイルです。
 このファイルは固定名であり、`@Testrun`アノテーションで指定する必要はありません。
 このファイルで設定したパラメーターはプロジェクト内の全てのテストに適用されますが、他の構成ファイル(`testrun.properties`
-or `testConfig.json`)でオーバーライドされます。
+および `testConfig.json`)でオーバーライドされます。
 
 ## testrunファイルの例
 

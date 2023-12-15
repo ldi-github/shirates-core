@@ -14,6 +14,11 @@ You can scroll screen using these functions.
 | scrollToTop       | scroll to top of the scroll area        |
 | scrollToRightEdge | scroll to right edge of the scroll area |
 | scrollToLeftEdge  | scroll to left edge of the scroll area  |
+| withScrollDown    | select element with scrolling down      |
+| withScrollUp      | select element with scrolling up        |
+| withScrollRight   | select element with scrolling right     |
+| withScrollLeft    | select element with scrolling left      |
+| withoutScroll     | select element without scrolling        |
 
 ## Example
 

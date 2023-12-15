@@ -393,6 +393,14 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
                 val sel = selectors[nickname]!!
                 return sel
             } else {
+                if (NicknameUtility.isValidNickname(nickname)) {
+                    val content = nickname.getNicknameText()
+                    val n = content.toIntOrNull()
+                    if (n != null) {
+                        return Selector("pos=$n")
+                    }
+                }
+
                 if (TestMode.isNoLoadRun.not()) {
                     throw TestConfigException(
                         message(

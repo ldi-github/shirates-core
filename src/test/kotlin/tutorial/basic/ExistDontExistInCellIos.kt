@@ -11,32 +11,24 @@ class ExistDontExistInCellIos : UITest() {
 
     @Test
     @Order(10)
-    fun existInCell_OK() {
+    fun exist_in_cell_OK() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Language & Region Screen]")
                 }.expectation {
-                    it.cell(".XCUIElementTypeOther&&#PREFERRED LANGUAGES") {
-                        existInCell("PREFERRED LANGUAGES")
-                    }
-                    it.cell(".XCUIElementTypeCell&&English") {
-                        existInCell("English")
-                        existInCell("iPhone Language")
-                        existInCell("Reorder English")
+                    it.cell(".XCUIElementTypeCell&&value=iPhone Language") {
+                        exist("English")
+                        exist("iPhone Language")
                     }
                 }
             }
             case(2) {
                 expectation {
-                    it.cellOf("PREFERRED LANGUAGES") {
-                        existInCell("PREFERRED LANGUAGES")
-                    }
-                    it.cellOf("English") {
-                        existInCell("English")
-                        existInCell("iPhone Language")
-                        existInCell("Reorder English")
+                    it.cellOf("iPhone Language") {
+                        exist("English")
+                        exist("iPhone Language")
                     }
                 }
             }
@@ -45,16 +37,16 @@ class ExistDontExistInCellIos : UITest() {
 
     @Test
     @Order(20)
-    fun existInCell_NG() {
+    fun exist_in_cell_NG() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Language & Region Screen]")
                 }.expectation {
-                    it.cell(".XCUIElementTypeCell&&English") {
-                        existInCell("English")
-                        existInCell("A bird")
+                    it.cellOf("iPhone Language") {
+                        exist("English")
+                        exist("A cat")
                     }
                 }
             }
@@ -63,20 +55,15 @@ class ExistDontExistInCellIos : UITest() {
 
     @Test
     @Order(30)
-    fun dontExistInCell_OK() {
+    fun dontExist_in_cell_OK() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Language & Region Screen]")
                 }.expectation {
-                    it.cellOf("PREFERRED LANGUAGES") {
-                        existInCell("PREFERRED LANGUAGES")
-                        dontExistInCell("A cat")
-                    }
-                    it.cellOf("English") {
-                        existInCell("English")
-                        dontExistInCell("A dog")
+                    it.cellOf("iPhone Language") {
+                        dontExist("A dog")
                     }
                 }
             }
@@ -85,15 +72,15 @@ class ExistDontExistInCellIos : UITest() {
 
     @Test
     @Order(40)
-    fun dontExistInCell_NG() {
+    fun dontExist_in_cell_NG() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Language & Region Screen]")
                 }.expectation {
-                    it.cellOf("English") {
-                        dontExistInCell("English")
+                    it.cellOf("iPhone Language") {
+                        dontExist("English")
                     }
                 }
             }

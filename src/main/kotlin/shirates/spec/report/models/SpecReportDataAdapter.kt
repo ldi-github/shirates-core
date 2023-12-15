@@ -2,14 +2,14 @@ package shirates.spec.report.models
 
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import shirates.core.exception.TestEnvironmentException
+import shirates.core.logging.TestLog
+import shirates.core.utility.toDateOrNull
 import shirates.spec.exception.FileFormatException
 import shirates.spec.report.entity.LogLine
 import shirates.spec.report.entity.SpecLine
 import shirates.spec.report.entity.SpecReportData
 import shirates.spec.utilily.*
-import shirates.core.exception.TestEnvironmentException
-import shirates.core.logging.TestLog
-import shirates.core.utility.toDateOrNull
 import java.io.File
 import java.nio.file.Path
 
@@ -45,7 +45,7 @@ class SpecReportDataAdapter(val data: SpecReportData) {
         var last: LogLine? = null
         for (logLine in data.logLines) {
             if (last != null) {
-                if (last.isStartingBranch && logLine.isEndingBranch) {
+                if (last.command != "cell" && last.command != "cellOf" && last.isStartingBranch && logLine.isEndingBranch) {
                     last.delete = true
                     logLine.delete = true
                 }

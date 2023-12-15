@@ -4,6 +4,7 @@ import org.apache.commons.lang3.time.DateUtils
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 val Date.calendar: Calendar
@@ -53,9 +54,13 @@ val Date.dayOfWeek: Int
         return this.calendar.get(Calendar.DAY_OF_WEEK)
     }
 
-fun Date.format(pattern: String? = null, tz: String? = null): String {
+fun Date.format(
+    pattern: String? = null,
+    tz: String? = null,
+    locale: String? = null,
+): String {
 
-    var sdfFormat = (
+    val sdfFormat = (
             if (pattern.isNullOrBlank().not())
                 pattern!!
             else if (this.millisecondValue != 0)
@@ -65,15 +70,13 @@ fun Date.format(pattern: String? = null, tz: String? = null): String {
             else
                 "yyyy/MM/dd"
             )
-    if (tz != null) {
-        when (tz) {
-            "z" -> sdfFormat += " z"
-            else -> sdfFormat += tz
-        }
-    }
-
     try {
-        val sdf = SimpleDateFormat(sdfFormat)
+        val sdf =
+            if (locale.isNullOrEmpty()) SimpleDateFormat(sdfFormat)
+            else SimpleDateFormat(sdfFormat, Locale(locale))
+        if (tz.isNullOrEmpty().not()) {
+            sdf.timeZone = TimeZone.getTimeZone(ZoneId.of(tz))
+        }
         return sdf.format(this)
     } catch (t: Throwable) {
         throw IllegalArgumentException("Format error. (date=$this, pattern=$pattern)")

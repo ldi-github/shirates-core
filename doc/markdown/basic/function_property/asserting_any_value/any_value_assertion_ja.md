@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
+import java.util.*
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class AssertingAnyValue1 : UITest() {
@@ -126,6 +127,46 @@ class AssertingAnyValue1 : UITest() {
             }
         }
     }
+
+    @Test
+    @Order(50)
+    fun dateFormatAssertion_OK() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    "2023/12/15".thisMatchesDateFormat("yyyy/MM/dd")
+                }
+            }
+            case(2) {
+                condition {
+                    if (Locale.getDefault().toString() != "ja_JP") {
+                        SKIP_CASE()
+                    }
+                }.expectation {
+                    "2023/12/15(金)".thisMatchesDateFormat("yyyy/MM/dd(E)")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(60)
+    fun dateFormatAssertion_NG() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    "2023/12/15".thisMatchesDateFormat("yyyy.MM.dd")
+                }
+            }
+        }
+    }
+
 }
 ```
 

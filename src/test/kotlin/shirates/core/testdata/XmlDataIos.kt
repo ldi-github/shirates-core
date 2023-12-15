@@ -786,4 +786,154 @@ object XmlDataIos {
 </AppiumAUT>
 """.trimIndent()
 
+    val DateAndTime_ja = """
+<?xml version="1.0" encoding="UTF-8"?>
+<AppiumAUT>
+  <XCUIElementTypeApplication type="XCUIElementTypeApplication" name="カレンダー" label="カレンダー" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+    <XCUIElementTypeWindow type="XCUIElementTypeWindow" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                                        <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                                            <XCUIElementTypeNavigationBar type="XCUIElementTypeNavigationBar" name="DayViewContainerView" enabled="true" visible="true" accessible="false" x="0" y="47" width="390" height="44" index="0">
+                                              <XCUIElementTypeButton type="XCUIElementTypeButton" name="12月" label="12月" enabled="true" visible="true" accessible="true" x="0" y="47" width="65" height="44" index="0"/>
+                                              <XCUIElementTypeButton type="XCUIElementTypeButton" name="リスト" label="リスト" enabled="true" visible="true" accessible="true" x="227" y="47" width="50" height="44" index="1"/>
+                                              <XCUIElementTypeButton type="XCUIElementTypeButton" name="検索" label="検索" enabled="true" visible="true" accessible="true" x="284" y="47" width="49" height="44" index="2"/>
+                                              <XCUIElementTypeButton type="XCUIElementTypeButton" name="追加" label="追加" enabled="true" visible="true" accessible="true" x="340" y="47" width="42" height="44" index="3"/>
+                                            </XCUIElementTypeNavigationBar>
+                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="1">
+                                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0">
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="582" index="0">
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="582" index="0">
+                                                    <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="582" index="0">
+                                                      <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="582" index="0">
+                                                        <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="582" index="0">
+                                                          <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="582" index="0">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="582" index="0">
+                                                            <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="582" index="0">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="-461" width="51" height="1222" index="0">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="-461" width="51" height="986" index="0">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="-461" width="51" height="986" index="0">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="-461" width="51" height="986" index="0"/>
+                                                            </XCUIElementTypeOther>
+                                                            </XCUIElementTypeOther>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="15" y="270" width="36" height="21" index="1"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="525" width="51" height="250" index="2">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="525" width="51" height="250" index="0">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="525" width="51" height="250" index="0"/>
+                                                            </XCUIElementTypeOther>
+                                                            </XCUIElementTypeOther>
+                                                            </XCUIElementTypeOther>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="51" y="-461" width="339" height="1222" index="1">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="51" y="-461" width="339" height="1222" index="0">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="12月15日 金曜日" label="12月15日 金曜日" enabled="true" visible="true" accessible="false" x="51" y="-461" width="339" height="1222" index="0">
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="0:00" label="0:00" enabled="true" visible="false" accessible="true" x="51" y="-451" width="339" height="51" index="0"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="1:00" label="1:00" enabled="true" visible="false" accessible="true" x="51" y="-401" width="339" height="51" index="1"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="2:00" label="2:00" enabled="true" visible="false" accessible="true" x="51" y="-351" width="339" height="51" index="2"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="3:00" label="3:00" enabled="true" visible="false" accessible="true" x="51" y="-301" width="339" height="51" index="3"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="4:00" label="4:00" enabled="true" visible="false" accessible="true" x="51" y="-251" width="339" height="51" index="4"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="5:00" label="5:00" enabled="true" visible="false" accessible="true" x="51" y="-201" width="339" height="51" index="5"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="6:00" label="6:00" enabled="true" visible="false" accessible="true" x="51" y="-151" width="339" height="51" index="6"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="7:00" label="7:00" enabled="true" visible="false" accessible="true" x="51" y="-101" width="339" height="51" index="7"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="8:00" label="8:00" enabled="true" visible="false" accessible="true" x="51" y="-51" width="339" height="51" index="8"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="9:00" label="9:00" enabled="true" visible="false" accessible="true" x="51" y="-1" width="339" height="51" index="9"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="10:00" label="10:00" enabled="true" visible="false" accessible="true" x="51" y="49" width="339" height="51" index="10"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="11:00" label="11:00" enabled="true" visible="false" accessible="true" x="51" y="99" width="339" height="51" index="11"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="12:00" label="12:00" enabled="true" visible="true" accessible="true" x="51" y="149" width="339" height="51" index="12"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="13:00" label="13:00" enabled="true" visible="true" accessible="true" x="51" y="199" width="339" height="51" index="13"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="14:00, 進行中" label="14:00, 進行中" enabled="true" visible="true" accessible="true" x="51" y="249" width="339" height="51" index="14"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="15:00" label="15:00" enabled="true" visible="true" accessible="true" x="51" y="299" width="339" height="51" index="15"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="16:00" label="16:00" enabled="true" visible="true" accessible="true" x="51" y="349" width="339" height="51" index="16"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="17:00" label="17:00" enabled="true" visible="true" accessible="true" x="51" y="399" width="339" height="51" index="17"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="18:00" label="18:00" enabled="true" visible="true" accessible="true" x="51" y="449" width="339" height="51" index="18"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="19:00" label="19:00" enabled="true" visible="true" accessible="true" x="51" y="499" width="339" height="51" index="19"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="20:00" label="20:00" enabled="true" visible="true" accessible="true" x="51" y="550" width="339" height="50" index="20"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="21:00" label="21:00" enabled="true" visible="true" accessible="true" x="51" y="600" width="339" height="50" index="21"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="22:00" label="22:00" enabled="true" visible="true" accessible="true" x="51" y="650" width="339" height="50" index="22"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" name="23:00" label="23:00" enabled="true" visible="true" accessible="true" x="51" y="700" width="339" height="50" index="23"/>
+                                                            </XCUIElementTypeOther>
+                                                            </XCUIElementTypeOther>
+                                                            </XCUIElementTypeOther>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" value="100%" name="垂直スクロールバー, 3ページ" label="垂直スクロールバー, 3ページ" enabled="true" visible="true" accessible="false" x="357" y="179" width="30" height="582" index="2"/>
+                                                            <XCUIElementTypeOther type="XCUIElementTypeOther" value="0%" name="水平スクロールバー, 1ページ" label="水平スクロールバー, 1ページ" enabled="true" visible="true" accessible="false" x="0" y="728" width="390" height="30" index="3"/>
+                                                            </XCUIElementTypeScrollView>
+                                                            </XCUIElementTypeOther>
+                                                          </XCUIElementTypeOther>
+                                                        </XCUIElementTypeScrollView>
+                                                      </XCUIElementTypeOther>
+                                                    </XCUIElementTypeOther>
+                                                  </XCUIElementTypeOther>
+                                                </XCUIElementTypeOther>
+                                              </XCUIElementTypeOther>
+                                            </XCUIElementTypeOther>
+                                            <XCUIElementTypeToolbar type="XCUIElementTypeToolbar" name="Toolbar" label="ツールバー" enabled="true" visible="true" accessible="false" x="0" y="761" width="390" height="49" index="2">
+                                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="761" width="390" height="49" index="0">
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="16" y="761" width="358" height="49" index="0">
+                                                  <XCUIElementTypeButton type="XCUIElementTypeButton" name="今日" label="今日" enabled="true" visible="true" accessible="true" x="16" y="771" width="32" height="34" index="0">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="今日" name="今日" label="今日" enabled="true" visible="true" accessible="false" x="16" y="777" width="32" height="22" index="0"/>
+                                                  </XCUIElementTypeButton>
+                                                  <XCUIElementTypeButton type="XCUIElementTypeButton" name="カレンダー" label="カレンダー" enabled="true" visible="true" accessible="true" x="149" y="771" width="92" height="35" index="1"/>
+                                                  <XCUIElementTypeButton type="XCUIElementTypeButton" name="出席依頼" label="出席依頼" enabled="true" visible="true" accessible="true" x="310" y="771" width="64" height="34" index="2">
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="出席依頼" name="出席依頼" label="出席依頼" enabled="true" visible="true" accessible="false" x="310" y="777" width="64" height="22" index="0"/>
+                                                  </XCUIElementTypeButton>
+                                                </XCUIElementTypeOther>
+                                              </XCUIElementTypeOther>
+                                            </XCUIElementTypeToolbar>
+                                            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="3">
+                                              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="91" width="390" height="89" index="0">
+                                                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="91" width="390" height="89" index="0">
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="108" width="390" height="72" index="0">
+                                                    <XCUIElementTypeScrollView type="XCUIElementTypeScrollView" enabled="true" visible="true" accessible="false" x="12" y="108" width="367" height="40" index="0">
+                                                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="12月10日 日曜日" label="12月10日 日曜日" enabled="true" visible="true" accessible="true" x="11" y="108" width="54" height="40" index="0"/>
+                                                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="12月11日 月曜日" label="12月11日 月曜日" enabled="true" visible="true" accessible="true" x="64" y="108" width="53" height="40" index="1"/>
+                                                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="12月12日 火曜日" label="12月12日 火曜日" enabled="true" visible="true" accessible="true" x="116" y="108" width="53" height="40" index="2"/>
+                                                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="12月13日 水曜日" label="12月13日 水曜日" enabled="true" visible="true" accessible="true" x="168" y="108" width="54" height="40" index="3"/>
+                                                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="12月14日 木曜日" label="12月14日 木曜日" enabled="true" visible="true" accessible="true" x="221" y="108" width="53" height="40" index="4"/>
+                                                      <XCUIElementTypeOther type="XCUIElementTypeOther" name="今日, 12月15日 金曜日" label="今日, 12月15日 金曜日" enabled="true" visible="true" accessible="true" x="273" y="108" width="53" height="40" index="5"/>
+                                                      <XCUIElementTypeButton type="XCUIElementTypeButton" name="12月16日 土曜日" label="12月16日 土曜日" enabled="true" visible="true" accessible="true" x="325" y="108" width="54" height="40" index="6"/>
+                                                    </XCUIElementTypeScrollView>
+                                                    <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="2023年12月15日 金曜日" name="2023年12月15日 金曜日" label="2023年12月15日 金曜日" enabled="true" visible="true" accessible="true" x="109" y="148" width="172" height="20" index="1"/>
+                                                  </XCUIElementTypeOther>
+                                                  <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="0" y="179" width="390" height="1" index="1"/>
+                                                </XCUIElementTypeOther>
+                                              </XCUIElementTypeOther>
+                                            </XCUIElementTypeOther>
+                                          </XCUIElementTypeOther>
+                                        </XCUIElementTypeOther>
+                                      </XCUIElementTypeOther>
+                                    </XCUIElementTypeOther>
+                                  </XCUIElementTypeOther>
+                                </XCUIElementTypeOther>
+                              </XCUIElementTypeOther>
+                            </XCUIElementTypeOther>
+                          </XCUIElementTypeOther>
+                        </XCUIElementTypeOther>
+                      </XCUIElementTypeOther>
+                    </XCUIElementTypeOther>
+                  </XCUIElementTypeOther>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+            </XCUIElementTypeOther>
+          </XCUIElementTypeOther>
+        </XCUIElementTypeOther>
+      </XCUIElementTypeOther>
+    </XCUIElementTypeWindow>
+  </XCUIElementTypeApplication>
+</AppiumAUT>
+""".trimIndent()
 }

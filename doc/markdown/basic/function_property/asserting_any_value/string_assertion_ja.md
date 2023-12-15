@@ -4,22 +4,23 @@
 
 ## 関数
 
-| 関数                | 説明                      |
-|:------------------|-------------------------|
-| thisIs            | 期待値であることを検証します          |
-| thisIsNot         | 期待値ではないことを検証します         |
-| thisIsEmpty       | 空文字であることを検証します          |
-| thisIsNotEmpty    | 空文字ではないことを検証します         |
-| thisIsBlank       | 空白文字であることを検証します         |
-| thisIsNotBlank    | 空白文字ではないことを検証します        |
-| thisStartsWith    | 指定した文字列から開始することを検証します   |
-| thisStartsWithNot | 指定した文字列から開始しないことを検証します  |
-| thisContains      | 指定した文字列を含むことを検証します      |
-| thisContainsNot   | 指定した文字列を含まないことを検証します    |
-| thisEndsWith      | 指定した文字列で終了することを検証します    |
-| thisEndsWithNot   | 指定した文字列で終了しないことを検証します   |
-| thisMatches       | 指定したパターンにマッチすることを検証します  |
-| thisMatchesNot    | 指定したパターンにマッチしないことを検証します |
+| 関数                    | 説明                         |
+|:----------------------|----------------------------|
+| thisIs                | 期待値であることを検証します             |
+| thisIsNot             | 期待値ではないことを検証します            |
+| thisIsEmpty           | 空文字であることを検証します             |
+| thisIsNotEmpty        | 空文字ではないことを検証します            |
+| thisIsBlank           | 空白文字であることを検証します            |
+| thisIsNotBlank        | 空白文字ではないことを検証します           |
+| thisStartsWith        | 指定した文字列から開始することを検証します      |
+| thisStartsWithNot     | 指定した文字列から開始しないことを検証します     |
+| thisContains          | 指定した文字列を含むことを検証します         |
+| thisContainsNot       | 指定した文字列を含まないことを検証します       |
+| thisEndsWith          | 指定した文字列で終了することを検証します       |
+| thisEndsWithNot       | 指定した文字列で終了しないことを検証します      |
+| thisMatches           | 指定したパターンにマッチすることを検証します     |
+| thisMatchesNot        | 指定したパターンにマッチしないことを検証します    |
+| thisMatchesDateFormat | 指定した日付書式パターンにマッチすることを検証します |
 
 ## 例
 
