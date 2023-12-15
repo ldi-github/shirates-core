@@ -7,7 +7,12 @@ import java.util.*
 /**
  * toDate
  */
-fun String.toDate(pattern: String? = null, tz: String? = null, strict: Boolean = true): Date {
+fun String.toDate(
+    pattern: String? = null,
+    tz: String? = null,
+    locale: String? = null,
+    strict: Boolean = true
+): Date {
 
     val tokens = this.replace("-", "|-").replace("+", "|+").split("|")
     val datePart = tokens[0]
@@ -28,7 +33,9 @@ fun String.toDate(pattern: String? = null, tz: String? = null, strict: Boolean =
             else -> "yyyy/MM/dd"
         } + zonePattern)
     try {
-        val sdf = SimpleDateFormat(sdfPattern)
+        val sdf =
+            if (locale == null) SimpleDateFormat(sdfPattern)
+            else SimpleDateFormat(sdfPattern, Locale(locale))
         sdf.isLenient = false
         if (zonePart.isNotBlank()) {
             sdf.timeZone = TimeZone.getTimeZone(ZoneId.of(zonePart))
@@ -36,10 +43,8 @@ fun String.toDate(pattern: String? = null, tz: String? = null, strict: Boolean =
         val date = sdf.parse(this)
 
         if (strict) {
-            val reformat =
-                sdf.format(date).replace("Z", "").replace(zonePart, "").replace(zonePart.replace("00", ""), "")
-            val thisWithoutZonePart = this.replace(zonePart, "")
-            if (thisWithoutZonePart != reformat) {
+            val reformat = sdf.format(date)
+            if (this != reformat) {
                 throw IllegalArgumentException("strict=$strict")
             }
         }

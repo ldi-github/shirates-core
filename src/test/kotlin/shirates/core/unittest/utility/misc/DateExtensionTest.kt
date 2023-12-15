@@ -7,6 +7,7 @@ import shirates.core.testcode.UnitTest
 import shirates.core.utility.*
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 
 class DateExtensionTest : UnitTest() {
 
@@ -48,36 +49,15 @@ class DateExtensionTest : UnitTest() {
             // Assert
             assertThat(actual).isEqualTo(expected)
         }
-//        run {
-//            // Arrange
-//            val expected = "Fri, 15 Dec 2023 00:01:02.123 -0700"
-//            val date = expected.toDate(pattern = "EEE, d MMM yyyy HH:mm:ss.SSS Z", tz = "-0700")
-//            // Act
-//            val actual = date.format("EEE, d MMM yyyy HH:mm:ss.SSS Z", tz = "-0700")
-//            // Assert
-//            assertThat(actual).isEqualTo(expected)
-//        }
-//        run {
-//            // Arrange
-//            val expected = "2023年12月15日(金) 160102"
-//            val date =
-//                expected.toDate(pattern = "yyyy年MM月dd日(E) HHmmss", tz = "+0900")
-//            // Act
-//            val actual = date.format("yyyy年MM月dd日(E) HH時mm分ss秒", tz = "+0900")
-//            // Assert
-//            assertThat(actual).isEqualTo(expected)
-//        }
-//        run {
-//            // Arrange
-//            val expected = "2023年12月15日金曜日 160102"
-//            val date =
-//                expected.toDate(pattern = "yyyy年MM月dd日E曜日 HHmmss", tz = "+0900")
-//            // Act
-//            val actual = date.format("yyyy年MM月dd日E曜日 HH時mm分ss秒", tz = "+0900")
-//            // Assert
-//            assertThat(actual).isEqualTo(expected)
-//        }
-
+        run {
+            // Arrange
+            val expected = "Fri, 15 Dec 2023 00:01:02.123 -0700"
+            val date = expected.toDate(pattern = "EEE, d MMM yyyy HH:mm:ss.SSS -0700", locale = "en_US")
+            // Act
+            val actual = date.format("EEE, d MMM yyyy HH:mm:ss.SSS Z", tz = "-0700", locale = "en_US")
+            // Assert
+            assertThat(actual).isEqualTo(expected)
+        }
         assertThatThrownBy {
             // Arrange
             val expected = "2021/08/01 01:01:01.123"
@@ -85,7 +65,30 @@ class DateExtensionTest : UnitTest() {
             // Act
             date.format("XXXX")
         }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("Format error. (date=Sun Aug 01 01:01:01 JST 2021, pattern=XXXX)")
+            .hasMessageStartingWith("Format error. (date=")
+            .hasMessageEndingWith(", pattern=XXXX)")
+
+        if (Locale.getDefault().toString() == "ja_JP") {
+            run {
+                // Arrange
+                val expected = "2023年12月15日(金) 16時01分02秒 +0900"
+                val date = expected.toDate(pattern = "yyyy年MM月dd日(E) HH時mm分ss秒 +0900")
+                // Act
+                val actual = date.format("yyyy年MM月dd日(E) HH時mm分ss秒 +0900")
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+            run {
+                // Arrange
+                val expected = "2023年12月15日(金) 160102.123 +0900"
+                val date = expected.toDate(pattern = "yyyy年MM月dd日(E) HHmmss.SSS +0900")
+                // Act
+                val actual = date.format("yyyy年MM月dd日(E) HHmmss.SSS +0900")
+                // Assert
+                assertThat(actual).isEqualTo(expected)
+            }
+        }
+
     }
 
     @Test
