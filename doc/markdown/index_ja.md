@@ -231,8 +231,8 @@
 
 ## パッケージのインストール/アップデート
 
-- [nodeとnpmのインストール/アップデート](updating_packages/installing_updating_node&npm_ja.md)
-- [Appiumとドライバーのインストール/アップデート](updating_packages/installing_updating_appium&drivers_ja.md)
+- [nodeとnpmのインストール/アップデート](updating_packages/installing_updating_node_npm_ja.md)
+- [Appiumとドライバーのインストール/アップデート](updating_packages/installing_updating_appium_drivers_ja.md)
 
 ## トラブルシューティング
 
