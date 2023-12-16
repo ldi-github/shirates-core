@@ -1,4 +1,6 @@
 {
   "inputDirectory": "doc/markdown",
-  "outputDirectory": "doc/out"
+  "outputDirectory": "doc/out",
+  "generateSitemap": "true",
+  "siteRoot": "https://ldi-github.github.io/shirates-core/"
 }

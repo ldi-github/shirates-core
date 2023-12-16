@@ -231,8 +231,8 @@
 
 ## Installing/Updating packages
 
-- [Installing/Updating node & npm](updating_packages/installing_updating_node&npm.md)
-- [Installing/Updating Appium & drivers](updating_packages/installing_updating_appium&drivers.md)
+- [Installing/Updating node & npm](updating_packages/installing_updating_node_npm.md)
+- [Installing/Updating Appium & drivers](updating_packages/installing_updating_appium_drivers.md)
 
 ## Troubleshooting
 
