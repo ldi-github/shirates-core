@@ -41,6 +41,8 @@ object Const {
     const val ENABLE_SHELL_EXEC_LOG = false
     const val ENABLE_TIME_MEASURE_LOG = false
     const val ENABLE_IMAGE_MATCH_DEBUG_LOG = false
+    const val ENABLE_IS_IN_VIEW_LOG = false
+    const val ENABLE_IS_SAFE_LOG = true
     const val SCREENSHOT_SCALE = 0.5
     const val ENABLE_IMAGE_ASSERTION = true
     const val IMAGE_MATCHING_SCALE = 0.25

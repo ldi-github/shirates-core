@@ -191,7 +191,9 @@ fun TestDrive.tap(
 
         val targetElement = it.select(expression = expression)
         if (safeElementOnly && targetElement.isSafe.not()) {
-            return@execOperateCommand
+            throw TestDriverException(
+                message(id = "tappingUnsafeElementNotAllowed", subject = targetElement.toString())
+            )
         }
 
         val tapFunc = {

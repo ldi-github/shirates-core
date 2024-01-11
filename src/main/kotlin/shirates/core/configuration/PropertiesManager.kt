@@ -497,6 +497,26 @@ object PropertiesManager {
             return value == "true"
         }
 
+    /**
+     * enableIsInViewLog
+     */
+    val enableIsInViewLog: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableIsInViewLog")
+                ?: return Const.ENABLE_IS_IN_VIEW_LOG
+            return value == "true"
+        }
+
+    /**
+     * enableIsSafeLog
+     */
+    val enableIsSafeLog: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableIsSafeLog")
+                ?: return Const.ENABLE_IS_SAFE_LOG
+            return value == "true"
+        }
+
     // Screenshot --------------------------------------------------
 
     /**
