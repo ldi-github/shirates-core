@@ -1130,7 +1130,7 @@ object TestDriver {
                 )
             }
             if (selector.isNegation.not()) {
-                if (selectedElement.isFound) {
+                if (selectedElement.isFound && selectedElement.isInView) {
                     lastElement = selectedElement
                     return lastElement
                 }
@@ -1174,10 +1174,11 @@ object TestDriver {
                         )
                     }
                     selectedElement = e
+                    val foundAndIsInView = e.isFound && e.isInView
                     val result = if (selector.isNegation) {
-                        e.isEmpty
+                        foundAndIsInView.not()
                     } else {
-                        e.isFound
+                        foundAndIsInView
                     }
 
                     result

@@ -480,8 +480,8 @@ class TestElement(
                 info("isSafe property returns false. (isDummy == true)")
                 return false
             }
-            if (this.bounds.isIncludedIn(rootBounds).not()) {
-                info("isSafe property returns false. (this is not included in rootBounds. (this=$this, rootBounds=$rootBounds)")
+            if (this.bounds.isCenterIncludedIn(rootBounds).not()) {
+                info("isSafe property returns false. (the center of this is not included in rootBounds. (this=$this, rootBounds=$rootBounds)")
                 return false
             }
 
@@ -1086,18 +1086,25 @@ class TestElement(
             }
         }
 
+        /**
+         * For iOS and Android
+         */
         if (bounds.area == 0) {
             info("isInView == false. bounds.ared == 0. ($this)")
             return false
         }
+
+        val isCenterIncludedIn = this.bounds.isCenterIncludedIn(rootBounds)
+        if (isCenterIncludedIn.not()) {
+            info("isInView == false. The center of this is not included in rootBounds. (this=$this, rootBound=$rootBounds)")
+        }
         if (isAndroid) {
-            val r = this.bounds.isIncludedIn(rootBounds)
-            if (r.not()) {
-                info("isInView == false. this is not included in rootBounds. (this=$this, rootBound=$rootBounds)")
-            }
-            return r
+            return true
         }
 
+        /**
+         * For iOS only
+         */
         if (this.isWidget.not()) {
             return true
         }
