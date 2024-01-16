@@ -2,6 +2,7 @@ package shirates.core.driver
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.lastElement
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.getKeyboardInIos
 import shirates.core.driver.commandextension.relative
@@ -35,6 +36,21 @@ object TestElementCache {
             field = value
             allElements = listOf()
             synced = false
+            if (field.isEmpty) {
+                rootViewElement = TestElement.emptyElement
+            } else {
+                rootViewElement =
+                    if (isAndroid) field.children.first()
+                    else field
+            }
+        }
+
+    /**
+     * rootViewElement
+     */
+    var rootViewElement: TestElement = TestElement.emptyElement
+        internal set(value) {
+            field = value
         }
 
     /**
@@ -42,7 +58,7 @@ object TestElementCache {
      */
     val rootBounds: Bounds
         get() {
-            return rootElement.bounds
+            return rootViewElement.bounds
         }
 
     /**

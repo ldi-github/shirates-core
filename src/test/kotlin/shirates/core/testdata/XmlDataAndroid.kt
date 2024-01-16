@@ -802,33 +802,35 @@ object XmlDataAndroid {
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <hierarchy index="0" class="hierarchy" rotation="0" width="1080" height="2176">
   <android.widget.FrameLayout    bounds="[0,0][1080,2176]" resource-id="FrameLayout1" package="com.sample.android" class="android.widget.FrameLayout" text="" displayed="true">
-    <android.widget.FrameLayout  bounds="[0,10][9,19]"   resource-id="FrameLayout1-1" class="android.widget.FrameLayout" displayed="true" />
-    <android.widget.TextView     bounds="[10,10][19,19]" resource-id="TextView1-1" text="TextView1-1" class="android.widget.TextView" displayed="true" />
-    <android.widget.EditText     bounds="[20,10][29,19]" resource-id="EditText1-1" text="EditText1-1" class="android.widget.EditText" displayed="true" />
-    <android.widget.ImageView    bounds="[30,10][39,19]" resource-id="ImageView1-1" text="ImageView1-1" class="android.widget.ImageView" displayed="true" />
-    <android.widget.ImageButton  bounds="[40,10][49,19]" resource-id="ImageButton1-1" text="ImageButton1-1" class="android.widget.ImageButton" displayed="true" />
-    <android.widget.Switch       bounds="[50,10][59,19]" resource-id="Switch1-1" text="Switch1-1" class="android.widget.Switch" displayed="true" />
-    <android.widget.CheckBox     bounds="[60,10][69,19]" resource-id="CheckBox1-1" text="CheckBox1-1" class="android.widget.CheckBox" displayed="true" />
-    <android.widget.LinearLayout bounds="[70,10][79,19]" resource-id="LinearLayout1-1" class="android.widget.LinearLayout" displayed="true" />
-
-    <android.widget.FrameLayout  bounds="[0,20][9,29]"   resource-id="FrameLayout2-1" class="android.widget.FrameLayout" displayed="true" />
-    <android.widget.TextView     bounds="[10,20][19,29]" resource-id="TextView2-1" text="TextView2-1" class="android.widget.TextView" displayed="true" />
-    <android.widget.EditText     bounds="[20,20][29,29]" resource-id="EditText2-1" text="EditText2-1" class="android.widget.EditText" displayed="true" />
-    <android.widget.ImageView    bounds="[30,20][39,29]" resource-id="ImageView2-1" text="ImageView2-1" class="android.widget.ImageView" displayed="true" />
-    <android.widget.ImageButton  bounds="[40,20][49,29]" resource-id="ImageButton2-1" text="ImageButton2-1" class="android.widget.ImageButton" displayed="true" />
-    <android.widget.Switch       bounds="[50,20][59,29]" resource-id="Switch2-1" text="Switch2-1" class="android.widget.Switch" displayed="true" />
-    <android.widget.CheckBox     bounds="[60,20][69,29]" resource-id="CheckBox2-1" text="CheckBox2-1" class="android.widget.CheckBox" displayed="true" />
-    <android.widget.LinearLayout bounds="[70,20][79,29]" resource-id="LinearLayout2-1" class="android.widget.LinearLayout" displayed="true" />
-
-    <android.widget.FrameLayout  bounds="[0,30][9,39]"   resource-id="FrameLayout3-1" class="android.widget.FrameLayout" displayed="true" />
-    <android.widget.TextView     bounds="[10,30][19,39]" resource-id="TextView3-1" text="TextView3-1" class="android.widget.TextView" displayed="true" />
-    <android.widget.EditText     bounds="[20,30][29,39]" resource-id="EditText3-1" text="EditText3-1" class="android.widget.EditText" displayed="true" />
-    <android.widget.ImageView    bounds="[30,30][39,39]" resource-id="ImageView3-1" text="ImageView3-1" class="android.widget.ImageView" displayed="true" />
-    <android.widget.ImageButton  bounds="[40,30][49,39]" resource-id="ImageButton3-1" text="ImageButton3-1" class="android.widget.ImageButton" displayed="true" />
-    <android.widget.Switch       bounds="[50,30][59,39]" resource-id="Switch3-1" text="Switch3-1" class="android.widget.Switch" displayed="true" />
-    <android.widget.CheckBox     bounds="[60,30][69,39]" resource-id="CheckBox3-1" text="CheckBox3-1" class="android.widget.CheckBox" displayed="true" />
-    <android.widget.LinearLayout bounds="[70,30][79,39]" resource-id="LinearLayout3-1" class="android.widget.LinearLayout" displayed="true" />
-
+      <android.widget.LinearLayout    bounds="[0,0][1080,2176]" resource-id="LinearLayout1" package="com.sample.android" class="android.widget.LinearLayout" text="" displayed="true">
+        <android.widget.FrameLayout  bounds="[0,10][9,19]"   resource-id="FrameLayout1-1" class="android.widget.FrameLayout" displayed="true" />
+        <android.widget.TextView     bounds="[10,10][19,19]" resource-id="TextView1-1" text="TextView1-1" class="android.widget.TextView" displayed="true" />
+        <android.widget.EditText     bounds="[20,10][29,19]" resource-id="EditText1-1" text="EditText1-1" class="android.widget.EditText" displayed="true" />
+        <android.widget.ImageView    bounds="[30,10][39,19]" resource-id="ImageView1-1" text="ImageView1-1" class="android.widget.ImageView" displayed="true" />
+        <android.widget.ImageButton  bounds="[40,10][49,19]" resource-id="ImageButton1-1" text="ImageButton1-1" class="android.widget.ImageButton" displayed="true" />
+        <android.widget.Switch       bounds="[50,10][59,19]" resource-id="Switch1-1" text="Switch1-1" class="android.widget.Switch" displayed="true" />
+        <android.widget.CheckBox     bounds="[60,10][69,19]" resource-id="CheckBox1-1" text="CheckBox1-1" class="android.widget.CheckBox" displayed="true" />
+        <android.widget.LinearLayout bounds="[70,10][79,19]" resource-id="LinearLayout1-1" class="android.widget.LinearLayout" displayed="true" />
+    
+        <android.widget.FrameLayout  bounds="[0,20][9,29]"   resource-id="FrameLayout2-1" class="android.widget.FrameLayout" displayed="true" />
+        <android.widget.TextView     bounds="[10,20][19,29]" resource-id="TextView2-1" text="TextView2-1" class="android.widget.TextView" displayed="true" />
+        <android.widget.EditText     bounds="[20,20][29,29]" resource-id="EditText2-1" text="EditText2-1" class="android.widget.EditText" displayed="true" />
+        <android.widget.ImageView    bounds="[30,20][39,29]" resource-id="ImageView2-1" text="ImageView2-1" class="android.widget.ImageView" displayed="true" />
+        <android.widget.ImageButton  bounds="[40,20][49,29]" resource-id="ImageButton2-1" text="ImageButton2-1" class="android.widget.ImageButton" displayed="true" />
+        <android.widget.Switch       bounds="[50,20][59,29]" resource-id="Switch2-1" text="Switch2-1" class="android.widget.Switch" displayed="true" />
+        <android.widget.CheckBox     bounds="[60,20][69,29]" resource-id="CheckBox2-1" text="CheckBox2-1" class="android.widget.CheckBox" displayed="true" />
+        <android.widget.LinearLayout bounds="[70,20][79,29]" resource-id="LinearLayout2-1" class="android.widget.LinearLayout" displayed="true" />
+    
+        <android.widget.FrameLayout  bounds="[0,30][9,39]"   resource-id="FrameLayout3-1" class="android.widget.FrameLayout" displayed="true" />
+        <android.widget.TextView     bounds="[10,30][19,39]" resource-id="TextView3-1" text="TextView3-1" class="android.widget.TextView" displayed="true" />
+        <android.widget.EditText     bounds="[20,30][29,39]" resource-id="EditText3-1" text="EditText3-1" class="android.widget.EditText" displayed="true" />
+        <android.widget.ImageView    bounds="[30,30][39,39]" resource-id="ImageView3-1" text="ImageView3-1" class="android.widget.ImageView" displayed="true" />
+        <android.widget.ImageButton  bounds="[40,30][49,39]" resource-id="ImageButton3-1" text="ImageButton3-1" class="android.widget.ImageButton" displayed="true" />
+        <android.widget.Switch       bounds="[50,30][59,39]" resource-id="Switch3-1" text="Switch3-1" class="android.widget.Switch" displayed="true" />
+        <android.widget.CheckBox     bounds="[60,30][69,39]" resource-id="CheckBox3-1" text="CheckBox3-1" class="android.widget.CheckBox" displayed="true" />
+        <android.widget.LinearLayout bounds="[70,30][79,39]" resource-id="LinearLayout3-1" class="android.widget.LinearLayout" displayed="true" />
+    
+      </android.widget.LinearLayout>
   </android.widget.FrameLayout>
 </hierarchy>
     """.trimIndent()
@@ -839,40 +841,41 @@ object XmlDataAndroid {
     val RelativeCoordinateTest2 = """
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <hierarchy index="0" class="hierarchy" rotation="0" width="1080" height="2176">
-  <android.widget.FrameLayout    bounds="[0,0][1080,2176]" resource-id="FrameLayout1" package="com.sample.android" class="android.widget.FrameLayout" text="" displayed="true">
-    <android.widget.FrameLayout  bounds="[0, 10][9, 19]"   resource-id="FrameLayout1-1" class="android.widget.FrameLayout" displayed="true" />
-    <android.widget.FrameLayout  bounds="[10,10][19,19]"   resource-id="FrameLayout1-2" class="android.widget.FrameLayout" displayed="true" />
-    <android.widget.FrameLayout  bounds="[20,10][29,19]"   resource-id="FrameLayout1-3" class="android.widget.FrameLayout" displayed="true" />
-
-    <android.widget.TextView     bounds="[0 ,20][9, 29]" resource-id="TextView1-1" class="android.widget.TextView" displayed="true" />
-    <android.widget.TextView     bounds="[10,20][19,29]" resource-id="TextView1-2" class="android.widget.TextView" displayed="true" />
-    <android.widget.TextView     bounds="[20,20][29,29]" resource-id="TextView1-3" class="android.widget.TextView" displayed="true" />
-
-    <android.widget.EditText     bounds="[0 ,30][9 ,39]" resource-id="EditText1-1" class="android.widget.EditText" displayed="true" />
-    <android.widget.EditText     bounds="[10,30][19,39]" resource-id="EditText1-2" class="android.widget.EditText" displayed="true" />
-    <android.widget.EditText     bounds="[20,30][29,39]" resource-id="EditText1-3" class="android.widget.EditText" displayed="true" />
-
-    <android.widget.ImageView    bounds="[0 ,40][9 ,49]" resource-id="ImageView1-1" class="android.widget.ImageView" displayed="true" />
-    <android.widget.ImageView    bounds="[10,40][19,49]" resource-id="ImageView1-2" class="android.widget.ImageView" displayed="true" />
-    <android.widget.ImageView    bounds="[20,40][29,49]" resource-id="ImageView1-3" class="android.widget.ImageView" displayed="true" />
-
-    <android.widget.ImageButton  bounds="[0 ,50][9 ,59]" resource-id="ImageButton1-1" class="android.widget.ImageButton" displayed="true" />
-    <android.widget.ImageButton  bounds="[10,50][19,59]" resource-id="ImageButton1-2" class="android.widget.ImageButton" displayed="true" />
-    <android.widget.ImageButton  bounds="[20,50][29,59]" resource-id="ImageButton1-3" class="android.widget.ImageButton" displayed="true" />
-
-    <android.widget.Switch       bounds="[0 ,60][9 ,69]" resource-id="Switch1-1" class="android.widget.Switch" displayed="true" />
-    <android.widget.Switch       bounds="[10,60][19,69]" resource-id="Switch1-2" class="android.widget.Switch" displayed="true" />
-    <android.widget.Switch       bounds="[20,60][29,69]" resource-id="Switch1-3" class="android.widget.Switch" displayed="true" />
-
-    <android.widget.CheckBox     bounds="[0 ,70][9 ,79]" resource-id="CheckBox1-1" class="android.widget.CheckBox" displayed="true" />
-    <android.widget.CheckBox     bounds="[10,70][19,79]" resource-id="CheckBox1-2" class="android.widget.CheckBox" displayed="true" />
-    <android.widget.CheckBox     bounds="[20,70][29,79]" resource-id="CheckBox1-3" class="android.widget.CheckBox" displayed="true" />
-
-    <android.widget.LinearLayout bounds="[0 ,80][9 ,89]"   resource-id="LinearLayout1-1" class="android.widget.LinearLayout" displayed="true" />
-    <android.widget.LinearLayout bounds="[10,80][19,89]"   resource-id="LinearLayout1-2" class="android.widget.LinearLayout" displayed="true" />
-    <android.widget.LinearLayout bounds="[20,80][29,89]"   resource-id="LinearLayout1-3" class="android.widget.LinearLayout" displayed="true" />
-
-  </android.widget.FrameLayout>
+    <android.widget.FrameLayout    bounds="[0,0][1080,2176]" resource-id="FrameLayout1" package="com.sample.android" class="android.widget.FrameLayout" text="" displayed="true">
+        <android.widget.LinearLayout    bounds="[0,0][1080,2176]" resource-id="LinearLayout1" package="com.sample.android" class="android.widget.LinearLayout" text="" displayed="true">
+            <android.widget.FrameLayout  bounds="[0, 10][9, 19]"   resource-id="FrameLayout1-1" class="android.widget.FrameLayout" displayed="true" />
+            <android.widget.FrameLayout  bounds="[10,10][19,19]"   resource-id="FrameLayout1-2" class="android.widget.FrameLayout" displayed="true" />
+            <android.widget.FrameLayout  bounds="[20,10][29,19]"   resource-id="FrameLayout1-3" class="android.widget.FrameLayout" displayed="true" />
+            
+            <android.widget.TextView     bounds="[0 ,20][9, 29]" resource-id="TextView1-1" class="android.widget.TextView" displayed="true" />
+            <android.widget.TextView     bounds="[10,20][19,29]" resource-id="TextView1-2" class="android.widget.TextView" displayed="true" />
+            <android.widget.TextView     bounds="[20,20][29,29]" resource-id="TextView1-3" class="android.widget.TextView" displayed="true" />
+            
+            <android.widget.EditText     bounds="[0 ,30][9 ,39]" resource-id="EditText1-1" class="android.widget.EditText" displayed="true" />
+            <android.widget.EditText     bounds="[10,30][19,39]" resource-id="EditText1-2" class="android.widget.EditText" displayed="true" />
+            <android.widget.EditText     bounds="[20,30][29,39]" resource-id="EditText1-3" class="android.widget.EditText" displayed="true" />
+            
+            <android.widget.ImageView    bounds="[0 ,40][9 ,49]" resource-id="ImageView1-1" class="android.widget.ImageView" displayed="true" />
+            <android.widget.ImageView    bounds="[10,40][19,49]" resource-id="ImageView1-2" class="android.widget.ImageView" displayed="true" />
+            <android.widget.ImageView    bounds="[20,40][29,49]" resource-id="ImageView1-3" class="android.widget.ImageView" displayed="true" />
+            
+            <android.widget.ImageButton  bounds="[0 ,50][9 ,59]" resource-id="ImageButton1-1" class="android.widget.ImageButton" displayed="true" />
+            <android.widget.ImageButton  bounds="[10,50][19,59]" resource-id="ImageButton1-2" class="android.widget.ImageButton" displayed="true" />
+            <android.widget.ImageButton  bounds="[20,50][29,59]" resource-id="ImageButton1-3" class="android.widget.ImageButton" displayed="true" />
+            
+            <android.widget.Switch       bounds="[0 ,60][9 ,69]" resource-id="Switch1-1" class="android.widget.Switch" displayed="true" />
+            <android.widget.Switch       bounds="[10,60][19,69]" resource-id="Switch1-2" class="android.widget.Switch" displayed="true" />
+            <android.widget.Switch       bounds="[20,60][29,69]" resource-id="Switch1-3" class="android.widget.Switch" displayed="true" />
+            
+            <android.widget.CheckBox     bounds="[0 ,70][9 ,79]" resource-id="CheckBox1-1" class="android.widget.CheckBox" displayed="true" />
+            <android.widget.CheckBox     bounds="[10,70][19,79]" resource-id="CheckBox1-2" class="android.widget.CheckBox" displayed="true" />
+            <android.widget.CheckBox     bounds="[20,70][29,79]" resource-id="CheckBox1-3" class="android.widget.CheckBox" displayed="true" />
+            
+            <android.widget.LinearLayout bounds="[0 ,80][9 ,89]"   resource-id="LinearLayout1-1" class="android.widget.LinearLayout" displayed="true" />
+            <android.widget.LinearLayout bounds="[10,80][19,89]"   resource-id="LinearLayout1-2" class="android.widget.LinearLayout" displayed="true" />
+            <android.widget.LinearLayout bounds="[20,80][29,89]"   resource-id="LinearLayout1-3" class="android.widget.LinearLayout" displayed="true" />
+        </android.widget.LinearLayout>
+    </android.widget.FrameLayout>
 </hierarchy>
     """.trimIndent()
 
@@ -883,30 +886,33 @@ object XmlDataAndroid {
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <hierarchy index="0" class="hierarchy" rotation="0" width="282" height="54">
   <android.widget.FrameLayout      bounds="[0,0][281,404]"   resource-id="frame1" class="android.widget.FrameLayout" displayed="true">
-    <android.view.ViewGroup        bounds="[0,0][281,53]"    resource-id="toolbar" class="android.view.ViewGroup" displayed="true">
-      <android.widget.ImageButton  bounds="[14,14][44,39]"   resource-id="close" class="android.widget.ImageButton" displayed="true" />
-      <android.widget.TextView     bounds="[105,19][172,37]" text="Settings" class="android.widget.TextView" displayed="true" />
-      <android.widget.ImageButton  bounds="[220,14][273,39]" resource-id="menu" text="Menu" class="android.widget.ImageButton" displayed="true" />
-    </android.view.ViewGroup>
-
-    <android.widget.FrameLayout    bounds="[0,54][281,404]"    resource-id="content" class="android.widget.FrameLayout" displayed="true">
-      <android.widget.ImageView    bounds="[12,67][112,166]"   resource-id="image1" class="android.widget.ImageView" displayed="true" />
-      <android.widget.TextView     bounds="[149,67][230,79]"   resource-id="last-name-label" text="Last Name" class="android.widget.TextView" displayed="true" />
-      <android.widget.EditText     bounds="[149,87][236,112]"  resource-id="last-name-textbox" text="Test" class="android.widget.EditText" displayed="true" />
-      <android.widget.TextView     bounds="[149,124][231,138]" resource-id="first-name-label" text="First Name" class="android.widget.TextView" displayed="true" />
-      <android.widget.EditText     bounds="[149,142][236,168]" resource-id="last-name-textbox" text="Taro" class="android.widget.EditText" displayed="true" />
-
-      <android.widget.FrameLayout  bounds="[14,184][267,273]"  resource-id="group1" class="android.widget.FrameLayout" displayed="true">
-        <android.widget.TextView   bounds="[39,204][102,219]"  resource-id="general-label" text="General" class="android.widget.TextView" displayed="true" />
-        <android.widget.Switch     bounds="[187,203][242,225]" resource-id="general-switch" class="android.widget.Switch" displayed="true" />
-        <android.widget.TextView   bounds="[39,242][160,256]"  resource-id="administrator-label" text="Administrator" class="android.widget.TextView" displayed="true" />
-        <android.widget.Switch     bounds="[187,238][242,260]" resource-id="administrator-switch" class="android.widget.Switch" displayed="true" />
-      </android.widget.FrameLayout>
-
-      <android.widget.CheckBox     bounds="[25,299][131,314]" resource-id="notification" text="Notification" class="android.widget.CheckBox" displayed="true" />
-
-      <android.widget.ImageButton  bounds="[102,364][190,390]" resource-id="save" text="Save" class="android.widget.ImageButton" displayed="true" />
-    </android.widget.FrameLayout>
+      <android.widget.LinearLayout     bounds="[0,0][281,404]"   resource-id="linear1" class="android.widget.LinearLayout" displayed="true">
+        <android.view.ViewGroup        bounds="[0,0][281,53]"    resource-id="toolbar" class="android.view.ViewGroup" displayed="true">
+          <android.widget.ImageButton  bounds="[14,14][44,39]"   resource-id="close" class="android.widget.ImageButton" displayed="true" />
+          <android.widget.TextView     bounds="[105,19][172,37]" text="Settings" class="android.widget.TextView" displayed="true" />
+          <android.widget.ImageButton  bounds="[220,14][273,39]" resource-id="menu" text="Menu" class="android.widget.ImageButton" displayed="true" />
+        </android.view.ViewGroup>
+    
+        <android.widget.FrameLayout    bounds="[0,54][281,404]"    resource-id="content" class="android.widget.FrameLayout" displayed="true">
+          <android.widget.ImageView    bounds="[12,67][112,166]"   resource-id="image1" class="android.widget.ImageView" displayed="true" />
+          <android.widget.TextView     bounds="[149,67][230,79]"   resource-id="last-name-label" text="Last Name" class="android.widget.TextView" displayed="true" />
+          <android.widget.EditText     bounds="[149,87][236,112]"  resource-id="last-name-textbox" text="Test" class="android.widget.EditText" displayed="true" />
+          <android.widget.TextView     bounds="[149,124][231,138]" resource-id="first-name-label" text="First Name" class="android.widget.TextView" displayed="true" />
+          <android.widget.EditText     bounds="[149,142][236,168]" resource-id="last-name-textbox" text="Taro" class="android.widget.EditText" displayed="true" />
+    
+          <android.widget.FrameLayout  bounds="[14,184][267,273]"  resource-id="group1" class="android.widget.FrameLayout" displayed="true">
+            <android.widget.TextView   bounds="[39,204][102,219]"  resource-id="general-label" text="General" class="android.widget.TextView" displayed="true" />
+            <android.widget.Switch     bounds="[187,203][242,225]" resource-id="general-switch" class="android.widget.Switch" displayed="true" />
+            <android.widget.TextView   bounds="[39,242][160,256]"  resource-id="administrator-label" text="Administrator" class="android.widget.TextView" displayed="true" />
+            <android.widget.Switch     bounds="[187,238][242,260]" resource-id="administrator-switch" class="android.widget.Switch" displayed="true" />
+          </android.widget.FrameLayout>
+    
+          <android.widget.CheckBox     bounds="[25,299][131,314]" resource-id="notification" text="Notification" class="android.widget.CheckBox" displayed="true" />
+    
+          <android.widget.ImageButton  bounds="[102,364][190,390]" resource-id="save" text="Save" class="android.widget.ImageButton" displayed="true" />
+        </android.widget.FrameLayout>
+    
+      </android.widget.LinearLayout>
   </android.widget.FrameLayout>
 </hierarchy>
     """.trimIndent()
