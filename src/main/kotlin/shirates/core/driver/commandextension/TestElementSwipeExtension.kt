@@ -126,7 +126,7 @@ fun TestElement.swipeToTop(
 ): TestElement {
 
     val scrollFrame =
-        if (ofScreen) rootElement
+        if (ofScreen) rootViewElement
         else getScrollableElement(scrollable)
     val headerBottom = TestDriver.screenInfo.scrollInfo.getHeaderBottom()
 
@@ -233,7 +233,7 @@ fun TestElement.swipeToBottom(
 ): TestElement {
 
     val scrollFrame =
-        if (ofScreen) rootElement
+        if (ofScreen) rootViewElement
         else getScrollableElement(scrollable)
 
     val command = "swipeToBottom"
@@ -392,7 +392,7 @@ fun TestElement.swipeToRight(
 ): TestElement {
 
     val scrollFrame =
-        if (ofScreen) rootElement
+        if (ofScreen) rootViewElement
         else getScrollableElement(scrollable)
 
     val command = "swipeToRight"
@@ -497,7 +497,7 @@ fun TestElement.swipeToLeft(
 ): TestElement {
 
     val scrollFrame =
-        if (ofScreen) rootElement
+        if (ofScreen) rootViewElement
         else getScrollableElement(scrollable)
 
     val command = "swipeToLeft"
