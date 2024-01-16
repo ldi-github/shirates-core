@@ -40,7 +40,7 @@ object TestElementCache {
                 rootViewElement = TestElement.emptyElement
             } else {
                 rootViewElement =
-                    if (isAndroid) field.children.first()
+                    if (isAndroid) field.children.firstOrNull() ?: field
                     else field
             }
         }

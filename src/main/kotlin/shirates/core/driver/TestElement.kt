@@ -481,7 +481,7 @@ class TestElement(
                 return false
             }
             if (this.bounds.isCenterIncludedIn(rootViewBounds).not()) {
-                info("isSafe property returns false. (the center of this is not included in rootBounds. (this=$this, rootBounds=$rootViewBounds)")
+                info("isSafe property returns false. (the center of this is not included in rootViewBounds. (this=$this, rootViewBounds=$rootViewBounds)")
                 return false
             }
 
@@ -1096,7 +1096,7 @@ class TestElement(
 
         val isCenterIncludedIn = this.bounds.isCenterIncludedIn(rootViewBounds)
         if (isCenterIncludedIn.not()) {
-            info("isInView == false. The center of this is not included in rootBounds. (this=$this, rootBound=$rootViewBounds)")
+            info("isInView == false. The center of this is not included in rootViewBounds. (this=$this, rootViewBounds=$rootViewBounds)")
         }
         if (isAndroid) {
             return true
@@ -1113,13 +1113,13 @@ class TestElement(
         if (a.isFound) {
             val r = this.bounds.isCenterIncludedIn(a.bounds)
             if (r.not()) {
-                info("isInView == false. this is not included in the scrollable ancestor. (this=$this, rootBound=${a.bounds})")
+                info("isInView == false. this is not included in the scrollable ancestor. (this=$this, bound=${a.bounds})")
             }
             return r
         }
         val r = this.absoluteBounds.isCenterIncludedIn(rootViewBounds)
         if (r.not()) {
-            info("isInView == false. this.absoluteBounds is not included in rootBounds. (this=$this, this.absoluteBounds=${this.absoluteBounds}, rootBound=${rootViewBounds})")
+            info("isInView == false. this.absoluteBounds is not included in rootViewBounds. (this=$this, this.absoluteBounds=${this.absoluteBounds}, rootViewBound=${rootViewBounds})")
         }
         return r
     }
