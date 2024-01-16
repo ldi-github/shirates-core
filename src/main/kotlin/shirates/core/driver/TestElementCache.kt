@@ -54,9 +54,9 @@ object TestElementCache {
         }
 
     /**
-     * rootBounds
+     * rootViewBounds
      */
-    val rootBounds: Bounds
+    val rootViewBounds: Bounds
         get() {
             return rootViewElement.bounds
         }
@@ -243,7 +243,7 @@ object TestElementCache {
         expression: String,
         throwsException: Boolean = true,
         selectContext: TestElement = rootElement,
-        frame: Bounds? = rootBounds
+        frame: Bounds? = rootViewBounds
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {

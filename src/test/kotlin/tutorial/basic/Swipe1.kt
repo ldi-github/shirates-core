@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.rootBounds
+import shirates.core.driver.rootViewBounds
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -80,10 +80,10 @@ class Swipe1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
                     it.swipePointToPoint(
-                        startX = rootBounds.centerX,
-                        startY = rootBounds.centerY,
-                        endX = rootBounds.centerX,
-                        endY = rootBounds.top
+                        startX = rootViewBounds.centerX,
+                        startY = rootViewBounds.centerY,
+                        endX = rootViewBounds.centerX,
+                        endY = rootViewBounds.top
                     )
                 }.expectation {
 
@@ -93,10 +93,10 @@ class Swipe1 : UITest() {
             case(2) {
                 action {
                     it.swipePointToPoint(
-                        startX = rootBounds.centerX,
-                        startY = rootBounds.centerY,
-                        endX = rootBounds.centerX,
-                        endY = rootBounds.bottom,
+                        startX = rootViewBounds.centerX,
+                        startY = rootViewBounds.centerY,
+                        endX = rootViewBounds.centerX,
+                        endY = rootViewBounds.bottom,
                         durationSeconds = 0.2
                     )
                 }.expectation {
@@ -284,7 +284,7 @@ class Swipe1 : UITest() {
             case(2) {
                 action {
                     it.select("Messages")
-                        .swipeHorizontalTo(rootBounds.right)
+                        .swipeHorizontalTo(rootViewBounds.right)
                 }.expectation {
                 }
             }

@@ -854,7 +854,7 @@ class Selector(
      * getIosPredicate
      */
     fun getIosPredicate(
-        frameBounds: Bounds? = rootBounds
+        frameBounds: Bounds? = rootViewBounds
     ): String {
 
         if (relativeSelectors.any() { it.command != ":descendant" }) {
@@ -912,7 +912,7 @@ class Selector(
      * getIosClassChain
      */
     fun getIosClassChain(
-        frameBounds: Bounds? = rootBounds
+        frameBounds: Bounds? = rootViewBounds
     ): String {
 
         if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {

@@ -39,7 +39,7 @@ class ScrollingInfo(
 
     val bottomEdge: Int
         get() {
-            val footerTop = footerTop ?: rootBounds.bottom
+            val footerTop = footerTop ?: rootViewBounds.bottom
             val m1 = min(scrollableBounds.bottom, viewport.bottom)
             val m2 = min(m1, footerTop)
             return m2

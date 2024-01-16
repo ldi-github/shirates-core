@@ -44,7 +44,7 @@ val TestDrive.imageProfile: String
             return "${TestMode.platformAnnotation}_${b.width}x${b.height}"
         }
 
-        val b = rootBounds
+        val b = rootViewBounds
         if (b.isEmpty) {
             return TestMode.platformAnnotation
         }

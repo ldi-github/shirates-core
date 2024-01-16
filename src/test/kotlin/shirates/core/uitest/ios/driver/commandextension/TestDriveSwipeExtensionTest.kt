@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.rootBounds
+import shirates.core.driver.rootViewBounds
 import shirates.core.driver.testContext
 import shirates.core.testcode.UITest
 
@@ -141,8 +141,8 @@ class TestDriveSwipeExtensionTest : UITest() {
                     val b = it.bounds
                     val low = b.top
                     val high = b.bottom
-                    (low <= rootBounds.centerY).thisIsTrue("$low <= ${rootBounds.centerY}")
-                    (rootBounds.centerY <= high).thisIsTrue("${rootBounds.centerY} <= $high")
+                    (low <= rootViewBounds.centerY).thisIsTrue("$low <= ${rootViewBounds.centerY}")
+                    (rootViewBounds.centerY <= high).thisIsTrue("${rootViewBounds.centerY} <= $high")
                 }
             }
             case(2) {

@@ -14,7 +14,7 @@ fun TestDrive.select(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    frame: Bounds? = rootBounds,
+    frame: Bounds? = rootViewBounds,
     useCache: Boolean = testContext.useCache,
     updateLastElement: Boolean = true,
     log: Boolean = false,
@@ -68,7 +68,7 @@ fun TestDrive.widget(
     expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    frame: Bounds? = rootBounds,
+    frame: Bounds? = rootViewBounds,
     useCache: Boolean = testContext.useCache,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null

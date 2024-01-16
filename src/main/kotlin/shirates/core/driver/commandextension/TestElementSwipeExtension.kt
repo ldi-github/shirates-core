@@ -2,6 +2,7 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
+import shirates.core.driver.TestElementCache.rootViewElement
 import shirates.core.logging.Message.message
 
 /**
@@ -336,10 +337,10 @@ fun TestElement.swipeToCenter(
 ): TestElement {
 
     val scrollFrame =
-        if (ofScreen) rootElement
+        if (ofScreen) rootViewElement
         else getScrollableElement(scrollable)
     val endY =
-        if (ofScreen) rootElement.bounds.height / 2
+        if (ofScreen) rootViewBounds.height / 2
         else scrollFrame.bounds.centerY
 
     val command = "swipeToCenter"

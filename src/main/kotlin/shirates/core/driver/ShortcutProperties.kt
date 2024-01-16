@@ -22,11 +22,19 @@ var rootElement: TestElement
     }
 
 /**
- * rootBounds
+ * rootViewElement
  */
-val rootBounds: Bounds
+val rootViewElement: TestElement
     get() {
-        return TestElementCache.rootBounds
+        return TestElementCache.rootViewElement
+    }
+
+/**
+ * rootViewBounds
+ */
+val rootViewBounds: Bounds
+    get() {
+        return TestElementCache.rootViewBounds
     }
 
 /**
