@@ -95,6 +95,7 @@ ios.profile=iPhone 13(15.5)
 #enableIsSafeLog=false
 #testResults=
 #testListDir=
+#reportIndexDir=
 
 ## Screenshot --------------------
 #screenshotScale=0.333333
