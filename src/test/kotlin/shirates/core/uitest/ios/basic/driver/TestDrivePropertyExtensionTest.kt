@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
 import shirates.core.driver.imageProfile
-import shirates.core.driver.rootBounds
+import shirates.core.driver.viewBounds
 import shirates.core.testcode.UITest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
@@ -18,7 +18,7 @@ class TestDrivePropertyExtensionTest : UITest() {
 
         scenario {
             case(1) {
-                val b = rootBounds
+                val b = viewBounds
                 assertThat(imageProfile).isEqualTo("${TestMode.platformAnnotation}_${b.width}x${b.height}")
             }
         }

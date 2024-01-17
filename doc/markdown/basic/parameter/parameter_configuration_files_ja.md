@@ -91,8 +91,11 @@ ios.profile=iPhone 13(15.5)
 #enableShellExecLog=true
 #enableTimeMeasureLog=true
 #enableImageMatchDebugLog=true
+#enableIsInViewLog=true
+#enableIsSafeLog=false
 #testResults=
 #testListDir=
+#reportIndexDir=
 
 ## Screenshot --------------------
 #screenshotScale=0.333333

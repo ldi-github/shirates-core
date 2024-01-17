@@ -22,6 +22,8 @@ See also [parameters](../../basic/parameter/parameters.md).
 #enableShellExecLog=true
 #enableTimeMeasureLog=true
 #enableImageMatchDebugLog=true
+#enableIsInViewLog=true
+#enableIsSafeLog=false
 #testResults=
 #testListDir=
 #reportIndexDir=

@@ -780,6 +780,42 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableIsInViewLog() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableIsInViewLog).isEqualTo(Const.ENABLE_IS_IN_VIEW_LOG)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_IS_IN_VIEW_LOG.not()
+            PropertiesManager.setPropertyValue("enableIsInViewLog", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableIsInViewLog).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableIsSafeLog() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableIsSafeLog).isEqualTo(Const.ENABLE_IS_SAFE_LOG)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_IS_SAFE_LOG.not()
+            PropertiesManager.setPropertyValue("enableIsSafeLog", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableIsSafeLog).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun screenshotScale() {
 
         run {

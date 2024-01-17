@@ -46,7 +46,7 @@ fun TestDrive.hideKeyboard(
             val keyboard = testDrive.getKeyboardInIos()
             if (keyboard.isFound) {
                 // tap background
-                tap(0, rootBounds.centerY)
+                tap(0, viewBounds.centerY)
             }
         } else {
             TestDriver.appiumDriver.hideKeyboard()

@@ -22,6 +22,8 @@ testrunファイルでログ出力を構成することができます。
 #enableShellExecLog=true
 #enableTimeMeasureLog=true
 #enableImageMatchDebugLog=true
+#enableIsInViewLog=true
+#enableIsSafeLog=false
 #testResults=
 #testListDir=
 #reportIndexDir=

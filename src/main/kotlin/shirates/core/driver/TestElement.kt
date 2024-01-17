@@ -5,6 +5,7 @@ import org.json.JSONObject
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.w3c.dom.Node
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
@@ -15,6 +16,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import shirates.core.utility.element.ElementCategory
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getAttribute
@@ -461,6 +463,12 @@ class TestElement(
      */
     val isSafe: Boolean
         get() {
+            fun info(message: String) {
+                if (PropertiesManager.enableIsSafeLog) {
+                    TestLog.info(message)
+                }
+            }
+
             if (imageMatched) {
                 return true
             }
@@ -470,14 +478,18 @@ class TestElement(
             if (isDummy) {
                 return false
             }
-            if (this.bounds.isIncludedIn(rootBounds).not()) {
+            if (this.bounds.isCenterIncludedIn(viewBounds).not()) {
+                info("isSafe property returns false. (the center of this is not included in viewBounds. (this=$this, viewBounds=$viewBounds)")
                 return false
             }
 
             if (type == "XCUIElementTypeApplication") {
+                info("isSafe property returns false. (type == XCUIElementTypeApplication)")
                 return false
             }
-            if (isInView.not()) {
+            val inView = getIsInView(PropertiesManager.enableIsInViewLog || PropertiesManager.enableIsSafeLog)
+            if (inView.not()) {
+                info("isSafe property returns false. (isInView == false)")
                 return false
             }
             if (driver.currentScreen.isNotBlank()) {
@@ -489,6 +501,7 @@ class TestElement(
                     if (scrollableElement != null && scrollableElement.isScrollable) {
                         val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
                         if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
+                            info("isSafe property returns false. this is out of safe bounds. (this=$this, scrollingInfo=$scrollingInfo)")
                             return false
                         }
                     }
@@ -502,6 +515,7 @@ class TestElement(
                         val keyboard = testDrive.getKeyboardInIos()
                         if (keyboard.isFound) {
                             if (this.bounds.isOverlapping(keyboard.bounds)) {
+                                info("isSafe property returns false. keyboard is overlapping. (this=$this, keyboard=$keyboard)")
                                 return false
                             }
                         }
@@ -526,14 +540,13 @@ class TestElement(
                             return true
                         }
                         if (overlay.isFound && this.bounds.isOverlapping(overlay.bounds)) {
-                            r = false
+                            info("isSafe property returns false. overlay is overlapping. (this=$this, overlay=$overlay)")
+                            return false
                         }
                     }
                 }
-                if (r.not()) {
-                    return false
-                }
             }
+
             return true
         }
 
@@ -1060,23 +1073,54 @@ class TestElement(
      */
     val isInView: Boolean
         get() {
-            if (bounds.area == 0) {
-                return false
-            }
-            if (isAndroid) {
-                return this.bounds.isIncludedIn(rootBounds)
-            }
-
-            if (this.isWidget.not()) {
-                return true
-            }
-
-            val a = ancestorScrollable
-            if (a.isFound) {
-                return this.bounds.isIncludedIn(a.bounds)
-            }
-            return this.absoluteBounds.isIncludedIn(rootBounds)
+            return getIsInView()
         }
+
+    internal fun getIsInView(log: Boolean = PropertiesManager.enableIsInViewLog): Boolean {
+
+        fun info(message: String) {
+            if (log) {
+                TestLog.info(message)
+            }
+        }
+
+        /**
+         * For iOS and Android
+         */
+        if (bounds.area == 0) {
+            info("isInView == false. bounds.area == 0. ($this)")
+            return false
+        }
+
+        val isCenterIncludedIn = this.bounds.isCenterIncludedIn(viewBounds)
+        if (isCenterIncludedIn.not()) {
+            info("isInView == false. The center of this is not included in viewBounds. (this=$this, viewBounds=$viewBounds)")
+        }
+        if (isAndroid) {
+            return true
+        }
+
+        /**
+         * For iOS only
+         */
+        if (this.isWidget.not()) {
+            return true
+        }
+
+        val a = ancestorScrollable
+        if (a.isFound) {
+            val r = this.bounds.isCenterIncludedIn(a.bounds)
+            if (r.not()) {
+                info("isInView == false. this is not included in the scrollable ancestor. (this=$this, bounds=${a.bounds})")
+            }
+            return r
+        }
+        val r = this.absoluteBounds.isCenterIncludedIn(viewBounds)
+        if (r.not()) {
+            info("isInView == false. this.absoluteBounds is not included in viewBounds. (this=$this, this.absoluteBounds=${this.absoluteBounds}, viewBounds=${viewBounds})")
+        }
+        return r
+    }
 
     internal val isInXCUIElementTypeCell: Boolean
         get() {

@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
@@ -101,7 +102,9 @@ fun TestDrive.scrollDown(
     scrollable: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
-    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
+    repeat: Int = 1,
+    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS
 ): TestElement {
 
     val scrollableElement = getScrollableElement(scrollable)
@@ -115,12 +118,14 @@ fun TestDrive.scrollDown(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewport = rootBounds,
+                viewport = viewBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
                 endY = s.endY,
                 durationSeconds = durationSeconds,
+                repeat = repeat,
+                intervalSeconds = intervalSeconds
             )
         )
     }
@@ -135,7 +140,9 @@ fun TestDrive.scrollUp(
     scrollable: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
-    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
+    repeat: Int = 1,
+    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS
 ): TestElement {
 
     val scrollableElement = getScrollableElement(scrollable)
@@ -149,12 +156,14 @@ fun TestDrive.scrollUp(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewport = rootBounds,
+                viewport = viewBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
                 endY = s.endY,
-                durationSeconds = durationSeconds
+                durationSeconds = durationSeconds,
+                repeat = repeat,
+                intervalSeconds = intervalSeconds
             )
         )
     }
@@ -169,7 +178,9 @@ fun TestDrive.scrollRight(
     scrollable: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
-    endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio
+    endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
+    repeat: Int = 1,
+    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS
 ): TestElement {
 
     val scrollableElement = getScrollableElement(scrollable)
@@ -183,12 +194,14 @@ fun TestDrive.scrollRight(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewport = rootBounds,
+                viewport = viewBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
                 endY = s.endY,
-                durationSeconds = durationSeconds
+                durationSeconds = durationSeconds,
+                repeat = repeat,
+                intervalSeconds = intervalSeconds
             )
         )
     }
@@ -203,7 +216,9 @@ fun TestDrive.scrollLeft(
     scrollable: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
-    endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio
+    endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
+    repeat: Int = 1,
+    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS
 ): TestElement {
 
     val scrollableElement = getScrollableElement(scrollable)
@@ -217,12 +232,14 @@ fun TestDrive.scrollLeft(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewport = rootBounds,
+                viewport = viewBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
                 endY = s.endY,
-                durationSeconds = durationSeconds
+                durationSeconds = durationSeconds,
+                repeat = repeat,
+                intervalSeconds = intervalSeconds
             )
         )
     }
@@ -797,7 +814,7 @@ internal fun TestDrive.getScrollingInfo(
         val r = ScrollingInfo(
             errorMessage = "",
             scrollableBounds = scrollableElement.bounds,
-            viewport = rootBounds,
+            viewport = viewBounds,
             direction = direction,
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio,
@@ -814,7 +831,7 @@ internal fun TestDrive.getScrollingInfo(
     val r = ScrollingInfo(
         errorMessage = "",
         scrollableBounds = scrollBounds,
-        viewport = rootBounds,
+        viewport = viewBounds,
         direction = direction,
         startMarginRatio = startMarginRatio,
         endMarginRatio = endMarginRatio,

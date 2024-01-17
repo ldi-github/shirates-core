@@ -129,10 +129,10 @@ You can swipe or flick screen using these functions.
                     it.macro("[Android Settings Top Screen]")
                 }.action {
                     it.swipePointToPoint(
-                        startX = rootBounds.centerX,
-                        startY = rootBounds.centerY,
-                        endX = rootBounds.centerX,
-                        endY = rootBounds.top
+                        startX = viewBounds.centerX,
+                        startY = viewBounds.centerY,
+                        endX = viewBounds.centerX,
+                        endY = viewBounds.top
                     )
                 }.expectation {
 
@@ -142,10 +142,10 @@ You can swipe or flick screen using these functions.
             case(2) {
                 action {
                     it.swipePointToPoint(
-                        startX = rootBounds.centerX,
-                        startY = rootBounds.centerY,
-                        endX = rootBounds.centerX,
-                        endY = rootBounds.bottom,
+                        startX = viewBounds.centerX,
+                        startY = viewBounds.centerY,
+                        endX = viewBounds.centerX,
+                        endY = viewBounds.bottom,
                         durationSeconds = 0.2
                     )
                 }.expectation {

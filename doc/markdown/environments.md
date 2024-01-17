@@ -2,6 +2,21 @@
 
 ## Tested Environments
 
+2024/1/17
+
+- macOS Sonoma 14.1.2
+- node v21.1.0
+- Appium 2.4.1
+- java-client v8.5.1
+- uiautomator2@2.42.2
+- xcuitest@5.14.0
+- Android Studio Hedgehog | 2023.1.1 Patch 1
+- Android Emulator Pixel 3a(Android 12)
+- Xcode 15.2
+- iOS Simulator iPhone 15(iOS 17.2)
+
+<hr>
+
 2023/12/15
 
 - macOS Sonoma 14.1.2

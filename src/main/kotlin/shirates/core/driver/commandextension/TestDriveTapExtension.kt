@@ -191,7 +191,9 @@ fun TestDrive.tap(
 
         val targetElement = it.select(expression = expression)
         if (safeElementOnly && targetElement.isSafe.not()) {
-            return@execOperateCommand
+            throw TestDriverException(
+                message(id = "tappingUnsafeElementNotAllowed", subject = targetElement.toString())
+            )
         }
 
         val tapFunc = {
@@ -420,7 +422,7 @@ fun TestDrive.tapCenterOfScreen(
     val context = TestDriverCommandContext(rootElement)
     context.execOperateCommand(command = command, message = message) {
 
-        val bounds = rootBounds
+        val bounds = viewBounds
         tap(x = bounds.centerX, y = bounds.centerY, holdSeconds = holdSeconds, repeat = repeat, safeMode = safeMode)
     }
 

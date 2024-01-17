@@ -41,6 +41,8 @@ object Const {
     const val ENABLE_SHELL_EXEC_LOG = false
     const val ENABLE_TIME_MEASURE_LOG = false
     const val ENABLE_IMAGE_MATCH_DEBUG_LOG = false
+    const val ENABLE_IS_IN_VIEW_LOG = false
+    const val ENABLE_IS_SAFE_LOG = true
     const val SCREENSHOT_SCALE = 0.5
     const val ENABLE_IMAGE_ASSERTION = true
     const val IMAGE_MATCHING_SCALE = 0.25
@@ -106,6 +108,8 @@ object Const {
     const val WAIT_SECONDS_FOR_CONNECTION_ENABLED = 8.0
     const val SWIPE_DURATION_SECONDS = 3.0
     const val FLICK_DURATION_SECONDS = 0.3
+    const val SWIPE_INTERVAL_SECONDS = 0.1
+    const val FLICK_INTERVAL_SECONDS = 0.3
     const val SWIPE_MARGIN_RATIO = 0.0
     const val SCROLL_VERTICAL_START_MARGIN_RATIO = 0.15
     const val SCROLL_VERTICAL_END_MARGIN_RATIO = 0.1
