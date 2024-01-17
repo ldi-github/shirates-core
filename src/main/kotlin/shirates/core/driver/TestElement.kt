@@ -473,11 +473,9 @@ class TestElement(
                 return true
             }
             if (isEmpty) {
-                info("isSafe property returns false. (isEmpty == true)")
                 return false
             }
             if (isDummy) {
-                info("isSafe property returns false. (isDummy == true)")
                 return false
             }
             if (this.bounds.isCenterIncludedIn(viewBounds).not()) {
@@ -1090,7 +1088,7 @@ class TestElement(
          * For iOS and Android
          */
         if (bounds.area == 0) {
-            info("isInView == false. bounds.ared == 0. ($this)")
+            info("isInView == false. bounds.area == 0. ($this)")
             return false
         }
 
@@ -1113,13 +1111,13 @@ class TestElement(
         if (a.isFound) {
             val r = this.bounds.isCenterIncludedIn(a.bounds)
             if (r.not()) {
-                info("isInView == false. this is not included in the scrollable ancestor. (this=$this, bound=${a.bounds})")
+                info("isInView == false. this is not included in the scrollable ancestor. (this=$this, bounds=${a.bounds})")
             }
             return r
         }
         val r = this.absoluteBounds.isCenterIncludedIn(viewBounds)
         if (r.not()) {
-            info("isInView == false. this.absoluteBounds is not included in viewBounds. (this=$this, this.absoluteBounds=${this.absoluteBounds}, viewBound=${viewBounds})")
+            info("isInView == false. this.absoluteBounds is not included in viewBounds. (this=$this, this.absoluteBounds=${this.absoluteBounds}, viewBounds=${viewBounds})")
         }
         return r
     }
