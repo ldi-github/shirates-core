@@ -1507,7 +1507,7 @@ object TestDriver {
      */
     fun selectWithScroll(
         selector: Selector,
-        frame: Bounds? = rootViewBounds,
+        frame: Bounds? = viewBounds,
         direction: ScrollDirection = ScrollDirection.Down,
         durationSeconds: Double = testContext.swipeDurationSeconds,
         startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),

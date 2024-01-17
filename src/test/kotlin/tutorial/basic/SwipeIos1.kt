@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.rootViewBounds
+import shirates.core.driver.viewBounds
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 
@@ -80,10 +80,10 @@ class SwipeIos1 : UITest() {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
                     it.swipePointToPoint(
-                        startX = rootViewBounds.centerX,
-                        startY = rootViewBounds.centerY,
-                        endX = rootViewBounds.centerX,
-                        endY = rootViewBounds.top
+                        startX = viewBounds.centerX,
+                        startY = viewBounds.centerY,
+                        endX = viewBounds.centerX,
+                        endY = viewBounds.top
                     )
                 }.expectation {
 
@@ -93,10 +93,10 @@ class SwipeIos1 : UITest() {
             case(2) {
                 action {
                     it.swipePointToPoint(
-                        startX = rootViewBounds.centerX,
-                        startY = rootViewBounds.centerY,
-                        endX = rootViewBounds.centerX,
-                        endY = rootViewBounds.bottom,
+                        startX = viewBounds.centerX,
+                        startY = viewBounds.centerY,
+                        endX = viewBounds.centerX,
+                        endY = viewBounds.bottom,
                         durationSeconds = 0.2
                     )
                 }.expectation {
@@ -285,7 +285,7 @@ class SwipeIos1 : UITest() {
             case(2) {
                 action {
                     it.select("Watch")
-                        .swipeHorizontalTo(rootViewBounds.right)
+                        .swipeHorizontalTo(viewBounds.right)
                 }.expectation {
                 }
             }

@@ -1,7 +1,7 @@
 package shirates.core.configuration
 
 import shirates.core.driver.TestElementCache
-import shirates.core.driver.rootViewBounds
+import shirates.core.driver.viewBounds
 
 /**
  * ScrollInfo
@@ -57,7 +57,7 @@ class ScrollInfo {
         val footerElements = footerElements.map { TestElementCache.select(expression = it, throwsException = false) }
             .filter { it.isFound }
         val sortedElements = footerElements.sortedBy { it.bounds.top }
-        val footerTop = sortedElements.firstOrNull()?.bounds?.top ?: (rootViewBounds.bottom + 1)
+        val footerTop = sortedElements.firstOrNull()?.bounds?.top ?: (viewBounds.bottom + 1)
         return footerTop
     }
 }

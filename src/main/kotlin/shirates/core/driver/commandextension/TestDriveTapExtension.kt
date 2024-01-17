@@ -422,7 +422,7 @@ fun TestDrive.tapCenterOfScreen(
     val context = TestDriverCommandContext(rootElement)
     context.execOperateCommand(command = command, message = message) {
 
-        val bounds = rootViewBounds
+        val bounds = viewBounds
         tap(x = bounds.centerX, y = bounds.centerY, holdSeconds = holdSeconds, repeat = repeat, safeMode = safeMode)
     }
 

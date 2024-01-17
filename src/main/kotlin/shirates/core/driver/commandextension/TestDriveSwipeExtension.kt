@@ -36,8 +36,8 @@ fun TestDrive.swipePointToPoint(
     val testElement = rootElement
 
     val sc = SwipeContext(
-        swipeFrame = rootViewBounds,
-        viewport = rootViewBounds,
+        swipeFrame = viewBounds,
+        viewport = viewBounds,
         startX = startX,
         startY = startY,
         endX = endX,

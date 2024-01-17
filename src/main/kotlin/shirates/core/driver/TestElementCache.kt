@@ -37,28 +37,28 @@ object TestElementCache {
             allElements = listOf()
             synced = false
             if (field.isEmpty) {
-                rootViewElement = TestElement.emptyElement
+                viewElement = TestElement.emptyElement
             } else {
-                rootViewElement =
+                viewElement =
                     if (isAndroid) field.children.firstOrNull() ?: field
                     else field
             }
         }
 
     /**
-     * rootViewElement
+     * viewElement
      */
-    var rootViewElement: TestElement = TestElement.emptyElement
+    var viewElement: TestElement = TestElement.emptyElement
         internal set(value) {
             field = value
         }
 
     /**
-     * rootViewBounds
+     * viewBounds
      */
-    val rootViewBounds: Bounds
+    val viewBounds: Bounds
         get() {
-            return rootViewElement.bounds
+            return viewElement.bounds
         }
 
     /**
@@ -243,7 +243,7 @@ object TestElementCache {
         expression: String,
         throwsException: Boolean = true,
         selectContext: TestElement = rootElement,
-        frame: Bounds? = rootViewBounds
+        frame: Bounds? = viewBounds
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {

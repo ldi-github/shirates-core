@@ -118,7 +118,7 @@ fun TestDrive.scrollDown(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewport = rootViewBounds,
+                viewport = viewBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -156,7 +156,7 @@ fun TestDrive.scrollUp(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewport = rootViewBounds,
+                viewport = viewBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -194,7 +194,7 @@ fun TestDrive.scrollRight(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewport = rootViewBounds,
+                viewport = viewBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -232,7 +232,7 @@ fun TestDrive.scrollLeft(
         swipePointToPointCore(
             SwipeContext(
                 swipeFrame = s.adjustedScrollableBounds,
-                viewport = rootViewBounds,
+                viewport = viewBounds,
                 startX = s.startX,
                 startY = s.startY,
                 endX = s.endX,
@@ -814,7 +814,7 @@ internal fun TestDrive.getScrollingInfo(
         val r = ScrollingInfo(
             errorMessage = "",
             scrollableBounds = scrollableElement.bounds,
-            viewport = rootViewBounds,
+            viewport = viewBounds,
             direction = direction,
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio,
@@ -831,7 +831,7 @@ internal fun TestDrive.getScrollingInfo(
     val r = ScrollingInfo(
         errorMessage = "",
         scrollableBounds = scrollBounds,
-        viewport = rootViewBounds,
+        viewport = viewBounds,
         direction = direction,
         startMarginRatio = startMarginRatio,
         endMarginRatio = endMarginRatio,

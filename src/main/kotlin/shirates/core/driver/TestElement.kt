@@ -480,8 +480,8 @@ class TestElement(
                 info("isSafe property returns false. (isDummy == true)")
                 return false
             }
-            if (this.bounds.isCenterIncludedIn(rootViewBounds).not()) {
-                info("isSafe property returns false. (the center of this is not included in rootViewBounds. (this=$this, rootViewBounds=$rootViewBounds)")
+            if (this.bounds.isCenterIncludedIn(viewBounds).not()) {
+                info("isSafe property returns false. (the center of this is not included in viewBounds. (this=$this, viewBounds=$viewBounds)")
                 return false
             }
 
@@ -1094,9 +1094,9 @@ class TestElement(
             return false
         }
 
-        val isCenterIncludedIn = this.bounds.isCenterIncludedIn(rootViewBounds)
+        val isCenterIncludedIn = this.bounds.isCenterIncludedIn(viewBounds)
         if (isCenterIncludedIn.not()) {
-            info("isInView == false. The center of this is not included in rootViewBounds. (this=$this, rootViewBounds=$rootViewBounds)")
+            info("isInView == false. The center of this is not included in viewBounds. (this=$this, viewBounds=$viewBounds)")
         }
         if (isAndroid) {
             return true
@@ -1117,9 +1117,9 @@ class TestElement(
             }
             return r
         }
-        val r = this.absoluteBounds.isCenterIncludedIn(rootViewBounds)
+        val r = this.absoluteBounds.isCenterIncludedIn(viewBounds)
         if (r.not()) {
-            info("isInView == false. this.absoluteBounds is not included in rootViewBounds. (this=$this, this.absoluteBounds=${this.absoluteBounds}, rootViewBound=${rootViewBounds})")
+            info("isInView == false. this.absoluteBounds is not included in viewBounds. (this=$this, this.absoluteBounds=${this.absoluteBounds}, viewBound=${viewBounds})")
         }
         return r
     }

@@ -26,15 +26,15 @@ var rootElement: TestElement
  */
 val rootViewElement: TestElement
     get() {
-        return TestElementCache.rootViewElement
+        return TestElementCache.viewElement
     }
 
 /**
- * rootViewBounds
+ * viewBounds
  */
-val rootViewBounds: Bounds
+val viewBounds: Bounds
     get() {
-        return TestElementCache.rootViewBounds
+        return TestElementCache.viewBounds
     }
 
 /**
