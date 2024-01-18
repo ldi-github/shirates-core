@@ -2239,7 +2239,7 @@ object TestDriver {
                      * Reset Appium session
                      */
                     if (isAndroid) {
-                        AndroidDeviceUtility.reboot(udid = testProfile.udid)
+                        AndroidDeviceUtility.reboot(testProfile)
                     } else if (isiOS) {
                         IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
                     }
@@ -2291,7 +2291,7 @@ object TestDriver {
         if (isAndroid) {
             val device = AndroidDeviceUtility.currentAndroidDeviceInfo
             if (device != null) {
-                AndroidDeviceUtility.reboot(udid = device.udid)
+                AndroidDeviceUtility.reboot(testProfile = testProfile)
             }
         } else if (isiOS && isSimulator) {
 //            IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
