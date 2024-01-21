@@ -4,7 +4,7 @@ import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
-import shirates.core.driver.commandextension.getThisOrRootElement
+import shirates.core.driver.commandextension.getThisOrIt
 import shirates.core.logging.Message.message
 import shirates.core.storage.Clipboard
 
@@ -13,7 +13,7 @@ import shirates.core.storage.Clipboard
  */
 fun TestDrive.clearClipboard(): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val command = "clearClipboard"
     val message = message(id = command)
@@ -34,7 +34,7 @@ fun TestDrive.clearClipboard(): TestElement {
  */
 fun TestDrive.writeClipboard(text: String): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val command = "writeClipboard"
     val message = message(id = command, value = text)
@@ -55,7 +55,7 @@ fun TestDrive.writeClipboard(text: String): TestElement {
  */
 fun TestDrive.readClipboard(): String {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val command = "readClipboard"
     val message = message(id = command)

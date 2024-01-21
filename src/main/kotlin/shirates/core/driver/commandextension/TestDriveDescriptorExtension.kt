@@ -13,7 +13,7 @@ fun TestDrive.output(
     message: Any
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val context = TestDriverCommandContext(testElement)
     context.execLogCommand(message = message.toString(), subject = message.toString()) {
@@ -30,7 +30,7 @@ fun TestDrive.comment(
     message: String
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val context = TestDriverCommandContext(testElement)
     context.execLogCommand(message = message, subject = message) {
@@ -47,7 +47,7 @@ fun TestDrive.describe(
     message: String
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val context = TestDriverCommandContext(testElement)
     context.execLogCommand(message = message, subject = message) {
@@ -64,7 +64,7 @@ fun TestDrive.caption(
     message: String
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val context = TestDriverCommandContext(testElement)
     context.execLogCommand(message = message, subject = message) {
@@ -81,7 +81,7 @@ fun TestDrive.target(
     targetItem: String
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val context = TestDriverCommandContext(testElement)
     context.execLogCommand(message = targetItem, subject = targetItem) {
@@ -100,7 +100,7 @@ fun TestDrive.manual(
     arg2: String = ""
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val context = TestDriverCommandContext(testElement)
     context.execLogCommand(message = message, subject = message) {
@@ -124,7 +124,7 @@ fun TestDrive.procedure(
     proc: () -> Unit
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val context = TestDriverCommandContext(testElement)
     context.execProcedureCommand(message = message, subject = message) {
@@ -144,7 +144,7 @@ fun TestDrive.knownIssue(
     ticketUrl: String
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     TestLog.knownIssue(
         message = message,

@@ -13,7 +13,7 @@ import shirates.core.storage.Memo
  */
 fun TestDrive.clearMemo(): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val command = "clearMemo"
     val message = message(id = command)
@@ -35,7 +35,7 @@ fun TestDrive.clearMemo(): TestElement {
  */
 fun TestDrive.writeMemo(key: String, text: String): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val command = "writeMemo"
     val message = message(id = command, key = key, value = text)
@@ -60,7 +60,7 @@ fun TestDrive.writeMemo(key: String, text: String): TestElement {
  */
 fun TestDrive.readMemo(key: String): String {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val command = "readMemo"
     val value = Memo.read(key = key)
@@ -89,7 +89,7 @@ fun TestDrive.memoTextAs(
     key: String
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val command = "memoTextAs"
     val message = message(id = command, key = key, value = testElement.textOrLabel)
@@ -113,7 +113,7 @@ fun TestDrive.memoTextAs(
  */
 fun TestDrive.clipboardText(): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val command = "clipboardText"
     val message = message(id = command, subject = testElement.subject, arg1 = testElement.textOrLabel)

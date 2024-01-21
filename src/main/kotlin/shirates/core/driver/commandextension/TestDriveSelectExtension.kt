@@ -24,7 +24,7 @@ fun TestDrive.select(
         return this.innerWidget(expression = expression)
     }
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     if (useCache) {
         syncCache()
@@ -322,7 +322,7 @@ fun TestDrive.canSelect(
         return this.innerWidget(expression = expression).isFound
     }
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val sel = TestDriver.expandExpression(expression = expression, screenName = screenName)
     var found = false
@@ -510,7 +510,7 @@ fun TestDrive.canSelectAllInScanResults(
     vararg expressions: String,
     log: Boolean = false
 ): Boolean {
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var found = true
@@ -567,7 +567,7 @@ fun TestDrive.canSelectAll(
     frame: Bounds? = null,
     log: Boolean = false
 ): Boolean {
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var foundAll = false

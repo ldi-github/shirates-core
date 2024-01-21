@@ -23,7 +23,7 @@ fun TestDrive.getThisOrLastElement(): TestElement {
  * Returns this if this is TestElement
  * else TestDriver.it
  */
-fun TestDrive.getThisOrRootElement(): TestElement {
+fun TestDrive.getThisOrIt(): TestElement {
     if (this is TestElement) {
         return this
     }

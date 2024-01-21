@@ -224,7 +224,7 @@ fun TestDrive.swipePointToPoint(
 
 private fun TestDrive.getSwipeTarget(): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     if (testElement.isScrollable && testElement.isEmpty.not())
         return testElement

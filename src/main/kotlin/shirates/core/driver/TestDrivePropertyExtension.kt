@@ -3,7 +3,7 @@ package shirates.core.driver
 import org.openqa.selenium.Capabilities
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.driver.commandextension.getScrollableElement
-import shirates.core.driver.commandextension.getThisOrRootElement
+import shirates.core.driver.commandextension.getThisOrIt
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.getCapabilityRelaxed
 
@@ -186,7 +186,7 @@ val TestDrive.appIconName: String
  */
 val TestDrive.scrollFrame: TestElement
     get() {
-        val testElement = getThisOrRootElement()
+        val testElement = getThisOrIt()
         TestDriver.lastElement = testElement.getScrollableElement()
         return TestDriver.lastElement
     }
