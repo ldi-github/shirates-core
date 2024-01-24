@@ -3082,6 +3082,7 @@ class Selector_AndroidTest : UnitTest() {
         assertThat("@(A|B)".orValueToList()).isEqualTo(mutableListOf("A", "B"))
         assertThat("A|B".orValueToList()).isEqualTo(mutableListOf("A|B"))
         assertThat("".orValueToList()).isEqualTo(mutableListOf(""))
+        assertThat("(A)".orValueToList()).isEqualTo(mutableListOf("(A)"))
     }
 
     @Test

@@ -2019,16 +2019,10 @@ class FilterTest : UnitTest() {
             ).isTrue()        // criteria are interpreted as "a"
             assertThat(
                 Filter.matchText(
-                    "a ",
-                    "(a)"
-                )
-            ).isTrue()      // criteria are interpreted as "a"
-            assertThat(
-                Filter.matchText(
                     "(a)",
                     "(a)"
                 )
-            ).isFalse()    // criteria are expanded to as "a"
+            ).isTrue()    // criteria are expanded to as "(a)"
             assertThat(
                 Filter.matchText(
                     "(a|b)",
