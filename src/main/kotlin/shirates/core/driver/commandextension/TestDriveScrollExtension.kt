@@ -41,7 +41,7 @@ internal fun TestDrive.getScrollableElement(
         }
     }
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
     if (testElement.isScrollable) {
         return testElement
     }

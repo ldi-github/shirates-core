@@ -71,7 +71,7 @@ fun TestDrive.tap(
     tapMethod: TapMethod = TapMethod.auto
 ): TestElement {
 
-    val tappedElement = getThisOrRootElement()
+    val tappedElement = getThisOrIt()
 
     val command = "tap"
     val message = message(id = command, subject = tappedElement.subject)
@@ -262,7 +262,7 @@ private fun TestDrive.tapWithScrollCommandCore(
     tapMethod: TapMethod,
 ): TestElement {
 
-    val testElement = getThisOrRootElement()
+    val testElement = getThisOrIt()
 
     val selector = getSelector(expression = expression)
     val message = message(id = command, subject = "$selector")

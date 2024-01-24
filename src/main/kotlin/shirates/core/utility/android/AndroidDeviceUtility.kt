@@ -5,6 +5,7 @@ import shirates.core.configuration.ProfileNameParser
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
+import shirates.core.driver.TestMode.isEmulator
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -145,12 +146,7 @@ object AndroidDeviceUtility {
      */
     fun getOrCreateEmulatorDeviceInfo(testProfile: TestProfile): AndroidDeviceInfo? {
 
-        val profileName = testProfile.profileName
-        val emulatorProfile = EmulatorProfile(
-            profileName = profileName,
-            emulatorOptions = (testProfile.emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
-                .filter { it.isNotBlank() }.toMutableList()
-        )
+        val emulatorProfile = getEmulatorProfile(testProfile = testProfile)
         val avdList = getAvdList()
         val a = emulatorProfile.avdName.escapeAvdName()
         if (avdList.contains(a)) {
@@ -166,6 +162,19 @@ object AndroidDeviceUtility {
         }
 
         return null
+    }
+
+    /**
+     * getEmulatorProfile
+     */
+    fun getEmulatorProfile(testProfile: TestProfile): EmulatorProfile {
+        val profileName = testProfile.profileName
+        val emulatorProfile = EmulatorProfile(
+            profileName = profileName,
+            emulatorOptions = (testProfile.emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
+                .filter { it.isNotBlank() }.toMutableList()
+        )
+        return emulatorProfile
     }
 
     /**
@@ -372,6 +381,15 @@ object AndroidDeviceUtility {
     /**
      * startEmulator
      */
+    fun startEmulator(testProfile: TestProfile): ShellUtility.ShellResult {
+
+        val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = testProfile)
+        return startEmulator(emulatorProfile = emulatorProfile)
+    }
+
+    /**
+     * startEmulator
+     */
     fun startEmulator(emulatorProfile: EmulatorProfile): ShellUtility.ShellResult {
 
         val args = mutableListOf<String>()
@@ -540,6 +558,32 @@ object AndroidDeviceUtility {
             breakLoop
         }
 
+        return r
+    }
+
+    /**
+     * reboot
+     */
+    fun reboot(
+        testProfile: TestProfile
+    ): ShellUtility.ShellResult {
+
+        if (isEmulator) {
+            return restartEmulator(testProfile = testProfile)
+        } else {
+            return reboot(udid = testProfile.udid)
+        }
+    }
+
+    /**
+     * restartEmulator
+     */
+    fun restartEmulator(
+        testProfile: TestProfile
+    ): ShellUtility.ShellResult {
+
+        shutdownEmulatorByUdid(testProfile.udid)
+        val r = startEmulator(testProfile)
         return r
     }
 

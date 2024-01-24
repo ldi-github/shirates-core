@@ -16,7 +16,7 @@ fun TestDrive.dataPattern(
     TestLog.info(message = message)
     shirates.core.proxy.dataPattern(apiName = apiNickname, dataPatternName = dataPatternName)
 
-    return getThisOrRootElement()
+    return getThisOrIt()
 }
 
 /**

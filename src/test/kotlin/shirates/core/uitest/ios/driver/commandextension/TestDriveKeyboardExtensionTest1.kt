@@ -31,7 +31,7 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
                     it.appIs("Maps")
                     it.tap("[Search Maps]")
                         .sendKeys("tokyo tower")
-                        .tapSoftwareKey("search")
+                        .tapSoftwareKey("search||検索")
                         .wait()
                         .tap("Website")
                         .tap("Open in Safari")

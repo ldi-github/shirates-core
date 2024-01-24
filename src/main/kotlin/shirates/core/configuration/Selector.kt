@@ -371,6 +371,10 @@ class Selector(
 
         internal fun String.orValueToList(): List<String> {
 
+            if (this.contains("|").not()) {
+                return mutableListOf(this)
+            }
+
             if (this.startsWith("(") && this.endsWith(")")) {
                 return this.removePrefix("(").removeSuffix(")").split("|")
             } else if (this.startsWith("@(") && this.endsWith(")")) {

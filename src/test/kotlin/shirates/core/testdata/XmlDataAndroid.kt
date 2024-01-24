@@ -1304,5 +1304,17 @@ object XmlDataAndroid {
 </hierarchy>
 """.trimIndent()
 
+    val SpecialData = """
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<hierarchy index="0" class="hierarchy" rotation="0" width="1080" height="2088">
+  <android.widget.FrameLayout index="0" package="com.android.settings" class="android.widget.FrameLayout" text="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[0,0][1080,2088]" displayed="true">
+    <android.widget.LinearLayout index="0" package="com.android.settings" class="android.widget.LinearLayout" text="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[0,0][1080,2088]" displayed="true">
+      <android.widget.FrameLayout index="0" package="com.android.settings" class="android.widget.FrameLayout" text="" resource-id="android:id/content" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[0,0][1080,2088]" displayed="true">
+          <android.widget.TextView index="0" package="com.android.settings" class="android.widget.TextView" text="(税込)" resource-id="android:id/title" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[66,1976][1036,2029]" displayed="true" />
+      </android.widget.FrameLayout>
+    </android.widget.LinearLayout>
+  </android.widget.FrameLayout>
+</hierarchy>
+    """.trimIndent()
 }
 

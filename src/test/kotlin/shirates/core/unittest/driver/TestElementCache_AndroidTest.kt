@@ -76,6 +76,26 @@ class TestElementCache_AndroidTest : UnitTest() {
     }
 
     @Test
+    fun select2() {
+
+        // Arrange
+        TestElementCache.loadXml(xmlData = XmlDataAndroid.SpecialData)
+
+        run {
+            // Act
+            val e = TestElementCache.select("*税込*")
+            // Assert
+            assertThat(e.toString()).isEqualTo("<android.widget.TextView class='android.widget.TextView' resource-id='android:id/title' text='(税込)' content-desc='' checked='false' focusable='false' focused='false' selected='false' scrollable='false' bounds=[66,1976][1036,2029]>")
+        }
+        run {
+            // Act
+            val e = TestElementCache.select("(税込)")
+            // Assert
+            assertThat(e.toString()).isEqualTo("<android.widget.TextView class='android.widget.TextView' resource-id='android:id/title' text='(税込)' content-desc='' checked='false' focusable='false' focused='false' selected='false' scrollable='false' bounds=[66,1976][1036,2029]>")
+        }
+    }
+
+    @Test
     fun findElements() {
 
         // Arrange
