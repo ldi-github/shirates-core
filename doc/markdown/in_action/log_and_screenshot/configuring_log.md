@@ -24,6 +24,7 @@ See also [parameters](../../basic/parameter/parameters.md).
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true
 #enableIsSafeLog=false
+#enableIsScreenLog=true
 #testResults=
 #testListDir=
 #reportIndexDir=

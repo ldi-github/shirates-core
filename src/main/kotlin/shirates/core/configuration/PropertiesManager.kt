@@ -517,6 +517,16 @@ object PropertiesManager {
             return value == "true"
         }
 
+    /**
+     * enableIsScreenLog
+     */
+    val enableIsScreenLog: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableIsScreenLog")
+                ?: return Const.ENABLE_IS_SCREEN_LOG
+            return value == "true"
+        }
+
     // Screenshot --------------------------------------------------
 
     /**

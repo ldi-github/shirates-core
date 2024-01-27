@@ -944,6 +944,8 @@ object TestDriver {
 
                 if (currentScreenRefresh) {
                     refreshCurrentScreen()
+                } else {
+                    currentScreen = "?"
                 }
 
                 if (lastElement.selector != null) {
@@ -1896,7 +1898,8 @@ object TestDriver {
      * isScreen
      */
     fun isScreen(
-        screenName: String
+        screenName: String,
+        log: Boolean = PropertiesManager.enableIsScreenLog
     ): Boolean {
 
         if (TestMode.isNoLoadRun) {
@@ -1928,6 +1931,10 @@ object TestDriver {
                 currentScreen = screenName
                 setScreenHistory(screenName)
                 TestLog.trace("Screen found. ■■■ $screenName ■■■")
+            }
+
+            if (log) {
+                TestLog.info("isScreen($screenName) is $r. (currentScreen=$currentScreen)")
             }
 
             return r

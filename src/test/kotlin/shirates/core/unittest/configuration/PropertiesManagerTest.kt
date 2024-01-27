@@ -816,6 +816,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableIsScreenLog() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableIsScreenLog).isEqualTo(Const.ENABLE_IS_SCREEN_LOG)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_IS_SCREEN_LOG.not()
+            PropertiesManager.setPropertyValue("enableIsScreenLog", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableIsScreenLog).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun screenshotScale() {
 
         run {

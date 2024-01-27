@@ -189,6 +189,7 @@ internal fun TestDrive.screenIsCore(
 ) {
 
     var isScreenResult = false
+    TestDriver.currentScreen = "?"
     val actionFunc = {
         isScreenResult = isScreen(screenName = expectedScreenName)
         isScreenResult
@@ -204,6 +205,8 @@ internal fun TestDrive.screenIsCore(
             refreshCache = useCache
         ) {
             val r = actionFunc()
+            TestDriver.refreshCurrentScreen(log = false)
+            TestLog.info("currentScreen=$screenName")
             if (r.not()) {
                 testDrive.screenshot()
                 if (onIrregular != null) {

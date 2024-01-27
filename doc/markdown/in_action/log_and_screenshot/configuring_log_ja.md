@@ -24,6 +24,7 @@ testrunファイルでログ出力を構成することができます。
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true
 #enableIsSafeLog=false
+#enableIsScreenLog=true
 #testResults=
 #testListDir=
 #reportIndexDir=
