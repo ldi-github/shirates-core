@@ -199,10 +199,11 @@ internal fun TestDrive.screenIsCore(
 
     if (isScreenResult.not()) {
 
-        SyncUtility.doUntilTrue(
+        val sc = SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds,
             intervalSeconds = PropertiesManager.screenshotIntervalSeconds,
-            refreshCache = useCache
+            refreshCache = useCache,
+            throwOnError = false
         ) {
             val r = actionFunc()
             TestDriver.refreshCurrentScreen(log = false)
@@ -220,7 +221,15 @@ internal fun TestDrive.screenIsCore(
             }
             r
         }
-
+        if (sc.isTimeout) {
+            // Retry once on an unexpectedly long processing times occured
+            actionFunc()
+            if (isScreenResult.not()) {
+                sc.throwIfError()
+            }
+        } else {
+            sc.throwIfError()
+        }
     }
 
     if (isScreenResult) {
