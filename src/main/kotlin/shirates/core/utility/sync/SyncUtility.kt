@@ -54,9 +54,6 @@ object SyncUtility {
 
         WaitUtility.doUntilTrue(context)
 
-        if (context.isTimeout) {
-            return context
-        }
         if (throwOnError) {
             context.throwIfError()
         }

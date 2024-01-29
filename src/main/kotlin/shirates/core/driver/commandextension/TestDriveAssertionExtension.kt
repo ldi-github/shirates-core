@@ -222,7 +222,7 @@ internal fun TestDrive.screenIsCore(
             r
         }
         if (sc.isTimeout) {
-            TestLog.warn(message(id = "timeoutOnScreenIs", submessage = "${sc.error?.message}"))
+            TestLog.warn(message(id = "timeout", subject = "screenIs", submessage = "${sc.error?.message}"))
             // Retry once on an unexpectedly long processing times occurred
             actionFunc()
         } else {

@@ -1158,6 +1158,7 @@ object TestDriver {
                 val r = SyncUtility.doUntilTrue(
                     waitSeconds = waitSeconds,
                     refreshCache = useCache,
+                    throwOnError = false,
                     onBeforeRetry = { sc ->
                         if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
                             testContext.onSelectErrorHandler!!.invoke()
@@ -1185,10 +1186,23 @@ object TestDriver {
 
                     result
                 }
+                if (r.isTimeout) {
+                    TestLog.warn(
+                        message(
+                            id = "timeoutInSelect",
+                            subject = "select",
+                            arg1 = "$selector",
+                            submessage = "${r.error?.message}"
+                        )
+                    )
+                }
 
                 if (r.hasError) {
                     lastElement.lastError = r.error
 
+                    if (selectedElement.hasImageMatchResult && selectedElement.imageMatchResult!!.result.not()) {
+                        TestLog.warn(message(id = "imageNotFound", subject = "${selectedElement.imageMatchResult}"))
+                    }
                 }
             }
 
