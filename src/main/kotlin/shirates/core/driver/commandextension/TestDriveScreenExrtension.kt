@@ -61,7 +61,6 @@ fun TestDrive.isScreenOf(
 fun TestDrive.waitScreenOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    useCache: Boolean = testContext.useCache,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
 ): TestElement {
@@ -74,7 +73,6 @@ fun TestDrive.waitScreenOf(
     waitScreenOfCore(
         screenNames = screenNames,
         waitSeconds = waitSeconds,
-        useCache = useCache,
         irregularHandler = irregularHandler,
         onTrue = onTrue
     )
@@ -85,14 +83,13 @@ fun TestDrive.waitScreenOf(
 internal fun TestDrive.waitScreenOfCore(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    useCache: Boolean = testContext.useCache,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
 ) {
 
     fun ofScreen(): String {
         for (screenName in screenNames) {
-            if (isScreen(screenName = screenName)) {
+            if (TestDriver.currentScreen == screenName) {
                 return screenName
             }
         }
@@ -108,26 +105,24 @@ internal fun TestDrive.waitScreenOfCore(
 
     var screenFound = false
 
-    fun syncAndCheckScreen() {
-
-        syncCache()
-        irregularHandler?.invoke()
-        syncCache()
-        currentScreenName = ofScreen()
-        screenFound = currentScreenName.isNotBlank()
-        if (screenFound.not()) {
-            TestDriver.fireIrregularHandler()
-        }
-    }
-
-    SyncUtility.doUntilTrue(
+    val context = SyncUtility.doUntilTrue(
         waitSeconds = waitSeconds,
-        intervalSeconds = testContext.waitSecondsForAnimationComplete
+        intervalSeconds = testContext.waitSecondsForAnimationComplete,
+        throwOnError = false
     ) {
         for (screenName in testContext.screenHandlers.keys) {
             isScreen(screenName = screenName)   // Fire screen handler
         }
-        syncAndCheckScreen()
+
+        refreshCache()
+        irregularHandler?.invoke()
+
+        currentScreenName = ofScreen()
+
+        screenFound = currentScreenName.isNotBlank()
+        if (screenFound.not()) {
+            TestDriver.fireIrregularHandler()
+        }
         screenFound
     }
 
@@ -144,8 +139,6 @@ internal fun TestDrive.waitScreenOfCore(
     }
 
     TestDriver.switchScreen(screenName = currentScreenName)
-
-    syncCache(force = useCache)
 
     onTrue?.invoke()
 }

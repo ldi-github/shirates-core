@@ -27,10 +27,10 @@ fun TestElement.isImage(
     }
 
     val context = TestDriverCommandContext(testElement)
-    var r = ImageMatchResult(result = false, templateSubject = expression)
+    var imageMatchResult = ImageMatchResult(result = false, templateSubject = expression)
     context.execBooleanCommand(subject = expression) {
 
-        r = isImageCore(
+        imageMatchResult = isImageCore(
             selector = sel,
             threshold = threshold,
             cropImage = cropImage
@@ -39,7 +39,7 @@ fun TestElement.isImage(
 
     TestDriver.lastElement = testElement
 
-    return r
+    return imageMatchResult
 }
 
 internal fun TestElement.isImageCore(

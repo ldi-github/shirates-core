@@ -508,16 +508,19 @@ internal fun TestDrive.ifImageIsCore(
     vararg expression: String,
     waitSeconds: Double,
     negation: Boolean,
-): Boolean {
+): ImageMatchResult {
 
     val testElement = TestDriver.it
 
     var r = false
-    var matchResult: ImageMatchResult
-    SyncUtility.doUntilTrue(waitSeconds = waitSeconds) {
+    var imageMatchResult = ImageMatchResult(result = false, templateSubject = "$expression")
+    SyncUtility.doUntilTrue(
+        waitSeconds = waitSeconds,
+        throwOnError = false
+    ) {
         for (exp in expression) {
-            matchResult = testElement.isImage(exp)
-            r = matchResult.result
+            imageMatchResult = testElement.isImage(exp)
+            r = imageMatchResult.result
             if (negation) {
                 r = r.not()
             }
@@ -528,7 +531,7 @@ internal fun TestDrive.ifImageIsCore(
         r
     }
 
-    return r
+    return imageMatchResult
 }
 
 private fun getSubject(
@@ -552,12 +555,12 @@ fun TestDrive.ifImageIs(
 
     val command = "ifImageIs"
 
-    val imageIs = ifImageIsCore(
+    val imageMatchResult = ifImageIsCore(
         expression = expression,
         waitSeconds = waitSeconds,
         negation = false,
     )
-    val matched = imageIs
+    val matched = imageMatchResult.result
     val result = BooleanCompareResult(value = matched, command = command)
     val subject = getSubject(expression = expression)
     val message = message(id = command, subject = subject)
@@ -586,11 +589,12 @@ fun TestDrive.ifImageIsNot(
 ): BooleanCompareResult {
 
     val command = "ifImageIsNot"
-    val matched = ifImageIsCore(
+    val imageMatchResult = ifImageIsCore(
         expression = expression,
         waitSeconds = waitSeconds,
         negation = true,
     )
+    val matched = imageMatchResult.result
     val result = BooleanCompareResult(value = matched, command = command)
     val subject = getSubject(expression = expression)
     val message = message(id = command, subject = subject)

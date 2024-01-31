@@ -68,9 +68,7 @@ object WaitUtility {
                     return context as T
                 }
 
-                if (context.hasError.not() &&
-                    context.stopWatch.elapsedSeconds > context.waitSeconds
-                ) {
+                if (context.stopWatch.elapsedSeconds > context.waitSeconds) {
                     context.stopWatch.lap("timeout")
                     context.error =
                         TestDriverException("timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds})")
