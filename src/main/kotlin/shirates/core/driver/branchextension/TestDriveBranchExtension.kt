@@ -523,6 +523,7 @@ internal fun TestDrive.ifImageIsCore(
             r = imageMatchResult.result
             if (negation) {
                 r = r.not()
+                imageMatchResult.result = r
             }
             if (r) {
                 break
