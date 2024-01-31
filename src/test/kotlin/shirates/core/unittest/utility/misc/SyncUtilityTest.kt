@@ -33,8 +33,7 @@ class SyncUtilityTest : UnitTest() {
             waitSeconds = 1.0,
             onTimeout = { sc ->
                 println("elapsedSecondsOnTimeout=${sc.elapsedSecondsOnTimeout}")
-            },
-            throwOnError = false
+            }
         ) { sc ->
             println("elapsedSeconds=${sc.stopWatch.elapsedSeconds}")
             false
@@ -103,7 +102,8 @@ class SyncUtilityTest : UnitTest() {
                     if (sc.count == 3) {
                         sc.cancelRetry = true
                     }
-                }
+                },
+                throwOnError = true
             ) { sc ->
                 println("count=${sc.count}")
                 throw TestDriverException("count=${sc.count}")
