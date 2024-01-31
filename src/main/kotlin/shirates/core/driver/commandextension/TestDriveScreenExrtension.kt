@@ -158,6 +158,11 @@ fun TestDrive.waitScreen(
     if (PropertiesManager.enableSyncLog) {
         TestLog.write(message = message, logType = LogType.INFO, scriptCommand = command)
     }
+
+    if (TestMode.isNoLoadRun) {
+        return lastElement
+    }
+
     waitScreenOfCore(
         screenName,
         waitSeconds = waitSeconds,

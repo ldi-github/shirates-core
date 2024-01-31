@@ -33,7 +33,8 @@ class SyncUtilityTest : UnitTest() {
             waitSeconds = 1.0,
             onTimeout = { sc ->
                 println("elapsedSecondsOnTimeout=${sc.elapsedSecondsOnTimeout}")
-            }
+            },
+            throwOnError = false
         ) { sc ->
             println("elapsedSeconds=${sc.stopWatch.elapsedSeconds}")
             false
@@ -42,9 +43,12 @@ class SyncUtilityTest : UnitTest() {
         assertThat(r.waitSeconds).isEqualTo(1.0)
         assertThat(r.isTimeOut).isTrue()
         assertThat(r.elapsedSecondsOnTimeout).isGreaterThanOrEqualTo(1.0)
-        assertThat(r.hasError).isFalse()
-        assertThat(r.error).isNull()
-        r.throwIfError()    // This does not throw on timeout.
+        assertThat(r.hasError).isTrue()
+        assertThat(r.error).isNotNull()
+        assertThatThrownBy {
+            r.throwIfError()
+        }.isInstanceOf(TestDriverException::class.java)
+            .hasMessageStartingWith("timeout")
     }
 
 
