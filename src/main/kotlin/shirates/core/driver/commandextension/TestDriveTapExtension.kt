@@ -167,7 +167,6 @@ fun TestDrive.tap(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    handleIrregular: Boolean = true,
     safeElementOnly: Boolean = true
 ): TestElement {
 
@@ -202,24 +201,7 @@ fun TestDrive.tap(
             }
         }
 
-        try {
-            tapFunc()
-        } catch (t: Throwable) {
-            val errorMessage = t.toString()
-            TestLog.warn(errorMessage)
-
-            refreshCache()
-
-            if (handleIrregular) {
-                TestDriver.fireIrregularHandler()
-            }
-
-            if (errorMessage.contains("Read timed out").not()) {
-                // retry once
-                TestLog.info("retrying tap()")
-                tapFunc()
-            }
-        }
+        tapFunc()
     }
     if (TestMode.isNoLoadRun) {
         lastElement = e
