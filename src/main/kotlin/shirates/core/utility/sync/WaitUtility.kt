@@ -76,7 +76,8 @@ object WaitUtility {
                 if (context.stopWatch.elapsedSeconds > context.waitSeconds) {
                     context.stopWatch.lap("timeout")
                     if (context.hasError.not()) {
-                        val stackTrace = Thread.currentThread().stackTrace.toString().replace("\n", " ")
+                        val e = Exception()
+                        val stackTrace = e.stackTraceToString()
                         context.error =
                             TestDriverException("timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds} $stackTrace)")
                     }
