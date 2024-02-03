@@ -183,7 +183,9 @@ internal fun TestDrive.swipePointToPointCore(
     for (i in 1..swipeContext.repeat) {
         if (swipeContext.repeat > 1) {
             TestLog.trace("$i")
-            Thread.sleep((swipeContext.intervalSeconds * 1000).toLong())
+            if (swipeContext.intervalSeconds > 0.0) {
+                Thread.sleep((swipeContext.intervalSeconds * 1000).toLong())
+            }
         }
         swipeFunc()
     }
@@ -652,7 +654,7 @@ fun TestDrive.flickAndGoDown(
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = 1,
-    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
 ): TestElement {
 
     val testElement = getSwipeTarget()
@@ -662,14 +664,20 @@ fun TestDrive.flickAndGoDown(
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        scrollDown(
-            scrollable = scrollable,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            endMarginRatio = endMarginRatio,
-            repeat = repeat,
-            intervalSeconds = intervalSeconds
-        )
+        val originalOnScrolling = testContext.onScrolling
+        try {
+            testContext.onScrolling = false
+            scrollDown(
+                scrollable = scrollable,
+                durationSeconds = durationSeconds,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
+                repeat = repeat,
+                intervalSeconds = intervalSeconds
+            )
+        } finally {
+            testContext.onScrolling = originalOnScrolling
+        }
     }
 
     return lastElement
@@ -694,14 +702,20 @@ fun TestDrive.flickAndGoRight(
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        scrollRight(
-            scrollable = scrollable,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            endMarginRatio = endMarginRatio,
-            repeat = repeat,
-            intervalSeconds = intervalSeconds
-        )
+        val originalOnScrolling = testContext.onScrolling
+        try {
+            testContext.onScrolling = false
+            scrollRight(
+                scrollable = scrollable,
+                durationSeconds = durationSeconds,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
+                repeat = repeat,
+                intervalSeconds = intervalSeconds
+            )
+        } finally {
+            testContext.onScrolling = originalOnScrolling
+        }
     }
 
     return lastElement
@@ -726,14 +740,20 @@ fun TestDrive.flickAndGoLeft(
 
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        scrollLeft(
-            scrollable = scrollable,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            endMarginRatio = endMarginRatio,
-            repeat = repeat,
-            intervalSeconds = intervalSeconds
-        )
+        val originalOnScrolling = testContext.onScrolling
+        try {
+            testContext.onScrolling = false
+            scrollLeft(
+                scrollable = scrollable,
+                durationSeconds = durationSeconds,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
+                repeat = repeat,
+                intervalSeconds = intervalSeconds
+            )
+        } finally {
+            testContext.onScrolling = originalOnScrolling
+        }
     }
 
     return lastElement
@@ -793,14 +813,20 @@ fun TestDrive.flickAndGoUp(
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
-        scrollUp(
-            scrollable = scrollable,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            endMarginRatio = endMarginRatio,
-            repeat = repeat,
-            intervalSeconds = intervalSeconds
-        )
+        val originalOnScrolling = testContext.onScrolling
+        try {
+            testContext.onScrolling = false
+            scrollUp(
+                scrollable = scrollable,
+                durationSeconds = durationSeconds,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
+                repeat = repeat,
+                intervalSeconds = intervalSeconds
+            )
+        } finally {
+            testContext.onScrolling = originalOnScrolling
+        }
     }
 
     return lastElement
