@@ -51,22 +51,6 @@ class RetryContext<T>(
         action = { null as T })
 
     /**
-     * hasUnknownServerSideError
-     */
-    val hasUnknownServerSideError: Boolean
-        get() {
-            return exception?.message?.contains("An unknown server-side error occurred") == true
-        }
-
-    /**
-     * noSuchElementException
-     */
-    val noSuchElementException: Boolean
-        get() {
-            return exception is org.openqa.selenium.NoSuchElementException
-        }
-
-    /**
      * writeErrorLog
      */
     fun writeErrorLog() {

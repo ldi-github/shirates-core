@@ -25,15 +25,9 @@ import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.eventextension.TestDriverOnScreenContext
 import shirates.core.driver.eventextension.removeScreenHandler
-import shirates.core.exception.TestConfigException
-import shirates.core.exception.TestDriverException
-import shirates.core.exception.TestEnvironmentException
-import shirates.core.exception.TestNGException
-import shirates.core.logging.CodeExecutionContext
-import shirates.core.logging.LogType
-import shirates.core.logging.Measure
+import shirates.core.exception.*
+import shirates.core.logging.*
 import shirates.core.logging.Message.message
-import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
@@ -738,7 +732,11 @@ object TestDriver {
         } else {
             TestLog.info("Rebooting Android device. (${profile.udid})")
             try {
-                AndroidDeviceUtility.reboot(udid = profile.udid)
+                if (TestMode.isEmulator) {
+                    AndroidDeviceUtility.restartEmulator(profile)
+                } else {
+                    AndroidDeviceUtility.reboot(udid = profile.udid)
+                }
             } catch (t: Throwable) {
                 if (t.message!!.contains("device offline")) {
                     AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
@@ -933,6 +931,18 @@ object TestDriver {
                 CodeExecutionContext.lastScreenshotImage = null
 
                 rootElement = AppiumProxy.getSource()
+
+                if (rootElement.hasEmptyWebViewError) {
+                    TestLog.warn("WebView is empty. Getting source again.")
+                    rootElement = AppiumProxy.getSource()
+                    if (rootElement.hasEmptyWebViewError) {
+                        screenshot(force = true)
+                        if (rootElement.hasEmptyWebViewError) {
+                            throw RerunScenarioException("WebView is empty.")
+                        }
+                    }
+                }
+
                 TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
                 if (isAndroid) {

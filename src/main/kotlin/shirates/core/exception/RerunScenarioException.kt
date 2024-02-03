@@ -5,6 +5,7 @@ package shirates.core.exception
  */
 class RerunScenarioException(
     override val message: String,
-    override val cause: Throwable? = null
+    override val cause: Throwable? = null,
+    val requireReconnectingNetwork: Boolean = false
 ) : Exception() {
 }

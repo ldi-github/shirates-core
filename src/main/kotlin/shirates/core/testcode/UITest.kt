@@ -500,6 +500,13 @@ abstract class UITest : TestDrive {
                 }
 
                 /**
+                 * onRerunScenarioHandler
+                 */
+                if (t is RerunScenarioException && testContext.onRerunScenarioHandler != null) {
+                    testContext.onRerunScenarioHandler!!.invoke(t)
+                }
+
+                /**
                  * Rerun scenario after resetting appium session
                  */
                 TestLog.write("Rerunning scenario ...")

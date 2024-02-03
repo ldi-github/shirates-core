@@ -1,8 +1,10 @@
 package shirates.core.utility.sync
 
 import shirates.core.Const
+import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
+import shirates.core.utility.exception.isProcessError
 
 object WaitUtility {
 
@@ -62,6 +64,9 @@ object WaitUtility {
                 } catch (t: Throwable) {
                     context.error = t
                     context.onError(context as T)
+                    if (t.isProcessError) {
+                        throw RerunScenarioException(message = t.message!!, cause = t)
+                    }
                     context.retryOnError.not()
                 }
                 if (breakLoop) {
@@ -71,8 +76,9 @@ object WaitUtility {
                 if (context.stopWatch.elapsedSeconds > context.waitSeconds) {
                     context.stopWatch.lap("timeout")
                     if (context.hasError.not()) {
+                        val stackTrace = Thread.currentThread().stackTrace.toString().replace("\n", " ")
                         context.error =
-                            TestDriverException("timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds})")
+                            TestDriverException("timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds} $stackTrace)")
                     }
                     context.isTimeout = true
                     context.onTimeout(context as T)
