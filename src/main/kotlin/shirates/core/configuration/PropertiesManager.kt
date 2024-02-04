@@ -711,6 +711,26 @@ object PropertiesManager {
                 ?: Const.TAP_TEST_SELECTOR
         }
 
+    /**
+     * enableAutoSyncAndroid
+     */
+    val enableAutoSyncAndroid: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableAutoSyncAndroid")
+                ?: return Const.ENABLE_AUTO_SYNC_ANDROID
+            return value == "true"
+        }
+
+    /**
+     * enableAutoSyncIos
+     */
+    val enableAutoSyncIos: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableAutoSyncIos")
+                ?: return Const.ENABLE_AUTO_SYNC_IOS
+            return value == "true"
+        }
+
     // Custom --------------------------------------------------
 
     /**

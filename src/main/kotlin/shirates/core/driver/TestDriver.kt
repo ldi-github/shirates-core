@@ -2001,6 +2001,18 @@ object TestDriver {
                         TestLog.info("imageProfile: ${testDrive.imageProfile}")
                     }
 
+                    if (isAndroid) {
+                        if (PropertiesManager.enableAutoSyncAndroid.not()) {
+                            printInfo("AutoSync is disabled.")
+                            lastXml = TestElementCache.sourceXml
+                        }
+                    } else {
+                        if (PropertiesManager.enableAutoSyncIos.not()) {
+                            printInfo("AutoSync is disabled.")
+                            lastXml = TestElementCache.sourceXml
+                        }
+                    }
+
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
                     if (TestElementCache.synced) {

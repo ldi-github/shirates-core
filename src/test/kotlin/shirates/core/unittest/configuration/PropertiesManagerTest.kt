@@ -1217,6 +1217,56 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableAutoSyncAndroid() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncAndroid).isEqualTo(Const.ENABLE_AUTO_SYNC_ANDROID)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableAutoSyncAndroid", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncAndroid).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableAutoSyncAndroid", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncAndroid).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableAutoSyncIos() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncIos).isEqualTo(Const.ENABLE_AUTO_SYNC_IOS)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableAutoSyncIos", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncIos).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableAutoSyncIos", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncIos).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun tapTestSelector() {
 
         run {
