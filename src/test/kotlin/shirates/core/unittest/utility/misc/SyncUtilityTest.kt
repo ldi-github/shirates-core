@@ -47,7 +47,7 @@ class SyncUtilityTest : UnitTest() {
         assertThatThrownBy {
             r.throwIfError()
         }.isInstanceOf(TestDriverException::class.java)
-            .hasMessageStartingWith("timeout")
+            .hasMessageStartingWith("doUntilTrue() timeout")
     }
 
 
@@ -86,8 +86,8 @@ class SyncUtilityTest : UnitTest() {
             assertThat(c.count).isEqualTo(5)
             assertThat(c.isTimeOut).isFalse()
             assertThat(c.elapsedSecondsOnTimeout).isNull()
-            assertThat(c.hasError).isFalse()
-            assertThat(c.error?.message).isNull()
+            assertThat(c.hasError).isTrue()
+            assertThat(c.error?.message).startsWith("doUntilTrue() reached maxLoop count.(maxLoopCount=5), java.lang.Exception")
         }
 
     }

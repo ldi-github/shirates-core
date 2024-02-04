@@ -80,7 +80,7 @@ object WaitUtility {
                         val e = Exception()
                         val stackTrace = e.stackTraceToString()
                         context.error =
-                            TestDriverException("doUntilTrue() timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds} $stackTrace)")
+                            TestDriverException("doUntilTrue() timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds}), $stackTrace)")
                     }
                     context.isTimeout = true
                     context.onTimeout(context as T)
@@ -94,7 +94,7 @@ object WaitUtility {
             val e = Exception()
             val stackTrace = e.stackTraceToString()
             context.error =
-                TestDriverException("doUntilTrue() reached maxLoop count.(maxLoopCount=${context.maxLoopCount}, $stackTrace")
+                TestDriverException("doUntilTrue() reached maxLoop count.(maxLoopCount=${context.maxLoopCount}), $stackTrace")
             context.onMaxLoop(context as T)
 
             return context
