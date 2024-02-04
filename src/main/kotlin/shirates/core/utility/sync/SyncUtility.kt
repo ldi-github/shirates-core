@@ -21,7 +21,7 @@ object SyncUtility {
         intervalSeconds: Double = Const.SYNC_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
         maxLoopCount: Int = MAX_LOOP_COUNT,
         retryOnError: Boolean = true,
-        throwOnError: Boolean = true,
+        throwOnError: Boolean = false,
         throwOnOverMaxLoopCount: Boolean = true,
         refreshCache: Boolean = testContext.useCache,
         onBeforeRetry: (SyncContext) -> Unit = { c ->
@@ -54,9 +54,6 @@ object SyncUtility {
 
         WaitUtility.doUntilTrue(context)
 
-        if (context.error?.message?.startsWith("timeout") == true) {
-            context.error = null
-        }
         if (throwOnError) {
             context.throwIfError()
         }

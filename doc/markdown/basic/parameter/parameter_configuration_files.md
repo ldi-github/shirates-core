@@ -94,6 +94,7 @@ ios.profile=iPhone 13(15.5)
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true
 #enableIsSafeLog=false
+#enableIsScreenLog=true
 #testResults=
 #testListDir=
 #reportIndexDir=

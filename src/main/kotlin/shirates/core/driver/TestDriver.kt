@@ -25,15 +25,9 @@ import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.eventextension.TestDriverOnScreenContext
 import shirates.core.driver.eventextension.removeScreenHandler
-import shirates.core.exception.TestConfigException
-import shirates.core.exception.TestDriverException
-import shirates.core.exception.TestEnvironmentException
-import shirates.core.exception.TestNGException
-import shirates.core.logging.CodeExecutionContext
-import shirates.core.logging.LogType
-import shirates.core.logging.Measure
+import shirates.core.exception.*
+import shirates.core.logging.*
 import shirates.core.logging.Message.message
-import shirates.core.logging.TestLog
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
@@ -738,7 +732,11 @@ object TestDriver {
         } else {
             TestLog.info("Rebooting Android device. (${profile.udid})")
             try {
-                AndroidDeviceUtility.reboot(udid = profile.udid)
+                if (TestMode.isEmulator) {
+                    AndroidDeviceUtility.restartEmulator(profile)
+                } else {
+                    AndroidDeviceUtility.reboot(udid = profile.udid)
+                }
             } catch (t: Throwable) {
                 if (t.message!!.contains("device offline")) {
                     AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
@@ -933,6 +931,7 @@ object TestDriver {
                 CodeExecutionContext.lastScreenshotImage = null
 
                 rootElement = AppiumProxy.getSource()
+
                 TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
                 if (isAndroid) {
@@ -944,6 +943,8 @@ object TestDriver {
 
                 if (currentScreenRefresh) {
                     refreshCurrentScreen()
+                } else {
+                    currentScreen = "?"
                 }
 
                 if (lastElement.selector != null) {
@@ -1156,6 +1157,7 @@ object TestDriver {
                 val r = SyncUtility.doUntilTrue(
                     waitSeconds = waitSeconds,
                     refreshCache = useCache,
+                    throwOnError = false,
                     onBeforeRetry = { sc ->
                         if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
                             testContext.onSelectErrorHandler!!.invoke()
@@ -1183,10 +1185,23 @@ object TestDriver {
 
                     result
                 }
+                if (r.isTimeout) {
+                    TestLog.warn(
+                        message(
+                            id = "timeoutInSelect",
+                            subject = "select",
+                            arg1 = "$selector",
+                            submessage = "${r.error?.message}"
+                        )
+                    )
+                }
 
                 if (r.hasError) {
                     lastElement.lastError = r.error
 
+                    if (selectedElement.hasImageMatchResult && selectedElement.imageMatchResult!!.result.not()) {
+                        TestLog.warn(message(id = "imageNotFound", subject = "${selectedElement.imageMatchResult}"))
+                    }
                 }
             }
 
@@ -1896,7 +1911,8 @@ object TestDriver {
      * isScreen
      */
     fun isScreen(
-        screenName: String
+        screenName: String,
+        log: Boolean = PropertiesManager.enableIsScreenLog
     ): Boolean {
 
         if (TestMode.isNoLoadRun) {
@@ -1928,6 +1944,10 @@ object TestDriver {
                 currentScreen = screenName
                 setScreenHistory(screenName)
                 TestLog.trace("Screen found. ■■■ $screenName ■■■")
+            }
+
+            if (log) {
+                TestLog.info("isScreen($screenName) is $r. (currentScreen=$currentScreen)")
             }
 
             return r
@@ -1979,6 +1999,18 @@ object TestDriver {
                     refreshCache(currentScreenRefresh = false)
                     if (lastXml.isBlank()) {
                         TestLog.info("imageProfile: ${testDrive.imageProfile}")
+                    }
+
+                    if (isAndroid) {
+                        if (PropertiesManager.enableAutoSyncAndroid.not()) {
+                            printInfo("AutoSync is disabled.")
+                            lastXml = TestElementCache.sourceXml
+                        }
+                    } else {
+                        if (PropertiesManager.enableAutoSyncIos.not()) {
+                            printInfo("AutoSync is disabled.")
+                            lastXml = TestElementCache.sourceXml
+                        }
                     }
 
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)

@@ -2,8 +2,10 @@ package shirates.core.utility.sync
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
-import shirates.core.exception.TestDriverException
+import shirates.core.exception.RerunScenarioException
 import shirates.core.logging.TestLog
+import shirates.core.utility.exception.isRerunRequiredError
+import shirates.core.utility.exception.isRetryableError
 import shirates.core.utility.time.StopWatch
 
 /**
@@ -25,7 +27,7 @@ class RetryUtility {
             retryIntervalSecond: Double = testContext.retryIntervalSeconds,
             log: Boolean = PropertiesManager.enableRetryLog,
             retryPredicate: (RetryContext<T>) -> Boolean = {
-                it.hasUnknownServerSideError || it.noSuchElementException
+                it.exception.isRetryableError
             },
             onBeforeRetry: (RetryContext<T>) -> T,
             action: (RetryContext<T>) -> T
@@ -90,16 +92,15 @@ class RetryUtility {
                 if (context.exception == null) {
                     return context
                 }
+                if (context.exception.isRerunRequiredError) {
+                    val ex = context.exception!!
+                    TestLog.error(ex)
+                    throw RerunScenarioException(ex.message!!, ex)
+                }
                 if (stopWatch.elapsedSeconds > timeoutSeconds) {
                     TestLog.info("Timeout in retrying. (${stopWatch.elapsedSeconds} > $timeoutSeconds)")
                     return context
                 }
-            }
-
-            if (context.exception?.message?.contains("socket hang up") == true) {
-                val ex = TestDriverException("socket hang up", context.exception)
-                TestLog.error(ex)
-                throw ex
             }
 
             return context

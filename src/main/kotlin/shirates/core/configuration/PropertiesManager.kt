@@ -517,6 +517,16 @@ object PropertiesManager {
             return value == "true"
         }
 
+    /**
+     * enableIsScreenLog
+     */
+    val enableIsScreenLog: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableIsScreenLog")
+                ?: return Const.ENABLE_IS_SCREEN_LOG
+            return value == "true"
+        }
+
     // Screenshot --------------------------------------------------
 
     /**
@@ -699,6 +709,26 @@ object PropertiesManager {
         get() {
             return getPropertyValue(propertyName = "tapTestSelector")
                 ?: Const.TAP_TEST_SELECTOR
+        }
+
+    /**
+     * enableAutoSyncAndroid
+     */
+    val enableAutoSyncAndroid: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableAutoSyncAndroid")
+                ?: return Const.ENABLE_AUTO_SYNC_ANDROID
+            return value == "true"
+        }
+
+    /**
+     * enableAutoSyncIos
+     */
+    val enableAutoSyncIos: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableAutoSyncIos")
+                ?: return Const.ENABLE_AUTO_SYNC_IOS
+            return value == "true"
         }
 
     // Custom --------------------------------------------------

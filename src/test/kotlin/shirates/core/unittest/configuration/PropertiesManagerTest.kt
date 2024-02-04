@@ -816,6 +816,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableIsScreenLog() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableIsScreenLog).isEqualTo(Const.ENABLE_IS_SCREEN_LOG)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_IS_SCREEN_LOG.not()
+            PropertiesManager.setPropertyValue("enableIsScreenLog", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableIsScreenLog).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun screenshotScale() {
 
         run {
@@ -1195,6 +1213,56 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("enableHealthCheck", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableHealthCheck).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableAutoSyncAndroid() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncAndroid).isEqualTo(Const.ENABLE_AUTO_SYNC_ANDROID)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableAutoSyncAndroid", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncAndroid).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableAutoSyncAndroid", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncAndroid).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableAutoSyncIos() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncIos).isEqualTo(Const.ENABLE_AUTO_SYNC_IOS)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableAutoSyncIos", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncIos).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableAutoSyncIos", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAutoSyncIos).isEqualTo(value)
         }
     }
 

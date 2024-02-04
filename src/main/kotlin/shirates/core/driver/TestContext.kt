@@ -4,6 +4,7 @@ import shirates.core.Const
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.eventextension.TestDriverOnScreenContext
+import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import kotlin.reflect.KMutableProperty
@@ -218,6 +219,8 @@ class TestContext(
     var onExistErrorHandler: (() -> Unit)? = null
 
     var onScreenErrorHandler: (() -> Unit)? = null
+
+    var onRerunScenarioHandler: ((ex: RerunScenarioException) -> Unit)? = null
 
     val screenHandlers = mutableMapOf<String, ((TestDriverOnScreenContext) -> Unit)?>()
 

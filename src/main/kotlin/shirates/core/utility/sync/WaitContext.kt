@@ -13,6 +13,7 @@ open class WaitContext(
     override var throwOnFinally: Boolean,
     override var stopWatch: StopWatch = StopWatch(),
     override var count: Int = 0,
+    override var isTimeout: Boolean = false,
     override var onTimeout: (WaitContext) -> Unit,
     override var onMaxLoop: (WaitContext) -> Unit,
     override var onError: (WaitContext) -> Unit,

@@ -43,6 +43,7 @@ object Const {
     const val ENABLE_IMAGE_MATCH_DEBUG_LOG = false
     const val ENABLE_IS_IN_VIEW_LOG = false
     const val ENABLE_IS_SAFE_LOG = true
+    const val ENABLE_IS_SCREEN_LOG = false
     const val SCREENSHOT_SCALE = 0.5
     const val ENABLE_IMAGE_ASSERTION = true
     const val IMAGE_MATCHING_SCALE = 0.25
@@ -51,6 +52,8 @@ object Const {
     const val ENABLE_WDA_INSTALL_OPTIMIZATION = true
     const val ENABLE_HEALTH_CHECK = true
     const val TAP_TEST_SELECTOR = ".label"
+    const val ENABLE_AUTO_SYNC_ANDROID = false
+    const val ENABLE_AUTO_SYNC_IOS = false
     const val CUSTOM_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val ANDROID_SWIPE_OFFSET_Y = -24

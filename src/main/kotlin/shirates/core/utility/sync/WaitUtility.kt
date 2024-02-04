@@ -3,6 +3,7 @@ package shirates.core.utility.sync
 import shirates.core.Const
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
+import shirates.core.utility.exception.isProcessError
 
 object WaitUtility {
 
@@ -62,20 +63,27 @@ object WaitUtility {
                 } catch (t: Throwable) {
                     context.error = t
                     context.onError(context as T)
-                    context.retryOnError.not()
+
+                    if (t.isProcessError) {
+                        true
+                    } else {
+                        context.retryOnError.not()
+                    }
                 }
                 if (breakLoop) {
                     return context as T
                 }
 
-                if (context.hasError.not() &&
-                    context.stopWatch.elapsedSeconds > context.waitSeconds
-                ) {
+                if (context.stopWatch.elapsedSeconds > context.waitSeconds) {
                     context.stopWatch.lap("timeout")
-                    context.error =
-                        TestDriverException("timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds})")
+                    if (context.hasError.not()) {
+                        val e = Exception()
+                        val stackTrace = e.stackTraceToString()
+                        context.error =
+                            TestDriverException("doUntilTrue() timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds}), $stackTrace)")
+                    }
+                    context.isTimeout = true
                     context.onTimeout(context as T)
-
                     return context
                 }
 
@@ -83,6 +91,10 @@ object WaitUtility {
             }
 
             context.overMaxLoopCount = true
+            val e = Exception()
+            val stackTrace = e.stackTraceToString()
+            context.error =
+                TestDriverException("doUntilTrue() reached maxLoop count.(maxLoopCount=${context.maxLoopCount}), $stackTrace")
             context.onMaxLoop(context as T)
 
             return context

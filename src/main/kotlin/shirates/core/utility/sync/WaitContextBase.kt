@@ -14,6 +14,7 @@ interface WaitContextBase<T> : TestDrive {
     var throwOnFinally: Boolean
     var stopWatch: StopWatch
     var count: Int
+    var isTimeout: Boolean
     var onTimeout: (T) -> Unit
     var onMaxLoop: (T) -> Unit
     var onError: (T) -> Unit

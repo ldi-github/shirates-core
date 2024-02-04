@@ -190,6 +190,7 @@ object TestElementCache {
                 e = list.firstOrNull { it.isEmpty.not() } ?: TestElement.emptyElement
             }
             e.lastError = null
+            e.imageMatchResult = null
 
             if (e.isEmpty) {
                 e.selector = selector

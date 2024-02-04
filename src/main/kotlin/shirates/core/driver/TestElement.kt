@@ -304,7 +304,7 @@ class TestElement(
                     return false
                 }
                 val webViewElements = webView.descendantsAndSelf
-                val hasError = webViewElements.count() < 5
+                val hasError = webViewElements.isEmpty()
                 if (hasError) {
                     lastError = IllegalStateException("EmptyWebViewError.")
                 }
