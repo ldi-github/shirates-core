@@ -932,21 +932,6 @@ object TestDriver {
 
                 rootElement = AppiumProxy.getSource()
 
-                if (rootElement.hasEmptyWebViewError) {
-                    SyncUtility.doUntilTrue(
-                        waitSeconds = testContext.waitSecondsOnIsScreen,
-                        onTimeout = {
-                            throw RerunScenarioException("WebView is empty. Could not get source.")
-                        }
-                    ) {
-                        screenshot(force = true)
-                        TestLog.warn("WebView is empty. Getting source again.")
-                        Thread.sleep(2000)
-                        rootElement = AppiumProxy.getSource()
-                        rootElement.hasEmptyWebViewError
-                    }
-                }
-
                 TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
                 if (isAndroid) {

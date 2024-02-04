@@ -8,6 +8,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONObject
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
@@ -16,10 +17,7 @@ import shirates.core.driver.commandextension.getWebElement
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
 import shirates.core.logging.TestLog
-import shirates.core.server.AppiumServerManager
 import shirates.core.utility.element.ElementCacheUtility
-import shirates.core.utility.sync.RetryContext
-import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.WaitUtility
 import java.time.Duration
 import java.util.*
@@ -33,7 +31,12 @@ object AppiumProxy {
     /**
      * getSource
      */
-    fun getSource(): TestElement {
+    fun getSource(
+        waitSeconds: Double = testContext.appiumProxyGetSourceTimeoutSeconds,
+        intervalSeconds: Double = 1.0,
+        maxLoopCount: Int = 60,
+        throwOnFinally: Boolean = true
+    ): TestElement {
 
         if (TestMode.isNoLoadRun) {
             return TestElement()
@@ -41,33 +44,53 @@ object AppiumProxy {
 
         var e = TestElement()
         fun checkState(): Boolean {
-            return try {
+            if (e.hasEmptyWebViewError) {
+                TestLog.warn("WebView is empty.")
+                return false
+            }
+
+            try {
                 val we = e.getWebElement()
                 if (isAndroid) {
                     we.getAttribute("package")
                 } else {
                     we.getAttribute("label")
                 }
-                true
             } catch (t: Throwable) {
                 if (PropertiesManager.enableGetSourceLog) {
-                    TestLog.info("[Error] AppiumProxy.getSource() checkState(): $t $e")
+                    TestLog.warn("AppiumProxy.getSource() checkState(): $t $e")
                 }
-                false
+                return false
             }
+
+            return true
         }
 
-        WaitUtility.doUntilTrue(
-            waitSeconds = testContext.appiumProxyGetSourceTimeoutSeconds,
-            onMaxLoop = {
-                throw TestDriverException("AppiumProxy.getSource() reached maxLoop count.(maxLoopCount=${it.maxLoopCount})")
+        val wc = WaitUtility.doUntilTrue(
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            maxLoopCount = maxLoopCount,
+            throwOnFinally = false,
+            onMaxLoop = { c ->
+                c.error =
+                    TestDriverException(
+                        "AppiumProxy.getSource() reached maxLoop count.(maxLoopCount=${c.maxLoopCount})",
+                        cause = c.error
+                    )
             },
-            onTimeout = {
-                throw TestDriverException("AppiumProxy.getSource() timed out. (waitSeconds=${it.waitSeconds})")
+            onTimeout = { c ->
+                c.error = TestDriverException(
+                    "AppiumProxy.getSource() timed out. (waitSeconds=${c.waitSeconds})",
+                    cause = c.error
+                )
             }
         ) {
             e = getSourceCore()
             checkState()
+        }
+
+        if (throwOnFinally && wc.hasError) {
+            throw wc.error!!
         }
 
         return e
@@ -79,28 +102,35 @@ object AppiumProxy {
         try {
             var source = ""
 
-            val retryMaxCount =
-                AppiumServerManager.appiumSessionStartupTimeoutSeconds / TestDriver.testContext.retryIntervalSeconds
-            val action: (RetryContext<Unit>) -> Unit = {
-                val c = it.retryCount + 1
+            fun validateSource(): Boolean {
+                if (source == "") {
+                    return false
+                }
+                if (isiOS) {
+                    if (source.contains("<AppiumAUT>").not() || source.contains("<XCUIElementTypeApplication").not()) {
+                        return false
+                    }
+                }
+                return true
+            }
+
+            val waitSeconds = Const.WAIT_SECONDS_ON_ISSCREEN
+            val maxLoopCount = waitSeconds.toInt() + 1
+            val waitContext = WaitUtility.doUntilTrue(
+                waitSeconds = waitSeconds,
+                intervalSeconds = 1.0,
+                maxLoopCount = maxLoopCount,
+                retryOnError = true,
+                throwOnFinally = false,
+            ) { c ->
                 if (PropertiesManager.enableGetSourceLog) {
-                    TestLog.info("getSourceCore($c)")
+                    val count = c.count
+                    TestLog.info("getSource($count)")
                 }
                 source = TestDriver.appiumDriver.pageSource
+                val r = validateSource()
+                r
             }
-            val retryPredicate: (RetryContext<Unit>) -> Boolean = {
-                if (isiOS) {
-                    source == "" || source.contains("<AppiumAUT>\n  <XCUIElementTypeApplication")
-                } else {
-                    source == ""
-                }
-            }
-            RetryUtility.exec(
-                retryMaxCount = retryMaxCount.toLong(),
-                retryPredicate = retryPredicate,
-                onBeforeRetry = {},
-                action = action
-            )
 
             if (source.isBlank()) {
                 return TestElement()

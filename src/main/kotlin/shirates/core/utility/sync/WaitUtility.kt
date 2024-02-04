@@ -1,7 +1,6 @@
 package shirates.core.utility.sync
 
 import shirates.core.Const
-import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.utility.exception.isProcessError
@@ -64,10 +63,12 @@ object WaitUtility {
                 } catch (t: Throwable) {
                     context.error = t
                     context.onError(context as T)
+
                     if (t.isProcessError) {
-                        throw RerunScenarioException(message = t.message!!, cause = t)
+                        true
+                    } else {
+                        context.retryOnError.not()
                     }
-                    context.retryOnError.not()
                 }
                 if (breakLoop) {
                     return context as T
@@ -79,7 +80,7 @@ object WaitUtility {
                         val e = Exception()
                         val stackTrace = e.stackTraceToString()
                         context.error =
-                            TestDriverException("timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds} $stackTrace)")
+                            TestDriverException("doUntilTrue() timeout(${context.stopWatch.elapsedSeconds}>${context.waitSeconds} $stackTrace)")
                     }
                     context.isTimeout = true
                     context.onTimeout(context as T)
@@ -90,6 +91,10 @@ object WaitUtility {
             }
 
             context.overMaxLoopCount = true
+            val e = Exception()
+            val stackTrace = e.stackTraceToString()
+            context.error =
+                TestDriverException("doUntilTrue() reached maxLoop count.(maxLoopCount=${context.maxLoopCount}, $stackTrace")
             context.onMaxLoop(context as T)
 
             return context
