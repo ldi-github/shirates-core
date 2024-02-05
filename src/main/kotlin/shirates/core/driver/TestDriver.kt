@@ -1186,14 +1186,16 @@ object TestDriver {
                     result
                 }
                 if (r.isTimeout) {
-                    TestLog.warn(
-                        message(
-                            id = "timeoutInSelect",
-                            subject = "select",
-                            arg1 = "$selector",
-                            submessage = "${r.error?.message}"
+                    if (PropertiesManager.enableWarnOnSelectTimeout) {
+                        TestLog.warn(
+                            message(
+                                id = "timeoutInSelect",
+                                subject = "select",
+                                arg1 = "$selector",
+                                submessage = "${r.error?.message}"
+                            )
                         )
-                    )
+                    }
                 }
 
                 if (r.hasError) {

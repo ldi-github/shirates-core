@@ -690,6 +690,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableWarnOnSelectTimeout() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableWarnOnSelectTimeout).isEqualTo(Const.ENABLE_WARN_ON_SELECT_TIMEOUT)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_WARN_ON_SELECT_TIMEOUT.not()
+            PropertiesManager.setPropertyValue("enableWarnOnSelectTimeout", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableWarnOnSelectTimeout).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableGetSourceLog() {
 
         run {
@@ -1263,6 +1281,31 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("enableAutoSyncIos", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableAutoSyncIos).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableRerunScenario() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunScenario).isEqualTo(Const.ENABLE_RERUN_SCENARIO)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableRerunScenario", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunScenario).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableRerunScenario", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunScenario).isEqualTo(value)
         }
     }
 

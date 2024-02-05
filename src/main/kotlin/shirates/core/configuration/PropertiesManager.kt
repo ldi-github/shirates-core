@@ -448,6 +448,16 @@ object PropertiesManager {
         }
 
     /**
+     * enableWarnOnSelectTimeout
+     */
+    val enableWarnOnSelectTimeout: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableWarnOnSelectTimeout")
+                ?: return Const.ENABLE_WARN_ON_SELECT_TIMEOUT
+            return value == "true"
+        }
+
+    /**
      * enableGetSourceLog
      */
     val enableGetSourceLog: Boolean
@@ -728,6 +738,16 @@ object PropertiesManager {
         get() {
             val value = getPropertyValue(propertyName = "enableAutoSyncIos")
                 ?: return Const.ENABLE_AUTO_SYNC_IOS
+            return value == "true"
+        }
+
+    /**
+     * enableRerunScenario
+     */
+    val enableRerunScenario: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableRerunScenario")
+                ?: return Const.ENABLE_RERUN_SCENARIO
             return value == "true"
         }
 

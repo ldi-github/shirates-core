@@ -32,6 +32,7 @@ object Const {
     const val ENABLE_SYNC_LOG = true
     const val ENABLE_RETRY_LOG = true
     const val ENABLE_WARN_ON_RETRY_ERROR = false
+    const val ENABLE_WARN_ON_SELECT_TIMEOUT = false
     const val ENABLE_GET_SOURCE_LOG = false
     const val ENABLE_INNER_MACRO_LOG = false
     const val ENABLE_INNER_COMMAND_LOG = false
@@ -54,6 +55,7 @@ object Const {
     const val TAP_TEST_SELECTOR = ".label"
     const val ENABLE_AUTO_SYNC_ANDROID = false
     const val ENABLE_AUTO_SYNC_IOS = false
+    const val ENABLE_RERUN_SCENARIO = true
     const val CUSTOM_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val ANDROID_SWIPE_OFFSET_Y = -24

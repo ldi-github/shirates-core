@@ -17,6 +17,7 @@ import shirates.core.driver.commandextension.getWebElement
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
+import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.element.ElementCacheUtility
 import shirates.core.utility.sync.WaitUtility
@@ -48,9 +49,10 @@ object AppiumProxy {
         fun checkState(): Boolean {
             if (e.hasEmptyWebViewError) {
                 emptyWebViewErrorCount += 1
-                TestLog.warn("WebView is empty. ($emptyWebViewErrorCount)")
+                TestLog.warn("WebView is empty.($emptyWebViewErrorCount)")
                 if (emptyWebViewErrorCount >= 3) {
-                    throw RerunScenarioException("Could not get content in the WebView. Rerun scenario requested.")
+                    val msg = message(id = "couldNotGetContentOfWebView")
+                    throw RerunScenarioException(msg)
                 }
                 return false
             }

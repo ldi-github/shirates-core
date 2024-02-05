@@ -480,24 +480,25 @@ abstract class UITest : TestDrive {
                 )
             }
         } catch (t: Throwable) {
-            val message = t.message ?: ""
-            if (t is RerunScenarioException ||
-                message.contains("Read timed out") ||
-                message.contains("AppiumProxy.getSource() timed out") ||
-                message.contains("Could not start a new session. Response code 500.") ||
-                message.contains(" is still running after") ||
-                message.contains("Could not proxy command to the remote server.") ||
-                message.contains("current thread is not owner")
-            ) {
+            val m = t.message ?: ""
+            val rerunRequested = t is RerunScenarioException ||
+                    m.contains("Read timed out") ||
+                    m.contains("AppiumProxy.getSource() timed out") ||
+                    m.contains("Could not start a new session. Response code 500.") ||
+                    m.contains(" is still running after") ||
+                    m.contains("Could not proxy command to the remote server.") ||
+                    m.contains("current thread is not owner")
+            if (rerunRequested && PropertiesManager.enableRerunScenario) {
                 TestLog.getLinesOfCurrentTestScenario().forEach {
                     it.deleted = true
                 }
 
                 if (t is RerunScenarioException && t.cause != null) {
-                    TestLog.warn(t.cause?.message ?: t.cause.toString())
+                    TestLog.warn("${t.cause?.message ?: t.cause}")
                 } else {
-                    TestLog.warn(message)
+                    TestLog.warn(m)
                 }
+                TestLog.warn(message(id = "rerunningScenarioRequested"))
 
                 /**
                  * onRerunScenarioHandler
@@ -526,7 +527,14 @@ abstract class UITest : TestDrive {
                     throw t2
                 }
             } else {
-                TestLog.error(t)
+                if (t is RerunScenarioException) {
+                    TestLog.error(t.message)
+                } else {
+                    throw t
+                }
+                if (PropertiesManager.enableRerunScenario.not()) {
+                    TestLog.info("enableRerunScenario=false")
+                }
                 throw t
             }
         } finally {
