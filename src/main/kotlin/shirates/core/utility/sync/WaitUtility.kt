@@ -3,7 +3,7 @@ package shirates.core.utility.sync
 import shirates.core.Const
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
-import shirates.core.utility.exception.isProcessError
+import shirates.core.utility.exception.isRerunRequiredError
 
 object WaitUtility {
 
@@ -64,7 +64,7 @@ object WaitUtility {
                     context.error = t
                     context.onError(context as T)
 
-                    if (t.isProcessError) {
+                    if (t.isRerunRequiredError) {
                         true
                     } else {
                         context.retryOnError.not()

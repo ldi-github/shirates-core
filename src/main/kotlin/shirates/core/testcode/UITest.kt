@@ -509,16 +509,24 @@ abstract class UITest : TestDrive {
                 /**
                  * Rerun scenario after resetting appium session
                  */
+                CodeExecutionContext.scenarioRerunCause = t
+                TestLog.write("--------------------------------------------------")
                 TestLog.write("Rerunning scenario ...")
                 TestDriver.resetAppiumSession()
-                scenarioCore(
-                    scenarioId = scenarioId,
-                    order = order,
-                    desc = desc,
-                    launchApp = launchApp,
-                    testProc = testProc
-                )
+                try {
+                    scenarioCore(
+                        scenarioId = scenarioId,
+                        order = order,
+                        desc = desc,
+                        launchApp = launchApp,
+                        testProc = testProc
+                    )
+                } catch (t2: Throwable) {
+                    TestLog.error(t2)
+                    throw t2
+                }
             } else {
+                TestLog.error(t)
                 throw t
             }
         } finally {

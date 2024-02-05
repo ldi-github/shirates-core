@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.testContext
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.CropInfo
@@ -40,6 +41,7 @@ class CodeExecutionContextTest : UnitTest() {
         context.lastScreenshotImage = BufferedImage(100, 200, 1)
         context.lastCropInfo = CropInfo()
         context.lastScreenshotXmlSource = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        context.scenarioRerunCause = TestDriverException("scenarioRerunCause")
         CodeExecutionContext.macroStack.add("Macro1")
         assertNotCleared()
         context.clear()
@@ -69,6 +71,8 @@ class CodeExecutionContextTest : UnitTest() {
         assertThat(context.lastScreenshotImage).isNull()
         assertThat(context.lastCropInfo).isNull()
         assertThat(context.lastScreenshotXmlSource).isEqualTo("")
+        assertThat(context.scenarioRerunCause).isNull()
+        assertThat(context.isScenarioRerunning).isFalse()
     }
 
     private fun assertNotCleared() {
@@ -93,6 +97,8 @@ class CodeExecutionContextTest : UnitTest() {
         assertThat(context.lastScreenshotImage).isNotNull()
         assertThat(context.lastCropInfo).isNotNull()
         assertThat(context.lastScreenshotXmlSource).isNotEqualTo("")
+        assertThat(context.scenarioRerunCause).isNotNull()
+        assertThat(context.isScenarioRerunning).isTrue()
     }
 
     @Test

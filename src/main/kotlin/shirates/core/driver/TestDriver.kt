@@ -2003,12 +2003,10 @@ object TestDriver {
 
                     if (isAndroid) {
                         if (PropertiesManager.enableAutoSyncAndroid.not()) {
-                            printInfo("AutoSync is disabled.")
                             lastXml = TestElementCache.sourceXml
                         }
                     } else {
                         if (PropertiesManager.enableAutoSyncIos.not()) {
-                            printInfo("AutoSync is disabled.")
                             lastXml = TestElementCache.sourceXml
                         }
                     }
@@ -2173,7 +2171,7 @@ object TestDriver {
             val appElement = select(".XCUIElementTypeApplication")
             return appElement.name == appName
         } catch (t: Throwable) {
-            TestLog.info("Error in isAppCore: $t")
+            TestLog.trace("In isAppCore: $t")
             return false
         }
     }
