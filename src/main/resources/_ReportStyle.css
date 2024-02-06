@@ -250,6 +250,10 @@ td {
     text-align: center;
 }
 
+.diff {
+    text-align: right;
+}
+
 .OK {
     font-weight: bold;
     background-color: greenyellow !important;
