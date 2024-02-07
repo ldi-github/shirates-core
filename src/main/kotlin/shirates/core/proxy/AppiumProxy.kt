@@ -44,21 +44,32 @@ object AppiumProxy {
             return TestElement()
         }
 
-        var e = TestElement()
+        var root = TestElement()
+        var emptyScreenErrorCount = 0
         var emptyWebViewErrorCount = 0
         fun checkState(): Boolean {
-            if (e.hasEmptyWebViewError) {
+            if (root.descendants.isEmpty()) {
+                emptyScreenErrorCount += 1
+                TestLog.warn("Contents is empty.($emptyScreenErrorCount)")
+                if (emptyScreenErrorCount >= 3) {
+                    val msg = message(id = "couldNotGetContentsOfScreen")
+                    throw RerunScenarioException(msg)
+                }
+                return false
+            }
+
+            if (root.hasEmptyWebViewError) {
                 emptyWebViewErrorCount += 1
                 TestLog.warn("WebView is empty.($emptyWebViewErrorCount)")
                 if (emptyWebViewErrorCount >= 3) {
-                    val msg = message(id = "couldNotGetContentOfWebView")
+                    val msg = message(id = "couldNotGetContentsOfWebView")
                     throw RerunScenarioException(msg)
                 }
                 return false
             }
 
             try {
-                val we = e.getWebElement()
+                val we = root.getWebElement()
                 if (isAndroid) {
                     we.getAttribute("package")
                 } else {
@@ -66,7 +77,7 @@ object AppiumProxy {
                 }
             } catch (t: Throwable) {
                 if (PropertiesManager.enableGetSourceLog) {
-                    TestLog.warn("AppiumProxy.getSource() checkState(): $t $e")
+                    TestLog.warn("AppiumProxy.getSource() checkState(): $t $root")
                 }
                 return false
             }
@@ -93,7 +104,7 @@ object AppiumProxy {
                 )
             }
         ) { c ->
-            e = getSourceCore()
+            root = getSourceCore()
             val r = checkState()
             r
         }
@@ -102,7 +113,7 @@ object AppiumProxy {
             throw wc.error!!
         }
 
-        return e
+        return root
     }
 
     private fun getSourceCore(): TestElement {
