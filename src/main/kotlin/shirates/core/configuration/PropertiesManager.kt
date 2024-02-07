@@ -751,6 +751,26 @@ object PropertiesManager {
             return value == "true"
         }
 
+    /**
+     * enableAlwaysRerunOnErrorAndroid
+     */
+    val enableAlwaysRerunOnErrorAndroid: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableAlwaysRerunOnErrorAndroid")
+                ?: return Const.ENABLE_ALWAYS_RERUN_ON_ERROR_ANDROID
+            return value == "true"
+        }
+
+    /**
+     * enableAlwaysRerunOnErrorIos
+     */
+    val enableAlwaysRerunOnErrorIos: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableAlwaysRerunOnErrorIos")
+                ?: return Const.ENABLE_ALWAYS_RERUN_ON_ERROR_IOS
+            return value == "true"
+        }
+
     // Custom --------------------------------------------------
 
     /**

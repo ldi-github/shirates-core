@@ -210,16 +210,25 @@ class TestContext(
             return TestMode.testTimePlatformName ?: profile.platformName
         }
 
+    @SaveTarget
     var irregularHandler: (() -> Unit)? = null
 
+    @SaveTarget
     var onLaunchHandler: (() -> Unit)? = null
 
+    @SaveTarget
     var onSelectErrorHandler: (() -> Unit)? = null
 
+    @SaveTarget
     var onExistErrorHandler: (() -> Unit)? = null
 
+    @SaveTarget
     var onScreenErrorHandler: (() -> Unit)? = null
 
+    @SaveTarget
+    var isRerunRequested: ((t: Throwable) -> Boolean)? = null
+
+    @SaveTarget
     var onRerunScenarioHandler: ((ex: RerunScenarioException) -> Unit)? = null
 
     val screenHandlers = mutableMapOf<String, ((TestDriverOnScreenContext) -> Unit)?>()

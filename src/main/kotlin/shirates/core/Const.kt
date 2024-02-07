@@ -56,6 +56,8 @@ object Const {
     const val ENABLE_AUTO_SYNC_ANDROID = false
     const val ENABLE_AUTO_SYNC_IOS = false
     const val ENABLE_RERUN_SCENARIO = true
+    const val ENABLE_ALWAYS_RERUN_ON_ERROR_ANDROID = false
+    const val ENABLE_ALWAYS_RERUN_ON_ERROR_IOS = false
     const val CUSTOM_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val ANDROID_SWIPE_OFFSET_Y = -24

@@ -480,24 +480,61 @@ abstract class UITest : TestDrive {
                 )
             }
         } catch (t: Throwable) {
-            val m = t.message ?: ""
-            val rerunRequested = t is RerunScenarioException ||
-                    m.contains("Read timed out") ||
-                    m.contains("AppiumProxy.getSource() timed out") ||
-                    m.contains("Could not start a new session. Response code 500.") ||
-                    m.contains(" is still running after") ||
-                    m.contains("Could not proxy command to the remote server.") ||
-                    m.contains("current thread is not owner")
-            if (rerunRequested && PropertiesManager.enableRerunScenario) {
+            val m = t.message ?: t.javaClass.simpleName
+
+            fun isRerunRequested(): Boolean {
+                TestLog.info("enableRerunScenario=${PropertiesManager.enableRerunScenario}")
+
+                if (PropertiesManager.enableRerunScenario.not()) {
+                    return false
+                }
+
+                if (TestMode.isNoLoadRun) {
+                    TestLog.info("isNoLoadRun=${TestMode.isNoLoadRun}")
+                    return false
+                }
+                if (t is TestAbortedException) {
+                    return false
+                }
+                if (t is RerunScenarioException) {
+                    return true
+                }
+
+                if (testContext.isRerunRequested != null) {
+                    val r = testContext.isRerunRequested!!.invoke(t)
+                    TestLog.info("testContext.isRerunRequested=${testContext.isRerunRequested}")
+                    return r
+                }
+
+                val containsMessage = m.contains("Read timed out") ||
+                        m.contains("AppiumProxy.getSource() timed out") ||
+                        m.contains("Could not start a new session. Response code 500.") ||
+                        m.contains(" is still running after") ||
+                        m.contains("Could not proxy command to the remote server.") ||
+                        m.contains("current thread is not owner")
+                if (containsMessage) {
+                    return true
+                }
+
+                if (isAndroid) {
+                    val rerunRequested = PropertiesManager.enableAlwaysRerunOnErrorAndroid
+                    TestLog.info("enableAlwaysRerunOnErrorAndroid=${rerunRequested}")
+                    return rerunRequested
+                } else {
+                    val rerunRequested = PropertiesManager.enableAlwaysRerunOnErrorIos
+                    TestLog.info("enableAlwaysRerunOnErrorAndroid=${rerunRequested}")
+                    return rerunRequested
+                }
+            }
+
+            val rerunRequested = isRerunRequested()
+
+            if (rerunRequested) {
                 TestLog.getLinesOfCurrentTestScenario().forEach {
                     it.deleted = true
                 }
 
-                if (t is RerunScenarioException && t.cause != null) {
-                    TestLog.warn("${t.cause?.message ?: t.cause}")
-                } else {
-                    TestLog.warn(m)
-                }
+                TestLog.warn(m)
                 TestLog.warn(message(id = "rerunningScenarioRequested"))
 
                 /**
@@ -523,7 +560,6 @@ abstract class UITest : TestDrive {
                         testProc = testProc
                     )
                 } catch (t2: Throwable) {
-                    TestLog.error(t2)
                     throw t2
                 }
             } else {
@@ -532,10 +568,6 @@ abstract class UITest : TestDrive {
                 } else {
                     throw t
                 }
-                if (PropertiesManager.enableRerunScenario.not()) {
-                    TestLog.info("enableRerunScenario=false")
-                }
-                throw t
             }
         } finally {
             if (UITestCallbackExtension.deletedAnnotation != null) {

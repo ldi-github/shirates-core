@@ -1310,6 +1310,56 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableAlwaysRerunOnErrorAndroid() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorAndroid).isEqualTo(Const.ENABLE_ALWAYS_RERUN_ON_ERROR_ANDROID)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorAndroid).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorAndroid).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableAlwaysRerunOnErrorIos() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorIos).isEqualTo(Const.ENABLE_ALWAYS_RERUN_ON_ERROR_IOS)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorIos", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorIos).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorIos", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorIos).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun tapTestSelector() {
 
         run {

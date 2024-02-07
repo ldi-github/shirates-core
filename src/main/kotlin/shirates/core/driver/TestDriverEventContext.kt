@@ -9,6 +9,7 @@ class TestDriverEventContext {
     var onSelectErrorHandler: (() -> Unit)? = null
     var onExistErrorHandler: (() -> Unit)? = null
     var onScreenErrorHandler: (() -> Unit)? = null
+    var onRequestingRerunHandler: ((t: Throwable) -> Boolean)? = null
     var onRerunScenarioHandler: ((ex: RerunScenarioException) -> Unit)? = null
 
 }

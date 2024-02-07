@@ -176,6 +176,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             testContext.onSelectErrorHandler = eventContext.onSelectErrorHandler
             testContext.onExistErrorHandler = eventContext.onExistErrorHandler
             testContext.onScreenErrorHandler = eventContext.onScreenErrorHandler
+            testContext.isRerunRequested = eventContext.onRequestingRerunHandler
             testContext.onRerunScenarioHandler = eventContext.onRerunScenarioHandler
 
             // printCapabilities

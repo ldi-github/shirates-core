@@ -563,18 +563,9 @@ object TestDriver {
             action = getInitFunc(profile = profile, capabilities = capabilities)
         )
 
-        // Write log on error
         val exception = retryContext.exception
         if (exception != null) {
-            if (retryContext.wrappedError != null) {
-                TestLog.error(retryContext.wrappedError!!)
-                TestLog.write(retryContext.wrappedError.toString())
-                throw retryContext.wrappedError!!
-            } else {
-                TestLog.error(exception)
-                TestLog.write(exception.toString())
-                throw exception
-            }
+            throw exception
         }
 
         // Save capabilities
@@ -900,7 +891,6 @@ object TestDriver {
                 androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail
             } catch (t: Throwable) {
                 val e = TestDriverException("[Health Check] failed. ${t.message ?: ""}", cause = t)
-                TestLog.warn(e.message)
                 throw e
             }
 
