@@ -761,7 +761,7 @@ object TestDriver {
                 // socket hang up
                 // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
 
-                val terminateEmulatorProcess = (context.retryCount == context.retryMaxCount)
+                val terminateEmulatorProcess = context.retryCount > 1
                 restartAndroid(profile = profile, terminateEmulatorProcess = terminateEmulatorProcess)
             } else if (isiOS) {
                 val udid = initialCapabilities["udid"] ?: profile.udid
@@ -846,6 +846,10 @@ object TestDriver {
             val msg = message(id = "couldNotStartANewSession")
             context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
             return false
+        } else if (message.contains("Appium Settings app is not running after")) {
+            val msg = message
+            context.wrappedError = TestDriverException(message = msg, cause = context.exception)
+            return true
         } else {
             TestLog.warn(message)
             TestLog.outputLogDump()
@@ -865,7 +869,8 @@ object TestDriver {
             throw TestDriverException(msg)
         }
         if (profile.udid.isNotBlank() && profile.udid != udid) {
-            throw TestDriverException("Connected udid is not correct. (profile.udid=${profile.udid}, actual=$udid)")
+            TestLog.warn("Another udid is reassigned. (profile.udid=${profile.udid}, actual=$udid)")
+            profile.udid = udid
         }
 
         /**
