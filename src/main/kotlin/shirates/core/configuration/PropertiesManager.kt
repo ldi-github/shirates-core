@@ -771,6 +771,15 @@ object PropertiesManager {
             return value == "true"
         }
 
+    /**
+     * rerunScenarioWords
+     */
+    val rerunScenarioWords: String
+        get() {
+            return getPropertyValue(propertyName = "rerunScenarioWords")
+                ?: Const.RERUN_SCENARIO_WORDS
+        }
+
     // Custom --------------------------------------------------
 
     /**

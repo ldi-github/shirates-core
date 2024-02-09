@@ -291,6 +291,18 @@ class TestElement(
         }
 
     /**
+     * webViewElement
+     */
+    val webViewElement: TestElement?
+        get() {
+            if (isAndroid) {
+                return descendantsAndSelf.firstOrNull() { it.className == "android.webkit.WebView" }
+            } else {
+                return descendantsAndSelf.firstOrNull() { it.type == "XCUIElementTypeWebView" }
+            }
+        }
+
+    /**
      * hasEmptyWebViewError
      */
     val hasEmptyWebViewError: Boolean
@@ -298,29 +310,15 @@ class TestElement(
             if (isWebElementMode) {
                 return false
             }
-            if (isAndroid) {
-                val webView = descendantsAndSelf.firstOrNull() { it.className == "android.webkit.WebView" }
-                if (webView == null) {
-                    return false
-                }
-                val webViewElements = webView.descendantsAndSelf
-                val hasError = webViewElements.isEmpty()
-                if (hasError) {
-                    lastError = IllegalStateException("EmptyWebViewError.")
-                }
-                return hasError
-            } else {
-                val webView = this.descendantsAndSelf.firstOrNull() { it.type == "XCUIElementTypeWebView" }
-                if (webView == null) {
-                    return false
-                }
-                val webViewElements = webView.descendantsAndSelf
-                val hasError = webViewElements.count() < 6
-                if (hasError) {
-                    lastError = IllegalStateException("EmptyWebViewError.")
-                }
-                return hasError
+            val webView = webViewElement ?: return false
+            val webViewElements = webView.descendantsAndSelf
+            val hasError =
+                if (isAndroid) webViewElements.isEmpty()
+                else webViewElements.count() < 6
+            if (hasError) {
+                lastError = IllegalStateException("EmptyWebViewError.")
             }
+            return hasError
         }
 
     companion object {

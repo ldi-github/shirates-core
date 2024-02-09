@@ -47,23 +47,31 @@ object AppiumProxy {
         var root = TestElement()
         var emptyScreenErrorCount = 0
         var emptyWebViewErrorCount = 0
+        var getWebElementErrorCount = 0
+
+        fun outputCheckLog(count: Int, msg: String) {
+            if (count == 1) {
+                TestLog.info(msg, PropertiesManager.enableGetSourceLog)
+            } else {
+                TestLog.warn(msg)
+            }
+        }
+
         fun checkState(): Boolean {
             if (root.descendants.isEmpty()) {
                 emptyScreenErrorCount += 1
-                TestLog.warn("Contents is empty.($emptyScreenErrorCount)")
+                outputCheckLog(count = emptyScreenErrorCount, msg = "Contents is empty.($emptyScreenErrorCount)")
                 if (emptyScreenErrorCount >= 3) {
-                    val msg = message(id = "couldNotGetContentsOfScreen")
-                    throw RerunScenarioException(msg)
+                    throw RerunScenarioException(message(id = "couldNotGetContentsOfScreen"))
                 }
                 return false
             }
 
             if (root.hasEmptyWebViewError) {
                 emptyWebViewErrorCount += 1
-                TestLog.warn("WebView is empty.($emptyWebViewErrorCount)")
+                outputCheckLog(count = emptyWebViewErrorCount, msg = "WebView is empty.($emptyWebViewErrorCount)")
                 if (emptyWebViewErrorCount >= 3) {
-                    val msg = message(id = "couldNotGetContentsOfWebView")
-                    throw RerunScenarioException(msg)
+                    throw RerunScenarioException(message(id = "couldNotGetContentsOfWebView"))
                 }
                 return false
             }
@@ -76,9 +84,11 @@ object AppiumProxy {
                     we.getAttribute("label")
                 }
             } catch (t: Throwable) {
-                if (PropertiesManager.enableGetSourceLog) {
-                    TestLog.warn("AppiumProxy.getSource() checkState(): $t $root")
-                }
+                getWebElementErrorCount += 1
+                outputCheckLog(
+                    count = getWebElementErrorCount,
+                    msg = "AppiumProxy.getSource() checkState(): $t $root ${t.cause ?: ""}"
+                )
                 return false
             }
 

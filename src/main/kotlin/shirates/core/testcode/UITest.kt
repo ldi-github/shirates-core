@@ -506,12 +506,8 @@ abstract class UITest : TestDrive {
                     return r
                 }
 
-                val containsMessage = m.contains("Read timed out") ||
-                        m.contains("AppiumProxy.getSource() timed out") ||
-                        m.contains("Could not start a new session. Response code 500.") ||
-                        m.contains(" is still running after") ||
-                        m.contains("Could not proxy command to the remote server.") ||
-                        m.contains("current thread is not owner")
+                val rerunScenarioWords = PropertiesManager.rerunScenarioWords.split("||")
+                val containsMessage = rerunScenarioWords.any() { m.contains(it) }
                 if (containsMessage) {
                     return true
                 }
@@ -560,6 +556,7 @@ abstract class UITest : TestDrive {
                         testProc = testProc
                     )
                 } catch (t2: Throwable) {
+                    TestLog.warn(message(id = "rerunFailed"))
                     throw t2
                 }
             } else {

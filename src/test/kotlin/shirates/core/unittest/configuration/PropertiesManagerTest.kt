@@ -1360,6 +1360,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun rerunScenarioWords() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.rerunScenarioWords).isEqualTo(Const.RERUN_SCENARIO_WORDS)
+        }
+        run {
+            // Arrange
+            val value = "word1||word2"
+            PropertiesManager.setPropertyValue("rerunScenarioWords", value)
+            // Act, Assert
+            assertThat(PropertiesManager.rerunScenarioWords).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun tapTestSelector() {
 
         run {

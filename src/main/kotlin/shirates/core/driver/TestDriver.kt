@@ -729,11 +729,7 @@ object TestDriver {
                     AndroidDeviceUtility.reboot(udid = profile.udid)
                 }
             } catch (t: Throwable) {
-                if (t.message!!.contains("device offline")) {
-                    AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
-                } else {
-                    throw TestDriverException("Failed rebooting Android device. ($t)", cause = t)
-                }
+                throw TestDriverException("Failed rebooting Android device. ($t)", cause = t)
             }
         }
 

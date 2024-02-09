@@ -569,7 +569,7 @@ object AndroidDeviceUtility {
     ): ShellUtility.ShellResult {
 
         if (isEmulator) {
-            return restartEmulator(testProfile = testProfile)
+            return restartEmulator(testProfile = testProfile).shellResult!!
         } else {
             return reboot(udid = testProfile.udid)
         }
@@ -580,10 +580,11 @@ object AndroidDeviceUtility {
      */
     fun restartEmulator(
         testProfile: TestProfile
-    ): ShellUtility.ShellResult {
+    ): AndroidDeviceInfo {
 
         shutdownEmulatorByUdid(testProfile.udid)
-        val r = startEmulator(testProfile)
+        val emulatorProfile = getEmulatorProfile(testProfile = testProfile)
+        val r = startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
         return r
     }
 
