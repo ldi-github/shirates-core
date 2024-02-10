@@ -219,7 +219,17 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         }
 
         testContext.saveState()
-        uiTest?.beforeEach(context)
+        try {
+            uiTest?.beforeEach(context)
+        } catch (t: Throwable) {
+            if (PropertiesManager.enableRerunScenario) {
+                TestLog.warn("$t ${t.stackTraceToString()}")
+                uiTest?.beforeEach(context)
+            } else {
+                TestLog.error("$t ${t.stackTraceToString()}")
+                throw t
+            }
+        }
         lastElement.lastError = null
 
         val lap = testFunctionWatch.lap("setupExecuted")

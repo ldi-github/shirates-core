@@ -1378,6 +1378,69 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableRerunOnScreenshotBlackout() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunOnScreenshotBlackout).isEqualTo(Const.ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableRerunOnScreenshotBlackout", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunOnScreenshotBlackout).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableRerunOnScreenshotBlackout", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunOnScreenshotBlackout).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun screenshotBlackoutThreshold() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.screenshotBlackoutThreshold).isEqualTo(Const.SCREENSHOT_BLACKOUT_THRESHOLD)
+        }
+        run {
+            // Arrange
+            val value = 0.95
+            PropertiesManager.setPropertyValue("screenshotBlackoutThreshold", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.screenshotBlackoutThreshold).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = 0.89
+            PropertiesManager.setPropertyValue("screenshotBlackoutThreshold", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.screenshotBlackoutThreshold
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("screenshotBlackoutThreshold is allowed from 0.9 to 1.0. (0.89)")
+        }
+        run {
+            // Arrange
+            val value = 1.1
+            PropertiesManager.setPropertyValue("screenshotBlackoutThreshold", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.screenshotBlackoutThreshold
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("screenshotBlackoutThreshold is allowed from 0.9 to 1.0. (1.1)")
+        }
+    }
+
+    @Test
     fun tapTestSelector() {
 
         run {

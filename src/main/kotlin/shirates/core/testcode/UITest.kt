@@ -556,7 +556,7 @@ abstract class UITest : TestDrive {
                         testProc = testProc
                     )
                 } catch (t2: Throwable) {
-                    TestLog.warn(message(id = "rerunFailed"))
+                    TestLog.error(message(id = "rerunFailed"))
                     throw t2
                 }
             } else {

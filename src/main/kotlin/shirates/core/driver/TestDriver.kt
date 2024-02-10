@@ -864,13 +864,9 @@ object TestDriver {
          */
         val udid = mAppiumDriver!!.capabilities.getUdid()
         if (udid.isBlank()) {
-            val msg = "udid not found in capablities."
+            val msg = "udid not found in capabilities."
             TestLog.warn(msg)
             throw TestDriverException(msg)
-        }
-        if (profile.udid.isNotBlank() && profile.udid != udid) {
-            TestLog.warn("Another udid is reassigned. (profile.udid=${profile.udid}, actual=$udid)")
-            profile.udid = udid
         }
 
         /**
@@ -880,6 +876,9 @@ object TestDriver {
             TestLog.info("[Health check] start")
 
             try {
+                if (profile.udid.isNotBlank() && profile.udid != udid) {
+                    throw TestDriverException("Connected udid is not correct. (profile.udid=${profile.udid}, actual=$udid)")
+                }
                 syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
                 val tapTestElement = testDrive.select(PropertiesManager.tapTestSelector)
                 if (tapTestElement.isFound) {
@@ -1689,6 +1688,7 @@ object TestDriver {
             Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
         }
 
+        var screenshotException: Throwable? = null
         try {
             val screenshot = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES)
             val screenshotImage = screenshot.toBufferedImage()
@@ -1708,8 +1708,15 @@ object TestDriver {
             )
             CodeExecutionContext.lastScreenshot = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
+
+            if (PropertiesManager.enableRerunOnScreenshotBlackout) {
+                val threshold = PropertiesManager.screenshotBlackoutThreshold
+                if (BufferedImageUtility.isBlackout(image = screenshotImage, threshold = threshold)) {
+                    screenshotException = RerunScenarioException(message(id = "screenIsBlackout", value = "$threshold"))
+                }
+            }
         } catch (t: Throwable) {
-            TestLog.warn("screenshot $t + ${t.stackTrace}")
+            screenshotException = t
         }
 
         val screenshotLine = TestLog.write(
@@ -1724,6 +1731,11 @@ object TestDriver {
         if (withXmlSource && testContext.useCache) {
             val fileName = screenshotFileName.replace(".png", ".xml")
             outputXmlSource(filePath = TestLog.directoryForLog.resolve(fileName))
+        }
+
+        if (screenshotException != null) {
+            TestLog.warn("screenshot ${screenshotException.message}")
+            throw screenshotException
         }
 
         return this

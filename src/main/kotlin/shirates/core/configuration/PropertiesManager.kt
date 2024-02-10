@@ -780,6 +780,31 @@ object PropertiesManager {
                 ?: Const.RERUN_SCENARIO_WORDS
         }
 
+    /**
+     * enableRerunOnScreenshotBlackout
+     */
+    val enableRerunOnScreenshotBlackout: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableRerunOnScreenshotBlackout")
+                ?: return Const.ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT
+            return value == "true"
+        }
+
+    /**
+     * screenshotBlackoutThreshold
+     */
+    val screenshotBlackoutThreshold: Double
+        get() {
+            val value =
+                getPropertyValue(propertyName = "screenshotBlackoutThreshold")?.toDoubleOrNull()
+                    ?: return Const.SCREENSHOT_BLACKOUT_THRESHOLD
+            if (value < 0.9 || value > 1.0) {
+                throw TestConfigException(message(id = "screenshotBlackoutThreshold", value = "$value"))
+            }
+
+            return value
+        }
+
     // Custom --------------------------------------------------
 
     /**
