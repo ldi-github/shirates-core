@@ -582,8 +582,11 @@ object AndroidDeviceUtility {
         testProfile: TestProfile
     ): AndroidDeviceInfo {
 
+        TestLog.info("Shutting down emulator. ($testProfile)")
         shutdownEmulatorByUdid(testProfile.udid)
         val emulatorProfile = getEmulatorProfile(testProfile = testProfile)
+
+        TestLog.info("Starting emulator. ($testProfile)")
         val r = startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
         return r
     }

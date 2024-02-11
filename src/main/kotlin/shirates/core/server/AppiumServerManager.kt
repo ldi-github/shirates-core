@@ -156,6 +156,7 @@ object AppiumServerManager {
         run {
             val pid = ProcessUtility.getPid(port = port)
             if (pid != null) {
+                TestLog.info("Terminating Appium Server. (pid=$pid, port=$port)")
                 ProcessUtility.terminateProcess(pid = pid)
             }
         }
@@ -172,6 +173,7 @@ object AppiumServerManager {
 
         executeResultHandler = DefaultExecuteResultHandler()
         TestLog.info("${commandLine.executable} ${commandLine.arguments.joinToString(" ")}")
+        TestLog.info("Starting Appium Server. (args=${commandTokens.joinToString(",")})")
         executor.execute(commandLine, executeResultHandler)
         Thread.sleep(2000)
 
