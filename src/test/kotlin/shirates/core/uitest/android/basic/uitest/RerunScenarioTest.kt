@@ -21,6 +21,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "true")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
         var count = 0
 
         assertThatThrownBy {
@@ -41,6 +42,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "false")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
         var count = 0
 
         assertThatThrownBy {
@@ -62,6 +64,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "true")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
 
         assertThatThrownBy {
             scenario {
@@ -80,6 +83,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "false")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
         var count = 0
 
         assertThatThrownBy {
@@ -100,6 +104,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "false")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
         var count = 0
 
         assertThatThrownBy {
@@ -120,6 +125,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "false")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
         var count = 0
 
         assertThatThrownBy {
@@ -145,6 +151,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "false")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
         var count = 0
 
         assertThatThrownBy {
@@ -170,6 +177,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "true")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
 
         assertThatThrownBy {
             scenario {
@@ -190,6 +198,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "false")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
         var count = 0
 
         assertThatThrownBy {
@@ -210,6 +219,7 @@ class RerunScenarioTest : UITest() {
 
         PropertiesManager.setPropertyValue("enableRerunScenario", "true")
         PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "false")
+        PropertiesManager.setPropertyValue("scenarioMaxCount", "2")
         var count = 0
 
         assertThatThrownBy {

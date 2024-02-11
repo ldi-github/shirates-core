@@ -1716,7 +1716,9 @@ object TestDriver {
             if (PropertiesManager.enableRerunOnScreenshotBlackout) {
                 val threshold = PropertiesManager.screenshotBlackoutThreshold
                 if (BufferedImageUtility.isBlackout(image = screenshotImage, threshold = threshold)) {
-                    screenshotException = RerunScenarioException(message(id = "screenIsBlackout", value = "$threshold"))
+                    val share = BufferedImageUtility.getLargestShare(image = screenshotImage)
+                    screenshotException =
+                        RerunScenarioException(message(id = "screenIsBlackout", value = "$share > $threshold"))
                 }
             }
         } catch (t: Throwable) {

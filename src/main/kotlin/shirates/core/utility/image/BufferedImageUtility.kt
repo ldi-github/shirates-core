@@ -47,17 +47,26 @@ object BufferedImageUtility {
     }
 
     /**
-     * isBlackout
+     * getLargestShare
      */
-    fun isBlackout(image: BufferedImage, threshold: Double = PropertiesManager.screenshotBlackoutThreshold): Boolean {
-
+    fun getLargestShare(image: BufferedImage): Double {
         val map = getRGBCountMap(image)
 
         val max = map.maxBy { it.value }
         val maxCount = max.value
         val pixelCount = image.width * image.height
         val share = maxCount.toDouble() / pixelCount
+        return share
+    }
+
+    /**
+     * isBlackout
+     */
+    fun isBlackout(image: BufferedImage, threshold: Double = PropertiesManager.screenshotBlackoutThreshold): Boolean {
+
+        val share = getLargestShare(image)
         val result = share > threshold
         return result
     }
+
 }

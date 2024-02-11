@@ -1360,6 +1360,62 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun scenarioTimeoutSeconds() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.scenarioTimeoutSeconds).isEqualTo(Const.SCENARIO_TIMEOUT_SECONDS)
+        }
+        run {
+            // Arrange
+            val value = 0.0
+            PropertiesManager.setPropertyValue("scenarioTimeoutSeconds", "$value")
+            // Act, Assert
+            assertThat(PropertiesManager.scenarioTimeoutSeconds).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = -1.0
+            PropertiesManager.setPropertyValue("scenarioTimeoutSeconds", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.scenarioTimeoutSeconds
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("scenarioTimeoutSeconds should be set to 0 or higher. (-1.0)")
+        }
+    }
+
+    @Test
+    fun scenarioMaxCount() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.scenarioMaxCount).isEqualTo(Const.SCENARIO_MAX_COUNT)
+        }
+        run {
+            // Arrange
+            val value = 1
+            PropertiesManager.setPropertyValue("scenarioMaxCount", "$value")
+            // Act, Assert
+            assertThat(PropertiesManager.scenarioMaxCount).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = 0
+            PropertiesManager.setPropertyValue("scenarioMaxCount", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.scenarioMaxCount
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("scenarioMaxCount should be set to 1 or higher. (0)")
+        }
+    }
+
+    @Test
     fun rerunScenarioWords() {
 
         run {

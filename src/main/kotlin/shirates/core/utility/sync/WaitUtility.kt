@@ -64,11 +64,8 @@ object WaitUtility {
                     context.error = t
                     context.onError(context as T)
 
-                    if (t.isRerunRequiredError) {
-                        true
-                    } else {
-                        context.retryOnError.not()
-                    }
+                    val retry = context.retryOnError || t.isRerunRequiredError
+                    retry.not()
                 }
                 if (breakLoop) {
                     return context as T
@@ -93,8 +90,12 @@ object WaitUtility {
             context.overMaxLoopCount = true
             val e = Exception()
             val stackTrace = e.stackTraceToString()
+            val lastError = context.error
             context.error =
-                TestDriverException("doUntilTrue() reached maxLoop count.(maxLoopCount=${context.maxLoopCount}), $stackTrace")
+                TestDriverException(
+                    "doUntilTrue() reached maxLoop count.(maxLoopCount=${context.maxLoopCount}), $stackTrace",
+                    cause = lastError
+                )
             context.onMaxLoop(context as T)
 
             return context

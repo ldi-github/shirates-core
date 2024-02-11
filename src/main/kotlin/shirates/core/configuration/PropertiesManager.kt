@@ -772,6 +772,35 @@ object PropertiesManager {
         }
 
     /**
+     * scenarioTimeoutSeconds
+     */
+    val scenarioTimeoutSeconds: Double
+        get() {
+            val value =
+                getPropertyValue(propertyName = "scenarioTimeoutSeconds")?.toDoubleOrNull()
+                    ?: return Const.SCENARIO_TIMEOUT_SECONDS
+            if (value < 0) {
+                throw TestConfigException(message(id = "scenarioTimeoutSeconds", value = "$value"))
+            }
+
+            return value
+        }
+
+    /**
+     * scenarioMaxCount
+     */
+    val scenarioMaxCount: Int
+        get() {
+            val value = getPropertyValue(propertyName = "scenarioMaxCount")?.toIntOrNull()
+                ?: return Const.SCENARIO_MAX_COUNT
+            if (value < 1) {
+                throw TestConfigException(message(id = "scenarioMaxCount", value = "$value"))
+            }
+
+            return value
+        }
+
+    /**
      * rerunScenarioWords
      */
     val rerunScenarioWords: String

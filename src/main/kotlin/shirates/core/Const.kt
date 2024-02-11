@@ -58,6 +58,8 @@ object Const {
     const val ENABLE_RERUN_SCENARIO = true
     const val ENABLE_ALWAYS_RERUN_ON_ERROR_ANDROID = false
     const val ENABLE_ALWAYS_RERUN_ON_ERROR_IOS = false
+    const val SCENARIO_TIMEOUT_SECONDS = 60 * 15.0
+    const val SCENARIO_MAX_COUNT = 3
     const val RERUN_SCENARIO_WORDS =
         "Read timed out||AppiumProxy.getSource() timed out||Could not start a new session. Response code 500.|| is still running after||Could not proxy command to the remote server.||current thread is not owner"
     const val ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT = true
@@ -147,7 +149,7 @@ object Const {
     internal const val SHELL_RESULT_WAIT_FOR_SECONDS: Double = 30.0
     internal const val EMULATOR_REBOOT_WAIT_SECONDS: Double = 60.0
     internal const val EMULATOR_BOOTANIMATION_WAIT_SECONDS: Double = 15.0
-    internal const val EMULATOR_SHUTDOWN_WAIT_SECONDS: Double = 20.0
+    internal const val EMULATOR_SHUTDOWN_WAIT_SECONDS: Double = 60.0
 
     /**
      * others
