@@ -172,8 +172,8 @@ object AppiumServerManager {
         executor.streamHandler = handler
 
         executeResultHandler = DefaultExecuteResultHandler()
+        TestLog.info("Starting Appium Server.")
         TestLog.info("${commandLine.executable} ${commandLine.arguments.joinToString(" ")}")
-        TestLog.info("Starting Appium Server. (args=${commandTokens.joinToString(",")})")
         executor.execute(commandLine, executeResultHandler)
         Thread.sleep(2000)
 
