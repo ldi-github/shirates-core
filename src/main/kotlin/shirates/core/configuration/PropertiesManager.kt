@@ -700,6 +700,16 @@ object PropertiesManager {
             return value == "true"
         }
 
+//    /**
+//     * emulatorPort
+//     */
+//    val emulatorPort: Int
+//        get() {
+//            val value = getPropertyValue(propertyName = "emulatorPort")?.toIntOrNull()
+//                ?: return Const.EMULATOR_PORT
+//            return value
+//        }
+
     // TestDriver --------------------------------------------------
 
     /**
@@ -801,15 +811,6 @@ object PropertiesManager {
         }
 
     /**
-     * rerunScenarioWords
-     */
-    val rerunScenarioWords: String
-        get() {
-            return getPropertyValue(propertyName = "rerunScenarioWords")
-                ?: Const.RERUN_SCENARIO_WORDS
-        }
-
-    /**
      * enableRerunOnScreenshotBlackout
      */
     val enableRerunOnScreenshotBlackout: Boolean
@@ -833,6 +834,17 @@ object PropertiesManager {
 
             return value
         }
+
+    /**
+     * enableRestartDeviceOnResettingAppiumSession
+     */
+    val enableRestartDeviceOnResettingAppiumSession: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableRestartDeviceOnResettingAppiumSession")
+                ?: return Const.ENABLE_RESTART_DEVICE_ON_RESETTING_APPIUM_SESSION
+            return value == "true"
+        }
+
 
     // Custom --------------------------------------------------
 

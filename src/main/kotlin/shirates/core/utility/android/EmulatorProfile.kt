@@ -2,7 +2,8 @@ package shirates.core.utility.android
 
 class EmulatorProfile(
     val profileName: String,
-    val emulatorOptions: MutableList<String> = mutableListOf()
+    val emulatorOptions: MutableList<String> = mutableListOf(),
+    val emulatorPort: Int? = null
 ) {
     val avdName: String = AndroidDeviceUtility.getAvdName(profileName = profileName)
     val platformVersion: String
@@ -15,5 +16,22 @@ class EmulatorProfile(
         } else {
             platformVersion = ""
         }
+    }
+
+    /**
+     * getCommandArgs
+     */
+    fun getCommandArgs(): List<String> {
+
+        val args = mutableListOf<String>()
+        args.add("emulator")
+        args.add("@$avdName")
+        if (emulatorPort != null) {
+            args.add("-port")
+            args.add("$emulatorPort")
+        }
+        args.addAll(emulatorOptions)
+
+        return args
     }
 }

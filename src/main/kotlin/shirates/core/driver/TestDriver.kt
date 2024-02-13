@@ -20,6 +20,7 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isSimulator
+import shirates.core.driver.TestMode.isVirtualDevice
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
@@ -1718,7 +1719,13 @@ object TestDriver {
                 if (BufferedImageUtility.isBlackout(image = screenshotImage, threshold = threshold)) {
                     val share = BufferedImageUtility.getLargestShare(image = screenshotImage)
                     screenshotException =
-                        RerunScenarioException(message(id = "screenIsBlackout", value = "$share > $threshold"))
+                        RerunScenarioException(
+                            message(
+                                id = "screenshotIsBlackout",
+                                arg1 = "$share",
+                                arg2 = "$threshold"
+                            )
+                        )
                 }
             }
         } catch (t: Throwable) {
@@ -2317,9 +2324,11 @@ object TestDriver {
     /**
      * resetAppiumSession
      */
-    fun resetAppiumSession() {
+    fun resetAppiumSession(
+        restartDevice: Boolean = PropertiesManager.enableRestartDeviceOnResettingAppiumSession
+    ) {
 
-        TestLog.info("Resetting Appium session.")
+        TestLog.info("[Resetting Appium session]")
 
         /**
          * Shutdown AppiumServer
@@ -2329,15 +2338,17 @@ object TestDriver {
         /**
          * Restart device
          */
-        if (isAndroid) {
-            val device = AndroidDeviceUtility.currentAndroidDeviceInfo
-            if (device != null) {
-                AndroidDeviceUtility.reboot(testProfile = testProfile)
+        if (isVirtualDevice && restartDevice) {
+            if (isAndroid) {
+                val device = AndroidDeviceUtility.currentAndroidDeviceInfo
+                if (device != null) {
+                    if (testProfile.udid.isNotBlank()) {
+                        AndroidDeviceUtility.shutdownEmulatorByUdid(testProfile.udid)
+                    }
+                }
+            } else {
+                IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
             }
-        } else if (isiOS && isSimulator) {
-//            IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
-//            IosDeviceUtility.stopSimulator(udid = testProfile.udid)
-            IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
         }
 
         Thread.sleep(500)

@@ -32,6 +32,7 @@ class TestProfile(var profileName: String = "") {
 
     // Emulator/Simulator --------------------------------------------------
     var emulatorOptions: String? = null
+    var emulatorPort: String? = null
     var deviceStartupTimeoutSeconds: String? = null
     var deviceWaitSecondsAfterStartup: String? = null
 

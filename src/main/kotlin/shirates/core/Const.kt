@@ -51,6 +51,7 @@ object Const {
     const val IMAGE_MATCHING_THRESHOLD = 1.0
     const val IMAGE_MATCHING_CANDIDATE_COUNT = 5
     const val ENABLE_WDA_INSTALL_OPTIMIZATION = true
+    const val EMULATOR_PORT = 5554
     const val ENABLE_HEALTH_CHECK = true
     const val TAP_TEST_SELECTOR = ".label"
     const val ENABLE_AUTO_SYNC_ANDROID = false
@@ -64,6 +65,7 @@ object Const {
         "Read timed out||AppiumProxy.getSource() timed out||Could not start a new session. Response code 500.|| is still running after||Could not proxy command to the remote server.||current thread is not owner"
     const val ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT = true
     const val SCREENSHOT_BLACKOUT_THRESHOLD = 0.99
+    const val ENABLE_RESTART_DEVICE_ON_RESETTING_APPIUM_SESSION = false
     const val CUSTOM_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val ANDROID_SWIPE_OFFSET_Y = -24

@@ -1209,6 +1209,24 @@ class PropertiesManagerTest : UnitTest() {
         }
     }
 
+//    @Test
+//    fun emulatorPort() {
+//
+//        run {
+//            // Arrange
+//            PropertiesManager.clear()
+//            // Act, Assert
+//            assertThat(PropertiesManager.emulatorPort).isEqualTo(Const.EMULATOR_PORT)
+//        }
+//        run {
+//            // Arrange
+//            val value = 5558
+//            PropertiesManager.setPropertyValue("emulatorPort", value.toString())
+//            // Act, Assert
+//            assertThat(PropertiesManager.emulatorPort).isEqualTo(value)
+//        }
+//    }
+
     @Test
     fun enableHealthCheck() {
 
@@ -1416,24 +1434,6 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun rerunScenarioWords() {
-
-        run {
-            // Arrange
-            PropertiesManager.clear()
-            // Act, Assert
-            assertThat(PropertiesManager.rerunScenarioWords).isEqualTo(Const.RERUN_SCENARIO_WORDS)
-        }
-        run {
-            // Arrange
-            val value = "word1||word2"
-            PropertiesManager.setPropertyValue("rerunScenarioWords", value)
-            // Act, Assert
-            assertThat(PropertiesManager.rerunScenarioWords).isEqualTo(value)
-        }
-    }
-
-    @Test
     fun enableRerunOnScreenshotBlackout() {
 
         run {
@@ -1493,6 +1493,31 @@ class PropertiesManagerTest : UnitTest() {
                 PropertiesManager.screenshotBlackoutThreshold
             }.isInstanceOf(TestConfigException::class.java)
                 .hasMessage("screenshotBlackoutThreshold is allowed from 0.9 to 1.0. (1.1)")
+        }
+    }
+
+    @Test
+    fun enableRestartDeviceOnResettingAppiumSession() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableRestartDeviceOnResettingAppiumSession).isEqualTo(Const.ENABLE_RESTART_DEVICE_ON_RESETTING_APPIUM_SESSION)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableRestartDeviceOnResettingAppiumSession", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRestartDeviceOnResettingAppiumSession).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableRestartDeviceOnResettingAppiumSession", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRestartDeviceOnResettingAppiumSession).isEqualTo(value)
         }
     }
 

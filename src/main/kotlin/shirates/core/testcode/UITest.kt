@@ -188,8 +188,10 @@ abstract class UITest : TestDrive {
         testrunFile: String = PropertiesManager.testrunFile,
         profileName: String = PropertiesManager.profile
     ) {
+        TestLog.info("")
         TestLog.info(Const.SEPARATOR_LONG)
         TestLog.info(TestFunctionDescription)
+        TestLog.info(Const.SEPARATOR_LONG)
 
         PropertiesManager.setup(testrunFile = testrunFile)
         TestMode.testTimeNoLoadRun = PropertiesManager.getPropertyValue("noLoadRun") == "true"
@@ -338,13 +340,21 @@ abstract class UITest : TestDrive {
 
             // AppiumDriver
             val lastProfile = TestDriver.lastTestContext.profile
-            if (profile.isSameProfile(lastProfile) && TestDriver.canReuse) {
-                TestLog.info(
-                    message(id = "reusingAppiumDriverSession", arg1 = configPath.toString(), arg2 = profileName)
-                )
-                TestDriver.testContext = TestDriver.lastTestContext
-            } else {
+            if (lastProfile.profileName.isBlank()) {
+                // First time
                 TestDriver.createAppiumDriver()
+            } else {
+                // Second time or later
+                if (profile.isSameProfile(lastProfile) && TestDriver.canReuse) {
+                    // Reuse Appium session if possible
+                    TestLog.info(
+                        message(id = "reusingAppiumDriverSession", arg1 = configPath.toString(), arg2 = profileName)
+                    )
+                    TestDriver.testContext = TestDriver.lastTestContext
+                } else {
+                    // Reset Appium session
+                    TestDriver.resetAppiumSession()
+                }
             }
         } catch (t: TestAbortedException) {
             TestLog.info(t.message ?: t.cause.toString())
@@ -494,7 +504,7 @@ abstract class UITest : TestDrive {
 
             val m = t.message ?: t.javaClass.simpleName
 
-            val rerunScenarioWords = PropertiesManager.rerunScenarioWords.split("||")
+            val rerunScenarioWords = Const.RERUN_SCENARIO_WORDS.split("||")
             val containsMessage = rerunScenarioWords.any() { m.contains(it) }
             if (containsMessage) {
                 return true

@@ -94,8 +94,11 @@ object AppiumServerManager {
     /**
      * setupAppiumServerProcess
      */
-    fun setupAppiumServerProcess(sessionName: String, profile: TestProfile, force: Boolean = false) {
-
+    fun setupAppiumServerProcess(
+        sessionName: String,
+        profile: TestProfile,
+        force: Boolean = false
+    ) {
         currentProfile = profile
 
         if (force.not() && lastSessionName == sessionName) {
