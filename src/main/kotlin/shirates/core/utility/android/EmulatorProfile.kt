@@ -2,10 +2,13 @@ package shirates.core.utility.android
 
 class EmulatorProfile(
     val profileName: String,
+    avdName: String? = null,
     val emulatorOptions: MutableList<String> = mutableListOf(),
     val emulatorPort: Int? = null
 ) {
-    val avdName: String = AndroidDeviceUtility.getAvdName(profileName = profileName)
+    val avdName: String =
+        if (avdName.isNullOrBlank()) AndroidDeviceUtility.getAvdName(profileName = profileName)
+        else avdName
     val platformVersion: String
 
     init {

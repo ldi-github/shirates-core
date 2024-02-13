@@ -29,13 +29,15 @@ class TestDriverCreateOrReuseTest : UITest() {
             // Act
             setupFromConfig(conf, prof)
             // Assert
-            assertLineCount(1, "Initializing TestDriver.")
+            assertLineCount(1, "Connecting to Appium Server.")
+            assertLineCount(0, "Reusing AppiumDriver session.")
         }
     }
 
     private fun assertLineCount(count: Long, message: String) {
 
-        val lines = TestLog.histories.filter { it.message.contains(message) }
+        val linesOfCurrentScenario = TestLog.getLinesOfCurrentTestScenario()
+        val lines = linesOfCurrentScenario.filter { it.message.contains(message) }
         assertThat(lines.count()).isEqualTo(count)
     }
 
@@ -44,14 +46,13 @@ class TestDriverCreateOrReuseTest : UITest() {
     fun sameConfig_sameProfile_resuse() {
 
         TestMode.runAsAndroid {
-            assertLineCount(0, "Reusing AppiumDriver session.")
-
             // Arrange
             val conf = "unitTestData/testConfig/androidSettings/testDriveGetOrCreateTestData.json"
             val prof = "profile1"
             // Act
             setupFromConfig(conf, prof)
             // Assert
+            assertLineCount(1, "Connecting to Appium Server.")
             assertLineCount(1, "Reusing AppiumDriver session.")
         }
     }
@@ -67,6 +68,7 @@ class TestDriverCreateOrReuseTest : UITest() {
             // Act
             setupFromConfig(conf, prof)
             // Assert
+            assertLineCount(2, "Connecting to Appium Server.")
             assertLineCount(1, "Reusing AppiumDriver session.")
         }
     }
@@ -82,6 +84,7 @@ class TestDriverCreateOrReuseTest : UITest() {
             // Act
             setupFromConfig(conf, prof)
             // Assert
+            assertLineCount(3, "Connecting to Appium Server.")
             assertLineCount(1, "Reusing AppiumDriver session.")
         }
     }

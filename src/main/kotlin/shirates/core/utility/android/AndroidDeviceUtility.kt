@@ -172,9 +172,11 @@ object AndroidDeviceUtility {
      */
     fun getEmulatorProfile(testProfile: TestProfile): EmulatorProfile {
         val profileName = testProfile.profileName
+        val avdName = testProfile.getCapabilityRelaxed("avd")
         val emulatorPort = testProfile.emulatorPort?.toIntOrNull()
         val emulatorProfile = EmulatorProfile(
             profileName = profileName,
+            avdName = avdName,
             emulatorOptions = (testProfile.emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
                 .filter { it.isNotBlank() }.toMutableList(),
             emulatorPort = emulatorPort
