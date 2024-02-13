@@ -1,6 +1,7 @@
 package shirates.core.utility.android
 
 import shirates.core.Const
+import shirates.core.UserVar
 import shirates.core.configuration.ProfileNameParser
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
@@ -9,6 +10,7 @@ import shirates.core.driver.TestMode.isEmulator
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.file.FileLockUtility
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.sync.WaitContext
@@ -349,21 +351,46 @@ object AndroidDeviceUtility {
         waitSecondsAfterStartup: Double = Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
     ): AndroidDeviceInfo {
 
+        var androidDeviceInfo: AndroidDeviceInfo? = null
+        FileLockUtility.lockFile(filePath = UserVar.downloads.resolve(".startEmulatorAndWaitDeviceReady")) {
+            androidDeviceInfo = startEmulatorAndWaitDeviceReadyCore(
+                emulatorProfile = emulatorProfile,
+                emulatorPort = emulatorProfile.emulatorPort,
+                timeoutSeconds = timeoutSeconds,
+                waitSecondsAfterStartup = waitSecondsAfterStartup
+            )
+        }
+        return androidDeviceInfo!!
+    }
+
+    private fun startEmulatorAndWaitDeviceReadyCore(
+        emulatorProfile: EmulatorProfile,
+        emulatorPort: Int?,
+        timeoutSeconds: Double,
+        waitSecondsAfterStartup: Double
+    ): AndroidDeviceInfo {
         currentAndroidDeviceInfo = null
 
         var device = getAndroidDeviceInfoByAvdName(avdName = emulatorProfile.avdName)
-
-        if (device?.status == "offline") {
-            val pid = device.pid.toIntOrNull()
-            if (pid != null) {
-                ProcessUtility.terminateProcess(pid = pid)
+        if (emulatorProfile.emulatorPort != null) {
+            if (device != null && device.port != emulatorPort.toString()) {
+                shutdownEmulatorByUdid(udid = device.udid)
+                device = null
             }
-            device = null
         }
 
-        if (device != null && device.status == "device") {
-            currentAndroidDeviceInfo = device
-            return device
+        if (device != null) {
+            if (device.status == "device") {
+                currentAndroidDeviceInfo = device
+                return device
+            }
+            if (device.status == "offline") {
+                val pid = device.pid.toIntOrNull()
+                if (pid != null) {
+                    ProcessUtility.terminateProcess(pid = pid)
+                }
+                device = null
+            }
         }
 
         var shellResult: ShellUtility.ShellResult? = null
@@ -382,15 +409,6 @@ object AndroidDeviceUtility {
 
         device.shellResult = shellResult
         return device
-    }
-
-    /**
-     * startEmulator
-     */
-    fun startEmulator(testProfile: TestProfile): ShellUtility.ShellResult {
-
-        val emulatorProfile = getEmulatorProfile(testProfile = testProfile)
-        return startEmulator(emulatorProfile = emulatorProfile)
     }
 
     /**

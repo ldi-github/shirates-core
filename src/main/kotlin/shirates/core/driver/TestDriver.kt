@@ -552,6 +552,11 @@ object TestDriver {
         if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
             wdaInstallOptimization(profile = profile)
         }
+        if (isAndroid) {
+            // start emulator and wait ready
+            val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = profile)
+            AndroidDeviceUtility.startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
+        }
 
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
