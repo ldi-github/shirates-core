@@ -134,7 +134,7 @@ class SpecReport_ifCanSelectTest : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReport_ifCanSelectTest",
-            profileName = "Pixel 3a API 31(Android 12)",
+            profileName = "Pixel 3a(Android 12)",
             deviceModel = deviceModel,
             platformVersion = platformVersion,
             notImpl = 1,

@@ -119,7 +119,7 @@ class SpecReportTest : UITest() {
             testConfigName = "Calculator",
             sheetName = "calculator test",
             testClassName = "SpecReportTest",
-            profileName = "Pixel 3a API 31(Android 12)",
+            profileName = "Pixel 3a(Android 12)",
             deviceModel = deviceModel,
             platformVersion = platformVersion,
             ok = 4,

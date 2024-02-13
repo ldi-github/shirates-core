@@ -123,7 +123,7 @@ class SpecReport_platformBranch_Test : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReport_platformBranch_Test",
-            profileName = "Pixel 3a API 31(Android 12)",
+            profileName = "Pixel 3a(Android 12)",
             deviceModel = deviceModel,
             platformVersion = platformVersion,
             notImpl = 1,
