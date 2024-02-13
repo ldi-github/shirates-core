@@ -1,11 +1,13 @@
 package shirates.core.utility.exception
 
+import shirates.core.exception.RerunScenarioException
+
 /**
  * Rerun Required Errors
  */
 val Throwable?.isRerunRequiredError: Boolean
     get() {
-        return this.isSocketHangupError || this.isProcessError
+        return this is RerunScenarioException || this.isSocketHangupError || this.isProcessError
     }
 
 val Throwable?.isSocketHangupError: Boolean

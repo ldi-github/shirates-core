@@ -1,7 +1,5 @@
 package shirates.core.driver
 
-import shirates.core.exception.RerunScenarioException
-
 class TestDriverEventContext {
 
     var irregularHandler: (() -> Unit)? = null
@@ -9,6 +7,7 @@ class TestDriverEventContext {
     var onSelectErrorHandler: (() -> Unit)? = null
     var onExistErrorHandler: (() -> Unit)? = null
     var onScreenErrorHandler: (() -> Unit)? = null
-    var onRerunScenarioHandler: ((ex: RerunScenarioException) -> Unit)? = null
+    var onRequestingRerunHandler: ((t: Throwable) -> Boolean)? = null
+    var onRerunScenarioHandler: ((t: Throwable) -> Unit)? = null
 
 }

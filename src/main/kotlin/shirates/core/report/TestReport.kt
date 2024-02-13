@@ -407,6 +407,7 @@ class TestReport(
         sb.append("<th>command</th>")
         sb.append("<th>message</th>")
         sb.append("<th>timeElapsed</th>")
+        sb.append("<th>diff(ms)</th>")
         sb.append("<th>screenshot</th>")
         sb.appendLine("</tr>")
         val logLines = getLogLines()
@@ -462,6 +463,8 @@ class TestReport(
 
     var currentCaePattern: LogType = LogType.NONE
 
+    private var lastWrittenLine: LogLine? = null
+
     private fun writeRow(sb: StringBuilder, seq: Int, line: LogLine) {
 
         val a = line
@@ -487,6 +490,7 @@ class TestReport(
 
         val deleted = if (a.deleted) "data-deleted" else ""
         val lastScreenshotHtml = htmlEscape(a.lastScreenshot)
+        val diff = if (lastWrittenLine == null) 0 else line.timeElapsed - lastWrittenLine!!.timeElapsed
         sb.append(
             "                <tr data-seq='$seq' data-line='${line.lineNumber}' $deleted data-last-screenshot='$lastScreenshotHtml'>"
         )
@@ -499,8 +503,11 @@ class TestReport(
         sb.append("<td class='command $tsClass $tcClass $pClass $cae' >${a.scriptCommand}</td>")
         sb.append("<td class='$mClass $tsClass $tcClass $pClass $cae' data-filename='${a.fileName}'>${getMessageHtml(a.message)}</td>")
         sb.append("<td class='timeElapsed $tsClass $tcClass $pClass $cae'>${a.timeElapsedLabel}</td>")
+        sb.append("<td class='diff $tsClass $tcClass $pClass $cae'>${diff}</td>")
         sb.append("<td class='screenshot $tsClass $tcClass $pClass $cae'>${a.screenshot}</td>")
         sb.appendLine("</tr>")
+
+        lastWrittenLine = line
     }
 
     private fun getMessageHtml(message: String): String {

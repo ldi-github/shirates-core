@@ -138,6 +138,20 @@ object CodeExecutionContext {
      */
     var lastScreenshotXmlSource: String = ""
 
+    // Misc --------------------------------------------------
+
+    /**
+     * scenarioRerunCause
+     */
+    var scenarioRerunCause: Throwable? = null
+
+    /**
+     * isRerunningScenario
+     */
+    val isScenarioRerunning: Boolean
+        get() {
+            return scenarioRerunCause != null
+        }
 
     /**
      * clear
@@ -172,6 +186,10 @@ object CodeExecutionContext {
         lastScreenshotImage = null
         lastCropInfo = null
         lastScreenshotXmlSource = ""
+        /**
+         * Misc
+         */
+        scenarioRerunCause = null
     }
 
     /**

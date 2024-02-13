@@ -20,6 +20,7 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isSimulator
+import shirates.core.driver.TestMode.isVirtualDevice
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
@@ -32,6 +33,7 @@ import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
 import shirates.core.utility.*
+import shirates.core.utility.android.AdbUtility
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.appium.setCapabilityStrict
@@ -550,6 +552,11 @@ object TestDriver {
         if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
             wdaInstallOptimization(profile = profile)
         }
+        if (isAndroid) {
+            // start emulator and wait ready
+            val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = profile)
+            AndroidDeviceUtility.startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
+        }
 
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
@@ -563,18 +570,9 @@ object TestDriver {
             action = getInitFunc(profile = profile, capabilities = capabilities)
         )
 
-        // Write log on error
         val exception = retryContext.exception
         if (exception != null) {
-            if (retryContext.wrappedError != null) {
-                TestLog.error(retryContext.wrappedError!!)
-                TestLog.write(retryContext.wrappedError.toString())
-                throw retryContext.wrappedError!!
-            } else {
-                TestLog.error(exception)
-                TestLog.write(exception.toString())
-                throw exception
-            }
+            throw exception
         }
 
         // Save capabilities
@@ -684,68 +682,42 @@ object TestDriver {
         return retryPredicate
     }
 
-    private fun restartAndroid(
-        profile: TestProfile,
-        terminateEmulatorProcess: Boolean
-    ) {
+    private fun restartEmulator(profile: TestProfile) {
+
+        if (isRealDevice) {
+            return
+        }
+
         val ms = Measure()
 
-        // Restart device
-        restartAndroidDevice(profile = profile, terminateEmulatorProcess = terminateEmulatorProcess)
-
-        // Restart Appium Server
-        TestLog.info("Restarting AppiumServer.")
-        AppiumServerManager.restartAppiumProcess()
-
-        ms.end()
-    }
-
-    private fun restartAndroidDevice(profile: TestProfile, terminateEmulatorProcess: Boolean) {
-
-        TestLog.info("profile=${profile.profileName}")
-        TestLog.info("terminateEmulatorProcess=$terminateEmulatorProcess")
-
         if (profile.udid.isBlank()) {
-            TestLog.info("Starting Android device. (${profile.profileName})")
+            TestLog.info("Starting emulator. (${profile.profileName})")
             AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
             return
         }
 
-        val pid = run {
-            val port = profile.udid.removePrefix("emulator-").toIntOrNull()
-            if (port == null) {
-                TestLog.warn("Could not get port number. (udid=${profile.udid})")
-                null
-            } else {
-                ProcessUtility.getPid(port = port)
-            }
-        }
-        TestLog.info("pid=$pid")
-
-        if (terminateEmulatorProcess && pid != null) {
-            TestLog.info("Terminating Android device. (pid=$pid)")
-            ProcessUtility.terminateProcess(pid = pid)
-        }
-        if (terminateEmulatorProcess || pid == null) {
-            TestLog.info("Starting Android device. (${profile.profileName})")
-            AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
-        } else {
-            TestLog.info("Rebooting Android device. (${profile.udid})")
-            try {
-                if (TestMode.isEmulator) {
-                    AndroidDeviceUtility.restartEmulator(profile)
-                } else {
-                    AndroidDeviceUtility.reboot(udid = profile.udid)
-                }
-            } catch (t: Throwable) {
-                if (t.message!!.contains("device offline")) {
-                    AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
-                } else {
-                    throw TestDriverException("Failed rebooting Android device. ($t)", cause = t)
-                }
-            }
+        try {
+            AndroidDeviceUtility.restartEmulator(profile)
+        } catch (t: Throwable) {
+            throw TestDriverException("Failed rebooting emulator. ($t)", cause = t)
         }
 
+        ms.end()
+    }
+
+    private fun terminateEmulatorProcess(profile: TestProfile) {
+
+        val port = profile.udid.removePrefix("emulator-").toIntOrNull()
+        if (port == null) {
+            TestLog.warn("Could not get port number. (udid=${profile.udid})")
+            return
+        }
+        val pid = ProcessUtility.getPid(port = port)
+        if (pid == null) {
+            return
+        }
+        TestLog.info("Terminating emulator process. (pid=$pid)")
+        ProcessUtility.terminateProcess(pid = pid)
     }
 
     private fun restartIos(profile: TestProfile) {
@@ -774,8 +746,13 @@ object TestDriver {
                 // socket hang up
                 // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
 
-                val terminateEmulatorProcess = (context.retryCount == context.retryMaxCount)
-                restartAndroid(profile = profile, terminateEmulatorProcess = terminateEmulatorProcess)
+                /**
+                 * Emulator process list
+                 */
+                val psResult = AdbUtility.ps(udid = profile.udid)
+                TestLog.directoryForLog.resolve("${TestLog.lines.count()}_android_ps.txt")
+                    .toFile().writeText(psResult)
+                restartAdbServerEmulatorAppiumServer(profile, context)
             } else if (isiOS) {
                 val udid = initialCapabilities["udid"] ?: profile.udid
                 if (udid.isBlank()) {
@@ -787,6 +764,26 @@ object TestDriver {
             }
         }
         return beforeRetry
+    }
+
+    private fun restartAdbServerEmulatorAppiumServer(
+        profile: TestProfile,
+        context: RetryContext<Unit>
+    ) {
+        /**
+         * adb server
+         */
+        val adbPort = profile.getCapabilityRelaxed("adbPort").toIntOrNull()
+        AdbUtility.killServer(port = adbPort, log = true)
+        /**
+         * emulator
+         */
+        if (context.retryCount > 1) {
+            terminateEmulatorProcess(profile = profile)
+        }
+        restartEmulator(profile = profile)
+        // Appium Server
+        AppiumServerManager.restartAppiumProcess()
     }
 
     fun retryPredicateCore(
@@ -859,6 +856,10 @@ object TestDriver {
             val msg = message(id = "couldNotStartANewSession")
             context.wrappedError = TestEnvironmentException(message = msg, cause = context.exception)
             return false
+        } else if (message.contains("Appium Settings app is not running after")) {
+            val msg = message
+            context.wrappedError = TestDriverException(message = msg, cause = context.exception)
+            return true
         } else {
             TestLog.warn(message)
             TestLog.outputLogDump()
@@ -873,12 +874,9 @@ object TestDriver {
          */
         val udid = mAppiumDriver!!.capabilities.getUdid()
         if (udid.isBlank()) {
-            val msg = "udid not found in capablities."
+            val msg = "udid not found in capabilities."
             TestLog.warn(msg)
             throw TestDriverException(msg)
-        }
-        if (profile.udid.isNotBlank() && profile.udid != udid) {
-            throw TestDriverException("Connected udid is not correct. (profile.udid=${profile.udid}, actual=$udid)")
         }
 
         /**
@@ -888,6 +886,9 @@ object TestDriver {
             TestLog.info("[Health check] start")
 
             try {
+                if (profile.udid.isNotBlank() && profile.udid != udid) {
+                    throw TestDriverException("Connected udid is not correct. (profile.udid=${profile.udid}, actual=$udid)")
+                }
                 syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
                 val tapTestElement = testDrive.select(PropertiesManager.tapTestSelector)
                 if (tapTestElement.isFound) {
@@ -900,7 +901,6 @@ object TestDriver {
                 androidDriver.pressKey(KeyEvent(AndroidKey.CLEAR))   // throws on fail
             } catch (t: Throwable) {
                 val e = TestDriverException("[Health Check] failed. ${t.message ?: ""}", cause = t)
-                TestLog.warn(e.message)
                 throw e
             }
 
@@ -1186,14 +1186,16 @@ object TestDriver {
                     result
                 }
                 if (r.isTimeout) {
-                    TestLog.warn(
-                        message(
-                            id = "timeoutInSelect",
-                            subject = "select",
-                            arg1 = "$selector",
-                            submessage = "${r.error?.message}"
+                    if (PropertiesManager.enableWarnOnSelectTimeout) {
+                        TestLog.warn(
+                            message(
+                                id = "timeoutInSelect",
+                                subject = "select",
+                                arg1 = "$selector",
+                                submessage = "${r.error?.message}"
+                            )
                         )
-                    )
+                    }
                 }
 
                 if (r.hasError) {
@@ -1696,6 +1698,7 @@ object TestDriver {
             Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
         }
 
+        var screenshotException: Throwable? = null
         try {
             val screenshot = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES)
             val screenshotImage = screenshot.toBufferedImage()
@@ -1715,8 +1718,23 @@ object TestDriver {
             )
             CodeExecutionContext.lastScreenshot = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
+
+            if (PropertiesManager.enableRerunOnScreenshotBlackout) {
+                val threshold = PropertiesManager.screenshotBlackoutThreshold
+                if (BufferedImageUtility.isBlackout(image = screenshotImage, threshold = threshold)) {
+                    val share = BufferedImageUtility.getLargestShare(image = screenshotImage)
+                    screenshotException =
+                        RerunScenarioException(
+                            message(
+                                id = "screenshotIsBlackout",
+                                arg1 = "$share",
+                                arg2 = "$threshold"
+                            )
+                        )
+                }
+            }
         } catch (t: Throwable) {
-            TestLog.warn("screenshot $t + ${t.stackTrace}")
+            screenshotException = t
         }
 
         val screenshotLine = TestLog.write(
@@ -1731,6 +1749,11 @@ object TestDriver {
         if (withXmlSource && testContext.useCache) {
             val fileName = screenshotFileName.replace(".png", ".xml")
             outputXmlSource(filePath = TestLog.directoryForLog.resolve(fileName))
+        }
+
+        if (screenshotException != null) {
+            TestLog.warn("screenshot ${screenshotException.message}")
+            throw screenshotException
         }
 
         return this
@@ -2003,12 +2026,10 @@ object TestDriver {
 
                     if (isAndroid) {
                         if (PropertiesManager.enableAutoSyncAndroid.not()) {
-                            printInfo("AutoSync is disabled.")
                             lastXml = TestElementCache.sourceXml
                         }
                     } else {
                         if (PropertiesManager.enableAutoSyncIos.not()) {
-                            printInfo("AutoSync is disabled.")
                             lastXml = TestElementCache.sourceXml
                         }
                     }
@@ -2173,7 +2194,7 @@ object TestDriver {
             val appElement = select(".XCUIElementTypeApplication")
             return appElement.name == appName
         } catch (t: Throwable) {
-            TestLog.info("Error in isAppCore: $t")
+            TestLog.trace("In isAppCore: $t")
             return false
         }
     }
@@ -2308,9 +2329,11 @@ object TestDriver {
     /**
      * resetAppiumSession
      */
-    fun resetAppiumSession() {
+    fun resetAppiumSession(
+        restartDevice: Boolean = PropertiesManager.enableRestartDeviceOnResettingAppiumSession
+    ) {
 
-        TestLog.info("Resetting Appium session.")
+        TestLog.info("[Resetting Appium session]")
 
         /**
          * Shutdown AppiumServer
@@ -2320,15 +2343,17 @@ object TestDriver {
         /**
          * Restart device
          */
-        if (isAndroid) {
-            val device = AndroidDeviceUtility.currentAndroidDeviceInfo
-            if (device != null) {
-                AndroidDeviceUtility.reboot(testProfile = testProfile)
+        if (isVirtualDevice && restartDevice) {
+            if (isAndroid) {
+                val device = AndroidDeviceUtility.currentAndroidDeviceInfo
+                if (device != null) {
+                    if (testProfile.udid.isNotBlank()) {
+                        AndroidDeviceUtility.shutdownEmulatorByUdid(testProfile.udid)
+                    }
+                }
+            } else {
+                IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
             }
-        } else if (isiOS && isSimulator) {
-//            IosDeviceUtility.restartSimulator(udid = testProfile.udid, log = true)
-//            IosDeviceUtility.stopSimulator(udid = testProfile.udid)
-            IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
         }
 
         Thread.sleep(500)

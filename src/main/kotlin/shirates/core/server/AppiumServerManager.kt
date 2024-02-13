@@ -94,8 +94,11 @@ object AppiumServerManager {
     /**
      * setupAppiumServerProcess
      */
-    fun setupAppiumServerProcess(sessionName: String, profile: TestProfile, force: Boolean = false) {
-
+    fun setupAppiumServerProcess(
+        sessionName: String,
+        profile: TestProfile,
+        force: Boolean = false
+    ) {
         currentProfile = profile
 
         if (force.not() && lastSessionName == sessionName) {
@@ -156,6 +159,7 @@ object AppiumServerManager {
         run {
             val pid = ProcessUtility.getPid(port = port)
             if (pid != null) {
+                TestLog.info("Terminating Appium Server. (pid=$pid, port=$port)")
                 ProcessUtility.terminateProcess(pid = pid)
             }
         }
@@ -171,6 +175,7 @@ object AppiumServerManager {
         executor.streamHandler = handler
 
         executeResultHandler = DefaultExecuteResultHandler()
+        TestLog.info("Starting Appium Server.")
         TestLog.info("${commandLine.executable} ${commandLine.arguments.joinToString(" ")}")
         executor.execute(commandLine, executeResultHandler)
         Thread.sleep(2000)

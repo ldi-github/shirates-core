@@ -14,8 +14,10 @@ import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.getWebElement
+import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
+import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.element.ElementCacheUtility
 import shirates.core.utility.sync.WaitUtility
@@ -42,24 +44,51 @@ object AppiumProxy {
             return TestElement()
         }
 
-        var e = TestElement()
+        var root = TestElement()
+        var emptyScreenErrorCount = 0
+        var emptyWebViewErrorCount = 0
+        var getWebElementErrorCount = 0
+
+        fun outputCheckLog(count: Int, msg: String) {
+            if (count == 1) {
+                TestLog.info(msg, PropertiesManager.enableGetSourceLog)
+            } else {
+                TestLog.warn(msg)
+            }
+        }
+
         fun checkState(): Boolean {
-            if (e.hasEmptyWebViewError) {
-                TestLog.warn("WebView is empty.")
+            if (root.descendants.isEmpty()) {
+                emptyScreenErrorCount += 1
+                outputCheckLog(count = emptyScreenErrorCount, msg = "Contents is empty.($emptyScreenErrorCount)")
+                if (emptyScreenErrorCount >= 3) {
+                    throw RerunScenarioException(message(id = "couldNotGetContentsOfScreen"))
+                }
+                return false
+            }
+
+            if (root.hasEmptyWebViewError) {
+                emptyWebViewErrorCount += 1
+                outputCheckLog(count = emptyWebViewErrorCount, msg = "WebView is empty.($emptyWebViewErrorCount)")
+                if (emptyWebViewErrorCount >= 3) {
+                    throw RerunScenarioException(message(id = "couldNotGetContentsOfWebView"))
+                }
                 return false
             }
 
             try {
-                val we = e.getWebElement()
+                val we = root.getWebElement()
                 if (isAndroid) {
                     we.getAttribute("package")
                 } else {
                     we.getAttribute("label")
                 }
             } catch (t: Throwable) {
-                if (PropertiesManager.enableGetSourceLog) {
-                    TestLog.warn("AppiumProxy.getSource() checkState(): $t $e")
-                }
+                getWebElementErrorCount += 1
+                outputCheckLog(
+                    count = getWebElementErrorCount,
+                    msg = "AppiumProxy.getSource() checkState(): $t $root ${t.cause ?: ""}"
+                )
                 return false
             }
 
@@ -84,16 +113,17 @@ object AppiumProxy {
                     cause = c.error
                 )
             }
-        ) {
-            e = getSourceCore()
-            checkState()
+        ) { c ->
+            root = getSourceCore()
+            val r = checkState()
+            r
         }
 
         if (throwOnFinally && wc.hasError) {
             throw wc.error!!
         }
 
-        return e
+        return root
     }
 
     private fun getSourceCore(): TestElement {

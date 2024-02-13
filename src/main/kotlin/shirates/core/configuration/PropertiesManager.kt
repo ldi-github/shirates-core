@@ -448,6 +448,16 @@ object PropertiesManager {
         }
 
     /**
+     * enableWarnOnSelectTimeout
+     */
+    val enableWarnOnSelectTimeout: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableWarnOnSelectTimeout")
+                ?: return Const.ENABLE_WARN_ON_SELECT_TIMEOUT
+            return value == "true"
+        }
+
+    /**
      * enableGetSourceLog
      */
     val enableGetSourceLog: Boolean
@@ -690,6 +700,16 @@ object PropertiesManager {
             return value == "true"
         }
 
+//    /**
+//     * emulatorPort
+//     */
+//    val emulatorPort: Int
+//        get() {
+//            val value = getPropertyValue(propertyName = "emulatorPort")?.toIntOrNull()
+//                ?: return Const.EMULATOR_PORT
+//            return value
+//        }
+
     // TestDriver --------------------------------------------------
 
     /**
@@ -730,6 +750,101 @@ object PropertiesManager {
                 ?: return Const.ENABLE_AUTO_SYNC_IOS
             return value == "true"
         }
+
+    /**
+     * enableRerunScenario
+     */
+    val enableRerunScenario: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableRerunScenario")
+                ?: return Const.ENABLE_RERUN_SCENARIO
+            return value == "true"
+        }
+
+    /**
+     * enableAlwaysRerunOnErrorAndroid
+     */
+    val enableAlwaysRerunOnErrorAndroid: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableAlwaysRerunOnErrorAndroid")
+                ?: return Const.ENABLE_ALWAYS_RERUN_ON_ERROR_ANDROID
+            return value == "true"
+        }
+
+    /**
+     * enableAlwaysRerunOnErrorIos
+     */
+    val enableAlwaysRerunOnErrorIos: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableAlwaysRerunOnErrorIos")
+                ?: return Const.ENABLE_ALWAYS_RERUN_ON_ERROR_IOS
+            return value == "true"
+        }
+
+    /**
+     * scenarioTimeoutSeconds
+     */
+    val scenarioTimeoutSeconds: Double
+        get() {
+            val value =
+                getPropertyValue(propertyName = "scenarioTimeoutSeconds")?.toDoubleOrNull()
+                    ?: return Const.SCENARIO_TIMEOUT_SECONDS
+            if (value < 0) {
+                throw TestConfigException(message(id = "scenarioTimeoutSeconds", value = "$value"))
+            }
+
+            return value
+        }
+
+    /**
+     * scenarioMaxCount
+     */
+    val scenarioMaxCount: Int
+        get() {
+            val value = getPropertyValue(propertyName = "scenarioMaxCount")?.toIntOrNull()
+                ?: return Const.SCENARIO_MAX_COUNT
+            if (value < 1) {
+                throw TestConfigException(message(id = "scenarioMaxCount", value = "$value"))
+            }
+
+            return value
+        }
+
+    /**
+     * enableRerunOnScreenshotBlackout
+     */
+    val enableRerunOnScreenshotBlackout: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableRerunOnScreenshotBlackout")
+                ?: return Const.ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT
+            return value == "true"
+        }
+
+    /**
+     * screenshotBlackoutThreshold
+     */
+    val screenshotBlackoutThreshold: Double
+        get() {
+            val value =
+                getPropertyValue(propertyName = "screenshotBlackoutThreshold")?.toDoubleOrNull()
+                    ?: return Const.SCREENSHOT_BLACKOUT_THRESHOLD
+            if (value < 0.9 || value > 1.0) {
+                throw TestConfigException(message(id = "screenshotBlackoutThreshold", value = "$value"))
+            }
+
+            return value
+        }
+
+    /**
+     * enableRestartDeviceOnResettingAppiumSession
+     */
+    val enableRestartDeviceOnResettingAppiumSession: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableRestartDeviceOnResettingAppiumSession")
+                ?: return Const.ENABLE_RESTART_DEVICE_ON_RESETTING_APPIUM_SESSION
+            return value == "true"
+        }
+
 
     // Custom --------------------------------------------------
 

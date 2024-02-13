@@ -1,6 +1,7 @@
 package shirates.core.utility.android
 
 import shirates.core.Const
+import shirates.core.UserVar
 import shirates.core.configuration.ProfileNameParser
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
@@ -9,8 +10,10 @@ import shirates.core.driver.TestMode.isEmulator
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.file.FileLockUtility
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
+import shirates.core.utility.sync.WaitContext
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 
@@ -169,10 +172,14 @@ object AndroidDeviceUtility {
      */
     fun getEmulatorProfile(testProfile: TestProfile): EmulatorProfile {
         val profileName = testProfile.profileName
+        val avdName = testProfile.getCapabilityRelaxed("avd")
+        val emulatorPort = testProfile.emulatorPort?.toIntOrNull()
         val emulatorProfile = EmulatorProfile(
             profileName = profileName,
+            avdName = avdName,
             emulatorOptions = (testProfile.emulatorOptions ?: Const.EMULATOR_OPTIONS).split(" ")
-                .filter { it.isNotBlank() }.toMutableList()
+                .filter { it.isNotBlank() }.toMutableList(),
+            emulatorPort = emulatorPort
         )
         return emulatorProfile
     }
@@ -346,18 +353,46 @@ object AndroidDeviceUtility {
         waitSecondsAfterStartup: Double = Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
     ): AndroidDeviceInfo {
 
+        var androidDeviceInfo: AndroidDeviceInfo? = null
+        FileLockUtility.lockFile(filePath = UserVar.downloads.resolve(".startEmulatorAndWaitDeviceReady")) {
+            androidDeviceInfo = startEmulatorAndWaitDeviceReadyCore(
+                emulatorProfile = emulatorProfile,
+                emulatorPort = emulatorProfile.emulatorPort,
+                timeoutSeconds = timeoutSeconds,
+                waitSecondsAfterStartup = waitSecondsAfterStartup
+            )
+        }
+        return androidDeviceInfo!!
+    }
+
+    private fun startEmulatorAndWaitDeviceReadyCore(
+        emulatorProfile: EmulatorProfile,
+        emulatorPort: Int?,
+        timeoutSeconds: Double,
+        waitSecondsAfterStartup: Double
+    ): AndroidDeviceInfo {
         currentAndroidDeviceInfo = null
 
         var device = getAndroidDeviceInfoByAvdName(avdName = emulatorProfile.avdName)
-
-        if (device?.status == "offline") {
-            ProcessUtility.terminateProcess(pid = device.pid.toInt())
-            device = null
+        if (emulatorProfile.emulatorPort != null) {
+            if (device != null && device.port != emulatorPort.toString()) {
+                shutdownEmulatorByUdid(udid = device.udid)
+                device = null
+            }
         }
 
-        if (device != null && device.status == "device") {
-            currentAndroidDeviceInfo = device
-            return device
+        if (device != null) {
+            if (device.status == "device") {
+                currentAndroidDeviceInfo = device
+                return device
+            }
+            if (device.status == "offline") {
+                val pid = device.pid.toIntOrNull()
+                if (pid != null) {
+                    ProcessUtility.terminateProcess(pid = pid)
+                }
+                device = null
+            }
         }
 
         var shellResult: ShellUtility.ShellResult? = null
@@ -381,21 +416,9 @@ object AndroidDeviceUtility {
     /**
      * startEmulator
      */
-    fun startEmulator(testProfile: TestProfile): ShellUtility.ShellResult {
-
-        val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = testProfile)
-        return startEmulator(emulatorProfile = emulatorProfile)
-    }
-
-    /**
-     * startEmulator
-     */
     fun startEmulator(emulatorProfile: EmulatorProfile): ShellUtility.ShellResult {
 
-        val args = mutableListOf<String>()
-        args.add("emulator")
-        args.add("@${emulatorProfile.avdName}")
-        args.addAll(emulatorProfile.emulatorOptions)
+        val args = emulatorProfile.getCommandArgs()
         TestLog.info(args.joinToString(" "))
         val shellResult = ShellUtility.executeCommandAsync(args = args.toTypedArray())
         return shellResult
@@ -458,7 +481,7 @@ object AndroidDeviceUtility {
             }
 
             if (sw.elapsedSeconds > timeoutSeconds) {
-                throw TestDriverException("Waiting emulator status timed out. (expected=$status, actual=${device?.status})")
+                throw TestDriverException("Waiting emulator status timed out. (${sw.elapsedSeconds} > $timeoutSeconds, expected=$status, actual=${device?.status})")
             }
 
             Thread.sleep(intervalMilliseconds)
@@ -468,19 +491,41 @@ object AndroidDeviceUtility {
     /**
      * shutdownEmulatorByUdid
      */
-    fun shutdownEmulatorByUdid(udid: String, waitSeconds: Double = Const.EMULATOR_SHUTDOWN_WAIT_SECONDS) {
-
+    fun shutdownEmulatorByUdid(
+        udid: String,
+        waitSeconds: Double = Const.EMULATOR_SHUTDOWN_WAIT_SECONDS
+    ) {
         val deviceInfo = getAndroidDeviceInfoByUdid(udid = udid) ?: return
         val port = deviceInfo.port.toInt()
 
         val args = mutableListOf("adb", "-s", udid, "shell", "reboot", "-p").toTypedArray()
         ShellUtility.executeCommand(args = args)
 
-        WaitUtility.doUntilTrue(waitSeconds = waitSeconds, intervalSeconds = 0.5) {
+        val context = waitForPortClosed(waitSeconds = waitSeconds, port = port)
+        if (context.hasError) {
+            if (deviceInfo.status == "offline") {
+                val pid = deviceInfo.pid.toIntOrNull()
+                if (pid != null) {
+                    ProcessUtility.terminateProcess(pid = pid)
+                }
+            }
+        }
+    }
+
+    private fun waitForPortClosed(
+        waitSeconds: Double,
+        port: Int
+    ): WaitContext {
+        val context = WaitUtility.doUntilTrue(
+            waitSeconds = waitSeconds,
+            intervalSeconds = 0.5,
+            throwOnFinally = false
+        ) {
             val pid = ProcessUtility.getPid(port = port)
             TestLog.trace("pid=$pid")
             pid == null
         }
+        return context
     }
 
     /**
@@ -569,7 +614,7 @@ object AndroidDeviceUtility {
     ): ShellUtility.ShellResult {
 
         if (isEmulator) {
-            return restartEmulator(testProfile = testProfile)
+            return restartEmulator(testProfile = testProfile).shellResult!!
         } else {
             return reboot(udid = testProfile.udid)
         }
@@ -580,10 +625,14 @@ object AndroidDeviceUtility {
      */
     fun restartEmulator(
         testProfile: TestProfile
-    ): ShellUtility.ShellResult {
+    ): AndroidDeviceInfo {
 
+        TestLog.info("Shutting down emulator. ($testProfile)")
         shutdownEmulatorByUdid(testProfile.udid)
-        val r = startEmulator(testProfile)
+        val emulatorProfile = getEmulatorProfile(testProfile = testProfile)
+
+        TestLog.info("Starting emulator. ($testProfile)")
+        val r = startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
         return r
     }
 

@@ -3,10 +3,12 @@ package experiment
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.Testrun
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 
@@ -137,6 +139,21 @@ class AdHocTestAndroid : UITest() {
 
         suppressCache {
             rootElement.printInfo()
+        }
+    }
+
+    @Test
+    fun rerunScenario() {
+
+        PropertiesManager.setPropertyValue("enableRerunScenario", "true")
+        PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", "false")
+
+        scenario {
+            case(1) {
+                condition {
+                    throw TestDriverException("AppiumProxy.getSource() timed out")
+                }
+            }
         }
     }
 }

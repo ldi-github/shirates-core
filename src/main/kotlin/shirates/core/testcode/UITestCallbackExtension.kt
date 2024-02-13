@@ -176,6 +176,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             testContext.onSelectErrorHandler = eventContext.onSelectErrorHandler
             testContext.onExistErrorHandler = eventContext.onExistErrorHandler
             testContext.onScreenErrorHandler = eventContext.onScreenErrorHandler
+            testContext.isRerunRequested = eventContext.onRequestingRerunHandler
             testContext.onRerunScenarioHandler = eventContext.onRerunScenarioHandler
 
             // printCapabilities
@@ -218,7 +219,17 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         }
 
         testContext.saveState()
-        uiTest?.beforeEach(context)
+        try {
+            uiTest?.beforeEach(context)
+        } catch (t: Throwable) {
+            if (PropertiesManager.enableRerunScenario) {
+                TestLog.warn("$t ${t.stackTraceToString()}")
+                uiTest?.beforeEach(context)
+            } else {
+                TestLog.error("$t ${t.stackTraceToString()}")
+                throw t
+            }
+        }
         lastElement.lastError = null
 
         val lap = testFunctionWatch.lap("setupExecuted")
@@ -331,7 +342,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.trace()
 
         if (throwable != null) {
-            TestDriver.screenshotCore()
+            TestDriver.screenshotCore(sync = false)
             throw throwable
         }
     }

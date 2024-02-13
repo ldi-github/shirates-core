@@ -319,7 +319,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         } finally {
             CodeExecutionContext.isInOperationCommand = original
             try {
-                TestDriver.autoScreenshot()
+                TestDriver.autoScreenshot(sync = false)
             } finally {
                 endCommand()
             }

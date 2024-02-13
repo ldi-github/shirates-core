@@ -690,6 +690,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableWarnOnSelectTimeout() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableWarnOnSelectTimeout).isEqualTo(Const.ENABLE_WARN_ON_SELECT_TIMEOUT)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_WARN_ON_SELECT_TIMEOUT.not()
+            PropertiesManager.setPropertyValue("enableWarnOnSelectTimeout", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableWarnOnSelectTimeout).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableGetSourceLog() {
 
         run {
@@ -1191,6 +1209,24 @@ class PropertiesManagerTest : UnitTest() {
         }
     }
 
+//    @Test
+//    fun emulatorPort() {
+//
+//        run {
+//            // Arrange
+//            PropertiesManager.clear()
+//            // Act, Assert
+//            assertThat(PropertiesManager.emulatorPort).isEqualTo(Const.EMULATOR_PORT)
+//        }
+//        run {
+//            // Arrange
+//            val value = 5558
+//            PropertiesManager.setPropertyValue("emulatorPort", value.toString())
+//            // Act, Assert
+//            assertThat(PropertiesManager.emulatorPort).isEqualTo(value)
+//        }
+//    }
+
     @Test
     fun enableHealthCheck() {
 
@@ -1263,6 +1299,225 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("enableAutoSyncIos", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.enableAutoSyncIos).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableRerunScenario() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunScenario).isEqualTo(Const.ENABLE_RERUN_SCENARIO)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableRerunScenario", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunScenario).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableRerunScenario", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunScenario).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableAlwaysRerunOnErrorAndroid() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorAndroid).isEqualTo(Const.ENABLE_ALWAYS_RERUN_ON_ERROR_ANDROID)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorAndroid).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorAndroid", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorAndroid).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableAlwaysRerunOnErrorIos() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorIos).isEqualTo(Const.ENABLE_ALWAYS_RERUN_ON_ERROR_IOS)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorIos", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorIos).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableAlwaysRerunOnErrorIos", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableAlwaysRerunOnErrorIos).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun scenarioTimeoutSeconds() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.scenarioTimeoutSeconds).isEqualTo(Const.SCENARIO_TIMEOUT_SECONDS)
+        }
+        run {
+            // Arrange
+            val value = 0.0
+            PropertiesManager.setPropertyValue("scenarioTimeoutSeconds", "$value")
+            // Act, Assert
+            assertThat(PropertiesManager.scenarioTimeoutSeconds).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = -1.0
+            PropertiesManager.setPropertyValue("scenarioTimeoutSeconds", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.scenarioTimeoutSeconds
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("scenarioTimeoutSeconds should be set to 0 or higher. (-1.0)")
+        }
+    }
+
+    @Test
+    fun scenarioMaxCount() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.scenarioMaxCount).isEqualTo(Const.SCENARIO_MAX_COUNT)
+        }
+        run {
+            // Arrange
+            val value = 1
+            PropertiesManager.setPropertyValue("scenarioMaxCount", "$value")
+            // Act, Assert
+            assertThat(PropertiesManager.scenarioMaxCount).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = 0
+            PropertiesManager.setPropertyValue("scenarioMaxCount", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.scenarioMaxCount
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("scenarioMaxCount should be set to 1 or higher. (0)")
+        }
+    }
+
+    @Test
+    fun enableRerunOnScreenshotBlackout() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunOnScreenshotBlackout).isEqualTo(Const.ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableRerunOnScreenshotBlackout", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunOnScreenshotBlackout).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableRerunOnScreenshotBlackout", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRerunOnScreenshotBlackout).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun screenshotBlackoutThreshold() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.screenshotBlackoutThreshold).isEqualTo(Const.SCREENSHOT_BLACKOUT_THRESHOLD)
+        }
+        run {
+            // Arrange
+            val value = 0.95
+            PropertiesManager.setPropertyValue("screenshotBlackoutThreshold", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.screenshotBlackoutThreshold).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = 0.89
+            PropertiesManager.setPropertyValue("screenshotBlackoutThreshold", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.screenshotBlackoutThreshold
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("screenshotBlackoutThreshold is allowed from 0.9 to 1.0. (0.89)")
+        }
+        run {
+            // Arrange
+            val value = 1.1
+            PropertiesManager.setPropertyValue("screenshotBlackoutThreshold", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.screenshotBlackoutThreshold
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("screenshotBlackoutThreshold is allowed from 0.9 to 1.0. (1.1)")
+        }
+    }
+
+    @Test
+    fun enableRestartDeviceOnResettingAppiumSession() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableRestartDeviceOnResettingAppiumSession).isEqualTo(Const.ENABLE_RESTART_DEVICE_ON_RESETTING_APPIUM_SESSION)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableRestartDeviceOnResettingAppiumSession", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRestartDeviceOnResettingAppiumSession).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableRestartDeviceOnResettingAppiumSession", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableRestartDeviceOnResettingAppiumSession).isEqualTo(value)
         }
     }
 

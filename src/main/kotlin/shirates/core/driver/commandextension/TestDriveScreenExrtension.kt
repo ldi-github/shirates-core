@@ -65,6 +65,10 @@ fun TestDrive.waitScreenOf(
     onTrue: (() -> Unit)? = null
 ): TestElement {
 
+    if (TestMode.isNoLoadRun) {
+        return lastElement
+    }
+
     val command = "waitScreenOf"
     val message = message(id = command, subject = screenNames.joinToString(","))
     if (PropertiesManager.enableSyncLog) {
@@ -152,6 +156,10 @@ fun TestDrive.waitScreen(
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
 ): TestElement {
+
+    if (TestMode.isNoLoadRun) {
+        return lastElement
+    }
 
     val command = "waitScreen"
     val message = message(id = command, subject = screenName)

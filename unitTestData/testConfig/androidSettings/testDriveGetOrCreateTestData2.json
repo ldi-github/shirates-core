@@ -23,7 +23,10 @@
       }
     },
     {
-      "profileName": "profile2"
+      "profileName": "profile2",
+      "capabilities": {
+        "avd": "Pixel_3a_Android_12_"
+      }
     }
   ]
 }

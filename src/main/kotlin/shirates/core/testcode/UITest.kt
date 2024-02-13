@@ -26,6 +26,7 @@ import shirates.core.logging.TestLog
 import shirates.core.macro.MacroRepository
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.file.FileLockUtility.lockFile
+import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.spec.report.TestListReport
@@ -187,8 +188,10 @@ abstract class UITest : TestDrive {
         testrunFile: String = PropertiesManager.testrunFile,
         profileName: String = PropertiesManager.profile
     ) {
+        TestLog.info("")
         TestLog.info(Const.SEPARATOR_LONG)
         TestLog.info(TestFunctionDescription)
+        TestLog.info(Const.SEPARATOR_LONG)
 
         PropertiesManager.setup(testrunFile = testrunFile)
         TestMode.testTimeNoLoadRun = PropertiesManager.getPropertyValue("noLoadRun") == "true"
@@ -337,13 +340,21 @@ abstract class UITest : TestDrive {
 
             // AppiumDriver
             val lastProfile = TestDriver.lastTestContext.profile
-            if (profile.isSameProfile(lastProfile) && TestDriver.canReuse) {
-                TestLog.info(
-                    message(id = "reusingAppiumDriverSession", arg1 = configPath.toString(), arg2 = profileName)
-                )
-                TestDriver.testContext = TestDriver.lastTestContext
-            } else {
+            if (lastProfile.profileName.isBlank()) {
+                // First time
                 TestDriver.createAppiumDriver()
+            } else {
+                // Second time or later
+                if (profile.isSameProfile(lastProfile) && TestDriver.canReuse) {
+                    // Reuse Appium session if possible
+                    TestLog.info(
+                        message(id = "reusingAppiumDriverSession", arg1 = configPath.toString(), arg2 = profileName)
+                    )
+                    TestDriver.testContext = TestDriver.lastTestContext
+                } else {
+                    // Reset Appium session
+                    TestDriver.resetAppiumSession()
+                }
             }
         } catch (t: TestAbortedException) {
             TestLog.info(t.message ?: t.cause.toString())
@@ -464,62 +475,116 @@ abstract class UITest : TestDrive {
             )
         }
 
-        CodeExecutionContext.isInScenario = true
+        fun isRerunRequested(t: Throwable?): Boolean {
+            if (t == null) {
+                return false
+            }
+
+            if (TestMode.isNoLoadRun) {
+                TestLog.info("isNoLoadRun=${TestMode.isNoLoadRun}")
+                return false
+            }
+
+            TestLog.info("enableRerunScenario=${PropertiesManager.enableRerunScenario}")
+
+            if (PropertiesManager.enableRerunScenario.not()) {
+                return false
+            }
+            if (t is TestAbortedException) {
+                return false
+            }
+            if (t is RerunScenarioException) {
+                return true
+            }
+            if (testContext.isRerunRequested != null) {
+                val r = testContext.isRerunRequested!!.invoke(t)
+                TestLog.info("testContext.isRerunRequested=${testContext.isRerunRequested}")
+                return r
+            }
+
+            val m = t.message ?: t.javaClass.simpleName
+
+            val rerunScenarioWords = Const.RERUN_SCENARIO_WORDS.split("||")
+            val containsMessage = rerunScenarioWords.any() { m.contains(it) }
+            if (containsMessage) {
+                return true
+            }
+            if (isAndroid) {
+                val rerunRequested = PropertiesManager.enableAlwaysRerunOnErrorAndroid
+                TestLog.info("enableAlwaysRerunOnErrorAndroid=${rerunRequested}")
+                return rerunRequested
+            } else {
+                val rerunRequested = PropertiesManager.enableAlwaysRerunOnErrorIos
+                TestLog.info("enableAlwaysRerunOnErrorAndroid=${rerunRequested}")
+                return rerunRequested
+            }
+        }
 
         val sw = StopWatch(title = "Running scenario").start()
+
+        CodeExecutionContext.isInScenario = true
+
         try {
-            withContext(
-                useCache = useCache,
+            val context = WaitUtility.doUntilTrue(
+                waitSeconds = PropertiesManager.scenarioTimeoutSeconds,
+                maxLoopCount = PropertiesManager.scenarioMaxCount,
+                retryOnError = true,
+                throwOnFinally = false,
+                onTimeout = { wc ->
+                    TestLog.warn("Scenario timed out. (${sw.elapsedSeconds} > ${wc.waitSeconds})")
+                    val t = wc.error?.cause ?: wc.error
+                    TestLog.error(message(id = "rerunFailed", submessage = "${t?.message}"))
+                    wc.error = t
+                },
+                onMaxLoop = { wc ->
+                    TestLog.warn("Scenario count reached scenarioMaxCount. (scenarioMaxCount=${PropertiesManager.scenarioMaxCount})}")
+                    val t = wc.error?.cause ?: wc.error
+                    TestLog.error(message(id = "rerunFailed", submessage = "${t?.message}"))
+                    wc.error = t
+                },
+                onError = { wc ->
+                    val t = wc.error!!
+                    if (t is TestAbortedException) {
+                        throw t
+                    }
+                    val rerunRequested = isRerunRequested(t)
+                    wc.retryOnError = rerunRequested
+                    if (rerunRequested) {
+                        TestLog.getLinesOfCurrentTestScenario().forEach {
+                            it.deleted = true
+                        }
+                        TestLog.warn(message(id = "rerunningScenarioRequested", submessage = t.message ?: ""))
+
+                        if (testContext.onRerunScenarioHandler != null) {
+                            testContext.onRerunScenarioHandler!!.invoke(t)
+                        }
+                    } else {
+                        TestLog.error(t.message!!)
+                    }
+                    CodeExecutionContext.scenarioRerunCause = wc.error
+                },
+                onBeforeRetry = { wc ->
+                    TestLog.write("--------------------------------------------------")
+                    TestLog.write("Rerunning scenario ...")
+                    TestDriver.resetAppiumSession()
+                }
             ) {
-                scenarioCore(
-                    scenarioId = scenarioId,
-                    order = order,
-                    desc = desc,
-                    launchApp = launchApp,
-                    testProc = testProc
-                )
+                withContext(
+                    useCache = useCache,
+                ) {
+                    scenarioCore(
+                        scenarioId = scenarioId,
+                        order = order,
+                        desc = desc,
+                        launchApp = launchApp,
+                        testProc = testProc
+                    )
+                }
+                true
             }
-        } catch (t: Throwable) {
-            val message = t.message ?: ""
-            if (t is RerunScenarioException ||
-                message.contains("Read timed out") ||
-                message.contains("AppiumProxy.getSource() timed out") ||
-                message.contains("Could not start a new session. Response code 500.") ||
-                message.contains(" is still running after") ||
-                message.contains("Could not proxy command to the remote server.") ||
-                message.contains("current thread is not owner")
-            ) {
-                TestLog.getLinesOfCurrentTestScenario().forEach {
-                    it.deleted = true
-                }
-
-                if (t is RerunScenarioException && t.cause != null) {
-                    TestLog.warn(t.cause?.message ?: t.cause.toString())
-                } else {
-                    TestLog.warn(message)
-                }
-
-                /**
-                 * onRerunScenarioHandler
-                 */
-                if (t is RerunScenarioException && testContext.onRerunScenarioHandler != null) {
-                    testContext.onRerunScenarioHandler!!.invoke(t)
-                }
-
-                /**
-                 * Rerun scenario after resetting appium session
-                 */
-                TestLog.write("Rerunning scenario ...")
-                TestDriver.resetAppiumSession()
-                scenarioCore(
-                    scenarioId = scenarioId,
-                    order = order,
-                    desc = desc,
-                    launchApp = launchApp,
-                    testProc = testProc
-                )
-            } else {
-                throw t
+            if (context.hasError) {
+                val e = context.error!!
+                throw e
             }
         } finally {
             if (UITestCallbackExtension.deletedAnnotation != null) {
@@ -548,7 +613,7 @@ abstract class UITest : TestDrive {
         testSkipped = false
 
         val lastScenarioLog = TestLog.lastScenarioLog
-        if (lastScenarioLog?.testScenarioId == scenarioId && lastScenarioLog?.deleted == false) {
+        if (lastScenarioLog?.testScenarioId == scenarioId && CodeExecutionContext.isScenarioRerunning.not()) {
             throw TestDriverException(message(id = "multipleScenarioNotAllowed"))
         }
 
