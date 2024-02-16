@@ -558,10 +558,9 @@ class TestProfile(var profileName: String = "") {
     }
 
     /**
-     * completeProfile
+     * completeProfileWithDeviceInformation
      */
-    fun completeProfile() {
-        TestLog.info(message(id = "searchingDeviceForProfile", subject = testContext.profile.profileName))
+    fun completeProfileWithDeviceInformation() {
         if (TestMode.isAndroid) {
             if (automationName.isBlank()) {
                 automationName = "UiAutomator2"

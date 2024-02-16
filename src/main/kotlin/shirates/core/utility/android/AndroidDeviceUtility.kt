@@ -191,7 +191,7 @@ object AndroidDeviceUtility {
 
         val sortedDeviceList = getConnectedDeviceList()
             .sortedWith(compareBy<AndroidDeviceInfo> { it.platformVersion.toDoubleOrNull() }.thenBy { it.model }
-                .thenBy { it.isRealDevice }.thenByDescending { it.udid })
+                .thenBy { it.isRealDevice }.thenBy { it.udid })
         val parser = ProfileNameParser(testProfile.profileName)
 
         /**
@@ -373,9 +373,20 @@ object AndroidDeviceUtility {
     ): AndroidDeviceInfo {
         currentAndroidDeviceInfo = null
 
+        /**
+         * Get the running emulator of the AVD
+         */
         var device = getAndroidDeviceInfoByAvdName(avdName = emulatorProfile.avdName)
+
         if (emulatorProfile.emulatorPort != null) {
+            /**
+             * If emulatorPort is specified
+             * and the emulator is using another port
+             * shutdown the emulator
+             */
             if (device != null && device.port != emulatorPort.toString()) {
+                val avdName = emulatorProfile.avdName
+                TestLog.info("AVD $avdName is running on port ${device.port}. Shutting down ${avdName}.")
                 shutdownEmulatorByUdid(udid = device.udid)
                 device = null
             }
@@ -383,24 +394,48 @@ object AndroidDeviceUtility {
 
         if (device != null) {
             if (device.status == "device") {
+                /**
+                 * Return the emulator of `device` status
+                 */
+                TestLog.info("Running device found. (udid=${device.udid}, avd=${device.avdName})")
                 currentAndroidDeviceInfo = device
                 return device
             }
             if (device.status == "offline") {
+                /**
+                 * Terminate the process of the emulator of `offline` status
+                 */
                 val pid = device.pid.toIntOrNull()
                 if (pid != null) {
+                    TestLog.info("Terminating the process of the emulator of offline status. (udid=${device.udid}, avd=${device.avdName}), pid=$pid")
                     ProcessUtility.terminateProcess(pid = pid)
                 }
                 device = null
             }
         }
 
+        if (emulatorPort != null) {
+            /**
+             * If emulatorPort is specified
+             * shutdown the emulator using the port
+             */
+            val udid = "emulator-$emulatorPort"
+            val d = getAndroidDeviceInfoByUdid(udid = udid)
+            if (d != null) {
+                TestLog.info("Shutting down the emulator. (udid=${d.udid}, avd=${d.avdName})")
+                shutdownEmulatorByUdid(udid = udid)
+            }
+        }
+
+        /**
+         * Start emulator and wait for `device` status
+         */
         var shellResult: ShellUtility.ShellResult? = null
         if (device == null) {
+            TestLog.info("Starting emulator. (avd=${emulatorProfile.avdName})")
             shellResult = startEmulator(emulatorProfile)
             Thread.sleep(10 * 1000)
         }
-
         device = waitEmulatorStatusByAvdName(
             avdName = emulatorProfile.avdName,
             status = "device",
@@ -434,11 +469,10 @@ object AndroidDeviceUtility {
         intervalMilliseconds: Long = 1000
     ): AndroidDeviceInfo {
 
-        val getDevice = {
-            getAndroidDeviceInfoByAvdName(avdName = avdName)
-        }
         return waitEmulatorStatusCore(
-            getDevice = getDevice,
+            getDevice = {
+                getAndroidDeviceInfoByAvdName(avdName = avdName)
+            },
             status = status,
             timeoutSeconds = timeoutSeconds,
             intervalMilliseconds = intervalMilliseconds
@@ -498,6 +532,7 @@ object AndroidDeviceUtility {
         val deviceInfo = getAndroidDeviceInfoByUdid(udid = udid) ?: return
         val port = deviceInfo.port.toInt()
 
+        TestLog.info("Shutting down emulator. (udid=$udid)")
         val args = mutableListOf("adb", "-s", udid, "shell", "reboot", "-p").toTypedArray()
         ShellUtility.executeCommand(args = args)
 
@@ -627,11 +662,9 @@ object AndroidDeviceUtility {
         testProfile: TestProfile
     ): AndroidDeviceInfo {
 
-        TestLog.info("Shutting down emulator. ($testProfile)")
         shutdownEmulatorByUdid(testProfile.udid)
         val emulatorProfile = getEmulatorProfile(testProfile = testProfile)
 
-        TestLog.info("Starting emulator. ($testProfile)")
         val r = startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
         return r
     }
