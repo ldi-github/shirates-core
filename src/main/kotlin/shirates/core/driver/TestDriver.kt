@@ -18,6 +18,7 @@ import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isEmulator
 import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isVirtualDevice
@@ -552,7 +553,7 @@ object TestDriver {
         if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
             wdaInstallOptimization(profile = profile)
         }
-        if (isAndroid) {
+        if (isAndroid && isEmulator) {
             // start emulator and wait ready
             val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = profile)
             AndroidDeviceUtility.startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
@@ -607,8 +608,6 @@ object TestDriver {
                 TestLog.warn(message(id = "findingFelicaPackageFailed", arg1 = "${t.message}"))
             }
         }
-
-        profile.completeProfile()
     }
 
     private fun setCapabilities(
@@ -684,14 +683,13 @@ object TestDriver {
 
     private fun restartEmulator(profile: TestProfile) {
 
-        if (isRealDevice) {
+        if (profile.udid.startsWith("emulator-").not()) {
             return
         }
 
         val ms = Measure()
 
         if (profile.udid.isBlank()) {
-            TestLog.info("Starting emulator. (${profile.profileName})")
             AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
             return
         }
@@ -2244,7 +2242,7 @@ object TestDriver {
         }
 
         if (testProfile.udid.isBlank()) {
-            testProfile.completeProfile()
+            testProfile.completeProfileWithDeviceInformation()
 
             if (testProfile.udid.isBlank()) {
                 resetAppiumSession()

@@ -329,7 +329,7 @@ abstract class UITest : TestDrive {
             }
 
             // profile
-            profile.completeProfile()
+            profile.completeProfileWithDeviceInformation()
             profile.validate()
 
             // Appium Server

@@ -7,10 +7,8 @@ import org.openqa.selenium.interactions.Sequence
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
-import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.proxy.AppiumProxy
 import java.time.Duration
 import kotlin.math.max
 import kotlin.math.min
@@ -119,17 +117,7 @@ internal fun TestDrive.swipePointToPointCore(
     swipeContext: SwipeContext,
 ): TestElement {
 
-    fun swipeFuncIos() {
-
-        val sc = swipeContext
-
-        val json = """
-{"actions":[{"action":"press","options":{"x":${sc.startX},"y":${sc.startY}}},{"action":"wait","options":{"ms":${sc.durationSeconds * 1000}}},{"action":"moveTo","options":{"x":${sc.endX},"y":${sc.endY}}},{"action":"release","options":{}}]}
-        """.trimIndent()
-        AppiumProxy.invoke("touch/perform", json)
-    }
-
-    fun swipeFuncAndroid() {
+    fun swipeFunc() {
 
         val sc = swipeContext
         val finger = PointerInput(PointerInput.Kind.TOUCH, "finger")
@@ -163,15 +151,6 @@ internal fun TestDrive.swipePointToPointCore(
         } catch (t: InvalidElementStateException) {
             TestLog.trace(t.message!!)
             //  https://github.com/appium/java-client/issues/2045
-        }
-    }
-
-    fun swipeFunc() {
-
-        if (isiOS) {
-            swipeFuncIos()
-        } else {
-            swipeFuncAndroid()
         }
 
         TestDriver.invalidateCache()
