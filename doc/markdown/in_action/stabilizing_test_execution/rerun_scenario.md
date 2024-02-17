@@ -26,6 +26,19 @@ Rerun is executed in these situation.
 | Terminating app time out. (Android)               | ex. `'com.android.settings' is still running after 500ms timeout`                    |
 | Could not proxy command to the remote server.     | Sending command to the device failed. (ex. `socket hang up`, `connect ECONNREFUSED`) |
 
+## Related Parameters
+
+- enableRerunScenario
+- enableAlwaysRerunOnErrorAndroid
+- enableAlwaysRerunOnErrorIos
+- scenarioTimeoutSeconds
+- scenarioMaxCount
+- enableRerunOnScreenshotBlackout
+- screenshotBlackoutThreshold
+- enableRestartDeviceOnResettingAppiumSession
+
+See [Parameters](../../basic/parameter/parameters.md)
+
 ## Requesting rerun scenario in code
 
 You can handle error and request rerun scenario with throwing **RerunScenarioException**.

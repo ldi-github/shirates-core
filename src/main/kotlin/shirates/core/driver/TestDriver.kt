@@ -562,11 +562,11 @@ object TestDriver {
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
 
-        val retryMaxCount = 3
         val retryContext = RetryUtility.exec(
-            retryMaxCount = retryMaxCount.toLong(),
+            retryMaxCount = testContext.retryMaxCount,
             retryTimeoutSeconds = testContext.retryTimeoutSeconds,
             retryPredicate = getRetryPredicate(profile = profile, capabilities = capabilities),
+            onError = getOnError(profile = profile, capabilities = capabilities),
             onBeforeRetry = getBeforeRetry(profile = profile, capabilities = capabilities),
             action = getInitFunc(profile = profile, capabilities = capabilities)
         )
@@ -726,6 +726,33 @@ object TestDriver {
         } else {
             // NOP
         }
+    }
+
+    private fun getOnError(
+        profile: TestProfile,
+        capabilities: DesiredCapabilities
+    ): (RetryContext<Unit>) -> Unit {
+
+        val onError: (RetryContext<Unit>) -> Unit = { context ->
+            val e = context.exception
+            if (e != null) {
+                val message = e.message ?: ""
+                /**
+                 * Throw exception on critical error
+                 * Exit retrying loop immediately
+                 */
+                if (message.contains("Either provide 'app' option to install")) {
+                    throw TestDriverException(
+                        message(
+                            id = "packageOrBundleIdNotFound",
+                            arg1 = profile.packageOrBundleId,
+                            submessage = e.message
+                        ), cause = e
+                    )
+                }
+            }
+        }
+        return onError
     }
 
     private fun getBeforeRetry(

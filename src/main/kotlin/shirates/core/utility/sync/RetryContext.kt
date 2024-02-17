@@ -14,6 +14,7 @@ class RetryContext<T>(
     val log: Boolean = true,
     var retryCount: Long = 0,
     var retryPredicate: (RetryContext<T>) -> Boolean,
+    var onError: (RetryContext<T>) -> T,
     var onBeforeRetry: (RetryContext<T>) -> T,
     var action: (RetryContext<T>) -> T
 ) {
@@ -47,6 +48,7 @@ class RetryContext<T>(
         retryIntervalSeconds = testContext.retryIntervalSeconds,
         log = true,
         retryPredicate = { true },
+        onError = { null as T },
         onBeforeRetry = { null as T },
         action = { null as T })
 
