@@ -133,7 +133,7 @@ object Const {
     const val SCROLL_TO_EDGE_BOOST = 1
     const val SCROLL_INTERVAL_SECONDS = 0.5
     const val SCROLL_MAX_COUNT = 20
-    const val TAP_HOLD_SECONDS = 0.2
+    const val TAP_HOLD_SECONDS = 0.0
     const val ENABLE_CACHE = true
     const val FIND_WEB_ELEMENT_TIMEOUT_SECONDS = 0.2
     const val SYNC_WAIT_SECONDS = 1.8
