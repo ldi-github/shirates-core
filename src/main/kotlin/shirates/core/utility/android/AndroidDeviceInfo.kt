@@ -2,6 +2,7 @@ package shirates.core.utility.android
 
 import shirates.core.Const
 import shirates.core.driver.TestMode
+import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
 
 class AndroidDeviceInfo(val line: String) {
@@ -19,11 +20,15 @@ class AndroidDeviceInfo(val line: String) {
         get() {
             val lines = psResult.split(Const.NEW_LINE)
             if (lines.count() >= 2) {
+                val line = lines[1]
                 if (TestMode.isRunningOnWindows) {
-                    return lines[1]
+                    return line
                 } else {
-                    val cmdIndex = lines[1].indexOf("/")
-                    return lines[1].substring(cmdIndex)
+                    val cmdIndex = line.indexOf("/")
+                    if (cmdIndex < 0) {
+                        TestLog.warn("cmdIndex < 0. line=$line")
+                    }
+                    return line.substring(cmdIndex)
                 }
             } else {
                 return ""
