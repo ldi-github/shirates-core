@@ -3,6 +3,7 @@ package shirates.core.unittest.utility.misc
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import shirates.core.UserVar
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
@@ -135,7 +136,34 @@ class StringPathExtensionTest : UnitTest() {
             // Act
             val actual = "".toPath()
             // Assert
-            assertThat(expected).isEqualTo(actual)
+            assertThat(actual).isEqualTo(expected)
+        }
+        run {
+            // Arrange
+            val text = "testConfig"
+            val expected = UserVar.project.resolve(text)
+            // Act
+            val actual = text.toPath()
+            // Assert
+            assertThat(actual).isEqualTo(expected)
+        }
+        run {
+            // Arrange
+            val text = "/Users/hoge"
+            // Act
+            val actual = text.toPath()
+            // Assert
+            assertThat(actual).isEqualTo(Path.of(text))
+        }
+        if (TestMode.isRunningOnWindows) {
+            run {
+                // Arrange
+                val text = "C:¥Users¥hoge"
+                // Act
+                val actual = text.toPath()
+                // Assert
+                assertThat(actual).isEqualTo(Path.of(text))
+            }
         }
     }
 

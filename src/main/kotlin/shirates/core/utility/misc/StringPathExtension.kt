@@ -1,6 +1,7 @@
 package shirates.core.utility
 
 import okhttp3.internal.trimSubstring
+import shirates.core.UserVar
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
 import java.io.File
@@ -60,7 +61,10 @@ fun String?.toPath(): Path {
 
     val text = (this ?: "").replaceUserHome()
     try {
-        return Path.of(text).toAbsolutePath()
+        if (text.startsWith(File.separator)) {
+            return Path.of(text).toAbsolutePath()
+        }
+        return UserVar.project.resolve(text).toAbsolutePath()
     } catch (t: Throwable) {
         return Path.of(text.replace(":", ""))
     }
