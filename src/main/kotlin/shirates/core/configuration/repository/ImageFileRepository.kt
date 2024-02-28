@@ -117,7 +117,8 @@ object ImageFileRepository {
         }
         val imageFiles = entries.filter { it.fileName.startsWith(fname) }.sortedByDescending { it.fileName }
         if (screenDirectory != null) {
-            val files = imageFiles.filter { it.filePath.toString().contains(screenDirectory) }
+            val dir = screenDirectory.replace("/", File.separator)
+            val files = imageFiles.filter { it.filePath.toString().contains(dir) }
             return files.firstOrNull()
         }
         return imageFiles.firstOrNull()

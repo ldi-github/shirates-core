@@ -54,9 +54,10 @@ class UserVarTest : UnitTest() {
             run {
                 // Arrange
                 System.setProperty(UserVar.SHIRATES_PROJECT_DIR, "/Users/wave1008/Downloads")
+                val expected = Path.of("/Users/wave1008/Downloads").toAbsolutePath()
                 // Act, Assert
                 assertThat(UserVar.PROJECT).isEqualTo("/Users/wave1008/Downloads")
-                assertThat(UserVar.project).isEqualTo(Path.of("/Users/wave1008/Downloads"))
+                assertThat(UserVar.project).isEqualTo(expected)
             }
         } finally {
             if (original == null) {

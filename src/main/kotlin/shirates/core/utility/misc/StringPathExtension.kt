@@ -59,15 +59,26 @@ internal fun String.replaceDirectoryForLog(): String {
  */
 fun String?.toPath(): Path {
 
-    val text = (this ?: "").replaceUserHome()
-    try {
-        if (text.startsWith(File.separator)) {
-            return Path.of(text).toAbsolutePath()
-        }
-        return UserVar.project.resolve(text).toAbsolutePath()
-    } catch (t: Throwable) {
-        return Path.of(text.replace(":", ""))
+    var text = (this ?: "").replaceUserHome()
+        .replace("\u00A5", "/")     // Replace YEN
+        .replace("\\", "/")
+    if (File.separator == "\\") {
+        // for Windows
+        text = text
+            .replace("/C/", "/")
+            .replace("/c/", "/")
+            .replace("C:", "/")
+            .replace("c:", "/")
     }
+    text = text
+        .replace("//", "/")
+    if (text.startsWith("/")) {
+        if (File.separator == "\\") {
+            text = text.replace("/", "\\")
+        }
+        return Path.of(text).toAbsolutePath()
+    }
+    return Path.of(UserVar.PROJECT).resolve(text).toAbsolutePath()
 }
 
 /**

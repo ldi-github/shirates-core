@@ -18,7 +18,7 @@ object UserVar {
 
     val PROJECT: String
         get() {
-            val shiratesProjectDir = System.getProperty(SHIRATES_PROJECT_DIR)
+            val shiratesProjectDir = kotlin.runCatching { System.getProperty(SHIRATES_PROJECT_DIR) }.getOrNull()
             if (shiratesProjectDir.isNullOrBlank()) {
                 return System.getProperty("user.dir")
             }

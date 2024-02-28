@@ -132,7 +132,7 @@ class StringPathExtensionTest : UnitTest() {
 
         run {
             // Arrange
-            val expected = shirates.core.UserVar.project
+            val expected = UserVar.project
             // Act
             val actual = "".toPath()
             // Assert
@@ -153,16 +153,44 @@ class StringPathExtensionTest : UnitTest() {
             // Act
             val actual = text.toPath()
             // Assert
-            assertThat(actual).isEqualTo(Path.of(text))
+            assertThat(actual).isEqualTo(Path.of(text).toAbsolutePath())
         }
         if (TestMode.isRunningOnWindows) {
             run {
                 // Arrange
-                val text = "C:¥Users¥hoge"
+                val text = "C:¥Users¥hoge"  // ¥: u00A5
+                val expected = "C:\\Users\\hoge"
                 // Act
                 val actual = text.toPath()
                 // Assert
-                assertThat(actual).isEqualTo(Path.of(text))
+                assertThat(actual).isEqualTo(Path.of(expected))
+            }
+            run {
+                // Arrange
+                val text = "c:¥Users¥hoge"  // ¥: u00A5
+                val expected = "C:\\Users\\hoge"
+                // Act
+                val actual = text.toPath()
+                // Assert
+                assertThat(actual).isEqualTo(Path.of(expected))
+            }
+            run {
+                // Arrange
+                val text = "/C/Users/hoge"
+                val expected = "C:\\Users\\hoge"
+                // Act
+                val actual = text.toPath()
+                // Assert
+                assertThat(actual).isEqualTo(Path.of(expected))
+            }
+            run {
+                // Arrange
+                val text = "/c/Users/hoge"
+                val expected = "C:\\Users\\hoge"
+                // Act
+                val actual = text.toPath()
+                // Assert
+                assertThat(actual).isEqualTo(Path.of(expected))
             }
         }
     }
