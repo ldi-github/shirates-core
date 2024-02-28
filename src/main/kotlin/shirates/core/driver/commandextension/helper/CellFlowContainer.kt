@@ -7,59 +7,34 @@ import shirates.core.utility.element.ElementCategory
 class CellFlowContainer {
 
     class ContainerItem(
-        val x: Int,
-        val y: Int,
-        val item: TestElement
+        val cell: TestElement,
+        val testElement: TestElement,
+        val container: IFlowContainer
     )
 
-    private val members = mutableListOf<ContainerItem>()
+    private val containerItems = mutableListOf<ContainerItem>()
 
     /**
      * addElement
      */
     fun addElement(
         element: TestElement
-    ): TestElement? {
+    ) {
 
-        var e = element.cellOf(throwsException = false)
-        if (e.isEmpty) {
-            e = element.parentElement
-            if (e.category == ElementCategory.BUTTON) {
-                e = e.parentElement
+        var cell = element.cellOf(throwsException = false)
+        if (cell.isEmpty) {
+            cell = element.parentElement
+            if (cell.category == ElementCategory.BUTTON) {
+                cell = cell.parentElement
             }
-            return null
         }
-        println(e)
-
-        return addElement(
-            element = element,
-            x = e.bounds.left,
-            y = e.bounds.top
-        )
-    }
-
-    /**
-     * addElement
-     */
-    fun addElement(
-        element: TestElement,
-        x: Int = element.parentElement.bounds.left,
-        y: Int = element.parentElement.bounds.top,
-        force: Boolean = false
-    ): TestElement? {
-
-        if (!force && element.isWidget.not()) {
-            return null
+        var containerItem = containerItems.filter { it.cell == cell }.firstOrNull()
+        if (containerItem == null) {
+            val container = FlowContainer()
+            containerItem = ContainerItem(cell = cell, testElement = element, container = container)
+            containerItems.add(containerItem)
         }
-        val registered = members.map { it.item }.firstOrNull() { it == element }
-        if (registered != null) {
-            return registered
-        }
-
-        val item = ContainerItem(x = x, y = y, item = element)
-        members.add(item)
-
-        return element
+        containerItem.container.addElement(element)
     }
 
     /**
@@ -78,12 +53,12 @@ class CellFlowContainer {
      */
     fun getElements(): List<TestElement> {
 
-        members.sortWith(compareBy<ContainerItem> { it.y }
-            .thenBy { it.x }
-            .thenBy { it.item.bounds.left }
-            .thenBy { it.item.bounds.top }
-            .thenBy { -it.item.bounds.area })
-
-        return members.map { it.item }.toList()
+        containerItems.sortWith(compareBy<ContainerItem> { it.cell.bounds.top }
+            .thenBy { it.cell.bounds.left })
+        val elements = mutableListOf<TestElement>()
+        for (containerItem in containerItems) {
+            elements.addAll(containerItem.container.getElements())
+        }
+        return elements
     }
 }

@@ -23,7 +23,7 @@ private fun TestElement.flowCore(
     val isThisContainingOthers =
         filteredElements.any { it.toString() != this.toString() && it.bounds.isIncludedIn(this.bounds) }
     if (isThisContainingOthers.not()) {
-        fc.addElement(element = this, force = true)
+        fc.addElementToRow(element = this, force = true)
     }
     fc.addAll(filteredElements)
 
@@ -56,7 +56,7 @@ private fun TestElement.vflowCore(
     val isThisContainingOthers =
         filteredElements.any { it.toString() != this.toString() && it.bounds.isIncludedIn(this.bounds) }
     if (isThisContainingOthers.not()) {
-        vfc.addElement(element = this, force = true)
+        vfc.addElementToColumn(element = this, force = true)
     }
     vfc.addAll(filteredElements)
 

@@ -28,7 +28,7 @@ class FlowContainerTest : UnitTest() {
         val closeButton = select("#close")
         val fc = FlowContainer()
         // Act
-        fc.addElement(closeButton)
+        fc.addElementToRow(closeButton)
         // Assert
         assertThat(fc.rows.count()).isEqualTo(1)
         // Arrange
@@ -48,8 +48,8 @@ class FlowContainerTest : UnitTest() {
         val image1 = select("#image1")
         val fc = FlowContainer()
         // Act
-        fc.addElement(closeButton)
-        fc.addElement(image1)
+        fc.addElementToRow(closeButton)
+        fc.addElementToRow(image1)
         // Assert
         assertThat(fc.rows.count()).isEqualTo(2)
         // Arrange
@@ -70,9 +70,9 @@ class FlowContainerTest : UnitTest() {
         val settings = select("Settings")
         val fc = FlowContainer()
         // Act
-        fc.addElement(closeButton)
-        fc.addElement(image1)
-        fc.addElement(settings)
+        fc.addElementToRow(closeButton)
+        fc.addElementToRow(image1)
+        fc.addElementToRow(settings)
         // Assert
         assertThat(fc.rows.count()).isEqualTo(2)
         // Arrange
@@ -96,10 +96,10 @@ class FlowContainerTest : UnitTest() {
         val menuButton = select("#menu")
         val fc = FlowContainer()
         // Act
-        fc.addElement(closeButton)
-        fc.addElement(image1)
-        fc.addElement(settings)
-        fc.addElement(menuButton)
+        fc.addElementToRow(closeButton)
+        fc.addElementToRow(image1)
+        fc.addElementToRow(settings)
+        fc.addElementToRow(menuButton)
         // Assert
         assertThat(fc.rows.count()).isEqualTo(2)
         // Arrange
@@ -126,11 +126,11 @@ class FlowContainerTest : UnitTest() {
         val general = select("General")
         val fc = FlowContainer()
         // Act
-        fc.addElement(closeButton)
-        fc.addElement(image1)
-        fc.addElement(settings)
-        fc.addElement(menuButton)
-        fc.addElement(general)
+        fc.addElementToRow(closeButton)
+        fc.addElementToRow(image1)
+        fc.addElementToRow(settings)
+        fc.addElementToRow(menuButton)
+        fc.addElementToRow(general)
         // Assert
         assertThat(fc.rows.count()).isEqualTo(3)
         // Arrange
@@ -149,7 +149,7 @@ class FlowContainerTest : UnitTest() {
         val fc = FlowContainer()
         // Act
         for (element in TestElementCache.allElements.filter { it.isWidget }) {
-            fc.addElement(element)
+            fc.addElementToRow(element)
         }
         // Assert
         assertThat(fc.rows.count()).isEqualTo(6)
@@ -198,7 +198,7 @@ class FlowContainerTest : UnitTest() {
 
         // Arrange
         val fc = FlowContainer()
-        fc.addElement(select("#close"))
+        fc.addElementToRow(select("#close"))
         run {
             // Act
             val elements = fc.getElements()
@@ -207,7 +207,7 @@ class FlowContainerTest : UnitTest() {
         }
 
         // Arrange
-        fc.addElement(select("#image1"))
+        fc.addElementToRow(select("#image1"))
         run {
             // Act
             val elements = fc.getElements()
@@ -218,7 +218,7 @@ class FlowContainerTest : UnitTest() {
         }
 
         // Arrange
-        fc.addElement(select("#menu"))
+        fc.addElementToRow(select("#menu"))
         run {
             // Act
             val elements = fc.getElements()
@@ -230,7 +230,7 @@ class FlowContainerTest : UnitTest() {
         }
 
         // Arrange
-        fc.addElement(select("Settings"))
+        fc.addElementToRow(select("Settings"))
         run {
             // Act
             val elements = fc.getElements()
@@ -243,7 +243,7 @@ class FlowContainerTest : UnitTest() {
         }
 
         // Arrange
-        fc.addElement(select("#general-switch"))
+        fc.addElementToRow(select("#general-switch"))
         run {
             // Act
             val elements = fc.getElements()
@@ -257,7 +257,7 @@ class FlowContainerTest : UnitTest() {
         }
 
         // Arrange
-        fc.addElement(select("Last Name"))
+        fc.addElementToRow(select("Last Name"))
         run {
             // Act
             val elements = fc.getElements()
@@ -277,12 +277,12 @@ class FlowContainerTest : UnitTest() {
 
         // Arrange
         val fc = FlowContainer()
-        fc.addElement(select("#close"))
-        fc.addElement(select("#image1"))
-        fc.addElement(select("#menu"))
-        fc.addElement(select("Settings"))
-        fc.addElement(select("#general-switch"))
-        fc.addElement(select("Last Name"))
+        fc.addElementToRow(select("#close"))
+        fc.addElementToRow(select("#image1"))
+        fc.addElementToRow(select("#menu"))
+        fc.addElementToRow(select("Settings"))
+        fc.addElementToRow(select("#general-switch"))
+        fc.addElementToRow(select("Last Name"))
         // Act, Assert
         assertThat(fc.element(1)).isEqualTo(select("#close"))
         assertThat(fc.element(2)).isEqualTo(select("Settings"))
