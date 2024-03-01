@@ -1,6 +1,7 @@
 package shirates.core.utility
 
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -18,4 +19,12 @@ fun Path.toRelativePath(): Path {
 fun Path.listFiles(): List<File> {
 
     return this.toFile().listFiles()?.toList() ?: mutableListOf()
+}
+
+/**
+ * exists
+ */
+fun Path.exists(): Boolean {
+
+    return Files.exists(this)
 }

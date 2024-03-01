@@ -5,6 +5,7 @@ import shirates.core.UserVar
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -79,6 +80,18 @@ fun String?.toPath(): Path {
         return Path.of(text).toAbsolutePath()
     }
     return Path.of(UserVar.PROJECT).resolve(text).toAbsolutePath()
+}
+
+/**
+ * fileExists
+ */
+fun String?.fileExists(): Boolean {
+
+    if (this.isNullOrBlank()) {
+        return false
+    }
+
+    return Files.exists(this.toPath())
 }
 
 /**
