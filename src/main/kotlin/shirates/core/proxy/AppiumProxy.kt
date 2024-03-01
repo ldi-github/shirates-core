@@ -198,8 +198,6 @@ object AppiumProxy {
     fun getSourceResponse(): Response {
 
         val d = TestDriver.appiumDriver
-
-        // ex. http://localhost:8201/wd/hub/session/$sessionId/source
         val url = "${d.remoteAddress}/session/${d.sessionId}/source".toHttpUrlOrNull()!!.newBuilder()
             .build()
         val response = getResponse(url)
@@ -354,7 +352,6 @@ object AppiumProxy {
 
     /**
      * find
-     * @see https://appium.io/docs/en/commands/element/find-element/#example-usage
      */
     fun findElements(using: String, value: String): String {
 

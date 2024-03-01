@@ -280,14 +280,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             )
             return null
         }
-//        if (TestDriver.skip) {
-//            return TestLog.skip(
-//                message = message,
-//                subject = subject,
-//                arg1 = arg1,
-//                arg2 = arg2
-//            )
-//        }
 
         if (fireEvent) {
             TestDriver.fireIrregularHandler()
@@ -400,14 +392,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             }
             return null
         }
-//        if (TestDriver.skip) {
-//            return TestLog.skip(
-//                message = message,
-//                subject = subject,
-//                arg1 = arg1,
-//                arg2 = arg2
-//            )
-//        }
 
         val commandText = getCommandText(command = command, subject = subject, arg1 = arg1, arg2 = arg2)
         val ms = Measure(commandText)

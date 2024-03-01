@@ -596,18 +596,6 @@ object TestLog {
         return indentLevel
     }
 
-//    private fun createIndentMap(): MutableMap<Int, String> {
-//
-//        val map = mutableMapOf<Int, String>()
-//        map[0] = ""
-//        for (i in 1..50) {
-//            map[i] = "".padStart(i * 4)
-//        }
-//        return map
-//    }
-
-//    private val indentMap = createIndentMap()
-
     internal fun getIndentString(level: Int = indentLevel): String {
 
         return " ".repeat(level * 4)
