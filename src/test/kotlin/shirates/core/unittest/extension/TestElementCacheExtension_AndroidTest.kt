@@ -36,6 +36,8 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
         assertThat(e.className).isEqualTo("android.widget.FrameLayout")
         assertThat(e.type).isEqualTo("")
         assertThat(e.id).isEqualTo("")
+        assertThat(e.idOrName).isEqualTo("")
+        assertThat(e.idOrNameShort).isEqualTo("")
         assertThat(e.name).isEqualTo("")
         assertThat(e.text).isEqualTo("")
         assertThat(e.label).isEqualTo("")
@@ -56,6 +58,29 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
         assertThat(e.height).isEqualTo("")
         assertThat(e.boundsString).isEqualTo("[0,0][1080,2088]")
         assertThat(e.displayed).isEqualTo("true")
+    }
+
+    @Test
+    fun idOrName_idOrNameShort() {
+
+        // Arrange
+        TestElementCache.loadXml(xmlData = XmlDataAndroid.SettingsTopScreen)
+        run {
+            // Arrange
+            val e = TestElementCache.select("#com.android.settings:id/settings_homepage_container")
+            // Act, Assert
+            assertThat(e.id).isEqualTo("com.android.settings:id/settings_homepage_container")
+            assertThat(e.idOrName).isEqualTo("com.android.settings:id/settings_homepage_container")
+            assertThat(e.idOrNameShort).isEqualTo("settings_homepage_container")
+        }
+        run {
+            // Arrange
+            val e = TestElementCache.select("#android:id/content")
+            // Act, Assert
+            assertThat(e.id).isEqualTo("android:id/content")
+            assertThat(e.idOrName).isEqualTo("android:id/content")
+            assertThat(e.idOrNameShort).isEqualTo("android:id/content")
+        }
     }
 
     @Test
