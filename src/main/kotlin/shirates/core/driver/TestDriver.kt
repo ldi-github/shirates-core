@@ -87,6 +87,27 @@ object TestDriver {
         }
 
     /**
+     * status
+     */
+    val status: Map<String, Any>
+        get() {
+            try {
+                return appiumDriver.status
+            } catch (t: Throwable) {
+                return mutableMapOf()
+            }
+        }
+
+    /**
+     * isReady
+     */
+    val isReady: Boolean
+        get() {
+            val st = status
+            return (st.containsKey("ready") && st["ready"] == true)
+        }
+
+    /**
      * canReuse
      */
     val canReuse: Boolean
@@ -661,13 +682,25 @@ object TestDriver {
             )
             if (isAndroid) {
                 mAppiumDriver = AndroidDriver(appiumServerUrl, capabilities)
+                if (isReady.not()) {
+                    printStatus()
+                }
                 healthCheckForAndroid(profile = profile)
             } else {
                 TestLog.info(message(id = "initializingIosDriverMayTakeMinutes"))
                 mAppiumDriver = IOSDriver(appiumServerUrl, capabilities)
+                if (isReady.not()) {
+                    printStatus()
+                }
             }
         }
         return initFunc
+    }
+
+    private fun printStatus() {
+
+        val arg = status.map { "${it.key}=${it.value}" }.joinToString(", ")
+        TestLog.warn("TestDriver.isReady=$isReady. $arg")
     }
 
     private fun getRetryPredicate(
