@@ -279,7 +279,6 @@ class SpecWorksheetModel(
     fun setResult(logLine: LogLine): LineObject {
 
         if (noLoadRun) {
-//            current.result = notApplicable
             if (current.auto.isBlank() || current.auto == "A") {
                 current.auto =
                     if (logLine.command == "manual" || logLine.result == "knownIssue") "M"

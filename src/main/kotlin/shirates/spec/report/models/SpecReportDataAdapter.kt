@@ -2,6 +2,7 @@ package shirates.spec.report.models
 
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import shirates.core.driver.TestMode
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.TestLog
 import shirates.core.utility.toDateOrNull
@@ -144,9 +145,22 @@ class SpecReportDataAdapter(val data: SpecReportData) {
             if (specLine.step.isNotBlank() && specLine.step.toIntOrNull() == null && specLine.action.isBlank()) {
                 specLine.type = "scenario"
             }
-            data.specLines.add(specLine)
+            if (canAdd(specLine = specLine)) {
+                data.specLines.add(specLine)
+            }
         }
         data.refreshCounts()
+    }
+
+    private fun canAdd(specLine: SpecLine): Boolean {
+
+        if (specLine.os.isBlank()) {
+            return true
+        } else if (TestMode.isAndroid) {
+            return specLine.os.lowercase() == "android"
+        } else {
+            return specLine.os.lowercase() == "ios"
+        }
     }
 
     private fun readSpecLine(worksheet: XSSFSheet, specSheetPos: SpecSheetPosition, i: Int): SpecLine {
