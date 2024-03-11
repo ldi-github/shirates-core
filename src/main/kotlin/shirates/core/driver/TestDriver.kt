@@ -571,7 +571,7 @@ object TestDriver {
 
     private fun createAppiumDriverCore(profile: TestProfile) {
 
-        if (testProfile.useRemoteServer?.toBoolean() == false) {
+        if (testProfile.useRemoteServer?.toBoolean() != true) {
             if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
                 wdaInstallOptimization(profile = profile)
             }
@@ -674,7 +674,7 @@ object TestDriver {
         TestLog.info(message(id = "connectingToAppiumServer", subject = "$appiumServerUrl"))
 
         val initFunc: (RetryContext<Unit>) -> Unit = { context ->
-            if (profile.useRemoteServer?.toBoolean() == false) {
+            if (profile.useRemoteServer?.toBoolean() != true) {
                 val connectionRefused = context.lastException?.message?.contains("Connection refused") ?: false
                 if (connectionRefused) {
                     AppiumServerManager.close()
@@ -805,26 +805,28 @@ object TestDriver {
                 TestLog.info("Retry cause: $message")
             }
 
-            if (isAndroid) {
-                // ex.
-                // socket hang up
-                // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
+            if (profile.useRemoteServer?.toBoolean() != true) {
+                if (isAndroid) {
+                    // ex.
+                    // socket hang up
+                    // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
 
-                /**
-                 * Emulator process list
-                 */
-                val psResult = AdbUtility.ps(udid = profile.udid)
-                TestLog.directoryForLog.resolve("${TestLog.lines.count()}_android_ps.txt")
-                    .toFile().writeText(psResult)
-                restartAdbServerEmulatorAppiumServer(profile, context)
-            } else if (isiOS) {
-                val udid = initialCapabilities["udid"] ?: profile.udid
-                if (udid.isBlank()) {
-                    throw TestDriverException("udid not found.")
+                    /**
+                     * Emulator process list
+                     */
+                    val psResult = AdbUtility.ps(udid = profile.udid)
+                    TestLog.directoryForLog.resolve("${TestLog.lines.count()}_android_ps.txt")
+                        .toFile().writeText(psResult)
+                    restartAdbServerEmulatorAppiumServer(profile, context)
+                } else if (isiOS) {
+                    val udid = initialCapabilities["udid"] ?: profile.udid
+                    if (udid.isBlank()) {
+                        throw TestDriverException("udid not found.")
+                    }
+                    TestLog.info("udid found in initialCapabilities. (udid=$udid)")
+
+                    restartIos(profile)
                 }
-                TestLog.info("udid found in initialCapabilities. (udid=$udid)")
-
-                restartIos(profile)
             }
         }
         return beforeRetry
@@ -2307,7 +2309,7 @@ object TestDriver {
             throw IllegalArgumentException("launchAppCore(blank)")
         }
 
-        if (testProfile.useRemoteServer?.toBoolean() == false) {
+        if (testProfile.useRemoteServer?.toBoolean() != true) {
             testProfile.completeProfileWithDeviceInformation()
 
             if (testProfile.udid.isBlank()) {

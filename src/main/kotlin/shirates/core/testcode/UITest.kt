@@ -329,13 +329,13 @@ abstract class UITest : TestDrive {
             }
 
             // profile
-            if (profile.useRemoteServer?.toBoolean() == false) {
+            if (profile.useRemoteServer?.toBoolean() != true) {
                 profile.completeProfileWithDeviceInformation()
             }
             profile.validate()
 
             // Appium Server
-            if (profile.useRemoteServer?.toBoolean() == false) {
+            if (profile.useRemoteServer?.toBoolean() != true) {
                 AppiumServerManager.setupAppiumServerProcess(
                     sessionName = TestLog.currentTestClassName,
                     profile = profile
@@ -356,7 +356,7 @@ abstract class UITest : TestDrive {
                     )
                     TestDriver.testContext = TestDriver.lastTestContext
                 } else {
-                    if (profile.useRemoteServer?.toBoolean() == false) {
+                    if (profile.useRemoteServer?.toBoolean() != true) {
                         // Reset Appium session
                         TestDriver.resetAppiumSession()
                     }
