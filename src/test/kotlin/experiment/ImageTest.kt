@@ -1,7 +1,0 @@
-package experiment
-
-
-class ImageTest {
-
-
-}

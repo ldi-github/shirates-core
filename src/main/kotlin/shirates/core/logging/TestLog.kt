@@ -980,6 +980,31 @@ object TestLog {
     }
 
     /**
+     * conditionalAuto
+     */
+    fun conditionalAuto(
+        message: String,
+        scriptCommand: String? = "conditionalAuto",
+        subject: String = "",
+        arg1: String = "",
+        arg2: String = "",
+        log: Boolean = enableTrace || CodeExecutionContext.isInSilentCommand.not()
+    ): LogLine {
+
+        result(LogType.COND_AUTO, message)
+        return write(
+            message = message,
+            logType = LogType.COND_AUTO,
+            result = LogType.COND_AUTO,
+            scriptCommand = scriptCommand,
+            subject = subject,
+            arg1 = arg1,
+            arg2 = arg2,
+            log = log
+        )
+    }
+
+    /**
      * skipScenario
      */
     fun skipScenario(

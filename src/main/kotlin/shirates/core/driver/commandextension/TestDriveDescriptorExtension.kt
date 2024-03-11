@@ -116,6 +116,28 @@ fun TestDrive.manual(
     return testElement
 }
 
+internal fun TestDrive.conditionalAuto(
+    message: String,
+    arg1: String = "",
+    arg2: String = ""
+): TestElement {
+
+    val testElement = getThisOrIt()
+
+    val context = TestDriverCommandContext(testElement)
+    context.execLogCommand(message = message, subject = message) {
+        TestLog.conditionalAuto(
+            message = message,
+            scriptCommand = "conditionalAuto",
+            subject = message,
+            arg1 = arg1,
+            arg2 = arg2
+        )
+    }
+
+    return testElement
+}
+
 /**
  * procedure
  */
@@ -260,7 +282,7 @@ private fun cellOfCore(
 ): TestElement {
     val command = "cellOf"
 
-    val cell = testElement.getCellOf()
+    val cell = testElement.getCell()
     if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
         throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
 
@@ -284,7 +306,10 @@ private fun cellOfCore(
     return cell
 }
 
-internal fun TestElement.getCellOf(): TestElement {
+/**
+ * getCell
+ */
+fun TestElement.getCell(): TestElement {
 
     val ancestorScrollableElements = this.getScrollableElementsInAncestorsAndSelf()
     val cell =
@@ -293,9 +318,13 @@ internal fun TestElement.getCellOf(): TestElement {
             val ancestorsAndSelf = this.ancestorsAndSelf
             val index = ancestorsAndSelf.indexOf(scrollableElement)
             val cellIndex = index + 1
-            ancestorsAndSelf[cellIndex]
+            if (cellIndex > ancestorsAndSelf.count() - 1) {
+                TestElement.emptyElement
+            } else {
+                ancestorsAndSelf[cellIndex]
+            }
         } else
-            this.getAncestorAt(level = 1)
+            return TestElement.emptyElement
     if (this.selector != null) {
         cell.selector = this.selector!!.getChainedSelector(":cellOf(${this.selector})")
     }

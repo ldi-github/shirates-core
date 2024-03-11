@@ -732,9 +732,9 @@ class TestElement(
         }
 
     /**
-     * idOrNameShort
+     * idOrNameSimple
      */
-    val idOrNameShort: String
+    val idOrNameSimple: String
         get() {
             if (isAndroid) return id.replace("${packageName}:id/", "")
             else return name

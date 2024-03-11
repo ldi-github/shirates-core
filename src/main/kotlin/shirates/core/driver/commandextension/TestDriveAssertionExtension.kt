@@ -511,6 +511,15 @@ fun TestDrive.existImage(
     val assertMessage = message(id = command, subject = "$sel")
     var e = TestElement(selector = sel)
 
+    if (TestMode.isNoLoadRun) {
+        TestLog.conditionalAuto(
+            message = assertMessage,
+            scriptCommand = command,
+            subject = "$sel"
+        )
+        return e
+    }
+
     val scroll = CodeExecutionContext.withScrollDirection != null
     val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.None
 
@@ -534,7 +543,7 @@ fun TestDrive.existImage(
                 throw TestDriverException("$assertMessage (${e.imageMatchResult})")
             }
             TestLog.warn("$assertMessage (${e.imageMatchResult})")
-            TestLog.manual(assertMessage)
+            TestLog.conditionalAuto(assertMessage)
         }
     }
 
@@ -614,7 +623,7 @@ private fun TestDrive.existImageCore(
 
     if (sel.isImageSelector) {
         if (PropertiesManager.enableImageAssertion.not()) {
-            manual(message = assertMessage)
+            conditionalAuto(message = assertMessage)
             return e
         }
 
@@ -648,8 +657,8 @@ private fun TestDrive.existImageCore(
     }
 
     val isTemplateImageNull = e.imageMatchResult != null && e.imageMatchResult!!.templateImageFile == null
-    if (PropertiesManager.enableImageAssertion.not() || isTemplateImageNull) {
-        manual(assertMessage)
+    if (isTemplateImageNull) {
+        conditionalAuto(assertMessage)
         return e
     }
 

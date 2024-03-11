@@ -13,24 +13,26 @@ class SummaryLine(
     var ng: Int = 0,
     var error: Int = 0,
     var suspended: Int = 0,
+    var condAuto: Int = 0,
     var manual: Int = 0,
     var skip: Int = 0,
     var notImpl: Int = 0,
     var a: Int = 0,
+    var ca: Int = 0,
     var m: Int = 0,
 ) {
     override fun toString(): String {
-        return "$no\t$sheetName\t$total\t$notApplicable\t$ok\t$ng\t$error\t$suspended\t$manual\t$skip\t$notImpl\t$autoPlusManual\t$a\t$m\ta$automatedRatio"
+        return "$no\t$sheetName\t$total\t$notApplicable\t$ok\t$ng\t$error\t$suspended\t$condAuto\t$manual\t$skip\t$notImpl\t$autoPlusManual\t$a\t$m\ta$automatedRatio"
     }
 
     val total: Int
         get() {
-            return (notApplicable + ok + ng + error + suspended + manual + skip + notImpl)
+            return (notApplicable + ok + ng + error + suspended + condAuto + manual + skip + notImpl)
         }
 
     val autoPlusManual: Int
         get() {
-            return a + m
+            return a + ca + m
         }
 
     val automatedRatio: Double
@@ -38,6 +40,6 @@ class SummaryLine(
             if (autoPlusManual == 0) {
                 return 0.0
             }
-            return a.toDouble() / autoPlusManual
+            return (a + ca).toDouble() / autoPlusManual
         }
 }
