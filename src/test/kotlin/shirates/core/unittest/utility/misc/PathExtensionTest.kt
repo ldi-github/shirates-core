@@ -2,6 +2,7 @@ package shirates.core.unittest.utility.misc
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.UserVar
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.*
 import java.nio.file.Path
@@ -70,6 +71,17 @@ class PathExtensionTest : UnitTest() {
             val actual = path.exists()
             // Assert
             assertThat(actual).isFalse()
+        }
+    }
+
+    @Test
+    fun replaceExtension() {
+
+        run {
+            // Arrange
+            val path = UserVar.downloads.resolve("hoge.txt")
+            // Act, Assert
+            assertThat(path.replaceExtension(".png")).isEqualTo(UserVar.downloads.resolve("hoge.png"))
         }
     }
 }
