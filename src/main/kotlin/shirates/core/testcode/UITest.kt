@@ -329,14 +329,18 @@ abstract class UITest : TestDrive {
             }
 
             // profile
-            profile.completeProfileWithDeviceInformation()
+            if (profile.useRemoteServer?.toBoolean() == false) {
+                profile.completeProfileWithDeviceInformation()
+            }
             profile.validate()
 
             // Appium Server
-            AppiumServerManager.setupAppiumServerProcess(
-                sessionName = TestLog.currentTestClassName,
-                profile = profile
-            )
+            if (profile.useRemoteServer?.toBoolean() == false) {
+                AppiumServerManager.setupAppiumServerProcess(
+                    sessionName = TestLog.currentTestClassName,
+                    profile = profile
+                )
+            }
 
             // AppiumDriver
             val lastProfile = TestDriver.lastTestContext.profile
@@ -352,8 +356,10 @@ abstract class UITest : TestDrive {
                     )
                     TestDriver.testContext = TestDriver.lastTestContext
                 } else {
-                    // Reset Appium session
-                    TestDriver.resetAppiumSession()
+                    if (profile.useRemoteServer?.toBoolean() == false) {
+                        // Reset Appium session
+                        TestDriver.resetAppiumSession()
+                    }
                 }
             }
         } catch (t: TestAbortedException) {

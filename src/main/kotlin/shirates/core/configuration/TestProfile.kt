@@ -38,6 +38,7 @@ class TestProfile(var profileName: String = "") {
 
     // Appium --------------------------------------------------
     var appiumServerUrl: String? = null
+    var useRemoteServer: String? = null
     var appiumPath: String? = null
     var appiumArgs: String? = null
     var appiumArgsSeparator: String? = null

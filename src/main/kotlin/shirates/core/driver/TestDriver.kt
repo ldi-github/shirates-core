@@ -571,13 +571,15 @@ object TestDriver {
 
     private fun createAppiumDriverCore(profile: TestProfile) {
 
-        if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
-            wdaInstallOptimization(profile = profile)
-        }
-        if (isAndroid && isEmulator) {
-            // start emulator and wait ready
-            val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = profile)
-            AndroidDeviceUtility.startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
+        if (testProfile.useRemoteServer?.toBoolean() == false) {
+            if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
+                wdaInstallOptimization(profile = profile)
+            }
+            if (isAndroid && isEmulator) {
+                // start emulator and wait ready
+                val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = profile)
+                AndroidDeviceUtility.startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
+            }
         }
 
         val capabilities = DesiredCapabilities()
@@ -618,15 +620,17 @@ object TestDriver {
         }
 
         // Check Felica
-        if (isAndroid) {
-            try {
-                val map = AndroidMobileShellUtility.getMap(command = "pm", "list", "packages")
-                val packages = AndroidMobileShellUtility.executeMobileShell(map)
-                    .toString().replace("package:", "").trim().split("\n").sorted()
-                profile.packages.addAll(packages)
-                profile.hasFelica = profile.packages.any() { it.startsWith("com.felicanetworks.") }
-            } catch (t: Throwable) {
-                TestLog.warn(message(id = "findingFelicaPackageFailed", arg1 = "${t.message}"))
+        if (profile.useRemoteServer?.toBoolean() == false) {
+            if (isAndroid) {
+                try {
+                    val map = AndroidMobileShellUtility.getMap(command = "pm", "list", "packages")
+                    val packages = AndroidMobileShellUtility.executeMobileShell(map)
+                        .toString().replace("package:", "").trim().split("\n").sorted()
+                    profile.packages.addAll(packages)
+                    profile.hasFelica = profile.packages.any() { it.startsWith("com.felicanetworks.") }
+                } catch (t: Throwable) {
+                    TestLog.warn(message(id = "findingFelicaPackageFailed", arg1 = "${t.message}"))
+                }
             }
         }
     }
@@ -670,16 +674,18 @@ object TestDriver {
         TestLog.info(message(id = "connectingToAppiumServer", subject = "$appiumServerUrl"))
 
         val initFunc: (RetryContext<Unit>) -> Unit = { context ->
-            val connectionRefused = context.lastException?.message?.contains("Connection refused") ?: false
-            if (connectionRefused) {
-                AppiumServerManager.close()
+            if (profile.useRemoteServer?.toBoolean() == false) {
+                val connectionRefused = context.lastException?.message?.contains("Connection refused") ?: false
+                if (connectionRefused) {
+                    AppiumServerManager.close()
+                }
+                val force = connectionRefused
+                AppiumServerManager.setupAppiumServerProcess(
+                    sessionName = TestLog.currentTestClassName,
+                    profile = profile,
+                    force = force
+                )
             }
-            val force = connectionRefused
-            AppiumServerManager.setupAppiumServerProcess(
-                sessionName = TestLog.currentTestClassName,
-                profile = profile,
-                force = force
-            )
             if (isAndroid) {
                 mAppiumDriver = AndroidDriver(appiumServerUrl, capabilities)
                 if (isReady.not()) {
@@ -2301,7 +2307,7 @@ object TestDriver {
             throw IllegalArgumentException("launchAppCore(blank)")
         }
 
-        if (testProfile.udid.isBlank()) {
+        if (testProfile.useRemoteServer?.toBoolean() == false) {
             testProfile.completeProfileWithDeviceInformation()
 
             if (testProfile.udid.isBlank()) {
