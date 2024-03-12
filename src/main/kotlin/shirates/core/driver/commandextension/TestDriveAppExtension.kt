@@ -194,7 +194,13 @@ fun TestDrive.launchApp(
             }
         }
 
-        if (isAndroid) {
+        if (TestDriver.testContext.isRemoteServer) {
+            TestDriver.tapAppIconCore(appNameOrAppIdOrActivityName)
+            SyncUtility.doUntilTrue {
+                invalidateCache()
+                isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+            }
+        } else if (isAndroid) {
             TestDriver.launchAppCore(
                 packageOrBundleIdOrActivity = packageOrBundleId,
                 onLaunchHandler = onLaunchHandler

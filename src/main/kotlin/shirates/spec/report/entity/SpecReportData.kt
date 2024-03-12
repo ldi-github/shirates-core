@@ -14,6 +14,7 @@ class SpecReportData {
     var okCount = 0
     var ngCount = 0
     var errorCount = 0
+    var condAuto = 0
     var manualCount = 0
     var skipCount = 0
     var notImplCount = 0
@@ -117,6 +118,7 @@ class SpecReportData {
         okCount = group["OK"]?.count() ?: 0
         ngCount = group["NG"]?.count() ?: 0
         errorCount = group["ERROR"]?.count() ?: 0
+        condAuto = group["COND_AUTO"]?.count() ?: 0
         manualCount = group["MANUAL"]?.count() ?: 0
         skipCount = group["SKIP"]?.count() ?: 0
         suspendedCount = group[SpecResourceUtility.suspended]?.count() ?: 0

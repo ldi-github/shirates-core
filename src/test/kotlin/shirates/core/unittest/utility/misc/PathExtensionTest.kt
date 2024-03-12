@@ -2,10 +2,9 @@ package shirates.core.unittest.utility.misc
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.UserVar
 import shirates.core.testcode.UnitTest
-import shirates.core.utility.listFiles
-import shirates.core.utility.replacePathSeparators
-import shirates.core.utility.toRelativePath
+import shirates.core.utility.*
 import java.nio.file.Path
 
 class PathExtensionTest : UnitTest() {
@@ -47,10 +46,42 @@ class PathExtensionTest : UnitTest() {
     fun listFiles() {
 
         // Arrange
-        val expected = shirates.core.UserVar.project.toFile().listFiles().toList().toString()
+        val expected = shirates.core.UserVar.project.toFile().listFiles()?.toList().toString()
         // Act
         val actual = shirates.core.UserVar.project.listFiles().toString()
         // Assert
         assertThat(actual).isEqualTo(expected)
+    }
+
+    @Test
+    fun exists() {
+
+        run {
+            // Arrange
+            val path = "testrun.global.properties".toPath()
+            // Act
+            val actual = path.exists()
+            // Assert
+            assertThat(actual).isTrue()
+        }
+        run {
+            // Arrange
+            val path = "noexist".toPath()
+            // Act
+            val actual = path.exists()
+            // Assert
+            assertThat(actual).isFalse()
+        }
+    }
+
+    @Test
+    fun replaceExtension() {
+
+        run {
+            // Arrange
+            val path = UserVar.downloads.resolve("hoge.txt")
+            // Act, Assert
+            assertThat(path.replaceExtension(".png")).isEqualTo(UserVar.downloads.resolve("hoge.png"))
+        }
     }
 }

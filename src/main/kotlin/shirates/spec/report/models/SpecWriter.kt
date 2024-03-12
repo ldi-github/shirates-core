@@ -96,7 +96,11 @@ class SpecWriter(val specReport: SpecReport) {
             }
 
             with(worksheetData) {
-                val sp = sheetPosition
+                val sp = try {
+                    sheetPosition
+                } catch (t: Throwable) {
+                    throw IllegalStateException("sheetPosition is not initialized. The input file may be broken. ($newSheetName, ${worksheetData.specReportFile}) ${t}")
+                }
                 val policy = org.apache.poi.ss.usermodel.CellCopyPolicy.Builder().cellStyle(true).build()
 
                 var rowNum = 0

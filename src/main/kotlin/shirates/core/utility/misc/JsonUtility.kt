@@ -4,7 +4,7 @@ import org.json.JSONObject
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import java.io.File
+import shirates.core.utility.toPath
 
 /**
  * JsonUtility
@@ -18,7 +18,7 @@ object JsonUtility {
 
         val data: String
         try {
-            data = File(file).readText()
+            data = file.toPath().toFile().readText()
         } catch (t: Throwable) {
             val ex = TestConfigException(message(id = "fileNotFound", file = file), t)
             TestLog.error(ex)

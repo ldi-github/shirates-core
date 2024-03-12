@@ -28,7 +28,7 @@ class VerticalFlowContainerTest : UnitTest() {
         val closeButton = select("#close")
         val vfc = VerticalFlowContainer()
         // Act
-        vfc.addElement(closeButton)
+        vfc.addElementToColumn(closeButton)
         // Assert
         assertThat(vfc.columns.count()).isEqualTo(1)
         // Arrange
@@ -49,8 +49,8 @@ class VerticalFlowContainerTest : UnitTest() {
         val settings = select("Settings")
         val vfc = VerticalFlowContainer()
         // Act
-        vfc.addElement(closeButton)
-        vfc.addElement(settings)
+        vfc.addElementToColumn(closeButton)
+        vfc.addElementToColumn(settings)
         // Assert
         assertThat(vfc.columns.count()).isEqualTo(2)
     }
@@ -64,9 +64,9 @@ class VerticalFlowContainerTest : UnitTest() {
         val menu = select("Menu")
         val vfc = VerticalFlowContainer()
         // Act
-        vfc.addElement(closeButton)
-        vfc.addElement(settings)
-        vfc.addElement(menu)
+        vfc.addElementToColumn(closeButton)
+        vfc.addElementToColumn(settings)
+        vfc.addElementToColumn(menu)
         // Assert
         assertThat(vfc.columns.count()).isEqualTo(3)
     }
@@ -81,10 +81,10 @@ class VerticalFlowContainerTest : UnitTest() {
         val image1 = select("#image1")
         val vfc = VerticalFlowContainer()
         // Act
-        vfc.addElement(closeButton)
-        vfc.addElement(settings)
-        vfc.addElement(menu)
-        vfc.addElement(image1)
+        vfc.addElementToColumn(closeButton)
+        vfc.addElementToColumn(settings)
+        vfc.addElementToColumn(menu)
+        vfc.addElementToColumn(image1)
         // Assert
         assertThat(vfc.columns.count()).isEqualTo(3)
         // Arrange
@@ -99,10 +99,10 @@ class VerticalFlowContainerTest : UnitTest() {
 
         // Arrange
         val vfc = VerticalFlowContainer()
-        vfc.addElement(select("#close"))
-        vfc.addElement(select("Administrator"))
-        vfc.addElement(select("General"))
-        vfc.addElement(select("Menu"))
+        vfc.addElementToColumn(select("#close"))
+        vfc.addElementToColumn(select("Administrator"))
+        vfc.addElementToColumn(select("General"))
+        vfc.addElementToColumn(select("Menu"))
 
         run {
             // Act
@@ -117,10 +117,10 @@ class VerticalFlowContainerTest : UnitTest() {
 
         // Arrange
         val vfc = VerticalFlowContainer()
-        vfc.addElement(select("#close"))
-        vfc.addElement(select("Administrator"))
-        vfc.addElement(select("General"))
-        vfc.addElement(select("Menu"))
+        vfc.addElementToColumn(select("#close"))
+        vfc.addElementToColumn(select("Administrator"))
+        vfc.addElementToColumn(select("General"))
+        vfc.addElementToColumn(select("Menu"))
         // Act, Assert
         assertThat(vfc.element(1)).isEqualTo(select("#close"))
         assertThat(vfc.element(2)).isEqualTo(select("General"))

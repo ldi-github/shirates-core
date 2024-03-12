@@ -1,6 +1,7 @@
 package shirates.core
 
 import shirates.core.utility.toPath
+import java.nio.file.Path
 
 object UserVar {
 
@@ -13,8 +14,20 @@ object UserVar {
     val DOWNLOADS = userHome.resolve("Downloads").toString()
     val downloads = DOWNLOADS.toPath()
 
-    val PROJECT = System.getProperty("user.dir")
-    val project = PROJECT.toPath()
+    val SHIRATES_PROJECT_DIR = "shirates.project.dir"
+
+    val PROJECT: String
+        get() {
+            val shiratesProjectDir = kotlin.runCatching { System.getProperty(SHIRATES_PROJECT_DIR) }.getOrNull()
+            if (shiratesProjectDir.isNullOrBlank()) {
+                return System.getProperty("user.dir")
+            }
+            return shiratesProjectDir
+        }
+    val project: Path
+        get() {
+            return PROJECT.toPath()
+        }
 
     val TEST_RESULTS = downloads.resolve("TestResults").toString()
     val testResults = TEST_RESULTS.toPath()

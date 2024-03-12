@@ -3,7 +3,7 @@ package shirates.core.driver.commandextension.helper
 import shirates.core.driver.TestElement
 import shirates.core.logging.Message.message
 
-class VerticalFlowContainer {
+class VerticalFlowContainer : IFlowContainer {
 
     class Column(initialElement: TestElement) {
         internal val verticalBand: VerticalBand
@@ -76,7 +76,15 @@ class VerticalFlowContainer {
     /**
      * addElement
      */
-    fun addElement(element: TestElement, force: Boolean = false): Column? {
+    override fun addElement(element: TestElement, force: Boolean): Any? {
+
+        return addElementToColumn(element = element, force = force)
+    }
+
+    /**
+     * addElementToColumn
+     */
+    fun addElementToColumn(element: TestElement, force: Boolean = false): Column? {
 
         if (!force && element.isWidget.not()) {
             return null
@@ -115,10 +123,10 @@ class VerticalFlowContainer {
     /**
      * addAll
      */
-    fun addAll(elements: List<TestElement>) {
+    override fun addAll(elements: List<TestElement>) {
 
         for (e in elements) {
-            addElement(e)
+            addElementToColumn(e)
         }
     }
 
@@ -133,7 +141,7 @@ class VerticalFlowContainer {
     /**
      * getElements
      */
-    fun getElements(): MutableList<TestElement> {
+    override fun getElements(): MutableList<TestElement> {
 
         sortColumns()
 
@@ -148,7 +156,7 @@ class VerticalFlowContainer {
     /**
      * element
      */
-    fun element(pos: Int): TestElement {
+    override fun element(pos: Int): TestElement {
 
         if (pos == 0) {
             throw IndexOutOfBoundsException(message(id = "posMustBeGreaterThanZero", arg1 = "${pos}"))

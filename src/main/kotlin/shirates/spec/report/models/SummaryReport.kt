@@ -60,6 +60,11 @@ class SummaryReport(
             return summaryLines.sumOf { it.suspended }
         }
 
+    val condAuto: Int
+        get() {
+            return summaryLines.sumOf { it.condAuto }
+        }
+
     val manual: Int
         get() {
             return summaryLines.sumOf { it.manual }
@@ -85,6 +90,11 @@ class SummaryReport(
             return summaryLines.sumOf { it.a }
         }
 
+    val ca: Int
+        get() {
+            return summaryLines.sumOf { it.ca }
+        }
+
     val m: Int
         get() {
             return summaryLines.sumOf { it.m }
@@ -95,7 +105,7 @@ class SummaryReport(
             if (autoPlusManual == 0) {
                 return 0.0
             }
-            return a.toDouble() / autoPlusManual
+            return (a + ca).toDouble() / autoPlusManual
         }
 
 
@@ -204,11 +214,13 @@ class SummaryReport(
             ng = data.ngCount
             error = data.errorCount
             suspended = data.suspendedCount
+            condAuto = data.condAuto
             manual = data.manualCount
             skip = data.skipCount
             notImpl = data.notImplCount
 
             a = data.specLines.count { it.auto == "A" }
+            ca = data.specLines.count { it.auto == "CA" }
             m = data.specLines.count { it.auto == "M" }
         }
         summaryLines.add(summaryLine)
@@ -236,13 +248,15 @@ class SummaryReport(
             summaryWorksheet.cells(rowNum, 7).setCellValue(s.ng)
             summaryWorksheet.cells(rowNum, 8).setCellValue(s.error)
             summaryWorksheet.cells(rowNum, 9).setCellValue(s.suspended)
-            summaryWorksheet.cells(rowNum, 10).setCellValue(s.manual)
-            summaryWorksheet.cells(rowNum, 11).setCellValue(s.skip)
-            summaryWorksheet.cells(rowNum, 12).setCellValue(s.notImpl)
-            summaryWorksheet.cells(rowNum, 13).setCellValue(s.a)
-            summaryWorksheet.cells(rowNum, 14).setCellValue(s.m)
-            summaryWorksheet.cells(rowNum, 15).setCellValue(s.autoPlusManual)
-            summaryWorksheet.cells(rowNum, 16).setCellValue(s.automatedRatio)
+            summaryWorksheet.cells(rowNum, 10).setCellValue(s.condAuto)
+            summaryWorksheet.cells(rowNum, 11).setCellValue(s.manual)
+            summaryWorksheet.cells(rowNum, 12).setCellValue(s.skip)
+            summaryWorksheet.cells(rowNum, 13).setCellValue(s.notImpl)
+            summaryWorksheet.cells(rowNum, 14).setCellValue(s.a)
+            summaryWorksheet.cells(rowNum, 15).setCellValue(s.ca)
+            summaryWorksheet.cells(rowNum, 16).setCellValue(s.m)
+            summaryWorksheet.cells(rowNum, 17).setCellValue(s.autoPlusManual)
+            summaryWorksheet.cells(rowNum, 18).setCellValue(s.automatedRatio)
 
         }
 
@@ -262,13 +276,15 @@ class SummaryReport(
         summaryWorksheet.cells(header, 7).setCellValue(ng)
         summaryWorksheet.cells(header, 8).setCellValue(error)
         summaryWorksheet.cells(header, 9).setCellValue(suspended)
-        summaryWorksheet.cells(header, 10).setCellValue(manual)
-        summaryWorksheet.cells(header, 11).setCellValue(skip)
-        summaryWorksheet.cells(header, 12).setCellValue(notImpl)
-        summaryWorksheet.cells(header, 13).setCellValue(a)
-        summaryWorksheet.cells(header, 14).setCellValue(m)
-        summaryWorksheet.cells(header, 15).setCellValue(autoPlusManual)
-        summaryWorksheet.cells(header, 16).setCellValue(automatedRatio)
+        summaryWorksheet.cells(header, 10).setCellValue(condAuto)
+        summaryWorksheet.cells(header, 11).setCellValue(manual)
+        summaryWorksheet.cells(header, 12).setCellValue(skip)
+        summaryWorksheet.cells(header, 13).setCellValue(notImpl)
+        summaryWorksheet.cells(header, 14).setCellValue(a)
+        summaryWorksheet.cells(header, 15).setCellValue(ca)
+        summaryWorksheet.cells(header, 16).setCellValue(m)
+        summaryWorksheet.cells(header, 17).setCellValue(autoPlusManual)
+        summaryWorksheet.cells(header, 18).setCellValue(automatedRatio)
     }
 
 }

@@ -176,7 +176,7 @@ class TestElementImageExtensionTest : UITest() {
                         assertThat(TestLog.lines.takeLast(2).first().logType).isEqualTo(LogType.WARN)
                         assertThat(TestLog.lines.takeLast(2).first().message)
                             .startsWith("Image of [Notifications Icon] exists (result=false")
-                        assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.MANUAL)
+                        assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.COND_AUTO)
                         assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of [Notifications Icon] exists")
                     }
 

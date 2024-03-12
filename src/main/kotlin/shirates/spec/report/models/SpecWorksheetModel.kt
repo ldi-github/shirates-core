@@ -43,10 +43,11 @@ class SpecWorksheetModel(
     fun appendLine(logLine: LogLine) {
 
         if (noLoadRun.not()) {
-            if ((logLine.result == "MANUAL" && current.result == "OK") ||
-                (logLine.result == "OK" && current.result == "MANUAL")
-            ) {
-                newCase()
+            val group = listOf("OK", "MANUAL", "COND_AUTO")
+            if (group.contains(logLine.result) && group.contains(current.result)) {
+                if (logLine.result != current.result) {
+                    newCase()
+                }
             }
         }
 
@@ -205,6 +206,13 @@ class SpecWorksheetModel(
                 }
             }
 
+            LogType.COND_AUTO.label -> {
+                if (frame == Frame.EXPECTATION || frame == Frame.CASE) {
+                    addDescription(logLine)
+                    setResult(logLine)
+                }
+            }
+
             LogType.KNOWNISSUE.label -> {
                 addDescription(logLine)
             }
@@ -273,8 +281,10 @@ class SpecWorksheetModel(
         if (noLoadRun) {
             current.result = notApplicable
             if (current.auto.isBlank() || current.auto == "A") {
-                current.auto = if (logLine.command == "manual" || logLine.result == "knownIssue") "M"
-                else "A"
+                current.auto =
+                    if (logLine.command == "manual" || logLine.result == "knownIssue") "M"
+                    else if (logLine.result == LogType.COND_AUTO.label) "CA"
+                    else "A"
             }
 
         } else {
@@ -298,11 +308,23 @@ class SpecWorksheetModel(
                 }
 
                 "MANUAL" -> {
-                    if (current.result.isBlank() || current.result == "OK" || current.result == "MANUAL") {
+                    if (current.result.isBlank() || current.result == "OK") {
                         current.result = "MANUAL"
                     }
 
                     current.auto = "M"
+                    current.date = ""
+                    current.tester = ""
+                    current.environment = ""
+                    current.build = ""
+                }
+
+                "COND_AUTO" -> {
+                    if (current.result.isBlank() || current.result == "OK" || current.result == "MANUAL") {
+                        current.result = "COND_AUTO"
+                    }
+
+                    current.auto = "CA"
                     current.date = ""
                     current.tester = ""
                     current.environment = ""

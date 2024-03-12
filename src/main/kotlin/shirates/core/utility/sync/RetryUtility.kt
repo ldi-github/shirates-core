@@ -29,6 +29,7 @@ class RetryUtility {
             retryPredicate: (RetryContext<T>) -> Boolean = {
                 it.exception.isRetryableError
             },
+            onError: (RetryContext<T>) -> T,
             onBeforeRetry: (RetryContext<T>) -> T,
             action: (RetryContext<T>) -> T
         ): RetryContext<T> {
@@ -39,6 +40,7 @@ class RetryUtility {
                 retryIntervalSeconds = retryIntervalSecond,
                 log = log,
                 retryPredicate = retryPredicate,
+                onError = onError,
                 onBeforeRetry = onBeforeRetry,
                 action = action
             )
@@ -69,6 +71,7 @@ class RetryUtility {
             if (context.exception == null) {
                 return context
             }
+            context.onError.invoke(context)
 
             /**
              * Retrying
@@ -92,13 +95,14 @@ class RetryUtility {
                 if (context.exception == null) {
                     return context
                 }
+                context.onError.invoke(context)
                 if (context.exception.isRerunRequiredError) {
                     val ex = context.exception!!
                     TestLog.error(ex)
                     throw RerunScenarioException(ex.message!!, ex)
                 }
                 if (stopWatch.elapsedSeconds > timeoutSeconds) {
-                    TestLog.info("Timeout in retrying. (${stopWatch.elapsedSeconds} > $timeoutSeconds)")
+                    TestLog.info("Timeout on retrying. (${stopWatch.elapsedSeconds} > $timeoutSeconds)")
                     return context
                 }
             }

@@ -2,6 +2,21 @@
 
 ## Tested Environments
 
+2024/3/12
+
+- macOS Sonoma 14.3.1
+- node v21.1.0
+- Appium 2.5.1
+- java-client v9.1.0
+- uiautomator2@3.0.2
+- xcuitest@7.3.0
+- Android Studio Iguana | 2023.2.1
+- Android Emulator Pixel 3a(Android 12)
+- Xcode 15.2
+- iOS Simulator iPhone 15(iOS 17.2)
+
+<hr>
+
 2024/2/16
 
 - macOS Sonoma 14.1.2

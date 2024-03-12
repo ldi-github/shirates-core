@@ -116,6 +116,28 @@ fun TestDrive.manual(
     return testElement
 }
 
+internal fun TestDrive.conditionalAuto(
+    message: String,
+    arg1: String = "",
+    arg2: String = ""
+): TestElement {
+
+    val testElement = getThisOrIt()
+
+    val context = TestDriverCommandContext(testElement)
+    context.execLogCommand(message = message, subject = message) {
+        TestLog.conditionalAuto(
+            message = message,
+            scriptCommand = "conditionalAuto",
+            subject = message,
+            arg1 = arg1,
+            arg2 = arg2
+        )
+    }
+
+    return testElement
+}
+
 /**
  * procedure
  */
@@ -215,7 +237,7 @@ fun TestDrive.cell(
  * cellOf
  */
 fun TestDrive.cellOf(
-    expression: String? = null,
+    expression: String,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
@@ -223,31 +245,50 @@ fun TestDrive.cellOf(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
+    val testElement = select(
+        expression = expression,
+        throwsException = throwsException,
+        waitSeconds = waitSeconds,
+        useCache = useCache,
+        log = log
+    )
+
+    return cellOfCore(
+        testElement = testElement,
+        throwsException = throwsException,
+        func = func
+    )
+}
+
+/**
+ * cellOf
+ */
+fun TestElement.cellOf(
+    throwsException: Boolean = true,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    return cellOfCore(
+        testElement = this,
+        throwsException = throwsException,
+        func = func
+    )
+}
+
+private fun cellOfCore(
+    testElement: TestElement,
+    throwsException: Boolean,
+    func: (TestElement.() -> Unit)?
+): TestElement {
     val command = "cellOf"
 
-    val testElement =
-        if (expression == null) it
-        else select(
-            expression = expression,
-            throwsException = throwsException,
-            waitSeconds = waitSeconds,
-            useCache = useCache,
-            log = log
-        )
-
-    val ancestorScrollableElements = testElement.getScrollableElementsInAncestorsAndSelf()
-    val cell =
-        if (ancestorScrollableElements.any()) {
-            val scrollableElement = ancestorScrollableElements.last()
-            val ancestorsAndSelf = testElement.ancestorsAndSelf
-            val index = ancestorsAndSelf.indexOf(scrollableElement)
-            val cellIndex = index + 1
-            ancestorsAndSelf[cellIndex]
-        } else
-            testElement.getAncestorAt(level = 1)
-    cell.selector = testElement.selector!!.getChainedSelector(":cellOf($expression)")
+    val cell = testElement.getCell()
     if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
         throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
+
+    if (func == null) {
+        return cell
+    }
 
     val target = message(id = command, subject = testElement.subject)
 
@@ -256,11 +297,36 @@ fun TestDrive.cellOf(
         val original = CodeExecutionContext.isInCell
         try {
             CodeExecutionContext.isInCell = true
-            func?.invoke(cell)
+            func.invoke(cell)
         } finally {
             CodeExecutionContext.isInCell = original
         }
     }
 
+    return cell
+}
+
+/**
+ * getCell
+ */
+fun TestElement.getCell(): TestElement {
+
+    val ancestorScrollableElements = this.getScrollableElementsInAncestorsAndSelf()
+    val cell =
+        if (ancestorScrollableElements.any()) {
+            val scrollableElement = ancestorScrollableElements.last()
+            val ancestorsAndSelf = this.ancestorsAndSelf
+            val index = ancestorsAndSelf.indexOf(scrollableElement)
+            val cellIndex = index + 1
+            if (cellIndex > ancestorsAndSelf.count() - 1) {
+                TestElement.emptyElement
+            } else {
+                ancestorsAndSelf[cellIndex]
+            }
+        } else
+            return TestElement.emptyElement
+    if (this.selector != null) {
+        cell.selector = this.selector!!.getChainedSelector(":cellOf(${this.selector})")
+    }
     return cell
 }

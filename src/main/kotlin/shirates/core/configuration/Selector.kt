@@ -1345,7 +1345,6 @@ class Selector(
      */
     fun evaluateLiteral(element: TestElement): Boolean {
 
-//        return evaluate(filterName = "literal", value = element.textOrLabel)
         return getFilter("literal")?.evaluate(element = element) ?: true
     }
 
@@ -1486,31 +1485,6 @@ class Selector(
                 } else if (exp.contains("~webTitle=")) {
                     expanded = expandWebTitle(webTitle = exp.substring("~webTitle=".length))
                 } else {
-//                    val operator =
-//                        if (command.startsWith(".")) "."
-//                        else if (command.startsWith("className=")) "className="
-//                        else ""
-//                    if (operator.isNotBlank()) {
-//                        val tokens = command.removePrefix(operator).removePrefix("(").removeSuffix(")").split("|")
-//                        val list = mutableListOf<String>()
-//                        for (token in tokens) {
-//                            list.add(
-//                                ElementCategoryExpressionUtility.expandWidget(token).removePrefix("(").removeSuffix(")")
-//                            )
-//                        }
-//                        if (list.count() == 1) {
-//                            val item = list[0]
-//                            if (item.contains("|")) {
-//                                expanded = "$operator($item)"
-//                            } else {
-//                                expanded = "$operator$item"
-//                            }
-//                        } else {
-//                            expanded = "$operator(${list.joinToString("|")})"
-//                        }
-//                    } else {
-//                        expanded = command
-//                    }
                     expanded = command
                 }
             } else {
@@ -1519,34 +1493,6 @@ class Selector(
         }
         return expanded
     }
-
-//    private fun expandWidget(com: String): String {
-//        val operator =
-//            if (com.startsWith(".")) "."
-//            else if (com.startsWith("className=")) "className="
-//            else ""
-//
-//        if (operator.isNotBlank()) {
-//            val tokens = com.removePrefix(".").removePrefix("className=").removePrefix("(").removeSuffix(")").split("|")
-//            val list = mutableListOf<String>()
-//            for (token in tokens) {
-//                list.add(
-//                    ElementCategoryExpressionUtility.expandWidget(token).removePrefix("(").removeSuffix(")")
-//                )
-//            }
-//            if (list.count() == 1) {
-//                val item = list[0]
-//                if (item.contains("|")) {
-//                    return "$operator($item)"
-//                } else {
-//                    return "$operator$item"
-//                }
-//            } else {
-//                return "$operator(${list.joinToString("|")})"
-//            }
-//        }
-//        return com
-//    }
 
     private fun expandTitle(title: String): String {
 

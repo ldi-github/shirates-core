@@ -1,6 +1,7 @@
 {
   "testConfigName": "testConfigCommonProfile1",
 
+  "appiumServerUrl": "http://servr1.example.com:4720",
   "appiumPath": "appiumPath",
   "appiumArgs": "appiumArgs",
   "appiumArgsSeparator": "appiumArgsSeparator",

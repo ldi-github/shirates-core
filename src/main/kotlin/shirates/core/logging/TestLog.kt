@@ -596,18 +596,6 @@ object TestLog {
         return indentLevel
     }
 
-//    private fun createIndentMap(): MutableMap<Int, String> {
-//
-//        val map = mutableMapOf<Int, String>()
-//        map[0] = ""
-//        for (i in 1..50) {
-//            map[i] = "".padStart(i * 4)
-//        }
-//        return map
-//    }
-
-//    private val indentMap = createIndentMap()
-
     internal fun getIndentString(level: Int = indentLevel): String {
 
         return " ".repeat(level * 4)
@@ -983,6 +971,31 @@ object TestLog {
             message = message,
             logType = LogType.MANUAL,
             result = LogType.MANUAL,
+            scriptCommand = scriptCommand,
+            subject = subject,
+            arg1 = arg1,
+            arg2 = arg2,
+            log = log
+        )
+    }
+
+    /**
+     * conditionalAuto
+     */
+    fun conditionalAuto(
+        message: String,
+        scriptCommand: String? = "conditionalAuto",
+        subject: String = "",
+        arg1: String = "",
+        arg2: String = "",
+        log: Boolean = enableTrace || CodeExecutionContext.isInSilentCommand.not()
+    ): LogLine {
+
+        result(LogType.COND_AUTO, message)
+        return write(
+            message = message,
+            logType = LogType.COND_AUTO,
+            result = LogType.COND_AUTO,
             scriptCommand = scriptCommand,
             subject = subject,
             arg1 = arg1,

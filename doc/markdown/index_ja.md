@@ -203,6 +203,8 @@
     - [コードファーストでテストを設計する](in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)
 - CIサーバーでテストを実行する
     - [テストをGradleで実行する](in_action/running_test_on_ci_server/running_with_gradle_ja.md)
+- リモートのAppium Serverを利用する
+    - [リモートのAppium Serverの構成](in_action/using_remote_appium_server/configuring_remote_appium_server_ja.md)
 - テストの実行を安定化させる(フレーキーテストの改善)
     - [フレーキーテストの原因](in_action/stabilizing_test_execution/causes_of_flaky_test_ja.md)
     - [scenarioの再実行](in_action/stabilizing_test_execution/rerun_scenario_ja.md)

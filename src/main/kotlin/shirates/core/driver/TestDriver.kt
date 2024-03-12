@@ -87,6 +87,27 @@ object TestDriver {
         }
 
     /**
+     * status
+     */
+    val status: Map<String, Any>
+        get() {
+            try {
+                return appiumDriver.status
+            } catch (t: Throwable) {
+                return mutableMapOf()
+            }
+        }
+
+    /**
+     * isReady
+     */
+    val isReady: Boolean
+        get() {
+            val st = status
+            return (st.containsKey("ready") && st["ready"] == true)
+        }
+
+    /**
      * canReuse
      */
     val canReuse: Boolean
@@ -550,23 +571,25 @@ object TestDriver {
 
     private fun createAppiumDriverCore(profile: TestProfile) {
 
-        if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
-            wdaInstallOptimization(profile = profile)
-        }
-        if (isAndroid && isEmulator) {
-            // start emulator and wait ready
-            val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = profile)
-            AndroidDeviceUtility.startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
+        if (testContext.isLocalServer) {
+            if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
+                wdaInstallOptimization(profile = profile)
+            }
+            if (isAndroid && isEmulator) {
+                // start emulator and wait ready
+                val emulatorProfile = AndroidDeviceUtility.getEmulatorProfile(testProfile = profile)
+                AndroidDeviceUtility.startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
+            }
         }
 
         val capabilities = DesiredCapabilities()
         setCapabilities(profile, capabilities)
 
-        val retryMaxCount = 3
         val retryContext = RetryUtility.exec(
-            retryMaxCount = retryMaxCount.toLong(),
+            retryMaxCount = testContext.retryMaxCount,
             retryTimeoutSeconds = testContext.retryTimeoutSeconds,
             retryPredicate = getRetryPredicate(profile = profile, capabilities = capabilities),
+            onError = getOnError(profile = profile, capabilities = capabilities),
             onBeforeRetry = getBeforeRetry(profile = profile, capabilities = capabilities),
             action = getInitFunc(profile = profile, capabilities = capabilities)
         )
@@ -597,15 +620,17 @@ object TestDriver {
         }
 
         // Check Felica
-        if (isAndroid) {
-            try {
-                val map = AndroidMobileShellUtility.getMap(command = "pm", "list", "packages")
-                val packages = AndroidMobileShellUtility.executeMobileShell(map)
-                    .toString().replace("package:", "").trim().split("\n").sorted()
-                profile.packages.addAll(packages)
-                profile.hasFelica = profile.packages.any() { it.startsWith("com.felicanetworks.") }
-            } catch (t: Throwable) {
-                TestLog.warn(message(id = "findingFelicaPackageFailed", arg1 = "${t.message}"))
+        if (testContext.isLocalServer) {
+            if (isAndroid) {
+                try {
+                    val map = AndroidMobileShellUtility.getMap(command = "pm", "list", "packages")
+                    val packages = AndroidMobileShellUtility.executeMobileShell(map)
+                        .toString().replace("package:", "").trim().split("\n").sorted()
+                    profile.packages.addAll(packages)
+                    profile.hasFelica = profile.packages.any() { it.startsWith("com.felicanetworks.") }
+                } catch (t: Throwable) {
+                    TestLog.warn(message(id = "findingFelicaPackageFailed", arg1 = "${t.message}"))
+                }
             }
         }
     }
@@ -649,25 +674,39 @@ object TestDriver {
         TestLog.info(message(id = "connectingToAppiumServer", subject = "$appiumServerUrl"))
 
         val initFunc: (RetryContext<Unit>) -> Unit = { context ->
-            val connectionRefused = context.lastException?.message?.contains("Connection refused") ?: false
-            if (connectionRefused) {
-                AppiumServerManager.close()
+            if (testContext.isLocalServer) {
+                val connectionRefused = context.lastException?.message?.contains("Connection refused") ?: false
+                if (connectionRefused) {
+                    AppiumServerManager.close()
+                }
+                val force = connectionRefused
+                AppiumServerManager.setupAppiumServerProcess(
+                    sessionName = TestLog.currentTestClassName,
+                    profile = profile,
+                    force = force
+                )
             }
-            val force = connectionRefused
-            AppiumServerManager.setupAppiumServerProcess(
-                sessionName = TestLog.currentTestClassName,
-                profile = profile,
-                force = force
-            )
             if (isAndroid) {
                 mAppiumDriver = AndroidDriver(appiumServerUrl, capabilities)
+                if (isReady.not()) {
+                    printStatus()
+                }
                 healthCheckForAndroid(profile = profile)
             } else {
                 TestLog.info(message(id = "initializingIosDriverMayTakeMinutes"))
                 mAppiumDriver = IOSDriver(appiumServerUrl, capabilities)
+                if (isReady.not()) {
+                    printStatus()
+                }
             }
         }
         return initFunc
+    }
+
+    private fun printStatus() {
+
+        val arg = status.map { "${it.key}=${it.value}" }.joinToString(", ")
+        TestLog.warn("TestDriver.isReady=$isReady. $arg")
     }
 
     private fun getRetryPredicate(
@@ -728,6 +767,33 @@ object TestDriver {
         }
     }
 
+    private fun getOnError(
+        profile: TestProfile,
+        capabilities: DesiredCapabilities
+    ): (RetryContext<Unit>) -> Unit {
+
+        val onError: (RetryContext<Unit>) -> Unit = { context ->
+            val e = context.exception
+            if (e != null) {
+                val message = e.message ?: ""
+                /**
+                 * Throw exception on critical error
+                 * Exit retrying loop immediately
+                 */
+                if (message.contains("Either provide 'app' option to install")) {
+                    throw TestDriverException(
+                        message(
+                            id = "packageOrBundleIdNotFound",
+                            arg1 = profile.packageOrBundleId,
+                            submessage = e.message
+                        ), cause = e
+                    )
+                }
+            }
+        }
+        return onError
+    }
+
     private fun getBeforeRetry(
         profile: TestProfile,
         capabilities: DesiredCapabilities
@@ -739,26 +805,28 @@ object TestDriver {
                 TestLog.info("Retry cause: $message")
             }
 
-            if (isAndroid) {
-                // ex.
-                // socket hang up
-                // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
+            if (testContext.isLocalServer) {
+                if (isAndroid) {
+                    // ex.
+                    // socket hang up
+                    // cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed)
 
-                /**
-                 * Emulator process list
-                 */
-                val psResult = AdbUtility.ps(udid = profile.udid)
-                TestLog.directoryForLog.resolve("${TestLog.lines.count()}_android_ps.txt")
-                    .toFile().writeText(psResult)
-                restartAdbServerEmulatorAppiumServer(profile, context)
-            } else if (isiOS) {
-                val udid = initialCapabilities["udid"] ?: profile.udid
-                if (udid.isBlank()) {
-                    throw TestDriverException("udid not found.")
+                    /**
+                     * Emulator process list
+                     */
+                    val psResult = AdbUtility.ps(udid = profile.udid)
+                    TestLog.directoryForLog.resolve("${TestLog.lines.count()}_android_ps.txt")
+                        .toFile().writeText(psResult)
+                    restartAdbServerEmulatorAppiumServer(profile, context)
+                } else if (isiOS) {
+                    val udid = initialCapabilities["udid"] ?: profile.udid
+                    if (udid.isBlank()) {
+                        throw TestDriverException("udid not found.")
+                    }
+                    TestLog.info("udid found in initialCapabilities. (udid=$udid)")
+
+                    restartIos(profile)
                 }
-                TestLog.info("udid found in initialCapabilities. (udid=$udid)")
-
-                restartIos(profile)
             }
         }
         return beforeRetry
@@ -2241,7 +2309,7 @@ object TestDriver {
             throw IllegalArgumentException("launchAppCore(blank)")
         }
 
-        if (testProfile.udid.isBlank()) {
+        if (testContext.isLocalServer) {
             testProfile.completeProfileWithDeviceInformation()
 
             if (testProfile.udid.isBlank()) {

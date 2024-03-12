@@ -1,9 +1,11 @@
 package shirates.core.utility
 
 import okhttp3.internal.trimSubstring
+import shirates.core.UserVar
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -58,12 +60,38 @@ internal fun String.replaceDirectoryForLog(): String {
  */
 fun String?.toPath(): Path {
 
-    val text = (this ?: "").replaceUserHome()
-    try {
-        return Path.of(text).toAbsolutePath()
-    } catch (t: Throwable) {
-        return Path.of(text.replace(":", ""))
+    var text = (this ?: "").replaceUserHome()
+        .replace("\u00A5", "/")     // Replace YEN
+        .replace("\\", "/")
+    if (File.separator == "\\") {
+        // for Windows
+        text = text
+            .replace("/C/", "/")
+            .replace("/c/", "/")
+            .replace("C:", "/")
+            .replace("c:", "/")
     }
+    text = text
+        .replace("//", "/")
+    if (text.startsWith("/")) {
+        if (File.separator == "\\") {
+            text = text.replace("/", "\\")
+        }
+        return Path.of(text).toAbsolutePath()
+    }
+    return Path.of(UserVar.PROJECT).resolve(text).toAbsolutePath()
+}
+
+/**
+ * fileExists
+ */
+fun String?.fileExists(): Boolean {
+
+    if (this.isNullOrBlank()) {
+        return false
+    }
+
+    return Files.exists(this.toPath())
 }
 
 /**

@@ -120,8 +120,8 @@ private fun TestElement.tapCore(
         swipePointToPoint(
             startX = b.centerX,
             startY = b.centerY,
-            endX = b.centerX + 1,
-            endY = b.centerY + 1,
+            endX = b.centerX,
+            endY = b.centerY,
             durationSeconds = holdSeconds,
         )
         if (PropertiesManager.enableTimeMeasureLog) {

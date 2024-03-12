@@ -167,7 +167,7 @@ object StringUtility {
         return text.replace(Const.NBSP, " ")
     }
 
-    private val escapedZentakuSpace = "/@ZENKAKU_SPACE@/"
+    private const val escapedZenkakuSpace = "/@ZENKAKU_SPACE@/"
 
     /**
      * replaceZstoSpace
@@ -179,12 +179,12 @@ object StringUtility {
 
         var result = text
         if (keepZenkakuSpace) {
-            result = text.replace(Const.ZENKAKU_SPACE, escapedZentakuSpace)
+            result = text.replace(Const.ZENKAKU_SPACE, escapedZenkakuSpace)
         }
         result = result.replace(Const.ZsCategorySpaces[0], " ")
         result = result.replace("\\p{Z}".toRegex(), " ")
         if (keepZenkakuSpace) {
-            result = result.replace(escapedZentakuSpace, Const.ZENKAKU_SPACE)
+            result = result.replace(escapedZenkakuSpace, Const.ZENKAKU_SPACE)
         }
 
         return result

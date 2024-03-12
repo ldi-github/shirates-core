@@ -11,7 +11,7 @@ import java.util.*
 data class LogLine(
     var deleted: Boolean = false,
     var lineNumber: Int = 0,
-    var logDateTime: Date = dateFormatrer.parse("2000/01/01"),
+    var logDateTime: Date = dateFormatter.parse("2000/01/01"),
     var timeDiffMilliseconds: Long = 0,
     var message: String = "",
     var logType: LogType = LogType.NONE,
@@ -65,7 +65,7 @@ data class LogLine(
      */
     companion object {
 
-        private val dateFormatrer = SimpleDateFormat("yyyy/MM/dd")
+        private val dateFormatter = SimpleDateFormat("yyyy/MM/dd")
 
         /**
          * getHeaderForToString

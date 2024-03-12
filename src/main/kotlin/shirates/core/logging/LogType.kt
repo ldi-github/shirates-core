@@ -73,6 +73,11 @@ enum class LogType(val label: String) {
     MANUAL("MANUAL"),
 
     /**
+     * COND_AUTO
+     */
+    COND_AUTO("COND_AUTO"),
+
+    /**
      * SKIP_SCENARIO
      */
     SKIP_SCENARIO("SKIP_SCENARIO"),

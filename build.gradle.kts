@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "6.7.1"
+version = "6.7.2"
 
 val appiumClientVersion = "9.1.0"
 
@@ -93,8 +93,8 @@ dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.8.10")
 
     // BoofCV
-    implementation("org.boofcv:boofcv-core:0.42")
-    testImplementation("org.boofcv:boofcv-core:0.42")
+    implementation("org.boofcv:boofcv-core:1.1.2")
+    testImplementation("org.boofcv:boofcv-core:1.1.2")
 
     // jsoup
     implementation("org.jsoup:jsoup:1.15.4")
