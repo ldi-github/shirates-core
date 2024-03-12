@@ -175,6 +175,8 @@ class TestConfigTest : UnitTest() {
         // Act
         val config = TestConfig("unitTestData/testConfig/androidSettings/testConfigCommonProfile1.json")
         // Assert
+        assertThat(config.commonProfile.appiumServerUrl).isEqualTo("http://servr1.example.com:4720")
+        assertThat(config.commonProfile.useRemoteServer).isEqualTo("true")
         assertThat(config.commonProfile.appiumPath).isEqualTo("appiumPath")
         assertThat(config.commonProfile.appiumArgs).isEqualTo("appiumArgs")
         assertThat(config.commonProfile.appiumArgsSeparator).isEqualTo("appiumArgsSeparator")

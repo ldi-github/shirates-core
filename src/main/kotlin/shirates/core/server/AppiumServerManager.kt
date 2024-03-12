@@ -101,9 +101,6 @@ object AppiumServerManager {
     ) {
         currentProfile = profile
 
-        if (profile.useRemoteServer?.toBoolean() == true) {
-            return
-        }
         if (force.not() && lastSessionName == sessionName) {
             return
         }

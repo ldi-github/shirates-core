@@ -2,6 +2,10 @@
 
 You can determine the virtual/real device to use in the test by profile naming convention.
 
+### Note
+
+This feature works in local machine. You can not use it in remote server.
+
 ## shirates-core 1.x
 
 As of shirates-core version 1.x, you have to configure profile to give capabilities that required for the

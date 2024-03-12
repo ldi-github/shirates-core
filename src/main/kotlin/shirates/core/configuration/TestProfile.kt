@@ -558,10 +558,8 @@ class TestProfile(var profileName: String = "") {
 
     }
 
-    /**
-     * completeProfileWithDeviceInformation
-     */
-    fun completeProfileWithDeviceInformation() {
+    fun completeProfileWithTestMode() {
+
         if (TestMode.isAndroid) {
             if (automationName.isBlank()) {
                 automationName = "UiAutomator2"
@@ -569,7 +567,21 @@ class TestProfile(var profileName: String = "") {
             if (platformName.isBlank()) {
                 platformName = "Android"
             }
+        } else {
+            if (automationName.isBlank()) {
+                automationName = "XCUITest"
+            }
+            if (platformName.isBlank()) {
+                platformName = "iOS"
+            }
+        }
+    }
 
+    /**
+     * completeProfileWithDeviceInformation
+     */
+    fun completeProfileWithDeviceInformation() {
+        if (TestMode.isAndroid) {
             val androidDeviceInfo =
                 AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = testContext.profile)
             if (androidDeviceInfo.message.isNotBlank()) {
@@ -586,13 +598,6 @@ class TestProfile(var profileName: String = "") {
             udid = androidDeviceInfo.udid
             platformVersion = androidDeviceInfo.platformVersion
         } else if (TestMode.isiOS) {
-            if (automationName.isBlank()) {
-                automationName = "XCUITest"
-            }
-            if (platformName.isBlank()) {
-                platformName = "iOS"
-            }
-
             val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
             if (iosDeviceInfo.message.isNotBlank()) {
                 TestLog.warn(iosDeviceInfo.message)

@@ -200,6 +200,16 @@ class TestContext(
             return profile.isEmpty
         }
 
+    val useRemoteServer: Boolean
+        get() {
+            return profile.useRemoteServer == "true"
+        }
+
+    val useLocalServer: Boolean
+        get() {
+            return useRemoteServer.not()
+        }
+
     @SaveTarget
     var boundsToRectRatio = profile.boundsToRectRatio?.toIntOrNull()
         ?: (if (isAndroid) Const.BOUNDS_TO_RECT_RATIO_ANDROID else Const.BOUNDS_TO_RECT_RATIO_IOS)

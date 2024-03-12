@@ -571,7 +571,7 @@ object TestDriver {
 
     private fun createAppiumDriverCore(profile: TestProfile) {
 
-        if (testProfile.useRemoteServer?.toBoolean() != true) {
+        if (testContext.useLocalServer) {
             if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
                 wdaInstallOptimization(profile = profile)
             }
@@ -620,7 +620,7 @@ object TestDriver {
         }
 
         // Check Felica
-        if (profile.useRemoteServer?.toBoolean() == false) {
+        if (testContext.useRemoteServer.not()) {
             if (isAndroid) {
                 try {
                     val map = AndroidMobileShellUtility.getMap(command = "pm", "list", "packages")
@@ -674,7 +674,7 @@ object TestDriver {
         TestLog.info(message(id = "connectingToAppiumServer", subject = "$appiumServerUrl"))
 
         val initFunc: (RetryContext<Unit>) -> Unit = { context ->
-            if (profile.useRemoteServer?.toBoolean() != true) {
+            if (testContext.useLocalServer) {
                 val connectionRefused = context.lastException?.message?.contains("Connection refused") ?: false
                 if (connectionRefused) {
                     AppiumServerManager.close()
@@ -805,7 +805,7 @@ object TestDriver {
                 TestLog.info("Retry cause: $message")
             }
 
-            if (profile.useRemoteServer?.toBoolean() != true) {
+            if (testContext.useLocalServer) {
                 if (isAndroid) {
                     // ex.
                     // socket hang up
@@ -2309,7 +2309,7 @@ object TestDriver {
             throw IllegalArgumentException("launchAppCore(blank)")
         }
 
-        if (testProfile.useRemoteServer?.toBoolean() != true) {
+        if (testContext.useLocalServer) {
             testProfile.completeProfileWithDeviceInformation()
 
             if (testProfile.udid.isBlank()) {
