@@ -194,7 +194,7 @@ fun TestDrive.launchApp(
             }
         }
 
-        if (TestDriver.testContext.useRemoteServer) {
+        if (TestDriver.testContext.isRemoteServer) {
             TestDriver.tapAppIconCore(appNameOrAppIdOrActivityName)
             SyncUtility.doUntilTrue {
                 invalidateCache()

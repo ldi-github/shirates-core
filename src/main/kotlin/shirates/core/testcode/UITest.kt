@@ -330,13 +330,13 @@ abstract class UITest : TestDrive {
 
             // profile
             profile.completeProfileWithTestMode()
-            if (testContext.useLocalServer) {
+            if (testContext.isLocalServer) {
                 profile.completeProfileWithDeviceInformation()
             }
             profile.validate()
 
             // Appium Server
-            if (testContext.useLocalServer) {
+            if (testContext.isLocalServer) {
                 AppiumServerManager.setupAppiumServerProcess(
                     sessionName = TestLog.currentTestClassName,
                     profile = profile
@@ -357,9 +357,11 @@ abstract class UITest : TestDrive {
                     )
                     TestDriver.testContext = TestDriver.lastTestContext
                 } else {
-                    if (profile.useRemoteServer == "false") {
+                    if (testContext.isLocalServer) {
                         // Reset Appium session
                         TestDriver.resetAppiumSession()
+                    } else {
+                        TestDriver.createAppiumDriver()
                     }
                 }
             }

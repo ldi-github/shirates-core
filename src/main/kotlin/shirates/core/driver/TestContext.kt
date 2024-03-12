@@ -6,6 +6,7 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.eventextension.TestDriverOnScreenContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
+import shirates.core.utility.misc.UrlUtility
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.memberProperties
@@ -200,14 +201,14 @@ class TestContext(
             return profile.isEmpty
         }
 
-    val useRemoteServer: Boolean
+    val isLocalServer: Boolean
         get() {
-            return profile.useRemoteServer == "true"
+            return UrlUtility.isLocal(testProfile.appiumServerUrl)
         }
 
-    val useLocalServer: Boolean
+    val isRemoteServer: Boolean
         get() {
-            return useRemoteServer.not()
+            return UrlUtility.isRemote(testProfile.appiumServerUrl)
         }
 
     @SaveTarget

@@ -11,14 +11,12 @@ You can use remote appium server. But there are some limitations.
 ## Example
 
 1. Set `appiumServerUrl` to the remote appium server.
-2. Set `useRemoteServer` to true.
 
 ```properties
 appiumServerUrl=http://10.0.0.104:4723/
-useRemoteServer=true
 ```
 
-3. Configure profile explicitly. See [Profile configuration](../../basic/parameter/profile_configuration.md)
+2. Configure profile explicitly. See [Profile configuration](../../basic/parameter/profile_configuration.md)
 
 ex.
 
@@ -36,13 +34,13 @@ ex.
   ]
 ```
 
-4. Start appium server on remote machine.
+3. Start appium server on remote machine.
 
 ```
 appium --session-override --relaxed-security
 ```
 
-5. Run the test written in Shirates.
+4. Run the test written in Shirates.
 
 ### Link
 

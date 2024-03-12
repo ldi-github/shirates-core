@@ -31,7 +31,6 @@ class TestProfileTest : UnitTest() {
 
         // Appium --------------------------------------------------
         assertThat(p1.appiumServerUrl).isNull()
-        assertThat(p1.useRemoteServer).isNull()
         assertThat(p1.appiumPath).isNull()
         assertThat(p1.appiumArgs).isNull()
         assertThat(p1.appiumArgsSeparator).isNull()
