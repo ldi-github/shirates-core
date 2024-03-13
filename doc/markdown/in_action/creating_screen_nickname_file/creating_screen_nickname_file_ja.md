@@ -37,7 +37,8 @@ Androidの設定アプリを開きます。
 }
 ```
 
-4. Appium Inspectorで`Connected Devices`画面をキャプチャします。 (参照 [Appium Inspectorを使用する](using_appium_inspector_ja.md))
+4. Appium Inspectorで`Connected Devices`画面をキャプチャします。 (
+   参照 [Appium Inspectorを使用する](using_appium_inspector_ja.md))
     1. appiumを起動します。
     2. Android 12のエミュレーターを起動します。
     3. Appium Inspectorを起動します。
@@ -97,7 +98,8 @@ Androidの設定アプリを開きます。
       <br>
     - `[+]` は属性値によって唯一に決定することはできません。
       <br> ![](../_images/inspect_element_4.png)
-      <br>この場合は[相対セレクター](../../basic/selector_and_nickname/relative_selector/relative_selector_ja.md)の使用を検討します。
+      <br>この場合は[相対セレクター](../../basic/selector_and_nickname/relative_selector/relative_selector_ja.md)
+      の使用を検討します。
       `:leftImage`を使用するとセレクターを以下のように定義できます。
       参照 [相対セレクター(方向ベース)](../../basic/selector_and_nickname/relative_selector/relative_selector_direction_ja.md)
       <br>```"[+]": "[Pair new device]:leftImage"```
@@ -111,7 +113,8 @@ Androidの設定アプリを開きます。
       <br>
     - `Bluetooth, Android Auto` は`[Connection preferences]`の動的なコンテンツであり、その属性によって唯一に決定することはできません。
       <br> ![](../_images/inspect_element_6.png)
-      <br>この場合は[相対セレクター](../../basic/selector_and_nickname/relative_selector/relative_selector_ja.md)の使用を検討します。
+      <br>この場合は[相対セレクター](../../basic/selector_and_nickname/relative_selector/relative_selector_ja.md)
+      の使用を検討します。
       `:belowLabel`を使用するとセレクターを以下のように定義できます。
       参照 [相対セレクター（方向ベース）](../../basic/selector_and_nickname/relative_selector/relative_selector_direction_ja.md)
       <br>```"{Connection preferences}": "[Connection preferences]:belowLabel"```
@@ -473,7 +476,8 @@ Androidの設定アプリを開きます。
 ...
 ```
 
-これにより、画面が`"#recycler_view"`を持ち、`"Battery"`, `"Accessibility"`, `"Passwords & accounts"` or `"Tips & support"`のうち
+これにより、画面が`"#recycler_view"`を持ち、`"Battery"`, `"Accessibility"`, `"Passwords & accounts"` or `"Tips & support"`
+のうち
 少なくとも一つが画面上に存在している場合、`"[Android Settings Top Screen]"`とみなされます
 
 identity と satellite keyから構成される複合キーが固有である必要があります。
@@ -481,4 +485,7 @@ identity と satellite keyから構成される複合キーが固有である必
 ### Link
 
 - [Appium Inspectorを使用する](using_appium_inspector_ja.md)
+- [Screen Builderを使用する](using_screen_builder.md)
+
+
 - [index](../../index_ja.md)

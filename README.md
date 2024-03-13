@@ -27,6 +27,14 @@
   is useful for manual testing or reviewing. Therefore, you can write test code and output Spec-Report for manual
   testing even if the test target app is under development.
 
+### HTML Report
+
+![](doc/markdown/basic/_images/report1.png)
+
+## Spec-Report
+
+![](doc/markdown/basic/_images/spec_report_calculator_normal.png)
+
 ## What and why Shirates?
 
 - The original of this framework was named **SHIRATAMA Test Framework**. We call this open source version **Shirates**.
@@ -74,6 +82,12 @@ use the
 into structural function calls like scenario, case, condition, action, target, expectation and outputs JUnit 5 test
 codes in Kotlin. Other procedures or descriptions are output as **manual** function. You can replace the manual function
 to actual function to get the test code to work.
+
+## Screen Builder
+
+You can make it easy to defining screen nicknames with **Screen Builder**.<br>
+https://github.com/ldi-github/shirates-builder
+![](doc/markdown/in_action/creating_screen_nickname_file/_images/screen_builder_overview_edit.png )
 
 
 [Shiratama dango]: https://www.google.com/search?q=Shiratama+dango&rlz=1C5CHFA_enJP809JP809&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiD08mKsI_uAhU-xYsBHdpfDAkQ_AUoAXoECA4QAw&biw=1570&bih=1497

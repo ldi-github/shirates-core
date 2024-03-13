@@ -67,4 +67,7 @@ To identify screen element, unique key information is required. You can use exte
 ### Link
 
 - [Creating screen nickname file](creating_screen_nickname_file.md)
+- [Using Screen Builder](using_screen_builder.md)
+
+
 - [index](../../index.md)

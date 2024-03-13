@@ -487,4 +487,7 @@ over screens.
 ### Link
 
 - [Using Appium Inspector](using_appium_inspector.md)
+- [Using Screen Builder](using_screen_builder.md)
+
+
 - [index](../../index.md)
