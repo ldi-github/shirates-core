@@ -49,7 +49,8 @@ Appiumのインストールは[クイックスタート](../../quick-start_ja.md
 }
 ```
 
-4. Android 12のエミュレーターを起動します。(Android 12用のAVDの設定については[クイックスタート](../../quick-start_ja.md))を参照してください。
+4. Android 12のエミュレーターを起動します。(Android 12用のAVDの設定については[クイックスタート](../../quick-start_ja.md))
+   を参照してください。
 5. `[Start Session]`をクリックします。
 6. デバイス内で設定アプリが起動します。<br>画面イメージがキャプチャされます。画面要素を調査することができます。
    <br>![](../_images/screen_captured_in_inspector.png)
@@ -67,4 +68,7 @@ Appiumのインストールは[クイックスタート](../../quick-start_ja.md
 ### Link
 
 - [画面ニックネームファイルの作成](creating_screen_nickname_file_ja.md)
+- [Screen Builderを使用する](using_screen_builder.md)
+
+
 - [index](../../index_ja.md)
