@@ -169,7 +169,7 @@
 - Creating screen nickname file
     - [Introducing Appium Inspector](in_action/creating_screen_nickname_file/using_appium_inspector.md)
     - [Creating screen nickname file](in_action/creating_screen_nickname_file/creating_screen_nickname_file.md)
-    - [Screen Builder]()
+    - [Using Screen Builder](in_action/creating_screen_nickname_file/using_screen_builder.md)
 - Message and language
     - [Log language](in_action/message_and_language/log_language.md)
     - [Device language](in_action/message_and_language/device_language.md)
