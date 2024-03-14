@@ -169,6 +169,7 @@
 - 画面ニックネームを作成する
     - [Appium Inspectorを使用する](in_action/creating_screen_nickname_file/using_appium_inspector_ja.md)
     - [画面ニックネームファイルを作成する](in_action/creating_screen_nickname_file/creating_screen_nickname_file_ja.md)
+    - [Screen Builderを使用する](in_action/creating_screen_nickname_file/using_screen_builder_ja.md)
 - メッセージと言語
     - [ログ出力の言語](in_action/message_and_language/log_language_ja.md)
     - [デバイスの言語](in_action/message_and_language/device_language_ja.md)

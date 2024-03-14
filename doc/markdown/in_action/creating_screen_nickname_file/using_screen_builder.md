@@ -47,8 +47,8 @@ git clone https://github.com/ldi-github/shirates-builder.git
 
 1. Click the base element to select. (red rectangle)
 2. Ctrl+Click the element that you want to convert to relative element of the base element. (green rectangle)<br>
-   ![](_images/screen_builder_converting_to_relative_selector.png) <br>
-   `{Network & internet}` is relative selector.
+   ![](_images/screen_builder_converting_to_relative_selector.png) <br><br>
+   `{Network & internet}` is relative selector.<br>
    ![](_images/screen_builder_converting_to_relative_selector_2.png)
 
 ### Link
