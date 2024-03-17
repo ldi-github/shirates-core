@@ -32,7 +32,7 @@ object TestElementCache {
      * rootElement
      */
     var rootElement: TestElement = TestElement.emptyElement
-        internal set(value) {
+        set(value) {
             field = value
             allElements = listOf()
             synced = false
