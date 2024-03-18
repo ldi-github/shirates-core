@@ -18,7 +18,7 @@ git clone https://github.com/ldi-github/shirates-builder.git
 ## Screen Builderを起動する
 
 1. `shirates-builder` プロジェクトをIntelliJ IDEAで開きます。
-2. Run app.<br>
+2. `run`をダブルクリックして実行します。<br>
    ![](_images/screen_builder_run.png)
 
 ## レコーディングセッションを開始する(Settingsタブ)

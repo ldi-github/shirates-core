@@ -200,6 +200,7 @@
     - [must, should, want](in_action/filtering_tests_with_priority/must_should_want.md)
 - Migrating from manual testing
     - [Generating test code template](in_action/migrating_from_manual_testing/generating_test_code_template.md)
+    - [Using Template Code Generator](in_action/migrating_from_manual_testing/using_template_code_generator.md)
 - Designing test in code first
     - [Designing test in code first](in_action/designing_and_implementing_test/designing_test_in_code_first.md)
 - Running test on CI server

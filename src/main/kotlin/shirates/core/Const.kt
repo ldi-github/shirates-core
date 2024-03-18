@@ -94,7 +94,7 @@ object Const {
     const val IMPLICITLY_WAIT_SECONDS = 5.0
     const val REUSE_DRIVER = true
     const val APPIUM_ARGS_SEPARATOR = " "
-    const val APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS: Double = 15.0
+    const val APPIUM_SERVER_STARTUP_TIMEOUT_SECONDS: Double = 30.0
     const val APPIUM_PROCESS_TERMINATE_TIMEOUT_SECONDS: Double = 5.0
     const val APPIUM_SESSION_STARTUP_TIMEOUT_SECONDS: Double = 30.0
     const val APPIUM_PROXY_READ_TIMEOUT_SECONDS: Double = 20.0
