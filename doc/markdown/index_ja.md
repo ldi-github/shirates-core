@@ -200,6 +200,7 @@
     - [must, should, want](in_action/filtering_tests_with_priority/must_should_want_ja.md)
 - 手動テストから移行する
     - [テストコードのテンプレートを生成する](in_action/migrating_from_manual_testing/generating_test_code_template_ja.md)
+    - [Template Code Generatorを使用する](in_action/migrating_from_manual_testing/using_template_code_generator_ja.md)
 - コードファーストでテストを設計する
     - [コードファーストでテストを設計する](in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)
 - CIサーバーでテストを実行する
