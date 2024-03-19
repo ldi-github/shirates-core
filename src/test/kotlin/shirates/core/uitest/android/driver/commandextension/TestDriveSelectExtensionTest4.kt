@@ -53,6 +53,32 @@ class TestDriveSelectExtensionTest4 : UITest() {
                     it.flickAndGoDown()
                         .canSelectAllWithScrollUp("[Network & internet]", "[Storage]", "[System]", log = true)
                         .thisIsFalse()
+
+                    it.flickAndGoUpTurbo()
+                    it.flickAndGoDownTurbo()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun flickAndGoDownTurbo_flickAndGoUpTurbo() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    it.flickAndGoDownTurbo()
+                }.expectation {
+                    it.exist("Tips & support")
+                }
+            }
+            case(2) {
+                action {
+                    it.flickAndGoUpTurbo()
+                }.expectation {
+                    it.exist("Settings")
                 }
             }
         }

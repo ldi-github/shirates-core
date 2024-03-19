@@ -663,6 +663,26 @@ fun TestDrive.flickAndGoDown(
 }
 
 /**
+ * flickAndGoDownTurbo
+ */
+fun TestDrive.flickAndGoDownTurbo(
+    scrollable: String = "",
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
+    repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
+): TestElement {
+    return flickAndGoDown(
+        scrollable = scrollable,
+        durationSeconds = 0.1,
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
+        repeat = repeat,
+        intervalSeconds = intervalSeconds
+    )
+}
+
+/**
  * flickAndGoRight
  */
 fun TestDrive.flickAndGoRight(
@@ -810,6 +830,27 @@ fun TestDrive.flickAndGoUp(
 
     return lastElement
 }
+
+/**
+ * flickAndGoUpTurbo
+ */
+fun TestDrive.flickAndGoUpTurbo(
+    scrollable: String = "",
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
+    repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS
+): TestElement {
+
+    return flickAndGoUp(
+        scrollable = scrollable,
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
+        repeat = repeat,
+        intervalSeconds = intervalSeconds
+    )
+}
+
 
 /**
  * flickTopToBottom
