@@ -4,7 +4,7 @@ import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.driver.testProfile
-import shirates.core.utility.getStringOrEmpty
+import shirates.core.utility.appium.getCapabilityRelaxed
 import shirates.core.utility.ios.IosLanguageUtility
 
 object LanguageHelperIos : TestDrive {
@@ -32,8 +32,8 @@ object LanguageHelperIos : TestDrive {
             return
         }
 
-        val capabilityLange = testProfile.capabilities.getStringOrEmpty("language")
-        val capabilityLocale = testProfile.capabilities.getStringOrEmpty("locale")
+        val capabilityLange = testProfile.capabilities.getCapabilityRelaxed("language")
+        val capabilityLocale = testProfile.capabilities.getCapabilityRelaxed("locale")
         val targetLocale = "$capabilityLange-$capabilityLocale"
 
         setLanguage(locale = targetLocale)

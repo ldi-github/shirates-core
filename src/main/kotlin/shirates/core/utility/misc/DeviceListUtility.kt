@@ -6,7 +6,7 @@ import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.utility.android.AndroidDeviceInfo
 import shirates.core.utility.android.AndroidDeviceUtility
-import shirates.core.utility.getStringOrEmpty
+import shirates.core.utility.appium.getCapabilityRelaxed
 import shirates.core.utility.ios.IosDeviceInfo
 import shirates.core.utility.ios.IosDeviceUtility
 
@@ -72,7 +72,7 @@ object DeviceListUtility {
             val deviceInfo = DeviceInfo()
             deviceInfo.androidDeviceInfo = androidDeviceInfo
             deviceInfo.profileInstance = TestConfigContainer.lastCreated?.profileMap?.values
-                ?.firstOrNull { it.capabilities.getStringOrEmpty("udid") == androidDeviceInfo.udid }
+                ?.firstOrNull { it.capabilities.getCapabilityRelaxed("udid") == androidDeviceInfo.udid }
             val profile = deviceInfo.profileInstance?.profileName
                 ?: NO_PROFILE
             deviceInfo.profile = profile
@@ -88,7 +88,7 @@ object DeviceListUtility {
             val deviceInfo = DeviceInfo()
             deviceInfo.iosDeviceInfo = iosDeviceInfo
             deviceInfo.profileInstance = TestConfigContainer.lastCreated?.profileMap?.values
-                ?.firstOrNull { it.capabilities.getStringOrEmpty("udid") == iosDeviceInfo.udid }
+                ?.firstOrNull { it.capabilities.getCapabilityRelaxed("udid") == iosDeviceInfo.udid }
             val profile = deviceInfo.profileInstance?.profileName
                 ?: NO_PROFILE
             deviceInfo.profile = profile

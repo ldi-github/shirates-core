@@ -3,10 +3,13 @@ package shirates.core.unittest.configuration
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import shirates.core.UserVar
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
 import shirates.core.testcode.UnitTest
+import shirates.core.utility.appium.getCapabilityRelaxed
+import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.misc.ReflectionUtility
 import shirates.core.utility.toPath
 import java.io.File
@@ -38,7 +41,7 @@ class TestProfileTest : UnitTest() {
         assertThat(p1.appiumSessionStartupTimeoutSeconds).isNull()
         assertThat(p1.implicitlyWaitSeconds).isNull()
         assertThat(p1.settings.count()).isEqualTo(0)
-        assertThat(p1.capabilities.count()).isEqualTo(0)
+        assertThat(p1.capabilities.capabilityNames.count()).isEqualTo(0)
         assertThat(p1.appPackageFile).isNull()
         assertThat(p1.appPackageDir).isNull()
         assertThat(p1.packageOrBundleId).isNull()
@@ -111,7 +114,7 @@ class TestProfileTest : UnitTest() {
         //
         // capabilities
         //
-        assertThat(p1.getCapabilityRelaxed("not exist")).isEqualTo("")
+        assertThat(p1.capabilities.getCapabilityRelaxed("not exist")).isEqualTo("")
         assertThat(p1.automationName).isEqualTo("")
         assertThat(p1.platformName).isEqualTo("")
         assertThat(p1.platformVersion).isEqualTo("")
@@ -138,6 +141,42 @@ class TestProfileTest : UnitTest() {
     }
 
     @Test
+    fun language() {
+
+        run {
+            // Arrange
+            val p = TestProfile()
+            // Act, Assert
+            assertThat(p.language).isEqualTo("")
+            assertThat(p.capabilities.getCapabilityRelaxed("language")).isEqualTo("")
+
+            // Arrange
+            p.language = "language1"
+            // Act, Assert
+            assertThat(p.language).isEqualTo("language1")
+            assertThat(p.capabilities.getCapabilityRelaxed("language1"))
+        }
+    }
+
+    @Test
+    fun locale() {
+
+        run {
+            // Arrange
+            val p = TestProfile()
+            // Act, Assert
+            assertThat(p.locale).isEqualTo("")
+            assertThat(p.capabilities.getCapabilityRelaxed("locale")).isEqualTo("")
+
+            // Arrange
+            p.locale = "locale1"
+            // Act, Assert
+            assertThat(p.locale).isEqualTo("locale1")
+            assertThat(p.capabilities.getCapabilityRelaxed("locale")).isEqualTo("locale1")
+        }
+    }
+
+    @Test
     fun udid() {
 
         run {
@@ -145,11 +184,13 @@ class TestProfileTest : UnitTest() {
             val p = TestProfile()
             // Act, Assert
             assertThat(p.udid).isEqualTo("")
+            assertThat(p.capabilities.getCapabilityRelaxed("udid")).isEqualTo("")
 
             // Arrange
-            p.capabilities["udid"] = "udid1"
+            p.udid = "udid1"
             // Act, Assert
             assertThat(p.udid).isEqualTo("udid1")
+            assertThat(p.capabilities.getCapabilityRelaxed("udid")).isEqualTo("udid1")
         }
     }
 
@@ -255,12 +296,12 @@ class TestProfileTest : UnitTest() {
             // Arrange
             val p = TestProfile()
             // Act, Assert
-            assertThat(p.getCapabilityRelaxed("cap1")).isEqualTo("")
+            assertThat(p.capabilities.getCapabilityRelaxed("cap1")).isEqualTo("")
 
             // Arrange
-            p.capabilities["cap1"] = "value1"
+            p.capabilities.setCapabilityStrict("cap1", "value1")
             // Act, Assert
-            assertThat(p.getCapabilityRelaxed("cap1")).isEqualTo("value1")
+            assertThat(p.capabilities.getCapabilityRelaxed("cap1")).isEqualTo("value1")
         }
     }
 
@@ -273,7 +314,7 @@ class TestProfileTest : UnitTest() {
         assertThat(p.automationName).isEqualTo("")
 
         // Arrange
-        p.capabilities["automationName"] = "automation1"
+        p.automationName = "automation1"
         // Act, Assert
         assertThat(p.automationName).isEqualTo("automation1")
     }
@@ -301,12 +342,12 @@ class TestProfileTest : UnitTest() {
         assertThat(p.platformName).isEqualTo("")
 
         // Arrange
-        p.capabilities["platformName"] = "Android"
+        p.platformName = "Android"
         // Act, Assert
         assertThat(p.platformName).isEqualTo("android")
 
         // Arrange
-        p.capabilities["platformName"] = "iOS"
+        p.platformName = "iOS"
         // Act, Assert
         assertThat(p.platformName).isEqualTo("ios")
     }
@@ -334,7 +375,7 @@ class TestProfileTest : UnitTest() {
         assertThat(p.deviceName).isEqualTo("")
 
         // Arrange
-        p.capabilities["deviceName"] = "device1"
+        p.deviceName = "device1"
         // Act, Assert
         assertThat(p.deviceName).isEqualTo("device1")
     }
@@ -348,7 +389,7 @@ class TestProfileTest : UnitTest() {
         assertThat(p.appPackage).isEqualTo("")
 
         // Arrange
-        p.capabilities["appPackage"] = "appPackage1"
+        p.appPackage = "appPackage1"
         // Act, Assert
         assertThat(p.appPackage).isEqualTo("appPackage1")
     }
@@ -362,7 +403,7 @@ class TestProfileTest : UnitTest() {
         assertThat(p.appActivity).isEqualTo("")
 
         // Arrange
-        p.capabilities["appActivity"] = "appActivity1"
+        p.appActivity = "appActivity1"
         // Act, Assert
         assertThat(p.appActivity).isEqualTo("appActivity1")
     }
@@ -373,13 +414,13 @@ class TestProfileTest : UnitTest() {
         val p = TestProfile("profile1")
         assertThat(p.platformAnnotation).isEqualTo("")
 
-        p.capabilities["platformName"] = "Android"
+        p.platformName = "Android"
         assertThat(p.platformAnnotation).isEqualTo("@a")
 
-        p.capabilities["platformName"] = "android"
+        p.platformName = "android"
         assertThat(p.platformAnnotation).isEqualTo("@a")
 
-        p.capabilities["platformName"] = "iOS"
+        p.platformName = "iOS"
         assertThat(p.platformAnnotation).isEqualTo("@i")
     }
 
@@ -390,13 +431,13 @@ class TestProfileTest : UnitTest() {
         assertThat(p.platformName).isEqualTo("")
         assertThat(p.isAndroid).isTrue()
 
-        p.capabilities["platformName"] = "Android"
+        p.platformName = "Android"
         assertThat(p.isAndroid).isTrue()
 
-        p.capabilities["platformName"] = "andRoid"
+        p.platformName = "andRoid"
         assertThat(p.isAndroid).isTrue()
 
-        p.capabilities["platformName"] = "ios"
+        p.platformName = "ios"
         assertThat(p.isAndroid).isFalse()
     }
 
@@ -407,13 +448,13 @@ class TestProfileTest : UnitTest() {
         assertThat(p.platformName).isEqualTo("")
         assertThat(p.isiOS).isFalse()
 
-        p.capabilities["platformName"] = "iOS"
+        p.platformName = "iOS"
         assertThat(p.isiOS).isTrue()
 
-        p.capabilities["platformName"] = "iOs"
+        p.platformName = "iOs"
         assertThat(p.isiOS).isTrue()
 
-        p.capabilities["platformName"] = "android"
+        p.platformName = "android"
         assertThat(p.isiOS).isFalse()
     }
 
@@ -448,12 +489,12 @@ class TestProfileTest : UnitTest() {
         p.syncMaxLoopCount = "8"
         p.syncIntervalSeconds = "0.8"
         p.specialTags = "Tag1"
-        p.capabilities["automationName"] = "automationName1"
-        p.capabilities["platformName"] = "Android"
-        p.capabilities["platformVersion"] = "10"
-        p.capabilities["deviceName"] = "deviceName1"
-        p.capabilities["appPackage"] = "appPackage1"
-        p.capabilities["appActivity"] = "appActivity1"
+        p.automationName = "automationName1"
+        p.platformName = "Android"
+        p.platformVersion = "10"
+        p.deviceName = "deviceName1"
+        p.appPackage = "appPackage1"
+        p.appActivity = "appActivity1"
 
         return p
     }
@@ -488,11 +529,11 @@ class TestProfileTest : UnitTest() {
         p.syncMaxLoopCount = "9"
         p.syncIntervalSeconds = "1.2"
         p.specialTags = "Tag1"
-        p.capabilities["automationName"] = "automationName1"
-        p.capabilities["platformName"] = "ios"
-        p.capabilities["platformVersion"] = "15"
-        p.capabilities["deviceName"] = "deviceName1"
-        p.capabilities["appPackage"] = "appPackage1"
+        p.automationName = "automationName1"
+        p.platformName = "ios"
+        p.platformVersion = "15"
+        p.deviceName = "deviceName1"
+        p.appPackage = "appPackage1"
 //        p.capabilities["appActivity"] = "appActivity1"
 
         return p
@@ -512,8 +553,8 @@ class TestProfileTest : UnitTest() {
                 // Arrange
                 val p = getProfileForAndroid()
                 val fileName = "package1.apk"
-                p.capabilities["app"] = fileName
-                val expected = shirates.core.UserVar.downloads.resolve(fileName).toString()
+                p.capabilities.setCapabilityStrict("app", fileName)
+                val expected = UserVar.downloads.resolve(fileName).toString()
                 // Act, Assert
                 assertThat(p.appPackageFullPath).isEqualTo(expected)
             }
@@ -521,7 +562,7 @@ class TestProfileTest : UnitTest() {
                 // Arrange
                 val p = getProfileForAndroid()
                 p.appPackageFile = "package1.apk"
-                val expected = shirates.core.UserVar.downloads.resolve(p.appPackageFile).toString()
+                val expected = UserVar.downloads.resolve(p.appPackageFile).toString()
                 // Act, Assert
                 assertThat(p.appPackageFullPath).isEqualTo(expected)
             }
@@ -535,12 +576,31 @@ class TestProfileTest : UnitTest() {
             run {
                 // Arrange
                 val p = getProfileForAndroid()
-                p.appPackageDir = shirates.core.UserVar.downloads.resolve("packageDir").toString()
+                p.appPackageDir = UserVar.downloads.resolve("packageDir").toString()
                 p.appPackageFile = "package1.apk"
                 // Act, Assert
                 val expected = p.appPackageDir.toPath().resolve(p.appPackageFile).toString()
                 assertThat(p.appPackageFullPath).isEqualTo(expected)
             }
+        }
+    }
+
+    @Test
+    fun getDesiredCapabilities() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            val p = TestProfile()
+            p.udid = "udid1"
+            p.language = "ja"
+            p.locale = "JP"
+            p.appActivity
+            // Act
+            val caps = p.getDesiredCapabilities()
+            // Assert
+            assertThat(caps.getCapabilityRelaxed("udid")).isEqualTo("udid1")
+            assertThat(caps.getCapabilityRelaxed("language")).isEqualTo("ja")
+            assertThat(caps.getCapabilityRelaxed("locale")).isEqualTo("JP")
         }
     }
 
@@ -593,12 +653,12 @@ class TestProfileTest : UnitTest() {
         )
         // appPackageFile
         run {
-            val path = shirates.core.UserVar.downloads.resolve("not/exist/file.apk")
+            val path = UserVar.downloads.resolve("not/exist/file.apk")
             validateProperty(
                 propertyName = "appPackageFile",
                 errorValue = path.toString(),
                 message = "Package file not found. Set androidPackageFile or iosPackageFile or capabilities.app properly.($path)",
-                validValue = shirates.core.UserVar.downloads.toString()
+                validValue = UserVar.downloads.toString()
             )
         }
         // appPackageDir
@@ -607,17 +667,17 @@ class TestProfileTest : UnitTest() {
                 propertyName = "appPackageDir",
                 errorValue = "not/exist/dir",
                 message = "appPackageDir not found.(not/exist/dir)",
-                validValue = shirates.core.UserVar.downloads.toString()
+                validValue = UserVar.downloads.toString()
             )
         }
         // appPackageFile
         run {
-            val path = shirates.core.UserVar.downloads.resolve("not/exist/package.apk")
+            val path = UserVar.downloads.resolve("not/exist/package.apk")
             validateProperty(
                 propertyName = "appPackageFile",
                 errorValue = "not/exist/package.apk",
                 message = "Package file not found. Set androidPackageFile or iosPackageFile or capabilities.app properly.($path)",
-                validValue = shirates.core.UserVar.downloads.toString()
+                validValue = UserVar.downloads.toString()
             )
         }
         // packageOrBundleId
@@ -828,9 +888,9 @@ class TestProfileTest : UnitTest() {
         }
         // APP
         validateCapability(
-            propertyName = "APP",
+            propertyName = "app",
             errorValue = "not/exist/package.apk",
-            message = "capabilities.app not found.(not/exist/package.apk)",
+            message = "Package file not found. Set androidPackageFile or iosPackageFile or capabilities.app properly.(/Users/wave1008/Downloads/not/exist/package.apk)",
             validValue = "unitTestData/files/dummy.apk"
         )
     }
@@ -841,7 +901,7 @@ class TestProfileTest : UnitTest() {
         val p =
             if (TestMode.isAndroid) getProfileForAndroid()
             else getProfileForIos()
-        p.capabilities[propertyName] = errorValue
+        p.capabilities.setCapabilityStrict(propertyName, errorValue)
         // Act, Assert
         assertThatThrownBy {
             p.validate()
@@ -849,7 +909,7 @@ class TestProfileTest : UnitTest() {
             .hasMessage(message)
 
         // Arrange
-        p.capabilities[propertyName] = validValue
+        p.capabilities.setCapabilityStrict(propertyName, validValue)
         // Act
         p.validate()
         // Assert
@@ -881,7 +941,7 @@ class TestProfileTest : UnitTest() {
             // Arrange
             val p = getProfileForAndroid()
             p.appPackageFile = "appPackageFile1.apk"
-            val expected = shirates.core.UserVar.downloads.resolve(p.appPackageFile!!).toString()
+            val expected = UserVar.downloads.resolve(p.appPackageFile!!).toString()
             // Act
             val actual = p.appPackageFullPath
             // Assert
@@ -915,9 +975,9 @@ class TestProfileTest : UnitTest() {
         run {
             // Arrange
             val p = getProfileForAndroid()
-            p.appPackageDir = shirates.core.UserVar.downloads.toString()
+            p.appPackageDir = UserVar.downloads.toString()
             p.appPackageFile = "appPackageFile1.apk"
-            val expected = shirates.core.UserVar.downloads.resolve(p.appPackageFile!!).toString()
+            val expected = UserVar.downloads.resolve(p.appPackageFile!!).toString()
             // Act
             val actual = p.appPackageFullPath
             // Assert
@@ -928,7 +988,7 @@ class TestProfileTest : UnitTest() {
         run {
             // Arrange
             val p = getProfileForAndroid()
-            p.appPackageDir = shirates.core.UserVar.downloads.toString()
+            p.appPackageDir = UserVar.downloads.toString()
             if (File.separator == "/") {
                 // Arrange
                 p.appPackageFile = "/users/hoge/appPackageFile1.apk"

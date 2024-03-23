@@ -5,7 +5,7 @@ import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.driver.commandextension.getScrollableElement
 import shirates.core.driver.commandextension.getThisOrIt
 import shirates.core.exception.TestDriverException
-import shirates.core.utility.getCapabilityRelaxed
+import shirates.core.utility.appium.getCapabilityRelaxed
 
 /**
  * parameters

@@ -37,6 +37,7 @@ import shirates.core.utility.*
 import shirates.core.utility.android.AdbUtility
 import shirates.core.utility.android.AndroidDeviceUtility
 import shirates.core.utility.android.AndroidMobileShellUtility
+import shirates.core.utility.appium.getCapabilityRelaxed
 import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.file.FileLockUtility.lockFile
@@ -565,8 +566,8 @@ object TestDriver {
         }
 
         TestLog.info("Using prebuiltWDA in $wdaDirectory")
-        profile.capabilities.set("appium:usePrebuiltWDA", true)
-        profile.capabilities.set("appium:derivedDataPath", wdaDirectory)
+        profile.capabilities.setCapabilityStrict("appium:usePrebuiltWDA", true)
+        profile.capabilities.setCapabilityStrict("appium:derivedDataPath", wdaDirectory)
     }
 
     private fun createAppiumDriverCore(profile: TestProfile) {
@@ -582,8 +583,7 @@ object TestDriver {
             }
         }
 
-        val capabilities = DesiredCapabilities()
-        setCapabilities(profile, capabilities)
+        val capabilities = profile.getDesiredCapabilities()
 
         val retryContext = RetryUtility.exec(
             retryMaxCount = testContext.retryMaxCount,
@@ -632,36 +632,6 @@ object TestDriver {
                     TestLog.warn(message(id = "findingFelicaPackageFailed", arg1 = "${t.message}"))
                 }
             }
-        }
-    }
-
-    private fun setCapabilities(
-        profile: TestProfile,
-        capabilities: DesiredCapabilities
-    ) {
-        val keys = profile.capabilities.keys
-        if (isiOS) {
-            if (keys.contains("appium:avd")) {
-                keys.remove("appium:avd")
-            }
-        }
-        for (key in keys) {
-            // comment mark
-            if (key.startsWith("#")) continue
-            if (key.startsWith("//")) continue
-
-            capabilities.setCapabilityStrict(key, profile.capabilities[key])
-        }
-        val capabilityNames = capabilities.capabilityNames
-        // newCommandTimeout
-        if (capabilityNames.any() { it.endsWith("newCommandTimeout") }.not()) {
-            capabilities.setCapabilityStrict("newCommandTimeout", 300)
-        }
-        // App package
-        if (profile.packageOrBundleId == profile.startupPackageOrBundleId &&
-            profile.appPackageFile.isNullOrBlank().not()
-        ) {
-            capabilities.setCapabilityStrict("app", profile.appPackageFullPath)
         }
     }
 
@@ -839,7 +809,7 @@ object TestDriver {
         /**
          * adb server
          */
-        val adbPort = profile.getCapabilityRelaxed("adbPort").toIntOrNull()
+        val adbPort = profile.capabilities.getCapabilityRelaxed("adbPort").toIntOrNull()
         AdbUtility.killServer(port = adbPort, log = true)
         /**
          * emulator
@@ -901,14 +871,14 @@ object TestDriver {
             )
             return true
         } else if (message.contains("was not in the list of connected devices")) {
-            val udid = profile.capabilities.getOrDefault("udid", "(not set)")?.toString()
+            val udid = profile.capabilities.getCapabilityRelaxed("udid")
             context.wrappedError = TestEnvironmentException(
                 message = message(id = "deviceNotConnected", subject = profile.deviceName, arg1 = udid),
                 cause = context.exception
             )
             return true
         } else if (message.contains("App with bundle identifier") && message.contains("unknown")) {
-            val bundleId = profile.capabilities.getOrDefault("bundleId", "(not set)")?.toString()
+            val bundleId = profile.capabilities.getCapabilityRelaxed("bundleId")
             context.wrappedError = TestConfigException(
                 message = message(id = "unknownBundleId", subject = bundleId),
                 cause = context.exception
@@ -938,7 +908,7 @@ object TestDriver {
          * Check udid.
          * Sometimes udid may not be captured.
          */
-        val udid = mAppiumDriver!!.capabilities.getUdid()
+        val udid = mAppiumDriver!!.capabilities.getCapabilityRelaxed("udid")
         if (udid.isBlank()) {
             val msg = "udid not found in capabilities."
             TestLog.warn(msg)
@@ -952,7 +922,7 @@ object TestDriver {
             TestLog.info("[Health check] start")
 
             try {
-                if (profile.udid.isNotBlank() && profile.udid != udid) {
+                if (profile.udid.isBlank()) {
                     throw TestDriverException("Connected udid is not correct. (profile.udid=${profile.udid}, actual=$udid)")
                 }
                 syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail

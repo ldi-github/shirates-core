@@ -1,5 +1,7 @@
 package shirates.core.configuration
 
+import org.openqa.selenium.remote.DesiredCapabilities
+import shirates.core.UserVar
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
 import shirates.core.driver.testProfile
@@ -7,7 +9,8 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.android.AndroidDeviceUtility
-import shirates.core.utility.getStringOrEmpty
+import shirates.core.utility.appium.getCapabilityRelaxed
+import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.misc.ReflectionUtility
 import shirates.core.utility.toPath
@@ -45,7 +48,7 @@ class TestProfile(var profileName: String = "") {
     var appiumSessionStartupTimeoutSeconds: String? = null
     var implicitlyWaitSeconds: String? = null
     val settings = mutableMapOf<String, String>()
-    val capabilities = mutableMapOf<String, Any?>()
+    val capabilities = DesiredCapabilities()
     var appPackageFile: String? = null
     var appVersion: String = ""
     var appBuild: String = ""
@@ -112,15 +115,31 @@ class TestProfile(var profileName: String = "") {
             return profileName == ""
         }
 
+    var language: String
+        get() {
+            return capabilities.getCapabilityRelaxed("language")
+        }
+        set(value) {
+            capabilities.setCapabilityStrict("language", value)
+        }
+
+    var locale: String
+        get() {
+            return capabilities.getCapabilityRelaxed("locale")
+        }
+        set(value) {
+            capabilities.setCapabilityStrict("locale", value)
+        }
+
     /**
      * udid
      */
     var udid: String
         get() {
-            return capabilities.getStringOrEmpty("udid")
+            return capabilities.getCapabilityRelaxed("udid")
         }
         set(value) {
-            capabilities.set("udid", value)
+            capabilities.setCapabilityStrict("udid", value)
         }
 
     /**
@@ -189,32 +208,14 @@ class TestProfile(var profileName: String = "") {
     //
 
     /**
-     * getCapabilityRelaxed
-     */
-    fun getCapabilityRelaxed(name: String): String {
-        if (capabilities.containsKey(name)) {
-            val pname = capabilities.getStringOrEmpty(name)
-            return pname
-        } else if (capabilities.containsKey("appium:$name")) {
-            val pname = capabilities.getStringOrEmpty("appium:$name")
-            return pname
-        } else {
-            return ""
-        }
-    }
-
-    /**
      * automationName
      */
     var automationName: String
         get() {
-            return getCapabilityRelaxed("automationName")
+            return capabilities.getCapabilityRelaxed("automationName")
         }
         set(value) {
-            if (capabilities.containsKey("automationName")) {
-                capabilities.remove("automationName")
-            }
-            capabilities.set("appium:automationName", value)
+            capabilities.setCapabilityStrict("automationName", value)
         }
 
     /**
@@ -222,13 +223,10 @@ class TestProfile(var profileName: String = "") {
      */
     var avd: String
         get() {
-            return getCapabilityRelaxed("avd")
+            return capabilities.getCapabilityRelaxed("avd")
         }
         set(value) {
-            if (capabilities.containsKey("avd")) {
-                capabilities.remove("avd")
-            }
-            capabilities.set("appium:avd", value)
+            capabilities.setCapabilityStrict("avd", value)
         }
 
     /**
@@ -236,10 +234,10 @@ class TestProfile(var profileName: String = "") {
      */
     var platformName: String
         get() {
-            return getCapabilityRelaxed("platformName").lowercase()
+            return capabilities.getCapabilityRelaxed("platformName").lowercase()
         }
         set(value) {
-            capabilities.set("platformName", value)
+            capabilities.setCapabilityStrict("platformName", value)
         }
 
     /**
@@ -247,13 +245,10 @@ class TestProfile(var profileName: String = "") {
      */
     var platformVersion: String
         get() {
-            return getCapabilityRelaxed("platformVersion")
+            return capabilities.getCapabilityRelaxed("platformVersion")
         }
         set(value) {
-            if (capabilities.containsKey("platformVersion")) {
-                capabilities.remove("platformVersion")
-            }
-            capabilities.set("appium:platformVersion", value)
+            capabilities.setCapabilityStrict("platformVersion", value)
         }
 
     /**
@@ -261,29 +256,32 @@ class TestProfile(var profileName: String = "") {
      */
     var deviceName: String
         get() {
-            return getCapabilityRelaxed("deviceName")
+            return capabilities.getCapabilityRelaxed("deviceName")
         }
         set(value) {
-            if (capabilities.containsKey("deviceName")) {
-                capabilities.remove("deviceName")
-            }
-            capabilities.set("appium:deviceName", value)
+            capabilities.setCapabilityStrict("deviceName", value)
         }
 
     /**
      * appPackage
      */
-    val appPackage: String
+    var appPackage: String
         get() {
-            return getCapabilityRelaxed("appPackage")
+            return capabilities.getCapabilityRelaxed("appPackage")
+        }
+        set(value) {
+            capabilities.setCapabilityStrict("appPackage", value)
         }
 
     /**
      * appActivity
      */
-    val appActivity: String
+    var appActivity: String
         get() {
-            return getCapabilityRelaxed("appActivity")
+            return capabilities.getCapabilityRelaxed("appActivity")
+        }
+        set(value) {
+            capabilities.setCapabilityStrict("appActivity", value)
         }
 
     /**
@@ -322,25 +320,18 @@ class TestProfile(var profileName: String = "") {
      */
     val appPackageFullPath: String
         get() {
-            val app: String
-            if (appPackageFile.isNullOrBlank().not()) {
-                app = appPackageFile!!
-            } else if (capabilities.containsKey("app")) {
-                app = capabilities.getStringOrEmpty("app")
-            } else {
+            val app = appPackageFile ?: capabilities.getCapabilityRelaxed("app")
+            if (app.isBlank()) {
                 return ""
             }
-
             val path = app.toPath()
             if (Files.exists(path)) {
                 return path.toString()
             }
 
-            val dir = appPackageDir ?: shirates.core.UserVar.DOWNLOADS
-
+            val dir = appPackageDir ?: UserVar.DOWNLOADS
             return dir.toPath().resolve(app).toString()
         }
-
 
     private fun validateRequired(propertyName: String) {
 
@@ -362,13 +353,44 @@ class TestProfile(var profileName: String = "") {
 
     private fun validateCapabilityRequired(propertyName: String) {
 
-        val value = capabilities[propertyName]?.toString() ?: capabilities["appium:$propertyName"]?.toString()
-        if (value.isNullOrBlank()) {
-            val avd = capabilities["avd"]?.toString() ?: capabilities["appium:avd"]?.toString()
-            if (avd.isNullOrBlank()) {
-                throw TestConfigException(message(id = "required", subject = "capabilities.$propertyName"))
+        val value = capabilities.getCapabilityRelaxed(propertyName)
+        if (value.isBlank()) {
+            throw TestConfigException(message(id = "required", subject = "capabilities.$propertyName"))
+        }
+    }
+
+    /**
+     * getDesiredCapabilities
+     */
+    fun getDesiredCapabilities(): DesiredCapabilities {
+
+        val keys = capabilities.capabilityNames.toList()
+        val desiredCaps = DesiredCapabilities()
+        for (key in keys) {
+            // comment mark
+            if (key.startsWith("#")) continue
+            if (key.startsWith("//")) continue
+
+            val value = capabilities.getCapabilityRelaxed(key)
+            if (value.isNotBlank()) {
+                if (value == "true" || value == "false") {
+                    desiredCaps.setCapabilityStrict(key, value.toBoolean())
+                } else {
+                    desiredCaps.setCapabilityStrict(key, value)
+                }
             }
         }
+
+        // newCommandTimeout
+        if (keys.any() { it.endsWith("newCommandTimeout") }.not()) {
+            desiredCaps.setCapabilityStrict("newCommandTimeout", 300)
+        }
+        // App package
+        if (packageOrBundleId == startupPackageOrBundleId && appPackageFile.isNullOrBlank().not()) {
+            desiredCaps.setCapabilityStrict("app", appPackageFullPath)
+        }
+
+        return desiredCaps
     }
 
 
@@ -406,7 +428,7 @@ class TestProfile(var profileName: String = "") {
 
         // appPackageDir
         run {
-            if (appPackageDir.isNullOrEmpty().not()) {
+            if (appPackageDir.isNullOrBlank().not()) {
                 if (Files.exists(appPackageDir.toPath()).not()) {
                     throw TestConfigException(
                         message(id = "notFound", subject = "appPackageDir", value = appPackageDir)
@@ -510,11 +532,10 @@ class TestProfile(var profileName: String = "") {
 
         // app
         run {
-            val appKey = capabilities.keys.firstOrNull() { it.equals("app", ignoreCase = true) }
-            if (appKey != null) {
-                val file = capabilities[appKey]?.toString() ?: ""
-                if (file.isNotBlank() && Files.exists(file.toPath()).not()) {
-                    throw TestConfigException(message(id = "notFound", subject = "capabilities.app", value = file))
+            val appFile = capabilities.getCapabilityRelaxed("app")
+            if (appFile.isNotBlank()) {
+                if (appFile.isNotBlank() && Files.exists(appFile.toPath()).not()) {
+                    throw TestConfigException(message(id = "notFound", subject = "capabilities.app", value = appFile))
                 }
             }
         }
@@ -530,14 +551,14 @@ class TestProfile(var profileName: String = "") {
         }
 
         // appEnvironment
-        if (appEnvironment.isBlank().not()) {
+        if (appEnvironment.isNotBlank()) {
             val mr = appEnvironment.toRegex().find(appPackageFile ?: "")
             if (mr?.groups?.count() == 2) {
                 appEnvironment = mr.groupValues[1]
             }
         }
         // appVersion
-        if (appVersion.isBlank().not()) {
+        if (appVersion.isNotBlank()) {
             val mr = appVersion.toRegex().find(appPackageFile ?: "")
             if (mr?.groups?.count() == 2) {
                 appVersion = mr.groupValues[1]
@@ -546,7 +567,7 @@ class TestProfile(var profileName: String = "") {
             }
         }
         // appBuild
-        if (appBuild.isBlank().not()) {
+        if (appBuild.isNotBlank()) {
             val mr = appBuild.toRegex().find(appPackageFile ?: "")
             if (mr?.groups?.count() == 2) {
                 appBuild = mr.groupValues[1]

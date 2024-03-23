@@ -3,6 +3,7 @@ package shirates.core.unittest.configuration
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestConfig
 import shirates.core.configuration.repository.DatasetRepositoryManager
@@ -11,6 +12,8 @@ import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
+import shirates.core.utility.appium.getCapabilityRelaxed
+import shirates.core.utility.appium.getMap
 import shirates.core.utility.toPath
 
 class TestConfigTest : UnitTest() {
@@ -211,8 +214,8 @@ class TestConfigTest : UnitTest() {
         assertThat(profile.settings.count()).isEqualTo(3)
         assertThat(profile.settings["settings_test_data_1"]).isEqualTo("1")
         assertThat(profile.settings["settings_test_data_2"]).isEqualTo("2")
-        assertThat(profile.capabilities["capability1"]).isEqualTo("1")
-        assertThat(profile.capabilities["capability2"]).isEqualTo("2")
+        assertThat(profile.capabilities.getCapabilityRelaxed("capability1")).isEqualTo("1")
+        assertThat(profile.capabilities.getCapabilityRelaxed("capability2")).isEqualTo("2")
     }
 
     @Test
@@ -333,12 +336,18 @@ class TestConfigTest : UnitTest() {
             assertThat(p1.retryMaxCount).isEqualTo("1")
             assertThat(p1.retryIntervalSeconds).isEqualTo("3.5")
             val cap1 = mapOf(
-                "appPackage" to "com.example.app1",
-                "appActivity" to "com.example.app1.MainActivity",
-                "platformVersion" to "9",
-                "deviceName" to "Pixel_2_API_28",
+                "appium:app" to UserVar.downloads.resolve("app1.apk").toString(),
+                "appium:appActivity" to "com.example.app1.MainActivity",
+                "appium:appPackage" to "com.example.app1",
+                "appium:deviceName" to "Pixel_2_API_28",
+                "appium:enforceXPath1" to true,
+                "appium:language" to "en",
+                "appium:locale" to "US",
+                "appium:newCommandTimeout" to 300,
+                "appium:platformVersion" to "9",
             )
-            assertThat(p1.capabilities).containsAllEntriesOf(cap1)
+            val desiredCaps = p1.getDesiredCapabilities()
+            assertThat(desiredCaps.getMap()).containsAllEntriesOf(cap1)
         }
 
         run {
@@ -358,13 +367,16 @@ class TestConfigTest : UnitTest() {
             assertThat(p2.retryMaxCount).isEqualTo("3")
             assertThat(p2.retryIntervalSeconds).isEqualTo("3.0")
             val cap2 = mapOf(
-                "appPackage" to "com.example.app1",
-                "appActivity" to "com.example.app1.MainActivity",
-                "automationName" to "UiAutomator3",
-                "platformVersion" to "8.1",
-                "deviceName" to "Pixel"
+                "appium:appActivity" to "com.example.app1.MainActivity",
+                "appium:appPackage" to "com.example.app1",
+                "appium:automationName" to "UiAutomator3",
+                "appium:deviceName" to "Pixel",
+                "appium:enforceXPath1" to true,
+                "appium:language" to "en",
+                "appium:locale" to "US",
+                "appium:platformVersion" to "8.1",
             )
-            assertThat(p2.capabilities).containsAllEntriesOf(cap2)
+            assertThat(p2.capabilities.getMap()).containsAllEntriesOf(cap2)
         }
 
         run {
@@ -383,7 +395,7 @@ class TestConfigTest : UnitTest() {
             assertThat(p3.implicitlyWaitSeconds).isEqualTo(null)
             assertThat(p3.retryMaxCount).isEqualTo("3")
             assertThat(p3.retryIntervalSeconds).isEqualTo("3.0")
-            assertThat(p3.capabilities["appActivity"]).isEqualTo("com.example.app1.MainActivity")
+            assertThat(p3.capabilities.getCapabilityRelaxed("appActivity")).isEqualTo("com.example.app1.MainActivity")
         }
     }
 }

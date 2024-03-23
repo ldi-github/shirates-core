@@ -10,6 +10,7 @@ import shirates.core.driver.TestMode.isEmulator
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.appium.getCapabilityRelaxed
 import shirates.core.utility.file.FileLockUtility
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
@@ -172,7 +173,7 @@ object AndroidDeviceUtility {
      */
     fun getEmulatorProfile(testProfile: TestProfile): EmulatorProfile {
         val profileName = testProfile.profileName
-        val avdName = testProfile.getCapabilityRelaxed("avd")
+        val avdName = testProfile.capabilities.getCapabilityRelaxed("avd")
         val emulatorPort = testProfile.emulatorPort?.toIntOrNull()
         val emulatorProfile = EmulatorProfile(
             profileName = profileName,

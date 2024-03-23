@@ -9,7 +9,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.platformMajorVersion
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
-import shirates.core.utility.getUdid
+import shirates.core.utility.appium.getCapabilityRelaxed
 import shirates.core.utility.misc.ShellUtility
 
 @MacroObject
@@ -74,7 +74,7 @@ object AndroidMacro : TestDrive {
     fun setLanguage(language: String, locale: String) {
 
         if (isAndroid) {
-            val udid = TestDriver.capabilities.getUdid()
+            val udid = TestDriver.capabilities.getCapabilityRelaxed("udid")
             val result = ShellUtility.executeCommand(
                 "adb", "-s", udid, "shell", "am", "start", "-a", "android.settings.LOCALE_SETTINGS"
             )
