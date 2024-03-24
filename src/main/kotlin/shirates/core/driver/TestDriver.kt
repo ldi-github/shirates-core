@@ -572,6 +572,8 @@ object TestDriver {
 
     private fun createAppiumDriverCore(profile: TestProfile) {
 
+        mAppiumDriver = null
+
         if (testContext.isLocalServer) {
             if (isiOS && PropertiesManager.enableWdaInstallOptimization) {
                 wdaInstallOptimization(profile = profile)
@@ -2272,6 +2274,7 @@ object TestDriver {
 
     fun launchAppCore(
         packageOrBundleIdOrActivity: String,
+        sync: Boolean = true,
         onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
     ): TestElement {
 
@@ -2295,8 +2298,10 @@ object TestDriver {
             )
             Thread.sleep(1500)
             refreshCache()
-            SyncUtility.doUntilTrue {
-                isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
+            if (sync) {
+                SyncUtility.doUntilTrue {
+                    isAppCore(appNameOrAppId = packageOrBundleIdOrActivity)
+                }
             }
         } else if (isiOS) {
             if (isRealDevice) {
@@ -2311,6 +2316,7 @@ object TestDriver {
                 TestDriveObjectIos.launchIosApp(
                     udid = testProfile.udid,
                     bundleId = bundleId,
+                    sync = sync,
                     onLaunchHandler = onLaunchHandler,
                     log = true
                 )

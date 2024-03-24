@@ -15,6 +15,7 @@ import shirates.core.utility.sync.SyncUtility
 internal fun TestDriveObjectIos.launchIosApp(
     udid: String,
     bundleId: String,
+    sync: Boolean = true,
     onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
     log: Boolean = PropertiesManager.enableShellExecLog
 ): TestElement {
@@ -23,32 +24,36 @@ internal fun TestDriveObjectIos.launchIosApp(
 
     var isApp = false
 
-    SyncUtility.doUntilTrue(
-        waitSeconds = testContext.waitSecondsForLaunchAppComplete
-    ) { context ->
-        TestLog.info("doUntilTrue(${context.count})")
-        testDrive.wait(waitSeconds = 2)
-        isApp = TestDriver.isAppCore(appNameOrAppId = bundleId)
+    if (sync) {
+        SyncUtility.doUntilTrue(
+            waitSeconds = testContext.waitSecondsForLaunchAppComplete
+        ) { context ->
+            TestLog.info("doUntilTrue(${context.count})")
+            testDrive.wait(waitSeconds = 2)
+            isApp = TestDriver.isAppCore(appNameOrAppId = bundleId)
 
-        val lastMessage = TestLog.lastTestLog!!.message
-        val kAXErrorServerNotFound = lastMessage.contains("kAXErrorServerNotFound") // SpringBoard is corrupted
-        if (kAXErrorServerNotFound) {
-            TestLog.info("SpringBoard is corrupted.")
-            IosDeviceUtility.terminateSpringBoardByUdid(udid = udid, log = log)
-            TestLog.info("Retrying launchApp.")
-            launchIosAppCore(udid = udid, bundleId = bundleId, log = log)
-            onLaunchHandler?.invoke()
-            false
-        } else if (isApp) {
-            TestLog.info("App launched. ($bundleId)")
-            true
-        } else {
-            onLaunchHandler?.invoke()
-            false
+            val lastMessage = TestLog.lastTestLog!!.message
+            val kAXErrorServerNotFound = lastMessage.contains("kAXErrorServerNotFound") // SpringBoard is corrupted
+            if (kAXErrorServerNotFound) {
+                TestLog.info("SpringBoard is corrupted.")
+                IosDeviceUtility.terminateSpringBoardByUdid(udid = udid, log = log)
+                TestLog.info("Retrying launchApp.")
+                launchIosAppCore(udid = udid, bundleId = bundleId, log = log)
+                onLaunchHandler?.invoke()
+                false
+            } else if (isApp) {
+                TestLog.info("App launched. ($bundleId)")
+                true
+            } else {
+                onLaunchHandler?.invoke()
+                false
+            }
         }
-    }
-    if (isApp.not()) {
-        throw TestDriverException("launchApp timed out. (waitSecondsForLaunchAppComplete=${testContext.waitSecondsForLaunchAppComplete}, bundleId=$bundleId)")
+        if (isApp.not()) {
+            throw TestDriverException("launchApp timed out. (waitSecondsForLaunchAppComplete=${testContext.waitSecondsForLaunchAppComplete}, bundleId=$bundleId)")
+        }
+    } else {
+        Thread.sleep(3000)
     }
 
     return lastElement
