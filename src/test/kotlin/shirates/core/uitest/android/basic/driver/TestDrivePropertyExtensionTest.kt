@@ -6,7 +6,8 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.platformAnnotation
 import shirates.core.testcode.UITest
-import shirates.core.utility.getCapabilityRelaxed
+import shirates.core.utility.appium.getCapabilityRelaxed
+import shirates.core.utility.appium.setCapabilityStrict
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDrivePropertyExtensionTest : UITest() {
@@ -94,30 +95,30 @@ class TestDrivePropertyExtensionTest : UITest() {
     @Test
     fun platformName() {
 
-        val original = testContext.profile.capabilities["platformName"]
+        val original = testContext.profile.capabilities.getCapabilityRelaxed("platformName")
         try {
             // Arrange
-            testContext.profile.capabilities.set("platformName", "platform1")
+            testContext.profile.capabilities.setCapabilityStrict("platformName", "platform1")
             // Act, Assert
             assertThat(platformName).isEqualTo("platform1")
 
         } finally {
-            testContext.profile.capabilities.set("platformName", original ?: "")
+            testContext.profile.capabilities.setCapabilityStrict("platformName", original)
         }
     }
 
     @Test
     fun platformVersion() {
 
-        val original = testContext.profile.capabilities["platformVersion"]
+        val original = testContext.profile.capabilities.getCapabilityRelaxed("platformVersion")
         try {
             // Arrange
-            testContext.profile.capabilities.set("platformVersion", "1")
+            testContext.profile.capabilities.setCapabilityStrict("platformVersion", "1")
             // Act, Assert
             val expected = driver.appiumDriver.capabilities.getCapabilityRelaxed("platformVersion")
             assertThat(platformVersion).isEqualTo(expected)
         } finally {
-            testContext.profile.capabilities.set("platformVersion", original ?: "")
+            testContext.profile.capabilities.setCapabilityStrict("platformVersion", original ?: "")
         }
     }
 

@@ -4,29 +4,29 @@
 
 ## 関数
 
-| スワイプ関数                      | 説明                          | フリック関数                           |
-|:----------------------------|:----------------------------|:---------------------------------|
-| swipeTo                     | 要素を他の要素の位置までスワイプします         | n/a                              |
-| swipeToAdjust               | 要素を他の要素の位置までスワイプします（位置調整あり） | n/a                              |
-| swipeVerticalTo             | 要素を指定したy座標まで垂直にスワイプします      | n/a                              |
-| swipeHorizontalTo           | 要素を指定したx座標まで水平にスワイプします      | n/a                              |
-| swipeToTop                  | 要素を画面の上までスワイプします            | flickToTop                       |
-| swipeToRight                | 要素を画面の右までスワイプします            | flickToRight                     |
-| swipeToBottom               | 要素を画面の下までスワイプします            | flickToBottom                    |
-| swipeToLeft                 | 要素を画面の左までスワイプします            | flickToLeft                      |
-| swipeToCenter               | 要素をスクロールエリアの中心までスワイプします     | n/a                              |
-| swipeToCenterOfScreen       | 要素を画面の中心までスワイプします           | n/a                              |
-| swipeCenterToTop            | 画面の中心から上へスワイプします            | flickCenterToTop                 |
-| swipeCenterToRight          | 画面の中心から右へスワイプします            | flickCenterToRight               |
-| swipeCenterToBottom         | 画面の中心から下へスワイプします            | flickCenterToBottom              |
-| swipeCenterToLeft           | 画面の中心から左へスワイプします            | flickCenterToLeft                |
-| swipeLeftToRight            | 画面の左から右へスワイプします             | flickLeftToRight                 |
-| swipeRightToLeft            | 画面の右から左へスワイプします             | flickRightToLeft                 |
-| swipeBottomToTop            | 画面の下から上へスワイプします             | flickBottomToTop, flickAndGoDown |
-| swipeTopToBottom            | 画面の上から下へスワイプします             | flickTopToBottom, flickAndGoUp   |
-| swipePointToPoint           | 画面上の開始座標から終了座標へスワイプします      | n/a                              |
-| swipeElementToElement       | 要素を他の要素の位置までスワイプします         | n/a                              |
-| swipeElementToElementAdjust | 要素を他の要素の位置までスワイプします（位置調整あり） | n/a                              |
+| スワイプ関数                      | 説明                          | フリック関数                                                |
+|:----------------------------|:----------------------------|:------------------------------------------------------|
+| swipeTo                     | 要素を他の要素の位置までスワイプします         | n/a                                                   |
+| swipeToAdjust               | 要素を他の要素の位置までスワイプします（位置調整あり） | n/a                                                   |
+| swipeVerticalTo             | 要素を指定したy座標まで垂直にスワイプします      | n/a                                                   |
+| swipeHorizontalTo           | 要素を指定したx座標まで水平にスワイプします      | n/a                                                   |
+| swipeToTop                  | 要素を画面の上までスワイプします            | flickToTop                                            |
+| swipeToRight                | 要素を画面の右までスワイプします            | flickToRight                                          |
+| swipeToBottom               | 要素を画面の下までスワイプします            | flickToBottom                                         |
+| swipeToLeft                 | 要素を画面の左までスワイプします            | flickToLeft                                           |
+| swipeToCenter               | 要素をスクロールエリアの中心までスワイプします     | n/a                                                   |
+| swipeToCenterOfScreen       | 要素を画面の中心までスワイプします           | n/a                                                   |
+| swipeCenterToTop            | 画面の中心から上へスワイプします            | flickCenterToTop                                      |
+| swipeCenterToRight          | 画面の中心から右へスワイプします            | flickCenterToRight                                    |
+| swipeCenterToBottom         | 画面の中心から下へスワイプします            | flickCenterToBottom                                   |
+| swipeCenterToLeft           | 画面の中心から左へスワイプします            | flickCenterToLeft                                     |
+| swipeLeftToRight            | 画面の左から右へスワイプします             | flickLeftToRight                                      |
+| swipeRightToLeft            | 画面の右から左へスワイプします             | flickRightToLeft                                      |
+| swipeBottomToTop            | 画面の下から上へスワイプします             | flickBottomToTop, flickAndGoDown, flickAndGoDownTurbo |
+| swipeTopToBottom            | 画面の上から下へスワイプします             | flickTopToBottom, flickAndGoUp, flickAndGoUpTurbo     |
+| swipePointToPoint           | 画面上の開始座標から終了座標へスワイプします      | n/a                                                   |
+| swipeElementToElement       | 要素を他の要素の位置までスワイプします         | n/a                                                   |
+| swipeElementToElementAdjust | 要素を他の要素の位置までスワイプします（位置調整あり） | n/a                                                   |
 
 ## swipeTo, swipeToAdjust
 

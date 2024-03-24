@@ -9,6 +9,8 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.appium.getCapabilityRelaxed
+import shirates.core.utility.appium.setCapabilityStrict
 import shirates.core.utility.misc.JsonUtility
 import shirates.core.utility.misc.ReflectionUtility
 import shirates.core.utility.toPath
@@ -132,17 +134,14 @@ class TestConfig(val testConfigFile: String) {
 
         // startupPackageOrBundleId
         val startupPackageOrBundleId = profile.startupPackageOrBundleId ?: profile.packageOrBundleId
-        if (startupPackageOrBundleId != null) {
-            if (profile.isAndroid) {
-                profile.capabilities["appPackage"] = startupPackageOrBundleId
-            } else if (profile.isiOS) {
-                profile.capabilities["bundleId"] = startupPackageOrBundleId
-            }
+        if (startupPackageOrBundleId.isNullOrBlank().not()) {
+            val name = if (profile.isAndroid) "appPackage" else "bundleId"
+            profile.capabilities.setCapabilityStrict(name, startupPackageOrBundleId)
         }
 
         // startupActivity
-        if (profile.capabilities.containsKey("appActivity").not() && profile.startupActivity != null) {
-            profile.capabilities["appActivity"] = profile.startupActivity!!
+        if (profile.startupActivity.isNullOrBlank().not()) {
+            profile.capabilities.setCapabilityStrict("appActivity", profile.startupActivity)
         }
 
         // Override
@@ -150,18 +149,17 @@ class TestConfig(val testConfigFile: String) {
         setValuesFromPropertiesToTestProfile(profile = profile)
 
         // enforceXPath1
-        if (isAndroid && profile.capabilities.containsKey("enforceXPath1").not()) {
-            val str = profile.enforceXPath1
-            val value = if (str == null) {
+        if (isAndroid) {
+            val value = if (profile.enforceXPath1.isNullOrBlank()) {
                 true        // default (enforceXPath1=true)
             } else {
                 try {
-                    str.toBoolean()
+                    profile.enforceXPath1.toBoolean()
                 } catch (t: Throwable) {
                     throw TestConfigException("enforceXPath1 must be boolean. (enforceXPath1=${profile.enforceXPath1})")
                 }
             }
-            profile.capabilities["enforceXPath1"] = value
+            profile.capabilities.setCapabilityStrict("enforceXPath1", value)
         }
     }
 
@@ -173,8 +171,10 @@ class TestConfig(val testConfigFile: String) {
         for (p in profProps) {
             if (profProps.containsKey(p.key)) {
                 val value = p.value.getter.call(from)
-                val toProps = profProps[p.key]
-                toProps!!.setter.call(to, value)
+                if (value != null && value != "") {
+                    val toProps = profProps[p.key]
+                    toProps!!.setter.call(to, value)
+                }
             }
         }
     }
@@ -216,14 +216,17 @@ class TestConfig(val testConfigFile: String) {
         val caps = props.filter { it.key.toString().startsWith("capabilities_") }
         for (cap in caps) {
             val key = cap.key.toString().substring("capabilities_".length)
-            profile.capabilities[key] = cap.value
+            profile.capabilities.setCapabilityStrict(key, cap.value)
         }
     }
 
     private fun copyCapabilities(from: TestProfile, to: TestProfile) {
 
-        for (key in from.capabilities.keys) {
-            to.capabilities[key] = from.capabilities[key]
+        for (key in from.capabilities.capabilityNames) {
+            val value = from.capabilities.getCapabilityRelaxed(key)
+            if (value.isNotBlank()) {
+                to.capabilities.setCapabilityStrict(key, value)
+            }
         }
     }
 
@@ -300,7 +303,7 @@ class TestConfig(val testConfigFile: String) {
     private fun setCapabilities(target: TestProfile, jsonObject: JSONObject) {
 
         jsonObject.keys().forEach {
-            target.capabilities[it] = jsonObject.get(it)
+            target.capabilities.setCapabilityStrict(it, jsonObject.get(it))
         }
     }
 

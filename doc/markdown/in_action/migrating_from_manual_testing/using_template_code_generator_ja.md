@@ -124,4 +124,4 @@ class CalculatorDemo : UITest() {
 - [テストコードのテンプレートを生成する](generating_test_code_template_ja.md)
 
 
-- [index](../../index.md)
+- [index](../../index_ja.md)

@@ -26,7 +26,9 @@ git clone https://github.com/ldi-github/shirates-builder.git
 1. Set `testrun File` field. Drag & Drop is available.<br>
    ![](_images/screen_builder_overview_settings.png)
 2. Select platform (Android/iOS).
-3. Click `[Start]` button to launch the emulator/simulator.
+3. Click `[Load testrun File]`.
+4. Set `packageOrBundleId`.
+5. Click `[Start]` button to launch the device.
 
 ## Capturing screen (in Edit tab)
 

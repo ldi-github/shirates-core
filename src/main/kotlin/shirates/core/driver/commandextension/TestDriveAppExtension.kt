@@ -161,6 +161,7 @@ fun TestDrive.restartApp(
 fun TestDrive.launchApp(
     appNameOrAppIdOrActivityName: String = testContext.appIconName,
     fallBackToTapAppIcon: Boolean = true,
+    sync: Boolean = true,
     onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
 ): TestElement {
 
@@ -203,19 +204,23 @@ fun TestDrive.launchApp(
         } else if (isAndroid) {
             TestDriver.launchAppCore(
                 packageOrBundleIdOrActivity = packageOrBundleId,
+                sync = sync,
                 onLaunchHandler = onLaunchHandler
             )
         } else if (TestMode.isiOS) {
             if (isSimulator) {
                 TestDriver.launchAppCore(
                     packageOrBundleIdOrActivity = packageOrBundleId,
+                    sync = sync,
                     onLaunchHandler = onLaunchHandler
                 )
             } else {
                 TestDriver.tapAppIconCore(appNameOrAppIdOrActivityName)
-                SyncUtility.doUntilTrue {
-                    invalidateCache()
-                    isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+                if (sync) {
+                    SyncUtility.doUntilTrue {
+                        invalidateCache()
+                        isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+                    }
                 }
             }
         }
