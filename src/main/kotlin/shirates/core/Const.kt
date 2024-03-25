@@ -25,7 +25,7 @@ object Const {
     const val ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG = false
     const val CPU_LOAD_INTERVAL_MILLISECONDS: Long = 1000
     const val CPU_LOAD_MAX_HISTORIES: Int = 60 * 10
-    const val COUNT_ON_AVERAGE: Int = 5
+    const val COUNT_ON_AVERAGE: Int = 3
 
     /**
      * testrun properties
