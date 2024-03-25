@@ -1522,6 +1522,94 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun cpuLoadForSafety() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.cpuLoadForSafety).isEqualTo(Const.CPU_LOAD_FOR_SAFETY)
+        }
+        run {
+            // Arrange
+            val value = 80
+            PropertiesManager.setPropertyValue("cpuLoadForSafety", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.cpuLoadForSafety).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = -1
+            PropertiesManager.setPropertyValue("cpuLoadForSafety", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.cpuLoadForSafety
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("cpuLoadForSafety is allowed from 0 to 100. (-1)")
+        }
+        run {
+            // Arrange
+            val value = 101
+            PropertiesManager.setPropertyValue("cpuLoadForSafety", value.toString())
+            // Act, Assert
+            assertThatThrownBy() {
+                PropertiesManager.cpuLoadForSafety
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("cpuLoadForSafety is allowed from 0 to 100. (101)")
+        }
+    }
+
+    @Test
+    fun enableWaitCpuLoad() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableWaitCpuLoad).isEqualTo(Const.ENABLE_WAIT_CPU_LOAD)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableWaitCpuLoad", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableWaitCpuLoad).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableWaitCpuLoad", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableWaitCpuLoad).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun enableWaitCpuLoadPrintDebug() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableWaitCpuLoadPrintDebug).isEqualTo(Const.ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableWaitCpuLoadPrintDebug", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableWaitCpuLoadPrintDebug).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableWaitCpuLoadPrintDebug", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableWaitCpuLoadPrintDebug).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun tapTestSelector() {
 
         run {

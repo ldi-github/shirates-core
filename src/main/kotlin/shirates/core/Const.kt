@@ -17,6 +17,15 @@ object Const {
     const val REPORT_SCRIPT_FILE_NAME = "_ReportScript.js"
     const val ELEMENT_CATEGORY_RESOURCE_BASE_NAME = "element_category"
 
+    /**
+     * CpuLoadService
+     */
+    const val CPU_LOAD_FOR_SAFETY: Int = 70
+    const val ENABLE_WAIT_CPU_LOAD = false
+    const val ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG = false
+    const val CPU_LOAD_INTERVAL_MILLISECONDS: Long = 1000
+    const val CPU_LOAD_MAX_HISTORIES: Int = 60 * 10
+    const val COUNT_ON_AVERAGE: Int = 5
 
     /**
      * testrun properties

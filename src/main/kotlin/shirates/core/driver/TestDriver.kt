@@ -43,6 +43,7 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.image.*
 import shirates.core.utility.ios.IosDeviceUtility
+import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.sync.RetryContext
@@ -539,6 +540,9 @@ object TestDriver {
 
         if (TestMode.isNoLoadRun) {
             return
+        }
+        if (PropertiesManager.enableWaitCpuLoad) {
+            CpuLoadService.waitForCpuLoadUnder()
         }
 
         val ms = Measure()
