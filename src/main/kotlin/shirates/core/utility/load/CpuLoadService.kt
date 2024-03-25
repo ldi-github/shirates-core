@@ -39,6 +39,17 @@ object CpuLoadService {
         }
     }
 
+    internal fun getCpuLoad(): Double {
+
+        val osBean = ManagementFactory.getOperatingSystemMXBean() as OperatingSystemMXBean
+        var cpuLoad = osBean.getCpuLoad() * 100
+        if (cpuLoad == 0.0 || cpuLoad.isNaN()) {
+            Thread.sleep(1)
+            cpuLoad = osBean.getCpuLoad() * 100
+        }
+        return cpuLoad
+    }
+
     private fun addRecord() {
 
         val lastRecordNumber = loadRecords.lastOrNull()?.number ?: 0
@@ -57,6 +68,9 @@ object CpuLoadService {
         }
     }
 
+    /**
+     * startService
+     */
     fun startService(
         cpuLoadForSafety: Int? = null,
         countOnAverage: Int? = null,
@@ -92,6 +106,9 @@ object CpuLoadService {
         }
     }
 
+    /**
+     * stopService
+     */
     fun stopService() {
 
         if (thread == null) {
@@ -109,17 +126,20 @@ object CpuLoadService {
         }
     }
 
-    fun getCpuLoad(): Double {
+    /**
+     * getLastCpuLoad
+     */
+    fun getLastCpuLoad(): Double {
 
-        val osBean = ManagementFactory.getOperatingSystemMXBean() as OperatingSystemMXBean
-        var cpuLoad = osBean.getCpuLoad() * 100
-        if (cpuLoad == 0.0 || cpuLoad.isNaN()) {
-            Thread.sleep(1)
-            cpuLoad = osBean.getCpuLoad() * 100
+        if (loadRecords.isEmpty()) {
+            addRecord()
         }
-        return cpuLoad
+        return loadRecords.last().cpuLoad
     }
 
+    /**
+     * getAverageCpuLoad
+     */
     fun getAverageCpuLoad(countOnAverage: Int = this.countOnAverage): Double {
 
         val records = loadRecords.takeLast(countOnAverage)
@@ -130,6 +150,9 @@ object CpuLoadService {
         return average
     }
 
+    /**
+     * waitForCpuLoadUnder
+     */
     fun waitForCpuLoadUnder(percentage: Int = cpuLoadForSafety) {
 
         if (percentage < 0 || percentage > 100) {
@@ -145,9 +168,12 @@ object CpuLoadService {
         printDebug("CpuLoadService.waitForCpuLoadUnder($percentage)")
 
         while (true) {
-            val average = getAverageCpuLoad()
-            if (average < percentage) {
-                break
+            val lastCpuLoad = getLastCpuLoad()
+            if (lastCpuLoad < percentage) {
+                val average = getAverageCpuLoad()
+                if (average < percentage) {
+                    break
+                }
             }
             Thread.sleep(this.intervalMilliseconds)
         }

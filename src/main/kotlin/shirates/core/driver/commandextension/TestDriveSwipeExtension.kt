@@ -9,6 +9,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.load.CpuLoadService
 import java.time.Duration
 import kotlin.math.max
 import kotlin.math.min
@@ -158,6 +159,8 @@ internal fun TestDrive.swipePointToPointCore(
             TestDriver.autoScreenshot()
         }
     }
+
+    CpuLoadService.waitForCpuLoadUnder()
 
     for (i in 1..swipeContext.repeat) {
         if (swipeContext.repeat > 1) {

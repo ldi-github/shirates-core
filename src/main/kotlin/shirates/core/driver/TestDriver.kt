@@ -1742,6 +1742,8 @@ object TestDriver {
 
         var screenshotException: Throwable? = null
         try {
+            CpuLoadService.waitForCpuLoadUnder()
+
             val screenshot = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES)
             val screenshotImage = screenshot.toBufferedImage()
 

@@ -9,6 +9,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.time.StopWatch
 
 /**
@@ -136,6 +137,8 @@ private fun TestElement.tapCore(
     }
 
     val originalSelector = this.selector
+
+    CpuLoadService.waitForCpuLoadUnder()
 
     if (tapMethod == TapMethod.click) {
         click()

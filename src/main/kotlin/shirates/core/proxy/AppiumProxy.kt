@@ -20,6 +20,7 @@ import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.element.ElementCacheUtility
+import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.sync.WaitUtility
 import java.time.Duration
 import java.util.*
@@ -43,6 +44,8 @@ object AppiumProxy {
         if (TestMode.isNoLoadRun) {
             return TestElement()
         }
+
+        CpuLoadService.waitForCpuLoadUnder()
 
         var root = TestElement()
         var emptyScreenErrorCount = 0
