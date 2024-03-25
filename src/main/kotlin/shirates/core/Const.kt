@@ -21,7 +21,7 @@ object Const {
      * CpuLoadService
      */
     const val CPU_LOAD_FOR_SAFETY: Int = 70
-    const val ENABLE_WAIT_CPU_LOAD = false
+    const val ENABLE_WAIT_CPU_LOAD = true
     const val ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG = false
     const val CPU_LOAD_INTERVAL_MILLISECONDS: Long = 1000
     const val CPU_LOAD_MAX_HISTORIES: Int = 60 * 10
