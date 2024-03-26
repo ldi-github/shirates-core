@@ -1522,68 +1522,40 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun cpuLoadForSafety() {
+    fun safeCpuLoad() {
 
         run {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.cpuLoadForSafety).isEqualTo(Const.CPU_LOAD_FOR_SAFETY)
+            assertThat(PropertiesManager.safeCpuLoad).isEqualTo(Const.CPU_LOAD_FOR_SAFETY)
         }
         run {
             // Arrange
             val value = 80
-            PropertiesManager.setPropertyValue("cpuLoadForSafety", value.toString())
+            PropertiesManager.setPropertyValue("safeCpuLoad", value.toString())
             // Act, Assert
-            assertThat(PropertiesManager.cpuLoadForSafety).isEqualTo(value)
+            assertThat(PropertiesManager.safeCpuLoad).isEqualTo(value)
         }
         run {
             // Arrange
             val value = -1
-            PropertiesManager.setPropertyValue("cpuLoadForSafety", value.toString())
+            PropertiesManager.setPropertyValue("safeCpuLoad", value.toString())
             // Act, Assert
             assertThatThrownBy() {
-                PropertiesManager.cpuLoadForSafety
+                PropertiesManager.safeCpuLoad
             }.isInstanceOf(TestConfigException::class.java)
-                .hasMessage("cpuLoadForSafety is allowed from 0 to 100. (-1)")
+                .hasMessage("safeCpuLoad is allowed from 0 to 100. (-1)")
         }
         run {
             // Arrange
             val value = 101
-            PropertiesManager.setPropertyValue("cpuLoadForSafety", value.toString())
+            PropertiesManager.setPropertyValue("safeCpuLoad", value.toString())
             // Act, Assert
             assertThatThrownBy() {
-                PropertiesManager.cpuLoadForSafety
+                PropertiesManager.safeCpuLoad
             }.isInstanceOf(TestConfigException::class.java)
-                .hasMessage("cpuLoadForSafety is allowed from 0 to 100. (101)")
-        }
-    }
-
-    @Test
-    fun cpuLoadCountOnAverage() {
-
-        run {
-            // Arrange
-            PropertiesManager.clear()
-            // Act, Assert
-            assertThat(PropertiesManager.cpuLoadCountOnAverage).isEqualTo(Const.CPU_LOAD_COUNT_ON_AVERAGE)
-        }
-        run {
-            // Arrange
-            val value = 80
-            PropertiesManager.setPropertyValue("cpuLoadCountOnAverage", value.toString())
-            // Act, Assert
-            assertThat(PropertiesManager.cpuLoadCountOnAverage).isEqualTo(value)
-        }
-        run {
-            // Arrange
-            val value = 0
-            PropertiesManager.setPropertyValue("cpuLoadCountOnAverage", value.toString())
-            // Act, Assert
-            assertThatThrownBy() {
-                PropertiesManager.cpuLoadCountOnAverage
-            }.isInstanceOf(TestConfigException::class.java)
-                .hasMessage("cpuLoadCountOnAverage is allowed 1 or greater. (0)")
+                .hasMessage("safeCpuLoad is allowed from 0 to 100. (101)")
         }
     }
 

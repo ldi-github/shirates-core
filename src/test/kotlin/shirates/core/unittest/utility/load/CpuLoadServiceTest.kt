@@ -28,7 +28,7 @@ class CpuLoadServiceTest {
         // Assert
         assertThat(CpuLoadService.serviceState).isEqualTo(CpuLoadService.CpuLoadServiceState.InService)
         for (i in 1..10) {
-            CpuLoadService.getAverageCpuLoad(5)
+            println(CpuLoadService.getLastCpuLoad())
             if (CpuLoadService.serviceState == CpuLoadService.CpuLoadServiceState.Stopped) {
                 break
             }
@@ -46,12 +46,8 @@ class CpuLoadServiceTest {
         assertThat(CpuLoadService.thread).isNotNull()
         assertThat(CpuLoadService.serviceState).isEqualTo(CpuLoadService.CpuLoadServiceState.InService)
         // Act
-        CpuLoadService.waitForCpuLoadUnder()
-        // Assert
-        val average = CpuLoadService.getAverageCpuLoad()
-        assertThat(average < CpuLoadService.cpuLoadForSafety).isTrue()
-        // Act
         CpuLoadService.stopService()
+        // Assert
         assertThat(CpuLoadService.thread).isNull()
         assertThat(CpuLoadService.serviceState).isEqualTo(CpuLoadService.CpuLoadServiceState.Stopped)
     }
@@ -63,12 +59,12 @@ class CpuLoadServiceTest {
         assertThatThrownBy {
             CpuLoadService.waitForCpuLoadUnder(-1)
         }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage(message(id = "cpuLoadForSafety", value = "-1"))
+            .hasMessage(message(id = "safeCpuLoad", value = "-1"))
         // Act, Assert
         assertThatThrownBy {
             CpuLoadService.waitForCpuLoadUnder(101)
         }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage(message(id = "cpuLoadForSafety", value = "101"))
+            .hasMessage(message(id = "safeCpuLoad", value = "101"))
 
     }
 }

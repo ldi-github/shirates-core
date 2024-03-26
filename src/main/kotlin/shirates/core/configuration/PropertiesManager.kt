@@ -846,28 +846,14 @@ object PropertiesManager {
         }
 
     /**
-     * cpuLoadForSafety
+     * safeCpuLoad
      */
-    val cpuLoadForSafety: Int
+    val safeCpuLoad: Int
         get() {
-            val value = getPropertyValue(propertyName = "cpuLoadForSafety")?.toIntOrNull()
+            val value = getPropertyValue(propertyName = "safeCpuLoad")?.toIntOrNull()
                 ?: return Const.CPU_LOAD_FOR_SAFETY
             if (value < 0 || value > 100) {
-                throw TestConfigException(message(id = "cpuLoadForSafety", value = "$value"))
-            }
-
-            return value
-        }
-
-    /**
-     * cpuLoadCountOnAverage
-     */
-    val cpuLoadCountOnAverage: Int
-        get() {
-            val value = getPropertyValue(propertyName = "cpuLoadCountOnAverage")?.toIntOrNull()
-                ?: return Const.CPU_LOAD_COUNT_ON_AVERAGE
-            if (value <= 0) {
-                throw TestConfigException(message(id = "cpuLoadCountOnAverage", value = "$value"))
+                throw TestConfigException(message(id = "safeCpuLoad", value = "$value"))
             }
 
             return value

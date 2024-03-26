@@ -30,8 +30,7 @@ object CpuLoadService {
     var thread: Thread? = null
     var serviceState = CpuLoadServiceState.None
     var printDebug = PropertiesManager.enableWaitCpuLoadPrintDebug
-    var cpuLoadForSafety = PropertiesManager.cpuLoadForSafety
-    var countOnAverage = PropertiesManager.cpuLoadCountOnAverage
+    var safeCpuLoad = PropertiesManager.safeCpuLoad
 
     private fun printDebug(message: String) {
 
@@ -64,8 +63,7 @@ object CpuLoadService {
         }
         loadRecords.add(record)
         if (printDebug) {
-            val average = getAverageCpuLoad(countOnAverage)
-            printDebug("cpuLoad: " + "%.2f".format(cpuLoad) + ", average: " + "%.2f".format(average))
+            printDebug("cpuLoad: " + "%.2f".format(cpuLoad))
         }
     }
 
@@ -73,15 +71,11 @@ object CpuLoadService {
      * startService
      */
     fun startService(
-        cpuLoadForSafety: Int? = null,
-        countOnAverage: Int? = null,
+        safeCpuLoad: Int? = null,
         printDebug: Boolean? = null
     ) {
-        if (cpuLoadForSafety != null) {
-            this.cpuLoadForSafety = cpuLoadForSafety
-        }
-        if (countOnAverage != null) {
-            this.countOnAverage = countOnAverage
+        if (safeCpuLoad != null) {
+            this.safeCpuLoad = safeCpuLoad
         }
         if (printDebug != null) {
             this.printDebug = printDebug
@@ -141,25 +135,35 @@ object CpuLoadService {
     }
 
     /**
-     * getAverageCpuLoad
+     * getCpuLoadExpectation
      */
-    fun getAverageCpuLoad(countOnAverage: Int = this.countOnAverage): Double {
+    fun getCpuLoadExpectation(): Double {
 
-        val records = loadRecords.takeLast(countOnAverage)
+        val records = loadRecords.takeLast(2)
         if (records.isEmpty()) {
             return 0.0
         }
-        val average = records.map { it.cpuLoad }.average()
-        return average
+        if (records.count() == 1) {
+            return records[0].cpuLoad
+        }
+        val diff = records[0].cpuLoad - records[1].cpuLoad
+
+        var expectation = records[1].cpuLoad + diff
+        if (expectation < 0.0) {
+            expectation = 0.0
+        } else if (expectation > 100.0) {
+            expectation = 100.0
+        }
+        return expectation
     }
 
     /**
      * waitForCpuLoadUnder
      */
-    fun waitForCpuLoadUnder(percentage: Int = cpuLoadForSafety) {
+    fun waitForCpuLoadUnder(safeCpuLoad: Int = this.safeCpuLoad) {
 
-        if (percentage < 0 || percentage > 100) {
-            throw IllegalArgumentException(message(id = "cpuLoadForSafety", value = percentage.toString()))
+        if (safeCpuLoad < 0 || safeCpuLoad > 100) {
+            throw IllegalArgumentException(message(id = "safeCpuLoad", value = safeCpuLoad.toString()))
         }
         if (thread == null) {
             return
@@ -168,13 +172,13 @@ object CpuLoadService {
             return
         }
 
-        printDebug("CpuLoadService.waitForCpuLoadUnder($percentage)")
+        printDebug("CpuLoadService.waitForCpuLoadUnder($safeCpuLoad)")
 
         while (true) {
             val lastCpuLoad = getLastCpuLoad()
-            if (lastCpuLoad < percentage) {
-                val average = getAverageCpuLoad()
-                if (average < percentage) {
+            if (lastCpuLoad < safeCpuLoad) {
+                val expectation = getCpuLoadExpectation()
+                if (expectation < safeCpuLoad) {
                     break
                 }
             }
