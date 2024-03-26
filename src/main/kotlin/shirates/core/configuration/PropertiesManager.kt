@@ -860,6 +860,20 @@ object PropertiesManager {
         }
 
     /**
+     * cpuLoadCountOnAverage
+     */
+    val cpuLoadCountOnAverage: Int
+        get() {
+            val value = getPropertyValue(propertyName = "cpuLoadCountOnAverage")?.toIntOrNull()
+                ?: return Const.CPU_LOAD_COUNT_ON_AVERAGE
+            if (value <= 0) {
+                throw TestConfigException(message(id = "cpuLoadCountOnAverage", value = "$value"))
+            }
+
+            return value
+        }
+
+    /**
      * enableWaitCpuLoad
      */
     val enableWaitCpuLoad: Boolean

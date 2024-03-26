@@ -4,6 +4,7 @@ import com.sun.management.OperatingSystemMXBean
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import java.lang.management.ManagementFactory
 import java.util.*
 import kotlin.concurrent.thread
@@ -28,14 +29,14 @@ object CpuLoadService {
     val loadRecords = mutableListOf<LoadRecord>()
     var thread: Thread? = null
     var serviceState = CpuLoadServiceState.None
-    var printDebug = false
-    var cpuLoadForSafety = Const.CPU_LOAD_FOR_SAFETY
-    var countOnAverage = Const.COUNT_ON_AVERAGE
+    var printDebug = PropertiesManager.enableWaitCpuLoadPrintDebug
+    var cpuLoadForSafety = PropertiesManager.cpuLoadForSafety
+    var countOnAverage = PropertiesManager.cpuLoadCountOnAverage
 
     private fun printDebug(message: String) {
 
         if (printDebug) {
-            println(message)
+            TestLog.info(message)
         }
     }
 
@@ -64,7 +65,7 @@ object CpuLoadService {
         loadRecords.add(record)
         if (printDebug) {
             val average = getAverageCpuLoad(countOnAverage)
-            println("cpuLoad: " + "%.2f".format(cpuLoad) + ", average: " + "%.2f".format(average))
+            printDebug("cpuLoad: " + "%.2f".format(cpuLoad) + ", average: " + "%.2f".format(average))
         }
     }
 
@@ -74,7 +75,7 @@ object CpuLoadService {
     fun startService(
         cpuLoadForSafety: Int? = null,
         countOnAverage: Int? = null,
-        printDebug: Boolean = PropertiesManager.enableWaitCpuLoadPrintDebug
+        printDebug: Boolean? = null
     ) {
         if (cpuLoadForSafety != null) {
             this.cpuLoadForSafety = cpuLoadForSafety
@@ -82,7 +83,9 @@ object CpuLoadService {
         if (countOnAverage != null) {
             this.countOnAverage = countOnAverage
         }
-        this.printDebug = printDebug
+        if (printDebug != null) {
+            this.printDebug = printDebug
+        }
 
         printDebug("CpuLoadService.startService()")
 

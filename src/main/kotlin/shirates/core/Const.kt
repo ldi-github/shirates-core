@@ -8,7 +8,7 @@ object Const {
     /**
      * System properties
      */
-    val NEW_LINE = System.getProperty("line.separator")
+    val NEW_LINE = System.lineSeparator()
 
     /**
      * File names
@@ -25,7 +25,7 @@ object Const {
     const val ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG = false
     const val CPU_LOAD_INTERVAL_MILLISECONDS: Long = 1000
     const val CPU_LOAD_MAX_HISTORIES: Int = 60 * 10
-    const val COUNT_ON_AVERAGE: Int = 3
+    const val CPU_LOAD_COUNT_ON_AVERAGE: Int = 1
 
     /**
      * testrun properties
