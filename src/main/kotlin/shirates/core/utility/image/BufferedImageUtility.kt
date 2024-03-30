@@ -11,6 +11,22 @@ import javax.imageio.ImageIO
 
 object BufferedImageUtility {
 
+    class ColorShare(
+        val color: Int,
+        var colorCount: Int,
+        val imageWidth: Int,
+        val imageHeight: Int,
+    ) {
+        val pixelCount: Int
+            get() {
+                return imageWidth * imageHeight
+            }
+        val colorShare: Double
+            get() {
+                return colorCount.toDouble() / pixelCount
+            }
+    }
+
     /**
      * getBufferedImage
      */
@@ -26,19 +42,20 @@ object BufferedImageUtility {
     }
 
     /**
-     * getRGBCountMap
+     * getColorShareMap
      */
-    fun getRGBCountMap(image: BufferedImage): Map<Int, Int> {
+    fun getColorShareMap(image: BufferedImage): Map<Int, ColorShare> {
 
-        val map = mutableMapOf<Int, Int>()
+        val map = mutableMapOf<Int, ColorShare>()
         for (y in 0 until image.height) {
             for (x in 0 until image.width) {
-                val value = image.getRGB(x, y)
-                if (map.containsKey(value)) {
-                    val v = map[value]!!
-                    map[value] = v + 1
+                val color = image.getRGB(x, y)
+                if (map.containsKey(color)) {
+                    val colorShare = map[color]!!
+                    colorShare.colorCount += 1
                 } else {
-                    map[value] = 1
+                    map[color] =
+                        ColorShare(color = color, colorCount = 1, imageWidth = image.width, imageHeight = image.height)
                 }
             }
         }
@@ -47,16 +64,13 @@ object BufferedImageUtility {
     }
 
     /**
-     * getLargestShare
+     * getLargestColorShare
      */
-    fun getLargestShare(image: BufferedImage): Double {
-        val map = getRGBCountMap(image)
+    fun getLargestColorShare(image: BufferedImage): ColorShare {
 
-        val max = map.maxBy { it.value }
-        val maxCount = max.value
-        val pixelCount = image.width * image.height
-        val share = maxCount.toDouble() / pixelCount
-        return share
+        val map = getColorShareMap(image)
+        val max = map.maxBy { it.value.colorShare }
+        return max.value
     }
 
     /**
@@ -64,8 +78,8 @@ object BufferedImageUtility {
      */
     fun isBlackout(image: BufferedImage, threshold: Double = PropertiesManager.screenshotBlackoutThreshold): Boolean {
 
-        val share = getLargestShare(image)
-        val result = share > threshold
+        val largestColorShare = getLargestColorShare(image = image)
+        val result = largestColorShare.colorShare > threshold && largestColorShare.color == -16777216
         return result
     }
 

@@ -72,7 +72,7 @@ object Const {
     const val RERUN_SCENARIO_WORDS =
         "Read timed out||AppiumProxy.getSource() timed out||Could not start a new session. Response code 500.|| is still running after||Could not proxy command to the remote server.||current thread is not owner"
     const val ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT = true
-    const val SCREENSHOT_BLACKOUT_THRESHOLD = 0.99999
+    const val SCREENSHOT_BLACKOUT_THRESHOLD = 0.995
     const val ENABLE_RESTART_DEVICE_ON_RESETTING_APPIUM_SESSION = false
     const val CUSTOM_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"

@@ -698,6 +698,8 @@ class StringAssertionExtensionTest {
         if (ja) {
             "2023/12/15(金)".thisMatchesDateFormat("yyyy/MM/dd(E)")
             "2023/12/15金曜日".thisMatchesDateFormat("yyyy/MM/ddE曜日")
+            "2024/3/18(月)～2024/4/7(日)".split("～")[0].thisMatchesDateFormat("yyyy/M/d(E)")
+            "2024/3/18(月)～2024/4/7(日)".split("～")[1].thisMatchesDateFormat("yyyy/M/d(E)")
         }
 
         assertThatThrownBy {

@@ -60,6 +60,9 @@ fun TestDrive.swipePointToPoint(
         arg1 = "(${sc.startX},${sc.startY})",
         arg2 = "(${sc.endX},${sc.endY})"
     ) {
+        if (sc.startX == sc.endX && sc.startY == sc.endY) {
+            return@execOperateCommand
+        }
         swipePointToPointCore(swipeContext = sc)
     }
 

@@ -972,15 +972,32 @@ object TestDriver {
                 val lastXml = TestElementCache.sourceXml
                 CodeExecutionContext.lastScreenshotImage = null
 
-                rootElement = AppiumProxy.getSource()
+                testDrive.doUntilTrue(
+                    waitSeconds = testContext.waitSecondsOnIsScreen,
+                    intervalSeconds = 1.0
+                ) {
+                    rootElement = AppiumProxy.getSource()
+                    TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
-                TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
-
-                if (isAndroid) {
-                    rootElement.sourceCaptureFailed = false
-                } else {
-                    val windowElements = TestElementCache.allElements.filter { it.type == "XCUIElementTypeWindow" }
-                    rootElement.sourceCaptureFailed = windowElements.count() < 3
+                    if (isAndroid) {
+                        rootElement.sourceCaptureFailed = false
+                        val webViews = TestElementCache.findElements(".android.webkit.WebView")
+                        if (webViews.any()) {
+                            for (webView in webViews) {
+                                if (webView.children.isEmpty()) {
+                                    rootElement.sourceCaptureFailed = true
+                                    TestLog.info("WebView is empty. $webView", PropertiesManager.enableSyncLog)
+                                    break
+                                }
+                            }
+                        }
+                    } else {
+                        rootElement.sourceCaptureFailed = TestElementCache.allElements.count() < 3
+                        if (rootElement.sourceCaptureFailed) {
+                            TestLog.info("Source capture failed.", PropertiesManager.enableSyncLog)
+                        }
+                    }
+                    rootElement.sourceCaptureFailed.not()
                 }
 
                 if (currentScreenRefresh) {
@@ -1766,12 +1783,12 @@ object TestDriver {
             if (PropertiesManager.enableRerunOnScreenshotBlackout) {
                 val threshold = PropertiesManager.screenshotBlackoutThreshold
                 if (BufferedImageUtility.isBlackout(image = screenshotImage, threshold = threshold)) {
-                    val share = BufferedImageUtility.getLargestShare(image = screenshotImage)
+                    val share = BufferedImageUtility.getLargestColorShare(image = screenshotImage)
                     screenshotException =
                         RerunScenarioException(
                             message(
                                 id = "screenshotIsBlackout",
-                                arg1 = "$share",
+                                arg1 = "${share.colorShare}",
                                 arg2 = "$threshold"
                             )
                         )
