@@ -1115,7 +1115,7 @@ class TestElement(
         }
 
         val a = ancestorScrollable
-        if (a.isFound) {
+        if (a.isFound && a.descendants.contains(this)) {
             val r = this.bounds.isCenterIncludedIn(a.bounds)
             if (r.not()) {
                 info("isInView == false. this is not included in the scrollable ancestor. (this=$this, bounds=${a.bounds})")
