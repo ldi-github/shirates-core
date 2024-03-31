@@ -9,6 +9,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.time.StopWatch
 
 /**
@@ -49,15 +50,19 @@ fun TestDrive.tap(
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message, subject = testElement.subject) {
 
-        swipePointToPoint(
+        val sc = SwipeContext(
+            swipeFrame = viewBounds,
+            viewport = viewBounds,
             startX = x,
             startY = y,
-            endX = x + 1,
-            endY = y + 1,
+            endX = x,
+            endY = y,
+            safeMode = safeMode,
             durationSeconds = holdSeconds,
             repeat = repeat,
-            safeMode = safeMode
         )
+
+        swipePointToPointCore(swipeContext = sc)
     }
 
     return refreshLastElement()
@@ -117,13 +122,16 @@ private fun TestElement.tapCore(
         val sw = StopWatch("touchAction")
         val b = this.bounds
         // tap by swipe
-        swipePointToPoint(
+        val sc = SwipeContext(
+            swipeFrame = viewBounds,
+            viewport = viewBounds,
             startX = b.centerX,
             startY = b.centerY,
             endX = b.centerX,
             endY = b.centerY,
             durationSeconds = holdSeconds,
         )
+        swipePointToPointCore(swipeContext = sc)
         if (PropertiesManager.enableTimeMeasureLog) {
             TestLog.write(sw.toString())
         }
@@ -136,6 +144,8 @@ private fun TestElement.tapCore(
     }
 
     val originalSelector = this.selector
+
+    CpuLoadService.waitForCpuLoadUnder()
 
     if (tapMethod == TapMethod.click) {
         click()

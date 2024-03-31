@@ -845,6 +845,39 @@ object PropertiesManager {
             return value == "true"
         }
 
+    /**
+     * safeCpuLoad
+     */
+    val safeCpuLoad: Int
+        get() {
+            val value = getPropertyValue(propertyName = "safeCpuLoad")?.toIntOrNull()
+                ?: return Const.CPU_LOAD_FOR_SAFETY
+            if (value < 0 || value > 100) {
+                throw TestConfigException(message(id = "safeCpuLoad", value = "$value"))
+            }
+
+            return value
+        }
+
+    /**
+     * enableWaitCpuLoad
+     */
+    val enableWaitCpuLoad: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableWaitCpuLoad")
+                ?: return Const.ENABLE_WAIT_CPU_LOAD
+            return value == "true"
+        }
+
+    /**
+     * enableWaitCpuLoadPrintDebug
+     */
+    val enableWaitCpuLoadPrintDebug: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableWaitCpuLoadPrintDebug")
+                ?: return Const.ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG
+            return value == "true"
+        }
 
     // Custom --------------------------------------------------
 

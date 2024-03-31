@@ -26,6 +26,7 @@ import shirates.core.logging.TestLog
 import shirates.core.macro.MacroRepository
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.file.FileLockUtility.lockFile
+import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
@@ -238,6 +239,10 @@ abstract class UITest : TestDrive {
 
         DatasetRepositoryManager.clear()
 
+        if (PropertiesManager.enableWaitCpuLoad) {
+            CpuLoadService.startService()
+        }
+
         try {
             val configPath = configFile.toPath()
             val testConfigName = configPath.toFile().nameWithoutExtension
@@ -331,12 +336,14 @@ abstract class UITest : TestDrive {
             // profile
             profile.completeProfileWithTestMode()
             if (testContext.isLocalServer) {
+                CpuLoadService.waitForCpuLoadUnder()
                 profile.completeProfileWithDeviceInformation()
             }
             profile.validate()
 
             // Appium Server
             if (testContext.isLocalServer) {
+                CpuLoadService.waitForCpuLoadUnder()
                 AppiumServerManager.setupAppiumServerProcess(
                     sessionName = TestLog.currentTestClassName,
                     profile = profile
@@ -344,6 +351,7 @@ abstract class UITest : TestDrive {
             }
 
             // AppiumDriver
+            CpuLoadService.waitForCpuLoadUnder()
             val lastProfile = TestDriver.lastTestContext.profile
             if (lastProfile.profileName.isBlank()) {
                 // First time

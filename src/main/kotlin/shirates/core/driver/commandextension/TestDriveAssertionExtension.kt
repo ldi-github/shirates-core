@@ -12,6 +12,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
@@ -198,6 +199,8 @@ internal fun TestDrive.screenIsCore(
     actionFunc()
 
     if (isScreenResult.not()) {
+
+        CpuLoadService.waitForCpuLoadUnder()
 
         val sc = SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds,

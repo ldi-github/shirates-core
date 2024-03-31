@@ -8,7 +8,7 @@ object Const {
     /**
      * System properties
      */
-    val NEW_LINE = System.getProperty("line.separator")
+    val NEW_LINE = System.lineSeparator()
 
     /**
      * File names
@@ -17,6 +17,14 @@ object Const {
     const val REPORT_SCRIPT_FILE_NAME = "_ReportScript.js"
     const val ELEMENT_CATEGORY_RESOURCE_BASE_NAME = "element_category"
 
+    /**
+     * CpuLoadService
+     */
+    const val CPU_LOAD_FOR_SAFETY: Int = 70
+    const val ENABLE_WAIT_CPU_LOAD = true
+    const val ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG = false
+    const val CPU_LOAD_INTERVAL_MILLISECONDS: Long = 1000
+    const val CPU_LOAD_MAX_HISTORIES: Int = 60 * 10
 
     /**
      * testrun properties
@@ -64,7 +72,7 @@ object Const {
     const val RERUN_SCENARIO_WORDS =
         "Read timed out||AppiumProxy.getSource() timed out||Could not start a new session. Response code 500.|| is still running after||Could not proxy command to the remote server.||current thread is not owner"
     const val ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT = true
-    const val SCREENSHOT_BLACKOUT_THRESHOLD = 0.99
+    const val SCREENSHOT_BLACKOUT_THRESHOLD = 0.995
     const val ENABLE_RESTART_DEVICE_ON_RESETTING_APPIUM_SESSION = false
     const val CUSTOM_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"

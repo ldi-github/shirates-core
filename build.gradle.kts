@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "6.7.3"
+version = "6.7.4"
 
 val appiumClientVersion = "9.1.0"
 
@@ -34,71 +34,71 @@ dependencies {
 
     // JUnit 5
     // (Required) Writing and executing Unit Tests on the JUnit Platform
-    implementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+    implementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
 
     // Assert J
-    implementation("org.assertj:assertj-core:3.24.2")
-    testImplementation("org.assertj:assertj-core:3.24.2")
+    implementation("org.assertj:assertj-core:3.25.2")
+    testImplementation("org.assertj:assertj-core:3.25.2")
 
     // Apache POI
-    implementation("org.apache.poi:poi:5.2.2")
-    implementation("org.apache.poi:poi-ooxml:5.2.2")
-    testImplementation("org.apache.poi:poi:5.2.2")
-    testImplementation("org.apache.poi:poi-ooxml:5.2.2")
+    implementation("org.apache.poi:poi:5.2.5")
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+    testImplementation("org.apache.poi:poi:5.2.5")
+    testImplementation("org.apache.poi:poi-ooxml:5.2.5")
 
     // SLF4J NOP Binding
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
-    testImplementation("org.slf4j:slf4j-nop:2.0.5")
+    testImplementation("org.slf4j:slf4j-nop:2.0.9")
 
     // Apache Log4j Core
-    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.22.1")
 
     // Apache Commons IO
-    implementation("commons-io:commons-io:2.11.0")
-    testImplementation("commons-io:commons-io:2.11.0")
+    implementation("commons-io:commons-io:2.15.1")
+    testImplementation("commons-io:commons-io:2.15.1")
 
     // Apache Commons Text
-    implementation("org.apache.commons:commons-text:1.10.0")
-    testImplementation("org.apache.commons:commons-text:1.10.0")
+    implementation("org.apache.commons:commons-text:1.11.0")
+    testImplementation("org.apache.commons:commons-text:1.11.0")
 
     // Apache Commons Exec
     implementation("org.apache.commons:commons-exec:1.3")
     testImplementation("org.apache.commons:commons-exec:1.3")
 
     // Apache Commons Codec
-    implementation("commons-codec:commons-codec:1.15")
-    testImplementation("commons-codec:commons-codec:1.15")
+    implementation("commons-codec:commons-codec:1.16.0")
+    testImplementation("commons-codec:commons-codec:1.16.0")
 
     // Jackson Module Kotlin
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
 
     // Jackson Dataformat XML
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2")
-    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1")
+    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1")
 
     // org.json
     // workaround for 'java.lang.RuntimeException: Method getString in org.json.JSONObject not mocked.'
-    implementation("org.json:json:20230227")
-    testImplementation("org.json:json:20230227")
+    implementation("org.json:json:20231013")
+    testImplementation("org.json:json:20231013")
 
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    testImplementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // Dokka
     // https://github.com/Kotlin/dokka
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.8.10")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.10")
 
     // BoofCV
     implementation("org.boofcv:boofcv-core:1.1.2")
     testImplementation("org.boofcv:boofcv-core:1.1.2")
 
     // jsoup
-    implementation("org.jsoup:jsoup:1.15.4")
-    testImplementation("org.jsoup:jsoup:1.15.4")
+    implementation("org.jsoup:jsoup:1.17.2")
+    testImplementation("org.jsoup:jsoup:1.17.2")
 
     // md2html
     implementation("io.github.ldi-github:md2html:0.2.0")

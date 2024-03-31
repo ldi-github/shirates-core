@@ -21,6 +21,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.android.AndroidMobileShellUtility
+import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.time.StopWatch
 import java.nio.file.Files
@@ -282,6 +283,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
     override fun afterAll(context: ExtensionContext?) {
 
         uiTest?.afterAll(context)
+
+        if (CpuLoadService.thread != null) {
+            CpuLoadService.stopService()
+        }
 
         /**
          * output log
