@@ -1,5 +1,9 @@
 # Environments
 
+## Note
+- Xcode 15.3 is not supported by Appium yet.
+
+
 ## Tested Environments
 
 2024/3/31
