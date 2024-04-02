@@ -134,34 +134,36 @@ object ImageFileRepository {
         val imageProfileHeightRemoved =
             if (ix >= 0) imageProfile.substring(0, imageProfile.lastIndexOf("x")) else imageProfile
 
-        val entry =
-            getImageFileEntryCore(
-                imageExpression = imageExpression,
-                tag = imageProfile,
-                screenDirectory = screenDirectory
-            ) ?: getImageFileEntryCore(
-                imageExpression = imageExpression,
-                tag = imageProfileHeightRemoved,
-                screenDirectory = screenDirectory
-            ) ?: getImageFileEntryCore(
-                imageExpression = imageExpression,
-                tag = "${platformAnnotation}.png",
-                screenDirectory = screenDirectory
-            ) ?: getImageFileEntryCore(
-                imageExpression = imageExpression,
-                tag = ".png",
-                screenDirectory = screenDirectory
-            ) ?: getImageFileEntryCore(
-                imageExpression = imageExpression,
-                tag = ".png"
-            ) ?: getImageFileEntryCore(
-                imageExpression = imageExpression,
-                tag = "",
-                screenDirectory = screenDirectory
-            ) ?: getImageFileEntryCore(
-                imageExpression = imageExpression,
-                tag = ""
-            ) ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))
+        fun getEntry(imageExpression: String, screenDirectory: String?): ImageFileEntry? {
+
+            val entry =
+                getImageFileEntryCore(
+                    imageExpression = imageExpression,
+                    tag = imageProfile,
+                    screenDirectory = screenDirectory
+                ) ?: getImageFileEntryCore(
+                    imageExpression = imageExpression,
+                    tag = imageProfileHeightRemoved,
+                    screenDirectory = screenDirectory
+                ) ?: getImageFileEntryCore(
+                    imageExpression = imageExpression,
+                    tag = "${platformAnnotation}.png",
+                    screenDirectory = screenDirectory
+                ) ?: getImageFileEntryCore(
+                    imageExpression = imageExpression,
+                    tag = ".png",
+                    screenDirectory = screenDirectory
+                ) ?: getImageFileEntryCore(
+                    imageExpression = imageExpression,
+                    tag = "",
+                    screenDirectory = screenDirectory
+                )
+            return entry
+        }
+
+        val entry = getEntry(imageExpression = imageExpression, screenDirectory = screenDirectory)
+            ?: getEntry(imageExpression = imageExpression, screenDirectory = null)
+            ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))
         return entry
     }
 
