@@ -4,6 +4,9 @@
 
 **shirates-core** is core library.
 
+## Note
+- Xcode 15.3 is not supported by Appium yet.
+
 ## Document
 
 - [in English](https://ldi-github.github.io/shirates-core/)
