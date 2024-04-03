@@ -980,8 +980,8 @@ object TestDriver {
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
                     rootElement.sourceCaptureFailed = false
-                    if (hasEmptyWebView()) {
-                        TestLog.warn("WebView is empty.", PropertiesManager.enableSyncLog)
+                    if (hasIncompleteWebView()) {
+                        TestLog.warn("WebView is incomplete.", PropertiesManager.enableSyncLog)
                         if (it.stopWatch.elapsedSeconds < it.waitSeconds) {
                             rootElement.sourceCaptureFailed = true
                         }
@@ -1023,7 +1023,7 @@ object TestDriver {
         return webViews
     }
 
-    internal fun hasEmptyWebView(): Boolean {
+    internal fun hasIncompleteWebView(): Boolean {
 
         val webViews = getWebViews()
         for (webView in webViews) {
