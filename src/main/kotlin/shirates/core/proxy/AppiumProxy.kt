@@ -38,6 +38,7 @@ object AppiumProxy {
         waitSeconds: Double = testContext.appiumProxyGetSourceTimeoutSeconds,
         intervalSeconds: Double = 1.0,
         maxLoopCount: Int = 60,
+        checkContentLoaded: Boolean = true,
         throwOnFinally: Boolean = true
     ): TestElement {
 
@@ -49,7 +50,6 @@ object AppiumProxy {
 
         var root = TestElement()
         var emptyScreenErrorCount = 0
-        var emptyWebViewErrorCount = 0
         var getWebElementErrorCount = 0
 
         fun outputCheckLog(count: Int, msg: String) {
@@ -61,22 +61,15 @@ object AppiumProxy {
         }
 
         fun checkState(): Boolean {
-            if (root.descendants.isEmpty()) {
-                emptyScreenErrorCount += 1
-                outputCheckLog(count = emptyScreenErrorCount, msg = "Contents is empty.($emptyScreenErrorCount)")
-                if (emptyScreenErrorCount >= 3) {
-                    throw RerunScenarioException(message(id = "couldNotGetContentsOfScreen"))
+            if (checkContentLoaded) {
+                if (root.descendants.isEmpty()) {
+                    emptyScreenErrorCount += 1
+                    outputCheckLog(count = emptyScreenErrorCount, msg = "Contents is empty.($emptyScreenErrorCount)")
+                    if (emptyScreenErrorCount >= 3) {
+                        throw RerunScenarioException(message(id = "couldNotGetContentsOfScreen"))
+                    }
+                    return false
                 }
-                return false
-            }
-
-            if (root.hasEmptyWebViewError) {
-                emptyWebViewErrorCount += 1
-                outputCheckLog(count = emptyWebViewErrorCount, msg = "WebView is empty.($emptyWebViewErrorCount)")
-                if (emptyWebViewErrorCount >= 3) {
-                    throw RerunScenarioException(message(id = "couldNotGetContentsOfWebView"))
-                }
-                return false
             }
 
             try {

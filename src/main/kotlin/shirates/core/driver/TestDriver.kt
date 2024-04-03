@@ -979,22 +979,16 @@ object TestDriver {
                     rootElement = AppiumProxy.getSource()
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
-                    if (isAndroid) {
-                        rootElement.sourceCaptureFailed = false
-                        val webViews = TestElementCache.findElements(".android.webkit.WebView")
-                        if (webViews.any()) {
-                            for (webView in webViews) {
-                                if (webView.children.isEmpty()) {
-                                    rootElement.sourceCaptureFailed = true
-                                    TestLog.info("WebView is empty. $webView", PropertiesManager.enableSyncLog)
-                                    break
-                                }
-                            }
+                    rootElement.sourceCaptureFailed = false
+                    if (hasEmptyWebView()) {
+                        TestLog.warn("WebView is empty.", PropertiesManager.enableSyncLog)
+                        if (it.stopWatch.elapsedSeconds < it.waitSeconds) {
+                            rootElement.sourceCaptureFailed = true
                         }
                     } else {
-                        rootElement.sourceCaptureFailed = TestElementCache.allElements.count() < 3
-                        if (rootElement.sourceCaptureFailed) {
-                            TestLog.info("Source capture failed.", PropertiesManager.enableSyncLog)
+                        if (isiOS && TestElementCache.allElements.count() < 3) {
+                            rootElement.sourceCaptureFailed = true
+                            TestLog.warn("Source capture failed.", PropertiesManager.enableSyncLog)
                         }
                     }
                     rootElement.sourceCaptureFailed.not()
@@ -1019,6 +1013,29 @@ object TestDriver {
         }
 
         return this
+    }
+
+    internal fun getWebViews(): List<TestElement> {
+
+        val webViews =
+            if (isAndroid) TestElementCache.findElements(".android.webkit.WebView")
+            else TestElementCache.findElements(".XCUIElementTypeWebView")
+        return webViews
+    }
+
+    internal fun hasEmptyWebView(): Boolean {
+
+        val webViews = getWebViews()
+        for (webView in webViews) {
+            val webViewElements = webView.descendantsAndSelf
+            val hasError =
+                if (isAndroid) webViewElements.isEmpty()
+                else webViewElements.count() < 6
+            if (hasError) {
+                return true
+            }
+        }
+        return false
     }
 
     /**
