@@ -1027,10 +1027,10 @@ object TestDriver {
 
         val webViews = getWebViews()
         for (webView in webViews) {
-            val webViewElements = webView.descendantsAndSelf
+            val webViewDescendants = webView.descendants
             val hasError =
-                if (isAndroid) webViewElements.isEmpty()
-                else webViewElements.count() < 6
+                if (isAndroid) webViewDescendants.isEmpty()
+                else webViewDescendants.count() < 6
             if (hasError) {
                 return true
             }
