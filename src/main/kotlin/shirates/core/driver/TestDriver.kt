@@ -981,8 +981,8 @@ object TestDriver {
 
                     rootElement.sourceCaptureFailed = false
                     if (hasIncompleteWebView()) {
-                        TestLog.warn("WebView is incomplete.", PropertiesManager.enableSyncLog)
                         if (it.stopWatch.elapsedSeconds < it.waitSeconds) {
+                            TestLog.info("WebView is incomplete", PropertiesManager.enableSyncLog)
                             rootElement.sourceCaptureFailed = true
                         }
                     } else {
@@ -992,6 +992,9 @@ object TestDriver {
                         }
                     }
                     rootElement.sourceCaptureFailed.not()
+                }
+                if (rootElement.sourceCaptureFailed) {
+                    TestLog.warn("WebView is incomplete.", PropertiesManager.enableSyncLog)
                 }
 
                 if (currentScreenRefresh) {
