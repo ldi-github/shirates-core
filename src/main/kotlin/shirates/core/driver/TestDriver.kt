@@ -1511,10 +1511,8 @@ object TestDriver {
             }
             selector.image = "${selector.nickname}.png"
         }
-        val filePath = runCatching {
-            ImageFileRepository.getFilePath(selector.image!!)
-        }.getOrNull()
-        if (filePath == null || Files.exists(filePath).not()) {
+        val imageFileEntries = ImageFileRepository.getImageFileEntries(imageExpression = selector.image!!)
+        if (imageFileEntries.isEmpty()) {
             if (throwsException) {
                 throw FileNotFoundException(message(id = "imageFileNotFound", subject = selector.image))
             }
@@ -1527,6 +1525,7 @@ object TestDriver {
         }
 
         var r = rootElement.isContainingImage(selector.image!!, threshold = threshold)
+        r.imageFileEntries = imageFileEntries
         if (r.result) {
             return r
         }
@@ -1569,6 +1568,7 @@ object TestDriver {
                     screenshot(force = true)
                 }
                 r = rootElement.isContainingImage(selector.image!!)
+                r.imageFileEntries = imageFileEntries
                 r.result
             }
         }

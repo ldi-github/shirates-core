@@ -96,7 +96,7 @@ class Selector(
     val templateImage: BufferedImage?
         get() {
             val filter = getFilter(key = "image")
-            return filter?.templateImage
+            return filter?.imageMatchResult?.templateImage
         }
 
     var access: String?

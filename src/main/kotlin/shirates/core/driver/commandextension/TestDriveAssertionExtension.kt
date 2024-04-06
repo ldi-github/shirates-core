@@ -6,12 +6,12 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
-import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncUtility
@@ -543,7 +543,7 @@ fun TestDrive.existImage(
 
         if (e.imageMatchResult?.result == false) {
             if (throwsException) {
-                throw TestDriverException("$assertMessage (${e.imageMatchResult})")
+                throw TestNGException("$assertMessage (${e.imageMatchResult})")
             }
             TestLog.warn("$assertMessage (${e.imageMatchResult})")
             TestLog.conditionalAuto(assertMessage)
@@ -659,8 +659,7 @@ private fun TestDrive.existImageCore(
         }
     }
 
-    val isTemplateImageNull = e.imageMatchResult != null && e.imageMatchResult!!.templateImageFile == null
-    if (isTemplateImageNull) {
+    if (e.imageMatchResult != null && e.imageMatchResult!!.imageFileEntries.isEmpty()) {
         conditionalAuto(assertMessage)
         return e
     }
@@ -720,12 +719,12 @@ private fun findImage(
         waitSeconds = waitSeconds,
         useCache = useCache
     )
-    if (r.templateImageFile == null) {
+    e.imageMatchResult = r
+    if (r.imageFileEntries.isEmpty()) {
         TestLog.warn("File not found for $sel")
         return e
     }
 
-    e.imageMatchResult = r
     if (r.result) {
         e.propertyCache["bounds"] =
             "[${r.x},${r.y}][${r.templateImage!!.width},${r.templateImage!!.height}]"
@@ -753,6 +752,7 @@ private fun selectElementAndCompareImage(
         useCache = useCache
     )
     if (e.isFound.not()) {
+        e.imageMatchResult = ImageMatchResult(result = false, templateSubject = null)
         return e
     }
     // Compare the image of the element to the template image

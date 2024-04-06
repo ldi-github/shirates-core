@@ -64,12 +64,12 @@ class ImageFileRepositoryTest : UnitTest() {
             ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
             // Assert
             run {
-                val entry = ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun_face.png")
+                val entry = ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun_face.png")!!
                 assertThat(entry.fileName).isEqualTo("tower_of_the_sun_face@a.png")
             }
             run {
                 val entry =
-                    ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun_face.png?s=0.5&t=10")
+                    ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun_face.png?s=0.5&t=10")!!
                 assertThat(entry.fileName).isEqualTo("tower_of_the_sun_face@a.png")
             }
             run {
@@ -127,7 +127,7 @@ class ImageFileRepositoryTest : UnitTest() {
 
         run {
             // Act
-            val entry = ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun.png")
+            val entry = ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun.png")!!
             // Assert
             assertThat(entry.filePath).isEqualTo("unitTestConfig/android/image/screens/images/tower_of_the_sun.png".toPath())
         }
@@ -151,7 +151,7 @@ class ImageFileRepositoryTest : UnitTest() {
             val entry = ImageFileRepository.getImageFileEntry(
                 imageExpression = "[Image1].png",
                 screenDirectory = "unitTestConfig/others/app1/screens/screen1"
-            )
+            )!!
             // Assert
             assertThat(entry.filePath).isEqualTo("unitTestConfig/others/app1/screens/screen1/image/[Image1].png".toPath())
         }
@@ -160,7 +160,7 @@ class ImageFileRepositoryTest : UnitTest() {
             val entry = ImageFileRepository.getImageFileEntry(
                 imageExpression = "[Image1].png",
                 screenDirectory = "unitTestConfig/others/app1/screens/screen2"
-            )
+            )!!
             // Assert
             assertThat(entry.filePath).isEqualTo("unitTestConfig/others/app1/screens/screen2/image/[Image1].png".toPath())
         }

@@ -2,10 +2,6 @@ package shirates.core.configuration.repository
 
 import shirates.core.configuration.ImageInfo
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.TestMode.platformAnnotation
-import shirates.core.driver.imageProfile
-import shirates.core.driver.testDrive
-import shirates.core.logging.Message.message
 import shirates.core.utility.image.BufferedImageUtility
 import java.awt.image.BufferedImage
 import java.io.File
@@ -101,11 +97,13 @@ object ImageFileRepository {
         return list
     }
 
-    private fun getImageFileEntryCore(
+    /**
+     * getImageFileEntries
+     */
+    fun getImageFileEntries(
         imageExpression: String,
         tag: String = "",
-        screenDirectory: String? = null
-    ): ImageFileEntry? {
+    ): List<ImageFileEntry> {
 
         val imageInfo = ImageInfo(imageExpression)
         val fname = imageInfo.fileName.removeSuffix(".png") + tag
@@ -115,56 +113,26 @@ object ImageFileRepository {
         val entries = allEntries.filter {
             it.fileName.contains(excludedAnnotation1).not() && it.fileName.contains(excludedAnnotation2).not()
         }
-        val imageFiles = entries.filter { it.fileName.startsWith(fname) }.sortedByDescending { it.fileName }
-        if (screenDirectory != null) {
-            val dir = screenDirectory.replace("/", File.separator)
-            val files = imageFiles.filter { it.filePath.toString().contains(dir) }
-            return files.firstOrNull()
-        }
-        return imageFiles.firstOrNull()
+        val imageFileEntries =
+            entries.filter { it.fileName.startsWith("${fname}.") || it.fileName.startsWith("${fname}@") }
+                .sortedByDescending { it.fileName }
+        return imageFileEntries
     }
 
     /**
      * getImageFileEntry
      */
-    fun getImageFileEntry(imageExpression: String, screenDirectory: String? = null): ImageFileEntry {
+    fun getImageFileEntry(
+        imageExpression: String,
+        screenDirectory: String? = null
+    ): ImageFileEntry? {
 
-        val imageProfile = testDrive.imageProfile
-        val ix = imageProfile.lastIndexOf("x")
-        val imageProfileHeightRemoved =
-            if (ix >= 0) imageProfile.substring(0, imageProfile.lastIndexOf("x")) else imageProfile
-
-        fun getEntry(imageExpression: String, screenDirectory: String?): ImageFileEntry? {
-
-            val entry =
-                getImageFileEntryCore(
-                    imageExpression = imageExpression,
-                    tag = imageProfile,
-                    screenDirectory = screenDirectory
-                ) ?: getImageFileEntryCore(
-                    imageExpression = imageExpression,
-                    tag = imageProfileHeightRemoved,
-                    screenDirectory = screenDirectory
-                ) ?: getImageFileEntryCore(
-                    imageExpression = imageExpression,
-                    tag = "${platformAnnotation}.png",
-                    screenDirectory = screenDirectory
-                ) ?: getImageFileEntryCore(
-                    imageExpression = imageExpression,
-                    tag = ".png",
-                    screenDirectory = screenDirectory
-                ) ?: getImageFileEntryCore(
-                    imageExpression = imageExpression,
-                    tag = "",
-                    screenDirectory = screenDirectory
-                )
-            return entry
+        val entries = getImageFileEntries(imageExpression = imageExpression)
+        if (screenDirectory != null) {
+            return entries.filter { it.filePath.toString().contains(screenDirectory) }.firstOrNull()
         }
-
-        val entry = getEntry(imageExpression = imageExpression, screenDirectory = screenDirectory)
-            ?: getEntry(imageExpression = imageExpression, screenDirectory = null)
-            ?: throw FileNotFoundException(message(id = "imageFileNotFound", subject = imageExpression))
-        return entry
+        return entries.firstOrNull()
+            ?: throw FileNotFoundException("Image file not found. (expression=$imageExpression)")
     }
 
     /**
@@ -173,6 +141,7 @@ object ImageFileRepository {
     fun getFilePath(imageExpression: String, screenDirectory: String? = null): Path {
 
         val entry = getImageFileEntry(imageExpression = imageExpression, screenDirectory = screenDirectory)
+            ?: throw FileNotFoundException("imageExpression=$imageExpression, screenDirectory=$screenDirectory")
         return entry.filePath
     }
 
@@ -181,6 +150,7 @@ object ImageFileRepository {
      */
     fun getBufferedImage(imageExpression: String, screenDirectory: String? = null): BufferedImage {
 
-        return getImageFileEntry(imageExpression = imageExpression, screenDirectory = screenDirectory).bufferedImage!!
+        val entry = getImageFileEntry(imageExpression = imageExpression, screenDirectory = screenDirectory)!!
+        return entry.bufferedImage!!
     }
 }

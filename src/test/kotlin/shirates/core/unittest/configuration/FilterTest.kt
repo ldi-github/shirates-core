@@ -48,34 +48,6 @@ class FilterTest : UnitTest() {
     }
 
     @Test
-    fun templateImage() {
-
-        // Arrange
-        val screensDirectory = "unitTestConfig/android/image/screens".toPath()
-        ScreenRepository.setup(screensDirectory = screensDirectory)
-        ImageFileRepository.setup(screenDirectory = screensDirectory)
-
-        run {
-            // Arrange
-            val f = Filter("image=tower_of_the_sun_face.png")
-            // Act, Assert
-            assertThat(f.templateImage).isNotNull()
-
-            // Arrange
-            val image =
-                BufferedImageUtility.getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_golden_face.png")
-            // Act
-            f.templateImage = image
-            // Assert
-            assertThat(f.templateImage).isEqualTo(image)
-        }
-        run {
-            // Arrange
-            assertThat(Filter("image=NotRegistered.png").templateImage).isNull()
-        }
-    }
-
-    @Test
     fun evaluate() {
 
         run {
