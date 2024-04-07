@@ -165,7 +165,7 @@ class TestElementImageExtensionTest : UITest() {
             case(4) {
                 condition {
                     // Override [Notifications Icon].png by [App Icon].png
-                    val appsIconFile = dir.listFiles().first { it.name.startsWith("[Apps Icon]") }
+                    val appsIconFile = dir.listFiles().first { it.name.startsWith("[Tips & support Icon]") }
                     appsIconFile.copyTo(
                         dir.resolve("[Notifications Icon]${testDrive.imageProfile}.png").toFile(),
                         overwrite = true
@@ -183,11 +183,11 @@ class TestElementImageExtensionTest : UITest() {
                     // Assert
                     assertThatThrownBy {
                         it.existImage(
-                            "[Notifications Icon]",
+                            expression = "[Notifications Icon]",
                             throwsException = true
                         )   // element found, image does not match, exception thrown
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("Image of [Notifications Icon] exists")
+                        .hasMessageStartingWith("Image of [Notifications Icon] exists")
                 }
             }
         }

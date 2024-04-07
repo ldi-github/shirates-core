@@ -979,25 +979,22 @@ object TestDriver {
                     rootElement = AppiumProxy.getSource()
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
-                    if (isAndroid) {
-                        rootElement.sourceCaptureFailed = false
-                        val webViews = TestElementCache.findElements(".android.webkit.WebView")
-                        if (webViews.any()) {
-                            for (webView in webViews) {
-                                if (webView.children.isEmpty()) {
-                                    rootElement.sourceCaptureFailed = true
-                                    TestLog.info("WebView is empty. $webView", PropertiesManager.enableSyncLog)
-                                    break
-                                }
-                            }
+                    rootElement.sourceCaptureFailed = false
+                    if (hasIncompleteWebView()) {
+                        if (it.stopWatch.elapsedSeconds < it.waitSeconds) {
+                            TestLog.info("WebView is incomplete", PropertiesManager.enableSyncLog)
+                            rootElement.sourceCaptureFailed = true
                         }
                     } else {
-                        rootElement.sourceCaptureFailed = TestElementCache.allElements.count() < 3
-                        if (rootElement.sourceCaptureFailed) {
-                            TestLog.info("Source capture failed.", PropertiesManager.enableSyncLog)
+                        if (isiOS && TestElementCache.allElements.count() < 3) {
+                            rootElement.sourceCaptureFailed = true
+                            TestLog.warn("Source capture failed.", PropertiesManager.enableSyncLog)
                         }
                     }
                     rootElement.sourceCaptureFailed.not()
+                }
+                if (rootElement.sourceCaptureFailed) {
+                    TestLog.warn("WebView is incomplete.", PropertiesManager.enableSyncLog)
                 }
 
                 if (currentScreenRefresh) {
@@ -1019,6 +1016,29 @@ object TestDriver {
         }
 
         return this
+    }
+
+    internal fun getWebViews(): List<TestElement> {
+
+        val webViews =
+            if (isAndroid) TestElementCache.findElements(".android.webkit.WebView")
+            else TestElementCache.findElements(".XCUIElementTypeWebView")
+        return webViews
+    }
+
+    internal fun hasIncompleteWebView(): Boolean {
+
+        val webViews = getWebViews()
+        for (webView in webViews) {
+            val webViewDescendants = webView.descendants
+            val hasError =
+                if (isAndroid) webViewDescendants.isEmpty()
+                else webViewDescendants.count() < 6
+            if (hasError) {
+                return true
+            }
+        }
+        return false
     }
 
     /**
@@ -1491,10 +1511,8 @@ object TestDriver {
             }
             selector.image = "${selector.nickname}.png"
         }
-        val filePath = runCatching {
-            ImageFileRepository.getFilePath(selector.image!!)
-        }.getOrNull()
-        if (filePath == null || Files.exists(filePath).not()) {
+        val imageFileEntries = ImageFileRepository.getImageFileEntries(imageExpression = selector.image!!)
+        if (imageFileEntries.isEmpty()) {
             if (throwsException) {
                 throw FileNotFoundException(message(id = "imageFileNotFound", subject = selector.image))
             }
@@ -1507,6 +1525,7 @@ object TestDriver {
         }
 
         var r = rootElement.isContainingImage(selector.image!!, threshold = threshold)
+        r.imageFileEntries = imageFileEntries
         if (r.result) {
             return r
         }
@@ -1549,6 +1568,7 @@ object TestDriver {
                     screenshot(force = true)
                 }
                 r = rootElement.isContainingImage(selector.image!!)
+                r.imageFileEntries = imageFileEntries
                 r.result
             }
         }

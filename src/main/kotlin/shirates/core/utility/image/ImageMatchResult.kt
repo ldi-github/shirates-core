@@ -1,5 +1,6 @@
 package shirates.core.utility.image
 
+import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.TestDrive
 import java.awt.image.BufferedImage
 import kotlin.math.absoluteValue
@@ -15,8 +16,10 @@ class ImageMatchResult(
     var image: BufferedImage? = null,
     var templateImage: BufferedImage? = null,
     var templateImageFile: String? = null,
+    var imageFileEntries: List<ImageFileRepository.ImageFileEntry> = mutableListOf()
 ) : TestDrive {
     override fun toString(): String {
-        return "result=$result, scale=$scale, threshold=$threshold, x=$x, y=$y, score=${score.absoluteValue}, templateImageFile=$templateImageFile"
+        val file = templateImageFile ?: imageFileEntries.firstOrNull()?.filePath
+        return "result=$result, scale=$scale, threshold=$threshold, x=$x, y=$y, score=${score.absoluteValue}, templateImageFile=$file"
     }
 }

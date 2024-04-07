@@ -12,7 +12,6 @@ import shirates.core.driver.TestMode
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
-import shirates.core.utility.image.isSame
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 
@@ -542,15 +541,13 @@ class Selector_AndroidTest : UnitTest() {
         run {
             // Arrange, Act
             val sel = Selector("image=tower_of_the_sun_face.png")
-            val templateImage =
-                BufferedImageUtility.getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun_face.png")
             // Assert
             assertThat(sel.expression).isEqualTo("image=tower_of_the_sun_face.png")
             assertThat(sel.nickname).isNull()
             assertThat(sel.toString()).isEqualTo("<tower_of_the_sun_face.png>")
             assertThat(sel.filterMap.count()).isEqualTo(1)
             assertThat(sel.image).isEqualTo("tower_of_the_sun_face.png")
-            assertThat(sel.templateImage.isSame(templateImage)).isTrue()
+            assertThat(sel.templateImage).isNull()
             assertThat(sel.relativeSelectors.count()).isEqualTo(0)
 
             run {

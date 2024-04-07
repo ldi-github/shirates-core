@@ -30,7 +30,9 @@ object ImageSetupHelper : TestDrive {
         }
 
         val dir = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
-        if (Files.exists(dir).not()) dir.toFile().mkdirs()
+        if (Files.exists(dir).not()) {
+            dir.toFile().mkdirs()
+        }
 
         it.macro("[Android Settings Top Screen]")
 

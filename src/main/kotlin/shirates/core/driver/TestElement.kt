@@ -286,39 +286,7 @@ class TestElement(
      */
     val hasError: Boolean
         get() {
-            hasEmptyWebViewError
             return (lastError != null)
-        }
-
-    /**
-     * webViewElement
-     */
-    val webViewElement: TestElement?
-        get() {
-            if (isAndroid) {
-                return descendantsAndSelf.firstOrNull() { it.className == "android.webkit.WebView" }
-            } else {
-                return descendantsAndSelf.firstOrNull() { it.type == "XCUIElementTypeWebView" }
-            }
-        }
-
-    /**
-     * hasEmptyWebViewError
-     */
-    val hasEmptyWebViewError: Boolean
-        get() {
-            if (isWebElementMode) {
-                return false
-            }
-            val webView = webViewElement ?: return false
-            val webViewElements = webView.descendantsAndSelf
-            val hasError =
-                if (isAndroid) webViewElements.isEmpty()
-                else webViewElements.count() < 6
-            if (hasError) {
-                lastError = IllegalStateException("EmptyWebViewError.")
-            }
-            return hasError
         }
 
     companion object {

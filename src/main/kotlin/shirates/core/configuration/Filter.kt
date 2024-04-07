@@ -70,40 +70,17 @@ class Filter(
             return expressionParser.isAbbreviation
         }
 
-    var templateImage: BufferedImage? = null
-        get() {
-            if (noun != "image") return null
-            if (field == null) {
-                templateImageFile
-            }
-            return field
-        }
-        internal set
+    var imageMatchResult: ImageMatchResult? = null
 
-    var templateImageFile: String? = null
+    val templateImage: BufferedImage?
         get() {
-            if (noun != "image") return null
-            if (field == null) {
-                try {
-                    val imageFileEntry = getImageFileEntry()
-                    field = imageFileEntry.filePath.toString()
-                    templateImage = imageFileEntry.bufferedImage
-                } catch (t: Throwable) {
-                    templateImage = null
-                    TestLog.trace(t.message!!)
-                }
-            }
-            return field
+            return imageMatchResult?.templateImage
         }
 
-    private fun getImageFileEntry(): ImageFileRepository.ImageFileEntry {
-        val imageInfo = ImageInfo(value)
-        val screenDirectory = TestDriver.screenInfo.screenFile.toPath().parent.toString()
-        return ImageFileRepository.getImageFileEntry(
-            imageExpression = imageInfo.fileName,
-            screenDirectory = screenDirectory
-        )
-    }
+    val templateImageFile: String?
+        get() {
+            return imageMatchResult?.templateImageFile
+        }
 
     val scale: Double
         get() {
@@ -449,6 +426,21 @@ class Filter(
         }
     }
 
+    private fun getImageFileEntriesSortedByScreenDirectory(): List<ImageFileRepository.ImageFileEntry> {
+
+        val entries = ImageFileRepository.getImageFileEntries(imageExpression = ImageInfo(value).fileName)
+            .toMutableList()
+        val screenDirectory = TestDriver.screenInfo.screenFile?.toPath()?.parent
+        if (screenDirectory != null && Files.exists(screenDirectory)) {
+            val primaryEntries = entries.filter { it.filePath.toString().contains(screenDirectory.toString()) }
+            entries.removeAll(primaryEntries)
+            val secondaryEntries = entries.toList()
+            entries.addAll(primaryEntries)
+            entries.addAll(secondaryEntries)
+        }
+        return entries
+    }
+
     /**
      * evaluateImageEqualsTo
      */
@@ -457,20 +449,33 @@ class Filter(
         threshold: Double = this.threshold,
     ): ImageMatchResult {
 
-        val tmp1 = templateImage
-        if (tmp1 == null) {
-            if (Files.exists(TestLog.directoryForLog).not()) {
-                TestLog.directoryForLog.toFile().mkdirs()
+        val imageFileEntries = getImageFileEntriesSortedByScreenDirectory()
+        for (imageFileEntry in imageFileEntries) {
+            imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
+                image = image,
+                templateImage = imageFileEntry.bufferedImage,
+                threshold = threshold
+            )
+            imageMatchResult!!.result = imageMatchResult!!.result.reverseIfNegation()
+            imageMatchResult!!.imageFileEntries = imageFileEntries
+            imageMatchResult!!.templateImageFile = imageFileEntry.filePath.toString()
+            if (imageMatchResult!!.result) {
+                return imageMatchResult!!
             }
-            image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
         }
-        val imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
+        if (Files.exists(TestLog.directoryForLog).not()) {
+            TestLog.directoryForLog.toFile().mkdirs()
+        }
+
+        image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
+
+        val imageMatchResult = ImageMatchResult(
+            result = false,
+            templateSubject = null,
+            threshold = threshold,
             image = image,
-            templateImage = tmp1,
-            threshold = threshold
+            imageFileEntries = imageFileEntries
         )
-        imageMatchResult.result = imageMatchResult.result.reverseIfNegation()
-        imageMatchResult.templateImageFile = templateImageFile
         return imageMatchResult
     }
 
@@ -483,35 +488,46 @@ class Filter(
         threshold: Double = this.threshold
     ): ImageMatchResult {
 
-        getImageFileEntry()
+        val imageFileEntries = getImageFileEntriesSortedByScreenDirectory()
+        for (imageFileEntry in imageFileEntries) {
+            if (image.isSame(imageFileEntry.bufferedImage) && isNegation.not()) {
+                return ImageMatchResult(
+                    result = true,
+                    templateSubject = null,
+                    scale = scale,
+                    threshold = threshold,
+                    image = image,
+                    templateImage = imageFileEntry.bufferedImage
+                )
+            }
 
-        val tmp1 = templateImage
-        if (tmp1 == null) {
-            image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
-        }
-
-        if (image.isSame(tmp1) && isNegation.not()) {
-            return ImageMatchResult(
-                result = true,
-                templateSubject = null,
+            imageMatchResult = ImageMatchUtility.evaluateImageContainedIn(
                 scale = scale,
-                threshold = threshold,
                 image = image,
-                templateImage = tmp1
+                templateImage = imageFileEntry.bufferedImage,
+                threshold = threshold
             )
+            imageMatchResult!!.templateImageFile = imageFileEntry.filePath.toString()
+            imageMatchResult!!.imageFileEntries = imageFileEntries
+            val result = imageMatchResult!!.result.reverseIfNegation()
+            imageMatchResult!!.result = result
+            if (isNegation.not() && result || isNegation && result.not()) {
+                return imageMatchResult!!
+            }
         }
 
-        val imageMatchResult = ImageMatchUtility.evaluateImageContainedIn(
+        image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
+
+        val imageMatchResult = ImageMatchResult(
+            result = false,
+            templateSubject = null,
             scale = scale,
+            threshold = threshold,
             image = image,
-            templateImage = tmp1,
-            threshold = threshold
+            imageFileEntries = imageFileEntries
         )
-        imageMatchResult.templateImageFile = templateImageFile
-        imageMatchResult.result = imageMatchResult.result.reverseIfNegation()
         return imageMatchResult
     }
-
 
     /**
      * evaluate
