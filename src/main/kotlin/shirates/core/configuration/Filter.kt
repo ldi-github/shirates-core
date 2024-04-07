@@ -2,6 +2,7 @@ package shirates.core.configuration
 
 import shirates.core.configuration.Selector.Companion.getFilterValues
 import shirates.core.configuration.repository.ImageFileRepository
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
@@ -14,6 +15,7 @@ import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.ImageMatchUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
+import shirates.core.utility.toPath
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 
@@ -79,13 +81,6 @@ class Filter(
         get() {
             return imageMatchResult?.templateImageFile
         }
-
-    private fun getImageFileEntries(): List<ImageFileRepository.ImageFileEntry> {
-        val imageInfo = ImageInfo(value)
-        return ImageFileRepository.getImageFileEntries(
-            imageExpression = imageInfo.fileName
-        )
-    }
 
     val scale: Double
         get() {
@@ -431,6 +426,21 @@ class Filter(
         }
     }
 
+    private fun getImageFileEntriesSortedByScreenDirectory(): List<ImageFileRepository.ImageFileEntry> {
+
+        val entries = ImageFileRepository.getImageFileEntries(imageExpression = ImageInfo(value).fileName)
+            .toMutableList()
+        val screenDirectory = TestDriver.screenInfo.screenFile?.toPath()?.parent
+        if (screenDirectory != null && Files.exists(screenDirectory)) {
+            val primaryEntries = entries.filter { it.filePath.toString().contains(screenDirectory.toString()) }
+            entries.removeAll(primaryEntries)
+            val secondaryEntries = entries.toList()
+            entries.addAll(primaryEntries)
+            entries.addAll(secondaryEntries)
+        }
+        return entries
+    }
+
     /**
      * evaluateImageEqualsTo
      */
@@ -439,7 +449,7 @@ class Filter(
         threshold: Double = this.threshold,
     ): ImageMatchResult {
 
-        val imageFileEntries = getImageFileEntries()
+        val imageFileEntries = getImageFileEntriesSortedByScreenDirectory()
         for (imageFileEntry in imageFileEntries) {
             imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
                 image = image,
@@ -456,11 +466,15 @@ class Filter(
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()
         }
+
         image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
-        val imageMatchResult = ImageMatchUtility.evaluateImageEqualsTo(
+
+        val imageMatchResult = ImageMatchResult(
+            result = false,
+            templateSubject = null,
+            threshold = threshold,
             image = image,
-            templateImage = null,
-            threshold = threshold
+            imageFileEntries = imageFileEntries
         )
         return imageMatchResult
     }
@@ -474,8 +488,7 @@ class Filter(
         threshold: Double = this.threshold
     ): ImageMatchResult {
 
-        val imageFileEntries = getImageFileEntries()
-
+        val imageFileEntries = getImageFileEntriesSortedByScreenDirectory()
         for (imageFileEntry in imageFileEntries) {
             if (image.isSame(imageFileEntry.bufferedImage) && isNegation.not()) {
                 return ImageMatchResult(
@@ -505,15 +518,16 @@ class Filter(
 
         image?.saveImage(TestLog.directoryForLog.resolve(this.filterExpression.escapeFileName()).toString())
 
-        val imageMatchResult = ImageMatchUtility.evaluateImageContainedIn(
+        val imageMatchResult = ImageMatchResult(
+            result = false,
+            templateSubject = null,
             scale = scale,
+            threshold = threshold,
             image = image,
-            templateImage = null,
-            threshold = threshold
+            imageFileEntries = imageFileEntries
         )
         return imageMatchResult
     }
-
 
     /**
      * evaluate

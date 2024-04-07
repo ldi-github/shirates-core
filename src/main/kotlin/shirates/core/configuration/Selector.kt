@@ -1302,8 +1302,13 @@ class Selector(
         threshold: Double = PropertiesManager.imageMatchingThreshold
     ): ImageMatchResult {
 
-        return getFilter("image")?.evaluateImageEqualsTo(image = image, threshold = threshold)
-            ?: ImageMatchResult(result = false, templateSubject = null, threshold = threshold)
+        val imageFilter = getFilter("image")
+            ?: return ImageMatchResult(result = false, templateSubject = null, threshold = threshold)
+
+        return imageFilter.evaluateImageEqualsTo(
+            image = image,
+            threshold = threshold
+        )
     }
 
     /**
@@ -1320,8 +1325,14 @@ class Selector(
         threshold: Double = PropertiesManager.imageMatchingThreshold
     ): ImageMatchResult {
 
-        return getFilter("image")?.evaluateImageContainedIn(image = image, scale = scale, threshold = threshold)
-            ?: ImageMatchResult(result = false, scale = scale, templateSubject = null, threshold = threshold)
+        val imageFilter = getFilter("image")
+            ?: return ImageMatchResult(result = false, templateSubject = null, threshold = threshold)
+
+        return imageFilter.evaluateImageContainedIn(
+            image = image,
+            scale = scale,
+            threshold = threshold
+        )
     }
 
     /**
