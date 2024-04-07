@@ -19,6 +19,7 @@ class ImageMatchResult(
     var imageFileEntries: List<ImageFileRepository.ImageFileEntry> = mutableListOf()
 ) : TestDrive {
     override fun toString(): String {
-        return "result=$result, scale=$scale, threshold=$threshold, x=$x, y=$y, score=${score.absoluteValue}, templateImageFile=$templateImageFile"
+        val file = templateImageFile ?: imageFileEntries.firstOrNull()?.filePath
+        return "result=$result, scale=$scale, threshold=$threshold, x=$x, y=$y, score=${score.absoluteValue}, templateImageFile=$file"
     }
 }
