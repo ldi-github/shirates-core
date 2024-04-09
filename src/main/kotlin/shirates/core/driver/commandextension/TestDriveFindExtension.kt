@@ -68,7 +68,7 @@ fun TestDrive.findElements(
  * allElements
  */
 fun TestDrive.allElements(
-    useCache: Boolean
+    useCache: Boolean = true
 ): List<TestElement> {
 
     if (TestMode.isNoLoadRun) {
@@ -193,4 +193,17 @@ val TestDrive.switchWidgets
         val selectContext = rootElement
         return findElements(expression = ".switch", selectContext = selectContext)
     }
+
+/**
+ * scrollableElements
+ */
+val TestDrive.scrollableElements
+    get(): List<TestElement> {
+        if (TestMode.isNoLoadRun) {
+            return listOf()
+        }
+        val selectContext = rootElement
+        return findElements(expression = ".scrollable", selectContext = selectContext)
+    }
+
 

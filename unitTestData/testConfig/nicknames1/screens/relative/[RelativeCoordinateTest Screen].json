@@ -81,6 +81,7 @@
     "[:Below button(3)]": ":belowButton(3)",
     "[:Below switch]": ":belowSwitch",
     "[:Below switch(2)]": ":belowSwitch(2)",
+    "[:Below scrollable]": ":belowScrollable",
 
     "[:Above label]": ":aboveLabel",
     "[:Above label(2)]": ":aboveLabel(2)",
@@ -93,7 +94,8 @@
     "[:Above button(2)]": ":aboveButton(2)",
     "[:Above button(3)]": ":aboveButton(3)",
     "[:Above switch]": ":aboveSwitch",
-    "[:Above switch(2)]": ":aboveSwitch(2)"
+    "[:Above switch(2)]": ":aboveSwitch(2)",
+    "[:Above scrollable]": ":aboveScrollable"
 
   }
 

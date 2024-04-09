@@ -3,7 +3,6 @@ package shirates.core.utility.element
 import shirates.core.Const
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.TestMode.isiOS
 import shirates.core.utility.file.ResourceUtility
 import java.util.*
 
@@ -163,34 +162,27 @@ object ElementCategoryExpressionUtility {
     )
 
     /**
-     * androidScrollableTypesExpression
-     */
-    var androidScrollableTypesExpression: String = ""
-        get() {
-            if (field.isBlank()) {
-                field = getTypesExpression("android.scrollableTypes")
-            }
-            return field
-        }
-
-    /**
-     * iosScrollableTypesExpression
-     */
-    var iosScrollableTypesExpression: String = ""
-        get() {
-            if (field.isBlank()) {
-                field = getTypesExpression("ios.scrollableTypes")
-            }
-            return field
-        }
-
-    /**
      * iosTableTypesExpression
      */
     var iosTableTypesExpression: String = ""
         get() {
             if (field.isBlank()) {
                 field = getTypesExpression("ios.tableTypes")
+            }
+            return field
+        }
+
+    /**
+     * scrollableTypesExpression
+     */
+    var scrollableTypesExpression: String = ""
+        set(value) {
+            field = value
+        }
+        get() {
+            if (field.isBlank()) {
+                field =
+                    if (isAndroid) getTypesExpression("android.scrollableTypes") else getTypesExpression("ios.scrollableTypes")
             }
             return field
         }
@@ -246,9 +238,9 @@ object ElementCategoryExpressionUtility {
     }
 
     /**
-     * expandWidget
+     * expandClassAlias
      */
-    fun expandWidget(className: String): String {
+    fun expandClassAlias(className: String): String {
 
         when (className.removePrefix(".")) {
 
@@ -258,6 +250,7 @@ object ElementCategoryExpressionUtility {
             "button" -> return buttonTypesExpression
             "switch" -> return switchTypesExpression
             "widget" -> return widgetTypesExpression
+            "scrollable" -> return scrollableTypesExpression
         }
 
         return className
@@ -275,8 +268,8 @@ object ElementCategoryExpressionUtility {
         buttonTypesExpression = ""
         switchTypesExpression = ""
         extraWidgetTypesExpression = ""
-        iosScrollableTypesExpression = ""
         iosTableTypesExpression = ""
+        scrollableTypesExpression = ""
     }
 
     /**
@@ -319,14 +312,8 @@ object ElementCategoryExpressionUtility {
             return ElementCategory.EXTRA_WIDGET
         }
 
-        if (isAndroid) {
-            if (androidScrollableTypesExpression.contains(classOrType)) {
-                return ElementCategory.SCROLLABLE
-            }
-        } else if (isiOS) {
-            if (iosScrollableTypesExpression.contains(classOrType)) {
-                return ElementCategory.SCROLLABLE
-            }
+        if (scrollableTypesExpression.contains(classOrType)) {
+            return ElementCategory.SCROLLABLE
         }
 
         return ElementCategory.OTHERS

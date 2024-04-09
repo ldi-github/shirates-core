@@ -75,6 +75,8 @@
     "[:Below button(3)]": ":belowButton(3)",
     "[:Below switch]": ":belowSwitch",
     "[:Below switch(2)]": ":belowSwitch(2)",
+    "[:Below scrollable]": ":belowScrollable",
+    "[:Below scrollable(2)]": ":belowScrollable(2)",
 
     "[:Above label]": ":aboveLabel",
     "[:Above label(2)]": ":aboveLabel(2)",

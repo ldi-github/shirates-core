@@ -1357,8 +1357,11 @@ object TestDriver {
                             if (c.lowercase().contains("switch")) {
                                 exps.add(".switch")
                             }
+                            if (c.lowercase().contains("scrollable")) {
+                                exps.add(".scrollable")
+                            }
                         }
-                        val expandedExps = exps.map { ElementCategoryExpressionUtility.expandWidget(it) }
+                        val expandedExps = exps.map { ElementCategoryExpressionUtility.expandClassAlias(it) }
                         val exp =
                             if (expandedExps.isEmpty()) ".widget"
                             else "className=(${expandedExps.joinToString("|")})"

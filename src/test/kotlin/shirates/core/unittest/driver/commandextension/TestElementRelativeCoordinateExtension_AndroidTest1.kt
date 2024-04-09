@@ -1226,6 +1226,8 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
          *   |Switch1-1      |Switch1-2      |Switch1-3      |
          *   |CheckBox1-1    |CheckBox1-2    |CheckBox1-3    |
          *   |LinearLayout1-1|LinearLayout1-2|LinearLayout1-3|
+         *   |Scrollable1-1  |Scrollable1-2  |Scrollable1-3  |
+         *   |Scrollable2-1  |Scrollable2-2  |               |
          */
 
         run {
@@ -1244,6 +1246,16 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
                 assertThat(r1).isEqualTo(r2)
                 assertThat(r1).isEqualTo(r3)
                 assertThat(r1).isEqualTo(e.below("[1]"))
+            }
+            run {
+                // Act, Assert
+                val r1 = e.below(expression = ".android.widget.LinearLayout")
+                assertThat(r1.selector.toString()).isEqualTo("<#TextView1-2>:below(.android.widget.LinearLayout)")
+                assertThat(r1.isFound).isTrue()
+                // Act, Assert
+                val r2 = e.below(expression = ".android.widget.LinearLayout&&[1]")
+                assertThat(r2.selector.toString()).isEqualTo("<#TextView1-2>:below(.android.widget.LinearLayout&&[1])")
+                assertThat(r2.isFound).isTrue()
             }
             run {
                 // Act, Assert
@@ -1313,6 +1325,20 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
                 assertThat(r1).isEqualTo(r2)
                 assertThat(r1).isEqualTo(r3)
                 assertThat(r1).isEqualTo(e.belowSwitch("[1]"))
+            }
+            run {
+                // Act, Assert
+                val r1 = e.belowScrollable()
+                assertThat(r1.selector.toString()).isEqualTo("<#TextView1-2>:belowScrollable")
+                val r2 = e.select(":belowScrollable")
+                assertThat(r2.selector.toString()).isEqualTo("<#TextView1-2>:belowScrollable")
+                val r3 = e.select("[:Below scrollable]", throwsException = false)
+                assertThat(r3.selector.toString()).isEqualTo("<#TextView1-2>[:Below scrollable]")
+                // Assert
+                assertThat(r1.id).isEqualTo("Scrollable1-2")
+                assertThat(r1).isEqualTo(r2)
+                assertThat(r1).isEqualTo(r3)
+                assertThat(r1).isEqualTo(e.belowScrollable("[1]"))
             }
         }
 
@@ -1704,6 +1730,21 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
                 assertThat(r1).isEqualTo(r2)
                 assertThat(r1).isEqualTo(r3)
                 assertThat(r1).isEqualTo(e.aboveSwitch("[1]"))
+            }
+            run {
+                val e = TestElementCache.select("#Scrollable2-2")
+                // Act, Assert
+                val r1 = e.aboveScrollable()
+                assertThat(r1.selector.toString()).isEqualTo("<#Scrollable2-2>:aboveScrollable")
+                val r2 = e.select(":aboveScrollable")
+                assertThat(r2.selector.toString()).isEqualTo("<#Scrollable2-2>:aboveScrollable")
+                val r3 = e.select("[:Above scrollable]", throwsException = false)
+                assertThat(r3.selector.toString()).isEqualTo("<#Scrollable2-2>[:Above scrollable]")
+                // Assert
+                assertThat(r1.id).isEqualTo("Scrollable1-2")
+                assertThat(r1).isEqualTo(r2)
+                assertThat(r1).isEqualTo(r3)
+                assertThat(r1).isEqualTo(e.aboveScrollable("[1]"))
             }
         }
 

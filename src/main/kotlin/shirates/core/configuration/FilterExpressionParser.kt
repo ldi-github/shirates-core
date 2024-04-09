@@ -215,14 +215,14 @@ class FilterExpressionParser(
         if (exp.startsWith("@") || exp.startsWith(".") || exp.startsWith("#")) {
             val v = exp.substring(1)
             if (name == "className") {
-                return ElementCategoryExpressionUtility.expandWidget(v)
+                return ElementCategoryExpressionUtility.expandClassAlias(v)
             }
             return v
         }
         if (exp.startsWith("!@") || exp.startsWith("!.") || exp.startsWith("!#")) {
             val v = exp.substring(2)
             if (name == "className") {
-                return ElementCategoryExpressionUtility.expandWidget(v)
+                return ElementCategoryExpressionUtility.expandClassAlias(v)
             }
             return v
         }

@@ -31,7 +31,7 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
             assertThat(p["android.buttonTypes"]).isEqualTo("android.widget.Button|android.widget.ImageButton|android.widget.CheckBox")
             assertThat(p["android.switchTypes"]).isEqualTo("android.widget.Switch")
             assertThat(p["android.extraWidgetTypes"]).isEqualTo("android.view.View")
-            assertThat(p["android.scrollableTypes"]).isEqualTo("androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView")
+            assertThat(p["android.scrollableTypes"]).isEqualTo("androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView|android.widget.HorizontalScrollView|androidx.viewpager.widget.ViewPager")
 
             assertThat(p["ios.labelTypes"]).isEqualTo("XCUIElementTypeStaticText")
             assertThat(p["ios.inputTypes"]).isEqualTo("XCUIElementTypeTextField|XCUIElementTypeSecureTextField")
@@ -155,17 +155,18 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
     }
 
     @Test
-    fun expandWidget() {
+    fun expandClassAlias() {
 
         val o = ElementCategoryExpressionUtility
         TestMode.runAsAndroid {
-            assertThat(o.expandWidget("label")).isEqualTo("android.widget.TextView")
-            assertThat(o.expandWidget("input")).isEqualTo("android.widget.EditText")
-            assertThat(o.expandWidget("image")).isEqualTo("android.widget.ImageView")
-            assertThat(o.expandWidget("button")).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox)")
-            assertThat(o.expandWidget("switch")).isEqualTo("android.widget.Switch")
-            assertThat(o.expandWidget("widget")).isEqualTo("(android.widget.EditText|android.widget.TextView|android.widget.ImageView|android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.Switch)")
-            assertThat(o.expandWidget("class1")).isEqualTo("class1")
+            assertThat(o.expandClassAlias("label")).isEqualTo("android.widget.TextView")
+            assertThat(o.expandClassAlias("input")).isEqualTo("android.widget.EditText")
+            assertThat(o.expandClassAlias("image")).isEqualTo("android.widget.ImageView")
+            assertThat(o.expandClassAlias("button")).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox)")
+            assertThat(o.expandClassAlias("switch")).isEqualTo("android.widget.Switch")
+            assertThat(o.expandClassAlias("widget")).isEqualTo("(android.widget.EditText|android.widget.TextView|android.widget.ImageView|android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.Switch)")
+            assertThat(o.expandClassAlias("scrollable")).isEqualTo("(androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView|android.widget.HorizontalScrollView|androidx.viewpager.widget.ViewPager)")
+            assertThat(o.expandClassAlias("class1")).isEqualTo("class1")
         }
     }
 
@@ -174,12 +175,12 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
 
         TestMode.runAsAndroid {
             // Act, Assert
-            assertThat(ElementCategoryExpressionUtility.androidScrollableTypesExpression)
-                .isEqualTo("(androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView)")
+            assertThat(ElementCategoryExpressionUtility.scrollableTypesExpression)
+                .isEqualTo("(androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView|android.widget.HorizontalScrollView|androidx.viewpager.widget.ViewPager)")
         }
         TestMode.runAsIos {
             // Act, Assert
-            assertThat(ElementCategoryExpressionUtility.iosScrollableTypesExpression)
+            assertThat(ElementCategoryExpressionUtility.scrollableTypesExpression)
                 .isEqualTo("(XCUIElementTypeTable|XCUIElementTypeCollectionView|XCUIElementTypeScrollView|XCUIElementTypeWebView|XCUIElementTypeMap)")
         }
     }

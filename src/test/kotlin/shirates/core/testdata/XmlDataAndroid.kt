@@ -874,6 +874,13 @@ object XmlDataAndroid {
             <android.widget.LinearLayout bounds="[0 ,80][9 ,89]"   resource-id="LinearLayout1-1" class="android.widget.LinearLayout" displayed="true" />
             <android.widget.LinearLayout bounds="[10,80][19,89]"   resource-id="LinearLayout1-2" class="android.widget.LinearLayout" displayed="true" />
             <android.widget.LinearLayout bounds="[20,80][29,89]"   resource-id="LinearLayout1-3" class="android.widget.LinearLayout" displayed="true" />
+
+            <androidx.recyclerview.widget.RecyclerView bounds="[0 ,90][9 ,99]"   resource-id="Scrollable1-1" class="androidx.recyclerview.widget.RecyclerView" displayed="true" />
+            <android.support.v7.widget.RecyclerView    bounds="[10,90][19,99]"   resource-id="Scrollable1-2" class="android.support.v7.widget.RecyclerView" displayed="true" />
+            <android.widget.ScrollView                 bounds="[20,90][29,99]"   resource-id="Scrollable1-3" class="android.widget.ScrollView" displayed="true" />
+
+            <android.widget.HorizontalScrollView       bounds="[0, 100][9, 109]"   resource-id="Scrollable2-1" class="android.widget.HorizontalScrollView" displayed="true" />
+            <androidx.viewpager.widget.ViewPager       bounds="[10,100][19,109]"   resource-id="Scrollable2-2" class="androidx.viewpager.widget.ViewPager" displayed="true" />
         </android.widget.LinearLayout>
     </android.widget.FrameLayout>
 </hierarchy>
