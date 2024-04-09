@@ -136,7 +136,6 @@ class SpecReportDataAdapter(val data: SpecReportData) {
         if (data.testClassName.isBlank()) {
             val ix = worksheet.workbook.indexOf(worksheet)
             data.testClassName = "NoName$ix"
-            return
         }
 
         val start = data.sheetPosition.RowHeader + 1
