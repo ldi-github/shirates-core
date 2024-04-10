@@ -85,7 +85,11 @@ internal fun getWidgetOnly(selector: Selector): Boolean {
     if (selector.filterMap.containsKey("className")) {
         return false
     }
-    if (selector.command == ":belowScrollable" || selector.command == ":aboveScrollable") {
+    if (selector.command == ":belowScrollable" ||
+        selector.command == ":aboveScrollable" ||
+        selector.command == ":flowScrollable" ||
+        selector.command == ":scrollable"
+    ) {
         return false
     }
     return true
@@ -241,7 +245,9 @@ private fun TestElement.getRelativeElement(
 ): TestElement {
 
     val sel = selector.copy()
-    sel.className = className
+    if (className.isNotBlank()) {
+        sel.className = className
+    }
 
     val e = if (relativeCommand.startsWith(":right")) {
         right(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)

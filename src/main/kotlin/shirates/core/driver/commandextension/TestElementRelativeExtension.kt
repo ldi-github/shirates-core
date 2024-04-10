@@ -372,6 +372,14 @@ internal fun TestElement.relative(
                 )
             }
 
+            ":flowScrollable", ":scrollable" -> {
+                e = this.flowScrollable(
+                    selector = relativeSelector,
+                    targetElements = targetElements.filter { it.isScrollable },
+                    frame = frame
+                )
+            }
+
             ":innerWidget", ":inner" -> {
                 val sel = relativeSelector.copy()
                 sel.command = null

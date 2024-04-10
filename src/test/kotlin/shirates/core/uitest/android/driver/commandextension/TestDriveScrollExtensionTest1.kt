@@ -70,14 +70,14 @@ class TestDriveScrollExtensionTest1 : UITest() {
                 condition {
                     it.macro("[Calculator Main Screen]")
                 }.expectation {
-                    rootElement.hasScrollable.thisIsFalse()
+                    rootElement.hasScrollable.thisIsFalse("hasScroll is false.")
                 }
             }
             case(2) {
                 condition {
                     it.macro("[Play Store Screen]")
                 }.expectation {
-                    rootElement.hasScrollable.thisIsTrue()
+                    rootElement.hasScrollable.thisIsTrue("hasScrollable is true.")
                 }
             }
         }

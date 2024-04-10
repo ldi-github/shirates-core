@@ -3,6 +3,7 @@ package shirates.core.configuration
 import shirates.core.configuration.Filter.Companion.registeredNouns
 import shirates.core.configuration.Filter.Companion.registeredNounsWithVerb
 import shirates.core.configuration.Filter.Companion.registeredVerbs
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 class FilterExpressionParser(
@@ -62,6 +63,11 @@ class FilterExpressionParser(
         val negationPrefixRemoved = exp.removePrefix("!")
         if (negationPrefixRemoved.startsWith("'") && negationPrefixRemoved.endsWith("'")) {
             return "literal"
+        }
+        if (isAndroid) {
+            if (negationPrefixRemoved.startsWith(".scrollable")) {
+                return "scrollable"
+            }
         }
         if (exp.contains(".png")) {
             val imageInfo = ImageInfo(negationPrefixRemoved)
@@ -244,6 +250,10 @@ class FilterExpressionParser(
     private fun getValue(valuePart: String, verb: String): String {
 
         if (isAbbreviation.not()) return valuePart
+
+        if (isAndroid && name == "scrollable") {
+            return "true"
+        }
 
         return when (verb) {
             "Contains" -> valuePart.substring(1, valuePart.length - 1)

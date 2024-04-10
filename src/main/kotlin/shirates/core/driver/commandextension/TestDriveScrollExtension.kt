@@ -477,28 +477,32 @@ private fun TestDrive.doUntilScrollStopCore(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
                     startMarginRatio = startMarginRatio,
-                    endMarginRatio = endMarginRatio
+                    endMarginRatio = endMarginRatio,
+                    repeat = repeat
                 )
             } else if (direction.isUp) {
                 scrollUp(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
                     startMarginRatio = startMarginRatio,
-                    endMarginRatio = endMarginRatio
+                    endMarginRatio = endMarginRatio,
+                    repeat = repeat
                 )
             } else if (direction.isRight) {
                 scrollRight(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
                     startMarginRatio = startMarginRatio,
-                    endMarginRatio = endMarginRatio
+                    endMarginRatio = endMarginRatio,
+                    repeat = repeat
                 )
             } else if (direction.isLeft) {
                 scrollLeft(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
                     startMarginRatio = startMarginRatio,
-                    endMarginRatio = endMarginRatio
+                    endMarginRatio = endMarginRatio,
+                    repeat = repeat
                 )
             }
         }
@@ -585,7 +589,7 @@ internal fun TestDrive.edgeElementFound(expressions: List<String>): Boolean {
 
     for (expression in expressions) {
         val e = TestDriver.select(expression = expression, throwsException = false, waitSeconds = 0.0)
-        if (e.isFound && e.bounds.isIncludedIn(e.getScrollableElement().bounds)) {
+        if (e.isFound && e.isVisibleCalculated) {
             TestLog.info("edge element found. ($expression)")
             return true
         } else {

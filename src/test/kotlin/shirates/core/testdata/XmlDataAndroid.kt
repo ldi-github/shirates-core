@@ -811,6 +811,7 @@ object XmlDataAndroid {
         <android.widget.Switch       bounds="[50,10][59,19]" resource-id="Switch1-1" text="Switch1-1" class="android.widget.Switch" displayed="true" />
         <android.widget.CheckBox     bounds="[60,10][69,19]" resource-id="CheckBox1-1" text="CheckBox1-1" class="android.widget.CheckBox" displayed="true" />
         <android.widget.LinearLayout bounds="[70,10][79,19]" resource-id="LinearLayout1-1" class="android.widget.LinearLayout" displayed="true" />
+        <androidx.recyclerview.widget.RecyclerView bounds="[80,10][89,19]" resource-id="Scrollable1-1" class="androidx.recyclerview.widget.RecyclerView" displayed="true" scrollable="true" />
     
         <android.widget.FrameLayout  bounds="[0,20][9,29]"   resource-id="FrameLayout2-1" class="android.widget.FrameLayout" displayed="true" />
         <android.widget.TextView     bounds="[10,20][19,29]" resource-id="TextView2-1" text="TextView2-1" class="android.widget.TextView" displayed="true" />
@@ -820,6 +821,7 @@ object XmlDataAndroid {
         <android.widget.Switch       bounds="[50,20][59,29]" resource-id="Switch2-1" text="Switch2-1" class="android.widget.Switch" displayed="true" />
         <android.widget.CheckBox     bounds="[60,20][69,29]" resource-id="CheckBox2-1" text="CheckBox2-1" class="android.widget.CheckBox" displayed="true" />
         <android.widget.LinearLayout bounds="[70,20][79,29]" resource-id="LinearLayout2-1" class="android.widget.LinearLayout" displayed="true" />
+        <android.support.v7.widget.RecyclerView bounds="[80,20][89,29]" resource-id="Scrollable2-1" class="android.support.v7.widget.RecyclerView" displayed="true" scrollable="true" />
     
         <android.widget.FrameLayout  bounds="[0,30][9,39]"   resource-id="FrameLayout3-1" class="android.widget.FrameLayout" displayed="true" />
         <android.widget.TextView     bounds="[10,30][19,39]" resource-id="TextView3-1" text="TextView3-1" class="android.widget.TextView" displayed="true" />
@@ -829,6 +831,7 @@ object XmlDataAndroid {
         <android.widget.Switch       bounds="[50,30][59,39]" resource-id="Switch3-1" text="Switch3-1" class="android.widget.Switch" displayed="true" />
         <android.widget.CheckBox     bounds="[60,30][69,39]" resource-id="CheckBox3-1" text="CheckBox3-1" class="android.widget.CheckBox" displayed="true" />
         <android.widget.LinearLayout bounds="[70,30][79,39]" resource-id="LinearLayout3-1" class="android.widget.LinearLayout" displayed="true" />
+        <android.widget.ScrollView   bounds="[80,30][89,39]" resource-id="Scrollable3-1" class="android.widget.ScrollView" displayed="true" scrollable="true" />
     
       </android.widget.LinearLayout>
   </android.widget.FrameLayout>
@@ -875,12 +878,12 @@ object XmlDataAndroid {
             <android.widget.LinearLayout bounds="[10,80][19,89]"   resource-id="LinearLayout1-2" class="android.widget.LinearLayout" displayed="true" />
             <android.widget.LinearLayout bounds="[20,80][29,89]"   resource-id="LinearLayout1-3" class="android.widget.LinearLayout" displayed="true" />
 
-            <androidx.recyclerview.widget.RecyclerView bounds="[0 ,90][9 ,99]"   resource-id="Scrollable1-1" class="androidx.recyclerview.widget.RecyclerView" displayed="true" />
-            <android.support.v7.widget.RecyclerView    bounds="[10,90][19,99]"   resource-id="Scrollable1-2" class="android.support.v7.widget.RecyclerView" displayed="true" />
-            <android.widget.ScrollView                 bounds="[20,90][29,99]"   resource-id="Scrollable1-3" class="android.widget.ScrollView" displayed="true" />
+            <androidx.recyclerview.widget.RecyclerView bounds="[0 ,90][9 ,99]"   resource-id="Scrollable1-1" class="androidx.recyclerview.widget.RecyclerView" displayed="true" scrollable="true" />
+            <android.support.v7.widget.RecyclerView    bounds="[10,90][19,99]"   resource-id="Scrollable1-2" class="android.support.v7.widget.RecyclerView" displayed="true" scrollable="true" />
+            <android.widget.ScrollView                 bounds="[20,90][29,99]"   resource-id="Scrollable1-3" class="android.widget.ScrollView" displayed="true" scrollable="true" />
 
-            <android.widget.HorizontalScrollView       bounds="[0, 100][9, 109]"   resource-id="Scrollable2-1" class="android.widget.HorizontalScrollView" displayed="true" />
-            <androidx.viewpager.widget.ViewPager       bounds="[10,100][19,109]"   resource-id="Scrollable2-2" class="androidx.viewpager.widget.ViewPager" displayed="true" />
+            <android.widget.HorizontalScrollView       bounds="[0, 100][9, 109]"   resource-id="Scrollable2-1" class="android.widget.HorizontalScrollView" displayed="true" scrollable="true" />
+            <androidx.viewpager.widget.ViewPager       bounds="[10,100][19,109]"   resource-id="Scrollable2-2" class="androidx.viewpager.widget.ViewPager" displayed="true" scrollable="true" />
         </android.widget.LinearLayout>
     </android.widget.FrameLayout>
 </hierarchy>

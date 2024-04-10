@@ -234,7 +234,7 @@ class Selector_AndroidTest3 : UnitTest() {
     fun relativeCommandNames() {
 
         assertThat(Selector.flowCommandBaseNames).containsExactlyInAnyOrder(
-            ":flow", ":label", ":input", ":image", ":button", ":switch",
+            ":flow", ":label", ":input", ":image", ":button", ":switch", ":scrollable",
             ":vflow"
         )
         assertThat(Selector.innerWidgetCommandBaseNames).containsExactlyInAnyOrder(

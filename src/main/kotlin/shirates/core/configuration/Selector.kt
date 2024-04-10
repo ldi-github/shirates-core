@@ -412,7 +412,7 @@ class Selector(
             }
 
         val flowCommandBaseNames = listOf(
-            ":flow", ":label", ":input", ":image", ":button", ":switch",
+            ":flow", ":label", ":input", ":image", ":button", ":switch", ":scrollable",
             ":vflow"
         )
 

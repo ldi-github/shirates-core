@@ -35,9 +35,9 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
 
         /**
          * |FrameLayout1|
-         *   |FrameLayout1-1|TextView1-1|EditText1-1|ImageView1-1|ImageButton1-1|Switch1-1|CheckBox1-1|LinearLayout1-1|
-         *   |FrameLayout2-1|TextView2-1|EditText2-1|ImageView2-1|ImageButton2-1|Switch2-1|CheckBox2-1|LinearLayout2-1|
-         *   |FrameLayout3-1|TextView3-1|EditText3-1|ImageView3-1|ImageButton3-1|Switch3-1|CheckBox3-1|LinearLayout3-1|
+         *   |FrameLayout1-1|TextView1-1|EditText1-1|ImageView1-1|ImageButton1-1|Switch1-1|CheckBox1-1|LinearLayout1-1|Scrollable1-1|
+         *   |FrameLayout2-1|TextView2-1|EditText2-1|ImageView2-1|ImageButton2-1|Switch2-1|CheckBox2-1|LinearLayout2-1|Scrollable2-1|
+         *   |FrameLayout3-1|TextView3-1|EditText3-1|ImageView3-1|ImageButton3-1|Switch3-1|CheckBox3-1|LinearLayout3-1|Scrollable3-1|
          */
 
         run {
@@ -72,6 +72,18 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
             assertThat(e2.selector.toString()).isEqualTo("<#TextView1-1>:right:below:left:above")
             assertThat(e2).isEqualTo(e)
         }
+        run {
+            // Arrange
+            val e = TestElementCache.select("#TextView1-1")
+            // Act, Assert
+            val e2 = e.select(":scrollable")
+                .select(":belowScrollable")
+                .select(":aboveScrollable")
+                .select(":flowScrollable")
+            assertThat(e2.selector.toString()).isEqualTo("<#TextView1-1>:scrollable:belowScrollable:aboveScrollable:flowScrollable")
+            val e3 = e.select(":scrollable(2)")
+            assertThat(e2).isEqualTo(e3)
+        }
 
     }
 
@@ -84,9 +96,9 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
 
         /**
          * |FrameLayout1|
-         *   |FrameLayout1-1|TextView1-1|EditText1-1|ImageView1-1|ImageButton1-1|Switch1-1|CheckBox1-1|LinearLayout1-1|
-         *   |FrameLayout2-1|TextView2-1|EditText2-1|ImageView2-1|ImageButton2-1|Switch2-1|CheckBox2-1|LinearLayout2-1|
-         *   |FrameLayout3-1|TextView3-1|EditText3-1|ImageView3-1|ImageButton3-1|Switch3-1|CheckBox3-1|LinearLayout3-1|
+         *   |FrameLayout1-1|TextView1-1|EditText1-1|ImageView1-1|ImageButton1-1|Switch1-1|CheckBox1-1|LinearLayout1-1|Scrollable1-1|
+         *   |FrameLayout2-1|TextView2-1|EditText2-1|ImageView2-1|ImageButton2-1|Switch2-1|CheckBox2-1|LinearLayout2-1|Scrollable2-1|
+         *   |FrameLayout3-1|TextView3-1|EditText3-1|ImageView3-1|ImageButton3-1|Switch3-1|CheckBox3-1|LinearLayout3-1|Scrollable3-1|
          */
 
         // right()
@@ -468,9 +480,9 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
 
         /**
          * |FrameLayout1|
-         *   |FrameLayout1-1|TextView1-1|EditText1-1|ImageView1-1|ImageButton1-1|Switch1-1|CheckBox1-1|LinearLayout1-1|
-         *   |FrameLayout2-1|TextView2-1|EditText2-1|ImageView2-1|ImageButton2-1|Switch2-1|CheckBox2-1|LinearLayout2-1|
-         *   |FrameLayout3-1|TextView3-1|EditText3-1|ImageView3-1|ImageButton3-1|Switch3-1|CheckBox3-1|LinearLayout3-1|
+         *   |FrameLayout1-1|TextView1-1|EditText1-1|ImageView1-1|ImageButton1-1|Switch1-1|CheckBox1-1|LinearLayout1-1|Scrollable1-1|
+         *   |FrameLayout2-1|TextView2-1|EditText2-1|ImageView2-1|ImageButton2-1|Switch2-1|CheckBox2-1|LinearLayout2-1|Scrollable2-1|
+         *   |FrameLayout3-1|TextView3-1|EditText3-1|ImageView3-1|ImageButton3-1|Switch3-1|CheckBox3-1|LinearLayout3-1|Scrollable3-1|
          */
 
         // right2()
@@ -1639,6 +1651,8 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
          *   |Switch1-1      |Switch1-2      |Switch1-3      |
          *   |CheckBox1-1    |CheckBox1-2    |CheckBox1-3    |
          *   |LinearLayout1-1|LinearLayout1-2|LinearLayout1-3|
+         *   |Scrollable1-1  |Scrollable1-2  |Scrollable1-3  |
+         *   |Scrollable2-1  |Scrollable2-2  |               |
          */
 
         testDrive.enableCache()
@@ -1732,19 +1746,19 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
                 assertThat(r1).isEqualTo(e.aboveSwitch("[1]"))
             }
             run {
-                val e = TestElementCache.select("#Scrollable2-2")
+                val s = TestElementCache.select("#Scrollable2-2")
                 // Act, Assert
-                val r1 = e.aboveScrollable()
+                val r1 = s.aboveScrollable()
                 assertThat(r1.selector.toString()).isEqualTo("<#Scrollable2-2>:aboveScrollable")
-                val r2 = e.select(":aboveScrollable")
+                val r2 = s.select(":aboveScrollable")
                 assertThat(r2.selector.toString()).isEqualTo("<#Scrollable2-2>:aboveScrollable")
-                val r3 = e.select("[:Above scrollable]", throwsException = false)
+                val r3 = s.select("[:Above scrollable]", throwsException = false)
                 assertThat(r3.selector.toString()).isEqualTo("<#Scrollable2-2>[:Above scrollable]")
                 // Assert
                 assertThat(r1.id).isEqualTo("Scrollable1-2")
                 assertThat(r1).isEqualTo(r2)
                 assertThat(r1).isEqualTo(r3)
-                assertThat(r1).isEqualTo(e.aboveScrollable("[1]"))
+                assertThat(r1).isEqualTo(s.aboveScrollable("[1]"))
             }
         }
 

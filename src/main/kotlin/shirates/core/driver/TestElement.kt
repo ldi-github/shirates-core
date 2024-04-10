@@ -1121,11 +1121,10 @@ class TestElement(
                 return false
             }
             if (isAndroid) {
-                if (scrollable == "true") {
-                    return true
-                }
+                return scrollable == "true"
+            } else {
+                return ElementCategoryExpressionUtility.scrollableTypesExpression.contains(classOrType)
             }
-            return ElementCategoryExpressionUtility.scrollableTypesExpression.contains(classOrType)
         }
 
     /**
