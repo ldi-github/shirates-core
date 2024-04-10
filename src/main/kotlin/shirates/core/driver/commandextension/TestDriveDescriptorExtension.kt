@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -323,8 +324,14 @@ fun TestElement.getCell(): TestElement {
             } else {
                 ancestorsAndSelf[cellIndex]
             }
-        } else
-            return TestElement.emptyElement
+        } else {
+            if (isAndroid) {
+                ancestors.lastOrNull { it.className == "androidx.cardview.widget.CardView" }
+                    ?: return TestElement.emptyElement
+            } else {
+                return TestElement.emptyElement
+            }
+        }
     if (this.selector != null) {
         cell.selector = this.selector!!.getChainedSelector(":cellOf(${this.selector})")
     }
