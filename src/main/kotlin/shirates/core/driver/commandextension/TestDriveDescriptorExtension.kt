@@ -6,6 +6,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 /**
  * output
@@ -326,8 +327,11 @@ fun TestElement.getCell(): TestElement {
             }
         } else {
             if (isAndroid) {
-                ancestors.lastOrNull { it.className == "androidx.cardview.widget.CardView" }
-                    ?: return TestElement.emptyElement
+                val cellHost = getCellHost()
+                fun getCellCore(): TestElement {
+                    return ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+                }
+                getCellCore()
             } else {
                 return TestElement.emptyElement
             }
@@ -336,4 +340,14 @@ fun TestElement.getCell(): TestElement {
         cell.selector = this.selector!!.getChainedSelector(":cellOf(${this.selector})")
     }
     return cell
+}
+
+/**
+ * getCellHost
+ */
+fun TestElement.getCellHost(): TestElement {
+
+    val ancestors = this.ancestors
+    val cellHost = ancestors.lastOrNull() { ElementCategoryExpressionUtility.isCellHost(it.className) }
+    return cellHost ?: TestElement.emptyElement
 }

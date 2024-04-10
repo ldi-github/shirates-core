@@ -116,6 +116,21 @@ object ElementCategoryExpressionUtility {
         }
 
     /**
+     * cellHostTypes
+     */
+    var cellHostTypes: String = ""
+        set(value) {
+            field = value
+        }
+        get() {
+            if (field.isBlank()) {
+                field =
+                    if (isAndroid) getTypesExpression("android.cellHostTypes") else ""
+            }
+            return field
+        }
+
+    /**
      * extraWidgetTypesExpression
      */
     var extraWidgetTypesExpression: String = ""
@@ -241,6 +256,13 @@ object ElementCategoryExpressionUtility {
     fun isWidgetClassAlias(aliasName: String): Boolean {
 
         return widgetClassAlias.contains(aliasName)
+    }
+
+    /**
+     * isCellHost
+     */
+    fun isCellHost(typeName: String): Boolean {
+        return cellHostTypes.contains(typeName)
     }
 
     /**
