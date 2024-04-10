@@ -24,7 +24,7 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
             val p = util.elementCategoryExpressionProperties
             p["android.extraWidgetTypes"] = "android.view.View"
             // Assert
-            assertThat(p.count()).isEqualTo(14)
+            assertThat(p.count()).isEqualTo(15)
             assertThat(p["android.labelTypes"]).isEqualTo("android.widget.TextView")
             assertThat(p["android.inputTypes"]).isEqualTo("android.widget.EditText")
             assertThat(p["android.imageTypes"]).isEqualTo("android.widget.ImageView")
