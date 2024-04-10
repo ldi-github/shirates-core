@@ -385,7 +385,7 @@ object TestDriver {
         try {
             mAppiumDriver?.quit()
         } catch (t: Throwable) {
-            if (t.message!!.contains("Connection refused").not()) {
+            if ((t.message ?: "").contains("Connection refused").not()) {
                 throw t
             }
         } finally {
@@ -1151,7 +1151,7 @@ object TestDriver {
             return try {
                 executeSelect()
             } catch (t: Throwable) {
-                TestLog.info(t.message!!)
+                TestLog.info(t.message ?: t.stackTraceToString())
                 testDrive.suppressHandler {
                     testContext.onSelectErrorHandler!!.invoke()
                 }

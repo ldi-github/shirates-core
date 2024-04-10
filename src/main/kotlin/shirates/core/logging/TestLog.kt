@@ -942,7 +942,7 @@ object TestLog {
         result(LogType.NG, exception)
         val line = getCommandContextLogLine()
         return write(
-            message = exception.message!!,
+            message = exception.message ?: exception.stackTraceToString(),
             logType = LogType.NG,
             result = LogType.NG,
             scriptCommand = scriptCommand ?: line?.scriptCommand ?: "",
@@ -1089,7 +1089,7 @@ object TestLog {
 
         result(LogType.NOTIMPL, exception)
         return write(
-            message = exception.message!!,
+            message = exception.message ?: exception.stackTraceToString(),
             logType = LogType.NOTIMPL,
             result = LogType.NOTIMPL,
             scriptCommand = "notImpl",

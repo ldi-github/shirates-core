@@ -69,7 +69,7 @@ fun TestElement.refreshThisElement(): TestElement {
     val e = try {
         TestDriver.select(selector = sel, waitSeconds = 0.0, throwsException = false)
     } catch (t: Throwable) {
-        TestLog.warn(t.message!!)
+        TestLog.warn(t.message ?: t.stackTraceToString())
         return TestElement.emptyElement
     }
 

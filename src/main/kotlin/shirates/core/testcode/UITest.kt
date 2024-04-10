@@ -694,11 +694,11 @@ abstract class UITest : TestDrive {
             scenarioLog.resultMessage = t.message
             throw t
         } catch (t: TestAbortedException) {
-            TestLog.warn(t.message!!)
+            TestLog.warn(t.message ?: t.stackTraceToString())
             throw t
         } catch (t: NotImplementedError) {
             TestLog.notImpl(t)
-            throw TestAbortedException(t.message!!, t)
+            throw TestAbortedException(t.message ?: t.stackTraceToString(), t)
         } catch (t: UnsatisfiedLinkError) {
             TestLog.error(t)
             driver.screenshotCore()

@@ -153,7 +153,7 @@ internal fun TestDrive.swipePointToPointCore(
         try {
             driver.appiumDriver.perform(mutableListOf(sequence))
         } catch (t: InvalidElementStateException) {
-            TestLog.trace(t.message!!)
+            TestLog.trace(t.message ?: t.stackTraceToString())
             //  https://github.com/appium/java-client/issues/2045
         }
 

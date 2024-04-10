@@ -56,7 +56,7 @@ object BoofCVUtility {
                 templateImage = templateImage.toGrayF32()!!
             ).firstOrNull()
         } catch (t: Throwable) {
-            TestLog.trace(t.message!!)
+            TestLog.trace("${t.message} ${t.stackTraceToString()}")
             null
         }
 
