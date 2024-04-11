@@ -420,7 +420,8 @@ abstract class UITest : TestDrive {
             describe(message = message)
             return
         }
-        TestLog.ok(message = message, scriptCommand = scriptCommand, log = true)
+        val log = CodeExecutionContext.isInOperationCommand.not()
+        TestLog.ok(message = message, scriptCommand = scriptCommand, log = log)
     }
 
     /**

@@ -89,6 +89,11 @@ object TestLog {
     val lines = mutableListOf<LogLine>()
 
     /**
+     * allLines
+     */
+    val allLines = mutableListOf<LogLine>()
+
+    /**
      * histories
      */
     val histories = mutableListOf<LogLine>()
@@ -417,6 +422,8 @@ object TestLog {
             result = result
         )
         logLineCallback?.invoke(logLine)
+
+        allLines.add(logLine)
 
         if (log.not()) return logLine
 

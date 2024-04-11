@@ -496,6 +496,47 @@ fun TestDrive.exist(
 }
 
 /**
+ * verify
+ */
+fun TestDrive.verify(
+    message: String,
+    func: (() -> Unit)
+): TestElement {
+    val testElement = TestDriver.it
+
+    val command = "verify"
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = message) {
+
+        val startCount = TestLog.allLines.count()
+        val original = CodeExecutionContext.isInOperationCommand
+        try {
+            CodeExecutionContext.isInOperationCommand = true
+            func()
+            CodeExecutionContext.isInOperationCommand = original
+
+            val endCount = TestLog.allLines.count()
+            val takeCount = endCount - startCount
+            val lines = TestLog.allLines.takeLast(takeCount)
+            if (lines.any() { it.logType == LogType.CHECK || it.logType.isOKType }.not()) {
+                throw NotImplementedError("verify block must include one or mode assertion.")
+            }
+            TestLog.ok(message = message)
+        } catch (t: NotImplementedError) {
+            throw t
+        } catch (t: Throwable) {
+            val ex = TestNGException(message = message, cause = t)
+            TestLog.ng(exception = ex)
+        } finally {
+            CodeExecutionContext.isInOperationCommand = original
+        }
+    }
+
+    return lastElement
+}
+
+/**
  * existImage
  */
 fun TestDrive.existImage(
