@@ -60,7 +60,7 @@ class AssertingAnything1 : UITest() {
 
     @Test
     @Order(10)
-    fun ok1() {
+    fun ok() {
 
         scenario {
             case(1) {
