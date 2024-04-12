@@ -3,7 +3,6 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
 import shirates.core.driver.TestElement
-import shirates.core.driver.getSelector
 
 internal val TestElement.innerElements: List<TestElement>
     get() {

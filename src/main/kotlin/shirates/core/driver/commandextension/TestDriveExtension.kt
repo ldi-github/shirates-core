@@ -1,6 +1,8 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.NicknameUtility
+import shirates.core.configuration.Selector
+import shirates.core.configuration.isRelativeNickname
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
@@ -58,17 +60,39 @@ fun TestDrive.sendKeys(
 }
 
 /**
+ * getSelector
+ */
+fun TestDrive.getSelector(expression: String): Selector {
+
+    val sel = TestDriver.screenInfo.expandExpression(expression = expression)
+    val newSel = sel.copy()
+    if (newSel.isRelative.not()) {
+        return newSel
+    }
+
+    if (this is TestElement) {
+        if (TestMode.isNoLoadRun && expression.isRelativeNickname()) {
+            return Selector("${this.selector}$expression")
+        }
+        return this.getChainedSelector(newSel)
+    }
+
+    return newSel
+}
+
+/**
  * putSelector
  */
-fun TestDrive.putSelector(nickname: String, expression: String? = null): TestElement {
+fun TestDrive.putSelector(nickname: String, expression: String): TestElement {
 
     val screenInfo = TestDriver.screenInfo
-    if (expression == null) {
-        val selector = screenInfo.getSelector(nickname)
-        screenInfo.putSelector(selector)
+    if (screenInfo.selectors.containsKey(nickname)) {
+        TestLog.info(message(id = "nicknameOverridden", key = nickname, value = expression))
     } else {
-        screenInfo.putSelector(nickname = nickname, expression = expression)
+        TestLog.info(message(id = "nicknameRegistered", key = nickname, value = expression))
     }
+    screenInfo.putSelector(nickname = nickname, expression = expression)
+
     return lastElement
 }
 
