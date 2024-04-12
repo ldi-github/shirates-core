@@ -74,7 +74,7 @@ class AssertingAnything1 : UITest() {
                             NG()
                         }
                     }
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
+                    it.verify("The app is 'Settings' and the screen is [Android Settings Top Screen]") {
                         it.appIs("Settings")
                         it.screenIs("[Android Settings Top Screen]")
                     }
@@ -92,8 +92,9 @@ class AssertingAnything1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
+                    it.verify("The app is 'Settings2' and the screen is [Android Settings Top Screen]") {
                         it.appIs("Settings2")
+                        it.screenIs("[Android Settings Top Screen]")
                     }
                 }
             }
@@ -109,7 +110,7 @@ class AssertingAnything1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
+                    it.verify("The app is 'Settings' and the screen is [Android Settings Top Screen]") {
                     }
                 }
             }
