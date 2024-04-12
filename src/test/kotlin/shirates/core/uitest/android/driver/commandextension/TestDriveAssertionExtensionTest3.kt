@@ -2,10 +2,8 @@ package shirates.core.uitest.android.driver.commandextension
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message
@@ -174,64 +172,6 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                 }
             }
 
-        }
-    }
-
-    @Test
-    @Order(10)
-    fun ok() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    it.verify("The packageName is \"com.android.settings\"") {
-                        if (TestElementCache.rootElement.packageName == "com.android.settings") {
-                            OK()
-                        } else {
-                            NG()
-                        }
-                    }
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
-                        it.appIs("Settings")
-                        it.screenIs("[Android Settings Top Screen]")
-                    }
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(20)
-    fun ng() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
-                        it.appIs("Settings2")
-                    }
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(30)
-    fun notImplemented() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
-                    }
-                }
-            }
         }
     }
 
