@@ -61,7 +61,9 @@ fun TestElement.refreshThisElement(): TestElement {
 
     val originalSelector = this.selector
 
-    val sel = getUniqueSelector()
+    val sel =
+        if (originalSelector?.nickname?.isNotBlank() == true) originalSelector
+        else getUniqueSelector()
     if (sel.isEmpty) {
         return TestElement.emptyElement
     }
