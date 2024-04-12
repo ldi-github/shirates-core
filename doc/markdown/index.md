@@ -139,8 +139,8 @@
     - [knownIssue](basic/function_property/descriptor/known_issue.md)
 - Test flow control
     - [SKIP/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl.md)
-- Putting selector on demand
-    - [putSelector](basic/function_property/selector/put_selector.md)
+- Registering selector on demand
+    - [tempSelector](basic/function_property/selector/temp_selector.md)
 - Logging
     - [info, warn](basic/function_property/logging/info_warn.md)
     - [silent, procedure](basic/function_property/logging/silent_and_procedure_function.md)

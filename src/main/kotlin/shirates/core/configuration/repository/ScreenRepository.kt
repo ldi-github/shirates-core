@@ -27,6 +27,15 @@ object ScreenRepository {
             return screenInfoMap.values.sortedByDescending { it.searchWeight }
         }
 
+    var temporaryScreenInfo = ScreenInfo()
+        get() {
+            if (screenInfoMap.containsKey("temporary").not()) {
+                field = ScreenInfo()
+                set(repositoryKey = "temporary", field)
+            }
+            return field
+        }
+
     /**
      * clear
      */

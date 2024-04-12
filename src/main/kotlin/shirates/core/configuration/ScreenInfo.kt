@@ -1,6 +1,7 @@
 package shirates.core.configuration
 
 import org.json.JSONObject
+import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
@@ -439,6 +440,11 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
     }
 
     internal fun expandExpression(expression: String): Selector {
+
+        val temporaryScreenInfo = ScreenRepository.temporaryScreenInfo
+        if (temporaryScreenInfo.selectors.containsKey(key = expression)) {
+            return temporaryScreenInfo.selectors[expression]!!
+        }
 
         if (selectors.containsKey(key = expression)) {
             return selectors[expression]!!

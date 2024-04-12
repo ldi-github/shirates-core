@@ -42,3 +42,14 @@ val ScrollDirection.isHorizontal: Boolean
     get() {
         return isLeft || isRight
     }
+
+fun ScrollDirection.toAxis(): Axis {
+
+    if (isVertical) {
+        return Axis.Vertical
+    } else if (isHorizontal) {
+        return Axis.Horizontal
+    } else {
+        return Axis.None
+    }
+}

@@ -137,8 +137,8 @@
     - [describe, procedure, caption, comment, manual, knownIssue, target, output](basic/function_property/descriptor/descriptors_ja.md)
     - [manual](basic/function_property/descriptor/manual_ja.md)
     - [knownIssue](basic/function_property/descriptor/known_issue_ja.md)
-- セレクターを必要時に登録する
-    - [putSelector](basic/function_property/selector/put_selector_ja.md)
+- セレクターをオンデマンドで登録する
+    - [tempSelector](basic/function_property/selector/temp_selector_ja.md)
 - テストフロー制御
     - [SKIP/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl_ja.md)
 - ロギング

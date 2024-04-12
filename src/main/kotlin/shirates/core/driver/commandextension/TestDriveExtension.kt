@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.NicknameUtility
 import shirates.core.configuration.Selector
 import shirates.core.configuration.isRelativeNickname
+import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
@@ -81,17 +82,15 @@ fun TestDrive.getSelector(expression: String): Selector {
 }
 
 /**
- * putSelector
+ * tempSelector
  */
-fun TestDrive.putSelector(nickname: String, expression: String): TestElement {
+fun TestDrive.tempSelector(nickname: String, expression: String): TestElement {
 
-    val screenInfo = TestDriver.screenInfo
-    if (screenInfo.selectors.containsKey(nickname)) {
-        TestLog.info(message(id = "nicknameOverridden", key = nickname, value = expression))
-    } else {
+    val tempScreenInfo = ScreenRepository.temporaryScreenInfo
+    if (tempScreenInfo.selectors.containsKey(nickname).not()) {
         TestLog.info(message(id = "nicknameRegistered", key = nickname, value = expression))
     }
-    screenInfo.putSelector(nickname = nickname, expression = expression)
+    tempScreenInfo.putSelector(nickname = nickname, expression = expression)
 
     return lastElement
 }

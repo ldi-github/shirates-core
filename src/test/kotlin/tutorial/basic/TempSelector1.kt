@@ -1,37 +1,27 @@
-# putSelector
-
-`putSelector`関数を使用してセレクターを動的に登録することができます。
-
-## Example 1
-
-### PutSelector1.kt
-
-(`kotlin/tutorial/basic/PutSelector1.kt`)
-
-```kotlin
 package tutorial.basic
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.putSelector
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.tap
+import shirates.core.driver.commandextension.tempSelector
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class PutSelector1 : UITest() {
+class TempSelector1 : UITest() {
 
     @Test
     @Order(10)
-    fun putSelector() {
+    fun tempSelector() {
+
+        tempSelector("[First Item]", "Network & internet")
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                    putSelector("[First Item]", "Network & internet")
                 }.action {
                     it.tap("[First Item]")
                 }.expectation {
@@ -42,9 +32,3 @@ class PutSelector1 : UITest() {
     }
 
 }
-```
-
-### Link
-
-- [index](../../../index_ja.md)
-

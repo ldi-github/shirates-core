@@ -933,7 +933,11 @@ fun TestDrive.swipeElementToElement(
             safeMode = safeMode
         )
 
-        val m = TestDriver.select(selector = startElement.selector!!, throwsException = false)
+        val m = TestDriver.select(
+            selector = startElement.selector!!,
+            swipeToCenter = false,
+            throwsException = false
+        )
         if (adjust) {
             TestDriver.syncCache(force = true)
             if (m.isEmpty.not()) {
@@ -951,7 +955,7 @@ fun TestDrive.swipeElementToElement(
         }
 
         TestDriver.syncCache(force = true)
-        TestDriver.select(selector = startElement.selector!!)
+        TestDriver.select(selector = startElement.selector!!, swipeToCenter = false)
     }
 
     if (TestDriver.skip)

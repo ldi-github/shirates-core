@@ -1,6 +1,5 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestElementCache.viewElement
 import shirates.core.logging.Message.message
@@ -23,7 +22,11 @@ fun TestElement.swipeTo(
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject, arg1 = expression) {
-        val e = TestDriver.select(selector = sel, useCache = useCache)
+        val e = TestDriver.select(
+            swipeToCenter = false,
+            selector = sel,
+            useCache = useCache
+        )
 
         swipeElementToElement(
             startElement = this,
@@ -331,14 +334,15 @@ fun TestElement.flickToBottom(
 fun TestElement.swipeToCenter(
     ofScreen: Boolean = false,
     scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
+    axis: Axis = Axis.Vertical,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
-    statBarHeight: Int = PropertiesManager.statBarHeight
 ): TestElement {
 
     val scrollFrame =
         if (ofScreen) viewElement
         else getScrollableElement(scrollable)
+    val endX = scrollFrame.bounds.centerX
     val endY =
         if (ofScreen) viewBounds.height / 2
         else scrollFrame.bounds.centerY
@@ -349,33 +353,78 @@ fun TestElement.swipeToCenter(
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject) {
         val b = bounds
-        swipePointToPoint(
-            startX = b.centerX,
-            startY = b.centerY,
-            endX = scrollFrame.bounds.centerX,
-            endY = endY,
-            durationSeconds = durationSeconds,
-            repeat = repeat
-        )
+        val startX = b.centerX
+        val startY = b.centerY
+        val skip = (axis == Axis.Vertical && startY == endY) || (axis == Axis.Horizontal && startX == endX)
+
+        if (skip.not()) {
+            swipePointToPoint(
+                startX = startX,
+                startY = startY,
+                endX = endX,
+                endY = endY,
+                durationSeconds = durationSeconds,
+                repeat = repeat
+            )
+        }
     }
 
     return this.refreshThisElement()
 }
 
 /**
+ * swipeToCenterVertical
+ */
+fun TestElement.swipeToCenterVertical(
+    ofScreen: Boolean = false,
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
+    durationSeconds: Double = testContext.swipeDurationSeconds,
+    repeat: Int = 1,
+): TestElement {
+
+    return swipeToCenter(
+        ofScreen = ofScreen,
+        scrollable = scrollable,
+        axis = Axis.Vertical,
+        durationSeconds = durationSeconds,
+        repeat = repeat
+    )
+}
+
+/**
+ * swipeToCenterHorizontal
+ */
+fun TestElement.swipeToCenterHorizontal(
+    ofScreen: Boolean = false,
+    scrollable: String = TestDriver.screenInfo.scrollInfo.scrollable,
+    durationSeconds: Double = testContext.swipeDurationSeconds,
+    repeat: Int = 1,
+): TestElement {
+
+    return swipeToCenter(
+        ofScreen = ofScreen,
+        scrollable = scrollable,
+        axis = Axis.Horizontal,
+        durationSeconds = durationSeconds,
+        repeat = repeat
+    )
+}
+
+
+/**
  * swipeToCenterOfScreen
  */
 fun TestElement.swipeToCenterOfScreen(
     durationSeconds: Double = testContext.swipeDurationSeconds,
+    axis: Axis = Axis.Vertical,
     repeat: Int = 1,
-    statBarHeight: Int = PropertiesManager.statBarHeight
 ): TestElement {
 
     return swipeToCenter(
         ofScreen = true,
+        axis = axis,
         durationSeconds = durationSeconds,
         repeat = repeat,
-        statBarHeight = statBarHeight
     )
 }
 
