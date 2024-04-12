@@ -11,7 +11,7 @@ interface IFlowContainer {
     /**
      * addAll
      */
-    fun addAll(elements: List<TestElement>)
+    fun addAll(elements: List<TestElement>, force: Boolean = false)
 
     /**
      * getElements

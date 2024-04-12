@@ -89,6 +89,11 @@ object TestLog {
     val lines = mutableListOf<LogLine>()
 
     /**
+     * allLines
+     */
+    val allLines = mutableListOf<LogLine>()
+
+    /**
      * histories
      */
     val histories = mutableListOf<LogLine>()
@@ -417,6 +422,8 @@ object TestLog {
             result = result
         )
         logLineCallback?.invoke(logLine)
+
+        allLines.add(logLine)
 
         if (log.not()) return logLine
 
@@ -942,7 +949,7 @@ object TestLog {
         result(LogType.NG, exception)
         val line = getCommandContextLogLine()
         return write(
-            message = exception.message!!,
+            message = exception.message ?: exception.stackTraceToString(),
             logType = LogType.NG,
             result = LogType.NG,
             scriptCommand = scriptCommand ?: line?.scriptCommand ?: "",
@@ -1089,7 +1096,7 @@ object TestLog {
 
         result(LogType.NOTIMPL, exception)
         return write(
-            message = exception.message!!,
+            message = exception.message ?: exception.stackTraceToString(),
             logType = LogType.NOTIMPL,
             result = LogType.NOTIMPL,
             scriptCommand = "notImpl",

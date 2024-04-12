@@ -234,7 +234,7 @@ class Selector_AndroidTest3 : UnitTest() {
     fun relativeCommandNames() {
 
         assertThat(Selector.flowCommandBaseNames).containsExactlyInAnyOrder(
-            ":flow", ":label", ":input", ":image", ":button", ":switch",
+            ":flow", ":label", ":input", ":image", ":button", ":switch", ":scrollable",
             ":vflow"
         )
         assertThat(Selector.innerWidgetCommandBaseNames).containsExactlyInAnyOrder(
@@ -262,7 +262,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(Selector.relativeCommandBaseNames).containsExactlyInAnyOrderElementsOf(list)
         }
         assertThat(Selector.relativeCommandSubjectNames).containsExactlyInAnyOrder(
-            "label", "image", "button", "switch", "input", "widget"
+            "label", "image", "button", "switch", "input", "widget", "scrollable"
         )
     }
 
@@ -270,7 +270,7 @@ class Selector_AndroidTest3 : UnitTest() {
     fun posMergeEnabledBaseNames() {
 
         assertThat(Selector.posMergeEnabledBaseNames).containsExactlyInAnyOrder(
-            ":flow", ":label", ":input", ":image", ":button", ":switch",
+            ":flow", ":label", ":input", ":image", ":button", ":switch", ":scrollable",
             ":vflow",
             ":ancestor", ":next", ":pre", ":previous",
             ":right", ":below", ":left", ":above"

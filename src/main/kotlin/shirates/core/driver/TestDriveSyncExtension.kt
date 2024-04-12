@@ -2,6 +2,7 @@ package shirates.core.driver
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.commandextension.canSelect
+import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.getThisOrIt
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message

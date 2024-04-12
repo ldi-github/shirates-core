@@ -50,13 +50,6 @@ class TestElementRelativeFlowExtension_AndroidTest : UnitTest() {
             assertThat(flow.id).isEqualTo("EditText2-1")
             assertThat(flow.selector.toString()).isEqualTo("<#TextView2-1>:flow")
         }
-        run {
-            // Arrange
-            val targetElements = rootElement.descendants.filter { it.id.contains("3-1") }
-            // Act, Assert
-            assertThat(e.flow(Selector("[1]"), TestElementCache.allElements, frame = null).id).isEqualTo("EditText2-1")
-            assertThat(e.flow(Selector("[1]"), targetElements, frame = null).id).isEqualTo("TextView3-1")
-        }
 
         // flow(pos)
         for (i in 1..10) {
@@ -464,6 +457,71 @@ class TestElementRelativeFlowExtension_AndroidTest : UnitTest() {
             val flowSwitch = e.flowSwitch(3)
             assertThat(flowSwitch.isEmpty).isEqualTo(true)
             assertThat(flowSwitch.selector.toString()).isEqualTo("<#TextView2-1>:flowSwitch(3)")
+        }
+    }
+
+    @Test
+    fun flowScrollable() {
+        /**
+         * |FrameLayout1|
+         *   |FrameLayout1-1 |FrameLayout1-2 |FrameLayout1-3 |
+         *   |TextView1-1    |TextView1-2    |TextView1-3    |
+         *   |EditText1-1    |EditText1-2    |EditText1-3    |
+         *   |ImageView1-1   |ImageView1-2   |ImageView1-3   |
+         *   |ImageButton1-1 |ImageButton1-2 |ImageButton1-3 |
+         *   |Switch1-1      |Switch1-2      |Switch1-3      |
+         *   |CheckBox1-1    |CheckBox1-2    |CheckBox1-3    |
+         *   |LinearLayout1-1|LinearLayout1-2|LinearLayout1-3|
+         *   |Scrollable1-1  |Scrollable1-2  |Scrollable1-3  |
+         *   |Scrollable2-1  |Scrollable2-2  |               |
+         */
+
+        // Arrange
+        TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest2)
+        TestElementCache.synced = true
+        val e = TestElementCache.select("#TextView1-2")
+
+        run {
+            // Act, Assert
+            val flowScrollable = e.flowScrollable()
+            assertThat(flowScrollable.id).isEqualTo("Scrollable1-1")
+            assertThat(flowScrollable.selector.toString()).isEqualTo("<#TextView1-2>:flowScrollable")
+        }
+        run {
+            // Act, Assert
+            val flowScrollable = e.flowScrollable("[1]")
+            assertThat(flowScrollable.id).isEqualTo("Scrollable1-1")
+            assertThat(flowScrollable.selector.toString()).isEqualTo("<#TextView1-2>:flowScrollable")
+        }
+        run {
+            // Act, Assert
+            val flowScrollable = e.flowScrollable(1)
+            assertThat(flowScrollable.id).isEqualTo("Scrollable1-1")
+            assertThat(flowScrollable.selector.toString()).isEqualTo("<#TextView1-2>:flowScrollable")
+        }
+        run {
+            // Act, Assert
+            val flowScrollable = e.flowScrollable(2)
+            assertThat(flowScrollable.id).isEqualTo("Scrollable1-2")
+            assertThat(flowScrollable.selector.toString()).isEqualTo("<#TextView1-2>:flowScrollable(2)")
+        }
+        run {
+            // Act, Assert
+            val flowScrollable = e.flowScrollable(3)
+            assertThat(flowScrollable.id).isEqualTo("Scrollable1-3")
+            assertThat(flowScrollable.selector.toString()).isEqualTo("<#TextView1-2>:flowScrollable(3)")
+        }
+        run {
+            // Act, Assert
+            val flowScrollable = e.flowScrollable(4)
+            assertThat(flowScrollable.id).isEqualTo("Scrollable2-1")
+            assertThat(flowScrollable.selector.toString()).isEqualTo("<#TextView1-2>:flowScrollable(4)")
+        }
+        run {
+            // Act, Assert
+            val flowScrollable = e.flowScrollable(99)
+            assertThat(flowScrollable.isEmpty).isEqualTo(true)
+            assertThat(flowScrollable.selector.toString()).isEqualTo("<#TextView1-2>:flowScrollable(99)")
         }
     }
 }

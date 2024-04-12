@@ -102,6 +102,8 @@
     - [App assertion](basic/function_property/asserting_others/app_assertion.md)
     - [Keyboard assertion](basic/function_property/asserting_others/keyboard_assertion.md)
     - [Package assertion](basic/function_property/asserting_others/package_assertion.md)
+- Asserting anyting
+    - [Anyting assertion (verify)](basic/function_property/asserting_anything/anything_assertion.md)
 - Branch
     - [Branch function (ifTrue, ifFalse)](basic/function_property/branch/if_true_if_false.md)
     - [Branch function (ifScreenIs, ifScreenIsNot)](basic/function_property/branch/ifscreenis.md)
@@ -137,6 +139,8 @@
     - [knownIssue](basic/function_property/descriptor/known_issue.md)
 - Test flow control
     - [SKIP/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl.md)
+- Registering selector on demand
+    - [tempSelector](basic/function_property/selector/temp_selector.md)
 - Logging
     - [info, warn](basic/function_property/logging/info_warn.md)
     - [silent, procedure](basic/function_property/logging/silent_and_procedure_function.md)

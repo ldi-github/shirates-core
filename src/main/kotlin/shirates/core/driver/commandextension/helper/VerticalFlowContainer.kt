@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension.helper
 
 import shirates.core.driver.TestElement
+import shirates.core.driver.commandextension.removeIncludingElements
 import shirates.core.logging.Message.message
 
 class VerticalFlowContainer : IFlowContainer {
@@ -123,10 +124,11 @@ class VerticalFlowContainer : IFlowContainer {
     /**
      * addAll
      */
-    override fun addAll(elements: List<TestElement>) {
+    override fun addAll(elements: List<TestElement>, force: Boolean) {
 
-        for (e in elements) {
-            addElementToColumn(e)
+        val elms = elements.removeIncludingElements()
+        for (e in elms) {
+            addElementToColumn(element = e, force = force)
         }
     }
 

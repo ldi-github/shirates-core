@@ -371,27 +371,27 @@ class TestElement(
         }
 
     /**
-     * ancestorScrollable
+     * scrollHost
      */
-    val ancestorScrollable: TestElement
+    val scrollHost: TestElement
         get() {
-            val ms = Measure("ancestorScrollable")
+            val ms = Measure("scrollHost")
             try {
-                return ancestorUnderScrollable.parentElement
+                return cellUnderScrollHost.parentElement
             } finally {
                 ms.end()
             }
         }
 
     /**
-     * ancestorUnderScrollable
+     * cellUnderScrollHost
      */
-    val ancestorUnderScrollable: TestElement
+    val cellUnderScrollHost: TestElement
         get() {
             if (this.isScrollable) {
                 return emptyElement
             }
-            val ms = Measure("ancestorUnderScrollable")
+            val ms = Measure("cellUnderScrollHost")
             try {
                 val list = this.ancestorsAndSelf
                 if (list.count() <= 1) {
@@ -414,14 +414,14 @@ class TestElement(
             if (isAndroid) {
                 return this.bounds
             }
-            val a = ancestorUnderScrollable
-            if (a.isEmpty) {
+            val c = cellUnderScrollHost
+            if (c.isEmpty) {
                 return this.bounds
             }
-            if (a.bounds.top == this.bounds.top) {
+            if (c.bounds.top == this.bounds.top) {
                 return this.bounds
             }
-            return a.bounds
+            return c.bounds
         }
 
     /**
@@ -1082,11 +1082,11 @@ class TestElement(
             return true
         }
 
-        val a = ancestorScrollable
-        if (a.isFound && a.descendants.contains(this)) {
-            val r = this.bounds.isCenterIncludedIn(a.bounds)
+        val h = scrollHost
+        if (h.isFound && h.descendants.contains(this)) {
+            val r = this.bounds.isCenterIncludedIn(h.bounds)
             if (r.not()) {
-                info("isInView == false. this is not included in the scrollable ancestor. (this=$this, bounds=${a.bounds})")
+                info("isInView == false. this is not included in the scrollable ancestor. (this=$this, bounds=${h.bounds})")
             }
             return r
         }
@@ -1117,20 +1117,28 @@ class TestElement(
             if (isEmpty) {
                 return false
             }
-            if (isAndroid) {
-                if (className == "") {
-                    return false
-                }
-                if (scrollable == "true") {
-                    return true
-                }
-                return ElementCategoryExpressionUtility.androidScrollableTypesExpression.contains(className)
-            } else {
-                if (type == "") {
-                    return false
-                }
-                return ElementCategoryExpressionUtility.iosScrollableTypesExpression.contains(type)
+            if (classOrType == "") {
+                return false
             }
+            if (isAndroid) {
+                return scrollable == "true"
+            } else {
+                return ElementCategoryExpressionUtility.scrollableTypesExpression.contains(classOrType)
+            }
+        }
+
+    /**
+     * isCellHost
+     */
+    val isCellHost: Boolean
+        get() {
+            if (isEmpty) {
+                return false
+            }
+            if (classOrType == "") {
+                return false
+            }
+            return ElementCategoryExpressionUtility.isCellHost(classOrType)
         }
 
     /**
@@ -1259,10 +1267,7 @@ class TestElement(
         return this.bounds.isOverlapping(container.bounds)
     }
 
-    /**
-     * getRelative
-     */
-    fun getRelative(
+    internal fun getRelative(
         scopeElements: List<TestElement>? = null
     ): TestElement {
 
@@ -1282,7 +1287,8 @@ class TestElement(
             for (r in selector!!.relativeSelectors) {
                 elm = elm.relative(
                     relativeSelector = r,
-                    scopeElements = scopedElements
+                    scopeElements = scopedElements,
+                    widgetOnly = true
                 )
             }
             elm.selector = selector

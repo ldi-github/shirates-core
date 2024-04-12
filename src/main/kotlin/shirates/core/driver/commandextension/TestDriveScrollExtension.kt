@@ -12,21 +12,25 @@ import shirates.core.logging.ScanRecord
 import shirates.core.logging.TestLog
 
 
-internal fun TestElement.getScrollableElementsInDescendantsAndSelf(): List<TestElement> {
+internal fun TestElement.getScrollableElementsInDescendantsAndSelf(
+    includeCellHost: Boolean = false
+): List<TestElement> {
 
     if (isAndroid) {
-        return this.descendantsAndSelf.filter { it.isScrollable }
+        return this.descendantsAndSelf.filter { it.isScrollable || (includeCellHost && it.isCellHost) }
     } else {
-        return this.descendantsAndSelf.filter { it.isScrollable && it.isVisibleCalculated }
+        return this.descendantsAndSelf.filter { (it.isScrollable || (includeCellHost && it.isCellHost)) && it.isVisibleCalculated }
     }
 }
 
-internal fun TestElement.getScrollableElementsInAncestorsAndSelf(): List<TestElement> {
+internal fun TestElement.getScrollableElementsInAncestorsAndSelf(
+    includeCellHost: Boolean = false
+): List<TestElement> {
 
     return if (isAndroid) {
-        this.ancestorsAndSelf.filter { it.isScrollable }
+        this.ancestorsAndSelf.filter { it.isScrollable || (includeCellHost && it.isCellHost) }
     } else {
-        this.ancestorsAndSelf.filter { it.isScrollable && it.isVisible }
+        this.ancestorsAndSelf.filter { (it.isScrollable || (includeCellHost && it.isCellHost)) && it.isVisible }
     }
 }
 
@@ -51,12 +55,14 @@ internal fun TestDrive.getScrollableElement(
         return ancestors.first()
     }
 
-    val descendants = testElement.getScrollableElementsInDescendantsAndSelf().sortedByDescending { it.bounds.area }
+    val descendants = testElement.getScrollableElementsInDescendantsAndSelf()
+        .sortedByDescending { it.bounds.area }
     if (descendants.any()) {
         return descendants.first()
     }
 
-    val rootDescendants = rootElement.getScrollableElementsInDescendantsAndSelf().sortedByDescending { it.bounds.area }
+    val rootDescendants = rootElement.getScrollableElementsInDescendantsAndSelf(includeCellHost = true)
+        .sortedByDescending { it.bounds.area }
     if (rootDescendants.any()) {
         return rootDescendants.first()
     }
@@ -477,28 +483,32 @@ private fun TestDrive.doUntilScrollStopCore(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
                     startMarginRatio = startMarginRatio,
-                    endMarginRatio = endMarginRatio
+                    endMarginRatio = endMarginRatio,
+                    repeat = repeat
                 )
             } else if (direction.isUp) {
                 scrollUp(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
                     startMarginRatio = startMarginRatio,
-                    endMarginRatio = endMarginRatio
+                    endMarginRatio = endMarginRatio,
+                    repeat = repeat
                 )
             } else if (direction.isRight) {
                 scrollRight(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
                     startMarginRatio = startMarginRatio,
-                    endMarginRatio = endMarginRatio
+                    endMarginRatio = endMarginRatio,
+                    repeat = repeat
                 )
             } else if (direction.isLeft) {
                 scrollLeft(
                     scrollable = scrollable,
                     durationSeconds = durationSeconds,
                     startMarginRatio = startMarginRatio,
-                    endMarginRatio = endMarginRatio
+                    endMarginRatio = endMarginRatio,
+                    repeat = repeat
                 )
             }
         }
@@ -585,7 +595,7 @@ internal fun TestDrive.edgeElementFound(expressions: List<String>): Boolean {
 
     for (expression in expressions) {
         val e = TestDriver.select(expression = expression, throwsException = false, waitSeconds = 0.0)
-        if (e.isFound && e.bounds.isIncludedIn(e.getScrollableElement().bounds)) {
+        if (e.isFound && e.isVisibleCalculated) {
             TestLog.info("edge element found. ($expression)")
             return true
         } else {

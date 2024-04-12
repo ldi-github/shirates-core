@@ -2,27 +2,28 @@
 
 ## 相対セレクター
 
-| 相対セレクター       | エイリアス   | 説明                         |
-|:--------------|:--------|:---------------------------|
-| :flow         | -       | ウィジェットフロー上にあるウィジェット        |
-| :flowLabel    | :label  | ウィジェットフロー上にあるlabel         |
-| :flowInput    | :input  | ウィジェットフロー上にあるinput         |
-| :flowImage    | :image  | ウィジェットフロー上にあるimage         |
-| :flowButton   | :button | ウィジェットフロー上にあるbutton        |
-| :flowSwitch   | :switch | ウィジェットフロー上にあるswitch        |
-| :innerWidget  | :inner  | コンテナ内ウィジェットフロー上にあるウィジェット   |
-| :innerLabel   | -       | コンテナ内ウィジェットフロー上にあるlabel    |
-| :innerInput   | -       | コンテナ内ウィジェットフロー上にあるinput    |
-| :innerImage   | -       | コンテナ内ウィジェットフロー上にあるimage    |
-| :innerButton  | -       | コンテナ内ウィジェットフロー上にあるbutton   |
-| :innerSwitch  | -       | コンテナ内ウィジェットフロー上にあるswitch   |
-| :vflow        | -       | 垂直ウィジェットフロー上にあるウィジェット      |
-| :innerVWidget | :innerV | コンテナ内垂直ウィジェットフロー上にあるウィジェット |
-| :innerVlabel  | -       | コンテナ内垂直ウィジェットフロー上にあるlabel  |
-| :innerVinput  | -       | コンテナ内垂直ウィジェットフロー上にあるinput  |
-| :innerVimage  | -       | コンテナ内垂直ウィジェットフロー上にあるimage  |
-| :innerVbutton | -       | コンテナ内垂直ウィジェットフロー上にあるbutton |
-| :innerVswitch | -       | コンテナ内垂直ウィジェットフロー上にあるswitch |
+| 相対セレクター         | エイリアス       | 説明                         |
+|:----------------|:------------|:---------------------------|
+| :flow           | -           | ウィジェットフロー上にあるウィジェット        |
+| :flowLabel      | :label      | ウィジェットフロー上にあるlabel         |
+| :flowInput      | :input      | ウィジェットフロー上にあるinput         |
+| :flowImage      | :image      | ウィジェットフロー上にあるimage         |
+| :flowButton     | :button     | ウィジェットフロー上にあるbutton        |
+| :flowSwitch     | :switch     | ウィジェットフロー上にあるswitch        |
+| :flowScrollable | :scrollable | ウィジェットフロー上にあるscrollable    |
+| :innerWidget    | :inner      | コンテナ内ウィジェットフロー上にあるウィジェット   |
+| :innerLabel     | -           | コンテナ内ウィジェットフロー上にあるlabel    |
+| :innerInput     | -           | コンテナ内ウィジェットフロー上にあるinput    |
+| :innerImage     | -           | コンテナ内ウィジェットフロー上にあるimage    |
+| :innerButton    | -           | コンテナ内ウィジェットフロー上にあるbutton   |
+| :innerSwitch    | -           | コンテナ内ウィジェットフロー上にあるswitch   |
+| :vflow          | -           | 垂直ウィジェットフロー上にあるウィジェット      |
+| :innerVWidget   | :innerV     | コンテナ内垂直ウィジェットフロー上にあるウィジェット |
+| :innerVlabel    | -           | コンテナ内垂直ウィジェットフロー上にあるlabel  |
+| :innerVinput    | -           | コンテナ内垂直ウィジェットフロー上にあるinput  |
+| :innerVimage    | -           | コンテナ内垂直ウィジェットフロー上にあるimage  |
+| :innerVbutton   | -           | コンテナ内垂直ウィジェットフロー上にあるbutton |
+| :innerVswitch   | -           | コンテナ内垂直ウィジェットフロー上にあるswitch |
 
 ## 使用例
 
@@ -35,7 +36,8 @@
 
 ## ウィジェットフローアルゴリズム
 
-ウィジェットフローアルゴリズムはウィジェットの垂直位置でグループ分けを行います(1st group - 6th group)。次に、それぞれのグループにおいて左から右に、上から下にウィジェットを探索します。
+ウィジェットフローアルゴリズムはウィジェットの垂直位置でグループ分けを行います(1st group - 6th group)
+。次に、それぞれのグループにおいて左から右に、上から下にウィジェットを探索します。
 
 ![Widget flow](../../_images/widget_flow.png)
 

@@ -420,7 +420,8 @@ abstract class UITest : TestDrive {
             describe(message = message)
             return
         }
-        TestLog.ok(message = message, scriptCommand = scriptCommand, log = true)
+        val log = CodeExecutionContext.isInOperationCommand.not()
+        TestLog.ok(message = message, scriptCommand = scriptCommand, log = log)
     }
 
     /**
@@ -576,7 +577,7 @@ abstract class UITest : TestDrive {
                             testContext.onRerunScenarioHandler!!.invoke(t)
                         }
                     } else {
-                        TestLog.error(t.message!!)
+                        TestLog.error("${t.message}\n${t.stackTraceToString()}", exception = t)
                     }
                     CodeExecutionContext.scenarioRerunCause = wc.error
                 },
@@ -694,11 +695,11 @@ abstract class UITest : TestDrive {
             scenarioLog.resultMessage = t.message
             throw t
         } catch (t: TestAbortedException) {
-            TestLog.warn(t.message!!)
+            TestLog.warn(t.message ?: t.stackTraceToString())
             throw t
         } catch (t: NotImplementedError) {
             TestLog.notImpl(t)
-            throw TestAbortedException(t.message!!, t)
+            throw TestAbortedException(t.message ?: t.stackTraceToString(), t)
         } catch (t: UnsatisfiedLinkError) {
             TestLog.error(t)
             driver.screenshotCore()

@@ -385,7 +385,7 @@ object TestDriver {
         try {
             mAppiumDriver?.quit()
         } catch (t: Throwable) {
-            if (t.message!!.contains("Connection refused").not()) {
+            if ((t.message ?: "").contains("Connection refused").not()) {
                 throw t
             }
         } finally {
@@ -430,6 +430,11 @@ object TestDriver {
         expression: String,
         screenName: String = currentScreen
     ): Selector {
+
+        if (ScreenRepository.has(screenName)) {
+            val screenInfo = ScreenRepository.getScreenInfo(screenName = screenName)
+            return screenInfo.expandExpression(expression = expression)
+        }
 
         if (screenName.isBlank() || ScreenRepository.has(screenName).not()) {
             return screenInfo.expandExpression(expression = expression)
@@ -1083,6 +1088,7 @@ object TestDriver {
         scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
         scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
+        swipeToCenter: Boolean = false,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         frame: Bounds? = null,
@@ -1104,6 +1110,7 @@ object TestDriver {
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
+                swipeToCenter = swipeToCenter,
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
                 frame = frame,
@@ -1122,6 +1129,7 @@ object TestDriver {
         scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
         scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
+        swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         frame: Bounds? = null,
@@ -1138,6 +1146,7 @@ object TestDriver {
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,
                 scrollMaxCount = scrollMaxCount,
+                swipeToCenter = swipeToCenter,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
                 frame = frame
@@ -1151,7 +1160,7 @@ object TestDriver {
             return try {
                 executeSelect()
             } catch (t: Throwable) {
-                TestLog.info(t.message!!)
+                TestLog.info(t.message ?: t.stackTraceToString())
                 testDrive.suppressHandler {
                     testContext.onSelectErrorHandler!!.invoke()
                 }
@@ -1173,6 +1182,7 @@ object TestDriver {
         scrollStartMarginRatio: Double,
         scrollEndMarginRatio: Double,
         scrollMaxCount: Int,
+        swipeToCenter: Boolean,
         throwsException: Boolean,
         waitSeconds: Double
     ): TestElement {
@@ -1226,6 +1236,7 @@ object TestDriver {
                     startMarginRatio = scrollStartMarginRatio,
                     endMarginRatio = scrollEndMarginRatio,
                     scrollMaxCount = scrollMaxCount,
+                    swipeToCenter = swipeToCenter,
                     throwsException = throwsException,
                 )
             }
@@ -1357,8 +1368,11 @@ object TestDriver {
                             if (c.lowercase().contains("switch")) {
                                 exps.add(".switch")
                             }
+                            if (c.lowercase().contains("scrollable")) {
+                                exps.add(".scrollable")
+                            }
                         }
-                        val expandedExps = exps.map { ElementCategoryExpressionUtility.expandWidget(it) }
+                        val expandedExps = exps.map { ElementCategoryExpressionUtility.expandClassAlias(it) }
                         val exp =
                             if (expandedExps.isEmpty()) ".widget"
                             else "className=(${expandedExps.joinToString("|")})"
@@ -1609,6 +1623,7 @@ object TestDriver {
         startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
         endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
+        swipeToCenter: Boolean,
         throwsException: Boolean = true
     ): TestElement {
 
@@ -1618,6 +1633,7 @@ object TestDriver {
 
             e = select(
                 selector = selector,
+                swipeToCenter = false,
                 waitSeconds = 0.0,
                 throwsException = false,
                 frame = frame
@@ -1635,6 +1651,11 @@ object TestDriver {
             endMarginRatio = endMarginRatio,
             actionFunc = actionFunc
         )
+
+        if (e.isFound && swipeToCenter) {
+
+            e = e.swipeToCenter(axis = direction.toAxis())
+        }
 
         lastElement = e
         if (e.hasError) {
@@ -1657,6 +1678,7 @@ object TestDriver {
         startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
         endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
+        swipeToCenter: Boolean = true,
         throwsException: Boolean = true
     ): TestElement {
         val sel = expandExpression(expression = expression)
@@ -1666,6 +1688,7 @@ object TestDriver {
             e = selectWithScroll(
                 selector = sel,
                 direction = direction,
+                swipeToCenter = swipeToCenter,
                 durationSeconds = scrollDurationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,

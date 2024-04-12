@@ -272,7 +272,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         if (hasNoException && scenarioLines.any { it.logType == LogType.SCENARIO }.not()) {
             val ex = TestAbortedException("scenario not implemented.")
-            TestLog.warn(ex.message!!)
+            TestLog.warn(ex.message ?: ex.stackTraceToString())
             throw ex
         }
     }

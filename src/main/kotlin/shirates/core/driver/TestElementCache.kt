@@ -5,6 +5,7 @@ import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.getKeyboardInIos
+import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.relative
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
@@ -161,6 +162,7 @@ object TestElementCache {
         selector: Selector,
         throwsException: Boolean = true,
         selectContext: TestElement = rootElement,
+        widgetOnly: Boolean = false,
         frame: Bounds? = null
     ): TestElement {
 
@@ -177,6 +179,7 @@ object TestElementCache {
                 e = lastElement.relative(
                     relativeSelectors = selector.relativeSelectors,
                     scopeElements = allElements,
+                    widgetOnly = widgetOnly,
                     frame = frame
                 )
             } else {

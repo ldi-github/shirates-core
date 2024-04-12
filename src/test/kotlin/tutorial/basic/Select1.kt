@@ -51,4 +51,24 @@ class Select1 : UITest() {
         }
     }
 
+    @Test
+    @Order(30)
+    fun selectWithScrollAndSwipeToCenter() {
+
+        scenario {
+            case(1) {
+                action {
+                    it.selectWithScrollDown("Privacy", log = false)
+                    output(it)
+                }
+            }
+            case(2) {
+                action {
+                    it.selectWithScrollUp("Notifications", log = true)
+                    output(it)
+                }
+            }
+        }
+    }
+
 }

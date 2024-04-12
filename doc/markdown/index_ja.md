@@ -102,6 +102,8 @@
     - [アプリが表示されていることの検証](basic/function_property/asserting_others/app_assertion_ja.md)
     - [キーボードが表示されていることの検証](basic/function_property/asserting_others/keyboard_assertion_ja.md)
     - [表示中のアプリのパッケージの検証](basic/function_property/asserting_others/package_assertion_ja.md)
+- 任意の内容を検証する
+    - [任意の内容の検証 (verify)](basic/function_property/asserting_anything/anything_assertion_ja.md)
 - 分岐する
     - [分岐関数 (ifTrue, ifFalse)](basic/function_property/branch/if_true_if_false_ja.md)
     - [分岐関数 (ifScreenIs, ifScreenIsNot)](basic/function_property/branch/ifscreenis_ja.md)
@@ -135,6 +137,8 @@
     - [describe, procedure, caption, comment, manual, knownIssue, target, output](basic/function_property/descriptor/descriptors_ja.md)
     - [manual](basic/function_property/descriptor/manual_ja.md)
     - [knownIssue](basic/function_property/descriptor/known_issue_ja.md)
+- セレクターをオンデマンドで登録する
+    - [tempSelector](basic/function_property/selector/temp_selector_ja.md)
 - テストフロー制御
     - [SKIP/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl_ja.md)
 - ロギング

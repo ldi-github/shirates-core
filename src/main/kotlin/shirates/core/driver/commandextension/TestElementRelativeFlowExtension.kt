@@ -9,6 +9,30 @@ import shirates.core.driver.commandextension.helper.VerticalFlowContainer
 import shirates.core.driver.filterBySelector
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 
+internal fun List<TestElement>.removeIncludingElements(): List<TestElement> {
+
+    val elements = this
+    val resolvedList = mutableListOf<TestElement>()
+    for (e in elements) {
+        val descendants = e.descendants
+        val others = elements.toMutableList()
+        others.remove(e)
+
+        fun descendantsContainsOthers(): Boolean {
+            for (o in others) {
+                if (descendants.contains(o)) {
+                    return true
+                }
+            }
+            return false
+        }
+        if (e.isWidget || descendantsContainsOthers().not()) {
+            resolvedList.add(e)
+        }
+    }
+    return resolvedList
+}
+
 private fun TestElement.flowCore(
     selector: Selector,
     scopeElements: List<TestElement>,
@@ -25,7 +49,7 @@ private fun TestElement.flowCore(
     if (isThisContainingOthers.not()) {
         fc.addElementToRow(element = this, force = true)
     }
-    fc.addAll(filteredElements)
+    fc.addAll(elements = filteredElements, force = true)
 
     val flowElements = fc.getElements()
     val indexOfThis = flowElements.indexOf(this)
@@ -326,6 +350,48 @@ fun TestElement.flowSwitch(
     return relative(
         command = ":flowSwitch($expression)",
         scopeElements = switchWidgets,
+        frame = frame
+    )
+}
+
+internal fun TestElement.flowScrollable(
+    selector: Selector,
+    targetElements: List<TestElement>,
+    frame: Bounds?
+): TestElement {
+
+    val sel = selector.copy()
+    return flow(selector = sel, targetElements = targetElements, frame = frame)
+}
+
+/**
+ * flowScrollable
+ */
+fun TestElement.flowScrollable(
+    pos: Int = 1,
+    frame: Bounds? = null
+): TestElement {
+
+    return relative(
+        command = ":flowScrollable($pos)",
+        scopeElements = scrollableElements,
+        widgetOnly = false,
+        frame = frame
+    )
+}
+
+/**
+ * flowScrollable
+ */
+fun TestElement.flowScrollable(
+    expression: String,
+    frame: Bounds? = null
+): TestElement {
+
+    return relative(
+        command = ":flowScrollable($expression)",
+        scopeElements = scrollableElements,
+        widgetOnly = false,
         frame = frame
     )
 }

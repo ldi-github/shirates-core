@@ -99,7 +99,7 @@ class RetryUtility {
                 if (context.exception.isRerunRequiredError) {
                     val ex = context.exception!!
                     TestLog.error(ex)
-                    throw RerunScenarioException(ex.message!!, ex)
+                    throw RerunScenarioException(ex.message ?: ex.stackTraceToString(), ex)
                 }
                 if (stopWatch.elapsedSeconds > timeoutSeconds) {
                     TestLog.info("Timeout on retrying. (${stopWatch.elapsedSeconds} > $timeoutSeconds)")

@@ -412,7 +412,7 @@ class Selector(
             }
 
         val flowCommandBaseNames = listOf(
-            ":flow", ":label", ":input", ":image", ":button", ":switch",
+            ":flow", ":label", ":input", ":image", ":button", ":switch", ":scrollable",
             ":vflow"
         )
 
@@ -442,7 +442,7 @@ class Selector(
          * :flow(2):flow(3) -> :flow(5)
          */
         val posMergeEnabledBaseNames = listOf(
-            ":flow", ":label", ":input", ":image", ":button", ":switch",
+            ":flow", ":label", ":input", ":image", ":button", ":switch", ":scrollable",
             ":vflow",
             ":ancestor", ":next", ":pre", ":previous",
             ":right", ":below", ":left", ":above"
@@ -464,7 +464,7 @@ class Selector(
             }
 
         val relativeCommandSubjectNames = listOf(
-            "label", "image", "button", "switch", "input", "widget"
+            "label", "image", "button", "switch", "input", "widget", "scrollable"
         )
 
         private fun String.escapeRelativeNickname(): String {

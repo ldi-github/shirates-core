@@ -7,6 +7,7 @@ import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.driver.branchextension.result.SpecialTagCompareResult
 import shirates.core.driver.commandextension.canSelect
 import shirates.core.driver.commandextension.findImage
+import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.isImage
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message

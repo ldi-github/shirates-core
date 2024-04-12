@@ -71,12 +71,15 @@ internal fun AppiumDriver.removeApp(packageOrBundleId: String? = testContext.pro
                 TestDriver.iosDriver.removeApp(packageOrBundleId)
             }
         } catch (t: Throwable) {
-            if (t.message!!.startsWith("Cannot invoke \"java.lang.Boolean.booleanValue()\"") && t.message!!.endsWith("is null")) {
+            if (t.message != null &&
+                t.message!!.startsWith("Cannot invoke \"java.lang.Boolean.booleanValue()\"") &&
+                t.message!!.endsWith("is null")
+            ) {
                 // ignore this message (This might be a bug)
                 // Cannot invoke "java.lang.Boolean.booleanValue()" because the return value of "io.appium.java_client.CommandExecutionHelper.execute(io.appium.java_client.ExecutesMethod, java.util.Map$Entry)" is null
-                TestLog.trace(t.message!!)
+                TestLog.trace(t.message ?: t.stackTraceToString())
             } else {
-                TestLog.warn(t.message!!)
+                TestLog.warn(t.message ?: t.stackTraceToString())
             }
         }
         isAppInstalled(packageOrBundleId = packageOrBundleId).not()

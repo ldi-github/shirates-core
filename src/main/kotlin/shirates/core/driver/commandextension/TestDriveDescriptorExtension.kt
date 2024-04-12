@@ -1,6 +1,7 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -323,10 +324,29 @@ fun TestElement.getCell(): TestElement {
             } else {
                 ancestorsAndSelf[cellIndex]
             }
-        } else
-            return TestElement.emptyElement
+        } else {
+            if (isAndroid) {
+                val cellHost = getCellHost()
+                fun getCellCore(): TestElement {
+                    return ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+                }
+                getCellCore()
+            } else {
+                return TestElement.emptyElement
+            }
+        }
     if (this.selector != null) {
         cell.selector = this.selector!!.getChainedSelector(":cellOf(${this.selector})")
     }
     return cell
+}
+
+/**
+ * getCellHost
+ */
+fun TestElement.getCellHost(): TestElement {
+
+    val ancestors = this.ancestors
+    val cellHost = ancestors.lastOrNull() { it.isCellHost }
+    return cellHost ?: TestElement.emptyElement
 }

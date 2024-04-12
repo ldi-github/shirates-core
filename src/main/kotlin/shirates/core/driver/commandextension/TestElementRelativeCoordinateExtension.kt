@@ -1,6 +1,5 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.configuration.Filter
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.helper.HorizontalBand
@@ -10,17 +9,15 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 private fun TestElement.filterCandidates(
     selector: Selector,
     targetElements: List<TestElement>,
+    widgetOnly: Boolean,
     frame: Bounds? = null
 ): MutableList<TestElement> {
 
-    val sel = selector.copy()
-    if (sel.className == null) {
-        val widgetTypes = ElementCategoryExpressionUtility.widgetTypesExpression
-        sel.filterMap["className"] = Filter("className=$widgetTypes")
+    var filtered = targetElements
+    if (widgetOnly) {
+        filtered = filtered.filter { it.isWidget }
     }
-
-    val filtered = targetElements
-        .filterBySelector(selector = sel, frame = frame)
+    filtered = filtered.filterBySelector(selector = selector, frame = frame)
         .filter { it != this }
         .toMutableList()
 
@@ -40,6 +37,7 @@ internal fun TestElement.rightLeftCore(
     relative: RelativeDirection,
     selector: Selector,
     targetElements: List<TestElement>,
+    widgetOnly: Boolean,
     frame: Bounds?
 ): TestElement {
 
@@ -57,6 +55,7 @@ internal fun TestElement.rightLeftCore(
     val candidates = filterCandidates(
         selector = sel,
         targetElements = elms,
+        widgetOnly = widgetOnly,
         frame = frame
     )
     val sortedElements =
@@ -78,27 +77,49 @@ internal fun TestElement.rightLeftCore(
     return e
 }
 
+internal fun getWidgetOnly(selector: Selector): Boolean {
+
+    if (selector.isXmlBased) {
+        return false
+    }
+    if (selector.filterMap.containsKey("className")) {
+        return false
+    }
+    if (selector.command == ":belowScrollable" ||
+        selector.command == ":aboveScrollable" ||
+        selector.command == ":flowScrollable" ||
+        selector.command == ":scrollable"
+    ) {
+        return false
+    }
+    return true
+}
+
 internal fun TestElement.belowAboveCore(
     relative: RelativeDirection,
     selector: Selector,
     targetElements: List<TestElement>,
+    widgetOnly: Boolean,
     frame: Bounds?
 ): TestElement {
 
     val sel = selector.copyAndRemovePos()
     sel.command = null
-    val widgets = targetElements
-        .filter { it.isWidget }
-        .filterBySelector(selector = sel)
+    var elements = targetElements
+    if (widgetOnly) {
+        elements = elements.filter { it.isWidget }
+    }
+    elements = elements.filterBySelector(selector = sel)
 
     val verticalBand = VerticalBand(this)
-    for (widget in widgets) {
-        verticalBand.merge(widget)
+    for (element in elements) {
+        verticalBand.merge(element)
     }
     val elms = verticalBand.getElements()
     val candidates = filterCandidates(
         selector = sel,
         targetElements = elms,
+        widgetOnly = widgetOnly,
         frame = frame
     )
     val sortedElements =
@@ -123,6 +144,7 @@ internal fun TestElement.belowAboveCore(
 internal fun TestElement.right(
     selector: Selector,
     targetElements: List<TestElement>,
+    widgetOnly: Boolean,
     frame: Bounds?
 ): TestElement {
 
@@ -133,6 +155,7 @@ internal fun TestElement.right(
                 relative = RelativeDirection.right,
                 selector = selector,
                 targetElements = targetElements,
+                widgetOnly = widgetOnly,
                 frame = frame
             )
         }
@@ -202,17 +225,38 @@ private fun TestElement.getRelativeWidget(
     frame: Bounds? = null
 ): TestElement {
 
+    return getRelativeElement(
+        relativeCommand = relativeCommand,
+        selector = selector,
+        className = className,
+        targetElements = targetElements,
+        widgetOnly = true,
+        frame = frame
+    )
+}
+
+private fun TestElement.getRelativeElement(
+    relativeCommand: String,
+    selector: Selector,
+    className: String,
+    targetElements: List<TestElement>,
+    widgetOnly: Boolean,
+    frame: Bounds? = null
+): TestElement {
+
     val sel = selector.copy()
-    sel.className = className
+    if (className.isNotBlank()) {
+        sel.className = className
+    }
 
     val e = if (relativeCommand.startsWith(":right")) {
-        right(selector = sel, targetElements = targetElements, frame = frame)
+        right(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)
     } else if (relativeCommand.startsWith(":left")) {
-        left(selector = sel, targetElements = targetElements, frame = frame)
+        left(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)
     } else if (relativeCommand.startsWith(":above")) {
-        above(selector = sel, targetElements = targetElements, frame = frame)
+        above(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)
     } else if (relativeCommand.startsWith(":below")) {
-        below(selector = sel, targetElements = targetElements, frame = frame)
+        below(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)
     } else {
         throw NotImplementedError(relativeCommand)
     }
@@ -449,6 +493,7 @@ fun TestElement.rightSwitch(
 internal fun TestElement.below(
     selector: Selector,
     targetElements: List<TestElement>,
+    widgetOnly: Boolean,
     frame: Bounds?
 ): TestElement {
 
@@ -459,6 +504,7 @@ internal fun TestElement.below(
                 relative = RelativeDirection.below,
                 selector = selector,
                 targetElements = targetElements,
+                widgetOnly = widgetOnly,
                 frame = frame
             )
         }
@@ -485,6 +531,7 @@ fun TestElement.below(
  */
 fun TestElement.below(
     expression: String,
+    widgetOnly: Boolean? = null,
     frame: Bounds? = null
 ): TestElement {
 
@@ -492,7 +539,8 @@ fun TestElement.below(
     val exp = sel.getElementExpression()
     return relative(
         command = ":below($exp)",
-        scopeElements = widgets,
+        scopeElements = allElements(),
+        widgetOnly = widgetOnly,
         frame = frame
     )
 }
@@ -508,7 +556,6 @@ internal fun TestElement.belowInput(
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
         targetElements = targetElements,
-        frame = frame
     )
     return e
 }
@@ -737,9 +784,60 @@ fun TestElement.belowSwitch(
     )
 }
 
+internal fun TestElement.belowScrollable(
+    selector: Selector,
+    targetElements: List<TestElement>,
+    frame: Bounds?
+): TestElement {
+
+    val e = getRelativeElement(
+        relativeCommand = ":belowScrollable",
+        selector = selector,
+        className = ElementCategoryExpressionUtility.scrollableTypesExpression,
+        targetElements = targetElements,
+        frame = frame,
+        widgetOnly = false
+    )
+    return e
+}
+
+/**
+ * belowScrollable
+ */
+fun TestElement.belowScrollable(
+    pos: Int = 1,
+    frame: Bounds? = null
+): TestElement {
+
+    return relative(
+        command = ":belowScrollable($pos)",
+        scopeElements = scrollableElements,
+        widgetOnly = false,
+        frame = frame
+    )
+}
+
+/**
+ * belowScrollable
+ */
+fun TestElement.belowScrollable(
+    expression: String,
+    frame: Bounds? = null
+): TestElement {
+
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
+    return relative(
+        command = ":belowScrollable($exp)",
+        scopeElements = scrollableElements,
+        frame = frame
+    )
+}
+
 internal fun TestElement.left(
     selector: Selector,
     targetElements: List<TestElement>,
+    widgetOnly: Boolean,
     frame: Bounds?
 ): TestElement {
 
@@ -750,6 +848,7 @@ internal fun TestElement.left(
                 relative = RelativeDirection.left,
                 selector = selector,
                 targetElements = targetElements,
+                widgetOnly = widgetOnly,
                 frame = frame
             )
         }
@@ -1033,6 +1132,7 @@ fun TestElement.leftSwitch(
 internal fun TestElement.above(
     selector: Selector,
     targetElements: List<TestElement>,
+    widgetOnly: Boolean,
     frame: Bounds?
 ): TestElement {
 
@@ -1043,6 +1143,7 @@ internal fun TestElement.above(
                 relative = RelativeDirection.above,
                 selector = selector,
                 targetElements = targetElements,
+                widgetOnly = widgetOnly,
                 frame = frame
             )
         }
@@ -1076,7 +1177,7 @@ fun TestElement.above(
     val exp = sel.getElementExpression()
     return relative(
         command = ":above($exp)",
-        scopeElements = widgets,
+        scopeElements = allElements(),
         frame = frame
     )
 }
@@ -1187,7 +1288,7 @@ internal fun TestElement.aboveImage(
         relativeCommand = ":aboveImage",
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
-        targetElements = targetElements
+        targetElements = targetElements,
     )
     return e
 }
@@ -1235,7 +1336,7 @@ internal fun TestElement.aboveButton(
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
         targetElements = targetElements,
-        frame = frame
+        frame = frame,
     )
     return e
 }
@@ -1319,3 +1420,54 @@ fun TestElement.aboveSwitch(
         frame = frame
     )
 }
+
+internal fun TestElement.aboveScrollable(
+    selector: Selector,
+    targetElements: List<TestElement>,
+    frame: Bounds?
+): TestElement {
+
+    val e = getRelativeElement(
+        relativeCommand = ":aboveScrollable",
+        selector = selector,
+        className = ElementCategoryExpressionUtility.scrollableTypesExpression,
+        targetElements = targetElements,
+        frame = frame,
+        widgetOnly = false
+    )
+    return e
+}
+
+/**
+ * aboveScrollable
+ */
+fun TestElement.aboveScrollable(
+    pos: Int = 1,
+    frame: Bounds? = null
+): TestElement {
+
+    return relative(
+        command = ":aboveScrollable($pos)",
+        scopeElements = scrollableElements,
+        widgetOnly = false,
+        frame = frame
+    )
+}
+
+/**
+ * aboveScrollable
+ */
+fun TestElement.aboveScrollable(
+    expression: String,
+    frame: Bounds? = null
+): TestElement {
+
+    val sel = getSelector(expression = expression)
+    val exp = sel.getElementExpression()
+    return relative(
+        command = ":aboveScrollable($exp)",
+        scopeElements = scrollableElements,
+        frame = frame
+    )
+}
+

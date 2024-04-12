@@ -13,6 +13,7 @@ import shirates.core.logging.Message
 fun TestElement.relative(
     command: String,
     scopeElements: List<TestElement> = rootElement.elements,
+    widgetOnly: Boolean? = null,
     frame: Bounds? = null
 ): TestElement {
 
@@ -31,6 +32,7 @@ fun TestElement.relative(
         val e = relative(
             relativeSelector = relativeSelector,
             scopeElements = scopeElements,
+            widgetOnly = widgetOnly ?: getWidgetOnly(selector = relativeSelector),
             frame = frame
         )
         if (e == this) {
@@ -68,7 +70,8 @@ private val commandsAllowedInDirectAccessMode = listOf(
 internal fun TestElement.relative(
     relativeSelector: Selector,
     newSelector: Selector = this.getChainedSelector(relativeSelector = relativeSelector),
-    scopeElements: List<TestElement>? = null,
+    scopeElements: List<TestElement> = allElements(),
+    widgetOnly: Boolean,
     frame: Bounds? = null
 ): TestElement {
 
@@ -84,6 +87,11 @@ internal fun TestElement.relative(
 
     val oldSelector = this.selector
 
+    var targetElements = scopeElements
+    if (widgetOnly && relativeSelector.isXmlBased.not()) {
+        targetElements = targetElements.filter { it.isWidget }
+    }
+
     val context = TestDriverCommandContext(this)
     var e = TestElement(selector = newSelector)
     context.execRelativeCommand("${this.subject}:${relativeSelector}", subject = this.subject) {
@@ -96,7 +104,8 @@ internal fun TestElement.relative(
             ":right" -> {
                 e = this.right(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets,
+                    targetElements = targetElements,
+                    widgetOnly = widgetOnly,
                     frame = frame
                 )
             }
@@ -104,7 +113,7 @@ internal fun TestElement.relative(
             ":rightInput" -> {
                 e = this.rightInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets,
+                    targetElements = targetElements.filter { it.isInput },
                     frame = frame
                 )
             }
@@ -112,7 +121,7 @@ internal fun TestElement.relative(
             ":rightLabel" -> {
                 e = this.rightLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets,
+                    targetElements = targetElements.filter { it.isLabel },
                     frame = frame
                 )
             }
@@ -120,7 +129,7 @@ internal fun TestElement.relative(
             ":rightImage" -> {
                 e = this.rightImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets,
+                    targetElements = targetElements.filter { it.isImage },
                     frame = frame
                 )
             }
@@ -128,7 +137,7 @@ internal fun TestElement.relative(
             ":rightButton" -> {
                 e = this.rightButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets,
+                    targetElements = targetElements.filter { it.isButton },
                     frame = frame
                 )
             }
@@ -136,7 +145,7 @@ internal fun TestElement.relative(
             ":rightSwitch" -> {
                 e = this.rightSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets,
+                    targetElements = targetElements.filter { it.isSwitch },
                     frame = frame
                 )
             }
@@ -144,7 +153,8 @@ internal fun TestElement.relative(
             ":below" -> {
                 e = this.below(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets,
+                    targetElements = targetElements,
+                    widgetOnly = widgetOnly,
                     frame = frame
                 )
             }
@@ -152,7 +162,7 @@ internal fun TestElement.relative(
             ":belowInput" -> {
                 e = this.belowInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets,
+                    targetElements = targetElements.filter { it.isInput },
                     frame = frame
                 )
             }
@@ -160,7 +170,7 @@ internal fun TestElement.relative(
             ":belowLabel" -> {
                 e = this.belowLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets,
+                    targetElements = targetElements.filter { it.isLabel },
                     frame = frame
                 )
             }
@@ -168,7 +178,7 @@ internal fun TestElement.relative(
             ":belowImage" -> {
                 e = this.belowImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets,
+                    targetElements = targetElements.filter { it.isImage },
                     frame = frame
                 )
             }
@@ -176,7 +186,7 @@ internal fun TestElement.relative(
             ":belowButton" -> {
                 e = this.belowButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets,
+                    targetElements = targetElements.filter { it.isButton },
                     frame = frame
                 )
             }
@@ -184,7 +194,15 @@ internal fun TestElement.relative(
             ":belowSwitch" -> {
                 e = this.belowSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets,
+                    targetElements = targetElements.filter { it.isSwitch },
+                    frame = frame
+                )
+            }
+
+            ":belowScrollable" -> {
+                e = this.belowScrollable(
+                    selector = relativeSelector,
+                    targetElements = targetElements.filter { it.isScrollable },
                     frame = frame
                 )
             }
@@ -192,7 +210,8 @@ internal fun TestElement.relative(
             ":left" -> {
                 e = this.left(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets,
+                    targetElements = targetElements,
+                    widgetOnly = widgetOnly,
                     frame = frame
                 )
             }
@@ -200,7 +219,7 @@ internal fun TestElement.relative(
             ":leftInput" -> {
                 e = this.leftInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets,
+                    targetElements = targetElements.filter { it.isInput },
                     frame = frame
                 )
             }
@@ -208,7 +227,7 @@ internal fun TestElement.relative(
             ":leftLabel" -> {
                 e = this.leftLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets,
+                    targetElements = targetElements.filter { it.isLabel },
                     frame = frame
                 )
             }
@@ -216,7 +235,7 @@ internal fun TestElement.relative(
             ":leftImage" -> {
                 e = this.leftImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets,
+                    targetElements = targetElements.filter { it.isImage },
                     frame = frame
                 )
             }
@@ -224,7 +243,7 @@ internal fun TestElement.relative(
             ":leftButton" -> {
                 e = this.leftButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets,
+                    targetElements = targetElements.filter { it.isButton },
                     frame = frame
                 )
             }
@@ -232,7 +251,7 @@ internal fun TestElement.relative(
             ":leftSwitch" -> {
                 e = this.leftSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets,
+                    targetElements = targetElements.filter { it.isSwitch },
                     frame = frame
                 )
             }
@@ -240,7 +259,8 @@ internal fun TestElement.relative(
             ":above" -> {
                 e = this.above(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets,
+                    targetElements = targetElements,
+                    widgetOnly = widgetOnly,
                     frame = frame
                 )
             }
@@ -248,7 +268,7 @@ internal fun TestElement.relative(
             ":aboveInput" -> {
                 e = this.aboveInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets,
+                    targetElements = targetElements.filter { it.isInput },
                     frame = frame
                 )
             }
@@ -256,7 +276,7 @@ internal fun TestElement.relative(
             ":aboveLabel" -> {
                 e = this.aboveLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets,
+                    targetElements = targetElements.filter { it.isLabel },
                     frame = frame
                 )
             }
@@ -264,7 +284,7 @@ internal fun TestElement.relative(
             ":aboveImage" -> {
                 e = this.aboveImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets,
+                    targetElements = targetElements.filter { it.isImage },
                     frame = frame
                 )
             }
@@ -272,7 +292,7 @@ internal fun TestElement.relative(
             ":aboveButton" -> {
                 e = this.aboveButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets,
+                    targetElements = targetElements.filter { it.isButton },
                     frame = frame
                 )
             }
@@ -280,7 +300,15 @@ internal fun TestElement.relative(
             ":aboveSwitch" -> {
                 e = this.aboveSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets,
+                    targetElements = targetElements.filter { it.isSwitch },
+                    frame = frame
+                )
+            }
+
+            ":aboveScrollable" -> {
+                e = this.aboveScrollable(
+                    selector = relativeSelector,
+                    targetElements = targetElements.filter { it.isScrollable },
                     frame = frame
                 )
             }
@@ -291,7 +319,7 @@ internal fun TestElement.relative(
             ":flow" -> {
                 e = this.flow(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -299,7 +327,7 @@ internal fun TestElement.relative(
             ":vflow" -> {
                 e = this.vflow(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -307,7 +335,7 @@ internal fun TestElement.relative(
             ":flowLabel", ":label" -> {
                 e = this.flowLabel(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets,
+                    targetElements = targetElements.filter { it.isLabel },
                     frame = frame
                 )
             }
@@ -315,7 +343,7 @@ internal fun TestElement.relative(
             ":flowInput", ":input" -> {
                 e = this.flowInput(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets,
+                    targetElements = targetElements.filter { it.isInput },
                     frame = frame
                 )
             }
@@ -323,7 +351,7 @@ internal fun TestElement.relative(
             ":flowImage", ":image" -> {
                 e = this.flowImage(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets,
+                    targetElements = targetElements.filter { it.isImage },
                     frame = frame
                 )
             }
@@ -331,7 +359,7 @@ internal fun TestElement.relative(
             ":flowButton", ":button" -> {
                 e = this.flowButton(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets,
+                    targetElements = targetElements.filter { it.isButton },
                     frame = frame
                 )
             }
@@ -339,7 +367,15 @@ internal fun TestElement.relative(
             ":flowSwitch", ":switch" -> {
                 e = this.flowSwitch(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets,
+                    targetElements = targetElements.filter { it.isSwitch },
+                    frame = frame
+                )
+            }
+
+            ":flowScrollable", ":scrollable" -> {
+                e = this.flowScrollable(
+                    selector = relativeSelector,
+                    targetElements = targetElements.filter { it.isScrollable },
                     frame = frame
                 )
             }
@@ -443,7 +479,7 @@ internal fun TestElement.relative(
             ":next" -> {
                 e = this.next(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -451,7 +487,7 @@ internal fun TestElement.relative(
             ":previous" -> {
                 e = this.previous(
                     selector = relativeSelector,
-                    targetElements = scopeElements ?: widgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -459,7 +495,7 @@ internal fun TestElement.relative(
             ":nextInput" -> {
                 e = this.nextInput(
                     relativeSelector,
-                    targetElements = scopeElements ?: innerWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -467,7 +503,7 @@ internal fun TestElement.relative(
             ":preInput" -> {
                 e = this.preInput(
                     relativeSelector,
-                    targetElements = scopeElements ?: inputWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -475,7 +511,7 @@ internal fun TestElement.relative(
             ":nextLabel" -> {
                 e = this.nextLabel(
                     relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -483,7 +519,7 @@ internal fun TestElement.relative(
             ":preLabel" -> {
                 e = this.preLabel(
                     relativeSelector,
-                    targetElements = scopeElements ?: labelWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -491,7 +527,7 @@ internal fun TestElement.relative(
             ":nextImage" -> {
                 e = this.nextImage(
                     relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -499,7 +535,7 @@ internal fun TestElement.relative(
             ":preImage" -> {
                 e = this.preImage(
                     relativeSelector,
-                    targetElements = scopeElements ?: imageWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -507,7 +543,7 @@ internal fun TestElement.relative(
             ":nextButton" -> {
                 e = this.nextButton(
                     relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -515,7 +551,7 @@ internal fun TestElement.relative(
             ":preButton" -> {
                 e = this.preButton(
                     relativeSelector,
-                    targetElements = scopeElements ?: buttonWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -523,7 +559,7 @@ internal fun TestElement.relative(
             ":nextSwitch" -> {
                 e = this.nextSwitch(
                     relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -531,7 +567,7 @@ internal fun TestElement.relative(
             ":preSwitch" -> {
                 e = this.preSwitch(
                     relativeSelector,
-                    targetElements = scopeElements ?: switchWidgets,
+                    targetElements = targetElements,
                     frame = frame
                 )
             }
@@ -566,6 +602,7 @@ internal fun TestElement.relative(
 fun TestElement.relative(
     relativeSelectors: List<Selector>,
     scopeElements: List<TestElement> = rootElement.elements,
+    widgetOnly: Boolean = false,
     frame: Bounds? = null
 ): TestElement {
 
@@ -574,6 +611,7 @@ fun TestElement.relative(
         e = e.relative(
             relativeSelector = selector,
             scopeElements = scopeElements,
+            widgetOnly = widgetOnly,
             frame = frame
         )
     }

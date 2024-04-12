@@ -365,6 +365,7 @@ internal fun TestDrive.existCore(
     scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
     scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean,
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
@@ -376,14 +377,15 @@ internal fun TestDrive.existCore(
             waitSeconds = waitSeconds,
             useCache = useCache,
             scroll = scroll,
-            direction = direction
+            direction = direction,
+            swipeToCenter = swipeToCenter
         )
         if (e.hasError && throwsException) {
             throw e.lastError!!
         }
     }
 
-    val e = actionWithOnExistErrorHandler(
+    var e = actionWithOnExistErrorHandler(
         message = assertMessage,
         throwsException = throwsException
     ) {
@@ -395,6 +397,7 @@ internal fun TestDrive.existCore(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
+            swipeToCenter = false,
             throwsException = false,
             waitSeconds = waitSeconds,
             useCache = useCache,
@@ -403,6 +406,9 @@ internal fun TestDrive.existCore(
 
     if (e.hasError && throwsException) {
         throw e.lastError!!
+    }
+    if (e.isFound && swipeToCenter) {
+        e = e.swipeToCenter(axis = direction.toAxis())
     }
     if (log) {
         TestLog.ok(message = assertMessage)
@@ -484,6 +490,7 @@ fun TestDrive.exist(
             waitSeconds = waitSeconds,
             useCache = useCache,
             scroll = scroll,
+            swipeToCenter = false,
             direction = direction,
         )
     }
@@ -496,10 +503,52 @@ fun TestDrive.exist(
 }
 
 /**
+ * verify
+ */
+fun TestDrive.verify(
+    message: String,
+    func: (() -> Unit)
+): TestElement {
+    val testElement = TestDriver.it
+
+    val command = "verify"
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = message) {
+
+        val startCount = TestLog.allLines.count()
+        val original = CodeExecutionContext.isInOperationCommand
+        try {
+            CodeExecutionContext.isInOperationCommand = true
+            func()
+            CodeExecutionContext.isInOperationCommand = original
+
+            val endCount = TestLog.allLines.count()
+            val takeCount = endCount - startCount
+            val lines = TestLog.allLines.takeLast(takeCount)
+            if (lines.any() { it.logType == LogType.CHECK || it.logType.isOKType }.not()) {
+                throw NotImplementedError("verify block must include one or mode assertion.")
+            }
+            TestLog.ok(message = message)
+        } catch (t: NotImplementedError) {
+            throw t
+        } catch (t: Throwable) {
+            val ex = TestNGException(message = message, cause = t)
+            TestLog.ng(exception = ex)
+        } finally {
+            CodeExecutionContext.isInOperationCommand = original
+        }
+    }
+
+    return lastElement
+}
+
+/**
  * existImage
  */
 fun TestDrive.existImage(
     expression: String,
+    swipeToCenter: Boolean = false,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     throwsException: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -538,7 +587,8 @@ fun TestDrive.existImage(
             waitSeconds = waitSeconds,
             useCache = useCache,
             scroll = scroll,
-            direction = direction
+            direction = direction,
+            swipeToCenter = swipeToCenter
         )
 
         if (e.imageMatchResult?.result == false) {
@@ -592,6 +642,7 @@ fun TestDrive.dontExistImage(
             useCache = useCache,
             scroll = scroll,
             direction = direction,
+            swipeToCenter = false,
             dontExist = true,
         )
 
@@ -618,6 +669,7 @@ private fun TestDrive.existImageCore(
     useCache: Boolean,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
+    swipeToCenter: Boolean,
     dontExist: Boolean = false,
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
@@ -654,6 +706,7 @@ private fun TestDrive.existImageCore(
                 waitSeconds = waitSeconds,
                 scroll = scroll,
                 direction = direction,
+                swipeToCenter = swipeToCenter,
                 useCache = useCache,
             )
         }
@@ -738,6 +791,7 @@ private fun selectElementAndCompareImage(
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
     scroll: Boolean,
+    swipeToCenter: Boolean,
     direction: ScrollDirection,
     useCache: Boolean,
 ): TestElement {
@@ -749,6 +803,7 @@ private fun selectElementAndCompareImage(
         direction = direction,
         throwsException = false,
         waitSeconds = waitSeconds,
+        swipeToCenter = swipeToCenter,
         useCache = useCache
     )
     if (e.isFound.not()) {
@@ -772,6 +827,7 @@ fun TestDrive.existWithScrollDown(
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -789,11 +845,12 @@ fun TestDrive.existWithScrollDown(
             assertMessage = assertMessage,
             selector = sel,
             scroll = true,
+            direction = ScrollDirection.Down,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            direction = ScrollDirection.Down,
+            swipeToCenter = swipeToCenter,
             throwsException = throwsException,
         )
     }
@@ -814,6 +871,7 @@ fun TestDrive.existWithScrollUp(
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -831,11 +889,12 @@ fun TestDrive.existWithScrollUp(
             assertMessage = assertMessage,
             selector = sel,
             scroll = true,
+            direction = ScrollDirection.Up,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            direction = ScrollDirection.Up,
+            swipeToCenter = swipeToCenter,
             throwsException = throwsException,
         )
     }
@@ -856,6 +915,7 @@ fun TestDrive.existWithScrollRight(
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -873,11 +933,12 @@ fun TestDrive.existWithScrollRight(
             assertMessage = assertMessage,
             selector = sel,
             scroll = true,
+            direction = ScrollDirection.Right,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            direction = ScrollDirection.Right,
+            swipeToCenter = swipeToCenter,
             throwsException = throwsException,
         )
     }
@@ -898,6 +959,7 @@ fun TestDrive.existWithScrollLeft(
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -915,11 +977,12 @@ fun TestDrive.existWithScrollLeft(
             assertMessage = assertMessage,
             selector = sel,
             scroll = true,
+            direction = ScrollDirection.Left,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            direction = ScrollDirection.Left,
+            swipeToCenter = swipeToCenter,
             throwsException = throwsException,
         )
     }
@@ -1105,6 +1168,7 @@ internal fun TestDrive.dontExistCore(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
+        swipeToCenter = false,
         waitSeconds = 0.0,
         throwsException = false,
         useCache = useCache,

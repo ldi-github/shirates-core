@@ -24,7 +24,7 @@ object ProcessUtility {
                 return pid
             }
         } catch (t: Throwable) {
-            TestLog.warn(t.message!!)
+            TestLog.warn(t.message ?: t.stackTraceToString())
             throw t
         }
     }

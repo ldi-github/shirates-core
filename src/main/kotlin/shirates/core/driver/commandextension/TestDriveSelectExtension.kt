@@ -12,6 +12,7 @@ import shirates.core.logging.Message.message
  */
 fun TestDrive.select(
     expression: String,
+    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     frame: Bounds? = viewBounds,
@@ -42,6 +43,7 @@ fun TestDrive.select(
             selector = sel,
             scroll = scroll,
             direction = direction,
+            swipeToCenter = swipeToCenter,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
             frame = frame,
@@ -100,16 +102,20 @@ fun TestDrive.selectWithScrollDown(
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
     val testElement = getScrollableElement()
 
+    val command = "selectWithScrollDown"
+
     val selector = getSelector(expression = expression)
+    val message = message(id = command, subject = selector.toString())
     val context = TestDriverCommandContext(testElement)
     var e = TestElement(selector = selector)
-    context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
+    context.execOperateCommand(command = command, message = message, subject = selector.toString(), forceLog = log) {
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = ScrollDirection.Down,
@@ -117,6 +123,7 @@ fun TestDrive.selectWithScrollDown(
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
+            swipeToCenter = swipeToCenter,
             throwsException = throwsException
         )
     }
@@ -136,16 +143,20 @@ fun TestDrive.selectWithScrollUp(
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
     val testElement = getScrollableElement()
 
+    val command = "selectWithScrollUp"
+
     val selector = getSelector(expression = expression)
+    val message = message(id = command, subject = selector.toString())
     var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(testElement)
-    context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
+    context.execOperateCommand(command = command, message = message, subject = selector.toString(), forceLog = log) {
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = ScrollDirection.Up,
@@ -153,6 +164,7 @@ fun TestDrive.selectWithScrollUp(
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
+            swipeToCenter = swipeToCenter,
             throwsException = throwsException
         )
     }
@@ -172,16 +184,20 @@ fun TestDrive.selectWithScrollRight(
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
     val testElement = getScrollableElement()
 
+    val command = "selectWithScrollRight"
+
     val selector = getSelector(expression = expression)
+    val message = message(id = command, subject = selector.toString())
     var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(testElement)
-    context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
+    context.execOperateCommand(command = command, message = message, subject = selector.toString(), forceLog = log) {
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = ScrollDirection.Right,
@@ -189,6 +205,7 @@ fun TestDrive.selectWithScrollRight(
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
+            swipeToCenter = swipeToCenter,
             throwsException = throwsException
         )
     }
@@ -208,16 +225,20 @@ fun TestDrive.selectWithScrollLeft(
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
     val testElement = getScrollableElement()
 
+    val command = "selectWithScrollLeft"
+
     val selector = getSelector(expression = expression)
+    val message = message(id = command, subject = selector.toString())
     var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(testElement)
-    context.execSelectCommand(selector = selector, subject = selector.toString(), log = log) {
+    context.execOperateCommand(command = command, message = message, subject = selector.toString(), forceLog = log) {
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = ScrollDirection.Left,
@@ -225,6 +246,7 @@ fun TestDrive.selectWithScrollLeft(
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
+            swipeToCenter = swipeToCenter,
             throwsException = throwsException
         )
     }
@@ -295,6 +317,7 @@ internal fun TestDrive.canSelect(
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
+        swipeToCenter = false,
         waitSeconds = waitSeconds,
         throwsException = false,
         frame = frame

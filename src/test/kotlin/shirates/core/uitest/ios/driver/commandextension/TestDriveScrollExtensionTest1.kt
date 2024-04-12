@@ -105,14 +105,14 @@ class TestDriveScrollExtensionTest1 : UITest() {
         // Act, Assert
         assertThat(it.hasScrollable).isTrue()
 
-        val originalData = ElementCategoryExpressionUtility.iosScrollableTypesExpression
+        val originalData = ElementCategoryExpressionUtility.scrollableTypesExpression
         try {
             // Arrange
-            ElementCategoryExpressionUtility.iosScrollableTypesExpression = "DummyType"
+            ElementCategoryExpressionUtility.scrollableTypesExpression = "DummyType"
             // Act, Assert
             assertThat(it.hasScrollable).isFalse()
         } finally {
-            ElementCategoryExpressionUtility.iosScrollableTypesExpression = originalData
+            ElementCategoryExpressionUtility.scrollableTypesExpression = originalData
         }
     }
 
