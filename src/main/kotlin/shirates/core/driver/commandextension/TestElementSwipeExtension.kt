@@ -355,7 +355,8 @@ fun TestElement.swipeToCenter(
         val b = bounds
         val startX = b.centerX
         val startY = b.centerY
-        val skip = (axis == Axis.Vertical && startY == endY) || (axis == Axis.Horizontal && startX == endX)
+        val skip = (axis == Axis.Vertical && Math.abs(startY - endY) < 10) ||
+                (axis == Axis.Horizontal && Math.abs(startX - endX) < 10)
 
         if (skip.not()) {
             swipePointToPoint(
