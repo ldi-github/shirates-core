@@ -6,7 +6,6 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 /**
  * output
@@ -348,6 +347,6 @@ fun TestElement.getCell(): TestElement {
 fun TestElement.getCellHost(): TestElement {
 
     val ancestors = this.ancestors
-    val cellHost = ancestors.lastOrNull() { ElementCategoryExpressionUtility.isCellHost(it.className) }
+    val cellHost = ancestors.lastOrNull() { it.isCellHost }
     return cellHost ?: TestElement.emptyElement
 }

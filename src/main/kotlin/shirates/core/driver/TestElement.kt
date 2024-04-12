@@ -1128,6 +1128,20 @@ class TestElement(
         }
 
     /**
+     * isCellHost
+     */
+    val isCellHost: Boolean
+        get() {
+            if (isEmpty) {
+                return false
+            }
+            if (classOrType == "") {
+                return false
+            }
+            return ElementCategoryExpressionUtility.isCellHost(classOrType)
+        }
+
+    /**
      * subject
      */
     val subject: String
