@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.InvalidSelectorException
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.findWebElement
+import shirates.core.driver.commandextension.thisIs
+import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -25,8 +27,8 @@ class TestDriveFindWebElementTest : UITest() {
             }
             case(2, "className") {
                 expectation {
-                    it.findWebElement(".android.widget.ScrollView").getAttribute("resource-id")
-                        .thisIs("com.android.settings:id/main_content_scrollable_container")
+                    it.findWebElement(".androidx.cardview.widget.CardView").getAttribute("resource-id")
+                        .thisIs("com.android.settings:id/search_bar")
                     it.findWebElement(".android.widget.ImageView&&[1]").getAttribute("resource-id")
                         .thisIs("com.android.settings:id/account_avatar")
                 }

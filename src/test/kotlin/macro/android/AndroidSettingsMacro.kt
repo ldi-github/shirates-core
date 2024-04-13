@@ -12,7 +12,7 @@ object AndroidSettingsMacro : TestDrive {
     fun androidSettingsTopScreen() {
 
         if (it.isScreen("[Android Settings Top Screen]")) {
-            it.selectWithScrollUp("Network & internet")
+            it.flickAndGoUpTurbo()
             return
         }
 
@@ -41,7 +41,7 @@ object AndroidSettingsMacro : TestDrive {
     fun networkAndInternetScreen() {
 
         if (it.isScreen("[Network & internet Screen]")) {
-            it.flickTopToBottom()
+            it.flickAndGoUpTurbo()
             return
         }
 
@@ -54,7 +54,7 @@ object AndroidSettingsMacro : TestDrive {
     fun internetScreen() {
 
         if (it.isScreen("[Internet Screen]")) {
-            it.flickTopToBottom()
+            it.flickAndGoUpTurbo()
             return
         }
 
@@ -69,7 +69,7 @@ object AndroidSettingsMacro : TestDrive {
     fun connectedDevicesScreen() {
 
         if (it.isScreen("[Connected devices Screen]")) {
-            it.flickTopToBottom()
+            it.flickAndGoUpTurbo()
             return
         }
 
@@ -82,7 +82,7 @@ object AndroidSettingsMacro : TestDrive {
     fun batteryScreen() {
 
         if (it.isScreen("[Battery Screen]")) {
-            it.flickTopToBottom()
+            it.flickAndGoUpTurbo()
             return
         }
 
@@ -107,7 +107,7 @@ object AndroidSettingsMacro : TestDrive {
     fun accessibilityScreen() {
 
         if (it.isScreen("[Accessibility Screen]")) {
-            it.flickTopToBottom()
+            it.flickAndGoUpTurbo()
             return
         }
 
@@ -120,11 +120,11 @@ object AndroidSettingsMacro : TestDrive {
     fun systemScreen() {
 
         if (it.isScreen("[System Screen]")) {
-            it.flickTopToBottom()
+            it.flickAndGoUpTurbo()
         }
 
         androidSettingsTopScreen()
-        it.flickBottomToTop()
+        it.flickAndGoDownTurbo()
             .tapWithScrollDown("[System]")
             .screenIs("[System Screen]")
     }
