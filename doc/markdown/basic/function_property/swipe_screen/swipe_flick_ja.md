@@ -98,14 +98,14 @@
             }
             case(2) {
                 condition {
-                    it.exist("[Security]")
-                        .exist("[Privacy]")
+                    it.exist("[Security & privacy]")
+                        .exist("[Location]")
                 }.action {
-                    it.select("[Security]")
+                    it.select("[Security & privacy]")
                         .swipeToBottomOfScreen(durationSeconds = 10.0)
                 }.expectation {
-                    it.exist("[Security]")
-                        .dontExist("[Privacy]")
+                    it.exist("[Security & privacy]")
+                        .dontExist("[Location]")
                 }
             }
         }

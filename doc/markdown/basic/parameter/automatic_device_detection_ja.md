@@ -1,35 +1,12 @@
 # プロファイル命名規約による自動デバイス検出
 
-テストで使用する仮想デバイス/実デバイスをプロファイル命名規約によって決定することができます。
+テストで使用する仮想デバイス/実デバイスを **プロファイル命名規約** によって決定することができます。
 
 ### 注意
 
 この機能はローカルマシンで利用できます。リモートサーバーでは利用できません。
 
-## shirates-core 1.x
-
-shirates-core 1.xの時点ではデバイスが必要とするcapabilitiesを明示的にプロファイルで構成する必要がありました。
-
-#### testConfig.json
-
-```
-...
-  "profiles": [
-    {
-      "profileName": "Android 12",
-      "capabilities": {
-        "automationName": "UiAutomator2",
-        "platformName": "Android",
-        "platformVersion": "12"
-      }
-    }
-  ]
-...  
-```
-
-## shirates-core 2.x以降
-
-shirates-core 2.x以降では **プロファイル命名規約**によってデバイスを指定できるようになりました。
+**プロファイル命名規約** を使用すれば
 testConfig.jsonにプロファイルを定義してcapabilitiesを構成する必要はありません。
 プロファイル名を指定するだけです。
 
@@ -49,17 +26,15 @@ AVD名をプロファイル名としてtestrunファイルで指定すること�
 #### testrun.properties
 
 ```
-android.profile=Pixel 3a API 31
+android.profile=Pixel 8(Android 14)
 ```
 
-テストを実行するとAVD名が`Pixel 3a API 31`である仮想デバイスが検索されて起動します。
+テストを実行するとAVD名が`Pixel 8(Android 14)`である仮想デバイスが検索されて起動します。
 
 #### Console
 
 ```
-63	2022/12/19 01:09:50.808	{}	[info]	()	Searching device for the profile. (profileName=Pixel 3a API 31)
-64	2022/12/19 01:09:54.224	{}	[info]	()	emulator @Pixel_3a_API_31 -no-boot-anim -no-snapshot
-65	2022/12/19 01:10:00.423	{}	[info]	()	Connected device found. (Pixel_3a_API_31:5554, Android 12, emulator-5554)
+78	[00:00:13]	2024/04/14 22:04:36.055	{}	0	-	[info]	+10175	C	()	Connected device found. (Pixel_8_Android_14_:5554, Android 14, emulator-5554)
 ```
 
 ### 例 (iOS)
@@ -70,56 +45,54 @@ Simulatorのデバイス名をプロファイル名としてtestrunファイル�
 
 ```
 os=ios
-ios.profile=iPhone 14(iOS 16.1)
+ios.profile=iPhone 15(iOS 17.2)
 ```
 
-テストを実行するとSimulatorデバイス`iPhone 14(iOS 16.1)`が検索されて起動します。
+テストを実行するとSimulatorデバイス`iPhone 15(iOS 17.2)`が検索されて起動します。
 
 #### Console
 
 ```
-61	2022/12/19 01:20:34.730	{}	[info]	()	Searching device for the profile. (profileName=iPhone 14(iOS 16.0)-01)
-62	2022/12/19 01:20:38.265	{}	[info]	()	Device found. (iPhone 14(iOS 16.0)-01, iOS 16.0, 4801481D-60AA-4A1A-BFC5-4C636ADF4B3A)
+125	[00:00:24]	2024/04/14 22:01:47.766	{s10}	0	-	[info]	+2268	C	(launchApp)	Device found. (iPhone 15(iOS 17.2), iOS 17.2, 4F87A640-BC60-46F1-8124-BD01B3862DD1)
 ```
 
 ## プロファイル命名規約
 
 ### Android
 
-| パターン                  | プロファイル名              | 説明                                  |
-|:----------------------|:---------------------|:------------------------------------|
-| _AVD name_            | Pixel 3a API 31      | Android仮想デバイス `Pixel 3a API 31`     |
-| _model_(_os_version_) | Pixel 3a(Android 12) | 接続されているデバイス `Pixel 3a(Android 12)`  |
-| _model_(_os_version_) | Pixel 3a(12)         | 接続されているデバイス `Pixel 3a(Android 12)`  |
-| _os_version_          | Android *            | 接続されているデバイス                         |
-| _os_version_          | Android 12           | 接続されているデバイス `Android 12`            |
-| _os_version_          | 12                   | 接続されているデバイス `Android 12`            |
-| _udid_                | emulator-5554        | 接続されているエミュレーター `udid:emulator-5554` |
-| _udid_                | 14141JEC20492X       | 接続されている実デバイス `udid:14141JEC20492X`  |
+| パターン                  | プロファイル名             | 説明                                  |
+|:----------------------|:--------------------|:------------------------------------|
+| _AVD name_            | Pixel 8 API 34      | Android仮想デバイス `Pixel 8 API 34`      |
+| _model_(_os_version_) | Pixel 8(Android 14) | 接続されているデバイス `Pixel 8(Android 14)`   |
+| _model_(_os_version_) | Pixel 8(14)         | 接続されているデバイス `Pixel 8(Android 14)`   |
+| _os_version_          | Android *           | 接続されているデバイス                         |
+| _os_version_          | Android 14          | 接続されているデバイス `Android 14`            |
+| _os_version_          | 14                  | 接続されているデバイス `Android 14`            |
+| _udid_                | emulator-5554       | 接続されているエミュレーター `udid:emulator-5554` |
+| _udid_                | 14141JEC20492X      | 接続されている実デバイス `udid:14141JEC20492X`  |
 
 ### iOS
 
 | パターン                  | プロファイル名                              | 説明                                                  |
 |:----------------------|:-------------------------------------|:----------------------------------------------------|
 | _deviceName_          | Device 1                             | iOSデバイス `Device 1`                                  |
-| _os_version_          | 16.2                                 | iOSデバイス (iOS 16.2)                                  |
+| _os_version_          | 17.2                                 | iOSデバイス (iOS 17.2)                                  |
 | _model_(_os_version_) | iPhone *                             | iOSデバイス                                             |
-| _model_               | iPhone 14                            | iOSデバイス (iPhone 14)                                 |
-| _model_(_os_version_) | iPhone 14(16.2)                      | iOSデバイス (iPhone 14, iOS 16.2)                       |
+| _model_               | iPhone 15                            | iOSデバイス (iPhone 15)                                 |
+| _model_(_os_version_) | iPhone 15(17.2)                      | iOSデバイス (iPhone 15, iOS 17.2)                       |
 | _udid_                | D0A63437-19F6-4756-8F27-8B1AA9EC22A4 | iOSデバイス (udid:D0A63437-19F6-4756-8F27-8B1AA9EC22A4) |
 
 ### Androidエミュレーター
 
 **Android Studio**を開いて**Device Manager**で **virtual** タブを確認します。
 
-![Device Manager](../_images/device-manager-virtual.png)
+![Device Manager](../_images/device_manager.png)
 
 プロファイル名としてAVD名を使用できます。
 
-- `Pixel 3a(Android 12)`
-- `Pixel 3a(Android 12)-01`
-- `Pixel 3a(Android 12)-02`
-- `Pixel 3a(Android 12)-03`
+- `Pixel 8(Android 14)`
+- `Pixel 8(Android 14)-01`
+- `Pixel 8(Android 14)-02`
 
 テスト開始時に指定されたAVDが起動していない場合は自動で起動します。
 
@@ -127,18 +100,15 @@ ios.profile=iPhone 14(iOS 16.1)
 
 **Xcode** を起動して **Simulators** タブを確認します。
 
-![Device Manager](../_images/devices-and-simulators.png)
+![Simulators](../_images/simulators.png)
 
 プロファイル名としてシミュレーターのデバイス名を使用できます。
 
-- `iPhone 14(16.0)`
-- `iPhone 14(16.1)`
-- `iPhone 14 Plus(16.0)`
-- `iPhone 14 Plus(16.1)`
-- `iPhone 14 Pro(16.0)`
-- `iPhone 14 Pro(16.1)`
-- `iPhone 14 Pro Max(16.0)`
-- `iPhone 14 Pro Max(16.1)`
+- `iPhone 15(17.2)`
+- `iPhone 15(17.2)-01`
+- `iPhone 15(17.2)-02`
+- `iPhone 15 Pro(17.2)`
+- `iPhone 15 Pro Max(17.2)`
 
 テスト開始時に指定されたシミュレーターデバイスが起動していない場合は自動で起動します。
 

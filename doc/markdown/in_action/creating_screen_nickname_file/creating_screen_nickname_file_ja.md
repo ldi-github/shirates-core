@@ -40,9 +40,9 @@ Androidの設定アプリを開きます。
 4. Appium Inspectorで`Connected Devices`画面をキャプチャします。 (
    参照 [Appium Inspectorを使用する](using_appium_inspector_ja.md))
     1. appiumを起動します。
-    2. Android 12のエミュレーターを起動します。
+    2. Android 14のエミュレーターを起動します。
     3. Appium Inspectorを起動します。
-    4. Android 12エミュレーター向けにcapabilitiesを編集し、`Start Session`をクリックして`設定アプリ`のセッションを開始します。
+    4. Android 14のエミュレーター向けにcapabilitiesを編集し、`Start Session`をクリックして`設定アプリ`のセッションを開始します。
     5. エミュレーターで`Connected devices`をタップします。
     6. Appium Inspectorで`Refresh source & screenshot`をクリックして`Connected devices`画面をキャプチャします。
        <br>![](../_images/refresh_source_and_screenshot.png)
@@ -348,7 +348,12 @@ Androidの設定アプリを開きます。
   "key": "[Android Settings Top Screen]",
 
   "identity": "#recycler_view",
-  "satellites": ["Battery", "Accessibility", "Passwords & accounts", "Tips & support"],
+  "satellites": [
+    "Battery",
+    "Accessibility",
+    "Passwords & accounts",
+    "Tips & support"
+  ],
 
   "selectors": {
     "[Account Avatar]": "#account_avatar",
@@ -397,13 +402,9 @@ Androidの設定アプリを開きます。
     "{Accessibility}": "[Accessibility]:label",
     "[Accessibility Icon]": "[Accessibility]:leftImage",
 
-    "[Security]": "",
-    "{Security}": "[Security]:label",
-    "[Security Icon]": "[Security]:leftImage",
-
-    "[Privacy]": "",
-    "{Privacy}": "[Privacy]:label",
-    "[Privacy Icon]": "[Privacy]:leftImage",
+    "[Security & privacy]": "",
+    "{Security & privacy}": "[Security & privacy]:label",
+    "[Security & privacy Icon]": "[Security & privacy]:leftImage",
 
     "[Location]": "",
     "{Location}": "[Location]:label",
@@ -416,6 +417,10 @@ Androidの設定アプリを開きます。
     "[Passwords & accounts]": "",
     "{Passwords & accounts}": "[Passwords & accounts]:label",
     "[Passwords & accounts Icon]": "[Passwords & accounts]:leftImage",
+
+    "[Digital Wellbeing & parental controls]": "",
+    "{Digital Wellbeing & parental controls}": "[Digital Wellbeing & parental controls]:label",
+    "[Digital Wellbeing & parental controls Icon]": "[Digital Wellbeing & parental controls]:leftImage",
 
     "[Google]": "",
     "{Google}": "[Google]:label",
@@ -441,9 +446,10 @@ Androidの設定アプリを開きます。
   },
 
   "scroll": {
+    "header-elements": "[Search Button][Search settings]",
+    "overlay-elements": "",
     "start-elements": "[Network & internet]",
-    "end-elements": "{Tips & support}",
-    "overlay-elements": "[Search Button][Search settings]"
+    "end-elements": "{Tips & support}"
   }
 }
 ```
@@ -485,7 +491,7 @@ identity と satellite keyから構成される複合キーが固有である必
 ### Link
 
 - [Appium Inspectorを使用する](using_appium_inspector_ja.md)
-- [Screen Builderを使用する](using_screen_builder.md)
+- [Screen Builderを使用する](using_screen_builder_ja.md)
 
 
 - [index](../../index_ja.md)

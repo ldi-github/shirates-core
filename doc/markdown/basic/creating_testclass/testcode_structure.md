@@ -58,7 +58,11 @@ class TestScenarioAndTestCase1 : UITest() {
 
 ## condition-action-expectation (CAE)
 
-A test case is combination of `condition`, `action` and `expectation` block.
+A test case is a combination of these blocks.
+
+- `condition`
+- `action`
+- `expectation`
 
 ### TestScenarioAndTestCase1.kt
 

@@ -43,6 +43,9 @@ object CalendarMacro : TestDrive {
             restartCalendar()
         }
 
+        if (it.canSelect("It's now easier to block spam")) {
+            it.tap("Got it")
+        }
         it.tap("@Show Calendar List and Settings drawer")
             .tap("Week")
 

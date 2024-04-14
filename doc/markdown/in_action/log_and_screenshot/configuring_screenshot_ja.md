@@ -6,6 +6,7 @@ testrunファイルでスクリーンショットを構成することができ�
 ```
 ## Screenshot --------------------
 #screenshotScale=0.333333
+#screenshotIntervalSeconds=0.5
 #autoScreenshot=false
 #onChangedOnly=false
 #onCondition=false
@@ -54,5 +55,7 @@ onScrolling=false
 ### Link
 
 - [ログ出力を構成する](configuring_log_ja.md)
+
+
 - [index](../../index_ja.md)
 

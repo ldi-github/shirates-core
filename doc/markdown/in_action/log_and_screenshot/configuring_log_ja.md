@@ -10,6 +10,7 @@ testrunファイルでログ出力を構成することができます。
 #enableTestList=false
 #enableTestClassList=false
 #enableSpecReport=false
+#enableRelativeCommandTranslation=false
 #enableInnerMacroLog=true
 #enableInnerCommandLog=true
 #enableSilentLog=true
@@ -17,17 +18,18 @@ testrunファイルでログ出力を構成することができます。
 #enableXmlSourceDump=false
 #enableRetryLog=false
 #enableWarnOnRetryError=true
+#enableWarnOnSelectTimeout=true
 #enableGetSourceLog=true
 #enableTrace=true
-#enableShellExecLog=true
 #enableTimeMeasureLog=true
+#enableShellExecLog=true
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true
 #enableIsSafeLog=false
 #enableIsScreenLog=true
 #testResults=
-#testListDir=
-#reportIndexDir=
+#testListDir={TEST_RESULTS}
+#reportIndexDir={DIRECTORY_FOR_TEST_CONFIG}
 ```
 
 ## 同期ログを抑制する
@@ -114,5 +116,7 @@ enableTapElementImageLog=true
 ### Link
 
 - [スクリーンショットを構成する](configuring_screenshot_ja.md)
+
+
 - [index](../../index_ja.md)
 

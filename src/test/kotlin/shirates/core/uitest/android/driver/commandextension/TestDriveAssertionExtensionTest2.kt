@@ -71,13 +71,14 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                         "Display",
                         "Wallpaper & style",
                         "Accessibility",
-                        "Security",
-                        "Privacy",
+                        "Security & privacy",
                         "Location",
                         "Safety & emergency",
                         "Passwords & accounts",
+                        "Digital Wellbeing & parental controls",
                         "Google",
                         "System",
+                        "About emulated device||About phone",
                         "Tips & support"
                     )
                 }
@@ -121,13 +122,14 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                         "Display",
                         "Wallpaper & style",
                         "Accessibility",
-                        "Security",
-                        "Privacy",
+                        "Security & privacy",
                         "Location",
                         "Safety & emergency",
                         "Passwords & accounts",
+                        "Digital Wellbeing & parental controls",
                         "Google",
                         "System",
+                        "About emulated device||About phone",
                         "Tips & support"
                     )
                 }

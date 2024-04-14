@@ -197,21 +197,22 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 1. **Android Studio**を開きます。
 2. メニューから`Tools > Device Manager`を選択します。
-3. `Create device`をクリックします。 <br>
+3. `[+]`をクリックします。 <br>
    ![](_images/create_avd_1.png)
 
 
-4. `Pixcel 3a` を選択して `Next` をクリックします。<br>
+4. `Pixcel 8` を選択して `Next` をクリックします。<br>
    ![](_images/create_avd_2.png)
 
 
-5. `S/API Level 31/Android 12.0 (Google Play)` を選択して`Next`をクリックします。 (**Calculator**アプリをデモで使用するのでGoogle
-   Play
-   Storeが必要です)。 M1 Macの場合は**arm64** イメージを、 それ以外の場合は **x86_64** イメージを選択します。<br>
+5. `UsideDownCake 34 Android 14.0 (Google Play)` を選択して`Next`をクリックします。 (**Calculator**アプリをデモで使用するのでGoogle
+   Play Storeが必要です)。 M1 Macの場合は**arm64** イメージを、 それ以外の場合は **x86_64** イメージを選択します。<br>
    ![](_images/create_avd_3.png)
 
 
-6. AVD名を `Pixel 3a(Android 12)` に設定して`Finish`をクリックします。<br>
+6. AVD名を `Pixel 8(Android 14)`に設定します。<br>
+   `Enable device frame`のチェックをOFFに設定します。<br>
+   `Finish`をクリックします。<br>
    ![](_images/create_avd_4.png)
 
 <br>
@@ -228,9 +229,9 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 ### 右クリックによるテスト実行を有効にする
 
-1. `IntelliJ IDEA > Preferences` (or `File > Settings`)
-1. `Build, Execution, Deployment > Build Tools > Gradle`
-1. `Run tests using` を `IntelliJ IDEA`に設定する
+1. メニューから`IntelliJ IDEA > Settings` (または `File > Settings`)を選択します。
+1. `Build, Execution, Deployment > Build Tools > Gradle`を選択します。
+1. `Run tests using` を `IntelliJ IDEA`に設定します
 
 ![](basic/_images/build_tools_gradle.png)
 
@@ -238,7 +239,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 ### AndroidSettingsDemoを実行する
 
-1. **Device Manager** から Android 12 の AVD を起動します。
+1. **Device Manager** から Android 14 の AVD を起動します。
 1. `shirates-core` プロジェクトを IntelliJで開き、 `src/test/Kotlin/demo/AndroidSettingsDemo` を右クリックして **Debug '
    AndroidSettingsDemo'** を選択します。
 1. コンソールに以下のようなログが出力されます。
@@ -246,18 +247,17 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 #### Console output
 
 ```
-Connected to the target VM, address: '127.0.0.1:59302', transport: 'socket'
-lineNo	logDateTime	testCaseId	logType	group	message
-1	2022/12/09 04:17:17.294	{}	[-]	()	----------------------------------------------------------------------------------------------------
-2	2022/12/09 04:17:17.307	{}	[-]	()	///
-3	2022/12/09 04:17:17.308	{}	[-]	()	/// Shirates 2.0.0
-4	2022/12/09 04:17:17.308	{}	[-]	()	///
-5	2022/12/09 04:17:17.309	{}	[-]	()	powered by Appium (io.appium:java-client:8.1.1)
-6	2022/12/09 04:17:17.309	{}	[-]	()	----------------------------------------------------------------------------------------------------
-7	2022/12/09 04:17:17.309	{}	[info]	(parameter)	testClass: demo.AndroidSettingsDemo
-8	2022/12/09 04:17:17.309	{}	[info]	(parameter)	sheetName: AndroidSettingsDemo
-9	2022/12/09 04:17:17.309	{}	[info]	(parameter)	logLanguage: 
-10	2022/12/09 04:17:17.903	{}	[info]	()	Initializing with testRun.properties.(testConfig/android/androidSettings/testrun.properties)
+Connected to the target VM, address: '127.0.0.1:62387', transport: 'socket'
+lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	timeDiff	mode	(group)	message
+1	[00:00:00]	2024/04/14 12:45:59.874	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
+2	[00:00:00]	2024/04/14 12:45:59.890	{}	0	-	[-]	+16	C	()	///
+3	[00:00:00]	2024/04/14 12:45:59.891	{}	0	-	[-]	+1	C	()	/// shirates-core 6.8.0
+4	[00:00:00]	2024/04/14 12:45:59.891	{}	0	-	[-]	+0	C	()	///
+5	[00:00:00]	2024/04/14 12:45:59.892	{}	0	-	[-]	+1	C	()	powered by Appium (io.appium:java-client:9.1.0)
+6	[00:00:00]	2024/04/14 12:45:59.892	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
+7	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+1	C	()	testClass: demo.AndroidSettingsDemo
+8	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+0	C	()	sheetName: AndroidSettingsDemo
+9	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+0	C	()	logLanguage: 
 ...
 ```
 
@@ -296,7 +296,7 @@ AndroidSettingsDemo@a.xlsx
 
 ### CalculatorDemoを実行する
 
-1. **Device Manager**でAndroid 12 のAVDを起動します。
+1. **Device Manager**でAndroid 14 のAVDを起動します。
 2. **Google Playストア** を開いて **電卓(Calculator)**(Google LLC)をインストールします。
 3. IntelliJでこのプロジェクトを開き、`src/test/Kotlin/demo/CalculatorDemo`を右クリックして **Debug 'CalculatorDemo'**
    を選択します。
@@ -308,7 +308,7 @@ AndroidSettingsDemo@a.xlsx
 
 ### iOSSettingsDemoの実行
 
-1. Xcode を開き、iOSシミュレーター(iPhone 13, iOS 15.5)をセットアップします。
+1. Xcode を開き、iOSシミュレーター(iPhone 15, iOS 17.2)をセットアップします。
 
 ![](_images/setup_ios_simulator.png)
 

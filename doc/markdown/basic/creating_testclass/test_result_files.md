@@ -5,7 +5,7 @@ Shirates outputs test result files at the end of test.
 ## Running sample
 
 1. Open `src/test/kotlin/demo/` in shirates-core project.
-2. Right click `AndroidSettingsDemo` and run.
+2. Right click `AndroidSettingsDemo` and select `Debug` to run.
 
 ## TestResults directory
 
@@ -43,15 +43,15 @@ in [Parameter](../parameter/parameters.md) file.
 
 #### Operations
 
-| Operation    | description            |
-|:-------------|:-----------------------|
-| Click        | Move to next image     |
-| Right-Click  | Move to previous image |
-| Esc          | Close image window     |
-| Up-Arrow     | Move to previous image |
-| Down-Arrow   | Move to next image     |
-| Right-Arrow  | Move to next image     |
-| Left-Arrow   | Move to previous image |
+| Operation   | description            |
+|:------------|:-----------------------|
+| Click       | Move to next image     |
+| Right-Click | Move to previous image |
+| Esc         | Close image window     |
+| Up-Arrow    | Move to previous image |
+| Down-Arrow  | Move to next image     |
+| Right-Arrow | Move to next image     |
+| Left-Arrow  | Move to previous image |
 
 <br>
 

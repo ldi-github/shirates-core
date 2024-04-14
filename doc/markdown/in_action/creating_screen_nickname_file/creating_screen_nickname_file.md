@@ -39,9 +39,9 @@ Let's see `[Connected devices Screen]` as example.
 
 4. Capture `Connected Devices` screen in Appium Inspector. (See [Using Appium Inspector](using_appium_inspector.md))
     1. Start appium.
-    2. Start Android 12 emulator.
+    2. Start Android 14 emulator.
     3. Start Appium Inspector.
-    4. Edit capabilities for Android 12 emulator. Click `Start Session`to start session of `Settings` app.
+    4. Edit capabilities for Android 14 emulator. Click `Start Session`to start session of `Settings` app.
     5. Tap `Connected devices` in the emulator.
     6. Click `Refresh source & screenshot` in Appium Inspector to capture `Connected devices` screen.
        <br>![](../_images/refresh_source_and_screenshot.png)
@@ -351,7 +351,12 @@ Let's see `[Android Settings Top Screen]` as example.
   "key": "[Android Settings Top Screen]",
 
   "identity": "#recycler_view",
-  "satellites": ["Battery", "Accessibility", "Passwords & accounts", "Tips & support"],
+  "satellites": [
+    "Battery",
+    "Accessibility",
+    "Passwords & accounts",
+    "Tips & support"
+  ],
 
   "selectors": {
     "[Account Avatar]": "#account_avatar",
@@ -400,13 +405,9 @@ Let's see `[Android Settings Top Screen]` as example.
     "{Accessibility}": "[Accessibility]:label",
     "[Accessibility Icon]": "[Accessibility]:leftImage",
 
-    "[Security]": "",
-    "{Security}": "[Security]:label",
-    "[Security Icon]": "[Security]:leftImage",
-
-    "[Privacy]": "",
-    "{Privacy}": "[Privacy]:label",
-    "[Privacy Icon]": "[Privacy]:leftImage",
+    "[Security & privacy]": "",
+    "{Security & privacy}": "[Security & privacy]:label",
+    "[Security & privacy Icon]": "[Security & privacy]:leftImage",
 
     "[Location]": "",
     "{Location}": "[Location]:label",
@@ -419,6 +420,10 @@ Let's see `[Android Settings Top Screen]` as example.
     "[Passwords & accounts]": "",
     "{Passwords & accounts}": "[Passwords & accounts]:label",
     "[Passwords & accounts Icon]": "[Passwords & accounts]:leftImage",
+
+    "[Digital Wellbeing & parental controls]": "",
+    "{Digital Wellbeing & parental controls}": "[Digital Wellbeing & parental controls]:label",
+    "[Digital Wellbeing & parental controls Icon]": "[Digital Wellbeing & parental controls]:leftImage",
 
     "[Google]": "",
     "{Google}": "[Google]:label",
@@ -444,9 +449,10 @@ Let's see `[Android Settings Top Screen]` as example.
   },
 
   "scroll": {
+    "header-elements": "[Search Button][Search settings]",
+    "overlay-elements": "",
     "start-elements": "[Network & internet]",
-    "end-elements": "{Tips & support}",
-    "overlay-elements": "[Search Button][Search settings]"
+    "end-elements": "{Tips & support}"
   }
 }
 ```

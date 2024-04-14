@@ -6,6 +6,7 @@ See also [parameters](../../basic/parameter/parameters.md).
 ```
 ## Screenshot --------------------
 #screenshotScale=0.333333
+#screenshotIntervalSeconds=0.5
 #autoScreenshot=false
 #onChangedOnly=false
 #onCondition=false
@@ -54,5 +55,7 @@ onScrolling=false
 ### Link
 
 - [Configuring log](configuring_log.md)
+
+
 - [index](../../index.md)
 

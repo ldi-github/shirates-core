@@ -24,12 +24,17 @@ android.inputTypes=android.widget.EditText
 android.imageTypes=android.widget.ImageView
 android.buttonTypes=android.widget.Button|android.widget.ImageButton|android.widget.CheckBox
 android.switchTypes=android.widget.Switch
+android.extraWidgetTypes=
+android.cellHostTypes=androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView|android.widget.HorizontalScrollView|androidx.viewpager.widget.ViewPager
 #iOS
 ios.labelTypes=XCUIElementTypeStaticText
 ios.inputTypes=XCUIElementTypeTextField|XCUIElementTypeSecureTextField
 ios.imageTypes=XCUIElementTypeImage
 ios.buttonTypes=XCUIElementTypeButton
 ios.switchTypes=XCUIElementTypeSwitch
+ios.extraWidgetTypes=
+ios.tableTypes=XCUIElementTypeTable
+ios.scrollableTypes=XCUIElementTypeTable|XCUIElementTypeCollectionView|XCUIElementTypeScrollView|XCUIElementTypeWebView|XCUIElementTypeMap
 ```
 
 ### Link

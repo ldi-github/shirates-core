@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.specialTag
@@ -28,6 +29,8 @@ import java.util.*
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecialBranchFunctionTest : UITest() {
 
+    lateinit var profile: TestProfile
+
     @NoLoadRun
     @Test
     @Order(10)
@@ -44,6 +47,9 @@ class SpecialBranchFunctionTest : UITest() {
     }
 
     private fun scenarioCore() {
+
+        profile = testProfile
+
         scenario {
             testProfile.specialTags = "Device1, Device2"
 
@@ -152,14 +158,13 @@ class SpecialBranchFunctionTest : UITest() {
          * Header
          */
         val deviceModel = if (ws.cells("D4").text.isNotBlank()) "sdk_gphone64_arm64" else ""
-        val platformVersion = if (deviceModel.isNotBlank()) "12" else ""
         ws.assertHeader(
             testConfigName = "Settings",
             sheetName = "SpecialBranchFunctionTest",
             testClassName = "SpecialBranchFunctionTest",
-            profileName = "Pixel 3a(Android 12)",
+            profileName = profile.profileName,
             deviceModel = deviceModel,
-            platformVersion = platformVersion,
+            platformVersion = profile.platformVersion,
             ok = 4,
             total = 4
         )

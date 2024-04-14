@@ -93,5 +93,5 @@ class IfStringIs1 : UITest() {
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 
