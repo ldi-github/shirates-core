@@ -40,9 +40,9 @@ Androidの設定アプリを開きます。
 4. Appium Inspectorで`Connected Devices`画面をキャプチャします。 (
    参照 [Appium Inspectorを使用する](using_appium_inspector_ja.md))
     1. appiumを起動します。
-    2. Android 12のエミュレーターを起動します。
+    2. Android 14のエミュレーターを起動します。
     3. Appium Inspectorを起動します。
-    4. Android 12エミュレーター向けにcapabilitiesを編集し、`Start Session`をクリックして`設定アプリ`のセッションを開始します。
+    4. Android 14のエミュレーター向けにcapabilitiesを編集し、`Start Session`をクリックして`設定アプリ`のセッションを開始します。
     5. エミュレーターで`Connected devices`をタップします。
     6. Appium Inspectorで`Refresh source & screenshot`をクリックして`Connected devices`画面をキャプチャします。
        <br>![](../_images/refresh_source_and_screenshot.png)
@@ -491,7 +491,7 @@ identity と satellite keyから構成される複合キーが固有である必
 ### Link
 
 - [Appium Inspectorを使用する](using_appium_inspector_ja.md)
-- [Screen Builderを使用する](using_screen_builder.md)
+- [Screen Builderを使用する](using_screen_builder_ja.md)
 
 
 - [index](../../index_ja.md)

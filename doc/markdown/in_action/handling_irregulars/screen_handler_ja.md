@@ -2,7 +2,7 @@
 
 [イレギュラーハンドラー](irregular_handler_ja.md) はコマンド実行の前に呼び出され、テストセッション内でグローバルに有効になります。
 
-スクリーンハンドラは、currentScreenが変更される時に呼び出され、テストシナリオの一部で有効にすることができます。
+**スクリーンハンドラー** は、currentScreenが変更される時に呼び出され、テストシナリオの一部で有効にすることができます。
 
 パフォーマンス上の理由から、すべてのイレギュラーな手続きをグローバルハンドラで実装するのは良いアイデアではありません。
 
@@ -68,8 +68,8 @@ class ScreenHandler1_ja : UITest() {
 
 ## disableScreenHandler(), enableScreenHandler()
 
-You can disable or enable screen handler by these functions.
+これらの関数を使用することでスクリーンハンドラーを無効化または有効化することができます。
 
 ### Link
 
-- [index](../../index.md)
+- [index](../../index_ja.md)

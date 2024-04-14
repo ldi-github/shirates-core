@@ -216,9 +216,11 @@ You can define base screen nickname file named `[screen-base].json` commonly sha
 
   "include": [
   ],
+
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[<-]": "@Navigate up||@Back",
     "[More options]": "@More options"
+
   }
 }
 ```

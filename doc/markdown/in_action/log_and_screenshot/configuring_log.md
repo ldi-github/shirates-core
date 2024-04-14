@@ -10,6 +10,7 @@ See also [parameters](../../basic/parameter/parameters.md).
 #enableTestList=false
 #enableTestClassList=false
 #enableSpecReport=false
+#enableRelativeCommandTranslation=false
 #enableInnerMacroLog=true
 #enableInnerCommandLog=true
 #enableSilentLog=true
@@ -17,17 +18,18 @@ See also [parameters](../../basic/parameter/parameters.md).
 #enableXmlSourceDump=false
 #enableRetryLog=false
 #enableWarnOnRetryError=true
+#enableWarnOnSelectTimeout=true
 #enableGetSourceLog=true
 #enableTrace=true
-#enableShellExecLog=true
 #enableTimeMeasureLog=true
+#enableShellExecLog=true
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true
 #enableIsSafeLog=false
 #enableIsScreenLog=true
 #testResults=
-#testListDir=
-#reportIndexDir=
+#testListDir={TEST_RESULTS}
+#reportIndexDir={DIRECTORY_FOR_TEST_CONFIG}
 ```
 
 ## Suppress sync log
@@ -114,5 +116,7 @@ enableTapElementImageLog=true
 ### Link
 
 - [Configuring screenshot](configuring_screenshot.md)
+
+
 - [index](../../index.md)
 

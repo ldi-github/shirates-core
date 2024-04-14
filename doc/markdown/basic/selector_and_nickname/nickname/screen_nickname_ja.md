@@ -218,9 +218,11 @@
 
   "include": [
   ],
+
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[<-]": "@Navigate up||@Back",
     "[More options]": "@More options"
+
   }
 }
 ```

@@ -198,20 +198,21 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 1. Open **Android Studio**.
 2. Select menu `Tools > Device Manager`.
-3. Click `Create device`. <br>
+3. Click `[+]`. <br>
    ![](_images/create_avd_1.png)
 
 
-4. Select `Pixcel 3a` and click Next.<br>
+4. Select `Pixcel 8` and click Next.<br>
    ![](_images/create_avd_2.png)
 
 
-5. Select `S/API Level 31/Android 12.0 (Google Play)` and click `Next` (Google Play Store is required for demonstration
-   using **Calculator** app). Select **arm64** image for M1 Mac, otherwise select **x86_64** image.<br>
+5. Select `UsideDownCake 34 Android 14.0 (Google Play)` and click `Next` (Google Play Store is required for
+   demonstration using **Calculator** app). Select **arm64** image for M1 Mac, otherwise select **x86_64** image.<br>
    ![](_images/create_avd_3.png)
 
-
-6. Set AVD Name to `Pixel 3a(Android 12)` and click `Finish`.<br>
+6. Set AVD Name to `Pixel 8(Android 14)`.<br>
+   Set `Enable device frame` off.<br>
+   Click `Finish`<br>
    ![](_images/create_avd_4.png)
 
 <br>
@@ -228,7 +229,7 @@ Let's see demonstration.
 
 ### Enable right-click test running
 
-1. `IntelliJ IDEA > Preferences` (or `File > Settings`)
+1. `IntelliJ IDEA > Settings` (or `File > Settings`)
 1. `Build, Execution, Deployment > Build Tools > Gradle`
 1. Set `Run tests using` to `IntelliJ IDEA`
 
@@ -238,7 +239,7 @@ Let's see demonstration.
 
 ### Run AndroidSettingsDemo
 
-1. Launch the AVD of Android 12 from **Device Manager**.
+1. Launch the AVD of Android 14 from **Device Manager**.
 1. Open `shirates-core` project in IntelliJ, right click on `src/test/Kotlin/demo/AndroidSettingsDemo` and select
    **Debug 'AndroidSettingsDemo'**
 1. You'll see logs in the Console like this.
@@ -246,18 +247,17 @@ Let's see demonstration.
 #### Console output
 
 ```
-Connected to the target VM, address: '127.0.0.1:59302', transport: 'socket'
-lineNo	logDateTime	testCaseId	logType	group	message
-1	2022/12/09 04:17:17.294	{}	[-]	()	----------------------------------------------------------------------------------------------------
-2	2022/12/09 04:17:17.307	{}	[-]	()	///
-3	2022/12/09 04:17:17.308	{}	[-]	()	/// Shirates 2.0.0
-4	2022/12/09 04:17:17.308	{}	[-]	()	///
-5	2022/12/09 04:17:17.309	{}	[-]	()	powered by Appium (io.appium:java-client:8.1.1)
-6	2022/12/09 04:17:17.309	{}	[-]	()	----------------------------------------------------------------------------------------------------
-7	2022/12/09 04:17:17.309	{}	[info]	(parameter)	testClass: demo.AndroidSettingsDemo
-8	2022/12/09 04:17:17.309	{}	[info]	(parameter)	sheetName: AndroidSettingsDemo
-9	2022/12/09 04:17:17.309	{}	[info]	(parameter)	logLanguage: 
-10	2022/12/09 04:17:17.903	{}	[info]	()	Initializing with testRun.properties.(testConfig/android/androidSettings/testrun.properties)
+Connected to the target VM, address: '127.0.0.1:62387', transport: 'socket'
+lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	timeDiff	mode	(group)	message
+1	[00:00:00]	2024/04/14 12:45:59.874	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
+2	[00:00:00]	2024/04/14 12:45:59.890	{}	0	-	[-]	+16	C	()	///
+3	[00:00:00]	2024/04/14 12:45:59.891	{}	0	-	[-]	+1	C	()	/// shirates-core 6.8.0
+4	[00:00:00]	2024/04/14 12:45:59.891	{}	0	-	[-]	+0	C	()	///
+5	[00:00:00]	2024/04/14 12:45:59.892	{}	0	-	[-]	+1	C	()	powered by Appium (io.appium:java-client:9.1.0)
+6	[00:00:00]	2024/04/14 12:45:59.892	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
+7	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+1	C	()	testClass: demo.AndroidSettingsDemo
+8	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+0	C	()	sheetName: AndroidSettingsDemo
+9	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+0	C	()	logLanguage: 
 ...
 ```
 
@@ -296,7 +296,7 @@ AndroidSettingsDemo@a.xlsx
 
 ### Run CalculatorDemo
 
-1. Launch the AVD of Android 12 from **Device Manager**.
+1. Launch the AVD of Android 14 from **Device Manager**.
 2. Open **Google Play Store** and install **Calculator**(Google LLC).
 3. Open this project in IntelliJ, right click on `src/test/Kotlin/demo/CalculatorDemo` and select
    **Debug 'CalculatorDemo'**
@@ -308,7 +308,7 @@ AndroidSettingsDemo@a.xlsx
 
 ### Run iOSSettingsDemo
 
-1. Open Xcode and setup iOS Simulator.(iPhone 13, iOS 15.5)
+1. Open Xcode and setup iOS Simulator.(iPhone 15, iOS 17.2)
 
 ![](_images/setup_ios_simulator.png)
 

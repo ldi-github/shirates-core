@@ -41,5 +41,7 @@ Using class aliases simplifies the description rather than writing specific clas
 ### Link
 
 - [Special filter](../special_filter/special_filter.md)
+
+
 - [index](../../../index.md)
 

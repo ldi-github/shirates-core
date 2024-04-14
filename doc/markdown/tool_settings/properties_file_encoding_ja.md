@@ -5,7 +5,7 @@ shirates-coreのpropertiesファイルはUTF-8に対応しているので、Inte
 
 ### 推奨設定
 
-1. `IntelliJ IDEA > Preferences` (or `File > Settings`)を選択します。
+1. `IntelliJ IDEA > Settings` (or `File > Settings`)を選択します。
 2. `Editor > File Encodings`を選択します。
 3. `Default encoding for properties file:`を **UTF-8** に設定します。
 4. `OK`をクリックします。

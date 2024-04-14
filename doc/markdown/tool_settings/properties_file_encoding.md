@@ -6,7 +6,7 @@ shirates-core's properties file supports UTF-8, we recommend changing the Intell
 
 ### Recommended setting
 
-1. `IntelliJ IDEA > Preferences` (or `File > Settings`)
+1. `IntelliJ IDEA > Settings` (or `File > Settings`)
 2. `Editor > File Encodings`
 3. Set `Default encoding for properties file:` to **UTF-8**
 4. Click `OK` .

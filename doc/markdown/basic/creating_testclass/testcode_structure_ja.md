@@ -58,7 +58,11 @@ class TestScenarioAndTestCase1 : UITest() {
 
 ## condition-action-expectation (CAE)
 
-case（テストケース）は `condition`(事前条件), `action`（アクション）, `expectation`（期待結果） のブロックの組み合わせです。
+case（テストケース）は以下のブロックの組み合わせです。
+
+- `condition`(事前条件)
+- `action`（アクション）
+- `expectation`（期待結果）
 
 ### TestScenarioAndTestCase1.kt
 
@@ -82,7 +86,8 @@ fun caePattern() {
 }
 ```
 
-このパターンはShiratesでは "**CAE pattern**" と呼びます。これは有名なUnitテストプラクティスの "AAAパターン (Arrange-Act-Assert
+このパターンはShiratesでは "**CAE pattern**" と呼びます。これは有名なUnitテストプラクティスの "AAAパターン (
+Arrange-Act-Assert
 pattern)" に対応するものです。
 
 ### Test Report

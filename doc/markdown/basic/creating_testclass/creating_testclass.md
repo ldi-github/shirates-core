@@ -4,7 +4,8 @@
 
 1. Create a package directory `src/test/kotlin/exercise`.
 
-   ![](../_images/creating_package.png)
+   ![](../_images/creating_package_1.png)<br><br>
+   ![](../_images/creating_package_2.png)
 
 
 2. Create a kotlin class file `TestClass1`.
@@ -55,13 +56,13 @@ You can omit putting `@Testrun` annotation on each Test class.
 
 ## @Test annotation
 
-Create a function (`testMethod1`).
+Create a function (`testFunc1`).
 
 ```kotlin
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class TestClass1 : UITest() {
 
-    fun testMethod1() {
+    fun testFunc1() {
 
     }
 }
@@ -82,7 +83,7 @@ import shirates.core.testcode.UITest
 class TestClass1 : UITest() {
 
     @Test
-    fun testMethod1() {
+    fun testFunc1() {
 
     }
 }
@@ -90,193 +91,144 @@ class TestClass1 : UITest() {
 
 ## Running test
 
-At this point, you can run `testMethod1`.
+At this point, you can run `testFunc1`.
 
 1. Run Android device.
     - You can use Android AVD created in **Create AVD for demo** in [Quick Start](../../quick-start.md)
     - Or you can connect Android real device to your machine and enable **USB debugging**.
-1. Set IntelliJ IDEA preferences.
+1. Set IntelliJ IDEA Settings.
     - See [Enable right-click test running](../../tool_settings/right_click_test_running.md)
-1. Right-click in testMethod1 and select `Debug`.
+1. Right-click in testFunc1 and select `Debug`.
 
 ### Console
 
 ```
-lineNo	logDateTime	testCaseId	logType	group	message
-1	2023/03/11 06:24:13.193	{}	[-]	()	----------------------------------------------------------------------------------------------------
-2	2023/03/11 06:24:13.206	{}	[-]	()	///
-3	2023/03/11 06:24:13.206	{}	[-]	()	/// Shirates 3.0.0
-4	2023/03/11 06:24:13.207	{}	[-]	()	///
-5	2023/03/11 06:24:13.207	{}	[-]	()	powered by Appium (io.appium:java-client:8.1.1)
-6	2023/03/11 06:24:13.208	{}	[-]	()	----------------------------------------------------------------------------------------------------
-7	2023/03/11 06:24:13.208	{}	[-]	(parameter)	testClass: excercise.TestClass1
-8	2023/03/11 06:24:13.208	{}	[-]	(parameter)	sheetName: TestClass1
-9	2023/03/11 06:24:13.208	{}	[-]	(parameter)	logLanguage: 
-10	2023/03/11 06:24:13.217	{}	[info]	()	----------------------------------------------------------------------------------------------------
-11	2023/03/11 06:24:13.217	{}	[info]	()	Test function: testMethod1 [testMethod1()]
-12	2023/03/11 06:24:13.863	{}	[info]	()	Initializing with testrun file.(testConfig/android/androidSettings/testrun.properties)
-13	2023/03/11 06:24:13.955	{}	[info]	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1/
-Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1
-14	2023/03/11 06:24:13.989	{}	[info]	()	Loading config.(configFile=/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/androidSettingsConfig.json, profileName=Android 12)
-15	2023/03/11 06:24:14.024	{}	[WARN]	()	screens directory not found. (/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/screens)
-16	2023/03/11 06:24:14.034	{}	[info]	()	Scanning macro under '/Users/wave1008/Downloads/Practice1/src/test/kotlin'
-17	2023/03/11 06:24:14.035	{}	[info]	()	Initializing TestDriver.(profileName=Android 12)
-18	2023/03/11 06:24:14.036	{}	[info]	()	noLoadRun: false
-19	2023/03/11 06:24:14.036	{}	[info]	()	boundsToRectRatio: 1
-20	2023/03/11 06:24:14.036	{}	[info]	()	reuseDriver: true
-21	2023/03/11 06:24:14.036	{}	[info]	()	autoScreenshot: true
-22	2023/03/11 06:24:14.037	{}	[info]	()	onChangedOnly: true
-23	2023/03/11 06:24:14.037	{}	[info]	()	onCondition: true
-24	2023/03/11 06:24:14.037	{}	[info]	()	onAction: true
-25	2023/03/11 06:24:14.037	{}	[info]	()	onExpectation: true
-26	2023/03/11 06:24:14.038	{}	[info]	()	onExecOperateCommand: true
-27	2023/03/11 06:24:14.038	{}	[info]	()	onCheckCommand: true
-28	2023/03/11 06:24:14.038	{}	[info]	()	onScrolling: true
-29	2023/03/11 06:24:14.038	{}	[info]	()	manualScreenshot: true
-30	2023/03/11 06:24:14.039	{}	[info]	()	retryMaxCount: 1
-31	2023/03/11 06:24:14.039	{}	[info]	()	retryIntervalSeconds: 2.0
-32	2023/03/11 06:24:14.040	{}	[info]	()	shortWaitSeconds: 1.5
-33	2023/03/11 06:24:14.040	{}	[info]	()	waitSecondsOnIsScreen: 15.0
-34	2023/03/11 06:24:14.040	{}	[info]	()	waitSecondsForLaunchAppComplete: 15.0
-35	2023/03/11 06:24:14.041	{}	[info]	()	waitSecondsForAnimationComplete: 0.5
-36	2023/03/11 06:24:14.041	{}	[info]	()	waitSecondsForConnectionEnabled: 8.0
-37	2023/03/11 06:24:14.042	{}	[info]	()	swipeDurationSeconds: 3.0
-38	2023/03/11 06:24:14.042	{}	[info]	()	flickDurationSeconds: 0.3
-39	2023/03/11 06:24:14.043	{}	[info]	()	swipeMarginRatio: 0.1
-40	2023/03/11 06:24:14.043	{}	[info]	()	scrollVerticalStartMarginRatio: 0.2
-41	2023/03/11 06:24:14.044	{}	[info]	()	scrollHorizontalStartMarginRatio: 0.2
-42	2023/03/11 06:24:14.044	{}	[info]	()	tapHoldSeconds: 0.2
-43	2023/03/11 06:24:14.044	{}	[info]	()	tapAppIconMethod: auto
-44	2023/03/11 06:24:14.044	{}	[info]	()	tapAppIconMacro: 
-45	2023/03/11 06:24:14.045	{}	[info]	()	syncWaitSeconds: 1.8
-46	2023/03/11 06:24:14.045	{}	[info]	()	Searching device for the profile. (profileName=Android 12)
-47	2023/03/11 06:24:14.516	{}	[info]	()	Connected device found. (Pixel_3a_Android_12_-01:5554, Android 12, emulator-5554)
-48	2023/03/11 06:24:14.568	{}	[info]	()	appium --session-override --relaxed-security --log /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1/appium_2023-03-11_062414523.log --port 4720
-49	2023/03/11 06:24:18.708	{}	[info]	()	Appium Server started. (pid=43662, port=4720)
-50	2023/03/11 06:24:19.717	{}	[info]	()	Connecting to Appium Server.(http://127.0.0.1:4720/)
-51	2023/03/11 06:24:25.307	{}	[info]	()	[Health check] start
-52	2023/03/11 06:24:25.311	{}	[info]	(syncCache)	Syncing (1)
-53	2023/03/11 06:24:26.126	{}	[info]	(syncCache)	elapsed=0.814, syncWaitSeconds=15.0
-54	2023/03/11 06:24:26.629	{}	[info]	(syncCache)	Syncing (2)
-55	2023/03/11 06:24:26.734	{}	[info]	(syncCache)	Synced. (elapsed=1.422, currentScreen=?)
-56	2023/03/11 06:24:27.285	{}	[screenshot]	(screenshot)	screenshot
-57	2023/03/11 06:24:27.287	{}	[operate]	(tap)	Tap <.label>
-58	2023/03/11 06:24:28.727	{}	[info]	(syncCache)	Syncing (1)
-59	2023/03/11 06:24:28.836	{}	[info]	(syncCache)	Synced. (elapsed=0.108, currentScreen=?)
-60	2023/03/11 06:24:29.014	{}	[info]	()	[Health check] end
-61	2023/03/11 06:24:29.019	{}	[info]	()	implicitlyWaitSeconds: 5.0
-62	2023/03/11 06:24:29.097	{}	[info]	()	(settings) always_finish_activities: 0
-63	2023/03/11 06:24:29.128	{}	[info]	()	Searching device for the profile. (profileName=Android 12)
-64	2023/03/11 06:24:29.579	{}	[info]	()	Connected device found. (Pixel_3a_Android_12_-01:5554, Android 12, emulator-5554)
-65	2023/03/11 06:24:29.580	{}	[info]	()	AppiumDriver initialized.
-66	2023/03/11 06:24:29.580	{}	[-]	(parameter)	testrun: testConfig/android/androidSettings/testrun.properties
-67	2023/03/11 06:24:29.581	{}	[-]	(parameter)	testConfigName: androidSettingsConfig(/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/androidSettingsConfig.json)
-68	2023/03/11 06:24:29.582	{}	[-]	(parameter)	profileName: Android 12
-69	2023/03/11 06:24:29.583	{}	[-]	(parameter)	appIconName: Settings
-70	2023/03/11 06:24:29.583	{}	[-]	()	(capabilities)
-71	2023/03/11 06:24:29.583	{}	[-]	(parameter)	appium:newCommandTimeout: 300
-72	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:takesScreenshot: true
-73	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:warnings: {}
-74	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:deviceApiLevel: 31
-75	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:automationName: UiAutomator2
-76	2023/03/11 06:24:29.584	{}	[-]	(parameter)	appium:locationContextEnabled: false
-77	2023/03/11 06:24:29.585	{}	[-]	(parameter)	appium:deviceScreenSize: 1080x2220
-78	2023/03/11 06:24:29.585	{}	[-]	(parameter)	appium:deviceManufacturer: Google
-79	2023/03/11 06:24:29.585	{}	[-]	(parameter)	appium:udid: emulator-5554
-80	2023/03/11 06:24:29.585	{}	[-]	(parameter)	appium:pixelRatio: 2.75
-81	2023/03/11 06:24:29.585	{}	[-]	(parameter)	platformName: android
-82	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:networkConnectionEnabled: true
-83	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:locale: US
-84	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:deviceScreenDensity: 440
-85	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:viewportRect: {left=0, top=66, width=1080, height=2022}
-86	2023/03/11 06:24:29.586	{}	[-]	(parameter)	appium:language: en
-87	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:avd: Pixel_3a_Android_12_-01
-88	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:deviceModel: sdk_gphone64_arm64
-89	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:platformVersion: 12
-90	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:databaseEnabled: false
-91	2023/03/11 06:24:29.587	{}	[-]	(parameter)	appium:deviceUDID: emulator-5554
-92	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:statBarHeight: 66
-93	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:webStorageEnabled: false
-94	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:appActivity: com.android.settings.Settings
-95	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:deviceName: emulator-5554
-96	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:javascriptEnabled: true
-97	2023/03/11 06:24:29.588	{}	[-]	(parameter)	appium:appPackage: com.android.settings
-98	2023/03/11 06:24:29.589	{}	[-]	()	settings
-99	2023/03/11 06:24:29.665	{}	[-]	(parameter)	always_finish_activities: 0
-100	2023/03/11 06:24:29.665	{}	[-]	()	(others)
-101	2023/03/11 06:24:29.666	{}	[-]	(parameter)	isEmulator: true
-102	2023/03/11 06:24:29.666	{}	[-]	(parameter)	hasOsaifuKeitai: false
-103	2023/03/11 06:24:29.667	{}	[info]	()	Setup executed. (duration: 16.0 sec)
-104	2023/03/11 06:24:29.671	{}	[WARN]	()	scenario not implemented.
+Connected to the target VM, address: '127.0.0.1:54490', transport: 'socket'
+lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	timeDiff	mode	(group)	message
+1	[00:00:00]	2024/04/14 20:12:16.039	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
+2	[00:00:00]	2024/04/14 20:12:16.056	{}	0	-	[-]	+17	C	()	///
+3	[00:00:00]	2024/04/14 20:12:16.056	{}	0	-	[-]	+0	C	()	/// shirates-core 6.8.0
+4	[00:00:00]	2024/04/14 20:12:16.056	{}	0	-	[-]	+0	C	()	///
+5	[00:00:00]	2024/04/14 20:12:16.057	{}	0	-	[-]	+1	C	()	powered by Appium (io.appium:java-client:9.1.0)
+6	[00:00:00]	2024/04/14 20:12:16.057	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
+7	[00:00:00]	2024/04/14 20:12:16.058	{}	0	-	[-]	+1	C	()	testClass: exercise.TestClass1
+8	[00:00:00]	2024/04/14 20:12:16.058	{}	0	-	[-]	+0	C	()	sheetName: TestClass1
+9	[00:00:00]	2024/04/14 20:12:16.058	{}	0	-	[-]	+0	C	()	logLanguage: 
+10	[00:00:00]	2024/04/14 20:12:16.067	{}	0	-	[info]	+9	C	()	
+11	[00:00:00]	2024/04/14 20:12:16.067	{}	0	-	[info]	+0	C	()	----------------------------------------------------------------------------------------------------
+12	[00:00:00]	2024/04/14 20:12:16.068	{}	0	-	[info]	+1	C	()	Test function: testFunc1 [testFunc1()]
+13	[00:00:00]	2024/04/14 20:12:16.068	{}	0	-	[info]	+0	C	()	----------------------------------------------------------------------------------------------------
+14	[00:00:00]	2024/04/14 20:12:16.664	{}	0	-	[info]	+596	C	()	Initializing with testrun file.(testConfig/android/androidSettings/testrun.properties)
+15	[00:00:00]	2024/04/14 20:12:16.673	{}	0	-	[info]	+9	C	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2024-04-14_201215/TestClass1/
+16	[00:00:00]	2024/04/14 20:12:16.805	{}	0	-	[info]	+132	C	()	Loading config.(configFile=/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/androidSettingsConfig.json, profileName=Android *)
+17	[00:00:01]	2024/04/14 20:12:16.835	{}	0	-	[info]	+30	C	()	Loading screen files.(directory=/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/screens)
+18	[00:00:01]	2024/04/14 20:12:16.839	{}	0	-	[info]	+4	C	()	Screen files loaded.(0 files)
+19	[00:00:01]	2024/04/14 20:12:16.857	{}	0	-	[info]	+18	C	()	Scanning macro under '/Users/wave1008/Downloads/Practice1/src/test/kotlin'
+20	[00:00:01]	2024/04/14 20:12:16.861	{}	0	-	[info]	+4	C	()	Initializing TestDriver.(profileName=Android *)
+21	[00:00:01]	2024/04/14 20:12:16.862	{}	0	-	[info]	+1	C	()	noLoadRun: false
+22	[00:00:01]	2024/04/14 20:12:16.862	{}	0	-	[info]	+0	C	()	boundsToRectRatio: 1
+23	[00:00:01]	2024/04/14 20:12:16.863	{}	0	-	[info]	+1	C	()	reuseDriver: true
+24	[00:00:01]	2024/04/14 20:12:16.863	{}	0	-	[info]	+0	C	()	autoScreenshot: true
+25	[00:00:01]	2024/04/14 20:12:16.864	{}	0	-	[info]	+1	C	()	onChangedOnly: true
+26	[00:00:01]	2024/04/14 20:12:16.864	{}	0	-	[info]	+0	C	()	onCondition: true
+27	[00:00:01]	2024/04/14 20:12:16.865	{}	0	-	[info]	+1	C	()	onAction: true
+28	[00:00:01]	2024/04/14 20:12:16.866	{}	0	-	[info]	+1	C	()	onExpectation: true
+29	[00:00:01]	2024/04/14 20:12:16.867	{}	0	-	[info]	+1	C	()	onExecOperateCommand: true
+30	[00:00:01]	2024/04/14 20:12:16.868	{}	0	-	[info]	+1	C	()	onCheckCommand: true
+31	[00:00:01]	2024/04/14 20:12:16.876	{}	0	-	[info]	+8	C	()	onScrolling: true
+32	[00:00:01]	2024/04/14 20:12:16.877	{}	0	-	[info]	+1	C	()	manualScreenshot: true
+33	[00:00:01]	2024/04/14 20:12:16.878	{}	0	-	[info]	+1	C	()	retryMaxCount: 2
+34	[00:00:01]	2024/04/14 20:12:16.879	{}	0	-	[info]	+1	C	()	retryIntervalSeconds: 2.0
+35	[00:00:01]	2024/04/14 20:12:16.879	{}	0	-	[info]	+0	C	()	shortWaitSeconds: 1.5
+36	[00:00:01]	2024/04/14 20:12:16.880	{}	0	-	[info]	+1	C	()	waitSecondsOnIsScreen: 15.0
+37	[00:00:01]	2024/04/14 20:12:16.880	{}	0	-	[info]	+0	C	()	waitSecondsForLaunchAppComplete: 15.0
+38	[00:00:01]	2024/04/14 20:12:16.881	{}	0	-	[info]	+1	C	()	waitSecondsForAnimationComplete: 0.5
+39	[00:00:01]	2024/04/14 20:12:16.882	{}	0	-	[info]	+1	C	()	waitSecondsForConnectionEnabled: 8.0
+40	[00:00:01]	2024/04/14 20:12:16.884	{}	0	-	[info]	+2	C	()	swipeDurationSeconds: 3.0
+41	[00:00:01]	2024/04/14 20:12:16.885	{}	0	-	[info]	+1	C	()	flickDurationSeconds: 0.3
+42	[00:00:01]	2024/04/14 20:12:16.886	{}	0	-	[info]	+1	C	()	swipeMarginRatio: 0.0
+43	[00:00:01]	2024/04/14 20:12:16.887	{}	0	-	[info]	+1	C	()	scrollVerticalStartMarginRatio: 0.15
+44	[00:00:01]	2024/04/14 20:12:16.889	{}	0	-	[info]	+2	C	()	scrollVerticalEndMarginRatio: 0.1
+45	[00:00:01]	2024/04/14 20:12:16.892	{}	0	-	[info]	+3	C	()	scrollHorizontalStartMarginRatio: 0.2
+46	[00:00:01]	2024/04/14 20:12:16.893	{}	0	-	[info]	+1	C	()	scrollHorizontalEndMarginRatio: 0.1
+47	[00:00:01]	2024/04/14 20:12:16.893	{}	0	-	[info]	+0	C	()	tapHoldSeconds: 0.0
+48	[00:00:01]	2024/04/14 20:12:16.894	{}	0	-	[info]	+1	C	()	tapAppIconMethod: auto
+49	[00:00:01]	2024/04/14 20:12:16.895	{}	0	-	[info]	+1	C	()	tapAppIconMacro: 
+50	[00:00:01]	2024/04/14 20:12:16.896	{}	0	-	[info]	+1	C	()	enableCache: true
+51	[00:00:01]	2024/04/14 20:12:16.896	{}	0	-	[info]	+0	C	()	syncWaitSeconds: 1.8
+52	[00:00:01]	2024/04/14 20:12:17.150	{}	0	-	[WARN]	+254	C	()	Could not find connected device(profile=Android *). Falling back to emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:7 Android:14.
+53	[00:00:01]	2024/04/14 20:12:17.152	{}	0	-	[info]	+2	C	()	Connected device found. (Pixel_8_Android_14_:5554, Android 14, emulator-5554)
+54	[00:00:01]	2024/04/14 20:12:17.252	{}	0	-	[info]	+100	C	()	Terminating Appium Server. (pid=87574, port=4720)
+55	[00:00:01]	2024/04/14 20:12:17.261	{}	0	-	[info]	+9	C	()	Starting Appium Server.
+56	[00:00:01]	2024/04/14 20:12:17.263	{}	0	-	[info]	+2	C	()	appium --session-override --relaxed-security --log /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2024-04-14_201215/TestClass1/appium_2024-04-14_201217154.log --port 4720
+57	[00:00:04]	2024/04/14 20:12:20.477	{}	0	-	[info]	+3214	C	()	Appium Server started. (pid=87724, port=4720)
+58	[00:00:05]	2024/04/14 20:12:21.496	{}	0	-	[info]	+1019	C	()	Connecting to Appium Server.(http://127.0.0.1:4720/)
+59	[00:00:10]	2024/04/14 20:12:26.165	{}	0	-	[info]	+4669	C	()	[Health check] start
+60	[00:00:10]	2024/04/14 20:12:26.169	{}	0	-	[info]	+4	C	(syncCache)	Syncing (1)
+61	[00:00:11]	2024/04/14 20:12:27.283	{}	0	-	[info]	+1114	C	(syncCache)	imageProfile: @a_1080x2268
+62	[00:00:11]	2024/04/14 20:12:27.291	{}	0	-	[info]	+8	C	(syncCache)	Synced. (elapsed=1.122)
+63	[00:00:11]	2024/04/14 20:12:27.309	{}	0	-	[info]	+18	C	()	tap<.label>
+64	[00:00:12]	2024/04/14 20:12:28.496	{}	0	-	[info]	+1187	C	()	[Health check] end
+65	[00:00:12]	2024/04/14 20:12:28.512	{}	0	-	[info]	+16	C	()	implicitlyWaitSeconds: 5.0
+66	[00:00:12]	2024/04/14 20:12:28.663	{}	0	-	[info]	+151	C	()	(settings) always_finish_activities: 0
+67	[00:00:12]	2024/04/14 20:12:28.715	{}	0	-	[info]	+52	C	()	AppiumDriver initialized.
+68	[00:00:12]	2024/04/14 20:12:28.716	{}	0	-	[-]	+1	C	()	testrun: testConfig/android/androidSettings/testrun.properties
+69	[00:00:12]	2024/04/14 20:12:28.717	{}	0	-	[-]	+1	C	()	testConfigName: androidSettingsConfig(/Users/wave1008/Downloads/Practice1/testConfig/android/androidSettings/androidSettingsConfig.json)
+70	[00:00:12]	2024/04/14 20:12:28.717	{}	0	-	[-]	+0	C	()	profileName: Android *
+71	[00:00:12]	2024/04/14 20:12:28.717	{}	0	-	[-]	+0	C	()	appIconName: Settings
+72	[00:00:12]	2024/04/14 20:12:28.718	{}	0	-	[-]	+1	C	()	(capabilities)
+73	[00:00:12]	2024/04/14 20:12:28.718	{}	0	-	[-]	+0	C	()	appium:newCommandTimeout: 300
+74	[00:00:12]	2024/04/14 20:12:28.719	{}	0	-	[-]	+1	C	()	appium:takesScreenshot: true
+75	[00:00:12]	2024/04/14 20:12:28.719	{}	0	-	[-]	+0	C	()	appium:warnings: {}
+76	[00:00:12]	2024/04/14 20:12:28.720	{}	0	-	[-]	+1	C	()	appium:deviceApiLevel: 34
+77	[00:00:12]	2024/04/14 20:12:28.720	{}	0	-	[-]	+0	C	()	appium:automationName: UiAutomator2
+78	[00:00:12]	2024/04/14 20:12:28.721	{}	0	-	[-]	+1	C	()	appium:locationContextEnabled: false
+79	[00:00:12]	2024/04/14 20:12:28.721	{}	0	-	[-]	+0	C	()	appium:deviceScreenSize: 1080x2400
+80	[00:00:12]	2024/04/14 20:12:28.722	{}	0	-	[-]	+1	C	()	appium:deviceManufacturer: Google
+81	[00:00:12]	2024/04/14 20:12:28.722	{}	0	-	[-]	+0	C	()	appium:enforceXPath1: true
+82	[00:00:12]	2024/04/14 20:12:28.728	{}	0	-	[-]	+6	C	()	appium:udid: emulator-5554
+83	[00:00:12]	2024/04/14 20:12:28.730	{}	0	-	[-]	+2	C	()	appium:pixelRatio: 2.625
+84	[00:00:12]	2024/04/14 20:12:28.731	{}	0	-	[-]	+1	C	()	platformName: ANDROID
+85	[00:00:12]	2024/04/14 20:12:28.732	{}	0	-	[-]	+1	C	()	appium:networkConnectionEnabled: true
+86	[00:00:12]	2024/04/14 20:12:28.732	{}	0	-	[-]	+0	C	()	appium:locale: US
+87	[00:00:12]	2024/04/14 20:12:28.733	{}	0	-	[-]	+1	C	()	appium:deviceScreenDensity: 420
+88	[00:00:12]	2024/04/14 20:12:28.733	{}	0	-	[-]	+0	C	()	appium:viewportRect: {left=0, top=132, width=1080, height=2268}
+89	[00:00:12]	2024/04/14 20:12:28.734	{}	0	-	[-]	+1	C	()	appium:language: en
+90	[00:00:12]	2024/04/14 20:12:28.735	{}	0	-	[-]	+1	C	()	appium:avd: Pixel_8_Android_14_
+91	[00:00:12]	2024/04/14 20:12:28.735	{}	0	-	[-]	+0	C	()	appium:deviceModel: sdk_gphone64_arm64
+92	[00:00:12]	2024/04/14 20:12:28.736	{}	0	-	[-]	+1	C	()	appium:platformVersion: 14
+93	[00:00:12]	2024/04/14 20:12:28.736	{}	0	-	[-]	+0	C	()	appium:databaseEnabled: false
+94	[00:00:12]	2024/04/14 20:12:28.737	{}	0	-	[-]	+1	C	()	appium:deviceUDID: emulator-5554
+95	[00:00:12]	2024/04/14 20:12:28.737	{}	0	-	[-]	+0	C	()	appium:statBarHeight: 132
+96	[00:00:12]	2024/04/14 20:12:28.738	{}	0	-	[-]	+1	C	()	appium:webStorageEnabled: false
+97	[00:00:12]	2024/04/14 20:12:28.738	{}	0	-	[-]	+0	C	()	appium:appActivity: com.android.settings.Settings
+98	[00:00:12]	2024/04/14 20:12:28.738	{}	0	-	[-]	+0	C	()	appium:deviceName: emulator-5554
+99	[00:00:12]	2024/04/14 20:12:28.739	{}	0	-	[-]	+1	C	()	appium:javascriptEnabled: true
+100	[00:00:12]	2024/04/14 20:12:28.739	{}	0	-	[-]	+0	C	()	appium:appPackage: com.android.settings
+101	[00:00:12]	2024/04/14 20:12:28.740	{}	0	-	[-]	+1	C	()	settings
+102	[00:00:13]	2024/04/14 20:12:28.881	{}	0	-	[-]	+141	C	()	always_finish_activities: 0
+103	[00:00:13]	2024/04/14 20:12:28.881	{}	0	-	[-]	+0	C	()	(others)
+104	[00:00:13]	2024/04/14 20:12:28.882	{}	0	-	[-]	+1	C	()	isEmulator: true
+105	[00:00:13]	2024/04/14 20:12:28.882	{}	0	-	[-]	+0	C	()	hasOsaifuKeitai: false
+106	[00:00:13]	2024/04/14 20:12:28.884	{}	0	-	[info]	+2	C	()	Setup executed. (duration: 12.0 sec)
+107	[00:00:13]	2024/04/14 20:12:28.889	{}	0	-	[info]	+5	C	()	Test function executed. (duration: 12.8 sec)
+108	[00:00:13]	2024/04/14 20:12:28.889	{}	0	-	[info]	+0	C	()	End of Test function: testFunc1 [testFunc1()]
+109	[00:00:13]	2024/04/14 20:12:28.890	{}	0	-	[WARN]	+1	C	()	scenario not implemented.
 
 org.opentest4j.TestAbortedException: scenario not implemented.
 
 
-	at shirates.core.testcode.UITestCallbackExtension.afterEach(UITestCallbackExtension.kt:209)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeAfterEachCallbacks$12(TestMethodTestDescriptor.java:260)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeAllAfterMethodsOrCallbacks$13(TestMethodTestDescriptor.java:276)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeAllAfterMethodsOrCallbacks$14(TestMethodTestDescriptor.java:276)
+	at shirates.core.testcode.UITestCallbackExtension.afterEach(UITestCallbackExtension.kt:274)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeAllAfterMethodsOrCallbacks(TestMethodTestDescriptor.java:275)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeAfterEachCallbacks(TestMethodTestDescriptor.java:259)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:144)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
-	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
-	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
-	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
-	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
-	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
-	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:147)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:127)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:90)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:55)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:102)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:54)
-	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
-	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
-	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
-	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:53)
-	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:57)
-	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
-	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
-	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
-	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:235)
-	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:54)
 
-105	2023/03/11 06:24:29.675	{}	[info]	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1/
-Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1
-Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-03-11_062412/TestClass1
+110	[00:00:14]	2024/04/14 20:12:29.911	{}	0	-	[info]	+1021	C	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2024-04-14_201215/TestClass1/
+Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2024-04-14_201215/TestClass1
+Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2024-04-14_201215/TestClass1
 No scenario found. Outputting Spec-Report skipped.
-106	2023/03/11 06:24:29.966	{}	[info]	()	Quitting TestDriver.
-107	2023/03/11 06:24:30.086	{}	[info]	()	Test class executed. (duration: 17.1 sec)
-Disconnected from the target VM, address: '127.0.0.1:55240', transport: 'socket'
+111	[00:00:14]	2024/04/14 20:12:30.238	{}	0	-	[info]	+327	C	()	Quitting TestDriver.
+112	[00:00:14]	2024/04/14 20:12:30.425	{}	0	-	[info]	+187	C	()	Test class executed. (duration: 14.6 sec)
+Disconnected from the target VM, address: '127.0.0.1:54490', transport: 'socket'
 
 Process finished with exit code 255
 ```
@@ -338,7 +290,7 @@ class TestClass1 : UITest() {
 
 ## @Nested support?
 
-No. Do not use @Nested annotation. This limitation is of software design of shirates-core.
+No. Do not use @Nested annotation of JUnit 5. This limitation is of software design of shirates-core.
 
 ### Link
 

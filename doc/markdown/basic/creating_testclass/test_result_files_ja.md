@@ -4,8 +4,8 @@ Shirates はテスト実行が完了した時にテスト結果ファイルを�
 
 ## サンプルの実行
 
-1. shirates-coreのプロジェクトで`src/test/kotlin/demo/`を開きします。
-2. `AndroidSettingsDemo` を右クリックして実行します。
+1. shirates-coreのプロジェクトで`src/test/kotlin/demo/`を開きます。
+2. `AndroidSettingsDemo` を右クリックし`Debug`を選択して実行します。
 
 ## TestResultsディレクトリ
 
