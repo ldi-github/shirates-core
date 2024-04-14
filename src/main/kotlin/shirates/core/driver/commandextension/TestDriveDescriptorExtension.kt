@@ -313,28 +313,20 @@ private fun cellOfCore(
 fun TestElement.getCell(): TestElement {
 
     val ancestorScrollableElements = this.getScrollableElementsInAncestorsAndSelf()
-    val cell =
-        if (ancestorScrollableElements.any()) {
-            val scrollableElement = ancestorScrollableElements.last()
-            val ancestorsAndSelf = this.ancestorsAndSelf
-            val index = ancestorsAndSelf.indexOf(scrollableElement)
-            val cellIndex = index + 1
-            if (cellIndex > ancestorsAndSelf.count() - 1) {
-                TestElement.emptyElement
-            } else {
-                ancestorsAndSelf[cellIndex]
-            }
+    val cell = if (isAndroid) {
+        val cellHost = getCellHost()
+        return ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+    } else {
+        val scrollableElement = ancestorScrollableElements.last()
+        val ancestorsAndSelf = this.ancestorsAndSelf
+        val index = ancestorsAndSelf.indexOf(scrollableElement)
+        val cellIndex = index + 1
+        if (cellIndex > ancestorsAndSelf.count() - 1) {
+            TestElement.emptyElement
         } else {
-            if (isAndroid) {
-                val cellHost = getCellHost()
-                fun getCellCore(): TestElement {
-                    return ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
-                }
-                getCellCore()
-            } else {
-                return TestElement.emptyElement
-            }
+            ancestorsAndSelf[cellIndex]
         }
+    }
     if (this.selector != null) {
         cell.selector = this.selector!!.getChainedSelector(":cellOf(${this.selector})")
     }
