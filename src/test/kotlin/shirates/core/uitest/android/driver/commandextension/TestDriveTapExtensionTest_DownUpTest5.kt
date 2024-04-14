@@ -18,7 +18,7 @@ class TestDriveTapExtensionTest_DownUpTest5 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.tapWithScrollDown("#android:id/title&&Security")
+                    it.tapWithScrollDown("#android:id/title&&Security & privacy")
                 }.expectation {
                     it.exist("[<-]")
                 }

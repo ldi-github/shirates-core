@@ -126,7 +126,7 @@ class TestDriveSelectExtensionTest1 : UITest() {
                     it.canSelectInScanResults("textMatches=^Caption.*ces$", log = true).thisIsTrue()
                     it.canSelectInScanResults("textMatches=^no.*exist$", log = true).thisIsFalse()
 
-                    it.canSelectInScanResults("#switchWidget", log = true).thisIsTrue()
+                    it.canSelectInScanResults("#android:id/switch_widget", log = true).thisIsTrue()
                     it.canSelectInScanResults("#no exist", log = true).thisIsFalse()
 
                     it.canSelectInScanResults("@Accessibility", log = true).thisIsTrue()

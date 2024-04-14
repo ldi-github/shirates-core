@@ -6,12 +6,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.branchextension.ifCanSelectNot
 import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.launchApp
 import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.SheetName
@@ -27,6 +29,8 @@ import java.util.*
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecReport_ifCanSelectTest : UITest() {
+
+    lateinit var profile: TestProfile
 
     @NoLoadRun
     @Test
@@ -46,6 +50,8 @@ class SpecReport_ifCanSelectTest : UITest() {
     }
 
     private fun scenarioCore() {
+
+        profile = testProfile
 
         scenario {
             case(1) {
@@ -129,14 +135,13 @@ class SpecReport_ifCanSelectTest : UITest() {
          * Header
          */
         val deviceModel = if (ws.cells("D4").text.isNotBlank()) "sdk_gphone64_arm64" else ""
-        val platformVersion = if (deviceModel.isNotBlank()) "12" else ""
         ws.assertHeader(
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReport_ifCanSelectTest",
-            profileName = "Pixel 3a(Android 12)",
+            profileName = profile.profileName,
             deviceModel = deviceModel,
-            platformVersion = platformVersion,
+            platformVersion = profile.platformVersion,
             notImpl = 1,
             total = 1
         )

@@ -57,12 +57,9 @@ class ExistTest : UITest() {
                             .exist("[Accessibility Icon]")
                             .exist("[Accessibility]")
                             .exist("{Accessibility}")
-                            .exist("[Security Icon]")
-                            .exist("[Security]")
-                            .exist("{Security}")
-                            .exist("[Privacy Icon]")
-                            .exist("[Privacy]")
-                            .exist("{Privacy}")
+                            .exist("[Security & privacy Icon]")
+                            .exist("[Security & privacy]")
+                            .exist("{Security & privacy}")
                             .exist("[Location Icon]")
                             .exist("[Location]")
                             .exist("{Location}")
@@ -149,12 +146,9 @@ class ExistTest : UITest() {
                         "[Accessibility Icon]",
                         "[Accessibility]",
                         "{Accessibility}",
-                        "[Security Icon]",
-                        "[Security]",
-                        "{Security}",
-                        "[Privacy Icon]",
-                        "[Privacy]",
-                        "{Privacy}",
+                        "[Security & privacy Icon]",
+                        "[Security & privacy]",
+                        "{Security & privacy}",
                         "[Location Icon]",
                         "[Location]",
                         "{Location}",
@@ -239,12 +233,9 @@ class ExistTest : UITest() {
                             "[Accessibility Icon]",
                             "[Accessibility]",
                             "{Accessibility}",
-                            "[Security Icon]",
-                            "[Security]",
-                            "{Security}",
-                            "[Privacy Icon]",
-                            "[Privacy]",
-                            "{Privacy}",
+                            "[Security & privacy Icon]",
+                            "[Security & privacy]",
+                            "{Security & privacy}",
                             "[Location Icon]",
                             "[Location]",
                             "{Location}",

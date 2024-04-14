@@ -2,7 +2,6 @@ package shirates.core.uitest.android.driver.commandextension
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.PropertiesManager.statBarHeight
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.viewBounds
@@ -154,7 +153,8 @@ class TestDriveSwipeExtensionTest : UITest() {
                     it.swipeToTopOfScreen(durationSeconds = 3.0)
                 }.expectation {
                     val b = it.bounds
-                    val low = statBarHeight + 1
+                    val actionBarBounds = select("[Header]").bounds
+                    val low = actionBarBounds.bottom + 1
                     val high = low + b.height - 1
                     (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
                     (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
@@ -162,11 +162,13 @@ class TestDriveSwipeExtensionTest : UITest() {
             }
             case(3) {
                 action {
-                    it.swipeToBottomOfScreen(durationSeconds = 3.0)
+                    it.select("[Passwords & accounts]")
+                        .swipeToBottomOfScreen(durationSeconds = 5.0)
                 }.expectation {
                     val b = it.bounds
-                    val low = viewBounds.bottom - b.height + 1
-                    val high = viewBounds.bottom
+                    val scrollHostBounds = it.scrollHost.bounds
+                    val low = scrollHostBounds.bottom - b.height + 1
+                    val high = scrollHostBounds.bottom
                     (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
                     (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
                 }

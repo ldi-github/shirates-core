@@ -20,13 +20,13 @@ class TestDriveScrollExtensionTest2 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                         .scrollToTop()
-                        .dontExist("Security")
+                        .dontExist("Security & privacy")
                 }.action {
                     it.scrollDown()
                     it.scrollDown()
                 }.expectation {
                     it.dontExist("Network & internet")
-                    it.exist("Security")
+                    it.exist("Security & privacy")
                 }
             }
             case(2) {
@@ -35,7 +35,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
                     it.scrollUp()
                 }.expectation {
                     it.exist("Network & internet")
-                        .dontExist("Security")
+                        .dontExist("Security & privacy")
                 }
             }
             case(3) {
@@ -44,7 +44,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
                         .scrollDown(durationSeconds = 2.0)
                 }.expectation {
                     it.dontExist("Network & internet")
-                    it.exist("Security")
+                    it.exist("Security & privacy")
                 }
             }
             case(4) {
@@ -53,7 +53,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
                         .scrollUp(durationSeconds = 2.0)
                 }.expectation {
                     it.exist("Network & internet")
-                        .dontExist("Security")
+                        .dontExist("Security & privacy")
                 }
             }
         }

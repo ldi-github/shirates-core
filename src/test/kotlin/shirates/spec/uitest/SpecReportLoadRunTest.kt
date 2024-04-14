@@ -3,6 +3,7 @@ package shirates.spec.uitest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ios
@@ -10,6 +11,7 @@ import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.tap
+import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
@@ -23,9 +25,13 @@ import java.nio.file.Files
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecReportLoadRunTest : UITest() {
 
+    lateinit var profile: TestProfile
+
     @Test
     @DisplayName("scenario1")
     fun S1000() {
+
+        profile = testProfile
 
         scenario {
             case(1) {
@@ -72,9 +78,9 @@ class SpecReportLoadRunTest : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReportLoadRunTest",
-            profileName = "Pixel 3a(Android 12)",
+            profileName = profile.profileName,
             deviceModel = "sdk_gphone64_arm64",
-            platformVersion = "12",
+            platformVersion = profile.platformVersion,
             noLoadRunMode = "",
             ok = 1,
             ng = 0,

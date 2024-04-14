@@ -204,15 +204,6 @@ class TestDriveAppExtensionTest : UITest() {
             }
             case(11) {
                 condition {
-                    checkInstalled("com.android.dialer")
-                }.action {
-                    s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.dialer")
-                }.expectation {
-                    s1.thisIs("com.android.dialer/.main.impl.MainActivity")
-                }
-            }
-            case(12) {
-                condition {
                     checkInstalled("com.google.android.apps.youtube.music")
                 }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(

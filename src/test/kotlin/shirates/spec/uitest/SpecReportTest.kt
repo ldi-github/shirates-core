@@ -5,8 +5,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.SheetName
@@ -27,6 +29,8 @@ class SpecReportTest : UITest() {
      * Install Calculator app (Google LLC) before running this test.
      */
 
+    lateinit var profile: TestProfile
+
     @NoLoadRun
     @Test
     @Order(10)
@@ -46,6 +50,8 @@ class SpecReportTest : UITest() {
     }
 
     private fun scenarioCore() {
+
+        profile = testProfile
 
         scenario {
             case(1) {
@@ -114,14 +120,13 @@ class SpecReportTest : UITest() {
          * Header
          */
         val deviceModel = if (ws.cells("D4").text.isNotBlank()) "sdk_gphone64_arm64" else ""
-        val platformVersion = if (deviceModel.isNotBlank()) "12" else ""
         ws.assertHeader(
             testConfigName = "Calculator",
             sheetName = "calculator test",
             testClassName = "SpecReportTest",
-            profileName = "Pixel 3a(Android 12)",
+            profileName = profile.profileName,
             deviceModel = deviceModel,
-            platformVersion = platformVersion,
+            platformVersion = profile.platformVersion,
             ok = 4,
             total = 4
         )

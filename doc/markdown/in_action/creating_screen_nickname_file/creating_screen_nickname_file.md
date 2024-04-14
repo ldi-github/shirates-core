@@ -351,7 +351,12 @@ Let's see `[Android Settings Top Screen]` as example.
   "key": "[Android Settings Top Screen]",
 
   "identity": "#recycler_view",
-  "satellites": ["Battery", "Accessibility", "Passwords & accounts", "Tips & support"],
+  "satellites": [
+    "Battery",
+    "Accessibility",
+    "Passwords & accounts",
+    "Tips & support"
+  ],
 
   "selectors": {
     "[Account Avatar]": "#account_avatar",
@@ -400,13 +405,9 @@ Let's see `[Android Settings Top Screen]` as example.
     "{Accessibility}": "[Accessibility]:label",
     "[Accessibility Icon]": "[Accessibility]:leftImage",
 
-    "[Security]": "",
-    "{Security}": "[Security]:label",
-    "[Security Icon]": "[Security]:leftImage",
-
-    "[Privacy]": "",
-    "{Privacy}": "[Privacy]:label",
-    "[Privacy Icon]": "[Privacy]:leftImage",
+    "[Security & privacy]": "",
+    "{Security & privacy}": "[Security & privacy]:label",
+    "[Security & privacy Icon]": "[Security & privacy]:leftImage",
 
     "[Location]": "",
     "{Location}": "[Location]:label",
@@ -419,6 +420,10 @@ Let's see `[Android Settings Top Screen]` as example.
     "[Passwords & accounts]": "",
     "{Passwords & accounts}": "[Passwords & accounts]:label",
     "[Passwords & accounts Icon]": "[Passwords & accounts]:leftImage",
+
+    "[Digital Wellbeing & parental controls]": "",
+    "{Digital Wellbeing & parental controls}": "[Digital Wellbeing & parental controls]:label",
+    "[Digital Wellbeing & parental controls Icon]": "[Digital Wellbeing & parental controls]:leftImage",
 
     "[Google]": "",
     "{Google}": "[Google]:label",
@@ -444,9 +449,10 @@ Let's see `[Android Settings Top Screen]` as example.
   },
 
   "scroll": {
+    "header-elements": "[Search Button][Search settings]",
+    "overlay-elements": "",
     "start-elements": "[Network & internet]",
-    "end-elements": "{Tips & support}",
-    "overlay-elements": "[Search Button][Search settings]"
+    "end-elements": "{Tips & support}"
   }
 }
 ```

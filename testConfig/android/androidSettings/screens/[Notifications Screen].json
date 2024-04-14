@@ -9,10 +9,17 @@
   "selectors": {
     "[<-]": "@Navigate up",
     "[Notifications]": "",
-    "[Search Button]": "@Search settings",
+    "[action_bar]": "#action_bar",
 
     "[RECENTLY SENT]": "",
     "[LOCK SCREEN]": ""
+  },
+
+  "scroll": {
+    "header-elements": "[action_bar]",
+    "overlay-elements": "",
+    "start-elements": "",
+    "end-elements": ""
   }
 
 }
