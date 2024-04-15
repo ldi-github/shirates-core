@@ -562,9 +562,7 @@ private fun TestDrive.doUntilScrollStopCore(
         val ms = Measure("doUntilScrollStop-loop")
         try {
             for (i in 1..maxLoopCount) {
-                for (j in 1..repeat) {
-                    scroll()
-                }
+                scroll()
                 TestDriver.refreshCache()
 
                 if (actionFunc != null) {
