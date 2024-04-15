@@ -14,7 +14,13 @@ object AppleMapsMacro : TestDrive {
 
         it.refreshCache()
 
-        if (it.isScreen("[Apple Maps Top Screen]")) {
+        if (canSelect(".XCUIElementTypeButton&&Close")) {
+            it.tap()
+        }
+        if (canSelect("Cancel")) {
+            it.tap()
+        }
+        if (isScreen("[Apple Maps Top Screen]")) {
             return
         }
 
@@ -22,23 +28,23 @@ object AppleMapsMacro : TestDrive {
             .pressHome()
             .launchApp("Maps")
 
-        if (it.canSelect("Not Now")) {
+        if (canSelect("Not Now")) {
             it.tap()
         }
-        if (it.canSelect("Cancel")) {
+        if (canSelect("Cancel")) {
             it.tap()
         }
-        if (it.canSelect("Close")) {
+        if (canSelect("Close")) {
             it.tap()
         }
-        if (it.canSelect("Dismiss")) {
+        if (canSelect("Dismiss")) {
             it.tap()
         }
-        if (it.canSelect("What’s New in Maps")) {
+        if (canSelect("What’s New in Maps")) {
             it.tap("Continue")
             it.wait()
         }
-        if (it.canSelect("Allow While Using App")) {
+        if (canSelect("Allow While Using App")) {
             it.tap()
         }
         it.screenIs("[Apple Maps Top Screen]")

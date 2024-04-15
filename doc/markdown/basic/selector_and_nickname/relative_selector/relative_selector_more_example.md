@@ -25,38 +25,24 @@ class RelativeCommand1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Wallpaper Screen]")
+                    it.macro("[Wallpaper & style Screen]")
                 }.expectation {
-                    it.exist("My photos")
-                        .relative(":right").textIs("Living Universe")
-                    it.select("My photos")
-                        .relative(":right(2)").textIs("Come Alive")
-                    it.select("My photos")
-                        .relative(":right(100)").thisIsEmpty()
-                    it.select("My photos")
+                    it.exist("Lock screen")
+                        .relative(":right").textIs("Home screen")
+                    it.select("Lock screen")
+                        .relative(":right(2)").thisIsEmpty()
+                    it.select("Lock screen")
                         .relative(":belowImage").classIs("android.widget.ImageView")
                 }
             }
             case(2) {
                 expectation {
-                    it.exist("My photos")
-                        .right().textIs("Living Universe")
-                    it.select("My photos")
-                        .right(2).textIs("Come Alive")
-                    it.select("My photos")
-                        .right(100).thisIsEmpty()
-                    it.select("My photos")
+                    it.exist("Lock screen")
+                        .right().textIs("Home screen")
+                    it.select("Lock screen")
+                        .right(2).thisIsEmpty()
+                    it.select("Lock screen")
                         .belowImage().classIs("android.widget.ImageView")
-                }
-            }
-            case(3) {
-                expectation {
-                    it.exist("My photos") {
-                        right().textIs("Living Universe")
-                        right(2).textIs("Come Alive")
-                        right(100).thisIsEmpty()
-                        aboveImage().classIs("android.widget.ImageView")
-                    }
                 }
             }
         }

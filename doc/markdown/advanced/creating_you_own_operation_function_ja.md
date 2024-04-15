@@ -17,8 +17,6 @@ fun scrollToTopAndTapWithScrollDown() {
         case(1) {
             condition {
                 it.macro("[Android Settings Top Screen]")
-                    .flickAndGoDown()
-                    .dontExist("[Accessibility]")
             }.action {
                 it.scrollToTop()
                     .tapWithScrollDown("[Accessibility]")
@@ -84,7 +82,6 @@ fun tapWithScrollDownFromTop() {
             condition {
                 it.macro("[Android Settings Top Screen]")
                     .flickAndGoDown()
-                    .dontExist("[Accessibility]")
             }.action {
                 it.tapWithScrollDownFromTop("[Accessibility]")
             }.expectation {

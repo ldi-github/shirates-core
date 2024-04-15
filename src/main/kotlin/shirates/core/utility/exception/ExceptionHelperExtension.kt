@@ -1,5 +1,6 @@
 package shirates.core.utility.exception
 
+import org.openqa.selenium.NoSuchSessionException
 import shirates.core.exception.RerunScenarioException
 
 /**
@@ -7,7 +8,7 @@ import shirates.core.exception.RerunScenarioException
  */
 val Throwable?.isRerunRequiredError: Boolean
     get() {
-        return this is RerunScenarioException || this.isSocketHangupError || this.isProcessError
+        return this is RerunScenarioException || this.isSocketHangupError || this.isProcessError || this.isSessionBrokenError
     }
 
 val Throwable?.isSocketHangupError: Boolean
@@ -18,6 +19,11 @@ val Throwable?.isSocketHangupError: Boolean
 val Throwable?.isProcessError: Boolean
     get() {
         return (this?.message ?: "").contains("the instrumentation process is not running")
+    }
+
+val Throwable?.isSessionBrokenError: Boolean
+    get() {
+        return this is NoSuchSessionException
     }
 
 /**

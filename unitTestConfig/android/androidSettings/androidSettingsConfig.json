@@ -29,7 +29,6 @@
   },
 
   "capabilities": {
-    "platformVersion": "12",
     "language": "en",
     "locale": "US"
   },

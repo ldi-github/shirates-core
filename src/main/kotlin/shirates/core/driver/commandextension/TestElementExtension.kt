@@ -217,42 +217,9 @@ private fun TestElement.getAttrMapForAndroid(): MutableMap<String, String> {
     if (contentDesc.isNotBlank()) {
         attrMap["content-desc"] = contentDesc
     }
-//        if (checkable.isNotBlank()) {
-//            attrMap["checkable"] = checkable
-//        }
-    if (checked.isNotBlank()) {
-        attrMap["checked"] = checked
-    }
-//        if (clickable.isNotBlank()) {
-//            attrMap["clickable"] = clickable
-//        }
-    if (enabled.isNotBlank()) {
-        attrMap["enabled"] = enabled
-    }
-//        if (focusable.isNotBlank()) {
-//            attrMap["focusable"] = focusable
-//        }
-    if (focused.isNotBlank()) {
-        attrMap["focused"] = focused
-    }
-//        if (longClickable.isNotBlank()) {
-//            attrMap["long-clickable"] = longClickable
-//        }
-//        if (password.isNotBlank()) {
-//            attrMap["password"] = password
-//        }
-    if (scrollable.isNotBlank()) {
-        attrMap["scrollable"] = scrollable
-    }
-    if (selected.isNotBlank()) {
-        attrMap["selected"] = selected
-    }
     if (boundsString.isNotBlank()) {
         attrMap["bounds"] = boundsString
     }
-//        if (displayed.isNotBlank()) {
-//            attrMap["displayed"] = displayed
-//        }
     return attrMap
 }
 
@@ -267,12 +234,6 @@ private fun TestElement.getAttrMapForIos(): MutableMap<String, String> {
     }
     if (value.isNotBlank()) {
         attrMap["value"] = value
-    }
-    if (enabled.isNotBlank()) {
-        attrMap["enabled"] = enabled
-    }
-    if (visible.isNotBlank()) {
-        attrMap["visible"] = visible
     }
     attrMap["x"] = x
     attrMap["y"] = y

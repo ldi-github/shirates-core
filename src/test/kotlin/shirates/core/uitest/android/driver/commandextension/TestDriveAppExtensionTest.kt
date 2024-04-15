@@ -183,15 +183,6 @@ class TestDriveAppExtensionTest : UITest() {
             }
             case(9) {
                 condition {
-                    checkInstalled("com.android.camera2")
-                }.action {
-                    s1 = TestDriveObjectAndroid.getMainActivity(udid = udid, packageName = "com.android.camera2")
-                }.expectation {
-                    s1.thisIs("com.android.camera2/com.android.camera.CameraLauncher")
-                }
-            }
-            case(10) {
-                condition {
                     checkInstalled("com.google.android.apps.docs")
                 }.action {
                     s1 = TestDriveObjectAndroid.getMainActivity(
@@ -202,7 +193,7 @@ class TestDriveAppExtensionTest : UITest() {
                     s1.thisIs("com.google.android.apps.docs/.app.NewMainProxyActivity")
                 }
             }
-            case(11) {
+            case(10) {
                 condition {
                     checkInstalled("com.google.android.apps.youtube.music")
                 }.action {

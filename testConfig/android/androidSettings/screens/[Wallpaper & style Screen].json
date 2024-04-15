@@ -1,10 +1,10 @@
 {
-  "key": "[Wallpaper Screen]",
+  "key": "[Wallpaper & style Screen]",
 
   "include": [
   ],
 
-  "identity": "~title=Wallpaper",
+  "identity": "~title=Wallpaper & style",
 
   "selectors": {
     "[Wallpaper Preview]": "@Wallpaper preview",
@@ -41,7 +41,6 @@
 
     "[Cityscapes]": "",
     "[Cityscapes Image]": "[Cityscapes]:belowImage",
-
 
     "[Wallpaper]": "#nav_wallpaper",
     "[Grid]": "#nav_grid"
