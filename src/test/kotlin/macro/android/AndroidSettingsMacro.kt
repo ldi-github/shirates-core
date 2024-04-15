@@ -91,16 +91,16 @@ object AndroidSettingsMacro : TestDrive {
             .screenIs("[Battery Screen]")
     }
 
-    @Macro("[Wallpaper Screen]")
-    fun wallpaperScreen() {
+    @Macro("[Wallpaper & style Screen]")
+    fun wallpaperAndStyleScreen() {
 
-        if (it.isScreen("[Wallpaper Screen]")) {
+        if (it.isScreen("[Wallpaper & style Screen]")) {
             return
         }
 
         androidSettingsTopScreen()
         it.tapWithScrollDown("[Wallpaper & style]")
-            .screenIs("[Wallpaper Screen]")
+            .screenIs("[Wallpaper & style Screen]")
     }
 
     @Macro("[Accessibility Screen]")

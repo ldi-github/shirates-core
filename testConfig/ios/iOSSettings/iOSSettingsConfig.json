@@ -16,7 +16,8 @@
       "testConfig/ios/appleMaps/screens",
       "testConfig/ios/misc/screens",
       "testConfig/ios/reminders/screens",
-      "testConfig/ios/safari/screens"
+      "testConfig/ios/safari/screens",
+      "testConfig/ios/news/screens"
     ]
   },
 

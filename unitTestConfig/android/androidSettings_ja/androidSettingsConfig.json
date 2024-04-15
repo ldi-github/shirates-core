@@ -19,7 +19,6 @@
   },
 
   "capabilities": {
-    "platformVersion": "12",
     "language": "ja",
     "locale": "JP"
   }

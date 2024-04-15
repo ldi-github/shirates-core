@@ -20,10 +20,7 @@
   "startupPackageOrBundleId": "com.google.android.calculator",
   "startupActivity": "com.android.calculator2.Calculator",
 
-
   "capabilities": {
-    "platformVersion": "12",
-    "deviceName": "Pixel 3a",
     "language": "en",
     "locale": "US"
   },
@@ -64,7 +61,6 @@
     {
       "profileName": "iOS/iPhone"
     }
-
 
   ]
 }

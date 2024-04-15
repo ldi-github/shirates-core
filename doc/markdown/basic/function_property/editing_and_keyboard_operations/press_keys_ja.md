@@ -112,17 +112,23 @@ fun pressBack() {
     scenario {
         case(1) {
             condition {
-                it.macro("[iOS Search Screen]")
-                it.select("[SpotlightSearchField]")
-                    .clearInput()
-                    .sendKeys("safari")
-                    .tap("safari")
-                    .wait()
+                it.terminateApp("[News]")
+                it.launchApp("[News]")
+
+                if (canSelect("Allow While Using App")) {
+                    it.tap()
+                }
+
+                it.wait()
+                it.tapCenterOfScreen()
+
+                it.waitForDisplay("#OpenInSafariButton")
+                it.tap("#OpenInSafariButton")
                     .appIs("[Safari]")
             }.action {
                 it.pressBack()
             }.expectation {
-                it.screenIs("[iOS Search Screen]")
+                it.exist("#OpenInSafariButton")
             }
         }
     }

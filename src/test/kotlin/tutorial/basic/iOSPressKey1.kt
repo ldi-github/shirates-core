@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.wait
+import shirates.core.driver.waitForDisplay
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
@@ -17,17 +18,23 @@ class iOSPressKey1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[iOS Search Screen]")
-                    it.select("[SpotlightSearchField]")
-                        .clearInput()
-                        .sendKeys("safari")
-                        .tap("safari")
-                        .wait()
+                    it.terminateApp("[News]")
+                    it.launchApp("[News]")
+
+                    if (canSelect("Allow While Using App")) {
+                        it.tap()
+                    }
+
+                    it.wait()
+                    it.tapCenterOfScreen()
+
+                    it.waitForDisplay("#OpenInSafariButton")
+                    it.tap("#OpenInSafariButton")
                         .appIs("[Safari]")
                 }.action {
                     it.pressBack()
                 }.expectation {
-                    it.screenIs("[iOS Search Screen]")
+                    it.exist("#OpenInSafariButton")
                 }
             }
         }

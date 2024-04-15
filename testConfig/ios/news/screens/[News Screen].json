@@ -1,0 +1,19 @@
+{
+  "key": "[News Screen]",
+
+  "include": [
+  ],
+
+  "identity": "[Today][News+][Sports]",
+
+  "selectors": {
+
+    "[Today]": "",
+    "[News+]": "",
+    "[Sports]": "",
+    "[Audio]": "",
+    "[Following]": ""
+
+  }
+
+}
