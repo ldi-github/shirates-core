@@ -12,20 +12,20 @@
     "[Bottom Summary]": "#bottom_summary",
 
     "[Battery Usage]": "",
-    "[View usage for past 24 hours]": "",
+    "{Battery Usage}": "[Battery Usage]:belowLabel",
 
     "[Battery Saver]": "",
     "{Battery Saver}": "[Battery Saver]:belowLabel",
 
-    "[Adaptive preferences]": "",
-    "[Adaptive preferences Summary]": "[Adaptive preferences]:belowLabel",
-
     "[Battery percentage]": "",
-    "[Battery percentage Summary]": "[Battery percentage]:belowLabel",
+    "{Battery percentage Summary}": "[Battery percentage]:belowLabel",
     "[Battery percentage Switch]": "[Battery percentage]:switch",
 
-    "[i]": "[Battery usage data is approximate and can change based on usage.]:aboveLabel",
-    "[Battery usage data is approximate and can change based on usage.]": ""
+    "[Battery widget]": "",
+    "{Battery widget}": "[Battery widget]:belowLabel",
+
+    "[i]": "[Remaining battery life is approximate and can change based on usage]:aboveLabel",
+    "[Remaining battery life is approximate and can change based on usage]": ""
   }
 
 }
