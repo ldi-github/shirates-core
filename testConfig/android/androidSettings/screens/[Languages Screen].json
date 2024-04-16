@@ -1,13 +1,14 @@
 {
   "key": "[Languages Screen]",
 
-  "identity": "~title=Languages",
+  "identity": "[Preferred Language][System Languages]",
 
   "selectors": {
     "[<-]": "@Navigate up",
     "[More options]": "@More options",
     "[Languages]": "@Languages",
 
+    "[Preferred Language]": "",
     "[System Languages]": ""
   }
 

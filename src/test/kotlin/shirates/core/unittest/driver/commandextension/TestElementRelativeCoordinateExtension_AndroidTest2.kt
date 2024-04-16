@@ -178,7 +178,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
     @Test
     fun left() {
 
-        TestMode.runAsScreen("[Languages Screen]") {
+        TestMode.runAsScreen("[System Languages Screen]") {
             // left()
             run {
                 // Arrange
