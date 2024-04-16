@@ -7,7 +7,9 @@
   "identity": "~title=Accessibility",
 
   "selectors": {
-    "[<-]": "@Navigate up"
+    "[<-]": "@Navigate up",
+
+    "[Accessibility]": "@Accessibility"
   },
 
   "scroll": {

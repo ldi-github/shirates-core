@@ -1,0 +1,19 @@
+{
+  "key": "[System Languages Screen]",
+
+  "identity": "[Add a language]",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[More options]": "@More options",
+    "[Languages]": "@Languages",
+
+    "[n]": "#miniLabel",
+    "[label]": "#label",
+    "[handle]": "#dragHandle",
+    "[=]": "#dragHandle",
+
+    "[Add a language]": "#add_language"
+  }
+
+}
