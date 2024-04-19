@@ -441,9 +441,11 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
 
     internal fun expandExpression(expression: String): Selector {
 
-        val temporaryScreenInfo = ScreenRepository.temporaryScreenInfo
-        if (temporaryScreenInfo.selectorMap.containsKey(key = expression)) {
-            return temporaryScreenInfo.selectorMap[expression]!!
+        // Override selectorMap by temporaryScreenInfo
+        for (selectorEntry in ScreenRepository.tempSelectorMap) {
+            val sel = getSelector(expression = selectorEntry.value)
+            sel.nickname = selectorEntry.key
+            selectorMap[selectorEntry.key] = sel
         }
 
         if (selectorMap.containsKey(key = expression)) {

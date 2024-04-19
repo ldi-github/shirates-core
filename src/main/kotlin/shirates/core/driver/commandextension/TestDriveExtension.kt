@@ -86,13 +86,8 @@ fun TestDrive.getSelector(expression: String): Selector {
  */
 fun TestDrive.tempSelector(nickname: String, expression: String): TestElement {
 
-    val tempScreenInfo = ScreenRepository.temporaryScreenInfo
-    if (tempScreenInfo.selectorMap.containsKey(nickname).not()) {
-        TestLog.info(message(id = "nicknameRegistered", key = nickname, value = expression))
-    }
-    val sel = TestDriver.expandExpression(expression = expression)
-    sel.nickname = nickname
-    tempScreenInfo.putSelector(selector = sel)
+    ScreenRepository.tempSelectorMap[nickname] = expression
+    TestLog.info(message(id = "nicknameRegistered", key = nickname, value = expression))
 
     return lastElement
 }
