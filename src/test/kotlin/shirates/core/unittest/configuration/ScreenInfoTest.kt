@@ -53,9 +53,9 @@ class ScreenInfoTest : UnitTest() {
         // Arrange
         val target = ScreenInfo()
         // Act
-        target.selectors["[key1]"] = sel1
+        target.selectorMap["[key1]"] = sel1
         // Assert
-        assertThat(target.selectors["[key1]"]).isEqualTo(sel1)
+        assertThat(target.selectorMap["[key1]"]).isEqualTo(sel1)
     }
 
     @Test
@@ -64,11 +64,11 @@ class ScreenInfoTest : UnitTest() {
         // Arrange
         val target = ScreenInfo()
         // Act
-        target.selectors["[key1]"] = sel1
-        target.selectors["[key2]"] = sel2
+        target.selectorMap["[key1]"] = sel1
+        target.selectorMap["[key2]"] = sel2
         // Assert
-        assertThat(target.selectors["[key2]"]).isEqualTo(sel2)
-        assertThat(target.selectors["[key1]"]).isEqualTo(sel1)
+        assertThat(target.selectorMap["[key2]"]).isEqualTo(sel2)
+        assertThat(target.selectorMap["[key1]"]).isEqualTo(sel1)
     }
 
     @Test
@@ -87,7 +87,7 @@ class ScreenInfoTest : UnitTest() {
         )
 
         // Assert
-        val v1 = target.selectors["[nickname1]"]
+        val v1 = target.selectorMap["[nickname1]"]
         assertThat(v1?.text).isEqualTo("text1")
         assertThat(v1?.id).isEqualTo("id1")
         assertThat(v1?.access).isEqualTo("access1")
@@ -119,8 +119,8 @@ class ScreenInfoTest : UnitTest() {
         )
 
         // Assert
-        val v1 = target.selectors["[nickname1]"]
-        val v2 = target.selectors["[nickname2]"]
+        val v1 = target.selectorMap["[nickname1]"]
+        val v2 = target.selectorMap["[nickname2]"]
         assertThat(v1?.text).isEqualTo("text1")
         assertThat(v1?.id).isEqualTo("id1")
         assertThat(v1?.access).isEqualTo("access1")
@@ -142,10 +142,10 @@ class ScreenInfoTest : UnitTest() {
         // Arrange
         val target = ScreenInfo()
         // Act
-        target.selectors["[key1]"] = sel1
+        target.selectorMap["[key1]"] = sel1
         // Assert
-        assertThat(target.selectors.containsKey("[key1]")).isTrue()
-        assertThat(target.selectors.containsKey("[key999]")).isFalse()
+        assertThat(target.selectorMap.containsKey("[key1]")).isTrue()
+        assertThat(target.selectorMap.containsKey("[key999]")).isFalse()
     }
 
     @Test
@@ -154,12 +154,12 @@ class ScreenInfoTest : UnitTest() {
         // Arrange
         val target = ScreenInfo()
         // Act
-        target.selectors["[key1]"] = sel1
-        target.selectors["[key2]"] = sel2
+        target.selectorMap["[key1]"] = sel1
+        target.selectorMap["[key2]"] = sel2
         // Assert
-        assertThat(target.selectors.containsKey("[key1]")).isTrue()
-        assertThat(target.selectors.containsKey("[key2]")).isTrue()
-        assertThat(target.selectors.containsKey("[key999]")).isFalse()
+        assertThat(target.selectorMap.containsKey("[key1]")).isTrue()
+        assertThat(target.selectorMap.containsKey("[key2]")).isTrue()
+        assertThat(target.selectorMap.containsKey("[key999]")).isFalse()
     }
 
     @Test
@@ -195,8 +195,8 @@ class ScreenInfoTest : UnitTest() {
         assertThat(screenInfo.scrollInfo.endElements[1]).isEqualTo("[end-elementB]")
 
         run {
-            assertThat(screenInfo.selectors.containsKey("[Title]"))
-            val s = screenInfo.selectors["[Title]"]!!
+            assertThat(screenInfo.selectorMap.containsKey("[Title]"))
+            val s = screenInfo.selectorMap["[Title]"]!!
             assertThat(s.text).isEqualTo("Title")
             assertThat(s.textStartsWith).isNull()
             assertThat(s.textContains).isNull()
@@ -219,8 +219,8 @@ class ScreenInfoTest : UnitTest() {
         }
 
         run {
-            assertThat(screenInfo.selectors.containsKey("[Title*]"))
-            val s = screenInfo.selectors["[Title*]"]!!
+            assertThat(screenInfo.selectorMap.containsKey("[Title*]"))
+            val s = screenInfo.selectorMap["[Title*]"]!!
             assertThat(s.text).isNull()
             assertThat(s.textStartsWith).isEqualTo("Title")
             assertThat(s.textContains).isNull()
@@ -243,8 +243,8 @@ class ScreenInfoTest : UnitTest() {
         }
 
         run {
-            assertThat(screenInfo.selectors.containsKey("[X]"))
-            val s = screenInfo.selectors["[X]"]!!
+            assertThat(screenInfo.selectorMap.containsKey("[X]"))
+            val s = screenInfo.selectorMap["[X]"]!!
             assertThat(s.text).isNull()
             assertThat(s.textStartsWith).isNull()
             assertThat(s.textContains).isNull()
@@ -276,13 +276,13 @@ class ScreenInfoTest : UnitTest() {
         val baseScreenInfo = ScreenInfo(BASE_nicknameFile)
         // Assert
         assertThat(baseScreenInfo.key).isEqualTo("[screen-base]")
-        assertThat(baseScreenInfo.selectors.count()).isEqualTo(10)
+        assertThat(baseScreenInfo.selectorMap.count()).isEqualTo(10)
 
         // Arrange
         val nicknameFile = "unitTestData/testConfig/nicknames1/screens/FunctionA/[A Screen].json"
         // Act
         val screenInfo = ScreenInfo(screenFile = nicknameFile, screenBaseInfo = baseScreenInfo)
-        val s = screenInfo.selectors
+        val s = screenInfo.selectorMap
         // Assert
         assertThat(s.containsKey("[Global Selector 1]"))
         assertThat(s.containsKey("[Global Selector 2]"))
@@ -368,10 +368,10 @@ class ScreenInfoTest : UnitTest() {
 
         // Arrange
         val screenInfo = ScreenInfo()
-        val s = screenInfo.selectors
+        val s = screenInfo.selectorMap
         assertThat(s.count()).isEqualTo(0)
         // Act
-        screenInfo.selectors.remove("[a]")
+        screenInfo.selectorMap.remove("[a]")
         // Assert
         assertThat(s.count()).isEqualTo(0)
 
@@ -379,7 +379,7 @@ class ScreenInfoTest : UnitTest() {
         screenInfo.putSelector(Selector("aaa", nickname = "[nickname1]"))
         assertThat(s.count()).isEqualTo(1)
         // Act, Assert
-        screenInfo.selectors.remove("[nickname1]")
+        screenInfo.selectorMap.remove("[nickname1]")
         assertThat(s.count()).isEqualTo(0)
     }
 
@@ -392,7 +392,7 @@ class ScreenInfoTest : UnitTest() {
         screenInfo.putSelector(Selector("id=close", nickname = "[X]", section = "selectors"))
 
         // Act, Assert
-        val s = screenInfo.selectors
+        val s = screenInfo.selectorMap
         assertThat(s.count()).isEqualTo(2)
         assertThat(s["[Title]"]!!.section).isEqualTo("selectors")
         assertThat(s["[X]"]!!.section).isEqualTo("selectors")
@@ -496,8 +496,8 @@ class ScreenInfoTest : UnitTest() {
             // Act
             screenInfo.putSelector(selector)
             // Assert
-            assertThat(screenInfo.selectors.count()).isEqualTo(1)
-            assertThat(screenInfo.selectors["[nickname1]"]?.nickname).isEqualTo("[nickname1]")
+            assertThat(screenInfo.selectorMap.count()).isEqualTo(1)
+            assertThat(screenInfo.selectorMap["[nickname1]"]?.nickname).isEqualTo("[nickname1]")
         }
         run {
             // Arrange
@@ -505,9 +505,9 @@ class ScreenInfoTest : UnitTest() {
             // Act
             screenInfo.putSelector(nickname = "[nickname1]", "text1")
             // Assert
-            assertThat(screenInfo.selectors.count()).isEqualTo(1)
-            assertThat(screenInfo.selectors["[nickname1]"]?.nickname).isEqualTo("[nickname1]")
-            assertThat(screenInfo.selectors["[nickname1]"]?.expression).isEqualTo("text1")
+            assertThat(screenInfo.selectorMap.count()).isEqualTo(1)
+            assertThat(screenInfo.selectorMap["[nickname1]"]?.nickname).isEqualTo("[nickname1]")
+            assertThat(screenInfo.selectorMap["[nickname1]"]?.expression).isEqualTo("text1")
         }
     }
 
@@ -1019,11 +1019,11 @@ class ScreenInfoTest : UnitTest() {
                 "unitTestData/testConfig/nicknames1/screens/relative/[Relative Command Test Screen2].json"
             val screenInfo = ScreenInfo(nicknameFile)
             // Act, Assert
-            assertThat(screenInfo.expandExpression("[Title]")).isEqualTo(screenInfo.selectors["[Title]"])
-            assertThat(screenInfo.expandExpression("[mail address]")).isEqualTo(screenInfo.selectors["[mail address]"])
-            assertThat(screenInfo.expandExpression("[:parent]")).isEqualTo(screenInfo.selectors["[:parent]"])
-            assertThat(screenInfo.expandExpression("[:first child]")).isEqualTo(screenInfo.selectors["[:first child]"])
-            assertThat(screenInfo.expandExpression("[Sibling of mail address 1]")).isEqualTo(screenInfo.selectors["[Sibling of mail address 1]"])
+            assertThat(screenInfo.expandExpression("[Title]")).isEqualTo(screenInfo.selectorMap["[Title]"])
+            assertThat(screenInfo.expandExpression("[mail address]")).isEqualTo(screenInfo.selectorMap["[mail address]"])
+            assertThat(screenInfo.expandExpression("[:parent]")).isEqualTo(screenInfo.selectorMap["[:parent]"])
+            assertThat(screenInfo.expandExpression("[:first child]")).isEqualTo(screenInfo.selectorMap["[:first child]"])
+            assertThat(screenInfo.expandExpression("[Sibling of mail address 1]")).isEqualTo(screenInfo.selectorMap["[Sibling of mail address 1]"])
         }
     }
 
@@ -1054,9 +1054,9 @@ class ScreenInfoTest : UnitTest() {
 
         run {
             // Assert
-            assertThat(screenInfo.selectors.containsKey("[Dark theme switch]")).isTrue()
-            assertThat(screenInfo.selectors["[Dark theme switch]"]!!.text).isEqualTo("Dark theme")
-            assertThat(screenInfo.selectors["[Dark theme switch]"]!!.relativeSelectors.count()).isEqualTo(1)
+            assertThat(screenInfo.selectorMap.containsKey("[Dark theme switch]")).isTrue()
+            assertThat(screenInfo.selectorMap["[Dark theme switch]"]!!.text).isEqualTo("Dark theme")
+            assertThat(screenInfo.selectorMap["[Dark theme switch]"]!!.relativeSelectors.count()).isEqualTo(1)
         }
     }
 

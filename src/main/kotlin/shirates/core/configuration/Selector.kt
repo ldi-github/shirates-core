@@ -1551,8 +1551,8 @@ class Selector(
         sel.originalExpression = "${this}${relativeCommand}"
         val commands = getCommandList(com)
         for (command in commands) {
-            if (TestDriver.screenInfo.selectors.containsKey(command)) {
-                val s = TestDriver.screenInfo.selectors[command]!!
+            if (TestDriver.screenInfo.selectorMap.containsKey(command)) {
+                val s = TestDriver.screenInfo.selectorMap[command]!!
                 sel.joinOrMerge(s)
             } else {
                 val s = Selector(command)

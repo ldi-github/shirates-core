@@ -29,7 +29,7 @@ class TestDriveSelectorExtensionTest : UnitTest() {
             // Act
             testDrive.tempSelector(nickname = "[Nickname1]", expression = "Nickname1")
             // Assert
-            assertThat(ScreenRepository.temporaryScreenInfo.selectors.containsKey(key = "[Nickname1]")).isTrue()
+            assertThat(ScreenRepository.temporaryScreenInfo.selectorMap.containsKey(key = "[Nickname1]")).isTrue()
             assertThat(TestLog.lastTestLog?.message).isEqualTo("Nickname registered. (nickname=[Nickname1], expression=Nickname1)")
 
             // Act

@@ -67,7 +67,7 @@ class Selector_CopyTest : UnitTest() {
 
         fun test(screenName: String) {
             testDrive.switchScreen(screenName)
-            for (sel in TestDriver.screenInfo.selectors.values) {
+            for (sel in TestDriver.screenInfo.selectorMap.values) {
                 assert(sel)
             }
         }

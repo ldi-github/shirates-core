@@ -89,7 +89,7 @@ class TestDriverTest : UITest() {
                     assertThat(TestDriver.lastError).isNotNull()
                 }
                 // post process
-                TestDriver.screenInfo.selectors.remove("[not exist]")
+                TestDriver.screenInfo.selectorMap.remove("[not exist]")
             }
             case(4, "selectWithScrollUp([not exist]) [ERROR]") {
                 condition {
@@ -114,7 +114,7 @@ class TestDriverTest : UITest() {
                     assertThat(TestDriver.lastError).isNotNull()
                 }
                 // post process
-                TestDriver.screenInfo.selectors.remove("[not exist]")
+                TestDriver.screenInfo.selectorMap.remove("[not exist]")
             }
             case(5, "scrollTo(textStartsWith)") {
                 condition {

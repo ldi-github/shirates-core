@@ -21,7 +21,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
     val identityElements = mutableListOf<String>()
     var weight: String? = null
     val satelliteExpressions = mutableListOf<String>()
-    val selectors = mutableMapOf<String, Selector>()
+    val selectorMap = mutableMapOf<String, Selector>()
     var default: String = ""
     val scrollInfo = ScrollInfo()
     val searchWeight: Int
@@ -93,7 +93,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
         NicknameUtility.validateNickname(nickname)
 
         selector.screenInfo = this
-        selectors[nickname] = selector
+        selectorMap[nickname] = selector
 
         return selector
     }
@@ -112,8 +112,8 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
      */
     init {
         if (screenBaseInfo != null) {
-            for (selector in screenBaseInfo.selectors) {
-                putSelector(selector = selector.value)
+            for (selector in screenBaseInfo.selectorMap.values) {
+                putSelector(selector = selector)
             }
             scrollInfo.scrollable = screenBaseInfo.scrollInfo.scrollable
             scrollInfo.headerElements.addAll(screenBaseInfo.scrollInfo.headerElements)
@@ -300,10 +300,10 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
         }
 
         fun getOrCreateSelector(nickname: String): Selector {
-            val sels = selectors
-            if (sels.containsKey(nickname)) {
+            val selMap = selectorMap
+            if (selMap.containsKey(nickname)) {
                 if (nicknameMap.containsKey(nickname).not()) {
-                    return sels[nickname]!!
+                    return selMap[nickname]!!
                 }
             }
             var exp =
@@ -351,7 +351,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
                 }
             }
             resultSelector.nickname = nickname
-            selectors.put(nickname, resultSelector)
+            selectorMap.put(nickname, resultSelector)
             nicknameMap.remove(nickname)
 
             return resultSelector
@@ -371,7 +371,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
         if (nicknameMap.isNotEmpty()) {
             val list = mutableListOf<String>()
             for (key in nicknameMap.keys) {
-                if (selectors.containsKey(key).not()) {
+                if (selectorMap.containsKey(key).not()) {
                     list.add(key)
                 }
             }
@@ -390,8 +390,8 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
 
         if (expression != null && expression.isValidNickname()) {
             val nickname = expression
-            if (selectors.containsKey(nickname)) {
-                val sel = selectors[nickname]!!
+            if (selectorMap.containsKey(nickname)) {
+                val sel = selectorMap[nickname]!!
                 return sel
             } else {
                 if (NicknameUtility.isValidNickname(nickname)) {
@@ -427,7 +427,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
 
         val firstCommand = commands.first()
         val firstSelector =
-            if (firstCommand.isValidNickname() && selectors.containsKey(firstCommand)) selectors[firstCommand]!!
+            if (firstCommand.isValidNickname() && selectorMap.containsKey(firstCommand)) selectorMap[firstCommand]!!
             else Selector(firstCommand)
         var s = firstSelector.copy()
         for (i in 1 until commands.count()) {
@@ -442,12 +442,12 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
     internal fun expandExpression(expression: String): Selector {
 
         val temporaryScreenInfo = ScreenRepository.temporaryScreenInfo
-        if (temporaryScreenInfo.selectors.containsKey(key = expression)) {
-            return temporaryScreenInfo.selectors[expression]!!
+        if (temporaryScreenInfo.selectorMap.containsKey(key = expression)) {
+            return temporaryScreenInfo.selectorMap[expression]!!
         }
 
-        if (selectors.containsKey(key = expression)) {
-            return selectors[expression]!!
+        if (selectorMap.containsKey(key = expression)) {
+            return selectorMap[expression]!!
         } else {
             return getSelector(expression = expression)
         }

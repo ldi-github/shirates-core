@@ -1997,7 +1997,7 @@ object TestDriver {
      */
     fun refreshCurrentScreenWithNickname(expression: String) {
 
-        if (screenInfo.selectors.any() { it.key == expression }) {
+        if (screenInfo.selectorMap.any() { it.key == expression }) {
             return
         }
 

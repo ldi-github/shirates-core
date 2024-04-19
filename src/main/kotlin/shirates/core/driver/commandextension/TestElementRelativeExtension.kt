@@ -19,9 +19,9 @@ fun TestElement.relative(
 
     val ms = Measure("relative command=$command")
     try {
-        val selectors = TestDriver.screenInfo.selectors
+        val selectorMap = TestDriver.screenInfo.selectorMap
         val exp =
-            if (selectors.containsKey(command)) selectors[command]?.expression
+            if (selectorMap.containsKey(command)) selectorMap[command]?.expression
             else null
         val expression = exp ?: command.removeRedundantExpression()
         val relativeSelector = Selector(expression)

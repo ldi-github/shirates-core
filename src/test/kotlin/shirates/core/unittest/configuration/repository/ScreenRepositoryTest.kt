@@ -109,8 +109,8 @@ class ScreenRepositoryTest : UnitTest() {
         run {
             // Assert
             val screenInfo = ScreenRepository["[A Screen]"]
-            assertThat(screenInfo.selectors.containsKey("[Global Selector 1]")).isTrue()
-            assertThat(screenInfo.selectors.containsKey("[Global Selector 2]")).isTrue()
+            assertThat(screenInfo.selectorMap.containsKey("[Global Selector 1]")).isTrue()
+            assertThat(screenInfo.selectorMap.containsKey("[Global Selector 2]")).isTrue()
         }
 
         /**
@@ -121,7 +121,7 @@ class ScreenRepositoryTest : UnitTest() {
             val screenInfo = ScreenRepository["[Common Footer]"]
             assertThat(screenInfo.key).isEqualTo("[Common Footer]")
             assertThat(screenInfo.includes.count()).isEqualTo(0)
-            assertThat(screenInfo.selectors.count()).isEqualTo(13)
+            assertThat(screenInfo.selectorMap.count()).isEqualTo(13)
             assertThat(screenInfo.screenFile).endsWith(
                 "unitTestData/testConfig/nicknames1/screens/shared/[Common Footer].json".replace(
                     "/",
@@ -129,7 +129,7 @@ class ScreenRepositoryTest : UnitTest() {
                 )
             )
 
-            val s = screenInfo.selectors
+            val s = screenInfo.selectorMap
 
             assertThat(s.containsKey("[Menu X]")).isTrue()
             check(s["[Menu X]"], "id", "idX")
@@ -186,7 +186,7 @@ class ScreenRepositoryTest : UnitTest() {
 
             assertThat(screenInfo.key).isEqualTo("[A Screen]")
 
-            val s = screenInfo.selectors
+            val s = screenInfo.selectorMap
 
             /**
              * include
