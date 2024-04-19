@@ -534,7 +534,7 @@ fun TestDrive.verify(
             throw t
         } catch (t: Throwable) {
             val ex = TestNGException(message = message, cause = t)
-            TestLog.ng(exception = ex)
+            throw ex
         } finally {
             CodeExecutionContext.isInOperationCommand = original
         }
