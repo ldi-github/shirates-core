@@ -312,11 +312,11 @@ private fun cellOfCore(
  */
 fun TestElement.getCell(): TestElement {
 
-    val ancestorScrollableElements = this.getScrollableElementsInAncestorsAndSelf()
     val cell = if (isAndroid) {
         val cellHost = getCellHost()
         return ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
     } else {
+        val ancestorScrollableElements = this.getScrollableElementsInAncestorsAndSelf()
         val scrollableElement = ancestorScrollableElements.last()
         val ancestorsAndSelf = this.ancestorsAndSelf
         val index = ancestorsAndSelf.indexOf(scrollableElement)
