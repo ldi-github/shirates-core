@@ -9,6 +9,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.getJSONArrayOrEmpty
 import shirates.core.utility.toPath
+import shirates.spec.utilily.removeBrackets
 import java.io.File
 
 /**
@@ -436,16 +437,20 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
         }
 
         s.originalExpression = expression
+        s.expression = s.getElementExpression()
+        if (s.relativeSelectors.isEmpty()) {
+            s.expression = s.expression?.removeBrackets()
+        }
         return s
     }
 
     internal fun expandExpression(expression: String): Selector {
 
         // Override selectorMap by temporaryScreenInfo
-        for (selectorEntry in ScreenRepository.tempSelectorMap) {
-            val sel = getSelector(expression = selectorEntry.value)
-            sel.nickname = selectorEntry.key
-            selectorMap[selectorEntry.key] = sel
+        for (selectorEntry in ScreenRepository.tempSelectorList) {
+            val sel = getSelector(expression = selectorEntry.second)
+            sel.nickname = selectorEntry.first
+            selectorMap[selectorEntry.first] = sel
         }
 
         if (selectorMap.containsKey(key = expression)) {

@@ -86,7 +86,8 @@ fun TestDrive.getSelector(expression: String): Selector {
  */
 fun TestDrive.tempSelector(nickname: String, expression: String): TestElement {
 
-    ScreenRepository.tempSelectorMap[nickname] = expression
+    ScreenRepository.tempSelectorList.removeIf { it.first == nickname }
+    ScreenRepository.tempSelectorList.add(Pair(nickname, expression))
     TestLog.info(message(id = "nicknameRegistered", key = nickname, value = expression))
 
     return lastElement

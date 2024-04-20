@@ -11,6 +11,7 @@ import shirates.core.utility.element.XPathUtility
 import shirates.core.utility.image.ImageMatchResult
 import java.awt.image.BufferedImage
 import java.text.Normalizer
+import kotlin.reflect.full.memberProperties
 
 
 /**
@@ -506,9 +507,43 @@ class Selector(
 
     init {
 
-        originalExpression = expression
-        expression = expandCommand(expression)
-        parseExpression()
+        parseExpression(expression)
+    }
+
+    fun isEqualTo(selector: Selector?): Boolean {
+
+        if (selector == null) {
+            return false
+        }
+
+        for (m in Selector::class.memberProperties) {
+
+            val v1 = m.call(this)
+            val v2 = m.call(selector)
+
+            if (v1 is Iterable<*> && v2 is Iterable<*>) {
+                val list1 = v1.toList()
+                val list2 = v2.toList()
+                for (i in 0 until list1.count()) {
+                    val r1 = list1[i]
+                    val r2 = list2[i]
+                    if (r1 is Selector && r2 is Selector) {
+                        if (r1.isEqualTo(r2).not()) {
+                            return false
+                        }
+                    } else {
+                        if (r1 != r2) {
+                            return false
+                        }
+                    }
+                }
+            } else {
+                if (v1 != v2) {
+                    return false
+                }
+            }
+        }
+        return true
     }
 
     private fun getFilter(key: String): Filter? {
@@ -541,12 +576,15 @@ class Selector(
         expression = getElementExpression()
     }
 
-    private fun parseExpression() {
+    private fun parseExpression(expression: String?) {
 
-        if (expression == null)
+        originalExpression = expression
+        this.expression = expandCommand(expression)
+
+        if (this.expression == null)
             return
 
-        val exps = expression!!.split("|||")
+        val exps = this.expression!!.split("|||")
         if (exps.any()) {
             val first = exps.first()
             parseExpressionCore(exp = first)
@@ -622,16 +660,29 @@ class Selector(
     fun copy(): Selector {
 
         val s = Selector()
-        s.ignoreTypes = ignoreTypes
+
         s.expression = expression
-        s.originalExpression = originalExpression
         s.nickname = nickname
         s.section = section
-        s.command = command
-        s.relativeSelectors.addAll(relativeSelectors.map { it.copy() })
-        s.orSelectors.addAll(orSelectors.map { it.copy() })
-        s.filterMap.putAll(filterMap)
         s.origin = origin
+        s.command = command
+        for (r in relativeSelectors) {
+            s.relativeSelectors.add(r.copy())
+        }
+        s.screenInfo = screenInfo
+        for (o in orSelectors) {
+            s.orSelectors.add(o.copy())
+        }
+        for (a in alternativeSelectors) {
+            s.alternativeSelectors.add(a.copy())
+        }
+        s.originalExpression = originalExpression
+        s.filterMap.putAll(filterMap)
+
+        val success = this.isEqualTo(s)
+        if (success.not()) {
+            throw TestConfigException("Selector.copy is incomplete.")
+        }
 
         return s
     }

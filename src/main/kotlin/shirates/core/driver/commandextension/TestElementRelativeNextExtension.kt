@@ -179,8 +179,8 @@ internal fun TestElement.execRelativeCommand(
     getElement: () -> TestElement
 ): TestElement {
 
-    val oldSelector = this.selector
-    val newSelector = this.getChainedSelector(relativeSelector = relativeSelector)
+    val oldSelector = this.selector?.copy()
+    val newSelector = this.selector?.getChainedSelector(relativeSelector = relativeSelector)
 
     val context = TestDriverCommandContext(this)
     var e = TestElement(selector = newSelector)

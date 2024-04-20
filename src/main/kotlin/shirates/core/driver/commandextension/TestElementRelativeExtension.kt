@@ -26,8 +26,8 @@ fun TestElement.relative(
         val expression = exp ?: command.removeRedundantExpression()
         val relativeSelector = Selector(expression)
 
-        val oldSelector = this.selector
-        val newSelector = this.getChainedSelector(relativeSelector = relativeSelector)
+        val oldSelector = this.selector?.copy()
+        val newSelector = this.selector?.getChainedSelector(relativeSelector = relativeSelector)
 
         val e = relative(
             relativeSelector = relativeSelector,
@@ -69,7 +69,6 @@ private val commandsAllowedInDirectAccessMode = listOf(
 
 internal fun TestElement.relative(
     relativeSelector: Selector,
-    newSelector: Selector = this.getChainedSelector(relativeSelector = relativeSelector),
     scopeElements: List<TestElement> = allElements(),
     widgetOnly: Boolean,
     frame: Bounds? = null
@@ -85,7 +84,8 @@ internal fun TestElement.relative(
         }
     }
 
-    val oldSelector = this.selector
+    val oldSelector = this.selector?.copy()
+    val newSelector = this.selector?.getChainedSelector(relativeSelector = relativeSelector)
 
     var targetElements = scopeElements
     if (widgetOnly && relativeSelector.isXmlBased.not()) {
@@ -93,7 +93,7 @@ internal fun TestElement.relative(
     }
 
     val context = TestDriverCommandContext(this)
-    var e = TestElement(selector = newSelector)
+    var e = TestElement(selector = this.selector)
     context.execRelativeCommand("${this.subject}:${relativeSelector}", subject = this.subject) {
 
         when (relativeSelector.command) {

@@ -27,7 +27,17 @@ object ScreenRepository {
             return screenInfoMap.values.sortedByDescending { it.searchWeight }
         }
 
-    val tempSelectorMap = mutableMapOf<String, String>()
+    val tempSelectorList = mutableListOf<Pair<String, String>>()
+
+    /**
+     * getTempSelectorExpression
+     */
+    fun getTempSelectorExpression(nickName: String): String {
+
+        val entry = tempSelectorList.find { it.first == nickName }
+        if (entry != null) return entry.second
+        return ""
+    }
 
     /**
      * clear
