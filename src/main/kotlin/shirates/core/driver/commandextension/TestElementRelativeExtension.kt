@@ -35,7 +35,7 @@ fun TestElement.relative(
             widgetOnly = widgetOnly ?: getWidgetOnly(selector = relativeSelector),
             frame = frame
         )
-        if (e == this) {
+        if (e == this && TestMode.isNoLoadRun.not()) {
             e.selector = oldSelector
         } else {
             e.selector = newSelector

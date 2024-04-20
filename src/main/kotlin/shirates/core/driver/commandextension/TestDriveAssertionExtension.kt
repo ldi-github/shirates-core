@@ -831,7 +831,7 @@ fun TestDrive.existWithScrollDown(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getThisOrLastElement()
+    val testElement = TestDriver.it
 
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)

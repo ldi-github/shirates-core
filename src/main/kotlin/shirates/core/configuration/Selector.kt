@@ -425,7 +425,7 @@ class Selector(
         )
 
         val xmlCommandBaseNames = listOf(
-            ":parent", ":child", ":sibling", ":ancestor", ":descendant", ":next", ":pre", ":previous"
+            ":parent", ":child", ":sibling", ":ancestor", ":descendant", ":next", ":pre", ":previous", ":cell"
         )
 
         val coordinateCommandBaseNames = listOf(

@@ -298,7 +298,9 @@ private fun cellOfCore(
         val original = CodeExecutionContext.isInCell
         try {
             CodeExecutionContext.isInCell = true
-            func.invoke(cell)
+            testElement.apply {
+                func.invoke(cell)
+            }
         } finally {
             CodeExecutionContext.isInCell = original
         }
@@ -314,7 +316,9 @@ fun TestElement.getCell(): TestElement {
 
     val cell = if (isAndroid) {
         val cellHost = getCellHost()
-        return ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+        val cell = ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+        cell.selector = this.getChainedSelector(":cell")
+        return cell
     } else {
         val ancestorScrollableElements = this.getScrollableElementsInAncestorsAndSelf()
         val scrollableElement = ancestorScrollableElements.last()
