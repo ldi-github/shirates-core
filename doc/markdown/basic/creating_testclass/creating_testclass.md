@@ -93,12 +93,16 @@ class TestClass1 : UITest() {
 
 At this point, you can run `testFunc1`.
 
-1. Run Android device.
-    - You can use Android AVD created in **Create AVD for demo** in [Quick Start](../../quick-start.md)
-    - Or you can connect Android real device to your machine and enable **USB debugging**.
-1. Set IntelliJ IDEA Settings.
+1. Set profile in `testrun.global.properties` file.<br>
+
+```properties
+# Specifying the AVD Name of emulator
+android.profile=Pixel 8(Android 14)
+``` 
+
+2. Set IntelliJ IDEA Settings.
     - See [Enable right-click test running](../../tool_settings/right_click_test_running.md)
-1. Right-click in testFunc1 and select `Debug`.
+3. Right-click in testFunc1 and select `Debug`.
 
 ### Console
 

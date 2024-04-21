@@ -94,12 +94,16 @@ class TestClass1 : UITest() {
 
 この時点で `testFunc1`は実行できます。
 
-1. Androidデバイスを起動します。
-    - [クイックスタート](../../quick-start_ja.md) の **Create AVD for demo**で作成したAndroid AVDを使用できます。
-    - またはAndroidの実機をマシンに接続し、 **USB デバッグ** を有効にします。
-1. IntelliJ IDEA のSettingsを設定します。
+1. `testrun.global.properties` でプロファイルを設定します。<br>
+
+```properties
+# エミュレーターのAVD名を指定する場合
+android.profile=Pixel 8(Android 14)
+``` 
+
+2. IntelliJ IDEA のSettingsを設定します。
     - 参照 [右クリックによろテスト実行を有効にする](../../tool_settings/right_click_test_running_ja.md)
-1. `testFunc1`の内部で右クリックして`Debug`を選択します。
+3. `testFunc1`の内部で右クリックして`Debug`を選択します。
 
 ### Console
 
