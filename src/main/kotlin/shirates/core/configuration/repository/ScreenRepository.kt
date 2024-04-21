@@ -27,14 +27,17 @@ object ScreenRepository {
             return screenInfoMap.values.sortedByDescending { it.searchWeight }
         }
 
-    var temporaryScreenInfo = ScreenInfo()
-        get() {
-            if (screenInfoMap.containsKey("temporary").not()) {
-                field = ScreenInfo()
-                set(repositoryKey = "temporary", field)
-            }
-            return field
-        }
+    val tempSelectorList = mutableListOf<Pair<String, String>>()
+
+    /**
+     * getTempSelectorExpression
+     */
+    fun getTempSelectorExpression(nickName: String): String {
+
+        val entry = tempSelectorList.find { it.first == nickName }
+        if (entry != null) return entry.second
+        return ""
+    }
 
     /**
      * clear
@@ -187,15 +190,15 @@ object ScreenRepository {
 
     private fun includeScreen(screenInfo: ScreenInfo, includedScreenInfo: ScreenInfo) {
 
-        for (includedSelector in includedScreenInfo.selectors) {
-            if (screenInfo.selectors.containsKey(includedSelector.key)) {
-                val thisSelector = screenInfo.selectors[includedSelector.key]!!
+        for (includedSelector in includedScreenInfo.selectorMap) {
+            if (screenInfo.selectorMap.containsKey(includedSelector.key)) {
+                val thisSelector = screenInfo.selectorMap[includedSelector.key]!!
                 if (thisSelector.isBase) {
                     // overrides screen-base selector by included selector
-                    screenInfo.selectors.set(includedSelector.key, includedSelector.value.copy())
+                    screenInfo.selectorMap.set(includedSelector.key, includedSelector.value.copy())
                 }
             } else {
-                screenInfo.selectors.set(includedSelector.key, includedSelector.value.copy())
+                screenInfo.selectorMap.set(includedSelector.key, includedSelector.value.copy())
             }
         }
         screenInfo.scrollInfo.importFrom(includedScreenInfo.scrollInfo)
@@ -208,7 +211,7 @@ object ScreenRepository {
 
         nicknameIndex.clear()
         for (screenInfo in screenInfoSearchList.toList()) {
-            val nicknames = screenInfo.selectors.values.map { it.nickname ?: "" }.filter { it.isValidNickname() }
+            val nicknames = screenInfo.selectorMap.values.map { it.nickname ?: "" }.filter { it.isValidNickname() }
             for (nickname in nicknames) {
                 val screensForNickname =
                     if (nicknameIndex.containsKey(nickname)) nicknameIndex[nickname]!!

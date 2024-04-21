@@ -106,33 +106,34 @@ class TestDriveSelectExtensionTest1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Accessibility Screen]")
+                    it.macro("[Android Settings Top Screen]")
                         .scanElements()
                 }.expectation {
-                    it.canSelectInScanResults("[Accessibility]", log = true).thisIsTrue()
+                    it.canSelectInScanResults("[Network & internet]", log = true).thisIsTrue()
                     it.canSelectInScanResults("[Display]", log = true).thisIsTrue()
-                    it.canSelectInScanResults("[Text-to-speech output]", log = true).thisIsTrue()
+                    it.canSelectInScanResults("[Tips & support]", log = true).thisIsTrue()
 
-                    it.canSelectInScanResults("General", log = true).thisIsTrue()
-                    it.canSelectInScanResults("System con*", log = true).thisIsTrue()
-                    it.canSelectInScanResults("*shortcuts", log = true).thisIsTrue()
-                    it.canSelectInScanResults("*adjust*", log = true).thisIsTrue()
+                    it.canSelectInScanResults("Apps", log = true).thisIsTrue()
+                    it.canSelectInScanResults("Sound*", log = true).thisIsTrue()
+                    it.canSelectInScanResults("*privacy", log = true).thisIsTrue()
+                    it.canSelectInScanResults("*Wellbeing*", log = true).thisIsTrue()
 
                     it.canSelectInScanResults("no exist", log = true).thisIsFalse()
                     it.canSelectInScanResults("no exi*", log = true).thisIsFalse()
                     it.canSelectInScanResults("*exist", log = true).thisIsFalse()
                     it.canSelectInScanResults("*o exi*", log = true).thisIsFalse()
 
-                    it.canSelectInScanResults("textMatches=^Caption.*ces$", log = true).thisIsTrue()
+                    it.canSelectInScanResults("textMatches=^Pass.*counts$", log = true).thisIsTrue()
                     it.canSelectInScanResults("textMatches=^no.*exist$", log = true).thisIsFalse()
 
-                    it.canSelectInScanResults("#android:id/switch_widget", log = true).thisIsTrue()
+                    it.canSelectInScanResults("#com.android.settings:id/account_avatar", log = true).thisIsTrue()
                     it.canSelectInScanResults("#no exist", log = true).thisIsFalse()
 
-                    it.canSelectInScanResults("@Accessibility", log = true).thisIsTrue()
-                    it.canSelectInScanResults("@Accessi*", log = true).thisIsTrue()
-                    it.canSelectInScanResults("@*bility", log = true).thisIsTrue()
-                    it.canSelectInScanResults("@*cessibili*", log = true).thisIsTrue()
+                    it.canSelectInScanResults("@Profile picture, double tap to open Google Account", log = true)
+                        .thisIsTrue()
+                    it.canSelectInScanResults("@Profile picture*", log = true).thisIsTrue()
+                    it.canSelectInScanResults("@*Google Account", log = true).thisIsTrue()
+                    it.canSelectInScanResults("@*double tap to open Google*", log = true).thisIsTrue()
 
                     it.canSelectInScanResults("@no exist", log = true).thisIsFalse()
                     it.canSelectInScanResults("@no exi*", log = true).thisIsFalse()

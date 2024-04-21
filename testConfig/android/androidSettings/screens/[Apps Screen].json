@@ -1,0 +1,14 @@
+{
+  "key": "[Apps Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Apps",
+
+  "selectors": {
+    "[<-]": "@Navigate up",
+    "[Apps]": ""
+  }
+
+}

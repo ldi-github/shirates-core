@@ -9,10 +9,7 @@
   "selectors": {
     "[<-]": "@Navigate up",
     "[Notifications]": "",
-    "[action_bar]": "#action_bar",
-
-    "[RECENTLY SENT]": "",
-    "[LOCK SCREEN]": ""
+    "[action_bar]": "#action_bar"
   },
 
   "scroll": {

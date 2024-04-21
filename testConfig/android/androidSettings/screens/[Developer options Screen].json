@@ -9,13 +9,11 @@
   "selectors": {
     "[<-]": "@Navigate up",
 
-    "[Use developer options bar]": "#switch_bar",
-
-    "[Wireless debugging]": "@Wireless debugging"
+    "[Use developer options Bar]": "#switch_bar"
   },
 
   "scroll": {
-    "header-elements": "[Use developer options bar]",
+    "header-elements": "[Use developer options Bar]",
     "start-elements": "",
     "end-elements": "",
     "overlay-elements": ""

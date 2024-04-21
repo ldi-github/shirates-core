@@ -244,7 +244,7 @@ class Selector_AndroidTest3 : UnitTest() {
             ":innerVlabel", ":innerVinput", ":innerVimage", ":innerVbutton", ":innerVswitch",
         )
         assertThat(Selector.xmlCommandBaseNames).containsExactlyInAnyOrder(
-            ":parent", ":child", ":sibling", ":ancestor", ":descendant", ":next", ":pre", ":previous"
+            ":parent", ":child", ":sibling", ":ancestor", ":descendant", ":next", ":pre", ":previous", ":cell"
         )
         assertThat(Selector.coordinateCommandBaseNames).containsExactlyInAnyOrder(
             ":right", ":below", ":left", ":above"

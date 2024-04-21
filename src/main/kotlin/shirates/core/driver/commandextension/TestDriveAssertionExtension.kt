@@ -534,7 +534,7 @@ fun TestDrive.verify(
             throw t
         } catch (t: Throwable) {
             val ex = TestNGException(message = message, cause = t)
-            TestLog.ng(exception = ex)
+            throw ex
         } finally {
             CodeExecutionContext.isInOperationCommand = original
         }
@@ -831,7 +831,7 @@ fun TestDrive.existWithScrollDown(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = getThisOrLastElement()
+    val testElement = TestDriver.it
 
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)

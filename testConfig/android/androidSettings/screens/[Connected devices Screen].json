@@ -8,11 +8,7 @@
 
   "selectors": {
     "[<-]": "@Navigate up",
-    "[Search Button]": "@Search settings",
-
-    "[CURRENTLY CONNECTED]": "",
-    "[USB]": "",
-    "[Connection preferences]": ""
+    "[Search Button]": "@Search settings"
   }
 
 }
