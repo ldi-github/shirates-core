@@ -66,7 +66,7 @@ fun BufferedImage.saveImage(
     }
 
     val dir = file.toPath().parent
-    if(Files.exists(file.toPath().parent).not()){
+    if (Files.exists(file.toPath().parent).not()) {
         throw FileNotFoundException("Failed to save file. Directory not found. (directory=$dir, file=${file.name})")
     }
 

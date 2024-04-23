@@ -15,7 +15,7 @@ class EmulatorProfile(
         val tokens = profileName.replace("(", " ").replace(")", " ").replace("_", " ").split(" ")
         val versionIx = tokens.map { it.lowercase() }.indexOf("android") + 1
         if (versionIx + 1 <= tokens.count()) {
-            platformVersion = tokens[versionIx]
+            platformVersion = tokens[versionIx].toIntOrNull()?.toString() ?: ""
         } else {
             platformVersion = ""
         }

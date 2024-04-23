@@ -246,6 +246,7 @@ private fun TestDrive.tapWithScrollCommandCore(
     expression: String,
     command: String,
     direction: ScrollDirection,
+    scrollableElement: TestElement?,
     scrollDurationSeconds: Double,
     scrollStartMarginRatio: Double,
     scrollEndMarginRatio: Double,
@@ -254,16 +255,15 @@ private fun TestDrive.tapWithScrollCommandCore(
     tapMethod: TapMethod,
 ): TestElement {
 
-    val testElement = getThisOrIt()
-
     val selector = getSelector(expression = expression)
     val message = message(id = command, subject = "$selector")
     var e = TestElement(selector = Selector(expression))
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(scrollableElement)
     context.execOperateCommand(command = command, message = message) {
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = direction,
+            scrollableElement = scrollableElement,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
@@ -281,6 +281,7 @@ private fun TestDrive.tapWithScrollCommandCore(
  */
 fun TestDrive.tapWithScrollDown(
     expression: String,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -296,6 +297,7 @@ fun TestDrive.tapWithScrollDown(
         expression = expression,
         command = command,
         direction = direction,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -312,6 +314,7 @@ fun TestDrive.tapWithScrollDown(
  */
 fun TestDrive.tapWithScrollUp(
     expression: String,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -327,6 +330,7 @@ fun TestDrive.tapWithScrollUp(
         expression = expression,
         command = command,
         direction = direction,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -343,6 +347,7 @@ fun TestDrive.tapWithScrollUp(
  */
 fun TestDrive.tapWithScrollRight(
     expression: String,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -358,6 +363,7 @@ fun TestDrive.tapWithScrollRight(
         expression = expression,
         command = command,
         direction = direction,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -374,6 +380,7 @@ fun TestDrive.tapWithScrollRight(
  */
 fun TestDrive.tapWithScrollLeft(
     expression: String,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -389,6 +396,7 @@ fun TestDrive.tapWithScrollLeft(
         expression = expression,
         command = command,
         direction = direction,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,

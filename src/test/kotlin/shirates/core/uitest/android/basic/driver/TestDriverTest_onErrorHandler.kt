@@ -99,10 +99,10 @@ class TestDriverTest_onErrorHandler : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.existImage("[Airplane mode Icon]") {
-                        imageMatched.thisIsTrue()
-                        isFound.thisIsTrue()
-                        isDummy.thisIsFalse()
-                        isEmpty.thisIsFalse()
+                        imageMatched.thisIsTrue("imageMatched")
+                        isFound.thisIsTrue("isFound")
+                        isDummy.thisIsTrue("isDummy")
+                        isEmpty.thisIsFalse("isEmpty")
                     }
                     it.screenIs("[Network & internet Screen]")
                 }

@@ -1125,6 +1125,7 @@ object TestDriver {
         selector: Selector,
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
+        scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
         scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
@@ -1137,11 +1138,27 @@ object TestDriver {
     ): TestElement {
 
         fun executeSelect(): TestElement {
+            if (selector.isImageSelector) {
+                val r = findImage(
+                    selector = selector,
+                    scroll = scroll,
+                    direction = direction,
+                    scrollDurationSeconds = scrollDurationSeconds,
+                    scrollStartMarginRatio = scrollStartMarginRatio,
+                    scrollEndMarginRatio = scrollEndMarginRatio,
+                    scrollMaxCount = scrollMaxCount,
+                    throwsException = throwsException,
+                    useCache = useCache,
+                )
+                val de = r.toDummyElement(selector = selector)
+                return de
+            }
             return selectCore(
                 selector = selector,
                 useCache = useCache,
                 scroll = scroll,
                 direction = direction,
+                scrollableElement = scrollableElement,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,
@@ -1178,6 +1195,7 @@ object TestDriver {
         useCache: Boolean,
         scroll: Boolean,
         direction: ScrollDirection,
+        scrollableElement: TestElement?,
         scrollDurationSeconds: Double,
         scrollStartMarginRatio: Double,
         scrollEndMarginRatio: Double,
@@ -1231,6 +1249,7 @@ object TestDriver {
                 return selectWithScroll(
                     selector = selector,
                     frame = frame,
+                    scrollableElement = scrollableElement,
                     direction = direction,
                     durationSeconds = scrollDurationSeconds,
                     startMarginRatio = scrollStartMarginRatio,
@@ -1480,6 +1499,7 @@ object TestDriver {
         expression: String,
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
+        scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
         scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
@@ -1490,10 +1510,11 @@ object TestDriver {
 
         val sel = expandExpression(expression = expression)
 
-        return findImage(
+        return findImageCore(
             selector = sel,
             scroll = scroll,
             direction = direction,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -1503,11 +1524,42 @@ object TestDriver {
         )
     }
 
-    internal fun findImage(
+    /**
+     * findImage
+     */
+    fun findImage(
+        selector: Selector,
+        scroll: Boolean = false,
+        direction: ScrollDirection = ScrollDirection.Down,
+        scrollableElement: TestElement? = null,
+        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
+        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
+        scrollMaxCount: Int = testContext.scrollMaxCount,
+        throwsException: Boolean = true,
+        useCache: Boolean = testContext.useCache,
+    ): ImageMatchResult {
+
+        return findImageCore(
+            selector = selector,
+            scroll = scroll,
+            direction = direction,
+            scrollableElement = scrollableElement,
+            scrollDurationSeconds = scrollDurationSeconds,
+            scrollStartMarginRatio = scrollStartMarginRatio,
+            scrollEndMarginRatio = scrollEndMarginRatio,
+            scrollMaxCount = scrollMaxCount,
+            throwsException = throwsException,
+            useCache = useCache
+        )
+    }
+
+    internal fun findImageCore(
         selector: Selector,
         threshold: Double = PropertiesManager.imageMatchingThreshold,
         scroll: Boolean,
         direction: ScrollDirection,
+        scrollableElement: TestElement?,
         scrollDurationSeconds: Double,
         scrollStartMarginRatio: Double,
         scrollEndMarginRatio: Double,
@@ -1563,6 +1615,7 @@ object TestDriver {
             }
 
             testDrive.doUntilScrollStop(
+                scrollableElement = scrollableElement,
                 repeat = 1,
                 maxLoopCount = scrollMaxCount,
                 direction = direction,
@@ -1618,6 +1671,7 @@ object TestDriver {
     fun selectWithScroll(
         selector: Selector,
         frame: Bounds? = viewBounds,
+        scrollableElement: TestElement? = null,
         direction: ScrollDirection = ScrollDirection.Down,
         durationSeconds: Double = testContext.swipeDurationSeconds,
         startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1633,6 +1687,7 @@ object TestDriver {
 
             e = select(
                 selector = selector,
+                scroll = false,
                 swipeToCenter = false,
                 waitSeconds = 0.0,
                 throwsException = false,
@@ -1643,6 +1698,7 @@ object TestDriver {
         }
 
         testDrive.doUntilScrollStop(
+            scrollableElement = scrollableElement,
             repeat = 1,
             maxLoopCount = scrollMaxCount,
             direction = direction,
@@ -1674,6 +1730,7 @@ object TestDriver {
     fun selectWithScroll(
         expression: String,
         direction: ScrollDirection = ScrollDirection.Down,
+        scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
         endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
@@ -1688,6 +1745,7 @@ object TestDriver {
             e = selectWithScroll(
                 selector = sel,
                 direction = direction,
+                scrollableElement = scrollableElement,
                 swipeToCenter = swipeToCenter,
                 durationSeconds = scrollDurationSeconds,
                 startMarginRatio = startMarginRatio,

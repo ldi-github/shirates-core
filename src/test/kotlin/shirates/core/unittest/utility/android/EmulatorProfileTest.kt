@@ -33,7 +33,7 @@ class EmulatorProfileTest {
             // Assert
             assertThat(emulatorProfile.profileName).isEqualTo("Android *")
             assertThat(emulatorProfile.avdName).isEqualTo("Android_*")
-            assertThat(emulatorProfile.platformVersion).isEqualTo("*")
+            assertThat(emulatorProfile.platformVersion).isEqualTo("")
             assertThat(emulatorProfile.emulatorPort).isEqualTo(5556)
         }
     }
