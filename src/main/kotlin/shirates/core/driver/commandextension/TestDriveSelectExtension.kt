@@ -103,7 +103,7 @@ fun TestDrive.selectWithScrollDown(
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = true,
+    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -145,7 +145,7 @@ fun TestDrive.selectWithScrollUp(
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = true,
+    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -187,7 +187,7 @@ fun TestDrive.selectWithScrollRight(
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = true,
+    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -229,7 +229,7 @@ fun TestDrive.selectWithScrollLeft(
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = true,
+    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null

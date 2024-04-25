@@ -1239,6 +1239,10 @@ object TestDriver {
             }
             if (selector.isNegation.not()) {
                 if (selectedElement.isFound && selectedElement.isInView) {
+                    if (swipeToCenter) {
+                        selectedElement = selectedElement.swipeToCenter()
+                        screenshot()
+                    }
                     lastElement = selectedElement
                     return lastElement
                 }
@@ -1665,10 +1669,7 @@ object TestDriver {
         }
     }
 
-    /**
-     * selectWithScroll
-     */
-    fun selectWithScroll(
+    internal fun selectWithScroll(
         selector: Selector,
         frame: Bounds? = viewBounds,
         scrollableElement: TestElement? = null,
@@ -1735,7 +1736,7 @@ object TestDriver {
         startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
         endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
-        swipeToCenter: Boolean = true,
+        swipeToCenter: Boolean = false,
         throwsException: Boolean = true
     ): TestElement {
         val sel = expandExpression(expression = expression)

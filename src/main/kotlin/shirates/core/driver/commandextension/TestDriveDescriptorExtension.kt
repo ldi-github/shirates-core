@@ -193,6 +193,7 @@ fun TestDrive.codeblock(
  */
 fun TestDrive.cell(
     expression: String? = null,
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
@@ -211,6 +212,7 @@ fun TestDrive.cell(
         } else {
             select(
                 expression = expression,
+                swipeToCenter = swipeToCenter,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
                 useCache = useCache,
@@ -239,6 +241,7 @@ fun TestDrive.cell(
  */
 fun TestDrive.cellOf(
     expression: String,
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
@@ -248,6 +251,7 @@ fun TestDrive.cellOf(
 
     val testElement = select(
         expression = expression,
+        swipeToCenter = swipeToCenter,
         throwsException = throwsException,
         waitSeconds = waitSeconds,
         useCache = useCache,
@@ -265,12 +269,20 @@ fun TestDrive.cellOf(
  * cellOf
  */
 fun TestElement.cellOf(
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
+    var testElement = this
+    if (swipeToCenter) {
+        silent {
+            testElement = this.swipeToCenter()
+        }
+    }
+
     return cellOfCore(
-        testElement = this,
+        testElement = testElement,
         throwsException = throwsException,
         func = func
     )
