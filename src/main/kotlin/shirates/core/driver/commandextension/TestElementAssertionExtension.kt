@@ -4,8 +4,11 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.Filter.Companion.getFullyQualifiedId
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.*
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.filterBySelector
 import shirates.core.logging.Message.message
 import shirates.core.testcode.preprocessForComparison
 
@@ -1097,15 +1100,15 @@ internal fun TestElement.existInCell(
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
 
-    val testElement = TestDriver.it
+    val cell = getCell()
 
     val command = "existInCell"
     val assertMessage = message(id = command, subject = e.subject, replaceRelative = true)
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(cell)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
-        e = this.innerElements.filterBySelector(selector = sel, throwsException = false).firstOrNull()
+        e = cell.innerElements.filterBySelector(selector = sel, throwsException = false).firstOrNull()
             ?: TestElement.emptyElement
         e.selector = sel
         TestDriver.postProcessForAssertion(
@@ -1129,15 +1132,15 @@ internal fun TestElement.dontExistInCell(
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
 
-    val testElement = TestDriver.it
+    val cell = getCell()
 
     val command = "dontExistInCell"
     val assertMessage = message(id = command, subject = e.subject, replaceRelative = true)
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(cell)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
-        e = this.innerWidgets.filterBySelector(selector = sel, throwsException = false).firstOrNull()
+        e = cell.innerElements.filterBySelector(selector = sel, throwsException = false).firstOrNull()
             ?: TestElement.emptyElement
         e.selector = sel
         TestDriver.postProcessForAssertion(
