@@ -22,7 +22,6 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getAttribute
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.ImageMatchResult
-import shirates.core.utility.time.StopWatch
 
 /**
  * TestElement
@@ -921,34 +920,28 @@ class TestElement(
      */
     fun getProperty(name: String): String {
 
-        val sw = StopWatch("getProperty($name)")
-
-        try {
-            if (node != null) {
-                return getAttribute(name = name)
-            }
-            if (webElement != null) {
-                if (propertyCache.containsKey(name)) {
-                    return propertyCache[name]!!
-                }
-                try {
-                    var value = webElement!!.getAttribute(name)
-                    if (value == "null") {
-                        value = ""
-                    }
-                    propertyCache[name] = value
-                    return value
-                } catch (t: Throwable) {
-                    return ""
-                }
-            }
+        if (node != null) {
+            return getAttribute(name = name)
+        }
+        if (webElement != null) {
             if (propertyCache.containsKey(name)) {
                 return propertyCache[name]!!
             }
-            return ""
-        } finally {
-//            sw.printInfo()
+            try {
+                var value = webElement!!.getAttribute(name)
+                if (value == "null") {
+                    value = ""
+                }
+                propertyCache[name] = value
+                return value
+            } catch (t: Throwable) {
+                return ""
+            }
         }
+        if (propertyCache.containsKey(name)) {
+            return propertyCache[name]!!
+        }
+        return ""
     }
 
     internal val propertyCache = mutableMapOf<String, String>()

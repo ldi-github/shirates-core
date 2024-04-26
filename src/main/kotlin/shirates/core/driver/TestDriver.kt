@@ -49,6 +49,7 @@ import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
+import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import java.awt.image.BufferedImage
 import java.io.File
@@ -977,16 +978,16 @@ object TestDriver {
                 val lastXml = TestElementCache.sourceXml
                 CodeExecutionContext.lastScreenshotImage = null
 
-                testDrive.doUntilTrue(
+                WaitUtility.doUntilTrue(
                     waitSeconds = testContext.waitSecondsOnIsScreen,
                     intervalSeconds = 1.0
-                ) {
+                ) { sc ->
                     rootElement = AppiumProxy.getSource()
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
                     rootElement.sourceCaptureFailed = false
                     if (hasIncompleteWebView()) {
-                        if (it.stopWatch.elapsedSeconds < it.waitSeconds) {
+                        if (sc.stopWatch.elapsedSeconds < sc.waitSeconds) {
                             TestLog.info("WebView is incomplete", PropertiesManager.enableSyncLog)
                             rootElement.sourceCaptureFailed = true
                         }

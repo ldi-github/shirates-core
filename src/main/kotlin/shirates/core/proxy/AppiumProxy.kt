@@ -8,7 +8,6 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONObject
-import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
@@ -16,7 +15,6 @@ import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.getWebElement
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.element.ElementCacheUtility
@@ -91,6 +89,20 @@ object AppiumProxy {
             return true
         }
 
+        var source = ""
+
+        fun validateSource(): Boolean {
+            if (source == "") {
+                return false
+            }
+            if (isiOS) {
+                if (source.contains("<AppiumAUT>").not() || source.contains("<XCUIElementTypeApplication").not()) {
+                    return false
+                }
+            }
+            return true
+        }
+
         val wc = WaitUtility.doUntilTrue(
             waitSeconds = waitSeconds,
             intervalSeconds = intervalSeconds,
@@ -110,9 +122,18 @@ object AppiumProxy {
                 )
             }
         ) { c ->
-            root = getSourceCore()
-            val r = checkState()
-            r
+            if (PropertiesManager.enableGetSourceLog) {
+                val count = c.count
+                TestLog.info("getSource($count)")
+            }
+            source = TestDriver.appiumDriver.pageSource
+            val r = validateSource()
+            if (r) {
+                root = ElementCacheUtility.createTestElementFromXml(sourceXml = source)
+                checkState()
+            } else {
+                false
+            }
         }
 
         if (throwOnFinally && wc.hasError) {
@@ -120,59 +141,6 @@ object AppiumProxy {
         }
 
         return root
-    }
-
-    private fun getSourceCore(): TestElement {
-
-        val ms = Measure("getSourceCore()")
-        try {
-            var source = ""
-
-            fun validateSource(): Boolean {
-                if (source == "") {
-                    return false
-                }
-                if (isiOS) {
-                    if (source.contains("<AppiumAUT>").not() || source.contains("<XCUIElementTypeApplication").not()) {
-                        return false
-                    }
-                }
-                return true
-            }
-
-            val waitSeconds = Const.WAIT_SECONDS_ON_ISSCREEN
-            val maxLoopCount = waitSeconds.toInt() + 1
-            val waitContext = WaitUtility.doUntilTrue(
-                waitSeconds = waitSeconds,
-                intervalSeconds = 1.0,
-                maxLoopCount = maxLoopCount,
-                retryOnError = true,
-                throwOnFinally = false,
-            ) { c ->
-                if (PropertiesManager.enableGetSourceLog) {
-                    val count = c.count
-                    TestLog.info("getSource($count)")
-                }
-                source = TestDriver.appiumDriver.pageSource
-                val r = validateSource()
-                r
-            }
-
-            if (source.isBlank()) {
-                return TestElement()
-            }
-
-            source = source.replace("\u000b", "")    // vertical tab is not valid in XML
-            if (PropertiesManager.xmlSourceRemovePattern.isNotBlank()) {
-                val regex = PropertiesManager.xmlSourceRemovePattern.toRegex()
-                source = source.replace(regex, "")
-            }
-
-            val e = ElementCacheUtility.createTestElementFromXml(source = source)
-            return e
-        } finally {
-            ms.end()
-        }
     }
 
     /**
