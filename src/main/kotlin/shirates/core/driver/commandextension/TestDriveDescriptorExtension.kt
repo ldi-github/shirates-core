@@ -328,7 +328,7 @@ fun TestElement.getCell(): TestElement {
 
     val cell = if (isAndroid) {
         val cellHost = getCellHost()
-        val cell = ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+        val cell = ancestorsAndSelf.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
         cell.selector = this.getChainedSelector(":cell")
         return cell
     } else {
