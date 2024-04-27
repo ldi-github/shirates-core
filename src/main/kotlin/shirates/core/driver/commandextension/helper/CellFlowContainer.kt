@@ -1,7 +1,7 @@
 package shirates.core.driver.commandextension.helper
 
 import shirates.core.driver.TestElement
-import shirates.core.driver.commandextension.cellOf
+import shirates.core.driver.commandextension.getCell
 import shirates.core.utility.element.ElementCategory
 
 class CellFlowContainer {
@@ -21,7 +21,7 @@ class CellFlowContainer {
         element: TestElement
     ) {
 
-        var cell = element.cellOf(throwsException = false)
+        var cell = element.getCell()
         if (cell.isEmpty) {
             cell = element.parentElement
             if (cell.category == ElementCategory.BUTTON) {
