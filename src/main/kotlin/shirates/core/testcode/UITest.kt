@@ -298,8 +298,6 @@ abstract class UITest : TestDrive {
                 if (profile.appPackageFile.isNullOrBlank().not()) {
                     ParameterRepository.write("appPackageFile", profile.appPackageFile!!)
                 }
-
-                profile.getMetadataFromFileName()
                 // appEnvironment
                 if (profile.appEnvironment.isBlank().not()) {
                     ParameterRepository.write("appEnvironment", profile.appEnvironment)
@@ -389,12 +387,16 @@ abstract class UITest : TestDrive {
     ): TestProfile {
         TestLog.info("Loading config.(configFile=$configPath, profileName=$profileName)")
         testConfig = TestConfig(configPath.toString())
-        if (testConfig!!.profileMap.containsKey(profileName)) {
+        val profile = if (testConfig!!.profileMap.containsKey(profileName)) {
             return testConfig!!.profileMap[profileName]!!
+        } else {
+            val defaultProfile = testConfig!!.profileMap["_default"]!!
+            defaultProfile.profileName = profileName
+            defaultProfile
         }
-        val defaultProfile = testConfig!!.profileMap["_default"]!!
-        defaultProfile.profileName = profileName
-        return defaultProfile
+        profile.getMetadataFromFileName()
+
+        return profile
     }
 
     /**
