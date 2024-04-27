@@ -582,7 +582,9 @@ abstract class UITest : TestDrive {
                             testContext.onRerunScenarioHandler!!.invoke(t)
                         }
                     } else {
-                        TestLog.error("${t.message}\n${t.stackTraceToString()}", exception = t)
+                        if ((t is AssertionError).not()) {
+                            TestLog.error("${t.message}\n${t.stackTraceToString()}", exception = t)
+                        }
                     }
                     CodeExecutionContext.scenarioRerunCause = wc.error
                 },
