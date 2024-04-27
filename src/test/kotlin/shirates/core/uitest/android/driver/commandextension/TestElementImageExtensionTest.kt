@@ -164,8 +164,10 @@ class TestElementImageExtensionTest : UITest() {
                 condition {
                     // Override [Notifications Icon].png by [App Icon].png
                     val tipsAndSupport = ImageFileRepository.getImageFileEntry("[Tips & support Icon].png")!!
-                    val notifications = ImageFileRepository.getImageFileEntry("[Notifications Icon].png")!!
-                    notifications.bufferedImage = tipsAndSupport.bufferedImage
+                    val entries = ImageFileRepository.getImageFileEntries(imageExpression = "[Notifications Icon].png")
+                    for (entry in entries) {
+                        entry.bufferedImage = tipsAndSupport.bufferedImage
+                    }
                 }.expectation {
                     it.existImage("[Notifications Icon]") {     // element found, image does not match, WARN
                         assertThat(TestLog.lines.takeLast(2).first().logType).isEqualTo(LogType.WARN)
