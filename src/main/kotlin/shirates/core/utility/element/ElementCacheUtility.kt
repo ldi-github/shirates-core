@@ -1,6 +1,7 @@
 package shirates.core.utility.element
 
 import org.w3c.dom.Node
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.testContext
@@ -18,9 +19,16 @@ object ElementCacheUtility {
     /**
      * createTestElementFromXml
      */
-    fun createTestElementFromXml(source: String): TestElement {
+    fun createTestElementFromXml(sourceXml: String): TestElement {
 
         TestLog.trace()
+
+        var source = sourceXml
+        source = source.replace("\u000b", "")    // vertical tab is not valid in XML
+        if (PropertiesManager.xmlSourceRemovePattern.isNotBlank()) {
+            val regex = PropertiesManager.xmlSourceRemovePattern.toRegex()
+            source = source.replace(regex, "")
+        }
 
         val xmlRemoved = source.replace("\r\n", "")
         val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()

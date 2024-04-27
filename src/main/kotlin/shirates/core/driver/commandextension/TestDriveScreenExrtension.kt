@@ -93,7 +93,7 @@ internal fun TestDrive.waitScreenOfCore(
 
     fun ofScreen(): String {
         for (screenName in screenNames) {
-            if (TestDriver.currentScreen == screenName) {
+            if (TestDriver.isScreen(screenName)) {
                 return screenName
             }
         }

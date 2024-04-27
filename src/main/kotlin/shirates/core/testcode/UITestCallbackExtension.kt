@@ -12,6 +12,7 @@ import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestMode.hasOsaifuKeitai
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isStub
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestFailException
@@ -184,21 +185,23 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             if (TestLog.capabilityPrinted.not()) {
                 TestDriver.printCapabilities()
 
-                if (TestMode.isNoLoadRun.not()) {
-                    // Settings(Android only)
-                    if (isAndroid && testContext.profile.settings.any()) {
-                        TestLog.write("settings")
-                        for (s in testContext.profile.settings) {
-                            val value = AndroidMobileShellUtility.setValue(name = s.key, value = s.value)
-                            ParameterRepository.write(s.key, value.toString().trimEnd())
+                // Settings(Android only)
+                if (isAndroid && testContext.profile.settings.any()) {
+                    TestLog.write("settings")
+                    for (s in testContext.profile.settings) {
+                        if (isNoLoadRun.not()) {
+                            AndroidMobileShellUtility.setValue(name = s.key, value = s.value)
                         }
+                        ParameterRepository.write(s.key, s.value.trimEnd())
                     }
-                    // others
-                    TestLog.write("(others)")
-                    ParameterRepository.write("isEmulator", TestDriveObject.isEmulator.toString())
-                    if (isStub) {
-                        ParameterRepository.write("isStub", isStub.toString())
-                    }
+                }
+                // others
+                TestLog.write("(others)")
+                ParameterRepository.write("isEmulator", TestDriveObject.isEmulator.toString())
+                if (isStub) {
+                    ParameterRepository.write("isStub", isStub.toString())
+                }
+                if (isNoLoadRun.not()) {
                     ParameterRepository.write("hasOsaifuKeitai", hasOsaifuKeitai.toString())
                 }
             }

@@ -193,6 +193,7 @@ fun TestDrive.codeblock(
  */
 fun TestDrive.cell(
     expression: String? = null,
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
@@ -202,7 +203,7 @@ fun TestDrive.cell(
 
     val command = "cell"
 
-    val testElement =
+    val cell =
         if (expression == null) {
             val e = this.toTestElement
             if (e.isEmpty && throwsException && TestMode.isNoLoadRun.not())
@@ -211,6 +212,7 @@ fun TestDrive.cell(
         } else {
             select(
                 expression = expression,
+                swipeToCenter = swipeToCenter,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
                 useCache = useCache,
@@ -218,20 +220,22 @@ fun TestDrive.cell(
             )
         }
 
-    val target = message(id = command, subject = testElement.subject)
+    val target = message(id = command, subject = cell.subject)
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(cell)
     context.execBranch(command = command, condition = target) {
-        val original = CodeExecutionContext.isInCell
+        val original = CodeExecutionContext.lastCell
         try {
-            CodeExecutionContext.isInCell = true
-            func?.invoke(testElement)
+            CodeExecutionContext.lastCell = cell
+            cell.apply {
+                func?.invoke(cell)
+            }
         } finally {
-            CodeExecutionContext.isInCell = original
+            CodeExecutionContext.lastCell = original
         }
     }
 
-    return testElement
+    return cell
 }
 
 /**
@@ -239,6 +243,7 @@ fun TestDrive.cell(
  */
 fun TestDrive.cellOf(
     expression: String,
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
@@ -248,6 +253,7 @@ fun TestDrive.cellOf(
 
     val testElement = select(
         expression = expression,
+        swipeToCenter = swipeToCenter,
         throwsException = throwsException,
         waitSeconds = waitSeconds,
         useCache = useCache,
@@ -265,12 +271,20 @@ fun TestDrive.cellOf(
  * cellOf
  */
 fun TestElement.cellOf(
+    swipeToCenter: Boolean = true,
     throwsException: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
+    var testElement = this
+    if (swipeToCenter) {
+        silent {
+            testElement = this.swipeToCenter()
+        }
+    }
+
     return cellOfCore(
-        testElement = this,
+        testElement = testElement,
         throwsException = throwsException,
         func = func
     )
@@ -293,16 +307,16 @@ private fun cellOfCore(
 
     val target = message(id = command, subject = testElement.subject)
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(cell)
     context.execBranch(command = command, condition = target) {
-        val original = CodeExecutionContext.isInCell
+        val original = CodeExecutionContext.lastCell
         try {
-            CodeExecutionContext.isInCell = true
-            testElement.apply {
+            CodeExecutionContext.lastCell = cell
+            cell.apply {
                 func.invoke(cell)
             }
         } finally {
-            CodeExecutionContext.isInCell = original
+            CodeExecutionContext.lastCell = original
         }
     }
 
@@ -314,9 +328,13 @@ private fun cellOfCore(
  */
 fun TestElement.getCell(): TestElement {
 
+    if (CodeExecutionContext.lastCell.isEmpty.not()) {
+        return CodeExecutionContext.lastCell
+    }
+
     val cell = if (isAndroid) {
         val cellHost = getCellHost()
-        val cell = ancestors.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+        val cell = ancestorsAndSelf.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
         cell.selector = this.getChainedSelector(":cell")
         return cell
     } else {

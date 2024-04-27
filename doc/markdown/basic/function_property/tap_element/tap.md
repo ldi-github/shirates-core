@@ -6,11 +6,14 @@ You can tap an element on the screen using these functions.
 
 | function           | description                                                           |
 |:-------------------|:----------------------------------------------------------------------|
-| tap                | Tap the first element that matches the selector in current screen.    |
+| tap(expression)    | Tap the first element that matches the selector in current screen.    |
+| tap(x, y)          | Tap the the coordinates (x, y).                                       |
 | tapWithScrollDown  | Tap the first element that matches the selector with scrolling down.  |
 | tapWithScrollUp    | Tap the first element that matches the selector with scrolling up.    |
 | tapWithScrollRight | Tap the first element that matches the selector with scrolling right. |
 | tapWithScrollLeft  | Tap the first element that matches the selector with scrolling left.  |
+| tapCenterOfScreen  | Tap the center of the screen.                                         |
+| tapCenterOf        | Tap the center of the element.                                        |
 
 ## Example
 
@@ -23,6 +26,8 @@ package tutorial.basic
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.select
 import shirates.core.driver.commandextension.tap
 import shirates.core.driver.commandextension.tapWithScrollDown
 import shirates.core.testcode.UITest
@@ -48,6 +53,21 @@ class Tap1 : UITest() {
                         .tapWithScrollDown("Colors")
                     it.tap("@Navigate up")
                         .tap("@Navigate up")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun tapByCoordinates() {
+
+        scenario {
+            case(1) {
+                action {
+                    val e = select("Network & internet")
+                    it.tap(x = e.bounds.centerX, y = e.bounds.centerY)
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
                 }
             }
         }

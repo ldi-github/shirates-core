@@ -1,11 +1,10 @@
 package shirates.core.uitest.android.driver.commandextension
 
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.exception.TestDriverException
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.helper.ImageSetupHelper
@@ -68,18 +67,18 @@ class TestElementImageExtensionTest2 : UITest() {
                 }.expectation {
                     it
                         .existImage("[Day1-1].png", waitSeconds = 0.2) {
-                            imageMatched.thisIsTrue()
-                            hasImageMatchResult.thisIsTrue()
-                            isFound.thisIsTrue()
-                            isDummy.thisIsFalse()
-                            isEmpty.thisIsTrue()
+                            imageMatched.thisIsTrue("imageMatched")
+                            hasImageMatchResult.thisIsTrue("hasImageMatchResult")
+                            isFound.thisIsTrue("isFound")
+                            isDummy.thisIsTrue("isDummy")
+                            isEmpty.thisIsFalse("isEmpty")
                         }
                         .dontExistImage("[Day2-1].png", waitSeconds = 0.2) {
-                            imageMatched.thisIsFalse()
-                            hasImageMatchResult.thisIsTrue()
-                            isFound.thisIsFalse()
-                            isDummy.thisIsFalse()
-                            isEmpty.thisIsTrue()
+                            imageMatched.thisIsFalse("imageMatched")
+                            hasImageMatchResult.thisIsTrue("hasImageMatchResult")
+                            isFound.thisIsFalse("isFound")
+                            isDummy.thisIsTrue("isDummy")
+                            isEmpty.thisIsFalse("isEmpty")
                         }
                         .withScrollRight(scrollDurationSeconds = 0.2) {
                             it.existImage("[Day2-1].png")
@@ -124,22 +123,24 @@ class TestElementImageExtensionTest2 : UITest() {
 
     @Test
     @Order(30)
-    fun imageSelectorNotSupported() {
+    fun imageSelector() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Calendar Week Screen]")
+                }.action {
+                    e1 = it.select("[Day1-1].png")
                 }.expectation {
-                    assertThatThrownBy {
-                        it.select("[Day1-1].png")
-                    }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage("Image selector is not supported in this command. Use other command that supports image selector.")
-
-                    assertThatThrownBy {
-                        it.canSelect("[Day1-1].png")
-                    }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage("Image selector is not supported in this command. Use other command that supports image selector.")
+                    assertThat(e1.imageMatchResult?.result).isTrue()
+                    assertThat(e1.isFound).isTrue()
+                }
+            }
+            case(2) {
+                action {
+                    b1 = it.canSelect("[Day1-1].png")
+                }.expectation {
+                    assertThat(b1).isTrue()
                 }
             }
         }

@@ -1,6 +1,7 @@
 package shirates.core.configuration
 
 import org.json.JSONObject
+import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
@@ -395,6 +396,12 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
                 val sel = selectorMap[nickname]!!
                 return sel
             } else {
+                val imageExpression = "${expression}.png"
+                val imageFileEntry =
+                    runCatching { ImageFileRepository.getImageFileEntry(imageExpression = imageExpression) }.getOrNull()
+                if (imageFileEntry != null) {
+                    return Selector(expression = imageExpression, nickname = expression)
+                }
                 if (NicknameUtility.isValidNickname(nickname)) {
                     val content = nickname.getNicknameText()
                     val n = content.toIntOrNull()

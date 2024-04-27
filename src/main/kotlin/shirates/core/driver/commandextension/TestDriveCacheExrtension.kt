@@ -1,16 +1,16 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.Const
-import shirates.core.driver.TestDrive
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestElement
-import shirates.core.driver.testContext
+import shirates.core.driver.*
 
 /**
  * invalidateCache
  */
 fun TestDrive.invalidateCache(): TestElement {
 
+    if (TestMode.isNoLoadRun) {
+        return this.toTestElement
+    }
     TestDriver.invalidateCache()
     return lastElement
 }
@@ -20,6 +20,9 @@ fun TestDrive.invalidateCache(): TestElement {
  */
 fun TestDrive.refreshCache(): TestElement {
 
+    if (TestMode.isNoLoadRun) {
+        return this.toTestElement
+    }
     val testElement = lastElement
 
     TestDriver.refreshCache()
@@ -31,6 +34,9 @@ fun TestDrive.refreshCache(): TestElement {
  */
 fun TestDrive.refreshCacheOnInvalidated(): TestElement {
 
+    if (TestMode.isNoLoadRun) {
+        return this.toTestElement
+    }
     TestDriver.refreshCacheOnInvalidated()
     return lastElement
 }
@@ -44,6 +50,9 @@ fun TestDrive.syncCache(
     maxLoopCount: Int = Const.SYNC_MAX_LOOP_COUNT
 ): TestElement {
 
+    if (TestMode.isNoLoadRun) {
+        return this.toTestElement
+    }
     if (TestDriver.isInitialized.not()) {
         return lastElement
     }
@@ -61,5 +70,8 @@ fun TestDrive.syncCache(
  */
 fun TestDrive.refreshLastElement(): TestElement {
 
+    if (TestMode.isNoLoadRun) {
+        return this.toTestElement
+    }
     return TestDriver.refreshLastElement()
 }

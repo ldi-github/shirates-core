@@ -6,11 +6,14 @@
 
 | 関数                 | 説明                                     |
 |:-------------------|:---------------------------------------|
-| tap                | selectorにマッチする最初の要素をタップします（現在の画面）      |
+| tap(expression)    | selectorにマッチする最初の要素をタップします（現在の画面）      |
+| tap(x, y)          | (x, y)座標をタップします                        |
 | tapWithScrollDown  | selectorにマッチする最初の要素をタップします（下方向スクロールあり） |
 | tapWithScrollUp    | selectorにマッチする最初の要素をタップします（上方向スクロールあり） |
 | tapWithScrollRight | selectorにマッチする最初の要素をタップします（右方向スクロールあり） |
 | tapWithScrollLeft  | selectorにマッチする最初の要素をタップします（左方向スクロールあり） |
+| tapCenterOfScreen  | 画面の中心をタップします                           |
+| tapCenterOf        | 要素の中心をタップします                           |
 
 ## 例
 
@@ -23,6 +26,8 @@ package tutorial.basic
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.select
 import shirates.core.driver.commandextension.tap
 import shirates.core.driver.commandextension.tapWithScrollDown
 import shirates.core.testcode.UITest
@@ -48,6 +53,21 @@ class Tap1 : UITest() {
                         .tapWithScrollDown("Colors")
                     it.tap("@Navigate up")
                         .tap("@Navigate up")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun tapByCoordinates() {
+
+        scenario {
+            case(1) {
+                action {
+                    val e = select("Network & internet")
+                    it.tap(x = e.bounds.centerX, y = e.bounds.centerY)
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
                 }
             }
         }

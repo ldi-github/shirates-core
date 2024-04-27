@@ -30,7 +30,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun initBySource() {
 
         // Arrange
-        val e = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
+        val e = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.SettingsTopScreen)
 
         // Assert
         assertThat(e.parentElement.isEmpty).isTrue()
@@ -66,7 +66,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun getScrollableTarget() {
 
         // Arrange
-        rootElement = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
+        rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.SettingsTopScreen)
 
         // Act
         val scrollableTArget = rootElement.getScrollableElement()
@@ -79,7 +79,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun ancestors() {
 
         // Arrange
-        val rootElement = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
+        val rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.SettingsTopScreen)
         val e = rootElement.findInDescendantsAndSelf(".XCUIElementTypeStaticText&&Settings")
 
         // Act, Assert
@@ -98,7 +98,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun ancestorsAndSelf() {
 
         // Arrange
-        val rootElement = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
+        val rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.SettingsTopScreen)
         val e = rootElement.findInDescendantsAndSelf(".XCUIElementTypeStaticText&&Settings")
 
         // Act, Assert
@@ -118,7 +118,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun descendants() {
 
         // Arrange
-        val rootElement = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
+        val rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.SettingsTopScreen)
         val e = rootElement.findInDescendantsAndSelf(".XCUIElementTypeCell&&Sign in to your iPhone")
 
         // Act, Assert
@@ -135,7 +135,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun descendantsAndSelf() {
 
         // Arrange
-        val rootElement = ElementCacheUtility.createTestElementFromXml(source = XmlDataIos.SettingsTopScreen)
+        val rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.SettingsTopScreen)
         val e = rootElement.findInDescendantsAndSelf(".XCUIElementTypeCell&&Sign in to your iPhone")
 
         // Act, Assert

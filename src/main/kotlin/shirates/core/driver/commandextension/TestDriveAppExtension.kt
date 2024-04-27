@@ -4,6 +4,7 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -65,6 +66,10 @@ fun TestDrive.installApp(
         }
 
         TestDriver.invalidateCache()
+
+        if (isiOS) {
+            wait(waitSeconds = 1.0) // for stability
+        }
     }
 
     return lastElement

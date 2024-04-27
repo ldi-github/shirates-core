@@ -7,9 +7,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.imageProfile
 import shirates.core.driver.rootElement
-import shirates.core.driver.testDrive
 import shirates.core.exception.TestNGException
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
@@ -148,7 +146,7 @@ class TestElementImageExtensionTest : UITest() {
                 }.expectation {
                     it.existImage("[Battery Icon2]") {    // nickname [Battery Icon2] is not defined, but file exists, OK
                         assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.OK)
-                        assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of <[Battery Icon2].png> exists")
+                        assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of [Battery Icon2] exists")
                     }
                 }
             }
@@ -165,14 +163,13 @@ class TestElementImageExtensionTest : UITest() {
             case(4) {
                 condition {
                     // Override [Notifications Icon].png by [App Icon].png
-                    val appsIconFile = dir.listFiles().first { it.name.startsWith("[Tips & support Icon]") }
-                    appsIconFile.copyTo(
-                        dir.resolve("[Notifications Icon]${testDrive.imageProfile}.png").toFile(),
-                        overwrite = true
-                    )
-                    ImageFileRepository.setup(dir)
+                    val tipsAndSupport = ImageFileRepository.getImageFileEntry("[Tips & support Icon].png")!!
+                    val entries = ImageFileRepository.getImageFileEntries(imageExpression = "[Notifications Icon].png")
+                    for (entry in entries) {
+                        entry.bufferedImage = tipsAndSupport.bufferedImage
+                    }
                 }.expectation {
-                    it.existImage("[Notifications Icon]") {// element found, image does not match, WARN
+                    it.existImage("[Notifications Icon]") {     // element found, image does not match, WARN
                         assertThat(TestLog.lines.takeLast(2).first().logType).isEqualTo(LogType.WARN)
                         assertThat(TestLog.lines.takeLast(2).first().message)
                             .startsWith("Image of [Notifications Icon] exists (result=false")

@@ -337,12 +337,15 @@ fun TestElement.swipeToCenter(
     axis: Axis = Axis.Vertical,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    force: Boolean = false
 ): TestElement {
 
     val scrollFrame =
         if (ofScreen) viewElement
         else getScrollableElement(scrollable)
-    val endX = scrollFrame.bounds.centerX
+    val endX =
+        if (ofScreen) viewBounds.width / 2 else
+            scrollFrame.bounds.centerX
     val endY =
         if (ofScreen) viewBounds.height / 2
         else scrollFrame.bounds.centerY
@@ -352,13 +355,15 @@ fun TestElement.swipeToCenter(
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject) {
+
         val b = bounds
         val startX = b.centerX
         val startY = b.centerY
-        val skip = (axis == Axis.Vertical && Math.abs(startY - endY) < 16) ||
-                (axis == Axis.Horizontal && Math.abs(startX - endX) < 16)
 
-        if (skip.not()) {
+        val skip = (axis == Axis.Vertical && Math.abs(startY - endY) < 24) ||
+                (axis == Axis.Horizontal && Math.abs(startX - endX) < 24)
+
+        if (force || skip.not()) {
             swipePointToPoint(
                 startX = startX,
                 startY = startY,

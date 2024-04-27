@@ -16,6 +16,7 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.*
@@ -286,50 +287,48 @@ abstract class UITest : TestDrive {
                 profileName = profileName
             )
 
-            // appPackageFile
-            if (profile.appPackageFile.isNullOrBlank().not()) {
-                ParameterRepository.write("appPackageFile", profile.appPackageFile!!)
-            }
-
-            profile.getMetadataFromFileName()
-            // appEnvironment
-            if (profile.appEnvironment.isBlank().not()) {
-                ParameterRepository.write("appEnvironment", profile.appEnvironment)
-            }
-            // appVersion
-            if (profile.appVersion.isBlank().not()) {
-                ParameterRepository.write("appVersion", profile.appVersion)
-            }
-            // appBuild
-            if (profile.appBuild.isBlank().not()) {
-                ParameterRepository.write("appBuild", profile.appBuild)
-            }
-
             // setup ScreenRepository
             ScreenRepository.setup(
                 screensDirectory = configPath.parent.resolve("screens"),
                 importDirectories = profile.testConfig!!.importScreenDirectories
             )
 
-            // setup ImageFileRepository
-            ImageFileRepository.setup(
-                screenDirectory = ScreenRepository.screensDirectory,
-                importDirectories = ScreenRepository.importDirectories
-            )
+            if (isNoLoadRun.not()) {
+                // appPackageFile
+                if (profile.appPackageFile.isNullOrBlank().not()) {
+                    ParameterRepository.write("appPackageFile", profile.appPackageFile!!)
+                }
+                // appEnvironment
+                if (profile.appEnvironment.isBlank().not()) {
+                    ParameterRepository.write("appEnvironment", profile.appEnvironment)
+                }
+                // appVersion
+                if (profile.appVersion.isBlank().not()) {
+                    ParameterRepository.write("appVersion", profile.appVersion)
+                }
+                // appBuild
+                if (profile.appBuild.isBlank().not()) {
+                    ParameterRepository.write("appBuild", profile.appBuild)
+                }
+
+                // setup ImageFileRepository
+                ImageFileRepository.setup(
+                    screenDirectory = ScreenRepository.screensDirectory,
+                    importDirectories = ScreenRepository.importDirectories
+                )
+
+                // CustomFunctionRepository
+                CustomFunctionRepository.initialize()
+
+                // MacroRepository
+                MacroRepository.setup()
+            }
 
             // testContext
             val testContext = TestContext(profile = profile)
-
-            // CustomFunctionRepository
-            CustomFunctionRepository.initialize()
-
-            // MacroRepository
-            MacroRepository.setup()
-
-            // testContext
             TestDriver.setupContext(testContext = testContext)
 
-            if (TestMode.isNoLoadRun) {
+            if (isNoLoadRun) {
                 return
             }
 
@@ -388,12 +387,16 @@ abstract class UITest : TestDrive {
     ): TestProfile {
         TestLog.info("Loading config.(configFile=$configPath, profileName=$profileName)")
         testConfig = TestConfig(configPath.toString())
-        if (testConfig!!.profileMap.containsKey(profileName)) {
+        val profile = if (testConfig!!.profileMap.containsKey(profileName)) {
             return testConfig!!.profileMap[profileName]!!
+        } else {
+            val defaultProfile = testConfig!!.profileMap["_default"]!!
+            defaultProfile.profileName = profileName
+            defaultProfile
         }
-        val defaultProfile = testConfig!!.profileMap["_default"]!!
-        defaultProfile.profileName = profileName
-        return defaultProfile
+        profile.getMetadataFromFileName()
+
+        return profile
     }
 
     /**
@@ -577,7 +580,9 @@ abstract class UITest : TestDrive {
                             testContext.onRerunScenarioHandler!!.invoke(t)
                         }
                     } else {
-                        TestLog.error("${t.message}\n${t.stackTraceToString()}", exception = t)
+                        if ((t is AssertionError).not()) {
+                            TestLog.error("${t.message}\n${t.stackTraceToString()}", exception = t)
+                        }
                     }
                     CodeExecutionContext.scenarioRerunCause = wc.error
                 },
@@ -600,7 +605,7 @@ abstract class UITest : TestDrive {
                 }
                 true
             }
-            if (context.hasError) {
+            if (context.hasError && isNoLoadRun.not()) {
                 val e = context.error!!
                 throw e
             }
