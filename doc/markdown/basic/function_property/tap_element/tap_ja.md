@@ -6,11 +6,14 @@
 
 | 関数                 | 説明                                     |
 |:-------------------|:---------------------------------------|
-| tap                | selectorにマッチする最初の要素をタップします（現在の画面）      |
+| tap(expression)    | selectorにマッチする最初の要素をタップします（現在の画面）      |
+| tap(x, y)          | (x, y)座標をタップします                        |
 | tapWithScrollDown  | selectorにマッチする最初の要素をタップします（下方向スクロールあり） |
 | tapWithScrollUp    | selectorにマッチする最初の要素をタップします（上方向スクロールあり） |
 | tapWithScrollRight | selectorにマッチする最初の要素をタップします（右方向スクロールあり） |
 | tapWithScrollLeft  | selectorにマッチする最初の要素をタップします（左方向スクロールあり） |
+| tapCenterOfScreen  | 画面の中心をタップします                           |
+| tapCenterOf        | 要素の中心をタップします                           |
 
 ## 例
 
