@@ -12,6 +12,10 @@ import java.nio.file.Path
 object ImageSetupHelper : TestDrive {
 
     fun TestElement.cropTo(dir: Path, fileName: String? = null) {
+        if (TestMode.isNoLoadRun) {
+            return
+        }
+
         val baseFileName = selector.toString()
         val suffix = testDrive.imageProfile
         val fname = fileName ?: "$baseFileName$suffix"

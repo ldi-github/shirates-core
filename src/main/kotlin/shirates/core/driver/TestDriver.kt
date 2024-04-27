@@ -145,7 +145,7 @@ object TestDriver {
      */
     var rootElement: TestElement
         get() {
-            if (testContext.useCache) {
+            if (testContext.useCache || isNoLoadRun) {
                 return TestElementCache.rootElement
             }
             val ms = Measure("rootElement")
@@ -2506,6 +2506,9 @@ object TestDriver {
     fun resetAppiumSession(
         restartDevice: Boolean = PropertiesManager.enableRestartDeviceOnResettingAppiumSession
     ) {
+        if (TestMode.isNoLoadRun) {
+            return
+        }
 
         TestLog.info("[Resetting Appium session]")
 

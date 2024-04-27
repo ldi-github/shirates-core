@@ -16,6 +16,7 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.*
@@ -276,6 +277,10 @@ abstract class UITest : TestDrive {
             TestLog.createDirectoryForLog()
             TestLog.printLogDirectory()
 
+            if (TestMode.isNoLoadRun) {
+                return
+            }
+
             // TestReportIndex
             TestLog.createOrUpdateTestReportIndex(filterName = "simple")
             TestLog.createOrUpdateTestReportIndex(filterName = "detail")
@@ -317,14 +322,14 @@ abstract class UITest : TestDrive {
                 importDirectories = ScreenRepository.importDirectories
             )
 
-            // testContext
-            val testContext = TestContext(profile = profile)
-
             // CustomFunctionRepository
             CustomFunctionRepository.initialize()
 
             // MacroRepository
             MacroRepository.setup()
+
+            // testContext
+            val testContext = TestContext(profile = profile)
 
             // testContext
             TestDriver.setupContext(testContext = testContext)
@@ -600,7 +605,7 @@ abstract class UITest : TestDrive {
                 }
                 true
             }
-            if (context.hasError) {
+            if (context.hasError && isNoLoadRun.not()) {
                 val e = context.error!!
                 throw e
             }
