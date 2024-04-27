@@ -287,6 +287,12 @@ abstract class UITest : TestDrive {
                 profileName = profileName
             )
 
+            // setup ScreenRepository
+            ScreenRepository.setup(
+                screensDirectory = configPath.parent.resolve("screens"),
+                importDirectories = profile.testConfig!!.importScreenDirectories
+            )
+
             if (isNoLoadRun.not()) {
                 // appPackageFile
                 if (profile.appPackageFile.isNullOrBlank().not()) {
@@ -306,12 +312,6 @@ abstract class UITest : TestDrive {
                 if (profile.appBuild.isBlank().not()) {
                     ParameterRepository.write("appBuild", profile.appBuild)
                 }
-
-                // setup ScreenRepository
-                ScreenRepository.setup(
-                    screensDirectory = configPath.parent.resolve("screens"),
-                    importDirectories = profile.testConfig!!.importScreenDirectories
-                )
 
                 // setup ImageFileRepository
                 ImageFileRepository.setup(
