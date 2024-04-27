@@ -279,9 +279,13 @@ object TestDriver {
      */
     fun setupContext(testContext: TestContext) {
 
-        val profile = testContext.profile
-
         this.testContext = testContext
+
+        if (isNoLoadRun) {
+            return
+        }
+
+        val profile = testContext.profile
 
         TestLog.trace("Setting up test context. (configFile=${profile.testConfigPath}, profileName=${profile.profileName})")
 
@@ -1664,7 +1668,7 @@ object TestDriver {
      */
     fun printCapabilities() {
 
-        if (TestMode.isNoLoadRun || mAppiumDriver == null) {
+        if (mAppiumDriver == null) {
             return
         }
 

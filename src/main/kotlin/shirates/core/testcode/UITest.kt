@@ -277,10 +277,6 @@ abstract class UITest : TestDrive {
             TestLog.createDirectoryForLog()
             TestLog.printLogDirectory()
 
-            if (TestMode.isNoLoadRun) {
-                return
-            }
-
             // TestReportIndex
             TestLog.createOrUpdateTestReportIndex(filterName = "simple")
             TestLog.createOrUpdateTestReportIndex(filterName = "detail")
@@ -291,50 +287,50 @@ abstract class UITest : TestDrive {
                 profileName = profileName
             )
 
-            // appPackageFile
-            if (profile.appPackageFile.isNullOrBlank().not()) {
-                ParameterRepository.write("appPackageFile", profile.appPackageFile!!)
+            if (isNoLoadRun.not()) {
+                // appPackageFile
+                if (profile.appPackageFile.isNullOrBlank().not()) {
+                    ParameterRepository.write("appPackageFile", profile.appPackageFile!!)
+                }
+
+                profile.getMetadataFromFileName()
+                // appEnvironment
+                if (profile.appEnvironment.isBlank().not()) {
+                    ParameterRepository.write("appEnvironment", profile.appEnvironment)
+                }
+                // appVersion
+                if (profile.appVersion.isBlank().not()) {
+                    ParameterRepository.write("appVersion", profile.appVersion)
+                }
+                // appBuild
+                if (profile.appBuild.isBlank().not()) {
+                    ParameterRepository.write("appBuild", profile.appBuild)
+                }
+
+                // setup ScreenRepository
+                ScreenRepository.setup(
+                    screensDirectory = configPath.parent.resolve("screens"),
+                    importDirectories = profile.testConfig!!.importScreenDirectories
+                )
+
+                // setup ImageFileRepository
+                ImageFileRepository.setup(
+                    screenDirectory = ScreenRepository.screensDirectory,
+                    importDirectories = ScreenRepository.importDirectories
+                )
+
+                // CustomFunctionRepository
+                CustomFunctionRepository.initialize()
+
+                // MacroRepository
+                MacroRepository.setup()
             }
-
-            profile.getMetadataFromFileName()
-            // appEnvironment
-            if (profile.appEnvironment.isBlank().not()) {
-                ParameterRepository.write("appEnvironment", profile.appEnvironment)
-            }
-            // appVersion
-            if (profile.appVersion.isBlank().not()) {
-                ParameterRepository.write("appVersion", profile.appVersion)
-            }
-            // appBuild
-            if (profile.appBuild.isBlank().not()) {
-                ParameterRepository.write("appBuild", profile.appBuild)
-            }
-
-            // setup ScreenRepository
-            ScreenRepository.setup(
-                screensDirectory = configPath.parent.resolve("screens"),
-                importDirectories = profile.testConfig!!.importScreenDirectories
-            )
-
-            // setup ImageFileRepository
-            ImageFileRepository.setup(
-                screenDirectory = ScreenRepository.screensDirectory,
-                importDirectories = ScreenRepository.importDirectories
-            )
-
-            // CustomFunctionRepository
-            CustomFunctionRepository.initialize()
-
-            // MacroRepository
-            MacroRepository.setup()
 
             // testContext
             val testContext = TestContext(profile = profile)
-
-            // testContext
             TestDriver.setupContext(testContext = testContext)
 
-            if (TestMode.isNoLoadRun) {
+            if (isNoLoadRun) {
                 return
             }
 
