@@ -2,6 +2,7 @@ package shirates.core.logging
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.ScrollDirection
+import shirates.core.driver.TestElement
 import shirates.core.driver.testContext
 import shirates.core.utility.image.CropInfo
 import java.awt.image.BufferedImage
@@ -77,7 +78,15 @@ object CodeExecutionContext {
     /**
      * isInCell
      */
-    var isInCell = false
+    val isInCell: Boolean
+        get() {
+            return lastCell.isEmpty.not()
+        }
+
+    /**
+     * lastCell
+     */
+    var lastCell: TestElement = TestElement.emptyElement
 
     /**
      * withScrollDirection

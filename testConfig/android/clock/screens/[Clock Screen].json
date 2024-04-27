@@ -9,7 +9,7 @@
 
   "selectors": {
     "[Toolbar]": "#toolbar",
-    "[Title]": "#action_bar_title",
+    "[Title]": "Clock&&#action_bar_title",
     "[More options]": "@More options",
 
     "[digital_clock]": "#digital_clock"

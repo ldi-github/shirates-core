@@ -19,6 +19,7 @@ import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isEmulator
+import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isVirtualDevice
@@ -963,6 +964,9 @@ object TestDriver {
      */
     fun refreshCache(currentScreenRefresh: Boolean = true): TestDriver {
 
+        if (isNoLoadRun) {
+            return this
+        }
         if (isInitialized.not()) {
             return this
         }
@@ -1241,7 +1245,9 @@ object TestDriver {
             if (selector.isNegation.not()) {
                 if (selectedElement.isFound && selectedElement.isInView) {
                     if (swipeToCenter) {
-                        selectedElement = selectedElement.swipeToCenter()
+                        testDrive.silent {
+                            selectedElement = selectedElement.swipeToCenter()
+                        }
                         screenshot()
                     }
                     lastElement = selectedElement

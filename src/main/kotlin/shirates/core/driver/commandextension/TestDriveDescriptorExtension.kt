@@ -203,7 +203,7 @@ fun TestDrive.cell(
 
     val command = "cell"
 
-    val testElement =
+    val cell =
         if (expression == null) {
             val e = this.toTestElement
             if (e.isEmpty && throwsException && TestMode.isNoLoadRun.not())
@@ -220,20 +220,22 @@ fun TestDrive.cell(
             )
         }
 
-    val target = message(id = command, subject = testElement.subject)
+    val target = message(id = command, subject = cell.subject)
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(cell)
     context.execBranch(command = command, condition = target) {
-        val original = CodeExecutionContext.isInCell
+        val original = CodeExecutionContext.lastCell
         try {
-            CodeExecutionContext.isInCell = true
-            func?.invoke(testElement)
+            CodeExecutionContext.lastCell = cell
+            cell.apply {
+                func?.invoke(cell)
+            }
         } finally {
-            CodeExecutionContext.isInCell = original
+            CodeExecutionContext.lastCell = original
         }
     }
 
-    return testElement
+    return cell
 }
 
 /**
@@ -305,16 +307,16 @@ private fun cellOfCore(
 
     val target = message(id = command, subject = testElement.subject)
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(cell)
     context.execBranch(command = command, condition = target) {
-        val original = CodeExecutionContext.isInCell
+        val original = CodeExecutionContext.lastCell
         try {
-            CodeExecutionContext.isInCell = true
-            testElement.apply {
+            CodeExecutionContext.lastCell = cell
+            cell.apply {
                 func.invoke(cell)
             }
         } finally {
-            CodeExecutionContext.isInCell = original
+            CodeExecutionContext.lastCell = original
         }
     }
 
@@ -325,6 +327,10 @@ private fun cellOfCore(
  * getCell
  */
 fun TestElement.getCell(): TestElement {
+
+    if (CodeExecutionContext.lastCell.isEmpty.not()) {
+        return CodeExecutionContext.lastCell
+    }
 
     val cell = if (isAndroid) {
         val cellHost = getCellHost()
