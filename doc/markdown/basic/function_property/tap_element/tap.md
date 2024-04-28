@@ -7,7 +7,7 @@ You can tap an element on the screen using these functions.
 | function           | description                                                           |
 |:-------------------|:----------------------------------------------------------------------|
 | tap(expression)    | Tap the first element that matches the selector in current screen.    |
-| tap(x, y)          | Tap the the coordinates (x, y).                                       |
+| tap(x, y)          | Tap the coordinates (x, y).                                           |
 | tapWithScrollDown  | Tap the first element that matches the selector with scrolling down.  |
 | tapWithScrollUp    | Tap the first element that matches the selector with scrolling up.    |
 | tapWithScrollRight | Tap the first element that matches the selector with scrolling right. |
