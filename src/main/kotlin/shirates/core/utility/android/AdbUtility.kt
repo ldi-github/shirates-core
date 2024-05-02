@@ -67,4 +67,31 @@ object AdbUtility {
         return startServer(port = port, log = log)
     }
 
+
+    /**
+     * getPid
+     */
+    fun getPid(
+        packageName: String
+    ): String? {
+
+        val r = ShellUtility.executeCommand("adb", "shell", "pidof", packageName)
+        val s = r.resultString
+        if (s.isBlank()) {
+            return null
+        } else {
+            return s
+        }
+    }
+
+    /**
+     * kill
+     */
+    fun kill(
+        pid: String
+    ): ShellUtility.ShellResult {
+
+        val r = ShellUtility.executeCommand("adb", "shell", "kill", "-9", pid)
+        return r
+    }
 }

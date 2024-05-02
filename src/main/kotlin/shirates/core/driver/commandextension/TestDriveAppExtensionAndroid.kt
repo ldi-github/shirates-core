@@ -27,6 +27,8 @@ internal fun TestDriveObjectAndroid.launchAndroidApp(
         throw IllegalStateException("packageName=$packageNameOrActivityName")
     }
 
+    terminateAndroidApp(udid = udid, packageName = packageNameOrActivityName, log = log)
+
     val packageName = packageNameOrActivityName.split("/")[0]
     val activityName =
         if (packageNameOrActivityName.contains("/")) packageNameOrActivityName
