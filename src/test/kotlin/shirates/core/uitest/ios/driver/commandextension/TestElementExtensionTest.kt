@@ -84,14 +84,14 @@ class TestElementExtensionTest : UITest() {
                     e1 = it.scrollFrame
                 }.expectation {
                     e1.classOrType.thisIs("XCUIElementTypeTable")
-                    e1.isScrollable.thisIsTrue()
+                    e1.isScrollableElement.thisIsTrue()
                 }
             }
             case(2) {
                 condition {
                     it.select("General")
                 }.expectation {
-                    it.isScrollable.thisIsFalse()
+                    it.isScrollableElement.thisIsFalse()
                 }
             }
         }

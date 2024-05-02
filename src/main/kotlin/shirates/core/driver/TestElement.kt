@@ -376,30 +376,7 @@ class TestElement(
         get() {
             val ms = Measure("scrollHost")
             try {
-                return cellUnderScrollHost.parentElement
-            } finally {
-                ms.end()
-            }
-        }
-
-    /**
-     * cellUnderScrollHost
-     */
-    val cellUnderScrollHost: TestElement
-        get() {
-            if (this.isScrollable) {
-                return emptyElement
-            }
-            val ms = Measure("cellUnderScrollHost")
-            try {
-                val list = this.ancestorsAndSelf
-                if (list.count() <= 1) {
-                    return emptyElement
-                }
-                val scrollableElement = list.lastOrNull() { it.isScrollable } ?: return emptyElement
-                val ix = list.indexOf(scrollableElement)
-                val e = list[ix + 1]
-                return e
+                return getCellHost()
             } finally {
                 ms.end()
             }
@@ -413,7 +390,7 @@ class TestElement(
             if (isAndroid) {
                 return this.bounds
             }
-            val c = cellUnderScrollHost
+            val c = getCell()
             if (c.isEmpty) {
                 return this.bounds
             }
@@ -463,7 +440,7 @@ class TestElement(
                      * Safe boundary check in scrollable view
                      */
                     val scrollableElement = this.getScrollableElementsInAncestorsAndSelf().firstOrNull()
-                    if (scrollableElement != null && scrollableElement.isScrollable) {
+                    if (scrollableElement != null && scrollableElement.isScrollableElement) {
                         val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
                         if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
                             info("isSafe property returns false. this is out of safe bounds. (this=$this, scrollingInfo=$scrollingInfo)")
@@ -1103,9 +1080,9 @@ class TestElement(
         }
 
     /**
-     * isScrollable
+     * isScrollableElement
      */
-    val isScrollable: Boolean
+    val isScrollableElement: Boolean
         get() {
             if (isEmpty) {
                 return false
@@ -1113,25 +1090,10 @@ class TestElement(
             if (classOrType == "") {
                 return false
             }
-            if (isAndroid) {
-                return scrollable == "true"
-            } else {
-                return ElementCategoryExpressionUtility.scrollableTypesExpression.contains(classOrType)
+            if (isAndroid && scrollable == "true") {
+                return true
             }
-        }
-
-    /**
-     * isCellHost
-     */
-    val isCellHost: Boolean
-        get() {
-            if (isEmpty) {
-                return false
-            }
-            if (classOrType == "") {
-                return false
-            }
-            return ElementCategoryExpressionUtility.isCellHost(classOrType)
+            return ElementCategoryExpressionUtility.isScrollableElement(classOrType)
         }
 
     /**

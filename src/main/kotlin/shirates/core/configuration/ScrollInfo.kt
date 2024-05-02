@@ -7,7 +7,7 @@ import shirates.core.driver.viewBounds
  * ScrollInfo
  */
 class ScrollInfo {
-    var scrollable: String = ""
+    var scrollFrame: String = ""
     val headerElements = mutableListOf<String>()
     val footerElements = mutableListOf<String>()
     val startElements = mutableListOf<String>()
@@ -28,8 +28,8 @@ class ScrollInfo {
      */
     fun importFrom(scrollInfo: ScrollInfo) {
 
-        if (scrollable.isBlank()) {
-            scrollable = scrollInfo.scrollable
+        if (scrollFrame.isBlank()) {
+            scrollFrame = scrollInfo.scrollFrame
         }
         headerElements.merge(scrollInfo.headerElements)
         footerElements.merge(scrollInfo.footerElements)

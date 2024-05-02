@@ -2,15 +2,15 @@
 
 **クラスエイリアス** は要素をフィルターするための特別なフィルターです。
 
-| クラスエイリアス   | 対応するclassName (Android)                                                          | 対応するtype (iOS)                                              |
-|:-----------|:---------------------------------------------------------------------------------|:------------------------------------------------------------|
-| label      | android.widget.TextView                                                          | XCUIElementTypeStaticText                                   |
-| input      | android.widget.EditText                                                          | XCUIElementTypeTextField<br/>XCUIElementTypeSecureTextField |
-| image      | android.widget.ImageView                                                         | XCUIElementTypeImage                                        |
-| button     | android.widget.Button<br/>android.widget.ImageButton<br/>android.widget.CheckBox | XCUIElementTypeButton                                       |
-| switch     | android.widget.Switch                                                            | XCUIElementTypeSwitch                                       |
-| widget     | (上記のすべて)                                                                         | (上記のすべて)                                                    |
-| scrollable | N/A<br>(scrollable="true" が適用されます)                                               | XCUIElementTypeTextField<br>XCUIElementTypeSecureTextField  |
+| クラスエイリアス   | 対応するclassName (Android)                                                                                                                                                                        | 対応するtype (iOS)                                                                                                                     |
+|:-----------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------|
+| label      | android.widget.TextView                                                                                                                                                                        | XCUIElementTypeStaticText                                                                                                          |
+| input      | android.widget.EditText                                                                                                                                                                        | XCUIElementTypeTextField<br/>XCUIElementTypeSecureTextField                                                                        |
+| image      | android.widget.ImageView                                                                                                                                                                       | XCUIElementTypeImage                                                                                                               |
+| button     | android.widget.Button<br/>android.widget.ImageButton<br/>android.widget.CheckBox                                                                                                               | XCUIElementTypeButton                                                                                                              |
+| switch     | android.widget.Switch                                                                                                                                                                          | XCUIElementTypeSwitch                                                                                                              |
+| widget     | (上記のすべて)                                                                                                                                                                                       | (上記のすべて)                                                                                                                           |
+| scrollable | androidx.recyclerview.widget.RecyclerView<br>android.support.v7.widget.RecyclerView<br>android.widget.ScrollView<br>android.widget.HorizontalScrollView<br>androidx.viewpager.widget.ViewPager | XCUIElementTypeTable<br>XCUIElementTypeCollectionView<br>XCUIElementTypeScrollView<br>XCUIElementTypeWebView<br>XCUIElementTypeMap |
 
 <br>
 

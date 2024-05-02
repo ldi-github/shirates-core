@@ -12,25 +12,21 @@ import shirates.core.logging.ScanRecord
 import shirates.core.logging.TestLog
 
 
-internal fun TestElement.getScrollableElementsInDescendantsAndSelf(
-    includeCellHost: Boolean = false
-): List<TestElement> {
+internal fun TestElement.getScrollableElementsInDescendantsAndSelf(): List<TestElement> {
 
     if (isAndroid) {
-        return this.descendantsAndSelf.filter { it.isScrollable || (includeCellHost && it.isCellHost) }
+        return this.descendantsAndSelf.filter { it.isScrollableElement }
     } else {
-        return this.descendantsAndSelf.filter { (it.isScrollable || (includeCellHost && it.isCellHost)) && it.isVisibleCalculated }
+        return this.descendantsAndSelf.filter { it.isScrollableElement && it.isVisibleCalculated }
     }
 }
 
-internal fun TestElement.getScrollableElementsInAncestorsAndSelf(
-    includeCellHost: Boolean = false
-): List<TestElement> {
+internal fun TestElement.getScrollableElementsInAncestorsAndSelf(): List<TestElement> {
 
     return if (isAndroid) {
-        this.ancestorsAndSelf.filter { it.isScrollable || (includeCellHost && it.isCellHost) }
+        this.ancestorsAndSelf.filter { it.isScrollableElement }
     } else {
-        this.ancestorsAndSelf.filter { (it.isScrollable || (includeCellHost && it.isCellHost)) && it.isVisible }
+        this.ancestorsAndSelf.filter { it.isScrollableElement && it.isVisible }
     }
 }
 
@@ -46,7 +42,7 @@ internal fun TestDrive.getScrollableElement(
     }
 
     val testElement = getThisOrIt()
-    if (testElement.isScrollable) {
+    if (testElement.isScrollableElement) {
         return testElement
     }
 
@@ -61,7 +57,7 @@ internal fun TestDrive.getScrollableElement(
         return descendants.first()
     }
 
-    val rootDescendants = rootElement.getScrollableElementsInDescendantsAndSelf(includeCellHost = true)
+    val rootDescendants = rootElement.getScrollableElementsInDescendantsAndSelf()
         .sortedByDescending { it.bounds.area }
     if (rootDescendants.any()) {
         return rootDescendants.first()
@@ -69,14 +65,6 @@ internal fun TestDrive.getScrollableElement(
 
     return rootElement
 }
-
-/**
- * hasScrollable
- */
-val TestDrive.hasScrollable: Boolean
-    get() {
-        return this.scrollFrame.isScrollable
-    }
 
 private fun TestDrive.scrollCommand(
     scrollableElement: TestElement,

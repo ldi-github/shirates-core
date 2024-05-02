@@ -2,15 +2,15 @@
 
 **class alias** is special filter for filtering elements.
 
-| class alias | corresponding (Android)                                                        | corresponding (iOS)                                        |
-|:------------|:-------------------------------------------------------------------------------|:-----------------------------------------------------------|
-| label       | android.widget.TextView                                                        | XCUIElementTypeStaticText                                  |
-| input       | android.widget.EditText                                                        | XCUIElementTypeTextField<br>XCUIElementTypeSecureTextField |
-| image       | android.widget.ImageView                                                       | XCUIElementTypeImage                                       |
-| button      | android.widget.Button<br>android.widget.ImageButton<br>android.widget.CheckBox | XCUIElementTypeButton                                      |
-| switch      | android.widget.Switch                                                          | XCUIElementTypeSwitch                                      |
-| widget      | (all of the above)                                                             | (all of the above)                                         |
-| scrollable  | N/A<br>(scrollable="true" is applied)                                          | XCUIElementTypeTextField<br>XCUIElementTypeSecureTextField |
+| class alias | corresponding (Android)                                                                                                                                                                        | corresponding (iOS)                                                                                                                |
+|:------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------|
+| label       | android.widget.TextView                                                                                                                                                                        | XCUIElementTypeStaticText                                                                                                          |
+| input       | android.widget.EditText                                                                                                                                                                        | XCUIElementTypeTextField<br>XCUIElementTypeSecureTextField                                                                         |
+| image       | android.widget.ImageView                                                                                                                                                                       | XCUIElementTypeImage                                                                                                               |
+| button      | android.widget.Button<br>android.widget.ImageButton<br>android.widget.CheckBox                                                                                                                 | XCUIElementTypeButton                                                                                                              |
+| switch      | android.widget.Switch                                                                                                                                                                          | XCUIElementTypeSwitch                                                                                                              |
+| widget      | (all of the above)                                                                                                                                                                             | (all of the above)                                                                                                                 |
+| scrollable  | androidx.recyclerview.widget.RecyclerView<br>android.support.v7.widget.RecyclerView<br>android.widget.ScrollView<br>android.widget.HorizontalScrollView<br>androidx.viewpager.widget.ViewPager | XCUIElementTypeTable<br>XCUIElementTypeCollectionView<br>XCUIElementTypeScrollView<br>XCUIElementTypeWebView<br>XCUIElementTypeMap |
 
 <br>
 

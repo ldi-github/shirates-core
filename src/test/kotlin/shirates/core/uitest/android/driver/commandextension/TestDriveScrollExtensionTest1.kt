@@ -25,7 +25,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     (scrollableElements.isNotEmpty()).thisIsTrue()
                     for (e in scrollableElements) {
-                        e.isScrollable.thisIsTrue()
+                        e.isScrollableElement.thisIsTrue()
                     }
                 }
             }
@@ -60,29 +60,5 @@ class TestDriveScrollExtensionTest1 : UITest() {
         }
 
     }
-
-    @Order(30)
-    @Test
-    fun hasScrollable() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Calculator Main Screen]")
-                }.expectation {
-                    rootElement.hasScrollable.thisIsFalse("hasScroll is false.")
-                }
-            }
-            case(2) {
-                condition {
-                    it.macro("[Play Store Screen]")
-                }.expectation {
-                    rootElement.hasScrollable.thisIsTrue("hasScrollable is true.")
-                }
-            }
-        }
-
-    }
-
 
 }

@@ -11,9 +11,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
-import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
-import shirates.core.utility.element.ElementCategoryExpressionUtility
 import utility.handleIrregulars
 
 @Want
@@ -38,7 +36,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     for (e in scrollableElements) {
                         e.printInfo()
-                        e.isScrollable.thisIsTrue()
+                        e.isScrollableElement.thisIsTrue()
                     }
                     scrollableElements.count().thisIs(1)
                     scrollableElements.filter { it.type == "XCUIElementTypeTable" }.count().thisIs(1)
@@ -54,7 +52,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     for (e in scrollableElements) {
                         e.printInfo()
-                        e.isScrollable.thisIsTrue()
+                        e.isScrollableElement.thisIsTrue()
                     }
                     scrollableElements.count().thisIs(3)
                     fun TestElement.thisIsScrollable() {
@@ -93,27 +91,6 @@ class TestDriveScrollExtensionTest1 : UITest() {
         // Act, Assert
         assertThat(target2.toString()).isNotEqualTo(nonScrollableElement.toString())
         assertThat(target2.toString()).isEqualTo(largestScrollableTarget.toString())
-    }
-
-    @Unstable("[iOS Settings Top Screen] is displayed(currentScreen=, expected identity=[Settings])")
-    @Test
-    @Order(30)
-    fun hasScrollable() {
-
-        // Arrange
-        it.macro("[iOS Settings Top Screen]")
-        // Act, Assert
-        assertThat(it.hasScrollable).isTrue()
-
-        val originalData = ElementCategoryExpressionUtility.scrollableTypesExpression
-        try {
-            // Arrange
-            ElementCategoryExpressionUtility.scrollableTypesExpression = "DummyType"
-            // Act, Assert
-            assertThat(it.hasScrollable).isFalse()
-        } finally {
-            ElementCategoryExpressionUtility.scrollableTypesExpression = originalData
-        }
     }
 
 }

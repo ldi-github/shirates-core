@@ -209,16 +209,6 @@ fun TestDrive.swipePointToPoint(
     )
 }
 
-private fun TestDrive.getSwipeTarget(): TestElement {
-
-    val testElement = getThisOrIt()
-
-    if (testElement.isScrollable && testElement.isEmpty.not())
-        return testElement
-
-    return rootElement
-}
-
 /**
  * swipeCenterToTop
  */
@@ -567,7 +557,7 @@ fun TestDrive.flickRightToLeft(
     safeMode: Boolean = true
 ): TestElement {
 
-    val testElement = scrollableElement ?: getSwipeTarget()
+    val testElement = scrollableElement ?: getScrollableElement()
 
     val command = "flickRightToLeft"
     val message = message(id = command)
