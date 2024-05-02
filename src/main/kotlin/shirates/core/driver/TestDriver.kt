@@ -1134,7 +1134,6 @@ object TestDriver {
         selector: Selector,
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
-        scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1147,14 +1146,12 @@ object TestDriver {
         useCache: Boolean = testContext.useCache,
     ): TestElement {
 
-        val sc = scrollableElement ?: testDrive.getScrollableElement(scrollFrame = scrollFrame)
-
         fun executeSelect(): TestElement {
             if (selector.isImageSelector) {
                 val r = findImage(
                     selector = selector,
                     scroll = scroll,
-                    scrollableElement = sc,
+                    scrollableElement = scrollableElement,
                     direction = direction,
                     scrollDurationSeconds = scrollDurationSeconds,
                     scrollStartMarginRatio = scrollStartMarginRatio,
@@ -1171,7 +1168,7 @@ object TestDriver {
                 useCache = useCache,
                 scroll = scroll,
                 direction = direction,
-                scrollableElement = sc,
+                scrollableElement = scrollableElement,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,

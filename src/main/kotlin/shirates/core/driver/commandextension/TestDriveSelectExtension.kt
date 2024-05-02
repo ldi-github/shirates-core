@@ -314,12 +314,13 @@ internal fun TestDrive.canSelect(
     frame: Bounds? = null
 ): Boolean {
 
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
+
     val e = TestDriver.select(
         selector = selector,
         scroll = scroll,
         direction = direction,
-        scrollFrame = scrollFrame,
-        scrollableElement = scrollableElement,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
