@@ -122,6 +122,7 @@ fun TestElement.swipeHorizontalTo(
 fun TestElement.swipeToTop(
     ofScreen: Boolean = false,
     scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -130,7 +131,7 @@ fun TestElement.swipeToTop(
 
     val frame =
         if (ofScreen) viewElement
-        else getScrollableElement(scrollFrame)
+        else scrollableElement ?: getScrollableElement(scrollFrame)
     val headerBottom = TestDriver.screenInfo.scrollInfo.getHeaderBottom()
 
     val command = "swipeToTop"
@@ -229,6 +230,7 @@ fun TestElement.flickToTop(
 fun TestElement.swipeToBottom(
     ofScreen: Boolean = false,
     scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -237,7 +239,7 @@ fun TestElement.swipeToBottom(
 
     val frame =
         if (ofScreen) viewElement
-        else getScrollableElement(scrollFrame)
+        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeToBottom"
     val message = message(id = command, subject = subject)
@@ -334,6 +336,7 @@ fun TestElement.flickToBottom(
 fun TestElement.swipeToCenter(
     ofScreen: Boolean = false,
     scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     axis: Axis = Axis.Vertical,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -342,7 +345,7 @@ fun TestElement.swipeToCenter(
 
     val frame =
         if (ofScreen) viewElement
-        else getScrollableElement(scrollFrame)
+        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     val endX =
         if (ofScreen) viewBounds.width / 2 else
             frame.bounds.centerX
@@ -440,6 +443,7 @@ fun TestElement.swipeToCenterOfScreen(
 fun TestElement.swipeToRight(
     ofScreen: Boolean = false,
     scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -448,7 +452,7 @@ fun TestElement.swipeToRight(
 
     val frame =
         if (ofScreen) viewElement
-        else getScrollableElement(scrollFrame)
+        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeToRight"
     val message = message(id = command, subject = subject)
@@ -545,6 +549,7 @@ fun TestElement.flickToRight(
 fun TestElement.swipeToLeft(
     ofScreen: Boolean = false,
     scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -553,7 +558,7 @@ fun TestElement.swipeToLeft(
 
     val frame =
         if (ofScreen) viewElement
-        else getScrollableElement(scrollFrame)
+        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeToLeft"
     val message = message(id = command, subject = subject)

@@ -270,11 +270,10 @@ fun TestDrive.selectInScanResults(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-    val testElement = getScrollableElement()
 
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
 
         for (scanRoot in TestElementCache.scanResults) {
@@ -305,6 +304,8 @@ internal fun TestDrive.canSelect(
     selector: Selector,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
     scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
@@ -317,6 +318,8 @@ internal fun TestDrive.canSelect(
         selector = selector,
         scroll = scroll,
         direction = direction,
+        scrollFrame = scrollFrame,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -377,22 +380,25 @@ fun TestDrive.canSelect(
  */
 fun TestDrive.canSelectWithScrollDown(
     expression: String,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val sel = getSelector(expression = expression)
     var found = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = sel.toString(), log = log) {
         found = canSelect(
             selector = sel,
             scroll = true,
             direction = ScrollDirection.Down,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -410,22 +416,25 @@ fun TestDrive.canSelectWithScrollDown(
  */
 fun TestDrive.canSelectWithScrollUp(
     expression: String,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val sel = getSelector(expression = expression)
     var found = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = sel.toString(), log = log) {
         found = canSelect(
             selector = sel,
             scroll = true,
             direction = ScrollDirection.Up,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -443,22 +452,25 @@ fun TestDrive.canSelectWithScrollUp(
  */
 fun TestDrive.canSelectWithScrollRight(
     expression: String,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val sel = getSelector(expression = expression)
     var found = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = sel.toString(), log = log) {
         found = canSelect(
             selector = sel,
             scroll = true,
             direction = ScrollDirection.Right,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -476,22 +488,25 @@ fun TestDrive.canSelectWithScrollRight(
  */
 fun TestDrive.canSelectWithScrollLeft(
     expression: String,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val sel = getSelector(expression = expression)
     var found = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = sel.toString(), log = log) {
         found = canSelect(
             selector = sel,
             scroll = true,
             direction = ScrollDirection.Left,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -511,11 +526,10 @@ fun TestDrive.canSelectInScanResults(
     expression: String,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val subject = TestDriver.screenInfo.getSelector(expression = expression).toString()
     var found = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         val e = selectInScanResults(
             expression = expression,
@@ -615,21 +629,24 @@ fun TestDrive.canSelectAll(
  */
 fun TestDrive.canSelectAllWithScrollDown(
     vararg expressions: String,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var foundAll = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (expression in expressions) {
             val result = canSelectWithScrollDown(
                 expression = expression,
+                scrollFrame = scrollFrame,
+                scrollableElement = scrollableElement,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,
@@ -655,21 +672,24 @@ fun TestDrive.canSelectAllWithScrollDown(
  */
 fun TestDrive.canSelectAllWithScrollUp(
     vararg expressions: String,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var found = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (expression in expressions) {
             val result = canSelectWithScrollUp(
                 expression = expression,
+                scrollFrame = scrollFrame,
+                scrollableElement = scrollableElement,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,
@@ -694,21 +714,24 @@ fun TestDrive.canSelectAllWithScrollUp(
  */
 fun TestDrive.canSelectAllWithScrollRight(
     vararg expressions: String,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var found = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (expression in expressions) {
             val result = canSelectWithScrollRight(
                 expression = expression,
+                scrollFrame = scrollFrame,
+                scrollableElement = scrollableElement,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,
@@ -733,21 +756,24 @@ fun TestDrive.canSelectAllWithScrollRight(
  */
 fun TestDrive.canSelectAllWithScrollLeft(
     vararg expressions: String,
+    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
-    val testElement = getScrollableElement()
 
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
     var found = false
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(this.toTestElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (expression in expressions) {
             val result = canSelectWithScrollLeft(
                 expression = expression,
+                scrollFrame = scrollFrame,
+                scrollableElement = scrollableElement,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,
