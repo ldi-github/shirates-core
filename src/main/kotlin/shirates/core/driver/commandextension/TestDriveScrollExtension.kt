@@ -92,6 +92,7 @@ private fun TestDrive.scrollCommand(
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio
         )
+        TestLog.info("scrollableElement: $scrollableElement")
         swipeAction(r)
         TestDriver.autoScreenshot()
     }
