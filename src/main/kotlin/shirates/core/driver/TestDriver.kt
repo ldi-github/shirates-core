@@ -1111,7 +1111,7 @@ object TestDriver {
         var e = TestElement(selector = sel)
         val context = TestDriverCommandContext(lastElement)
         context.execSelectCommand(selector = sel, subject = sel.nickname, log = log) {
-            e = select(
+            e = findImageOrSelectCore(
                 selector = sel,
                 scroll = scroll,
                 direction = direction,
@@ -1130,10 +1130,11 @@ object TestDriver {
         return e
     }
 
-    internal fun select(
+    internal fun findImageOrSelectCore(
         selector: Selector,
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
+        scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1151,6 +1152,7 @@ object TestDriver {
                 val r = findImage(
                     selector = selector,
                     scroll = scroll,
+                    scrollFrame = scrollFrame,
                     scrollableElement = scrollableElement,
                     direction = direction,
                     scrollDurationSeconds = scrollDurationSeconds,
@@ -1168,6 +1170,7 @@ object TestDriver {
                 useCache = useCache,
                 scroll = scroll,
                 direction = direction,
+                scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
@@ -1205,6 +1208,7 @@ object TestDriver {
         useCache: Boolean,
         scroll: Boolean,
         direction: ScrollDirection,
+        scrollFrame: String,
         scrollableElement: TestElement?,
         scrollDurationSeconds: Double,
         scrollStartMarginRatio: Double,
@@ -1265,6 +1269,7 @@ object TestDriver {
                 return selectWithScroll(
                     selector = selector,
                     frame = frame,
+                    scrollFrame = scrollFrame,
                     scrollableElement = scrollableElement,
                     direction = direction,
                     durationSeconds = scrollDurationSeconds,
@@ -1515,6 +1520,7 @@ object TestDriver {
         expression: String,
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
+        scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1530,6 +1536,7 @@ object TestDriver {
             selector = sel,
             scroll = scroll,
             direction = direction,
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -1547,7 +1554,7 @@ object TestDriver {
         selector: Selector,
         scroll: Boolean = false,
         direction: ScrollDirection = ScrollDirection.Down,
-        scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+        scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1557,13 +1564,12 @@ object TestDriver {
         useCache: Boolean = testContext.useCache,
     ): ImageMatchResult {
 
-        val sc = scrollableElement ?: testDrive.getScrollableElement(scrollFrame = scrollFrame)
-
         return findImageCore(
             selector = selector,
             scroll = scroll,
             direction = direction,
-            scrollableElement = sc,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -1578,6 +1584,7 @@ object TestDriver {
         threshold: Double = PropertiesManager.imageMatchingThreshold,
         scroll: Boolean,
         direction: ScrollDirection,
+        scrollFrame: String = "",
         scrollableElement: TestElement?,
         scrollDurationSeconds: Double,
         scrollStartMarginRatio: Double,
@@ -1634,6 +1641,7 @@ object TestDriver {
             }
 
             testDrive.doUntilScrollStop(
+                scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 repeat = 1,
                 maxLoopCount = scrollMaxCount,
@@ -1687,6 +1695,7 @@ object TestDriver {
     internal fun selectWithScroll(
         selector: Selector,
         frame: Bounds? = viewBounds,
+        scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         direction: ScrollDirection = ScrollDirection.Down,
         durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -1701,7 +1710,7 @@ object TestDriver {
         val actionFunc = {
             val ms = Measure("$selector")
 
-            e = select(
+            e = findImageOrSelectCore(
                 selector = selector,
                 scroll = false,
                 swipeToCenter = false,
@@ -1714,6 +1723,7 @@ object TestDriver {
         }
 
         testDrive.doUntilScrollStop(
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             repeat = 1,
             maxLoopCount = scrollMaxCount,
@@ -1746,6 +1756,7 @@ object TestDriver {
     fun selectWithScroll(
         expression: String,
         direction: ScrollDirection = ScrollDirection.Down,
+        scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1761,6 +1772,7 @@ object TestDriver {
             e = selectWithScroll(
                 selector = sel,
                 direction = direction,
+                scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 swipeToCenter = swipeToCenter,
                 durationSeconds = scrollDurationSeconds,
@@ -2021,6 +2033,7 @@ object TestDriver {
     ): String {
 
         val ms = Measure("refreshCurrentScreen")
+        val originalLastElement = lastElement
 
         val originalScreen = currentScreen
 
@@ -2032,6 +2045,7 @@ object TestDriver {
             TestLog.info("currentScreen=$currentScreen", log = log)
         }
 
+        lastElement = originalLastElement
         ms.end()
 
         return currentScreen
@@ -2121,6 +2135,7 @@ object TestDriver {
         }
 
         val ms = Measure("■■■ Trying isScreen($screenName)")
+        val originalLastElement = lastElement
         try {
             NicknameUtility.validateScreenName(screenName)
             val screenInfo = ScreenRepository.get(screenName)
@@ -2153,6 +2168,7 @@ object TestDriver {
 
             return r
         } finally {
+            lastElement = originalLastElement
             ms.end()
         }
     }

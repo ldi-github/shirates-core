@@ -22,9 +22,9 @@ var rootElement: TestElement
     }
 
 /**
- * rootViewElement
+ * view
  */
-val rootViewElement: TestElement
+val view: TestElement
     get() {
         return TestElementCache.viewElement
     }

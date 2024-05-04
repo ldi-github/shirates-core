@@ -41,5 +41,6 @@ fun TestDrive.macro(
         }
     }
 
+    lastElement = rootElement
     return lastElement
 }

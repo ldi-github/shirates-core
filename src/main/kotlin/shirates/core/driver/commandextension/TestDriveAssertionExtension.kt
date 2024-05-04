@@ -165,6 +165,7 @@ fun TestDrive.screenIs(
         func()
     }
 
+    lastElement = rootElement
     return lastElement
 }
 
@@ -361,6 +362,7 @@ internal fun TestDrive.existCore(
     useCache: Boolean = testContext.useCache,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -379,6 +381,7 @@ internal fun TestDrive.existCore(
             useCache = useCache,
             scroll = scroll,
             direction = direction,
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             swipeToCenter = swipeToCenter
         )
@@ -391,10 +394,11 @@ internal fun TestDrive.existCore(
         message = assertMessage,
         throwsException = throwsException
     ) {
-        TestDriver.select(
+        TestDriver.findImageOrSelectCore(
             selector = selector,
             scroll = scroll,
             direction = direction,
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -485,7 +489,6 @@ fun TestDrive.exist(
 
         val scroll = CodeExecutionContext.withScrollDirection != null
         val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
-        val scrollableElement = getScrollableElement()
         e = existCore(
             assertMessage = assertMessage,
             selector = sel,
@@ -494,7 +497,6 @@ fun TestDrive.exist(
             useCache = useCache,
             scroll = scroll,
             direction = direction,
-            scrollableElement = scrollableElement,
             swipeToCenter = false
         )
     }
@@ -578,7 +580,6 @@ fun TestDrive.existImage(
 
     val scroll = CodeExecutionContext.withScrollDirection != null
     val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.None
-    val scrollableElement = getScrollableElement()
 
     val testElement = TestDriver.it
     val context = TestDriverCommandContext(testElement)
@@ -593,7 +594,6 @@ fun TestDrive.existImage(
             useCache = useCache,
             scroll = scroll,
             direction = direction,
-            scrollableElement = scrollableElement,
             swipeToCenter = swipeToCenter
         )
 
@@ -618,6 +618,8 @@ fun TestDrive.existImage(
  */
 fun TestDrive.dontExistImage(
     expression: String,
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -634,7 +636,6 @@ fun TestDrive.dontExistImage(
 
     val scroll = CodeExecutionContext.withScrollDirection != null
     val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.None
-    val scrollableElement = getScrollableElement()
 
     val testElement = TestDriver.it
     val context = TestDriverCommandContext(testElement)
@@ -649,6 +650,7 @@ fun TestDrive.dontExistImage(
             useCache = useCache,
             scroll = scroll,
             direction = direction,
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             swipeToCenter = false,
             dontExist = true,
@@ -677,7 +679,8 @@ private fun TestDrive.existImageCore(
     useCache: Boolean,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
-    scrollableElement: TestElement?,
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     swipeToCenter: Boolean,
     dontExist: Boolean = false,
     log: Boolean = CodeExecutionContext.shouldOutputLog
@@ -700,6 +703,7 @@ private fun TestDrive.existImageCore(
                 threshold = threshold,
                 scroll = scroll,
                 direction = direction,
+                scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 waitSeconds = waitSeconds,
                 useCache = useCache,
@@ -716,6 +720,7 @@ private fun TestDrive.existImageCore(
                 waitSeconds = waitSeconds,
                 scroll = scroll,
                 direction = direction,
+                scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 swipeToCenter = swipeToCenter,
                 useCache = useCache,
@@ -764,6 +769,7 @@ private fun findImage(
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     scroll: Boolean,
     direction: ScrollDirection,
+    scrollFrame: String,
     scrollableElement: TestElement?,
     waitSeconds: Double,
     useCache: Boolean,
@@ -774,6 +780,7 @@ private fun findImage(
         threshold = threshold,
         scroll = scroll,
         direction = direction,
+        scrollFrame = scrollFrame,
         scrollableElement = scrollableElement,
         scrollDurationSeconds = testContext.swipeDurationSeconds,
         scrollStartMarginRatio = testContext.scrollStartMarginRatio(direction),
@@ -804,15 +811,17 @@ private fun selectElementAndCompareImage(
     scroll: Boolean,
     swipeToCenter: Boolean,
     direction: ScrollDirection,
+    scrollFrame: String,
     scrollableElement: TestElement?,
     useCache: Boolean,
 ): TestElement {
 
     // Select the element
-    val e = TestDriver.select(
+    val e = TestDriver.findImageOrSelectCore(
         selector = sel,
         scroll = scroll,
         direction = direction,
+        scrollFrame = scrollFrame,
         scrollableElement = scrollableElement,
         throwsException = false,
         waitSeconds = waitSeconds,
@@ -836,6 +845,7 @@ private fun selectElementAndCompareImage(
 fun TestDrive.existWithScrollDown(
     expression: String,
     throwsException: Boolean = true,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -845,14 +855,12 @@ fun TestDrive.existWithScrollDown(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val sc = scrollableElement ?: getScrollableElement()
-
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
-    val context = TestDriverCommandContext(sc)
+    val context = TestDriverCommandContext(this.toTestElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
@@ -860,7 +868,8 @@ fun TestDrive.existWithScrollDown(
             selector = sel,
             scroll = true,
             direction = ScrollDirection.Down,
-            scrollableElement = sc,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -882,7 +891,7 @@ fun TestDrive.existWithScrollDown(
 fun TestDrive.existWithScrollUp(
     expression: String,
     throwsException: Boolean = true,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -892,14 +901,12 @@ fun TestDrive.existWithScrollUp(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
-
     val command = "existWithScrollUp"
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
-    val context = TestDriverCommandContext(sc)
+    val context = TestDriverCommandContext(this.toTestElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
@@ -907,7 +914,8 @@ fun TestDrive.existWithScrollUp(
             selector = sel,
             scroll = true,
             direction = ScrollDirection.Up,
-            scrollableElement = sc,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -929,7 +937,7 @@ fun TestDrive.existWithScrollUp(
 fun TestDrive.existWithScrollRight(
     expression: String,
     throwsException: Boolean = true,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -939,14 +947,12 @@ fun TestDrive.existWithScrollRight(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
-
     val command = "existWithScrollRight"
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
-    val context = TestDriverCommandContext(sc)
+    val context = TestDriverCommandContext(this.toTestElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
@@ -954,7 +960,8 @@ fun TestDrive.existWithScrollRight(
             selector = sel,
             scroll = true,
             direction = ScrollDirection.Right,
-            scrollableElement = sc,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -976,7 +983,7 @@ fun TestDrive.existWithScrollRight(
 fun TestDrive.existWithScrollLeft(
     expression: String,
     throwsException: Boolean = true,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -986,14 +993,12 @@ fun TestDrive.existWithScrollLeft(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
-
     val command = "existWithScrollLeft"
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
     val assertMessage = message(id = command, subject = "$sel")
 
-    val context = TestDriverCommandContext(sc)
+    val context = TestDriverCommandContext(this.toTestElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         e = existCore(
@@ -1001,7 +1006,8 @@ fun TestDrive.existWithScrollLeft(
             selector = sel,
             scroll = true,
             direction = ScrollDirection.Left,
-            scrollableElement = sc,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -1130,7 +1136,7 @@ internal fun TestDrive.dontExist(
     useCache: Boolean = testContext.useCache,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement?,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1139,7 +1145,6 @@ internal fun TestDrive.dontExist(
 ): TestElement {
 
     val testElement = TestDriver.it
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     var e = TestElement(selector = selector)
 
     val command = "dontExist"
@@ -1156,6 +1161,7 @@ internal fun TestDrive.dontExist(
                 command = command,
                 expectedSelector = selector,
                 testElement = testElement,
+                scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 direction = direction,
                 durationSeconds = waitSeconds,
@@ -1178,7 +1184,8 @@ internal fun TestDrive.dontExist(
                 useCache = useCache,
                 scroll = scroll,
                 direction = direction,
-                scrollableElement = sc,
+                scrollFrame = scrollFrame,
+                scrollableElement = scrollableElement,
                 scrollDurationSeconds = scrollDurationSeconds,
                 scrollStartMarginRatio = scrollStartMarginRatio,
                 scrollEndMarginRatio = scrollEndMarginRatio,
@@ -1198,6 +1205,7 @@ internal fun TestDrive.dontExistCore(
     useCache: Boolean = testContext.useCache,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
+    scrollFrame: String,
     scrollableElement: TestElement?,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -1207,10 +1215,11 @@ internal fun TestDrive.dontExistCore(
 
     TestDriver.syncCache()
 
-    var e = TestDriver.select(
+    var e = TestDriver.findImageOrSelectCore(
         selector = selector,
         scroll = scroll,
         direction = direction,
+        scrollFrame = scrollFrame,
         scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
@@ -1299,7 +1308,7 @@ fun TestDrive.dontExistWithScrollDown(
     expression: String,
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -1307,14 +1316,12 @@ fun TestDrive.dontExistWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
 ): TestElement {
 
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
-
     val command = "dontExistWithScrollDown"
     val selector = TestDriver.screenInfo.getSelector(expression = expression)
     var e = TestElement(selector = selector)
     val assertMessage = message(id = command, "$selector")
 
-    val context = TestDriverCommandContext(sc)
+    val context = TestDriverCommandContext(this.toTestElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$selector") {
         e = dontExistCore(
             message = assertMessage,
@@ -1323,7 +1330,8 @@ fun TestDrive.dontExistWithScrollDown(
             useCache = useCache,
             scroll = true,
             direction = ScrollDirection.Down,
-            scrollableElement = sc,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
@@ -1341,7 +1349,7 @@ fun TestDrive.dontExistWithScrollUp(
     expression: String,
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -1349,14 +1357,12 @@ fun TestDrive.dontExistWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
 ): TestElement {
 
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
-
     val command = "dontExistWithScrollUp"
     val selector = TestDriver.screenInfo.getSelector(expression = expression)
     var e = TestElement(selector = selector)
     val assertMessage = message(id = command, "$selector")
 
-    val context = TestDriverCommandContext(sc)
+    val context = TestDriverCommandContext(this.toTestElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$selector") {
         e = dontExistCore(
             message = assertMessage,
@@ -1365,7 +1371,8 @@ fun TestDrive.dontExistWithScrollUp(
             useCache = useCache,
             scroll = true,
             direction = ScrollDirection.Up,
-            scrollableElement = sc,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,

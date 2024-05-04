@@ -22,7 +22,7 @@ fun TestElement.swipeTo(
 
     val context = TestDriverCommandContext(this)
     context.execOperateCommand(command = command, message = message, subject = subject, arg1 = expression) {
-        val e = TestDriver.select(
+        val e = TestDriver.findImageOrSelectCore(
             swipeToCenter = false,
             selector = sel,
             useCache = useCache
@@ -121,7 +121,7 @@ fun TestElement.swipeHorizontalTo(
  */
 fun TestElement.swipeToTop(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -180,7 +180,7 @@ fun TestElement.swipeToTopOfScreen(
  */
 fun TestElement.swipeOutTop(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1
@@ -201,7 +201,7 @@ fun TestElement.swipeOutTop(
  */
 fun TestElement.flickToTop(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1
@@ -229,7 +229,7 @@ fun TestElement.flickToTop(
  */
 fun TestElement.swipeToBottom(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -286,7 +286,7 @@ fun TestElement.swipeToBottomOfScreen(
  */
 fun TestElement.swipeOutBottom(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1
@@ -307,7 +307,7 @@ fun TestElement.swipeOutBottom(
  */
 fun TestElement.flickToBottom(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1
@@ -335,7 +335,7 @@ fun TestElement.flickToBottom(
  */
 fun TestElement.swipeToCenter(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     axis: Axis = Axis.Vertical,
     durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -386,7 +386,7 @@ fun TestElement.swipeToCenter(
  */
 fun TestElement.swipeToCenterVertical(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
 ): TestElement {
@@ -405,7 +405,7 @@ fun TestElement.swipeToCenterVertical(
  */
 fun TestElement.swipeToCenterHorizontal(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
 ): TestElement {
@@ -442,7 +442,7 @@ fun TestElement.swipeToCenterOfScreen(
  */
 fun TestElement.swipeToRight(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -499,7 +499,7 @@ fun TestElement.swipeToRightOfScreen(
  */
 fun TestElement.swipeOutRight(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1
@@ -520,7 +520,7 @@ fun TestElement.swipeOutRight(
  */
 fun TestElement.flickToRight(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1
@@ -548,7 +548,7 @@ fun TestElement.flickToRight(
  */
 fun TestElement.swipeToLeft(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -605,7 +605,7 @@ fun TestElement.swipeToLeftOfScreen(
  */
 fun TestElement.swipeOutLeft(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1
@@ -626,7 +626,7 @@ fun TestElement.swipeOutLeft(
  */
 fun TestElement.flickToLeft(
     ofScreen: Boolean = false,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     startOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1

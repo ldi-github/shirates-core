@@ -39,7 +39,7 @@ fun TestDrive.select(
         val scroll = CodeExecutionContext.withScrollDirection != null
         val direction = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down
 
-        e = TestDriver.select(
+        e = TestDriver.findImageOrSelectCore(
             selector = sel,
             scroll = scroll,
             direction = direction,
@@ -98,6 +98,7 @@ fun TestDrive.widget(
  */
 fun TestDrive.selectWithScrollDown(
     expression: String,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -119,6 +120,7 @@ fun TestDrive.selectWithScrollDown(
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = ScrollDirection.Down,
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
@@ -140,6 +142,7 @@ fun TestDrive.selectWithScrollDown(
  */
 fun TestDrive.selectWithScrollUp(
     expression: String,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -161,6 +164,7 @@ fun TestDrive.selectWithScrollUp(
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = ScrollDirection.Up,
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
@@ -182,6 +186,7 @@ fun TestDrive.selectWithScrollUp(
  */
 fun TestDrive.selectWithScrollRight(
     expression: String,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -203,6 +208,7 @@ fun TestDrive.selectWithScrollRight(
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = ScrollDirection.Right,
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
@@ -224,6 +230,7 @@ fun TestDrive.selectWithScrollRight(
  */
 fun TestDrive.selectWithScrollLeft(
     expression: String,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -245,6 +252,7 @@ fun TestDrive.selectWithScrollLeft(
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = ScrollDirection.Left,
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
@@ -304,7 +312,7 @@ internal fun TestDrive.canSelect(
     selector: Selector,
     scroll: Boolean = false,
     direction: ScrollDirection = ScrollDirection.Down,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
@@ -314,13 +322,12 @@ internal fun TestDrive.canSelect(
     frame: Bounds? = null
 ): Boolean {
 
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
-
-    val e = TestDriver.select(
+    val e = TestDriver.findImageOrSelectCore(
         selector = selector,
         scroll = scroll,
         direction = direction,
-        scrollableElement = sc,
+        scrollFrame = scrollFrame,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -381,7 +388,7 @@ fun TestDrive.canSelect(
  */
 fun TestDrive.canSelectWithScrollDown(
     expression: String,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -417,7 +424,7 @@ fun TestDrive.canSelectWithScrollDown(
  */
 fun TestDrive.canSelectWithScrollUp(
     expression: String,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -453,7 +460,7 @@ fun TestDrive.canSelectWithScrollUp(
  */
 fun TestDrive.canSelectWithScrollRight(
     expression: String,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -489,7 +496,7 @@ fun TestDrive.canSelectWithScrollRight(
  */
 fun TestDrive.canSelectWithScrollLeft(
     expression: String,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -630,7 +637,7 @@ fun TestDrive.canSelectAll(
  */
 fun TestDrive.canSelectAllWithScrollDown(
     vararg expressions: String,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -673,7 +680,7 @@ fun TestDrive.canSelectAllWithScrollDown(
  */
 fun TestDrive.canSelectAllWithScrollUp(
     vararg expressions: String,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -715,7 +722,7 @@ fun TestDrive.canSelectAllWithScrollUp(
  */
 fun TestDrive.canSelectAllWithScrollRight(
     vararg expressions: String,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -757,7 +764,7 @@ fun TestDrive.canSelectAllWithScrollRight(
  */
 fun TestDrive.canSelectAllWithScrollLeft(
     vararg expressions: String,
-    scrollFrame: String = TestDriver.screenInfo.scrollInfo.scrollFrame,
+    scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,

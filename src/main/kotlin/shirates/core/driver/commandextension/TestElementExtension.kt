@@ -69,7 +69,7 @@ fun TestElement.refreshThisElement(): TestElement {
     }
 
     val e = try {
-        TestDriver.select(
+        TestDriver.findImageOrSelectCore(
             selector = sel,
             swipeToCenter = false,
             waitSeconds = 0.0,
