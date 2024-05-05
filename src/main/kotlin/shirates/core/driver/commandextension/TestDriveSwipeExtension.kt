@@ -27,8 +27,8 @@ fun TestDrive.swipePointToPoint(
     withOffset: Boolean = false,
     offsetY: Int = PropertiesManager.swipeOffsetY,
     durationSeconds: Double = testContext.swipeDurationSeconds,
-    repeat: Int = 1,
     intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
+    repeat: Int = 1,
     safeMode: Boolean = true,
 ): TestElement {
 
@@ -79,7 +79,7 @@ internal class SwipeContext(
     val safeMode: Boolean = true,
     val durationSeconds: Double = testContext.swipeDurationSeconds,
     val repeat: Int = 1,
-    val intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS
+    val intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
 ) {
     init {
         if (safeMode) {
@@ -217,16 +217,16 @@ fun TestDrive.swipeCenterToTop(
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
-
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeCenterToTop"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         val b = sc.bounds
         swipePointToPoint(
             b.centerX,
@@ -235,6 +235,7 @@ fun TestDrive.swipeCenterToTop(
             b.top,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -250,6 +251,7 @@ fun TestDrive.flickCenterToTop(
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -257,11 +259,12 @@ fun TestDrive.flickCenterToTop(
     val message = message(id = command)
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         swipeCenterToTop(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -277,16 +280,16 @@ fun TestDrive.swipeCenterToBottom(
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
-
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeCenterToBottom"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         val b = sc.bounds
         swipePointToPoint(
             b.centerX,
@@ -295,6 +298,7 @@ fun TestDrive.swipeCenterToBottom(
             b.bottom,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -310,6 +314,7 @@ fun TestDrive.flickCenterToBottom(
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -318,11 +323,12 @@ fun TestDrive.flickCenterToBottom(
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         swipeCenterToBottom(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -338,16 +344,16 @@ fun TestDrive.swipeCenterToLeft(
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
-
-    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeCenterToLeft"
     val message = message(id = command)
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         val b = sc.bounds
         swipePointToPoint(
             b.centerX,
@@ -356,6 +362,7 @@ fun TestDrive.swipeCenterToLeft(
             b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -371,6 +378,7 @@ fun TestDrive.flickCenterToLeft(
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -379,11 +387,12 @@ fun TestDrive.flickCenterToLeft(
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         swipeCenterToLeft(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -399,6 +408,7 @@ fun TestDrive.swipeCenterToRight(
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -416,6 +426,7 @@ fun TestDrive.swipeCenterToRight(
             b.right,
             b.centerY,
             durationSeconds = durationSeconds,
+            intervalSeconds = intervalSeconds,
             repeat = repeat,
             safeMode = safeMode
         )
@@ -432,6 +443,7 @@ fun TestDrive.flickCenterToRight(
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -440,10 +452,11 @@ fun TestDrive.flickCenterToRight(
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         swipeCenterToRight(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             durationSeconds = durationSeconds,
+            intervalSeconds = intervalSeconds,
             repeat = repeat,
             safeMode = safeMode
         )
@@ -461,6 +474,7 @@ fun TestDrive.swipeLeftToRight(
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -480,6 +494,7 @@ fun TestDrive.swipeLeftToRight(
             endY = b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -496,6 +511,7 @@ fun TestDrive.flickLeftToRight(
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -504,12 +520,13 @@ fun TestDrive.flickLeftToRight(
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         swipeLeftToRight(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             startMarginRatio = startMarginRatio,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -526,6 +543,7 @@ fun TestDrive.swipeRightToLeft(
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -545,6 +563,7 @@ fun TestDrive.swipeRightToLeft(
             endY = b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -561,6 +580,7 @@ fun TestDrive.flickRightToLeft(
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -569,12 +589,13 @@ fun TestDrive.flickRightToLeft(
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         swipeRightToLeft(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             startMarginRatio = startMarginRatio,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -591,6 +612,7 @@ fun TestDrive.swipeBottomToTop(
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -611,6 +633,7 @@ fun TestDrive.swipeBottomToTop(
             endY = b.top,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -627,6 +650,7 @@ fun TestDrive.flickBottomToTop(
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -635,12 +659,13 @@ fun TestDrive.flickBottomToTop(
 
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         swipeBottomToTop(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             startMarginRatio = startMarginRatio,
             durationSeconds = durationSeconds,
             repeat = repeat,
+            intervalSeconds = intervalSeconds,
             safeMode = safeMode
         )
     }
@@ -669,9 +694,9 @@ fun TestDrive.flickAndGoDown(
         val originalOnScrolling = testContext.onScrolling
         try {
             testContext.onScrolling = false
+            val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
             scrollDown(
-                scrollFrame = scrollFrame,
-                scrollableElement = scrollableElement,
+                scrollableElement = sc,
                 durationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
@@ -698,14 +723,15 @@ fun TestDrive.flickAndGoDownTurbo(
     intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
 ): TestElement {
 
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
+
     return flickAndGoDown(
-        scrollFrame = scrollFrame,
-        scrollableElement = scrollableElement,
+        scrollableElement = sc,
         durationSeconds = 0.1,
         startMarginRatio = startMarginRatio,
         endMarginRatio = endMarginRatio,
         repeat = repeat,
-        intervalSeconds = intervalSeconds
+        intervalSeconds = intervalSeconds,
     )
 }
 
@@ -719,7 +745,7 @@ fun TestDrive.flickAndGoRight(
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     repeat: Int = 1,
-    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS
+    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
 ): TestElement {
 
     val command = "flickAndGoRight"
@@ -730,9 +756,9 @@ fun TestDrive.flickAndGoRight(
         val originalOnScrolling = testContext.onScrolling
         try {
             testContext.onScrolling = false
+            val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
             scrollRight(
-                scrollFrame = scrollFrame,
-                scrollableElement = scrollableElement,
+                scrollableElement = sc,
                 durationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
@@ -768,9 +794,9 @@ fun TestDrive.flickAndGoLeft(
         val originalOnScrolling = testContext.onScrolling
         try {
             testContext.onScrolling = false
+            val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
             scrollLeft(
-                scrollFrame = scrollFrame,
-                scrollableElement = scrollableElement,
+                scrollableElement = sc,
                 durationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
@@ -794,7 +820,7 @@ fun TestDrive.swipeTopToBottom(
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
-    intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -843,9 +869,9 @@ fun TestDrive.flickAndGoUp(
         val originalOnScrolling = testContext.onScrolling
         try {
             testContext.onScrolling = false
+            val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
             scrollUp(
-                scrollFrame = scrollFrame,
-                scrollableElement = scrollableElement,
+                scrollableElement = sc,
                 durationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
@@ -872,9 +898,9 @@ fun TestDrive.flickAndGoUpTurbo(
     intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS
 ): TestElement {
 
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     return flickAndGoUp(
-        scrollFrame = scrollFrame,
-        scrollableElement = scrollableElement,
+        scrollableElement = sc,
         startMarginRatio = startMarginRatio,
         endMarginRatio = endMarginRatio,
         repeat = repeat,
@@ -900,9 +926,9 @@ fun TestDrive.flickTopToBottom(
     val message = message(id = command)
     val context = TestDriverCommandContext(this.toTestElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         swipeTopToBottom(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             startMarginRatio = startMarginRatio,
             durationSeconds = durationSeconds,
             repeat = repeat,
@@ -926,7 +952,7 @@ fun TestDrive.swipeElementToElement(
     withOffset: Boolean = false,
     offsetY: Int = PropertiesManager.swipeOffsetY,
     repeat: Int = 1,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
 
@@ -999,7 +1025,7 @@ fun TestDrive.swipeElementToElementAdjust(
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     repeat: Int = 1,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     safeMode: Boolean = true
 ): TestElement {
 

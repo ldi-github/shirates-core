@@ -1,7 +1,6 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.utility.image.ImageMatchResult
 
@@ -10,12 +9,6 @@ import shirates.core.utility.image.ImageMatchResult
  */
 fun TestDrive.findImage(
     expression: String,
-    scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
-    direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
-    scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-    scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-    scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-    scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = false,
     useCache: Boolean = testContext.useCache,
     log: Boolean = true
@@ -26,12 +19,6 @@ fun TestDrive.findImage(
     return findImageCore(
         command = command,
         expression = expression,
-        scroll = scroll,
-        direction = direction,
-        scrollDurationSeconds = scrollDurationSeconds,
-        scrollStartMarginRatio = scrollStartMarginRatio,
-        scrollEndMarginRatio = scrollEndMarginRatio,
-        scrollMaxCount = scrollMaxCount,
         throwsException = throwsException,
         useCache = useCache,
         log = log
@@ -41,12 +28,6 @@ fun TestDrive.findImage(
 internal fun TestDrive.findImageCore(
     command: String,
     expression: String,
-    scroll: Boolean,
-    direction: ScrollDirection,
-    scrollDurationSeconds: Double,
-    scrollStartMarginRatio: Double,
-    scrollEndMarginRatio: Double,
-    scrollMaxCount: Int,
     throwsException: Boolean,
     useCache: Boolean,
     log: Boolean
@@ -63,12 +44,6 @@ internal fun TestDrive.findImageCore(
         context.execOperateCommand(command = command, message = message, subject = sel.toString()) {
             r = TestDriver.findImage(
                 expression = expression,
-                scroll = scroll,
-                direction = direction,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
                 throwsException = throwsException,
                 useCache = useCache
             )
@@ -91,7 +66,10 @@ internal fun TestDrive.findImageCore(
  */
 fun TestDrive.findImageWithScrollDown(
     expression: String,
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
@@ -101,21 +79,26 @@ fun TestDrive.findImageWithScrollDown(
 ): ImageMatchResult {
 
     val command = "findImageWithScrollDown"
-    val direction = ScrollDirection.Down
 
-    return findImageCore(
-        command = command,
-        expression = expression,
-        scroll = true,
-        direction = direction,
+    var result = ImageMatchResult(false, templateSubject = expression)
+    withScrollDown(
+        scrollFrame = scrollFrame,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
-        throwsException = throwsException,
-        useCache = useCache,
-        log = log
-    )
+    ) {
+        result = findImageCore(
+            command = command,
+            expression = expression,
+            throwsException = throwsException,
+            useCache = useCache,
+            log = log
+        )
+    }
+    return result
 }
 
 /**
@@ -123,7 +106,10 @@ fun TestDrive.findImageWithScrollDown(
  */
 fun TestDrive.findImageWithScrollUp(
     expression: String,
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
@@ -133,21 +119,26 @@ fun TestDrive.findImageWithScrollUp(
 ): ImageMatchResult {
 
     val command = "findImageWithScrollUp"
-    val direction = ScrollDirection.Up
 
-    return findImageCore(
-        command = command,
-        expression = expression,
-        scroll = true,
-        direction = direction,
+    var result = ImageMatchResult(result = false, templateSubject = expression)
+    withScrollUp(
+        scrollFrame = scrollFrame,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
-        throwsException = throwsException,
-        useCache = useCache,
-        log = log
-    )
+    ) {
+        result = findImageCore(
+            command = command,
+            expression = expression,
+            throwsException = throwsException,
+            useCache = useCache,
+            log = log
+        )
+    }
+    return result
 }
 
 /**
@@ -155,7 +146,10 @@ fun TestDrive.findImageWithScrollUp(
  */
 fun TestDrive.findImageWithScrollRight(
     expression: String,
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
@@ -165,21 +159,26 @@ fun TestDrive.findImageWithScrollRight(
 ): ImageMatchResult {
 
     val command = "findImageWithScrollRight"
-    val direction = ScrollDirection.Right
 
-    return findImageCore(
-        command = command,
-        expression = expression,
-        scroll = true,
-        direction = direction,
+    var result = ImageMatchResult(result = false, templateSubject = expression)
+    withScrollRight(
+        scrollFrame = scrollFrame,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
-        throwsException = throwsException,
-        useCache = useCache,
-        log = log
-    )
+    ) {
+        result = findImageCore(
+            command = command,
+            expression = expression,
+            throwsException = throwsException,
+            useCache = useCache,
+            log = log
+        )
+    }
+    return result
 }
 
 /**
@@ -187,7 +186,10 @@ fun TestDrive.findImageWithScrollRight(
  */
 fun TestDrive.findImageWithScrollLeft(
     expression: String,
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
@@ -197,19 +199,24 @@ fun TestDrive.findImageWithScrollLeft(
 ): ImageMatchResult {
 
     val command = "findImageWithScrollLeft"
-    val direction = ScrollDirection.Left
 
-    return findImageCore(
-        command = command,
-        expression = expression,
-        scroll = true,
-        direction = direction,
+    var result = ImageMatchResult(result = false, templateSubject = expression)
+    withScrollLeft(
+        scrollFrame = scrollFrame,
+        scrollableElement = scrollableElement,
         scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
-        throwsException = throwsException,
-        useCache = useCache,
-        log = log
-    )
+    ) {
+        result = findImageCore(
+            command = command,
+            expression = expression,
+            throwsException = throwsException,
+            useCache = useCache,
+            log = log
+        )
+    }
+    return result
 }

@@ -474,7 +474,6 @@ class TestElement(
                     for (overlayElement in overlayElements) {
                         val overlay = TestDriver.select(
                             expression = overlayElement,
-                            scroll = false,
                             throwsException = false,
                             waitSeconds = 0.0,
                         )
@@ -1172,7 +1171,7 @@ class TestElement(
 
             if (isCacheMode) {
                 if (selector != null) {
-                    if (canSelect(selector = selector!!)) {
+                    if (canSelectCore(selector = selector!!)) {
                         e = TestElementCache.select(selector = selector!!)
                         return@execOperateCommand
                     }

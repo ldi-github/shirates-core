@@ -131,7 +131,7 @@ fun TestElement.swipeToTop(
 
     val frame =
         if (ofScreen) viewElement
-        else scrollableElement ?: getScrollableElement(scrollFrame)
+        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     val headerBottom = TestDriver.screenInfo.scrollInfo.getHeaderBottom()
 
     val command = "swipeToTop"

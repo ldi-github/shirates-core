@@ -246,7 +246,7 @@ private fun TestDrive.tapWithScrollCommandCore(
     expression: String,
     command: String,
     direction: ScrollDirection,
-    scrollFrame: String,
+    scrollFrame: String = "",
     scrollableElement: TestElement?,
     scrollDurationSeconds: Double,
     scrollStartMarginRatio: Double,
@@ -261,11 +261,11 @@ private fun TestDrive.tapWithScrollCommandCore(
     var e = TestElement(selector = Selector(expression))
     val context = TestDriverCommandContext(scrollableElement)
     context.execOperateCommand(command = command, message = message) {
+        val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
         e = TestDriver.selectWithScroll(
             selector = selector,
             direction = direction,
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
+            scrollableElement = sc,
             durationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
@@ -296,12 +296,12 @@ fun TestDrive.tapWithScrollDown(
     val command = "tapWithScrollDown"
     val direction = ScrollDirection.Down
 
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     val e = tapWithScrollCommandCore(
         expression = expression,
         command = command,
         direction = direction,
-        scrollFrame = scrollFrame,
-        scrollableElement = scrollableElement,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -331,12 +331,12 @@ fun TestDrive.tapWithScrollUp(
     val command = "tapWithScrollUp"
     val direction = ScrollDirection.Up
 
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     val e = tapWithScrollCommandCore(
         expression = expression,
         command = command,
         direction = direction,
-        scrollFrame = scrollFrame,
-        scrollableElement = scrollableElement,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -366,12 +366,12 @@ fun TestDrive.tapWithScrollRight(
     val command = "tapWithScrollRight"
     val direction = ScrollDirection.Right
 
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     val e = tapWithScrollCommandCore(
         expression = expression,
         command = command,
         direction = direction,
-        scrollFrame = scrollFrame,
-        scrollableElement = scrollableElement,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -401,12 +401,12 @@ fun TestDrive.tapWithScrollLeft(
     val command = "tapWithScrollLeft"
     val direction = ScrollDirection.Left
 
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     val e = tapWithScrollCommandCore(
         expression = expression,
         command = command,
         direction = direction,
-        scrollFrame = scrollFrame,
-        scrollableElement = scrollableElement,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,

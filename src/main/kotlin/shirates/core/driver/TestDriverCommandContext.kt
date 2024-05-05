@@ -841,28 +841,43 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
      */
     fun execWithScroll(
         command: String,
+        withScroll: Boolean = true,
         scrollDirection: ScrollDirection?,
+        scrollFrame: String = "",
+        scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
         scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
+        scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+        scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
+        scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
         message: String = "",
         func: () -> Unit
     ): LogLine? {
 
-        val originalWithScrollDirection = CodeExecutionContext.withScrollDirection
-        val originalScrollDurationSeconds = testContext.swipeDurationSeconds
-        val originalScrollIntervalSeconds = testContext.scrollIntervalSeconds
-        val originalScrollToEdgeBoost = testContext.scrollToEdgeBoost
-        val originalScrollMaxCount = testContext.scrollMaxCount
+        val originalWithScroll = CodeExecutionContext.withScroll
+        val originalScrollDirection = CodeExecutionContext.scrollDirection
+        val originalScrollFrame = CodeExecutionContext.scrollFrame
+        val originalScrollableElement = CodeExecutionContext.scrollableElement
+        val originalScrollDurationSeconds = CodeExecutionContext.scrollDurationSeconds
+        val originalScrollIntervalSeconds = CodeExecutionContext.scrollIntervalSeconds
+        val originalScrollStartMarginRatio = CodeExecutionContext.scrollStartMarginRatio
+        val originalScrollEndMarginRatio = CodeExecutionContext.scrollEndMarginRatio
+        val originalScrollMaxCount = CodeExecutionContext.scrollMaxCount
+        val originalScrollToEdgeBoost = CodeExecutionContext.scrollToEdgeBoost
 
         val ms = Measure()
         try {
-            CodeExecutionContext.withScrollDirection = scrollDirection
-            testContext.swipeDurationSeconds = scrollDurationSeconds
-            testContext.scrollToEdgeBoost = scrollToEdgeBoost
-            testContext.scrollIntervalSeconds = scrollIntervalSeconds
-            testContext.scrollMaxCount = scrollMaxCount
+            CodeExecutionContext.withScroll = withScroll
+            CodeExecutionContext.scrollDirection = scrollDirection
+            CodeExecutionContext.scrollFrame = scrollFrame
+            CodeExecutionContext.scrollableElement = scrollableElement
+            CodeExecutionContext.scrollDurationSeconds = scrollDurationSeconds
+            CodeExecutionContext.scrollIntervalSeconds = scrollIntervalSeconds
+            CodeExecutionContext.scrollStartMarginRatio = scrollStartMarginRatio
+            CodeExecutionContext.scrollEndMarginRatio = scrollEndMarginRatio
+            CodeExecutionContext.scrollMaxCount = scrollMaxCount
+            CodeExecutionContext.scrollToEdgeBoost = scrollToEdgeBoost
 
             callerName = StackTraceUtility.getCallerName(
                 filterFileName = COMMAND_CONTEXT_FILE_NAME,
@@ -879,11 +894,16 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             func()
         } finally {
             try {
-                CodeExecutionContext.withScrollDirection = originalWithScrollDirection
-                testContext.swipeDurationSeconds = originalScrollDurationSeconds
-                testContext.scrollToEdgeBoost = originalScrollToEdgeBoost
-                testContext.scrollIntervalSeconds = originalScrollIntervalSeconds
-                testContext.scrollMaxCount = originalScrollMaxCount
+                CodeExecutionContext.withScroll = originalWithScroll
+                CodeExecutionContext.scrollDirection = originalScrollDirection
+                CodeExecutionContext.scrollFrame = originalScrollFrame
+                CodeExecutionContext.scrollableElement = originalScrollableElement
+                CodeExecutionContext.scrollDurationSeconds = originalScrollDurationSeconds
+                CodeExecutionContext.scrollIntervalSeconds = originalScrollIntervalSeconds
+                CodeExecutionContext.scrollStartMarginRatio = originalScrollStartMarginRatio
+                CodeExecutionContext.scrollEndMarginRatio = originalScrollEndMarginRatio
+                CodeExecutionContext.scrollMaxCount = originalScrollMaxCount
+                CodeExecutionContext.scrollToEdgeBoost = originalScrollToEdgeBoost
                 endExecWithScroll(command = command)
             } finally {
                 ms.end()

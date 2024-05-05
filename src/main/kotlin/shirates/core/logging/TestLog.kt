@@ -574,7 +574,7 @@ object TestLog {
         logLine.isInProcedureCommand = CodeExecutionContext.isInProcedureCommand
         logLine.isInOperationCommand = CodeExecutionContext.isInOperationCommand
         logLine.isScrolling = CodeExecutionContext.isScrolling
-        logLine.withScrollDirection = CodeExecutionContext.withScrollDirection
+        logLine.withScrollDirection = CodeExecutionContext.scrollDirection
         logLine.isNoLoadRun = TestMode.isNoLoadRun
         // CAE
         logLine.isInScenario = CodeExecutionContext.isInScenario

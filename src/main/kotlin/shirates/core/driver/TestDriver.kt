@@ -1091,12 +1091,7 @@ object TestDriver {
      */
     fun select(
         expression: String,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
-        scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
-        scrollMaxCount: Int = testContext.scrollMaxCount,
+        allowScroll: Boolean = true,
         swipeToCenter: Boolean = false,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
@@ -1113,12 +1108,7 @@ object TestDriver {
         context.execSelectCommand(selector = sel, subject = sel.nickname, log = log) {
             e = findImageOrSelectCore(
                 selector = sel,
-                scroll = scroll,
-                direction = direction,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
+                allowScroll = allowScroll,
                 swipeToCenter = swipeToCenter,
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
@@ -1132,14 +1122,7 @@ object TestDriver {
 
     internal fun findImageOrSelectCore(
         selector: Selector,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollFrame: String = "",
-        scrollableElement: TestElement? = null,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-        scrollMaxCount: Int = testContext.scrollMaxCount,
+        allowScroll: Boolean = true,
         swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
@@ -1149,16 +1132,8 @@ object TestDriver {
 
         fun executeSelect(): TestElement {
             if (selector.isImageSelector) {
-                val r = findImage(
+                val r = findImageCore(
                     selector = selector,
-                    scroll = scroll,
-                    scrollFrame = scrollFrame,
-                    scrollableElement = scrollableElement,
-                    direction = direction,
-                    scrollDurationSeconds = scrollDurationSeconds,
-                    scrollStartMarginRatio = scrollStartMarginRatio,
-                    scrollEndMarginRatio = scrollEndMarginRatio,
-                    scrollMaxCount = scrollMaxCount,
                     throwsException = throwsException,
                     useCache = useCache,
                 )
@@ -1167,15 +1142,8 @@ object TestDriver {
             }
             return selectCore(
                 selector = selector,
+                allowScroll = allowScroll,
                 useCache = useCache,
-                scroll = scroll,
-                direction = direction,
-                scrollFrame = scrollFrame,
-                scrollableElement = scrollableElement,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
                 swipeToCenter = swipeToCenter,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
@@ -1204,16 +1172,9 @@ object TestDriver {
 
     private fun selectCore(
         selector: Selector,
+        allowScroll: Boolean,
         frame: Bounds?,
         useCache: Boolean,
-        scroll: Boolean,
-        direction: ScrollDirection,
-        scrollFrame: String,
-        scrollableElement: TestElement?,
-        scrollDurationSeconds: Double,
-        scrollStartMarginRatio: Double,
-        scrollEndMarginRatio: Double,
-        scrollMaxCount: Int,
         swipeToCenter: Boolean,
         throwsException: Boolean,
         waitSeconds: Double
@@ -1265,17 +1226,10 @@ object TestDriver {
             }
 
             // Search in scroll
-            if (scroll) {
+            if (allowScroll && CodeExecutionContext.withScroll) {
                 return selectWithScroll(
                     selector = selector,
                     frame = frame,
-                    scrollFrame = scrollFrame,
-                    scrollableElement = scrollableElement,
-                    direction = direction,
-                    durationSeconds = scrollDurationSeconds,
-                    startMarginRatio = scrollStartMarginRatio,
-                    endMarginRatio = scrollEndMarginRatio,
-                    scrollMaxCount = scrollMaxCount,
                     swipeToCenter = swipeToCenter,
                     throwsException = throwsException,
                 )
@@ -1518,14 +1472,6 @@ object TestDriver {
      */
     fun findImage(
         expression: String,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollFrame: String = "",
-        scrollableElement: TestElement? = null,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-        scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
     ): ImageMatchResult {
@@ -1534,46 +1480,6 @@ object TestDriver {
 
         return findImageCore(
             selector = sel,
-            scroll = scroll,
-            direction = direction,
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
-            scrollDurationSeconds = scrollDurationSeconds,
-            scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollEndMarginRatio = scrollEndMarginRatio,
-            scrollMaxCount = scrollMaxCount,
-            throwsException = throwsException,
-            useCache = useCache
-        )
-    }
-
-    /**
-     * findImage
-     */
-    fun findImage(
-        selector: Selector,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollFrame: String = "",
-        scrollableElement: TestElement? = null,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-        scrollMaxCount: Int = testContext.scrollMaxCount,
-        throwsException: Boolean = true,
-        useCache: Boolean = testContext.useCache,
-    ): ImageMatchResult {
-
-        return findImageCore(
-            selector = selector,
-            scroll = scroll,
-            direction = direction,
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
-            scrollDurationSeconds = scrollDurationSeconds,
-            scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollEndMarginRatio = scrollEndMarginRatio,
-            scrollMaxCount = scrollMaxCount,
             throwsException = throwsException,
             useCache = useCache
         )
@@ -1582,14 +1488,14 @@ object TestDriver {
     internal fun findImageCore(
         selector: Selector,
         threshold: Double = PropertiesManager.imageMatchingThreshold,
-        scroll: Boolean,
-        direction: ScrollDirection,
-        scrollFrame: String = "",
-        scrollableElement: TestElement?,
-        scrollDurationSeconds: Double,
-        scrollStartMarginRatio: Double,
-        scrollEndMarginRatio: Double,
-        scrollMaxCount: Int,
+        scroll: Boolean = CodeExecutionContext.withScroll,
+        direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+        scrollFrame: String = CodeExecutionContext.scrollFrame,
+        scrollableElement: TestElement? = CodeExecutionContext.scrollableElement,
+        scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+        scrollStartMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
+        scrollEndMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
+        scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
         throwsException: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         useCache: Boolean
@@ -1697,11 +1603,11 @@ object TestDriver {
         frame: Bounds? = viewBounds,
         scrollFrame: String = "",
         scrollableElement: TestElement? = null,
-        direction: ScrollDirection = ScrollDirection.Down,
-        durationSeconds: Double = testContext.swipeDurationSeconds,
-        startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-        scrollMaxCount: Int = testContext.scrollMaxCount,
+        direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+        durationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+        startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
+        endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
+        scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
         swipeToCenter: Boolean,
         throwsException: Boolean = true
     ): TestElement {
@@ -1712,7 +1618,7 @@ object TestDriver {
 
             e = findImageOrSelectCore(
                 selector = selector,
-                scroll = false,
+                allowScroll = false,
                 swipeToCenter = false,
                 waitSeconds = 0.0,
                 throwsException = false,
@@ -1759,8 +1665,8 @@ object TestDriver {
         scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
+        startMarginRatio: Double = testContext.getScrollStartMarginRatio(direction),
+        endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         swipeToCenter: Boolean = false,
         throwsException: Boolean = true
@@ -2140,13 +2046,18 @@ object TestDriver {
             NicknameUtility.validateScreenName(screenName)
             val screenInfo = ScreenRepository.get(screenName)
 
-            var r = TestDriveObject.canSelectAll(selectors = screenInfo.identitySelectors, frame = null)
+            var r = TestDriveObject.canSelectAll(
+                selectors = screenInfo.identitySelectors,
+                allowScroll = false,
+                frame = null
+            )
             if (r && screenInfo.satelliteSelectors.any()) {
                 fun hasAnySatellite(): Boolean {
                     for (expression in screenInfo.satelliteExpressions) {
                         if (TestDriveObject.canSelect(
                                 expression = expression,
-                                screenName = screenName
+                                screenName = screenName,
+                                allowScroll = false
                             )
                         ) {
                             return true

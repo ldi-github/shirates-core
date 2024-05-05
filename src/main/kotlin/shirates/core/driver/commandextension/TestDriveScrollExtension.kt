@@ -34,11 +34,18 @@ internal fun TestDrive.getScrollableElement(
     scrollFrame: String = ""
 ): TestElement {
 
-    if (scrollFrame.isNotBlank()) {
-        val s = findElements(expression = scrollFrame).firstOrNull()
+    val frame =
+        if (scrollFrame.isNotBlank()) scrollFrame
+        else CodeExecutionContext.scrollFrame
+    if (frame.isNotBlank()) {
+        val s = findElements(expression = frame).firstOrNull()
         if (s != null) {
             return s
         }
+    }
+
+    if (CodeExecutionContext.withScroll && CodeExecutionContext.scrollableElement != null) {
+        return CodeExecutionContext.scrollableElement!!
     }
 
     val testElement = getThisOrIt()
@@ -75,12 +82,12 @@ internal fun TestDrive.getScrollableElement(
 }
 
 private fun TestDrive.scrollCommand(
-    scrollFrame: String,
-    scrollableElement: TestElement?,
     command: String,
-    direction: ScrollDirection,
-    startMarginRatio: Double,
-    endMarginRatio: Double,
+    scrollFrame: String = CodeExecutionContext.scrollFrame,
+    scrollableElement: TestElement? = CodeExecutionContext.scrollableElement,
+    direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+    startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
+    endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
     swipeAction: (ScrollingInfo) -> Unit
 ) {
     val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
@@ -95,7 +102,7 @@ private fun TestDrive.scrollCommand(
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio
         )
-        TestLog.info("scrollableElement: $scrollableElement")
+        TestLog.info("scrollableElement: $sc")
         swipeAction(r)
         TestDriver.autoScreenshot()
     }
@@ -108,10 +115,10 @@ fun TestDrive.scrollDown(
     scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.swipeDurationSeconds,
+    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = 1,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS
 ): TestElement {
 
     scrollCommand(
@@ -147,10 +154,10 @@ fun TestDrive.scrollUp(
     scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     durationSeconds: Double = testContext.swipeDurationSeconds,
+    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = 1,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS
 ): TestElement {
 
     scrollCommand(
@@ -170,8 +177,8 @@ fun TestDrive.scrollUp(
                 endX = s.endX,
                 endY = s.endY,
                 durationSeconds = durationSeconds,
+                intervalSeconds = intervalSeconds,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
             )
         )
     }
@@ -209,8 +216,8 @@ fun TestDrive.scrollRight(
                 endX = s.endX,
                 endY = s.endY,
                 durationSeconds = durationSeconds,
+                intervalSeconds = intervalSeconds,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
             )
         )
     }
@@ -248,8 +255,8 @@ fun TestDrive.scrollLeft(
                 endX = s.endX,
                 endY = s.endY,
                 durationSeconds = durationSeconds,
+                intervalSeconds = intervalSeconds,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
             )
         )
     }
@@ -264,10 +271,10 @@ private fun TestDrive.scrollToEdgeCommand(
     maxLoopCount: Int,
     direction: ScrollDirection,
     flick: Boolean,
-    startMarginRatio: Double,
-    endMarginRatio: Double,
+    startMarginRatio: Double = testContext.getScrollStartMarginRatio(direction = direction),
+    endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction = direction),
     repeat: Int,
-    intervalSeconds: Double,
+    intervalSeconds: Double = testContext.getIntervalSeconds(flick = flick),
     edgeSelector: String?,
 ) {
     val message = message(id = command)
@@ -279,7 +286,6 @@ private fun TestDrive.scrollToEdgeCommand(
             scrollableElement = scrollableElement,
             maxLoopCount = maxLoopCount,
             direction = direction,
-            flick = flick,
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio,
             repeat = repeat,
@@ -427,55 +433,13 @@ fun TestDrive.scrollToLeftEdge(
  * doUntilScrollStop
  */
 fun TestDrive.doUntilScrollStop(
-    scrollFrame: String = "",
-    scrollableElement: TestElement? = null,
-    maxLoopCount: Int = testContext.scrollMaxCount,
-    direction: ScrollDirection,
-    flick: Boolean = false,
-    durationSeconds: Double =
-        if (flick) testContext.flickDurationSeconds
-        else testContext.swipeDurationSeconds,
-    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-    repeat: Int = 1,
-    intervalSeconds: Double = testContext.scrollIntervalSeconds,
-    edgeSelector: String? = null,
-    imageCompare: Boolean = false,
-    scrollFunc: (() -> Unit)? = null,
-    actionFunc: (() -> Boolean)? = null
-): TestElement {
-
-    return doUntilScrollStop(
-        scrollFrame = scrollFrame,
-        scrollableElement = scrollableElement,
-        maxLoopCount = maxLoopCount,
-        direction = direction,
-        flick = flick,
-        durationSeconds = durationSeconds,
-        startMarginRatio = startMarginRatio,
-        endMarginRatio = endMarginRatio,
-        repeat = repeat,
-        intervalSeconds = intervalSeconds,
-        edgeSelector = edgeSelector,
-        scrollFunc = scrollFunc,
-        actionFunc = actionFunc
-    )
-}
-
-/**
- * doUntilScrollStop
- */
-fun TestDrive.doUntilScrollStop(
-    scrollFrame: String = "",
-    scrollableElement: TestElement? = null,
-    maxLoopCount: Int = testContext.scrollMaxCount,
-    direction: ScrollDirection,
-    flick: Boolean = false,
-    durationSeconds: Double =
-        if (flick) testContext.flickDurationSeconds
-        else testContext.swipeDurationSeconds,
-    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
+    scrollFrame: String = CodeExecutionContext.scrollFrame,
+    scrollableElement: TestElement? = CodeExecutionContext.scrollableElement,
+    maxLoopCount: Int = CodeExecutionContext.scrollMaxCount,
+    direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+    durationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+    startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
+    endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
     repeat: Int = 1,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
     edgeSelector: String? = null,
@@ -485,14 +449,14 @@ fun TestDrive.doUntilScrollStop(
 
     val ms = Measure()
 
-    val original = CodeExecutionContext.isScrolling
+    val originalIsScrolling = CodeExecutionContext.isScrolling
     try {
         CodeExecutionContext.isScrolling = true
         return doUntilScrollStopCore(
-            scrollFrame = scrollFrame,
-            scrollableElement = scrollableElement,
             scrollFunc = scrollFunc,
             direction = direction,
+            scrollFrame = scrollFrame,
+            scrollableElement = scrollableElement,
             durationSeconds = durationSeconds,
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio,
@@ -503,7 +467,7 @@ fun TestDrive.doUntilScrollStop(
             intervalSeconds = intervalSeconds
         )
     } finally {
-        CodeExecutionContext.isScrolling = original
+        CodeExecutionContext.isScrolling = originalIsScrolling
         ms.end()
     }
 }
@@ -514,12 +478,12 @@ internal fun TestDrive.doUntilScrollStopCore(
     scrollFrame: String,
     scrollableElement: TestElement?,
     durationSeconds: Double,
+    intervalSeconds: Double,
     startMarginRatio: Double,
     endMarginRatio: Double,
-    edgeSelector: String?,
     maxLoopCount: Int,
+    edgeSelector: String?,
     repeat: Int,
-    intervalSeconds: Double,
     actionFunc: (() -> Boolean)?
 ): TestElement {
     val scroll = scrollFunc ?: {
@@ -530,6 +494,7 @@ internal fun TestDrive.doUntilScrollStopCore(
                     scrollFrame = scrollFrame,
                     scrollableElement = scrollableElement,
                     durationSeconds = durationSeconds,
+                    intervalSeconds = intervalSeconds,
                     startMarginRatio = startMarginRatio,
                     endMarginRatio = endMarginRatio,
                     repeat = repeat
@@ -539,6 +504,7 @@ internal fun TestDrive.doUntilScrollStopCore(
                     scrollFrame = scrollFrame,
                     scrollableElement = scrollableElement,
                     durationSeconds = durationSeconds,
+                    intervalSeconds = intervalSeconds,
                     startMarginRatio = startMarginRatio,
                     endMarginRatio = endMarginRatio,
                     repeat = repeat
@@ -548,6 +514,7 @@ internal fun TestDrive.doUntilScrollStopCore(
                     scrollFrame = scrollFrame,
                     scrollableElement = scrollableElement,
                     durationSeconds = durationSeconds,
+                    intervalSeconds = intervalSeconds,
                     startMarginRatio = startMarginRatio,
                     endMarginRatio = endMarginRatio,
                     repeat = repeat
@@ -557,6 +524,7 @@ internal fun TestDrive.doUntilScrollStopCore(
                     scrollFrame = scrollFrame,
                     scrollableElement = scrollableElement,
                     durationSeconds = durationSeconds,
+                    intervalSeconds = intervalSeconds,
                     startMarginRatio = startMarginRatio,
                     endMarginRatio = endMarginRatio,
                     repeat = repeat
@@ -643,7 +611,8 @@ internal fun TestDrive.doUntilScrollStopCore(
 internal fun TestDrive.edgeElementFound(expressions: List<String>): Boolean {
 
     for (expression in expressions) {
-        val e = TestDriver.select(expression = expression, throwsException = false, waitSeconds = 0.0)
+        val e =
+            TestDriver.select(expression = expression, allowScroll = false, throwsException = false, waitSeconds = 0.0)
         if (e.isFound && e.isVisibleCalculated) {
             TestLog.info("edge element found. ($expression)")
             return true
@@ -664,10 +633,18 @@ private fun List<TestElement>.serialize(): String {
  * withScrollDown
  */
 fun TestDrive.withScrollDown(
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
     proc: () -> Unit
 ): TestElement {
+
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "withScrollDown"
     val message = message(id = command)
@@ -675,8 +652,13 @@ fun TestDrive.withScrollDown(
     context.execWithScroll(
         command = command,
         scrollDirection = ScrollDirection.Down,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
+        scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
+        scrollToEdgeBoost = scrollToEdgeBoost,
         message = message
     ) {
         proc()
@@ -689,10 +671,18 @@ fun TestDrive.withScrollDown(
  * withScrollUp
  */
 fun TestDrive.withScrollUp(
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
     proc: () -> Unit
 ): TestElement {
+
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "withScrollUp"
     val message = message(id = command)
@@ -700,8 +690,13 @@ fun TestDrive.withScrollUp(
     context.execWithScroll(
         command = command,
         scrollDirection = ScrollDirection.Up,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
+        scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
+        scrollToEdgeBoost = scrollToEdgeBoost,
         message = message
     ) {
         proc()
@@ -714,10 +709,18 @@ fun TestDrive.withScrollUp(
  * withScrollRight
  */
 fun TestDrive.withScrollRight(
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
     proc: () -> Unit
 ): TestElement {
+
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "withScrollRight"
     val message = message(id = command)
@@ -725,8 +728,13 @@ fun TestDrive.withScrollRight(
     context.execWithScroll(
         command = command,
         scrollDirection = ScrollDirection.Right,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
+        scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
+        scrollToEdgeBoost = scrollToEdgeBoost,
         message = message
     ) {
         proc()
@@ -739,10 +747,18 @@ fun TestDrive.withScrollRight(
  * withScrollLeft
  */
 fun TestDrive.withScrollLeft(
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
     proc: () -> Unit
 ): TestElement {
+
+    val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "withScrollLeft"
     val message = message(id = command)
@@ -750,8 +766,13 @@ fun TestDrive.withScrollLeft(
     context.execWithScroll(
         command = command,
         scrollDirection = ScrollDirection.Left,
+        scrollableElement = sc,
         scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
+        scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
+        scrollToEdgeBoost = scrollToEdgeBoost,
         message = message
     ) {
         proc()
@@ -772,6 +793,7 @@ fun TestDrive.withoutScroll(
     val context = TestDriverCommandContext(lastElement)
     context.execWithScroll(
         command = command,
+        withScroll = false,
         scrollDirection = null,
         message = message
     ) {
@@ -788,8 +810,8 @@ fun TestDrive.scanElements(
     scrollFrame: String = "",
     scrollableElement: TestElement? = null,
     direction: ScrollDirection = ScrollDirection.Down,
-    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
+    startMarginRatio: Double = testContext.getScrollStartMarginRatio(direction),
+    endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction),
     maxScrollTimes: Int = testContext.scrollMaxCount,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     endSelector: String? = null,
@@ -850,8 +872,8 @@ fun TestDrive.scanElements(
 internal fun TestDrive.getScrollingInfo(
     scrollableElement: TestElement,
     direction: ScrollDirection = ScrollDirection.None,
-    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
+    startMarginRatio: Double = testContext.getScrollStartMarginRatio(direction),
+    endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction),
 ): ScrollingInfo {
 
     val s = TestDriver.screenInfo.scrollInfo
