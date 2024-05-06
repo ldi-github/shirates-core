@@ -21,7 +21,7 @@ val TestDrive.isKeyboardShown: Boolean
         if (isAndroid) {
             return TestDriver.androidDriver.isKeyboardShown
         } else {
-            if (canSelect(".XCUIElementTypeKeyboard")) {
+            if (canSelectWithoutScroll(".XCUIElementTypeKeyboard")) {
                 return true
             }
             return TestDriver.iosDriver.isKeyboardShown

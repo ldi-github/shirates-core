@@ -357,6 +357,7 @@ internal fun TestDrive.screenIsOfCore(
 internal fun TestDrive.existCore(
     assertMessage: String,
     selector: Selector,
+    allowScroll: Boolean = true,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
@@ -367,6 +368,7 @@ internal fun TestDrive.existCore(
     if (selector.isImageSelector) {
         val e = existImageCore(
             sel = selector,
+            allowScroll = allowScroll,
             assertMessage = assertMessage,
             throwsException = false,
             waitSeconds = waitSeconds,
@@ -384,6 +386,7 @@ internal fun TestDrive.existCore(
     ) {
         TestDriver.findImageOrSelectCore(
             selector = selector,
+            allowScroll = allowScroll,
             swipeToCenter = false,
             throwsException = false,
             waitSeconds = waitSeconds,
@@ -445,6 +448,7 @@ private fun TestDrive.actionWithOnExistErrorHandler(
  */
 fun TestDrive.exist(
     expression: String,
+    allowScroll: Boolean = true,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
@@ -471,6 +475,7 @@ fun TestDrive.exist(
         e = existCore(
             assertMessage = assertMessage,
             selector = sel,
+            allowScroll = allowScroll,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
             useCache = useCache,
@@ -483,6 +488,26 @@ fun TestDrive.exist(
     }
 
     return e
+}
+
+/**
+ * existWithoutScroll
+ */
+fun TestDrive.existWithoutScroll(
+    expression: String,
+    throwsException: Boolean = true,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    useCache: Boolean = testContext.useCache,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+    return exist(
+        expression = expression,
+        allowScroll = false,
+        throwsException = throwsException,
+        waitSeconds = waitSeconds,
+        useCache = useCache,
+        func = func
+    )
 }
 
 /**
@@ -635,6 +660,7 @@ fun TestDrive.dontExistImage(
 
 private fun TestDrive.existImageCore(
     sel: Selector,
+    allowScroll: Boolean = true,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     assertMessage: String,
     throwsException: Boolean,
@@ -659,6 +685,7 @@ private fun TestDrive.existImageCore(
         ) {
             findImageAsElement(
                 sel = sel,
+                allowScroll = allowScroll,
                 threshold = threshold,
                 waitSeconds = waitSeconds,
                 useCache = useCache,
@@ -671,6 +698,7 @@ private fun TestDrive.existImageCore(
         ) {
             selectElementAndCompareImage(
                 sel = sel,
+                allowScroll = allowScroll,
                 threshold = threshold,
                 waitSeconds = waitSeconds,
                 swipeToCenter = swipeToCenter,
@@ -717,6 +745,7 @@ private fun TestDrive.getSelectorForExistImage(expression: String): Selector {
 
 private fun findImageAsElement(
     sel: Selector,
+    allowScroll: Boolean = true,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
     useCache: Boolean,
@@ -724,6 +753,7 @@ private fun findImageAsElement(
 
     val r = TestDriver.findImageCore(
         selector = sel,
+        allowScroll = allowScroll,
         threshold = threshold,
         throwsException = false,
         waitSeconds = waitSeconds,
@@ -745,6 +775,7 @@ private fun findImageAsElement(
 
 private fun selectElementAndCompareImage(
     sel: Selector,
+    allowScroll: Boolean = true,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
     swipeToCenter: Boolean,
@@ -754,6 +785,7 @@ private fun selectElementAndCompareImage(
     // Select the element
     val e = TestDriver.findImageOrSelectCore(
         selector = sel,
+        allowScroll = allowScroll,
         throwsException = false,
         waitSeconds = waitSeconds,
         swipeToCenter = swipeToCenter,

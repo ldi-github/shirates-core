@@ -12,6 +12,7 @@ import shirates.core.logging.Message.message
  */
 fun TestDrive.select(
     expression: String,
+    allowScroll: Boolean = true,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -39,6 +40,7 @@ fun TestDrive.select(
 
         e = TestDriver.findImageOrSelectCore(
             selector = sel,
+            allowScroll = allowScroll,
             swipeToCenter = swipeToCenter,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
@@ -57,6 +59,35 @@ fun TestDrive.select(
         lastElement = e
     }
     return e
+}
+
+/**
+ * selectWithoutScroll
+ */
+fun TestDrive.selectWithoutScroll(
+    expression: String,
+    swipeToCenter: Boolean = false,
+    throwsException: Boolean = true,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    frame: Bounds? = viewBounds,
+    useCache: Boolean = testContext.useCache,
+    updateLastElement: Boolean = true,
+    log: Boolean = false,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    return select(
+        expression = expression,
+        allowScroll = false,
+        swipeToCenter = swipeToCenter,
+        throwsException = throwsException,
+        waitSeconds = waitSeconds,
+        frame = frame,
+        useCache = useCache,
+        updateLastElement = updateLastElement,
+        log = log,
+        func = func
+    )
 }
 
 /**
@@ -379,6 +410,25 @@ fun TestDrive.canSelect(
     }
     return found
 }
+
+/**
+ * canSelectWithoutScroll
+ */
+fun TestDrive.canSelectWithoutScroll(
+    expression: String,
+    screenName: String = TestDriver.currentScreen,
+    waitSeconds: Double = 0.0,
+    log: Boolean = false
+): Boolean {
+    return canSelect(
+        expression = expression,
+        screenName = screenName,
+        allowScroll = false,
+        waitSeconds = waitSeconds,
+        log = log
+    )
+}
+
 
 /**
  * canSelectWithScrollDown

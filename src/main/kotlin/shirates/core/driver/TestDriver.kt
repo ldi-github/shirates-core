@@ -362,7 +362,8 @@ object TestDriver {
                     TestLog.ok(message = assertMessage)
                 }
             }
-        } else {
+        }
+        if (e.lastResult.isOKType.not()) {
             e.lastResult = LogType.NG
             val selectorString = "${e.selector} ($currentScreen})"
             e.lastError = TestNGException(message = assertMessage, cause = TestDriverException(selectorString))
@@ -1488,7 +1489,7 @@ object TestDriver {
     internal fun findImageCore(
         selector: Selector,
         threshold: Double = PropertiesManager.imageMatchingThreshold,
-        scroll: Boolean = CodeExecutionContext.withScroll,
+        allowScroll: Boolean = true,
         direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
         scrollFrame: String = CodeExecutionContext.scrollFrame,
         scrollableElement: TestElement? = CodeExecutionContext.scrollableElement,
@@ -1527,6 +1528,7 @@ object TestDriver {
         if (r.result) {
             return r
         }
+        val scroll = allowScroll && CodeExecutionContext.withScroll
         if (scroll.not() && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
             // Handle irregular
             testDrive.suppressHandler {
@@ -2054,12 +2056,7 @@ object TestDriver {
             if (r && screenInfo.satelliteSelectors.any()) {
                 fun hasAnySatellite(): Boolean {
                     for (expression in screenInfo.satelliteExpressions) {
-                        if (TestDriveObject.canSelect(
-                                expression = expression,
-                                screenName = screenName,
-                                allowScroll = false
-                            )
-                        ) {
+                        if (TestDriveObject.canSelectWithoutScroll(expression = expression, screenName = screenName)) {
                             return true
                         }
                     }

@@ -48,17 +48,20 @@ internal fun TestDrive.getScrollableElement(
         return CodeExecutionContext.scrollableElement!!
     }
 
-    val testElement = getThisOrIt()
-    if (testElement.isScrollableElement) {
-        return testElement
-    }
-
     val sf = TestDriver.screenInfo.scrollInfo.scrollFrame
     if (sf.isNotBlank()) {
         val s = findElements(expression = sf).firstOrNull()
         if (s != null) {
             return s
         }
+    }
+
+    val testElement = getThisOrIt()
+    if (testElement.isScrollableElement) {
+        return testElement
+    }
+    if (testElement.isEmpty || testElement == rootElement || testElement == view) {
+        return view
     }
 
     val ancestors = testElement.getScrollableElementsInAncestorsAndSelf()

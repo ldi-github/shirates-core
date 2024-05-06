@@ -3,7 +3,6 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
@@ -279,6 +278,7 @@ internal fun imageAssertionCoreCore(
 
         var matchResult = action()
         var r = matchResult.result
+        testElement.imageMatchResult = matchResult
 
         if (r.not() && CodeExecutionContext.withScroll) {
             testDrive.doUntilScrollStop(
@@ -292,20 +292,22 @@ internal fun imageAssertionCoreCore(
                 r
             }
         }
-        if (r) {
-            TestLog.ok(
-                message = assertMessage,
-                arg1 = expectedSelector.toString()
-            )
-        } else {
+        if (r.not()) {
             val croppedImageFileName = "${TestLog.lines.count()}_cropped_image"
             testElement.lastCropInfo?.croppedImage?.saveImage("${TestLog.directoryForLog.resolve(croppedImageFileName)}")
 
             val templateImageFileName = "${TestLog.lines.count()}_template_image"
             expectedSelector.templateImage?.saveImage("${TestLog.directoryForLog.resolve(templateImageFileName)}")
+        }
 
-            TestDriver.lastElement.lastError = TestNGException("$assertMessage ($matchResult)")
-            throw TestDriver.lastElement.lastError!!
+        TestDriver.postProcessForImageAssertion(
+            e = testElement,
+            assertMessage = assertMessage,
+            dontExist = negation
+        )
+
+        if (testElement.hasError) {
+            throw testElement.lastError!!
         }
     }
 }
