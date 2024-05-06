@@ -1,6 +1,5 @@
 package shirates.core.uitest.ios.driver.commandextension
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -71,26 +70,29 @@ class TestDriveScrollExtensionTest1 : UITest() {
 
     @Test
     @Order(20)
-    fun getScrollableTarget() {
+    fun getScrollableElement() {
 
-        // Arrange
-        it.macro("[Apple Maps Top Screen]")
-            .screenIs("[Apple Maps Top Screen]")
-        val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
-        val largestScrollableElement = scrollableElements.filter { it.isVisible }.maxByOrNull { it.bounds.area }!!
-        // Act
-        val target1 = largestScrollableElement.getScrollableElement()
-        // Assert
-        assertThat(target1.toString()).isEqualTo(largestScrollableElement.toString())
-
-
-        // Arrange
-        val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
-        val nonScrollableElement = rootElement
-        val target2 = nonScrollableElement.getScrollableElement()
-        // Act, Assert
-        assertThat(target2.toString()).isNotEqualTo(nonScrollableElement.toString())
-        assertThat(target2.toString()).isEqualTo(largestScrollableTarget.toString())
+        scenario {
+            case(1) {
+                condition {
+                    // Arrange
+                    it.macro("[Apple Maps Top Screen]")
+                }.expectation {
+                    val scrollableElement = select(".scrollable")
+                    val target1 = scrollableElement.getScrollableElement()
+                    (target1 == scrollableElement).thisIsTrue()
+                }
+            }
+            case(2) {
+                expectation {
+                    val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
+                    val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
+                    val nonScrollableElement = select("My Location")
+                    val target2 = nonScrollableElement.getScrollableElement()
+                    (target2 == largestScrollableTarget).thisIsTrue()
+                }
+            }
+        }
     }
 
 }

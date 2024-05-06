@@ -5,8 +5,11 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.WebElement
 import shirates.core.configuration.Testrun
+import shirates.core.driver.TestElement
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.rootElement
 import shirates.core.driver.scrollFrame
+import shirates.core.driver.view
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
@@ -74,28 +77,56 @@ class TestElementExtensionTest : UITest() {
 
     @Test
     @Order(30)
-    fun scrollFrame() {
+    fun scrollableFrame() {
 
         scenario {
             case(1) {
                 condition {
-                    it.macro("[iOS Settings Top Screen]")
-                }.action {
-                    e1 = it.scrollFrame
+                    it.macro("[Apple Maps Top Screen]")
                 }.expectation {
-                    e1.classOrType.thisIs("XCUIElementTypeTable")
-                    e1.isScrollableElement.thisIsTrue()
+                    withScrollDown(scrollFrame = "Search Maps") {
+                        scrollFrame.textIs("Search Maps")
+                    }
                 }
             }
             case(2) {
-                condition {
-                    it.select("General")
-                }.expectation {
-                    it.isScrollableElement.thisIsFalse()
+                expectation {
+                    view.scrollFrame.thisIs(view)
+                }
+            }
+            case(3) {
+                expectation {
+                    val s = select(".scrollable")
+                    s.scrollFrame.thisIs(s)
+                }
+            }
+            case(4) {
+                expectation {
+                    TestElement.emptyElement.scrollFrame.thisIs(view)
+                    rootElement.scrollFrame.thisIs(view)
+                    view.scrollFrame.thisIs(view)
+                }
+            }
+            case(5) {
+                expectation {
+                    val c = select("<.scrollable>:child(1)")
+                    c.scrollFrame.thisIs(c.parentElement)   // ancestors
+                }
+            }
+            case(6) {
+                expectation {
+                    val sc = select(".scrollable")
+                    val p = sc.parentElement
+                    p.scrollFrame.thisIs(sc)   // descendants
+                }
+            }
+            case(7) {
+                expectation {
+                    val sc = select(".scrollable")
+                    select("#Card grabber").scrollFrame.thisIs(sc)   // rootDescendants
                 }
             }
         }
-
 
     }
 
