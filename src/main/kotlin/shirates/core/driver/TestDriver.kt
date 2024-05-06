@@ -494,7 +494,9 @@ object TestDriver {
 
             val originalLastElement = lastElement
             try {
-                testContext.irregularHandler?.invoke()
+                testDrive.withoutScroll {
+                    testContext.irregularHandler?.invoke()
+                }
             } catch (t: Throwable) {
                 TestLog.error(t)
                 throw t
