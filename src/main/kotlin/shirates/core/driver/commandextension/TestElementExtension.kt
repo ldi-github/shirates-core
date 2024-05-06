@@ -71,6 +71,7 @@ fun TestElement.refreshThisElement(): TestElement {
     val e = try {
         TestDriver.findImageOrSelectCore(
             selector = sel,
+            allowScroll = false,
             swipeToCenter = false,
             waitSeconds = 0.0,
             throwsException = false

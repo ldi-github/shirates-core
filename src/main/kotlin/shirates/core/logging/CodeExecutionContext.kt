@@ -132,31 +132,37 @@ object CodeExecutionContext {
      * scrollDurationSeconds
      */
     var scrollDurationSeconds: Double = Const.SWIPE_DURATION_SECONDS
+        internal set
 
     /**
      * scrollIntervalSeconds
      */
     var scrollIntervalSeconds: Double = Const.SCROLL_INTERVAL_SECONDS
+        internal set
 
     /**
      * scrollStartMarginRatio
      */
     var scrollStartMarginRatio: Double = Const.SCROLL_VERTICAL_START_MARGIN_RATIO
+        internal set
 
     /**
      * scrollEndMarginRatio
      */
     var scrollEndMarginRatio: Double = Const.SCROLL_VERTICAL_END_MARGIN_RATIO
+        internal set
 
     /**
      * scrollMaxCount
      */
     var scrollMaxCount: Int = Const.SCROLL_MAX_COUNT
+        internal set
 
     /**
      * scrollToEdgeBoost
      */
     var scrollToEdgeBoost: Int = Const.SCROLL_TO_EDGE_BOOST
+        internal set
 
 
     // CAE Pattern --------------------------------------------------
