@@ -451,6 +451,9 @@ fun TestElement.isSafe(
                 if (cover == this) {
                     return true
                 }
+                if (cover.descendants.any() { it == this } && this.isInView) {
+                    return true
+                }
                 if (cover.isFound && this.bounds.isOverlapping(cover.bounds)) {
                     info("isSafe property returns false. overlay is overlapping. (this=$this, overlay=$cover)")
                     return false
@@ -461,3 +464,4 @@ fun TestElement.isSafe(
 
     return true
 }
+

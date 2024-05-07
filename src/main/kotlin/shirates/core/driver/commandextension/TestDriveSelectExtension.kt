@@ -19,7 +19,7 @@ fun TestDrive.select(
     frame: Bounds? = viewBounds,
     useCache: Boolean = testContext.useCache,
     updateLastElement: Boolean = true,
-    safeElementOnly: Boolean = false,
+    safeElementOnly: Boolean = CodeExecutionContext.isScrolling,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
