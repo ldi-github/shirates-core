@@ -79,6 +79,7 @@
 - Swipe/Scroll screen
     - [swipe, flick](basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](basic/function_property/swipe_screen/scroll.md)
+    - [Determining scrollable area (NEW v7.0.0)](basic/function_property/swipe_screen/determining_scrollable_area.md)
 - Asserting attribute
     - [text assertion](basic/function_property/asserting_attribute/text_assertion.md)
     - [id assertion](basic/function_property/asserting_attribute/id_assertion.md)

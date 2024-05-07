@@ -294,6 +294,22 @@ shirates-core は現在の画面名(currentScreen)を自動で決定します。
   "weight": "100"
 ```
 
+### scroll-frame
+
+_(from v7.0.0)_
+
+スクロールが発生する場合、shirates-coreは自動的にスクロール可能な領域を検出しますが、
+**scroll-frame** を使用することでスクロール可能領域を明示的に指定することもできます。
+
+```
+  "selectors": {
+    "[Scroll Area]": "@a<#recycler>,@i<.XCUIElementTypeTable>"
+  },
+  "scroll": {
+    "scroll-frame": "[Scroll Area]"
+  }
+```
+
 ### header-elements, footer-elements
 
 スクロールダウン/スクロールアップ時に、shirates-coreが自動的にスクロール可能な領域を検出します。

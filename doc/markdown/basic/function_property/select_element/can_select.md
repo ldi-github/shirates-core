@@ -4,17 +4,18 @@ You can know whether you can select the element or not using these functions tha
 
 ## Functions
 
-| function                   | description                                                                                    |
-|:---------------------------|:-----------------------------------------------------------------------------------------------|
-| canSelect                  | Finds the first element that matches the selector in current screen and returns true/false.    |
-| canSelectWithScrollDown    | Finds the first element that matches the selector with scrolling down and returns true/false.  |
-| canSelectWithScrollUp      | Finds the first element that matches the selector with scrolling up and returns true/false.    |
-| canSelectWithScrollRight   | Finds the first element that matches the selector with scrolling right and returns true/false. |
-| canSelectWithScrollLeft    | Finds the first element that matches the selector with scrolling left and returns true/false.  |
-| canSelectAllWithScrollDown | Finds all elements that matches the selectors with scrolling down and returns true/false.      |
-| canSelectAllWithScrollUp   | Finds all elements that matches the selectors with scrolling up and returns true/false.        |
-| canSelectInScanResults     | Finds the first element that matches the selector in scan results and returns true/false.      |
-| canSelectAllInScanResults  | Finds all elements that matches the selectors in scan results and returns true/false.          |
+| function                   | description                                                                                                                                |
+|:---------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
+| canSelect                  | Finds the first element that matches the selector in current screen and returns true/false. Scrolling occurs within `withScroll` function. |
+| canSelectWithoutScroll     | Finds the first element that matches the selector **without** scrolling and returns true/false.                                            |
+| canSelectWithScrollDown    | Finds the first element that matches the selector with scrolling down and returns true/false.                                              |
+| canSelectWithScrollUp      | Finds the first element that matches the selector with scrolling up and returns true/false.                                                |
+| canSelectWithScrollRight   | Finds the first element that matches the selector with scrolling right and returns true/false.                                             |
+| canSelectWithScrollLeft    | Finds the first element that matches the selector with scrolling left and returns true/false.                                              |
+| canSelectAllWithScrollDown | Finds all elements that matches the selectors with scrolling down and returns true/false.                                                  |
+| canSelectAllWithScrollUp   | Finds all elements that matches the selectors with scrolling up and returns true/false.                                                    |
+| canSelectInScanResults     | Finds the first element that matches the selector in scan results and returns true/false.                                                  |
+| canSelectAllInScanResults  | Finds all elements that matches the selectors in scan results and returns true/false.                                                      |
 
 ## Example 1: canSelect
 
