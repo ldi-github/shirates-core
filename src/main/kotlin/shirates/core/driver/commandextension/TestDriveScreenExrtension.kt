@@ -119,7 +119,9 @@ internal fun TestDrive.waitScreenOfCore(
         }
 
         refreshCache()
-        irregularHandler?.invoke()
+        testDrive.withoutScroll {
+            irregularHandler?.invoke()
+        }
 
         currentScreenName = ofScreen()
 

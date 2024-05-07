@@ -39,13 +39,17 @@ internal fun TestDriveObjectIos.launchIosApp(
                 IosDeviceUtility.terminateSpringBoardByUdid(udid = udid, log = log)
                 TestLog.info("Retrying launchApp.")
                 launchIosAppCore(udid = udid, bundleId = bundleId, log = log)
-                onLaunchHandler?.invoke()
+                testDrive.withoutScroll {
+                    onLaunchHandler?.invoke()
+                }
                 false
             } else if (isApp) {
                 TestLog.info("App launched. ($bundleId)")
                 true
             } else {
-                onLaunchHandler?.invoke()
+                testDrive.withoutScroll {
+                    onLaunchHandler?.invoke()
+                }
                 false
             }
         }

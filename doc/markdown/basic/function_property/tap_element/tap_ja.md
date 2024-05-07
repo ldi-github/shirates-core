@@ -8,6 +8,7 @@
 |:-------------------|:---------------------------------------|
 | tap(expression)    | selectorにマッチする最初の要素をタップします（現在の画面）      |
 | tap(x, y)          | (x, y)座標をタップします                        |
+| tapWithoutScroll   | selectorにマッチする最初の要素をタップします（スクロールなし）    |
 | tapWithScrollDown  | selectorにマッチする最初の要素をタップします（下方向スクロールあり） |
 | tapWithScrollUp    | selectorにマッチする最初の要素をタップします（上方向スクロールあり） |
 | tapWithScrollRight | selectorにマッチする最初の要素をタップします（右方向スクロールあり） |

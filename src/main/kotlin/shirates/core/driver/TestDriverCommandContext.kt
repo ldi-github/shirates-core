@@ -841,28 +841,44 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
      */
     fun execWithScroll(
         command: String,
+        withScroll: Boolean = true,
         scrollDirection: ScrollDirection?,
+        scrollFrame: String = "",
+        scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
         scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
+        scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+        scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
+        scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
         message: String = "",
+        log: Boolean = false,
         func: () -> Unit
     ): LogLine? {
 
-        val originalWithScrollDirection = CodeExecutionContext.withScrollDirection
-        val originalScrollDurationSeconds = testContext.swipeDurationSeconds
-        val originalScrollIntervalSeconds = testContext.scrollIntervalSeconds
-        val originalScrollToEdgeBoost = testContext.scrollToEdgeBoost
-        val originalScrollMaxCount = testContext.scrollMaxCount
+        val originalWithScroll = CodeExecutionContext.withScroll
+        val originalScrollDirection = CodeExecutionContext.scrollDirection
+        val originalScrollFrame = CodeExecutionContext.scrollFrame
+        val originalScrollableElement = CodeExecutionContext.scrollableElement
+        val originalScrollDurationSeconds = CodeExecutionContext.scrollDurationSeconds
+        val originalScrollIntervalSeconds = CodeExecutionContext.scrollIntervalSeconds
+        val originalScrollStartMarginRatio = CodeExecutionContext.scrollStartMarginRatio
+        val originalScrollEndMarginRatio = CodeExecutionContext.scrollEndMarginRatio
+        val originalScrollMaxCount = CodeExecutionContext.scrollMaxCount
+        val originalScrollToEdgeBoost = CodeExecutionContext.scrollToEdgeBoost
 
         val ms = Measure()
         try {
-            CodeExecutionContext.withScrollDirection = scrollDirection
-            testContext.swipeDurationSeconds = scrollDurationSeconds
-            testContext.scrollToEdgeBoost = scrollToEdgeBoost
-            testContext.scrollIntervalSeconds = scrollIntervalSeconds
-            testContext.scrollMaxCount = scrollMaxCount
+            CodeExecutionContext.withScroll = withScroll
+            CodeExecutionContext.scrollDirection = scrollDirection
+            CodeExecutionContext.scrollFrame = scrollFrame
+            CodeExecutionContext.scrollableElement = scrollableElement
+            CodeExecutionContext.scrollDurationSeconds = scrollDurationSeconds
+            CodeExecutionContext.scrollIntervalSeconds = scrollIntervalSeconds
+            CodeExecutionContext.scrollStartMarginRatio = scrollStartMarginRatio
+            CodeExecutionContext.scrollEndMarginRatio = scrollEndMarginRatio
+            CodeExecutionContext.scrollMaxCount = scrollMaxCount
+            CodeExecutionContext.scrollToEdgeBoost = scrollToEdgeBoost
 
             callerName = StackTraceUtility.getCallerName(
                 filterFileName = COMMAND_CONTEXT_FILE_NAME,
@@ -871,20 +887,27 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
             TestLog.withScrollStack.push(callerName)
 
-            beginLogLine = TestLog.withScroll(
-                message = "$message {",
-                scriptCommand = command
-            )
+            if (log) {
+                beginLogLine = TestLog.withScroll(
+                    message = "$message {",
+                    scriptCommand = command
+                )
+            }
 
             func()
         } finally {
             try {
-                CodeExecutionContext.withScrollDirection = originalWithScrollDirection
-                testContext.swipeDurationSeconds = originalScrollDurationSeconds
-                testContext.scrollToEdgeBoost = originalScrollToEdgeBoost
-                testContext.scrollIntervalSeconds = originalScrollIntervalSeconds
-                testContext.scrollMaxCount = originalScrollMaxCount
-                endExecWithScroll(command = command)
+                CodeExecutionContext.withScroll = originalWithScroll
+                CodeExecutionContext.scrollDirection = originalScrollDirection
+                CodeExecutionContext.scrollFrame = originalScrollFrame
+                CodeExecutionContext.scrollableElement = originalScrollableElement
+                CodeExecutionContext.scrollDurationSeconds = originalScrollDurationSeconds
+                CodeExecutionContext.scrollIntervalSeconds = originalScrollIntervalSeconds
+                CodeExecutionContext.scrollStartMarginRatio = originalScrollStartMarginRatio
+                CodeExecutionContext.scrollEndMarginRatio = originalScrollEndMarginRatio
+                CodeExecutionContext.scrollMaxCount = originalScrollMaxCount
+                CodeExecutionContext.scrollToEdgeBoost = originalScrollToEdgeBoost
+                endExecWithScroll(command = command, log = log)
             } finally {
                 ms.end()
             }
@@ -896,7 +919,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
     /**
      * endExecWithScroll
      */
-    fun endExecWithScroll(command: String): LogLine {
+    fun endExecWithScroll(command: String, log: Boolean): LogLine? {
 
         val current = TestLog.currentWithScroll
         if (callerName != current) {
@@ -905,14 +928,13 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         TestLog.withScrollStack.pop()
         val message = message(id = command)
 
-        val ms = Measure()
-        try {
+        if (log) {
             return TestLog.withScroll(
                 message = "} $message",
                 scriptCommand = command
             )
-        } finally {
-            ms.end()
+        } else {
+            return null
         }
     }
 

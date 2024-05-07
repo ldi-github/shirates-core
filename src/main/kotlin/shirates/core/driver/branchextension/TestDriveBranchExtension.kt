@@ -9,7 +9,6 @@ import shirates.core.driver.commandextension.canSelect
 import shirates.core.driver.commandextension.findImage
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.isImage
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.ImageMatchResult
@@ -352,8 +351,6 @@ fun TestDrive.ifScreenIsNot(
  */
 fun TestDrive.ifCanSelect(
     expression: String,
-    scroll: Boolean = false,
-    direction: ScrollDirection = ScrollDirection.Down,
     onTrue: (() -> Unit) = {}
 ): BooleanCompareResult {
 
@@ -361,8 +358,6 @@ fun TestDrive.ifCanSelect(
     TestDriver.it
     val canSelect = this.canSelect(
         expression = expression,
-        scroll = scroll,
-        direction = direction
     )
     val matched = canSelect
 
@@ -390,8 +385,6 @@ fun TestDrive.ifCanSelect(
  */
 fun TestDrive.ifCanSelectNot(
     expression: String,
-    scroll: Boolean = false,
-    direction: ScrollDirection = ScrollDirection.Down,
     onTrue: () -> Unit
 ): BooleanCompareResult {
 
@@ -399,8 +392,6 @@ fun TestDrive.ifCanSelectNot(
     TestDriver.it
     val canSelect = canSelect(
         expression = expression,
-        scroll = scroll,
-        direction = direction
     )
     val matched = canSelect.not()
     val result =
@@ -428,8 +419,6 @@ fun TestDrive.ifCanSelectNot(
  */
 fun TestDrive.ifImageExist(
     expression: String,
-    scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
-    direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
 
@@ -442,8 +431,6 @@ fun TestDrive.ifImageExist(
         if (e.isFound) e.isImage(expression = expression)
         else findImage(
             expression = expression,
-            scroll = scroll,
-            direction = direction,
             log = false
         )
     val matched = imageMatchResult.result
@@ -469,8 +456,6 @@ fun TestDrive.ifImageExist(
  */
 fun TestDrive.ifImageExistNot(
     expression: String,
-    scroll: Boolean = CodeExecutionContext.withScrollDirection != null,
-    direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
     onTrue: () -> Unit
 ): BooleanCompareResult {
 
@@ -483,8 +468,6 @@ fun TestDrive.ifImageExistNot(
         if (e.isFound) e.isImage(expression = expression)
         else findImage(
             expression = expression,
-            scroll = scroll,
-            direction = direction,
             log = false
         )
     val matched = imageMatchResult.result.not()

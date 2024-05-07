@@ -4,9 +4,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.WebElement
 import shirates.core.configuration.Testrun
-import shirates.core.driver.TestElementCache
+import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.scrollFrame
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
@@ -92,24 +91,53 @@ class TestElementExtensionTest : UITest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                }.action {
-                    it.scrollFrame
                 }.expectation {
-                    it.className.thisIs("android.widget.ScrollView")
-                    it.scrollable.thisIs("true")
+                    withScrollDown(scrollFrame = "#settings_homepage_container") {
+                        scrollFrame.idIs("settings_homepage_container")
+                    }
                 }
             }
-
             case(2) {
+                expectation {
+                    view.scrollFrame.thisIs(view)
+                }
+            }
+            case(3) {
+                expectation {
+                    val s = select(".scrollable")
+                    s.scrollFrame.thisIs(s)
+                }
+            }
+            case(4) {
+                expectation {
+                    TestElement.emptyElement.scrollFrame.thisIs(view)
+                    rootElement.scrollFrame.thisIs(view)
+                    view.scrollFrame.thisIs(view)
+                }
+            }
+            case(5) {
+                expectation {
+                    val c = select("<.scrollable>:child(1)")
+                    c.scrollFrame.thisIs(c.parentElement)   // ancestors
+                }
+            }
+            case(6) {
+                expectation {
+                    val sc = select(".scrollable")
+                    val p = sc.parentElement
+                    p.scrollFrame.thisIs(sc)   // descendants
+                }
+            }
+            case(7) {
                 condition {
                     it.macro("[Play Store Screen]")
-                }.action {
-                    it.scrollFrame
                 }.expectation {
-                    it.className.thisIs("android.view.View")
+                    val sc = select(".scrollable")
+                    select("Games").scrollFrame.thisIs(sc)   // rootDescendants
                 }
             }
         }
+
     }
 
     @Test

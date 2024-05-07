@@ -79,6 +79,7 @@
 - 画面をスワイプ/スクロールする
     - [swipe, flick](basic/function_property/swipe_screen/swipe_flick_ja.md)
     - [scroll](basic/function_property/swipe_screen/scroll_ja.md)
+    - [スクロール可能領域の決定 (NEW v7.0.0)](basic/function_property/swipe_screen/determining_scrollable_area_ja.md)
 - 属性を検証する
     - [text属性の検証](basic/function_property/asserting_attribute/text_assertion_ja.md)
     - [id属性の検証](basic/function_property/asserting_attribute/id_assertion_ja.md)

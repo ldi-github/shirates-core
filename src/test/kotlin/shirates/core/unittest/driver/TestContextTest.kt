@@ -226,6 +226,7 @@ class TestContextTest : UnitTest() {
         context.scrollHorizontalEndMarginRatio = 999.0
         context.scrollToEdgeBoost = 99
         context.scrollIntervalSeconds = 999.9
+        context.flickIntrvalSeconds = 999.9
         context.scrollMaxCount = 99
         context.tapHoldSeconds = 999.0
         context.enableCache = !context.enableCache

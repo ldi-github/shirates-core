@@ -117,7 +117,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
             for (selector in screenBaseInfo.selectorMap.values) {
                 putSelector(selector = selector)
             }
-            scrollInfo.scrollable = screenBaseInfo.scrollInfo.scrollable
+            scrollInfo.scrollFrame = screenBaseInfo.scrollInfo.scrollFrame
             scrollInfo.headerElements.addAll(screenBaseInfo.scrollInfo.headerElements)
             scrollInfo.footerElements.addAll(screenBaseInfo.scrollInfo.footerElements)
             scrollInfo.startElements.addAll(screenBaseInfo.scrollInfo.startElements)
@@ -219,34 +219,34 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
 
     private fun setScroll(jso: JSONObject) {
 
-        val scroll = jso.getJSONObject("scroll")
-        val scrollable = scroll.getValue("scrollable")
-        if (scrollable.isNotBlank()) {
-            scrollInfo.scrollable = scrollable
+        val scrollJsonObject = jso.getJSONObject("scroll")
+        val scrollFrame = scrollJsonObject.getValue("scroll-frame")
+        if (scrollFrame.isNotBlank()) {
+            scrollInfo.scrollFrame = scrollFrame
         }
         scrollInfo.headerElements.addAll(
             NicknameUtility.splitNicknames(
-                scroll.getValue("header-elements")
+                scrollJsonObject.getValue("header-elements")
             )
         )
         scrollInfo.footerElements.addAll(
             NicknameUtility.splitNicknames(
-                scroll.getValue("footer-elements")
+                scrollJsonObject.getValue("footer-elements")
             )
         )
         scrollInfo.overlayElements.addAll(
             NicknameUtility.splitNicknames(
-                scroll.getValue("overlay-elements")
+                scrollJsonObject.getValue("overlay-elements")
             )
         )
         scrollInfo.startElements.addAll(
             NicknameUtility.splitNicknames(
-                scroll.getValue("start-elements")
+                scrollJsonObject.getValue("start-elements")
             )
         )
         scrollInfo.endElements.addAll(
             NicknameUtility.splitNicknames(
-                scroll.getValue("end-elements")
+                scrollJsonObject.getValue("end-elements")
             )
         )
     }

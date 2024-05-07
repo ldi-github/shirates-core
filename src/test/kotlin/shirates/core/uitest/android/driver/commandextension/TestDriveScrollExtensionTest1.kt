@@ -25,7 +25,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     (scrollableElements.isNotEmpty()).thisIsTrue()
                     for (e in scrollableElements) {
-                        e.isScrollable.thisIsTrue()
+                        e.isScrollableElement.thisIsTrue()
                     }
                 }
             }
@@ -34,15 +34,14 @@ class TestDriveScrollExtensionTest1 : UITest() {
 
     @Order(20)
     @Test
-    fun getScrollableTarget() {
+    fun getScrollableElement() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Play Store Screen]")
                 }.expectation {
-                    val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
-                    val scrollableElement = scrollableElements.first()
+                    val scrollableElement = select(".scrollable")
                     val target1 = scrollableElement.getScrollableElement()
                     (target1 == scrollableElement).thisIsTrue()
                 }
@@ -51,38 +50,13 @@ class TestDriveScrollExtensionTest1 : UITest() {
                 expectation {
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
-                    val nonScrollableElement = rootElement
+                    val nonScrollableElement = select("Games")
                     val target2 = nonScrollableElement.getScrollableElement()
-                    (target2.toString() != nonScrollableElement.toString()).thisIsTrue()
-                    (target2.toString() == largestScrollableTarget.toString()).thisIsTrue()
+                    (target2 == largestScrollableTarget).thisIsTrue()
                 }
             }
         }
 
     }
-
-    @Order(30)
-    @Test
-    fun hasScrollable() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Calculator Main Screen]")
-                }.expectation {
-                    rootElement.hasScrollable.thisIsFalse("hasScroll is false.")
-                }
-            }
-            case(2) {
-                condition {
-                    it.macro("[Play Store Screen]")
-                }.expectation {
-                    rootElement.hasScrollable.thisIsTrue("hasScrollable is true.")
-                }
-            }
-        }
-
-    }
-
 
 }

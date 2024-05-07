@@ -156,6 +156,9 @@ class TestContext(
     var scrollIntervalSeconds = profile.scrollIntervalSeconds?.toDoubleOrNull() ?: Const.SCROLL_INTERVAL_SECONDS
 
     @SaveTarget
+    var flickIntrvalSeconds = Const.FLICK_INTERVAL_SECONDS
+
+    @SaveTarget
     var scrollMaxCount = profile.scrollMaxCount?.toIntOrNull() ?: Const.SCROLL_MAX_COUNT
 
     @SaveTarget
@@ -286,18 +289,30 @@ class TestContext(
     }
 
     /**
-     * scrollStartMarginRatio
+     * getScrollStartMarginRatio
      */
-    fun scrollStartMarginRatio(direction: ScrollDirection): Double {
+    fun getScrollStartMarginRatio(direction: ScrollDirection): Double {
 
         return if (direction.isVertical) scrollVerticalStartMarginRatio else scrollHorizontalStartMarginRatio
     }
 
     /**
-     * scrollEndMarginRatio
+     * getScrollEndMarginRatio
      */
-    fun scrollEndMarginRatio(direction: ScrollDirection): Double {
+    fun getScrollEndMarginRatio(direction: ScrollDirection): Double {
 
         return if (direction.isVertical) scrollVerticalEndMarginRatio else scrollHorizontalEndMarginRatio
+    }
+
+    /**
+     * getIntervalSeconds
+     */
+    fun getIntervalSeconds(flick: Boolean = false): Double {
+
+        if (flick) {
+            return flickIntrvalSeconds
+        } else {
+            return scrollIntervalSeconds
+        }
     }
 }

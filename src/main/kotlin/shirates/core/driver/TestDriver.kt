@@ -362,7 +362,8 @@ object TestDriver {
                     TestLog.ok(message = assertMessage)
                 }
             }
-        } else {
+        }
+        if (e.lastResult.isOKType.not()) {
             e.lastResult = LogType.NG
             val selectorString = "${e.selector} ($currentScreen})"
             e.lastError = TestNGException(message = assertMessage, cause = TestDriverException(selectorString))
@@ -493,7 +494,9 @@ object TestDriver {
 
             val originalLastElement = lastElement
             try {
-                testContext.irregularHandler?.invoke()
+                testDrive.withoutScroll {
+                    testContext.irregularHandler?.invoke()
+                }
             } catch (t: Throwable) {
                 TestLog.error(t)
                 throw t
@@ -1091,17 +1094,13 @@ object TestDriver {
      */
     fun select(
         expression: String,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
-        scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
-        scrollMaxCount: Int = testContext.scrollMaxCount,
+        allowScroll: Boolean = true,
         swipeToCenter: Boolean = false,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
+        safeElementOnly: Boolean = false,
         log: Boolean = false
     ): TestElement {
 
@@ -1111,18 +1110,14 @@ object TestDriver {
         var e = TestElement(selector = sel)
         val context = TestDriverCommandContext(lastElement)
         context.execSelectCommand(selector = sel, subject = sel.nickname, log = log) {
-            e = select(
+            e = findImageOrSelectCore(
                 selector = sel,
-                scroll = scroll,
-                direction = direction,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
+                allowScroll = allowScroll,
                 swipeToCenter = swipeToCenter,
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
                 frame = frame,
+                safeElementOnly = safeElementOnly,
                 useCache = useCache,
             )
         }
@@ -1130,32 +1125,21 @@ object TestDriver {
         return e
     }
 
-    internal fun select(
+    internal fun findImageOrSelectCore(
         selector: Selector,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollableElement: TestElement? = null,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-        scrollMaxCount: Int = testContext.scrollMaxCount,
+        allowScroll: Boolean = true,
         swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
+        safeElementOnly: Boolean
     ): TestElement {
 
         fun executeSelect(): TestElement {
             if (selector.isImageSelector) {
-                val r = findImage(
+                val r = findImageCore(
                     selector = selector,
-                    scroll = scroll,
-                    direction = direction,
-                    scrollDurationSeconds = scrollDurationSeconds,
-                    scrollStartMarginRatio = scrollStartMarginRatio,
-                    scrollEndMarginRatio = scrollEndMarginRatio,
-                    scrollMaxCount = scrollMaxCount,
                     throwsException = throwsException,
                     useCache = useCache,
                 )
@@ -1164,18 +1148,13 @@ object TestDriver {
             }
             return selectCore(
                 selector = selector,
+                allowScroll = allowScroll,
                 useCache = useCache,
-                scroll = scroll,
-                direction = direction,
-                scrollableElement = scrollableElement,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
                 swipeToCenter = swipeToCenter,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
-                frame = frame
+                frame = frame,
+                safeElementOnly = safeElementOnly
             )
         }
 
@@ -1188,7 +1167,9 @@ object TestDriver {
             } catch (t: Throwable) {
                 TestLog.info(t.message ?: t.stackTraceToString())
                 testDrive.suppressHandler {
-                    testContext.onSelectErrorHandler!!.invoke()
+                    testDrive.withoutScroll {
+                        testContext.onSelectErrorHandler!!.invoke()
+                    }
                 }
                 executeSelect()
             }
@@ -1200,18 +1181,13 @@ object TestDriver {
 
     private fun selectCore(
         selector: Selector,
+        allowScroll: Boolean,
         frame: Bounds?,
         useCache: Boolean,
-        scroll: Boolean,
-        direction: ScrollDirection,
-        scrollableElement: TestElement?,
-        scrollDurationSeconds: Double,
-        scrollStartMarginRatio: Double,
-        scrollEndMarginRatio: Double,
-        scrollMaxCount: Int,
         swipeToCenter: Boolean,
         throwsException: Boolean,
-        waitSeconds: Double
+        waitSeconds: Double,
+        safeElementOnly: Boolean
     ): TestElement {
         if (selector.isRelative) {
             return TestElementCache.select(
@@ -1247,7 +1223,7 @@ object TestDriver {
                 )
             }
             if (selector.isNegation.not()) {
-                if (selectedElement.isFound && selectedElement.isInView) {
+                if (selectedElement.isFound && selectedElement.isInView && (safeElementOnly.not() || selectedElement.isSafe())) {
                     if (swipeToCenter) {
                         testDrive.silent {
                             selectedElement = selectedElement.swipeToCenter()
@@ -1260,17 +1236,12 @@ object TestDriver {
             }
 
             // Search in scroll
-            if (scroll) {
+            if (allowScroll && CodeExecutionContext.withScroll) {
                 return selectWithScroll(
                     selector = selector,
                     frame = frame,
-                    scrollableElement = scrollableElement,
-                    direction = direction,
-                    durationSeconds = scrollDurationSeconds,
-                    startMarginRatio = scrollStartMarginRatio,
-                    endMarginRatio = scrollEndMarginRatio,
-                    scrollMaxCount = scrollMaxCount,
                     swipeToCenter = swipeToCenter,
+                    safeElementOnly = safeElementOnly,
                     throwsException = throwsException,
                 )
             }
@@ -1284,7 +1255,9 @@ object TestDriver {
                     throwOnError = false,
                     onBeforeRetry = { sc ->
                         if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
-                            testContext.onSelectErrorHandler!!.invoke()
+                            testDrive.withoutScroll {
+                                testContext.onSelectErrorHandler!!.invoke()
+                            }
                         }
                     }
                 ) { sc ->
@@ -1512,13 +1485,6 @@ object TestDriver {
      */
     fun findImage(
         expression: String,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollableElement: TestElement? = null,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-        scrollMaxCount: Int = testContext.scrollMaxCount,
         throwsException: Boolean = true,
         useCache: Boolean = testContext.useCache,
     ): ImageMatchResult {
@@ -1527,43 +1493,6 @@ object TestDriver {
 
         return findImageCore(
             selector = sel,
-            scroll = scroll,
-            direction = direction,
-            scrollableElement = scrollableElement,
-            scrollDurationSeconds = scrollDurationSeconds,
-            scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollEndMarginRatio = scrollEndMarginRatio,
-            scrollMaxCount = scrollMaxCount,
-            throwsException = throwsException,
-            useCache = useCache
-        )
-    }
-
-    /**
-     * findImage
-     */
-    fun findImage(
-        selector: Selector,
-        scroll: Boolean = false,
-        direction: ScrollDirection = ScrollDirection.Down,
-        scrollableElement: TestElement? = null,
-        scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        scrollStartMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        scrollEndMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-        scrollMaxCount: Int = testContext.scrollMaxCount,
-        throwsException: Boolean = true,
-        useCache: Boolean = testContext.useCache,
-    ): ImageMatchResult {
-
-        return findImageCore(
-            selector = selector,
-            scroll = scroll,
-            direction = direction,
-            scrollableElement = scrollableElement,
-            scrollDurationSeconds = scrollDurationSeconds,
-            scrollStartMarginRatio = scrollStartMarginRatio,
-            scrollEndMarginRatio = scrollEndMarginRatio,
-            scrollMaxCount = scrollMaxCount,
             throwsException = throwsException,
             useCache = useCache
         )
@@ -1572,13 +1501,14 @@ object TestDriver {
     internal fun findImageCore(
         selector: Selector,
         threshold: Double = PropertiesManager.imageMatchingThreshold,
-        scroll: Boolean,
-        direction: ScrollDirection,
-        scrollableElement: TestElement?,
-        scrollDurationSeconds: Double,
-        scrollStartMarginRatio: Double,
-        scrollEndMarginRatio: Double,
-        scrollMaxCount: Int,
+        allowScroll: Boolean = true,
+        direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+        scrollFrame: String = CodeExecutionContext.scrollFrame,
+        scrollableElement: TestElement? = CodeExecutionContext.scrollableElement,
+        scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+        scrollStartMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
+        scrollEndMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
+        scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
         throwsException: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         useCache: Boolean
@@ -1610,10 +1540,13 @@ object TestDriver {
         if (r.result) {
             return r
         }
+        val scroll = allowScroll && CodeExecutionContext.withScroll
         if (scroll.not() && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
             // Handle irregular
             testDrive.suppressHandler {
-                testContext.onExistErrorHandler!!.invoke()
+                testDrive.withoutScroll {
+                    testContext.onExistErrorHandler!!.invoke()
+                }
             }
             // Retry
             r = rootElement.isContainingImage(selector.image!!)
@@ -1630,6 +1563,7 @@ object TestDriver {
             }
 
             testDrive.doUntilScrollStop(
+                scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 repeat = 1,
                 maxLoopCount = scrollMaxCount,
@@ -1683,13 +1617,15 @@ object TestDriver {
     internal fun selectWithScroll(
         selector: Selector,
         frame: Bounds? = viewBounds,
+        scrollFrame: String = "",
         scrollableElement: TestElement? = null,
-        direction: ScrollDirection = ScrollDirection.Down,
-        durationSeconds: Double = testContext.swipeDurationSeconds,
-        startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
-        scrollMaxCount: Int = testContext.scrollMaxCount,
+        direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+        durationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+        startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
+        endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
+        scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
         swipeToCenter: Boolean,
+        safeElementOnly: Boolean,
         throwsException: Boolean = true
     ): TestElement {
 
@@ -1697,19 +1633,27 @@ object TestDriver {
         val actionFunc = {
             val ms = Measure("$selector")
 
-            e = select(
+            e = findImageOrSelectCore(
                 selector = selector,
-                scroll = false,
+                allowScroll = false,
                 swipeToCenter = false,
                 waitSeconds = 0.0,
                 throwsException = false,
-                frame = frame
+                frame = frame,
+                safeElementOnly = safeElementOnly,
             )
             ms.end()
-            e.isSafe
+            val stopScroll =
+                if (safeElementOnly) {
+                    e.isSafe()
+                } else {
+                    e.isFound
+                }
+            stopScroll
         }
 
         testDrive.doUntilScrollStop(
+            scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             repeat = 1,
             maxLoopCount = scrollMaxCount,
@@ -1742,12 +1686,14 @@ object TestDriver {
     fun selectWithScroll(
         expression: String,
         direction: ScrollDirection = ScrollDirection.Down,
+        scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
-        startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-        endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
+        startMarginRatio: Double = testContext.getScrollStartMarginRatio(direction),
+        endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         swipeToCenter: Boolean = false,
+        safeElementOnly: Boolean = true,
         throwsException: Boolean = true
     ): TestElement {
         val sel = expandExpression(expression = expression)
@@ -1757,12 +1703,14 @@ object TestDriver {
             e = selectWithScroll(
                 selector = sel,
                 direction = direction,
+                scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 swipeToCenter = swipeToCenter,
                 durationSeconds = scrollDurationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 scrollMaxCount = scrollMaxCount,
+                safeElementOnly = safeElementOnly,
                 throwsException = throwsException
             )
         }
@@ -2017,6 +1965,7 @@ object TestDriver {
     ): String {
 
         val ms = Measure("refreshCurrentScreen")
+        val originalLastElement = lastElement
 
         val originalScreen = currentScreen
 
@@ -2028,6 +1977,7 @@ object TestDriver {
             TestLog.info("currentScreen=$currentScreen", log = log)
         }
 
+        lastElement = originalLastElement
         ms.end()
 
         return currentScreen
@@ -2109,6 +2059,7 @@ object TestDriver {
      */
     fun isScreen(
         screenName: String,
+        safeElementOnly: Boolean = false,
         log: Boolean = PropertiesManager.enableIsScreenLog
     ): Boolean {
 
@@ -2117,19 +2068,21 @@ object TestDriver {
         }
 
         val ms = Measure("■■■ Trying isScreen($screenName)")
+        val originalLastElement = lastElement
         try {
             NicknameUtility.validateScreenName(screenName)
             val screenInfo = ScreenRepository.get(screenName)
 
-            var r = TestDriveObject.canSelectAll(selectors = screenInfo.identitySelectors, frame = null)
+            var r = TestDriveObject.canSelectAll(
+                selectors = screenInfo.identitySelectors,
+                allowScroll = false,
+                safeElementOnly = safeElementOnly,
+                frame = null
+            )
             if (r && screenInfo.satelliteSelectors.any()) {
                 fun hasAnySatellite(): Boolean {
                     for (expression in screenInfo.satelliteExpressions) {
-                        if (TestDriveObject.canSelect(
-                                expression = expression,
-                                screenName = screenName
-                            )
-                        ) {
+                        if (TestDriveObject.canSelectWithoutScroll(expression = expression, screenName = screenName)) {
                             return true
                         }
                     }
@@ -2149,6 +2102,7 @@ object TestDriver {
 
             return r
         } finally {
+            lastElement = originalLastElement
             ms.end()
         }
     }
@@ -2458,7 +2412,9 @@ object TestDriver {
                 )
                 Thread.sleep(1500)
                 refreshCache()
-                onLaunchHandler?.invoke()
+                testDrive.withoutScroll {
+                    onLaunchHandler?.invoke()
+                }
             } catch (t: Throwable) {
                 TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
 

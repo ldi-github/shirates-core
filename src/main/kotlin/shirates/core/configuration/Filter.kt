@@ -648,11 +648,20 @@ class Filter(
     private fun matchScrollable(element: TestElement): Boolean {
         val filterValue = this.value
         if (isAndroid) {
-            return element.scrollable == filterValue
-        } else {
-            val isScrollable = filterValue == "true"
-            return element.isScrollable == isScrollable
+            if (element.scrollable == filterValue) {
+                return true
+            }
         }
+        if (filterValue == "true") {
+            return element.isScrollableElement
+        }
+        if (filterValue == "false") {
+            return element.isScrollableElement.not()
+        }
+        if (filterValue == "scrollable") {
+            return element.isScrollableElement
+        }
+        return false
     }
 
     internal fun evaluateIgnoreTypes(classOrType: String): Boolean {

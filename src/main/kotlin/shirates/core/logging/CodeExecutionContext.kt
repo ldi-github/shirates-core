@@ -1,5 +1,6 @@
 package shirates.core.logging
 
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestElement
@@ -16,11 +17,13 @@ object CodeExecutionContext {
      * isInCheckCommand
      */
     var isInCheckCommand = false
+        internal set
 
     /**
      * isInSilentCommand
      */
     var isInSilentCommand = false
+        internal set
 
     /**
      * isInMacro
@@ -39,41 +42,51 @@ object CodeExecutionContext {
      * isInOSCommand
      */
     var isInOSCommand = false
+        internal set
 
     /**
      * isInBooleanCommand
      */
     var isInBooleanCommand = false
+        internal set
 
     /**
      * isInSelectCommand
      */
     var isInSelectCommand = false
+        internal set
 
     /**
      * isInSpecialCommand
      */
     var isInSpecialCommand = false
+        internal set
 
     /**
      * isInRelativeCommand
      */
     var isInRelativeCommand = false
+        internal set
 
     /**
      * isInProcedureCommand
      */
     var isInProcedureCommand = false
+        internal set
 
     /**
      * isInOperationCommand
      */
     var isInOperationCommand = false
+        internal set
 
     /**
      * isScrolling
      */
     var isScrolling = false
+        internal set
+
+    // Cell --------------------------------------------------
 
     /**
      * isInCell
@@ -87,11 +100,70 @@ object CodeExecutionContext {
      * lastCell
      */
     var lastCell: TestElement = TestElement.emptyElement
+        internal set
+
+    // With Scroll --------------------------------------------------
 
     /**
-     * withScrollDirection
+     * withScroll
      */
-    var withScrollDirection: ScrollDirection? = null
+    var withScroll: Boolean = false
+        internal set
+
+    /**
+     * scrollDirection
+     */
+    var scrollDirection: ScrollDirection? = null
+        internal set
+
+    /**
+     * scrollFrame
+     */
+    var scrollFrame: String = ""
+        internal set
+
+    /**
+     * scrollableElement
+     */
+    var scrollableElement: TestElement? = null
+        internal set
+
+    /**
+     * scrollDurationSeconds
+     */
+    var scrollDurationSeconds: Double = Const.SWIPE_DURATION_SECONDS
+        internal set
+
+    /**
+     * scrollIntervalSeconds
+     */
+    var scrollIntervalSeconds: Double = Const.SCROLL_INTERVAL_SECONDS
+        internal set
+
+    /**
+     * scrollStartMarginRatio
+     */
+    var scrollStartMarginRatio: Double = Const.SCROLL_VERTICAL_START_MARGIN_RATIO
+        internal set
+
+    /**
+     * scrollEndMarginRatio
+     */
+    var scrollEndMarginRatio: Double = Const.SCROLL_VERTICAL_END_MARGIN_RATIO
+        internal set
+
+    /**
+     * scrollMaxCount
+     */
+    var scrollMaxCount: Int = Const.SCROLL_MAX_COUNT
+        internal set
+
+    /**
+     * scrollToEdgeBoost
+     */
+    var scrollToEdgeBoost: Int = Const.SCROLL_TO_EDGE_BOOST
+        internal set
+
 
     // CAE Pattern --------------------------------------------------
 
@@ -99,26 +171,31 @@ object CodeExecutionContext {
      * isInScenario
      */
     var isInScenario = false
+        internal set
 
     /**
      * isInCase
      */
     var isInCase = false
+        internal set
 
     /**
      * isInCondition
      */
     var isInCondition = false
+        internal set
 
     /**
      * isInAction
      */
     var isInAction = false
+        internal set
 
     /**
      * isInExpectation
      */
     var isInExpectation = false
+        internal set
 
     // Screenshot --------------------------------------------------
 
@@ -126,26 +203,31 @@ object CodeExecutionContext {
      * lastScreenshot
      */
     var lastScreenshot: String = ""
+        internal set
 
     /**
      * lastScreenshotImage
      */
     var lastScreenshotImage: BufferedImage? = null
+        internal set
 
     /**
      * lastScreenshotTime
      */
     var lastScreenshotTime: Date? = null
+        internal set
 
     /**
      * lastCropInfo
      */
     var lastCropInfo: CropInfo? = null
+        internal set
 
     /**
      * lastScreenshotXmlSource
      */
     var lastScreenshotXmlSource: String = ""
+        internal set
 
     // Misc --------------------------------------------------
 
@@ -153,6 +235,7 @@ object CodeExecutionContext {
      * scenarioRerunCause
      */
     var scenarioRerunCause: Throwable? = null
+        internal set
 
     /**
      * isRerunningScenario
@@ -165,7 +248,7 @@ object CodeExecutionContext {
     /**
      * clear
      */
-    fun clear() {
+    internal fun clear() {
         /**
          * Command
          */
@@ -180,6 +263,22 @@ object CodeExecutionContext {
         isInProcedureCommand = false
         isInOperationCommand = false
         isScrolling = false
+        /**
+         * Cell
+         */
+        lastCell = TestElement.emptyElement
+        /**
+         * With Scroll
+         */
+        withScroll = false
+        scrollDirection = null
+        scrollFrame = ""
+        scrollableElement = null
+        scrollDurationSeconds = Const.SWIPE_DURATION_SECONDS
+        scrollIntervalSeconds = Const.SCROLL_INTERVAL_SECONDS
+        scrollStartMarginRatio = Const.SCROLL_VERTICAL_START_MARGIN_RATIO
+        scrollEndMarginRatio = Const.SCROLL_VERTICAL_END_MARGIN_RATIO
+        scrollMaxCount = Const.SCROLL_MAX_COUNT
         /**
          * CAE pattern
          */

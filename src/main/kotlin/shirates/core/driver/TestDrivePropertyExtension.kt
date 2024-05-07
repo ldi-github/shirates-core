@@ -187,7 +187,16 @@ val TestDrive.appIconName: String
 val TestDrive.scrollFrame: TestElement
     get() {
         val testElement = getThisOrIt()
-        TestDriver.lastElement = testElement.getScrollableElement()
-        return TestDriver.lastElement
+        lastElement = testElement.getScrollableElement()
+        return lastElement
+    }
+
+/**
+ * view
+ */
+val TestDrive.view: TestElement
+    get() {
+        lastElement = TestElementCache.viewElement
+        return lastElement
     }
 

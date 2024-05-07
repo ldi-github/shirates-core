@@ -291,10 +291,24 @@ You can specify weight on the screen nickname file. Larger number is hi priority
   "weight": "100"
 ```
 
+### scroll-frame
+
+_(from v7.0.0)_
+
+On scrolling, shirates-core automatically detects scrollable area. You can also specify **scroll-frame** explicitly.
+
+```
+  "selectors": {
+    "[Scroll Area]": "@a<#recycler>,@i<.XCUIElementTypeTable>"
+  },
+  "scroll": {
+    "scroll-frame": "[Scroll Area]"
+  }
+```
+
 ### header-elements, footer-elements
 
-On scrolling down/scrolling up, shirates-core automatically detects scrollable area. You can specify
-**header-elements** / **footer-elements** as hint.
+On scrolling down/scrolling up, you can specify **header-elements** / **footer-elements** as hint.
 Headers and footers are excluded from scrollable area. This provides safe scrolling and tapping.
 
 ```

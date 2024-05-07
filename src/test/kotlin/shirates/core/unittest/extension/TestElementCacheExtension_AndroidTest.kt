@@ -84,14 +84,76 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
     }
 
     @Test
-    fun getScrollableTarget() {
+    fun getScrollableElement() {
 
         // Arrange
         rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataAndroid.SettingsTopScreen)
-        // Act
-        val scrollableTArget = rootElement.getScrollableElement()
-        // Assert
-        assertThat(scrollableTArget.id).isEqualTo("com.android.settings:id/main_content_scrollable_container")
+        run {
+            // Act
+            val e = testDrive.getScrollableElement("#main_content_scrollable_container")
+            // Assert
+            assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container")
+        }
+        run {
+            testDrive.withScrollDown(scrollFrame = "#main_content_scrollable_container") {
+                run {
+                    // Act
+                    val e = testDrive.getScrollableElement()
+                    // Assert
+                    assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container")
+                }
+                run {
+                    // Act
+                    val e = testDrive.getScrollableElement("#settings_homepage_container")
+                    // Assert
+                    assertThat(e.id).isEqualTo("com.android.settings:id/settings_homepage_container")
+                }
+            }
+        }
+        run {
+            // Arrange
+            val scrollableElement = testDrive.select("#main_content_scrollable_container")
+            // Act
+            val e = scrollableElement.getScrollableElement()
+            // Assert
+            assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container")
+        }
+        run {
+            // Act
+            val e = TestElement.emptyElement.getScrollableElement()
+            // Assert
+            assertThat(e).isEqualTo(view)
+        }
+        run {
+            // Act
+            val e = rootElement.getScrollableElement()
+            // Assert
+            assertThat(e).isEqualTo(view)
+        }
+        run {
+            // Act
+            val e = view.getScrollableElement()
+            // Assert
+            assertThat(e).isEqualTo(view)
+        }
+        run {
+            // Act
+            val e = testDrive.select("#contextual_cards_content").getScrollableElement()
+            // Assert
+            assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container") // ancestors
+        }
+        run {
+            // Act
+            val e = testDrive.select("#settings_homepage_container").getScrollableElement()
+            // Assert
+            assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container") // descendants
+        }
+        run {
+            // Act
+            val e = testDrive.select("#search_action_bar_title").getScrollableElement()
+            // Assert
+            assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container") // rootDescendants
+        }
     }
 
     @Test

@@ -1,7 +1,6 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -332,26 +331,9 @@ fun TestElement.getCell(): TestElement {
         return CodeExecutionContext.lastCell
     }
 
-    val cell = if (isAndroid) {
-        val cellHost = getCellHost()
-        val cell = ancestorsAndSelf.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
-        cell.selector = this.getChainedSelector(":cell")
-        return cell
-    } else {
-        val ancestorScrollableElements = this.getScrollableElementsInAncestorsAndSelf()
-        val scrollableElement = ancestorScrollableElements.last()
-        val ancestorsAndSelf = this.ancestorsAndSelf
-        val index = ancestorsAndSelf.indexOf(scrollableElement)
-        val cellIndex = index + 1
-        if (cellIndex > ancestorsAndSelf.count() - 1) {
-            TestElement.emptyElement
-        } else {
-            ancestorsAndSelf[cellIndex]
-        }
-    }
-    if (this.selector != null) {
-        cell.selector = this.selector!!.getChainedSelector(":cellOf(${this.selector})")
-    }
+    val cellHost = getCellHost()
+    val cell = ancestorsAndSelf.lastOrNull() { it.parentElement == cellHost } ?: TestElement.emptyElement
+    cell.selector = this.getChainedSelector(":cell")
     return cell
 }
 
@@ -361,6 +343,6 @@ fun TestElement.getCell(): TestElement {
 fun TestElement.getCellHost(): TestElement {
 
     val ancestors = this.ancestors
-    val cellHost = ancestors.lastOrNull() { it.isCellHost }
-    return cellHost ?: TestElement.emptyElement
+    val scrollableElement = ancestors.lastOrNull() { it.isScrollableElement }
+    return scrollableElement ?: TestElement.emptyElement
 }

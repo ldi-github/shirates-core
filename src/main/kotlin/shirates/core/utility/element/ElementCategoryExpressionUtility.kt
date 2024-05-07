@@ -3,7 +3,6 @@ package shirates.core.utility.element
 import shirates.core.Const
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.logging.TestLog
 import shirates.core.utility.file.ResourceUtility
 import java.util.*
 
@@ -20,11 +19,6 @@ object ElementCategoryExpressionUtility {
             if (elementCategoryExpressionPropertiesField == null) {
                 elementCategoryExpressionPropertiesField =
                     ResourceUtility.getProperties(baseName = Const.ELEMENT_CATEGORY_RESOURCE_BASE_NAME)
-                val key = "android.scrollableTypes"
-                if (elementCategoryExpressionPropertiesField!!.containsKey(key)) {
-                    elementCategoryExpressionPropertiesField!!.remove(key)
-                    TestLog.warn("Key '$key' in element_category.properties has been removed because it is obsolete.")
-                }
             }
             return elementCategoryExpressionPropertiesField!!
         }
@@ -116,16 +110,17 @@ object ElementCategoryExpressionUtility {
         }
 
     /**
-     * cellHostTypes
+     * scrollableTypesExpression
      */
-    var cellHostTypes: String = ""
+    var scrollableTypesExpression: String = ""
         set(value) {
             field = value
         }
         get() {
             if (field.isBlank()) {
                 field =
-                    if (isAndroid) getTypesExpression("android.cellHostTypes") else ""
+                    if (isAndroid) getTypesExpression("android.scrollableTypes")
+                    else getTypesExpression("ios.scrollableTypes")
             }
             return field
         }
@@ -183,32 +178,6 @@ object ElementCategoryExpressionUtility {
     )
 
     /**
-     * iosTableTypesExpression
-     */
-    var iosTableTypesExpression: String = ""
-        get() {
-            if (field.isBlank()) {
-                field = getTypesExpression("ios.tableTypes")
-            }
-            return field
-        }
-
-    /**
-     * scrollableTypesExpression
-     */
-    var scrollableTypesExpression: String = ""
-        set(value) {
-            field = value
-        }
-        get() {
-            if (field.isBlank()) {
-                field =
-                    if (isAndroid) "" else getTypesExpression("ios.scrollableTypes")
-            }
-            return field
-        }
-
-    /**
      * isLabel
      */
     fun isLabel(typeName: String): Boolean {
@@ -259,10 +228,10 @@ object ElementCategoryExpressionUtility {
     }
 
     /**
-     * isCellHost
+     * isScrollableElement
      */
-    fun isCellHost(typeName: String): Boolean {
-        return cellHostTypes.contains(typeName)
+    fun isScrollableElement(typeName: String): Boolean {
+        return this.scrollableTypesExpression.contains(typeName)
     }
 
     /**
@@ -296,8 +265,7 @@ object ElementCategoryExpressionUtility {
         buttonTypesExpression = ""
         switchTypesExpression = ""
         extraWidgetTypesExpression = ""
-        iosTableTypesExpression = ""
-        scrollableTypesExpression = ""
+        this.scrollableTypesExpression = ""
     }
 
     /**
@@ -306,10 +274,6 @@ object ElementCategoryExpressionUtility {
     fun getCategory(element: TestElement): ElementCategory {
 
         if (isAndroid) {
-
-            if (element.isScrollable) {
-                return ElementCategory.SCROLLABLE
-            }
             return getCategory(element.className)
         } else {
             return getCategory(element.type)
@@ -340,7 +304,7 @@ object ElementCategoryExpressionUtility {
             return ElementCategory.EXTRA_WIDGET
         }
 
-        if (scrollableTypesExpression.contains(classOrType)) {
+        if (this.scrollableTypesExpression.contains(classOrType)) {
             return ElementCategory.SCROLLABLE
         }
 

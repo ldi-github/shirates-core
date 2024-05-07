@@ -1,6 +1,5 @@
 package shirates.core.uitest.ios.driver.commandextension
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -11,9 +10,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
-import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
-import shirates.core.utility.element.ElementCategoryExpressionUtility
 import utility.handleIrregulars
 
 @Want
@@ -38,7 +35,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     for (e in scrollableElements) {
                         e.printInfo()
-                        e.isScrollable.thisIsTrue()
+                        e.isScrollableElement.thisIsTrue()
                     }
                     scrollableElements.count().thisIs(1)
                     scrollableElements.filter { it.type == "XCUIElementTypeTable" }.count().thisIs(1)
@@ -54,7 +51,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     for (e in scrollableElements) {
                         e.printInfo()
-                        e.isScrollable.thisIsTrue()
+                        e.isScrollableElement.thisIsTrue()
                     }
                     scrollableElements.count().thisIs(3)
                     fun TestElement.thisIsScrollable() {
@@ -73,46 +70,28 @@ class TestDriveScrollExtensionTest1 : UITest() {
 
     @Test
     @Order(20)
-    fun getScrollableTarget() {
+    fun getScrollableElement() {
 
-        // Arrange
-        it.macro("[Apple Maps Top Screen]")
-            .screenIs("[Apple Maps Top Screen]")
-        val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
-        val largestScrollableElement = scrollableElements.filter { it.isVisible }.maxByOrNull { it.bounds.area }!!
-        // Act
-        val target1 = largestScrollableElement.getScrollableElement()
-        // Assert
-        assertThat(target1.toString()).isEqualTo(largestScrollableElement.toString())
-
-
-        // Arrange
-        val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
-        val nonScrollableElement = rootElement
-        val target2 = nonScrollableElement.getScrollableElement()
-        // Act, Assert
-        assertThat(target2.toString()).isNotEqualTo(nonScrollableElement.toString())
-        assertThat(target2.toString()).isEqualTo(largestScrollableTarget.toString())
-    }
-
-    @Unstable("[iOS Settings Top Screen] is displayed(currentScreen=, expected identity=[Settings])")
-    @Test
-    @Order(30)
-    fun hasScrollable() {
-
-        // Arrange
-        it.macro("[iOS Settings Top Screen]")
-        // Act, Assert
-        assertThat(it.hasScrollable).isTrue()
-
-        val originalData = ElementCategoryExpressionUtility.scrollableTypesExpression
-        try {
-            // Arrange
-            ElementCategoryExpressionUtility.scrollableTypesExpression = "DummyType"
-            // Act, Assert
-            assertThat(it.hasScrollable).isFalse()
-        } finally {
-            ElementCategoryExpressionUtility.scrollableTypesExpression = originalData
+        scenario {
+            case(1) {
+                condition {
+                    // Arrange
+                    it.macro("[Apple Maps Top Screen]")
+                }.expectation {
+                    val scrollableElement = select(".scrollable")
+                    val target1 = scrollableElement.getScrollableElement()
+                    (target1 == scrollableElement).thisIsTrue()
+                }
+            }
+            case(2) {
+                expectation {
+                    val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
+                    val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
+                    val nonScrollableElement = select("#WeatherConditionsTitleLabel")
+                    val target2 = nonScrollableElement.getScrollableElement()
+                    (target2 == largestScrollableTarget).thisIsTrue()
+                }
+            }
         }
     }
 

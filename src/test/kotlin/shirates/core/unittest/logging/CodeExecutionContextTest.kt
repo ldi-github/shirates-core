@@ -2,7 +2,10 @@ package shirates.core.unittest.logging
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.ScrollDirection
+import shirates.core.driver.TestElement
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
@@ -32,6 +35,18 @@ class CodeExecutionContextTest : UnitTest() {
         context.isInProcedureCommand = true
         context.isInOperationCommand = true
         context.isScrolling = true
+        context.lastCell = TestElement.dummyElement
+
+        context.withScroll = true
+        context.scrollDirection = ScrollDirection.Up
+        context.scrollFrame = "#scroll-frame"
+        context.scrollableElement = TestElement()
+        context.scrollDurationSeconds = 12.3
+        context.scrollIntervalSeconds = 45.6
+        context.scrollStartMarginRatio = 0.123
+        context.scrollEndMarginRatio = 0.456
+        context.scrollMaxCount = 999
+
         context.isInScenario = true
         context.isInCase = true
         context.isInCondition = true
@@ -62,6 +77,17 @@ class CodeExecutionContextTest : UnitTest() {
         assertThat(context.isInProcedureCommand).isFalse()
         assertThat(context.isInOperationCommand).isFalse()
         assertThat(context.isScrolling).isFalse()
+        assertThat(context.lastCell.isEmpty).isTrue()
+
+        assertThat(context.withScroll).isFalse()
+        assertThat(context.scrollDirection).isNull()
+        assertThat(context.scrollFrame).isEmpty()
+        assertThat(context.scrollableElement).isNull()
+        assertThat(context.scrollDurationSeconds).isEqualTo(Const.SWIPE_DURATION_SECONDS)
+        assertThat(context.scrollIntervalSeconds).isEqualTo(Const.SCROLL_INTERVAL_SECONDS)
+        assertThat(context.scrollStartMarginRatio).isEqualTo(Const.SCROLL_VERTICAL_START_MARGIN_RATIO)
+        assertThat(context.scrollEndMarginRatio).isEqualTo(Const.SCROLL_VERTICAL_END_MARGIN_RATIO)
+
         assertThat(context.isInScenario).isFalse()
         assertThat(context.isInCase).isFalse()
         assertThat(context.isInCondition).isFalse()
@@ -88,6 +114,17 @@ class CodeExecutionContextTest : UnitTest() {
         assertThat(context.isInProcedureCommand).isTrue()
         assertThat(context.isInOperationCommand).isTrue()
         assertThat(context.isScrolling).isTrue()
+        assertThat(context.lastCell.isEmpty).isFalse()
+
+        assertThat(context.withScroll).isTrue()
+        assertThat(context.scrollDirection).isNotNull
+        assertThat(context.scrollFrame).isNotEmpty()
+        assertThat(context.scrollableElement).isNotNull
+        assertThat(context.scrollDurationSeconds).isNotEqualTo(Const.SWIPE_DURATION_SECONDS)
+        assertThat(context.scrollIntervalSeconds).isNotEqualTo(Const.SCROLL_INTERVAL_SECONDS)
+        assertThat(context.scrollStartMarginRatio).isNotEqualTo(Const.SCROLL_VERTICAL_START_MARGIN_RATIO)
+        assertThat(context.scrollEndMarginRatio).isNotEqualTo(Const.SCROLL_VERTICAL_END_MARGIN_RATIO)
+
         assertThat(context.isInScenario).isTrue()
         assertThat(context.isInCase).isTrue()
         assertThat(context.isInCondition).isTrue()

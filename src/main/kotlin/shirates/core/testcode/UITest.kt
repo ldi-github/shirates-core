@@ -388,7 +388,7 @@ abstract class UITest : TestDrive {
         TestLog.info("Loading config.(configFile=$configPath, profileName=$profileName)")
         testConfig = TestConfig(configPath.toString())
         val profile = if (testConfig!!.profileMap.containsKey(profileName)) {
-            return testConfig!!.profileMap[profileName]!!
+            testConfig!!.profileMap[profileName]!!
         } else {
             val defaultProfile = testConfig!!.profileMap["_default"]!!
             defaultProfile.profileName = profileName
@@ -577,7 +577,9 @@ abstract class UITest : TestDrive {
                         TestLog.warn(message(id = "rerunningScenarioRequested", submessage = t.message ?: ""))
 
                         if (testContext.onRerunScenarioHandler != null) {
-                            testContext.onRerunScenarioHandler!!.invoke(t)
+                            testDrive.withoutScroll {
+                                testContext.onRerunScenarioHandler!!.invoke(t)
+                            }
                         }
                     } else {
                         if ((t is AssertionError).not()) {

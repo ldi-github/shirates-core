@@ -152,7 +152,7 @@ class ScreenRepositoryTest : UnitTest() {
                 screenInfo.screenFile?.replace(File.separator, "/")
             ).endsWith("unitTestData/testConfig/nicknames1/screens/FunctionA/[A Screen].json")
             assertThat(screenInfo.identitySelectors.count()).isEqualTo(2)
-            assertThat(screenInfo.scrollInfo.scrollable).isEqualTo("[Scrollable]")
+            assertThat(screenInfo.scrollInfo.scrollFrame).isEqualTo("[ScrollFrame]")
             assertThat(screenInfo.scrollInfo.startElements)
                 .containsAll(
                     listOf(

@@ -190,7 +190,7 @@ class TestElementRelativeExtension_IosTest2 : UnitTest() {
         // Act
         val next1 = e.next("scrollable=true")
         // Assert
-        assertThat(next1.isScrollable).isTrue()
+        assertThat(next1.isScrollableElement).isTrue()
         assertThat(next1.type).isEqualTo("XCUIElementTypeScrollView")
         assertThat(next1.selector.toString()).isEqualTo("<Skip>:next(scrollable=true)")
     }

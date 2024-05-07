@@ -6,10 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.ScreenInfo
 import shirates.core.driver.*
-import shirates.core.driver.commandextension.getScrollableElement
-import shirates.core.driver.commandextension.getUniqueXpath
-import shirates.core.driver.commandextension.next
-import shirates.core.driver.commandextension.previous
+import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataIos
 import shirates.core.utility.element.ElementCacheUtility
@@ -63,16 +60,70 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     }
 
     @Test
-    fun getScrollableTarget() {
+    fun getScrollableElement() {
 
         // Arrange
-        rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.SettingsTopScreen)
-
-        // Act
-        val scrollableTArget = rootElement.getScrollableElement()
-
-        // Assert
-        assertThat(scrollableTArget.type).isEqualTo("XCUIElementTypeTable")
+        rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.DateAndTime_ja)
+        run {
+            // Act
+            val e = testDrive.getScrollableElement("#DayViewContainerView")
+            // Assert
+            assertThat(e.name).isEqualTo("DayViewContainerView")
+        }
+        run {
+            testDrive.withScrollDown(scrollFrame = "#DayViewContainerView") {
+                run {
+                    // Act
+                    val e = testDrive.getScrollableElement()
+                    // Assert
+                    assertThat(e.name).isEqualTo("DayViewContainerView")
+                }
+                run {
+                    // Act
+                    val e = testDrive.getScrollableElement("#scroll-view2")
+                    // Assert
+                    assertThat(e.name).isEqualTo("scroll-view2")
+                }
+            }
+        }
+        run {
+            // Arrange
+            val scrollableElement = testDrive.select("#scroll-view3")
+            // Act
+            val e = scrollableElement.getScrollableElement()
+            // Assert
+            assertThat(e.name).isEqualTo("scroll-view3")
+        }
+        run {
+            // Act
+            val e = TestElement.emptyElement.getScrollableElement()
+            // Assert
+            assertThat(e).isEqualTo(view)
+        }
+        run {
+            // Act
+            val e = rootElement.getScrollableElement()
+            // Assert
+            assertThat(e).isEqualTo(view)
+        }
+        run {
+            // Act
+            val e = view.getScrollableElement()
+            // Assert
+            assertThat(e).isEqualTo(view)
+        }
+        run {
+            // Act
+            val e = testDrive.select("#12月10日 日曜日").getScrollableElement()
+            // Assert
+            assertThat(e.name).isEqualTo("scroll-view3") // ancestors
+        }
+        run {
+            // Act
+            val e = testDrive.select("<#DayViewContainerView>:parent").getScrollableElement()
+            // Assert
+            assertThat(e.name).isEqualTo("scroll-view1") // descendants
+        }
     }
 
     @Test

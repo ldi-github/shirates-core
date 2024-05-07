@@ -164,7 +164,7 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
             assertThat(o.expandClassAlias("button")).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox)")
             assertThat(o.expandClassAlias("switch")).isEqualTo("android.widget.Switch")
             assertThat(o.expandClassAlias("widget")).isEqualTo("(android.widget.EditText|android.widget.TextView|android.widget.ImageView|android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.Switch)")
-            assertThat(o.expandClassAlias("scrollable")).isEqualTo("")
+            assertThat(o.expandClassAlias("scrollable")).isEqualTo("(androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView|android.widget.HorizontalScrollView|androidx.viewpager.widget.ViewPager)")
             assertThat(o.expandClassAlias("class1")).isEqualTo("class1")
         }
     }
@@ -175,21 +175,12 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
         TestMode.runAsAndroid {
             // Act, Assert
             assertThat(ElementCategoryExpressionUtility.scrollableTypesExpression)
-                .isEqualTo("")
+                .isEqualTo("(androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView|android.widget.HorizontalScrollView|androidx.viewpager.widget.ViewPager)")
         }
         TestMode.runAsIos {
             // Act, Assert
             assertThat(ElementCategoryExpressionUtility.scrollableTypesExpression)
                 .isEqualTo("(XCUIElementTypeTable|XCUIElementTypeCollectionView|XCUIElementTypeScrollView|XCUIElementTypeWebView|XCUIElementTypeMap)")
-        }
-    }
-
-    @Test
-    fun iosTableTypesExpression() {
-
-        TestMode.runAsIos {
-            // Act, Assert
-            assertThat(ElementCategoryExpressionUtility.iosTableTypesExpression).isEqualTo("XCUIElementTypeTable")
         }
     }
 

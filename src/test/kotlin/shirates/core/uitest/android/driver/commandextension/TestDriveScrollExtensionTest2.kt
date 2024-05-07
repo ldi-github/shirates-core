@@ -11,7 +11,7 @@ import shirates.core.testcode.Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriveScrollExtensionTest2 : UITest() {
 
-    @Order(40)
+    @Order(10)
     @Test
     fun scrollDown_scrollUp() {
 
@@ -59,7 +59,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
         }
     }
 
-    @Order(50)
+    @Order(20)
     @Test
     fun scrollToBottom_scrollToTop() {
 
@@ -86,7 +86,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
         }
     }
 
-    @Order(60)
+    @Order(30)
     @Test
     fun scrollToRightEdge_scrollToLeftEdge() {
 

@@ -1,7 +1,7 @@
 package shirates.core.driver
 
 import shirates.core.configuration.Selector
-import shirates.core.driver.commandextension.canSelect
+import shirates.core.driver.commandextension.canSelectCore
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.getThisOrIt
 import shirates.core.exception.TestDriverException
@@ -81,7 +81,7 @@ fun TestDrive.waitForClose(
             waitSeconds = waitSeconds,
             refreshCache = testContext.useCache
         ) {
-            found = canSelect(selector = sel)
+            found = canSelectCore(selector = sel, safeElementOnly = false)
             found.not()
         }
 
@@ -120,7 +120,7 @@ fun TestDrive.waitForDisplay(
             waitSeconds = waitSeconds,
             refreshCache = testContext.useCache
         ) {
-            found = canSelect(selector = sel)
+            found = canSelectCore(selector = sel, safeElementOnly = false)
             found
         }
 

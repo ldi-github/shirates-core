@@ -17,7 +17,7 @@ object ElementVisibilityUtility {
             throw NotImplementedError("iOS is supported.")
         }
         val result =
-            element.ancestors.any() { ElementCategoryExpressionUtility.iosTableTypesExpression.contains(it.type) }
+            element.ancestors.any() { ElementCategoryExpressionUtility.scrollableTypesExpression.contains(it.type) }
         return result
     }
 

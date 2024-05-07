@@ -4,17 +4,18 @@
 
 ## 関数
 
-| 関数                         | 説明                                                             |
-|:---------------------------|:---------------------------------------------------------------|
-| canSelect                  | 現在の画面においてselectorにマッチする最初の要素を検索してtrue/falseを返します               |
-| canSelectWithScrollDown    | selectorにマッチする最初の要素を検索してtrue/falseを返します(下方向スクロールあり)            |
-| canSelectWithScrollUp      | selectorにマッチする最初の要素を検索してtrue/falseを返します(上方向スクロールあり)            |
-| canSelectWithScrollRight   | selectorにマッチする最初の要素を検索してtrue/falseを返します(右方向スクロールあり)            |
-| canSelectWithScrollLeft    | selectorにマッチする最初の要素を検索してtrue/falseを返します(左方向スクロールあり)            |
-| canSelectAllWithScrollDown | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します(下方向スクロールあり) |
-| canSelectAllWithScrollUp   | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します(上方向スクロールあり) |
-| canSelectInScanResults     | スキャン結果内でselectorにマッチする最初の要素を検索してtrue/falseを返します                |
-| canSelectAllInScanResults  | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します             |
+| 関数                         | 説明                                                                      |
+|:---------------------------|:------------------------------------------------------------------------|
+| canSelect                  | 現在の画面においてselectorにマッチする最初の要素を検索してtrue/falseを返します（withScroll使用時はスクロールあり） |
+| canSelectWithoutScroll     | selectorにマッチする最初の要素を検索してtrue/falseを返します(スクロールなし)                        |
+| canSelectWithScrollDown    | selectorにマッチする最初の要素を検索してtrue/falseを返します(下方向スクロールあり)                     |
+| canSelectWithScrollUp      | selectorにマッチする最初の要素を検索してtrue/falseを返します(上方向スクロールあり)                     |
+| canSelectWithScrollRight   | selectorにマッチする最初の要素を検索してtrue/falseを返します(右方向スクロールあり)                     |
+| canSelectWithScrollLeft    | selectorにマッチする最初の要素を検索してtrue/falseを返します(左方向スクロールあり)                     |
+| canSelectAllWithScrollDown | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します(下方向スクロールあり)          |
+| canSelectAllWithScrollUp   | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します(上方向スクロールあり)          |
+| canSelectInScanResults     | スキャン結果内でselectorにマッチする最初の要素を検索してtrue/falseを返します                         |
+| canSelectAllInScanResults  | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します                      |
 
 ## 例1: canSelect
 

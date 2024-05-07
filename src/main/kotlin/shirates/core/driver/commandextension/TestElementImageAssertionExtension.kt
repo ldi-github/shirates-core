@@ -1,10 +1,8 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
@@ -109,7 +107,6 @@ fun TestElement.isContainingImage(
  */
 fun TestElement.imageContains(
     expression: String,
-    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -134,7 +131,6 @@ fun TestElement.imageContains(
         expression = expression,
         testElement = testElement,
         assertMessage = assertMessage,
-        durationSeconds = waitSeconds,
         action = action
     )
 
@@ -152,7 +148,6 @@ fun TestElement.imageContains(
  */
 fun TestElement.imageIs(
     expression: String = this.selector.toString(),
-    waitSeconds: Double = testContext.shortWaitSeconds,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -173,7 +168,6 @@ fun TestElement.imageIs(
         expression = expression,
         testElement = testElement,
         assertMessage = assertMessage,
-        durationSeconds = waitSeconds,
         action = action
     )
 
@@ -191,7 +185,6 @@ fun TestElement.imageIs(
  */
 fun TestElement.imageIsNot(
     expression: String,
-    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -212,7 +205,6 @@ fun TestElement.imageIsNot(
         expression = expression,
         testElement = testElement,
         assertMessage = assertMessage,
-        durationSeconds = waitSeconds,
         action = action,
         negation = true
     )
@@ -230,16 +222,7 @@ internal fun imageAssertionCore(
     command: String,
     expectedSelector: Selector,
     testElement: TestElement,
-    scrollableElement: TestElement? = null,
-    scrollFunc: (() -> Unit)? = null,
-    direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
-    durationSeconds: Double = testContext.swipeDurationSeconds,
-    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     edgeSelector: String? = null,
-    maxLoopCount: Int = testContext.scrollMaxCount,
-    repeat: Int = 1,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     assertMessage: String,
     action: () -> ImageMatchResult,
     negation: Boolean = false
@@ -249,16 +232,7 @@ internal fun imageAssertionCore(
         command = command,
         expectedSelector = expectedSelector,
         testElement = testElement,
-        scrollableElement = scrollableElement,
-        scrollFunc = scrollFunc,
-        direction = direction,
-        durationSeconds = durationSeconds,
-        startMarginRatio = startMarginRatio,
-        endMarginRatio = endMarginRatio,
         edgeSelector = edgeSelector,
-        maxLoopCount = maxLoopCount,
-        repeat = repeat,
-        intervalSeconds = intervalSeconds,
         assertMessage = assertMessage,
         action = action,
         negation = negation
@@ -269,16 +243,7 @@ internal fun imageAssertionCore(
     command: String,
     expression: String,
     testElement: TestElement,
-    scrollableElement: TestElement? = null,
-    scrollFunc: (() -> Unit)? = null,
-    direction: ScrollDirection = CodeExecutionContext.withScrollDirection ?: ScrollDirection.Down,
-    durationSeconds: Double = testContext.swipeDurationSeconds,
-    startMarginRatio: Double = testContext.scrollStartMarginRatio(direction),
-    endMarginRatio: Double = testContext.scrollEndMarginRatio(direction),
     edgeSelector: String? = null,
-    maxLoopCount: Int = testContext.scrollMaxCount,
-    repeat: Int = 1,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     assertMessage: String,
     action: () -> ImageMatchResult,
     negation: Boolean = false
@@ -292,16 +257,7 @@ internal fun imageAssertionCore(
         command = command,
         expectedSelector = sel,
         testElement = testElement,
-        scrollableElement = scrollableElement,
-        scrollFunc = scrollFunc,
-        direction = direction,
-        durationSeconds = durationSeconds,
-        startMarginRatio = startMarginRatio,
-        endMarginRatio = endMarginRatio,
         edgeSelector = edgeSelector,
-        maxLoopCount = maxLoopCount,
-        repeat = repeat,
-        intervalSeconds = intervalSeconds,
         assertMessage = assertMessage,
         action = action,
         negation = negation
@@ -312,16 +268,7 @@ internal fun imageAssertionCoreCore(
     command: String,
     expectedSelector: Selector,
     testElement: TestElement,
-    scrollFunc: (() -> Unit)? = null,
-    scrollableElement: TestElement?,
-    direction: ScrollDirection,
-    durationSeconds: Double,
-    startMarginRatio: Double,
-    endMarginRatio: Double,
     edgeSelector: String?,
-    maxLoopCount: Int,
-    repeat: Int,
-    intervalSeconds: Double,
     assertMessage: String,
     negation: Boolean,
     action: () -> ImageMatchResult,
@@ -329,41 +276,38 @@ internal fun imageAssertionCoreCore(
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = testElement.selector.toString()) {
 
-        var matchResult = ImageMatchResult(result = false, templateSubject = expectedSelector.toString())
-        var r = false
-        testDrive.doUntilScrollStopCore(
-            scrollFunc = scrollFunc,
-            direction = direction,
-            scrollableElement = scrollableElement,
-            durationSeconds = durationSeconds,
-            startMarginRatio = startMarginRatio,
-            endMarginRatio = endMarginRatio,
-            edgeSelector = edgeSelector,
-            maxLoopCount = maxLoopCount,
-            repeat = repeat,
-            intervalSeconds = intervalSeconds
-        ) {
-            matchResult = action()
-            r = matchResult.result
-            if (negation) {
-                r = r.not()
+        var matchResult = action()
+        var r = matchResult.result
+        testElement.imageMatchResult = matchResult
+
+        if (r.not() && CodeExecutionContext.withScroll) {
+            testDrive.doUntilScrollStop(
+                edgeSelector = edgeSelector,
+            ) {
+                matchResult = action()
+                r = matchResult.result
+                if (negation) {
+                    r = r.not()
+                }
+                r
             }
-            r
         }
-        if (r) {
-            TestLog.ok(
-                message = assertMessage,
-                arg1 = expectedSelector.toString()
-            )
-        } else {
+        if (r.not()) {
             val croppedImageFileName = "${TestLog.lines.count()}_cropped_image"
             testElement.lastCropInfo?.croppedImage?.saveImage("${TestLog.directoryForLog.resolve(croppedImageFileName)}")
 
             val templateImageFileName = "${TestLog.lines.count()}_template_image"
             expectedSelector.templateImage?.saveImage("${TestLog.directoryForLog.resolve(templateImageFileName)}")
+        }
 
-            TestDriver.lastElement.lastError = TestNGException("$assertMessage ($matchResult)")
-            throw TestDriver.lastElement.lastError!!
+        TestDriver.postProcessForImageAssertion(
+            e = testElement,
+            assertMessage = assertMessage,
+            dontExist = negation
+        )
+
+        if (testElement.hasError) {
+            throw testElement.lastError!!
         }
     }
 }

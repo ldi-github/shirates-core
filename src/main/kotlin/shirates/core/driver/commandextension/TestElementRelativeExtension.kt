@@ -202,7 +202,7 @@ internal fun TestElement.relative(
             ":belowScrollable" -> {
                 e = this.belowScrollable(
                     selector = relativeSelector,
-                    targetElements = targetElements.filter { it.isScrollable },
+                    targetElements = targetElements.filter { it.isScrollableElement },
                     frame = frame
                 )
             }
@@ -308,7 +308,7 @@ internal fun TestElement.relative(
             ":aboveScrollable" -> {
                 e = this.aboveScrollable(
                     selector = relativeSelector,
-                    targetElements = targetElements.filter { it.isScrollable },
+                    targetElements = targetElements.filter { it.isScrollableElement },
                     frame = frame
                 )
             }
@@ -375,7 +375,7 @@ internal fun TestElement.relative(
             ":flowScrollable", ":scrollable" -> {
                 e = this.flowScrollable(
                     selector = relativeSelector,
-                    targetElements = targetElements.filter { it.isScrollable },
+                    targetElements = targetElements.filter { it.isScrollableElement },
                     frame = frame
                 )
             }

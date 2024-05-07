@@ -4,16 +4,18 @@
 
 ## 関数
 
-|   グループ    | 関数                      | 説明                           | 返却値                                             |
-|:---------:|:------------------------|:-----------------------------|:------------------------------------------------|
-|   exist   | exist                   | 要素が存在することを検証します（表示中の画面）      | TestElement(存在する場合)<br>TestNGException(存在しない場合) |
-|   exist   | existWithScrollDown     | 要素が存在することを検証します（下方向スクロールあり）  | (上と同じ)                                          |
-|   exist   | existWithScrollUp       | 要素が存在することを検証します（上方向スクロールあり）  | (上と同じ)                                          |
-|   exist   | existInScanResults      | スキャン結果に要素が存在することを検証します       | (上と同じ)                                          |
-| dontExist | dontExist               | 要素が存在しないことを検証します（表示中の画面）     | 空要素(存在しない場合)<br>TestNGException(存在する場合)         |
-| dontExist | dontExistWithScrollDown | 要素が存在しないことを検証石ます（下方向スクロールあり） | (上と同じ)                                          |
-| dontExist | dontExistWithScrollUp   | 要素が存在しないことを検証石ます（上方向スクロールあり） | (上と同じ)                                          |
-| dontExist | dontExistInScanResults  | スキャン結果内に要素が存在しないことを検証します     | (上と同じ)                                          |
+|   グループ    | 関数                      | 説明                                      | 返却値                                             |
+|:---------:|:------------------------|:----------------------------------------|:------------------------------------------------|
+|   exist   | exist                   | 要素が存在することを検証します（withScroll使用時はスクロールあり）  | TestElement(存在する場合)<br>TestNGException(存在しない場合) |
+|   exist   | existWithoutScroll      | 要素が存在することを検証します（スクロールなし）                | (上と同じ)                                          |
+|   exist   | existWithScrollDown     | 要素が存在することを検証します（下方向スクロールあり）             | (上と同じ)                                          |
+|   exist   | existWithScrollUp       | 要素が存在することを検証します（上方向スクロールあり）             | (上と同じ)                                          |
+|   exist   | existInScanResults      | スキャン結果に要素が存在することを検証します                  | (上と同じ)                                          |
+| dontExist | dontExist               | 要素が存在しないことを検証します（表示中の画面）                | 空要素(存在しない場合)<br>TestNGException(存在する場合)         |
+| dontExist | dontExistWithoutScroll  | 要素が存在しないことを検証します（withScroll使用時はスクロールあり） | (上と同じ)                                          |
+| dontExist | dontExistWithScrollDown | 要素が存在しないことを検証石ます（下方向スクロールあり）            | (上と同じ)                                          |
+| dontExist | dontExistWithScrollUp   | 要素が存在しないことを検証石ます（上方向スクロールあり）            | (上と同じ)                                          |
+| dontExist | dontExistInScanResults  | スキャン結果内に要素が存在しないことを検証します                | (上と同じ)                                          |
 
 ## 例
 

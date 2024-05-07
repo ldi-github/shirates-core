@@ -15,7 +15,7 @@ import shirates.core.testcode.Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriveScrollExtensionTest3 : UITest() {
 
-    @Order(70)
+    @Order(10)
     @Test
     fun doUntilScrollStop() {
 
@@ -54,7 +54,7 @@ class TestDriveScrollExtensionTest3 : UITest() {
 
     }
 
-    @Order(80)
+    @Order(20)
     @Test
     fun scanElements() {
 
@@ -81,7 +81,7 @@ class TestDriveScrollExtensionTest3 : UITest() {
     }
 
     @Test
-    @Order(90)
+    @Order(30)
     fun withScroll() {
 
         scenario {
