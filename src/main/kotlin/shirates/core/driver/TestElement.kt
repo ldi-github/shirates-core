@@ -401,97 +401,6 @@ class TestElement(
         }
 
     /**
-     * isSafe
-     */
-    val isSafe: Boolean
-        get() {
-            fun info(message: String) {
-                if (PropertiesManager.enableIsSafeLog) {
-                    TestLog.info(message)
-                }
-            }
-
-            if (imageMatched) {
-                return true
-            }
-            if (isEmpty) {
-                return false
-            }
-            if (isDummy) {
-                return false
-            }
-            if (this.bounds.isCenterIncludedIn(viewBounds).not()) {
-                info("isSafe property returns false. (the center of this is not included in viewBounds. (this=$this, viewBounds=$viewBounds)")
-                return false
-            }
-
-            if (type == "XCUIElementTypeApplication") {
-                info("isSafe property returns false. (type == XCUIElementTypeApplication)")
-                return false
-            }
-            val inView = getIsInView(PropertiesManager.enableIsInViewLog || PropertiesManager.enableIsSafeLog)
-            if (inView.not()) {
-                info("isSafe property returns false. (isInView == false)")
-                return false
-            }
-            if (driver.currentScreen.isNotBlank()) {
-                if (CodeExecutionContext.isScrolling) {
-                    /**
-                     * Safe boundary check in scrollable view
-                     */
-                    val scrollableElement = this.getScrollableElementsInAncestorsAndSelf().firstOrNull()
-                    if (scrollableElement != null && scrollableElement.isScrollableElement) {
-                        val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
-                        if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
-                            info("isSafe property returns false. this is out of safe bounds. (this=$this, scrollingInfo=$scrollingInfo)")
-                            return false
-                        }
-                    }
-                }
-
-                if (isiOS) {
-                    /**
-                     * Keyboard overlapping check
-                     */
-                    if (testContext.useCache) {
-                        val keyboard = testDrive.getKeyboardInIos()
-                        if (keyboard.isFound) {
-                            if (this.bounds.isOverlapping(keyboard.bounds)) {
-                                info("isSafe property returns false. keyboard is overlapping. (this=$this, keyboard=$keyboard)")
-                                return false
-                            }
-                        }
-                    }
-                }
-
-                /**
-                 * Overlay check
-                 */
-                val s = TestDriver.screenInfo.scrollInfo
-                val overlayElements = s.overlayElements
-                var r = true
-                if (overlayElements.any()) {
-                    for (overlayElement in overlayElements) {
-                        val overlay = selectWithoutScroll(
-                            expression = overlayElement,
-                            throwsException = false,
-                            waitSeconds = 0.0,
-                        )
-                        if (overlay == this) {
-                            return true
-                        }
-                        if (overlay.isFound && this.bounds.isOverlapping(overlay.bounds)) {
-                            info("isSafe property returns false. overlay is overlapping. (this=$this, overlay=$overlay)")
-                            return false
-                        }
-                    }
-                }
-            }
-
-            return true
-        }
-
-    /**
      * isLabel
      */
     val isLabel: Boolean
@@ -1171,7 +1080,7 @@ class TestElement(
 
             if (isCacheMode) {
                 if (selector != null) {
-                    if (canSelectCore(selector = selector!!)) {
+                    if (canSelectCore(selector = selector!!, safeElementOnly = false)) {
                         e = TestElementCache.select(selector = selector!!)
                         return@execOperateCommand
                     }

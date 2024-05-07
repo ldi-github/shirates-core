@@ -4,10 +4,14 @@ import org.openqa.selenium.By
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.remote.RemoteWebElement
+import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.ScreenInfo
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
+import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.escapeFileName
@@ -74,6 +78,7 @@ fun TestElement.refreshThisElement(): TestElement {
             allowScroll = false,
             swipeToCenter = false,
             waitSeconds = 0.0,
+            safeElementOnly = false,
             throwsException = false
         )
     } catch (t: Throwable) {
@@ -361,4 +366,98 @@ fun TestElement.capture(
     TestDriver.lastElement.cropImage()
 
     return TestDriver.lastElement
+}
+
+/**
+ * isSafe
+ */
+fun TestElement.isSafe(
+    screenInfo: ScreenInfo = TestDriver.screenInfo,
+): Boolean {
+    fun info(message: String) {
+        if (PropertiesManager.enableIsSafeLog) {
+            TestLog.info(message)
+        }
+    }
+
+    if (imageMatched) {
+        return true
+    }
+    if (isEmpty) {
+        return false
+    }
+    if (isDummy) {
+        return false
+    }
+    if (this.bounds.isCenterIncludedIn(viewBounds).not()) {
+        info("isSafe property returns false. (the center of this is not included in viewBounds. (this=$this, viewBounds=$viewBounds)")
+        return false
+    }
+
+    if (type == "XCUIElementTypeApplication") {
+        info("isSafe property returns false. (type == XCUIElementTypeApplication)")
+        return false
+    }
+    val inView = getIsInView(PropertiesManager.enableIsInViewLog || PropertiesManager.enableIsSafeLog)
+    if (inView.not()) {
+        info("isSafe property returns false. (isInView == false)")
+        return false
+    }
+    if (driver.currentScreen.isNotBlank()) {
+        if (CodeExecutionContext.isScrolling) {
+            /**
+             * Safe boundary check in scrollable view
+             */
+            val scrollableElement = this.getScrollableElementsInAncestorsAndSelf().firstOrNull()
+            if (scrollableElement != null && scrollableElement.isScrollableElement) {
+                val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
+                if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
+                    info("isSafe property returns false. this is out of safe bounds. (this=$this, scrollingInfo=$scrollingInfo)")
+                    return false
+                }
+            }
+        }
+
+        if (isiOS) {
+            /**
+             * Keyboard overlapping check
+             */
+            if (testContext.useCache) {
+                val keyboard = testDrive.getKeyboardInIos()
+                if (keyboard.isFound) {
+                    if (this.bounds.isOverlapping(keyboard.bounds)) {
+                        info("isSafe property returns false. keyboard is overlapping. (this=$this, keyboard=$keyboard)")
+                        return false
+                    }
+                }
+            }
+        }
+
+        /**
+         * Covering check
+         */
+        val coveringElements = screenInfo.scrollInfo.getCoveringElements()
+        if (coveringElements.any()) {
+            for (coveringElement in coveringElements) {
+                val sel = getSelector(expression = coveringElement)
+                val cover = TestDriver.findImageOrSelectCore(
+                    selector = sel,
+                    allowScroll = false,
+                    swipeToCenter = false,
+                    waitSeconds = 0.0,
+                    safeElementOnly = false,
+                    throwsException = false,
+                )
+                if (cover == this) {
+                    return true
+                }
+                if (cover.isFound && this.bounds.isOverlapping(cover.bounds)) {
+                    info("isSafe property returns false. overlay is overlapping. (this=$this, overlay=$cover)")
+                    return false
+                }
+            }
+        }
+    }
+
+    return true
 }

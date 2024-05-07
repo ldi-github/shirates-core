@@ -199,7 +199,7 @@ fun TestDrive.tap(
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
         val targetElement = it.select(expression = expression)
-        if (safeElementOnly && targetElement.isSafe.not()) {
+        if (safeElementOnly && targetElement.isSafe().not()) {
             throw TestDriverException(
                 message(id = "tappingUnsafeElementNotAllowed", subject = targetElement.toString())
             )
@@ -270,7 +270,8 @@ private fun TestDrive.tapWithScrollCommandCore(
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            swipeToCenter = false
+            swipeToCenter = false,
+            safeElementOnly = true
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         e = e.tap(holdSeconds = holdSeconds, tapMethod = tapMethod)

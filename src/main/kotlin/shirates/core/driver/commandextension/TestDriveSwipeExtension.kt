@@ -989,6 +989,7 @@ fun TestDrive.swipeElementToElement(
         val m = TestDriver.findImageOrSelectCore(
             selector = startElement.selector!!,
             swipeToCenter = false,
+            safeElementOnly = false,
             throwsException = false
         )
         if (adjust) {
@@ -1008,7 +1009,11 @@ fun TestDrive.swipeElementToElement(
         }
 
         TestDriver.syncCache(force = true)
-        TestDriver.findImageOrSelectCore(selector = startElement.selector!!, swipeToCenter = false)
+        TestDriver.findImageOrSelectCore(
+            selector = startElement.selector!!,
+            swipeToCenter = false,
+            safeElementOnly = false
+        )
     }
 
     if (TestDriver.skip)

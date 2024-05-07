@@ -19,6 +19,7 @@ fun TestDrive.select(
     frame: Bounds? = viewBounds,
     useCache: Boolean = testContext.useCache,
     updateLastElement: Boolean = true,
+    safeElementOnly: Boolean = false,
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
@@ -46,6 +47,7 @@ fun TestDrive.select(
             throwsException = throwsException,
             frame = frame,
             useCache = useCache,
+            safeElementOnly = safeElementOnly,
         )
     }
     if (func != null) {
@@ -159,6 +161,7 @@ fun TestDrive.selectWithScrollDown(
             e = TestDriver.findImageOrSelectCore(
                 selector = selector,
                 swipeToCenter = swipeToCenter,
+                safeElementOnly = true,
                 throwsException = throwsException
             )
         }
@@ -209,6 +212,7 @@ fun TestDrive.selectWithScrollUp(
             e = TestDriver.findImageOrSelectCore(
                 selector = selector,
                 swipeToCenter = swipeToCenter,
+                safeElementOnly = true,
                 throwsException = throwsException
             )
         }
@@ -259,6 +263,7 @@ fun TestDrive.selectWithScrollRight(
             e = TestDriver.findImageOrSelectCore(
                 selector = selector,
                 swipeToCenter = swipeToCenter,
+                safeElementOnly = true,
                 throwsException = throwsException
             )
         }
@@ -309,6 +314,7 @@ fun TestDrive.selectWithScrollLeft(
             e = TestDriver.findImageOrSelectCore(
                 selector = selector,
                 swipeToCenter = swipeToCenter,
+                safeElementOnly = true,
                 throwsException = throwsException
             )
         }
@@ -363,6 +369,7 @@ internal fun TestDrive.canSelectCore(
     selector: Selector,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
+    safeElementOnly: Boolean,
     frame: Bounds? = null
 ): Boolean {
 
@@ -372,7 +379,8 @@ internal fun TestDrive.canSelectCore(
         swipeToCenter = false,
         waitSeconds = waitSeconds,
         throwsException = false,
-        frame = frame
+        frame = frame,
+        safeElementOnly = safeElementOnly
     )
 
     return e.isEmpty.not()
@@ -386,6 +394,7 @@ fun TestDrive.canSelect(
     screenName: String = TestDriver.currentScreen,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
+    safeElementOnly: Boolean = false,
     log: Boolean = false
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is TestElement) {
@@ -403,6 +412,7 @@ fun TestDrive.canSelect(
             selector = sel,
             allowScroll = allowScroll,
             waitSeconds = waitSeconds,
+            safeElementOnly = safeElementOnly
         )
     }
     if (logLine != null) {
@@ -462,6 +472,7 @@ fun TestDrive.canSelectWithScrollDown(
         ) {
             found = canSelectCore(
                 selector = sel,
+                safeElementOnly = true
             )
         }
     }
@@ -503,6 +514,7 @@ fun TestDrive.canSelectWithScrollUp(
         ) {
             found = canSelectCore(
                 selector = sel,
+                safeElementOnly = true
             )
         }
     }
@@ -544,6 +556,7 @@ fun TestDrive.canSelectWithScrollRight(
         ) {
             found = canSelectCore(
                 selector = sel,
+                safeElementOnly = true
             )
         }
     }
@@ -585,6 +598,7 @@ fun TestDrive.canSelectWithScrollLeft(
         ) {
             found = canSelectCore(
                 selector = sel,
+                safeElementOnly = true
             )
         }
     }
@@ -655,6 +669,7 @@ internal fun TestDrive.canSelectAll(
     selectors: Iterable<Selector>,
     allowScroll: Boolean = true,
     frame: Bounds?,
+    safeElementOnly: Boolean,
     log: Boolean = false
 ): Boolean {
     val testElement = refreshLastElement()
@@ -664,7 +679,12 @@ internal fun TestDrive.canSelectAll(
     val context = TestDriverCommandContext(testElement)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         for (selector in selectors) {
-            foundAll = canSelectCore(selector = selector, allowScroll = allowScroll, frame = frame)
+            foundAll = canSelectCore(
+                selector = selector,
+                allowScroll = allowScroll,
+                frame = frame,
+                safeElementOnly = safeElementOnly
+            )
             if (foundAll.not()) {
                 break
             }
@@ -682,6 +702,7 @@ internal fun TestDrive.canSelectAll(
 fun TestDrive.canSelectAll(
     vararg expressions: String,
     frame: Bounds? = null,
+    safeElementOnly: Boolean = true,
     log: Boolean = false
 ): Boolean {
     val testElement = getThisOrIt()
@@ -692,7 +713,11 @@ fun TestDrive.canSelectAll(
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
         val screenInfo = TestDriver.screenInfo
         val selectors = expressions.map { screenInfo.getSelector(expression = it) }
-        foundAll = canSelectAll(selectors = selectors, frame = frame)
+        foundAll = canSelectAll(
+            selectors = selectors,
+            frame = frame,
+            safeElementOnly = safeElementOnly
+        )
     }
     if (logLine != null) {
         logLine.message += " (result=$foundAll)"

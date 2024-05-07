@@ -81,7 +81,7 @@ fun TestDrive.waitForClose(
             waitSeconds = waitSeconds,
             refreshCache = testContext.useCache
         ) {
-            found = canSelectCore(selector = sel)
+            found = canSelectCore(selector = sel, safeElementOnly = false)
             found.not()
         }
 
@@ -120,7 +120,7 @@ fun TestDrive.waitForDisplay(
             waitSeconds = waitSeconds,
             refreshCache = testContext.useCache
         ) {
-            found = canSelectCore(selector = sel)
+            found = canSelectCore(selector = sel, safeElementOnly = false)
             found
         }
 

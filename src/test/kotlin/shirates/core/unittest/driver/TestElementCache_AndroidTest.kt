@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
+import shirates.core.driver.commandextension.isSafe
 import shirates.core.driver.commandextension.relative
 import shirates.core.driver.commandextension.select
 import shirates.core.exception.RerunScenarioException
@@ -47,7 +48,7 @@ class TestElementCache_AndroidTest : UnitTest() {
             assertThat(e.text).isEqualTo("Network & internet")
             assertThat(e.isEmpty).isEqualTo(false)
             assertThat(e.isFound).isEqualTo(true)
-            assertThat(e.isSafe).isEqualTo(true)
+            assertThat(e.isSafe()).isEqualTo(true)
             assertThat(e.isDummy).isEqualTo(false)
             assertThat(e.hasError).isEqualTo(false)
             assertThat(e.lastError).isEqualTo(null)
@@ -60,7 +61,7 @@ class TestElementCache_AndroidTest : UnitTest() {
             assertThat(e.text).isEqualTo("")
             assertThat(e.isEmpty).isEqualTo(true)
             assertThat(e.isFound).isEqualTo(false)
-            assertThat(e.isSafe).isEqualTo(false)
+            assertThat(e.isSafe()).isEqualTo(false)
             assertThat(e.isDummy).isEqualTo(false)
             assertThat(e.hasError).isEqualTo(true)
             assertThat(e.lastError).isNotEqualTo(null)

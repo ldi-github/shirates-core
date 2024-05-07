@@ -1100,6 +1100,7 @@ object TestDriver {
         throwsException: Boolean = true,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
+        safeElementOnly: Boolean = false,
         log: Boolean = false
     ): TestElement {
 
@@ -1116,6 +1117,7 @@ object TestDriver {
                 waitSeconds = waitSeconds,
                 throwsException = throwsException,
                 frame = frame,
+                safeElementOnly = safeElementOnly,
                 useCache = useCache,
             )
         }
@@ -1131,6 +1133,7 @@ object TestDriver {
         throwsException: Boolean = true,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
+        safeElementOnly: Boolean
     ): TestElement {
 
         fun executeSelect(): TestElement {
@@ -1150,7 +1153,8 @@ object TestDriver {
                 swipeToCenter = swipeToCenter,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
-                frame = frame
+                frame = frame,
+                safeElementOnly = safeElementOnly
             )
         }
 
@@ -1182,7 +1186,8 @@ object TestDriver {
         useCache: Boolean,
         swipeToCenter: Boolean,
         throwsException: Boolean,
-        waitSeconds: Double
+        waitSeconds: Double,
+        safeElementOnly: Boolean
     ): TestElement {
         if (selector.isRelative) {
             return TestElementCache.select(
@@ -1218,7 +1223,7 @@ object TestDriver {
                 )
             }
             if (selector.isNegation.not()) {
-                if (selectedElement.isFound && selectedElement.isInView) {
+                if (selectedElement.isFound && selectedElement.isInView && (safeElementOnly.not() || selectedElement.isSafe())) {
                     if (swipeToCenter) {
                         testDrive.silent {
                             selectedElement = selectedElement.swipeToCenter()
@@ -1236,6 +1241,7 @@ object TestDriver {
                     selector = selector,
                     frame = frame,
                     swipeToCenter = swipeToCenter,
+                    safeElementOnly = safeElementOnly,
                     throwsException = throwsException,
                 )
             }
@@ -1619,6 +1625,7 @@ object TestDriver {
         endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
         scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
         swipeToCenter: Boolean,
+        safeElementOnly: Boolean,
         throwsException: Boolean = true
     ): TestElement {
 
@@ -1632,10 +1639,17 @@ object TestDriver {
                 swipeToCenter = false,
                 waitSeconds = 0.0,
                 throwsException = false,
-                frame = frame
+                frame = frame,
+                safeElementOnly = safeElementOnly,
             )
             ms.end()
-            e.isSafe
+            val stopScroll =
+                if (safeElementOnly) {
+                    e.isSafe()
+                } else {
+                    e.isFound
+                }
+            stopScroll
         }
 
         testDrive.doUntilScrollStop(
@@ -1679,6 +1693,7 @@ object TestDriver {
         endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction),
         scrollMaxCount: Int = testContext.scrollMaxCount,
         swipeToCenter: Boolean = false,
+        safeElementOnly: Boolean = true,
         throwsException: Boolean = true
     ): TestElement {
         val sel = expandExpression(expression = expression)
@@ -1695,6 +1710,7 @@ object TestDriver {
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 scrollMaxCount = scrollMaxCount,
+                safeElementOnly = safeElementOnly,
                 throwsException = throwsException
             )
         }
@@ -2043,6 +2059,7 @@ object TestDriver {
      */
     fun isScreen(
         screenName: String,
+        safeElementOnly: Boolean = false,
         log: Boolean = PropertiesManager.enableIsScreenLog
     ): Boolean {
 
@@ -2059,6 +2076,7 @@ object TestDriver {
             var r = TestDriveObject.canSelectAll(
                 selectors = screenInfo.identitySelectors,
                 allowScroll = false,
+                safeElementOnly = safeElementOnly,
                 frame = null
             )
             if (r && screenInfo.satelliteSelectors.any()) {

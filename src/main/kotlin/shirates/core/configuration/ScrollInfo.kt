@@ -60,4 +60,14 @@ class ScrollInfo {
         val footerTop = sortedElements.firstOrNull()?.bounds?.top ?: (viewBounds.bottom + 1)
         return footerTop
     }
+
+    internal fun getCoveringElements(): List<String> {
+
+        val list = mutableListOf<String>()
+        list.addAll(overlayElements)
+        list.addAll(headerElements)
+        list.addAll(footerElements)
+        return list
+    }
+
 }

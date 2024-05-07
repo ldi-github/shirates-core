@@ -364,6 +364,7 @@ internal fun TestDrive.existCore(
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     swipeToCenter: Boolean,
+    safeElementOnly: Boolean,
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
@@ -375,7 +376,7 @@ internal fun TestDrive.existCore(
             throwsException = false,
             waitSeconds = waitSeconds,
             useCache = useCache,
-            swipeToCenter = swipeToCenter
+            swipeToCenter = swipeToCenter,
         )
         if (e.hasError && throwsException) {
             throw e.lastError!!
@@ -393,6 +394,7 @@ internal fun TestDrive.existCore(
             throwsException = false,
             waitSeconds = waitSeconds,
             useCache = useCache,
+            safeElementOnly = safeElementOnly
         )
     }
 
@@ -456,6 +458,7 @@ fun TestDrive.exist(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
+    safeElementOnly: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -483,7 +486,8 @@ fun TestDrive.exist(
             throwsException = throwsException,
             waitSeconds = waitSeconds,
             useCache = useCache,
-            swipeToCenter = false
+            swipeToCenter = false,
+            safeElementOnly = safeElementOnly
         )
     }
 
@@ -707,6 +711,7 @@ private fun TestDrive.existImageCore(
                 waitSeconds = waitSeconds,
                 swipeToCenter = swipeToCenter,
                 useCache = useCache,
+                safeElementOnly = false
             )
         }
     }
@@ -786,6 +791,7 @@ private fun selectElementAndCompareImage(
     waitSeconds: Double,
     swipeToCenter: Boolean,
     useCache: Boolean,
+    safeElementOnly: Boolean
 ): TestElement {
 
     // Select the element
@@ -795,7 +801,8 @@ private fun selectElementAndCompareImage(
         throwsException = false,
         waitSeconds = waitSeconds,
         swipeToCenter = swipeToCenter,
-        useCache = useCache
+        useCache = useCache,
+        safeElementOnly = safeElementOnly
     )
     if (e.isFound.not()) {
         e.imageMatchResult = ImageMatchResult(result = false, templateSubject = null)
@@ -846,6 +853,7 @@ fun TestDrive.existWithScrollDown(
                 assertMessage = assertMessage,
                 selector = sel,
                 swipeToCenter = swipeToCenter,
+                safeElementOnly = true,
                 throwsException = throwsException,
             )
         }
@@ -895,6 +903,7 @@ fun TestDrive.existWithScrollUp(
                 assertMessage = assertMessage,
                 selector = sel,
                 swipeToCenter = swipeToCenter,
+                safeElementOnly = true,
                 throwsException = throwsException,
             )
         }
@@ -944,6 +953,7 @@ fun TestDrive.existWithScrollRight(
                 assertMessage = assertMessage,
                 selector = sel,
                 swipeToCenter = swipeToCenter,
+                safeElementOnly = true,
                 throwsException = throwsException,
             )
         }
@@ -993,6 +1003,7 @@ fun TestDrive.existWithScrollLeft(
                 assertMessage = assertMessage,
                 selector = sel,
                 swipeToCenter = swipeToCenter,
+                safeElementOnly = true,
                 throwsException = throwsException,
             )
         }
@@ -1115,6 +1126,7 @@ internal fun TestDrive.dontExist(
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
     useCache: Boolean = testContext.useCache,
+    safeElementOnly: Boolean
 ): TestElement {
 
     val testElement = TestDriver.it
@@ -1148,6 +1160,7 @@ internal fun TestDrive.dontExist(
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
                 useCache = useCache,
+                safeElementOnly = safeElementOnly
             )
         }
     }
@@ -1161,6 +1174,7 @@ internal fun TestDrive.dontExistCore(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
+    safeElementOnly: Boolean
 ): TestElement {
 
     TestDriver.syncCache()
@@ -1171,6 +1185,7 @@ internal fun TestDrive.dontExistCore(
         waitSeconds = 0.0,
         throwsException = false,
         useCache = useCache,
+        safeElementOnly = safeElementOnly
     )
 
     if (waitSeconds > 0.0 && CodeExecutionContext.withScroll.not() && e.isFound) {
@@ -1211,6 +1226,7 @@ fun TestDrive.dontExist(
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
     useCache: Boolean = testContext.useCache,
+    safeElementOnly: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -1233,6 +1249,7 @@ fun TestDrive.dontExist(
         throwsException = throwsException,
         waitSeconds = waitSeconds,
         useCache = useCache,
+        safeElementOnly = safeElementOnly
     )
 
     if (func != null) {
@@ -1303,6 +1320,7 @@ fun TestDrive.dontExistWithScrollDown(
                 selector = selector,
                 throwsException = throwsException,
                 useCache = useCache,
+                safeElementOnly = true
             )
         }
     }
@@ -1347,6 +1365,7 @@ fun TestDrive.dontExistWithScrollUp(
                 selector = selector,
                 throwsException = throwsException,
                 useCache = useCache,
+                safeElementOnly = true
             )
         }
     }
