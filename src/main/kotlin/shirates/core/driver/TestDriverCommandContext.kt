@@ -852,6 +852,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         scrollMaxCount: Int = testContext.scrollMaxCount,
         scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
         message: String = "",
+        log: Boolean = false,
         func: () -> Unit
     ): LogLine? {
 
@@ -886,10 +887,12 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
             TestLog.withScrollStack.push(callerName)
 
-            beginLogLine = TestLog.withScroll(
-                message = "$message {",
-                scriptCommand = command
-            )
+            if (log) {
+                beginLogLine = TestLog.withScroll(
+                    message = "$message {",
+                    scriptCommand = command
+                )
+            }
 
             func()
         } finally {
@@ -904,7 +907,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 CodeExecutionContext.scrollEndMarginRatio = originalScrollEndMarginRatio
                 CodeExecutionContext.scrollMaxCount = originalScrollMaxCount
                 CodeExecutionContext.scrollToEdgeBoost = originalScrollToEdgeBoost
-                endExecWithScroll(command = command)
+                endExecWithScroll(command = command, log = log)
             } finally {
                 ms.end()
             }
@@ -916,7 +919,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
     /**
      * endExecWithScroll
      */
-    fun endExecWithScroll(command: String): LogLine {
+    fun endExecWithScroll(command: String, log: Boolean): LogLine? {
 
         val current = TestLog.currentWithScroll
         if (callerName != current) {
@@ -925,14 +928,13 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         TestLog.withScrollStack.pop()
         val message = message(id = command)
 
-        val ms = Measure()
-        try {
+        if (log) {
             return TestLog.withScroll(
                 message = "} $message",
                 scriptCommand = command
             )
-        } finally {
-            ms.end()
+        } else {
+            return null
         }
     }
 

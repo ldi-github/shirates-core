@@ -472,7 +472,7 @@ class TestElement(
                 var r = true
                 if (overlayElements.any()) {
                     for (overlayElement in overlayElements) {
-                        val overlay = TestDriver.select(
+                        val overlay = selectWithoutScroll(
                             expression = overlayElement,
                             throwsException = false,
                             waitSeconds = 0.0,

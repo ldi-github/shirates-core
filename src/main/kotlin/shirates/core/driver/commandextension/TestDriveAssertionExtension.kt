@@ -219,7 +219,9 @@ internal fun TestDrive.screenIsCore(
                     refreshCache()
                 }
                 if (testContext.enableIrregularHandler && testContext.onScreenErrorHandler != null) {
-                    testContext.onScreenErrorHandler!!.invoke()
+                    testDrive.withoutScroll {
+                        testContext.onScreenErrorHandler!!.invoke()
+                    }
                     refreshCache()
                 }
             }
@@ -429,7 +431,9 @@ private fun TestDrive.actionWithOnExistErrorHandler(
          */
         TestLog.info("Calling onExistErrorHandler.")
         testDrive.suppressHandler {
-            testContext.onExistErrorHandler!!.invoke()
+            testDrive.withoutScroll {
+                testContext.onExistErrorHandler!!.invoke()
+            }
         }
         e = action()
         screenshot()
@@ -731,7 +735,9 @@ private fun TestDrive.getSelectorForExistImage(expression: String): Selector {
     val s = runCatching { getSelector(expression = expression) }.getOrNull()
     // Handle irregular
     if (s == null && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
-        testContext.onExistErrorHandler!!.invoke()
+        testDrive.withoutScroll {
+            testContext.onExistErrorHandler!!.invoke()
+        }
     }
     val sel = s ?: try {
         // Try getting registered selector in current screen again
@@ -1233,6 +1239,30 @@ fun TestDrive.dontExist(
         func(e)
     }
 
+    return e
+}
+
+/**
+ * dontExistWithoutScroll
+ */
+fun TestDrive.dontExistWithoutScroll(
+    expression: String,
+    throwsException: Boolean = true,
+    waitSeconds: Double = 0.0,
+    useCache: Boolean = testContext.useCache,
+    func: (TestElement.() -> Unit)? = null
+): TestElement {
+
+    var e = TestElement.emptyElement
+    withoutScroll {
+        e = dontExist(
+            expression = expression,
+            throwsException = throwsException,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+            func = func
+        )
+    }
     return e
 }
 

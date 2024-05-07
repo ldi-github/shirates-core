@@ -577,7 +577,9 @@ abstract class UITest : TestDrive {
                         TestLog.warn(message(id = "rerunningScenarioRequested", submessage = t.message ?: ""))
 
                         if (testContext.onRerunScenarioHandler != null) {
-                            testContext.onRerunScenarioHandler!!.invoke(t)
+                            testDrive.withoutScroll {
+                                testContext.onRerunScenarioHandler!!.invoke(t)
+                            }
                         }
                     } else {
                         if ((t is AssertionError).not()) {

@@ -1163,7 +1163,9 @@ object TestDriver {
             } catch (t: Throwable) {
                 TestLog.info(t.message ?: t.stackTraceToString())
                 testDrive.suppressHandler {
-                    testContext.onSelectErrorHandler!!.invoke()
+                    testDrive.withoutScroll {
+                        testContext.onSelectErrorHandler!!.invoke()
+                    }
                 }
                 executeSelect()
             }
@@ -1247,7 +1249,9 @@ object TestDriver {
                     throwOnError = false,
                     onBeforeRetry = { sc ->
                         if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
-                            testContext.onSelectErrorHandler!!.invoke()
+                            testDrive.withoutScroll {
+                                testContext.onSelectErrorHandler!!.invoke()
+                            }
                         }
                     }
                 ) { sc ->
@@ -1534,7 +1538,9 @@ object TestDriver {
         if (scroll.not() && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
             // Handle irregular
             testDrive.suppressHandler {
-                testContext.onExistErrorHandler!!.invoke()
+                testDrive.withoutScroll {
+                    testContext.onExistErrorHandler!!.invoke()
+                }
             }
             // Retry
             r = rootElement.isContainingImage(selector.image!!)
@@ -2388,7 +2394,9 @@ object TestDriver {
                 )
                 Thread.sleep(1500)
                 refreshCache()
-                onLaunchHandler?.invoke()
+                testDrive.withoutScroll {
+                    onLaunchHandler?.invoke()
+                }
             } catch (t: Throwable) {
                 TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
 
