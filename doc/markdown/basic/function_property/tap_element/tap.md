@@ -8,7 +8,7 @@ You can tap an element on the screen using these functions.
 |:-------------------|:----------------------------------------------------------------------------------------------------------------|
 | tap(expression)    | Tap the first element that matches the selector in current screen. Scrolling occurs within withScroll function. |
 | tap(x, y)          | Tap the coordinates (x, y).                                                                                     |
-| tapWithout         | Tap the first element that matches the selector **without** scrolling.                                          |
+| tapWithoutScroll   | Tap the first element that matches the selector **without** scrolling.                                          |
 | tapWithScrollDown  | Tap the first element that matches the selector with scrolling down.                                            |
 | tapWithScrollUp    | Tap the first element that matches the selector with scrolling up.                                              |
 | tapWithScrollRight | Tap the first element that matches the selector with scrolling right.                                           |
