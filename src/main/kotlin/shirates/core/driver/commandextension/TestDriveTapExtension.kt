@@ -177,7 +177,7 @@ fun TestDrive.tap(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    safeElementOnly: Boolean = true
+    safeElementOnly: Boolean = CodeExecutionContext.isScrolling
 ): TestElement {
 
     if (CodeExecutionContext.isInCell && this is TestElement) {
@@ -198,12 +198,12 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = it.select(expression = expression)
-        if (safeElementOnly && targetElement.isSafe().not()) {
-            throw TestDriverException(
-                message(id = "tappingUnsafeElementNotAllowed", subject = targetElement.toString())
-            )
-        }
+        val targetElement = it.select(expression = expression, safeElementOnly = safeElementOnly)
+//        if (safeElementOnly && targetElement.isSafe().not()) {
+//            throw TestDriverException(
+//                message(id = "tappingUnsafeElementNotAllowed", subject = targetElement.toString())
+//            )
+//        }
 
         val tapFunc = {
             silent {
@@ -219,6 +219,24 @@ fun TestDrive.tap(
 
     return refreshLastElement()
 }
+
+/**
+ * tapWithoutScroll
+ */
+fun TestDrive.tapWithoutScroll(
+    expression: String,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+    tapMethod: TapMethod = TapMethod.auto
+): TestElement {
+
+    return tap(
+        expression = expression,
+        holdSeconds = holdSeconds,
+        tapMethod = tapMethod,
+        safeElementOnly = false
+    )
+}
+
 
 /**
  * tapSoftwareKey
