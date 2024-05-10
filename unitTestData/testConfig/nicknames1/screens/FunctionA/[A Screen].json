@@ -43,6 +43,9 @@
 
     "[by access,text,className]": "@access1&&text1&&.className1",
 
+    "[Button A(active)]": "[Button A]",
+    "[Button A(inactive)]": "[Button A]",
+
     "[ScrollFrame]": "#scrollframe"
   },
   "default": "[X]",
