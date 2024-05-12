@@ -352,6 +352,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
                     resultSelector = resultSelector.getChainedSelector(command)
                 }
             }
+            resultSelector = resultSelector.copy()
             resultSelector.nickname = nickname
             selectorMap.put(nickname, resultSelector)
             nicknameMap.remove(nickname)

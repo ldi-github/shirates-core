@@ -16,9 +16,15 @@ import java.nio.file.Path
 
 class ScreenRepositoryTest : UnitTest() {
 
-    private fun check(selector: Selector?, property: String, expected: String?) {
+    private fun Map<String, Selector>.check(nickname: String, property: String, expected: String?): Selector {
 
-        val s = selector!!
+        if (this.containsKey(nickname).not()) {
+            throw TestConfigException("No nickname found")
+        }
+
+        val s = this[nickname]!!
+
+        assertThat(s.nickname).isEqualTo(nickname)
 
         if (property == "text") {
             assertThat(s.text).isEqualTo(expected)
@@ -91,6 +97,8 @@ class ScreenRepositoryTest : UnitTest() {
         if (property == "xpath") {
             assertThat(s.xpath).isEqualTo(expected)
         }
+
+        return s
     }
 
     @Test
@@ -131,14 +139,11 @@ class ScreenRepositoryTest : UnitTest() {
 
             val s = screenInfo.selectorMap
 
-            assertThat(s.containsKey("[Menu X]")).isTrue()
-            check(s["[Menu X]"], "id", "idX")
+            s.check("[Menu X]", "id", "idX")
 
-            assertThat(s.containsKey("[Menu Y]")).isTrue()
-            check(s["[Menu Y]"], "xpath", "xpathY")
+            s.check("[Menu Y]", "xpath", "xpathY")
 
-            assertThat(s.containsKey("[Menu Z]")).isTrue()
-            check(s["[Menu Z]"], "text", "textZ")
+            s.check("[Menu Z]", "text", "textZ")
         }
 
         /**
@@ -191,41 +196,39 @@ class ScreenRepositoryTest : UnitTest() {
             /**
              * include
              */
-            run {
-                assertThat(s.containsKey("[Menu X]")).isTrue()
-                check(s["[Menu X]"], "id", "idX")
-
-                assertThat(s.containsKey("[Menu Y]")).isTrue()
-                check(s["[Menu Y]"], "xpath", "xpathY")
-
-                assertThat(s.containsKey("[Menu Z]")).isTrue()
-                check(s["[Menu Z]"], "text", "textZ")
-            }
+            s.check("[Menu X]", "id", "idX")
+            s.check("[Menu Y]", "xpath", "xpathY")
+            s.check("[Menu Z]", "text", "textZ")
 
             /**
              * selectors
              */
             run {
-                assertThat(s.containsKey("[Button A]")).isTrue()
-                check(s["[Button A]"], "id", "idA")
-                assertThat(s["[Button A]"]?.section).isEqualTo("selectors")
-
+                val sel = s.check("[Button A]", "id", "idA")
+                assertThat(sel.section).isEqualTo("selectors")
+            }
+            run {
+                val sel = s.check("[Button A(active)]", "id", "idA")
+                assertThat(sel.section).isEqualTo("selectors")
+            }
+            run {
                 assertThat(s.containsKey("{TextBox A}")).isTrue()
-                check(s["{TextBox A}"], "xpath", "xpathA")
+                val sel = s.check("{TextBox A}", "xpath", "xpathA")
                 assertThat(s["{TextBox A}"]?.section).isEqualTo("selectors")
-
-                assertThat(s.containsKey("[Label A]")).isTrue()
-                check(s["[Label A]"], "text", "textA")
-
-                assertThat(s.containsKey("[Label A2]")).isTrue()
-                check(s["[Label A2]"], "textStartsWith", "textA2")
-
-                assertThat(s.containsKey("[Label A3]")).isTrue()
-                check(s["[Label A3]"], "textContains", "textA3")
-
-                assertThat(s.containsKey("[Label A4]")).isTrue()
-                check(s["[Label A4]"], "textMatches", "textA4")
-
+            }
+            run {
+                val sel = s.check("[Label A]", "text", "textA")
+            }
+            run {
+                val sel = s.check("[Label A2]", "textStartsWith", "textA2")
+            }
+            run {
+                val sel = s.check("[Label A3]", "textContains", "textA3")
+            }
+            run {
+                val sel = s.check("[Label A4]", "textMatches", "textA4")
+            }
+            run {
                 assertThat(s.containsKey("[empty]")).isTrue()
                 assertThat(s["[empty]"]?.text).isEqualTo("empty")
                 assertThat(s["[empty]"]?.textContains).isNull()
@@ -238,62 +241,66 @@ class ScreenRepositoryTest : UnitTest() {
                 assertThat(s["[empty]"]?.className).isNull()
                 assertThat(s["[empty]"]?.xpath).isNull()
                 assertThat(s["[empty]"]?.section).isEqualTo("selectors")
-
-                assertThat(s.containsKey("[by id]")).isTrue()
-                check(s["[by id]"], "id", "idA")
-
-                assertThat(s.containsKey("[by xpath]")).isTrue()
-                check(s["[by xpath]"], "xpath", "xpathA")
-
-                assertThat(s.containsKey("[by text]")).isTrue()
-                check(s["[by text]"], "text", "textA")
-
-                assertThat(s.containsKey("[by textStartsWith]")).isTrue()
-                check(s["[by textStartsWith]"], "textStartsWith", "textA")
-
-                assertThat(s.containsKey("[by textContains]")).isTrue()
-                check(s["[by textContains]"], "textContains", "textA")
-
-                assertThat(s.containsKey("[by textEndsWith]")).isTrue()
-                check(s["[by textEndsWith]"], "textEndsWith", "textA")
-
-                assertThat(s.containsKey("[by textMatches]")).isTrue()
-                check(s["[by textMatches]"], "textMatches", "textA")
-
-                assertThat(s.containsKey("[by access]")).isTrue()
-                check(s["[by access]"], "access", "accessA")
-
-                assertThat(s.containsKey("[by access 2]")).isTrue()
-                check(s["[by access 2]"], "access", "accessA2")
-
-                assertThat(s.containsKey("[by accessStartsWith]")).isTrue()
-                check(s["[by accessStartsWith]"], "accessStartsWith", "accessA")
-
-                assertThat(s.containsKey("[by accessStartsWith 2]")).isTrue()
-                check(s["[by accessStartsWith 2]"], "accessStartsWith", "accessA2")
-
-                assertThat(s.containsKey("[by accessContains]")).isTrue()
-                check(s["[by accessContains]"], "accessContains", "accessA")
-
-                assertThat(s.containsKey("[by accessContains 2]")).isTrue()
-                check(s["[by accessContains 2]"], "accessContains", "accessA2")
-
-                assertThat(s.containsKey("[by accessEndsWith]")).isTrue()
-                check(s["[by accessEndsWith]"], "accessEndsWith", "accessA")
-
-                assertThat(s.containsKey("[by accessEndsWith 2]")).isTrue()
-                check(s["[by accessEndsWith 2]"], "accessEndsWith", "accessA2")
-
-                assertThat(s.containsKey("[by accessMatches]")).isTrue()
-                check(s["[by accessMatches]"], "accessMatches", "accessA")
-
-                assertThat(s.containsKey("[by className]")).isTrue()
-                check(s["[by className]"], "className", "className1")
-
-                assertThat(s.containsKey("[by access,text,className]")).isTrue()
-                check(s["[by access,text,className]"], "access", "access1")
-                check(s["[by access,text,className]"], "text", "text1")
-                check(s["[by access,text,className]"], "className", "className1")
+            }
+            run {
+                val sel = s.check("[by id]", "id", "idA")
+            }
+            run {
+                val sel = s.check("[by xpath]", "xpath", "xpathA")
+            }
+            run {
+                val sel = s.check("[by text]", "text", "textA")
+            }
+            run {
+                val sel = s.check("[by textStartsWith]", "textStartsWith", "textA")
+            }
+            run {
+                val sel = s.check("[by textContains]", "textContains", "textA")
+            }
+            run {
+                val sel = s.check("[by textEndsWith]", "textEndsWith", "textA")
+            }
+            run {
+                val sel = s.check("[by textMatches]", "textMatches", "textA")
+            }
+            run {
+                val sel = s.check("[by access]", "access", "accessA")
+            }
+            run {
+                val sel = s.check("[by access 2]", "access", "accessA2")
+            }
+            run {
+                val sel = s.check("[by accessStartsWith]", "accessStartsWith", "accessA")
+            }
+            run {
+                val sel = s.check("[by accessStartsWith 2]", "accessStartsWith", "accessA2")
+            }
+            run {
+                val sel = s.check("[by accessContains]", "accessContains", "accessA")
+            }
+            run {
+                val sel = s.check("[by accessContains 2]", "accessContains", "accessA2")
+            }
+            run {
+                val sel = s.check("[by accessEndsWith]", "accessEndsWith", "accessA")
+            }
+            run {
+                val sel = s.check("[by accessEndsWith 2]", "accessEndsWith", "accessA2")
+            }
+            run {
+                val sel = s.check("[by accessMatches]", "accessMatches", "accessA")
+            }
+            run {
+                val sel = s.check("[by className]", "className", "className1")
+            }
+            run {
+                val sel = s.check("[by access,text,className]", "access", "access1")
+            }
+            run {
+                val sel = s.check("[by access,text,className]", "text", "text1")
+            }
+            run {
+                val sel = s.check("[by access,text,className]", "className", "className1")
             }
         }
     }

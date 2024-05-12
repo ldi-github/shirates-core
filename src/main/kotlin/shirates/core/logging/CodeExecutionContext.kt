@@ -209,7 +209,6 @@ object CodeExecutionContext {
      * lastScreenshotImage
      */
     var lastScreenshotImage: BufferedImage? = null
-        internal set
 
     /**
      * lastScreenshotTime
