@@ -22,6 +22,9 @@ class TestElementCellExtensionTest : UITest() {
                         exist("Game Controller")
                         exist("Gamepad")
                         exist("Connected")
+                        select("Game Controller").textIs("Game Controller")
+                        select("Gamepad").textIs("Gamepad")
+                        select("Connected").textIs("Connected")
                     }
                     it.cellOf("Identify Controller") {
                         exist("Identify Controller")

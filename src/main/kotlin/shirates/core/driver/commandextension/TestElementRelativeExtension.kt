@@ -577,6 +577,10 @@ internal fun TestElement.relative(
                 e = this.not()
             }
 
+            ":cell" -> {
+                e = this.getCell()
+            }
+
             else -> {
                 if (relativeSelector.command.isNullOrBlank().not()) {
                     throw NotImplementedError("command.funcName='${relativeSelector.command}' is not supported")
