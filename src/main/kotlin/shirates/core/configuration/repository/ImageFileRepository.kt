@@ -129,7 +129,8 @@ object ImageFileRepository {
 
         val entries = getImageFileEntries(imageExpression = imageExpression)
         if (screenDirectory != null) {
-            return entries.filter { it.filePath.toString().contains(screenDirectory) }.firstOrNull()
+            val sd = screenDirectory.replace("/", File.separator)
+            return entries.filter { it.filePath.toString().contains(sd) }.firstOrNull()
         }
         return entries.firstOrNull()
             ?: throw FileNotFoundException("Image file not found. (expression=$imageExpression)")
