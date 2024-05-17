@@ -887,10 +887,11 @@ class TestProfileTest : UnitTest() {
             }
         }
         // APP
+        val path = UserVar.downloads.resolve("not/exist/package.apk")
         validateCapability(
             propertyName = "app",
             errorValue = "not/exist/package.apk",
-            message = "Package file not found. Set androidPackageFile or iosPackageFile or capabilities.app properly.(/Users/wave1008/Downloads/not/exist/package.apk)",
+            message = "Package file not found. Set androidPackageFile or iosPackageFile or capabilities.app properly.($path)",
             validValue = "unitTestData/files/dummy.apk"
         )
     }
