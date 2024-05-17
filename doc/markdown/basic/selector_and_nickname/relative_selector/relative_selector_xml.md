@@ -21,6 +21,7 @@
 | :preButton        | previous button element |
 | :nextSwitch       | next switch element     |
 | :preSwitch        | previous switch element |
+| :cell             | cell element            |
 
 ## Relative selector examples
 
