@@ -5,10 +5,7 @@ import shirates.core.driver.TestMode.hasOsaifuKeitai
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.driver.branchextension.result.SpecialTagCompareResult
-import shirates.core.driver.commandextension.canSelect
-import shirates.core.driver.commandextension.findImage
-import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.commandextension.isImage
+import shirates.core.driver.commandextension.*
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.ImageMatchResult
@@ -356,14 +353,12 @@ fun TestDrive.ifCanSelect(
 
     val command = "ifCanSelect"
     TestDriver.it
-    val canSelect = this.canSelect(
-        expression = expression,
-    )
-    val matched = canSelect
+    val e = select(expression = expression, throwsException = false, waitSeconds = 0.0)
+    val matched = e.isFound
 
     val result =
         if (this is BooleanCompareResult) this
-        else BooleanCompareResult(value = canSelect, command = command)
+        else BooleanCompareResult(value = matched, command = command)
     val sel = getSelector(expression = expression)
     val message = message(id = command, subject = sel.toString())
 
@@ -371,7 +366,10 @@ fun TestDrive.ifCanSelect(
         val context = TestDriverCommandContext(null)
         context.execBranch(command = command, condition = message) {
 
-            onTrue.invoke()
+            lastElement = e
+            e.apply {
+                onTrue.invoke()
+            }
         }
     }
 

@@ -1032,4 +1032,21 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             assertThat(eNotNot.isDummy).isEqualTo(true)
         }
     }
+
+    @Test
+    fun cell() {
+
+        run {
+            // Arrange
+            TestElementCache.loadXml(XmlDataAndroid.SettingsTopScreen)
+            val e = TestElementCache.select("Network & internet")
+            // Act
+            val cell = e.relative(":cell")
+            // Assert
+            assertThat(cell.className).isEqualTo("android.widget.LinearLayout")
+            assertThat(cell.boundsString).isEqualTo("[0,397][1080,597]")
+            assertThat(cell.parentElement.id).isEqualTo("com.android.settings:id/recycler_view")
+        }
+    }
+
 }

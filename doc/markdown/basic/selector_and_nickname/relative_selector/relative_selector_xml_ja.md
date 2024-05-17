@@ -21,6 +21,7 @@
 | :preButton  | 前のbutton要素 |
 | :nextSwitch | 次のswitch要素 |
 | :preSwitch  | 前のswitch要素 |
+| :cell       | セル要素       |
 
 ## 使用例
 

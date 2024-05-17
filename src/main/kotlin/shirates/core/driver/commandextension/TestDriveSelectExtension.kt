@@ -23,19 +23,20 @@ fun TestDrive.select(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-    if (CodeExecutionContext.isInCell && this is TestElement) {
-        return this.innerWidget(expression = expression)
-    }
 
-    val testElement = getThisOrIt()
+    val sel = getSelector(expression = expression)
+
+    if (CodeExecutionContext.isInCell && this is TestElement) {
+        return CodeExecutionContext.lastCell.innerWidget(expression, frame = frame)
+    }
 
     if (useCache) {
         syncCache()
     }
     TestDriver.refreshCurrentScreenWithNickname(expression)
 
-    val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
+    val testElement = getThisOrIt()
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
 

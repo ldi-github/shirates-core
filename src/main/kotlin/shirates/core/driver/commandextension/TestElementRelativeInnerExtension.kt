@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
 import shirates.core.driver.TestElement
+import shirates.core.driver.filterBySelector
 
 internal val TestElement.innerElements: List<TestElement>
     get() {
@@ -45,11 +46,14 @@ internal fun TestElement.innerWidget(
     frame: Bounds?
 ): TestElement {
 
-    return this.flow(
+    val elms = this.innerWidgets.filterBySelector(
         selector = selector,
-        targetElements = innerWidgets,
+        throwsException = false,
         frame = frame
     )
+    val e = elms.firstOrNull() ?: TestElement.emptyElement
+    e.selector = this.selector?.getChainedSelector(":innerWidget($selector)")
+    return e
 }
 
 /**
@@ -76,12 +80,7 @@ fun TestElement.innerWidget(
 ): TestElement {
 
     val sel = getSelector(expression = expression)
-    val exp = sel.getElementExpression()
-    return relative(
-        command = ":innerWidget($exp)",
-        scopeElements = innerWidgets,
-        frame = frame
-    )
+    return innerWidget(selector = sel, frame = frame)
 }
 
 internal fun TestElement.innerLabel(
