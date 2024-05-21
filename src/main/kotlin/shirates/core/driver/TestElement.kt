@@ -915,13 +915,15 @@ class TestElement(
             }
 
             // iOS
-            if (type == "XCUIElementTypeStaticText" && label.isEmpty()) {
+            if (type == "XCUIElementTypeStaticText" && label.isEmpty() && name.isEmpty() && value.isEmpty()) {
                 return false
             }
-            if (parentElement.isVisible) {
-                return true
+            if (isVisible.not()) {
+                if (isInXCUIElementTypeCell || isInXCUIElementTypeTabBar) {
+                    return true
+                }
             }
-            if (isVisible.not() && (isInXCUIElementTypeCell || isInXCUIElementTypeTabBar)) {
+            if (parentElement.isVisible) {
                 return true
             }
             return isVisible
