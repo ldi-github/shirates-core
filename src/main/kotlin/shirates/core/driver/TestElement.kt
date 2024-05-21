@@ -909,13 +909,16 @@ class TestElement(
      */
     val isVisibleCalculated: Boolean
         get() {
+            // Android
             if (isAndroid) {
                 return true
             }
-            if (type == "XCUIElementTypeImage") {
+
+            // iOS
+            if (parentElement.isVisible) {
                 return true
             }
-            if (visible == "false" && (isInXCUIElementTypeCell || isInXCUIElementTypeTabBar)) {
+            if (isVisible.not() && (isInXCUIElementTypeCell || isInXCUIElementTypeTabBar)) {
                 return true
             }
             return isVisible
