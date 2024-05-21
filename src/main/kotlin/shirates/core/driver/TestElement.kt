@@ -915,6 +915,9 @@ class TestElement(
             }
 
             // iOS
+            if (type == "XCUIElementTypeStaticText" && label.isEmpty()) {
+                return false
+            }
             if (parentElement.isVisible) {
                 return true
             }
