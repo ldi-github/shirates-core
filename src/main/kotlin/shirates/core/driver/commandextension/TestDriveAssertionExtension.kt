@@ -607,7 +607,6 @@ fun TestDrive.existImage(
                 throw TestNGException("$assertMessage (${e.imageMatchResult})")
             }
             TestLog.warn("$assertMessage (${e.imageMatchResult})")
-            TestLog.conditionalAuto(assertMessage)
         }
     }
 
