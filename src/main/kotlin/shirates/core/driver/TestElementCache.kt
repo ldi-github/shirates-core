@@ -190,7 +190,7 @@ object TestElementCache {
                     selectContext = selectContext,
                     frame = frame
                 )
-                e = list.firstOrNull { it.isEmpty.not() } ?: TestElement.emptyElement
+                e = list.firstOrNull { it.isEmpty.not() && it.isInView } ?: TestElement.emptyElement
             }
             e.lastError = null
             e.imageMatchResult = null
