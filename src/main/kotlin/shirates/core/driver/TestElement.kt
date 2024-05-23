@@ -921,11 +921,11 @@ class TestElement(
                 }
             }
             if (isVisible.not()) {
-                if (siblings.areAllVisibleFalse()) {
-                    return false
-                }
                 if (isInXCUIElementTypeCell || isInXCUIElementTypeTabBar) {
                     return true
+                }
+                if (siblings.count() > 1 && siblings.areAllVisibleFalse()) {
+                    return false
                 }
             }
             if (parentElement.isVisible) {
