@@ -1233,8 +1233,6 @@ object TestDriver {
                     lastElement = selectedElement
                     return lastElement
                 } else {
-                    selectedElement = TestElement.emptyElement
-                    selectedElement.selector = selector
                     lastElement = selectedElement
                 }
             }
