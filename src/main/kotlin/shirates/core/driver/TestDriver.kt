@@ -362,7 +362,7 @@ object TestDriver {
                     TestLog.ok(message = assertMessage)
                 }
                 return
-            } else if (imageMatchResult.result == false) {
+            } else if (e.isFound && imageMatchResult.result == false) {
                 e.lastResult = LogType.COND_AUTO
                 if (log) {
                     TestLog.warn("$assertMessage (${e.imageMatchResult})")
@@ -371,11 +371,10 @@ object TestDriver {
                 return
             }
         }
-        if (e.lastResult.isOKType.not()) {
-            e.lastResult = LogType.NG
-            val selectorString = "${e.selector} ($currentScreen})"
-            e.lastError = TestNGException(message = assertMessage, cause = TestDriverException(selectorString))
-        }
+
+        e.lastResult = LogType.NG
+        val selectorString = "${e.selector} ($currentScreen})"
+        e.lastError = TestNGException(message = assertMessage, cause = TestDriverException(selectorString))
     }
 
     /**
