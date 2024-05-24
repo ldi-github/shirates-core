@@ -361,6 +361,14 @@ object TestDriver {
                 if (log) {
                     TestLog.ok(message = assertMessage)
                 }
+                return
+            } else if (imageMatchResult.result == false) {
+                e.lastResult = LogType.COND_AUTO
+                if (log) {
+                    TestLog.warn("$assertMessage (${e.imageMatchResult})")
+                    TestLog.conditionalAuto(assertMessage)
+                }
+                return
             }
         }
         if (e.lastResult.isOKType.not()) {

@@ -168,6 +168,7 @@ class TestElementImageExtensionTest : UITest() {
                     for (entry in entries) {
                         entry.bufferedImage = tipsAndSupport.bufferedImage
                     }
+                    selectWithScrollUp("[Notifications Icon]")
                 }.expectation {
                     it.existImage("[Notifications Icon]") {     // element found, image does not match, WARN
                         assertThat(TestLog.lines.takeLast(2).first().logType).isEqualTo(LogType.WARN)

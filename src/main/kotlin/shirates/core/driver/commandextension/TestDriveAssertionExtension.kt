@@ -601,13 +601,6 @@ fun TestDrive.existImage(
             useCache = useCache,
             swipeToCenter = swipeToCenter
         )
-
-        if (e.imageMatchResult?.result == false) {
-            if (throwsException) {
-                throw TestNGException("$assertMessage (${e.imageMatchResult})")
-            }
-            TestLog.warn("$assertMessage (${e.imageMatchResult})")
-        }
     }
 
     if (func != null) {
@@ -713,11 +706,6 @@ private fun TestDrive.existImageCore(
                 safeElementOnly = false
             )
         }
-    }
-
-    if (e.imageMatchResult != null && e.imageMatchResult!!.imageFileEntries.isEmpty()) {
-        conditionalAuto(assertMessage)
-        return e
     }
 
     TestDriver.postProcessForImageAssertion(
