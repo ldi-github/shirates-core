@@ -2,6 +2,7 @@ package shirates.core.driver
 
 import shirates.core.configuration.Filter
 import shirates.core.configuration.Selector
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.relative
 import shirates.core.utility.image.ImageMatchSizeFilterStrategy
@@ -228,4 +229,21 @@ fun List<TestElement>.filterByPointIncluded(
 ): List<TestElement> {
 
     return this.filter { it.bounds.includesPoint(x = x, y = y) }
+}
+
+/**
+ * areAllVisibleFalse
+ */
+fun List<TestElement>.areAllVisibleFalse(): Boolean {
+
+    if (isAndroid) {
+        return false
+    }
+
+    for (e in this) {
+        if (e.isVisible) {
+            return false
+        }
+    }
+    return true
 }

@@ -331,44 +331,65 @@ object TestDriver {
     internal fun postProcessForAssertion(
         selectResult: TestElement,
         assertMessage: String,
+        mustValidateImage: Boolean,
         log: Boolean = CodeExecutionContext.shouldOutputLog,
         dontExist: Boolean = false
     ) {
-
         val e = selectResult
-        if (dontExist && e.isEmpty || dontExist.not() && e.isFound) {
-            e.lastResult = TestLog.getOKType()
-            if (log) {
-                TestLog.ok(message = assertMessage)
-            }
-        } else {
-            e.lastResult = LogType.NG
-            val selectorString = "${selectResult.selector} ($currentScreen})"
-            e.lastError = TestNGException(assertMessage, TestDriverException(selectorString))
-        }
-    }
 
-    internal fun postProcessForImageAssertion(
-        e: TestElement,
-        assertMessage: String,
-        log: Boolean = CodeExecutionContext.shouldOutputLog,
-        dontExist: Boolean = false
-    ) {
-        val imageMatchResult = e.imageMatchResult
-        if (imageMatchResult != null) {
-            if (dontExist && imageMatchResult.result.not() || dontExist.not() && imageMatchResult.result) {
-                e.lastResult = TestLog.getOKType()
-                if (log) {
-                    TestLog.ok(message = assertMessage)
-                }
-            }
-        }
-        if (e.lastResult.isOKType.not()) {
+        fun setNG() {
             e.lastResult = LogType.NG
             val selectorString = "${e.selector} ($currentScreen})"
             e.lastError = TestNGException(message = assertMessage, cause = TestDriverException(selectorString))
         }
+
+        val eResult = e.isElementFound && dontExist.not() || e.isElementFound.not() && dontExist
+        if (e.imageMatchResult == null) {
+            if (eResult) {
+                e.lastResult = TestLog.getOKType()
+                if (log) {
+                    TestLog.ok(message = assertMessage)
+                }
+                return
+            } else {
+                setNG()
+                return
+            }
+        }
+
+        val iResult = e.isImageFound && dontExist.not() || e.isImageFound.not() && dontExist
+        if (eResult) {
+            if (iResult) {
+                e.lastResult = TestLog.getOKType()
+                if (log) {
+                    TestLog.ok(message = assertMessage)
+                }
+                return
+            } else {
+                if (mustValidateImage) {
+                    setNG()
+                    return
+                } else {
+                    e.lastResult = LogType.COND_AUTO
+                    if (log) {
+                        TestLog.warn("$assertMessage (${e.imageMatchResult})")
+                        TestLog.conditionalAuto(assertMessage)
+                    }
+                    return
+                }
+            }
+        } else {
+            if (iResult) {
+                e.lastResult = TestLog.getOKType()
+                if (log) {
+                    TestLog.ok(message = assertMessage)
+                }
+                return
+            }
+        }
+        setNG()
     }
+
 
     /**
      * clearContext
@@ -1232,6 +1253,8 @@ object TestDriver {
                     }
                     lastElement = selectedElement
                     return lastElement
+                } else {
+                    lastElement = selectedElement
                 }
             }
 

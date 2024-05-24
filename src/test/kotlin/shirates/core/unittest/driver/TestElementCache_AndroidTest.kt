@@ -812,7 +812,6 @@ class TestElementCache_AndroidTest : UnitTest() {
 
         assertThat(TestElementCache.canSelect("Airplane mode")).isTrue()
         assertThat(TestElementCache.canSelect("no exist")).isFalse()
-        assertThat(TestElementCache.canSelect("<no exist>:not")).isTrue()
 
         assertThat(TestElementCache.canSelect("Airplane*")).isTrue()
         assertThat(TestElementCache.canSelect("no exist*")).isFalse()

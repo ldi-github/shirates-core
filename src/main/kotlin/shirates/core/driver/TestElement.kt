@@ -370,6 +370,25 @@ class TestElement(
         }
 
     /**
+     * isElementFound
+     */
+    val isElementFound: Boolean
+        get() {
+            if (isDummy) {
+                return true
+            }
+            return isEmpty.not()
+        }
+
+    /**
+     * isImageFound
+     */
+    val isImageFound: Boolean
+        get() {
+            return imageMatchResult?.result ?: false
+        }
+
+    /**
      * scrollHost
      */
     val scrollHost: TestElement
@@ -909,13 +928,26 @@ class TestElement(
      */
     val isVisibleCalculated: Boolean
         get() {
+            // Android
             if (isAndroid) {
                 return true
             }
-            if (type == "XCUIElementTypeImage") {
-                return true
+
+            // iOS
+            if (type == "XCUIElementTypeStaticText") {
+                if (label.isEmpty() && name.isEmpty() && value.isEmpty()) {
+                    return false
+                }
             }
-            if (visible == "false" && (isInXCUIElementTypeCell || isInXCUIElementTypeTabBar)) {
+            if (isVisible.not()) {
+                if (isInXCUIElementTypeCell || isInXCUIElementTypeTabBar) {
+                    return true
+                }
+                if (siblings.count() > 1 && siblings.areAllVisibleFalse()) {
+                    return false
+                }
+            }
+            if (parentElement.isVisible) {
                 return true
             }
             return isVisible

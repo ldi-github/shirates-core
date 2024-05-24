@@ -365,6 +365,7 @@ internal fun TestDrive.existCore(
     useCache: Boolean = testContext.useCache,
     swipeToCenter: Boolean,
     safeElementOnly: Boolean,
+    mustValidateImage: Boolean,
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
@@ -377,6 +378,7 @@ internal fun TestDrive.existCore(
             waitSeconds = waitSeconds,
             useCache = useCache,
             swipeToCenter = swipeToCenter,
+            mustValidateImage = mustValidateImage
         )
         if (e.hasError && throwsException) {
             throw e.lastError!!
@@ -424,6 +426,7 @@ private fun TestDrive.actionWithOnExistErrorHandler(
     TestDriver.postProcessForAssertion(
         selectResult = e,
         assertMessage = message,
+        mustValidateImage = throwsException,
         log = false
     )
 
@@ -443,6 +446,7 @@ private fun TestDrive.actionWithOnExistErrorHandler(
         TestDriver.postProcessForAssertion(
             selectResult = e,
             assertMessage = message,
+            mustValidateImage = throwsException,
             log = false
         )
     }
@@ -459,11 +463,16 @@ fun TestDrive.exist(
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     safeElementOnly: Boolean = true,
+    mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     if (CodeExecutionContext.isInCell && this is TestElement) {
-        return existInCell(expression = expression, throwsException = throwsException)
+        return existInCell(
+            expression = expression,
+            throwsException = throwsException,
+            mustValidateImage = mustValidateImage
+        )
     }
 
     TestDriver.refreshCurrentScreenWithNickname(expression)
@@ -487,7 +496,8 @@ fun TestDrive.exist(
             waitSeconds = waitSeconds,
             useCache = useCache,
             swipeToCenter = false,
-            safeElementOnly = safeElementOnly
+            safeElementOnly = safeElementOnly,
+            mustValidateImage = mustValidateImage
         )
     }
 
@@ -569,6 +579,7 @@ fun TestDrive.existImage(
     throwsException: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
+    mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -599,16 +610,9 @@ fun TestDrive.existImage(
             throwsException = throwsException,
             waitSeconds = waitSeconds,
             useCache = useCache,
-            swipeToCenter = swipeToCenter
+            swipeToCenter = swipeToCenter,
+            mustValidateImage = mustValidateImage
         )
-
-        if (e.imageMatchResult?.result == false) {
-            if (throwsException) {
-                throw TestNGException("$assertMessage (${e.imageMatchResult})")
-            }
-            TestLog.warn("$assertMessage (${e.imageMatchResult})")
-            TestLog.conditionalAuto(assertMessage)
-        }
     }
 
     if (func != null) {
@@ -627,6 +631,7 @@ fun TestDrive.dontExistImage(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
+    mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -650,6 +655,7 @@ fun TestDrive.dontExistImage(
             useCache = useCache,
             swipeToCenter = false,
             dontExist = true,
+            mustValidateImage = mustValidateImage
         )
 
         if (e.imageMatchResult?.result == true) {
@@ -676,6 +682,7 @@ private fun TestDrive.existImageCore(
     useCache: Boolean,
     swipeToCenter: Boolean,
     dontExist: Boolean = false,
+    mustValidateImage: Boolean,
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
@@ -710,20 +717,15 @@ private fun TestDrive.existImageCore(
                 threshold = threshold,
                 waitSeconds = waitSeconds,
                 swipeToCenter = swipeToCenter,
-                useCache = useCache,
-                safeElementOnly = false
+                useCache = useCache
             )
         }
     }
 
-    if (e.imageMatchResult != null && e.imageMatchResult!!.imageFileEntries.isEmpty()) {
-        conditionalAuto(assertMessage)
-        return e
-    }
-
-    TestDriver.postProcessForImageAssertion(
-        e = e,
+    TestDriver.postProcessForAssertion(
+        selectResult = e,
         assertMessage = assertMessage,
+        mustValidateImage = mustValidateImage,
         log = log,
         dontExist = dontExist
     )
@@ -790,8 +792,7 @@ private fun selectElementAndCompareImage(
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
     swipeToCenter: Boolean,
-    useCache: Boolean,
-    safeElementOnly: Boolean
+    useCache: Boolean
 ): TestElement {
 
     // Select the element
@@ -802,7 +803,7 @@ private fun selectElementAndCompareImage(
         waitSeconds = waitSeconds,
         swipeToCenter = swipeToCenter,
         useCache = useCache,
-        safeElementOnly = safeElementOnly
+        safeElementOnly = false
     )
     if (e.isFound.not()) {
         e.imageMatchResult = ImageMatchResult(result = false, templateSubject = null)
@@ -829,6 +830,7 @@ fun TestDrive.existWithScrollDown(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToCenter: Boolean = false,
+    mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -855,6 +857,7 @@ fun TestDrive.existWithScrollDown(
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException,
+                mustValidateImage = mustValidateImage
             )
         }
     }
@@ -879,6 +882,7 @@ fun TestDrive.existWithScrollUp(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToCenter: Boolean = false,
+    mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -905,6 +909,7 @@ fun TestDrive.existWithScrollUp(
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException,
+                mustValidateImage = mustValidateImage
             )
         }
     }
@@ -929,6 +934,7 @@ fun TestDrive.existWithScrollRight(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToCenter: Boolean = false,
+    mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -955,6 +961,7 @@ fun TestDrive.existWithScrollRight(
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException,
+                mustValidateImage = mustValidateImage
             )
         }
     }
@@ -979,6 +986,7 @@ fun TestDrive.existWithScrollLeft(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToCenter: Boolean = false,
+    mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -1005,6 +1013,7 @@ fun TestDrive.existWithScrollLeft(
                 swipeToCenter = swipeToCenter,
                 safeElementOnly = true,
                 throwsException = throwsException,
+                mustValidateImage = mustValidateImage
             )
         }
     }
@@ -1049,7 +1058,8 @@ fun TestDrive.existInScanResults(
             TestDriver.postProcessForAssertion(
                 selectResult = e,
                 assertMessage = assertMessage,
-                dontExist = false
+                dontExist = false,
+                mustValidateImage = false
             )
 
             if (e.hasError && throwsException) {
@@ -1126,6 +1136,7 @@ internal fun TestDrive.dontExist(
     throwsException: Boolean = true,
     waitSeconds: Double = 0.0,
     useCache: Boolean = testContext.useCache,
+    mustValidateImage: Boolean = false,
     safeElementOnly: Boolean
 ): TestElement {
 
@@ -1160,7 +1171,8 @@ internal fun TestDrive.dontExist(
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
                 useCache = useCache,
-                safeElementOnly = safeElementOnly
+                safeElementOnly = safeElementOnly,
+                mustValidateImage = mustValidateImage
             )
         }
     }
@@ -1174,7 +1186,8 @@ internal fun TestDrive.dontExistCore(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
-    safeElementOnly: Boolean
+    safeElementOnly: Boolean,
+    mustValidateImage: Boolean
 ): TestElement {
 
     TestDriver.syncCache()
@@ -1207,7 +1220,8 @@ internal fun TestDrive.dontExistCore(
     TestDriver.postProcessForAssertion(
         selectResult = e,
         assertMessage = message,
-        dontExist = true
+        dontExist = true,
+        mustValidateImage = mustValidateImage
     )
 
     lastElement = e
@@ -1227,11 +1241,16 @@ fun TestDrive.dontExist(
     waitSeconds: Double = 0.0,
     useCache: Boolean = testContext.useCache,
     safeElementOnly: Boolean = true,
+    mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     if (CodeExecutionContext.isInCell && this is TestElement) {
-        return dontExistInCell(expression = expression, throwsException = throwsException)
+        return dontExistInCell(
+            expression = expression,
+            throwsException = throwsException,
+            mustValidateImage = mustValidateImage
+        )
     }
 
     var sel = getSelector(expression = expression)
@@ -1296,6 +1315,7 @@ fun TestDrive.dontExistWithScrollDown(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
+    mustValidateImage: Boolean = false,
     useCache: Boolean = testContext.useCache,
 ): TestElement {
 
@@ -1320,7 +1340,8 @@ fun TestDrive.dontExistWithScrollDown(
                 selector = selector,
                 throwsException = throwsException,
                 useCache = useCache,
-                safeElementOnly = true
+                safeElementOnly = true,
+                mustValidateImage = mustValidateImage
             )
         }
     }
@@ -1342,6 +1363,7 @@ fun TestDrive.dontExistWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     throwsException: Boolean = true,
     useCache: Boolean = testContext.useCache,
+    mustValidateImage: Boolean = false,
 ): TestElement {
 
     val command = "dontExistWithScrollUp"
@@ -1365,7 +1387,8 @@ fun TestDrive.dontExistWithScrollUp(
                 selector = selector,
                 throwsException = throwsException,
                 useCache = useCache,
-                safeElementOnly = true
+                safeElementOnly = true,
+                mustValidateImage = mustValidateImage
             )
         }
     }
@@ -1432,7 +1455,8 @@ fun TestDrive.dontExistInScanResults(
         TestDriver.postProcessForAssertion(
             selectResult = e,
             assertMessage = assertMessage,
-            dontExist = true
+            dontExist = true,
+            mustValidateImage = false
         )
 
         lastElement = e

@@ -1094,7 +1094,8 @@ fun TestElement.classIsNot(
 
 internal fun TestElement.existInCell(
     expression: String,
-    throwsException: Boolean = true
+    throwsException: Boolean,
+    mustValidateImage: Boolean
 ): TestElement {
 
     val sel = getSelector(expression = expression)
@@ -1113,7 +1114,8 @@ internal fun TestElement.existInCell(
         e.selector = sel
         TestDriver.postProcessForAssertion(
             selectResult = e,
-            assertMessage = assertMessage
+            assertMessage = assertMessage,
+            mustValidateImage = mustValidateImage
         )
     }
 
@@ -1126,7 +1128,8 @@ internal fun TestElement.existInCell(
 
 internal fun TestElement.dontExistInCell(
     expression: String,
-    throwsException: Boolean = true
+    throwsException: Boolean,
+    mustValidateImage: Boolean
 ): TestElement {
 
     val sel = getSelector(expression = expression)
@@ -1146,7 +1149,8 @@ internal fun TestElement.dontExistInCell(
         TestDriver.postProcessForAssertion(
             selectResult = e,
             assertMessage = assertMessage,
-            dontExist = true
+            dontExist = true,
+            mustValidateImage = mustValidateImage
         )
     }
 
