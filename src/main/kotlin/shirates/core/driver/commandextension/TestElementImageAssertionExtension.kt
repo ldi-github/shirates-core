@@ -300,10 +300,11 @@ internal fun imageAssertionCoreCore(
             expectedSelector.templateImage?.saveImage("${TestLog.directoryForLog.resolve(templateImageFileName)}")
         }
 
-        TestDriver.postProcessForImageAssertion(
-            e = testElement,
+        TestDriver.postProcessForAssertion(
+            selectResult = testElement,
             assertMessage = assertMessage,
-            dontExist = negation
+            dontExist = negation,
+            mustValidateImage = true
         )
 
         if (testElement.hasError) {

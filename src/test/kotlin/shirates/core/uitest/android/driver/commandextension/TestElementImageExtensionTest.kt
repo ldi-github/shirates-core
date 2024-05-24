@@ -182,7 +182,8 @@ class TestElementImageExtensionTest : UITest() {
                     assertThatThrownBy {
                         it.existImage(
                             expression = "[Notifications Icon]",
-                            throwsException = true
+                            throwsException = true,
+                            mustValidateImage = true
                         )   // element found, image does not match, exception thrown
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessageStartingWith("Image of [Notifications Icon] exists")

@@ -370,6 +370,25 @@ class TestElement(
         }
 
     /**
+     * isElementFound
+     */
+    val isElementFound: Boolean
+        get() {
+            if (isDummy) {
+                return true
+            }
+            return isEmpty.not()
+        }
+
+    /**
+     * isImageFound
+     */
+    val isImageFound: Boolean
+        get() {
+            return imageMatchResult?.result ?: false
+        }
+
+    /**
      * scrollHost
      */
     val scrollHost: TestElement
