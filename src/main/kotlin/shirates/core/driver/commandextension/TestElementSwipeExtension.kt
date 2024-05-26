@@ -379,6 +379,7 @@ fun TestElement.swipeToCenter(
         }
     }
 
+    syncCache()
     return this.refreshThisElement()
 }
 
