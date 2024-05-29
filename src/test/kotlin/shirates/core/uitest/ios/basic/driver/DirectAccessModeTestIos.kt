@@ -11,7 +11,7 @@ import shirates.core.driver.toTestElement
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
-class DirectAccessModeIos : UITest() {
+class DirectAccessModeTestIos : UITest() {
 
     @Test
     @Order(10)

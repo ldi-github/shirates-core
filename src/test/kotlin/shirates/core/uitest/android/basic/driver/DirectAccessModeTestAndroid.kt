@@ -10,7 +10,7 @@ import shirates.core.driver.toTestElement
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class DirectAccessModeAndroid : UITest() {
+class DirectAccessModeTestAndroid : UITest() {
 
     @Test
     @Order(10)
