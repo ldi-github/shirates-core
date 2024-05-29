@@ -1,4 +1,4 @@
-package tutorial.inaction
+package shirates.core.uitest.android.basic.driver
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -8,7 +8,6 @@ import shirates.core.driver.DisableCache
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.toTestElement
 import shirates.core.testcode.UITest
-import shirates.core.utility.time.StopWatch
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class DirectAccessModeAndroid : UITest() {
@@ -115,57 +114,4 @@ class DirectAccessModeAndroid : UITest() {
         }
     }
 
-    @Test
-    @Order(50)
-    fun performanceComparison() {
-
-        fun process(count: Int) {
-            val sw1 = StopWatch()
-            val sw2 = StopWatch()
-            invalidateCache()
-
-            sw1.start()
-            useCache {
-                for (i in 1..count) {
-                    it.select("Network & internet")  // cache mode
-                }
-            }
-            sw1.stop()
-
-            sw2.start()
-            suppressCache {
-                for (i in 1..count) {
-                    it.select("Network & internet")  // direct access mode
-                }
-            }
-            sw2.stop()
-
-            output("$count element(s)")
-            output("$sw1 cache mode")
-            output("$sw2 direct access mode")
-        }
-
-        scenario {
-            case(1) {
-                expectation {
-                    process(1)
-                }
-            }
-            case(2) {
-                expectation {
-                    process(5)
-                }
-            }
-            case(3) {
-                expectation {
-                    process(10)
-                }
-            }
-            case(4) {
-                expectation {
-                    process(50)
-                }
-            }
-        }
-    }
 }

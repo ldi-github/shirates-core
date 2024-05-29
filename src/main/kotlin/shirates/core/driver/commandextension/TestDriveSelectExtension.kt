@@ -32,11 +32,11 @@ fun TestDrive.select(
 
     if (useCache) {
         syncCache()
+        TestDriver.refreshCurrentScreenWithNickname(expression)
     }
-    TestDriver.refreshCurrentScreenWithNickname(expression)
 
     var e = TestElement(selector = sel)
-    val testElement = getThisOrIt()
+    val testElement = if (useCache) getThisOrIt() else null
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
 

@@ -1244,7 +1244,12 @@ object TestDriver {
                 )
             }
             if (selector.isNegation.not()) {
-                if (selectedElement.isFound && selectedElement.isInView && (safeElementOnly.not() || selectedElement.isSafe())) {
+                if (useCache.not()) {
+                    lastElement = selectedElement
+                    if (lastElement.isFound) {
+                        return lastElement
+                    }
+                } else if (selectedElement.isFound && selectedElement.isInView && (safeElementOnly.not() || selectedElement.isSafe())) {
                     if (swipeToCenter) {
                         testDrive.silent {
                             selectedElement = selectedElement.swipeToCenter()
@@ -2039,6 +2044,10 @@ object TestDriver {
      * refreshCurrentScreenWithNickname
      */
     fun refreshCurrentScreenWithNickname(expression: String) {
+
+        if (testContext.useCache.not()) {
+            return
+        }
 
         if (screenInfo.selectorMap.any() { it.key == expression }) {
             return

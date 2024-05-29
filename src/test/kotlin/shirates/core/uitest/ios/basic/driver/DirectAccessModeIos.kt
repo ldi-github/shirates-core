@@ -1,4 +1,4 @@
-package tutorial.inaction
+package shirates.core.uitest.ios.basic.driver
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -9,7 +9,6 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.driver.toTestElement
 import shirates.core.testcode.UITest
-import shirates.core.utility.time.StopWatch
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
 class DirectAccessModeIos : UITest() {
@@ -95,60 +94,6 @@ class DirectAccessModeIos : UITest() {
                 }.expectation {
                     it.switchScreen("[About Screen]")
                         .exist("[Name]")
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(40)
-    fun performanceComparison() {
-
-        fun process(count: Int) {
-            val sw1 = StopWatch()
-            val sw2 = StopWatch()
-            invalidateCache()
-
-            sw1.start()
-            useCache {
-                for (i in 1..count) {
-                    it.select("General")  // cache mode
-                }
-            }
-            sw1.stop()
-
-            sw2.start()
-            suppressCache {
-                for (i in 1..count) {
-                    it.select("General")  // direct access mode
-                }
-            }
-            sw2.stop()
-
-            output("$count element(s)")
-            output("$sw1 cache mode")
-            output("$sw2 direct access mode")
-        }
-
-        scenario {
-            case(1) {
-                expectation {
-                    process(1)
-                }
-            }
-            case(2) {
-                expectation {
-                    process(5)
-                }
-            }
-            case(3) {
-                expectation {
-                    process(10)
-                }
-            }
-            case(4) {
-                expectation {
-                    process(50)
                 }
             }
         }
