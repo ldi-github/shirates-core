@@ -19,7 +19,6 @@
   "capabilities": {
     "useJSONSource": true,
     "appium:showXcodeLog": true,
-    "bundleId": "com.apple.Preferences",
     "language": "en",
     "locale": "US"
   },

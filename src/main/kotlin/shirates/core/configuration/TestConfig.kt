@@ -135,7 +135,7 @@ class TestConfig(val testConfigFile: String) {
         // startupPackageOrBundleId
         val startupPackageOrBundleId = profile.startupPackageOrBundleId ?: profile.packageOrBundleId
         if (startupPackageOrBundleId.isNullOrBlank().not()) {
-            val name = if (profile.isAndroid) "appPackage" else "bundleId"
+            val name = if (isAndroid) "appPackage" else "bundleId"
             profile.capabilities.setCapabilityStrict(name, startupPackageOrBundleId)
         }
 
