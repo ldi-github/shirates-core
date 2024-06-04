@@ -29,6 +29,8 @@ import java.util.concurrent.TimeUnit
  */
 object AppiumProxy {
 
+    var lastSource = ""
+
     /**
      * getSource
      */
@@ -89,14 +91,14 @@ object AppiumProxy {
             return true
         }
 
-        var source = ""
-
         fun validateSource(): Boolean {
-            if (source == "") {
+            if (lastSource == "") {
                 return false
             }
             if (isiOS) {
-                if (source.contains("<AppiumAUT>").not() || source.contains("<XCUIElementTypeApplication").not()) {
+                if (lastSource.contains("<AppiumAUT>").not() || lastSource.contains("<XCUIElementTypeApplication")
+                        .not()
+                ) {
                     return false
                 }
             }
@@ -126,10 +128,10 @@ object AppiumProxy {
                 val count = c.count
                 TestLog.info("getSource($count)")
             }
-            source = TestDriver.appiumDriver.pageSource
+            lastSource = TestDriver.appiumDriver.pageSource
             val r = validateSource()
             if (r) {
-                root = ElementCacheUtility.createTestElementFromXml(sourceXml = source)
+                root = ElementCacheUtility.createTestElementFromXml(sourceXml = lastSource)
                 checkState()
             } else {
                 false

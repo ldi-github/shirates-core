@@ -52,7 +52,6 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
-import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -480,8 +479,6 @@ object TestDriver {
             else ScreenInfo()
         }
 
-    private var lastFireIrregularHandlerScreenshotImage: BufferedImage? = null
-
     var isFiringIrregularHandler = false
 
     /**
@@ -495,22 +492,22 @@ object TestDriver {
             }
         }
 
-        lastFireIrregularHandlerScreenshotImage = null
-
-        fireIrregularHandlerCore()
+        var lastSource = ""
+        for (i in 1..5) {
+            lastSource = AppiumProxy.lastSource
+            fireIrregularHandlerCore()
+            if (AppiumProxy.lastSource == lastSource) {
+                break
+            }
+        }
     }
 
-    private fun fireIrregularHandlerCore(): Boolean {
+    private fun fireIrregularHandlerCore() {
         try {
             isFiringIrregularHandler = true
 
             if (testContext.useCache) {
-                if (TestElementCache.synced && CodeExecutionContext.lastScreenshotImage == lastFireIrregularHandlerScreenshotImage) {
-                    TestLog.trace("firing irregularHandler skipped")
-                    return false
-                }
                 syncCache()
-                lastFireIrregularHandlerScreenshotImage = CodeExecutionContext.lastScreenshotImage
             }
 
             val originalLastElement = lastElement
@@ -527,9 +524,6 @@ object TestDriver {
         } finally {
             isFiringIrregularHandler = false
         }
-
-        val handled = CodeExecutionContext.lastScreenshotImage == lastFireIrregularHandlerScreenshotImage
-        return handled
     }
 
     var firingScreenHandlerScreens = mutableListOf<String>()
@@ -1052,6 +1046,8 @@ object TestDriver {
             isRefreshing = false
             ms.end()
         }
+
+        fireIrregularHandler()
 
         return this
     }

@@ -72,7 +72,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             return null
         }
 
-        if (fireEvent && testContext.enableCache) {
+        if (fireEvent) {
             TestDriver.fireIrregularHandler()
             resumeSelector()
         }
