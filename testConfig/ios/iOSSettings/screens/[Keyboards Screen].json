@@ -1,0 +1,21 @@
+{
+  "key": "[Keyboards Screen]",
+
+  "include": [
+  ],
+
+  "identity": "~title=Keyboards",
+  "weight": "100",
+
+  "selectors": {
+    "[<General]": "General&&.XCUIElementTypeButton",
+    "[Keyboards]": "",
+    "[NavigationBar]": ".XCUIElementTypeNavigationBar"
+
+  },
+
+  "scroll": {
+    "header-elements": "[NavigationBar]"
+  }
+
+}
