@@ -142,7 +142,7 @@ fun TestDrive.screenIs(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    onIrregular: (() -> Unit)? = null,
+    onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -186,7 +186,7 @@ internal fun TestDrive.screenIsCore(
     expectedScreenName: String,
     assertMessage: String,
     waitSeconds: Double,
-    onIrregular: (() -> Unit)? = null,
+    onIrregular: (() -> Unit)?,
     useCache: Boolean
 ) {
 
@@ -258,7 +258,7 @@ fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    onIrregular: (() -> Unit)? = null,
+    onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -291,7 +291,7 @@ fun TestDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Int,
     useCache: Boolean = testContext.useCache,
-    onIrregular: (() -> Unit)? = null,
+    onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
     func: (() -> Unit)? = null
 ): TestElement {
 
@@ -309,7 +309,7 @@ internal fun TestDrive.screenIsOfCore(
     assertMessage: String,
     waitSeconds: Double,
     useCache: Boolean = testContext.useCache,
-    onIrregular: (() -> Unit)? = null
+    onIrregular: (() -> Unit)?
 ) {
     var isScreenResult = false
     var matchedScreenName = ""
