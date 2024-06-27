@@ -2,7 +2,6 @@ package shirates.core.utility.android
 
 import shirates.core.Const
 import shirates.core.driver.TestMode
-import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
 
 class AndroidDeviceInfo(val line: String) {
@@ -26,7 +25,7 @@ class AndroidDeviceInfo(val line: String) {
                 } else {
                     val cmdIndex = line.indexOf("/")
                     if (cmdIndex < 0) {
-                        TestLog.warn("cmdIndex < 0. line=$line")
+                        throw IllegalStateException("Unexpected ps command result. cmdIndex < 0. line=$line")
                     }
                     return line.substring(cmdIndex)
                 }

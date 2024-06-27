@@ -69,7 +69,8 @@ object AndroidDeviceUtility {
                             )
                             deviceInfo.psResult = r.resultString
                         } else {
-                            val r = ShellUtility.executeCommand("ps", "-p", deviceInfo.pid)
+                            val r =
+                                ShellUtility.executeCommand("ps", "-p", deviceInfo.pid, "-o", "pid,tty,time,command")
                             deviceInfo.psResult = r.resultString
                         }
                     }
