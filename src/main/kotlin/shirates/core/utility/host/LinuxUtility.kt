@@ -2,7 +2,7 @@ package shirates.core.utility.host
 
 import shirates.core.utility.misc.ShellUtility
 
-object MacUtility {
+object LinuxUtility {
 
     private var _processorArchitecture = ""
 

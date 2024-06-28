@@ -44,6 +44,9 @@ class PlatformTest : UITest() {
                     if (TestMode.isRunningOnWindows) {
                         TestMode.isRunningOnWindows.thisIsTrue("isRunningOnWindows")
                     }
+                    if (TestMode.isRunningOnLinux) {
+                        TestMode.isRunningOnLinux.thisIsTrue("isRunningOnLinux")
+                    }
                     if (TestMode.isRunningOnMacArm64) {
                         TestMode.isRunningOnMacArm64.thisIsTrue("isRunningOnMacArm64")
                     }

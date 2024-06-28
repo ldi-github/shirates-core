@@ -245,6 +245,14 @@ object TestMode {
         }
 
     /**
+     * isRunningOnLinux
+     */
+    val isRunningOnLinux: Boolean
+        get() {
+            return HostOSUtility.isLinux
+        }
+
+    /**
      * isRunningOnMacOS
      */
     val isRunningOnMacOS: Boolean

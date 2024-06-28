@@ -24,6 +24,9 @@ object HostOSUtility {
             if (isMacOS) {
                 return MacUtility.isArm64
             }
+            if (isLinux) {
+                return LinuxUtility.isArm64
+            }
 
             return WindowsUtility.isArm64
         }
@@ -32,6 +35,9 @@ object HostOSUtility {
         get() {
             if (isMacOS) {
                 return MacUtility.isIntel
+            }
+            if (isLinux) {
+                return LinuxUtility.isIntel
             }
 
             return WindowsUtility.isIntel
