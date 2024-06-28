@@ -10,7 +10,6 @@ import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.launchApp
 import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.isEmulator
 import shirates.core.driver.testProfile
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.TestLog
@@ -57,8 +56,11 @@ class SpecReport_platformBranch_Test : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (isEmulator.not()) {
+                    realDevice {
                         throw TestEnvironmentException("This test must be run on emulator.")
+                    }
+                    intel {
+                        throw TestEnvironmentException("This test must be run on amd64 platform.")
                     }
                     it.launchApp("Settings")
                         .screenIs("[Android Settings Top Screen]")
