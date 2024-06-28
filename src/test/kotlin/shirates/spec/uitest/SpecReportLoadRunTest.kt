@@ -15,6 +15,8 @@ import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
+import shirates.spec.report.entity.SpecReportData
+import shirates.spec.report.models.SpecReportDataAdapter
 import shirates.spec.utilily.ExcelUtility
 import shirates.spec.utilily.cells
 import shirates.spec.utilily.text
@@ -58,6 +60,11 @@ class SpecReportLoadRunTest : UITest() {
             filePath = TestLog.directoryForLog.resolve("SpecReportLoadRunTest/SpecReportLoadRunTest.xlsx")
         }
         val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("SheetName1")
+
+        val data = SpecReportData()
+        val adapter = SpecReportDataAdapter(data)
+        adapter.loadWorkbook(filePath)
+
         val commandSheet = ws.workbook.worksheets("CommandList")
 
         val executionDateTime = commandSheet.cells("B4").text
@@ -79,7 +86,7 @@ class SpecReportLoadRunTest : UITest() {
             sheetName = "SheetName1",
             testClassName = "SpecReportLoadRunTest",
             profileName = profile.profileName,
-            deviceModel = "sdk_gphone64_arm64",
+            deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             noLoadRunMode = "",
             ok = 1,
