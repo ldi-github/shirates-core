@@ -28,15 +28,15 @@ class AndroidDeviceUtilityTest : UnitTest() {
 
         run {
             // Act
-            val actual = AndroidDeviceUtility.getAvdName(profileName = "Pixel 3a(Android 12)")
+            val actual = AndroidDeviceUtility.getAvdName(profileName = "Pixel 8(Android 14)")
             // Assert
-            assertThat(actual).isEqualTo("Pixel_3a_Android_12_")
+            assertThat(actual).isEqualTo("Pixel_8_Android_14_")
         }
         run {
             // Act
-            val actual = AndroidDeviceUtility.getAvdName(profileName = "Pixel 3a(Android 12)-01")
+            val actual = AndroidDeviceUtility.getAvdName(profileName = "Pixel 8(Android 14)-01")
             // Assert
-            assertThat(actual).isEqualTo("Pixel_3a_Android_12_-01")
+            assertThat(actual).isEqualTo("Pixel_8_Android_14_-01")
         }
         run {
             // Act

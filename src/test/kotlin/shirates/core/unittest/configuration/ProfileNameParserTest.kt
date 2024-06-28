@@ -144,12 +144,12 @@ class ProfileNameParserTest : UnitTest() {
          * model(Android platformVersion)
          */
         run {
-            val testProfileName = "Pixel 3a(Android 12)"
+            val testProfileName = "Pixel 8(Android 14)"
             val parser = ProfileNameParser(testProfileName)
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
-            assertThat(parser.model).isEqualTo("Pixel 3a")
-            assertThat(parser.platformVersion).isEqualTo("12")
+            assertThat(parser.model).isEqualTo("Pixel 8")
+            assertThat(parser.platformVersion).isEqualTo("14")
             assertThat(parser.udid).isEqualTo("")
         }
     }
@@ -158,21 +158,21 @@ class ProfileNameParserTest : UnitTest() {
     fun init_android_platformVersion() {
 
         run {
-            val testProfileName = "Android 12"
+            val testProfileName = "Android 14"
             val parser = ProfileNameParser(testProfileName)
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.platformVersion).isEqualTo("12")
+            assertThat(parser.platformVersion).isEqualTo("14")
             assertThat(parser.udid).isEqualTo("")
         }
         run {
-            val testProfileName = "android 12"
+            val testProfileName = "android 14"
             val parser = ProfileNameParser(testProfileName)
             assertThat(parser.testProfileName).isEqualTo(testProfileName)
             assertThat(parser.platformName).isEqualTo("Android")
             assertThat(parser.model).isEqualTo("")
-            assertThat(parser.platformVersion).isEqualTo("12")
+            assertThat(parser.platformVersion).isEqualTo("14")
             assertThat(parser.udid).isEqualTo("")
         }
     }

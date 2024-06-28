@@ -61,7 +61,7 @@
 
   "profiles": [
     {
-      "profileName": "Android 12",
+      "profileName": "Android 14",
       "capabilities": {
       }
     }

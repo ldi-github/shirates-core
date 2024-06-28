@@ -39,7 +39,7 @@ Let's see `[Connected devices Screen]` as example.
 
 4. Capture `Connected Devices` screen in Appium Inspector. (See [Using Appium Inspector](using_appium_inspector.md))
     1. Start appium.
-    2. Start Android 12 emulator.
+    2. Start Android 14 emulator.
     3. Start Appium Inspector.
     4. Edit capabilities for Android 14 emulator. Click `Start Session`to start session of `Settings` app.
     5. Tap `Connected devices` in the emulator.

@@ -11,14 +11,16 @@
     "data": "unitTestData/testConfig/androidSettings/dataset/data.json"
   },
   "screens": {
-    "import": ["testConfig/android/androidSettings/screens"]
+    "import": [
+      "testConfig/android/androidSettings/screens"
+    ]
   },
 
   "profiles": [
     {
-      "profileName": "Android 12",
+      "profileName": "Android 14",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     }
   ]

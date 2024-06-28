@@ -42,9 +42,9 @@ testConfigファイルのプロファイルを構成してテストで使用す�
 
   "profiles": [
     {
-      "profileName": "Android 12",
+      "profileName": "Android 14",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
     {
@@ -54,17 +54,17 @@ testConfigファイルのプロファイルを構成してテストで使用す�
       }
     },
     {
-      "profileName": "Android 12 with Tag1",
+      "profileName": "Android 14 with Tag1",
       "specialTags": "Tag1",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
     {
-      "profileName": "Android 12 with Tat2 & Tag3",
+      "profileName": "Android 14 with Tat2 & Tag3",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
 
@@ -92,10 +92,10 @@ testConfigファイルのプロファイルを構成してテストで使用す�
 
 上記に加え、各プロファイルは固有のプロパティを設定できます。
 
-* **"Android 12"** は `"platformVersion": "12"`
+* **"Android 14"** は `"platformVersion": "14"`
 * **"Android 13"** は `"platformVersion": "13"`
-* **"Android 12 with Tag1"** は `"specialTags": "Tag1"`
-* **"Android 12 with Tag2 & Tag3"** は `"specialTags": "Tag2, Tag3"`
+* **"Android 14 with Tag1"** は `"specialTags": "Tag1"`
+* **"Android 14 with Tag2 & Tag3"** は `"specialTags": "Tag2, Tag3"`
 * **"emulator-5556"** は `"udid": "emulator-5556"`
 
 specialTagに関するより詳細な情報はこちら

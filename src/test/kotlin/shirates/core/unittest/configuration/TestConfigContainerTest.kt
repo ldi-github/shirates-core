@@ -116,9 +116,9 @@ class TestConfigContainerTest : UnitTest() {
         // Arrange
         val container = TestConfigContainer("unitTestConfig/others/testConfig/test1@*.json")
         // Act
-        val profile = container.getProfile(profileName = "Android 12")
+        val profile = container.getProfile(profileName = "Android 14")
         // Assert
-        assertThat(profile?.profileName).isEqualTo("Android 12")
+        assertThat(profile?.profileName).isEqualTo("Android 14")
         assertThat(profile?.testConfig?.testConfigName).isEqualTo("test1@a")
 
         // Act, Assert
