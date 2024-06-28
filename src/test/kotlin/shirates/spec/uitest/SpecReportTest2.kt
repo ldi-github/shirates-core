@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
+import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.platformMajorVersion
 import shirates.core.driver.testProfile
-import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.SheetName
@@ -51,8 +51,8 @@ class SpecReportTest2 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    if (platformMajorVersion < 14) {
-                        throw TestEnvironmentException("This test requires Android 14 or later.")
+                    if (TestMode.isNoLoadRun.not() && platformMajorVersion < 14) {
+                        SKIP_SCENARIO("This test requires Android 14 or later.")
                     }
                     it.macro("[Alarm Screen]")
                 }.expectation {
