@@ -50,7 +50,7 @@ class DirectAccessModeTestAndroid : UITest() {
                     it.tap("[Internet]")
                 }.expectation {
                     it.switchScreen("[Internet Screen]")
-                        .exist("[Add network]")
+                        .existWithScrollDown("[Add network]")
                 }
             }
         }
@@ -92,7 +92,7 @@ class DirectAccessModeTestAndroid : UITest() {
                     it.tap("[Internet]")
                 }.expectation {
                     it.switchScreen("[Internet Screen]")
-                        .exist("[Add network]")
+                        .existWithScrollDown("[Add network]")
                 }
             }
         }
