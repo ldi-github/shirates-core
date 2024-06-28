@@ -3,7 +3,6 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.output
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.exception.RerunScenarioException
@@ -20,11 +19,7 @@ class RerunScenario2 : UITest() {
 
         scenario {
             case(1) {
-                condition {
-                    if (TestMode.isRunningOnMacOS.not()) {
-                        NOTIMPL("This test must be run only on macOS")
-                    }
-                }.action {
+                action {
                     count++
                     output("count=$count")
                     if (count == 1) {
