@@ -125,11 +125,6 @@ class SpecReport_platformBranch_Test : UITest() {
         val adapter = SpecReportDataAdapter(data)
         adapter.loadWorkbook(filePath)
 
-        val r = data.logLines.firstOrNull() { it.result == "NOTIMPL" }
-        if (r != null) {
-            NOTIMPL(r.exception)
-        }
-
         /**
          * Header
          */
