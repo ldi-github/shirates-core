@@ -46,7 +46,7 @@ object AndroidSettingsMacro : TestDrive {
         }
 
         androidSettingsTopScreen()
-        it.tap("Network & internet")
+        it.tapWithScrollUp("Network & internet")
             .screenIs("[Network & internet Screen]")
     }
 
