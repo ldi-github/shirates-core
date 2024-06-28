@@ -52,7 +52,7 @@ class SpecReportTest2 : UITest() {
             case(1) {
                 condition {
                     if (TestMode.isNoLoadRun.not() && platformMajorVersion < 14) {
-                        SKIP_SCENARIO("This test requires Android 14 or later.")
+                        NOTIMPL("This test requires Android 14 or later.")
                     }
                     it.macro("[Alarm Screen]")
                 }.expectation {
@@ -130,6 +130,11 @@ class SpecReportTest2 : UITest() {
         val data = SpecReportData()
         val adapter = SpecReportDataAdapter(data)
         adapter.loadWorkbook(filePath)
+
+        val r = data.logLines.firstOrNull() { it.result == "NOTIMPL" }
+        if (r != null) {
+            NOTIMPL(r.exception)
+        }
 
         /**
          * Header

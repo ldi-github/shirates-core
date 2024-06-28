@@ -11,7 +11,6 @@ import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.launchApp
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.testProfile
-import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.SheetName
@@ -57,10 +56,10 @@ class SpecReport_platformBranch_Test : UITest() {
             case(1) {
                 condition {
                     realDevice {
-                        throw TestEnvironmentException("This test must be run on emulator.")
+                        NOTIMPL("This test must be run on emulator.")
                     }
                     intel {
-                        throw TestEnvironmentException("This test must be run on amd64 platform.")
+                        NOTIMPL("This test must be run on amd64 platform.")
                     }
                     it.launchApp("Settings")
                         .screenIs("[Android Settings Top Screen]")
@@ -125,6 +124,11 @@ class SpecReport_platformBranch_Test : UITest() {
         val data = SpecReportData()
         val adapter = SpecReportDataAdapter(data)
         adapter.loadWorkbook(filePath)
+
+        val r = data.logLines.firstOrNull() { it.result == "NOTIMPL" }
+        if (r != null) {
+            NOTIMPL(r.exception)
+        }
 
         /**
          * Header

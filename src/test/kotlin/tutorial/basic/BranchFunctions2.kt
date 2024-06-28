@@ -3,6 +3,7 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.screenIs
@@ -17,7 +18,11 @@ class BranchFunctions2 : UITest() {
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    if (TestMode.isRunningOnMacOS.not()) {
+                        NOTIMPL("This test must be run only on macOS")
+                    }
+                }.action {
                     android {
                         virtualDevice {
                             describe("This is called on android emulator")

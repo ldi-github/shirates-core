@@ -3,6 +3,7 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 
@@ -16,6 +17,9 @@ class ExistDontExistInCellIos : UITest() {
         scenario {
             case(1) {
                 condition {
+                    if (TestMode.isRunningOnMacOS.not()) {
+                        NOTIMPL("This test must be run only on macOS")
+                    }
                     it.macro("[Language & Region Screen]")
                 }.expectation {
                     it.cell(".XCUIElementTypeCell&&value=iPhone Language") {
@@ -42,6 +46,9 @@ class ExistDontExistInCellIos : UITest() {
         scenario {
             case(1) {
                 condition {
+                    if (TestMode.isRunningOnMacOS.not()) {
+                        NOTIMPL("This test must be run only on macOS")
+                    }
                     it.macro("[Language & Region Screen]")
                 }.expectation {
                     it.cellOf("iPhone Language") {
@@ -60,6 +67,9 @@ class ExistDontExistInCellIos : UITest() {
         scenario {
             case(1) {
                 condition {
+                    if (TestMode.isRunningOnMacOS.not()) {
+                        NOTIMPL("This test must be run only on macOS")
+                    }
                     it.macro("[Language & Region Screen]")
                 }.expectation {
                     it.cellOf("iPhone Language") {
@@ -77,6 +87,9 @@ class ExistDontExistInCellIos : UITest() {
         scenario {
             case(1) {
                 condition {
+                    if (TestMode.isRunningOnMacOS.not()) {
+                        NOTIMPL("This test must be run only on macOS")
+                    }
                     it.macro("[Language & Region Screen]")
                 }.expectation {
                     it.cellOf("iPhone Language") {
