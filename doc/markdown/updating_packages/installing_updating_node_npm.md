@@ -2,6 +2,8 @@
 
 ## Installing node
 
+**Note:** Use newer version to avoid troubles of installing appium.
+
 ### (for Mac)
 
 You can install **node(Node.js)** with brew. Open terminal window and type these.
@@ -9,6 +11,7 @@ You can install **node(Node.js)** with brew. Open terminal window and type these
 ```
 brew install node
 node -v
+npm -v
 ```
 
 ### (for Windows)
@@ -16,9 +19,14 @@ node -v
 Download installation package.
 https://nodejs.org/en/download/
 
+### (for Linux)
+
+See
+https://nodejs.org/en/download/
+
+
 <br>
 
-**Note:** Use newer version to avoid troubles of installing appium.
 
 <hr>
 
