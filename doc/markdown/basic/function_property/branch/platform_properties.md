@@ -33,7 +33,7 @@ import shirates.core.driver.platformName
 import shirates.core.driver.platformVersion
 import shirates.core.testcode.UITest
 
-@Testrun("unitTestData/testConfig/testrun/android_12/testrun.properties")
+@Testrun("unitTestData/testConfig/testrun/android_14/testrun.properties")
 class PlatformProperties1 : UITest() {
 
     @Test
@@ -47,10 +47,10 @@ class PlatformProperties1 : UITest() {
                         .thisIs("android")
 
                     platformVersion
-                        .thisIs("12")
+                        .thisIs("14")
 
                     platformMajorVersion
-                        .thisIs(12)
+                        .thisIs(14)
 
                     isAndroid
                         .thisIsTrue()
