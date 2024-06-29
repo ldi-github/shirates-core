@@ -20,9 +20,9 @@
 
   "profiles": [
     {
-      "profileName": "Android 12",
+      "profileName": "Android 14",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
     {
@@ -32,7 +32,7 @@
       }
     },
     {
-      "profileName": "Pixel 3a(Android 12)",
+      "profileName": "Pixel 8(Android 14)",
       "capabilities": {
       }
     },

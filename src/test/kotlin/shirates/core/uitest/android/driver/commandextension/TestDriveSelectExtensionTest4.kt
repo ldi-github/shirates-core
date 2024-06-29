@@ -69,14 +69,14 @@ class TestDriveSelectExtensionTest4 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.flickAndGoDownTurbo()
+                    it.flickAndGoDownTurbo(repeat = 2)
                 }.expectation {
                     it.exist("Tips & support")
                 }
             }
             case(2) {
                 action {
-                    it.flickAndGoUpTurbo()
+                    it.flickAndGoUpTurbo(repeat = 2)
                 }.expectation {
                     it.exist("Settings")
                 }

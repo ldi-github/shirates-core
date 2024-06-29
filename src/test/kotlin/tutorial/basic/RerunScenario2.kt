@@ -3,7 +3,8 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.output
+import shirates.core.driver.commandextension.thisIs
 import shirates.core.exception.RerunScenarioException
 import shirates.core.testcode.UITest
 

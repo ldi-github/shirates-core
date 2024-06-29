@@ -48,7 +48,7 @@ wave1008@SNB-M1 Practice1 %
 
 ```
 export SR_os="android"
-export SR_profile="Pixel 3a(Android 12)"
+export SR_profile="Pixel 8(Android 14)"
 export SR_appiumServerUrl="http://127.0.0.1:4720/"
 export SR_appiumArgs="--session-override --relaxed-security"
 export SR_testResults="$HOME/Downloads/TestResults/Practice1"

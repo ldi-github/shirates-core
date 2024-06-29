@@ -1,8 +1,6 @@
 package shirates.spec.uitest
 
-import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFSheet
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -18,6 +16,8 @@ import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
 import shirates.core.utility.format
+import shirates.spec.report.entity.SpecReportData
+import shirates.spec.report.models.SpecReportDataAdapter
 import shirates.spec.utilily.ExcelUtility
 import shirates.spec.utilily.cells
 import shirates.spec.utilily.text
@@ -55,6 +55,12 @@ class SpecReport_platformBranch_Test : UITest() {
         scenario {
             case(1) {
                 condition {
+                    realDevice {
+                        NOTIMPL("This test must be run on emulator.")
+                    }
+                    intel {
+                        NOTIMPL("This test must be run on amd64 platform.")
+                    }
                     it.launchApp("Settings")
                         .screenIs("[Android Settings Top Screen]")
                     branches()
@@ -115,10 +121,9 @@ class SpecReport_platformBranch_Test : UITest() {
         }
         val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("SheetName1")
 
-        fun XSSFCell.textIs(expected: String) {
-
-            assertThat(this.text).isEqualTo(expected)
-        }
+        val data = SpecReportData()
+        val adapter = SpecReportDataAdapter(data)
+        adapter.loadWorkbook(filePath)
 
         /**
          * Header
@@ -129,7 +134,7 @@ class SpecReport_platformBranch_Test : UITest() {
             sheetName = "SheetName1",
             testClassName = "SpecReport_platformBranch_Test",
             profileName = profile.profileName,
-            deviceModel = deviceModel,
+            deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             notImpl = 1,
             total = 1

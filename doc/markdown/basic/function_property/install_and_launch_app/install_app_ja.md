@@ -45,11 +45,11 @@ it.installApp()
 
   "profiles": [
     {
-      "profileName": "Android 12",
+      "profileName": "Android 14",
       "tapAppIconMethod": "",
       "tapAppIconMacro": "",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     }
   ]

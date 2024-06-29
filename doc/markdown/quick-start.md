@@ -70,12 +70,24 @@ You can install NPM with brew. Open terminal window and type these.
 ```
 brew install node
 node -v
+npm -v
 ```
 
 #### (for Windows)
 
 Download installation package.
 https://nodejs.org/en/download/
+
+#### (for Ubuntu)
+
+You can install NPM with apt. Open terminal window and type these.
+
+```
+sudo apt update
+sudo apt install nodejs
+node -v
+npm -v
+```
 
 <br>
 
@@ -191,6 +203,17 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
     - `%ANDROID_SDK_ROOT%\tools`<br>
       ![](_images/set_environment_variable_windows_2.png)
 6. Reboot the PC.
+
+### Setting Environment Variables (Ubuntu only)
+
+Set environment variables in initializing script (.bashrc or others).
+
+#### Example
+
+```
+export ANDROID_SDK_ROOT=/home/$USER/Android/Sdk
+export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
+```
 
 ## Setting up AVD (Android Virtual Device)
 

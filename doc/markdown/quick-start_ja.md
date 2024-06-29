@@ -69,12 +69,24 @@ NPMをbrewでインストールすることができます。ターミナルウ�
 ```
 brew install node
 node -v
+npm -v
 ```
 
 #### (Windowsの場合)
 
 インストール用パッケージをダウンロードしてください。
 https://nodejs.org/en/download/
+
+#### (Ubuntuの場合)
+
+NPMをaptでインストールすることができます。ターミナルウィンドウを開いて以下を実行してください。
+
+```
+sudo apt update
+sudo apt install nodejs
+node -v
+npm -v
+```
 
 <br>
 
@@ -190,6 +202,17 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
     - `%ANDROID_SDK_ROOT%\tools`<br>
       ![](_images/set_environment_variable_windows_2.png)
 6. PCを再起動します。
+
+### 環境変数の設定(Ubuntuのみ)
+
+初期化スクリプト(.bashrcなど)で環境変数を設定してください。
+
+#### 例
+
+```
+export ANDROID_SDK_ROOT=/home/$USER/Android/Sdk
+export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
+```
 
 ## AVD (Android Virtual Device)の設定
 

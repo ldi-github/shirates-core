@@ -14,10 +14,18 @@ object HostOSUtility {
             return OS_NAME.startsWith("windows")
         }
 
+    val isLinux: Boolean
+        get() {
+            return OS_NAME.startsWith("linux")
+        }
+
     val isArm64: Boolean
         get() {
             if (isMacOS) {
                 return MacUtility.isArm64
+            }
+            if (isLinux) {
+                return LinuxUtility.isArm64
             }
 
             return WindowsUtility.isArm64
@@ -27,6 +35,9 @@ object HostOSUtility {
         get() {
             if (isMacOS) {
                 return MacUtility.isIntel
+            }
+            if (isLinux) {
+                return LinuxUtility.isIntel
             }
 
             return WindowsUtility.isIntel

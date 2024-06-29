@@ -18,17 +18,17 @@ In profiles section, each profile has specialTags.
   ...
 
     {
-      "profileName": "Android 12 with Tag1",
+      "profileName": "Android 14 with Tag1",
       "specialTags": "Tag1",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
     {
-      "profileName": "Android 12 with Tat2 & Tag3",
+      "profileName": "Android 14 with Tat2 & Tag3",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
 
@@ -52,7 +52,7 @@ import shirates.core.driver.commandextension.describe
 import shirates.core.driver.testProfile
 import shirates.core.testcode.UITest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android 12 with Tag1")
+@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android 14 with Tag1")
 class SpecialTag1 : UITest() {
 
     @Test
@@ -105,8 +105,8 @@ class SpecialTag1 : UITest() {
 }
 ```
 
-When initialized with "`Android 12 with Tag1`" profile, the function for "`Tag1`" is called. When initialized
-with "`Android 12 with Tag2 & Tag3`", functions for "`Tag2`" is called.
+When initialized with "`Android 14 with Tag1`" profile, the function for "`Tag1`" is called. When initialized
+with "`Android 14 with Tag2 & Tag3`", functions for "`Tag2`" is called.
 
 In this way, you can describe profile specific test code using specialTag function.
 

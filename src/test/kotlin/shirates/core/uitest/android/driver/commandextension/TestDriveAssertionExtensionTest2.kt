@@ -85,7 +85,7 @@ class TestDriveAssertionExtensionTest2 : UITest() {
             }
             case(2) {
                 condition {
-                    it.flickAndGoUp()
+                    it.flickAndGoUp(repeat = 2)
                 }.expectation {
                     assertThatThrownBy {
                         it.existAllWithScrollDown(

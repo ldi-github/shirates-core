@@ -66,11 +66,9 @@ See [Tested Environments](../environments.md) to get tested version.
 
 <hr>
 
-## Example
+# Example
 
-### Updating all latest
-
-Copy this and paste on you terminal.
+## Updating all latest (for macOS)
 
 ```
 appium -v
@@ -84,6 +82,38 @@ appium driver uninstall xcuitest
 
 appium driver install uiautomator2
 appium driver install xcuitest
+
+appium -v
+appium driver list
+```
+
+## Updating all latest (for Windows)
+
+```
+appium -v
+appium driver list
+
+npm uninstall -g appium
+npm install -g appium
+
+appium driver uninstall uiautomator2
+appium driver install uiautomator2
+
+appium -v
+appium driver list
+```
+
+## Updating all latest (for Linux)
+
+```
+appium -v
+appium driver list
+
+sudo npm uninstall -g appium
+sudo npm install -g appium
+
+appium driver uninstall uiautomator2
+appium driver install uiautomator2
 
 appium -v
 appium driver list

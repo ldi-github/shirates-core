@@ -329,9 +329,9 @@ In **testConfig** file, you can set test **profiles** for test devices and `desi
 
   "profiles": [
     {
-      "profileName": "Android 12",
+      "profileName": "Android 14",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
     {
@@ -341,17 +341,17 @@ In **testConfig** file, you can set test **profiles** for test devices and `desi
       }
     },
     {
-      "profileName": "Android 12 with Tag1",
+      "profileName": "Android 14 with Tag1",
       "specialTags": "Tag1",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
     {
-      "profileName": "Android 12 with Tat2 & Tag3",
+      "profileName": "Android 14 with Tat2 & Tag3",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
 

@@ -2,6 +2,39 @@
 
 ## Tested Environments
 
+2024/6/29
+
+- Ubuntu 24.04 LTS
+- node v20.15.0
+- Appium 2.11.0
+- java-client v9.1.0
+- uiautomator2@3.7.0
+- Android Studio Jellyfish | 2023.3.1 Patch 1
+- Android Emulator Pixel 8(Android 14)
+
+<br>
+
+- Windows 11 Pro 23H2
+- node v20.15.0
+- Appium 2.11.1
+- java-client v9.1.0
+- uiautomator2@3.7.0
+- Android Studio Jellyfish | 2023.3.1
+- Android Emulator Pixel 8(Android 14)
+
+<br>
+
+- macOS Sonoma 14.4.1
+- node v21.1.0
+- Appium 2.11.1
+- java-client v9.1.0
+- uiautomator2@3.7.0
+- xcuitest@7.21.0
+- Android Studio Koala | 2024.1.1
+- Android Emulator Pixel 8(Android 14)
+- Xcode 15.3
+- iOS Simulator iPhone 15(iOS 17.4)
+
 2024/6/4
 
 - macOS Sonoma 14.4.1

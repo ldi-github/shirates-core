@@ -42,9 +42,9 @@ You can configure profiles in the testConfig file for the specific condition of 
 
   "profiles": [
     {
-      "profileName": "Android 12",
+      "profileName": "Android 14",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
     {
@@ -54,17 +54,17 @@ You can configure profiles in the testConfig file for the specific condition of 
       }
     },
     {
-      "profileName": "Android 12 with Tag1",
+      "profileName": "Android 14 with Tag1",
       "specialTags": "Tag1",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
     {
-      "profileName": "Android 12 with Tat2 & Tag3",
+      "profileName": "Android 14 with Tat2 & Tag3",
       "specialTags": "Tag2, Tag3",
       "capabilities": {
-        "platformVersion": "12"
+        "platformVersion": "14"
       }
     },
 
@@ -92,10 +92,10 @@ Each profile inherits from top level properties.
 
 In addition to the above, each profile has specific properties.
 
-* **"Android 12"** specifies `"platformVersion": "12"`
+* **"Android 14"** specifies `"platformVersion": "14"`
 * **"Android 13"** specifies `"platformVersion": "13"`
-* **"Android 12 with Tag1"** specifies `"specialTags": "Tag1"`
-* **"Android 12 with Tag2 & Tag3"** specifies `"specialTags": "Tag2, Tag3"`
+* **"Android 14 with Tag1"** specifies `"specialTags": "Tag1"`
+* **"Android 14 with Tag2 & Tag3"** specifies `"specialTags": "Tag2, Tag3"`
 * **"emulator-5556"** specifies `"udid": "emulator-5556"`
 
 For more information about specialTag,

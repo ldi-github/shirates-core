@@ -4,6 +4,10 @@
 
 **shirates-core** is core library.
 
+## News
+
+- [2024/6/29] **Linux** support added!
+
 ## Document
 
 - [in English](https://ldi-github.github.io/shirates-core/)
@@ -27,6 +31,59 @@
   is useful for manual testing or reviewing. Therefore, you can write test code and output Spec-Report for manual
   testing even if the test target app is under development.
 
+### Test Code
+
+```kotlin
+package demo
+
+import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.*
+import shirates.core.testcode.UITest
+
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class AndroidSettingsDemo : UITest() {
+
+    @Test
+    fun airplaneModeSwitch() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.launchApp("Settings")
+                        .screenIs("[Android Settings Top Screen]")
+                }.action {
+                    it.tap("[Network & internet]")
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
+                }
+            }
+
+            case(2) {
+                condition {
+                    it.select("{Airplane mode switch}")
+                        .checkIsOFF()
+                }.action {
+                    it.tap("{Airplane mode switch}")
+                }.expectation {
+                    it.select("{Airplane mode switch}")
+                        .checkIsON()
+                }
+            }
+
+            case(3) {
+                action {
+                    it.tap("{Airplane mode switch}")
+                }.expectation {
+                    it.select("{Airplane mode switch}")
+                        .checkIsOFF()
+                }
+            }
+        }
+    }
+}
+```
+
 ### HTML Report
 
 ![](doc/markdown/basic/_images/report1.png)
@@ -42,7 +99,7 @@
 
 ## Test code development environment
 
-- OS: macOS or Windows (iOS app requires macOS)
+- OS: macOS or Windows or Linux (iOS app requires macOS)
 - IDE: IntelliJ IDEA (Ultimate or Community)
 - Programming language: Kotlin
 

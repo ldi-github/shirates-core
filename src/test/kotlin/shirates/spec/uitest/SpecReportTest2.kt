@@ -1,22 +1,22 @@
 package shirates.spec.uitest
 
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
+import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.platformMajorVersion
 import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
 import shirates.core.utility.format
+import shirates.spec.report.entity.SpecReportData
+import shirates.spec.report.models.SpecReportDataAdapter
 import shirates.spec.utilily.ExcelUtility
-import shirates.spec.utilily.cells
-import shirates.spec.utilily.text
 import shirates.spec.utilily.worksheets
 import java.nio.file.Files
 import java.util.*
@@ -51,6 +51,9 @@ class SpecReportTest2 : UITest() {
         scenario {
             case(1) {
                 condition {
+                    if (TestMode.isNoLoadRun.not() && platformMajorVersion < 14) {
+                        NOTIMPL("This test requires Android 14 or later.")
+                    }
                     it.macro("[Alarm Screen]")
                 }.expectation {
                     it.cell("[Cell of 8:30 AM]") {
@@ -124,21 +127,24 @@ class SpecReportTest2 : UITest() {
         }
         val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("clock test")
 
-        fun XSSFCell.textIs(expected: String) {
+        val data = SpecReportData()
+        val adapter = SpecReportDataAdapter(data)
+        adapter.loadWorkbook(filePath)
 
-            assertThat(this.text).isEqualTo(expected)
+        val r = data.logLines.firstOrNull() { it.result == "NOTIMPL" }
+        if (r != null) {
+            NOTIMPL(r.exception)
         }
 
         /**
          * Header
          */
-        val deviceModel = if (ws.cells("D4").text.isNotBlank()) "sdk_gphone64_arm64" else ""
         ws.assertHeader(
             testConfigName = "Clock",
             sheetName = "clock test",
             testClassName = "SpecReportTest2",
             profileName = profile.profileName,
-            deviceModel = deviceModel,
+            deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             ok = 10,
             notImpl = 0,
