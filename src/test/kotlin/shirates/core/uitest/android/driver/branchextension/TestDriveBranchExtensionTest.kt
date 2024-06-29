@@ -11,7 +11,6 @@ import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.testcode.UITest
-import shirates.core.utility.host.HostOSUtility
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriveBranchExtensionTest : UITest() {
@@ -105,9 +104,6 @@ class TestDriveBranchExtensionTest : UITest() {
             arm64Called = false
             intelCalled = false
         }
-
-        HostOSUtility.isArm64
-        HostOSUtility.isMacOS
 
         scenario {
             TestMode.runAsArm64 {
