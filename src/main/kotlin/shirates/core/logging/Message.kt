@@ -148,6 +148,7 @@ object Message {
         arg2: String? = null,
         submessage: String? = null,
         condition: String? = null,
+        status: String? = null,
         lang: String = TestLog.logLanguage,
         replaceRelative: Boolean = false
     ): String {
@@ -176,6 +177,7 @@ object Message {
             message = message.replace(placeHolder("arg2"), arg2 ?: "null")
             message = message.replace(placeHolder("submessage"), submessage ?: "null")
             message = message.replace(placeHolder("condition"), condition ?: "null")
+            message = message.replace(placeHolder("status"), status ?: "null")
             if (replaceRelative) {
                 message = replaceRelative(message = message)
             }
@@ -199,6 +201,7 @@ object Message {
                     arg("arg2", arg2) +
                     arg("submessage", submessage) +
                     arg("condition", submessage) +
+                    arg("status", status) +
                     ")"
         }
 

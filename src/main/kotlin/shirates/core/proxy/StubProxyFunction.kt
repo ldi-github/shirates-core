@@ -31,7 +31,14 @@ fun dataPattern(
 
         val response = StubProxy.setDataPattern(urlPathOrApiName = apiName, dataPatternName = dataPatternName)
         if (response.code != 200) {
-            throw TestEnvironmentException(message(id = "httpErrorInResponseFromStubTool", arg1 = "${response.code}"))
+            throw TestEnvironmentException(
+                message(
+                    id = "failedToSetDataPattern",
+                    status = "${response.code}",
+                    arg1 = apiName,
+                    arg2 = dataPatternName
+                )
+            )
         }
     }
 
