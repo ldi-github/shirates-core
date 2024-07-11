@@ -274,6 +274,11 @@ td {
     background-color: #a0d8ef !important;
 }
 
+.COND_AUTO {
+    font-weight: bold;
+    background-color: #a0d8ef !important;
+}
+
 .SKIP_SCENARIO {
     font-weight: bold;
     background-color: #a0d8ef !important;

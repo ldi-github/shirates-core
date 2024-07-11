@@ -357,6 +357,9 @@ object TestDriver {
         }
 
         val iResult = e.isImageFound && dontExist.not() || e.isImageFound.not() && dontExist
+        if (iResult.not() && log) {
+            TestLog.warn("$assertMessage (${e.imageMatchResult})")
+        }
         if (eResult) {
             if (iResult) {
                 e.lastResult = TestLog.getOKType()
@@ -371,7 +374,6 @@ object TestDriver {
                 } else {
                     e.lastResult = LogType.COND_AUTO
                     if (log) {
-                        TestLog.warn("$assertMessage (${e.imageMatchResult})")
                         TestLog.conditionalAuto(assertMessage)
                     }
                     return
@@ -384,9 +386,14 @@ object TestDriver {
                     TestLog.ok(message = assertMessage)
                 }
                 return
+            } else {
+                e.lastResult = LogType.COND_AUTO
+                if (log) {
+                    TestLog.conditionalAuto(assertMessage)
+                }
+                return
             }
         }
-        setNG()
     }
 
 
@@ -549,6 +556,7 @@ object TestDriver {
             if (testContext.screenHandlers.containsKey(screenName)) {
                 val handler = testContext.screenHandlers[screenName]!!
                 context.fired = true
+                screenshot(force = true, onChangedOnly = true)
                 handler(context)
                 if (context.keep.not()) {
                     testDrive.removeScreenHandler(screenName)
