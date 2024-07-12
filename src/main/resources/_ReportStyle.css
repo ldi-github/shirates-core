@@ -319,6 +319,12 @@ td {
     background-color: yellow !important;
 }
 
+.TARGET {
+    font-weight: bold;
+    color: white;
+    background-color: steelblue !important;
+}
+
 .check {
     font-weight: bold;
     background-color: #a0d8ef !important;
