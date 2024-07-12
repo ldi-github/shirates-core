@@ -373,6 +373,7 @@ object TestDriver {
                     return
                 } else {
                     e.lastResult = LogType.COND_AUTO
+                    e.lastError = null
                     if (log) {
                         TestLog.conditionalAuto(assertMessage)
                     }
@@ -388,6 +389,7 @@ object TestDriver {
                 return
             } else {
                 e.lastResult = LogType.COND_AUTO
+                e.lastError = null
                 if (log) {
                     TestLog.conditionalAuto(assertMessage)
                 }

@@ -576,7 +576,7 @@ fun TestDrive.existImage(
     expression: String,
     swipeToCenter: Boolean = false,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
-    throwsException: Boolean = false,
+    throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     mustValidateImage: Boolean = false,
