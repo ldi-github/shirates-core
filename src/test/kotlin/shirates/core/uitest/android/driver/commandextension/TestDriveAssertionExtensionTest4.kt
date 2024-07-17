@@ -4,13 +4,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.opentest4j.TestAbortedException
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.appIs
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.verify
+import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
 
@@ -68,19 +68,23 @@ class TestDriveAssertionExtensionTest4 : UITest() {
     @Order(30)
     fun notImplemented() {
 
-        assertThatThrownBy {
-            scenario {
-                case(1) {
-                    condition {
-                        it.macro("[Android Settings Top Screen]")
-                    }.expectation {
-                        it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
-                        }
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
                     }
                 }
             }
-        }.isInstanceOf(TestAbortedException::class.java)
-            .hasMessage("verify block must include one or mode assertion.")
+        }
+        // Assert
+        val infoLine = TestLog.lines.first() { it.message == "verify block should include one or mode assertion." }
+        assertThat(infoLine).isNotNull
+        // Assert
+        val manualLine =
+            TestLog.lines.first { it.message == "The app is Settings and the screen is [Android Settings Top Screen]" }
+        assertThat(manualLine.result).isEqualTo(LogType.MANUAL)
     }
 
 }

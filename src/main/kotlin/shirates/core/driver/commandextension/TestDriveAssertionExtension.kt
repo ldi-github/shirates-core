@@ -552,10 +552,12 @@ fun TestDrive.verify(
             val endCount = TestLog.allLines.count()
             val takeCount = endCount - startCount
             val lines = TestLog.allLines.takeLast(takeCount)
-            if (lines.any() { it.logType == LogType.CHECK || it.logType.isOKType }.not()) {
-                throw NotImplementedError("verify block must include one or mode assertion.")
+            if (lines.any() { it.logType == LogType.CHECK || it.logType.isOKType }) {
+                TestLog.ok(message = message)
+            } else {
+                TestLog.info("verify block should include one or mode assertion.")
+                TestLog.manual(message = message)
             }
-            TestLog.ok(message = message)
         } catch (t: NotImplementedError) {
             throw t
         } catch (t: Throwable) {
