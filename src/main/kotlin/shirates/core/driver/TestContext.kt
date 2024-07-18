@@ -244,6 +244,9 @@ class TestContext(
     @SaveTarget
     var onRerunScenarioHandler: ((t: Throwable) -> Unit)? = null
 
+    @SaveTarget
+    var onRefreshCurrentScreenHandler: (() -> Unit)? = null
+
     val screenHandlers = mutableMapOf<String, ((TestDriverOnScreenContext) -> Unit)?>()
 
     @SaveTarget

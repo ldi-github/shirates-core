@@ -2003,10 +2003,13 @@ object TestDriver {
 
         val originalScreen = currentScreen
 
-        val newScreen = refreshCurrentScreenInCandidates(screenInfoList = screenInfoList)
+        currentScreen = refreshCurrentScreenInCandidates(screenInfoList = screenInfoList)
+        if (testContext.onRefreshCurrentScreenHandler != null) {
+            testContext.onRefreshCurrentScreenHandler!!.invoke()
+        }
+        val newScreen = currentScreen
         val changed = newScreen != "?" && newScreen != originalScreen
         if (changed) {
-            currentScreen = newScreen
             screenshot()
             TestLog.info("currentScreen=$currentScreen", log = log)
         }

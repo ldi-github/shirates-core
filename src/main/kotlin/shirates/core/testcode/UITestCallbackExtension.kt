@@ -180,6 +180,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             testContext.onScreenErrorHandler = eventContext.onScreenErrorHandler
             testContext.isRerunRequested = eventContext.onRequestingRerunHandler
             testContext.onRerunScenarioHandler = eventContext.onRerunScenarioHandler
+            testContext.onRefreshCurrentScreenHandler = eventContext.onRefreshCurrentScreenHandler
 
             // printCapabilities
             if (TestLog.capabilityPrinted.not()) {
