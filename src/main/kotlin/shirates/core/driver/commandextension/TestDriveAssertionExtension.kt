@@ -19,70 +19,6 @@ import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
 
 /**
- * appIs
- *
- * @param appNameOrAppId
- * Nickname [App1]
- * or appName App1
- * or packageOrBundleId com.example.app1
- */
-fun TestDrive.appIs(
-    appNameOrAppId: String,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    useCache: Boolean = testContext.useCache,
-    onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() }
-): TestElement {
-
-    val testElement = TestDriver.it
-
-    val command = "appIs"
-    val subject = Selector(appNameOrAppId).toString()
-    val assertMessage = message(id = command, subject = subject)
-
-    val context = TestDriverCommandContext(testElement)
-    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
-
-        var result = false
-        val actionFunc = {
-            result = isApp(appNameOrAppId)
-            result
-        }
-
-        actionFunc()
-
-        if (result.not()) {
-            val sc = doUntilActionResultTrue(
-                waitSeconds = waitSeconds,
-                useCache = useCache,
-                actionFunc = actionFunc,
-                onIrregular = onIrregular
-            )
-            if (sc.isTimeout) {
-                TestLog.warn(message(id = "timeout", subject = "appIs", submessage = "${sc.error?.message}"))
-                // Retry once on an unexpectedly long processing times occurred
-                actionFunc()
-            } else {
-                sc.throwIfError()
-            }
-        }
-
-        if (result) {
-            TestLog.ok(message = assertMessage, arg1 = appNameOrAppId)
-        } else {
-            lastElement.lastResult = LogType.NG
-
-            val appName = AppNameUtility.getCurrentAppName()
-            val actual = if (appName.isBlank()) "?" else appName
-            val ex = TestNGException("$assertMessage (actual=$actual)")
-            throw ex
-        }
-    }
-
-    lastElement = rootElement
-    return lastElement
-}
-
-/**
  * keyboardIsShown
  */
 fun TestDrive.keyboardIsShown(): TestElement {
@@ -161,6 +97,70 @@ fun TestDrive.packageIs(expected: String): TestElement {
         }
     }
 
+    return lastElement
+}
+
+/**
+ * appIs
+ *
+ * @param appNameOrAppId
+ * Nickname [App1]
+ * or appName App1
+ * or packageOrBundleId com.example.app1
+ */
+fun TestDrive.appIs(
+    appNameOrAppId: String,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() }
+): TestElement {
+
+    val testElement = TestDriver.it
+
+    val command = "appIs"
+    val subject = Selector(appNameOrAppId).toString()
+    val assertMessage = message(id = command, subject = subject)
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+
+        var result = false
+        val actionFunc = {
+            result = isApp(appNameOrAppId)
+            result
+        }
+
+        actionFunc()
+
+        if (result.not()) {
+            val sc = doUntilActionResultTrue(
+                waitSeconds = waitSeconds,
+                useCache = useCache,
+                actionFunc = actionFunc,
+                onIrregular = onIrregular
+            )
+            if (sc.isTimeout) {
+                TestLog.warn(message(id = "timeout", subject = "appIs", submessage = "${sc.error?.message}"))
+                // Retry once on an unexpectedly long processing times occurred
+                actionFunc()
+            } else {
+                sc.throwIfError()
+            }
+        }
+
+        if (result) {
+            TestLog.ok(message = assertMessage, arg1 = appNameOrAppId)
+        } else {
+            lastElement.lastResult = LogType.NG
+
+            val appName = AppNameUtility.getCurrentAppName()
+            val actual = if (appName.isBlank()) "?" else appName
+            val ex = TestNGException("$assertMessage (actual=$actual)")
+            throw ex
+        }
+    }
+
+    lastElement = rootElement
     return lastElement
 }
 
