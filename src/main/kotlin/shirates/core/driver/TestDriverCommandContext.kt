@@ -547,10 +547,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         func: () -> Unit
     ): LogLine? {
 
-        if (TestMode.isNoLoadRun) {
-            return null
-        }
-
         val ms = Measure()
 
         val original = CodeExecutionContext.isInSilentCommand
