@@ -226,7 +226,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg2: String? = null,
         fileName: String? = null,
         fireEvent: Boolean = true,
-        forceLog: Boolean = false,
+        log: Boolean? = null,
         suppressBeforeScreenshot: Boolean = false,
         func: () -> Unit
     ): LogLine? {
@@ -242,7 +242,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 arg2 = arg2,
                 fileName = fileName,
                 fireEvent = fireEvent,
-                forceLog = forceLog,
+                log = log,
                 scriptCommand = scriptCommand,
                 suppressBeforeScreenshot = suppressBeforeScreenshot,
                 func = func
@@ -260,7 +260,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg2: String?,
         fileName: String?,
         fireEvent: Boolean,
-        forceLog: Boolean,
+        log: Boolean?,
         scriptCommand: String?,
         suppressBeforeScreenshot: Boolean = false,
         func: () -> Unit
@@ -293,7 +293,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val original = CodeExecutionContext.isInOperationCommand
         try {
             pushToCommandStack()
-            val outputLog = forceLog || CodeExecutionContext.shouldOutputLog
+            val outputLog = log ?: CodeExecutionContext.shouldOutputLog
 
             beginLogLine = TestLog.operate(
                 message = message,

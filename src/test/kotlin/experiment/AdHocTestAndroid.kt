@@ -156,4 +156,39 @@ class AdHocTestAndroid : UITest() {
             }
         }
     }
+
+    @Test
+    fun selectWithScroll_log() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.expectation {
+                    it.selectWithScrollDown("[Network & internet]", log = true)
+                    it.selectWithScrollDown("[Connected devices]", log = false)
+                    it.selectWithScrollDown("[Apps]")
+                    silent {
+                        it.selectWithScrollDown("[Notifications]")
+                    }
+                    withScrollDown {
+                        it.cellOf("[Network & internet]") {
+                            it.exist("[Network & internet Icon]")
+                        }
+                        it.cellOf("[Connected devices]") {
+                            it.exist("[Connected devices Icon]")
+                        }
+                        it.cellOf("[Apps]") {
+                            it.exist("[Apps Icon]")
+                        }
+                        silent {
+                            it.cellOf("[Notifications]") {
+                                it.exist("[Notifications]")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
