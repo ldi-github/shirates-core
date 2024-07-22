@@ -94,6 +94,15 @@ fun TestDrive.tempSelector(nickname: String, expression: String): TestElement {
 }
 
 /**
+ * clearTempSelectors
+ */
+fun TestDrive.clearTempSelectors(): TestElement {
+
+    ScreenRepository.tempSelectorList.clear()
+    return lastElement
+}
+
+/**
  * screenshot
  */
 fun TestDrive.screenshot(
