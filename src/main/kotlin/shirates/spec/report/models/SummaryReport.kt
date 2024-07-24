@@ -138,6 +138,7 @@ class SummaryReport(
         createSummarySheet()
         createWorksheets()
         templateWorkbook.removeSheet("TestSpec")
+        templateWorkbook.removeSheet("Template")
         templateWorkbook.setActiveSheet(0)
         Files.deleteIfExists(outputFilePath)
         templateWorkbook.saveAs(outputFilePath)
@@ -214,7 +215,7 @@ class SummaryReport(
             ng = data.ngCount
             error = data.errorCount
             suspended = data.suspendedCount
-            condAuto = data.condAuto
+            condAuto = data.condAutoCount
             manual = data.manualCount
             skip = data.skipCount
             notImpl = data.notImplCount

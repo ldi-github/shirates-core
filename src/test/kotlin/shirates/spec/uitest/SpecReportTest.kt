@@ -155,7 +155,8 @@ class SpecReportTest : UITest() {
                         "- Tap [3]",
                 expectation = "- [formula] is \"123\"",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -164,7 +165,8 @@ class SpecReportTest : UITest() {
                 action = "- Tap [+]",
                 expectation = "- [formula] is \"123+\"",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 13,
@@ -176,7 +178,8 @@ class SpecReportTest : UITest() {
                 expectation = "- [formula] is \"123+456\"\n" +
                         "- [result preview] is \"579\"",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 14,
@@ -185,7 +188,8 @@ class SpecReportTest : UITest() {
                 action = "- Tap [=]",
                 expectation = "- [result final] is \"579\"",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
 
             assertRow(

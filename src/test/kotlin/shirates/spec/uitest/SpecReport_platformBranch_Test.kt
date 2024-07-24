@@ -19,8 +19,6 @@ import shirates.core.utility.format
 import shirates.spec.report.entity.SpecReportData
 import shirates.spec.report.models.SpecReportDataAdapter
 import shirates.spec.utilily.ExcelUtility
-import shirates.spec.utilily.cells
-import shirates.spec.utilily.text
 import shirates.spec.utilily.worksheets
 import java.nio.file.Files
 import java.util.*
@@ -128,14 +126,13 @@ class SpecReport_platformBranch_Test : UITest() {
         /**
          * Header
          */
-        val deviceModel = if (ws.cells("D4").text.isNotBlank()) "sdk_gphone64_arm64" else ""
         ws.assertHeader(
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReport_platformBranch_Test",
             profileName = profile.profileName,
-            deviceModel = data.p.getValue("appium:deviceModel").toString(),
-            platformVersion = profile.platformVersion,
+            deviceModel = data.p.getValue("appium:deviceModel") ?: "",
+            platformVersion = if (data.noLoadRun) "" else profile.platformVersion,
             notImpl = 1,
             total = 1
         )
@@ -245,76 +242,99 @@ stubNot {
 """.trimIndent(),
                 expectation = "- in android",
                 os = "Android",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
                 id = 3,
                 expectation = "- in emulator",
                 os = "Android",
-                special = "emulator"
+                special = "emulator",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 13,
                 id = 4,
                 expectation = "- in ios",
                 os = "iOS",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 14,
                 id = 5,
                 expectation = "- in simulator",
                 os = "iOS",
-                special = "simulator"
+                special = "simulator",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 15,
                 id = 6,
                 expectation = "- in virtualDevice",
-                special = "virtualDevice"
+                special = "virtualDevice",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 16,
                 id = 7,
                 expectation = "- in arm64",
-                special = "virtualDevice/arm64"
+                special = "virtualDevice/arm64",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 17,
                 id = 8,
                 expectation = "- in intel",
-                special = "virtualDevice/intel"
+                special = "virtualDevice/intel",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 18,
                 id = 9,
                 expectation = "- in realDevice",
-                special = "realDevice"
+                special = "realDevice",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 19,
                 id = 10,
                 expectation = "- in osaifuKeitai",
-                special = "realDevice/osaifuKeitai"
+                special = "realDevice/osaifuKeitai",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 20,
                 id = 11,
                 expectation = "- in osaifuKeitaiNot",
-                special = "realDevice/osaifuKeitaiNot"
+                special = "realDevice/osaifuKeitaiNot",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 21,
                 id = 12,
                 expectation = "- in stub",
-                special = "stub"
+                special = "stub",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 22,
                 id = 13,
                 expectation = "- in stubNot",
-                special = "stubNot"
+                special = "stubNot",
+                auto = "M",
+                supplement = "SKIP"
             )
-
 
         }
     }

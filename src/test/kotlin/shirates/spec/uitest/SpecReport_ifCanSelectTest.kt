@@ -229,6 +229,8 @@ if else {
 - in ifElse
 }
 """.trimIndent(),
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -293,6 +295,8 @@ if else {
 - in ifElse
 }
 """.trimIndent(),
+                auto = "M",
+                supplement = "SKIP"
             )
         }
     }

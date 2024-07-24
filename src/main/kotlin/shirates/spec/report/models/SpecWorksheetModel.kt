@@ -201,14 +201,20 @@ class SpecWorksheetModel(
 
             LogType.MANUAL.label -> {
                 addDescription(logLine)
-                if (frame == Frame.EXPECTATION || frame == Frame.CASE) {
+                if (frame == Frame.EXPECTATION) {
+                    if (current.auto.isNotEmpty() && current.auto != "M") {
+                        newCase()
+                    }
                     setResult(logLine)
                 }
             }
 
             LogType.COND_AUTO.label -> {
-                if (frame == Frame.EXPECTATION || frame == Frame.CASE) {
-                    addDescription(logLine)
+                addDescription(logLine)
+                if (frame == Frame.EXPECTATION) {
+                    if (current.auto.isNotEmpty() && current.auto != "CA") {
+                        newCase()
+                    }
                     setResult(logLine)
                 }
             }
@@ -267,6 +273,13 @@ class SpecWorksheetModel(
             }
         }
 
+        if (logLine.mode == "SKIP" && current.type != "scenario") {
+            current.auto = "M"
+            if (noLoadRun.not()) {
+                current.supplement = "SKIP"
+            }
+        }
+
         if (logLine.result == "DELETED") {
             current.result = SpecResourceUtility.deleted
         }
@@ -308,8 +321,8 @@ class SpecWorksheetModel(
                 }
 
                 "MANUAL" -> {
-                    if (current.result.isBlank() || current.result == "OK") {
-                        current.result = "MANUAL"
+                    if (current.result.isBlank()) {
+                        current.result = notApplicable
                     }
 
                     current.auto = "M"

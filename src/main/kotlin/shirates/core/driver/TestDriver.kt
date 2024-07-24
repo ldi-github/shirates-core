@@ -202,23 +202,6 @@ object TestDriver {
             return lastElement.lastError
         }
 
-    /**
-     * skipScenario
-     */
-    var skipScenario: Boolean = false
-
-    /**
-     * skipCase
-     */
-    var skipCase: Boolean = false
-
-    /**
-     * skip
-     */
-    val skip: Boolean
-        get() {
-            return skipScenario || skipCase
-        }
 
     /**
      * implicitlyWaitSeconds
@@ -404,8 +387,6 @@ object TestDriver {
      */
     fun clearContext() {
 
-        skipScenario = false
-        skipCase = false
         lastTestContext = testContext
         testContext = TestContext()
     }

@@ -6,6 +6,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogLine
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
+import shirates.core.logging.getRedundancyRemoved
 import shirates.core.report.TestReportUtility.getShortenMessageWithEllipsis
 import shirates.core.utility.file.ResourceUtility
 import shirates.core.utility.toPath
@@ -22,7 +23,7 @@ class TestReport(
 ) {
     val lines = mutableListOf<LogLine>()
 
-    private val collector: TestResultCollector = TestResultCollector(lines)
+    private val collector: TestResultCollector
 
     var noLoadRun: String = ""
     var okStyle = """
@@ -30,7 +31,9 @@ class TestReport(
     """.trimIndent()
 
     init {
-        this.lines.addAll(lines.map { it.copy() })
+        val compressedLines = lines.getRedundancyRemoved()
+        collector = TestResultCollector(compressedLines)
+        this.lines.addAll(compressedLines.map { it.copy() })
 
         if (filterName == "simple") {
             reformatForSimple()

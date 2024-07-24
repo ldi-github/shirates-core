@@ -43,8 +43,25 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         var failOfTestContext = false
         var failAnnotation: Fail? = null
         var deletedAnnotation: Deleted? = null
-        var noLoadRunOfTestContext = false
+
         var enableCache: Boolean? = null
+
+        val isClassNoLoadRun: Boolean
+            get() {
+                return uiTest?.isClassNoLoadRun ?: false
+            }
+        val isMethodNoLoadRun: Boolean
+            get() {
+                return uiTest?.isMethodNoLoadRun ?: false
+            }
+        val skipScenario: Boolean
+            get() {
+                return uiTest?.skipScenario ?: false
+            }
+        val skipCase: Boolean
+            get() {
+                return uiTest?.skipCase ?: false
+            }
     }
 
     /**
@@ -55,7 +72,6 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         beforeAllExecuted = false
         failOfTestContext = false
         failAnnotation = null
-        noLoadRunOfTestContext = false
 
         testClassWatch = StopWatch("testClassWatch").start()
 
@@ -106,7 +122,6 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failOfTestContext = context.isMethodAnnotated(Fail::class)
         failAnnotation = context.getMethodAnnotation(Fail::class) ?: context.getClassAnnotation(Fail::class)
         deletedAnnotation = context.getMethodAnnotation(Deleted::class) ?: context.getClassAnnotation(Deleted::class)
-        noLoadRunOfTestContext = context.isAnnotated(NoLoadRun::class) || context.isAnnotated(Deleted::class)
 
         if (context.isClassAnnotated(DisableCache::class) && context.isClassAnnotated(EnableCache::class)) {
             throw TestConfigException("Do not use @EnableCache and @DisableCache on a class.")
@@ -265,7 +280,6 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         failOfTestContext = false
         failAnnotation = null
-        noLoadRunOfTestContext = false
         enableCache = null
         testContext.resumeState()
 
@@ -334,7 +348,6 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         }
 
         TestLog.currentTestClass = null
-        noLoadRunOfTestContext = false
 
         testClassWatch.stop()
         val duration = "%.1f".format(testClassWatch.elapsedSeconds)

@@ -269,15 +269,19 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
         val sw = StopWatch()
 
+        val outputLog = log ?: CodeExecutionContext.shouldOutputLog
+
         if (TestMode.isNoLoadRun) {
-            loggingOnNoLoadRun(
-                logType = LogType.OPERATE,
-                message = message,
-                command = command,
-                subject = subject,
-                arg1 = arg1,
-                arg2 = arg2
-            )
+            if (outputLog) {
+                loggingOnNoLoadRun(
+                    logType = LogType.OPERATE,
+                    message = message,
+                    command = command,
+                    subject = subject,
+                    arg1 = arg1,
+                    arg2 = arg2
+                )
+            }
             return null
         }
 
@@ -293,7 +297,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val original = CodeExecutionContext.isInOperationCommand
         try {
             pushToCommandStack()
-            val outputLog = log ?: CodeExecutionContext.shouldOutputLog
 
             beginLogLine = TestLog.operate(
                 message = message,

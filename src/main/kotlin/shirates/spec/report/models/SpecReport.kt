@@ -4,10 +4,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import shirates.core.logging.TestLog
 import shirates.spec.report.entity.SpecReportData
-import shirates.spec.utilily.ExcelUtility
-import shirates.spec.utilily.SpecResourceUtility
-import shirates.spec.utilily.removeSheet
-import shirates.spec.utilily.worksheets
+import shirates.spec.utilily.*
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -57,21 +54,19 @@ class SpecReport(
     }
 
     private fun transformLines() {
-        with(data) {
-            val specWorksheetModel = SpecWorksheetModel(
-                noLoadRun = noLoadRun,
-                tester = tester,
-                testDate = testDate,
-                environment = environment,
-                build = appBuild
+        val specWorksheetModel =
+            SpecWorksheetModel(
+                noLoadRun = data.noLoadRun,
+                tester = data.tester,
+                testDate = data.testDate,
+                environment = data.environment,
+                build = data.appBuild
             )
-
-            val targetLogLines = logLines.filter { it.testCaseId.isNotBlank() }
-            for (logLine in targetLogLines) {
-                specWorksheetModel.appendLine(logLine)
-            }
-            data.specLines.addAll(specWorksheetModel.toSpecLines())
+        val targetLogLines = data.logLines.filter { it.testCaseId.isNotBlank() }.getRedundancyRemoved()
+        for (logLine in targetLogLines) {
+            specWorksheetModel.appendLine(logLine)
         }
+        data.specLines.addAll(specWorksheetModel.toSpecLines())
     }
 
     private fun createSpecReport() {

@@ -66,7 +66,8 @@ fun XSSFSheet.assertHeader(
     cells("H5").intIs(ng)
     cells("H6").intIs(error)
 
-    cells("J3").textIs("SUSPENDED")
+    cells("J2").textIs("SUSPENDED")
+    cells("J3").textIs("COND_AUTO")
     cells("J4").textIs("MANUAL")
     cells("J5").textIs("SKIP")
     cells("J6").textIs("NOTIMPL")

@@ -95,6 +95,27 @@ abstract class UITest : TestDrive {
             return description
         }
 
+    val isClassNoLoadRun: Boolean
+        get() {
+            if (extensionContext == null) return false
+            return extensionContext.isClassAnnotated(NoLoadRun::class)
+        }
+
+    val isMethodNoLoadRun: Boolean
+        get() {
+            if (extensionContext == null) return false
+            return extensionContext.isMethodAnnotated(NoLoadRun::class)
+        }
+
+    var skipScenario: Boolean = false
+
+    var skipCase: Boolean = false
+
+    val skip: Boolean
+        get() {
+            return skipScenario || skipCase
+        }
+
     fun clearTempStorages() {
 
         e1 = TestElement()
@@ -246,7 +267,10 @@ abstract class UITest : TestDrive {
 
         try {
             val configPath = configFile.toPath()
-            val testConfigName = configPath.toFile().nameWithoutExtension
+            var testConfigName = configPath.toFile().nameWithoutExtension
+            if (isNoLoadRun) {
+                testConfigName = testConfigName.split("@").first()
+            }
 
             // testResults
             if (testConfigName.isNotBlank()) {
@@ -446,12 +470,13 @@ abstract class UITest : TestDrive {
         message: String = message(id = "SKIP_CASE")
     ) {
         if (TestMode.isNoLoadRun) {
+            skipCase = true
             TestLog.skipCase(message)
             return
         }
         driver.screenshotCore()
         TestLog.skipCase(message)
-        driver.skipCase = true
+        skipCase = true
         testSkipped = true
     }
 
@@ -462,12 +487,13 @@ abstract class UITest : TestDrive {
         message: String = message(id = "SKIP_SCENARIO")
     ) {
         if (TestMode.isNoLoadRun) {
+            skipScenario = true
             TestLog.skipScenario(message)
             return
         }
         driver.screenshotCore()
         TestLog.skipScenario(message)
-        driver.skipScenario = true
+        skipScenario = true
         testSkipped = true
     }
 
@@ -633,7 +659,7 @@ abstract class UITest : TestDrive {
         launchApp: Boolean,
         testProc: () -> Unit
     ) {
-        driver.skipScenario = false
+        skipScenario = false
         CodeExecutionContext.lastScreenshotXmlSource = ""
         testSkipped = false
 
@@ -826,7 +852,7 @@ abstract class UITest : TestDrive {
         proc: () -> Unit
     ) {
 
-        driver.skipCase = false
+        skipCase = false
         val caseLog = TestLog.case(stepNo = stepNo, log = true, desc = desc)
 
         if (TestLog.lastScenarioLog?.testScenarioId != currentTestMethodName) {

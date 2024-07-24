@@ -8,6 +8,7 @@ class LogLine(
     var lineNo: Int? = null
     var logDateTime: Date? = null
     var testCaseId: String = ""
+    var mode: String = ""
     var logType: String = ""
     var os: String = ""
     var special: String = ""
@@ -75,15 +76,16 @@ class LogLine(
             lineNo = tokens[0].toInt()
             logDateTime = shirates.spec.SpecConst.DATE_FORMAT.parse(tokens[1])
             testCaseId = tokens[2]
-            logType = tokens[3]
-            os = tokens[4]
-            special = tokens[5]
-            group = tokens[6]
-            level = tokens[7]
-            command = tokens[8]
-            message = tokens[9]
-            result = tokens[10]
-            exception = tokens[11]
+            mode = tokens[3]
+            logType = tokens[4]
+            os = tokens[5]
+            special = tokens[6]
+            group = tokens[7]
+            level = tokens[8]
+            command = tokens[9]
+            message = tokens[10]
+            result = tokens[11]
+            exception = tokens[12]
         } catch (t: Throwable) {
             println("IndexOufOfBound. (tokens.count=${tokens.count()}, text=$text)")
         }
@@ -94,6 +96,6 @@ class LogLine(
      */
     override fun toString(): String {
 
-        return "$lineNo\t$logDateTime\t$testCaseId\t$logType\t$os\t$group\t$level\t$command\t$message\t$exception"
+        return "$lineNo\t$logDateTime\t$testCaseId\t$mode\t$logType\t$os\t$group\t$level\t$command\t$message\t$exception"
     }
 }

@@ -14,7 +14,7 @@ class SpecReportData {
     var okCount = 0
     var ngCount = 0
     var errorCount = 0
-    var condAuto = 0
+    var condAutoCount = 0
     var manualCount = 0
     var skipCount = 0
     var notImplCount = 0
@@ -43,6 +43,7 @@ class SpecReportData {
         }
     val profileName: String
         get() {
+            if (noLoadRun) return ""
             return p.getValue("profileName") ?: ""
         }
     val appIconName: String
@@ -51,14 +52,17 @@ class SpecReportData {
         }
     val platformName: String
         get() {
+            if (noLoadRun) return ""
             return p.getValue("platformName") ?: ""
         }
     val platformVersion: String
         get() {
+            if (noLoadRun) return ""
             return p.getValue("appium:platformVersion") ?: ""
         }
     val deviceModel: String
         get() {
+            if (noLoadRun) return ""
             if (platformName == "ANDROID") {
                 return p.getValue("appium:deviceModel") ?: ""
             } else {
@@ -83,6 +87,9 @@ class SpecReportData {
 
     val osSymbol: String
         get() {
+            if (noLoadRun) {
+                return ""
+            }
             val s = ("${platformName.lowercase()} ").substring(0, 1).trim()
             if (s.isBlank()) {
                 return ""
@@ -118,7 +125,7 @@ class SpecReportData {
         okCount = group["OK"]?.count() ?: 0
         ngCount = group["NG"]?.count() ?: 0
         errorCount = group["ERROR"]?.count() ?: 0
-        condAuto = group["COND_AUTO"]?.count() ?: 0
+        condAutoCount = group["COND_AUTO"]?.count() ?: 0
         manualCount = group["MANUAL"]?.count() ?: 0
         skipCount = group["SKIP"]?.count() ?: 0
         suspendedCount = group[SpecResourceUtility.suspended]?.count() ?: 0
