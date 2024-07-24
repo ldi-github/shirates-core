@@ -38,10 +38,12 @@ class TestDriveAssertionExtensionTest4 : UITest() {
                         it.appIs("Settings")
                         it.screenIs("[Android Settings Top Screen]")
                     }
-                    assertThat(TestLog.lastTestLog?.message).isEqualTo("The app is Settings and the screen is [Android Settings Top Screen]")
                 }
             }
         }
+        // Assert
+        val verifyLine = TestLog.lines.last() { it.scriptCommand == "verify" }
+        assertThat(verifyLine.result).isEqualTo(LogType.OK)
     }
 
     @Test
@@ -62,6 +64,9 @@ class TestDriveAssertionExtensionTest4 : UITest() {
             }
         }.isInstanceOf(AssertionError::class.java)
             .hasMessage("The app is Settings and the screen is [Android Settings Top Screen]")
+        // Assert
+        val verifylLine = TestLog.lines.last() { it.scriptCommand == "verify" }
+        assertThat(verifylLine.result).isEqualTo(LogType.NG)
     }
 
     @Test
@@ -79,12 +84,11 @@ class TestDriveAssertionExtensionTest4 : UITest() {
             }
         }
         // Assert
-        val infoLine = TestLog.lines.first() { it.message == "verify block should include one or mode assertion." }
+        val infoLine = TestLog.lines.last() { it.message == "verify block should include one or mode assertion." }
         assertThat(infoLine).isNotNull
         // Assert
-        val manualLine =
-            TestLog.lines.first { it.message == "The app is Settings and the screen is [Android Settings Top Screen]" }
-        assertThat(manualLine.result).isEqualTo(LogType.MANUAL)
+        val verifyLine = TestLog.lines.last() { it.scriptCommand == "verify" }
+        assertThat(verifyLine.result).isEqualTo(LogType.NONE)
     }
 
 }
