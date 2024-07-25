@@ -2,12 +2,12 @@ package shirates.spec.unittest.code
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.PropertiesManager
+import shirates.core.testcode.UnitTest
 import shirates.spec.code.custom.DefaultTranslator
 import shirates.spec.code.entity.Case
 import shirates.spec.code.entity.Scenario
 import shirates.spec.utilily.SpecResourceUtility
-import shirates.core.configuration.PropertiesManager
-import shirates.core.testcode.UnitTest
 
 class TranslatorTest : UnitTest() {
 
@@ -51,8 +51,8 @@ class TranslatorTest : UnitTest() {
         assertThat(DefaultTranslator.getScreenNickName("- [A dialog]")).isEqualTo("[A dialog]")
 
         // Act, Assert
-        assertThat(DefaultTranslator.getScreenNickName("A画面")).isEqualTo("[A画面]")
-        assertThat(DefaultTranslator.getScreenNickName("- A画面")).isEqualTo("[A画面]")
+        assertThat(DefaultTranslator.getScreenNickName("A画面")).isEqualTo("")
+        assertThat(DefaultTranslator.getScreenNickName("- A画面")).isEqualTo("")
         assertThat(DefaultTranslator.getScreenNickName("- [A Screen]")).isEqualTo("[A Screen]")
         assertThat(DefaultTranslator.getScreenNickName("- [A screen]")).isEqualTo("[A screen]")
         assertThat(DefaultTranslator.getScreenNickName("- [Aダイアログ]")).isEqualTo("[Aダイアログ]")
@@ -91,9 +91,10 @@ class TranslatorTest : UnitTest() {
             // Act, Assert
             assertThat(t.messageToFunction("[A画面]が表示されること")).isEqualTo("screenIs(\"[A画面]\")")
             assertThat(t.messageToFunction("[ラベル]が存在すること")).isEqualTo("exist(\"[ラベル]\")")
-            assertThat(t.messageToFunction("[ラベル]が表示されること")).isEqualTo("exist(\"[ラベル]\")")
+            assertThat(t.messageToFunction("[ラベル]が表示されること")).isEqualTo("manual(\"[ラベル]が表示されること\")")
             assertThat(t.messageToFunction("アプリが[Chrome]であること")).isEqualTo("appIs(\"[Chrome]\")")
-            assertThat(t.messageToFunction("セットアップする", defaultFunc = "macro")).isEqualTo("macro(\"[セットアップする]\")")
+            assertThat(t.messageToFunction("セットアップする", defaultFunc = "macro"))
+                .isEqualTo("macro(\"[セットアップする]\")")
             assertThat(t.messageToFunction("セットアップする")).isEqualTo("manual(\"セットアップする\")")
         }
         run {
@@ -102,7 +103,7 @@ class TranslatorTest : UnitTest() {
             // Act, Assert
             assertThat(t.messageToFunction("[A Screen] is displayed")).isEqualTo("screenIs(\"[A Screen]\")")
             assertThat(t.messageToFunction("[Label] exists")).isEqualTo("exist(\"[Label]\")")
-            assertThat(t.messageToFunction("[Label] is displayed")).isEqualTo("exist(\"[Label]\")")
+            assertThat(t.messageToFunction("[Label] is displayed")).isEqualTo("manual(\"[Label] is displayed\")")
             assertThat(t.messageToFunction("App is [Chrome]")).isEqualTo("appIs(\"[Chrome]\")")
             assertThat(t.messageToFunction("Setup", defaultFunc = "macro")).isEqualTo("macro(\"[Setup]\")")
             assertThat(t.messageToFunction("Setup")).isEqualTo("manual(\"Setup\")")
@@ -217,7 +218,7 @@ class TranslatorTest : UnitTest() {
             // Act
             val actual = t.expectationMessageToFunction(target = target, message = message)
             // Assert
-            assertThat(actual).isEqualTo("exist(\"Item1\")")
+            assertThat(actual).isEqualTo("manual(\"is displayed\")")
         }
         run {
             // Arrange

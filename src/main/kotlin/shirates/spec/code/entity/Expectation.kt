@@ -37,7 +37,7 @@ class Expectation(
 
         for (i in 0 until checkItems.count()) {
             val checkItem = checkItems[i]
-            val functionPart = checkItem.expectationMessageToFunction(defaultFunc = "exist", target = target)
+            val functionPart = checkItem.expectationMessageToFunction(defaultFunc = "manual", target = target)
             lines.add(functionPart)
         }
 

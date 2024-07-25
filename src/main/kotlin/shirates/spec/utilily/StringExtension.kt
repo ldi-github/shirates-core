@@ -3,10 +3,26 @@ package shirates.spec.utilily
 import shirates.spec.code.custom.Keywords
 import shirates.spec.code.entity.exntension.getScreenNickName
 
+internal fun String.hasSquareBracket(): Boolean {
+
+    val result = ".*\\[.*].+".toRegex().matchEntire(this)
+    return result?.groupValues?.any() == true
+}
+
+internal fun String.hasAngleBracket(): Boolean {
+
+    val result2 = ".*<.*>.+".toRegex().matchEntire(this)
+    return result2?.groupValues?.any() == true
+}
+
+internal fun String.hasBracket(): Boolean {
+    return this.hasSquareBracket() || this.hasAngleBracket()
+}
+
 /**
  * isAssertion
  */
-val String.isAssertion: Boolean
+internal val String.isAssertion: Boolean
     get() {
         if (this.isDisplayedAssertion) {
             return true
@@ -26,9 +42,22 @@ val String.isAssertion: Boolean
     }
 
 /**
+ * isScreenDisplayedAssertion
+ */
+internal val String.isScreenDisplayedAssertion: Boolean
+    get() {
+        for (token in Keywords.displayedContainedTokens) {
+            if (this == token) {
+                return true
+            }
+        }
+        return false
+    }
+
+/**
  * isDisplayedAssertion
  */
-val String.isDisplayedAssertion: Boolean
+internal val String.isDisplayedAssertion: Boolean
     get() {
         for (token in Keywords.displayedContainedTokens) {
             if (this.contains(token)) {
@@ -41,7 +70,7 @@ val String.isDisplayedAssertion: Boolean
 /**
  * isExistenceAssertion
  */
-val String.isExistenceAssertion: Boolean
+internal val String.isExistenceAssertion: Boolean
     get() {
         for (token in Keywords.existenceContainedTokens) {
             if (this.contains(token)) {
@@ -55,7 +84,7 @@ val String.isExistenceAssertion: Boolean
 /**
  * isScreen
  */
-val String.isScreen: Boolean
+internal val String.isScreen: Boolean
     get() {
         if (isAssertion) {
             return false
@@ -70,7 +99,7 @@ val String.isScreen: Boolean
 /**
  * removeJapaneseBrackets
  */
-fun String.removeJapaneseBrackets(): String {
+internal fun String.removeJapaneseBrackets(): String {
 
     var result = this
     for (bracket in Keywords.japaneseBrackets) {
@@ -82,7 +111,7 @@ fun String.removeJapaneseBrackets(): String {
 /**
  * removeBrackets
  */
-fun String.removeBrackets(): String {
+internal fun String.removeBrackets(): String {
 
     var result = this
     for (bracket in Keywords.brackets) {
@@ -94,7 +123,7 @@ fun String.removeBrackets(): String {
 /**
  * escapeForRegex
  */
-fun String.escapeForRegex(): String {
+internal fun String.escapeForRegex(): String {
 
     val charactersToEscape = """^$.+*/\[]{}()""".toList()
 
