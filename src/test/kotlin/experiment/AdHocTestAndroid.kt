@@ -7,6 +7,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.Testrun
 import shirates.core.driver.*
+import shirates.core.driver.branchextension.android
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
@@ -155,5 +156,68 @@ class AdHocTestAndroid : UITest() {
                 }
             }
         }
+    }
+
+    @Test
+    fun selectWithScroll_log() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.expectation {
+                    it.selectWithScrollDown("[Network & internet]", log = true)
+                    it.selectWithScrollDown("[Connected devices]", log = false)
+                    it.selectWithScrollDown("[Apps]")
+                    silent {
+                        it.selectWithScrollDown("[Notifications]")
+                    }
+                    withScrollDown {
+                        it.cellOf("[Network & internet]") {
+                            it.exist("[Network & internet Icon]")
+                        }
+                        it.cellOf("[Connected devices]") {
+                            it.exist("[Connected devices Icon]")
+                        }
+                        it.cellOf("[Apps]") {
+                            it.exist("[Apps Icon]")
+                        }
+                        silent {
+                            it.cellOf("[Notifications]") {
+                                it.exist("[Notifications]")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun removeEmptyBlock() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+
+                    android {
+
+                    }
+                    android {
+                        printInfo("hoge")
+                    }
+                }.expectation {
+                    android {
+
+                    }
+                    android {
+                        printInfo("fuga")
+                    }
+                }
+            }
+        }
+
     }
 }

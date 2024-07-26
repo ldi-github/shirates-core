@@ -14,44 +14,9 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.AppNameUtility
+import shirates.core.utility.sync.SyncContext
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch
-
-/**
- * appIs
- *
- * @param appNameOrAppId
- * Nickname [App1]
- * or appName App1
- * or packageOrBundleId com.example.app1
- */
-fun TestDrive.appIs(
-    appNameOrAppId: String
-): TestElement {
-
-    val testElement = TestDriver.it
-
-    val command = "appIs"
-    val subject = Selector(appNameOrAppId).toString()
-    val assertMessage = message(id = command, subject = subject)
-
-    val context = TestDriverCommandContext(testElement)
-    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
-        if (isApp(appNameOrAppId)) {
-            TestLog.ok(
-                message = assertMessage,
-                arg1 = appNameOrAppId
-            )
-        } else {
-            val appName = AppNameUtility.getCurrentAppName()
-            val actual = if (appName.isBlank()) "?" else appName
-            lastElement.lastError = TestNGException("$assertMessage (actual=$actual)")
-            throw lastElement.lastError!!
-        }
-    }
-
-    return lastElement
-}
 
 /**
  * keyboardIsShown
@@ -136,6 +101,70 @@ fun TestDrive.packageIs(expected: String): TestElement {
 }
 
 /**
+ * appIs
+ *
+ * @param appNameOrAppId
+ * Nickname [App1]
+ * or appName App1
+ * or packageOrBundleId com.example.app1
+ */
+fun TestDrive.appIs(
+    appNameOrAppId: String,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    useCache: Boolean = testContext.useCache,
+    onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() }
+): TestElement {
+
+    val testElement = TestDriver.it
+
+    val command = "appIs"
+    val subject = Selector(appNameOrAppId).toString()
+    val assertMessage = message(id = command, subject = subject)
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+
+        var result = false
+        val actionFunc = {
+            result = isApp(appNameOrAppId)
+            result
+        }
+
+        actionFunc()
+
+        if (result.not()) {
+            val sc = doUntilActionResultTrue(
+                waitSeconds = waitSeconds,
+                useCache = useCache,
+                actionFunc = actionFunc,
+                onIrregular = onIrregular
+            )
+            if (sc.isTimeout) {
+                TestLog.warn(message(id = "timeout", subject = "appIs", submessage = "${sc.error?.message}"))
+                // Retry once on an unexpectedly long processing times occurred
+                actionFunc()
+            } else {
+                sc.throwIfError()
+            }
+        }
+
+        if (result) {
+            TestLog.ok(message = assertMessage, arg1 = appNameOrAppId)
+        } else {
+            lastElement.lastResult = LogType.NG
+
+            val appName = AppNameUtility.getCurrentAppName()
+            val actual = if (appName.isBlank()) "?" else appName
+            val ex = TestNGException("$assertMessage (actual=$actual)")
+            throw ex
+        }
+    }
+
+    lastElement = rootElement
+    return lastElement
+}
+
+/**
  * screenIs
  */
 fun TestDrive.screenIs(
@@ -153,13 +182,45 @@ fun TestDrive.screenIs(
 
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
-        screenIsCore(
-            expectedScreenName = screenName,
-            waitSeconds = waitSeconds,
-            assertMessage = assertMessage,
-            useCache = useCache,
-            onIrregular = onIrregular
-        )
+
+        var result = false
+        TestDriver.currentScreen = "?"
+        val actionFunc = {
+            result = isScreen(screenName = screenName)
+            result
+        }
+
+        actionFunc()
+
+        if (result.not()) {
+            val sc = doUntilActionResultTrue(
+                waitSeconds = waitSeconds,
+                useCache = useCache,
+                actionFunc = actionFunc,
+                onIrregular = onIrregular
+            )
+            if (sc.isTimeout) {
+                TestLog.warn(message(id = "timeout", subject = "screenIs", submessage = "${sc.error?.message}"))
+                // Retry once on an unexpectedly long processing times occurred
+                actionFunc()
+            } else {
+                sc.throwIfError()
+            }
+        }
+
+        if (result) {
+            TestLog.ok(message = assertMessage, arg1 = screenName)
+            if (useCache.not()) {
+                invalidateCache()   // matched, but not synced yet.
+            }
+        } else {
+            lastElement.lastResult = LogType.NG
+
+            val identity = ScreenRepository.get(screenName).identityElements.joinToString("")
+            val message = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected identity=$identity)"
+            val ex = TestNGException(message, lastElement.lastError)
+            throw ex
+        }
     }
     if (func != null) {
         func()
@@ -179,76 +240,47 @@ fun TestDrive.screenIs(
     func: (() -> Unit)? = null
 ): TestElement {
 
-    return screenIs(screenName = screenName, waitSeconds = waitSeconds.toDouble(), useCache = useCache, func = func)
+    return screenIs(
+        screenName = screenName,
+        waitSeconds = waitSeconds.toDouble(),
+        useCache = useCache,
+        func = func
+    )
 }
 
-internal fun TestDrive.screenIsCore(
-    expectedScreenName: String,
-    assertMessage: String,
+private fun TestDrive.doUntilActionResultTrue(
+    actionFunc: () -> Boolean,
     waitSeconds: Double,
-    onIrregular: (() -> Unit)?,
-    useCache: Boolean
-) {
+    useCache: Boolean,
+    onIrregular: (() -> Unit)?
+): SyncContext {
+    CpuLoadService.waitForCpuLoadUnder()
 
-    var isScreenResult = false
-    TestDriver.currentScreen = "?"
-    val actionFunc = {
-        isScreenResult = isScreen(screenName = expectedScreenName)
-        isScreenResult
-    }
-
-    actionFunc()
-
-    if (isScreenResult.not()) {
-
-        CpuLoadService.waitForCpuLoadUnder()
-
-        val sc = SyncUtility.doUntilTrue(
-            waitSeconds = waitSeconds,
-            intervalSeconds = PropertiesManager.screenshotIntervalSeconds,
-            refreshCache = useCache,
-            throwOnError = false
-        ) {
-            val r = actionFunc()
-            TestDriver.refreshCurrentScreen(log = false)
-            TestLog.info("currentScreen=$screenName")
-            if (r.not()) {
-                testDrive.screenshot()
-                if (onIrregular != null) {
-                    onIrregular.invoke()
-                    refreshCache()
-                }
-                if (testContext.enableIrregularHandler && testContext.onScreenErrorHandler != null) {
-                    testDrive.withoutScroll {
-                        testContext.onScreenErrorHandler!!.invoke()
-                    }
-                    refreshCache()
-                }
+    val sc = SyncUtility.doUntilTrue(
+        waitSeconds = waitSeconds,
+        intervalSeconds = PropertiesManager.screenshotIntervalSeconds,
+        refreshCache = useCache,
+        throwOnError = false
+    ) {
+        val r = actionFunc()
+        TestDriver.refreshCurrentScreen(log = false)
+        TestLog.info("currentScreen=$screenName")
+        if (r.not()) {
+            testDrive.screenshot()
+            if (onIrregular != null) {
+                onIrregular.invoke()
+                refreshCache()
             }
-            r
+            if (testContext.enableIrregularHandler && testContext.onScreenErrorHandler != null) {
+                testDrive.withoutScroll {
+                    testContext.onScreenErrorHandler!!.invoke()
+                }
+                refreshCache()
+            }
         }
-        if (sc.isTimeout) {
-            TestLog.warn(message(id = "timeout", subject = "screenIs", submessage = "${sc.error?.message}"))
-            // Retry once on an unexpectedly long processing times occurred
-            actionFunc()
-        } else {
-            sc.throwIfError()
-        }
+        r
     }
-
-    if (isScreenResult) {
-        TestLog.ok(message = assertMessage, arg1 = expectedScreenName)
-        if (useCache.not()) {
-            invalidateCache()   // matched, but not synced yet.
-        }
-    } else {
-        lastElement.lastResult = LogType.NG
-
-        val identity = ScreenRepository.get(expectedScreenName).identityElements.joinToString("")
-        val message = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected identity=$identity)"
-        val ex = TestNGException(message, lastElement.lastError)
-        throw ex
-    }
+    return sc
 }
 
 /**
@@ -552,10 +584,12 @@ fun TestDrive.verify(
             val endCount = TestLog.allLines.count()
             val takeCount = endCount - startCount
             val lines = TestLog.allLines.takeLast(takeCount)
-            if (lines.any() { it.logType == LogType.CHECK || it.logType.isOKType }.not()) {
-                throw NotImplementedError("verify block must include one or mode assertion.")
+            if (lines.any() { it.logType == LogType.CHECK || it.logType.isOKType }) {
+                TestLog.ok(message = message)
+            } else {
+                TestLog.info("verify block should include one or mode assertion.")
+                TestLog.manual(message = message)
             }
-            TestLog.ok(message = message)
         } catch (t: NotImplementedError) {
             throw t
         } catch (t: Throwable) {
@@ -576,7 +610,7 @@ fun TestDrive.existImage(
     expression: String,
     swipeToCenter: Boolean = false,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
-    throwsException: Boolean = false,
+    throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     useCache: Boolean = testContext.useCache,
     mustValidateImage: Boolean = false,

@@ -180,7 +180,8 @@ class SpecReportTest2 : UITest() {
                         "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -191,7 +192,8 @@ class SpecReportTest2 : UITest() {
                         "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 13,
@@ -202,7 +204,8 @@ class SpecReportTest2 : UITest() {
                         "- <Mon, Tue, Wed, Thu, Fri>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 14,
@@ -213,7 +216,8 @@ class SpecReportTest2 : UITest() {
                         "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 15,
@@ -222,7 +226,8 @@ class SpecReportTest2 : UITest() {
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_large_label_view>",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 16,
@@ -231,7 +236,8 @@ class SpecReportTest2 : UITest() {
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_labels_group>",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 17,
@@ -242,7 +248,8 @@ class SpecReportTest2 : UITest() {
                         "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 18,
@@ -253,7 +260,8 @@ class SpecReportTest2 : UITest() {
                         "- [9:00 AM Days of week]\n" +
                         "- [9:00 AM ON/OFF]",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 19,
@@ -264,7 +272,8 @@ class SpecReportTest2 : UITest() {
                         "- innerWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
                         "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 20,
@@ -275,7 +284,8 @@ class SpecReportTest2 : UITest() {
                         "- innerWidget(3) is \"Sun, Sat\"\n" +
                         "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
-                result = "N/A"
+                result = "N/A",
+                supplement = "SKIP"
             )
 
 

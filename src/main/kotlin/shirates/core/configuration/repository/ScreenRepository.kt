@@ -44,6 +44,8 @@ object ScreenRepository {
      */
     fun clear() {
         screenInfoMap.clear()
+        nicknameIndex.clear()
+        tempSelectorList.clear()
     }
 
     /**

@@ -88,7 +88,7 @@ data class LogLine(
          */
         fun getHeaderForCommandList(): String {
 
-            return "lineNo\tlogDateTime\ttestCaseId\tlogType\tos\tspecial\tgroup\tlevel\tcommand\tmessage\tresult\texception"
+            return "lineNo\tlogDateTime\ttestCaseId\tmode\tlogType\tos\tspecial\tgroup\tlevel\tcommand\tmessage\tresult\texception"
         }
     }
 
@@ -116,7 +116,7 @@ data class LogLine(
     fun toStringForCommandList(): String {
 
         val ex = (exception?.message ?: "").replace("\n", "\\n")
-        return "$lineNumber\t$logDateTimeLabel\t$testCaseId\t${logType.label}\t$os\t$special\t$commandGroup\t$commandLevel\t$scriptCommand\t$message\t$result\t$ex"
+        return "$lineNumber\t$logDateTimeLabel\t$testCaseId\t${mode}\t${logType.label}\t$os\t$special\t$commandGroup\t$commandLevel\t$scriptCommand\t$message\t$result\t$ex"
     }
 
 

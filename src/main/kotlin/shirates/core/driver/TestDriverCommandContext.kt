@@ -226,7 +226,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg2: String? = null,
         fileName: String? = null,
         fireEvent: Boolean = true,
-        forceLog: Boolean = false,
+        log: Boolean? = null,
         suppressBeforeScreenshot: Boolean = false,
         func: () -> Unit
     ): LogLine? {
@@ -242,7 +242,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 arg2 = arg2,
                 fileName = fileName,
                 fireEvent = fireEvent,
-                forceLog = forceLog,
+                log = log,
                 scriptCommand = scriptCommand,
                 suppressBeforeScreenshot = suppressBeforeScreenshot,
                 func = func
@@ -260,7 +260,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg2: String?,
         fileName: String?,
         fireEvent: Boolean,
-        forceLog: Boolean,
+        log: Boolean?,
         scriptCommand: String?,
         suppressBeforeScreenshot: Boolean = false,
         func: () -> Unit
@@ -269,15 +269,19 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
         val sw = StopWatch()
 
+        val outputLog = log ?: CodeExecutionContext.shouldOutputLog
+
         if (TestMode.isNoLoadRun) {
-            loggingOnNoLoadRun(
-                logType = LogType.OPERATE,
-                message = message,
-                command = command,
-                subject = subject,
-                arg1 = arg1,
-                arg2 = arg2
-            )
+            if (outputLog) {
+                loggingOnNoLoadRun(
+                    logType = LogType.OPERATE,
+                    message = message,
+                    command = command,
+                    subject = subject,
+                    arg1 = arg1,
+                    arg2 = arg2
+                )
+            }
             return null
         }
 
@@ -293,7 +297,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val original = CodeExecutionContext.isInOperationCommand
         try {
             pushToCommandStack()
-            val outputLog = forceLog || CodeExecutionContext.shouldOutputLog
 
             beginLogLine = TestLog.operate(
                 message = message,
@@ -546,10 +549,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         log: Boolean = TestLog.enableTrace,
         func: () -> Unit
     ): LogLine? {
-
-        if (TestMode.isNoLoadRun) {
-            return null
-        }
 
         val ms = Measure()
 

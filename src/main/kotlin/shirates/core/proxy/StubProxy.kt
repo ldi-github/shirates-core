@@ -202,6 +202,31 @@ object StubProxy {
     }
 
     /**
+     * setDataPatternRelaxed
+     */
+    fun setDataPatternRelaxed(
+        urlPathOrApiName: String,
+        dataPatternName: String,
+        profile: String? = this.activeProfile
+    ): StubProxyResponse {
+
+        if (TestMode.isNoLoadRun) {
+            return StubProxyResponse()
+        }
+
+        val builder =
+            "${testContext.profile.stubServerUrl}/management/setDataPatternRelaxed".toHttpUrlOrNull()!!.newBuilder()
+                .addQueryParameter("urlPathOrApiName", urlPathOrApiName)
+                .addQueryParameter("dataPatternName", dataPatternName)
+        if (profile.isNullOrBlank().not()) {
+            builder.addQueryParameter("profile", profile)
+        }
+        val url = builder.build()
+        val stubProxyResponse = request(url)
+        return stubProxyResponse
+    }
+
+    /**
      * getDataPattern
      */
     fun getDataPattern(

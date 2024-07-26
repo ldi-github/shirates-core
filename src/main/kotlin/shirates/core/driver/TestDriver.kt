@@ -202,23 +202,6 @@ object TestDriver {
             return lastElement.lastError
         }
 
-    /**
-     * skipScenario
-     */
-    var skipScenario: Boolean = false
-
-    /**
-     * skipCase
-     */
-    var skipCase: Boolean = false
-
-    /**
-     * skip
-     */
-    val skip: Boolean
-        get() {
-            return skipScenario || skipCase
-        }
 
     /**
      * implicitlyWaitSeconds
@@ -357,6 +340,9 @@ object TestDriver {
         }
 
         val iResult = e.isImageFound && dontExist.not() || e.isImageFound.not() && dontExist
+        if (iResult.not() && log) {
+            TestLog.warn("$assertMessage (${e.imageMatchResult})")
+        }
         if (eResult) {
             if (iResult) {
                 e.lastResult = TestLog.getOKType()
@@ -370,8 +356,8 @@ object TestDriver {
                     return
                 } else {
                     e.lastResult = LogType.COND_AUTO
+                    e.lastError = null
                     if (log) {
-                        TestLog.warn("$assertMessage (${e.imageMatchResult})")
                         TestLog.conditionalAuto(assertMessage)
                     }
                     return
@@ -384,9 +370,15 @@ object TestDriver {
                     TestLog.ok(message = assertMessage)
                 }
                 return
+            } else {
+                e.lastResult = LogType.COND_AUTO
+                e.lastError = null
+                if (log) {
+                    TestLog.conditionalAuto(assertMessage)
+                }
+                return
             }
         }
-        setNG()
     }
 
 
@@ -395,8 +387,6 @@ object TestDriver {
      */
     fun clearContext() {
 
-        skipScenario = false
-        skipCase = false
         lastTestContext = testContext
         testContext = TestContext()
     }
@@ -549,6 +539,7 @@ object TestDriver {
             if (testContext.screenHandlers.containsKey(screenName)) {
                 val handler = testContext.screenHandlers[screenName]!!
                 context.fired = true
+                screenshot(force = true, onChangedOnly = true)
                 handler(context)
                 if (context.keep.not()) {
                     testDrive.removeScreenHandler(screenName)
@@ -1993,10 +1984,13 @@ object TestDriver {
 
         val originalScreen = currentScreen
 
-        val newScreen = refreshCurrentScreenInCandidates(screenInfoList = screenInfoList)
+        currentScreen = refreshCurrentScreenInCandidates(screenInfoList = screenInfoList)
+        if (testContext.onRefreshCurrentScreenHandler != null) {
+            testContext.onRefreshCurrentScreenHandler!!.invoke()
+        }
+        val newScreen = currentScreen
         val changed = newScreen != "?" && newScreen != originalScreen
         if (changed) {
-            currentScreen = newScreen
             screenshot()
             TestLog.info("currentScreen=$currentScreen", log = log)
         }

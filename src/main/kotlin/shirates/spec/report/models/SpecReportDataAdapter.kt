@@ -21,21 +21,21 @@ class SpecReportDataAdapter(val data: SpecReportData) {
      */
     fun loadLogFile(logFilePath: Path) {
 
-        with(data) {
-            val textLines = File(logFilePath.toUri()).readLines()
-            if (textLines.isEmpty()) {
-                throw IllegalStateException("data not found.($logFilePath)")
-            }
+        val textLines = File(logFilePath.toUri()).readLines()
+        if (textLines.isEmpty()) {
+            throw IllegalStateException("data not found.($logFilePath)")
+        }
 
-            for (i in 1 until textLines.count()) {
-                val logLine = LogLine(textLines[i])
-                logLines.add(logLine)
-            }
-            setDeleteFlag()
-            for (i in logLines.count() - 1 downTo 0) {
-                if (logLines[i].delete) {
-                    logLines.removeAt(i)
-                }
+        val lines = mutableListOf<LogLine>()
+        for (i in 1 until textLines.count()) {
+            val logLine = LogLine(textLines[i])
+            lines.add(logLine)
+        }
+        data.logLines.addAll(lines.getRedundancyRemoved())
+        setDeleteFlag()
+        for (i in data.logLines.count() - 1 downTo 0) {
+            if (data.logLines[i].delete) {
+                data.logLines.removeAt(i)
             }
         }
         data.refreshParameters()
@@ -96,15 +96,16 @@ class SpecReportDataAdapter(val data: SpecReportData) {
                 lineNo = text(i, 1).toIntOrNull()
                 logDateTime = text(i, 2).toDateOrNull()
                 testCaseId = text(i, 3)
-                logType = text(i, 4)
-                os = text(i, 5)
-                special = text(i, 6)
-                group = text(i, 7)
-                level = text(i, 8)
-                command = text(i, 9)
-                message = text(i, 10)
-                result = text(i, 11)
-                exception = text(i, 12)
+                mode = text(i, 4)
+                logType = text(i, 5)
+                os = text(i, 6)
+                special = text(i, 7)
+                group = text(i, 8)
+                level = text(i, 9)
+                command = text(i, 10)
+                message = text(i, 11)
+                result = text(i, 12)
+                exception = text(i, 13)
             }
             data.logLines.add(logLine)
         }
@@ -144,7 +145,7 @@ class SpecReportDataAdapter(val data: SpecReportData) {
             if (specLine.step.isNotBlank() && specLine.step.toIntOrNull() == null && specLine.action.isBlank()) {
                 specLine.type = "scenario"
             }
-            if (canAdd(specLine = specLine)) {
+            if (data.noLoadRun || canAdd(specLine = specLine)) {
                 data.specLines.add(specLine)
             }
         }

@@ -86,9 +86,6 @@ fun TestDrive.tap(
     context.execOperateCommand(command = command, message = message, subject = tappedElement.subject) {
         e = tappedElement.tapCore(holdSeconds = holdSeconds, tapMethod = tapMethod)
     }
-    if (TestDriver.skip) {
-        lastElement = e
-    }
 
     lastElement = e
     return lastElement

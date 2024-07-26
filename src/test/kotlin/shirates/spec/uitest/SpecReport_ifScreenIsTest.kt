@@ -290,6 +290,8 @@ if else {
 - in ifElse
 }
 """.trimIndent(),
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -312,6 +314,8 @@ if else {
 }
 """.trimIndent(),
                 os = "Android",
+                auto = "M",
+                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 13,
@@ -334,7 +338,9 @@ if else {
 }
 """.trimIndent(),
                 os = "Android",
-                special = "emulator"
+                special = "emulator",
+                auto = "M",
+                supplement = "SKIP"
             )
         }
     }

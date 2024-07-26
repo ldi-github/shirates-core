@@ -51,9 +51,30 @@ object TestMode {
     val isNoLoadRun: Boolean
         get() {
             return testTimeNoLoadRun == true ||
-                    UITestCallbackExtension.noLoadRunOfTestContext ||
-                    TestDriver.skipScenario ||
-                    TestDriver.skipCase
+                    isClassNoLoadRun ||
+                    isMethodNoLoadRun ||
+                    skipScenario ||
+                    skipCase
+        }
+
+    val isClassNoLoadRun: Boolean
+        get() {
+            return UITestCallbackExtension.isClassNoLoadRun
+        }
+
+    val isMethodNoLoadRun: Boolean
+        get() {
+            return UITestCallbackExtension.isMethodNoLoadRun
+        }
+
+    val skipScenario: Boolean
+        get() {
+            return UITestCallbackExtension.skipScenario
+        }
+
+    val skipCase: Boolean
+        get() {
+            return UITestCallbackExtension.skipCase
         }
 
     /**

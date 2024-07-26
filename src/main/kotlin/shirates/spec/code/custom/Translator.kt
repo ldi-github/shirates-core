@@ -58,17 +58,6 @@ interface Translator {
             }
         }
 
-        /**
-         * "*Screen* -> [* Screen]
-         */
-        val replaced = formatArg(message).removeJapaneseBrackets().removeBrackets()
-        for (keyword in Keywords.screenKeywords) {
-            val screenName = replaced.getGroupValue("(.*$keyword).*".toRegex())
-            if (screenName.isNotBlank()) {
-                return "[$screenName]"
-            }
-        }
-
         return ""
     }
 
@@ -118,31 +107,29 @@ interface Translator {
      */
     fun messageToFunction(message: String, defaultFunc: String = "manual"): String {
 
-        val subject = getSubject(message)
         val screenNickname = getScreenNickName(message)
 
         if (screenNickname.isNotBlank() && message.isDisplayedAssertion) {
             return "screenIs(\"$screenNickname\")"
         }
-        if (subject.isNotBlank() && (message.isDisplayedAssertion || message.isExistenceAssertion)) {
-            return "exist(\"$subject\")"
+
+        if (defaultFunc == "macro") {
+            val arg = formatArg(message)
+            return "$defaultFunc(\"[$arg]\")"
         }
 
         /**
          * Match with message master
          */
-        val matchedMessage = matchWithMessageMaster(message = message)
-        if (matchedMessage.isNotBlank()) {
-            return matchedMessage
+        val matchedFunction = matchWithMessageMaster(message = message)
+        if (matchedFunction.hasBracket()) {
+            if (matchedFunction.startsWith("screenIs").not()) {
+                return matchedFunction
+            }
         }
 
-        if (defaultFunc == "macro") {
-            val arg = formatArg(message)
-            return "$defaultFunc(\"[$arg]\")"
-        } else {
-            val msg = escapeForCode(message)
-            return "$defaultFunc(\"$msg\")"
-        }
+        val msg = escapeForCode(message)
+        return "$defaultFunc(\"$msg\")"
     }
 
     /**
@@ -254,21 +241,20 @@ interface Translator {
 
         val targetItem = target?.target ?: ""
         val targetScreenNickname = getScreenNickName(targetItem)
-        if (targetScreenNickname.isNotBlank() && message.isDisplayedAssertion) {
+        if (targetScreenNickname.isNotBlank() && message.isScreenDisplayedAssertion) {
             return "screenIs(\"$targetScreenNickname\")"
         }
-        if (targetItem.isNotBlank() && (message.isDisplayedAssertion || message.isExistenceAssertion)) {
-            return "exist(\"$targetItem\")"
-        }
-
         val screenNickname = getScreenNickName(message)
-        if (screenNickname.isNotBlank() && message.isDisplayedAssertion) {
+        if (screenNickname.isNotBlank() && message.isDisplayedAssertion && message.hasSquareBracket()) {
             return "screenIs(\"$screenNickname\")"
         }
 
         val subject = getSubject(message)
         if (subject.isNotBlank() && (message.isDisplayedAssertion || message.isExistenceAssertion)) {
             return "exist(\"$subject\")"
+        }
+        if (message.endsWith("]") || message.endsWith(">")) {
+            return "exist(\"$message\")"
         }
 
         return messageToFunction(message = message, defaultFunc = defaultFunc)

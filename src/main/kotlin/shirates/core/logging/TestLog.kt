@@ -526,7 +526,12 @@ object TestLog {
         val lineNumber = lines.count() + 1
         val commandLevel = commandStack.count()
         val commandGroupNo = userCallCommand?.beginLogLine?.commandGroupNo ?: lineNumber
-        val mode = if (testContext.useCache) "C" else "!"
+        val mode =
+            if (TestMode.skipScenario || TestMode.skipCase || TestMode.isClassNoLoadRun || TestMode.isMethodNoLoadRun) {
+                "SKIP"
+            } else if (TestMode.isNoLoadRun) "NLR"
+            else if (testContext.useCache) "C"  // cache mode
+            else "!"    // direct access mode
 
         val logLine = LogLine(
             lineNumber = lineNumber,
@@ -1542,7 +1547,7 @@ object TestLog {
      */
     fun outputLogDetail(format: LogFileFormat) {
 
-        val detailLines = lines.filter { it.isForDetail }
+        val detailLines = lines.filter { it.isForDetail }.getRedundancyRemoved()
         outputLogFile(
             filterName = "detail",
             logLines = detailLines,
@@ -1555,7 +1560,7 @@ object TestLog {
      */
     fun outputLogSimple(format: LogFileFormat) {
 
-        val simpleLines = lines.filter { it.isForSimple }
+        val simpleLines = lines.filter { it.isForSimple }.getRedundancyRemoved()
         outputLogFile(
             filterName = "simple",
             logLines = simpleLines,
@@ -1568,7 +1573,7 @@ object TestLog {
      */
     fun outputCommandList() {
 
-        val commandLines = lines.filter { it.isForCommandList && it.deleted == false }
+        val commandLines = lines.filter { it.isForCommandList && it.deleted == false }.getRedundancyRemoved()
         outputLogFile(
             filterName = "commandList",
             logLines = commandLines,

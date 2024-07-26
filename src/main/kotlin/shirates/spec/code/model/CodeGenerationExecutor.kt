@@ -26,7 +26,10 @@ class CodeGenerationExecutor(
             CustomFunctionRepository.initialize()
         }
         PropertiesManager.setup()
-        PropertiesManager.setPropertyValue(propertyName = "logLanguage", value = logLanguage)
+        val logLang =
+            if (logLanguage == "" && PropertiesManager.logLanguage != "")
+                PropertiesManager.logLanguage else logLanguage
+        PropertiesManager.setPropertyValue(propertyName = "logLanguage", value = logLang)
 
         if (Files.exists(codegenOutputFile).not()) {
             Files.createDirectory(codegenOutputFile)

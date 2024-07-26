@@ -15,8 +15,9 @@ import shirates.core.storage.data
 import shirates.core.testcode.NoLoadRun
 import shirates.core.testcode.UITest
 
+@NoLoadRun("NLR on TestClass")
 @Testrun("testConfig/android/clock/testrun.properties")
-class NoLoadRunTest : UITest() {
+class NoLoadRunTest2 : UITest() {
 
     @NoLoadRun("NLR on clipboard")
     @Test

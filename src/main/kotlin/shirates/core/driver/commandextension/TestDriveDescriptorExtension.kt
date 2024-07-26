@@ -196,7 +196,6 @@ fun TestDrive.cell(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    log: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -209,14 +208,15 @@ fun TestDrive.cell(
                 throw TestDriverException(message(id = "cellIsEmpty", subject = e.subject))
             e
         } else {
-            select(
-                expression = expression,
-                swipeToCenter = swipeToCenter,
-                throwsException = throwsException,
-                waitSeconds = waitSeconds,
-                useCache = useCache,
-                log = log
-            )
+            silent {
+                select(
+                    expression = expression,
+                    swipeToCenter = swipeToCenter,
+                    throwsException = throwsException,
+                    waitSeconds = waitSeconds,
+                    useCache = useCache,
+                )
+            }
         }
 
     val target = message(id = command, subject = cell.subject)
@@ -246,18 +246,19 @@ fun TestDrive.cellOf(
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,
-    log: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val testElement = select(
-        expression = expression,
-        swipeToCenter = swipeToCenter,
-        throwsException = throwsException,
-        waitSeconds = waitSeconds,
-        useCache = useCache,
-        log = log
-    )
+    var testElement = TestElement.emptyElement
+    silent {
+        testElement = select(
+            expression = expression,
+            swipeToCenter = swipeToCenter,
+            throwsException = throwsException,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+        )
+    }
 
     return cellOfCore(
         testElement = testElement,
