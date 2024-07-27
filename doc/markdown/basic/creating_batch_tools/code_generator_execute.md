@@ -45,7 +45,7 @@ import shirates.core.testcode.*
 @SheetName("calculator test")
 class CalculatorDemo : UITest() {
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("calculate 123+456")
     fun S1010() {
@@ -90,7 +90,7 @@ class CalculatorDemo : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("calculate 1÷0")
     fun S1020() {

@@ -2,19 +2,19 @@
 
 コードファーストのスタイルでテストを設計することができます。
 
-1. テストクラスを作成し、`@NoLoadRun`アノテーションを付与したテスト関数を作成します。
+1. テストクラスを作成し、`@Manual`アノテーションを付与したテスト関数を作成します。
 2. テスト手順を仮実装します。
-3. テスト対象のアプリが提供されたら`@NoLoadRun`を削除し、テストを実装して完成させ、実行します。
+3. テスト対象のアプリが提供されたら`@Manual`を削除し、テストを実装して完成させ、実行します。
 
 ### CodeFirst1.kt
 
-テストクラスを作成し、`@NoLoadRun`を付与したテスト関数を作成します。
+テストクラスを作成し、`@Manual`を付与したテスト関数を作成します。
 
 ```kotlin
 @Testrun("testConfig/android/calculator/testrun.properties")
 class CodeFirst1 : UITest() {
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Start calculator")
     fun A0010() {
@@ -24,7 +24,7 @@ class CodeFirst1 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Add")
     fun A0020() {
@@ -34,7 +34,7 @@ class CodeFirst1 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Divide by zero")
     fun A0030() {
@@ -65,7 +65,7 @@ class CodeFirst1 : UITest() {
 @Testrun("testConfig/android/calculator/testrun.properties")
 class CodeFirst2 : UITest() {
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Start calculator")
     fun A0010() {
@@ -81,7 +81,7 @@ class CodeFirst2 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Add")
     fun A0020() {
@@ -103,7 +103,7 @@ class CodeFirst2 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Divide by zero")
     fun A0030() {
@@ -138,7 +138,7 @@ class CodeFirst2 : UITest() {
 
 ### CodeFirst3.kt
 
-テスト対象のアプリが提供されたら`@NoLoadRun`アノテーションを削除し、テストを実装して完成させ、実行します。
+テスト対象のアプリが提供されたら`@Manual`アノテーションを削除し、テストを実装して完成させ、実行します。
 
 ```kotlin
 @Testrun("testConfig/android/calculator/testrun.properties")

@@ -10,7 +10,7 @@ import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.specialTag
 import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.utility.format
@@ -30,7 +30,7 @@ class SpecialBranchFunctionTest : UITest() {
 
     lateinit var profile: TestProfile
 
-    @NoLoadRun
+    @Manual
     @Test
     @Order(10)
     fun s10() {

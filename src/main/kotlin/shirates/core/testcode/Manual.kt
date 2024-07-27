@@ -1,11 +1,10 @@
 package shirates.core.testcode
 
 /**
- * NoLoadRun
+ * Manual
  */
-@Deprecated("Use 'Manual' attribute instead")
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
-annotation class NoLoadRun(
+annotation class Manual(
     val description: String = ""
 ) {
 

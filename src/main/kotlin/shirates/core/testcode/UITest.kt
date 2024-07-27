@@ -95,16 +95,16 @@ abstract class UITest : TestDrive {
             return description
         }
 
-    val isClassNoLoadRun: Boolean
+    val isClassManual: Boolean
         get() {
             if (extensionContext == null) return false
-            return extensionContext.isClassAnnotated(NoLoadRun::class)
+            return extensionContext.isClassAnnotated(Manual::class) || extensionContext.isClassAnnotated(NoLoadRun::class)
         }
 
-    val isMethodNoLoadRun: Boolean
+    val isMethodManual: Boolean
         get() {
             if (extensionContext == null) return false
-            return extensionContext.isMethodAnnotated(NoLoadRun::class)
+            return extensionContext.isMethodAnnotated(Manual::class) || extensionContext.isMethodAnnotated(NoLoadRun::class)
         }
 
     var skipScenario: Boolean = false

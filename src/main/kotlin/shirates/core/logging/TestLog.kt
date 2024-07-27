@@ -527,7 +527,7 @@ object TestLog {
         val commandLevel = commandStack.count()
         val commandGroupNo = userCallCommand?.beginLogLine?.commandGroupNo ?: lineNumber
         val mode =
-            if (TestMode.skipScenario || TestMode.skipCase || TestMode.isClassNoLoadRun || TestMode.isMethodNoLoadRun) {
+            if (TestMode.skipScenario || TestMode.skipCase || TestMode.isClassManual || TestMode.isMethodManual) {
                 "SKIP"
             } else if (TestMode.isNoLoadRun) "NLR"
             else if (testContext.useCache) "C"  // cache mode

@@ -1,7 +1,7 @@
 package shirates.spec.code.entity
 
-import shirates.spec.code.custom.DefaultTranslator
 import shirates.core.customobject.CustomFunctionRepository
+import shirates.spec.code.custom.DefaultTranslator
 
 class Scenario(
     var displayName: String = "",
@@ -24,7 +24,7 @@ class Scenario(
     fun getCodeLines(): List<String> {
 
         val lines = mutableListOf<String>()
-        lines.add("@NoLoadRun")
+        lines.add("@Manual")
         lines.add("@Test")
         if (displayName.isNotBlank()) {
             val escaped = displayName.replace("\n", "")

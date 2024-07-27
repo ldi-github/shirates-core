@@ -51,20 +51,20 @@ object TestMode {
     val isNoLoadRun: Boolean
         get() {
             return testTimeNoLoadRun == true ||
-                    isClassNoLoadRun ||
-                    isMethodNoLoadRun ||
+                    isClassManual ||
+                    isMethodManual ||
                     skipScenario ||
                     skipCase
         }
 
-    val isClassNoLoadRun: Boolean
+    val isClassManual: Boolean
         get() {
-            return UITestCallbackExtension.isClassNoLoadRun
+            return UITestCallbackExtension.isClassManual
         }
 
-    val isMethodNoLoadRun: Boolean
+    val isMethodManual: Boolean
         get() {
-            return UITestCallbackExtension.isMethodNoLoadRun
+            return UITestCallbackExtension.isMethodManual
         }
 
     val skipScenario: Boolean
