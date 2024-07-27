@@ -228,6 +228,11 @@ class SpecWorksheetModel(
             }
 
             LogType.OK.label, LogType.NG.label, LogType.CHECK.label -> {
+                if (frame == Frame.EXPECTATION) {
+                    if (logLine.mode != "SKIP" && current.auto.isNotEmpty() && current.auto != "A") {
+                        newCase()
+                    }
+                }
                 addDescription(logLine)
                 if (frame == Frame.EXPECTATION) {
                     setResult(logLine)
@@ -274,7 +279,9 @@ class SpecWorksheetModel(
         }
 
         if (logLine.mode == "SKIP" && current.type != "scenario") {
-            current.auto = "M"
+            if (frame == Frame.EXPECTATION) {
+                current.auto = "M"
+            }
             if (noLoadRun.not()) {
                 current.supplement = "SKIP"
             }
