@@ -16,7 +16,7 @@ import shirates.core.driver.isEmulator
 import shirates.core.driver.testProfile
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.TestLog
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
 import shirates.core.utility.format
@@ -33,10 +33,10 @@ class SpecReport_ifScreenIsTest : UITest() {
 
     lateinit var profile: TestProfile
 
-    @NoLoadRun
+    @Manual
     @Test
     @Order(10)
-    @DisplayName("s10@NoLoadRun")
+    @DisplayName("s10@Manual")
     fun s10() {
 
         scenarioCore()
@@ -163,7 +163,8 @@ class SpecReport_ifScreenIsTest : UITest() {
                 rowNum = 10,
                 id = 1,
                 step = "s10",
-                condition = "s10@NoLoadRun",
+                condition = "s10@Manual",
+                result = "@Manual"
             )
             assertRow(
                 rowNum = 11,
@@ -290,8 +291,6 @@ if else {
 - in ifElse
 }
 """.trimIndent(),
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -314,8 +313,6 @@ if else {
 }
 """.trimIndent(),
                 os = "Android",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 13,
@@ -339,8 +336,6 @@ if else {
 """.trimIndent(),
                 os = "Android",
                 special = "emulator",
-                auto = "M",
-                supplement = "SKIP"
             )
         }
     }
@@ -444,6 +439,10 @@ if screen is not [Network & internet Screen] {
 """.trimIndent(),
                 os = "Android",
                 special = "emulator",
+            )
+            assertRow(
+                rowNum = 18,
+                id = 9,
                 auto = "A",
                 result = "NOTIMPL",
                 testDate = Date().format("yyyy/MM/dd"),

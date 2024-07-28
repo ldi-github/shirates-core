@@ -8,7 +8,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
 import shirates.core.utility.format
@@ -29,7 +29,7 @@ class SpecReportTest : UITest() {
 
     lateinit var profile: TestProfile
 
-    @NoLoadRun
+    @Manual
     @Test
     @Order(10)
     @DisplayName("calculate 123+456")
@@ -38,7 +38,7 @@ class SpecReportTest : UITest() {
         scenarioCore()
     }
 
-    //    @NoLoadRun
+    //    @Manual
     @Test
     @Order(20)
     @DisplayName("calculate 123+456")
@@ -124,7 +124,8 @@ class SpecReportTest : UITest() {
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             ok = 4,
-            total = 4
+            manual = 4,
+            total = 8
         )
 
         val date = Date().format("yyyy/MM/dd")
@@ -143,6 +144,7 @@ class SpecReportTest : UITest() {
                 id = 1,
                 step = "s10",
                 condition = "calculate 123+456",
+                result = "@Manual",
             )
             assertRow(
                 rowNum = 11,
@@ -155,8 +157,7 @@ class SpecReportTest : UITest() {
                         "- Tap [3]",
                 expectation = "- [formula] is \"123\"",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 12,
@@ -165,8 +166,7 @@ class SpecReportTest : UITest() {
                 action = "- Tap [+]",
                 expectation = "- [formula] is \"123+\"",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 13,
@@ -178,8 +178,7 @@ class SpecReportTest : UITest() {
                 expectation = "- [formula] is \"123+456\"\n" +
                         "- [result preview] is \"579\"",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 14,
@@ -188,8 +187,7 @@ class SpecReportTest : UITest() {
                 action = "- Tap [=]",
                 expectation = "- [result final] is \"579\"",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
 
             assertRow(

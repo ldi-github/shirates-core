@@ -46,21 +46,21 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         var enableCache: Boolean? = null
 
-        val isClassNoLoadRun: Boolean
+        val isClassManual: Boolean
             get() {
-                return uiTest?.isClassNoLoadRun ?: false
+                return uiTest?.isClassManual ?: false
             }
-        val isMethodNoLoadRun: Boolean
+        val isMethodManual: Boolean
             get() {
-                return uiTest?.isMethodNoLoadRun ?: false
+                return uiTest?.isMethodManual ?: false
             }
-        val skipScenario: Boolean
+        val isSkippingScenario: Boolean
             get() {
-                return uiTest?.skipScenario ?: false
+                return uiTest?.isSkippingScenario ?: false
             }
-        val skipCase: Boolean
+        val isSkippingCase: Boolean
             get() {
-                return uiTest?.skipCase ?: false
+                return uiTest?.isSkippingCase ?: false
             }
     }
 

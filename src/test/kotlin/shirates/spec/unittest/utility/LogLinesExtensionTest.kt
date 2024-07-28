@@ -3,7 +3,7 @@ package shirates.spec.unittest.utility
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.testcode.UnitTest
-import shirates.spec.report.entity.LogLine
+import shirates.spec.report.entity.CommandItem
 import shirates.spec.utilily.getRedundancyRemoved
 
 class LogLinesExtensionTest : UnitTest() {
@@ -11,45 +11,45 @@ class LogLinesExtensionTest : UnitTest() {
     @Test
     fun getRedundancyRemoved() {
 
-        fun logLine(message: String): LogLine {
+        fun commandItem(message: String): CommandItem {
 
-            val logLine = LogLine()
-            logLine.message = message
-            return logLine
+            val item = CommandItem()
+            item.message = message
+            return item
         }
 
         run {
             // Arrange
-            val lines = mutableListOf<LogLine>()
-            lines.add(logLine(message = "android {"))
-            lines.add(logLine(message = "} android"))
+            val items = mutableListOf<CommandItem>()
+            items.add(commandItem(message = "android {"))
+            items.add(commandItem(message = "} android"))
             // Act
-            val result = lines.getRedundancyRemoved()
+            val result = items.getRedundancyRemoved()
             // Assert
             assertThat(result).isEmpty()
         }
         run {
             // Arrange
-            val lines = mutableListOf<LogLine>()
-            lines.add(logLine(message = "android {"))
-            lines.add(logLine(message = "ios {"))
-            lines.add(logLine(message = "} ios"))
-            lines.add(logLine(message = "} android"))
+            val items = mutableListOf<CommandItem>()
+            items.add(commandItem(message = "android {"))
+            items.add(commandItem(message = "ios {"))
+            items.add(commandItem(message = "} ios"))
+            items.add(commandItem(message = "} android"))
             // Act
-            val result = lines.getRedundancyRemoved()
+            val result = items.getRedundancyRemoved()
             // Assert
             assertThat(result).isEmpty()
         }
         run {
             // Arrange
-            val lines = mutableListOf<LogLine>()
-            lines.add(logLine(message = "android {"))
-            lines.add(logLine(message = "describe"))
-            lines.add(logLine(message = "emulator {"))
-            lines.add(logLine(message = "} emulator"))
-            lines.add(logLine(message = "} android"))
+            val items = mutableListOf<CommandItem>()
+            items.add(commandItem(message = "android {"))
+            items.add(commandItem(message = "describe"))
+            items.add(commandItem(message = "emulator {"))
+            items.add(commandItem(message = "} emulator"))
+            items.add(commandItem(message = "} android"))
             // Act
-            val result = lines.getRedundancyRemoved()
+            val result = items.getRedundancyRemoved()
             // Assert
             assertThat(result.count()).isEqualTo(3)
             assertThat(result[0].message).isEqualTo("android {")
@@ -58,15 +58,15 @@ class LogLinesExtensionTest : UnitTest() {
         }
         run {
             // Arrange
-            val lines = mutableListOf<LogLine>()
-            lines.add(logLine(message = "android {"))
-            lines.add(logLine(message = "describe"))
-            lines.add(logLine(message = "emulator {"))
-            lines.add(logLine(message = "describe"))
-            lines.add(logLine(message = "} emulator"))
-            lines.add(logLine(message = "} android"))
+            val items = mutableListOf<CommandItem>()
+            items.add(commandItem(message = "android {"))
+            items.add(commandItem(message = "describe"))
+            items.add(commandItem(message = "emulator {"))
+            items.add(commandItem(message = "describe"))
+            items.add(commandItem(message = "} emulator"))
+            items.add(commandItem(message = "} android"))
             // Act
-            val result = lines.getRedundancyRemoved()
+            val result = items.getRedundancyRemoved()
             // Assert
             assertThat(result.count()).isEqualTo(6)
         }

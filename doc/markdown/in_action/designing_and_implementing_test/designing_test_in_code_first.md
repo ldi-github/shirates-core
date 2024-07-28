@@ -2,19 +2,19 @@
 
 You can design test in code first style.
 
-1. Create test class, then create test functions with `@NoLoadRun` annotation.
+1. Create test class, then create test functions with `@Manual` annotation.
 2. Implement procedures of tests tentatively.
-3. After the app under test is rolled out, remove `@NoLoadRun`, implement tests completely, and run tests.
+3. After the app under test is rolled out, remove `@Manual`, implement tests completely, and run tests.
 
 ### CodeFirst1.kt
 
-Create test class, then create test method with `@NoLoadRun` annotation.
+Create test class, then create test method with `@Manual` annotation.
 
 ```kotlin
 @Testrun("testConfig/android/calculator/testrun.properties")
 class CodeFirst1 : UITest() {
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Start calculator")
     fun A0010() {
@@ -24,7 +24,7 @@ class CodeFirst1 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Add")
     fun A0020() {
@@ -34,7 +34,7 @@ class CodeFirst1 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Divide by zero")
     fun A0030() {
@@ -64,7 +64,7 @@ file "[Calculator Main Screen]" also is not required to be implemented at this p
 @Testrun("testConfig/android/calculator/testrun.properties")
 class CodeFirst2 : UITest() {
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Start calculator")
     fun A0010() {
@@ -80,7 +80,7 @@ class CodeFirst2 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Add")
     fun A0020() {
@@ -102,7 +102,7 @@ class CodeFirst2 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @DisplayName("Divide by zero")
     fun A0030() {
@@ -137,7 +137,7 @@ You can run test, get Spec-Report as follows at this point.
 
 ### CodeFirst3.kt
 
-After the test target app is rolled out, remove `@NoLoadRun`, implement tests completely, and run tests.
+After the test target app is rolled out, remove `@Manual`, implement tests completely, and run tests.
 
 ```kotlin
 @Testrun("testConfig/android/calculator/testrun.properties")

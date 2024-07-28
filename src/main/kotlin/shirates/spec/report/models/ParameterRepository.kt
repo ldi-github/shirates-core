@@ -1,6 +1,6 @@
 package shirates.spec.report.models
 
-import shirates.spec.report.entity.LogLine
+import shirates.spec.report.entity.CommandItem
 
 class ParameterRepository() {
 
@@ -9,16 +9,16 @@ class ParameterRepository() {
     /**
      * load
      */
-    fun load(logLines: List<LogLine>) {
+    fun load(commandItems: List<CommandItem>) {
 
-        for (log in logLines.filter { it.command == "parameter" }) {
-            val lastIndexOfSplitter = log.message.lastIndexOf(":")
+        for (commandItem in commandItems.filter { it.command == "parameter" }) {
+            val lastIndexOfSplitter = commandItem.message.lastIndexOf(":")
             if (lastIndexOfSplitter != -1) {
-                val name = log.message.substring(0, lastIndexOfSplitter).trim()
-                val value = log.message.substring(lastIndexOfSplitter + 1).trim()
+                val name = commandItem.message.substring(0, lastIndexOfSplitter).trim()
+                val value = commandItem.message.substring(lastIndexOfSplitter + 1).trim()
                 paramMap[name] = value
             } else {
-                paramMap[log.message] = log.message.trim()
+                paramMap[commandItem.message] = commandItem.message.trim()
             }
         }
     }

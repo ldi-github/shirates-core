@@ -7,7 +7,7 @@ import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.TestLog
 import shirates.core.utility.toDateOrNull
 import shirates.spec.exception.FileFormatException
-import shirates.spec.report.entity.LogLine
+import shirates.spec.report.entity.CommandItem
 import shirates.spec.report.entity.SpecLine
 import shirates.spec.report.entity.SpecReportData
 import shirates.spec.utilily.*
@@ -17,25 +17,25 @@ import java.nio.file.Path
 class SpecReportDataAdapter(val data: SpecReportData) {
 
     /**
-     * loadLogFile
+     * loadCommandListFile
      */
-    fun loadLogFile(logFilePath: Path) {
+    fun loadCommandListFile(logFilePath: Path) {
 
         val textLines = File(logFilePath.toUri()).readLines()
         if (textLines.isEmpty()) {
             throw IllegalStateException("data not found.($logFilePath)")
         }
 
-        val lines = mutableListOf<LogLine>()
+        val commandItems = mutableListOf<CommandItem>()
         for (i in 1 until textLines.count()) {
-            val logLine = LogLine(textLines[i])
-            lines.add(logLine)
+            val item = CommandItem(textLines[i])
+            commandItems.add(item)
         }
-        data.logLines.addAll(lines.getRedundancyRemoved())
+        data.commandItems.addAll(commandItems.getRedundancyRemoved())
         setDeleteFlag()
-        for (i in data.logLines.count() - 1 downTo 0) {
-            if (data.logLines[i].delete) {
-                data.logLines.removeAt(i)
+        for (i in data.commandItems.count() - 1 downTo 0) {
+            if (data.commandItems[i].delete) {
+                data.commandItems.removeAt(i)
             }
         }
         data.refreshParameters()
@@ -43,8 +43,8 @@ class SpecReportDataAdapter(val data: SpecReportData) {
 
     private fun setDeleteFlag() {
 
-        var last: LogLine? = null
-        for (logLine in data.logLines) {
+        var last: CommandItem? = null
+        for (logLine in data.commandItems) {
             if (last != null) {
                 if (last.command != "cell" && last.command != "cellOf" && last.isStartingBranch && logLine.isEndingBranch) {
                     last.delete = true
@@ -91,23 +91,24 @@ class SpecReportDataAdapter(val data: SpecReportData) {
         }
 
         for (i in header + 1..worksheet.rows.count()) {
-            val logLine = LogLine()
-            with(logLine) {
+            val item = CommandItem()
+            with(item) {
                 lineNo = text(i, 1).toIntOrNull()
                 logDateTime = text(i, 2).toDateOrNull()
                 testCaseId = text(i, 3)
                 mode = text(i, 4)
                 logType = text(i, 5)
-                os = text(i, 6)
-                special = text(i, 7)
-                group = text(i, 8)
-                level = text(i, 9)
-                command = text(i, 10)
-                message = text(i, 11)
-                result = text(i, 12)
-                exception = text(i, 13)
+                auto = text(i, 6)
+                os = text(i, 7)
+                special = text(i, 8)
+                group = text(i, 9)
+                level = text(i, 10)
+                command = text(i, 11)
+                message = text(i, 12)
+                result = text(i, 13)
+                exception = text(i, 14)
             }
-            data.logLines.add(logLine)
+            data.commandItems.add(item)
         }
         data.refreshParameters()
         val logLanguage = TestLog.logLanguage

@@ -24,7 +24,8 @@ Shiratesには以下のカスタムアノテーションがあります。
 | @CustomObject   | クラス     | CustomObjectを宣言する ([参照](../in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md))            |
 | @CustomFunction | 関数      | Custom関数を宣言する ([参照](../in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md))                |
 | @DisableCache   | クラス, 関数 | キャッシュを無効にする                                                                                                       |
-| @NoLoadRun      | クラス, 関数 | テストを無負荷実行モード(NLRモード)で実行する ([参照](../in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)) |
+| @NoLoadRun      | クラス, 関数 | (廃止予定。代わりに@Manualを使用してください。)                                                                                      |
+| @Manual         | クラス, 関数 | テストを無負荷実行モード(NLRモード)で実行する ([参照](../in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)) |
 | @Unstable       | クラス, 関数 | テストが不安定であることを宣言する                                                                                                 |
 | @Deleted        | クラス, 関数 | テストが削除予定であることを宣言する                                                                                                |
 | @Fail           | 関数      | テストがFailすることを宣言する                                                                                                 |

@@ -13,7 +13,7 @@ import shirates.core.driver.commandextension.launchApp
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
 import shirates.core.utility.format
@@ -30,10 +30,10 @@ class SpecReport_ifCanSelectTest : UITest() {
 
     lateinit var profile: TestProfile
 
-    @NoLoadRun
+    @Manual
     @Test
     @Order(10)
-    @DisplayName("s10@NoLoadRun")
+    @DisplayName("s10@Manual")
     fun s10() {
 
         scenarioCore()
@@ -161,7 +161,8 @@ class SpecReport_ifCanSelectTest : UITest() {
                 rowNum = 10,
                 id = 1,
                 step = "s10",
-                condition = "s10@NoLoadRun",
+                condition = "s10@Manual",
+                result = "@Manual"
             )
             assertRow(
                 rowNum = 11,
@@ -229,8 +230,6 @@ if else {
 - in ifElse
 }
 """.trimIndent(),
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -295,8 +294,6 @@ if else {
 - in ifElse
 }
 """.trimIndent(),
-                auto = "M",
-                supplement = "SKIP"
             )
         }
     }

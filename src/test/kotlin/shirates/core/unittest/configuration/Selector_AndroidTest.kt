@@ -9,7 +9,7 @@ import shirates.core.configuration.Selector.Companion.orValueToList
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.time.StopWatch
@@ -2027,7 +2027,7 @@ class Selector_AndroidTest : UnitTest() {
         assert_init_relativeSelector()
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     fun init_relativeSelector_noLoadRun() {
 

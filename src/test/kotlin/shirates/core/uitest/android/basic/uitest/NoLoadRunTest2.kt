@@ -12,14 +12,14 @@ import shirates.core.storage.Clipboard
 import shirates.core.storage.account
 import shirates.core.storage.app
 import shirates.core.storage.data
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.UITest
 
-@NoLoadRun("NLR on TestClass")
+@Manual("NLR on TestClass")
 @Testrun("testConfig/android/clock/testrun.properties")
 class NoLoadRunTest2 : UITest() {
 
-    @NoLoadRun("NLR on clipboard")
+    @Manual("NLR on clipboard")
     @Test
     @Order(10)
     fun clipboard() {
@@ -53,7 +53,7 @@ class NoLoadRunTest2 : UITest() {
         }
     }
 
-    @NoLoadRun("NLR on dataFunctions")
+    @Manual("NLR on dataFunctions")
     @Test
     @Order(20)
     fun dataFunctions() {
@@ -116,7 +116,7 @@ class NoLoadRunTest2 : UITest() {
 //        }
 //    }
 
-    @NoLoadRun("NLR on select_noLoadRun")
+    @Manual("NLR on select_noLoadRun")
     @Test
     @Order(40)
     fun select_noLoadRun() {

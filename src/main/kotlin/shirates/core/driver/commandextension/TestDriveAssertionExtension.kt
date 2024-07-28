@@ -760,6 +760,7 @@ private fun TestDrive.existImageCore(
         selectResult = e,
         assertMessage = assertMessage,
         mustValidateImage = mustValidateImage,
+        auto = "CA",
         log = log,
         dontExist = dontExist
     )

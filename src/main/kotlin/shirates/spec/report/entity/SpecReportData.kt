@@ -8,7 +8,7 @@ import java.nio.file.Path
 class SpecReportData {
 
     var specReportFile: Path? = null
-    val logLines = mutableListOf<LogLine>()
+    val commandItems = mutableListOf<CommandItem>()
     val specLines = mutableListOf<SpecLine>()
 
     var okCount = 0
@@ -110,9 +110,9 @@ class SpecReportData {
     internal fun refreshParameters() {
 
         p.paramMap.clear()
-        p.load(logLines)
+        p.load(commandItems)
 
-        val firstLine = logLines.firstOrNull()
+        val firstLine = commandItems.firstOrNull()
         if (firstLine != null) {
             testDateTime = shirates.spec.SpecConst.DATE_FORMAT.format(firstLine.logDateTime)
             testDate = testDateTime.substring(0, 10)

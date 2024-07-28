@@ -10,7 +10,7 @@ import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.specialTag
 import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.utility.format
@@ -30,7 +30,7 @@ class SpecialBranchFunctionTest : UITest() {
 
     lateinit var profile: TestProfile
 
-    @NoLoadRun
+    @Manual
     @Test
     @Order(10)
     fun s10() {
@@ -187,6 +187,7 @@ class SpecialBranchFunctionTest : UITest() {
                 id = 1,
                 step = "s10",
                 condition = "s10()",
+                result = "@Manual"
             )
             assertRow(
                 rowNum = 11,
@@ -195,8 +196,6 @@ class SpecialBranchFunctionTest : UITest() {
                 expectation = "- Device1 called",
                 os = "",
                 special = "Device1",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -205,8 +204,6 @@ class SpecialBranchFunctionTest : UITest() {
                 expectation = "- Device2 called",
                 os = "",
                 special = "Device2",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 13,
@@ -215,8 +212,6 @@ class SpecialBranchFunctionTest : UITest() {
                 expectation = "- UnregisteredTag called",
                 os = "",
                 special = "UnregisteredTag",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 14,
@@ -229,8 +224,6 @@ if else {
 """.trimIndent(),
                 os = "",
                 special = "",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 15,
@@ -239,8 +232,6 @@ if else {
                 expectation = "- Device1 called",
                 os = "",
                 special = "Device1",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 16,
@@ -253,8 +244,6 @@ if else {
 """.trimIndent(),
                 os = "",
                 special = "",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 17,
@@ -263,8 +252,6 @@ if else {
                 expectation = "- UnregisteredTag called",
                 os = "",
                 special = "UnregisteredTag",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 18,
@@ -277,8 +264,6 @@ if else {
 """.trimIndent(),
                 os = "",
                 special = "",
-                auto = "M",
-                supplement = "SKIP"
             )
 
         }

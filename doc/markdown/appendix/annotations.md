@@ -24,7 +24,8 @@ Shirates has these custom annotations.
 | @CustomObject   | Class           | Declares it to be a CustomObject ([see](../in_action/adapting_to_environments/configuring_tap_appIcon_function.md))         |
 | @CustomFunction | Function        | Declares it to be a Custom function ([see](../in_action/adapting_to_environments/configuring_tap_appIcon_function.md))      |
 | @DisableCache   | Class, Function | Disable cache                                                                                                               |
-| @NoLoadRun      | Class, Function | Run the test as No-Load-Run(NLR) mode ([see](../in_action/designing_and_implementing_test/designing_test_in_code_first.md)) |
+| @NoLoadRun      | Class, Function | (Deprecated. Use @Manual instead.)                                                                                          |
+| @Manual         | Class, Function | Run the test as No-Load-Run(NLR) mode ([see](../in_action/designing_and_implementing_test/designing_test_in_code_first.md)) |
 | @Unstable       | Class, Function | Describes the test is unstable                                                                                              |
 | @Deleted        | Class, Function | Describes the test is deleted                                                                                               |
 | @Fail           | Function        | Describes that the test fails                                                                                               |

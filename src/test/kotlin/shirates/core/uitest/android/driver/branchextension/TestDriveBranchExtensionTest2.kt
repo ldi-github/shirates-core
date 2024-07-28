@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.*
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.UITest
 import shirates.helper.ImageSetupHelper
 
@@ -28,7 +28,7 @@ class TestDriveBranchExtensionTest2 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @Order(10)
     fun s10() {
@@ -90,7 +90,7 @@ class TestDriveBranchExtensionTest2 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @Order(20)
     fun s20() {
@@ -211,7 +211,7 @@ class TestDriveBranchExtensionTest2 : UITest() {
         }
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     @Order(30)
     fun s30() {

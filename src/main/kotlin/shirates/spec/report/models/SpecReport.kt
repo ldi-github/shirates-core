@@ -33,7 +33,7 @@ class SpecReport(
     fun output(): SpecReport {
 
         data = SpecReportData()
-        SpecReportDataAdapter(data).loadLogFile(logFilePath)
+        SpecReportDataAdapter(data).loadCommandListFile(logFilePath)
         setupWorksheet()
         transformLines()
         createSpecReport()
@@ -62,10 +62,11 @@ class SpecReport(
                 environment = data.environment,
                 build = data.appBuild
             )
-        val targetLogLines = data.logLines.filter { it.testCaseId.isNotBlank() }.getRedundancyRemoved()
+        val targetLogLines = data.commandItems.filter { it.testCaseId.isNotBlank() }.getRedundancyRemoved()
         for (logLine in targetLogLines) {
             specWorksheetModel.appendLine(logLine)
         }
+        specWorksheetModel.replaceResults()
         data.specLines.addAll(specWorksheetModel.toSpecLines())
     }
 

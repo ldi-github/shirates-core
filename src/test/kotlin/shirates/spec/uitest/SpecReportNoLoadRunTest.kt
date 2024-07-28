@@ -175,10 +175,10 @@ class SpecReportNoLoadRunTest : UITest() {
             ng = 0,
             error = 0,
             suspended = 0,
-            manual = 0,
+            manual = 5,
             skip = 0,
             notImpl = 0,
-            total = 0
+            total = 5
         )
 
         /**
@@ -231,7 +231,7 @@ class SpecReportNoLoadRunTest : UITest() {
                         "(caption2)\n" +
                         "- manual1",
                 auto = "M",
-                result = "N/A"
+                result = "MANUAL"
             )
             assertRow(
                 rowNum = 16,
@@ -294,7 +294,7 @@ class SpecReportNoLoadRunTest : UITest() {
                 os = "Android",
                 special = "S1",
                 auto = "M",
-                result = "N/A"
+                result = "MANUAL"
             )
             assertRow(
                 rowNum = 21,
@@ -324,7 +324,7 @@ class SpecReportNoLoadRunTest : UITest() {
                 os = "iOS",
                 special = "S2",
                 auto = "M",
-                result = "N/A"
+                result = "MANUAL"
             )
             assertRow(
                 rowNum = 24,
@@ -338,7 +338,7 @@ class SpecReportNoLoadRunTest : UITest() {
                 os = "Android",
                 special = "S1",
                 auto = "M",
-                result = "N/A"
+                result = "MANUAL"
             )
             assertRow(
                 rowNum = 25,
@@ -351,7 +351,7 @@ class SpecReportNoLoadRunTest : UITest() {
                 os = "iOS",
                 special = "S2",
                 auto = "M",
-                result = "N/A"
+                result = "MANUAL"
             )
         }
     }

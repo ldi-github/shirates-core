@@ -10,7 +10,7 @@ import shirates.core.driver.commandextension.restartApp
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
-import shirates.core.testcode.NoLoadRun
+import shirates.core.testcode.Manual
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -58,7 +58,7 @@ class RerunScenarioTest : UITest() {
             .hasMessage("Error(1)")
     }
 
-    @NoLoadRun
+    @Manual
     @Test
     fun noLoadRun() {
 

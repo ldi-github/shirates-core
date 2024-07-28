@@ -314,6 +314,7 @@ object TestDriver {
         selectResult: TestElement,
         assertMessage: String,
         mustValidateImage: Boolean,
+        auto: String = "A",
         log: Boolean = CodeExecutionContext.shouldOutputLog,
         dontExist: Boolean = false
     ) {
@@ -330,7 +331,7 @@ object TestDriver {
             if (eResult) {
                 e.lastResult = TestLog.getOKType()
                 if (log) {
-                    TestLog.ok(message = assertMessage)
+                    TestLog.ok(message = assertMessage, auto = auto)
                 }
                 return
             } else {
@@ -347,7 +348,7 @@ object TestDriver {
             if (iResult) {
                 e.lastResult = TestLog.getOKType()
                 if (log) {
-                    TestLog.ok(message = assertMessage)
+                    TestLog.ok(message = assertMessage, auto = auto)
                 }
                 return
             } else {
@@ -367,7 +368,7 @@ object TestDriver {
             if (iResult) {
                 e.lastResult = TestLog.getOKType()
                 if (log) {
-                    TestLog.ok(message = assertMessage)
+                    TestLog.ok(message = assertMessage, auto = auto)
                 }
                 return
             } else {
