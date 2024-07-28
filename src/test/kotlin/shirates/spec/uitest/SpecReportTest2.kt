@@ -147,8 +147,8 @@ class SpecReportTest2 : UITest() {
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             ok = 10,
-            notImpl = 0,
-            total = 10
+            manual = 10,
+            total = 20
         )
 
         val date = Date().format("yyyy/MM/dd")
@@ -167,6 +167,7 @@ class SpecReportTest2 : UITest() {
                 id = 1,
                 step = "s10",
                 condition = "Alarm Screen",
+                result = "@Manual"
             )
             assertRow(
                 rowNum = 11,
@@ -180,8 +181,7 @@ class SpecReportTest2 : UITest() {
                         "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 12,
@@ -192,8 +192,7 @@ class SpecReportTest2 : UITest() {
                         "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 13,
@@ -204,8 +203,7 @@ class SpecReportTest2 : UITest() {
                         "- <Mon, Tue, Wed, Thu, Fri>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 14,
@@ -216,8 +214,7 @@ class SpecReportTest2 : UITest() {
                         "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 15,
@@ -226,8 +223,7 @@ class SpecReportTest2 : UITest() {
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_large_label_view>",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 16,
@@ -236,8 +232,7 @@ class SpecReportTest2 : UITest() {
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_labels_group>",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 17,
@@ -248,8 +243,7 @@ class SpecReportTest2 : UITest() {
                         "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 18,
@@ -260,8 +254,7 @@ class SpecReportTest2 : UITest() {
                         "- [9:00 AM Days of week]\n" +
                         "- [9:00 AM ON/OFF]",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 19,
@@ -272,8 +265,7 @@ class SpecReportTest2 : UITest() {
                         "- innerWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
                         "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
             assertRow(
                 rowNum = 20,
@@ -284,8 +276,7 @@ class SpecReportTest2 : UITest() {
                         "- innerWidget(3) is \"Sun, Sat\"\n" +
                         "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
-                result = "N/A",
-                supplement = "SKIP"
+                result = "MANUAL",
             )
 
 

@@ -718,7 +718,8 @@ abstract class UITest : TestDrive {
             if (TestLog.lines.any { it.logType == LogType.CASE }.not()) {
                 throw NotImplementedError("No case found in scenario.")
             }
-            if (TestLog.lines.any { it.result.isEffectiveType }.not() && TestMode.isNoLoadRun.not()) {
+            val lines = TestLog.getLinesOfCurrentTestScenario()
+            if (lines.any { it.result.isEffectiveType }.not() && TestMode.isNoLoadRun.not()) {
                 throw NotImplementedError(message(id = "noTestResultFound"))
             }
         } catch (t: TestNGException) {

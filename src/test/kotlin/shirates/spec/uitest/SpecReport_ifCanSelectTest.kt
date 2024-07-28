@@ -162,6 +162,7 @@ class SpecReport_ifCanSelectTest : UITest() {
                 id = 1,
                 step = "s10",
                 condition = "s10@Manual",
+                result = "@Manual"
             )
             assertRow(
                 rowNum = 11,
@@ -229,8 +230,6 @@ if else {
 - in ifElse
 }
 """.trimIndent(),
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -295,8 +294,6 @@ if else {
 - in ifElse
 }
 """.trimIndent(),
-                auto = "M",
-                supplement = "SKIP"
             )
         }
     }

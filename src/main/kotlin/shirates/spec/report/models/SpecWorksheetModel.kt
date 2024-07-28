@@ -534,7 +534,7 @@ class SpecWorksheetModel(
         current.os = ""
         current.special = ""
         if (commandItem.mode == "MANUAL") {
-            current.result = "@manual"
+            current.result = "@Manual"
         }
 
         return current

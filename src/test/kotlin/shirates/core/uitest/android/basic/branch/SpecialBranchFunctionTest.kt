@@ -187,6 +187,7 @@ class SpecialBranchFunctionTest : UITest() {
                 id = 1,
                 step = "s10",
                 condition = "s10()",
+                result = "@Manual"
             )
             assertRow(
                 rowNum = 11,
@@ -195,8 +196,6 @@ class SpecialBranchFunctionTest : UITest() {
                 expectation = "- Device1 called",
                 os = "",
                 special = "Device1",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 12,
@@ -205,8 +204,6 @@ class SpecialBranchFunctionTest : UITest() {
                 expectation = "- Device2 called",
                 os = "",
                 special = "Device2",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 13,
@@ -215,8 +212,6 @@ class SpecialBranchFunctionTest : UITest() {
                 expectation = "- UnregisteredTag called",
                 os = "",
                 special = "UnregisteredTag",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 14,
@@ -229,8 +224,6 @@ if else {
 """.trimIndent(),
                 os = "",
                 special = "",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 15,
@@ -239,8 +232,6 @@ if else {
                 expectation = "- Device1 called",
                 os = "",
                 special = "Device1",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 16,
@@ -253,8 +244,6 @@ if else {
 """.trimIndent(),
                 os = "",
                 special = "",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 17,
@@ -263,8 +252,6 @@ if else {
                 expectation = "- UnregisteredTag called",
                 os = "",
                 special = "UnregisteredTag",
-                auto = "M",
-                supplement = "SKIP"
             )
             assertRow(
                 rowNum = 18,
@@ -277,8 +264,6 @@ if else {
 """.trimIndent(),
                 os = "",
                 special = "",
-                auto = "M",
-                supplement = "SKIP"
             )
 
         }
