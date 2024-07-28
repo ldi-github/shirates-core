@@ -281,13 +281,12 @@ class SpecWorksheetModel(
         if (frame != Frame.EXPECTATION) {
             return current
         }
-        val auto = commandItem.auto
-        val needNewCase = current.os != commandItem.os ||
-                current.special != commandItem.special ||
-                current.auto.isNotEmpty() && current.auto != auto
+        val needNewCase = isNewCaseRequired(commandItem)
         if (needNewCase) {
             newCase()
         }
+
+        val auto = commandItem.auto
 
         when (commandItem.result) {
             "OK" -> {
@@ -448,6 +447,16 @@ class SpecWorksheetModel(
         return subject
     }
 
+    private fun isNewCaseRequired(commandItem: CommandItem): Boolean {
+
+        val isRequired = current.os != commandItem.os ||
+                current.special != commandItem.special ||
+                current.auto.isNotEmpty() && current.auto != commandItem.auto ||
+                (commandItem.command == "screenIs" && current.target.isNotBlank() &&
+                        commandItem.message.contains(current.target).not())
+        return isRequired
+    }
+
     /**
      * addDescription
      */
@@ -464,11 +473,6 @@ class SpecWorksheetModel(
             }
 
             Frame.EXPECTATION -> {
-                if (commandItem.command == "screenIs") {
-                    if (commandItem.message.contains(current.target).not() && current.expectations.any()) {
-                        newCase()
-                    }
-                }
                 arrangeTarget(commandItem)
                 expectation(commandItem)
             }
