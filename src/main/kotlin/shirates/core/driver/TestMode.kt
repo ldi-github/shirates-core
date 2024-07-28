@@ -53,8 +53,8 @@ object TestMode {
             return testTimeNoLoadRun == true ||
                     isClassManual ||
                     isMethodManual ||
-                    skipScenario ||
-                    skipCase
+                    isSkippingScenario ||
+                    isSkippingCase
         }
 
     val isClassManual: Boolean
@@ -67,14 +67,24 @@ object TestMode {
             return UITestCallbackExtension.isMethodManual
         }
 
-    val skipScenario: Boolean
+    val isManual: Boolean
         get() {
-            return UITestCallbackExtension.skipScenario
+            return isClassManual || isMethodManual
         }
 
-    val skipCase: Boolean
+    val isSkippingScenario: Boolean
         get() {
-            return UITestCallbackExtension.skipCase
+            return UITestCallbackExtension.isSkippingScenario
+        }
+
+    val isSkippingCase: Boolean
+        get() {
+            return UITestCallbackExtension.isSkippingCase
+        }
+
+    val isSkipping: Boolean
+        get() {
+            return isSkippingScenario || isSkippingCase
         }
 
     /**

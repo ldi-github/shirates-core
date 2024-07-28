@@ -496,6 +496,22 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         log: Boolean = true,
         func: () -> Unit
     ): LogLine? {
+        val command = "procedure"
+
+        if (TestMode.isNoLoadRun) {
+            loggingOnNoLoadRun(
+                logType = LogType.PROCEDURE,
+                message = message,
+                command = command,
+                subject = subject,
+                arg1 = arg1,
+                arg2 = arg2
+            )
+            if (subject != null) {
+                TestDriver.select(subject)
+            }
+            return null
+        }
 
         if (fireEvent) {
             TestDriver.fireIrregularHandler()

@@ -131,7 +131,7 @@ class SpecReportTest2 : UITest() {
         val adapter = SpecReportDataAdapter(data)
         adapter.loadWorkbook(filePath)
 
-        val r = data.logLines.firstOrNull() { it.result == "NOTIMPL" }
+        val r = data.commandItems.firstOrNull() { it.result == "NOTIMPL" }
         if (r != null) {
             NOTIMPL(r.exception)
         }

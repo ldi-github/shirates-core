@@ -397,6 +397,7 @@ object TestLog {
     fun write(
         message: String,
         logType: LogType = LogType.NONE,
+        auto: String = if (TestMode.isManual) "M" else "A",
         scriptCommand: String? = null,
         subject: String = "",
         arg1: String = "",
@@ -419,6 +420,7 @@ object TestLog {
             arg2 = arg2,
             fileName = fileName,
             logType = logType,
+            auto = auto,
             result = result
         )
         logLineCallback?.invoke(logLine)
@@ -494,6 +496,7 @@ object TestLog {
     internal fun getLogLine(
         message: String,
         logType: LogType = LogType.NONE,
+        auto: String = "A",
         scriptCommand: String? = null,
         subject: String = "",
         arg1: String = "",
@@ -527,11 +530,15 @@ object TestLog {
         val commandLevel = commandStack.count()
         val commandGroupNo = userCallCommand?.beginLogLine?.commandGroupNo ?: lineNumber
         val mode =
-            if (TestMode.skipScenario || TestMode.skipCase || TestMode.isClassManual || TestMode.isMethodManual) {
-                "SKIP"
-            } else if (TestMode.isNoLoadRun) "NLR"
+            if (TestMode.isManual) "MANUAL"
+            else if (TestMode.isSkipping) "SKIP"
+            else if (TestMode.isNoLoadRun) "NLR"
             else if (testContext.useCache) "C"  // cache mode
             else "!"    // direct access mode
+        val result2 =
+            if (TestMode.isManual) LogType.MANUAL
+            else if (TestMode.isSkipping) LogType.SKIP
+            else result
 
         val logLine = LogLine(
             lineNumber = lineNumber,
@@ -548,10 +555,11 @@ object TestLog {
             arg2 = arg2.replace("\n", "\\n"),
             fileName = fileName,
             logType = logType,
+            auto = auto,
             mode = mode,
             testScenarioId = testScenarioId,
             stepNo = stepNo,
-            result = result,
+            result = result2,
             resultMessage = resultMsg,
             exception = exception,
             lastScreenshot = if (CodeExecutionContext.lastScreenshot.isBlank()) ""
@@ -915,6 +923,7 @@ object TestLog {
      */
     fun ok(
         message: String,
+        auto: String = "A",
         scriptCommand: String? = null,
         subject: String? = null,
         arg1: String? = null,
@@ -929,6 +938,7 @@ object TestLog {
         return write(
             message = message,
             logType = okType,
+            auto = auto,
             result = okType,
             scriptCommand = scriptCommand ?: line?.scriptCommand ?: "",
             subject = subject ?: line?.subject ?: "",
@@ -944,6 +954,7 @@ object TestLog {
      */
     fun ng(
         exception: Throwable,
+        auto: String = "A",
         scriptCommand: String? = null,
         subject: String? = null,
         arg1: String? = null,
@@ -956,6 +967,7 @@ object TestLog {
         return write(
             message = exception.message ?: exception.stackTraceToString(),
             logType = LogType.NG,
+            auto = auto,
             result = LogType.NG,
             scriptCommand = scriptCommand ?: line?.scriptCommand ?: "",
             subject = subject ?: line?.subject ?: "",
@@ -982,6 +994,7 @@ object TestLog {
         return write(
             message = message,
             logType = LogType.MANUAL,
+            auto = "M",
             result = LogType.MANUAL,
             scriptCommand = scriptCommand,
             subject = subject,
@@ -1007,6 +1020,7 @@ object TestLog {
         return write(
             message = message,
             logType = LogType.COND_AUTO,
+            auto = "CA",
             result = LogType.COND_AUTO,
             scriptCommand = scriptCommand,
             subject = subject,

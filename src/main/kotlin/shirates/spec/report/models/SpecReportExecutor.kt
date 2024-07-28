@@ -1,5 +1,6 @@
 package shirates.spec.report.models
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.Message.message
 import shirates.core.utility.toPath
 import shirates.spec.exception.UserException
@@ -49,6 +50,8 @@ class SpecReportExecutor(
      */
     fun execute() {
 
+        PropertiesManager.setup()
+        
         for (logFile in logFiles) {
 
             println("Loading: ${logFile.absolutePath}")

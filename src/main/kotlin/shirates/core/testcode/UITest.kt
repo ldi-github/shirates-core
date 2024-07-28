@@ -107,13 +107,13 @@ abstract class UITest : TestDrive {
             return extensionContext.isMethodAnnotated(Manual::class) || extensionContext.isMethodAnnotated(NoLoadRun::class)
         }
 
-    var skipScenario: Boolean = false
+    var isSkippingScenario: Boolean = false
 
-    var skipCase: Boolean = false
+    var isSkippingCase: Boolean = false
 
-    val skip: Boolean
+    val isSkipping: Boolean
         get() {
-            return skipScenario || skipCase
+            return isSkippingScenario || isSkippingCase
         }
 
     fun clearTempStorages() {
@@ -470,13 +470,13 @@ abstract class UITest : TestDrive {
         message: String = message(id = "SKIP_CASE")
     ) {
         if (TestMode.isNoLoadRun) {
-            skipCase = true
+            isSkippingCase = true
             TestLog.skipCase(message)
             return
         }
         driver.screenshotCore()
         TestLog.skipCase(message)
-        skipCase = true
+        isSkippingCase = true
         testSkipped = true
     }
 
@@ -487,13 +487,13 @@ abstract class UITest : TestDrive {
         message: String = message(id = "SKIP_SCENARIO")
     ) {
         if (TestMode.isNoLoadRun) {
-            skipScenario = true
+            isSkippingScenario = true
             TestLog.skipScenario(message)
             return
         }
         driver.screenshotCore()
         TestLog.skipScenario(message)
-        skipScenario = true
+        isSkippingScenario = true
         testSkipped = true
     }
 
@@ -659,7 +659,7 @@ abstract class UITest : TestDrive {
         launchApp: Boolean,
         testProc: () -> Unit
     ) {
-        skipScenario = false
+        isSkippingScenario = false
         CodeExecutionContext.lastScreenshotXmlSource = ""
         testSkipped = false
 
@@ -852,7 +852,7 @@ abstract class UITest : TestDrive {
         proc: () -> Unit
     ) {
 
-        skipCase = false
+        isSkippingCase = false
         val caseLog = TestLog.case(stepNo = stepNo, log = true, desc = desc)
 
         if (TestLog.lastScenarioLog?.testScenarioId != currentTestMethodName) {

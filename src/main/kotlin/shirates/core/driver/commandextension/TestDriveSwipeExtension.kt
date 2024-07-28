@@ -1016,7 +1016,7 @@ fun TestDrive.swipeElementToElement(
         )
     }
 
-    if (TestMode.skipScenario || TestMode.skipCase)
+    if (TestMode.isSkippingScenario || TestMode.isSkippingCase)
         lastElement = startElement
     return lastElement
 }

@@ -42,8 +42,8 @@ class SpecWriter(val specReport: SpecReport) {
         commandListWorksheet.cells(1, 1).setCellValue(specReport.logFilePath.toString())
 
         var rowNum = 3
-        for (i in 0 until specReport.data.logLines.count()) {
-            val logLine = specReport.data.logLines[i]
+        for (i in 0 until specReport.data.commandItems.count()) {
+            val logLine = specReport.data.commandItems[i]
             rowNum++
             val row = commandListWorksheet.rows(rowNum)
 
@@ -52,14 +52,15 @@ class SpecWriter(val specReport: SpecReport) {
             row.cells(3).setCellValue(logLine.testCaseId)
             row.cells(4).setCellValue(logLine.mode)
             row.cells(5).setCellValue(logLine.logType)
-            row.cells(6).setCellValue(logLine.os)
-            row.cells(7).setCellValue(logLine.special)
-            row.cells(8).setCellValue(logLine.group)
-            row.cells(9).setCellValue(logLine.level)
-            row.cells(10).setCellValue(logLine.command)
-            row.cells(11).setCellValue(logLine.message)
-            row.cells(12).setCellValue(logLine.result)
-            row.cells(13).setCellValue(logLine.exception)
+            row.cells(6).setCellValue(logLine.auto)
+            row.cells(7).setCellValue(logLine.os)
+            row.cells(8).setCellValue(logLine.special)
+            row.cells(9).setCellValue(logLine.group)
+            row.cells(10).setCellValue(logLine.level)
+            row.cells(11).setCellValue(logLine.command)
+            row.cells(12).setCellValue(logLine.message)
+            row.cells(13).setCellValue(logLine.result)
+            row.cells(14).setCellValue(logLine.exception)
         }
     }
 
@@ -169,11 +170,13 @@ class SpecWriter(val specReport: SpecReport) {
                             )
                         )
                     }
-                    row.cells(sp.colDate).setCellValue(specLine.date)
+                    if (worksheetData.noLoadRun.not()) {
+                        row.cells(sp.colDate).setCellValue(specLine.date)
+                        row.setString("column.tester", sp.colTester, specLine.tester)
+                        row.setString("column.environment", sp.colEnvironment, specLine.environment)
+                        row.setString("column.build", sp.colBuild, specLine.build)
+                    }
 
-                    row.setString("column.tester", sp.colTester, specLine.tester)
-                    row.setString("column.environment", sp.colEnvironment, specLine.environment)
-                    row.setString("column.build", sp.colBuild, specLine.build)
                     row.setString("column.supplement", sp.colSupplement, specLine.supplement)
                     row.setString("column.suspend", sp.colSuspended, specLine.suspend)
                     row.setString("column.ticketNo", sp.colTicketNo, specLine.ticketNo)

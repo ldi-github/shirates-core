@@ -54,13 +54,13 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             get() {
                 return uiTest?.isMethodManual ?: false
             }
-        val skipScenario: Boolean
+        val isSkippingScenario: Boolean
             get() {
-                return uiTest?.skipScenario ?: false
+                return uiTest?.isSkippingScenario ?: false
             }
-        val skipCase: Boolean
+        val isSkippingCase: Boolean
             get() {
-                return uiTest?.skipCase ?: false
+                return uiTest?.isSkippingCase ?: false
             }
     }
 
