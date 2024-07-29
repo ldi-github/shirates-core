@@ -48,7 +48,9 @@ class SpecWriter(val specReport: SpecReport) {
             val row = commandListWorksheet.rows(rowNum)
 
             row.cells(1).setCellValue(logLine.lineNo.toString())
-            row.cells(2).setCellValue(shirates.spec.SpecConst.DATE_FORMAT.format(logLine.logDateTime))
+            if (logLine.logDateTime != null) {
+                row.cells(2).setCellValue(shirates.spec.SpecConst.DATE_FORMAT.format(logLine.logDateTime))
+            }
             row.cells(3).setCellValue(logLine.testCaseId)
             row.cells(4).setCellValue(logLine.mode)
             row.cells(5).setCellValue(logLine.logType)
