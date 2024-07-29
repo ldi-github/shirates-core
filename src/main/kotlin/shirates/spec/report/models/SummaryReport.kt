@@ -11,7 +11,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class SummaryReport(
-    val sessionPath: Path
+    val sessionPath: Path,
+    val templatePath: Path? = null
 ) {
     val specReportFiles = mutableListOf<File>()
     val summaryLines = mutableListOf<SummaryLine>()
@@ -191,7 +192,9 @@ class SummaryReport(
     private fun setupTemplateWorksheet() {
 
         val logLanguage = worksheetDataList.first().logLanguage
-        templateWorkbook = ExcelUtility.getWorkbook(baseName = "TestSpec.xlsx", logLanguage = logLanguage)
+        templateWorkbook =
+            if (templatePath != null) ExcelUtility.getWorkbook(templatePath)
+            else ExcelUtility.getWorkbook(baseName = "TestSpec.xlsx", logLanguage = logLanguage)
         summaryWorksheet = templateWorkbook.worksheets("Summary")
 
         templateWorkbook.removeSheet("CommandList")
