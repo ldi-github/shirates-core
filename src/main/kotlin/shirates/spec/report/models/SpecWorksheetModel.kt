@@ -192,7 +192,7 @@ class SpecWorksheetModel(
                             current.expectations.removeLast()
                         } else {
                             if (commandItem.command == "cellOf" || commandItem.command == "cell") {
-                                // NOP
+                                newCase()
                             } else if (commandItem.command != "os" && commandItem.command != "special") {
                                 addDescription(commandItem)
                             }
