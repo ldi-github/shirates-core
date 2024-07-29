@@ -1,4 +1,4 @@
-package shirates.spec.uitest
+package shirates.spec.uitest.android
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
@@ -14,6 +14,9 @@ import shirates.core.testcode.UITest
 import shirates.core.utility.format
 import shirates.spec.report.entity.SpecReportData
 import shirates.spec.report.models.SpecReportDataAdapter
+import shirates.spec.uitest.assertHeader
+import shirates.spec.uitest.assertRow
+import shirates.spec.uitest.assertRowHeader
 import shirates.spec.utilily.ExcelUtility
 import shirates.spec.utilily.worksheets
 import java.nio.file.Files
