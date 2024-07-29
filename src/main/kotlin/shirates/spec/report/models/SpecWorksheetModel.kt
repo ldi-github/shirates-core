@@ -278,7 +278,7 @@ class SpecWorksheetModel(
      */
     fun setResult(commandItem: CommandItem): LineObject {
 
-        if (frame != Frame.EXPECTATION) {
+        if (frame != Frame.EXPECTATION && commandItem.result != "ERROR") {
             return current
         }
         val needNewCase = isNewCaseRequired(commandItem)
