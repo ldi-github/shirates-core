@@ -174,14 +174,9 @@ class SpecReportNoLoadRunTest : UITest() {
             deviceModel = "",
             platformVersion = "",
             noLoadRunMode = "No-Load-Run Mode",
-            ok = 0,
-            ng = 0,
-            error = 0,
-            suspended = 0,
+            none = 5,
             manual = 5,
-            skip = 0,
-            notImpl = 0,
-            total = 5
+            total = 10
         )
 
         /**

@@ -1585,6 +1585,31 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun excludeItemExpectation() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.excludeItemExpectation).isEqualTo(Const.EXCLUDE_ITEM_EXPECTATION)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("excludeItemExpectation", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.excludeItemExpectation).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("excludeItemExpectation", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.excludeItemExpectation).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableWaitCpuLoadPrintDebug() {
 
         run {
@@ -1646,24 +1671,6 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun specReportReplaceMANUAL() {
-
-        run {
-            // Arrange
-            PropertiesManager.clear()
-            // Act, Assert
-            assertThat(PropertiesManager.specReportReplaceMANUAL).isEqualTo("")
-        }
-        run {
-            // Arrange
-            val value = "MANUAL"
-            PropertiesManager.setPropertyValue("specReport.replace.MANUAL", value)
-            // Act, Assert
-            assertThat(PropertiesManager.specReportReplaceMANUAL).isEqualTo(value)
-        }
-    }
-
-    @Test
     fun specReportReplaceMANUALReason() {
 
         run {
@@ -1682,24 +1689,6 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun specReportReplaceSKIP() {
-
-        run {
-            // Arrange
-            PropertiesManager.clear()
-            // Act, Assert
-            assertThat(PropertiesManager.specReportReplaceSKIP).isEqualTo("")
-        }
-        run {
-            // Arrange
-            val value = "SKIP"
-            PropertiesManager.setPropertyValue("specReport.replace.SKIP", value)
-            // Act, Assert
-            assertThat(PropertiesManager.specReportReplaceSKIP).isEqualTo(value)
-        }
-    }
-
-    @Test
     fun specReportReplaceSKIPReason() {
 
         run {
@@ -1714,6 +1703,24 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("specReport.replace.SKIP.reason", value)
             // Act, Assert
             assertThat(PropertiesManager.specReportReplaceSKIPReason).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun specReportReplaceEXCLUDEDReason() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.specReportReplaceEXCLUDEDReason).isEqualTo("")
+        }
+        run {
+            // Arrange
+            val value = "EXCLUDED"
+            PropertiesManager.setPropertyValue("specReport.replace.EXCLUDED.reason", value)
+            // Act, Assert
+            assertThat(PropertiesManager.specReportReplaceEXCLUDEDReason).isEqualTo(value)
         }
     }
 

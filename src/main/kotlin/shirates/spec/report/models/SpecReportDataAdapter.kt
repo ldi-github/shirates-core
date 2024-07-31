@@ -150,7 +150,6 @@ class SpecReportDataAdapter(val data: SpecReportData) {
                 data.specLines.add(specLine)
             }
         }
-        data.refreshCounts()
     }
 
     private fun canAdd(specLine: SpecLine): Boolean {

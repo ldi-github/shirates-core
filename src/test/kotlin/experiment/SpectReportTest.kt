@@ -2,8 +2,9 @@ package experiment
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.conditionalAuto
-import shirates.core.driver.commandextension.manual
+import shirates.core.driver.commandextension.exist
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.tap
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -15,10 +16,14 @@ class SpectReportTest : UITest() {
         scenario {
             case(1) {
                 condition {
-
+                    it.screenIs("[Android Settings Top Screen]")
+                        .exist("Settings")
+                }.action {
+                    it.tap("Network & internet")
                 }.expectation {
-                    it.manual("manual1")
-                    it.conditionalAuto("[image1]")
+                    it.screenIs("[Network & internet Screen]")
+                        .exist("Internet")
+                        .exist("SIMs")
                 }
             }
         }

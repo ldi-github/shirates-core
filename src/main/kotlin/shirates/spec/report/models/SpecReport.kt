@@ -54,20 +54,13 @@ class SpecReport(
     }
 
     private fun transformLines() {
-        val specWorksheetModel =
-            SpecWorksheetModel(
-                noLoadRun = data.noLoadRun,
-                tester = data.tester,
-                testDate = data.testDate,
-                environment = data.environment,
-                build = data.appBuild
-            )
+        val specWorksheetModel = SpecWorksheetModel(data)
         val targetLogLines = data.commandItems.filter { it.testCaseId.isNotBlank() }.getRedundancyRemoved()
         for (logLine in targetLogLines) {
             specWorksheetModel.appendLine(logLine)
         }
-        specWorksheetModel.replaceResults()
         data.specLines.addAll(specWorksheetModel.toSpecLines())
+        data.refresh()
     }
 
     private fun createSpecReport() {

@@ -879,6 +879,16 @@ object PropertiesManager {
             return value == "true"
         }
 
+    /**
+     * excludeItemExpectation
+     */
+    val excludeItemExpectation: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "excludeItemExpectation")
+                ?: return Const.EXCLUDE_ITEM_EXPECTATION
+            return value == "true"
+        }
+
     // Custom --------------------------------------------------
 
     /**
@@ -903,14 +913,6 @@ object PropertiesManager {
     // Spec-Report --------------------------------------------------
 
     /**
-     * specReportReplaceMANUAL
-     */
-    val specReportReplaceMANUAL: String
-        get() {
-            return getPropertyValue(propertyName = "specReport.replace.MANUAL") ?: ""
-        }
-
-    /**
      * specReportReplaceMANUALReason
      */
     val specReportReplaceMANUALReason: String
@@ -919,19 +921,19 @@ object PropertiesManager {
         }
 
     /**
-     * specReportReplaceSKIP
-     */
-    val specReportReplaceSKIP: String
-        get() {
-            return getPropertyValue(propertyName = "specReport.replace.SKIP") ?: ""
-        }
-
-    /**
      * specReportReplaceSKIPReason
      */
     val specReportReplaceSKIPReason: String
         get() {
             return getPropertyValue(propertyName = "specReport.replace.SKIP.reason") ?: ""
+        }
+
+    /**
+     * specReportReplaceEXCLUDEDReason
+     */
+    val specReportReplaceEXCLUDEDReason: String
+        get() {
+            return getPropertyValue(propertyName = "specReport.replace.EXCLUDED.reason") ?: ""
         }
 
     // misc --------------------------------------------------

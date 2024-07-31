@@ -93,12 +93,6 @@ class SpecReportLoadRunTest : UITest() {
             platformVersion = profile.platformVersion,
             noLoadRunMode = "",
             ok = 1,
-            ng = 0,
-            error = 0,
-            suspended = 0,
-            manual = 0,
-            skip = 0,
-            notImpl = 0,
             total = 1
         )
 
