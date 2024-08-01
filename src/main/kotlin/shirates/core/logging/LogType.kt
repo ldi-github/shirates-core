@@ -88,6 +88,16 @@ enum class LogType(val label: String) {
     SKIP_CASE("SKIP_CASE"),
 
     /**
+     * MANUAL_SCENARIO
+     */
+    MANUAL_SCENARIO("MANUAL_SCENARIO"),
+
+    /**
+     * MANUAL_CASE
+     */
+    MANUAL_CASE("MANUAL_CASE"),
+
+    /**
      * SKIP
      */
     SKIP("SKIP"),
@@ -293,6 +303,8 @@ enum class LogType(val label: String) {
             BRANCH,
             SKIP_SCENARIO,
             SKIP_CASE,
+            MANUAL_SCENARIO,
+            MANUAL_CASE,
             OPERATE,
             SCREENSHOT,
             CHECK,
@@ -339,7 +351,9 @@ enum class LogType(val label: String) {
         val SkipTypes: List<LogType> = mutableListOf(
             SKIP_SCENARIO,
             SKIP_CASE,
-            SKIP
+            SKIP,
+            MANUAL_SCENARIO,
+            MANUAL_CASE
         )
 
         /**

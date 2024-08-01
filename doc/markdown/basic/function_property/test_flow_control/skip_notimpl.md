@@ -1,12 +1,14 @@
-# SKIP, NOTIMPL
+# Test flow control using SKIP, MANUAL, NOTIMPL
 
 You can skip or abort test using these functions.
 
-| function      | description                              |
-|:--------------|:-----------------------------------------|
-| SKIP_CASE     | Skip the test case.                      |
-| SKIP_SCENARIO | Skip the test scenario.                  |
-| NOTIMPL       | Abort the test as it is not implemented. |
+| function        | description                              |
+|:----------------|:-----------------------------------------|
+| SKIP_CASE       | Skip the test case. SKIP is set.         |
+| SKIP_SCENARIO   | Skip the test scenario. SKIP is set.     |
+| MANUAL_CASE     | Skip the test case. MANUAL is set.       |
+| MANUAL_SCENARIO | Skip the test scenario. MANUAL is set.   |
+| NOTIMPL         | Abort the test as it is not implemented. |
 
 ## Example
 

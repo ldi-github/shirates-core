@@ -23,7 +23,6 @@ object Const {
     const val CPU_LOAD_FOR_SAFETY: Int = 70
     const val ENABLE_WAIT_CPU_LOAD = true
     const val ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG = false
-    const val EXCLUDE_ITEM_EXPECTATION = false
     const val CPU_LOAD_INTERVAL_MILLISECONDS: Long = 1000
     const val CPU_LOAD_MAX_HISTORIES: Int = 60 * 10
 
@@ -79,6 +78,7 @@ object Const {
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val ANDROID_SWIPE_OFFSET_Y = -24
     const val IOS_SWIPE_OFFSET_Y = -10
+    const val SPECREPORT_EXCLUDE_DETAIL = false
 
     /**
      * testConfig common properties

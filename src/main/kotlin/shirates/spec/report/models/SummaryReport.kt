@@ -81,6 +81,11 @@ class SummaryReport(
             return summaryLines.sumOf { it.notImpl }
         }
 
+    val excluded: Int
+        get() {
+            return summaryLines.sumOf { it.excluded }
+        }
+
     val autoPlusManual: Int
         get() {
             return summaryLines.sumOf { it.autoPlusManual }
@@ -214,6 +219,7 @@ class SummaryReport(
             workbookPath = data.specReportFile
             sheetName = data.sheetName
             testClassName = data.testClassName
+            none = data.noneCount
             ok = data.okCount
             ng = data.ngCount
             error = data.errorCount
@@ -288,7 +294,7 @@ class SummaryReport(
         summaryWorksheet.cells(header, 11).setCellValue(manual)
         summaryWorksheet.cells(header, 12).setCellValue(skip)
         summaryWorksheet.cells(header, 13).setCellValue(notImpl)
-        summaryWorksheet.cells(header, 14).setCellValue(none)
+        summaryWorksheet.cells(header, 14).setCellValue(excluded)
         summaryWorksheet.cells(header, 15).setCellValue(a)
         summaryWorksheet.cells(header, 16).setCellValue(ca)
         summaryWorksheet.cells(header, 17).setCellValue(m)

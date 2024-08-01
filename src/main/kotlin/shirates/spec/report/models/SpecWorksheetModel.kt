@@ -96,15 +96,28 @@ class SpecWorksheetModel(
                 addDescription(commandItem)
             }
 
+            LogType.SKIP_SCENARIO.label -> {
+                setResult(commandItem)
+                commandItem.message = "SKIP_SCENARIO(${commandItem.message.trim()})"
+                addDescription(commandItem)
+            }
+
             LogType.SKIP_CASE.label -> {
                 setResult(commandItem)
                 commandItem.message = "SKIP_CASE(${commandItem.message.trim()})"
                 addDescription(commandItem)
             }
 
-            LogType.SKIP_SCENARIO.label -> {
+            LogType.MANUAL_SCENARIO.label -> {
+
                 setResult(commandItem)
-                commandItem.message = "SKIP_SCENARIO(${commandItem.message.trim()})"
+                commandItem.message = "MANUAL_SCENARIO(${commandItem.message.trim()})"
+                addDescription(commandItem)
+            }
+
+            LogType.MANUAL_CASE.label -> {
+                setResult(commandItem)
+                commandItem.message = "MANUAL_CASE(${commandItem.message.trim()})"
                 addDescription(commandItem)
             }
 
@@ -271,13 +284,10 @@ class SpecWorksheetModel(
         if (frame != Frame.EXPECTATION && commandItem.result != "ERROR") {
             return current
         }
-        if (data.excludeItemExpectation
-            && data.noLoadRun
-            && commandItem.mode != "MANUAL"
+        if (data.specReportExcludeDetail
             && current.conditions.isEmpty()
             && current.actions.isEmpty()
             && commandItem.command != "screenIs"
-//            && (commandItem.auto == "A" || commandItem.auto == "CA")
         ) {
             commandItem.result = "EXCLUDED"
         }
@@ -286,7 +296,9 @@ class SpecWorksheetModel(
             newCase()
         }
 
-        val auto = commandItem.auto
+        val auto =
+            if (commandItem.result == "MANUAL") "M"
+            else commandItem.auto
 
         fun setExecutionInfo() {
             current.auto = auto

@@ -237,7 +237,7 @@ class SpecWriter(val specReport: SpecReport) {
                 worksheet.cells("H3").setCellValue(ngCount.toDouble())
                 worksheet.cells("H4").setCellValue(errorCount.toDouble())
                 worksheet.cells("H5").setCellValue(suspendedCount.toDouble())
-                worksheet.cells("H6").setCellValue(naCount.toDouble())
+                worksheet.cells("H6").setCellValue(noneCount.toDouble())
 
                 worksheet.cells("K2").setCellValue(condAutoCount.toDouble())
                 worksheet.cells("K3").setCellValue(manualCount.toDouble())

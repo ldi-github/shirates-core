@@ -532,12 +532,14 @@ object TestLog {
         val mode =
             if (TestMode.isManual) "MANUAL"
             else if (TestMode.isSkipping) "SKIP"
+            else if (TestMode.isManualing) "MANUAL"
             else if (TestMode.isNoLoadRun) "NLR"
             else if (testContext.useCache) "C"  // cache mode
             else "!"    // direct access mode
         val result2 =
             if (TestMode.isManual) LogType.MANUAL
             else if (TestMode.isSkipping) LogType.SKIP
+            else if (TestMode.isManualing) LogType.MANUAL
             else result
 
         val logLine = LogLine(
@@ -1058,6 +1060,38 @@ object TestLog {
             message = message,
             logType = LogType.SKIP_CASE,
             scriptCommand = "skipCase",
+            log = log,
+        )
+    }
+
+    /**
+     * manualScenario
+     */
+    fun manualScenario(
+        message: String,
+        log: Boolean = true
+    ): LogLine {
+        result(LogType.MANUAL_SCENARIO, message)
+        return write(
+            message = message,
+            logType = LogType.MANUAL_SCENARIO,
+            result = LogType.MANUAL_SCENARIO,
+            scriptCommand = "manualScenario",
+            log = log,
+        )
+    }
+
+    /**
+     * manualCase
+     */
+    fun manualCase(
+        message: String,
+        log: Boolean = true
+    ): LogLine {
+        return write(
+            message = message,
+            logType = LogType.MANUAL_CASE,
+            scriptCommand = "manualCase",
             log = log,
         )
     }

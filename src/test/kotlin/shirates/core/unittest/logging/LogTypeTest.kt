@@ -35,6 +35,8 @@ class LogTypeTest : UnitTest() {
             LogType.BRANCH,
             LogType.SKIP_SCENARIO,
             LogType.SKIP_CASE,
+            LogType.MANUAL_SCENARIO,
+            LogType.MANUAL_CASE,
             LogType.OPERATE,
             LogType.SCREENSHOT,
             LogType.CHECK,

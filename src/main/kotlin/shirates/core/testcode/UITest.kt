@@ -111,10 +111,10 @@ abstract class UITest : TestDrive {
 
     var isSkippingCase: Boolean = false
 
-    val isSkipping: Boolean
-        get() {
-            return isSkippingScenario || isSkippingCase
-        }
+    var isManualingScenario: Boolean = false
+
+    var isManualingCase: Boolean = false
+
 
     fun clearTempStorages() {
 
@@ -463,22 +463,9 @@ abstract class UITest : TestDrive {
         throw TestNGException(message)
     }
 
-    /**
-     * SKIP_CASE
-     */
-    open fun SKIP_CASE(
-        message: String = message(id = "SKIP_CASE")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isSkippingCase = true
-            TestLog.skipCase(message)
-            return
-        }
-        driver.screenshotCore()
-        TestLog.skipCase(message)
-        isSkippingCase = true
-        testSkipped = true
-    }
+    var currentTestMethodName = ""
+    var currentDisplayName = ""
+    var currentOrder = null as Int?
 
     /**
      * SKIP_SCENARIO
@@ -497,9 +484,57 @@ abstract class UITest : TestDrive {
         testSkipped = true
     }
 
-    var currentTestMethodName = ""
-    var currentDisplayName = ""
-    var currentOrder = null as Int?
+    /**
+     * SKIP_CASE
+     */
+    open fun SKIP_CASE(
+        message: String = message(id = "SKIP_CASE")
+    ) {
+        if (TestMode.isNoLoadRun) {
+            isSkippingCase = true
+            TestLog.skipCase(message)
+            return
+        }
+        driver.screenshotCore()
+        TestLog.skipCase(message)
+        isSkippingCase = true
+        testSkipped = true
+    }
+
+    /**
+     * MANUAL_SCENARIO
+     */
+    open fun MANUAL_SCENARIO(
+        message: String = message(id = "MANUAL_SCENARIO")
+    ) {
+        if (TestMode.isNoLoadRun) {
+            isManualingScenario = true
+            TestLog.manualScenario(message)
+            return
+        }
+        driver.screenshotCore()
+        TestLog.manualScenario(message)
+        isManualingScenario = true
+        testSkipped = true
+    }
+
+    /**
+     * MANUAL_CASE
+     */
+    open fun MANUAL_CASE(
+        message: String = message(id = "MANUAL_CASE")
+    ) {
+        if (TestMode.isNoLoadRun) {
+            isManualingCase = true
+            TestLog.manualCase(message)
+            return
+        }
+        driver.screenshotCore()
+        TestLog.manualCase(message)
+        isManualingCase = true
+        testSkipped = true
+    }
+
 
     /**
      * scenario
@@ -660,6 +695,7 @@ abstract class UITest : TestDrive {
         testProc: () -> Unit
     ) {
         isSkippingScenario = false
+        isManualingScenario = false
         CodeExecutionContext.lastScreenshotXmlSource = ""
         testSkipped = false
 
@@ -761,6 +797,15 @@ abstract class UITest : TestDrive {
                     scenarioLog.resultMessage = skipLine.message
                 }
             }
+
+            val manualLine =
+                lines.firstOrNull() { it.logType == LogType.MANUAL_CASE || it.logType == LogType.MANUAL_SCENARIO }
+            if (manualLine != null) {
+                if (scenarioLog.result != LogType.NG && scenarioLog.result != LogType.ERROR) {
+                    scenarioLog.result = LogType.MANUAL
+                    scenarioLog.resultMessage = manualLine.message
+                }
+            }
         }
 
         if (TestMode.isNoLoadRun) {
@@ -854,6 +899,7 @@ abstract class UITest : TestDrive {
     ) {
 
         isSkippingCase = false
+        isManualingCase = false
         val caseLog = TestLog.case(stepNo = stepNo, log = true, desc = desc)
 
         if (TestLog.lastScenarioLog?.testScenarioId != currentTestMethodName) {
@@ -900,6 +946,13 @@ abstract class UITest : TestDrive {
             if (skipLine != null) {
                 caseLog.result = LogType.SKIP
                 caseLog.resultMessage = skipLine.message
+            }
+
+            val manualLine =
+                lines.firstOrNull() { it.logType == LogType.MANUAL_CASE || it.logType == LogType.MANUAL_SCENARIO }
+            if (manualLine != null) {
+                caseLog.result = LogType.MANUAL
+                caseLog.resultMessage = manualLine.message
             }
         }
     }

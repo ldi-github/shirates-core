@@ -8,6 +8,7 @@ class SummaryLine(
     var testClassName: String = "",
 
     var no: Int = 0,
+
     var none: Int = 0,
     var ok: Int = 0,
     var ng: Int = 0,
@@ -18,6 +19,7 @@ class SummaryLine(
     var skip: Int = 0,
     var notImpl: Int = 0,
     var excluded: Int = 0,
+
     var a: Int = 0,
     var ca: Int = 0,
     var m: Int = 0,
@@ -28,7 +30,7 @@ class SummaryLine(
 
     val total: Int
         get() {
-            return (ok + ng + error + suspended + none + condAuto + manual + skip + notImpl + excluded)
+            return (none + ok + ng + error + suspended + condAuto + manual + skip + notImpl + excluded)
         }
 
     val autoPlusManual: Int

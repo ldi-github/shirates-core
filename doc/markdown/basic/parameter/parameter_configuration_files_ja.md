@@ -221,7 +221,6 @@ appiumArgs=--session-override --relaxed-security
 #safeCpuLoad=80
 #enableWaitCpuLoad=false
 #enableWaitCpuLoadPrintDebug=true
-#excludeItemExpectation=true
 
 ## App operation --------------------
 #appIconName=
@@ -255,9 +254,9 @@ appiumArgs=--session-override --relaxed-security
 #MacroObject.scan.dir=src/test/kotlin
 
 ## Spec-Report --------------------
-#specReport.replace.MANUAL.reason=
-#specReport.replace.SKIP.reason=
-#specReport.replace.EXCLUDED.reason=
+#specReport.exclude.detail=true
+#specReport.SKIP.reason=
+#specReport.EXCLUDED.reason=
 
 ## misc
 #android.statBarHeight=

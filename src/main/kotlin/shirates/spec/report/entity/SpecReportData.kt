@@ -16,7 +16,7 @@ class SpecReportData {
     var ngCount = 0
     var errorCount = 0
     var suspendedCount = 0
-    var naCount = 0
+    var noneCount = 0
 
     var condAutoCount = 0
     var manualCount = 0
@@ -100,9 +100,9 @@ class SpecReportData {
         get() {
             return p.getValue("noLoadRun") == "true"
         }
-    val excludeItemExpectation: Boolean
+    val specReportExcludeDetail: Boolean
         get() {
-            return p.getValue("excludeItemExpectation") == "true"
+            return p.getValue("specReport.exclude.detail") == "true"
         }
 
     val osSymbol: String
@@ -136,7 +136,7 @@ class SpecReportData {
         ngCount = 0
         errorCount = 0
         suspendedCount = 0
-        naCount = 0
+        noneCount = 0
         condAutoCount = 0
         manualCount = 0
         skipCount = 0
@@ -159,7 +159,7 @@ class SpecReportData {
             } else if (r == "SUSPENDED" || r == replaceSUSPENDED) {
                 suspendedCount++
             } else if (r == "NONE" || r == replaceNONE) {
-                naCount++
+                noneCount++
             } else if (r == "COND_AUTO" || r == replaceCOND_AUTO) {
                 condAutoCount++
             } else if (r == "MANUAL" || r == replaceMANUAL) {
@@ -173,7 +173,7 @@ class SpecReportData {
             }
         }
 
-        totalCount = okCount + ngCount + errorCount + suspendedCount + naCount + condAutoCount +
+        totalCount = okCount + ngCount + errorCount + suspendedCount + noneCount + condAutoCount +
                 condAutoCount + manualCount + skipCount + notImplCount + excludedCount
     }
 
@@ -206,10 +206,9 @@ class SpecReportData {
             line.replaceResult("SUSPENDED", replaceSUSPENDED)
             line.replaceResult("NONE", replaceNONE)
             line.replaceResult("COND_AUTO", replaceCOND_AUTO)
-            line.replaceResult("MANUAL", replaceMANUAL, p.specReportReplaceMANUALReason)
-            line.replaceResult("SKIP", replaceSKIP, p.specReportReplaceSKIPReason)
+            line.replaceResult("SKIP", replaceSKIP, p.specReportSKIPReason)
             line.replaceResult("NOTIMPL", replaceNOTIMPL)
-            line.replaceResult("EXCLUDED", replaceEXCLUDED, p.specReportReplaceEXCLUDEDReason)
+            line.replaceResult("EXCLUDED", replaceEXCLUDED, p.specReportEXCLUDEDReason)
             line.replaceResult("DELETED", replaceDELETED)
         }
     }

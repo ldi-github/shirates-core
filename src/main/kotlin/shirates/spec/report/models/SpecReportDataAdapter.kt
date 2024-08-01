@@ -72,6 +72,8 @@ class SpecReportDataAdapter(val data: SpecReportData) {
                 loadSpecSheet(ws)
             }
         }
+
+        data.refresh()
     }
 
     /**
