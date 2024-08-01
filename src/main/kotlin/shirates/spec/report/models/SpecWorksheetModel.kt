@@ -1,6 +1,5 @@
 package shirates.spec.report.models
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogType
 import shirates.core.logging.Message
 import shirates.core.logging.Message.message
@@ -22,10 +21,6 @@ class SpecWorksheetModel(
     var special = ""
     var frame = Frame.SCENARIO
 
-
-    val replaceMANUALReason = PropertiesManager.specReportReplaceMANUALReason
-    val replaceSKIPReason = PropertiesManager.specReportReplaceSKIPReason
-    val replaceEXCLUDEDReason = PropertiesManager.specReportReplaceEXCLUDEDReason
 
     init {
         current.result = "not initialized"
@@ -276,7 +271,14 @@ class SpecWorksheetModel(
         if (frame != Frame.EXPECTATION && commandItem.result != "ERROR") {
             return current
         }
-        if (commandItem.command != "screenIs" && data.excludeItemExpectation) {
+        if (data.excludeItemExpectation
+            && data.noLoadRun
+            && commandItem.mode != "MANUAL"
+            && current.conditions.isEmpty()
+            && current.actions.isEmpty()
+            && commandItem.command != "screenIs"
+//            && (commandItem.auto == "A" || commandItem.auto == "CA")
+        ) {
             commandItem.result = "EXCLUDED"
         }
         val needNewCase = isNewCaseRequired(commandItem)

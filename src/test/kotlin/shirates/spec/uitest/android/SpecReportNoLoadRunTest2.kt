@@ -4,9 +4,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.exist
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.tap
+import shirates.core.driver.commandextension.*
 import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
@@ -44,6 +42,8 @@ class SpecReportNoLoadRunTest2 : UITest() {
                     it.screenIs("[Network & internet Screen]")
                         .exist("Internet")
                         .exist("SIMs")
+                    it.target("Airplane mode")
+                        .manual("check is OFF")
                 }
             }
         }
@@ -70,8 +70,8 @@ class SpecReportNoLoadRunTest2 : UITest() {
             platformVersion = "",
             noLoadRunMode = "No-Load-Run Mode",
             none = 1,
-            excluded = 1,
-            total = 2
+            excluded = 2,
+            total = 3
         )
 
         /**
@@ -107,6 +107,14 @@ class SpecReportNoLoadRunTest2 : UITest() {
                 expectation = "- <Internet>\n" +
                         "- <SIMs>",
                 auto = "A",
+                result = "EXCLUDED"
+            )
+            assertRow(
+                rowNum = 13,
+                id = 4,
+                target = "Airplane mode",
+                expectation = "- check is OFF",
+                auto = "M",
                 result = "EXCLUDED"
             )
         }
