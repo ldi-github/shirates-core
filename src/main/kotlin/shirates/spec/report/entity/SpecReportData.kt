@@ -189,12 +189,23 @@ class SpecReportData {
     fun replaceResults() {
 
         fun SpecLine.replaceResult(result: String, replace: String, reason: String? = null) {
+            if (this.result != result && this.result != replace) {
+                return
+            }
+
             if (this.result == result) {
                 if (replace.isNotBlank()) {
                     this.result = replace
                 }
-                this.supplement = listOf(this.supplement, reason).filter { it.isNullOrBlank().not() }.joinToString("\n")
             }
+            if (reason.isNullOrBlank()) {
+                return
+            }
+            if (this.supplement.contains(reason)) {
+                return
+            }
+
+            this.supplement = listOf(this.supplement, reason).filter { it.isBlank().not() }.joinToString("\n")
         }
 
         val p = PropertiesManager
