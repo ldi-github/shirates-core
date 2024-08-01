@@ -1,4 +1,4 @@
-package shirates.spec.uitest
+package shirates.spec.uitest.android
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -17,6 +17,9 @@ import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
 import shirates.spec.report.entity.SpecReportData
 import shirates.spec.report.models.SpecReportDataAdapter
+import shirates.spec.uitest.assertHeader
+import shirates.spec.uitest.assertRow
+import shirates.spec.uitest.assertRowHeader
 import shirates.spec.utilily.ExcelUtility
 import shirates.spec.utilily.cells
 import shirates.spec.utilily.text
@@ -90,12 +93,6 @@ class SpecReportLoadRunTest : UITest() {
             platformVersion = profile.platformVersion,
             noLoadRunMode = "",
             ok = 1,
-            ng = 0,
-            error = 0,
-            suspended = 0,
-            manual = 0,
-            skip = 0,
-            notImpl = 0,
             total = 1
         )
 

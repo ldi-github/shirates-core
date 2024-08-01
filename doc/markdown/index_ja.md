@@ -141,7 +141,7 @@
 - セレクターをオンデマンドで登録する
     - [tempSelector](basic/function_property/selector/temp_selector_ja.md)
 - テストフロー制御
-    - [SKIP/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl_ja.md)
+    - [SKIP/MANUAL/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl_ja.md)
 - ロギング
     - [info, warn](basic/function_property/logging/info_warn_ja.md)
     - [silent, procedure](basic/function_property/logging/silent_and_procedure_function_ja.md)

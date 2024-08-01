@@ -13,7 +13,7 @@ fun TestDrive.dataPattern(
 ): TestElement {
 
     val message = "$apiNickname -> $dataPatternName"
-    TestLog.info(message = message)
+    TestLog.describe(message = message)
     shirates.core.proxy.dataPattern(apiName = apiNickname, dataPatternName = dataPatternName)
 
     return getThisOrIt()

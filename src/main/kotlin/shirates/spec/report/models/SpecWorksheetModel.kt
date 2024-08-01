@@ -1,38 +1,26 @@
 package shirates.spec.report.models
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogType
 import shirates.core.logging.Message
 import shirates.core.logging.Message.message
 import shirates.spec.code.custom.DefaultTranslator.escapeForCode
-import shirates.spec.report.entity.CommandItem
-import shirates.spec.report.entity.Frame
-import shirates.spec.report.entity.LineObject
-import shirates.spec.report.entity.SpecLine
+import shirates.spec.report.entity.*
 import shirates.spec.utilily.SpecResourceUtility
 
 class SpecWorksheetModel(
-    val noLoadRun: Boolean,
-    val tester: String,
-    val testDate: String,
-    val environment: String,
-    val build: String
+    val data: SpecReportData,
 ) {
-
     val bullet = SpecResourceUtility.bullet
     val caption = message(id = "caption", subject = "\${caption}")
-    val notApplicable = SpecResourceUtility.notApplicable
     val lineObjects = mutableListOf<LineObject>()
     var current = LineObject("")
     var last = LineObject("")
+    var lastCommandItem: CommandItem = CommandItem("")
     var target = ""
     var os = ""
     var special = ""
     var frame = Frame.SCENARIO
-    val replaceMANUAL = PropertiesManager.specReportReplaceMANUAL
-    val replaceMANUALReason = PropertiesManager.specReportReplaceMANUALReason
-    val replaceSKIP = PropertiesManager.specReportReplaceSKIP
-    val replaceSKIPReason = PropertiesManager.specReportReplaceSKIPReason
+
 
     init {
         current.result = "not initialized"
@@ -108,15 +96,28 @@ class SpecWorksheetModel(
                 addDescription(commandItem)
             }
 
+            LogType.SKIP_SCENARIO.label -> {
+                setResult(commandItem)
+                commandItem.message = "SKIP_SCENARIO(${commandItem.message.trim()})"
+                addDescription(commandItem)
+            }
+
             LogType.SKIP_CASE.label -> {
                 setResult(commandItem)
                 commandItem.message = "SKIP_CASE(${commandItem.message.trim()})"
                 addDescription(commandItem)
             }
 
-            LogType.SKIP_SCENARIO.label -> {
+            LogType.MANUAL_SCENARIO.label -> {
+
                 setResult(commandItem)
-                commandItem.message = "SKIP_SCENARIO(${commandItem.message.trim()})"
+                commandItem.message = "MANUAL_SCENARIO(${commandItem.message.trim()})"
+                addDescription(commandItem)
+            }
+
+            LogType.MANUAL_CASE.label -> {
+                setResult(commandItem)
+                commandItem.message = "MANUAL_CASE(${commandItem.message.trim()})"
                 addDescription(commandItem)
             }
 
@@ -149,7 +150,7 @@ class SpecWorksheetModel(
                     if (current.expectations.isNotEmpty() && (current.os != os || current.special != special)) {
                         newCase()
                     }
-                    if (current.type != "scenario" || current.result == notApplicable) {
+                    if (current.type != "scenario" || current.result == "NONE") {
                         current.os = os
                         current.special = special
                         if (frame == Frame.EXPECTATION) {
@@ -192,7 +193,7 @@ class SpecWorksheetModel(
                             current.expectations.removeLast()
                         } else {
                             if (commandItem.command == "cellOf" || commandItem.command == "cell") {
-                                // NOP
+                                newCase()
                             } else if (commandItem.command != "os" && commandItem.command != "special") {
                                 addDescription(commandItem)
                             }
@@ -262,15 +263,17 @@ class SpecWorksheetModel(
                 }
             }
 
+            LogType.DELETED.label -> {
+                setResult(commandItem)
+            }
+
             LogType.ok.label -> {
                 addDescription(commandItem)
             }
 
         }
 
-        if (commandItem.result == "DELETED") {
-            current.result = SpecResourceUtility.deleted
-        }
+        lastCommandItem = commandItem
     }
 
     /**
@@ -278,100 +281,102 @@ class SpecWorksheetModel(
      */
     fun setResult(commandItem: CommandItem): LineObject {
 
-        if (frame != Frame.EXPECTATION) {
+        if (frame != Frame.EXPECTATION && commandItem.result != "ERROR") {
             return current
+        }
+        if (data.specReportExcludeDetail
+            && current.conditions.isEmpty()
+            && current.actions.isEmpty()
+            && commandItem.command != "screenIs"
+        ) {
+            commandItem.result = "EXCLUDED"
         }
         val needNewCase = isNewCaseRequired(commandItem)
         if (needNewCase) {
             newCase()
         }
 
-        val auto = commandItem.auto
+        val auto =
+            if (commandItem.result == "MANUAL") "M"
+            else commandItem.auto
+
+        fun setExecutionInfo() {
+            current.auto = auto
+            current.date = data.testDate
+            current.tester = data.tester
+            current.environment = data.environment
+            current.build = data.appBuild
+        }
 
         when (commandItem.result) {
             "OK" -> {
                 if (current.result.isBlank()) {
                     current.result = "OK"
 
-                    current.auto = auto
-                    current.date = testDate
-                    current.tester = tester
-                    current.environment = environment
-                    current.build = build
+                    setExecutionInfo()
                 }
             }
 
-            "KNOWNISSUE" -> {
+            "NG" -> {
+                current.result = "NG"
+                setExecutionInfo()
+            }
+
+            "ERROR" -> {
+                current.result = "ERROR"
+                setExecutionInfo()
+            }
+
+            "SUSPENDED" -> {
+                current.result = "SUSPENDED"
+                setExecutionInfo()
+            }
+
+            "NONE" -> {
+                current.result = "NONE"
+                current.auto = auto
+            }
+
+            "COND_AUTO" -> {
                 if (current.result.isBlank()) {
-                    current.result = notApplicable
+                    current.result =
+                        if (data.noLoadRun) "NONE"
+                        else "COND_AUTO"
                 }
+                setExecutionInfo()
             }
 
             "MANUAL" -> {
                 if (current.result.isBlank()) {
                     current.result = "MANUAL"
                 }
-
                 current.auto = auto
-                current.date = ""
-                current.tester = ""
-                current.environment = ""
-                current.build = ""
-            }
-
-            "COND_AUTO" -> {
-                if (current.result.isBlank()) {
-                    current.result =
-                        if (noLoadRun) "NONE"
-                        else "COND_AUTO"
-                }
-
-                current.auto = auto
-                current.date = ""
-                current.tester = ""
-                current.environment = ""
-                current.build = ""
-            }
-
-            "NG" -> {
-                current.result = "NG"
-                current.auto = auto
-                current.date = testDate
-                current.tester = tester
-                current.environment = environment
-                current.build = build
             }
 
             "SKIP" -> {
                 current.result = "SKIP"
-                current.auto = auto
-                current.date = testDate
-                current.tester = tester
-                current.environment = environment
-                current.build = build
+                setExecutionInfo()
             }
 
             "NOTIMPL" -> {
                 current.result = "NOTIMPL"
-                current.auto = auto
-                current.date = testDate
-                current.tester = tester
-                current.environment = environment
-                current.build = build
+                setExecutionInfo()
             }
 
-            "ERROR" -> {
-                current.result = "ERROR"
+            "EXCLUDED" -> {
+                current.result = "EXCLUDED"
                 current.auto = auto
-                current.date = testDate
-                current.tester = tester
-                current.environment = environment
-                current.build = build
             }
 
-            "NONE" -> {
-                current.result = "NONE"
+            "DELETED" -> {
+                current.result = "DELETED"
                 current.auto = auto
+            }
+
+            "KNOWNISSUE" -> {
+                if (current.result.isBlank()) {
+                    current.result = "KNOWNISSUE"
+                }
             }
         }
 
@@ -382,26 +387,6 @@ class SpecWorksheetModel(
         }
 
         return current
-    }
-
-    fun replaceResults() {
-
-        for (lineObject in lineObjects) {
-            if (lineObject.result == "NONE") {
-                lineObject.result = notApplicable
-            } else if (lineObject.result == "MANUAL" && replaceMANUAL.isNotBlank()) {
-                lineObject.result = replaceMANUAL
-                lineObject.supplement =
-                    if (lineObject.supplement.isBlank()) replaceMANUALReason
-                    else "${lineObject.supplement},$replaceMANUALReason"
-
-            } else if (lineObject.result == "SKIP" && replaceSKIP.isNotBlank()) {
-                lineObject.result = replaceSKIP
-                lineObject.supplement =
-                    if (lineObject.supplement.isBlank()) replaceSKIPReason
-                    else "${lineObject.supplement},$replaceSKIPReason"
-            }
-        }
     }
 
     private fun arrangeTarget(commandItem: CommandItem) {
@@ -453,7 +438,8 @@ class SpecWorksheetModel(
                 current.special != commandItem.special ||
                 current.auto.isNotEmpty() && current.auto != commandItem.auto ||
                 (commandItem.command == "screenIs" && current.target.isNotBlank() &&
-                        commandItem.message.contains(current.target).not())
+                        commandItem.message.contains(current.target).not()) ||
+                lastCommandItem.command == "screenIs"
         return isRequired
     }
 
@@ -722,8 +708,10 @@ class SpecWorksheetModel(
 
         val specLines = mutableListOf<SpecLine>()
         for (line in lineObjects) {
-            val spLine = line.toSpecLine()
-            specLines.add(spLine)
+            if (line.isEmpty.not()) {
+                val spLine = line.toSpecLine()
+                specLines.add(spLine)
+            }
         }
 
         return specLines

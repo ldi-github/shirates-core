@@ -8,7 +8,8 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class SummaryReportExecutor(
-    val inputDirPath: Path = shirates.spec.SpecConst.TEST_RESULTS.toPath()
+    val inputDirPath: Path = shirates.spec.SpecConst.TEST_RESULTS.toPath(),
+    val templatePath: Path? = null
 ) {
 
     init {
@@ -37,12 +38,14 @@ class SummaryReportExecutor(
                 for (sessionDirectory in sessionDirectories) {
                     println()
                     println("session: ${configDirectory.name}/${sessionDirectory.name}")
-                    SummaryReport(sessionPath = sessionDirectory.toPath())
-                        .execute()
+                    SummaryReport(
+                        sessionPath = sessionDirectory.toPath(),
+                        templatePath = templatePath
+                    ).execute()
                 }
             }
         } else {
-            SummaryReport(sessionPath = inputDirPath)
+            SummaryReport(sessionPath = inputDirPath, templatePath = templatePath)
                 .execute()
         }
     }

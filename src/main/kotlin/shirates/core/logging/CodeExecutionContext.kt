@@ -107,7 +107,7 @@ object CodeExecutionContext {
     /**
      * withScroll
      */
-    var withScroll: Boolean = false
+    var withScroll: Boolean? = null
         internal set
 
     /**

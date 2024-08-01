@@ -48,7 +48,9 @@ class SpecWriter(val specReport: SpecReport) {
             val row = commandListWorksheet.rows(rowNum)
 
             row.cells(1).setCellValue(logLine.lineNo.toString())
-            row.cells(2).setCellValue(shirates.spec.SpecConst.DATE_FORMAT.format(logLine.logDateTime))
+            if (logLine.logDateTime != null) {
+                row.cells(2).setCellValue(shirates.spec.SpecConst.DATE_FORMAT.format(logLine.logDateTime))
+            }
             row.cells(3).setCellValue(logLine.testCaseId)
             row.cells(4).setCellValue(logLine.mode)
             row.cells(5).setCellValue(logLine.logType)
@@ -108,7 +110,8 @@ class SpecWriter(val specReport: SpecReport) {
                 var rowNum = 0
                 for (i in 0 until specLines.count()) {
                     val specLine = specLines[i]
-                    val deleted = specLine.result == SpecResourceUtility.deleted
+                    val deleted =
+                        specLine.result == "DELETED" || specLine.result == SpecResourceUtility.DELETED
                     rowNum = sp.RowHeader + 1 + i
                     val row = worksheet.rows(rowNum)
 
@@ -226,16 +229,23 @@ class SpecWriter(val specReport: SpecReport) {
                     worksheet.cells("E1")
                         .setCellValue(shirates.spec.utilily.SpecResourceUtility.noLoadRunMode)
                 }
-                this.refresh()
                 worksheet.cells("F1").setCellValue("TestDateTime: ${testDateTime}")
-                worksheet.cells("H4").setCellValue(okCount.toDouble())
-                worksheet.cells("H5").setCellValue(ngCount.toDouble())
-                worksheet.cells("H6").setCellValue(errorCount.toDouble())
-                worksheet.cells("K2").setCellValue(suspendedCount.toDouble())
-                worksheet.cells("K3").setCellValue(condAutoCount.toDouble())
-                worksheet.cells("K4").setCellValue(manualCount.toDouble())
-                worksheet.cells("K5").setCellValue(skipCount.toDouble())
-                worksheet.cells("K6").setCellValue(notImplCount.toDouble())
+
+                worksheetData.refreshCount()
+
+                worksheet.cells("H2").setCellValue(okCount.toDouble())
+                worksheet.cells("H3").setCellValue(ngCount.toDouble())
+                worksheet.cells("H4").setCellValue(errorCount.toDouble())
+                worksheet.cells("H5").setCellValue(suspendedCount.toDouble())
+                worksheet.cells("H6").setCellValue(noneCount.toDouble())
+
+                worksheet.cells("K2").setCellValue(condAutoCount.toDouble())
+                worksheet.cells("K3").setCellValue(manualCount.toDouble())
+                worksheet.cells("K4").setCellValue(skipCount.toDouble())
+                worksheet.cells("K5").setCellValue(notImplCount.toDouble())
+                worksheet.cells("K6").setCellValue(excludedCount.toDouble())
+
+                worksheet.cells("K7").setCellValue(totalCount.toDouble())
             }
         }
 

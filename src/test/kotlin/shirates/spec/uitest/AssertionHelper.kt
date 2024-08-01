@@ -41,9 +41,12 @@ fun XSSFSheet.assertHeader(
     ng: Int = 0,
     error: Int = 0,
     suspended: Int = 0,
+    none: Int = 0,
     manual: Int = 0,
+    condAuto: Int = 0,
     skip: Int = 0,
     notImpl: Int = 0,
+    excluded: Int = 0,
     total: Int = 0
 ) {
 
@@ -59,23 +62,28 @@ fun XSSFSheet.assertHeader(
     cells("E1").textIs(noLoadRunMode)
     cells("F1").textIs("TestDateTime: $executionDateTime")
 
-    cells("G4").textIs("OK")
-    cells("G5").textIs("NG")
-    cells("G6").textIs("ERROR")
-    cells("H4").intIs(ok)
-    cells("H5").intIs(ng)
-    cells("H6").intIs(error)
+    cells("G2").textIs("OK")
+    cells("G3").textIs("NG")
+    cells("G4").textIs("ERROR")
+    cells("G5").textIs("SUSPENDED")
+    cells("G6").textIs("N/A")
+    cells("H2").intIs(ok)
+    cells("H3").intIs(ng)
+    cells("H4").intIs(error)
+    cells("H5").intIs(suspended)
+    cells("H6").intIs(none)
 
-    cells("J2").textIs("SUSPENDED")
-    cells("J3").textIs("COND_AUTO")
-    cells("J4").textIs("MANUAL")
-    cells("J5").textIs("SKIP")
-    cells("J6").textIs("NOTIMPL")
+    cells("J2").textIs("COND_AUTO")
+    cells("J3").textIs("MANUAL")
+    cells("J4").textIs("SKIP")
+    cells("J5").textIs("NOTIMPL")
+    cells("J6").textIs("EXCLUDED")
     cells("J7").textIs("total")
-    cells("K3").intIs(suspended)
-    cells("K4").intIs(manual)
-    cells("K5").intIs(skip)
-    cells("K6").intIs(notImpl)
+    cells("K2").intIs(condAuto)
+    cells("K3").intIs(manual)
+    cells("K4").intIs(skip)
+    cells("K5").intIs(notImpl)
+    cells("K6").intIs(excluded)
     cells("K7").intIs(total)
 
 }

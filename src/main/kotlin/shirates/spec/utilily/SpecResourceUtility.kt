@@ -59,30 +59,6 @@ object SpecResourceUtility {
         }
 
     /**
-     * notApplicable
-     */
-    val notApplicable: String
-        get() {
-            return getString("result.notApplicable")
-        }
-
-    /**
-     * suspended
-     */
-    val suspended: String
-        get() {
-            return getString("result.suspended")
-        }
-
-    /**
-     * deleted
-     */
-    val deleted: String
-        get() {
-            return getString("result.deleted")
-        }
-
-    /**
      * isDisplayed
      */
     val isDisplayed: String
@@ -98,4 +74,58 @@ object SpecResourceUtility {
             return getString("message.noLoadRunMode")
         }
 
+    val OK: String
+        get() {
+            return getString("result.OK")
+        }
+
+    val NG: String
+        get() {
+            return getString("result.NG")
+        }
+
+    val ERROR: String
+        get() {
+            return getString("result.ERROR")
+        }
+
+    val SUSPENDED: String
+        get() {
+            return getString("result.SUSPENDED")
+        }
+
+    val NONE: String
+        get() {
+            return getString("result.NONE")
+        }
+
+    val COND_AUTO: String
+        get() {
+            return getString("result.COND_AUTO")
+        }
+
+    val MANUAL: String
+        get() {
+            return getString("result.MANUAL")
+        }
+
+    val SKIP: String
+        get() {
+            return getString("result.SKIP")
+        }
+
+    val NOTIMPL: String
+        get() {
+            return getString("result.NOTIMPL")
+        }
+
+    val EXCLUDED: String
+        get() {
+            return getString("result.EXCLUDED")
+        }
+
+    val DELETED: String
+        get() {
+            return getString("result.DELETED")
+        }
 }

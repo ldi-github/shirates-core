@@ -8,7 +8,8 @@ class SummaryLine(
     var testClassName: String = "",
 
     var no: Int = 0,
-    var notApplicable: Int = 0,
+
+    var none: Int = 0,
     var ok: Int = 0,
     var ng: Int = 0,
     var error: Int = 0,
@@ -17,17 +18,19 @@ class SummaryLine(
     var manual: Int = 0,
     var skip: Int = 0,
     var notImpl: Int = 0,
+    var excluded: Int = 0,
+
     var a: Int = 0,
     var ca: Int = 0,
     var m: Int = 0,
 ) {
     override fun toString(): String {
-        return "$no\t$sheetName\t$total\t$notApplicable\t$ok\t$ng\t$error\t$suspended\t$condAuto\t$manual\t$skip\t$notImpl\t$autoPlusManual\t$a\t$m\ta$automatedRatio"
+        return "$no\t$sheetName\t$total\t$none\t$ok\t$ng\t$error\t$suspended\t$condAuto\t$manual\t$skip\t$notImpl\t$excluded\t$autoPlusManual\t$a\t$m\ta$automatedRatio"
     }
 
     val total: Int
         get() {
-            return (notApplicable + ok + ng + error + suspended + condAuto + manual + skip + notImpl)
+            return (none + ok + ng + error + suspended + condAuto + manual + skip + notImpl + excluded)
         }
 
     val autoPlusManual: Int

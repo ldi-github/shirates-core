@@ -62,6 +62,14 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             get() {
                 return uiTest?.isSkippingCase ?: false
             }
+        val isManualingScenario: Boolean
+            get() {
+                return uiTest?.isManualingScenario ?: false
+            }
+        val isManualingCase: Boolean
+            get() {
+                return uiTest?.isManualingCase ?: false
+            }
     }
 
     /**
@@ -181,7 +189,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
                 ParameterRepository.write("profileName", profile.profileName)
                 ParameterRepository.write("appIconName", "${profile.appIconName}")
                 if (profile.noLoadRun?.toBoolean() == true) {
-                    ParameterRepository.write("noLoadRun", "${profile.noLoadRun}")
+                    ParameterRepository.write("noLoadRun", "true")
+                }
+                if (PropertiesManager.specReportExcludeDetail) {
+                    ParameterRepository.write("specReport.exclude.detail", "true")
                 }
             }
 

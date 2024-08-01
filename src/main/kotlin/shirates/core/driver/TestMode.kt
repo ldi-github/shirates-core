@@ -54,7 +54,9 @@ object TestMode {
                     isClassManual ||
                     isMethodManual ||
                     isSkippingScenario ||
-                    isSkippingCase
+                    isSkippingCase ||
+                    isManualingScenario ||
+                    isManualingCase
         }
 
     val isClassManual: Boolean
@@ -85,6 +87,22 @@ object TestMode {
     val isSkipping: Boolean
         get() {
             return isSkippingScenario || isSkippingCase
+        }
+
+
+    val isManualingScenario: Boolean
+        get() {
+            return UITestCallbackExtension.isManualingScenario
+        }
+
+    val isManualingCase: Boolean
+        get() {
+            return UITestCallbackExtension.isManualingCase
+        }
+
+    val isManualing: Boolean
+        get() {
+            return isManualingScenario || isManualingCase
         }
 
     /**

@@ -1,4 +1,4 @@
-package shirates.spec.uitest
+package shirates.spec.uitest.android
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -12,6 +12,9 @@ import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
+import shirates.spec.uitest.assertHeader
+import shirates.spec.uitest.assertRow
+import shirates.spec.uitest.assertRowHeader
 import shirates.spec.utilily.ExcelUtility
 import shirates.spec.utilily.cells
 import shirates.spec.utilily.text
@@ -171,14 +174,9 @@ class SpecReportNoLoadRunTest : UITest() {
             deviceModel = "",
             platformVersion = "",
             noLoadRunMode = "No-Load-Run Mode",
-            ok = 0,
-            ng = 0,
-            error = 0,
-            suspended = 0,
+            none = 5,
             manual = 5,
-            skip = 0,
-            notImpl = 0,
-            total = 5
+            total = 10
         )
 
         /**

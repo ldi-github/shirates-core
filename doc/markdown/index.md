@@ -139,7 +139,7 @@
     - [manual](basic/function_property/descriptor/manual.md)
     - [knownIssue](basic/function_property/descriptor/known_issue.md)
 - Test flow control
-    - [SKIP/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl.md)
+    - [SKIP/MANUAL/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl.md)
 - Registering selector on demand
     - [tempSelector](basic/function_property/selector/temp_selector.md)
 - Logging

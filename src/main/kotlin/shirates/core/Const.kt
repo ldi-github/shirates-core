@@ -78,6 +78,7 @@ object Const {
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val ANDROID_SWIPE_OFFSET_Y = -24
     const val IOS_SWIPE_OFFSET_Y = -10
+    const val SPECREPORT_EXCLUDE_DETAIL = false
 
     /**
      * testConfig common properties
