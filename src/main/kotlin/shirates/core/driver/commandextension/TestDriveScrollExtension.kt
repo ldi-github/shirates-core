@@ -44,7 +44,7 @@ internal fun TestDrive.getScrollableElement(
         }
     }
 
-    if (CodeExecutionContext.withScroll && CodeExecutionContext.scrollableElement != null) {
+    if (CodeExecutionContext.withScroll != false && CodeExecutionContext.scrollableElement != null) {
         return CodeExecutionContext.scrollableElement!!
     }
 

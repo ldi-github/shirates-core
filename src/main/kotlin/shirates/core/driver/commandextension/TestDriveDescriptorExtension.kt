@@ -242,7 +242,7 @@ fun TestDrive.cell(
  */
 fun TestDrive.cellOf(
     expression: String,
-    swipeToCenter: Boolean = true,
+    swipeToCenter: Boolean = CodeExecutionContext.withScroll ?: true,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     useCache: Boolean = testContext.useCache,

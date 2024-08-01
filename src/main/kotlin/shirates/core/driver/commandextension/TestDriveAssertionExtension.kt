@@ -1236,7 +1236,7 @@ internal fun TestDrive.dontExistCore(
         safeElementOnly = safeElementOnly
     )
 
-    if (waitSeconds > 0.0 && CodeExecutionContext.withScroll.not() && e.isFound) {
+    if (waitSeconds > 0.0 && CodeExecutionContext.withScroll != true && e.isFound) {
 
         SyncUtility.doUntilTrue(
             waitSeconds = waitSeconds

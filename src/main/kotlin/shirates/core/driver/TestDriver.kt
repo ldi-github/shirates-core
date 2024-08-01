@@ -1238,7 +1238,7 @@ object TestDriver {
                         return lastElement
                     }
                 } else if (selectedElement.isFound && selectedElement.isInView && (safeElementOnly.not() || selectedElement.isSafe())) {
-                    if (swipeToCenter) {
+                    if (swipeToCenter && CodeExecutionContext.withScroll != false) {
                         testDrive.silent {
                             selectedElement = selectedElement.swipeToCenter()
                         }
@@ -1252,7 +1252,7 @@ object TestDriver {
             }
 
             // Search in scroll
-            if (allowScroll && CodeExecutionContext.withScroll) {
+            if (allowScroll && CodeExecutionContext.withScroll != false) {
                 return selectWithScroll(
                     selector = selector,
                     frame = frame,
@@ -1556,7 +1556,7 @@ object TestDriver {
         if (r.result) {
             return r
         }
-        val scroll = allowScroll && CodeExecutionContext.withScroll
+        val scroll = allowScroll && CodeExecutionContext.withScroll != false
         if (scroll.not() && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
             // Handle irregular
             testDrive.suppressHandler {
