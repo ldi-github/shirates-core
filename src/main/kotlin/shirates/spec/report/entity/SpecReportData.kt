@@ -189,23 +189,14 @@ class SpecReportData {
     fun replaceResults() {
 
         fun SpecLine.replaceResult(result: String, replace: String, reason: String? = null) {
-            if (this.result != result && this.result != replace) {
-                return
-            }
-
-            if (this.result == result) {
+            if (this.result == result || this.result == replace) {
                 if (replace.isNotBlank()) {
                     this.result = replace
                 }
+                if (reason.isNullOrBlank().not() && this.supplement.contains(reason!!).not()) {
+                    this.supplement = listOf(this.supplement, reason).filter { it.isBlank().not() }.joinToString("\n")
+                }
             }
-            if (reason.isNullOrBlank()) {
-                return
-            }
-            if (this.supplement.contains(reason)) {
-                return
-            }
-
-            this.supplement = listOf(this.supplement, reason).filter { it.isBlank().not() }.joinToString("\n")
         }
 
         val p = PropertiesManager
@@ -217,6 +208,7 @@ class SpecReportData {
             line.replaceResult("SUSPENDED", replaceSUSPENDED)
             line.replaceResult("NONE", replaceNONE)
             line.replaceResult("COND_AUTO", replaceCOND_AUTO)
+            line.replaceResult("MANUAL", replaceMANUAL)
             line.replaceResult("SKIP", replaceSKIP, p.specReportSKIPReason)
             line.replaceResult("NOTIMPL", replaceNOTIMPL)
             line.replaceResult("EXCLUDED", replaceEXCLUDED, p.specReportEXCLUDEDReason)

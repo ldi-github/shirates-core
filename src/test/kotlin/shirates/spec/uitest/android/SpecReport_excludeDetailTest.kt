@@ -19,7 +19,7 @@ import shirates.spec.utilily.worksheets
 
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/no-load-exclude.testrun.properties")
-class SpecReportNoLoadRunTest2 : UITest() {
+class SpecReport_excludeDetailTest : UITest() {
 
     var profileName = ""
 
@@ -28,7 +28,7 @@ class SpecReportNoLoadRunTest2 : UITest() {
     }
 
     @Test
-    @DisplayName("expectation items must be EXCLUDED on NLR mode except 'screenIs'")
+    @DisplayName("exclude detail items on scenario mode")
     fun S100() {
 
         scenario {
@@ -51,7 +51,7 @@ class SpecReportNoLoadRunTest2 : UITest() {
 
     override fun finally() {
 
-        val filePath = TestLog.directoryForLog.resolve("SpecReportNoLoadRunTest2/SpecReportNoLoadRunTest2.xlsx")
+        val filePath = TestLog.directoryForLog.resolve("SpecReport_excludeDetailTest/SpecReport_excludeDetailTest.xlsx")
         val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("SheetName1")
         val commandSheet = ws.workbook.worksheets("CommandList")
 
@@ -64,7 +64,7 @@ class SpecReportNoLoadRunTest2 : UITest() {
         ws.assertHeader(
             testConfigName = "Settings",
             sheetName = "SheetName1",
-            testClassName = "SpecReportNoLoadRunTest2",
+            testClassName = "SpecReport_excludeDetailTest",
             profileName = "",
             deviceModel = "",
             platformVersion = "",
@@ -87,7 +87,7 @@ class SpecReportNoLoadRunTest2 : UITest() {
                 rowNum = 10,
                 id = 1,
                 step = "S100",
-                condition = "expectation items must be EXCLUDED on NLR mode except 'screenIs'"
+                condition = "exclude detail items on scenario mode"
             )
             assertRow(
                 rowNum = 11,
@@ -107,7 +107,8 @@ class SpecReportNoLoadRunTest2 : UITest() {
                 expectation = "- <Internet>\n" +
                         "- <SIMs>",
                 auto = "A",
-                result = "EXCLUDED"
+                result = "EXCLUDED",
+                supplement = "Excluded on Scenario Mode"
             )
             assertRow(
                 rowNum = 13,
@@ -115,7 +116,8 @@ class SpecReportNoLoadRunTest2 : UITest() {
                 target = "Airplane mode",
                 expectation = "- check is OFF",
                 auto = "M",
-                result = "EXCLUDED"
+                result = "EXCLUDED",
+                supplement = "Excluded on Scenario Mode"
             )
         }
     }

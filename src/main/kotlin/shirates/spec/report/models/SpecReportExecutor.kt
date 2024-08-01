@@ -50,8 +50,10 @@ class SpecReportExecutor(
      */
     fun execute() {
 
-        PropertiesManager.setup()
-        
+        if (PropertiesManager.properties.isEmpty) {
+            PropertiesManager.setup()
+        }
+
         for (logFile in logFiles) {
 
             println("Loading: ${logFile.absolutePath}")

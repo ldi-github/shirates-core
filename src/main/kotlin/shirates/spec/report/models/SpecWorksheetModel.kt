@@ -708,8 +708,10 @@ class SpecWorksheetModel(
 
         val specLines = mutableListOf<SpecLine>()
         for (line in lineObjects) {
-            val spLine = line.toSpecLine()
-            specLines.add(spLine)
+            if (line.isEmpty.not()) {
+                val spLine = line.toSpecLine()
+                specLines.add(spLine)
+            }
         }
 
         return specLines
