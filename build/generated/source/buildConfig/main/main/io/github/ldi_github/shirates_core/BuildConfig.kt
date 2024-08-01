@@ -5,7 +5,7 @@ import kotlin.String
 object BuildConfig {
     const val appName: String = "shirates-core"
 
-    const val version: String = "7.3.1-SNAPSHOT"
+    const val version: String = "7.4.0"
 
     const val packageName: String = "io.github.ldi-github"
 
