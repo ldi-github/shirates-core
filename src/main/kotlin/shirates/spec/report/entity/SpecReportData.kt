@@ -3,7 +3,6 @@ package shirates.spec.report.entity
 import shirates.core.configuration.PropertiesManager
 import shirates.spec.report.models.ParameterRepository
 import shirates.spec.report.models.SpecSheetPosition
-import shirates.spec.utilily.SpecResourceUtility
 import java.nio.file.Path
 
 class SpecReportData {
@@ -33,18 +32,6 @@ class SpecReportData {
     var mNoneCount = 0
     var aNoneCount = 0
     var caNoneCount = 0
-
-    val replaceOK = SpecResourceUtility.OK
-    val replaceNG = SpecResourceUtility.NG
-    val replaceERROR = SpecResourceUtility.ERROR
-    val replaceSUSPENDED = SpecResourceUtility.SUSPENDED
-    val replaceNONE = SpecResourceUtility.NONE
-    val replaceCOND_AUTO = SpecResourceUtility.COND_AUTO
-    val replaceSKIP = SpecResourceUtility.SKIP
-    val replaceMANUAL = SpecResourceUtility.MANUAL
-    val replaceNOTIMPL = SpecResourceUtility.NOTIMPL
-    val replaceEXCLUDED = SpecResourceUtility.EXCLUDED
-    val replaceDELETED = SpecResourceUtility.DELETED
 
     lateinit var sheetPosition: SpecSheetPosition
 

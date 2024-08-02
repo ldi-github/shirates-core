@@ -14,7 +14,10 @@ object SpecResourceUtility {
         baseName: String = SpecConst.SPEC_BASE_NAME,
         logLanguage: String
     ) {
-        specResrouceField = ResourceUtility.getProperties(baseName = baseName, logLanguage = logLanguage)
+        _specResource = ResourceUtility.getProperties(baseName = baseName, logLanguage = logLanguage)
+        _specResourceMap = null
+        _resultMap = null
+        _resultReverseMap = null
     }
 
     /**
@@ -22,12 +25,50 @@ object SpecResourceUtility {
      */
     val specResource: Properties
         get() {
-            if (specResrouceField == null) {
+            if (_specResource == null) {
                 setup(logLanguage = TestLog.logLanguage)
             }
-            return specResrouceField!!
+            return _specResource!!
         }
-    private var specResrouceField: Properties? = null
+    private var _specResource: Properties? = null
+
+    /**
+     * specResourceMap
+     */
+    val specResourceMap: Map<String, String>
+        get() {
+            if (_specResourceMap == null) {
+                _specResourceMap = specResource.map { it.key.toString() to it.value.toString() }.toMap()
+            }
+            return _specResourceMap!!
+        }
+    private var _specResourceMap: Map<String, String>? = null
+
+    /**
+     * resultMap
+     */
+    val resultMap: Map<String, String>
+        get() {
+            if (_resultMap == null) {
+                _resultMap = specResourceMap
+                    .filter { it.key.startsWith("result.") }
+                    .map { it.key.removePrefix("result.") to it.value }.toMap()
+            }
+            return _resultMap!!
+        }
+    private var _resultMap: Map<String, String>? = null
+
+    /**
+     * resultReverseMap
+     */
+    val resultReverseMap: Map<String, String>
+        get() {
+            if (_resultReverseMap == null) {
+                _resultReverseMap = resultMap.map { it.value to it.key }.toMap()
+            }
+            return _resultReverseMap!!
+        }
+    private var _resultReverseMap: Map<String, String>? = null
 
     /**
      * getString
@@ -58,21 +99,18 @@ object SpecResourceUtility {
         return result
     }
 
+
     /**
      * getResultFromAltResult
      */
     fun getResultFromAltResult(altResult: String): String {
 
-        val entries = specResource.map { it.key.toString() to it.value.toString() }
-            .filter { it.first.startsWith("result.") && it.second == altResult }
-        val key = entries.firstOrNull()?.first?.removePrefix("result.") ?: ""
-        if (key.isNotEmpty()) {
-            return key
+        if (resultReverseMap.containsKey(altResult)) {
+            return resultReverseMap[altResult]!!
         }
 
         val result = altResult
-        val alt = getAltResult(result)
-        if (alt.isNotBlank()) {
+        if (resultMap.containsKey(result)) {
             return result
         }
 

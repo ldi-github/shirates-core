@@ -163,7 +163,8 @@ class SpecialBranchFunctionTest : UITest() {
             deviceModel = if (TestMode.isNoLoadRun) "" else data.p.getValue("appium:deviceModel").toString(),
             platformVersion = if (TestMode.isNoLoadRun) "" else profile.platformVersion,
             ok = 4,
-            total = 4
+            total = 4,
+            a_ca = 4
         )
 
         /**
