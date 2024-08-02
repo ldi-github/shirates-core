@@ -1,5 +1,7 @@
 package shirates.spec.report.entity
 
+import shirates.spec.utilily.SpecResourceUtility
+
 class SpecLine(
     var type: String = "",
 
@@ -25,12 +27,39 @@ class SpecLine(
 ) {
 
     /**
+     * altResult
+     */
+    val altResult: String
+        get() {
+            return SpecResourceUtility.getAltResult(result = result)
+        }
+
+    /**
      * isEmpty
      */
     val isEmpty: Boolean
         get() {
             return toString().replace("0", "").trim() == ""
         }
+
+    /**
+     * isResult
+     */
+    fun isResult(result: String): Boolean {
+
+        if (this.result == result) {
+            return true
+        }
+        if (this.altResult == result) {
+            return true
+        }
+        val r = SpecResourceUtility.getAltResult(result = result)
+        if (this.result == r) {
+            return true
+        }
+        return false
+    }
+
 
     override fun toString(): String {
 

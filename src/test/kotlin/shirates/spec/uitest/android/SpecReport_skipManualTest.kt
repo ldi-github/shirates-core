@@ -170,9 +170,13 @@ class SpecReport_skipManualTest : UITest() {
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             ok = 4,
-            manual = 13,
+            na = 13,
             skip = 3,
-            total = 20
+            total = 20,
+            m = 13,
+            m_na = 13,
+            a_ca = 7,
+            a_ca_na = 0
         )
 
         /**
@@ -213,7 +217,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Network & internet> is "Network & internet"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 12,
@@ -229,7 +233,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Connected devices> is "Connected devices"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 13,
@@ -242,7 +246,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Apps> is "Apps"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 14,
@@ -258,7 +262,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Notifications> is "Notifications"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 15,
@@ -271,7 +275,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Tips & support> is "Tips & support"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
 
 // s11
@@ -388,7 +392,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Network & internet> is "Network & internet"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 24,
@@ -404,7 +408,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Connected devices> is "Connected devices"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 25,
@@ -417,7 +421,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Apps> is "Apps"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 26,
@@ -433,7 +437,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Notifications> is "Notifications"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 27,
@@ -446,7 +450,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Tips & support> is "Tips & support"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
 
 // s21
@@ -488,7 +492,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Connected devices> is "Connected devices"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 31,
@@ -519,7 +523,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Notifications> is "Notifications"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 33,
@@ -532,7 +536,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Tips & support> is "Tips & support"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
 
         }

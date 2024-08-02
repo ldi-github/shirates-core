@@ -150,8 +150,11 @@ class SpecReportTest2 : UITest() {
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             ok = 10,
-            manual = 10,
-            total = 20
+            na = 10,
+            total = 20,
+            m = 10,
+            m_na = 10,
+            a_ca = 10
         )
 
         val date = Date().format("yyyy/MM/dd")
@@ -184,7 +187,7 @@ class SpecReportTest2 : UITest() {
                         "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 12,
@@ -195,7 +198,7 @@ class SpecReportTest2 : UITest() {
                         "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 13,
@@ -206,7 +209,7 @@ class SpecReportTest2 : UITest() {
                         "- <Mon, Tue, Wed, Thu, Fri>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 14,
@@ -217,7 +220,7 @@ class SpecReportTest2 : UITest() {
                         "- <Sun, Sat>\n" +
                         "- <#onoff>",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 15,
@@ -226,7 +229,7 @@ class SpecReportTest2 : UITest() {
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_large_label_view>",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 16,
@@ -235,7 +238,7 @@ class SpecReportTest2 : UITest() {
                 expectation = "- <#navigation_bar_item_icon_container>\n" +
                         "- <#navigation_bar_item_labels_group>",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 17,
@@ -246,7 +249,7 @@ class SpecReportTest2 : UITest() {
                         "- [8:30 AM Days of week]\n" +
                         "- [8:30 AM ON/OFF]",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 18,
@@ -257,7 +260,7 @@ class SpecReportTest2 : UITest() {
                         "- [9:00 AM Days of week]\n" +
                         "- [9:00 AM ON/OFF]",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 19,
@@ -268,7 +271,7 @@ class SpecReportTest2 : UITest() {
                         "- innerWidget(3) is \"Mon, Tue, Wed, Thu, Fri\"\n" +
                         "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 20,
@@ -279,7 +282,7 @@ class SpecReportTest2 : UITest() {
                         "- innerWidget(3) is \"Sun, Sat\"\n" +
                         "- innerWidget(4).idOrName is \"onoff\"",
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
 
 

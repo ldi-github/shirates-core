@@ -625,11 +625,19 @@ fun TestDrive.existImage(
     var e = TestElement(selector = sel)
 
     if (TestMode.isNoLoadRun) {
-        TestLog.conditionalAuto(
-            message = assertMessage,
-            scriptCommand = command,
-            subject = "$sel"
-        )
+        if (TestMode.isManual) {
+            TestLog.manual(
+                message = assertMessage,
+                scriptCommand = command,
+                subject = "$sel"
+            )
+        } else {
+            TestLog.conditionalAuto(
+                message = assertMessage,
+                scriptCommand = command,
+                subject = "$sel"
+            )
+        }
         return e
     }
 

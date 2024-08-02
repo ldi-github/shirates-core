@@ -397,7 +397,7 @@ object TestLog {
     fun write(
         message: String,
         logType: LogType = LogType.NONE,
-        auto: String = if (TestMode.isManual) "M" else "A",
+        auto: String = if (TestMode.isManual || TestMode.isManualing) "M" else "A",
         scriptCommand: String? = null,
         subject: String = "",
         arg1: String = "",
@@ -537,9 +537,8 @@ object TestLog {
             else if (testContext.useCache) "C"  // cache mode
             else "!"    // direct access mode
         val result2 =
-            if (TestMode.isManual) LogType.MANUAL
+            if (TestMode.isManual || TestMode.isManualing) LogType.NONE
             else if (TestMode.isSkipping) LogType.SKIP
-            else if (TestMode.isManualing) LogType.MANUAL
             else result
 
         val logLine = LogLine(

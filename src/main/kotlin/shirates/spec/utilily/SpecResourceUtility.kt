@@ -32,14 +32,51 @@ object SpecResourceUtility {
     /**
      * getString
      */
-    fun getString(key: String): String {
+    fun getString(key: String, throwsException: Boolean = true): String {
 
         val r = specResource
         if (r.containsKey(key).not()) {
-            throw IllegalAccessException("key not found in resource. key=$key")
+            if (throwsException) {
+                throw IllegalAccessException("key not found in resource. key=$key")
+            }
+            return ""
         }
 
         return r.getProperty(key)
+    }
+
+    /**
+     * getAltResult
+     */
+    fun getAltResult(result: String): String {
+
+        val key = "result.$result"
+        val replace = getString(key, throwsException = false)
+        if (replace.isNotBlank()) {
+            return replace
+        }
+        return result
+    }
+
+    /**
+     * getResultFromAltResult
+     */
+    fun getResultFromAltResult(altResult: String): String {
+
+        val entries = specResource.map { it.key.toString() to it.value.toString() }
+            .filter { it.first.startsWith("result.") && it.second == altResult }
+        val key = entries.firstOrNull()?.first?.removePrefix("result.") ?: ""
+        if (key.isNotEmpty()) {
+            return key
+        }
+
+        val result = altResult
+        val alt = getAltResult(result)
+        if (alt.isNotBlank()) {
+            return result
+        }
+
+        return ""
     }
 
     /**

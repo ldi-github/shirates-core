@@ -174,9 +174,12 @@ class SpecReportNoLoadRunTest : UITest() {
             deviceModel = "",
             platformVersion = "",
             noLoadRunMode = "No-Load-Run Mode",
-            none = 5,
-            manual = 5,
-            total = 10
+            na = 10,
+            total = 10,
+            m = 5,
+            m_na = 5,
+            a_ca = 5,
+            a_ca_na = 5
         )
 
         /**
@@ -229,7 +232,7 @@ class SpecReportNoLoadRunTest : UITest() {
                         "(caption2)\n" +
                         "- manual1",
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 16,
@@ -292,7 +295,7 @@ class SpecReportNoLoadRunTest : UITest() {
                 os = "Android",
                 special = "S1",
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 21,
@@ -322,7 +325,7 @@ class SpecReportNoLoadRunTest : UITest() {
                 os = "iOS",
                 special = "S2",
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 24,
@@ -336,7 +339,7 @@ class SpecReportNoLoadRunTest : UITest() {
                 os = "Android",
                 special = "S1",
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 25,
@@ -349,7 +352,7 @@ class SpecReportNoLoadRunTest : UITest() {
                 os = "iOS",
                 special = "S2",
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
         }
     }

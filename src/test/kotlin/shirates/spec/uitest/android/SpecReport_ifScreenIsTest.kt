@@ -144,7 +144,8 @@ class SpecReport_ifScreenIsTest : UITest() {
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             notImpl = 1,
-            total = 1
+            total = 1,
+            a_ca = 1
         )
 
         /**

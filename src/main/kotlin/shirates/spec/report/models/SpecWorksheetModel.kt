@@ -284,7 +284,8 @@ class SpecWorksheetModel(
         if (frame != Frame.EXPECTATION && commandItem.result != "ERROR") {
             return current
         }
-        if (data.specReportExcludeDetail
+        if (data.noLoadRun
+            && data.specReportExcludeDetail
             && current.conditions.isEmpty()
             && current.actions.isEmpty()
             && commandItem.command != "screenIs"
@@ -296,9 +297,7 @@ class SpecWorksheetModel(
             newCase()
         }
 
-        val auto =
-            if (commandItem.result == "MANUAL") "M"
-            else commandItem.auto
+        val auto = commandItem.auto
 
         fun setExecutionInfo() {
             current.auto = auto
@@ -347,9 +346,7 @@ class SpecWorksheetModel(
             }
 
             "MANUAL" -> {
-                if (current.result.isBlank()) {
-                    current.result = "MANUAL"
-                }
+                current.result = "NONE"
                 current.auto = auto
             }
 

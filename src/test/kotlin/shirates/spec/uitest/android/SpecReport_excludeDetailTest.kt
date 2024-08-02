@@ -69,9 +69,12 @@ class SpecReport_excludeDetailTest : UITest() {
             deviceModel = "",
             platformVersion = "",
             noLoadRunMode = "No-Load-Run Mode",
-            none = 1,
+            na = 1,
             excluded = 2,
-            total = 3
+            total = 3,
+            m = 1,
+            a_ca = 2,
+            a_ca_na = 1
         )
 
         /**
@@ -108,7 +111,7 @@ class SpecReport_excludeDetailTest : UITest() {
                         "- <SIMs>",
                 auto = "A",
                 result = "EXCLUDED",
-                supplement = "Excluded on Scenario Mode"
+                supplement = "Excluded on screen transition mode"
             )
             assertRow(
                 rowNum = 13,
@@ -117,7 +120,7 @@ class SpecReport_excludeDetailTest : UITest() {
                 expectation = "- check is OFF",
                 auto = "M",
                 result = "EXCLUDED",
-                supplement = "Excluded on Scenario Mode"
+                supplement = "Excluded on screen transition mode"
             )
         }
     }
