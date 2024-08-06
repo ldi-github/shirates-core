@@ -69,12 +69,12 @@ class SpecReport_excludeDetailTest : UITest() {
             deviceModel = "",
             platformVersion = "",
             noLoadRunMode = "No-Load-Run Mode",
-            na = 1,
-            excluded = 2,
+            na = 2,
+            excluded = 1,
             total = 3,
             m = 1,
             a_ca = 2,
-            a_ca_na = 1
+            a_ca_na = 2
         )
 
         /**
@@ -110,8 +110,7 @@ class SpecReport_excludeDetailTest : UITest() {
                 expectation = "- <Internet>\n" +
                         "- <SIMs>",
                 auto = "A",
-                result = "EXCLUDED",
-                supplement = "Excluded on screen transition mode"
+                result = "N/A",
             )
             assertRow(
                 rowNum = 13,
@@ -120,7 +119,7 @@ class SpecReport_excludeDetailTest : UITest() {
                 expectation = "- check is OFF",
                 auto = "M",
                 result = "EXCLUDED",
-                supplement = "Excluded on screen transition mode"
+                supplement = "Excluded on checking screen transition"
             )
         }
     }

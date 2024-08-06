@@ -738,11 +738,13 @@ abstract class UITest : TestDrive {
                 TestLog.info("No-Load-Run mode")
             }
 
-            if (launchApp && testDrive.isAppInstalled()) {
-                if (isiOS && isRealDevice) {
-                    testDrive.tapAppIcon()
-                } else {
-                    testDrive.launchApp()
+            silent {
+                if (launchApp && testDrive.isAppInstalled()) {
+                    if (isiOS && isRealDevice) {
+                        testDrive.tapAppIcon()
+                    } else {
+                        testDrive.launchApp()
+                    }
                 }
             }
 

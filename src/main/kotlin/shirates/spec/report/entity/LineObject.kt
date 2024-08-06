@@ -38,7 +38,8 @@ class LineObject(var type: String) {
                     tester.isBlank() &&
                     environment.isBlank() &&
                     build.isBlank() &&
-                    supplement.isBlank()
+                    supplement.isBlank() &&
+                    importantMessage.isBlank()
             return r
         }
 
