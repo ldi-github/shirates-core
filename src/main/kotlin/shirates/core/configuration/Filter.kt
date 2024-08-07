@@ -109,9 +109,9 @@ class Filter(
             if (isNegation) {
                 return when (noun) {
                     "literal" -> "!'*'"
-                    "id" -> "!#"
                     "className" -> "!."
-                    "access" -> "!@"
+                    "id" -> if (verb == "Matches") "" else "!#"
+                    "access" -> if (verb == "Matches") "" else "!@"
                     "text" -> "!"
                     "pos" -> "![n]"
                     else -> ""
@@ -120,8 +120,8 @@ class Filter(
 
             return when (noun) {
                 "literal" -> "'*'"
-                "id" -> "#"
                 "className" -> "."
+                "id" -> if (verb == "Matches") "" else "#"
                 "access" -> "@"
                 "text" -> ""
                 "pos" -> "[n]"
@@ -193,8 +193,15 @@ class Filter(
     override fun toString(): String {
 
         return when (noun) {
-            "id" -> abbreviationExpression
             "className" -> abbreviationExpression
+
+            "id" -> {
+                when (verb) {
+                    "Matches" -> fullExpression
+                    else -> abbreviationExpression
+                }
+            }
+
             "access" -> {
                 when (verb) {
                     "Matches" -> fullExpression
@@ -203,6 +210,7 @@ class Filter(
             }
 
             "literal" -> abbreviationExpression
+
             "text" -> {
                 when (verb) {
                     "Matches" -> fullExpression
@@ -211,8 +219,11 @@ class Filter(
             }
 
             "value" -> fullExpression
+
             "pos" -> abbreviationExpression
+
             "image" -> abbreviationExpression
+
             else -> fullExpression
         }
     }
@@ -257,6 +268,7 @@ class Filter(
                     val list = registeredNouns.toMutableList()
                     list.addAll(
                         listOf(
+                            "idStartsWith", "idContains", "idEndsWith", "idMatches",
                             "accessStartsWith", "accessContains", "accessEndsWith", "accessMatches",
                             "textStartsWith", "textContains", "textEndsWith", "textMatches",
                             "valueStartsWith", "valueContains", "valueEndsWith", "valueMatches",
@@ -396,7 +408,7 @@ class Filter(
 
         return when (noun) {
             "id" ->
-                evaluateId(stringValue)
+                evaluateId(id = stringValue)
 
             "className" ->
                 evaluateClassName(className = stringValue)
@@ -580,6 +592,12 @@ class Filter(
                 val fullId2 = getFullyQualifiedId(filterValue)?.preprocessForComparison()
 
                 if (fullId == fullId2) {
+                    return true
+                }
+
+                val shortId = string.split(":id/").last()
+                val match = matchTextSomething(text = shortId, filterValue = this.value)
+                if (match) {
                     return true
                 }
             }

@@ -70,16 +70,18 @@ class FilterExpressionParser(
             val imageInfo = ImageInfo(negationPrefixRemoved)
             if (imageInfo.fileName.endsWith(".png")) return "image"
         }
+        if (exp.startsWith(".") || exp.startsWith("!.")) {
+            return "className"
+        }
         if (exp.startsWith("@") || exp.startsWith("!@")) {
             val a = exp.removePrefix("!").removePrefix("@")
             val verb = a.getVerbForWildcard() ?: ""
             return "access$verb"
         }
-        if (exp.startsWith(".") || exp.startsWith("!.")) {
-            return "className"
-        }
         if (exp.startsWith("#") || exp.startsWith("!#")) {
-            return "id"
+            val a = exp.removePrefix("!").removePrefix("#")
+            val verb = a.getVerbForWildcard() ?: ""
+            return "id$verb"
         }
 
         val t = exp.removePrefix("!")
