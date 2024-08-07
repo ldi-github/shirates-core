@@ -55,14 +55,16 @@ class SpecWriter(val specReport: SpecReport) {
             row.cells(4).setCellValue(logLine.mode)
             row.cells(5).setCellValue(logLine.logType)
             row.cells(6).setCellValue(logLine.auto)
-            row.cells(7).setCellValue(logLine.os)
-            row.cells(8).setCellValue(logLine.special)
-            row.cells(9).setCellValue(logLine.group)
-            row.cells(10).setCellValue(logLine.level)
-            row.cells(11).setCellValue(logLine.command)
-            row.cells(12).setCellValue(logLine.message)
-            row.cells(13).setCellValue(logLine.result)
-            row.cells(14).setCellValue(logLine.exception)
+            row.cells(7).setCellValue(logLine.environment)
+            row.cells(8).setCellValue(logLine.supplement)
+            row.cells(9).setCellValue(logLine.os)
+            row.cells(10).setCellValue(logLine.special)
+            row.cells(11).setCellValue(logLine.group)
+            row.cells(12).setCellValue(logLine.level)
+            row.cells(13).setCellValue(logLine.command)
+            row.cells(14).setCellValue(logLine.message)
+            row.cells(15).setCellValue(logLine.result)
+            row.cells(16).setCellValue(logLine.exception)
         }
     }
 
@@ -173,10 +175,12 @@ class SpecWriter(val specReport: SpecReport) {
                             )
                         )
                     }
+
+                    row.setString("column.environment", sp.colEnvironment, specLine.environment)
+
                     if (worksheetData.noLoadRun.not()) {
                         row.cells(sp.colDate).setCellValue(specLine.date)
                         row.setString("column.tester", sp.colTester, specLine.tester)
-                        row.setString("column.environment", sp.colEnvironment, specLine.environment)
                         row.setString("column.build", sp.colBuild, specLine.build)
                     }
 

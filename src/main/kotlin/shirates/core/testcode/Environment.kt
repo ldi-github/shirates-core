@@ -1,11 +1,11 @@
 package shirates.core.testcode
 
 /**
- * Manual
+ * environment
  */
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
-annotation class Manual(
-    val supplement: String = ""
+annotation class Environment(
+    val environment: String = ""
 ) {
 
 }

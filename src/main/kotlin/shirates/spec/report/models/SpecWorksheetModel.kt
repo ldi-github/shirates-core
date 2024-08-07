@@ -307,11 +307,12 @@ class SpecWorksheetModel(
 
         val auto = commandItem.auto
 
+        current.environment = commandItem.environment.ifBlank { data.environment }
+
         fun setExecutionInfo() {
             current.auto = auto
             current.date = data.testDate
             current.tester = data.tester
-            current.environment = data.environment
             current.build = data.appBuild
         }
 
@@ -532,6 +533,8 @@ class SpecWorksheetModel(
         if (commandItem.mode == "MANUAL") {
             current.result = "@Manual"
         }
+        current.environment = commandItem.environment
+        current.supplement = commandItem.supplement
 
         return current
     }

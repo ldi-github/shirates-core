@@ -398,6 +398,8 @@ object TestLog {
         message: String,
         logType: LogType = LogType.NONE,
         auto: String = if (TestMode.isManual || TestMode.isManualing) "M" else "A",
+        environment: String = TestMode.environment,
+        supplement: String = "",
         scriptCommand: String? = null,
         subject: String = "",
         arg1: String = "",
@@ -421,6 +423,8 @@ object TestLog {
             fileName = fileName,
             logType = logType,
             auto = auto,
+            environment = environment,
+            supplement = supplement,
             result = result
         )
         logLineCallback?.invoke(logLine)
@@ -497,6 +501,8 @@ object TestLog {
         message: String,
         logType: LogType = LogType.NONE,
         auto: String = "A",
+        environment: String = "",
+        supplement: String = "",
         scriptCommand: String? = null,
         subject: String = "",
         arg1: String = "",
@@ -557,6 +563,8 @@ object TestLog {
             fileName = fileName,
             logType = logType,
             auto = auto,
+            environment = environment,
+            supplement = supplement,
             mode = mode,
             testScenarioId = testScenarioId,
             stepNo = stepNo,
@@ -1186,6 +1194,7 @@ object TestLog {
         lastScenarioLog = write(
             message = message,
             logType = LogType.SCENARIO,
+            supplement = TestMode.manualSupplement,
             scriptCommand = "scenario",
             subject = testScenarioId,
             arg1 = message,
