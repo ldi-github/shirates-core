@@ -217,7 +217,7 @@ abstract class UITest : TestDrive {
         TestLog.info(Const.SEPARATOR_LONG)
 
         PropertiesManager.setup(testrunFile = testrunFile)
-        TestMode.testTimeNoLoadRun = PropertiesManager.getPropertyValue("noLoadRun") == "true"
+        TestMode.testTimeNoLoadRun = PropertiesManager.noLoadRun
         prepareTestLog()
 
         if (Files.exists(testrunFile.toPath())) {
@@ -268,7 +268,7 @@ abstract class UITest : TestDrive {
         try {
             val configPath = configFile.toPath()
             var testConfigName = configPath.toFile().nameWithoutExtension
-            if (isNoLoadRun) {
+            if (PropertiesManager.noLoadRun) {
                 testConfigName = testConfigName.split("@").first()
             }
 

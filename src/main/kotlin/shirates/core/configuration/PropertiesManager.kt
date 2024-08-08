@@ -164,6 +164,16 @@ object PropertiesManager {
             return TestMode.ANDROID
         }
 
+    // Test Mode --------------------------------------------------
+
+    /**
+     * noLoadRun
+     */
+    val noLoadRun: Boolean
+        get() {
+            return getPropertyValue("noLoadRun") == "true"
+        }
+
     // Config --------------------------------------------------
 
     /**

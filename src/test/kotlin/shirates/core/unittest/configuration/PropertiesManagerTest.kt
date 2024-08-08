@@ -280,6 +280,49 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun noLoadRun() {
+
+        run {
+            /**
+             * from "SR_noLoadRun" env
+             */
+
+            // Arrange
+            EnvUtility.setEnvForTesting("SR_noLoadRun", "")
+            PropertiesManager.setup()
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isFalse()
+
+            // Arrange
+            EnvUtility.setEnvForTesting("SR_noLoadRun", "true")
+            PropertiesManager.setup()
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isTrue()
+
+            // Arrange
+            EnvUtility.setEnvForTesting("SR_noLoadRun", "false")
+            PropertiesManager.setup()
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isFalse()
+        }
+        run {
+            /**
+             * overwrite "noLoadRun"
+             */
+
+            // Arrange
+            PropertiesManager.setPropertyValue("noLoadRun", "true")
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isTrue()
+
+            // Arrange
+            PropertiesManager.setPropertyValue("noLoadRun", "false")
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isFalse()
+        }
+    }
+
+    @Test
     fun configFile() {
 
         run {
