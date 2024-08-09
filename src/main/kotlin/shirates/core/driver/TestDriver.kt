@@ -998,14 +998,23 @@ object TestDriver {
 
                 WaitUtility.doUntilTrue(
                     waitSeconds = testContext.waitSecondsOnIsScreen,
-                    intervalSeconds = 1.0
-                ) { sc ->
+                    intervalSeconds = 1.0,
+                    onError = { wc ->
+                        if (wc.error != null) {
+                            var msg = "Error on refreshCache."
+                            if (wc.error?.message != null) {
+                                msg += " " + wc.error!!.message!!
+                            }
+                            TestLog.warn(message = msg)
+                        }
+                    }
+                ) { wc ->
                     rootElement = AppiumProxy.getSource()
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
                     rootElement.sourceCaptureFailed = false
                     if (hasIncompleteWebView()) {
-                        if (sc.stopWatch.elapsedSeconds < sc.waitSeconds) {
+                        if (wc.stopWatch.elapsedSeconds < wc.waitSeconds) {
                             TestLog.info("WebView is incomplete", PropertiesManager.enableSyncLog)
                             rootElement.sourceCaptureFailed = true
                         }

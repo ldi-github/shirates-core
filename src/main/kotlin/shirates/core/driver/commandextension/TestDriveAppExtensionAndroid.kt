@@ -37,7 +37,17 @@ internal fun TestDriveObjectAndroid.launchAndroidApp(
     val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "start", "-n", activityName, log = log)
     invalidateCache()
 
-    WaitUtility.doUntilTrue {
+    WaitUtility.doUntilTrue(
+        onError = { wc ->
+            if (wc.error != null) {
+                var msg = "Error on launchAndroidApp."
+                if (wc.error?.message != null) {
+                    msg += " " + wc.error!!.message!!
+                }
+                TestLog.warn(message = msg)
+            }
+        }
+    ) {
         val running = isAndroidAppRunning(udid = udid, packageName = packageName)
         if (running.not()) {
             testDrive.withoutScroll {
@@ -62,7 +72,17 @@ internal fun TestDriveObjectAndroid.terminateAndroidApp(
     val r = ShellUtility.executeCommand("adb", "-s", udid, "shell", "am", "force-stop", packageName, log = log)
     invalidateCache()
 
-    WaitUtility.doUntilTrue {
+    WaitUtility.doUntilTrue(
+        onError = { wc ->
+            if (wc.error != null) {
+                var msg = "Error on terminateAndroidApp."
+                if (wc.error?.message != null) {
+                    msg += " " + wc.error!!.message!!
+                }
+                TestLog.warn(message = msg)
+            }
+        }
+    ) {
         isAndroidAppRunning(udid = udid, packageName = packageName).not()
     }
 
