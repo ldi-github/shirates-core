@@ -353,6 +353,7 @@ abstract class UITest : TestDrive {
             TestDriver.setupContext(testContext = testContext)
 
             if (isNoLoadRun) {
+                TestDriver.quit()
                 return
             }
 
@@ -471,68 +472,88 @@ abstract class UITest : TestDrive {
      * SKIP_SCENARIO
      */
     open fun SKIP_SCENARIO(
-        message: String = message(id = "SKIP_SCENARIO")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isSkippingScenario = true
-            TestLog.skipScenario(message)
-            return
+        message: String = message(id = "SKIP_SCENARIO"),
+        predicate: () -> Boolean = {
+            true
         }
-        driver.screenshotCore()
-        TestLog.skipScenario(message)
-        isSkippingScenario = true
-        testSkipped = true
+    ) {
+        if (predicate()) {
+            if (TestMode.isNoLoadRun) {
+                isSkippingScenario = true
+                TestLog.skipScenario(message)
+                return
+            }
+            driver.screenshotCore()
+            TestLog.skipScenario(message)
+            isSkippingScenario = true
+            testSkipped = true
+        }
     }
 
     /**
      * SKIP_CASE
      */
     open fun SKIP_CASE(
-        message: String = message(id = "SKIP_CASE")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isSkippingCase = true
-            TestLog.skipCase(message)
-            return
+        message: String = message(id = "SKIP_CASE"),
+        predicate: () -> Boolean = {
+            true
         }
-        driver.screenshotCore()
-        TestLog.skipCase(message)
-        isSkippingCase = true
-        testSkipped = true
+    ) {
+        if (predicate()) {
+            if (TestMode.isNoLoadRun) {
+                isSkippingCase = true
+                TestLog.skipCase(message)
+                return
+            }
+            driver.screenshotCore()
+            TestLog.skipCase(message)
+            isSkippingCase = true
+            testSkipped = true
+        }
     }
 
     /**
      * MANUAL_SCENARIO
      */
     open fun MANUAL_SCENARIO(
-        message: String = message(id = "MANUAL_SCENARIO")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isManualingScenario = true
-            TestLog.manualScenario(message)
-            return
+        message: String = message(id = "MANUAL_SCENARIO"),
+        predicate: () -> Boolean = {
+            true
         }
-        driver.screenshotCore()
-        TestLog.manualScenario(message)
-        isManualingScenario = true
-        testSkipped = true
+    ) {
+        describe(message = message)
+        if (predicate()) {
+            if (TestMode.isNoLoadRun) {
+                isManualingScenario = true
+                return
+            }
+            driver.screenshotCore()
+            TestLog.manualScenario(message)
+            isManualingScenario = true
+            testSkipped = true
+        }
     }
 
     /**
      * MANUAL_CASE
      */
     open fun MANUAL_CASE(
-        message: String = message(id = "MANUAL_CASE")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isManualingCase = true
-            TestLog.manualCase(message)
-            return
+        message: String = message(id = "MANUAL_CASE"),
+        predicate: () -> Boolean = {
+            true
         }
-        driver.screenshotCore()
-        TestLog.manualCase(message)
-        isManualingCase = true
-        testSkipped = true
+    ) {
+        describe(message = message)
+        if (predicate()) {
+            if (TestMode.isNoLoadRun) {
+                isManualingCase = true
+                return
+            }
+            driver.screenshotCore()
+            TestLog.manualCase(message)
+            isManualingCase = true
+            testSkipped = true
+        }
     }
 
 
