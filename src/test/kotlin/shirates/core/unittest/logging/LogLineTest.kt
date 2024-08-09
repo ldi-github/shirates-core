@@ -180,6 +180,6 @@ class LogLineTest : UnitTest() {
     fun getHeaderForCommandList() {
 
         val header = LogLine.getHeaderForCommandList()
-        assertThat(header).isEqualTo("lineNo\tlogDateTime\ttestCaseId\tmode\tlogType\tauto\tos\tspecial\tgroup\tlevel\tcommand\tmessage\tresult\texception")
+        assertThat(header).isEqualTo("lineNo\tlogDateTime\ttestCaseId\tmode\tlogType\tauto\tenvironment\tsupplement\tos\tspecial\tgroup\tlevel\tcommand\tmessage\tresult\texception")
     }
 }

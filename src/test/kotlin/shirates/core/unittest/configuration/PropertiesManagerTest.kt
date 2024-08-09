@@ -1702,7 +1702,7 @@ class PropertiesManagerTest : UnitTest() {
             // Arrange
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.pressBackSelector).isEqualTo(Const.TAP_TEST_SELECTOR)
+            assertThat(PropertiesManager.pressBackSelector).isEqualTo(Const.PRESS_BACK_SELECTOR)
         }
         run {
             // Arrange
