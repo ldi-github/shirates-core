@@ -4,7 +4,7 @@
   "include": [
   ],
 
-  "identity": "[application][TopBrowserBar]",
+  "identity": "[application]",
 
   "selectors": {
     "[application]": ".XCUIElementTypeApplication&&#Safari",

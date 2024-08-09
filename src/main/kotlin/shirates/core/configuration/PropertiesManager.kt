@@ -742,6 +742,15 @@ object PropertiesManager {
         }
 
     /**
+     * pressBackSelector
+     */
+    val pressBackSelector: String
+        get() {
+            return getPropertyValue(propertyName = "pressBackSelector")
+                ?: Const.PRESS_BACK_SELECTOR
+        }
+
+    /**
      * enableAutoSyncAndroid
      */
     val enableAutoSyncAndroid: Boolean
@@ -758,6 +767,16 @@ object PropertiesManager {
         get() {
             val value = getPropertyValue(propertyName = "enableAutoSyncIos")
                 ?: return Const.ENABLE_AUTO_SYNC_IOS
+            return value == "true"
+        }
+
+    /**
+     * enableLaunchOnScenario
+     */
+    val enableLaunchOnScenario: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableLaunchOnScenario")
+                ?: return Const.ENABLE_RERUN_SCENARIO
             return value == "true"
         }
 

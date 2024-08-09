@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import com.google.common.collect.ImmutableMap
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
@@ -89,14 +90,44 @@ fun TestDrive.pressBack(
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
         if (isAndroid) {
-            TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.BACK))
+            if (canSelect(PropertiesManager.pressBackSelector)) {
+                it.tap()
+                return@execOperateCommand
+            }
+
+            if (platformMajorVersion <= 9) {
+                driver.androidDriver.navigate().back()
+            } else {
+                TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.BACK))
+            }
             TestDriver.invalidateCache()
         } else {
-//            tap("${driver.appIconName}")
             tap(x = 50, y = 10)
         }
         invalidateCache()
         wait(waitSeconds = waitSeconds)
+    }
+
+    return TestElement.emptyElement
+}
+
+/**
+ * goBack
+ */
+fun TestDrive.goBack(): TestElement {
+
+    val testElement = TestDriver.it
+
+    val command = "swipeBack"
+    val message = message(id = command)
+    val context = TestDriverCommandContext(testElement)
+    context.execOperateCommand(command = command, message = message) {
+        if (isAndroid) {
+            driver.androidDriver.navigate().back()
+        } else {
+            driver.iosDriver.navigate().back()
+        }
+        invalidateCache()
     }
 
     return TestElement.emptyElement

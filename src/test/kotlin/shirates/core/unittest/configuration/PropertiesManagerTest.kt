@@ -1346,6 +1346,31 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableLaunchAppOnScenario() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableLaunchOnScenario).isEqualTo(Const.ENABLE_LAUNCH_APP_ON_SCENARIO)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableLaunchOnScenario", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableLaunchOnScenario).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableLaunchOnScenario", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableLaunchOnScenario).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableRerunScenario() {
 
         run {
@@ -1667,6 +1692,24 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("tapTestSelector", value)
             // Act, Assert
             assertThat(PropertiesManager.tapTestSelector).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun pressBackSelector() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.pressBackSelector).isEqualTo(Const.TAP_TEST_SELECTOR)
+        }
+        run {
+            // Arrange
+            val value = "@Navigate Back"
+            PropertiesManager.setPropertyValue("pressBackSelector", value)
+            // Act, Assert
+            assertThat(PropertiesManager.pressBackSelector).isEqualTo(value)
         }
     }
 

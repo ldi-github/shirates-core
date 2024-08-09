@@ -543,7 +543,7 @@ abstract class UITest : TestDrive {
         scenarioId: String? = currentTestMethodName,
         order: Int? = currentOrder,
         desc: String = currentDisplayName,
-        launchApp: Boolean = true,
+        launchApp: Boolean = PropertiesManager.enableLaunchOnScenario,
         useCache: Boolean? = null,
         testProc: () -> Unit
     ) {
@@ -740,6 +740,7 @@ abstract class UITest : TestDrive {
 
             silent {
                 if (launchApp && testDrive.isAppInstalled()) {
+                    terminateApp()
                     if (isiOS && isRealDevice) {
                         testDrive.tapAppIcon()
                     } else {
