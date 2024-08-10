@@ -16,7 +16,10 @@
     "[Contribute Tab(selected)]": "#contribute_tab_strip_button&&selected=true",
 
     "[Updates Tab]": "#updates_tab_strip_button",
-    "[Updates Tab(selected)]": "#updates_tab_strip_button&&selected=true"
+    "[Updates Tab(selected)]": "#updates_tab_strip_button&&selected=true",
+
+    "[You Tab]": "#saved_tab_strip_button",
+    "[You Tab(selected)]": "#saved_tab_strip_button&&selected=true"
   }
 
 }
