@@ -17,7 +17,6 @@ import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isNoLoadRun
-import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
@@ -760,15 +759,8 @@ abstract class UITest : TestDrive {
                 TestLog.info("No-Load-Run mode")
             }
 
-            silent {
-                if (launchApp && testDrive.isAppInstalled()) {
-                    terminateApp()
-                    if (isiOS && isRealDevice) {
-                        testDrive.tapAppIcon()
-                    } else {
-                        testDrive.launchApp()
-                    }
-                }
+            if (launchApp && testDrive.isAppInstalled()) {
+                testDrive.launchApp()
             }
 
             testProc()

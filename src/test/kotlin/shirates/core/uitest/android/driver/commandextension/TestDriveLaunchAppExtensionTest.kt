@@ -2,7 +2,9 @@ package shirates.core.uitest.android.driver.commandextension
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.appIs
+import shirates.core.driver.commandextension.launchApp
+import shirates.core.driver.commandextension.terminateApp
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
@@ -27,7 +29,7 @@ class TestDriveLaunchAppExtensionTest : UITest() {
                 condition {
                     it.terminateApp("[Settings]")
                 }.action {
-                    it.launchApp("[Settings]")
+                    it.launchApp("Settings")
                 }.expectation {
                     it.appIs("[Settings]")
                 }
