@@ -1381,15 +1381,15 @@ class PropertiesManagerTest : UnitTest() {
         }
         run {
             // Arrange
-            val value = true
-            PropertiesManager.setPropertyValue("launchAppMethod", value.toString())
+            val value = "shell"
+            PropertiesManager.setPropertyValue("launchAppMethod", value)
             // Act, Assert
             assertThat(PropertiesManager.launchAppMethod).isEqualTo(value)
         }
         run {
             // Arrange
-            val value = false
-            PropertiesManager.setPropertyValue("launchAppMethod", value.toString())
+            val value = "auto"
+            PropertiesManager.setPropertyValue("launchAppMethod", value)
             // Act, Assert
             assertThat(PropertiesManager.launchAppMethod).isEqualTo(value)
         }

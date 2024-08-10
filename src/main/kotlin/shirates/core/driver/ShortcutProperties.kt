@@ -1,5 +1,8 @@
 package shirates.core.driver
 
+import shirates.core.configuration.TestProfile
+import shirates.core.testcode.UITestCallbackExtension
+
 /**
  * testDrive
  */
@@ -49,4 +52,12 @@ val sourceXml: String
 val testContext: TestContext
     get() {
         return TestDriver.testContext
+    }
+
+/**
+ * testProfile
+ */
+val testProfile: TestProfile
+    get() {
+        return UITestCallbackExtension.uiTest!!.testProfile
     }
