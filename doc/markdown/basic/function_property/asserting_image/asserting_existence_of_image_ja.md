@@ -42,10 +42,8 @@ class ExistDontExist2 : UITest() {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
                     it.existImage("[Explore Tab(selected)]")
-                        .existImage("[Go Tab]")
-                        .existImage("[Saved Tab]")
+                        .existImage("[You Tab]")
                         .existImage("[Contribute Tab]")
-                        .existImage("[Updates Tab]")
                 }
             }
         }
@@ -133,10 +131,8 @@ class ExistDontExist2 : UITest() {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
                     it.existImage("[Explore Tab(selected)]")
-                        .existImage("[Go Tab]")
-                        .existImage("[Saved Tab]")
+                        .existImage("[You Tab]")
                         .existImage("[Contribute Tab]")
-                        .existImage("[Updates Tab]")
                 }
             }
         }

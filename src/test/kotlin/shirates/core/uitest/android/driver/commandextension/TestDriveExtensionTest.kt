@@ -113,15 +113,16 @@ class TestDriveExtensionTest : UITest() {
         scenario {
             case(1) {
                 condition {
+                    terminateApp("[Maps]")
                     it.macro("[Maps Top Screen]")
-                        .select("#explore_tab_strip_button")
+                    it.select("#explore_tab_strip_button")
                         .cropImage("Explore(selected).png")
-                        .select("#transportation_tab_strip_button")
-                        .cropImage("Go.png")
+                    it.select("#saved_tab_strip_button")
+                        .cropImage("You.png")
 
                     ImageFileRepository.clear()
                     ImageFileRepository.setFile(TestLog.directoryForLog.resolve("Explore(selected).png"))
-                    ImageFileRepository.setFile(TestLog.directoryForLog.resolve("Go.png"))
+                    ImageFileRepository.setFile(TestLog.directoryForLog.resolve("You.png"))
 
                     it.launchApp("Maps")
                         .wait()
@@ -135,14 +136,14 @@ class TestDriveExtensionTest : UITest() {
                         .imageIs("Explore(selected).png")
                     it.select("#explore_tab_strip_button")
                         .isImage("Explore(selected).png").thisIsTrue()
-                    it.select("#transportation_tab_strip_button").imageIs("Go.png?t=1.5")
-                        .isImage("Go.png?t=1.5").thisIsTrue()
-                    it.existImage("Go.png")
+                    it.select("#saved_tab_strip_button").imageIs("You.png?t=1.5")
+                        .isImage("You.png?t=1.5").thisIsTrue()
+                    it.existImage("You.png")
                 }
             }
             case(2) {
                 expectation {
-                    rootElement.isContainingImage("Go.png?t=1.5").thisIsTrue()
+                    rootElement.isContainingImage("You.png?t=1.5").thisIsTrue()
                 }
             }
         }
