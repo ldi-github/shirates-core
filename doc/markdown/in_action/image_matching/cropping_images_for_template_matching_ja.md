@@ -40,40 +40,22 @@ class CroppingImages1 : UITest() {
                 }.action {
                     rootElement.cropImage("[Maps Top Screen].png")
                     it.select("[Explore Tab]").cropAndCopy("[Explore Tab Image(selected)].png")
-                    it.select("[Go Tab]").cropAndCopy("[Go Tab Image].png")
-                    it.select("[Saved Tab]").cropAndCopy("[Saved Tab Image].png")
+                    it.select("[You Tab]").cropAndCopy("[Saved Tab Image].png")
                     it.select("[Contribute Tab]").cropAndCopy("[Contribute Tab Image].png")
-                    it.select("[Updates Tab]").cropAndCopy("[Updates Tab Image].png")
                 }
             }
             case(2) {
                 action {
-                    it.tap("[Go Tab]")
-                        .screenIs("[Maps Go Screen]")
-                        .wait()
-                    it.select("[Explore Tab]").cropAndCopy("[Explore Tab Image].png")
-                    it.select("[Go Tab]").cropAndCopy("[Go Tab Image(selected)].png")
+                    it.tap("[You Tab]")
+                        .wait()     // wait for animation to complete
+                    it.select("[You Tab]").cropAndCopy("[You Tab Image(selected)].png")
                 }
             }
             case(3) {
                 action {
-                    it.tap("[Saved Tab]")
-                        .wait()     // wait for animation to complete
-                    it.select("[Saved Tab]").cropAndCopy("[Saved Tab Image(selected)].png")
-                }
-            }
-            case(4) {
-                action {
                     it.tap("[Contribute Tab]")
                         .wait()     // wait for animation to complete
                     it.select("[Contribute Tab]").cropAndCopy("[Contribute Tab Image(selected)].png")
-                }
-            }
-            case(5) {
-                action {
-                    it.tap("[Updates Tab]")
-                        .wait()     // wait for animation to complete
-                    it.select("[Updates Tab]").cropAndCopy("[Updates Tab Image(selected)].png")
                 }
             }
         }

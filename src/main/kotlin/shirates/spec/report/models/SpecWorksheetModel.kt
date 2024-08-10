@@ -70,10 +70,27 @@ class SpecWorksheetModel(
              * Result commands
              */
 
-            LogType.OK.label,
-            LogType.NG.label,
+            LogType.OK.label -> {
+                setResult(commandItem)
+                addDescription(commandItem)
+            }
+
+            LogType.NG.label -> {
+                setResult(commandItem)
+                addDescription(commandItem)
+            }
+
             LogType.CHECK.label -> {
                 setResult(commandItem)
+                addDescription(commandItem)
+            }
+
+            LogType.ERROR.label -> {
+                setResult(commandItem)
+                if (commandItem.message.startsWith("@Fail(")) {
+                    current.result = "ERROR"
+                    current.supplement = commandItem.message.trim()
+                }
                 addDescription(commandItem)
             }
 
@@ -84,10 +101,6 @@ class SpecWorksheetModel(
 
             LogType.MANUAL.label -> {
                 setResult(commandItem)
-                addDescription(commandItem)
-            }
-
-            LogType.KNOWNISSUE.label -> {
                 addDescription(commandItem)
             }
 
@@ -125,15 +138,9 @@ class SpecWorksheetModel(
                 setResult(commandItem)
             }
 
-            LogType.ERROR.label -> {
+            LogType.KNOWNISSUE.label -> {
                 setResult(commandItem)
-                if (commandItem.message.startsWith("@Fail(")) {
-                    current.result = "ERROR"
-                    current.supplement = commandItem.message.trim()
-                }
-                addDescription(commandItem)
             }
-
 
             /**
              * NON-Result commands
@@ -287,7 +294,9 @@ class SpecWorksheetModel(
         if (data.specReportExcludeDetail
             && current.conditions.isEmpty()
             && current.actions.isEmpty()
+            && commandItem.auto == "M"
             && commandItem.command != "screenIs"
+            && commandItem.result != "DELETED"
         ) {
             commandItem.result = "EXCLUDED"
         }
@@ -296,19 +305,23 @@ class SpecWorksheetModel(
             newCase()
         }
 
-        val auto =
-            if (commandItem.result == "MANUAL") "M"
-            else commandItem.auto
+        val auto = commandItem.auto
+
+        current.environment = commandItem.environment.ifBlank { data.environment }
 
         fun setExecutionInfo() {
             current.auto = auto
             current.date = data.testDate
             current.tester = data.tester
-            current.environment = data.environment
             current.build = data.appBuild
         }
 
         when (commandItem.result) {
+            "NONE" -> {
+                current.result = "NONE"
+                current.auto = auto
+            }
+
             "OK" -> {
                 if (current.result.isBlank()) {
                     current.result = "OK"
@@ -327,16 +340,6 @@ class SpecWorksheetModel(
                 setExecutionInfo()
             }
 
-            "SUSPENDED" -> {
-                current.result = "SUSPENDED"
-                setExecutionInfo()
-            }
-
-            "NONE" -> {
-                current.result = "NONE"
-                current.auto = auto
-            }
-
             "COND_AUTO" -> {
                 if (current.result.isBlank()) {
                     current.result =
@@ -347,9 +350,7 @@ class SpecWorksheetModel(
             }
 
             "MANUAL" -> {
-                if (current.result.isBlank()) {
-                    current.result = "MANUAL"
-                }
+                current.result = "NONE"
                 current.auto = auto
             }
 
@@ -368,6 +369,11 @@ class SpecWorksheetModel(
                 current.auto = auto
             }
 
+            "IMPORTANT" -> {
+                current.result = "IMPORTANT"
+                current.auto = auto
+            }
+
             "DELETED" -> {
                 current.result = "DELETED"
                 current.auto = auto
@@ -377,13 +383,14 @@ class SpecWorksheetModel(
                 if (current.result.isBlank()) {
                     current.result = "KNOWNISSUE"
                 }
+                current.supplement = listOf(current.supplement, commandItem.message).filter { it.isNotBlank() }
+                    .joinToString("\n").trim()
             }
-        }
 
-
-        if (commandItem.result == "KNOWNISSUE") {
-            current.supplement = listOf(current.supplement, commandItem.message).filter { it.isNotBlank() }
-                .joinToString("\n")
+            else -> {
+                current.result = commandItem.result
+                current.auto = auto
+            }
         }
 
         return current
@@ -526,6 +533,8 @@ class SpecWorksheetModel(
         if (commandItem.mode == "MANUAL") {
             current.result = "@Manual"
         }
+        current.environment = commandItem.environment
+        current.supplement = commandItem.supplement
 
         return current
     }

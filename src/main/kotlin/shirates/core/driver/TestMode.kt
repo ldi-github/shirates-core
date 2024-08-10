@@ -105,6 +105,16 @@ object TestMode {
             return isManualingScenario || isManualingCase
         }
 
+    val environment: String
+        get() {
+            return UITestCallbackExtension.environmentAnnotation?.environment ?: ""
+        }
+
+    val manualSupplement: String
+        get() {
+            return UITestCallbackExtension.manualAnnotation?.supplement ?: ""
+        }
+
     /**
      * isAndroid
      */

@@ -43,6 +43,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         var failOfTestContext = false
         var failAnnotation: Fail? = null
         var deletedAnnotation: Deleted? = null
+        var manualAnnotation: Manual? = null
+        var environmentAnnotation: Environment? = null
 
         var enableCache: Boolean? = null
 
@@ -130,6 +132,9 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failOfTestContext = context.isMethodAnnotated(Fail::class)
         failAnnotation = context.getMethodAnnotation(Fail::class) ?: context.getClassAnnotation(Fail::class)
         deletedAnnotation = context.getMethodAnnotation(Deleted::class) ?: context.getClassAnnotation(Deleted::class)
+        manualAnnotation = context.getMethodAnnotation(Manual::class) ?: context.getClassAnnotation(Manual::class)
+        environmentAnnotation =
+            context.getMethodAnnotation(Environment::class) ?: context.getClassAnnotation(Environment::class)
 
         if (context.isClassAnnotated(DisableCache::class) && context.isClassAnnotated(EnableCache::class)) {
             throw TestConfigException("Do not use @EnableCache and @DisableCache on a class.")
@@ -182,12 +187,21 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
             // print config
             if (TestLog.configPrinted.not()) {
-                val profile = testContext.profile
+                val profile = uiTest!!.testProfile!!
                 val testConfig = profile.testConfig
                 ParameterRepository.write("testrun", PropertiesManager.testrunFile)
-                ParameterRepository.write("testConfigName", "${profile.testConfigName}(${testConfig?.testConfigFile})")
-                ParameterRepository.write("profileName", profile.profileName)
-                ParameterRepository.write("appIconName", "${profile.appIconName}")
+                if (profile.testConfigName.isNullOrBlank().not() && testConfig?.testConfigFile.isNullOrBlank().not()) {
+                    ParameterRepository.write(
+                        "testConfigName",
+                        "${profile.testConfigName ?: ""}(${testConfig?.testConfigFile ?: ""})"
+                    )
+                }
+                if (profile.profileName.isBlank().not()) {
+                    ParameterRepository.write("profileName", profile.profileName)
+                }
+                if (profile.appIconName.isNullOrBlank().not()) {
+                    ParameterRepository.write("appIconName", profile.appIconName ?: "")
+                }
                 if (profile.noLoadRun?.toBoolean() == true) {
                     ParameterRepository.write("noLoadRun", "true")
                 }

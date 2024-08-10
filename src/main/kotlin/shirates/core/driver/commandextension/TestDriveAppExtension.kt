@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.driver.*
@@ -9,8 +10,8 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.storage.app
+import shirates.core.storage.appIconName
 import shirates.core.utility.misc.AppNameUtility
-import shirates.core.utility.sync.SyncUtility
 
 /**
  * isAppInstalled
@@ -165,6 +166,7 @@ fun TestDrive.restartApp(
  */
 fun TestDrive.launchApp(
     appNameOrAppIdOrActivityName: String = testContext.appIconName,
+    launchAppMethod: String = PropertiesManager.launchAppMethod,
     fallBackToTapAppIcon: Boolean = true,
     sync: Boolean = true,
     onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
@@ -178,59 +180,113 @@ fun TestDrive.launchApp(
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message, subject = subject) {
 
-        if (appNameOrAppIdOrActivityName.contains("/")) {
-            val activityName = appNameOrAppIdOrActivityName
-            TestDriver.launchAppCore(packageOrBundleIdOrActivity = activityName)
-            return@execOperateCommand
-        }
+        terminateApp(appNameOrAppIdOrActivityName)
 
-        val packageOrBundleId =
-            AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName)
-        if (packageOrBundleId.isBlank()) {
-            if (fallBackToTapAppIcon) {
-                TestDriver.tapAppIconCore(appIconName = appNameOrAppIdOrActivityName)
-                return@execOperateCommand
-            } else {
-                throw IllegalArgumentException(
-                    message(
-                        id = "failedToGetPackageOrBundleId",
-                        arg1 = "appNameOrAppId=$appNameOrAppIdOrActivityName"
-                    )
-                )
-            }
-        }
+        TestLog.info("launchAppMethod: $launchAppMethod")
 
-        if (TestDriver.testContext.isRemoteServer) {
-            TestDriver.tapAppIconCore(appNameOrAppIdOrActivityName)
-            SyncUtility.doUntilTrue {
-                invalidateCache()
-                isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
-            }
-        } else if (isAndroid) {
-            TestDriver.launchAppCore(
-                packageOrBundleIdOrActivity = packageOrBundleId,
+        fun launchAppByShellAction() {
+            launchAppByShell(
+                appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName,
+                fallBackToTapAppIcon = fallBackToTapAppIcon,
                 sync = sync,
                 onLaunchHandler = onLaunchHandler
             )
-        } else if (TestMode.isiOS) {
-            if (isSimulator) {
-                TestDriver.launchAppCore(
-                    packageOrBundleIdOrActivity = packageOrBundleId,
-                    sync = sync,
-                    onLaunchHandler = onLaunchHandler
-                )
+        }
+
+        if (launchAppMethod == "shell") {
+            /**
+             * by shell
+             */
+            launchAppByShellAction()
+
+        } else if (launchAppMethod == "tapAppIcon") {
+            /**
+             * by tapAppIcon
+             */
+            tapAppIcon(appIconName = appNameOrAppIdOrActivityName)
+
+        } else if (launchAppMethod.startsWith("[") && launchAppMethod.endsWith("]")) {
+            /**
+             * by macro
+             */
+            macro(macroName = launchAppMethod, appNameOrAppIdOrActivityName)
+
+        } else {
+            val isAppId = appNameOrAppIdOrActivityName.contains("[").not() &&
+                    appNameOrAppIdOrActivityName.split(".").count() >= 2
+            /**
+             * auto
+             */
+            if (isAppId) {
+                /**
+                 * appId or activityName
+                 * e.g. com.android.settings
+                 */
+                launchAppByShellAction()
+
             } else {
-                TestDriver.tapAppIconCore(appNameOrAppIdOrActivityName)
-                if (sync) {
-                    SyncUtility.doUntilTrue {
-                        invalidateCache()
-                        isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+                /**
+                 * appName
+                 */
+                if (TestMode.isVirtualDevice) {
+                    /**
+                     * For stability workaround.
+                     * Launching emulator/simulator by shell(adb/xcrun) may fail to launch app on parallel execution.
+                     * Tapping is more stable.
+                     */
+                    val appIconName = appIconName(datasetName = appNameOrAppIdOrActivityName)
+                    if (appIconName.isNotBlank()) {
+                        tapAppIcon(appIconName = appIconName)
+                    } else {
+                        launchAppByShellAction()
                     }
+                } else {
+                    launchAppByShellAction()
                 }
             }
         }
+
     }
 
     return lastElement
 }
+
+/**
+ * launchAppByShell
+ *
+ * @param appNameOrAppIdOrActivityName
+ * Nickname [App1]
+ * or appName App1
+ * or packageOrBundleId com.example.app1
+ * or activityName com.android.settings/.Settings
+ */
+fun TestDrive.launchAppByShell(
+    appNameOrAppIdOrActivityName: String = testContext.appIconName,
+    launchAppMethod: String = PropertiesManager.launchAppMethod,
+    fallBackToTapAppIcon: Boolean = true,
+    sync: Boolean = true,
+    onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
+): TestElement {
+
+    val testElement = TestElement.emptyElement
+
+    val command = "launchApp"
+    val subject = Selector(appNameOrAppIdOrActivityName).toString()
+    val message = message(id = command, subject = subject)
+    val context = TestDriverCommandContext(testElement)
+    context.execOperateCommand(command = command, message = message, subject = subject) {
+
+        TestLog.info("launchAppMethod: $launchAppMethod")
+
+        TestDriver.launchByShell(
+            appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName,
+            fallBackToTapAppIcon = fallBackToTapAppIcon,
+            sync = sync,
+            onLaunchHandler = onLaunchHandler
+        )
+    }
+
+    return lastElement
+}
+
 

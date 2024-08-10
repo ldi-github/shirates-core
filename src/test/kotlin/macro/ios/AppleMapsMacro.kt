@@ -1,8 +1,11 @@
 package macro.ios
 
-import okhttp3.internal.wait
 import shirates.core.driver.TestDrive
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.branchextension.ifCanSelect
+import shirates.core.driver.commandextension.launchApp
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.tap
+import shirates.core.driver.wait
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
 
@@ -12,39 +15,12 @@ object AppleMapsMacro : TestDrive {
     @Macro("[Apple Maps Top Screen]")
     fun appleMapsToScreen() {
 
-        it.refreshCache()
-
-        if (canSelect(".XCUIElementTypeButton&&Close")) {
+        launchApp("Maps")
+        wait(5)
+        ifCanSelect("Close") {
             it.tap()
         }
-        if (canSelect("Cancel")) {
-            it.tap()
-        }
-        if (isScreen("[Apple Maps Top Screen]")) {
-            return
-        }
-
-        it.pressHome()
-            .pressHome()
-            .launchApp("Maps")
-
-        if (canSelect("Not Now")) {
-            it.tap()
-        }
-        if (canSelect("Cancel")) {
-            it.tap()
-        }
-        if (canSelect("Close")) {
-            it.tap()
-        }
-        if (canSelect("Dismiss")) {
-            it.tap()
-        }
-        if (canSelect("What’s New in Maps")) {
-            it.tap("Continue")
-            it.wait()
-        }
-        if (canSelect("Allow While Using App")) {
+        ifCanSelect("Close") {
             it.tap()
         }
         it.screenIs("[Apple Maps Top Screen]")

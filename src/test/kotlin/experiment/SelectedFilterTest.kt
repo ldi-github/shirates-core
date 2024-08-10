@@ -22,11 +22,11 @@ class SelectedFilterTest : UITest() {
                 }.action {
                 }.expectation {
                     it.exist("Explore&&selected=true")
-                    it.exist("Go&&selected=false")
+                    it.exist("You&&selected=false")
                     it.dontExist("Explore&&selected=false")
-                    it.dontExist("Go&&selected=true")
+                    it.dontExist("You&&selected=true")
                     it.exist("[Explore Tab(selected)]")
-                    it.dontExist("[Go Tab(selected)]")
+                    it.dontExist("[You Tab(selected)]")
                 }
             }
         }

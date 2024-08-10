@@ -8,10 +8,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.function.clearClipboard
 import shirates.core.driver.function.readClipboard
 import shirates.core.driver.function.writeClipboard
-import shirates.core.storage.Clipboard
-import shirates.core.storage.account
-import shirates.core.storage.app
-import shirates.core.storage.data
+import shirates.core.storage.*
 import shirates.core.testcode.Manual
 import shirates.core.testcode.UITest
 
@@ -68,6 +65,8 @@ class NoLoadRunTest : UITest() {
                     assertThat(account("[account1]", "key")).isEqualTo("[account1].key")
                     assertThat(data("[data1].key")).isEqualTo("[data1].key")
                     assertThat(data("[data1]", "key")).isEqualTo("[data1].key")
+                    assertThat(appId("[App1]")).isEqualTo("com.example.app1")
+                    assertThat(appIconName("[App1]")).isEqualTo("appIconName")
                 }
             }
         }

@@ -25,8 +25,8 @@ class Selector(
     var command: String? = null,
     var relativeSelectors: MutableList<Selector> = mutableListOf(),
     var screenInfo: ScreenInfo? = null,
-    var orSelectors: MutableList<Selector> = mutableListOf(),   // Splitted with ||
-    var alternativeSelectors: MutableList<Selector> = mutableListOf()   // Splitted with |||
+    var orSelectors: MutableList<Selector> = mutableListOf(),   // Split with ||
+    var alternativeSelectors: MutableList<Selector> = mutableListOf()   // Split with |||
 ) {
     var originalExpression: String? = null
 
@@ -78,14 +78,6 @@ class Selector(
             this["textMatches"] = value
         }
 
-    var id: String?
-        get() {
-            return getFieldValue("id")
-        }
-        set(value) {
-            this["id"] = value
-        }
-
     var image: String?
         get() {
             return getFieldValue("image")
@@ -98,6 +90,46 @@ class Selector(
         get() {
             val filter = getFilter(key = "image")
             return filter?.imageMatchResult?.templateImage
+        }
+
+    var id: String?
+        get() {
+            return getFieldValue("id")
+        }
+        set(value) {
+            this["id"] = value
+        }
+
+    var idStartsWith: String?
+        get() {
+            return getFieldValue("idStartsWith")
+        }
+        set(value) {
+            this["idStartsWith"] = value
+        }
+
+    var idContains: String?
+        get() {
+            return getFieldValue("idContains")
+        }
+        set(value) {
+            this["idContains"] = value
+        }
+
+    var idEndsWith: String?
+        get() {
+            return getFieldValue("idEndsWith")
+        }
+        set(value) {
+            this["idEndsWith"] = value
+        }
+
+    var idMatches: String?
+        get() {
+            return getFieldValue("idMatches")
+        }
+        set(value) {
+            this["idMatches"] = value
         }
 
     var access: String?
@@ -1387,14 +1419,6 @@ class Selector(
     }
 
     /**
-     * evaluateId
-     */
-    fun evaluateId(element: TestElement): Boolean {
-
-        return evaluate(filterName = "id", value = element.idOrName)
-    }
-
-    /**
      * evaluateClassName
      */
     fun evaluateClassName(element: TestElement): Boolean {
@@ -1424,6 +1448,46 @@ class Selector(
     fun evaluateTextStartsWith(element: TestElement): Boolean {
 
         return getFilter("textStartsWith")?.evaluate(element = element) ?: true
+    }
+
+    /**
+     * evaluateId
+     */
+    fun evaluateId(element: TestElement): Boolean {
+
+        return evaluate(filterName = "id", value = element.idOrName)
+    }
+
+    /**
+     * evaluateIdStartsWith
+     */
+    fun evaluateIdStartsWith(element: TestElement): Boolean {
+
+        return getFilter("idStartsWith")?.evaluate(element = element) ?: true
+    }
+
+    /**
+     * evaluateIdContains
+     */
+    fun evaluateIdContains(element: TestElement): Boolean {
+
+        return getFilter("idContains")?.evaluate(element = element) ?: true
+    }
+
+    /**
+     * evaluateIdEndsWith
+     */
+    fun evaluateIdEndsWith(element: TestElement): Boolean {
+
+        return getFilter("idEndsWith")?.evaluate(element = element) ?: true
+    }
+
+    /**
+     * evaluateIdMatches
+     */
+    fun evaluateIdMatches(element: TestElement): Boolean {
+
+        return getFilter("idMatches")?.evaluate(element = element) ?: true
     }
 
     /**

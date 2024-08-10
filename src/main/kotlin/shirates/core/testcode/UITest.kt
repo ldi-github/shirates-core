@@ -17,7 +17,6 @@ import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isNoLoadRun
-import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
@@ -48,6 +47,11 @@ abstract class UITest : TestDrive {
      * ExtensionContext
      */
     var extensionContext: ExtensionContext? = null
+
+    /**
+     * testProfile
+     */
+    var testProfile: TestProfile = TestProfile()
 
     /**
      * testConfig
@@ -217,7 +221,7 @@ abstract class UITest : TestDrive {
         TestLog.info(Const.SEPARATOR_LONG)
 
         PropertiesManager.setup(testrunFile = testrunFile)
-        TestMode.testTimeNoLoadRun = PropertiesManager.getPropertyValue("noLoadRun") == "true"
+        TestMode.testTimeNoLoadRun = PropertiesManager.noLoadRun
         prepareTestLog()
 
         if (Files.exists(testrunFile.toPath())) {
@@ -268,7 +272,7 @@ abstract class UITest : TestDrive {
         try {
             val configPath = configFile.toPath()
             var testConfigName = configPath.toFile().nameWithoutExtension
-            if (isNoLoadRun) {
+            if (PropertiesManager.noLoadRun) {
                 testConfigName = testConfigName.split("@").first()
             }
 
@@ -310,6 +314,7 @@ abstract class UITest : TestDrive {
                 configPath = configPath,
                 profileName = profileName
             )
+            testProfile = profile
 
             // setup ScreenRepository
             ScreenRepository.setup(
@@ -353,6 +358,7 @@ abstract class UITest : TestDrive {
             TestDriver.setupContext(testContext = testContext)
 
             if (isNoLoadRun) {
+                TestDriver.quit()
                 return
             }
 
@@ -471,68 +477,83 @@ abstract class UITest : TestDrive {
      * SKIP_SCENARIO
      */
     open fun SKIP_SCENARIO(
-        message: String = message(id = "SKIP_SCENARIO")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isSkippingScenario = true
-            TestLog.skipScenario(message)
-            return
+        message: String = message(id = "SKIP_SCENARIO"),
+        predicate: () -> Boolean = {
+            true
         }
-        driver.screenshotCore()
-        TestLog.skipScenario(message)
-        isSkippingScenario = true
-        testSkipped = true
+    ) {
+        if (predicate()) {
+            if (TestMode.isNoLoadRun) {
+                isSkippingScenario = true
+                TestLog.skipScenario(message)
+                return
+            }
+            driver.screenshotCore()
+            TestLog.skipScenario(message)
+            isSkippingScenario = true
+            testSkipped = true
+        }
     }
 
     /**
      * SKIP_CASE
      */
     open fun SKIP_CASE(
-        message: String = message(id = "SKIP_CASE")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isSkippingCase = true
-            TestLog.skipCase(message)
-            return
+        message: String = message(id = "SKIP_CASE"),
+        predicate: () -> Boolean = {
+            true
         }
-        driver.screenshotCore()
-        TestLog.skipCase(message)
-        isSkippingCase = true
-        testSkipped = true
+    ) {
+        if (predicate()) {
+            if (TestMode.isNoLoadRun) {
+                isSkippingCase = true
+                TestLog.skipCase(message)
+                return
+            }
+            driver.screenshotCore()
+            TestLog.skipCase(message)
+            isSkippingCase = true
+            testSkipped = true
+        }
     }
 
     /**
      * MANUAL_SCENARIO
      */
     open fun MANUAL_SCENARIO(
-        message: String = message(id = "MANUAL_SCENARIO")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isManualingScenario = true
-            TestLog.manualScenario(message)
-            return
+        message: String = message(id = "MANUAL_SCENARIO"),
+        predicate: () -> Boolean = {
+            true
         }
-        driver.screenshotCore()
-        TestLog.manualScenario(message)
-        isManualingScenario = true
-        testSkipped = true
+    ) {
+        if (predicate()) {
+            if (isNoLoadRun.not()) {
+                driver.screenshotCore()
+            }
+            driver.screenshotCore()
+            TestLog.manualScenario(message)
+            isManualingScenario = true
+            testSkipped = true
+        }
     }
 
     /**
      * MANUAL_CASE
      */
     open fun MANUAL_CASE(
-        message: String = message(id = "MANUAL_CASE")
-    ) {
-        if (TestMode.isNoLoadRun) {
-            isManualingCase = true
-            TestLog.manualCase(message)
-            return
+        message: String = message(id = "MANUAL_CASE"),
+        predicate: () -> Boolean = {
+            true
         }
-        driver.screenshotCore()
-        TestLog.manualCase(message)
-        isManualingCase = true
-        testSkipped = true
+    ) {
+        if (predicate()) {
+            if (isNoLoadRun.not()) {
+                driver.screenshotCore()
+            }
+            TestLog.manualCase(message)
+            isManualingCase = true
+            testSkipped = true
+        }
     }
 
 
@@ -543,7 +564,7 @@ abstract class UITest : TestDrive {
         scenarioId: String? = currentTestMethodName,
         order: Int? = currentOrder,
         desc: String = currentDisplayName,
-        launchApp: Boolean = true,
+        launchApp: Boolean = PropertiesManager.enableLaunchOnScenario,
         useCache: Boolean? = null,
         testProc: () -> Unit
     ) {
@@ -739,9 +760,7 @@ abstract class UITest : TestDrive {
             }
 
             if (launchApp && testDrive.isAppInstalled()) {
-                if (isiOS && isRealDevice) {
-                    testDrive.tapAppIcon()
-                } else {
+                silent {
                     testDrive.launchApp()
                 }
             }

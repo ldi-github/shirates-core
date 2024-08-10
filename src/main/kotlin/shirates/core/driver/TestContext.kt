@@ -206,12 +206,12 @@ class TestContext(
 
     val isLocalServer: Boolean
         get() {
-            return UrlUtility.isLocal(testProfile.appiumServerUrl)
+            return UrlUtility.isLocal(profile.appiumServerUrl)
         }
 
     val isRemoteServer: Boolean
         get() {
-            return UrlUtility.isRemote(testProfile.appiumServerUrl)
+            return UrlUtility.isRemote(profile.appiumServerUrl)
         }
 
     @SaveTarget

@@ -36,6 +36,10 @@ Shirates **Filter expression** is expression describing conditions to filter scr
 | textMatches      | textMatches=^text$        | n/a          | text              | label         |            |
 | literal          | literal=literal1          | 'literal1'   | text              | label         |            |
 | id               | id=id1                    | #id1         | resource-id       | name          |            |
+| idStartsWith     | idStartsWith=id1          | #id1*        | resource-id       | name          |            |
+| idContains       | idContains=id1            | #\*id1*      | resource-id       | name          |            |
+| idEndsWith       | idEndsWith=id1            | #*id1        | resource-id       | name          |            |
+| idMatches        | idMatches=^id1$           | n/a          | resource-id       | name          |            |
 | access           | access=access1            | @access1     | content-desc      | name          |            |
 | accessStartsWith | accessStartsWith=access1  | @access1*    | content-desc      | name          |            |
 | accessContains   | accessContains=access1    | @\*access1*  | content-desc      | name          |            |

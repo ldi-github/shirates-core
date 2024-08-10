@@ -9,7 +9,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.selectWithScrollDown
 import shirates.core.driver.commandextension.textIs
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.Manual
 import shirates.core.testcode.SheetName
@@ -70,10 +69,10 @@ class SpecReport_skipManualTest : UITest() {
 
         scenarioCore(
             func1 = {
-                MANUAL_CASE("Manualing case(1)")
+                MANUAL_CASE("Execute test manually after this row in this case.")
             },
             func2 = {
-                MANUAL_SCENARIO("Manualing scenario")
+                MANUAL_SCENARIO("Execute test manually after this row in this scenario.")
             }
         )
     }
@@ -85,10 +84,10 @@ class SpecReport_skipManualTest : UITest() {
 
         scenarioCore(
             func1 = {
-                MANUAL_CASE("Manualing case(1)")
+                MANUAL_CASE("Execute test manually after this row in this case.")
             },
             func2 = {
-                MANUAL_SCENARIO("Manualing scenario")
+                MANUAL_SCENARIO("Execute test manually after this row in this scenario.")
             }
         )
     }
@@ -170,9 +169,13 @@ class SpecReport_skipManualTest : UITest() {
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             ok = 4,
-            manual = 13,
+            na = 13,
             skip = 3,
-            total = 20
+            total = 20,
+            m = 13,
+            m_na = 13,
+            a_ca = 7,
+            a_ca_na = 0
         )
 
         /**
@@ -213,7 +216,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Network & internet> is "Network & internet"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 12,
@@ -229,7 +232,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Connected devices> is "Connected devices"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 13,
@@ -242,7 +245,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Apps> is "Apps"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 14,
@@ -258,7 +261,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Notifications> is "Notifications"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 15,
@@ -271,7 +274,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Tips & support> is "Tips & support"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
 
 // s11
@@ -388,14 +391,14 @@ class SpecReport_skipManualTest : UITest() {
 - <Network & internet> is "Network & internet"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 24,
                 id = 15,
                 step = "2",
                 condition = """
-- MANUAL_CASE(Manualing case(1))
+- MANUAL_CASE(Execute test manually after this row in this case.)
 """.trimIndent(),
                 action = """
 - Select <Connected devices> (scroll down)
@@ -404,7 +407,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Connected devices> is "Connected devices"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 25,
@@ -417,14 +420,14 @@ class SpecReport_skipManualTest : UITest() {
 - <Apps> is "Apps"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 26,
                 id = 17,
                 step = "4",
                 condition = """
-- MANUAL_SCENARIO(Manualing scenario)
+- MANUAL_SCENARIO(Execute test manually after this row in this scenario.)
 """.trimIndent(),
                 action = """
 - Select <Notifications> (scroll down)
@@ -433,7 +436,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Notifications> is "Notifications"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
             assertRow(
                 rowNum = 27,
@@ -446,7 +449,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Tips & support> is "Tips & support"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL"
+                result = "N/A"
             )
 
 // s21
@@ -479,7 +482,7 @@ class SpecReport_skipManualTest : UITest() {
                 id = 21,
                 step = "2",
                 condition = """
-- MANUAL_CASE(Manualing case(1))
+- MANUAL_CASE(Execute test manually after this row in this case.)
 """.trimIndent(),
                 action = """
 - Select <Connected devices> (scroll down)
@@ -488,7 +491,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Connected devices> is "Connected devices"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 31,
@@ -510,7 +513,7 @@ class SpecReport_skipManualTest : UITest() {
                 id = 23,
                 step = "4",
                 condition = """
-- MANUAL_SCENARIO(Manualing scenario)
+- MANUAL_SCENARIO(Execute test manually after this row in this scenario.)
 """.trimIndent(),
                 action = """
 - Select <Notifications> (scroll down)
@@ -519,7 +522,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Notifications> is "Notifications"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
             assertRow(
                 rowNum = 33,
@@ -532,7 +535,7 @@ class SpecReport_skipManualTest : UITest() {
 - <Tips & support> is "Tips & support"
 """.trimIndent(),
                 auto = "M",
-                result = "MANUAL",
+                result = "N/A",
             )
 
         }

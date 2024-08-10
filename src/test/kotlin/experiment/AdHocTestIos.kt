@@ -107,8 +107,20 @@ class AdHocTestIos : UITest() {
     }
 
     @Test
-    fun handlerTest() {
+    fun goBackTest() {
 
-
+        scenario {
+            case(1) {
+                condition {
+                    pressHome()
+                    tapAppIcon("Safari")
+                        .screenIs("[Safari Screen]")
+                }.action {
+                    goBack()
+                }.expectation {
+                    it.screenIs("[Safari Screen]")
+                }
+            }
+        }
     }
 }

@@ -23,43 +23,6 @@ class Selector_AndroidTest2 : UnitTest() {
     }
 
     @Test
-    fun evaluateId() {
-
-        TestMode.runAsAndroid {
-            // Arrange
-            TestElementCache.loadXml(XmlDataAndroid.FlowTest)
-            val e = TestElementCache.rootElement
-            val e1 = TestElementCache.select("id=frame1")
-            val e2 = TestElementCache.select("id=toolbar")
-
-            run {
-                // Arrange
-                val sel = Selector("id=toolbar")
-                // Act, Assert
-                assertThat(sel.evaluateId(e)).isFalse()
-                assertThat(sel.evaluateId(e1)).isFalse()
-                assertThat(sel.evaluateId(e2)).isTrue()
-            }
-        }
-        TestMode.runAsIos {
-            // Arrange
-            TestElementCache.loadXml(XmlDataIos.iOS1)
-            val e = TestElementCache.rootElement
-            val e1 = TestElementCache.select("Skip")
-            val e2 = TestElementCache.select("Mail Address")
-
-            run {
-                // Arrange
-                val sel = Selector("id=Mail Address")
-                // Act, Assert
-                assertThat(sel.evaluateId(e)).isFalse()
-                assertThat(sel.evaluateId(e1)).isFalse()
-                assertThat(sel.evaluateId(e2)).isTrue()
-            }
-        }
-    }
-
-    @Test
     fun evaluateClassName() {
 
         TestMode.runAsAndroid {
@@ -236,6 +199,80 @@ class Selector_AndroidTest2 : UnitTest() {
                 assertThat(sel.evaluateTextStartsWith(e)).isFalse()
                 assertThat(sel.evaluateTextStartsWith(e1)).isFalse()
                 assertThat(sel.evaluateTextStartsWith(e2)).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun evaluateId() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            TestElementCache.loadXml(XmlDataAndroid.FlowTest)
+            val e = TestElementCache.rootElement
+            val e1 = TestElementCache.select("id=frame1")
+            val e2 = TestElementCache.select("id=toolbar")
+
+            run {
+                // Arrange
+                val sel = Selector("id=toolbar")
+                // Act, Assert
+                assertThat(sel.evaluateId(e)).isFalse()
+                assertThat(sel.evaluateId(e1)).isFalse()
+                assertThat(sel.evaluateId(e2)).isTrue()
+            }
+        }
+        TestMode.runAsIos {
+            // Arrange
+            TestElementCache.loadXml(XmlDataIos.iOS1)
+            val e = TestElementCache.rootElement
+            val e1 = TestElementCache.select("Skip")
+            val e2 = TestElementCache.select("Mail Address")
+
+            run {
+                // Arrange
+                val sel = Selector("id=Mail Address")
+                // Act, Assert
+                assertThat(sel.evaluateId(e)).isFalse()
+                assertThat(sel.evaluateId(e1)).isFalse()
+                assertThat(sel.evaluateId(e2)).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun evaluateIdMatches() {
+
+        TestMode.runAsAndroid {
+            // Arrange
+            TestElementCache.loadXml(XmlDataAndroid.SettingsTopScreen)
+            val e = TestElementCache.rootElement
+            val e1 = TestElementCache.select("#settings_homepage_container")
+            val e2 = TestElementCache.select("#search_action_bar")
+
+            run {
+                // Arrange
+                val sel = Selector("idMatches=^search_action_bar$")
+                // Act, Assert
+                assertThat(sel.evaluateIdMatches(e)).isFalse()
+                assertThat(sel.evaluateIdMatches(e1)).isFalse()
+                assertThat(sel.evaluateIdMatches(e2)).isTrue()
+            }
+        }
+        TestMode.runAsIos {
+            // Arrange
+            TestElementCache.loadXml(XmlDataIos.RelativeCoordinateTest)
+            val e = TestElementCache.rootElement
+            val e1 = TestElementCache.select("#StaticText1-1")
+            val e2 = TestElementCache.select("#TextField1-1")
+
+            run {
+                // Arrange
+                val sel = Selector("idMatches=^TextField1-1$")
+                // Act, Assert
+                assertThat(sel.evaluateIdMatches(e)).isFalse()
+                assertThat(sel.evaluateIdMatches(e1)).isFalse()
+                assertThat(sel.evaluateIdMatches(e2)).isTrue()
             }
         }
     }

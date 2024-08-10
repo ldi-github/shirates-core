@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
@@ -69,9 +68,12 @@ class SpecReport_excludeDetailTest : UITest() {
             deviceModel = "",
             platformVersion = "",
             noLoadRunMode = "No-Load-Run Mode",
-            none = 1,
-            excluded = 2,
-            total = 3
+            na = 2,
+            excluded = 1,
+            total = 3,
+            m = 1,
+            a_ca = 2,
+            a_ca_na = 2
         )
 
         /**
@@ -107,8 +109,7 @@ class SpecReport_excludeDetailTest : UITest() {
                 expectation = "- <Internet>\n" +
                         "- <SIMs>",
                 auto = "A",
-                result = "EXCLUDED",
-                supplement = "Excluded on Scenario Mode"
+                result = "N/A",
             )
             assertRow(
                 rowNum = 13,
@@ -117,7 +118,7 @@ class SpecReport_excludeDetailTest : UITest() {
                 expectation = "- check is OFF",
                 auto = "M",
                 result = "EXCLUDED",
-                supplement = "Excluded on Scenario Mode"
+                supplement = "Excluded on checking screen transition"
             )
         }
     }

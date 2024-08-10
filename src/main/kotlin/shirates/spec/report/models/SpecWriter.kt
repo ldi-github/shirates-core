@@ -55,14 +55,16 @@ class SpecWriter(val specReport: SpecReport) {
             row.cells(4).setCellValue(logLine.mode)
             row.cells(5).setCellValue(logLine.logType)
             row.cells(6).setCellValue(logLine.auto)
-            row.cells(7).setCellValue(logLine.os)
-            row.cells(8).setCellValue(logLine.special)
-            row.cells(9).setCellValue(logLine.group)
-            row.cells(10).setCellValue(logLine.level)
-            row.cells(11).setCellValue(logLine.command)
-            row.cells(12).setCellValue(logLine.message)
-            row.cells(13).setCellValue(logLine.result)
-            row.cells(14).setCellValue(logLine.exception)
+            row.cells(7).setCellValue(logLine.environment)
+            row.cells(8).setCellValue(logLine.supplement)
+            row.cells(9).setCellValue(logLine.os)
+            row.cells(10).setCellValue(logLine.special)
+            row.cells(11).setCellValue(logLine.group)
+            row.cells(12).setCellValue(logLine.level)
+            row.cells(13).setCellValue(logLine.command)
+            row.cells(14).setCellValue(logLine.message)
+            row.cells(15).setCellValue(logLine.result)
+            row.cells(16).setCellValue(logLine.exception)
         }
     }
 
@@ -162,7 +164,7 @@ class SpecWriter(val specReport: SpecReport) {
                     row.setString("column.os", sp.colOS, os)
                     row.setString("column.special", sp.colSpecial, specLine.special)
                     row.setString("column.auto", sp.colAuto, specLine.auto)
-                    row.setString("column.result", sp.colResult, specLine.result)
+                    row.setString("column.result", sp.colResult, specLine.altResult)
 
                     if (sp.colDate < 0) {
                         throw TestConfigException(
@@ -173,10 +175,12 @@ class SpecWriter(val specReport: SpecReport) {
                             )
                         )
                     }
+
+                    row.setString("column.environment", sp.colEnvironment, specLine.environment)
+
                     if (worksheetData.noLoadRun.not()) {
                         row.cells(sp.colDate).setCellValue(specLine.date)
                         row.setString("column.tester", sp.colTester, specLine.tester)
-                        row.setString("column.environment", sp.colEnvironment, specLine.environment)
                         row.setString("column.build", sp.colBuild, specLine.build)
                     }
 
@@ -226,8 +230,7 @@ class SpecWriter(val specReport: SpecReport) {
                 worksheet.cells("D4").setCellValue(deviceModel)
                 worksheet.cells("D5").setCellValue(platformVersion)
                 if (noLoadRun) {
-                    worksheet.cells("E1")
-                        .setCellValue(shirates.spec.utilily.SpecResourceUtility.noLoadRunMode)
+                    worksheet.cells("E1").setCellValue(SpecResourceUtility.noLoadRunMode)
                 }
                 worksheet.cells("F1").setCellValue("TestDateTime: ${testDateTime}")
 
@@ -239,13 +242,19 @@ class SpecWriter(val specReport: SpecReport) {
                 worksheet.cells("H5").setCellValue(suspendedCount.toDouble())
                 worksheet.cells("H6").setCellValue(noneCount.toDouble())
 
-                worksheet.cells("K2").setCellValue(condAutoCount.toDouble())
-                worksheet.cells("K3").setCellValue(manualCount.toDouble())
-                worksheet.cells("K4").setCellValue(skipCount.toDouble())
-                worksheet.cells("K5").setCellValue(notImplCount.toDouble())
-                worksheet.cells("K6").setCellValue(excludedCount.toDouble())
+                worksheet.cells("J2").setCellValue(condAutoCount.toDouble())
+                worksheet.cells("J3").setCellValue(manualCount.toDouble())
+                worksheet.cells("J4").setCellValue(skipCount.toDouble())
+                worksheet.cells("J5").setCellValue(notImplCount.toDouble())
+                worksheet.cells("J6").setCellValue(excludedCount.toDouble())
 
-                worksheet.cells("K7").setCellValue(totalCount.toDouble())
+                worksheet.cells("J7").setCellValue(totalCount.toDouble())
+
+                worksheet.cells("M2").setCellValue(mCount)
+                worksheet.cells("M3").setCellValue(mNoneCount)
+
+                worksheet.cells("M5").setCellValue(aCount + caCount)
+                worksheet.cells("M6").setCellValue(aNoneCount + caNoneCount)
             }
         }
 

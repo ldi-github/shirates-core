@@ -41,13 +41,17 @@ fun XSSFSheet.assertHeader(
     ng: Int = 0,
     error: Int = 0,
     suspended: Int = 0,
-    none: Int = 0,
+    na: Int = 0,
     manual: Int = 0,
     condAuto: Int = 0,
     skip: Int = 0,
     notImpl: Int = 0,
     excluded: Int = 0,
-    total: Int = 0
+    total: Int = 0,
+    m: Int = 0,
+    m_na: Int = 0,
+    a_ca: Int = 0,
+    a_ca_na: Int = 0
 ) {
 
     val commandSheet = workbook.worksheets("CommandList")
@@ -71,21 +75,30 @@ fun XSSFSheet.assertHeader(
     cells("H3").intIs(ng)
     cells("H4").intIs(error)
     cells("H5").intIs(suspended)
-    cells("H6").intIs(none)
+    cells("H6").intIs(na)
 
-    cells("J2").textIs("COND_AUTO")
-    cells("J3").textIs("MANUAL")
-    cells("J4").textIs("SKIP")
-    cells("J5").textIs("NOTIMPL")
-    cells("J6").textIs("EXCLUDED")
-    cells("J7").textIs("total")
-    cells("K2").intIs(condAuto)
-    cells("K3").intIs(manual)
-    cells("K4").intIs(skip)
-    cells("K5").intIs(notImpl)
-    cells("K6").intIs(excluded)
-    cells("K7").intIs(total)
+    cells("I2").textIs("COND_AUTO")
+    cells("I3").textIs("MANUAL")
+    cells("I4").textIs("SKIP")
+    cells("I5").textIs("NOTIMPL")
+    cells("I6").textIs("EXCLUDED")
+    cells("I7").textIs("total")
+    cells("J2").intIs(condAuto)
+    cells("J3").intIs(manual)
+    cells("J4").intIs(skip)
+    cells("J5").intIs(notImpl)
+    cells("J6").intIs(excluded)
+    cells("J7").intIs(total)
 
+    cells("L2").textIs("M")
+    cells("L3").textIs("N/A")
+    cells("M2").intIs(m)
+    cells("M3").intIs(m_na)
+
+    cells("L5").textIs("A/CA")
+    cells("L6").textIs("N/A")
+    cells("M5").intIs(a_ca)
+    cells("M6").intIs(a_ca_na)
 }
 
 fun XSSFSheet.assertRowHeader() {

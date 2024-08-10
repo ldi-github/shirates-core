@@ -88,4 +88,100 @@ class TestDriveAppExtensionTest : UITest() {
             }
         }
     }
+
+    @Test
+    fun launchByMethod() {
+
+        scenario {
+            case(1) {
+                /**
+                 * shell(default)
+                 */
+                condition {
+                    appIs("Settings")
+                    it.screenIs("[iOS Settings Top Screen]")
+                        .tap("[General]")
+                        .screenIs("[General Screen]")
+                }.action {
+                    launchApp()
+                }.expectation {
+                    appIs("Settings")
+                    it.screenIs("[iOS Settings Top Screen]")
+                }
+            }
+            case(2) {
+                /**
+                 * shell
+                 */
+                condition {
+                    it.tap("[General]")
+                        .screenIs("[General Screen]")
+                }.action {
+                    launchApp("Settings", launchAppMethod = "shell")
+                }.expectation {
+                    appIs("Settings")
+                    it.screenIs("[iOS Settings Top Screen]")
+                }
+            }
+            case(3) {
+                /**
+                 * tapAppIcon
+                 */
+                condition {
+                    it.tap("[General]")
+                        .screenIs("[General Screen]")
+                }.action {
+                    launchApp("Settings", launchAppMethod = "tapAppIcon")
+                }.expectation {
+                    appIs("Settings")
+                    it.screenIs("[iOS Settings Top Screen]")
+                }
+            }
+            case(4) {
+                /**
+                 * [macro name] (default)
+                 */
+                condition {
+                    it.tap("[General]")
+                        .screenIs("[General Screen]")
+                }.action {
+                    launchApp(launchAppMethod = "[My Launch Macro]")
+                }.expectation {
+                    appIs("Settings")
+                    it.screenIs("[iOS Settings Top Screen]")
+                }
+            }
+            case(5) {
+                /**
+                 * [macro name] Safari
+                 */
+                action {
+                    launchApp("Safari", launchAppMethod = "[My Launch Macro]")
+                }.expectation {
+                    appIs("Safari")
+                }
+            }
+            case(6) {
+                /**
+                 * auto
+                 */
+                action {
+                    launchApp("com.apple.Preferences", launchAppMethod = "auto")
+                }.expectation {
+                    appIs("com.apple.Preferences")
+                }
+            }
+            case(7) {
+                /**
+                 * auto
+                 */
+                action {
+                    launchApp("Maps", launchAppMethod = "auto")
+                }.expectation {
+                    appIs("Maps")
+                }
+            }
+        }
+    }
+
 }

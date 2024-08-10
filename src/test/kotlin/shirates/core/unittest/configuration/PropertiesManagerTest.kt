@@ -280,6 +280,49 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun noLoadRun() {
+
+        run {
+            /**
+             * from "SR_noLoadRun" env
+             */
+
+            // Arrange
+            EnvUtility.setEnvForTesting("SR_noLoadRun", "")
+            PropertiesManager.setup()
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isFalse()
+
+            // Arrange
+            EnvUtility.setEnvForTesting("SR_noLoadRun", "true")
+            PropertiesManager.setup()
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isTrue()
+
+            // Arrange
+            EnvUtility.setEnvForTesting("SR_noLoadRun", "false")
+            PropertiesManager.setup()
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isFalse()
+        }
+        run {
+            /**
+             * overwrite "noLoadRun"
+             */
+
+            // Arrange
+            PropertiesManager.setPropertyValue("noLoadRun", "true")
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isTrue()
+
+            // Arrange
+            PropertiesManager.setPropertyValue("noLoadRun", "false")
+            // Act, Assert
+            assertThat(PropertiesManager.noLoadRun).isFalse()
+        }
+    }
+
+    @Test
     fun configFile() {
 
         run {
@@ -1303,6 +1346,56 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableLaunchAppOnScenario() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableLaunchOnScenario).isEqualTo(Const.ENABLE_LAUNCH_APP_ON_SCENARIO)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableLaunchOnScenario", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableLaunchOnScenario).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableLaunchOnScenario", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableLaunchOnScenario).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun launchAppMethod() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.launchAppMethod).isEqualTo(Const.LAUNCH_APP_METHOD)
+        }
+        run {
+            // Arrange
+            val value = "shell"
+            PropertiesManager.setPropertyValue("launchAppMethod", value)
+            // Act, Assert
+            assertThat(PropertiesManager.launchAppMethod).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = "auto"
+            PropertiesManager.setPropertyValue("launchAppMethod", value)
+            // Act, Assert
+            assertThat(PropertiesManager.launchAppMethod).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableRerunScenario() {
 
         run {
@@ -1624,6 +1717,24 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("tapTestSelector", value)
             // Act, Assert
             assertThat(PropertiesManager.tapTestSelector).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun pressBackSelector() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.pressBackSelector).isEqualTo(Const.PRESS_BACK_SELECTOR)
+        }
+        run {
+            // Arrange
+            val value = "@Navigate Back"
+            PropertiesManager.setPropertyValue("pressBackSelector", value)
+            // Act, Assert
+            assertThat(PropertiesManager.pressBackSelector).isEqualTo(value)
         }
     }
 

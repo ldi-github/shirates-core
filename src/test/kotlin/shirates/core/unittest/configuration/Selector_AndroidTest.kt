@@ -505,33 +505,6 @@ class Selector_AndroidTest : UnitTest() {
     }
 
     @Test
-    fun init_id() {
-
-        run {
-            // Arrange, Act
-            val sel = Selector("id=id1")
-            // Assert
-            assertThat(sel.expression).isEqualTo("id=id1")
-            assertThat(sel.nickname).isNull()
-            assertThat(sel.toString()).isEqualTo("<#id1>")
-            assertThat(sel.filterMap.count()).isEqualTo(1)
-            assertThat(sel.id).isEqualTo("id1")
-            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
-        }
-        run {
-            // Arrange, Act
-            val sel = Selector("id!=id1")
-            // Assert
-            assertThat(sel.expression).isEqualTo("id!=id1")
-            assertThat(sel.nickname).isNull()
-            assertThat(sel.toString()).isEqualTo("<!#id1>")
-            assertThat(sel.filterMap.count()).isEqualTo(1)
-            assertThat(sel.id).isEqualTo("!id1")
-            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
-        }
-    }
-
-    @Test
     fun init_image() {
 
         val screensDirectory = "unitTestConfig/android/image/screens".toPath()
@@ -679,6 +652,141 @@ class Selector_AndroidTest : UnitTest() {
             sel.image = null
             // Act, Assert
             assertThat(sel.isImageSelector).isFalse()
+        }
+    }
+
+    @Test
+    fun init_id() {
+
+        run {
+            // Arrange, Act
+            val sel = Selector("id=id1")
+            // Assert
+            assertThat(sel.expression).isEqualTo("id=id1")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<#id1>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.id).isEqualTo("id1")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+        run {
+            // Arrange, Act
+            val sel = Selector("id!=id1")
+            // Assert
+            assertThat(sel.expression).isEqualTo("id!=id1")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<!#id1>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.id).isEqualTo("!id1")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun init_idStartsWith() {
+
+        run {
+            // Arrange, Act
+            val sel = Selector("idStartsWith=id1")
+            // Assert
+            assertThat(sel.expression).isEqualTo("idStartsWith=id1")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<#id1*>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.idStartsWith).isEqualTo("id1")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+        run {
+            // Arrange, Act
+            val sel = Selector("idStartsWith!=id1")
+            // Assert
+            assertThat(sel.expression).isEqualTo("idStartsWith!=id1")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<!#id1*>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.idStartsWith).isEqualTo("!id1")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun init_idContains() {
+
+        run {
+            // Arrange, Act
+            val sel = Selector("idContains=id1")
+            // Assert
+            assertThat(sel.expression).isEqualTo("idContains=id1")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<#*id1*>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.idContains).isEqualTo("id1")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+        run {
+            // Arrange, Act
+            val sel = Selector("idContains!=id1")
+            // Assert
+            assertThat(sel.expression).isEqualTo("idContains!=id1")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<!#*id1*>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.idContains).isEqualTo("!id1")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun init_idEndsWith() {
+
+        run {
+            // Arrange, Act
+            val sel = Selector("idEndsWith=id1")
+            // Assert
+            assertThat(sel.expression).isEqualTo("idEndsWith=id1")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<#*id1>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.idEndsWith).isEqualTo("id1")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+        run {
+            // Arrange, Act
+            val sel = Selector("idEndsWith!=id1")
+            // Assert
+            assertThat(sel.expression).isEqualTo("idEndsWith!=id1")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<!#*id1>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.idEndsWith).isEqualTo("!id1")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun init_idMatches() {
+
+        run {
+            // Arrange, Act
+            val sel = Selector("idMatches=^text1.*\$")
+            // Assert
+            assertThat(sel.expression).isEqualTo("idMatches=^text1.*\$")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<idMatches=^text1.*\$>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.idMatches).isEqualTo("^text1.*\$")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+        run {
+            // Arrange, Act
+            val sel = Selector("idMatches!=^text1.*\$")
+            // Assert
+            assertThat(sel.expression).isEqualTo("idMatches!=^text1.*\$")
+            assertThat(sel.nickname).isNull()
+            assertThat(sel.toString()).isEqualTo("<idMatches!=^text1.*\$>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.idMatches).isEqualTo("!^text1.*\$")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
         }
     }
 

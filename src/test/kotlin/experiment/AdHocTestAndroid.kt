@@ -24,7 +24,13 @@ class AdHocTestAndroid : UITest() {
             case(1) {
                 condition {
                     it.screenIs("[Android Settings Top Screen]")
+                }.action {
                 }.expectation {
+                    it.exist("#settings_homepage_container")
+                    it.exist("#settings_homepage*")
+                    it.exist("#*homepage_container")
+                    it.exist("#*homepage*")
+
                     it.tap("aaa")
                 }
             }
@@ -219,5 +225,25 @@ class AdHocTestAndroid : UITest() {
             }
         }
 
+    }
+
+    @Test
+    fun goBackTest() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.run {
+                        macro("[Android Settings Top Screen]")
+                        launchApp("[Chrome]")
+                            .appIs("[Chrome]")
+                    }
+                }.action {
+                    it.goBack()
+                }.expectation {
+                    it.screenIs("[Android Settings Top Screen]")
+                }
+            }
+        }
     }
 }

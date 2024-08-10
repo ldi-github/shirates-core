@@ -33,6 +33,7 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
                         .sendKeys("tokyo tower")
                         .tapSoftwareKey("search||検索")
                         .wait()
+                        .tap("Tokyo Tower")
                         .tap("Website")
                         .tap("Open in Safari")
                         .wait(10.0)

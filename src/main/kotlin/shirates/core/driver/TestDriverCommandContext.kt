@@ -467,9 +467,13 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         try {
             pushToCommandStack()
 
+            val logType2 =
+                if (TestMode.isManualing) LogType.MANUAL
+                else logType
+
             beginLogLine = TestLog.write(
                 message = message,
-                logType = logType,
+                logType = logType2,
                 scriptCommand = command,
                 subject = subject ?: "",
                 arg1 = arg1 ?: "",

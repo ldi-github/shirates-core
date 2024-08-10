@@ -3,7 +3,6 @@ package shirates.spec.report.entity
 import shirates.core.configuration.PropertiesManager
 import shirates.spec.report.models.ParameterRepository
 import shirates.spec.report.models.SpecSheetPosition
-import shirates.spec.utilily.SpecResourceUtility
 import java.nio.file.Path
 
 class SpecReportData {
@@ -26,17 +25,13 @@ class SpecReportData {
 
     var totalCount = 0
 
-    val replaceOK = SpecResourceUtility.OK
-    val replaceNG = SpecResourceUtility.NG
-    val replaceERROR = SpecResourceUtility.ERROR
-    val replaceSUSPENDED = SpecResourceUtility.SUSPENDED
-    val replaceNONE = SpecResourceUtility.NONE
-    val replaceCOND_AUTO = SpecResourceUtility.COND_AUTO
-    val replaceSKIP = SpecResourceUtility.SKIP
-    val replaceMANUAL = SpecResourceUtility.MANUAL
-    val replaceNOTIMPL = SpecResourceUtility.NOTIMPL
-    val replaceEXCLUDED = SpecResourceUtility.EXCLUDED
-    val replaceDELETED = SpecResourceUtility.DELETED
+    var mCount = 0
+    var aCount = 0
+    var caCount = 0
+
+    var mNoneCount = 0
+    var aNoneCount = 0
+    var caNoneCount = 0
 
     lateinit var sheetPosition: SpecSheetPosition
 
@@ -143,37 +138,60 @@ class SpecReportData {
         notImplCount = 0
         excludedCount = 0
 
+        mCount = 0
+        aCount = 0
+        caCount = 0
+
+        mNoneCount = 0
+        aNoneCount = 0
+        caNoneCount = 0
 
         for (line in specLines) {
-            val r = line.result
-            if (r.isBlank()) {
+            if (line.result.isBlank()) {
                 continue
             }
 
-            if (r == "OK" || r == replaceOK) {
+            if (line.isResult("OK")) {
                 okCount++
-            } else if (r == "NG" || r == replaceNG) {
+            } else if (line.isResult("NG")) {
                 ngCount++
-            } else if (r == "ERROR" || r == replaceERROR) {
+            } else if (line.isResult("ERROR")) {
                 errorCount++
-            } else if (r == "SUSPENDED" || r == replaceSUSPENDED) {
+            } else if (line.isResult("SUSPENDED")) {
                 suspendedCount++
-            } else if (r == "NONE" || r == replaceNONE) {
+            } else if (line.isResult("NONE")) {
                 noneCount++
-            } else if (r == "COND_AUTO" || r == replaceCOND_AUTO) {
+            } else if (line.isResult("COND_AUTO")) {
                 condAutoCount++
-            } else if (r == "MANUAL" || r == replaceMANUAL) {
+            } else if (line.isResult("MANUAL")) {
                 manualCount++
-            } else if (r == "SKIP" || r == replaceSKIP) {
+            } else if (line.isResult("SKIP")) {
                 skipCount++
-            } else if (r == "NOTIMPL" || r == replaceNOTIMPL) {
+            } else if (line.isResult("NOTIMPL")) {
                 notImplCount++
-            } else if (r == "EXCLUDED" || r == replaceEXCLUDED) {
+            } else if (line.isResult("EXCLUDED")) {
                 excludedCount++
+            }
+
+            if (line.auto == "M") {
+                mCount++
+                if (line.isResult("NONE")) {
+                    mNoneCount++
+                }
+            } else if (line.auto == "A") {
+                aCount++
+                if (line.isResult("NONE")) {
+                    aNoneCount++
+                }
+            } else if (line.auto == "CA") {
+                caCount++
+                if (line.isResult("NONE")) {
+                    caNoneCount++
+                }
             }
         }
 
-        totalCount = okCount + ngCount + errorCount + suspendedCount + noneCount + condAutoCount +
+        totalCount = okCount + ngCount + errorCount + suspendedCount + noneCount +
                 condAutoCount + manualCount + skipCount + notImplCount + excludedCount
     }
 
@@ -183,36 +201,28 @@ class SpecReportData {
     fun refresh() {
 
         refreshCount()
-        replaceResults()
+        setSupplement()
     }
 
-    fun replaceResults() {
+    private fun setSupplement() {
 
-        fun SpecLine.replaceResult(result: String, replace: String, reason: String? = null) {
-            if (this.result == result || this.result == replace) {
-                if (replace.isNotBlank()) {
-                    this.result = replace
-                }
-                if (reason.isNullOrBlank().not() && this.supplement.contains(reason!!).not()) {
-                    this.supplement = listOf(this.supplement, reason).filter { it.isBlank().not() }.joinToString("\n")
-                }
+        fun SpecLine.setSupplement(reason: String) {
+            if (reason.isBlank()) {
+                return
+            }
+            if (this.supplement.contains(reason).not()) {
+                this.supplement = listOf(this.supplement, reason).filter { it.isBlank().not() }.joinToString("\n")
             }
         }
 
         val p = PropertiesManager
 
         for (line in specLines) {
-            line.replaceResult("OK", replaceOK)
-            line.replaceResult("NG", replaceNG)
-            line.replaceResult("ERROR", replaceERROR)
-            line.replaceResult("SUSPENDED", replaceSUSPENDED)
-            line.replaceResult("NONE", replaceNONE)
-            line.replaceResult("COND_AUTO", replaceCOND_AUTO)
-            line.replaceResult("MANUAL", replaceMANUAL)
-            line.replaceResult("SKIP", replaceSKIP, p.specReportSKIPReason)
-            line.replaceResult("NOTIMPL", replaceNOTIMPL)
-            line.replaceResult("EXCLUDED", replaceEXCLUDED, p.specReportEXCLUDEDReason)
-            line.replaceResult("DELETED", replaceDELETED)
+            if (line.isResult("SKIP")) {
+                line.setSupplement(p.specReportSKIPReason)
+            } else if (line.isResult("EXCLUDED")) {
+                line.setSupplement(p.specReportEXCLUDEDReason)
+            }
         }
     }
 }

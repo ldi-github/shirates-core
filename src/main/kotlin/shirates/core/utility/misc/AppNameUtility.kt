@@ -2,10 +2,10 @@ package shirates.core.utility.misc
 
 import org.json.JSONObject
 import shirates.core.configuration.NicknameUtility
+import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.rootElement
-import shirates.core.driver.testProfile
 import shirates.core.storage.App
 import shirates.core.storage.app
 
@@ -31,8 +31,8 @@ object AppNameUtility {
      */
     fun getPackageOrBundleId(appNameOrAppIdOrActivityName: String): String {
 
-        if (appNameOrAppIdOrActivityName == testProfile.appIconName) {
-            return testProfile.packageOrBundleId!!
+        if (appNameOrAppIdOrActivityName == testContext.profile.appIconName) {
+            return testContext.profile.packageOrBundleId!!
         }
 
         if (NicknameUtility.isValidNickname(appNameOrAppIdOrActivityName)) {
@@ -56,8 +56,8 @@ object AppNameUtility {
      */
     fun getAppNameFromPackageName(packageName: String): String {
 
-        if (packageName == testProfile.packageOrBundleId) {
-            return testProfile.appIconName!!
+        if (packageName == testContext.profile.packageOrBundleId) {
+            return testContext.profile.appIconName!!
         }
 
         val appNickName = getAppNickNameFromPackageName(packageName = packageName)

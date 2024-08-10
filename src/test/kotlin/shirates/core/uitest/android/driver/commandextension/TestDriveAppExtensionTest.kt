@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriveObjectAndroid
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testProfile
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
@@ -208,4 +207,98 @@ class TestDriveAppExtensionTest : UITest() {
         }
     }
 
+    @Test
+    fun launchByMethod() {
+
+        scenario {
+            case(1) {
+                /**
+                 * shell(default)
+                 */
+                condition {
+                    appIs("Settings")
+                    it.screenIs("[Android Settings Top Screen]")
+                        .tap("[Network & internet]")
+                        .screenIs("[Network & internet Screen]")
+                }.action {
+                    launchApp()
+                }.expectation {
+                    appIs("Settings")
+                    it.screenIs("[Android Settings Top Screen]")
+                }
+            }
+            case(2) {
+                /**
+                 * shell
+                 */
+                condition {
+                    it.tap("[Network & internet]")
+                        .screenIs("[Network & internet Screen]")
+                }.action {
+                    launchApp("[Settings]", launchAppMethod = "shell")
+                }.expectation {
+                    appIs("Settings")
+                    it.screenIs("[Android Settings Top Screen]")
+                }
+            }
+            case(3) {
+                /**
+                 * tapAppIcon
+                 */
+                condition {
+                    it.tap("[Network & internet]")
+                        .screenIs("[Network & internet Screen]")
+                }.action {
+                    launchApp("Settings", launchAppMethod = "tapAppIcon")
+                }.expectation {
+                    appIs("Settings")
+                    it.screenIs("[Android Settings Top Screen]")
+                }
+            }
+            case(4) {
+                /**
+                 * [macro name] (default)
+                 */
+                condition {
+                    it.tap("[Network & internet]")
+                        .screenIs("[Network & internet Screen]")
+                }.action {
+                    launchApp(launchAppMethod = "[My Launch Macro]")
+                }.expectation {
+                    appIs("Settings")
+                    it.screenIs("[Android Settings Top Screen]")
+                }
+            }
+            case(5) {
+                /**
+                 * [macro name] Chrome
+                 */
+                action {
+                    launchApp("Chrome", launchAppMethod = "[My Launch Macro]")
+                }.expectation {
+                    appIs("Chrome")
+                }
+            }
+            case(6) {
+                /**
+                 * auto
+                 */
+                action {
+                    launchApp("com.android.settings", launchAppMethod = "auto")
+                }.expectation {
+                    appIs("com.android.settings")
+                }
+            }
+            case(7) {
+                /**
+                 * auto
+                 */
+                action {
+                    launchApp("Calendar", launchAppMethod = "auto")
+                }.expectation {
+                    appIs("Calendar")
+                }
+            }
+        }
+    }
 }

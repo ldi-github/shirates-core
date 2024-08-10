@@ -431,6 +431,12 @@ class FilterTest : UnitTest() {
         // id
         assertThat(Filter("#id1").isAbbreviation).isEqualTo(true)
         assertThat(Filter("!#id1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("#*id1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!#*id1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("#id1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!#id1*").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("#*id1").isAbbreviation).isEqualTo(true)
+        assertThat(Filter("!#*id1").isAbbreviation).isEqualTo(true)
 
         assertThat(Filter("a=b").isAbbreviation).isEqualTo(true)    // "a" is not registered noun, and recognized as abbreviation
         assertThat(Filter("id!=id1").isAbbreviation).isEqualTo(false)
@@ -439,67 +445,6 @@ class FilterTest : UnitTest() {
         assertThat(Filter("[1]").isAbbreviation).isEqualTo(true)
         assertThat(Filter("pos=1").isAbbreviation).isEqualTo(false)
 
-    }
-
-    @Test
-    fun id() {
-
-        run {
-            // Arrange, Act
-            val filter = Filter("id=id1")
-            // Assert
-            assertThat(filter.name).isEqualTo("id")
-            assertThat(filter.noun).isEqualTo("id")
-            assertThat(filter.verb).isEqualTo("")
-            assertThat(filter.operator).isEqualTo("=")
-            assertThat(filter.value).isEqualTo("id1")
-            assertThat(filter.isNegation).isEqualTo(false)
-            assertThat(filter.toString()).isEqualTo("#id1")
-            assertThat(filter.evaluate("id1")).isEqualTo(true)
-            assertThat(filter.evaluate("id2")).isEqualTo(false)
-        }
-        run {
-            // Arrange, Act
-            val filter = Filter("id!=id1")
-            // Assert
-            assertThat(filter.name).isEqualTo("id")
-            assertThat(filter.noun).isEqualTo("id")
-            assertThat(filter.verb).isEqualTo("")
-            assertThat(filter.operator).isEqualTo("!=")
-            assertThat(filter.value).isEqualTo("id1")
-            assertThat(filter.isNegation).isEqualTo(true)
-            assertThat(filter.toString()).isEqualTo("!#id1")
-            assertThat(filter.evaluate("id1")).isEqualTo(false)
-            assertThat(filter.evaluate("id2")).isEqualTo(true)
-        }
-        run {
-            // Arrange, Act
-            val filter = Filter("#id1")
-            // Assert
-            assertThat(filter.name).isEqualTo("id")
-            assertThat(filter.noun).isEqualTo("id")
-            assertThat(filter.verb).isEqualTo("")
-            assertThat(filter.operator).isEqualTo("=")
-            assertThat(filter.value).isEqualTo("id1")
-            assertThat(filter.isNegation).isEqualTo(false)
-            assertThat(filter.toString()).isEqualTo("#id1")
-            assertThat(filter.evaluate("id1")).isEqualTo(true)
-            assertThat(filter.evaluate("id2")).isEqualTo(false)
-        }
-        run {
-            // Arrange, Act
-            val filter = Filter("!#id1")
-            // Assert
-            assertThat(filter.name).isEqualTo("id")
-            assertThat(filter.noun).isEqualTo("id")
-            assertThat(filter.verb).isEqualTo("")
-            assertThat(filter.operator).isEqualTo("!=")
-            assertThat(filter.value).isEqualTo("id1")
-            assertThat(filter.isNegation).isEqualTo(true)
-            assertThat(filter.toString()).isEqualTo("!#id1")
-            assertThat(filter.evaluate("id1")).isEqualTo(false)
-            assertThat(filter.evaluate("id2")).isEqualTo(true)
-        }
     }
 
     @Test
@@ -1193,6 +1138,344 @@ class FilterTest : UnitTest() {
     }
 
     @Test
+    fun textMatches() {
+
+        run {
+            // Arrange, Act
+            val filter = Filter("textMatches=^value1\$")
+            // Assert
+            assertThat(filter.name).isEqualTo("textMatches")
+            assertThat(filter.noun).isEqualTo("text")
+            assertThat(filter.verb).isEqualTo("Matches")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("^value1\$")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("textMatches=^value1\$")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("textMatches=^value1\$")
+            assertThat(filter.abbreviationOperator).isEqualTo("")
+            assertThat(filter.abbreviationExpression).isEqualTo("^value1\$")
+            assertThat(filter.evaluate("value1")).isEqualTo(true)
+            assertThat(filter.evaluate("value2")).isEqualTo(false)
+        }
+    }
+
+    @Test
+    fun id() {
+
+        run {
+            // Arrange, Act
+            val filter = Filter("id=id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("id")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("#id1")
+            assertThat(filter.evaluate("id1")).isEqualTo(true)
+            assertThat(filter.evaluate("id2")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("id!=id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("id")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("!#id1")
+            assertThat(filter.evaluate("id1")).isEqualTo(false)
+            assertThat(filter.evaluate("id2")).isEqualTo(true)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("#id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("id")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("#id1")
+            assertThat(filter.evaluate("id1")).isEqualTo(true)
+            assertThat(filter.evaluate("id2")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("!#id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("id")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("!#id1")
+            assertThat(filter.evaluate("id1")).isEqualTo(false)
+            assertThat(filter.evaluate("id2")).isEqualTo(true)
+        }
+    }
+
+    @Test
+    fun idContains() {
+
+        run {
+            // Arrange, Act
+            val filter = Filter("idContains=id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("idContains")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("Contains")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("#*id1*")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("idContains=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("#")
+            assertThat(filter.abbreviationExpression).isEqualTo("#*id1*")
+            assertThat(filter.evaluate("---id1---")).isEqualTo(true)
+            assertThat(filter.evaluate("---id2---")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("idContains!=id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("idContains")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("Contains")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("!#*id1*")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("idContains!=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("!#")
+            assertThat(filter.abbreviationExpression).isEqualTo("!#*id1*")
+            assertThat(filter.evaluate("---id1---")).isEqualTo(false)
+            assertThat(filter.evaluate("---id2---")).isEqualTo(true)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("#*id1*")
+            // Assert
+            assertThat(filter.name).isEqualTo("idContains")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("Contains")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("#*id1*")
+            assertThat(filter.isAbbreviation).isEqualTo(true)
+            assertThat(filter.fullExpression).isEqualTo("idContains=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("#")
+            assertThat(filter.abbreviationExpression).isEqualTo("#*id1*")
+            assertThat(filter.evaluate("---id1---")).isEqualTo(true)
+            assertThat(filter.evaluate("---id2---")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("!#*id1*")
+            // Assert
+            assertThat(filter.name).isEqualTo("idContains")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("Contains")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("!#*id1*")
+            assertThat(filter.isAbbreviation).isEqualTo(true)
+            assertThat(filter.fullExpression).isEqualTo("idContains!=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("!#")
+            assertThat(filter.abbreviationExpression).isEqualTo("!#*id1*")
+            assertThat(filter.evaluate("---id1---")).isEqualTo(false)
+            assertThat(filter.evaluate("---id2---")).isEqualTo(true)
+        }
+    }
+
+    @Test
+    fun idStartsWith() {
+
+        run {
+            // Arrange, Act
+            val filter = Filter("idStartsWith=id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("idStartsWith")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("StartsWith")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("#id1*")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("idStartsWith=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("#")
+            assertThat(filter.abbreviationExpression).isEqualTo("#id1*")
+            assertThat(filter.evaluate("id1---")).isEqualTo(true)
+            assertThat(filter.evaluate("id2---")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("idStartsWith!=id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("idStartsWith")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("StartsWith")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("!#id1*")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("idStartsWith!=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("!#")
+            assertThat(filter.abbreviationExpression).isEqualTo("!#id1*")
+            assertThat(filter.evaluate("id1---")).isEqualTo(false)
+            assertThat(filter.evaluate("id2---")).isEqualTo(true)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("#id1*")
+            // Assert
+            assertThat(filter.name).isEqualTo("idStartsWith")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("StartsWith")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("#id1*")
+            assertThat(filter.isAbbreviation).isEqualTo(true)
+            assertThat(filter.fullExpression).isEqualTo("idStartsWith=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("#")
+            assertThat(filter.abbreviationExpression).isEqualTo("#id1*")
+            assertThat(filter.evaluate("id1---")).isEqualTo(true)
+            assertThat(filter.evaluate("id2---")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("!#id1*")
+            // Assert
+            assertThat(filter.name).isEqualTo("idStartsWith")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("StartsWith")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("!#id1*")
+            assertThat(filter.isAbbreviation).isEqualTo(true)
+            assertThat(filter.fullExpression).isEqualTo("idStartsWith!=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("!#")
+            assertThat(filter.abbreviationExpression).isEqualTo("!#id1*")
+            assertThat(filter.evaluate("id1---")).isEqualTo(false)
+            assertThat(filter.evaluate("id2---")).isEqualTo(true)
+        }
+    }
+
+    @Test
+    fun idEndsWith() {
+
+        run {
+            // Arrange, Act
+            val filter = Filter("idEndsWith=id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("idEndsWith")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("EndsWith")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("#*id1")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("idEndsWith=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("#")
+            assertThat(filter.abbreviationExpression).isEqualTo("#*id1")
+            assertThat(filter.evaluate("---id1")).isEqualTo(true)
+            assertThat(filter.evaluate("---id2")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("idEndsWith!=id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("idEndsWith")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("EndsWith")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("!#*id1")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("idEndsWith!=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("!#")
+            assertThat(filter.abbreviationExpression).isEqualTo("!#*id1")
+            assertThat(filter.evaluate("---id1")).isEqualTo(false)
+            assertThat(filter.evaluate("---id2")).isEqualTo(true)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("#*id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("idEndsWith")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("EndsWith")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("#*id1")
+            assertThat(filter.isAbbreviation).isEqualTo(true)
+            assertThat(filter.fullExpression).isEqualTo("idEndsWith=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("#")
+            assertThat(filter.abbreviationExpression).isEqualTo("#*id1")
+            assertThat(filter.evaluate("---id1")).isEqualTo(true)
+            assertThat(filter.evaluate("---id2")).isEqualTo(false)
+        }
+        run {
+            // Arrange, Act
+            val filter = Filter("!#*id1")
+            // Assert
+            assertThat(filter.name).isEqualTo("idEndsWith")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("EndsWith")
+            assertThat(filter.operator).isEqualTo("!=")
+            assertThat(filter.value).isEqualTo("id1")
+            assertThat(filter.isNegation).isEqualTo(true)
+            assertThat(filter.toString()).isEqualTo("!#*id1")
+            assertThat(filter.isAbbreviation).isEqualTo(true)
+            assertThat(filter.fullExpression).isEqualTo("idEndsWith!=id1")
+            assertThat(filter.abbreviationOperator).isEqualTo("!#")
+            assertThat(filter.abbreviationExpression).isEqualTo("!#*id1")
+            assertThat(filter.evaluate("---id1")).isEqualTo(false)
+            assertThat(filter.evaluate("---id2")).isEqualTo(true)
+        }
+    }
+
+    @Test
+    fun idMatches() {
+
+        run {
+            // Arrange, Act
+            val filter = Filter("idMatches=^value1\$")
+            // Assert
+            assertThat(filter.name).isEqualTo("idMatches")
+            assertThat(filter.noun).isEqualTo("id")
+            assertThat(filter.verb).isEqualTo("Matches")
+            assertThat(filter.operator).isEqualTo("=")
+            assertThat(filter.value).isEqualTo("^value1\$")
+            assertThat(filter.isNegation).isEqualTo(false)
+            assertThat(filter.toString()).isEqualTo("idMatches=^value1\$")
+            assertThat(filter.isAbbreviation).isEqualTo(false)
+            assertThat(filter.fullExpression).isEqualTo("idMatches=^value1\$")
+            assertThat(filter.abbreviationOperator).isEqualTo("")
+            assertThat(filter.abbreviationExpression).isEqualTo("")
+            assertThat(filter.evaluate("value1")).isEqualTo(true)
+            assertThat(filter.evaluate("value2")).isEqualTo(false)
+        }
+    }
+
+    @Test
     fun access() {
 
         run {
@@ -1662,30 +1945,6 @@ class FilterTest : UnitTest() {
             assertThat(filter.evaluate("---value1")).isEqualTo(false)
             assertThat(filter.evaluate("---value2")).isEqualTo(true)
         }
-    }
-
-    @Test
-    fun matches() {
-
-        run {
-            // Arrange, Act
-            val filter = Filter("textMatches=^value1\$")
-            // Assert
-            assertThat(filter.name).isEqualTo("textMatches")
-            assertThat(filter.noun).isEqualTo("text")
-            assertThat(filter.verb).isEqualTo("Matches")
-            assertThat(filter.operator).isEqualTo("=")
-            assertThat(filter.value).isEqualTo("^value1\$")
-            assertThat(filter.isNegation).isEqualTo(false)
-            assertThat(filter.toString()).isEqualTo("textMatches=^value1\$")
-            assertThat(filter.isAbbreviation).isEqualTo(false)
-            assertThat(filter.fullExpression).isEqualTo("textMatches=^value1\$")
-            assertThat(filter.abbreviationOperator).isEqualTo("")
-            assertThat(filter.abbreviationExpression).isEqualTo("^value1\$")
-            assertThat(filter.evaluate("value1")).isEqualTo(true)
-            assertThat(filter.evaluate("value2")).isEqualTo(false)
-        }
-
     }
 
     @Test

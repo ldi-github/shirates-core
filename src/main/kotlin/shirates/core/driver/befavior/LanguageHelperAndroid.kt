@@ -1,10 +1,10 @@
 package shirates.core.driver.befavior
 
 import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
-import shirates.core.driver.testProfile
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.misc.ShellUtility
 
@@ -19,7 +19,7 @@ object LanguageHelperAndroid : TestDrive {
             return
         }
 
-        val udid = testProfile.udid
+        val udid = testContext.profile.udid
         val args = "adb -s $udid shell am start -a android.settings.LOCALE_SETTINGS".split(" ").toTypedArray()
         ShellUtility.executeCommand(args = args)
         invalidateCache()
@@ -107,7 +107,7 @@ object LanguageHelperAndroid : TestDrive {
         it.tap()
         it.tap("#android:id/title")
         it.tap(languageAndRegion)
-        if (testProfile.platformVersion.toInt() >= 12) {
+        if (testContext.profile.platformVersion.toInt() >= 12) {
             it.tap("<#com.android.settings:id/action_bar>:inner(-1)")
         } else {
             it.tap("<#com.android.settings:id/action_bar>:inner(-2)")

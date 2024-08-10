@@ -13,7 +13,6 @@ import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.launchApp
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.isEmulator
-import shirates.core.driver.testProfile
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.Manual
@@ -144,7 +143,8 @@ class SpecReport_ifScreenIsTest : UITest() {
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
             platformVersion = profile.platformVersion,
             notImpl = 1,
-            total = 1
+            total = 1,
+            a_ca = 1
         )
 
         /**

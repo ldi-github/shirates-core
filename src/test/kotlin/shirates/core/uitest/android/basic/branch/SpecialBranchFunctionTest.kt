@@ -8,7 +8,6 @@ import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.specialTag
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.Manual
 import shirates.core.testcode.UITest
@@ -163,7 +162,8 @@ class SpecialBranchFunctionTest : UITest() {
             deviceModel = if (TestMode.isNoLoadRun) "" else data.p.getValue("appium:deviceModel").toString(),
             platformVersion = if (TestMode.isNoLoadRun) "" else profile.platformVersion,
             ok = 4,
-            total = 4
+            total = 4,
+            a_ca = 4
         )
 
         /**

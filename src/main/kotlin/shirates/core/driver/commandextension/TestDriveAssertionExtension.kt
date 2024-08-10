@@ -200,7 +200,7 @@ fun TestDrive.screenIs(
                 onIrregular = onIrregular
             )
             if (sc.isTimeout) {
-                TestLog.warn(message(id = "timeout", subject = "screenIs", submessage = "${sc.error?.message}"))
+                TestLog.info(message(id = "timeout", subject = "screenIs"))
                 // Retry once on an unexpectedly long processing times occurred
                 actionFunc()
             } else {
@@ -625,11 +625,19 @@ fun TestDrive.existImage(
     var e = TestElement(selector = sel)
 
     if (TestMode.isNoLoadRun) {
-        TestLog.conditionalAuto(
-            message = assertMessage,
-            scriptCommand = command,
-            subject = "$sel"
-        )
+        if (TestMode.isManual) {
+            TestLog.manual(
+                message = assertMessage,
+                scriptCommand = command,
+                subject = "$sel"
+            )
+        } else {
+            TestLog.conditionalAuto(
+                message = assertMessage,
+                scriptCommand = command,
+                subject = "$sel"
+            )
+        }
         return e
     }
 

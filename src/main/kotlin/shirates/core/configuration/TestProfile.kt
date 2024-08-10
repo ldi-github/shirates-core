@@ -4,7 +4,6 @@ import org.openqa.selenium.remote.DesiredCapabilities
 import shirates.core.UserVar
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
-import shirates.core.driver.testProfile
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -618,7 +617,7 @@ class TestProfile(var profileName: String = "") {
             udid = androidDeviceInfo.udid
             platformVersion = androidDeviceInfo.platformVersion
         } else if (TestMode.isiOS) {
-            val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testProfile)
+            val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = testContext.profile)
             if (iosDeviceInfo.message.isNotBlank()) {
                 TestLog.warn(iosDeviceInfo.message)
             }

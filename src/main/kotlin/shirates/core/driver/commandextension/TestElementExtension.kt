@@ -72,7 +72,7 @@ fun TestElement.refreshThisElement(): TestElement {
         return TestElement.emptyElement
     }
 
-    val e = try {
+    var e = try {
         TestDriver.findImageOrSelectCore(
             selector = sel,
             allowScroll = false,
@@ -86,8 +86,12 @@ fun TestElement.refreshThisElement(): TestElement {
         return TestElement.emptyElement
     }
 
-    if (originalSelector != null) {
-        e.selector = originalSelector
+    if (e.isFound) {
+        if (originalSelector != null) {
+            e.selector = originalSelector
+        }
+    } else {
+        e = rootElement
     }
 
     return e
