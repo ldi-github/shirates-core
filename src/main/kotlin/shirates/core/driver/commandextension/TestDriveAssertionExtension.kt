@@ -200,7 +200,7 @@ fun TestDrive.screenIs(
                 onIrregular = onIrregular
             )
             if (sc.isTimeout) {
-                TestLog.warn(message(id = "timeout", subject = "screenIs", submessage = "${sc.error?.message}"))
+                TestLog.info(message(id = "timeout", subject = "screenIs"))
                 // Retry once on an unexpectedly long processing times occurred
                 actionFunc()
             } else {
