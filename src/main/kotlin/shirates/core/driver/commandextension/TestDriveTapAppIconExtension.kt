@@ -20,8 +20,10 @@ fun TestDrive.tapAppIcon(
     val context = TestDriverCommandContext(rootElement)
     context.execOperateCommand(command = command, message = message, subject = appIconName) {
 
+        pressHome()
+
         if (isiOS) {
-            if (canSelect("#SpotlightSearchField||#dewey-search-field")) {
+            if (rootElement.name.isNotBlank()) {
                 pressHome()
             }
         }

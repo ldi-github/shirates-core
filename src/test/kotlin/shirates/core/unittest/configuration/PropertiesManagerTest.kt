@@ -1371,6 +1371,31 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun launchAppMethod() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.launchAppMethod).isEqualTo(Const.LAUNCH_APP_METHOD)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("launchAppMethod", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.launchAppMethod).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("launchAppMethod", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.launchAppMethod).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun enableRerunScenario() {
 
         run {

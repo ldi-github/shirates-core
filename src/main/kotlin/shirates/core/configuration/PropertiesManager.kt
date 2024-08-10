@@ -781,6 +781,15 @@ object PropertiesManager {
         }
 
     /**
+     * launchAppMethod
+     */
+    val launchAppMethod: String
+        get() {
+            return getPropertyValue(propertyName = "launchAppMethod")
+                ?: Const.LAUNCH_APP_METHOD
+        }
+
+    /**
      * enableRerunScenario
      */
     val enableRerunScenario: Boolean

@@ -2,6 +2,9 @@
   "[Settings]": {
     "packageOrBundleId": "com.android.settings"
   },
+  "[Calendar]": {
+    "packageOrBundleId": "com.google.android.calendar"
+  },
   "[Calculator]": {
     "packageOrBundleId": "com.google.android.calculator"
   },

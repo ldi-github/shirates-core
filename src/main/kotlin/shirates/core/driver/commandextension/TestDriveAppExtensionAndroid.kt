@@ -11,10 +11,7 @@ import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.sync.WaitUtility
 
 
-/**
- * launchAndroidApp
- */
-internal fun TestDriveObjectAndroid.launchAndroidApp(
+internal fun TestDriveObjectAndroid.launchAndroidAppByShell(
     udid: String,
     packageNameOrActivityName: String,
     onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
@@ -60,9 +57,6 @@ internal fun TestDriveObjectAndroid.launchAndroidApp(
     return r
 }
 
-/**
- * terminateAndroidApp
- */
 internal fun TestDriveObjectAndroid.terminateAndroidApp(
     udid: String,
     packageName: String,
@@ -89,9 +83,6 @@ internal fun TestDriveObjectAndroid.terminateAndroidApp(
     return r
 }
 
-/**
- * getMainActivity
- */
 internal fun TestDriveObjectAndroid.getMainActivity(
     udid: String,
     packageName: String,
@@ -151,9 +142,6 @@ internal fun TestDriveObjectAndroid.getMainActivity(
     return ""
 }
 
-/**
- * isAndroidAppRunning
- */
 internal fun TestDriveObjectAndroid.isAndroidAppRunning(
     udid: String,
     packageName: String

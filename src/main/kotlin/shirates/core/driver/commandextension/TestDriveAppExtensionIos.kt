@@ -9,10 +9,7 @@ import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.sync.SyncUtility
 
-/**
- * launchIosApp
- */
-internal fun TestDriveObjectIos.launchIosApp(
+internal fun TestDriveObjectIos.launchIosAppByShell(
     udid: String,
     bundleId: String,
     sync: Boolean = true,
@@ -20,7 +17,7 @@ internal fun TestDriveObjectIos.launchIosApp(
     log: Boolean = PropertiesManager.enableShellExecLog
 ): TestElement {
 
-    launchIosAppCore(udid = udid, bundleId = bundleId, log = log)
+    launchIosAppByShellCore(udid = udid, bundleId = bundleId, log = log)
 
     var isApp = false
 
@@ -38,7 +35,7 @@ internal fun TestDriveObjectIos.launchIosApp(
                 TestLog.info("SpringBoard is corrupted.")
                 IosDeviceUtility.terminateSpringBoardByUdid(udid = udid, log = log)
                 TestLog.info("Retrying launchApp.")
-                launchIosAppCore(udid = udid, bundleId = bundleId, log = log)
+                launchIosAppByShellCore(udid = udid, bundleId = bundleId, log = log)
                 testDrive.withoutScroll {
                     onLaunchHandler?.invoke()
                 }
@@ -63,7 +60,7 @@ internal fun TestDriveObjectIos.launchIosApp(
     return lastElement
 }
 
-internal fun launchIosAppCore(
+internal fun launchIosAppByShellCore(
     udid: String,
     bundleId: String,
     log: Boolean = PropertiesManager.enableShellExecLog
@@ -94,9 +91,6 @@ internal fun launchIosAppCore(
     return r
 }
 
-/**
- * terminateIosApp
- */
 internal fun TestDriveObjectIos.terminateIosApp(
     udid: String,
     bundleId: String,
@@ -116,9 +110,6 @@ internal fun TestDriveObjectIos.terminateIosApp(
     return lastElement
 }
 
-/**
- * restartIosApp
- */
 internal fun TestDriveObjectIos.restartIosApp(
     udid: String,
     bundleId: String,
@@ -126,5 +117,5 @@ internal fun TestDriveObjectIos.restartIosApp(
 ): TestElement {
 
     terminateIosApp(udid = udid, bundleId = bundleId, log = log)
-    return launchIosApp(udid = udid, bundleId = bundleId, log = log)
+    return launchIosAppByShell(udid = udid, bundleId = bundleId, log = log)
 }

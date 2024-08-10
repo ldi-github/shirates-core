@@ -2394,7 +2394,66 @@ object TestDriver {
         return lastElement
     }
 
-    fun launchAppCore(
+    fun launchByShell(
+        appNameOrAppIdOrActivityName: String,
+        fallBackToTapAppIcon: Boolean,
+        sync: Boolean,
+        onLaunchHandler: (() -> Unit)?
+    ) {
+        if (appNameOrAppIdOrActivityName.contains("/")) {
+            val activityName = appNameOrAppIdOrActivityName
+            launchByShellCore(packageOrBundleIdOrActivity = activityName)
+            return
+        }
+
+        val packageOrBundleId =
+            AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName)
+        if (packageOrBundleId.isBlank()) {
+            if (fallBackToTapAppIcon) {
+                tapAppIconCore(appIconName = appNameOrAppIdOrActivityName)
+                return
+            } else {
+                throw IllegalArgumentException(
+                    message(
+                        id = "failedToGetPackageOrBundleId",
+                        arg1 = "appNameOrAppId=$appNameOrAppIdOrActivityName"
+                    )
+                )
+            }
+        }
+
+        if (testContext.isRemoteServer) {
+            tapAppIconCore(appNameOrAppIdOrActivityName)
+            SyncUtility.doUntilTrue {
+                testDrive.invalidateCache()
+                testDrive.isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+            }
+        } else if (isAndroid) {
+            launchByShellCore(
+                packageOrBundleIdOrActivity = packageOrBundleId,
+                sync = sync,
+                onLaunchHandler = onLaunchHandler
+            )
+        } else if (isiOS) {
+            if (isSimulator) {
+                launchByShellCore(
+                    packageOrBundleIdOrActivity = packageOrBundleId,
+                    sync = sync,
+                    onLaunchHandler = onLaunchHandler
+                )
+            } else {
+                tapAppIconCore(appNameOrAppIdOrActivityName)
+                if (sync) {
+                    SyncUtility.doUntilTrue {
+                        testDrive.invalidateCache()
+                        testDrive.isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+                    }
+                }
+            }
+        }
+    }
+
+    internal fun launchByShellCore(
         packageOrBundleIdOrActivity: String,
         sync: Boolean = true,
         onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
@@ -2413,7 +2472,7 @@ object TestDriver {
         }
 
         if (isAndroid) {
-            TestDriveObjectAndroid.launchAndroidApp(
+            TestDriveObjectAndroid.launchAndroidAppByShell(
                 udid = testContext.profile.udid,
                 packageNameOrActivityName = packageOrBundleIdOrActivity,
                 onLaunchHandler = onLaunchHandler
@@ -2435,7 +2494,7 @@ object TestDriver {
             try {
                 testDrive.terminateApp(appNameOrAppId = bundleId)
                 TestLog.info("Launching app. (bundleId=$bundleId)")
-                TestDriveObjectIos.launchIosApp(
+                TestDriveObjectIos.launchIosAppByShell(
                     udid = testContext.profile.udid,
                     bundleId = bundleId,
                     sync = sync,
@@ -2469,7 +2528,7 @@ object TestDriver {
                      */
                     val retry =
                         try {
-                            TestDriveObjectIos.launchIosApp(
+                            TestDriveObjectIos.launchIosAppByShell(
                                 udid = testContext.profile.udid,
                                 bundleId = bundleId,
                                 log = true
