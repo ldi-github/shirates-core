@@ -183,16 +183,20 @@ fun TestDrive.launchApp(
 
         TestLog.info("launchAppMethod: $launchAppMethod")
 
-        if (launchAppMethod == "shell") {
-            /**
-             * by shell
-             */
+        fun launchAppByShellAction() {
             launchAppByShell(
                 appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName,
                 fallBackToTapAppIcon = fallBackToTapAppIcon,
                 sync = sync,
                 onLaunchHandler = onLaunchHandler
             )
+        }
+
+        if (launchAppMethod == "shell") {
+            /**
+             * by shell
+             */
+            launchAppByShellAction()
 
         } else if (launchAppMethod == "tapAppIcon") {
             /**
@@ -211,14 +215,26 @@ fun TestDrive.launchApp(
              * auto
              */
             if (appNameOrAppIdOrActivityName.split(".").count() >= 2) {
-                TestDriver.launchByShell(
-                    appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName,
-                    fallBackToTapAppIcon = fallBackToTapAppIcon,
-                    sync = sync,
-                    onLaunchHandler = onLaunchHandler
-                )
+                /**
+                 * appId or activityName
+                 * e.g. com.android.settings
+                 */
+                launchAppByShellAction()
+
             } else {
-                tapAppIcon(appIconName = appNameOrAppIdOrActivityName)
+                /**
+                 * appName
+                 */
+                if (TestMode.isVirtualDevice) {
+                    /**
+                     * For stability workaround.
+                     * Launching emulator/simulator by shell(adb/xcrun) may fail to launch app on parallel execution.
+                     * Tapping is more stable.
+                     */
+                    tapAppIcon(appIconName = appNameOrAppIdOrActivityName)
+                } else {
+                    launchAppByShellAction()
+                }
             }
         }
 

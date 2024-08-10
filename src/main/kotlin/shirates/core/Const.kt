@@ -66,7 +66,7 @@ object Const {
     const val ENABLE_AUTO_SYNC_ANDROID = false
     const val ENABLE_AUTO_SYNC_IOS = false
     const val ENABLE_LAUNCH_APP_ON_SCENARIO = true
-    const val LAUNCH_APP_METHOD = "shell"
+    const val LAUNCH_APP_METHOD = "auto"
     const val ENABLE_RERUN_SCENARIO = true
     const val ENABLE_ALWAYS_RERUN_ON_ERROR_ANDROID = false
     const val ENABLE_ALWAYS_RERUN_ON_ERROR_IOS = false
