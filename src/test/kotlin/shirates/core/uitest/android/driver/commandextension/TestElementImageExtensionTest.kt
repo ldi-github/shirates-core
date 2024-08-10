@@ -109,7 +109,7 @@ class TestElementImageExtensionTest : UITest() {
                 expectation {
                     rootElement.imageContains("[Display Icon].png") {
                         assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.OK)
-                        assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of <.android.widget.FrameLayout&&focusable=false&&scrollable=false> contains [Display Icon].png")
+                        assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of <Settings> contains [Display Icon].png")
                     }
                     assertThatThrownBy {
                         it.select("[Display Icon].png").imageContains("[Network & internet Icon].png")

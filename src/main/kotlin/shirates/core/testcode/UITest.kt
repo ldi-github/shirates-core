@@ -760,7 +760,9 @@ abstract class UITest : TestDrive {
             }
 
             if (launchApp && testDrive.isAppInstalled()) {
-                testDrive.launchApp()
+                silent {
+                    testDrive.launchApp()
+                }
             }
 
             testProc()
