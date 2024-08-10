@@ -235,7 +235,7 @@ class TestDriveAppExtensionTest : UITest() {
                     it.tap("[Network & internet]")
                         .screenIs("[Network & internet Screen]")
                 }.action {
-                    launchApp("Settings", launchAppMethod = "shell")
+                    launchApp("[Settings]", launchAppMethod = "shell")
                 }.expectation {
                     appIs("Settings")
                     it.screenIs("[Android Settings Top Screen]")

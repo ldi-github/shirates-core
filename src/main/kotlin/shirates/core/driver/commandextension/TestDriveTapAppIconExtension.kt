@@ -5,6 +5,8 @@ import shirates.core.driver.*
 import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.Message.message
+import shirates.core.storage.appIconName
+import shirates.spec.utilily.hasBracket
 
 /**
  * tapAppIcon
@@ -28,28 +30,32 @@ fun TestDrive.tapAppIcon(
             }
         }
 
+        val iconLabel =
+            if (appIconName.hasBracket()) appIconName(datasetName = appIconName)
+            else appIconName
+
         // launch app by macro
         if (testContext.tapAppIconMacro.isNotBlank()) {
-            macro(macroName = testContext.tapAppIconMacro, appIconName)
+            macro(macroName = testContext.tapAppIconMacro, iconLabel)
             return@execOperateCommand
         }
 
         // launch by custom function
         val functionName = "tapAppIcon"
         if (CustomFunctionRepository.hasFunction(functionName)) {
-            val tapped = CustomFunctionRepository.call(functionName = functionName, appIconName)
+            val tapped = CustomFunctionRepository.call(functionName = functionName, iconLabel)
             if (tapped == true) {
                 return@execOperateCommand
             }
         }
 
-        if (canSelect(appIconName)) {
+        if (canSelect(iconLabel)) {
             lastElement.tap()
                 .wait()
             return@execOperateCommand
         }
 
-        TestDriver.tapAppIconCore(appIconName = appIconName, tapAppIconMethod = tapAppIconMethod)
+        TestDriver.tapAppIconCore(appIconName = iconLabel, tapAppIconMethod = tapAppIconMethod)
     }
 
     return lastElement

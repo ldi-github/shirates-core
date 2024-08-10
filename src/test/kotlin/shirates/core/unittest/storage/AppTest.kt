@@ -9,6 +9,8 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.storage.App
 import shirates.core.storage.app
+import shirates.core.storage.appIconName
+import shirates.core.storage.appId
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.toPath
 
@@ -40,6 +42,22 @@ class AppTest : UnitTest() {
         // Act, Assert
         assertThat(app(datasetName = "[App1]", attributeName = "packageOrBundleId")).isEqualTo("com.example.app1")
         assertThat(app("[App1]", "packageOrBundleId")).isEqualTo("com.example.app1")
+    }
+
+    @Test
+    fun appIdTest() {
+
+        // Act, Assert
+        assertThat(appId("[App1]")).isEqualTo("com.example.app1")
+        assertThat(appId("[not.registered.id]")).isEqualTo("not.registered.id")
+    }
+
+    @Test
+    fun appIconNameTest() {
+
+        // Act, Assert
+        assertThat(appIconName("[App1]")).isEqualTo("App1")
+        assertThat(appIconName("[not.registered.name]")).isEqualTo("not.registered.name")
     }
 
     @Test

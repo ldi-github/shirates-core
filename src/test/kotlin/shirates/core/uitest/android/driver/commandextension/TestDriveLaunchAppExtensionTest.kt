@@ -29,7 +29,7 @@ class TestDriveLaunchAppExtensionTest : UITest() {
                 condition {
                     it.terminateApp("[Settings]")
                 }.action {
-                    it.launchApp("Settings")
+                    it.launchApp("[Settings]")
                 }.expectation {
                     it.appIs("[Settings]")
                 }

@@ -10,6 +10,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.storage.app
+import shirates.core.storage.appIconName
 import shirates.core.utility.misc.AppNameUtility
 
 /**
@@ -211,10 +212,12 @@ fun TestDrive.launchApp(
             macro(macroName = launchAppMethod, appNameOrAppIdOrActivityName)
 
         } else {
+            val isAppId = appNameOrAppIdOrActivityName.contains("[").not() &&
+                    appNameOrAppIdOrActivityName.split(".").count() >= 2
             /**
              * auto
              */
-            if (appNameOrAppIdOrActivityName.split(".").count() >= 2) {
+            if (isAppId) {
                 /**
                  * appId or activityName
                  * e.g. com.android.settings
@@ -231,7 +234,12 @@ fun TestDrive.launchApp(
                      * Launching emulator/simulator by shell(adb/xcrun) may fail to launch app on parallel execution.
                      * Tapping is more stable.
                      */
-                    tapAppIcon(appIconName = appNameOrAppIdOrActivityName)
+                    val appIconName = appIconName(datasetName = appNameOrAppIdOrActivityName)
+                    if (appIconName.isNotBlank()) {
+                        tapAppIcon(appIconName = appIconName)
+                    } else {
+                        launchAppByShellAction()
+                    }
                 } else {
                     launchAppByShellAction()
                 }

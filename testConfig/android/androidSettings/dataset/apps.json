@@ -1,26 +1,34 @@
 {
   "[Settings]": {
-    "packageOrBundleId": "com.android.settings"
+    "packageOrBundleId": "com.android.settings",
+    "appIconName": "Settings"
   },
   "[Calendar]": {
-    "packageOrBundleId": "com.google.android.calendar"
+    "packageOrBundleId": "com.google.android.calendar",
+    "appIconName": "Calendar"
   },
   "[Calculator]": {
-    "packageOrBundleId": "com.google.android.calculator"
+    "packageOrBundleId": "com.google.android.calculator",
+    "appIconName": "Calculator"
   },
   "[Chrome]": {
-    "packageOrBundleId": "com.android.chrome"
+    "packageOrBundleId": "com.android.chrome",
+    "appIconName": "Chrome"
   },
   "[Maps]": {
-    "packageOrBundleId": "com.google.android.apps.maps"
+    "packageOrBundleId": "com.google.android.apps.maps",
+    "appIconName": "Maps"
   },
   "[Play Store]": {
-    "packageOrBundleId": "com.android.vending"
+    "packageOrBundleId": "com.android.vending",
+    "appIconName": "Play Store"
   },
   "[Clock]": {
-    "packageOrBundleId": "com.google.android.deskclock"
+    "packageOrBundleId": "com.google.android.deskclock",
+    "appIconName": "Clock"
   },
   "[App1]": {
-    "packageOrBundleId": "com.example.app1"
+    "packageOrBundleId": "com.example.app1",
+    "appIconName": "App1"
   }
 }

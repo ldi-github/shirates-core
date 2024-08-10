@@ -4,6 +4,7 @@ import shirates.core.configuration.repository.DatasetRepository
 import shirates.core.configuration.repository.DatasetRepositoryManager
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
+import shirates.spec.utilily.removeBrackets
 
 object App {
 
@@ -60,4 +61,28 @@ fun app(datasetName: String, attributeName: String, throwsException: Boolean = t
         return longKey
     }
     return App.getValue(longKey = longKey, throwsException = throwsException)
+}
+
+/**
+ * appId
+ */
+fun appId(datasetName: String): String {
+
+    val r = app(datasetName = datasetName, attributeName = "packageOrBundleId", throwsException = false)
+    if (r.isNotBlank()) {
+        return r
+    }
+    return datasetName.removeBrackets()
+}
+
+/**
+ * appIconName
+ */
+fun appIconName(datasetName: String): String {
+
+    val r = app(datasetName = datasetName, attributeName = "appIconName", throwsException = false)
+    if (r.isNotBlank()) {
+        return r
+    }
+    return datasetName.removeBrackets()
 }
