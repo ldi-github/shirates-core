@@ -2,8 +2,8 @@ package shirates.core.driver.befavior
 
 import shirates.core.driver.TestDrive
 import shirates.core.driver.TestDriver
+import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestMode
-import shirates.core.driver.testProfile
 import shirates.core.utility.appium.getCapabilityRelaxed
 import shirates.core.utility.ios.IosLanguageUtility
 
@@ -19,7 +19,7 @@ object LanguageHelperIos : TestDrive {
             return
         }
 
-        IosLanguageUtility.setAppleLocale(udid = testProfile.udid, locale = locale)
+        IosLanguageUtility.setAppleLocale(udid = testContext.profile.udid, locale = locale)
         TestDriver.createAppiumDriver()
     }
 
@@ -32,8 +32,8 @@ object LanguageHelperIos : TestDrive {
             return
         }
 
-        val capabilityLange = testProfile.capabilities.getCapabilityRelaxed("language")
-        val capabilityLocale = testProfile.capabilities.getCapabilityRelaxed("locale")
+        val capabilityLange = testContext.profile.capabilities.getCapabilityRelaxed("language")
+        val capabilityLocale = testContext.profile.capabilities.getCapabilityRelaxed("locale")
         val targetLocale = "$capabilityLange-$capabilityLocale"
 
         setLanguage(locale = targetLocale)

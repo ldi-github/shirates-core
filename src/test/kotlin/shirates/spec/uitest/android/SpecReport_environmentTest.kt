@@ -9,7 +9,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.selectWithScrollDown
 import shirates.core.driver.commandextension.textIs
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.Environment
 import shirates.core.testcode.Manual
@@ -164,9 +163,6 @@ class SpecReport_environmentTest : UITest() {
                 rowNum = 12,
                 id = 3,
                 step = "2",
-                condition = """
-- SKIP_CASE(Skipping case(1))
-""".trimIndent(),
                 action = """
 - Select <Connected devices> (scroll down)
 """.trimIndent(),

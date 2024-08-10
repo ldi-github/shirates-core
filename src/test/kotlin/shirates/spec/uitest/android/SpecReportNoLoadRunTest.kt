@@ -8,7 +8,6 @@ import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ios
 import shirates.core.driver.branchextension.specialTag
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest

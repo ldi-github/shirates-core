@@ -50,6 +50,11 @@ abstract class UITest : TestDrive {
     var extensionContext: ExtensionContext? = null
 
     /**
+     * testProfile
+     */
+    var testProfile: TestProfile = TestProfile()
+
+    /**
      * testConfig
      */
     var testConfig: TestConfig? = null
@@ -310,6 +315,7 @@ abstract class UITest : TestDrive {
                 configPath = configPath,
                 profileName = profileName
             )
+            testProfile = profile
 
             // setup ScreenRepository
             ScreenRepository.setup(
@@ -521,11 +527,9 @@ abstract class UITest : TestDrive {
             true
         }
     ) {
-        describe(message = message)
         if (predicate()) {
-            if (TestMode.isNoLoadRun) {
-                isManualingScenario = true
-                return
+            if (isNoLoadRun.not()) {
+                driver.screenshotCore()
             }
             driver.screenshotCore()
             TestLog.manualScenario(message)
@@ -543,13 +547,10 @@ abstract class UITest : TestDrive {
             true
         }
     ) {
-        describe(message = message)
         if (predicate()) {
-            if (TestMode.isNoLoadRun) {
-                isManualingCase = true
-                return
+            if (isNoLoadRun.not()) {
+                driver.screenshotCore()
             }
-            driver.screenshotCore()
             TestLog.manualCase(message)
             isManualingCase = true
             testSkipped = true

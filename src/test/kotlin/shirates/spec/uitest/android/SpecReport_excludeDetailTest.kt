@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest

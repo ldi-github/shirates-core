@@ -9,7 +9,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.selectWithScrollDown
 import shirates.core.driver.commandextension.textIs
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.Manual
 import shirates.core.testcode.SheetName
@@ -70,10 +69,10 @@ class SpecReport_skipManualTest : UITest() {
 
         scenarioCore(
             func1 = {
-                MANUAL_CASE("Manualing case(1)")
+                MANUAL_CASE("Execute test manually after this row in this case.")
             },
             func2 = {
-                MANUAL_SCENARIO("Manualing scenario")
+                MANUAL_SCENARIO("Execute test manually after this row in this scenario.")
             }
         )
     }
@@ -85,10 +84,10 @@ class SpecReport_skipManualTest : UITest() {
 
         scenarioCore(
             func1 = {
-                MANUAL_CASE("Manualing case(1)")
+                MANUAL_CASE("Execute test manually after this row in this case.")
             },
             func2 = {
-                MANUAL_SCENARIO("Manualing scenario")
+                MANUAL_SCENARIO("Execute test manually after this row in this scenario.")
             }
         )
     }
@@ -399,7 +398,7 @@ class SpecReport_skipManualTest : UITest() {
                 id = 15,
                 step = "2",
                 condition = """
-- MANUAL_CASE(Manualing case(1))
+- MANUAL_CASE(Execute test manually after this row in this case.)
 """.trimIndent(),
                 action = """
 - Select <Connected devices> (scroll down)
@@ -428,7 +427,7 @@ class SpecReport_skipManualTest : UITest() {
                 id = 17,
                 step = "4",
                 condition = """
-- MANUAL_SCENARIO(Manualing scenario)
+- MANUAL_SCENARIO(Execute test manually after this row in this scenario.)
 """.trimIndent(),
                 action = """
 - Select <Notifications> (scroll down)
@@ -483,7 +482,7 @@ class SpecReport_skipManualTest : UITest() {
                 id = 21,
                 step = "2",
                 condition = """
-- MANUAL_CASE(Manualing case(1))
+- MANUAL_CASE(Execute test manually after this row in this case.)
 """.trimIndent(),
                 action = """
 - Select <Connected devices> (scroll down)
@@ -514,7 +513,7 @@ class SpecReport_skipManualTest : UITest() {
                 id = 23,
                 step = "4",
                 condition = """
-- MANUAL_SCENARIO(Manualing scenario)
+- MANUAL_SCENARIO(Execute test manually after this row in this scenario.)
 """.trimIndent(),
                 action = """
 - Select <Notifications> (scroll down)

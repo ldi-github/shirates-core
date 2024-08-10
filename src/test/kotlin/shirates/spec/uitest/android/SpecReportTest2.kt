@@ -8,7 +8,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.platformMajorVersion
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.Manual
 import shirates.core.testcode.SheetName

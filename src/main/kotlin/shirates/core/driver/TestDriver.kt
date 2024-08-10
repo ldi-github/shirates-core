@@ -2405,16 +2405,16 @@ object TestDriver {
         }
 
         if (testContext.isLocalServer) {
-            testProfile.completeProfileWithDeviceInformation()
+            testContext.profile.completeProfileWithDeviceInformation()
 
-            if (testProfile.udid.isBlank()) {
+            if (testContext.profile.udid.isBlank()) {
                 resetAppiumSession()
             }
         }
 
         if (isAndroid) {
             TestDriveObjectAndroid.launchAndroidApp(
-                udid = testProfile.udid,
+                udid = testContext.profile.udid,
                 packageNameOrActivityName = packageOrBundleIdOrActivity,
                 onLaunchHandler = onLaunchHandler
             )
@@ -2436,7 +2436,7 @@ object TestDriver {
                 testDrive.terminateApp(appNameOrAppId = bundleId)
                 TestLog.info("Launching app. (bundleId=$bundleId)")
                 TestDriveObjectIos.launchIosApp(
-                    udid = testProfile.udid,
+                    udid = testContext.profile.udid,
                     bundleId = bundleId,
                     sync = sync,
                     onLaunchHandler = onLaunchHandler,
@@ -2458,9 +2458,9 @@ object TestDriver {
                      * Reset Appium session
                      */
                     if (isAndroid) {
-                        AndroidDeviceUtility.reboot(testProfile)
+                        AndroidDeviceUtility.reboot(testContext.profile)
                     } else if (isiOS) {
-                        IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
+                        IosDeviceUtility.terminateSpringBoardByUdid(udid = testContext.profile.udid)
                     }
                     createAppiumDriver()
 
@@ -2470,7 +2470,7 @@ object TestDriver {
                     val retry =
                         try {
                             TestDriveObjectIos.launchIosApp(
-                                udid = testProfile.udid,
+                                udid = testContext.profile.udid,
                                 bundleId = bundleId,
                                 log = true
                             )
@@ -2516,12 +2516,12 @@ object TestDriver {
             if (isAndroid) {
                 val device = AndroidDeviceUtility.currentAndroidDeviceInfo
                 if (device != null) {
-                    if (testProfile.udid.isNotBlank()) {
-                        AndroidDeviceUtility.shutdownEmulatorByUdid(testProfile.udid)
+                    if (testContext.profile.udid.isNotBlank()) {
+                        AndroidDeviceUtility.shutdownEmulatorByUdid(testContext.profile.udid)
                     }
                 }
             } else {
-                IosDeviceUtility.terminateSpringBoardByUdid(udid = testProfile.udid)
+                IosDeviceUtility.terminateSpringBoardByUdid(udid = testContext.profile.udid)
             }
         }
 
@@ -2532,7 +2532,7 @@ object TestDriver {
          */
         AppiumServerManager.setupAppiumServerProcess(
             sessionName = TestLog.currentTestClassName,
-            profile = testProfile
+            profile = testContext.profile
         )
 
         /**

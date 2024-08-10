@@ -1,7 +1,5 @@
 package shirates.core.driver
 
-import shirates.core.configuration.TestProfile
-
 /**
  * testDrive
  */
@@ -52,12 +50,3 @@ val testContext: TestContext
     get() {
         return TestDriver.testContext
     }
-
-/**
- * testProfile
- */
-val testProfile: TestProfile
-    get() {
-        return testContext.profile
-    }
-

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.specialTag
 import shirates.core.driver.commandextension.describe
-import shirates.core.driver.testProfile
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android 14 with Tag1")

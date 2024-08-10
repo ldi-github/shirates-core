@@ -3,7 +3,7 @@ package shirates.core.configuration
 import shirates.core.Const
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.testProfile
+import shirates.core.driver.testContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -243,7 +243,7 @@ object PropertiesManager {
                 return Const.ANDROID_STATBAR_HEIGHT
             }
 
-            val m = testProfile.deviceName.removePrefix("iPhone ")
+            val m = testContext.profile.deviceName.removePrefix("iPhone ")
             return if (m.startsWith("SE")) 20
             else if (m.startsWith("15")) 47
             else if (m.startsWith("14")) 47

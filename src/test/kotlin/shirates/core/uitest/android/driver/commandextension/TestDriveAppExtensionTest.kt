@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriveObjectAndroid
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testProfile
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 

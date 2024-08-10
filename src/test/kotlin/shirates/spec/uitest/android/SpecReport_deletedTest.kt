@@ -9,7 +9,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.selectWithScrollDown
 import shirates.core.driver.commandextension.textIs
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.Deleted
 import shirates.core.testcode.Manual

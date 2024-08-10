@@ -11,7 +11,6 @@ import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.tap
-import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
