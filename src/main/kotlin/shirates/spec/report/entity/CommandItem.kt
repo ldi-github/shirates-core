@@ -1,5 +1,6 @@
 package shirates.spec.report.entity
 
+import shirates.spec.exception.FileFormatException
 import java.util.*
 
 class CommandItem(
@@ -93,7 +94,7 @@ class CommandItem(
             result = tokens[14]
             exception = tokens[15]
         } catch (t: Throwable) {
-            println("IndexOufOfBound. (tokens.count=${tokens.count()}, text=$text)")
+            throw FileFormatException("IndexOufOfBound. File format of TestLog(commandList)_yyyyMMddHHmmss.log may have been changed. Try deleting TestResult directory and run again. (tokens.count=${tokens.count()}, text=$text), $t")
         }
     }
 

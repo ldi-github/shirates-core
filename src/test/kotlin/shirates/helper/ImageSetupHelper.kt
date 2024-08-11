@@ -142,15 +142,11 @@ object ImageSetupHelper : TestDrive {
 
         rootElement.cropImage("[Maps Top Screen].png")
         it.select("[Explore Tab(selected)]").cropTo(dir)
-        it.select("[You Tab]").cropTo(dir)
         it.select("[Contribute Tab]").cropTo(dir)
-
-        it.tap("[You Tab]")
-            .wait()
-        it.select("[Saved Tab(selected)]").cropTo(dir)
 
         it.tap("[Contribute Tab]")
             .wait()
+        it.select("[Explore Tab]").cropTo(dir)
         it.select("[Contribute Tab(selected)]").cropTo(dir)
     }
 

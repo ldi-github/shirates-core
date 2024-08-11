@@ -3,7 +3,6 @@ package shirates.spec.uitest.android
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.logging.TestLog
@@ -29,8 +28,6 @@ class SpecReportTest : UITest() {
      * Install Calculator app (Google LLC) before running this test.
      */
 
-    lateinit var profile: TestProfile
-
     @Manual
     @Test
     @Order(10)
@@ -50,8 +47,6 @@ class SpecReportTest : UITest() {
     }
 
     private fun scenarioCore() {
-
-        profile = testProfile
 
         scenario {
             case(1) {
@@ -122,9 +117,9 @@ class SpecReportTest : UITest() {
             testConfigName = "Calculator",
             sheetName = "calculator test",
             testClassName = "SpecReportTest",
-            profileName = profile.profileName,
+            profileName = testProfile.profileName,
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
-            platformVersion = profile.platformVersion,
+            platformVersion = testProfile.platformVersion,
             ok = 4,
             na = 4,
             total = 8,

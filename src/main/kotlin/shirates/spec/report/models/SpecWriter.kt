@@ -85,141 +85,138 @@ class SpecWriter(val specReport: SpecReport) {
                 else templateWorkbook.worksheets("TestSpec")
             val templateWorksheet = templateWorkbook.worksheets("Template")
 
-            fun XSSFRow.setString(key: String, col: Int, value: String) {
+            worksheetData.sheetPosition = SpecSheetPosition(sheet = worksheet, headerFirstColumnName = "ID")
+            val sp = worksheetData.sheetPosition
 
-                if (col <= 0) {
-                    throw TestConfigException(
-                        message(
-                            id = "keyIsNotSetInResourceFile",
-                            key = key,
-                            arg1 = worksheetData.logLanguage
-                        )
-                    )
-                }
-                if (value.isNotBlank()) {
-                    cells(col).setCellValue(value)
-                }
-            }
+            val policy = org.apache.poi.ss.usermodel.CellCopyPolicy.Builder().cellStyle(true).build()
+            var rowNum = 0
 
-            with(worksheetData) {
-                val sp = try {
-                    sheetPosition
-                } catch (t: Throwable) {
-                    throw IllegalStateException("sheetPosition is not initialized. The input file may be broken. ($newSheetName, ${worksheetData.specReportFile}) ${t}")
-                }
-                val policy = org.apache.poi.ss.usermodel.CellCopyPolicy.Builder().cellStyle(true).build()
+            for (i in 0 until worksheetData.specLines.count()) {
+                val specLine = worksheetData.specLines[i]
+                val deleted =
+                    specLine.result == "DELETED" || specLine.result == SpecResourceUtility.DELETED
+                rowNum = sp.RowHeader + 1 + i
+                val row = worksheet.rows(rowNum)
 
-                var rowNum = 0
-                for (i in 0 until specLines.count()) {
-                    val specLine = specLines[i]
-                    val deleted =
-                        specLine.result == "DELETED" || specLine.result == SpecResourceUtility.DELETED
-                    rowNum = sp.RowHeader + 1 + i
-                    val row = worksheet.rows(rowNum)
-
-                    /**
-                     * copy template cells
-                     */
-                    if (specLine.type == "scenario") {
+                /**
+                 * copy template cells
+                 */
+                if (specLine.type == "scenario") {
+                    for (c in 1..19) {
+                        val fromCell =
+                            if (deleted) templateWorksheet.rows(sp.RowHeader + 3).cells(c)
+                            else templateWorksheet.rows(sp.RowHeader + 1).cells(c)
+                        val cell = worksheet.rows(rowNum).cells(c)
+                        cell.copyCellFrom(fromCell, policy)
+                    }
+                } else {
+                    if (deleted) {
                         for (c in 1..19) {
-                            val fromCell =
-                                if (deleted) templateWorksheet.rows(sp.RowHeader + 3).cells(c)
-                                else templateWorksheet.rows(sp.RowHeader + 1).cells(c)
+                            val fromCell = templateWorksheet.rows(sp.RowHeader + 4).cells(c)
                             val cell = worksheet.rows(rowNum).cells(c)
                             cell.copyCellFrom(fromCell, policy)
                         }
-                    } else {
-                        if (deleted) {
-                            for (c in 1..19) {
-                                val fromCell = templateWorksheet.rows(sp.RowHeader + 4).cells(c)
-                                val cell = worksheet.rows(rowNum).cells(c)
-                                cell.copyCellFrom(fromCell, policy)
-                            }
-                        }
                     }
+                }
 
-                    /**
-                     * Important message
-                     */
-                    if (specLine.importantMessage.isNotBlank()) {
-                        val cell = worksheet.rows(rowNum).cells(3)
-                        cell.setCellValue(specLine.importantMessage)
-                        cell.cellStyle.wrapText = false
-                        cell.setFontRed()
-                    }
+                /**
+                 * Important message
+                 */
+                if (specLine.importantMessage.isNotBlank()) {
+                    val cell = worksheet.rows(rowNum).cells(3)
+                    cell.setCellValue(specLine.importantMessage)
+                    cell.cellStyle.wrapText = false
+                    cell.setFontRed()
+                }
 
-                    /**
-                     * set values
-                     */
+                /**
+                 * set values
+                 */
+                fun XSSFRow.setString(key: String, col: Int, value: String) {
 
-                    row.setString("column.step", sp.colStep, specLine.step)
-                    row.setString("column.condition", sp.colCondtion, specLine.condition)
-                    row.setString("column.action", sp.colAction, specLine.action)
-                    row.setString("column.target", sp.colTarget, specLine.target)
-                    row.setString("column.expectation", sp.colExpectation, specLine.expectation)
-                    val os =
-                        if (specLine.os.lowercase() == "android") "Android"
-                        else if (specLine.os.lowercase() == "ios") "iOS"
-                        else ""
-                    row.setString("column.os", sp.colOS, os)
-                    row.setString("column.special", sp.colSpecial, specLine.special)
-                    row.setString("column.auto", sp.colAuto, specLine.auto)
-                    row.setString("column.result", sp.colResult, specLine.altResult)
-
-                    if (sp.colDate < 0) {
+                    if (col <= 0) {
                         throw TestConfigException(
                             message(
                                 id = "keyIsNotSetInResourceFile",
-                                key = "column.testdate",
+                                key = key,
                                 arg1 = worksheetData.logLanguage
                             )
                         )
                     }
-
-                    row.setString("column.environment", sp.colEnvironment, specLine.environment)
-
-                    if (worksheetData.noLoadRun.not()) {
-                        row.cells(sp.colDate).setCellValue(specLine.date)
-                        row.setString("column.tester", sp.colTester, specLine.tester)
-                        row.setString("column.build", sp.colBuild, specLine.build)
+                    if (value.isNotBlank()) {
+                        cells(col).setCellValue(value)
                     }
-
-                    row.setString("column.supplement", sp.colSupplement, specLine.supplement)
-                    row.setString("column.suspend", sp.colSuspended, specLine.suspend)
-                    row.setString("column.ticketNo", sp.colTicketNo, specLine.ticketNo)
-                    row.setString("column.remarks", sp.colRemarks, specLine.remarks)
                 }
 
-                /**
-                 * group rows
-                 */
-                var lastScenarioRow = 0
-                val maxRow = sp.RowHeader + specLines.count() - 1
-                var scenarioRow: Int
-                var last = 0
-                for (n in sp.RowHeader..maxRow) {
-                    val step = worksheet.cells(n, sp.colStep).toString()
-                    val isScenario = step != "" && step.toIntOrNull() == null
-                    if (isScenario) {
-                        scenarioRow = n
-                        if (lastScenarioRow != 0) {
-                            worksheet.groupRow(lastScenarioRow, scenarioRow - 2)
-                        }
-                        lastScenarioRow = scenarioRow
+                row.setString("column.step", sp.colStep, specLine.step)
+                row.setString("column.condition", sp.colCondtion, specLine.condition)
+                row.setString("column.action", sp.colAction, specLine.action)
+                row.setString("column.target", sp.colTarget, specLine.target)
+                row.setString("column.expectation", sp.colExpectation, specLine.expectation)
+                val os =
+                    if (specLine.os.lowercase() == "android") "Android"
+                    else if (specLine.os.lowercase() == "ios") "iOS"
+                    else ""
+                row.setString("column.os", sp.colOS, os)
+                row.setString("column.special", sp.colSpecial, specLine.special)
+                row.setString("column.auto", sp.colAuto, specLine.auto)
+                row.setString("column.result", sp.colResult, specLine.altResult)
+
+                if (sp.colDate < 0) {
+                    throw TestConfigException(
+                        message(
+                            id = "keyIsNotSetInResourceFile",
+                            key = "column.testdate",
+                            arg1 = worksheetData.logLanguage
+                        )
+                    )
+                }
+
+                row.setString("column.environment", sp.colEnvironment, specLine.environment)
+
+                if (worksheetData.noLoadRun.not()) {
+                    row.cells(sp.colDate).setCellValue(specLine.date)
+                    row.setString("column.tester", sp.colTester, specLine.tester)
+                    row.setString("column.build", sp.colBuild, specLine.build)
+                }
+
+                row.setString("column.supplement", sp.colSupplement, specLine.supplement)
+                row.setString("column.suspend", sp.colSuspended, specLine.suspend)
+                row.setString("column.ticketNo", sp.colTicketNo, specLine.ticketNo)
+                row.setString("column.remarks", sp.colRemarks, specLine.remarks)
+            }
+
+            /**
+             * group rows
+             */
+            var lastScenarioRow = 0
+            val maxRow = sp.RowHeader + worksheetData.specLines.count() - 1
+            var scenarioRow: Int
+            var last = 0
+            for (n in sp.RowHeader..maxRow) {
+                val step = worksheet.cells(n, sp.colStep).toString()
+                val isScenario = step != "" && step.toIntOrNull() == null
+                if (isScenario) {
+                    scenarioRow = n
+                    if (lastScenarioRow != 0) {
+                        worksheet.groupRow(lastScenarioRow, scenarioRow - 2)
                     }
-                    last = n
+                    lastScenarioRow = scenarioRow
                 }
-                if (last > 0) {
-                    worksheet.groupRow(lastScenarioRow, last)
-                }
+                last = n
+            }
+            if (last > 0) {
+                worksheet.groupRow(lastScenarioRow, last)
+            }
 
-                /**
-                 * delete rows
-                 */
-                for (i in worksheet.lastRowNum + 1 downTo rowNum + 1) {
-                    worksheet.removeRow(worksheet.rows(i))
-                }
+            /**
+             * delete rows
+             */
+            for (i in worksheet.lastRowNum + 1 downTo rowNum + 1) {
+                worksheet.removeRow(worksheet.rows(i))
+            }
 
+            with(worksheetData) {
                 /**
                  * set header
                  */

@@ -5,7 +5,7 @@
     "[Maps Footer Menu(shared)]"
   ],
 
-  "identity": "[below_search_omnibox_container][Explore Tab][You Tab][Contribute Tab]",
+  "identity": "[Explore Tab][Contribute Tab]",
 
   "selectors": {
 

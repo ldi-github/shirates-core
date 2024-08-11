@@ -64,6 +64,7 @@ class LogTypeTest : UnitTest() {
             LogType.NG,
             LogType.SKIP,
             LogType.MANUAL,
+            LogType.COND_AUTO,
             LogType.NOTIMPL,
             LogType.KNOWNISSUE
         )

@@ -3,7 +3,6 @@ package shirates.spec.uitest.android
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
@@ -27,8 +26,6 @@ import java.util.*
 @Testrun("testConfig/android/clock/testrun.properties")
 class SpecReportTest2 : UITest() {
 
-    lateinit var profile: TestProfile
-
     @Manual
     @Test
     @Order(10)
@@ -47,8 +44,6 @@ class SpecReportTest2 : UITest() {
     }
 
     private fun scenarioCore() {
-
-        profile = testProfile
 
         scenario {
             case(1) {
@@ -145,9 +140,9 @@ class SpecReportTest2 : UITest() {
             testConfigName = "Clock",
             sheetName = "clock test",
             testClassName = "SpecReportTest2",
-            profileName = profile.profileName,
+            profileName = testProfile.profileName,
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
-            platformVersion = profile.platformVersion,
+            platformVersion = testProfile.platformVersion,
             ok = 10,
             na = 10,
             total = 20,

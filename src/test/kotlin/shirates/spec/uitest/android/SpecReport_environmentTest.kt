@@ -4,7 +4,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.selectWithScrollDown
@@ -29,8 +28,6 @@ import java.util.*
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecReport_environmentTest : UITest() {
 
-    lateinit var profile: TestProfile
-
     @Environment("stg")
     @Manual(supplement = "This test should be done manually.")
     @Test
@@ -51,8 +48,6 @@ class SpecReport_environmentTest : UITest() {
     }
 
     private fun scenarioCore() {
-
-        profile = testProfile
 
         scenario {
             case(1) {
@@ -104,9 +99,9 @@ class SpecReport_environmentTest : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReport_environmentTest",
-            profileName = profile.profileName,
+            profileName = testProfile.profileName,
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
-            platformVersion = profile.platformVersion,
+            platformVersion = testProfile.platformVersion,
             ok = 3,
             na = 3,
             total = 6,

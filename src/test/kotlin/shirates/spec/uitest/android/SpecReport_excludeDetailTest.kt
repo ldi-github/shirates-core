@@ -2,7 +2,6 @@ package shirates.spec.uitest.android
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.logging.TestLog
@@ -19,12 +18,6 @@ import shirates.spec.utilily.worksheets
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/no-load-exclude.testrun.properties")
 class SpecReport_excludeDetailTest : UITest() {
-
-    var profileName = ""
-
-    override fun beforeAllAfterSetup(context: ExtensionContext?) {
-        profileName = testProfile.profileName
-    }
 
     @Test
     @DisplayName("exclude detail items on scenario mode")
