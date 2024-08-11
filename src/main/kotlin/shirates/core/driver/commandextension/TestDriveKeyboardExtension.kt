@@ -118,7 +118,7 @@ fun TestDrive.goBack(): TestElement {
 
     val testElement = TestDriver.it
 
-    val command = "swipeBack"
+    val command = "goBack"
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
