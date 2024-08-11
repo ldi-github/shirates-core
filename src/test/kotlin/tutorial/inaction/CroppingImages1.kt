@@ -27,18 +27,10 @@ class CroppingImages1 : UITest() {
                 }.action {
                     rootElement.cropImage("[Maps Top Screen].png")
                     it.select("[Explore Tab]").cropAndCopy("[Explore Tab Image(selected)].png")
-                    it.select("[You Tab]").cropAndCopy("[Saved Tab Image].png")
                     it.select("[Contribute Tab]").cropAndCopy("[Contribute Tab Image].png")
                 }
             }
-            case(3) {
-                action {
-                    it.tap("[You Tab]")
-                        .wait()     // wait for animation to complete
-                    it.select("[You Tab]").cropAndCopy("[You Tab Image(selected)].png")
-                }
-            }
-            case(4) {
+            case(2) {
                 action {
                     it.tap("[Contribute Tab]")
                         .wait()     // wait for animation to complete

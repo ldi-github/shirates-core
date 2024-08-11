@@ -13,6 +13,7 @@ package tutorial.basic
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.dontExistImage
 import shirates.core.driver.commandextension.existImage
@@ -23,13 +24,8 @@ import shirates.helper.ImageSetupHelper
 @Testrun("testConfig/android/maps/testrun.properties")
 class ExistDontExist2 : UITest() {
 
-    @Test
-    @Order(0)
-    fun setupImage() {
-
-        scenario {
-            ImageSetupHelper.SetupImagesMapsTopScreen()
-        }
+    override fun beforeAllAfterSetup(context: ExtensionContext?) {
+        ImageSetupHelper.setupImagesMapsTopScreen()
     }
 
     @Test
@@ -42,24 +38,22 @@ class ExistDontExist2 : UITest() {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
                     it.existImage("[Explore Tab(selected)]")
-                        .existImage("[You Tab]")
                         .existImage("[Contribute Tab]")
                 }
             }
         }
-
     }
 
     @Test
     @Order(20)
-    fun existImage_WARN() {
+    fun existImage_WARN_COND_AUTO() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.existImage("[Explore Tab]")   // WARN
+                    it.existImage("[Explore Tab]")   // WARN & COND_AUTO
                 }
             }
         }
@@ -67,21 +61,6 @@ class ExistDontExist2 : UITest() {
 
     @Test
     @Order(30)
-    fun existImage_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Maps Top Screen]")
-                }.expectation {
-                    it.existImage("[Explore Tab]", throwsException = true)   // NG
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(40)
     fun dontExistImage_OK() {
 
         scenario {
@@ -89,14 +68,14 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.dontExistImage("[Explore Tab]") // OK
+                    it.dontExistImage("[Contribute Tab(selected)]") // OK
                 }
             }
         }
     }
 
     @Test
-    @Order(50)
+    @Order(40)
     fun dontExistImage_NG() {
 
         scenario {
@@ -104,7 +83,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.dontExistImage("[Explore Tab(selected)]") // NG
+                    it.dontExistImage("[Contribute Tab]") // NG
                 }
             }
         }
@@ -115,10 +94,14 @@ class ExistDontExist2 : UITest() {
 
 ## Sample Description
 
-1. Run `setupImage()` to create files for image matching. Image files will be output to the following directory after
-   capturing the maps app screen.<br><br>`testConfig/android/maps/screens/images/mapsTopScreen`
+1. Run `setupImage()` to create files for image matching. Image files will be output to the
+   following directory after
+   capturing the Maps app screen.<br><br>`testConfig/android/maps/screens/images/mapsTopScreen`
    <br><br> ![img.png](../../_images/setup_image_android_settings_top_screen.png) <br><br> ![img.png](../../_images/setup_image_android_settings_top_screen_2.png)
-2. Run `existImage_OK()`. The files described above will be loaded.
+
+<br>
+
+3. Run `existImage_OK()`. The files described above will be loaded.
    Image matching will be executed on calling `existImage()`.
 
 ```kotlin
@@ -132,31 +115,32 @@ class ExistDontExist2 : UITest() {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
                     it.existImage("[Explore Tab(selected)]")
-                        .existImage("[You Tab]")
                         .existImage("[Contribute Tab]")
                 }
             }
         }
-
     }
 ```
 
 ![img_1.png](../../_images/image_assertion_exist_image_maps_top_screen_1.png) <br><br>
 ![img.png](../../_images/image_assertion_exist_image_existimage_ok.png)
 
-3. Run `existImage_WARN()`. **WARN** message is output because the image does not match.
+<br>
+
+3. Run `existImage_WARN_COND_AUTO()`. **WARN** message is output because the image does not match,
+   and **COND_AUTO** message indicationg that manual testing is required is output.
 
 ```kotlin
     @Test
     @Order(20)
-    fun existImage_WARN() {
+    fun existImage_WARN_COND_AUTO() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.existImage("[Explore Tab]")   // WARN
+                    it.existImage("[Explore Tab]")   // WARN & COND_AUTO
                 }
             }
         }
@@ -165,32 +149,13 @@ class ExistDontExist2 : UITest() {
 
 ![img.png](../../_images/image_assertion_exist_image_existimage_warn.png)
 
-4. Run `existImage_NG()`. **NG** message is output because the argument of `throwsException = true` specified.
+<br>
+
+4. Run `dontExistImage_OK()`. **OK** message is output because the image is not exist.
 
 ```kotlin
     @Test
     @Order(30)
-    fun existImage_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Maps Top Screen]")
-                }.expectation {
-                    it.existImage("[Explore Tab]", throwsException = true)   // NG
-                }
-            }
-        }
-    }
-```
-
-![img.png](../../_images/image_assertion_exist_image_existimage_ng.png)
-
-5. Run `dontExistImage_OK()`. **OK** message is output because the image is not exist.
-
-```kotlin
-    @Test
-    @Order(40)
     fun dontExistImage_OK() {
 
         scenario {
@@ -198,7 +163,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.dontExistImage("[Explore Tab]") // OK
+                    it.dontExistImage("[Contribute Tab(selected)]") // OK
                 }
             }
         }
@@ -207,11 +172,13 @@ class ExistDontExist2 : UITest() {
 
 ![img.png](../../_images/image_assertion_exist_image_dontexistimage_ok.png)
 
-6. Run `dontExistImage_NG()`. **NG** message is output because the image exists.
+<br>
+
+5. Run `dontExistImage_NG()`. **NG** message is output because the image exists.
 
 ```kotlin
     @Test
-    @Order(50)
+    @Order(40)
     fun dontExistImage_NG() {
 
         scenario {
@@ -219,7 +186,7 @@ class ExistDontExist2 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.dontExistImage("[Explore Tab(selected)]") // NG
+                    it.dontExistImage("[Contribute Tab]") // NG
                 }
             }
         }
