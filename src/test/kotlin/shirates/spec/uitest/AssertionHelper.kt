@@ -8,8 +8,11 @@ import shirates.spec.utilily.cells
 import shirates.spec.utilily.text
 import shirates.spec.utilily.worksheets
 
-fun XSSFCell.textIs(expected: String) {
+fun XSSFCell.textIs(expected: String?) {
 
+    if (expected == null) {
+        return
+    }
     assertThat(this.text).isEqualTo(expected)
 }
 
@@ -126,23 +129,23 @@ fun XSSFSheet.assertRowHeader() {
 fun XSSFSheet.assertRow(
     rowNum: Int,
     id: Int? = null,
-    step: String = "",
-    condition: String = "",
+    step: String? = null,
+    condition: String? = null,
     action: String = "",
-    target: String = "",
-    expectation: String = "",
-    os: String = "",
-    special: String = "",
-    auto: String = "",
-    result: String = "",
-    testDate: String = "",
-    tester: String = "",
-    environment: String = "",
-    build: String = "",
-    supplement: String = "",
-    suspended: String = "",
-    ticketNo: String = "",
-    remarks: String = ""
+    target: String? = null,
+    expectation: String? = null,
+    os: String? = null,
+    special: String? = null,
+    auto: String? = null,
+    result: String? = null,
+    testDate: String? = null,
+    tester: String? = null,
+    environment: String? = null,
+    build: String? = null,
+    supplement: String? = null,
+    suspended: String? = null,
+    ticketNo: String? = null,
+    remarks: String? = null
 ) {
     if (id != null) {
         cells("A$rowNum").intIs(id)

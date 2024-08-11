@@ -2,7 +2,6 @@ package tutorial.basic
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.dontExistImage
 import shirates.core.driver.commandextension.existImage
@@ -13,7 +12,10 @@ import shirates.helper.ImageSetupHelper
 @Testrun("testConfig/android/maps/testrun.properties")
 class ExistDontExist2 : UITest() {
 
-    override fun beforeAllAfterSetup(context: ExtensionContext?) {
+    @Test
+    @Order(0)
+    fun setupImage() {
+
         ImageSetupHelper.setupImagesMapsTopScreen()
     }
 

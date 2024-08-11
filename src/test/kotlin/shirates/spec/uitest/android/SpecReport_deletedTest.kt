@@ -4,7 +4,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.selectWithScrollDown
@@ -29,8 +28,6 @@ import java.util.*
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecReport_deletedTest : UITest() {
 
-    lateinit var profile: TestProfile
-
     @Deleted("s10 is deleted")
     @Manual
     @Test
@@ -51,8 +48,6 @@ class SpecReport_deletedTest : UITest() {
     }
 
     private fun scenarioCore() {
-
-        profile = testProfile
 
         scenario {
             case(1) {
@@ -90,9 +85,9 @@ class SpecReport_deletedTest : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReport_deletedTest",
-            profileName = profile.profileName,
+            profileName = testProfile.profileName,
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
-            platformVersion = profile.platformVersion,
+            platformVersion = testProfile.platformVersion,
             m = 1,
             m_na = 0,
             a_ca = 1,

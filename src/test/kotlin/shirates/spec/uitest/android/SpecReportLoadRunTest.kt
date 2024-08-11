@@ -3,7 +3,6 @@ package shirates.spec.uitest.android
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ios
@@ -29,13 +28,9 @@ import java.nio.file.Files
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecReportLoadRunTest : UITest() {
 
-    lateinit var profile: TestProfile
-
     @Test
     @DisplayName("scenario1")
     fun S1000() {
-
-        profile = testProfile
 
         scenario {
             case(1) {
@@ -87,9 +82,9 @@ class SpecReportLoadRunTest : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReportLoadRunTest",
-            profileName = profile.profileName,
+            profileName = testProfile.profileName,
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
-            platformVersion = profile.platformVersion,
+            platformVersion = testProfile.platformVersion,
             noLoadRunMode = "",
             ok = 1,
             total = 1,

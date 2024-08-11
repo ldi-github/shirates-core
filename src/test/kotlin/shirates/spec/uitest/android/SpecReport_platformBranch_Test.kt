@@ -4,7 +4,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.*
 import shirates.core.driver.commandextension.describe
@@ -29,8 +28,6 @@ import java.util.*
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecReport_platformBranch_Test : UITest() {
 
-    lateinit var profile: TestProfile
-
     @Manual
     @Test
     @Order(10)
@@ -49,8 +46,6 @@ class SpecReport_platformBranch_Test : UITest() {
     }
 
     private fun scenarioCore() {
-
-        profile = testProfile
 
         scenario {
             case(1) {
@@ -132,9 +127,9 @@ class SpecReport_platformBranch_Test : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReport_platformBranch_Test",
-            profileName = profile.profileName,
+            profileName = testProfile.profileName,
             deviceModel = data.p.getValue("appium:deviceModel") ?: "",
-            platformVersion = if (data.noLoadRun) "" else profile.platformVersion,
+            platformVersion = if (data.noLoadRun) "" else testProfile.platformVersion,
             notImpl = 1,
             total = 1,
             a_ca = 1

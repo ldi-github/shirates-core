@@ -4,7 +4,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.selectWithScrollDown
@@ -27,8 +26,6 @@ import java.util.*
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class SpecReport_skipManualTest : UITest() {
-
-    lateinit var profile: TestProfile
 
     @Manual
     @Test
@@ -93,8 +90,6 @@ class SpecReport_skipManualTest : UITest() {
     }
 
     private fun scenarioCore(func1: () -> Unit, func2: () -> Unit) {
-
-        profile = testProfile
 
         scenario {
             case(1) {
@@ -165,9 +160,9 @@ class SpecReport_skipManualTest : UITest() {
             testConfigName = "Settings",
             sheetName = "SheetName1",
             testClassName = "SpecReport_skipManualTest",
-            profileName = profile.profileName,
+            profileName = testProfile.profileName,
             deviceModel = data.p.getValue("appium:deviceModel").toString(),
-            platformVersion = profile.platformVersion,
+            platformVersion = testProfile.platformVersion,
             ok = 4,
             na = 13,
             skip = 3,
