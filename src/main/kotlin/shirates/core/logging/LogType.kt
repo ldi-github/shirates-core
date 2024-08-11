@@ -326,6 +326,7 @@ enum class LogType(val label: String) {
             NG,
             SKIP,
             MANUAL,
+            COND_AUTO,
             NOTIMPL,
             KNOWNISSUE
         )

@@ -341,9 +341,6 @@ object TestDriver {
         }
 
         val iResult = e.isImageFound && dontExist.not() || e.isImageFound.not() && dontExist
-        if (iResult.not() && log) {
-            TestLog.warn("$assertMessage (${e.imageMatchResult})")
-        }
         if (eResult) {
             if (iResult) {
                 e.lastResult = TestLog.getOKType()
@@ -359,6 +356,7 @@ object TestDriver {
                     e.lastResult = LogType.COND_AUTO
                     e.lastError = null
                     if (log) {
+                        TestLog.warn("$assertMessage (${e.imageMatchResult})")
                         TestLog.conditionalAuto(assertMessage)
                     }
                     return
@@ -372,11 +370,7 @@ object TestDriver {
                 }
                 return
             } else {
-                e.lastResult = LogType.COND_AUTO
-                e.lastError = null
-                if (log) {
-                    TestLog.conditionalAuto(assertMessage)
-                }
+                e.lastResult = LogType.NG
                 return
             }
         }
