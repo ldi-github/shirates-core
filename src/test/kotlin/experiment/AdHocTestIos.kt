@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.allElements
+import shirates.core.driver.commandextension.select
+import shirates.core.driver.commandextension.suppressCache
+import shirates.core.driver.commandextension.widget
 import shirates.core.driver.rootElement
 import shirates.core.driver.testDrive
 import shirates.core.logging.printInfo
@@ -106,21 +109,4 @@ class AdHocTestIos : UITest() {
         }
     }
 
-    @Test
-    fun goBackTest() {
-
-        scenario {
-            case(1) {
-                condition {
-                    pressHome()
-                    tapAppIcon("Safari")
-                        .screenIs("[Safari Screen]")
-                }.action {
-                    goBack()
-                }.expectation {
-                    it.screenIs("[Safari Screen]")
-                }
-            }
-        }
-    }
 }

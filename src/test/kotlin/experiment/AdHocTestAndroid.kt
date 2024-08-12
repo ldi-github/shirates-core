@@ -227,23 +227,4 @@ class AdHocTestAndroid : UITest() {
 
     }
 
-    @Test
-    fun goBackTest() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.run {
-                        macro("[Android Settings Top Screen]")
-                        launchApp("[Chrome]")
-                            .appIs("[Chrome]")
-                    }
-                }.action {
-                    it.goBack()
-                }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
-                }
-            }
-        }
-    }
 }

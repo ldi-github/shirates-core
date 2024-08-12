@@ -209,7 +209,6 @@ appiumArgs=--session-override --relaxed-security
 #retryIntervalSeconds=
 #enableHealthCheck=false
 #tapTestSelector=
-#pressBackSelector=@Navigate up||@上へ移動
 #enableAutoSyncAndroid=true
 #enableAutoSyncIos=true
 #enableLaunchOnScenario=false

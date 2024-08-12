@@ -1721,24 +1721,6 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun pressBackSelector() {
-
-        run {
-            // Arrange
-            PropertiesManager.clear()
-            // Act, Assert
-            assertThat(PropertiesManager.pressBackSelector).isEqualTo(Const.PRESS_BACK_SELECTOR)
-        }
-        run {
-            // Arrange
-            val value = "@Navigate Back"
-            PropertiesManager.setPropertyValue("pressBackSelector", value)
-            // Act, Assert
-            assertThat(PropertiesManager.pressBackSelector).isEqualTo(value)
-        }
-    }
-
-    @Test
     fun macroObjectsScanDir() {
 
         run {
