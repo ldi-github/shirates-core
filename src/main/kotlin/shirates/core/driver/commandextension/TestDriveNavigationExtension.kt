@@ -10,7 +10,6 @@ import shirates.core.driver.commandextension.invalidateCache
 import shirates.core.driver.commandextension.suppressCache
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.android.AdbUtility
 import java.time.Duration
 
 /**
@@ -92,15 +91,7 @@ fun TestDrive.goPreviousApp(
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
         if (isAndroid) {
-            val canUseGesture = AdbUtility.isOverlayEnabled(
-                name = "com.android.internal.systemui.navbar.gestural",
-                udid = testProfile.udid
-            )
-            if (canUseGesture) {
-                goPreviousAppWithGestureAndroid()
-            } else {
-                goPreviousAppWithAppSwitch()
-            }
+            goPreviousAppWithAppSwitchAndroid()
         } else if (isiOS) {
             goPreviousAppWithGestureIos()
         } else {
@@ -115,12 +106,11 @@ fun TestDrive.goPreviousApp(
 
 }
 
-internal fun TestDrive.goPreviousAppWithAppSwitch(): TestElement {
+internal fun TestDrive.goPreviousAppWithAppSwitchAndroid(): TestElement {
 
     suppressCache {
-        val b = rootElement.bounds
         TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.APP_SWITCH))
-        wait()
+        wait(waitSeconds = 0.5)
         TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.APP_SWITCH))
     }
     invalidateCache()
