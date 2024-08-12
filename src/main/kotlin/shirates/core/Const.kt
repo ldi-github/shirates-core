@@ -62,7 +62,6 @@ object Const {
     const val EMULATOR_PORT = 5554
     const val ENABLE_HEALTH_CHECK = true
     const val TAP_TEST_SELECTOR = ".label"
-    const val PRESS_BACK_SELECTOR = "@Navigate up||@上へ移動"
     const val ENABLE_AUTO_SYNC_ANDROID = false
     const val ENABLE_AUTO_SYNC_IOS = false
     const val ENABLE_LAUNCH_APP_ON_SCENARIO = true
