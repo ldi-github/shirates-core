@@ -7,11 +7,10 @@ import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.invalidateCache
-import shirates.core.driver.commandextension.pressBack
 import shirates.core.driver.commandextension.suppressCache
-import shirates.core.driver.commandextension.tap
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.android.AdbUtility
 import java.time.Duration
 
 /**
@@ -80,30 +79,30 @@ internal fun TestDrive.showTask(
 }
 
 /**
- * goPreviousTask
+ * goPreviousApp
  */
-fun TestDrive.goPreviousTask(
+fun TestDrive.goPreviousApp(
     waitSeconds: Double = testContext.shortWaitSeconds
 ): TestElement {
 
     val testElement = TestDriver.it
 
-    val command = "goPreviousTask"
+    val command = "goPreviousApp"
     val message = message(id = command)
     val context = TestDriverCommandContext(testElement)
     context.execOperateCommand(command = command, message = message) {
         if (isAndroid) {
-            if (platformMajorVersion == 10) {
-                suppressCache {
-                    val b = rootElement.bounds
-                    TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.APP_SWITCH))
-                    tap(b.left + 10, b.centerY)
-                }
+            val canUseGesture = AdbUtility.isOverlayEnabled(
+                name = "com.android.internal.systemui.navbar.gestural",
+                udid = testProfile.udid
+            )
+            if (canUseGesture) {
+                goPreviousAppWithGestureAndroid()
             } else {
-                pressBack()
+                goPreviousAppWithAppSwitch()
             }
         } else if (isiOS) {
-            goLeftTaskGestureIos()
+            goPreviousAppWithGestureIos()
         } else {
             throw NotImplementedError()
         }
@@ -112,11 +111,23 @@ fun TestDrive.goPreviousTask(
         wait(waitSeconds = waitSeconds)
     }
 
-    return TestElement.emptyElement
+    return lastElement
 
 }
 
-private fun TestDrive.goLeftTaskGestureAndroid() {
+internal fun TestDrive.goPreviousAppWithAppSwitch(): TestElement {
+
+    suppressCache {
+        val b = rootElement.bounds
+        TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.APP_SWITCH))
+        wait()
+        TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.APP_SWITCH))
+    }
+    invalidateCache()
+    return lastElement
+}
+
+internal fun TestDrive.goPreviousAppWithGestureAndroid() {
     val b = rootElement.bounds
     val finger = PointerInput(PointerInput.Kind.TOUCH, "finger")
     val sequence = org.openqa.selenium.interactions.Sequence(finger, 0)
@@ -159,7 +170,7 @@ private fun TestDrive.goLeftTaskGestureAndroid() {
 
 }
 
-private fun TestDrive.goLeftTaskGestureIos() {
+internal fun TestDrive.goPreviousAppWithGestureIos() {
 
     val b = rootElement.bounds
     val finger = PointerInput(PointerInput.Kind.TOUCH, "finger")

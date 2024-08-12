@@ -121,6 +121,8 @@
     - [clearInput](basic/function_property/editing_and_keyboard_operations/clearinput_ja.md)
     - [press keys](basic/function_property/editing_and_keyboard_operations/press_keys_ja.md)
     - [hideKeyboard](basic/function_property/editing_and_keyboard_operations/hide_keyboard_ja.md)
+- アプリを切り替える
+    - [goPreviousApp](basic/function_property/navigation/go_previous_task_ja.md)
 - 同期する
     - [wait](basic/syncing/wait_ja.md)
     - [waitScreen, waitScreenOf](basic/syncing/wait_screen_ja.md)

@@ -1,19 +1,17 @@
-package shirates.core.uitest.ios.driver.commandextension
+package tutorial.basic
 
 import goPreviousApp
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.appIs
 import shirates.core.driver.commandextension.launchApp
-import shirates.core.driver.commandextension.launchAppByShell
-import shirates.core.driver.commandextension.screenIs
 import shirates.core.testcode.UITest
 
-@Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveNavigationExtensionTest : UITest() {
+@Testrun("testConfig/android/androidSettings/testrun.properties")
+class NavigationOnAndroid1 : UITest() {
 
     @Test
-    fun goLeftTaskTest() {
+    fun goPreviousAppTest() {
 
         scenario {
             case(1) {
@@ -25,9 +23,9 @@ class TestDriveNavigationExtensionTest : UITest() {
             }
             case(2) {
                 action {
-                    it.launchApp("[Safari]")
+                    it.launchApp("[Maps]")
                 }.expectation {
-                    it.appIs("[Safari]")
+                    it.appIs("[Maps]")
                 }
             }
             case(3) {
@@ -39,5 +37,5 @@ class TestDriveNavigationExtensionTest : UITest() {
             }
         }
     }
-    
+
 }

@@ -12,6 +12,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
+import shirates.core.utility.android.AdbUtility
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class AdHocTestAndroid : UITest() {
@@ -227,4 +228,15 @@ class AdHocTestAndroid : UITest() {
 
     }
 
+    @Test
+    fun gesturalTest() {
+
+        val isEnabled =
+            AdbUtility.isOverlayEnabled(
+                "com.android.internal.systemui.navbar.gestural",
+                udid = shirates.core.driver.testProfile.udid
+            )
+
+        println("com.android.internal.systemui.navbar.gestural: $isEnabled")
+    }
 }

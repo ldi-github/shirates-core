@@ -94,4 +94,39 @@ object AdbUtility {
         val r = ShellUtility.executeCommand("adb", "shell", "kill", "-9", pid)
         return r
     }
+
+    /**
+     * getOverlayList
+     */
+    fun getOverlayList(
+        udid: String,
+    ): List<String> {
+
+        val result =
+            ShellUtility.executeCommand(
+                "adb",
+                "-s",
+                udid,
+                "shell",
+                "cmd",
+                "overlay",
+                "list"
+            )
+        val list = result.resultString.split("\n")
+        return list
+    }
+
+    /**
+     * isOverlayEnabled
+     */
+    fun isOverlayEnabled(
+        name: String,
+        udid: String
+    ): Boolean {
+        val list = getOverlayList(udid = udid)
+        if (list.isEmpty()) return false
+
+        val list2 = list.filter { it.startsWith("[x]") && it.endsWith(name) }
+        return list2.any()
+    }
 }

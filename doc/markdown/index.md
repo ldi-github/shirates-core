@@ -121,6 +121,8 @@
     - [clearInput](basic/function_property/editing_and_keyboard_operations/clearinput.md)
     - [press keys](basic/function_property/editing_and_keyboard_operations/press_keys.md)
     - [hideKeyboard](basic/function_property/editing_and_keyboard_operations/hide_keyboard.md)
+- Swich Apps
+    - [goPreviousApp](basic/function_property/navigation/go_previous_task.md)
 - Syncing
     - [wait](basic/syncing/wait.md)
     - [waitScreen, waitScreenOf](basic/syncing/wait_screen.md)
