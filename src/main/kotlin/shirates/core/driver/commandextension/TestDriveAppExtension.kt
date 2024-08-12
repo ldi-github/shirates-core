@@ -168,8 +168,8 @@ fun TestDrive.launchApp(
     appNameOrAppIdOrActivityName: String = testContext.appIconName,
     launchAppMethod: String = PropertiesManager.launchAppMethod,
     fallBackToTapAppIcon: Boolean = true,
-    sync: Boolean = true,
-    onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
+    onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
+    sync: Boolean = true
 ): TestElement {
 
     val testElement = TestElement.emptyElement
@@ -188,8 +188,8 @@ fun TestDrive.launchApp(
             launchAppByShell(
                 appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName,
                 fallBackToTapAppIcon = fallBackToTapAppIcon,
-                sync = sync,
-                onLaunchHandler = onLaunchHandler
+                onLaunchHandler = onLaunchHandler,
+                sync = sync
             )
         }
 
@@ -264,8 +264,8 @@ fun TestDrive.launchAppByShell(
     appNameOrAppIdOrActivityName: String = testContext.appIconName,
     launchAppMethod: String = PropertiesManager.launchAppMethod,
     fallBackToTapAppIcon: Boolean = true,
-    sync: Boolean = true,
-    onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
+    onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
+    sync: Boolean = true
 ): TestElement {
 
     val testElement = TestElement.emptyElement
@@ -281,8 +281,8 @@ fun TestDrive.launchAppByShell(
         TestDriver.launchByShell(
             appNameOrAppIdOrActivityName = appNameOrAppIdOrActivityName,
             fallBackToTapAppIcon = fallBackToTapAppIcon,
-            sync = sync,
-            onLaunchHandler = onLaunchHandler
+            onLaunchHandler = onLaunchHandler,
+            sync = sync
         )
     }
 

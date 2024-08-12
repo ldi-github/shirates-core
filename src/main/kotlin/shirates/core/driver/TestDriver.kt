@@ -2391,8 +2391,8 @@ object TestDriver {
     fun launchByShell(
         appNameOrAppIdOrActivityName: String,
         fallBackToTapAppIcon: Boolean,
-        sync: Boolean,
-        onLaunchHandler: (() -> Unit)?
+        onLaunchHandler: (() -> Unit)?,
+        sync: Boolean
     ) {
         if (appNameOrAppIdOrActivityName.contains("/")) {
             val activityName = appNameOrAppIdOrActivityName

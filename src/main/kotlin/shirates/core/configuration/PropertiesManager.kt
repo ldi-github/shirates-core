@@ -742,15 +742,6 @@ object PropertiesManager {
         }
 
     /**
-     * pressBackSelector
-     */
-    val pressBackSelector: String
-        get() {
-            return getPropertyValue(propertyName = "pressBackSelector")
-                ?: Const.PRESS_BACK_SELECTOR
-        }
-
-    /**
      * enableAutoSyncAndroid
      */
     val enableAutoSyncAndroid: Boolean
