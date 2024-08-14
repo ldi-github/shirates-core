@@ -846,7 +846,7 @@ class FilterTest : UnitTest() {
             assertThat(filter.fullExpression).isEqualTo("capturable=??")
             assertThat(filter.abbreviationOperator).isEqualTo("??")
             assertThat(filter.abbreviationExpression).isEqualTo("??")
-            assertThat(filter.evaluate("always return true")).isEqualTo(true)
+            assertThat(filter.evaluate("always return false")).isEqualTo(false)
         }
         run {
             // Arrange, Act
@@ -863,7 +863,7 @@ class FilterTest : UnitTest() {
             assertThat(filter.fullExpression).isEqualTo("capturable=??")
             assertThat(filter.abbreviationOperator).isEqualTo("??")
             assertThat(filter.abbreviationExpression).isEqualTo("??")
-            assertThat(filter.evaluate("always return true")).isEqualTo(true)
+            assertThat(filter.evaluate("always return false")).isEqualTo(false)
         }
         run {
             assertThatThrownBy {
