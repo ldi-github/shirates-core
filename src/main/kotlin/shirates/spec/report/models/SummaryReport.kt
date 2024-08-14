@@ -12,7 +12,8 @@ import java.nio.file.Path
 
 class SummaryReport(
     val sessionPath: Path,
-    val templatePath: Path? = null
+    val templatePath: Path? = null,
+    val outputPath: Path? = null,
 ) {
     val specReportFiles = mutableListOf<File>()
     val summaryLines = mutableListOf<SummaryLine>()
@@ -23,7 +24,8 @@ class SummaryReport(
 
     val outputFilePath: Path
         get() {
-            return summaryDirPath.resolve("_Summary_${sessionPath.parent.fileName}_${sessionPath.fileName}.xlsx")
+            return outputPath
+                ?: summaryDirPath.resolve("_Summary_${sessionPath.parent.fileName}_${sessionPath.fileName}.xlsx")
         }
 
     val summaryDirPath: Path
