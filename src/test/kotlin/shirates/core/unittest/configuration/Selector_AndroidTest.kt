@@ -1858,6 +1858,33 @@ class Selector_AndroidTest : UnitTest() {
     }
 
     @Test
+    fun init_expression_capturable() {
+
+        run {
+            // Arrange, Act
+            val sel = Selector("capturable=??")
+            // Assert
+            assertThat(sel.expression).isEqualTo("capturable=??")
+            assertThat(sel.nickname).isEqualTo(null)
+            assertThat(sel.toString()).isEqualTo("<??>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.capturable).isEqualTo("??")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+        run {
+            // Arrange, Act
+            val sel = Selector("??")
+            // Assert
+            assertThat(sel.expression).isEqualTo("??")
+            assertThat(sel.nickname).isEqualTo(null)
+            assertThat(sel.toString()).isEqualTo("<??>")
+            assertThat(sel.filterMap.count()).isEqualTo(1)
+            assertThat(sel.capturable).isEqualTo("??")
+            assertThat(sel.relativeSelectors.count()).isEqualTo(0)
+        }
+    }
+
+    @Test
     fun init_expression_textMatches_no_bracket() {
 
         run {

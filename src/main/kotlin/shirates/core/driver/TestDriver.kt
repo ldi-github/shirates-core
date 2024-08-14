@@ -370,12 +370,19 @@ object TestDriver {
                 }
                 return
             } else {
-                e.lastResult = LogType.NG
+                if (e.selector?.capturable == "??") {
+                    if (log) {
+                        e.lastError = null
+                        TestLog.info("Selector is not capturable. (${e.selector?.expression})")
+                        TestLog.conditionalAuto(assertMessage)
+                    }
+                } else {
+                    e.lastResult = LogType.NG
+                }
                 return
             }
         }
     }
-
 
     /**
      * clearContext
