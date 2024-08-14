@@ -145,12 +145,38 @@ class SummaryReport(
         setupTemplateWorksheet()
         createSummarySheet()
         createWorksheets()
+        saveSummaryFile()
+        println("Saved: $outputFilePath")
+
+        saveMetadata()
+    }
+
+    private fun saveMetadata() {
+        val p = worksheetDataList.sortedBy { it.testDateTime }.last()
+        outputFilePath.parent.resolve("summary-parameters.sh").toFile().writeText(
+            """
+# Summary Parameters
+profileName="${p.profileName}"
+appIconName="${p.appIconName}"
+platformName="${p.platformName}"
+platformVersion="${p.platformVersion}"
+deviceModel="${p.deviceModel}"
+testDate="${p.testDate}"
+environment="${p.environment}"
+appVersion="${p.appVersion}"
+appBuild="${p.appBuild}"
+noLoadRun="${p.noLoadRun}"
+osSymbol="${p.osSymbol}"
+""".trimIndent()
+        )
+    }
+
+    private fun saveSummaryFile() {
         templateWorkbook.removeSheet("TestSpec")
         templateWorkbook.removeSheet("Template")
         templateWorkbook.setActiveSheet(0)
         Files.deleteIfExists(outputFilePath)
         templateWorkbook.saveAs(outputFilePath)
-        println("Saved: $outputFilePath")
     }
 
     private fun createWorksheets() {

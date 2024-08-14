@@ -87,6 +87,10 @@ class SpecReportData {
         get() {
             return p.getValue("appEnvironment") ?: ""
         }
+    val appVersion: String
+        get() {
+            return p.getValue("appVersion") ?: ""
+        }
     val appBuild: String
         get() {
             return p.getValue("appBuild") ?: ""
