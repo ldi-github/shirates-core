@@ -239,4 +239,35 @@ class AdHocTestAndroid : UITest() {
 
         println("com.android.internal.systemui.navbar.gestural: $isEnabled")
     }
+
+    @Test
+    fun tapAppIconTest() {
+
+        scenario {
+            case(1) {
+                condition {
+//                    it.tapAppIcon("YouTube")
+                    it.tapAppIcon("YT Music")
+                }.expectation {
+//                    it.appIs("com.google.android.youtube")
+                    it.appIs("com.google.android.apps.youtube.music")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun capturableTest() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    it.exist("??")
+                }
+
+            }
+        }
+
+
+    }
 }

@@ -401,6 +401,11 @@ internal fun TestDrive.existCore(
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
+    if (selector.capturable == "??") {
+        TestLog.conditionalAuto(message = assertMessage)
+        return lastElement
+    }
+
     if (selector.isImageSelector) {
         val e = existImageCore(
             sel = selector,
