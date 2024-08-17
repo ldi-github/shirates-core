@@ -1150,6 +1150,7 @@ object TestDriver {
         swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
+        selectContext: TestElement = TestElementCache.rootElement,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         safeElementOnly: Boolean
@@ -1172,6 +1173,7 @@ object TestDriver {
                 swipeToCenter = swipeToCenter,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
+                selectContext = selectContext,
                 frame = frame,
                 safeElementOnly = safeElementOnly
             )
@@ -1201,6 +1203,7 @@ object TestDriver {
     private fun selectCore(
         selector: Selector,
         allowScroll: Boolean,
+        selectContext: TestElement = TestElementCache.rootElement,
         frame: Bounds?,
         useCache: Boolean,
         swipeToCenter: Boolean,
@@ -1233,6 +1236,7 @@ object TestDriver {
                 TestElementCache.select(
                     selector = selector,
                     throwsException = false,
+                    selectContext = selectContext,
                     frame = frame
                 )
             } else {
@@ -1290,7 +1294,8 @@ object TestDriver {
                     val e = if (useCache) {
                         TestElementCache.select(
                             selector = selector,
-                            throwsException = false
+                            throwsException = false,
+                            selectContext = selectContext
                         )
                     } else {
                         selectDirect(
@@ -1537,6 +1542,7 @@ object TestDriver {
         scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
         throwsException: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
+        selectContext: TestElement = TestElementCache.rootElement,
         useCache: Boolean
     ): ImageMatchResult {
 
@@ -1561,7 +1567,7 @@ object TestDriver {
             syncCache()
         }
 
-        var r = rootElement.isContainingImage(selector.image!!, threshold = threshold)
+        var r = selectContext.isContainingImage(selector.image!!, threshold = threshold)
         r.imageFileEntries = imageFileEntries
         if (r.result) {
             return r
@@ -1575,7 +1581,7 @@ object TestDriver {
                 }
             }
             // Retry
-            r = rootElement.isContainingImage(selector.image!!)
+            r = selectContext.isContainingImage(selector.image!!)
             if (r.result) {
                 return r
             }
@@ -1584,7 +1590,7 @@ object TestDriver {
         if (scroll) {
             // Search in scroll
             val actionFunc = {
-                r = rootElement.isContainingImage(selector.image!!)
+                r = selectContext.isContainingImage(selector.image!!)
                 r.result
             }
 
@@ -1609,7 +1615,7 @@ object TestDriver {
                 if (sc.refreshCache.not()) {
                     screenshot(force = true)
                 }
-                r = rootElement.isContainingImage(selector.image!!)
+                r = selectContext.isContainingImage(selector.image!!)
                 r.imageFileEntries = imageFileEntries
                 r.result
             }

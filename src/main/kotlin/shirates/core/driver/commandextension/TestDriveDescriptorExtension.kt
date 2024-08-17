@@ -259,6 +259,7 @@ fun TestDrive.cellOf(
             useCache = useCache,
         )
     }
+    screenshot()
 
     return cellOfCore(
         testElement = testElement,
