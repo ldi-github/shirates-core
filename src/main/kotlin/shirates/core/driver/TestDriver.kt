@@ -370,12 +370,19 @@ object TestDriver {
                 }
                 return
             } else {
-                e.lastResult = LogType.NG
+                if (e.selector?.capturable == "??") {
+                    if (log) {
+                        e.lastError = null
+                        TestLog.info("Selector is not capturable. (${e.selector?.expression})")
+                        TestLog.conditionalAuto(assertMessage)
+                    }
+                } else {
+                    e.lastResult = LogType.NG
+                }
                 return
             }
         }
     }
-
 
     /**
      * clearContext
@@ -1143,6 +1150,7 @@ object TestDriver {
         swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
+        selectContext: TestElement = rootElement,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         safeElementOnly: Boolean
@@ -1165,6 +1173,7 @@ object TestDriver {
                 swipeToCenter = swipeToCenter,
                 throwsException = throwsException,
                 waitSeconds = waitSeconds,
+                selectContext = selectContext,
                 frame = frame,
                 safeElementOnly = safeElementOnly
             )
@@ -1194,6 +1203,7 @@ object TestDriver {
     private fun selectCore(
         selector: Selector,
         allowScroll: Boolean,
+        selectContext: TestElement = rootElement,
         frame: Bounds?,
         useCache: Boolean,
         swipeToCenter: Boolean,
@@ -1214,6 +1224,7 @@ object TestDriver {
         lastElement = TestElement.emptyElement
 
         var selectedElement: TestElement
+        var currentSelectContext = selectContext
 
         val originalForceUseCache = testContext.forceUseCache
         try {
@@ -1226,6 +1237,7 @@ object TestDriver {
                 TestElementCache.select(
                     selector = selector,
                     throwsException = false,
+                    selectContext = currentSelectContext,
                     frame = frame
                 )
             } else {
@@ -1234,7 +1246,22 @@ object TestDriver {
                     throwsException = false
                 )
             }
-            if (selector.isNegation.not()) {
+            if (selector.isNegation) {
+                if (useCache.not()) {
+                    lastElement = selectedElement
+                    if (lastElement.isFound.not()) {
+                        return lastElement
+                    }
+                } else if (
+                    selectedElement.isEmpty ||
+                    selectedElement.isFound && (selectedElement.isInView.not() ||
+                            safeElementOnly && selectedElement.isSafe().not())
+                ) {
+                    lastElement = TestElement.emptyElement
+                    lastElement.selector = selector
+                    return lastElement
+                }
+            } else {
                 if (useCache.not()) {
                     lastElement = selectedElement
                     if (lastElement.isFound) {
@@ -1278,12 +1305,16 @@ object TestDriver {
                                 testContext.onSelectErrorHandler!!.invoke()
                             }
                         }
+                        val newSelectContext = currentSelectContext.refreshThisElement()
+                        currentSelectContext = if (newSelectContext.isFound) newSelectContext else rootElement
                     }
                 ) { sc ->
                     val e = if (useCache) {
                         TestElementCache.select(
                             selector = selector,
-                            throwsException = false
+                            throwsException = false,
+                            selectContext = currentSelectContext,
+                            frame = frame
                         )
                     } else {
                         selectDirect(
@@ -1530,6 +1561,7 @@ object TestDriver {
         scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
         throwsException: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
+        selectContext: TestElement = TestElementCache.rootElement,
         useCache: Boolean
     ): ImageMatchResult {
 
@@ -1554,7 +1586,7 @@ object TestDriver {
             syncCache()
         }
 
-        var r = rootElement.isContainingImage(selector.image!!, threshold = threshold)
+        var r = selectContext.isContainingImage(selector.image!!, threshold = threshold)
         r.imageFileEntries = imageFileEntries
         if (r.result) {
             return r
@@ -1568,7 +1600,7 @@ object TestDriver {
                 }
             }
             // Retry
-            r = rootElement.isContainingImage(selector.image!!)
+            r = selectContext.isContainingImage(selector.image!!)
             if (r.result) {
                 return r
             }
@@ -1577,7 +1609,7 @@ object TestDriver {
         if (scroll) {
             // Search in scroll
             val actionFunc = {
-                r = rootElement.isContainingImage(selector.image!!)
+                r = selectContext.isContainingImage(selector.image!!)
                 r.result
             }
 
@@ -1602,7 +1634,7 @@ object TestDriver {
                 if (sc.refreshCache.not()) {
                     screenshot(force = true)
                 }
-                r = rootElement.isContainingImage(selector.image!!)
+                r = selectContext.isContainingImage(selector.image!!)
                 r.imageFileEntries = imageFileEntries
                 r.result
             }

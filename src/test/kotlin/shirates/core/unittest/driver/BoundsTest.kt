@@ -255,6 +255,26 @@ class BoundsTest : UnitTest() {
     }
 
     @Test
+    fun isAlmostIncludedIn() {
+
+        run {
+            val outer = Bounds(10, 20, 30, 40)
+            val inner = Bounds(11, 21, 29, 39)
+
+            // included
+            assertThat(inner.isAlmostIncludedIn(outer)).isTrue()
+            assertThat(inner.isAlmostIncludedIn(outer, margin = 0)).isTrue()
+            assertThat(outer.isAlmostIncludedIn(inner)).isTrue()
+            assertThat(outer.isAlmostIncludedIn(inner, margin = 1)).isTrue()
+            assertThat(outer.isAlmostIncludedIn(inner, margin = 0)).isFalse()
+
+            // included itself
+            assertThat(inner.isAlmostIncludedIn(inner)).isTrue()
+            assertThat(inner.isAlmostIncludedIn(inner, margin = 0)).isTrue()
+        }
+    }
+
+    @Test
     fun isSeparatedFrom_isOverlapping() {
 
         val a = Bounds(100, 200, 10, 10)

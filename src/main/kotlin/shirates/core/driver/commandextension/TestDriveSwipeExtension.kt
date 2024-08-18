@@ -973,6 +973,10 @@ fun TestDrive.swipeElementToElement(
         val marginX = ((b2.centerX - b1.centerX) * marginRatio).toInt()
         val marginY = ((b2.centerY - b1.centerY) * marginRatio).toInt()
 
+        if (b1.centerX == b2.centerX && b1.centerY == b2.centerY) {
+            return@execOperateCommand
+        }
+
         swipePointToPoint(
             startX = b1.centerX,
             startY = b1.centerY,
@@ -986,15 +990,16 @@ fun TestDrive.swipeElementToElement(
             safeMode = safeMode
         )
 
-        val m = TestDriver.findImageOrSelectCore(
-            selector = startElement.selector!!,
-            swipeToCenter = false,
-            safeElementOnly = false,
-            throwsException = false
-        )
         if (adjust) {
             TestDriver.syncCache(force = true)
-            if (m.isEmpty.not()) {
+            val m = TestDriver.findImageOrSelectCore(
+                selector = startElement.selector!!,
+                allowScroll = false,
+                swipeToCenter = false,
+                safeElementOnly = false,
+                throwsException = false
+            )
+            if (m.isEmpty.not() && m.bounds.centerX != b2.centerX && m.bounds.centerY != b2.centerY) {
                 swipePointToPoint(
                     startX = m.bounds.centerX,
                     startY = m.bounds.centerY,

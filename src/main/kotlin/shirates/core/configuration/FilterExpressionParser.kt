@@ -3,6 +3,7 @@ package shirates.core.configuration
 import shirates.core.configuration.Filter.Companion.registeredNouns
 import shirates.core.configuration.Filter.Companion.registeredNounsWithVerb
 import shirates.core.configuration.Filter.Companion.registeredVerbs
+import shirates.core.exception.TestConfigException
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 class FilterExpressionParser(
@@ -82,6 +83,12 @@ class FilterExpressionParser(
             val a = exp.removePrefix("!").removePrefix("#")
             val verb = a.getVerbForWildcard() ?: ""
             return "id$verb"
+        }
+        if (negationPrefixRemoved == "??" || negationPrefixRemoved.startsWith("capturable=")) {
+            if (exp.startsWith("!")) {
+                throw TestConfigException("Negation is not allowed on expression \"??\".")
+            }
+            return "capturable"
         }
 
         val t = exp.removePrefix("!")

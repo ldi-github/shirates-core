@@ -59,6 +59,7 @@ Shirates **Filter expression** is expression describing conditions to filter scr
 | pos              | pos=2                     | [2]          | n/a               | n/a           |            |
 | ignoreTypes      | ignoreTypes=Class1,Class2 | n/a          | class             | type          |            |
 | image            | image=image1.png          | image1.png   | n/a               | n/a           |            |
+| capturable       | capturable=??             | ??           | n/a               | n/a           |            |
 
 Note: The visibility attribute in iOS is deprecated because it cannot be used to determine whether an element is visible
 on the screen.
@@ -181,6 +182,22 @@ image1.png          // abbreviation
 image1.png?scale=0.5&threshold=20   // with option(formal)
 image1.png?s=0.5&t=20   // with option(abbreviation)
 ```
+
+## Capturable filter (Meta Filter)
+
+Depending on the implementation of the app, it may not be possible to retrieve the corresponding element even
+though it is displayed on the screen.
+For example, an element corresponding to an image displayed on the screen can be captured on Android, but not on iOS.
+In this case, a capturable filter can be used to explicitly state that the element cannot be captured on iOS.
+
+```kotlin
+it.existImage("@a<.android.widget.ImageButton>,@i<??>")
+```
+
+In this example, on Android, the element is searched with `.android.widget.ImageButton` and matched with an image
+template,
+On iOS, element search and image matching are not performed, and the result of verification is `COND_AUTO`, which
+indicates that manual testing is required.
 
 ### Link
 

@@ -401,6 +401,11 @@ internal fun TestDrive.existCore(
     log: Boolean = CodeExecutionContext.shouldOutputLog
 ): TestElement {
 
+    if (selector.capturable == "??") {
+        TestLog.conditionalAuto(message = assertMessage)
+        return lastElement
+    }
+
     if (selector.isImageSelector) {
         val e = existImageCore(
             sel = selector,
@@ -612,6 +617,8 @@ fun TestDrive.existImage(
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
+    selectContext: TestElement = TestElementCache.rootElement,
+    frame: Bounds? = null,
     useCache: Boolean = testContext.useCache,
     mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -645,12 +652,18 @@ fun TestDrive.existImage(
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
+        val newSelectContext = if (CodeExecutionContext.isInCell) CodeExecutionContext.lastCell else selectContext
+        val allowScroll = if (CodeExecutionContext.isInCell) false else true
+
         e = existImageCore(
             sel = sel,
+            allowScroll = allowScroll,
             threshold = threshold,
             assertMessage = assertMessage,
             throwsException = throwsException,
             waitSeconds = waitSeconds,
+            selectContext = newSelectContext,
+            frame = frame,
             useCache = useCache,
             swipeToCenter = swipeToCenter,
             mustValidateImage = mustValidateImage
@@ -672,6 +685,8 @@ fun TestDrive.dontExistImage(
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
+    selectContext: TestElement = TestElementCache.rootElement,
+    frame: Bounds? = null,
     useCache: Boolean = testContext.useCache,
     mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
@@ -688,12 +703,18 @@ fun TestDrive.dontExistImage(
     val context = TestDriverCommandContext(testElement)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
+        val newSelectContext = if (CodeExecutionContext.isInCell) CodeExecutionContext.lastCell else selectContext
+        val allowScroll = if (CodeExecutionContext.isInCell) false else true
+
         e = existImageCore(
             sel = sel,
+            allowScroll = allowScroll,
             threshold = threshold,
             assertMessage = assertMessage,
             throwsException = false,
             waitSeconds = waitSeconds,
+            selectContext = newSelectContext,
+            frame = frame,
             useCache = useCache,
             swipeToCenter = false,
             dontExist = true,
@@ -721,6 +742,8 @@ private fun TestDrive.existImageCore(
     assertMessage: String,
     throwsException: Boolean,
     waitSeconds: Double,
+    selectContext: TestElement = rootElement,
+    frame: Bounds? = null,
     useCache: Boolean,
     swipeToCenter: Boolean,
     dontExist: Boolean = false,
@@ -757,12 +780,16 @@ private fun TestDrive.existImageCore(
                 sel = sel,
                 allowScroll = allowScroll,
                 threshold = threshold,
-                waitSeconds = waitSeconds,
+                waitSeconds = if (dontExist) 0.0 else waitSeconds,
                 swipeToCenter = swipeToCenter,
+                selectContext = selectContext,
+                frame = frame,
                 useCache = useCache
             )
         }
     }
+
+    screenshot()
 
     TestDriver.postProcessForAssertion(
         selectResult = e,
@@ -804,6 +831,7 @@ private fun findImageAsElement(
     allowScroll: Boolean = true,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
+    selectContext: TestElement = TestElementCache.rootElement,
     useCache: Boolean,
 ): TestElement {
 
@@ -835,6 +863,8 @@ private fun selectElementAndCompareImage(
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
     swipeToCenter: Boolean,
+    selectContext: TestElement = TestElementCache.rootElement,
+    frame: Bounds? = null,
     useCache: Boolean
 ): TestElement {
 
@@ -845,6 +875,8 @@ private fun selectElementAndCompareImage(
         throwsException = false,
         waitSeconds = waitSeconds,
         swipeToCenter = swipeToCenter,
+        selectContext = selectContext,
+        frame = frame,
         useCache = useCache,
         safeElementOnly = false
     )

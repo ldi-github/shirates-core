@@ -12,7 +12,8 @@ import java.nio.file.Path
 
 class SummaryReport(
     val sessionPath: Path,
-    val templatePath: Path? = null
+    val templatePath: Path? = null,
+    val outputPath: Path? = null,
 ) {
     val specReportFiles = mutableListOf<File>()
     val summaryLines = mutableListOf<SummaryLine>()
@@ -23,7 +24,8 @@ class SummaryReport(
 
     val outputFilePath: Path
         get() {
-            return summaryDirPath.resolve("_Summary_${sessionPath.parent.fileName}_${sessionPath.fileName}.xlsx")
+            return outputPath
+                ?: summaryDirPath.resolve("_Summary_${sessionPath.parent.fileName}_${sessionPath.fileName}.xlsx")
         }
 
     val summaryDirPath: Path
@@ -143,12 +145,38 @@ class SummaryReport(
         setupTemplateWorksheet()
         createSummarySheet()
         createWorksheets()
+        saveSummaryFile()
+        println("Saved: $outputFilePath")
+
+        saveMetadata()
+    }
+
+    private fun saveMetadata() {
+        val p = worksheetDataList.sortedBy { it.testDateTime }.last()
+        outputFilePath.parent.resolve("summary-parameters.sh").toFile().writeText(
+            """
+# Summary Parameters
+profileName="${p.profileName}"
+appIconName="${p.appIconName}"
+platformName="${p.platformName}"
+platformVersion="${p.platformVersion}"
+deviceModel="${p.deviceModel}"
+testDate="${p.testDate}"
+environment="${p.environment}"
+appVersion="${p.appVersion}"
+appBuild="${p.appBuild}"
+noLoadRun="${p.noLoadRun}"
+osSymbol="${p.osSymbol}"
+""".trimIndent()
+        )
+    }
+
+    private fun saveSummaryFile() {
         templateWorkbook.removeSheet("TestSpec")
         templateWorkbook.removeSheet("Template")
         templateWorkbook.setActiveSheet(0)
         Files.deleteIfExists(outputFilePath)
         templateWorkbook.saveAs(outputFilePath)
-        println("Saved: $outputFilePath")
     }
 
     private fun createWorksheets() {

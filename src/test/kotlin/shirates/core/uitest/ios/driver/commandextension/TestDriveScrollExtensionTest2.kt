@@ -84,7 +84,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
         // Arrange
         it.macro("[Developer Screen]")
         // Act
-        it.scrollToBottom()
+        it.flickAndGoDown(repeat = 3)
         // Assert
         val lastItem =
             it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }

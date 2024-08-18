@@ -9,6 +9,7 @@ import java.nio.file.Path
 
 class SummaryReportExecutor(
     val inputDirPath: Path = shirates.spec.SpecConst.TEST_RESULTS.toPath(),
+    val outputPath: Path? = null,
     val templatePath: Path? = null
 ) {
 
@@ -45,7 +46,11 @@ class SummaryReportExecutor(
                 }
             }
         } else {
-            SummaryReport(sessionPath = inputDirPath, templatePath = templatePath)
+            SummaryReport(
+                sessionPath = inputDirPath,
+                outputPath = outputPath,
+                templatePath = templatePath
+            )
                 .execute()
         }
     }

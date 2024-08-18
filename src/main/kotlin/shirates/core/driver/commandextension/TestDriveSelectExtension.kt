@@ -16,6 +16,7 @@ fun TestDrive.select(
     swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    selectContext: TestElement = rootElement,
     frame: Bounds? = viewBounds,
     useCache: Boolean = testContext.useCache,
     updateLastElement: Boolean = true,
@@ -26,7 +27,7 @@ fun TestDrive.select(
 
     val sel = getSelector(expression = expression)
 
-    if (CodeExecutionContext.isInCell && this is TestElement) {
+    if (CodeExecutionContext.isInCell) {
         return CodeExecutionContext.lastCell.innerWidget(expression, frame = frame)
     }
 
@@ -46,6 +47,7 @@ fun TestDrive.select(
             swipeToCenter = swipeToCenter,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
+            selectContext = selectContext,
             frame = frame,
             useCache = useCache,
             safeElementOnly = safeElementOnly,

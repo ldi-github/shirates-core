@@ -78,6 +78,14 @@ class Selector(
             this["textMatches"] = value
         }
 
+    var capturable: String?
+        get() {
+            return getFieldValue("capturable")
+        }
+        set(value) {
+            this["capturable"] = value
+        }
+
     var image: String?
         get() {
             return getFieldValue("image")

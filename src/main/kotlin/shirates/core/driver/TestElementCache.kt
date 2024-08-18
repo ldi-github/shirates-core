@@ -97,7 +97,8 @@ object TestElementCache {
      */
     fun findElements(
         expression: String,
-        selectContext: TestElement = rootElement
+        selectContext: TestElement = rootElement,
+        excludeKeyboardOverlapping: Boolean = true,
     ): List<TestElement> {
 
         val sel: Selector
@@ -107,7 +108,11 @@ object TestElementCache {
             sel = TestDriver.expandExpression(expression = expression)
         }
 
-        val list = findElements(selector = sel, selectContext = selectContext)
+        val list = findElements(
+            selector = sel,
+            selectContext = selectContext,
+            excludeKeyboardOverlapping = excludeKeyboardOverlapping
+        )
         return list
     }
 
@@ -118,13 +123,14 @@ object TestElementCache {
         selector: Selector,
         throwsException: Boolean = false,
         selectContext: TestElement = rootElement,
+        excludeKeyboardOverlapping: Boolean = true,
         frame: Bounds? = null
     ): MutableList<TestElement> {
 
         var targetElements = selectContext.descendantsAndSelf
         if (frame != null) {
-            targetElements = targetElements.filter { it.bounds.isIncludedIn(frame) }
-            if (isiOS) {
+            targetElements = targetElements.filter { it.bounds.isAlmostIncludedIn(frame) }
+            if (isiOS && excludeKeyboardOverlapping) {
                 /**
                  * Keyboard overlapping check
                  */

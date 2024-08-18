@@ -120,7 +120,7 @@ class TestElementImageExtensionTest : UITest() {
     }
 
     @Test
-    @Order(999)
+    @Order(30)
     fun existImage() {
 
         val dir = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
@@ -133,6 +133,18 @@ class TestElementImageExtensionTest : UITest() {
                     it.existImage("[Battery Icon]") {// nickname [Battery Icon] is defined, file exists, OK
                         assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.OK)
                         assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of [Battery Icon] exists")
+                    }
+                    withScrollDown {
+                        cellOf("[Battery]") {
+                            existImage("[Battery Icon]") {
+                                assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.OK)
+                                assertThat(TestLog.lastTestLog?.message).isEqualTo("    Image of [Battery Icon] exists")
+                            }
+                            dontExistImage("[Display Icon]") {
+                                assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.OK)
+                                assertThat(TestLog.lastTestLog?.message).isEqualTo("    Image of [Display Icon] does not exist")
+                            }
+                        }
                     }
                 }
             }
@@ -147,6 +159,12 @@ class TestElementImageExtensionTest : UITest() {
                     it.existImage("[Battery Icon2]") {    // nickname [Battery Icon2] is not defined, but file exists, OK
                         assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.OK)
                         assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of [Battery Icon2] exists")
+                    }
+                    cellOf("[Battery]") {
+                        existImage("[Battery Icon2]") {
+                            assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.OK)
+                            assertThat(TestLog.lastTestLog?.message).isEqualTo("    Image of [Battery Icon2] exists")
+                        }
                     }
                 }
             }
@@ -187,6 +205,16 @@ class TestElementImageExtensionTest : UITest() {
                         )   // element found, image does not match, exception thrown
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessageStartingWith("Image of [Notifications Icon] exists")
+                    cellOf("[Notifications]") {
+                        assertThatThrownBy {
+                            existImage(
+                                expression = "[Notifications Icon]",
+                                throwsException = true,
+                                mustValidateImage = true
+                            )   // element found, image does not match, exception thrown
+                        }.isInstanceOf(TestNGException::class.java)
+                            .hasMessageStartingWith("Image of [Notifications Icon] exists")
+                    }
                 }
             }
         }

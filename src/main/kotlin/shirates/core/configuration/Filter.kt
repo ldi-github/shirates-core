@@ -124,6 +124,7 @@ class Filter(
                 "id" -> if (verb == "Matches") "" else "#"
                 "access" -> "@"
                 "text" -> ""
+                "capturable" -> "??"
                 "pos" -> "[n]"
                 else -> ""
             }
@@ -149,6 +150,9 @@ class Filter(
             }
             if (noun == "literal") {
                 return "$negative'$value'"
+            }
+            if (noun == "capturable") {
+                return value
             }
             if (noun == "image") {
                 return "$negative$value"
@@ -211,6 +215,8 @@ class Filter(
 
             "literal" -> abbreviationExpression
 
+            "capturable" -> abbreviationExpression
+
             "text" -> {
                 when (verb) {
                     "Matches" -> fullExpression
@@ -237,6 +243,7 @@ class Filter(
                 "text",
                 "value",
                 "literal",
+                "capturable",
                 "focusable",
                 "selected",
                 "scrollable",
@@ -422,6 +429,9 @@ class Filter(
             "literal" ->
                 evaluateLiteral(literal = stringValue)
 
+            "capturable" ->
+                false
+
             "value" ->
                 evaluateValue(value = stringValue)
 
@@ -564,6 +574,9 @@ class Filter(
 
             "literal" ->
                 evaluateLiteral(literal = element.textOrLabel)
+
+            "capturable" ->
+                false
 
             "value" ->
                 evaluateValue(value = element.value)

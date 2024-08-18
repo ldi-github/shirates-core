@@ -20,10 +20,12 @@ object SummaryReportFromCollectedExecute {
         if (Files.exists(collectedDirPath).not()) {
             throw FileNotFoundException("Directory not found. ($collectedDirPath)")
         }
-        val templatePath = if (args.count() > 1) args[1].toPath() else null
+        val outputPath = if (args.count() > 1 && args[1].isNotBlank()) args[1].toPath() else null
+        val templatePath = if (args.count() > 2 && args[2].isNotBlank()) args[2].toPath() else null
 
         SummaryReportExecutor(
             inputDirPath = collectedDirPath,
+            outputPath = outputPath,
             templatePath = templatePath
         ).execute()
     }

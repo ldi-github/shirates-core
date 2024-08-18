@@ -54,6 +54,7 @@ Shiratesの **フィルター式** は画面要素をフィルターするため
 | pos              | pos=2                     | [2]         | n/a          | n/a     |      |
 | ignoreTypes      | ignoreTypes=Class1,Class2 | n/a         | class        | type    |      |
 | image            | image=image1.png          | image1.png  | n/a          | n/a     |      |
+| capturable       | capturable=??             | ??          | n/a          | n/a     |      |
 
 ※iOSのvisible属性は要素が画面に表示されているかどうかの判定には利用できないので非推奨です。
 
@@ -119,7 +120,8 @@ text1&&.class1||@access1
 
 ## 完全修飾id
 
-Androidでは`resource-id`はアプリのパッケージ名がプレフィックスになっています。例えば設定アプリでは"`com.android.settings`"の部分がパッケージ名です。
+Androidでは`resource-id`
+はアプリのパッケージ名がプレフィックスになっています。例えば設定アプリでは"`com.android.settings`"の部分がパッケージ名です。
 
 | 完全修飾形                              | 省略形        |
 |:-----------------------------------|:-----------|
@@ -174,6 +176,19 @@ image1.png          // 省略形
 image1.png?scale=0.5&threshold=20   // オプション付き(完全形)
 image1.png?s=0.5&t=20   // オプション付き(省略形)
 ```
+
+## キャプチャ可能性フィルター（メタフィルター）
+
+アプリの実装によっては画面上に表示されているにもかかわらず、対応する要素を取得できないことがあります。
+例えば画面上に表示されている画像に対応する要素がAndroidでは取得できるが、iOSでは取得できない場合があります。
+この場合、キャプチャ可能性フィルターを使用することでiOSでは要素がキャプチャできないことを明示的に表現できます。
+
+```kotlin
+it.existImage("@a<.android.widget.ImageButton>,@i<??>")
+```
+
+この例ではAndroidにおいては`.android.widget.ImageButton`で要素を検索し、画像テンプレートによるマッチングを行いますが、
+iOSにおいては要素検索と画像マッチングを行わず、検証結果は手動テストが必要であることを示す`COND_AUTO`になります。
 
 ### Link
 
