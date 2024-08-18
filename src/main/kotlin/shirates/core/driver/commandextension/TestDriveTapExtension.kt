@@ -195,7 +195,7 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = it.select(expression = expression, safeElementOnly = safeElementOnly)
+        val targetElement = select(expression = expression, safeElementOnly = safeElementOnly)
 
         val tapFunc = {
             silent {
@@ -244,11 +244,10 @@ fun TestDrive.tapSoftwareKey(
     if (isKeyboardShown.not()) {
         throw TestDriverException(message(id = "failedToTapSoftwareKey"))
     }
-    return tap(
-        expression = expression,
-        holdSeconds = holdSeconds,
-        safeElementOnly = false
-    )
+    val targetElement = TestElementCache.findElements(expression = expression, excludeKeyboardOverlapping = false)
+        .firstOrNull() ?: throw TestDriverException(message(id = "failedToTapSoftwareKey"))
+
+    return targetElement.tap(holdSeconds = holdSeconds)
 }
 
 

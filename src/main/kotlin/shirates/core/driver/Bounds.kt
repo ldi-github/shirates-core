@@ -243,6 +243,23 @@ data class Bounds(var left: Int = 0, var top: Int = 0, var width: Int = 0, var h
     }
 
     /**
+     * isAlmostIncludedIn
+     */
+    fun isAlmostIncludedIn(bounds: Bounds, margin: Int = 5): Boolean {
+
+        val relaxedBounds = Bounds(
+            left = bounds.left - margin,
+            top = bounds.top - margin,
+            width = bounds.width + margin * 2,
+            height = bounds.height + margin * 2
+        )
+        return isLeftIncludedIn(relaxedBounds) &&
+                isTopIncludedIn(relaxedBounds) &&
+                isRightIncludedIn(relaxedBounds) &&
+                isBottomIncludedIn(relaxedBounds)
+    }
+
+    /**
      * isSeparatedFrom
      */
     fun isSeparatedFrom(bounds: Bounds): Boolean {
