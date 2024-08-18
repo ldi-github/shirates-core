@@ -1150,7 +1150,7 @@ object TestDriver {
         swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
-        selectContext: TestElement = TestElementCache.rootElement,
+        selectContext: TestElement = rootElement,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         safeElementOnly: Boolean
@@ -1203,7 +1203,7 @@ object TestDriver {
     private fun selectCore(
         selector: Selector,
         allowScroll: Boolean,
-        selectContext: TestElement = TestElementCache.rootElement,
+        selectContext: TestElement = rootElement,
         frame: Bounds?,
         useCache: Boolean,
         swipeToCenter: Boolean,
@@ -1224,6 +1224,7 @@ object TestDriver {
         lastElement = TestElement.emptyElement
 
         var selectedElement: TestElement
+        var currentSelectContext = selectContext
 
         val originalForceUseCache = testContext.forceUseCache
         try {
@@ -1236,7 +1237,7 @@ object TestDriver {
                 TestElementCache.select(
                     selector = selector,
                     throwsException = false,
-                    selectContext = selectContext,
+                    selectContext = currentSelectContext,
                     frame = frame
                 )
             } else {
@@ -1289,13 +1290,15 @@ object TestDriver {
                                 testContext.onSelectErrorHandler!!.invoke()
                             }
                         }
+                        val newSelectContext = currentSelectContext.refreshThisElement()
+                        currentSelectContext = if (newSelectContext.isFound) newSelectContext else rootElement
                     }
                 ) { sc ->
                     val e = if (useCache) {
                         TestElementCache.select(
                             selector = selector,
                             throwsException = false,
-                            selectContext = selectContext
+                            selectContext = currentSelectContext
                         )
                     } else {
                         selectDirect(

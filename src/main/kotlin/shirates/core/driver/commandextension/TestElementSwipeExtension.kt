@@ -153,6 +153,7 @@ fun TestElement.swipeToTop(
         )
     }
 
+    syncCache()
     return this.refreshThisElement()
 }
 
@@ -222,6 +223,7 @@ fun TestElement.flickToTop(
         )
     }
 
+    syncCache()
     return this.refreshThisElement()
 }
 
@@ -260,6 +262,7 @@ fun TestElement.swipeToBottom(
         )
     }
 
+    syncCache()
     return this.refreshThisElement()
 }
 
@@ -328,6 +331,7 @@ fun TestElement.flickToBottom(
         )
     }
 
+    syncCache()
     return this.refreshThisElement()
 }
 
@@ -474,6 +478,7 @@ fun TestElement.swipeToRight(
         )
     }
 
+    syncCache()
     return this.refreshThisElement()
 }
 
@@ -542,6 +547,7 @@ fun TestElement.flickToRight(
         )
     }
 
+    syncCache()
     return this.refreshThisElement()
 }
 
@@ -580,6 +586,7 @@ fun TestElement.swipeToLeft(
         )
     }
 
+    syncCache()
     return this.refreshThisElement()
 }
 
@@ -648,5 +655,6 @@ fun TestElement.flickToLeft(
         )
     }
 
+    syncCache()
     return this.refreshThisElement()
 }

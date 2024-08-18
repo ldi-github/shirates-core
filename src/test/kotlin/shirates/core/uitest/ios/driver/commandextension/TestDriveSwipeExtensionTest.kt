@@ -77,10 +77,18 @@ class TestDriveSwipeExtensionTest : UITest() {
                     e1 = it.select("Passwords")
                     e2 = it.select("General")
                 }.action {
-                    it.swipeElementToElement(startElement = e1, endElement = e2, durationSeconds = 2.0, adjust = true)
+                    it.swipeElementToElement(
+                        startElement = e1,
+                        endElement = e2,
+                        durationSeconds = 2.0,
+                        adjust = true
+                    )
                 }.expectation {
-                    it.bounds.isOverlapping(e2.bounds)
-                        .thisIsTrue("${it.bounds} is overlapping ${e2.bounds}")
+                    val current = it.select("Passwords")
+                    val diff = current.bounds.centerY - e2.bounds.centerY
+                    output("diff=$diff")
+                    current.bounds.isOverlapping(e2.bounds)
+                        .thisIsTrue("${current.bounds} is overlapping ${e2.bounds}")
                 }
             }
         }
@@ -99,8 +107,33 @@ class TestDriveSwipeExtensionTest : UITest() {
                 }.action {
                     it.swipeElementToElementAdjust(startElement = e1, endElement = e2, durationSeconds = 2.0)
                 }.expectation {
-                    it.bounds.isOverlapping(e2.bounds)
-                        .thisIsTrue("${it.bounds} is overlapping ${e2.bounds}")
+                    val current = it.select("Passwords")
+                    val diff = current.bounds.centerY - e2.bounds.centerY
+                    output("diff=$diff")
+                    current.bounds.isOverlapping(e2.bounds)
+                        .thisIsTrue("${current.bounds} is overlapping ${e2.bounds}")
+                }
+            }
+        }
+    }
+
+
+    @Test
+    @Order(35)
+    fun swipeElementToSameElement() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Settings Top Screen]")
+                    e1 = it.select("Passwords")
+                    e2 = e1
+                }.action {
+                    it.swipeElementToElement(startElement = e1, endElement = e2, durationSeconds = 2.0, adjust = true)
+                }.expectation {
+                    e3 = it.select("Passwords")
+                    (e3.bounds.centerX == e1.bounds.centerX && e3.bounds.centerY == e1.bounds.centerY)
+                        .thisIsTrue("Swipe on the same coordinates skipped")
                 }
             }
         }
