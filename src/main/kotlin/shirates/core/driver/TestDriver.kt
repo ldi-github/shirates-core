@@ -1246,7 +1246,22 @@ object TestDriver {
                     throwsException = false
                 )
             }
-            if (selector.isNegation.not()) {
+            if (selector.isNegation) {
+                if (useCache.not()) {
+                    lastElement = selectedElement
+                    if (lastElement.isFound.not()) {
+                        return lastElement
+                    }
+                } else if (
+                    selectedElement.isEmpty ||
+                    selectedElement.isFound && (selectedElement.isInView.not() ||
+                            safeElementOnly && selectedElement.isSafe().not())
+                ) {
+                    lastElement = TestElement.emptyElement
+                    lastElement.selector = selector
+                    return lastElement
+                }
+            } else {
                 if (useCache.not()) {
                     lastElement = selectedElement
                     if (lastElement.isFound) {
@@ -1298,7 +1313,8 @@ object TestDriver {
                         TestElementCache.select(
                             selector = selector,
                             throwsException = false,
-                            selectContext = currentSelectContext
+                            selectContext = currentSelectContext,
+                            frame = frame
                         )
                     } else {
                         selectDirect(
