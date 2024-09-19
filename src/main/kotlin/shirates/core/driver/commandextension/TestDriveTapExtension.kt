@@ -177,6 +177,8 @@ fun TestDrive.tap(
     safeElementOnly: Boolean = CodeExecutionContext.isScrolling
 ): TestElement {
 
+    TestDriver.it
+
     if (CodeExecutionContext.isInCell && this is TestElement) {
         val e = this.innerWidget(expression = expression)
         e.tap()
