@@ -2,10 +2,24 @@ package shirates.core.unittest.utility.macos
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.opentest4j.TestAbortedException
+import shirates.core.driver.TestMode
+import shirates.core.testcode.UnitTest
 import shirates.core.utility.macos.RecognizeTextResult
+import shirates.core.utility.macos.VNCommandUtility
 import shirates.core.utility.toPath
 
-class RecognizeTextResultTest {
+class RecognizeTextResultTest : UnitTest() {
+
+    override fun beforeAll(context: ExtensionContext?) {
+
+        if (TestMode.isRunningOnMacOS.not()) {
+            throw TestAbortedException("This feature is for macOS only")
+        }
+
+        VNCommandUtility.build()
+    }
 
     @Test
     fun init_test() {

@@ -3,6 +3,8 @@ package shirates.core.unittest.utility.macos
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.opentest4j.TestAbortedException
 import shirates.core.UserVar
 import shirates.core.driver.TestMode
 import shirates.core.testcode.UnitTest
@@ -12,6 +14,13 @@ import shirates.core.utility.toPath
 import java.nio.file.Files
 
 class VNCommandUtilityTest : UnitTest() {
+
+    override fun beforeAll(context: ExtensionContext?) {
+
+        if (TestMode.isRunningOnMacOS.not()) {
+            throw TestAbortedException("This feature is for macOS only")
+        }
+    }
 
     @Order(10)
     @Test
