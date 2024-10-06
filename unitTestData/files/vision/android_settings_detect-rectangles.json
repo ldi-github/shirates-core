@@ -1,0 +1,25 @@
+{
+  "imagePath" : "\/Users\/wave1008\/github\/ldi-github\/shirates-core\/unitTestData\/files\/vision\/android_settings.png",
+  "minimumSize" : 0.1,
+  "minimumAspectRatio" : 0.01,
+  "maximumAspectRatio" : 1,
+  "items" : [
+    {
+      "confidence" : "1.0",
+      "rect" : "[293.0, 113.1, 287.9, 357.5]"
+    },
+    {
+      "confidence" : "1.0",
+      "rect" : "[2.0, 839.1, 537.3, 82.5]"
+    },
+    {
+      "rect" : "[19.7, 828.6, 492.6, 61.3]",
+      "confidence" : "1.0"
+    },
+    {
+      "confidence" : "1.0",
+      "rect" : "[428.3, 993.9, 90.4, 87.8]"
+    }
+  ],
+  "maximumObservations" : 100
+}

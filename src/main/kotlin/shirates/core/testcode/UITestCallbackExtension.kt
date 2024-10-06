@@ -15,6 +15,7 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isStub
 import shirates.core.exception.TestConfigException
+import shirates.core.exception.TestEnvironmentException
 import shirates.core.exception.TestFailException
 import shirates.core.logging.LogFileFormat
 import shirates.core.logging.LogType
@@ -23,6 +24,7 @@ import shirates.core.logging.TestLog
 import shirates.core.server.AppiumServerManager
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.load.CpuLoadService
+import shirates.core.utility.macos.VNCommandUtility
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.time.StopWatch
 import java.nio.file.Files
@@ -117,6 +119,14 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         // can not get UITest instance at this point.
 //        uiTest = getUITest(context)
+
+        if (PropertiesManager.enableVisionFramework) {
+            if (TestMode.isRunningOnMacOS.not()) {
+                throw TestEnvironmentException("enableVisionFramework is supported only on macOS")
+            }
+            VNCommandUtility.build()
+            TestLog.write("enableVisionFramework: true")
+        }
 
     }
 

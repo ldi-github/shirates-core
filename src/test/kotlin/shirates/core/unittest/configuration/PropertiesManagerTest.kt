@@ -1703,6 +1703,31 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableVisionFramework() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableVisionFramework).isEqualTo(Const.ENABLE_VISION_FRAMEWORK)
+        }
+        run {
+            // Arrange
+            val value = true
+            PropertiesManager.setPropertyValue("enableVisionFramework", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableVisionFramework).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = false
+            PropertiesManager.setPropertyValue("enableVisionFramework", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableVisionFramework).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun tapTestSelector() {
 
         run {

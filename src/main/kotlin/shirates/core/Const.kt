@@ -11,11 +11,12 @@ object Const {
     val NEW_LINE = System.lineSeparator()
 
     /**
-     * File names
+     * File names in resources
      */
     const val REPORT_STYLE_FILE_NAME = "_ReportStyle.css"
     const val REPORT_SCRIPT_FILE_NAME = "_ReportScript.js"
     const val ELEMENT_CATEGORY_RESOURCE_BASE_NAME = "element_category"
+    const val VNCOMMAND_SWIFT_FILE_NAME = "vision/vncommand/main.swift"
 
     /**
      * CpuLoadService
@@ -23,6 +24,7 @@ object Const {
     const val CPU_LOAD_FOR_SAFETY: Int = 70
     const val ENABLE_WAIT_CPU_LOAD = true
     const val ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG = false
+    const val ENABLE_VISION_FRAMEWORK = false
     const val CPU_LOAD_INTERVAL_MILLISECONDS: Long = 1000
     const val CPU_LOAD_MAX_HISTORIES: Int = 60 * 10
 

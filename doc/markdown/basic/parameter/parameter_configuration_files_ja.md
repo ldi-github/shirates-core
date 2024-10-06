@@ -225,6 +225,7 @@ launchAppMethod=tapAppIcon
 #safeCpuLoad=80
 #enableWaitCpuLoad=false
 #enableWaitCpuLoadPrintDebug=true
+#enableVisionFramework=true
 
 ## App operation --------------------
 #appIconName=

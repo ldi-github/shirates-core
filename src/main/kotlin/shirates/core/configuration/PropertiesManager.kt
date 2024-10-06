@@ -908,6 +908,16 @@ object PropertiesManager {
             return value == "true"
         }
 
+    /**
+     * enableVisionFramework
+     */
+    val enableVisionFramework: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableVisionFramework")
+                ?: return Const.ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG
+            return value == "true"
+        }
+
     // Custom --------------------------------------------------
 
     /**

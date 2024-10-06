@@ -1,0 +1,100 @@
+{
+  "imagePath" : "\/Users\/wave1008\/github\/ldi-github\/shirates-core\/unitTestData\/files\/vision\/android_settings.png",
+  "items" : [
+    {
+      "rect" : "[22.0, 1079.8, 136.1, 26.5]",
+      "confidence" : "0.5",
+      "text" : "434 0 9"
+    },
+    {
+      "confidence" : "0.5",
+      "text" : "LTE A \"",
+      "rect" : "[423.8, 1081.4, 82.3, 23.3]"
+    },
+    {
+      "rect" : "[462.0, 952.0, 24.0, 28.0]",
+      "text" : "N",
+      "confidence" : "0.5"
+    },
+    {
+      "confidence" : "1.0",
+      "rect" : "[32.0, 870.0, 182.0, 48.0]",
+      "text" : "Settings"
+    },
+    {
+      "confidence" : "1.0",
+      "text" : "Q Search settings",
+      "rect" : "[50.0, 782.0, 240.0, 34.0]"
+    },
+    {
+      "rect" : "[100.0, 686.0, 226.0, 24.0]",
+      "text" : "Network & internet",
+      "confidence" : "1.0"
+    },
+    {
+      "text" : "Mobile, Wi-Fi, hotspot",
+      "confidence" : "1.0",
+      "rect" : "[98.0, 654.0, 188.0, 22.0]"
+    },
+    {
+      "rect" : "[32.0, 568.0, 36.0, 22.0]",
+      "confidence" : "0.5",
+      "text" : "LoO"
+    },
+    {
+      "text" : "Connected devices",
+      "rect" : "[100.0, 580.0, 230.0, 22.0]",
+      "confidence" : "1.0"
+    },
+    {
+      "rect" : "[98.0, 548.0, 152.0, 22.0]",
+      "confidence" : "1.0",
+      "text" : "Bluetooth, pairing"
+    },
+    {
+      "text" : "Apps",
+      "confidence" : "0.5",
+      "rect" : "[98.0, 468.0, 66.0, 28.0]"
+    },
+    {
+      "text" : "Assistant, recent apps, default apps",
+      "confidence" : "1.0",
+      "rect" : "[98.0, 438.0, 312.0, 24.0]"
+    },
+    {
+      "rect" : "[100.0, 364.0, 154.0, 24.0]",
+      "text" : "Notifications",
+      "confidence" : "1.0"
+    },
+    {
+      "rect" : "[98.0, 332.0, 296.0, 22.0]",
+      "confidence" : "1.0",
+      "text" : "Notification history, conversations"
+    },
+    {
+      "confidence" : "1.0",
+      "rect" : "[97.6, 253.6, 91.0, 26.7]",
+      "text" : "Battery"
+    },
+    {
+      "rect" : "[98.0, 228.0, 48.0, 18.0]",
+      "confidence" : "1.0",
+      "text" : "100%"
+    },
+    {
+      "confidence" : "1.0",
+      "text" : "Storage",
+      "rect" : "[97.3, 145.9, 97.2, 25.5]"
+    },
+    {
+      "confidence" : "1.0",
+      "rect" : "[98.0, 120.0, 208.0, 20.0]",
+      "text" : "92% used - 641 MB free"
+    },
+    {
+      "confidence" : "0.5",
+      "text" : "ound & vibl",
+      "rect" : "[116.0, 43.8, 130.1, 22.4]"
+    }
+  ]
+}

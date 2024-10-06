@@ -7,6 +7,7 @@ import shirates.core.utility.toPath
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -70,6 +71,20 @@ object ResourceUtility {
 
         val inputStream = getResourceAsStream(fileName = fileName, logLanguage = logLanguage) ?: return null
         return InputStreamReader(inputStream, StandardCharsets.UTF_8)
+    }
+
+    /**
+     * getResourceAsString
+     */
+    fun getResourceAsString(
+        fileName: String,
+        logLanguage: String = TestLog.logLanguage,
+        charset: Charset = StandardCharsets.UTF_8
+    ): String {
+
+        val stream = getResourceAsStream(fileName = fileName, logLanguage = logLanguage)
+            ?: throw FileNotFoundException("File not found in resource (fileName=$fileName, logLanguage=$logLanguage).")
+        return String(stream.readAllBytes(), charset)
     }
 
     /**
