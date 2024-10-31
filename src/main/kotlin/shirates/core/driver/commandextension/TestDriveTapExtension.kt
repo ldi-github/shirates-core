@@ -189,13 +189,17 @@ fun TestDrive.tap(
     val testElement = rootElement
 
     var sel = Selector()
-    doUntilTrue {
-        try {
-            sel = getSelector(expression = expression)
-            true
-        } catch (t: Throwable) {
-            printWarn("${t.message} currentScreen=$screenName")
-            false
+    if (TestMode.isNoLoadRun) {
+        sel = getSelector(expression = expression)
+    } else {
+        doUntilTrue {
+            try {
+                sel = getSelector(expression = expression)
+                true
+            } catch (t: Throwable) {
+                printWarn("${t.message} currentScreen=$screenName")
+                false
+            }
         }
     }
 
