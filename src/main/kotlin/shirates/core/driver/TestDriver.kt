@@ -1720,6 +1720,14 @@ object TestDriver {
             e = e.swipeToCenter(axis = direction.toAxis())
         }
 
+        if (isAndroid) {
+            /**
+             * for accuracy and stability
+             */
+            refreshCache()
+            actionFunc()
+        }
+
         lastElement = e
         if (e.hasError) {
             e.lastResult = LogType.ERROR
