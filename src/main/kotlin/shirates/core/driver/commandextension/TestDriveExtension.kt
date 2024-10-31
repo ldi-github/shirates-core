@@ -65,6 +65,23 @@ fun TestDrive.sendKeys(
  */
 fun TestDrive.getSelector(expression: String): Selector {
 
+    if (TestMode.isNoLoadRun) {
+        return getSelectorCore(expression = expression)
+    } else {
+        var sel: Selector? = null
+        doUntilTrue {
+            try {
+                sel = getSelectorCore(expression)
+                true
+            } catch (t: Throwable) {
+                false
+            }
+        }
+        return sel!!
+    }
+}
+
+private fun TestDrive.getSelectorCore(expression: String): Selector {
     val sel = TestDriver.screenInfo.expandExpression(expression = expression)
     val newSel = sel.copy()
     if (newSel.isRelative.not()) {

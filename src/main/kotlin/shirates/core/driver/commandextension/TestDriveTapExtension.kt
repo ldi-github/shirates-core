@@ -9,7 +9,6 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.logging.printWarn
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.time.StopWatch
 
@@ -188,20 +187,7 @@ fun TestDrive.tap(
 
     val testElement = rootElement
 
-    var sel = Selector()
-    if (TestMode.isNoLoadRun) {
-        sel = getSelector(expression = expression)
-    } else {
-        doUntilTrue {
-            try {
-                sel = getSelector(expression = expression)
-                true
-            } catch (t: Throwable) {
-                printWarn("${t.message} currentScreen=$screenName")
-                false
-            }
-        }
-    }
+    val sel = getSelector(expression = expression)
 
     val command = "tap"
     val message = message(id = command, subject = "$sel")
