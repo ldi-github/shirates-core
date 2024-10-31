@@ -24,7 +24,6 @@ object Const {
     const val CPU_LOAD_FOR_SAFETY: Int = 70
     const val ENABLE_WAIT_CPU_LOAD = true
     const val ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG = false
-    const val ENABLE_VISION_FRAMEWORK = false
     const val CPU_LOAD_INTERVAL_MILLISECONDS: Long = 1000
     const val CPU_LOAD_MAX_HISTORIES: Int = 60 * 10
 
@@ -78,6 +77,8 @@ object Const {
     const val ENABLE_RERUN_ON_SCREENSHOT_BLACKOUT = true
     const val SCREENSHOT_BLACKOUT_THRESHOLD = 0.995
     const val ENABLE_RESTART_DEVICE_ON_RESETTING_APPIUM_SESSION = false
+    const val ENABLE_VISION_FRAMEWORK = false
+    const val VISION_TEXT_LANGUAGE = ""
     const val CUSTOM_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val MACRO_OBJECT_SCAN_DIR = "src/test/kotlin"
     const val ANDROID_SWIPE_OFFSET_Y = -24

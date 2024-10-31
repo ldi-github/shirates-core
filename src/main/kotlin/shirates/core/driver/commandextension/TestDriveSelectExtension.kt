@@ -1,10 +1,13 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
+import shirates.core.utility.macos.VNCommandUtility
 
 
 /**
@@ -41,6 +44,13 @@ fun TestDrive.select(
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
 
+        if (PropertiesManager.enableVisionFramework) {
+            e = selectByVision(selector = sel)
+            if (e.isFound) {
+                return@execSelectCommand
+            }
+        }
+
         e = TestDriver.findImageOrSelectCore(
             selector = sel,
             allowScroll = allowScroll,
@@ -64,6 +74,42 @@ fun TestDrive.select(
         lastElement = e
     }
     return e
+}
+
+private fun TestDrive.selectByVision(
+    selector: Selector,
+): TestElement {
+    /**
+     * Experiment
+     */
+    screenshot()
+    if (selector.text.isNullOrBlank().not()) {
+        val r = VNCommandUtility.recognizeText(
+            imagePath = TestLog.directoryForLog.resolve(CodeExecutionContext.lastScreenshot).toString(),
+            language = PropertiesManager.visionTextLanguage
+        )
+        val item = r.items.firstOrNull() { it.text == selector.text }
+        println(item)
+        val bounds = item?.rectangle?.bounds
+        if (bounds != null) {
+            val scale = PropertiesManager.screenshotScale
+            val ratio = testContext.boundsToRectRatio
+            val x = (bounds.left / scale / ratio).toInt()
+            val y = (bounds.top / scale / ratio).toInt()
+            val width = (bounds.right / scale / ratio).toInt()
+            val height = (bounds.height / scale / ratio).toInt()
+            val bounds2 = Bounds(left = x, top = y, width = width, height = height)
+            val d = TestElement.dummyElement
+            d.propertyCache["bounds"] = bounds2.boundString
+            d.propertyCache["x"] = bounds2.x1.toString()
+            d.propertyCache["y"] = bounds2.y1.toString()
+            d.propertyCache["width"] = bounds2.width.toString()
+            d.propertyCache["height"] = bounds2.height.toString()
+
+            return d
+        }
+    }
+    return TestElement.emptyElement
 }
 
 /**

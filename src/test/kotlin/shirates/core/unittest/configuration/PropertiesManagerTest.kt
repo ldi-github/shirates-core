@@ -1728,6 +1728,31 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionTextLanguage() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextLanguage).isEqualTo(Const.VISION_TEXT_LANGUAGE)
+        }
+        run {
+            // Arrange
+            val value = "ja"
+            PropertiesManager.setPropertyValue("visionTextLanguage", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextLanguage).isEqualTo(value)
+        }
+        run {
+            // Arrange
+            val value = ""
+            PropertiesManager.setPropertyValue("visionTextLanguage", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionTextLanguage).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun tapTestSelector() {
 
         run {

@@ -124,8 +124,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             if (TestMode.isRunningOnMacOS.not()) {
                 throw TestEnvironmentException("enableVisionFramework is supported only on macOS")
             }
-            VNCommandUtility.build()
             TestLog.write("enableVisionFramework: true")
+            VNCommandUtility.build()
         }
 
     }

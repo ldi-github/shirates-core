@@ -51,6 +51,7 @@ class RecognizeTextResult() {
                 }
                 return _Rectangle!!
             }
+
         private var _Rectangle: Rectangle? = null
 
         override fun toString(): String {

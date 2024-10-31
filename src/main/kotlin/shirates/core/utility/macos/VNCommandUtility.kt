@@ -14,6 +14,10 @@ object VNCommandUtility {
     const val SWIFT_PATH = "bin/vncommand/main.swift"
 
     private fun setupSwiftFile(swiftPath: Path) {
+        val dirPath = swiftPath.parent
+        if (Files.exists(dirPath).not()) {
+            dirPath.toFile().mkdirs()
+        }
         ResourceUtility.copyFile(
             fileName = Const.VNCOMMAND_SWIFT_FILE_NAME,
             targetFile = swiftPath,
@@ -31,11 +35,6 @@ object VNCommandUtility {
         }
 
         val swiftPath = SWIFT_PATH.toPath()
-        val dirPath = swiftPath.parent
-
-        if (Files.exists(dirPath).not()) {
-            dirPath.toFile().mkdirs()
-        }
 
         if (Files.exists(swiftPath).not()) {
             setupSwiftFile(swiftPath)

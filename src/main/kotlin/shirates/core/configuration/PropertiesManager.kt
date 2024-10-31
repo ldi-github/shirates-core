@@ -914,8 +914,17 @@ object PropertiesManager {
     val enableVisionFramework: Boolean
         get() {
             val value = getPropertyValue(propertyName = "enableVisionFramework")
-                ?: return Const.ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG
+                ?: return Const.ENABLE_VISION_FRAMEWORK
             return value == "true"
+        }
+
+    /**
+     * visionTextLanguage
+     */
+    val visionTextLanguage: String
+        get() {
+            return getPropertyValue(propertyName = "visionTextLanguage")
+                ?: Const.VISION_TEXT_LANGUAGE
         }
 
     // Custom --------------------------------------------------

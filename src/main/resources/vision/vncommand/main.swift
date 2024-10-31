@@ -73,7 +73,7 @@ func recognizeText(
     }
 
     let imagePath = argv[2]
-    let outputPath = if argv.count>=4 { argv[3] } else { "" }
+    let outputPath = if argv.count>=4 && !argv[3].contains(":") { argv[3] } else { "" }
     let language = argv.string(name: "language")
 
     let nsImage = NSImage(contentsOfFile: imagePath)
@@ -108,7 +108,7 @@ func recognizeText(
             let confidence = candidate.confidence
             let b = o.boundingBox
             let x = String(format: "%.1f", b.origin.x * size.width)
-            let y = String(format: "%.1f", b.origin.y * size.height)
+            let y = String(format: "%.1f", (1 - b.origin.y) * size.height)
             let width = String(format: "%.1f", b.size.width * size.width)
             let height = String(format: "%.1f", b.size.height * size.height)
             let rect = "[\(x), \(y), \(width), \(height)]"
@@ -151,7 +151,7 @@ func detectRectangles(
     }
 
     let imagePath = argv[2]
-    let outputPath = if argv.count>=4 { argv[3] } else { "" }
+    let outputPath = if argv.count>=4 && !argv[3].contains(":") { argv[3] } else { "" }
     let maximumObservations: Int = argv.int(name: "maximumObservations") ?? 100
     let minimumSize: Float = argv.float(name: "minimumSize") ?? 0.1
     let minimumAspectRatio: Float = argv.float(name: "minimumAspectRatio") ?? 0.01

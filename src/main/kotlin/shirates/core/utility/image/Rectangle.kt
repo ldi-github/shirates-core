@@ -1,5 +1,7 @@
 package shirates.core.utility.image
 
+import shirates.core.driver.Bounds
+
 class Rectangle(
     var x: Int = 0,
     var y: Int = 0,
@@ -9,6 +11,15 @@ class Rectangle(
     constructor(rectString: String) : this() {
         parse(rectString)
     }
+
+    val bounds: Bounds
+        get() {
+            if (_bounds == null) {
+                _bounds = Bounds(this.x, this.y, this.width, this.height)
+            }
+            return _bounds!!
+        }
+    private var _bounds: Bounds? = null
 
     private fun getUsage(input: String): String {
 
