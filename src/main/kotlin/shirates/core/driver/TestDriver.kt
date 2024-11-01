@@ -1123,8 +1123,6 @@ object TestDriver {
         log: Boolean = false
     ): TestElement {
 
-        refreshCurrentScreenWithNickname(expression)
-
         val sel = expandExpression(expression = expression)
         var e = TestElement(selector = sel)
         val context = TestDriverCommandContext(lastElement)

@@ -512,8 +512,6 @@ fun TestDrive.exist(
         )
     }
 
-    TestDriver.refreshCurrentScreenWithNickname(expression)
-
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
 
@@ -624,8 +622,6 @@ fun TestDrive.existImage(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    TestDriver.refreshCurrentScreenWithNickname(expression = expression)
-
     val command = "existImage"
     val sel = getSelectorForExistImage(expression = expression)
     val assertMessage = message(id = command, subject = "$sel")
@@ -691,8 +687,6 @@ fun TestDrive.dontExistImage(
     mustValidateImage: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-
-    TestDriver.refreshCurrentScreenWithNickname(expression = expression)
 
     val command = "dontExistImage"
     val sel = getSelectorForExistImage(expression = expression)

@@ -31,11 +31,6 @@ fun TestDrive.select(
         return CodeExecutionContext.lastCell.innerWidget(expression, frame = frame)
     }
 
-    if (useCache) {
-        syncCache()
-        TestDriver.refreshCurrentScreenWithNickname(expression)
-    }
-
     var e = TestElement(selector = sel)
     val testElement = if (useCache) getThisOrIt() else null
     val context = TestDriverCommandContext(testElement)
@@ -107,8 +102,6 @@ fun TestDrive.widget(
     log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
-
-    TestDriver.refreshCurrentScreenWithNickname(expression)
 
     var sel = getSelector(expression = expression)
     if (sel.className.isNullOrBlank()) {

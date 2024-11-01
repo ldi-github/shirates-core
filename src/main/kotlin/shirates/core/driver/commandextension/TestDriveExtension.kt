@@ -71,7 +71,7 @@ fun TestDrive.getSelector(expression: String): Selector {
         var sel: Selector? = null
         doUntilTrue {
             try {
-                sel = getSelectorCore(expression)
+                sel = getSelectorCore(expression = expression)
                 true
             } catch (t: Throwable) {
                 false
