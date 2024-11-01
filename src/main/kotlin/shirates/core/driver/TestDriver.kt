@@ -2312,7 +2312,8 @@ object TestDriver {
     ): TestElement {
 
         if (isAndroid) {
-            val focused = select(expression = "xpath=//*[@focused='true']", throwsException = false)
+            val focused =
+                select(expression = "xpath=//*[@focused='true']", allowScroll = false, throwsException = false)
             return focused
         } else {
             val e = try {
