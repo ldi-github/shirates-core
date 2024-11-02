@@ -1,6 +1,8 @@
 package shirates.core.utility.android
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.TestMode
+import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
 
 object AdbUtility {
@@ -30,6 +32,25 @@ object AdbUtility {
         port: Int? = null,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellUtility.ShellResult {
+
+        val env = System.getenv()
+        if (env.containsKey("SR_capabilities_adbPort")) {
+            val p = env["SR_capabilities_adbPort"]?.toIntOrNull()
+            if (p != null) {
+                if (TestMode.isRunningOnMacOS) {
+                    val pids = ShellUtility.executeCommand("ps", "-ax").resultLines
+                        .filter { it.contains("adb -L tcp:$p") }
+                        .map { it.split(" ")[0] }
+                    if (pids.count() > 1) {
+                        TestLog.warn("Multiple adb processes found on port ${p}.")
+                    }
+                    TestLog.warn("killing process listening on port ${p}. $pids")
+                    for (pid in pids) {
+                        ShellUtility.executeCommand("kill", "-9", pid)
+                    }
+                }
+            }
+        }
 
         if (port == null) {
             return ShellUtility.executeCommand("adb", "kill-server", log = log)

@@ -1123,8 +1123,6 @@ object TestDriver {
         log: Boolean = false
     ): TestElement {
 
-        refreshCurrentScreenWithNickname(expression)
-
         val sel = expandExpression(expression = expression)
         var e = TestElement(selector = sel)
         val context = TestDriverCommandContext(lastElement)
@@ -1720,6 +1718,14 @@ object TestDriver {
             e = e.swipeToCenter(axis = direction.toAxis())
         }
 
+        if (isAndroid) {
+            /**
+             * for accuracy and stability
+             */
+            refreshCache()
+            actionFunc()
+        }
+
         lastElement = e
         if (e.hasError) {
             e.lastResult = LogType.ERROR
@@ -2306,7 +2312,8 @@ object TestDriver {
     ): TestElement {
 
         if (isAndroid) {
-            val focused = select(expression = "xpath=//*[@focused='true']", throwsException = false)
+            val focused =
+                select(expression = "xpath=//*[@focused='true']", allowScroll = false, throwsException = false)
             return focused
         } else {
             val e = try {

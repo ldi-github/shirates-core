@@ -267,7 +267,18 @@ class AdHocTestAndroid : UITest() {
 
             }
         }
+    }
 
+    @Test
+    fun getSelectorFailed() {
 
+        scenario {
+            case(1) {
+                condition {
+                    it.select("[Network & internet]")
+                    it.select("[Network & internet2]")
+                }
+            }
+        }
     }
 }

@@ -177,18 +177,19 @@ fun TestDrive.tap(
     safeElementOnly: Boolean = CodeExecutionContext.isScrolling
 ): TestElement {
 
+    TestDriver.it
+
     if (CodeExecutionContext.isInCell && this is TestElement) {
         val e = this.innerWidget(expression = expression)
         e.tap()
         return lastElement
     }
 
-    TestDriver.refreshCurrentScreenWithNickname(expression)
-
     val testElement = rootElement
 
-    val command = "tap"
     val sel = getSelector(expression = expression)
+
+    val command = "tap"
     val message = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(testElement)
