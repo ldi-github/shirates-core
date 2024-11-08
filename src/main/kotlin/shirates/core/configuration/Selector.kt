@@ -393,6 +393,11 @@ class Selector(
             return xmlCommandBaseNames.any { (command ?: "").startsWith(it) }
         }
 
+    val isMiscBased: Boolean
+        get() {
+            return miscCommandBaseNames.any { (command ?: "").startsWith(it) }
+        }
+
     val isCoordinateBased: Boolean
         get() {
             return coordinateCommandBaseNames.any { (command ?: "").startsWith(it) }
@@ -438,14 +443,14 @@ class Selector(
             return list
         }
 
-        val classAlias = listOf(
+        val specialSelectors = listOf(
             "~title", "~webTitle"
         )
 
-        internal val String.isClassAlias: Boolean
+        internal val String.isSpecialSelector: Boolean
             get() {
-                for (alias in classAlias) {
-                    if (this.contains(alias)) {
+                for (specialSelector in specialSelectors) {
+                    if (this.contains(specialSelector)) {
                         return true
                     }
                 }
@@ -466,6 +471,10 @@ class Selector(
 
         val xmlCommandBaseNames = listOf(
             ":parent", ":child", ":sibling", ":ancestor", ":descendant", ":next", ":pre", ":previous", ":cell"
+        )
+
+        val miscCommandBaseNames = listOf(
+            ":radio"
         )
 
         val coordinateCommandBaseNames = listOf(
@@ -497,6 +506,7 @@ class Selector(
                     list.addAll(flowCommandBaseNames)
                     list.addAll(innerWidgetCommandBaseNames)
                     list.addAll(xmlCommandBaseNames)
+                    list.addAll(miscCommandBaseNames)
                     list.addAll(coordinateCommandBaseNames)
                     list.addAll(otherCommandBaseNames)
                     _relativeCommandBaseNames = list
@@ -797,7 +807,7 @@ class Selector(
             if (n.isValidNickname()) {
                 return n    // [Nickname]
             }
-            val s = baseClassAliasExpression
+            val s = baseSpecialSelectorExpression
             if (s.isNotBlank()) {
                 return s
             }
@@ -834,7 +844,7 @@ class Selector(
      */
     val relativePartExpression: String
         get() {
-            val s = baseClassAliasExpression
+            val s = baseSpecialSelectorExpression
             // Shortcut expression
             if (s.isNotBlank()) {
                 if (originalExpression!!.startsWith("<")) {
@@ -862,7 +872,7 @@ class Selector(
         if (exp.startsWith(":").not()) {
             exp = exp.toDecoratedExpression()
         }
-        if (exp.isClassAlias.not()) {
+        if (exp.isSpecialSelector.not()) {
             for (rs in relativeSelectors) {
                 exp = "$exp${rs.getSelectorBaseExpression()}"
             }
@@ -887,7 +897,7 @@ class Selector(
             return nickname!!
         }
 
-        if (originalExpression?.isClassAlias == true) {
+        if (originalExpression?.isSpecialSelector == true) {
             return originalExpression!!.toDecoratedExpression()
         }
 
@@ -1766,13 +1776,13 @@ class Selector(
         }
 
     /**
-     * baseClassAliasExpression
+     * baseSpecialSelectorExpression
      *
-     * class alias expressions
+     * special selector expressions
      * <~title=title1>
      * <~webTitle=webTitle1>
      */
-    val baseClassAliasExpression: String
+    val baseSpecialSelectorExpression: String
         get() {
             if (originalExpression.isNullOrBlank()) {
                 return ""
@@ -1780,7 +1790,7 @@ class Selector(
             val commands = getCommandList(originalExpression!!)
             val firstCommand = commands.first()
             val exp = firstCommand.toUndecoratedExpression()
-            if (exp.isClassAlias) {
+            if (exp.isSpecialSelector) {
                 return exp.toDecoratedExpression()
             }
             return ""

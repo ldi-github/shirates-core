@@ -928,6 +928,24 @@ object XmlDataAndroid {
     """.trimIndent()
 
     /**
+     * RelativeMisc_radio
+     */
+    val RelativeMisc_radio = """
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<hierarchy index="0" class="hierarchy" rotation="0" width="282" height="54">
+  <android.widget.FrameLayout      bounds="[0,0][281,404]"   resource-id="frame1" class="android.widget.FrameLayout" displayed="true">
+      <android.view.ViewGroup index="23" package="android" class="android.view.ViewGroup" text="" resource-id="android:id/includeGender" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[42,1380][1038,1533]" displayed="true">
+        <android.widget.RadioGroup index="1" package="android" class="android.widget.RadioGroup" text="" resource-id="android:id/radioGroupGender" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[42,1449][1038,1533]" displayed="true">
+          <android.widget.RadioButton index="0" package="android" class="android.widget.RadioButton" text="Male" resource-id="android:id/checkMale" checkable="true" checked="true" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[42,1449][200,1533]" displayed="true" />
+          <android.widget.RadioButton index="1" package="android" class="android.widget.RadioButton" text="Female" resource-id="android:id/checkFemale" checkable="true" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[263,1449][421,1533]" displayed="true" />
+          <android.widget.RadioButton index="2" package="android" class="android.widget.RadioButton" text="No answer" resource-id="android:id/checkNoAnswer" checkable="true" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[484,1449][753,1533]" displayed="true" />
+        </android.widget.RadioGroup>
+      </android.view.ViewGroup>
+  </android.widget.FrameLayout>
+</hierarchy>
+    """.trimIndent()
+
+    /**
      * AppIsNotResponding
      */
     val AppIsNotResponding = """

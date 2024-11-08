@@ -27,7 +27,7 @@ class TestDriveTapAppIconExtensionTest2 : UITest() {
                         .pressHome()
                         .pressHome()
                 }.action {
-                    it.tapAppIcon("[Calculator]")
+                    it.tapAppIcon("Calculator")
                 }.expectation {
                     it.screenIs("[Calculator Main Screen]")
                 }

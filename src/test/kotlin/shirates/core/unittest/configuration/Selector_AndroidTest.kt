@@ -1093,7 +1093,7 @@ class Selector_AndroidTest : UnitTest() {
             assertThat(sel.nickname).isNull()
             assertThat(sel.toString()).isEqualTo("<.button>")
             assertThat(sel.filterMap.count()).isEqualTo(1)
-            assertThat(sel.className).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox)")
+            assertThat(sel.className).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton)")
             assertThat(sel.relativeSelectors.count()).isEqualTo(0)
         }
         TestMode.runAsIos {
@@ -1309,7 +1309,7 @@ class Selector_AndroidTest : UnitTest() {
             assertThat(sel.nickname).isNull()
             assertThat(sel.toString()).isEqualTo("<.button&&xpath=xpath1>")
             assertThat(sel.filterMap.count()).isEqualTo(2)
-            assertThat(sel.className).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox)")
+            assertThat(sel.className).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton)")
             assertThat(sel.xpath).isEqualTo("xpath1")
             assertThat(sel.relativeSelectors.count()).isEqualTo(0)
         }
@@ -1396,7 +1396,7 @@ class Selector_AndroidTest : UnitTest() {
             assertThat(sel.nickname).isEqualTo("[Button1]")
             assertThat(sel.toString()).isEqualTo("[Button1]")
             assertThat(sel.filterMap.count()).isEqualTo(2)
-            assertThat(sel.className).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox)")
+            assertThat(sel.className).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton)")
             assertThat(sel.text).isEqualTo("Submit")
             assertThat(sel.getElementExpression()).isEqualTo("<.button&&Submit>")
             assertThat(sel.getElementFriendlyExpression()).isEqualTo("[Button1]")

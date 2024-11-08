@@ -54,7 +54,8 @@
 
 ### Link
 
-- [相対セレクター (方向ベース)](relative_selector_direction_ja.md)
-- [相対セレクター (XMLベース)](relative_selector_xml_ja.md)
+- [相対セレクター(方向ベース)](relative_selector_direction_ja.md)
+- [相対セレクター(XMLベース)](relative_selector_xml_ja.md)
+- [相対セレクター(その他)](relative_selector_misc_ja.md)
 - [相対セレクター](relative_selector_ja.md)
 

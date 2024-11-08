@@ -572,6 +572,13 @@ internal fun TestElement.relative(
                 )
             }
 
+            /**
+             * Misc based
+             */
+            ":radio" -> {
+                e = this.radio()
+            }
+
             // negation
             ":not" -> {
                 e = this.not()

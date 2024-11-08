@@ -731,7 +731,7 @@ object XmlDataIos {
     """.trimIndent()
 
     /**
-     * RelativeCoordinateTest
+     * RelativeCoordinateTest2
      */
     val RelativeCoordinateTest2 = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -772,6 +772,45 @@ object XmlDataIos {
             <XCUIElementTypeNavigationBar   x="30" y="70" width="10" height="10" name="NavigationBar1-3" type="XCUIElementTypeNavigationBar" visible="true"></XCUIElementTypeNavigationBar>
     
     
+        </XCUIElementTypeCell>
+    </XCUIElementTypeApplication>
+</AppiumAUT>
+    """.trimIndent()
+
+    /**
+     * RelativeMisc_radio
+     */
+    val RelativeMisc_radio = """
+<?xml version="1.0" encoding="UTF-8"?>
+<AppiumAUT>
+    <XCUIElementTypeApplication type="XCUIElementTypeApplication" visible="true" name="App1" label="App1" width="1000" height="1000">
+        <XCUIElementTypeCell                x="0"  y="0" width="1000" height="1000" name="XCUIElementTypeCell1" type="XCUIElementTypeCell" visible="true">
+            <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="16" y="433" width="280" height="45" index="54">
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="16" y="433" width="64" height="45" index="0">
+                <XCUIElementTypeButton type="XCUIElementTypeButton" value="1" enabled="false" visible="true" accessible="true" x="16" y="443" width="24" height="25" index="0">
+                  <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" enabled="true" visible="false" accessible="false" x="16" y="443" width="0" height="1" index="0"/>
+                </XCUIElementTypeButton>
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="52" y="448" width="28" height="15" index="1">
+                  <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Male" name="Male" label="Male" enabled="true" visible="true" accessible="true" x="52" y="445" width="28" height="21" index="0"/>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="103" y="433" width="65" height="45" index="1">
+                <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="false" visible="true" accessible="true" x="103" y="443" width="25" height="25" index="0">
+                  <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" enabled="true" visible="false" accessible="false" x="103" y="443" width="1" height="1" index="0"/>
+                </XCUIElementTypeButton>
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="139" y="448" width="29" height="15" index="1">
+                  <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="Female" name="Female" label="Female" enabled="true" visible="true" accessible="true" x="139" y="445" width="29" height="21" index="0"/>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+              <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="191" y="433" width="105" height="45" index="2">
+                <XCUIElementTypeButton type="XCUIElementTypeButton" enabled="false" visible="true" accessible="true" x="191" y="443" width="25" height="25" index="0">
+                  <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" enabled="true" visible="false" accessible="false" x="191" y="443" width="1" height="1" index="0"/>
+                </XCUIElementTypeButton>
+                <XCUIElementTypeOther type="XCUIElementTypeOther" enabled="true" visible="true" accessible="false" x="227" y="448" width="69" height="15" index="1">
+                  <XCUIElementTypeStaticText type="XCUIElementTypeStaticText" value="No answer" name="No answer" label="No answer" enabled="true" visible="true" accessible="true" x="227" y="445" width="69" height="21" index="0"/>
+                </XCUIElementTypeOther>
+              </XCUIElementTypeOther>
+            </XCUIElementTypeOther>
         </XCUIElementTypeCell>
     </XCUIElementTypeApplication>
 </AppiumAUT>

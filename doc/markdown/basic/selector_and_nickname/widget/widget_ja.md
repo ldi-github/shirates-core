@@ -4,14 +4,14 @@
 
 組み込みウィジェットには以下のものがあります。
 
-| ウィジェット | 対応する要素 (Android)                                                                 | 対応する要素 (iOS)                                                |
-|:-------|:---------------------------------------------------------------------------------|:------------------------------------------------------------|
-| label  | android.widget.TextView                                                          | XCUIElementTypeStaticText                                   |
-| input  | android.widget.EditText                                                          | XCUIElementTypeTextField<br/>XCUIElementTypeSecureTextField |
-| image  | android.widget.ImageView                                                         | XCUIElementTypeImage                                        |
-| button | android.widget.Button<br/>android.widget.ImageButton<br/>android.widget.CheckBox | XCUIElementTypeButton                                       |
-| switch | android.widget.Switch                                                            | XCUIElementTypeSwitch                                       |
-| widget | (all of the above)                                                               | (all of the above)                                          |
+| ウィジェット | 対応する要素 (Android)                                                                                                | 対応する要素 (iOS)                                                |
+|:-------|:----------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------|
+| label  | android.widget.TextView                                                                                         | XCUIElementTypeStaticText                                   |
+| input  | android.widget.EditText                                                                                         | XCUIElementTypeTextField<br/>XCUIElementTypeSecureTextField |
+| image  | android.widget.ImageView                                                                                        | XCUIElementTypeImage                                        |
+| button | android.widget.Button<br/>android.widget.ImageButton<br/>android.widget.CheckBox<br/>android.widget.RadioButton | XCUIElementTypeButton                                       |
+| switch | android.widget.Switch                                                                                           | XCUIElementTypeSwitch                                       |
+| widget | (all of the above)                                                                                              | (all of the above)                                          |
 
 <br>
 
@@ -22,7 +22,7 @@
 android.labelTypes=android.widget.TextView
 android.inputTypes=android.widget.EditText
 android.imageTypes=android.widget.ImageView
-android.buttonTypes=android.widget.Button|android.widget.ImageButton|android.widget.CheckBox
+android.buttonTypes=android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton
 android.switchTypes=android.widget.Switch
 android.extraWidgetTypes=
 android.scrollableTypes=androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView|android.widget.HorizontalScrollView|androidx.viewpager.widget.ViewPager

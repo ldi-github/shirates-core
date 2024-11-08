@@ -1678,6 +1678,10 @@ object TestDriver {
         throwsException: Boolean = true
     ): TestElement {
 
+        if (testDrive.isKeyboardShown) {
+            testDrive.hideKeyboard(waitSeconds = 0.2)
+        }
+
         var e = TestElement()
         val actionFunc = {
             val ms = Measure("$selector")

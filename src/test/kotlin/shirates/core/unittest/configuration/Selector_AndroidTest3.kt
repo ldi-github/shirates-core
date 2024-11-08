@@ -73,6 +73,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -81,6 +82,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -89,6 +91,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isTrue()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -97,6 +100,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isTrue()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -105,6 +109,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -113,6 +118,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -121,6 +127,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -129,6 +136,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -137,6 +145,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -145,6 +154,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -153,6 +163,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -161,6 +172,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -169,6 +181,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -177,6 +190,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -185,6 +199,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -193,6 +208,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isTrue()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -201,6 +217,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isTrue()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -209,6 +226,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isTrue()
             assertThat(sel.isOtherBased).isFalse()
         }
@@ -217,7 +235,17 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isTrue()
+            assertThat(sel.isOtherBased).isFalse()
+        }
+        run {
+            val sel = Selector(":radio")
+            assertThat(sel.isFlowBased).isFalse()
+            assertThat(sel.isInnerWidgetBased).isFalse()
+            assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isTrue()
+            assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isFalse()
         }
         run {
@@ -225,6 +253,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
+            assertThat(sel.isMiscBased).isFalse()
             assertThat(sel.isCoordinateBased).isFalse()
             assertThat(sel.isOtherBased).isTrue()
         }
@@ -246,6 +275,9 @@ class Selector_AndroidTest3 : UnitTest() {
         assertThat(Selector.xmlCommandBaseNames).containsExactlyInAnyOrder(
             ":parent", ":child", ":sibling", ":ancestor", ":descendant", ":next", ":pre", ":previous", ":cell"
         )
+        assertThat(Selector.miscCommandBaseNames).containsExactlyInAnyOrder(
+            ":radio"
+        )
         assertThat(Selector.coordinateCommandBaseNames).containsExactlyInAnyOrder(
             ":right", ":below", ":left", ":above"
         )
@@ -257,6 +289,7 @@ class Selector_AndroidTest3 : UnitTest() {
             list.addAll(Selector.flowCommandBaseNames)
             list.addAll(Selector.innerWidgetCommandBaseNames)
             list.addAll(Selector.xmlCommandBaseNames)
+            list.addAll(Selector.miscCommandBaseNames)
             list.addAll(Selector.coordinateCommandBaseNames)
             list.addAll(Selector.otherCommandBaseNames)
             assertThat(Selector.relativeCommandBaseNames).containsExactlyInAnyOrderElementsOf(list)
