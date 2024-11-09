@@ -116,6 +116,10 @@ class SummaryReport(
             return (a + ca).toDouble() / autoPlusManual
         }
 
+    val logLanguage: String
+        get() {
+            return worksheetDataList.firstOrNull()?.logLanguage ?: ""
+        }
 
     init {
 
@@ -142,13 +146,17 @@ class SummaryReport(
             println("Spec-Report file not found.")
             return
         }
-        setupTemplateWorksheet()
+        createAndSaveSummaryFile()
+        saveMetadata()
+    }
+
+    private fun createAndSaveSummaryFile() {
+        setupTemplateWorksheetForSummary()
         createSummarySheet()
-        createWorksheets()
+        createWorksheetsForSummary()
+        createWorksheetForAllSpec()
         saveSummaryFile()
         println("Saved: $outputFilePath")
-
-        saveMetadata()
     }
 
     private fun saveMetadata() {
@@ -174,12 +182,15 @@ osSymbol="${p.osSymbol}"
     private fun saveSummaryFile() {
         templateWorkbook.removeSheet("TestSpec")
         templateWorkbook.removeSheet("Template")
+        if (templateWorkbook.worksheets.any { it.sheetName == "AllSpec" }) {
+            templateWorkbook.removeSheet("AllSpec")
+        }
         templateWorkbook.setActiveSheet(0)
         Files.deleteIfExists(outputFilePath)
         templateWorkbook.saveAs(outputFilePath)
     }
 
-    private fun createWorksheets() {
+    private fun createWorksheetsForSummary() {
 
         val group = worksheetDataList.groupBy {
             it.sheetName
@@ -203,6 +214,29 @@ osSymbol="${p.osSymbol}"
         }
     }
 
+    private fun createWorksheetForAllSpec() {
+
+        if (templateWorkbook.worksheets.any { it.sheetName == "AllSpec" }.not()) {
+            println("AllSpec sheet not found.")
+            return
+        }
+
+        val newSheetName = if (logLanguage == "ja") "全シナリオ" else "All Scenarios"
+        val specReportData = SpecReportData()
+        specReportData.testClassName = newSheetName
+        for (data in worksheetDataList) {
+            specReportData.specLines.addAll(data.specLines)
+        }
+
+        println("Writing sheet: $newSheetName")
+        SpecWriter.outputSpecSheet(
+            templateWorkbook = templateWorkbook,
+            newSheetName = newSheetName,
+            specSheetName = "AllSpec",
+            worksheetData = specReportData
+        )
+    }
+
     private fun cleanup() {
 
         FileUtils.deleteDirectory(File(summaryDirPath.toUri()))
@@ -222,9 +256,8 @@ osSymbol="${p.osSymbol}"
         }
     }
 
-    private fun setupTemplateWorksheet() {
+    private fun setupTemplateWorksheetForSummary() {
 
-        val logLanguage = worksheetDataList.first().logLanguage
         templateWorkbook =
             if (templatePath != null) ExcelUtility.getWorkbook(templatePath)
             else ExcelUtility.getWorkbook(baseName = "TestSpec.xlsx", logLanguage = logLanguage)

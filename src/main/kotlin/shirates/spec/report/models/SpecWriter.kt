@@ -31,6 +31,9 @@ class SpecWriter(val specReport: SpecReport) {
         val sheetIndex = templateWorkbook.sheetIterator().asSequence().indexOf(worksheet)
         templateWorkbook.setSheetName(sheetIndex, specReport.data.sheetName)
         templateWorkbook.removeSheet("Template")
+        if (templateWorkbook.worksheets.any { it.sheetName == "AllSpec" }) {
+            templateWorkbook.removeSheet("AllSpec")
+        }
         templateWorkbook.forceFormulaRecalculation = true
         templateWorkbook.saveAs(specReport.outputFilePath)
         println("Saved: ${specReport.outputFilePath}")
@@ -70,25 +73,27 @@ class SpecWriter(val specReport: SpecReport) {
 
     companion object {
 
+        val policy = org.apache.poi.ss.usermodel.CellCopyPolicy.Builder().cellStyle(true).build()
+
         /**
          * outputSpecSheet
          */
         fun outputSpecSheet(
             templateWorkbook: XSSFWorkbook,
             worksheetData: SpecReportData,
+            specSheetName: String = "TestSpec",
             newSheetName: String? = null
         ) {
 
             val worksheet =
                 if (newSheetName != null)
-                    templateWorkbook.copySheet(templateSheetName = "TestSpec", newSheetName = newSheetName)
-                else templateWorkbook.worksheets("TestSpec")
+                    templateWorkbook.copySheet(templateSheetName = specSheetName, newSheetName = newSheetName)
+                else templateWorkbook.worksheets(specSheetName)
             val templateWorksheet = templateWorkbook.worksheets("Template")
 
             worksheetData.sheetPosition = SpecSheetPosition(sheet = worksheet, headerFirstColumnName = "ID")
             val sp = worksheetData.sheetPosition
 
-            val policy = org.apache.poi.ss.usermodel.CellCopyPolicy.Builder().cellStyle(true).build()
             var rowNum = 0
 
             for (i in 0 until worksheetData.specLines.count()) {

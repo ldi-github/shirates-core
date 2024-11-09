@@ -882,7 +882,10 @@ class TestElement(
      */
     val isChecked: Boolean
         get() {
-            return checked == "true"
+            if (isAndroid) {
+                return checked == "true"
+            }
+            return value == "1"
         }
 
     /**

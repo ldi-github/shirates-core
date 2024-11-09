@@ -28,7 +28,7 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
             assertThat(p["android.labelTypes"]).isEqualTo("android.widget.TextView")
             assertThat(p["android.inputTypes"]).isEqualTo("android.widget.EditText")
             assertThat(p["android.imageTypes"]).isEqualTo("android.widget.ImageView")
-            assertThat(p["android.buttonTypes"]).isEqualTo("android.widget.Button|android.widget.ImageButton|android.widget.CheckBox")
+            assertThat(p["android.buttonTypes"]).isEqualTo("android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton")
             assertThat(p["android.switchTypes"]).isEqualTo("android.widget.Switch")
             assertThat(p["android.extraWidgetTypes"]).isEqualTo("android.view.View")
 
@@ -88,7 +88,7 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
         TestMode.runAsAndroid {
             // Act, Assert
             assertThat(ElementCategoryExpressionUtility.buttonTypesExpression)
-                .isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox)")
+                .isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton)")
         }
         TestMode.runAsIos {
             // Act, Assert
@@ -131,7 +131,7 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
         TestMode.runAsAndroid {
             // Act, Assert
             assertThat(ElementCategoryExpressionUtility.widgetTypesExpression)
-                .isEqualTo("(android.widget.EditText|android.widget.TextView|android.widget.ImageView|android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.Switch)")
+                .isEqualTo("(android.widget.EditText|android.widget.TextView|android.widget.ImageView|android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton|android.widget.Switch)")
         }
         TestMode.runAsIos {
             // Act, Assert
@@ -161,9 +161,9 @@ class ElementCategoryExpressionUtilityTest : UnitTest() {
             assertThat(o.expandClassAlias("label")).isEqualTo("android.widget.TextView")
             assertThat(o.expandClassAlias("input")).isEqualTo("android.widget.EditText")
             assertThat(o.expandClassAlias("image")).isEqualTo("android.widget.ImageView")
-            assertThat(o.expandClassAlias("button")).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox)")
+            assertThat(o.expandClassAlias("button")).isEqualTo("(android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton)")
             assertThat(o.expandClassAlias("switch")).isEqualTo("android.widget.Switch")
-            assertThat(o.expandClassAlias("widget")).isEqualTo("(android.widget.EditText|android.widget.TextView|android.widget.ImageView|android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.Switch)")
+            assertThat(o.expandClassAlias("widget")).isEqualTo("(android.widget.EditText|android.widget.TextView|android.widget.ImageView|android.widget.Button|android.widget.ImageButton|android.widget.CheckBox|android.widget.RadioButton|android.widget.Switch)")
             assertThat(o.expandClassAlias("scrollable")).isEqualTo("(androidx.recyclerview.widget.RecyclerView|android.support.v7.widget.RecyclerView|android.widget.ScrollView|android.widget.HorizontalScrollView|androidx.viewpager.widget.ViewPager)")
             assertThat(o.expandClassAlias("class1")).isEqualTo("class1")
         }

@@ -52,6 +52,7 @@
     - [Relative selector(Direction based)](basic/selector_and_nickname/relative_selector/relative_selector_direction.md)
     - [Relative selector(Widget flow based)](basic/selector_and_nickname/relative_selector/relative_selector_flow.md)
     - [Relative selector(XML based)](basic/selector_and_nickname/relative_selector/relative_selector_xml.md)
+    - [Relative selector(Misc)](basic/selector_and_nickname/relative_selector/relative_selector_misc.md)
 - [Special filter](basic/selector_and_nickname/special_filter/special_filter.md)
     - [Class alias](basic/selector_and_nickname/special_filter/class_alias.md)
 - [Special selector](basic/selector_and_nickname/special_selector/special_selector.md)

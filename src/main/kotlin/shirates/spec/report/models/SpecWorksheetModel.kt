@@ -398,30 +398,30 @@ class SpecWorksheetModel(
 
     private fun arrangeTarget(commandItem: CommandItem) {
 
-        when (commandItem.group) {
+        if (commandItem.command == "screenIs") {
+            val msg = message(id = "screenIs", subject = "")
+            val subject = commandItem.message.trim().replace(msg, "")
+            if (subject.isNotBlank()) {
+                current.target = escapeForCode(subject)
+                commandItem.arrangedMessage = SpecResourceUtility.isDisplayed
+            }
+        } else {
+            when (commandItem.group) {
 
-            "screenIs" -> {
-                val msg = message(id = "screenIs", subject = "")
-                val subject = commandItem.message.trim().replace(msg, "")
-                if (subject.isNotBlank()) {
-                    current.target = escapeForCode(subject)
-                    commandItem.arrangedMessage = SpecResourceUtility.isDisplayed
+                "exist", "existInCell" -> {
+                    val msg = message(id = commandItem.group, subject = "")
+                    val subject = commandItem.message.trim().replace(msg, "")
+                    commandItem.arrangedMessage = subject
                 }
-            }
 
-            "exist", "existInCell" -> {
-                val msg = message(id = commandItem.group, subject = "")
-                val subject = commandItem.message.trim().replace(msg, "")
-                commandItem.arrangedMessage = subject
-            }
-
-            else ->
-                if (commandItem.group.endsWith("Is")) {
-                    if (target.isNotBlank()) {
-                        commandItem.arrangedMessage =
-                            Message.getRelativeRemovedMessage(commandItem.message.trim()).removePrefix(":")
+                else ->
+                    if (commandItem.group.endsWith("Is")) {
+                        if (target.isNotBlank()) {
+                            commandItem.arrangedMessage =
+                                Message.getRelativeRemovedMessage(commandItem.message.trim()).removePrefix(":")
+                        }
                     }
-                }
+            }
         }
     }
 

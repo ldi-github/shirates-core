@@ -173,9 +173,10 @@ it.select("<Label1>[:Right button]")
 
 ### Link
 
-- [Relative selector (Direction based)](relative_selector_direction.md)
-- [Relative selector (Widget flow based)](relative_selector_flow.md)
-- [Relative selector (XML based)](relative_selector_xml.md)
+- [Relative selector(Direction based)](relative_selector_direction.md)
+- [Relative selector(Widget flow based)](relative_selector_flow.md)
+- [Relative selector(XML based)](relative_selector_xml.md)
+- [Relative selector(misc)](relative_selector_misc.md)
 - [Relative selector more example](relative_selector_more_example.md)
 
 

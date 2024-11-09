@@ -37,8 +37,9 @@
 
 ### Link
 
-- [Relative selector (Direction based)](relative_selector_direction.md)
-- [Relative selector (Widget flow based)](relative_selector_flow.md)
+- [Relative selector(Direction based)](relative_selector_direction.md)
+- [Relative selector(Widget flow based)](relative_selector_flow.md)
+- [Relative selector(misc)](relative_selector_misc.md)
 - [Relative selector](relative_selector.md)
 
 

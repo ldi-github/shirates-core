@@ -7,14 +7,19 @@ import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 
 /**
  * dataPattern
  */
 fun dataPattern(
     apiName: String,
-    dataPatternName: String
+    dataPatternName: String,
+    message: String = message(id = "dataPattern", subject = apiName, arg1 = dataPatternName)
+
 ): TestElement {
+
+    TestLog.describe(message = message)
 
     if (TestMode.isNoLoadRun)
         return lastElement
@@ -23,10 +28,11 @@ fun dataPattern(
     val context = TestDriverCommandContext(TestDriver.lastElement)
     context.execOperateCommand(
         command = command,
-        message = message(id = command, subject = apiName, arg1 = dataPatternName),
+        message = message,
         subject = apiName,
         arg1 = dataPatternName,
-        fireEvent = false
+        fireEvent = false,
+        log = false
     ) {
 
         val response = StubProxy.setDataPattern(urlPathOrApiName = apiName, dataPatternName = dataPatternName)

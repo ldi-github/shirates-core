@@ -52,6 +52,7 @@
     - [相対セレクター(方向ベース)](basic/selector_and_nickname/relative_selector/relative_selector_direction_ja.md)
     - [相対セレクター(ウィジェットフローベース)](basic/selector_and_nickname/relative_selector/relative_selector_flow_ja.md)
     - [相対セレクター(XMLベース)](basic/selector_and_nickname/relative_selector/relative_selector_xml_ja.md)
+    - [相対セレクター(その他)](basic/selector_and_nickname/relative_selector/relative_selector_misc_ja.md)
 - [スペシャルフィルター](basic/selector_and_nickname/special_filter/special_filter_ja.md)
     - [クラスエイリアス](basic/selector_and_nickname/special_filter/class_alias_ja.md)
 - [スペシャルセレクター](basic/selector_and_nickname/special_selector/special_selector_ja.md)
