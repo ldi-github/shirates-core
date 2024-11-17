@@ -27,7 +27,7 @@ class AndroidDeviceUtilityTest2 : UITest() {
             val androidDeviceInfo = AndroidDeviceUtility.getOrCreateAndroidDeviceInfo(testProfile = profile)
             androidDeviceInfo
         }
-        var realDevice1 = AndroidDeviceUtility.getConnectedDeviceList().lastOrNull() { it.isRealDevice }
+        val realDevice1 = AndroidDeviceUtility.getConnectedDeviceList().lastOrNull() { it.isRealDevice }
 
         /**
          * by udid
