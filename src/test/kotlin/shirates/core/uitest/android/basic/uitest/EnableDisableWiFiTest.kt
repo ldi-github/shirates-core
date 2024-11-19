@@ -23,7 +23,7 @@ class EnableDisableWiFiTest : UITest() {
                 action {
                     s1 = AndroidDeviceUtility.enableWiFi()
                 }.expectation {
-                    s1.thisIs("adb -s emulator-5558 shell svc wifi enable")
+                    s1.thisIs("adb -s ${testProfile.udid} shell svc wifi enable")
 
                     val r = AndroidDeviceUtility.isWiFiEnabled()
                     wait()
@@ -35,7 +35,7 @@ class EnableDisableWiFiTest : UITest() {
                 action {
                     s1 = AndroidDeviceUtility.disableWiFi()
                 }.expectation {
-                    s1.thisIs("adb -s emulator-5558 shell svc wifi disable")
+                    s1.thisIs("adb -s ${testProfile.udid} shell svc wifi disable")
 
                     val r = AndroidDeviceUtility.isWiFiEnabled()
                     wait()
@@ -47,7 +47,7 @@ class EnableDisableWiFiTest : UITest() {
                 action {
                     s1 = AndroidDeviceUtility.enableWiFi()
                 }.expectation {
-                    s1.thisIs("adb -s emulator-5558 shell svc wifi enable")
+                    s1.thisIs("adb -s ${testProfile.udid} shell svc wifi enable")
 
                     val r = AndroidDeviceUtility.isWiFiEnabled()
                     wait()
