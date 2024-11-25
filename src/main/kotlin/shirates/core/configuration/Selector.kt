@@ -474,7 +474,7 @@ class Selector(
         )
 
         val miscCommandBaseNames = listOf(
-            ":radio"
+            ":radioButton", ":checkBox"
         )
 
         val coordinateCommandBaseNames = listOf(

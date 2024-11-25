@@ -1,8 +1,9 @@
 # 相対セレクター(その他)
 
-| 相対セレクター | Androidの場合                                 | iOSの場合                        |
-|:--------|:-------------------------------------------|:------------------------------|
-| :radio  | 自分が`android.widget.RadioButton`の場合は自分自身を返す | 左側の`XCUIElementTypeButton`を返す |
+| 相対セレクター      | Androidの場合                                 | iOSの場合                        |
+|:-------------|:-------------------------------------------|:------------------------------|
+| :radioButton | 自分が`android.widget.RadioButton`の場合は自分自身を返す | 左側の`XCUIElementTypeButton`を返す |
+| :checkBox    | 自分が`android.widget.CheckBox`の場合は自分自身を返す    | 左側の`XCUIElementTypeButton`を返す |
 
 ### Link
 

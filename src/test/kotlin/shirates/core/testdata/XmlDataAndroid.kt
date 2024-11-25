@@ -946,6 +946,22 @@ object XmlDataAndroid {
     """.trimIndent()
 
     /**
+     * RelativeMisc_check
+     */
+    val RelativeMisc_check = """
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<hierarchy index="0" class="hierarchy" rotation="0" width="282" height="54">
+  <android.widget.FrameLayout      bounds="[0,0][281,404]"   resource-id="frame1" class="android.widget.FrameLayout" displayed="true">
+      <android.view.ViewGroup index="23" package="android" class="android.view.ViewGroup" text="" resource-id="android:id/fruits" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[42,1380][1038,1533]" displayed="true">
+          <android.widget.CheckBox index="0" package="android" class="android.widget.CheckBox" text="Apple" resource-id="android:id/checkApple" checkable="true" checked="true" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[42,1449][200,1533]" displayed="true" />
+          <android.widget.CheckBox index="1" package="android" class="android.widget.CheckBox" text="Orange" resource-id="android:id/checkOrange" checkable="true" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[263,1449][421,1533]" displayed="true" />
+          <android.widget.CheckBox index="2" package="android" class="android.widget.CheckBox" text="Grape" resource-id="android:id/checkGrape" checkable="true" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[484,1449][753,1533]" displayed="true" />
+      </android.view.ViewGroup>
+  </android.widget.FrameLayout>
+</hierarchy>
+    """.trimIndent()
+
+    /**
      * AppIsNotResponding
      */
     val AppIsNotResponding = """

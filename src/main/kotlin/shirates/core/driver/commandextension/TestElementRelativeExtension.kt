@@ -575,8 +575,12 @@ internal fun TestElement.relative(
             /**
              * Misc based
              */
-            ":radio" -> {
-                e = this.radio()
+            ":radioButton" -> {
+                e = this.radioButton()
+            }
+
+            ":checkBox" -> {
+                e = this.checkBox()
             }
 
             // negation

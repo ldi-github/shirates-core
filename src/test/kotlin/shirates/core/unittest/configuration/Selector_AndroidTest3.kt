@@ -240,7 +240,7 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(sel.isOtherBased).isFalse()
         }
         run {
-            val sel = Selector(":radio")
+            val sel = Selector(":radioButton")
             assertThat(sel.isFlowBased).isFalse()
             assertThat(sel.isInnerWidgetBased).isFalse()
             assertThat(sel.isXmlBased).isFalse()
@@ -276,7 +276,7 @@ class Selector_AndroidTest3 : UnitTest() {
             ":parent", ":child", ":sibling", ":ancestor", ":descendant", ":next", ":pre", ":previous", ":cell"
         )
         assertThat(Selector.miscCommandBaseNames).containsExactlyInAnyOrder(
-            ":radio"
+            ":radioButton", ":checkBox"
         )
         assertThat(Selector.coordinateCommandBaseNames).containsExactlyInAnyOrder(
             ":right", ":below", ":left", ":above"
