@@ -802,7 +802,10 @@ fun TestElement.checkIsON(): TestElement {
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
         val expected = if (isAndroid) "true" else "1"
-        checkedIsCore(expected = expected, message = assertMessage)
+        val target =
+            if (this.isLabel) leftButton()
+            else this
+        target.checkedIsCore(expected = expected, message = assertMessage)
     }
 
     return this
@@ -819,7 +822,10 @@ fun TestElement.checkIsOFF(): TestElement {
     val context = TestDriverCommandContext(this)
     context.execCheckCommand(command = command, assertMessage, subject = subject) {
         val expected = if (isAndroid) "false" else ""
-        checkedIsCore(expected = expected, message = assertMessage)
+        val target =
+            if (this.isLabel) leftButton()
+            else this
+        target.checkedIsCore(expected = expected, message = assertMessage)
     }
 
     return this
