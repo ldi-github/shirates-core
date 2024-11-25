@@ -1,6 +1,7 @@
 package shirates.core.configuration
 
 import shirates.core.Const
+import shirates.core.driver.TestDriver.capabilities
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.testContext
@@ -240,11 +241,19 @@ object PropertiesManager {
             }
 
             if (os == "android") {
-                return Const.ANDROID_STATBAR_HEIGHT
+                try {
+                    val statBarHeight = capabilities.getCapability("statBarHeight").toString().toInt()
+                    return statBarHeight
+                } catch (t: Throwable) {
+                    return Const.ANDROID_STATBAR_HEIGHT
+                }
             }
 
             val m = testContext.profile.deviceName.removePrefix("iPhone ")
             return if (m.startsWith("SE")) 20
+            else if (m.startsWith("18")) 53
+            else if (m.startsWith("17")) 53
+            else if (m.startsWith("16")) 47
             else if (m.startsWith("15")) 47
             else if (m.startsWith("14")) 47
             else if (m.startsWith("13")) 47

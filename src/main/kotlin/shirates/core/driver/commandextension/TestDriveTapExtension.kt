@@ -456,6 +456,35 @@ fun TestDrive.tapCenterOfScreen(
 }
 
 /**
+ * tapTopOfScreen
+ */
+fun TestDrive.tapTopOfScreen(
+    margin: Int = 20,
+    holdSeconds: Double = testContext.tapHoldSeconds,
+    repeat: Int = 1,
+    safeMode: Boolean = true
+): TestElement {
+
+    val command = "tapTopOfScreen"
+    val message = message(id = command)
+
+    val context = TestDriverCommandContext(rootElement)
+    context.execOperateCommand(command = command, message = message) {
+
+        val bounds = viewBounds
+        tap(
+            x = bounds.centerX,
+            y = (PropertiesManager.statBarHeight + margin),
+            holdSeconds = holdSeconds,
+            repeat = repeat,
+            safeMode = safeMode
+        )
+    }
+
+    return lastElement
+}
+
+/**
  * tapCenterOf
  */
 fun TestDrive.tapCenterOf(
