@@ -1,15 +1,16 @@
 package shirates.core.driver.commandextension
 
 import io.appium.java_client.AppiumDriver
-import shirates.core.driver.TestDriver
+import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.testContext
-import shirates.core.driver.testDrive
-import shirates.core.driver.waitForClose
 import shirates.core.exception.TestConfigException
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
+import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.sync.SyncUtility
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import java.nio.file.Files
 
@@ -46,9 +47,41 @@ internal fun AppiumDriver.installApp(appPackageFile: String = testContext.profil
         throw TestConfigException("app file not found(${appPackageFile})")
     }
     if (isAndroid) {
-        TestDriver.androidDriver.installApp(appPackageFile)
+        if (appPackageFile.endsWith(".apks")) {
+            val sw = StopWatch()
+            val r = ShellUtility.executeCommand(
+                "bundletool",
+                "install-apks",
+                "--device-id=${testProfile.udid}",
+                "--apks=${appPackageFile}2",
+                log = true
+            )
+            sw.stop()
+            if (r.hasError) {
+                throw TestDriverException("Install failed. ${r.command}", cause = r.error)
+            }
+            printInfo("Installed. (${sw.elapsedSeconds} sec)")
+        } else {
+            val sw = StopWatch()
+            val r = ShellUtility.executeCommand(
+                "adb",
+                "-s",
+                testProfile.udid,
+                "install",
+                appPackageFile + "2",
+                log = true
+            )
+            sw.stop()
+            if (r.hasError) {
+                throw TestDriverException("Install failed. ${r.command}", cause = r.error)
+            }
+            printInfo("Installed. (${sw.elapsedSeconds} sec)")
+        }
     } else {
+        val sw = StopWatch()
         TestDriver.iosDriver.installApp(appPackageFile)
+        sw.stop()
+        printInfo("Installed. (${sw.elapsedSeconds} sec)")
     }
 }
 

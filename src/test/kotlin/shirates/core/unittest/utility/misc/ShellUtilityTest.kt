@@ -28,14 +28,14 @@ class ShellUtilityTest : UnitTest() {
         }
         run {
             // Act
-            val r = ShellUtility.executeCommand("adb", "devices")
+            val r = ShellUtility.executeCommand("adb", "devices", log = true)
             r.waitFor()
             // Assert
             assertThat(r.resultString).contains("List of devices attached")
         }
         run {
             // Act
-            val r = ShellUtility.executeCommand("adb", "devices")
+            val r = ShellUtility.executeCommand("adb", "devices", log = true)
             val s = r.waitForResultString()
             // Assert
             assertThat(s).contains("List of devices attached")
@@ -47,7 +47,7 @@ class ShellUtilityTest : UnitTest() {
 
         run {
             // Act
-            val r = ShellUtility.executeCommandAsync("adb", "devices", "-l")
+            val r = ShellUtility.executeCommandAsync("adb", "devices", "-l", log = true)
             // Assert
             assertThat(r.hasCompleted).isFalse()
 
@@ -72,7 +72,7 @@ class ShellUtilityTest : UnitTest() {
         }
         run {
             // Act
-            val r = ShellUtility.executeCommandAsync("adb", "devices")
+            val r = ShellUtility.executeCommandAsync("adb", "devices", log = true)
             // Assert
             assertThat(r.waitForResultString()).contains("List of devices attached")
         }
