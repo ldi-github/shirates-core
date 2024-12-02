@@ -9,6 +9,7 @@ import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
+import shirates.core.utility.time.StopWatch
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStreamReader
@@ -20,9 +21,12 @@ object ShellUtility {
      */
     fun executeCommand(
         vararg args: String,
+        timeoutSeconds: Double = Const. SHELL_RESULT_WAIT_FOR_SECONDS,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellResult {
-        return executeCommandCore(args = args, log = log)
+        val r = executeCommandCore(args = args, log = log)
+        r.waitFor(timeoutSeconds = timeoutSeconds)
+        return r
     }
 
     internal fun executeCommandCore(
@@ -33,6 +37,7 @@ object ShellUtility {
         val outputStream = ByteArrayOutputStream()
         var error: Throwable? = null
         val executor = DefaultExecutor()
+        val sw = StopWatch()
         try {
             TestLog.execute(message = args.joinToString(" "), log = log)
 
@@ -43,6 +48,9 @@ object ShellUtility {
             val commandLine = CommandLine(command)
             commandLine.addArguments(args2.toTypedArray())
             executor.streamHandler = PumpStreamHandler(outputStream)
+
+            sw.start()
+
             executor.execute(commandLine)
         } catch (t: Throwable) {
             error = t
@@ -57,9 +65,17 @@ object ShellUtility {
                     TestLog.info(msg)
                 }
             }
+        } finally {
+            sw.stop()
         }
 
-        return ShellResult(executor, args.toList(), outputStream, error)
+        return ShellResult(
+            executor = executor,
+            args = args.toList(),
+            outputStream = outputStream,
+            error = error,
+            stopWatch = sw
+        )
     }
 
     /**
@@ -82,13 +98,22 @@ object ShellUtility {
         executor.streamHandler = PumpStreamHandler(outputStream)
         val resultHandler = DefaultExecuteResultHandler();
         val env = EnvironmentUtils.getProcEnvironment();
+        val sw = StopWatch()
         try {
+            sw.start()
             executor.execute(commandLine, env, resultHandler);
         } catch (t: Throwable) {
             throw t
         }
 
-        return ShellResult(executor, args.toList(), outputStream, null, resultHandler)
+        return ShellResult(
+            executor = executor,
+            args = args.toList(),
+            outputStream = outputStream,
+            error = null,
+            resultHandler = resultHandler,
+            stopWatch = sw
+        )
     }
 
     /**
@@ -108,7 +133,8 @@ object ShellUtility {
         val args: List<String>,
         val outputStream: ByteArrayOutputStream,
         val error: Throwable? = null,
-        val resultHandler: DefaultExecuteResultHandler? = null
+        val resultHandler: DefaultExecuteResultHandler? = null,
+        val stopWatch: StopWatch
     ) {
         val command: String
             get() {
@@ -132,6 +158,9 @@ object ShellUtility {
 
         val resultString: String
             get() {
+                if(hasCompleted.not()){
+                    waitFor()
+                }
                 if (TestMode.isRunningOnWindows) {
                     val reader = InputStreamReader(ByteArrayInputStream(outputStream.toByteArray()), "SJIS")
                     return reader.readText().trim()
@@ -155,6 +184,10 @@ object ShellUtility {
             timeoutSeconds: Double = Const.SHELL_RESULT_WAIT_FOR_SECONDS
         ): ShellResult {
             resultHandler?.waitFor((timeoutSeconds * 1000).toLong())
+
+            if (hasCompleted) {
+                stopWatch.stop()
+            }
 
             return this
         }
