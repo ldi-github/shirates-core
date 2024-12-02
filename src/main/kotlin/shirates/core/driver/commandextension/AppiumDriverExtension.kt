@@ -53,7 +53,7 @@ internal fun AppiumDriver.installApp(appPackageFile: String = testContext.profil
                 "bundletool",
                 "install-apks",
                 "--device-id=${testProfile.udid}",
-                "--apks=${appPackageFile}2",
+                "--apks=${appPackageFile}",
                 log = true
             )
             sw.stop()
@@ -68,7 +68,7 @@ internal fun AppiumDriver.installApp(appPackageFile: String = testContext.profil
                 "-s",
                 testProfile.udid,
                 "install",
-                appPackageFile + "2",
+                appPackageFile,
                 log = true
             )
             sw.stop()
