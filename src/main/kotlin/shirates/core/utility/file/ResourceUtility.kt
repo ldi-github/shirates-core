@@ -135,6 +135,32 @@ object ResourceUtility {
     fun copyFile(fileName: String, targetFile: Path, logLanguage: String = TestLog.logLanguage) {
 
         val resourcePath = getResourcePath(fileName = fileName, logLanguage = logLanguage)
+        val sourcePath = getResourceCopySourcePath(resourcePath = resourcePath)
+        if (Files.exists(targetFile.parent).not()) {
+            targetFile.parent.toFile().mkdirs()
+        }
+        if (Files.exists(sourcePath)) {
+            println("Copying $resourcePath to ${targetFile}")
+            Files.copy(sourcePath, targetFile, StandardCopyOption.REPLACE_EXISTING)
+        } else {
+            JarUtility.copyFromJarToFile(fileName = resourcePath, targetFile = targetFile, logLanguage = "")
+        }
+    }
+
+    /**
+     * getResourceCopySourcePath
+     */
+    fun getResourceCopySourcePath(fileName: String, logLanguage: String = TestLog.logLanguage): Path {
+
+        val resourcePath = getResourcePath(fileName = fileName, logLanguage = logLanguage)
+        return getResourceCopySourcePath(resourcePath = resourcePath)
+    }
+
+    /**
+     * getResourceCopySourcePath
+     */
+    fun getResourceCopySourcePath(resourcePath: String): Path {
+
         val url = javaClass.classLoader.getResource(resourcePath)
             ?: throw FileNotFoundException("resourcePath=$resourcePath")
 
@@ -146,12 +172,6 @@ object ResourceUtility {
                 else if (TestMode.isRunningOnWindows && decodedPath.startsWith("file:/")) decodedPath.substring("file:/".length)
                 else decodedPath
                 ).toPath()
-        if (Files.exists(path)) {
-            TestLog.createDirectoryForLog()
-            println("Copying $resourcePath to ${TestLog.directoryForLog}")
-            Files.copy(path, targetFile, StandardCopyOption.REPLACE_EXISTING)
-        } else {
-            JarUtility.copyFromJarToFile(fileName = resourcePath, targetFile = targetFile, logLanguage = "")
-        }
+        return path
     }
 }

@@ -6,14 +6,12 @@ import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
-import shirates.core.driver.commandextension.allElements
-import shirates.core.driver.commandextension.select
-import shirates.core.driver.commandextension.suppressCache
-import shirates.core.driver.commandextension.widget
+import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
 import shirates.core.driver.testDrive
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
+import shirates.core.vision.driver.tap
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
 class AdHocTestIos : UITest() {
@@ -106,6 +104,38 @@ class AdHocTestIos : UITest() {
 
         suppressCache {
             rootElement.printInfo()
+        }
+    }
+
+    @Test
+    fun visionTest() {
+
+        scenario {
+            case(1) {
+                condition {
+                    disableCache()
+
+                    detect("Accessibility").tap()
+                    detect("Display & Text Size").tap()
+                    detect("Larger Text").tap()
+                    detect("Larger Accessibility Sizes")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun visionTest_cache_mode() {
+
+        scenario {
+            case(1) {
+                condition {
+                    select("Accessibility").tap()
+                    select("Display & Text Size").tap()
+                    select("Larger Text").tap()
+                    select("Larger Accessibility Sizes")
+                }
+            }
         }
     }
 

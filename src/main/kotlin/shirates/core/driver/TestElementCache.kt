@@ -17,8 +17,6 @@ import shirates.core.utility.element.XPathUtility
 
 object TestElementCache {
 
-    const val UNKOWN_SCREEN_NAME = ""
-
     /**
      * synced
      */

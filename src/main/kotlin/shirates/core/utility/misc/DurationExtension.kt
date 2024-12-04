@@ -20,3 +20,12 @@ val Duration.shortLabel: String
             this.toSecondsPart()
         )
     }
+
+val Duration.debugLabel: String
+    get() {
+        if (this.seconds > 60) {
+            return shortLabel
+        } else {
+            return "${this.toSecondsPart()}.${this.toMillisPart()} sec"
+        }
+    }

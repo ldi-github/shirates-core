@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "7.5.6-SNAPSHOT"
+version = "7.6.0-SNAPSHOT"
 
 val appiumClientVersion = "9.1.0"
 
@@ -92,9 +92,13 @@ dependencies {
     // https://github.com/Kotlin/dokka
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.10")
 
-    // BoofCV
+    // BoofCV(core)
     implementation("org.boofcv:boofcv-core:1.1.2")
     testImplementation("org.boofcv:boofcv-core:1.1.2")
+
+    // BoofCV(swing)
+    implementation("org.boofcv:boofcv-swing:1.1.7")
+    testImplementation("org.boofcv:boofcv-swing:1.1.7")
 
     // jsoup
     implementation("org.jsoup:jsoup:1.17.2")

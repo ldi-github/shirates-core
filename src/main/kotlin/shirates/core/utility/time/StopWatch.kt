@@ -1,6 +1,6 @@
 package shirates.core.utility.time
 
-import shirates.core.utility.label
+import shirates.core.utility.debugLabel
 import java.time.Duration
 
 /**
@@ -144,8 +144,8 @@ class StopWatch(var title: String = "") {
      */
     override fun toString(): String {
         if (title.isBlank()) {
-            return duration.label
+            return "in ${duration.debugLabel}"
         }
-        return "$title: ${duration.label}"
+        return "[$title] in ${duration.debugLabel}"
     }
 }

@@ -52,6 +52,7 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.VisionElement
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -193,6 +194,11 @@ object TestDriver {
      * lastElement
      */
     var lastElement: TestElement = TestElement.emptyElement
+
+    /**
+     * lastVisionElement
+     */
+    var lastVisionElement: VisionElement = VisionElement.emptyElement
 
     /**
      * lastError
@@ -1902,7 +1908,7 @@ object TestDriver {
             CodeExecutionContext.lastScreenshot = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
 
-            if (PropertiesManager.enableRerunOnScreenshotBlackout) {
+            if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout) {
                 val threshold = PropertiesManager.screenshotBlackoutThreshold
                 if (BufferedImageUtility.isBlackout(image = screenshotImage, threshold = threshold)) {
                     val share = BufferedImageUtility.getLargestColorShare(image = screenshotImage)

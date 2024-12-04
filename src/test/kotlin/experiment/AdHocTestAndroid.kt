@@ -13,6 +13,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.utility.android.AdbUtility
+import shirates.core.vision.driver.tap
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class AdHocTestAndroid : UITest() {
@@ -278,6 +279,56 @@ class AdHocTestAndroid : UITest() {
                     it.select("[Network & internet]")
                     it.select("[Network & internet2]")
                 }
+            }
+        }
+    }
+
+    @Test
+    fun visionTest() {
+
+        scenario {
+            case(1) {
+                condition {
+//                    val e = select("Network & internet")
+//                    e.cropImage()
+//                    println(e.bounds)
+
+                    disableCache()
+
+                    val v = detect("Network & internet")
+                    v.tap()
+
+                    detect("Internet")
+                        .tap()
+
+                    detect("AndroidWifi")
+                        .tap()
+
+
+//                    detect("Network & internet")
+//                        .printInfo()
+//                    detect("Connected devices")
+//                        .printInfo()
+//                    detect("Apps")
+//                        .printInfo()
+//                    detect("Notifications")
+//                        .printInfo()
+//                    detect("Battery")
+//                        .printInfo()
+//                    detect("Storage")
+//                        .printInfo()
+
+                }
+            }
+        }
+    }
+
+    @Test
+    fun capture() {
+
+        scenario {
+            case(1) {
+                it.tap("<Network & internet>:leftImage")
             }
         }
     }

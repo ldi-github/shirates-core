@@ -153,6 +153,9 @@ object Const {
     const val BOUNDS_TO_RECT_RATIO_ANDROID = 1
     const val BOUNDS_TO_RECT_RATIO_IOS = 3
 
+    // Vision
+    const val VISION_DIRECTORY = "vision"
+
     /**
      * internal
      */

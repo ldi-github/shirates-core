@@ -6,6 +6,26 @@ class Rectangle(
     var width: Int = 0,
     var height: Int = 0
 ) {
+    val left: Int
+        get() {
+            return x
+        }
+
+    val top: Int
+        get() {
+            return y
+        }
+
+    val right: Int
+        get() {
+            return x + width - 1
+        }
+
+    val bottom: Int
+        get() {
+            return y + height - 1
+        }
+
     fun area(): Int {
         return width * height
     }
@@ -13,5 +33,9 @@ class Rectangle(
     fun trimBy(trimObject: TrimObject): Rectangle {
 
         return trimObject.trim(this)
+    }
+
+    override fun toString(): String {
+        return "[$left, $top, $right, $bottom](w=$width, h=$height)"
     }
 }

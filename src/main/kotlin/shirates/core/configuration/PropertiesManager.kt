@@ -917,6 +917,17 @@ object PropertiesManager {
             return value == "true"
         }
 
+    // Vision --------------------------------------------------
+
+    /**
+     * visionDirectory
+     */
+    val visionDirectory: String
+        get() {
+            return getPropertyValue(propertyName = "visionDirectory")
+                ?: Const.VISION_DIRECTORY
+        }
+
     // Custom --------------------------------------------------
 
     /**

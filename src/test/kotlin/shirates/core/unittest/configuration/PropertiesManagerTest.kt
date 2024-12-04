@@ -1739,6 +1739,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionDirectory() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionDirectory).isEqualTo(Const.VISION_DIRECTORY)
+        }
+        run {
+            // Arrange
+            val value = "temp"
+            PropertiesManager.setPropertyValue("visionDirectory", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionDirectory).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun specReportExcludeIDetail() {
 
         run {

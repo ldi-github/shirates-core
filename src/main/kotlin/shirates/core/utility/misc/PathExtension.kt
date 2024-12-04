@@ -37,3 +37,24 @@ fun Path.replaceExtension(extension: String): Path {
 
     return this.parent.resolve("${this.nameWithoutExtension}$extension")
 }
+
+/**
+ * getSiblingPath
+ */
+fun Path.getSiblingPath(fileName: String): Path {
+
+    val nameWithoutExtension = fileName.toPath().nameWithoutExtension
+    return this.parent.resolve(nameWithoutExtension)
+}
+
+/**
+ * deleteFilesNonRecursively
+ */
+fun Path.deleteFilesNonRecursively() {
+
+    val files = this.listFiles().filter { it.isFile }
+    for (file in files) {
+        file.delete()
+    }
+}
+
