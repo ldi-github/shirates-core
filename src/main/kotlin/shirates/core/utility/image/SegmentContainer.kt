@@ -119,13 +119,13 @@ class SegmentContainer(
             if (top < 0) top = 0
 
             var right = left + segment.width + margin * 2
-            if (right > image!!.width) {
-                right = image!!.width - 1
+            if (right > parentImage.width - 1) {
+                right = parentImage.width - 1
             }
 
             var bottom = top + segment.height + margin * 2
-            if (bottom > image!!.height) {
-                bottom = image!!.height - 1
+            if (bottom > parentImage.height - 1) {
+                bottom = parentImage.height - 1
             }
 
             val width = right - left + 1
