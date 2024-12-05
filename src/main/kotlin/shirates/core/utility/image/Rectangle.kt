@@ -18,11 +18,17 @@ class Rectangle(
 
     val right: Int
         get() {
+            if (width == 0) {
+                return x
+            }
             return x + width - 1
         }
 
     val bottom: Int
         get() {
+            if (height == 0) {
+                return y
+            }
             return y + height - 1
         }
 

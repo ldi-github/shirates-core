@@ -1,74 +1,49 @@
 package shirates.core.unittest.utility.image
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
-import shirates.core.utility.image.SegmentContainer
 
 class SegmentTest {
 
     @Test
-    fun merge1() {
-
-        // Arrange
-        val s1 = Segment().addMember(Rectangle(10, 10, 10, 10))
-        val s2 = Segment().addMember(Rectangle(20, 10, 10, 10))
-        val s3 = Segment().addMember(Rectangle(10, 20, 10, 10))
-        // Act
-        s1.merge(s2)
-        // Assert
-        assertThat(s1.toString()).isEqualTo("[10, 10, 29, 19]")
-    }
-
-    @Test
-    fun merge2() {
+    fun canMerge() {
 
         run {
             // Arrange
-            val margin = 6
-            val s1 = Segment().addMember(Rectangle(10, 10, 10, 10))
-            val s2 = Segment().addMember(Rectangle(25, 10, 10, 10))
+            val segment1 = Segment(10, 10, 10, 10)
+            val segment2 = Segment(20, 10, 10, 10)
             // Act
-            s1.merge(s2)
+            val canMerge = segment1.canMerge(segment2, margin = 0)
             // Assert
-            assertThat(s1.toString()).isEqualTo("[10, 10, 34, 19]")
+            assertThat(canMerge).isTrue()
         }
         run {
             // Arrange
-            val margin = 5
-            val s1 = Segment().addMember(Rectangle(10, 10, 10, 10))
-            val s2 = Segment().addMember(Rectangle(25, 10, 10, 10))
-            // Act, Assert
-            assertThatThrownBy {
-                s1.merge(s2)
-            }.isInstanceOf(IllegalStateException::class.java)
-                .hasMessage("Can't merge the segment. segmentMargin=5. You can force merger by force=true.")
-        }
-        run {
-            // Arrange
-            val margin = 5
-            val s1 = Segment().addMember(Rectangle(10, 10, 10, 10))
-            val s2 = Segment().addMember(Rectangle(25, 10, 10, 10))
+            val segment1 = Segment(10, 10, 10, 10)
+            val segment2 = Segment(21, 10, 10, 10)
             // Act
-            s1.merge(s2, force = true)
+            val canMerge = segment1.canMerge(segment2, margin = 0)
             // Assert
-            assertThat(s1.toString()).isEqualTo("[10, 10, 34, 19]")
+            assertThat(canMerge).isFalse()
         }
-    }
-
-    @Test
-    fun debug() {
-
         run {
             // Arrange
-            val container = SegmentContainer(margin = 20)
-            container.addRectangle(Rectangle(199, 454, 662, 535))
+            val segment1 = Segment(10, 10, 10, 10)
+            val segment2 = Segment(25, 10, 10, 10)
             // Act
-            container.addRectangle(Rectangle(235, 458, 606, 536))
-
-            container.segments
+            val canMerge = segment1.canMerge(segment2, margin = 4)
+            // Assert
+            assertThat(canMerge).isFalse()
+        }
+        run {
+            // Arrange
+            val segment1 = Segment(10, 10, 10, 10)
+            val segment2 = Segment(25, 10, 10, 10)
+            // Act
+            val canMerge = segment1.canMerge(segment2, margin = 5)
+            // Assert
+            assertThat(canMerge).isTrue()
         }
     }
 

@@ -1,31 +1,30 @@
 package shirates.core.utility.image
 
 import shirates.core.driver.Bounds
+import java.awt.image.BufferedImage
 
 class Segment(
-) {
-    val members = mutableListOf<Rectangle>()
+    var left: Int = 0,
+    var top: Int = 0,
+    var width: Int,
+    var height: Int,
 
-    var left: Int = 0
-        private set
+    ) {
 
-    var top: Int = 0
-        private set
-
-    var right: Int = 0
-        private set
-
-    var bottom: Int = 0
-        private set
-
-    val width: Int
+    val right: Int
         get() {
-            return (right + 1) - left
+            if (width == 0) {
+                return left
+            }
+            return left + width - 1
         }
 
-    val height: Int
+    val bottom: Int
         get() {
-            return (bottom + 1) - top
+            if (height == 0) {
+                return top
+            }
+            return top + height - 1
         }
 
     val area: Int
@@ -38,48 +37,12 @@ class Segment(
             return width.toFloat() / height.toFloat()
         }
 
+    var savedSegmentImageFile: String? = null
+
+    var segmentImage: BufferedImage? = null
+
     override fun toString(): String {
         return "[$left, $top, $right, $bottom](w=$width, h=$height, ratio=$aspectRatio)"
-    }
-
-    /**
-     * addMember
-     */
-    fun addMember(rectangle: Rectangle): Segment {
-
-        if (members.isEmpty()) {
-            left = rectangle.left
-            top = rectangle.top
-            right = rectangle.right
-            bottom = rectangle.bottom
-            members.add(rectangle)
-            return this
-        }
-
-        refreshSegmentBoundary()
-        return this
-    }
-
-    private fun refreshSegmentBoundary() {
-
-        left = members.minOfOrNull { it.left } ?: 0
-        top = members.minOfOrNull { it.top } ?: 0
-        right = members.maxOfOrNull { it.right } ?: 0
-        bottom = members.maxOfOrNull { it.bottom } ?: 0
-    }
-
-    /**
-     * addAll
-     */
-    fun addAll(list: List<Rectangle>): Segment {
-
-        for (rect in list) {
-            if (members.contains(rect).not()) {
-                members.add(rect)
-            }
-        }
-        refreshSegmentBoundary()
-        return this
     }
 
     /**
@@ -90,32 +53,20 @@ class Segment(
         val thisBounds = this.toBounds()
         val thatBounds = segment.toBounds()
 
-        thatBounds.left -= margin
+        thatBounds.left = thatBounds.left - margin - 1
         if (thatBounds.left <= 0) thatBounds.left = 0
 
-        thatBounds.top -= margin
+        thatBounds.top = thatBounds.top - margin - 1
         if (thatBounds.top <= 0) thatBounds.top = 0
 
-        thatBounds.width += margin * 2
-        thatBounds.height += margin * 2
+        thatBounds.width += (margin + 1) * 2
+        thatBounds.height += (margin + 1) * 2
 
         if (thisBounds.isOverlapping(thatBounds)) {
             return true
         }
 
         return false
-    }
-
-    /**
-     * merge
-     */
-    fun merge(segment: Segment, margin: Int = 0, force: Boolean = false): Segment {
-
-        if (force || canMerge(segment = segment, margin = margin)) {
-            addAll(segment.members)
-        }
-
-        return this
     }
 
     /**

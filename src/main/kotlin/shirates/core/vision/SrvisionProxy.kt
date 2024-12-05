@@ -13,7 +13,6 @@ import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.proxy.AppiumProxy.getResponseBody
 import shirates.core.utility.getSiblingPath
-import shirates.core.utility.image.BinarizationOption
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.SegmentUtility
 import shirates.core.utility.sync.WaitUtility
@@ -91,9 +90,9 @@ object SrvisionProxy {
         val result = getResponseBody(url)
         lastResult = result
 
-        sw.stop()
         if (log) {
             inputDirectory.toPath().resolve("result.json").toFile().writeText(result)
+            sw.stop()
             sw.printInfo()
         }
 
@@ -107,21 +106,20 @@ object SrvisionProxy {
         imageFile: String,
         templateFile: String,
         margin: Int = 20,
-        binarizationOptions: List<BinarizationOption> = listOf(BinarizationOption.auto),
         log: Boolean = false,
-        binarizationAction: (() -> Unit)? = null
     ): TemplateMatchingResult {
 
-        val segmentedFilesResult = SegmentUtility.getSegmentedFiles(
+        val sw = StopWatch("getTemplateMatchingRectangle")
+
+        val segmentedContainer = SegmentUtility.getSegmentContainer(
             imageFile = imageFile,
             templateFile = templateFile,
             margin = margin,
-            binarizationOptions = binarizationOptions,
+            saveImage = true,
             log = log,
-            binarizationAction = binarizationAction
         )
-        if (segmentedFilesResult.files.isEmpty()) {
-            throw FileNotFoundException("segmented files not found.")
+        if (segmentedContainer.segments.isEmpty()) {
+            throw FileNotFoundException("segment not found.")
         }
 
         val inputDirectory = imageFile.toPath().getSiblingPath(imageFile).toString()
@@ -152,6 +150,11 @@ object SrvisionProxy {
             rectangle = rectangle,
         )
 
+        sw.stop()
+        if (log) {
+            sw.printInfo()
+        }
+
         return result
     }
 
@@ -159,5 +162,10 @@ object SrvisionProxy {
         val jsonString: String,
         val file: String,
         val rectangle: Rectangle,
-    )
+    ) {
+        override fun toString(): String {
+
+            return "rectangle: $rectangle, file=$file, jsonString: \n$jsonString"
+        }
+    }
 }

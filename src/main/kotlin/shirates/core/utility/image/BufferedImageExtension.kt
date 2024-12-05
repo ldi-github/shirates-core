@@ -2,6 +2,7 @@ package shirates.core.utility.image
 
 import boofcv.io.image.ConvertBufferedImage
 import boofcv.struct.image.GrayF32
+import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
@@ -207,6 +208,14 @@ fun BufferedImage?.isSame(comparedImage: BufferedImage?): Boolean {
 fun BufferedImage?.toGrayF32(): GrayF32? {
 
     return ConvertBufferedImage.convertFrom(this, null as GrayF32?)
+}
+
+/**
+ * toGrayU8
+ */
+fun BufferedImage?.toGrayU8(): GrayU8? {
+
+    return ConvertBufferedImage.convertFrom(this, null as GrayU8?)
 }
 
 /**
