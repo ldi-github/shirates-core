@@ -96,7 +96,7 @@ internal fun TestDriveObjectAndroid.getMainActivity(
     val dump = r.toString()
 
     if (PropertiesManager.enableShellExecLog) {
-        val n = TestLog.lines.count() + 1
+        val n = TestLog.nextLineNo
         TestLog.directoryForLog.resolve("${n}_shell_pm_dump.txt").toFile().writeText(text = dump)
     }
     if (dump.contains("more than one device/emulator")) {

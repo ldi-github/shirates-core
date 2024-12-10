@@ -137,7 +137,7 @@ private fun TestElement.tapCore(
     }
 
     if (PropertiesManager.enableTapElementImageLog) {
-        val fileName = "${TestLog.lines.count() + 1}_TAP_${this.subject}_${this.bounds}"
+        val fileName = "${TestLog.nextLineNo}_TAP_${this.subject}_${this.bounds}"
         this.cropImage(fileName = fileName)
     }
 

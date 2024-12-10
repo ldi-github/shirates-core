@@ -1,8 +1,6 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.NicknameUtility
-import shirates.core.configuration.Selector
-import shirates.core.configuration.isRelativeNickname
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
@@ -58,51 +56,6 @@ fun TestDrive.sendKeys(
     }
 
     return lastElement
-}
-
-/**
- * getSelector
- */
-fun TestDrive.getSelector(expression: String): Selector {
-
-    if (TestMode.isNoLoadRun) {
-        return getSelectorCore(expression = expression)
-    } else {
-        var sel: Selector? = null
-        try {
-            doUntilTrue {
-                try {
-                    sel = getSelectorCore(expression = expression)
-                    true
-                } catch (t: Throwable) {
-                    false
-                }
-            }
-        } catch (t: Throwable) {
-            throw TestDriverException(
-                message(id = "couldNotGetSelector", subject = expression, arg1 = screenName),
-                cause = t
-            )
-        }
-        return sel!!
-    }
-}
-
-private fun TestDrive.getSelectorCore(expression: String): Selector {
-    val sel = TestDriver.screenInfo.expandExpression(expression = expression)
-    val newSel = sel.copy()
-    if (newSel.isRelative.not()) {
-        return newSel
-    }
-
-    if (this is TestElement) {
-        if (TestMode.isNoLoadRun && expression.isRelativeNickname()) {
-            return Selector("${this.selector}$expression")
-        }
-        return this.getChainedSelector(newSel)
-    }
-
-    return newSel
 }
 
 /**

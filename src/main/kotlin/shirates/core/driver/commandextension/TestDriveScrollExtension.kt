@@ -827,7 +827,7 @@ fun TestDrive.scanElements(
     val context = TestDriverCommandContext(lastElement)
     context.execOperateCommand(command = command, message = message) {
         useCache {
-            val lineNo = TestLog.lines.count() + 1
+            val lineNo = TestLog.nextLineNo
 
             TestElementCache.scanResults.clear()
             TestDriver.refreshCache()
@@ -886,7 +886,7 @@ internal fun TestDrive.getScrollingInfo(
     if (isAndroid || (isiOS && isKeyboardShown.not())) {
         val r = ScrollingInfo(
             errorMessage = "",
-            scrollableBounds = scrollableElement.bounds,
+            bounds = scrollableElement.bounds,
             viewport = viewBounds,
             direction = direction,
             startMarginRatio = startMarginRatio,
@@ -903,7 +903,7 @@ internal fun TestDrive.getScrollingInfo(
     val scrollBounds = Bounds(left = b.left, top = b.top, width = b.width, height = height)
     val r = ScrollingInfo(
         errorMessage = "",
-        scrollableBounds = scrollBounds,
+        bounds = scrollBounds,
         viewport = viewBounds,
         direction = direction,
         startMarginRatio = startMarginRatio,

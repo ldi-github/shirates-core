@@ -19,11 +19,11 @@ class RelativeCommand1 : UITest() {
                     it.macro("[Wallpaper & style Screen]")
                 }.expectation {
                     it.exist("Lock screen")
-                        .relative(":right").textIs("Home screen")
+                        .relative(":right", margin = 0).textIs("Home screen")
                     it.select("Lock screen")
-                        .relative(":right(2)").thisIsEmpty()
+                        .relative(":right(2)", margin = 0).thisIsEmpty()
                     it.select("Lock screen")
-                        .relative(":belowImage").classIs("android.widget.ImageView")
+                        .relative(":belowImage", margin = 0).classIs("android.widget.ImageView")
                 }
             }
             case(2) {
@@ -49,11 +49,11 @@ class RelativeCommand1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.exist("Network & internet")
-                        .relative(":flow").textIs("Mobile, Wi‑Fi, hotspot")
-                        .relative(":flow").classIs("android.widget.ImageView")
-                        .relative(":flow").textIs("Connected devices")
-                        .relative(":flow").textIs("Bluetooth, pairing")
-                        .relative(":flow").classIs("android.widget.ImageView")
+                        .relative(":flow", margin = 0).textIs("Mobile, Wi‑Fi, hotspot")
+                        .relative(":flow", margin = 0).classIs("android.widget.ImageView")
+                        .relative(":flow", margin = 0).textIs("Connected devices")
+                        .relative(":flow", margin = 0).textIs("Bluetooth, pairing")
+                        .relative(":flow", margin = 0).classIs("android.widget.ImageView")
                 }
             }
             case(2) {
@@ -90,10 +90,10 @@ class RelativeCommand1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.exist("Network & internet")
-                        .relative(":vflow").textIs("Mobile, Wi‑Fi, hotspot")
-                        .relative(":vflow").textIs("Connected devices")
-                        .relative(":vflow").textIs("Bluetooth, pairing")
-                        .relative(":vflow").textIs("Apps")
+                        .relative(":vflow", margin = 0).textIs("Mobile, Wi‑Fi, hotspot")
+                        .relative(":vflow", margin = 0).textIs("Connected devices")
+                        .relative(":vflow", margin = 0).textIs("Bluetooth, pairing")
+                        .relative(":vflow", margin = 0).textIs("Apps")
                 }
             }
             case(2) {
@@ -129,8 +129,8 @@ class RelativeCommand1 : UITest() {
                 }.expectation {
                     it.exist("Network & internet").parent()
                         .apply {
-                            relative(":child").textIs("Network & internet")
-                            relative(":child(2)").textIs("Mobile, Wi‑Fi, hotspot")
+                            relative(":child", margin = 0).textIs("Network & internet")
+                            relative(":child(2)", margin = 0).textIs("Mobile, Wi‑Fi, hotspot")
                         }
                 }
             }

@@ -767,8 +767,8 @@ class TestElementCache_AndroidTest : UnitTest() {
         TestElementCache.loadXml(xmlData = XmlDataAndroid.NetworkAndInternetScreen)
         TestElementCache.synced = true
         val mobileNetwork = TestElementCache.select("Mobile network")
-        val parent = mobileNetwork.relative(":parent")
-        val summary = parent.relative(":descendant(#android:id/summary)")
+        val parent = mobileNetwork.relative(":parent", margin = 0)
+        val summary = parent.relative(":descendant(#android:id/summary)", margin = 0)
 
         run {
             // Act

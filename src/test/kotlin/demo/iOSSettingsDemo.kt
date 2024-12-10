@@ -18,9 +18,7 @@ class iOSSettingsDemo : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.pressHome()
-                        .launchApp()
-                        .screenIs("[iOS Settings Top Screen]")
+                    it.screenIs("[iOS Settings Top Screen]")
                 }.action {
                     it.tapWithScrollDown("Developer")
                 }.expectation {
@@ -51,13 +49,9 @@ class iOSSettingsDemo : UITest() {
                             .tap("General")
                             .tap("About")
                     }.action {
-                        ifCanSelect("System Version") {
+                        ifCanSelect("iOS Version") {
                             it.next().next()
                                 .memoTextAs("Version")
-                        }
-                        ifCanSelect("text=Version&&className=XCUIElementTypeStaticText") {
-                            it.next(".XCUIElementTypeStaticText")
-                                .memoTextAs("version")
                         }
                     }
                 }

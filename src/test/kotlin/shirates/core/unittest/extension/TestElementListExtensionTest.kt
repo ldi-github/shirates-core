@@ -65,7 +65,7 @@ class TestElementListExtensionTest : UnitTest() {
                 val filtered = list.filterBySelector(selector = selector)
                 // Assert
                 assertThat(filtered.any()).isEqualTo(true)
-                assertThat(filtered[0].parentElement?.type).isEqualTo("XCUIElementTypeCell")
+                assertThat(filtered[0].parentElement.type).isEqualTo("XCUIElementTypeCell")
             }
 
             run {

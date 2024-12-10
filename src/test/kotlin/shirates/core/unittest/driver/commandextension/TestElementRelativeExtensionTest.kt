@@ -34,7 +34,7 @@ class TestElementRelativeExtensionTest : UnitTest() {
         val selectors = mutableListOf<Selector>()
         selectors.add(Selector(":next(1)"))
         // Act
-        val next1 = e.relative(selectors)
+        val next1 = e.relative(selectors, margin = 0)
         // Assert
         assertThat(next1).isEqualTo(e.next())
         assertThat(next1.className).isEqualTo("android.widget.ImageButton")

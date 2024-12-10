@@ -7,12 +7,19 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.Testrun
 import shirates.core.driver.*
+import shirates.core.driver.commandextension.appIs
+import shirates.core.driver.commandextension.exist
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.textIs
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.utility.android.AdbUtility
+import shirates.core.vision.driver.classify
+import shirates.core.vision.driver.detect
+import shirates.core.vision.driver.existImage
 import shirates.core.vision.driver.tap
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -289,35 +296,20 @@ class AdHocTestAndroid : UITest() {
         scenario {
             case(1) {
                 condition {
-//                    val e = select("Network & internet")
-//                    e.cropImage()
-//                    println(e.bounds)
-
                     disableCache()
-
-                    val v = detect("Network & internet")
-                    v.tap()
-
-                    detect("Internet")
+                }.action {
+                    vision.detect("Network & internet")
                         .tap()
-
-                    detect("AndroidWifi")
+                    vision.detect("Internet")
                         .tap()
-
-
-//                    detect("Network & internet")
-//                        .printInfo()
-//                    detect("Connected devices")
-//                        .printInfo()
-//                    detect("Apps")
-//                        .printInfo()
-//                    detect("Notifications")
-//                        .printInfo()
-//                    detect("Battery")
-//                        .printInfo()
-//                    detect("Storage")
-//                        .printInfo()
-
+                    vision.detect("AndroidWifi")
+                        .tap()
+                }.expectation {
+                    val v = vision.existImage(
+                        "unitTestData/files/srvision/android/template_Wifi_no_internet_access.png",
+                    )
+                    val label = v.classify()
+                    printInfo("label: $label")
                 }
             }
         }

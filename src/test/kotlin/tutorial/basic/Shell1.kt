@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode.isRunningOnWindows
+import shirates.core.driver.commandextension.thisContains
+import shirates.core.driver.commandextension.thisIsEmpty
+import shirates.core.driver.commandextension.thisIsNotEmpty
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 import shirates.core.utility.misc.ShellUtility

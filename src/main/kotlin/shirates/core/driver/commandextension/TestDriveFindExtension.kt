@@ -14,6 +14,7 @@ import shirates.core.utility.element.ElementCategoryExpressionUtility
 fun TestDrive.findElements(
     expression: String,
     useCache: Boolean = testContext.useCache,
+    relativeMargin: Int = 0,
     selectContext: TestElement = rootElement
 ): List<TestElement> {
 
@@ -54,7 +55,7 @@ fun TestDrive.findElements(
         e.selector = sel
         var a = e
         for (r in sel.relativeSelectors) {
-            a = a.relative(command = r.command!!, scopeElements = elements)
+            a = a.relative(command = r.command!!, scopeElements = elements, margin = relativeMargin)
         }
         results.add(a)
     }

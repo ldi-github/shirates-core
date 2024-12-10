@@ -67,6 +67,7 @@ fun TestElement.innerWidget(
     return relative(
         command = ":innerWidget($pos)",
         scopeElements = innerWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -91,6 +92,7 @@ internal fun TestElement.innerLabel(
     return this.flow(
         selector = selector,
         targetElements = innerLabelWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -106,6 +108,7 @@ fun TestElement.innerLabel(
     return relative(
         command = ":innerLabel($pos)",
         scopeElements = innerLabelWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -123,6 +126,7 @@ fun TestElement.innerLabel(
     return relative(
         command = ":innerLabel($exp)",
         scopeElements = innerLabelWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -135,6 +139,7 @@ internal fun TestElement.innerInput(
     return this.flow(
         selector = selector,
         targetElements = innerInputWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -150,6 +155,7 @@ fun TestElement.innerInput(
     return relative(
         command = ":innerInput($pos)",
         scopeElements = innerInputWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -167,6 +173,7 @@ fun TestElement.innerInput(
     return relative(
         command = ":innerInput($exp)",
         scopeElements = innerInputWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -179,6 +186,7 @@ internal fun TestElement.innerImage(
     return this.flow(
         selector = selector,
         targetElements = innerImageWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -194,6 +202,7 @@ fun TestElement.innerImage(
     return relative(
         command = ":innerImage($pos)",
         scopeElements = innerImageWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -211,6 +220,7 @@ fun TestElement.innerImage(
     return relative(
         command = ":innerImage($exp)",
         scopeElements = innerImageWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -223,6 +233,7 @@ internal fun TestElement.innerButton(
     return this.flow(
         selector = selector,
         targetElements = innerButtonWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -238,6 +249,7 @@ fun TestElement.innerButton(
     return relative(
         command = ":innerButton($pos)",
         scopeElements = innerButtonWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -255,6 +267,7 @@ fun TestElement.innerButton(
     return relative(
         command = ":innerButton($exp)",
         scopeElements = innerButtonWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -267,6 +280,7 @@ internal fun TestElement.innerSwitch(
     return this.flow(
         selector = selector,
         targetElements = innerSwitchWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -282,6 +296,7 @@ fun TestElement.innerSwitch(
     return relative(
         command = ":innerSwitch($pos)",
         scopeElements = innerSwitchWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -299,6 +314,7 @@ fun TestElement.innerSwitch(
     return relative(
         command = ":innerSwitch($exp)",
         scopeElements = innerSwitchWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -311,6 +327,7 @@ internal fun TestElement.innerVWidget(
     return this.vflow(
         selector = selector,
         targetElements = innerWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -326,6 +343,7 @@ fun TestElement.innerVWidget(
     return relative(
         command = ":innerVWidget($pos)",
         scopeElements = innerWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -343,6 +361,7 @@ fun TestElement.innerVWidget(
     return relative(
         command = ":innerVWidget($exp)",
         scopeElements = innerWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -355,6 +374,7 @@ internal fun TestElement.innerVlabel(
     return this.vflow(
         selector = selector,
         targetElements = innerLabelWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -370,6 +390,7 @@ fun TestElement.innerVlabel(
     return relative(
         command = ":innerVlabel($pos)",
         scopeElements = innerLabelWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -387,6 +408,7 @@ fun TestElement.innerVlabel(
     return relative(
         command = ":innerVlabel($exp)",
         scopeElements = labelWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -399,6 +421,7 @@ internal fun TestElement.innerVinput(
     return this.vflow(
         selector = selector,
         targetElements = innerInputWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -414,6 +437,7 @@ fun TestElement.innerVinput(
     return relative(
         command = ":innerVinput($pos)",
         scopeElements = innerInputWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -431,6 +455,7 @@ fun TestElement.innerVinput(
     return relative(
         command = ":innerVinput($exp)",
         scopeElements = innerInputWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -443,6 +468,7 @@ internal fun TestElement.innerVimage(
     return this.vflow(
         selector = selector,
         targetElements = innerImageWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -458,6 +484,7 @@ fun TestElement.innerVimage(
     return relative(
         command = ":innerVimage($pos)",
         scopeElements = innerImageWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -475,6 +502,7 @@ fun TestElement.innerVimage(
     return relative(
         command = ":innerVimage($exp)",
         scopeElements = innerImageWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -487,6 +515,7 @@ internal fun TestElement.innerVbutton(
     return this.vflow(
         selector = selector,
         targetElements = innerButtonWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -502,6 +531,7 @@ fun TestElement.innerVbutton(
     return relative(
         command = ":innerVbutton($pos)",
         scopeElements = innerButtonWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -519,6 +549,7 @@ fun TestElement.innerVbutton(
     return relative(
         command = ":innerVbutton($exp)",
         scopeElements = innerButtonWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -531,6 +562,7 @@ internal fun TestElement.innerVswitch(
     return this.vflow(
         selector = selector,
         targetElements = innerSwitchWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -546,6 +578,7 @@ fun TestElement.innerVswitch(
     return relative(
         command = ":innerVswitch($pos)",
         scopeElements = innerSwitchWidgets,
+        margin = 0,
         frame = frame
     )
 }
@@ -563,6 +596,7 @@ fun TestElement.innerVswitch(
     return relative(
         command = ":innerVswitch($exp)",
         scopeElements = innerSwitchWidgets,
+        margin = 0,
         frame = frame
     )
 }

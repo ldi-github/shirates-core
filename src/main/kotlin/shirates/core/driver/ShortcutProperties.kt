@@ -2,6 +2,7 @@ package shirates.core.driver
 
 import shirates.core.configuration.TestProfile
 import shirates.core.testcode.UITestCallbackExtension
+import shirates.core.vision.driver.VisionDriveObject
 
 /**
  * testDrive
@@ -9,6 +10,14 @@ import shirates.core.testcode.UITestCallbackExtension
 val testDrive: TestDrive
     get() {
         return TestDriveObject
+    }
+
+/**
+ * vision
+ */
+val vision: VisionDriveObject
+    get() {
+        return VisionDriveObject
     }
 
 /**

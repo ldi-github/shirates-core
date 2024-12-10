@@ -371,6 +371,11 @@ class Selector(
             return relativeSelectors.filter { it.expression == ":not" }.any()
         }
 
+    val isTextSelector: Boolean
+        get() {
+            return filterMap.keys.any() { it.startsWith("text") }
+        }
+
     val isImageSelector: Boolean
         get() {
             return image.isNullOrBlank().not()

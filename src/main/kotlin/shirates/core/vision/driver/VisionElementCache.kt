@@ -1,10 +1,12 @@
 package shirates.core.vision.driver
 
 import shirates.core.configuration.Selector
-import shirates.core.driver.Bounds
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
+import shirates.core.logging.Message.message
 import shirates.core.vision.RecognizeTextParser
 import shirates.core.vision.VisionElement
+import java.awt.image.BufferedImage
 
 object VisionElementCache {
 
@@ -26,19 +28,32 @@ object VisionElementCache {
     /**
      * loadTextRecognizerJson
      */
-    fun loadTextRecognizerJson(json: String) {
+    fun loadTextRecognizerJson(
+        json: String,
+        screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
+        screenshotFile: String = CodeExecutionContext.lastScreenshotFile
+    ) {
 
         sourceJson = json
         visionElements.clear()
 
         val observations = try {
-            RecognizeTextParser(json).parse()
+            RecognizeTextParser(
+                content = json,
+                screenshotImage = CodeExecutionContext.lastScreenshotImage,
+                screenshotFile = CodeExecutionContext.lastScreenshotFile
+            ).parse()
         } catch (t: Throwable) {
             throw TestDriverException(message = "Could not parse json. \n$json")
         }
 
+        observations.forEach { observation ->
+            val img = observation.image
+            "".toString()
+        }
+
         for (o in observations) {
-            val v = VisionElement(observation = o)
+            val v = o.createVisionElement()
             visionElements.add(v)
         }
     }
@@ -48,22 +63,47 @@ object VisionElementCache {
      */
     fun detect(
         selector: Selector,
-        throwsException: Boolean = true,
+        throwsException: Boolean = false,
 //        selectContext: TestElement = rootElement,
 //        widgetOnly: Boolean = false,
-        frame: Bounds? = null
+//        frame: Bounds? = null
     ): VisionElement {
 
         var candidates = visionElements
         val selectorText = selector.text ?: ""
         if (selectorText.isBlank().not()) {
-            candidates = candidates.filter { it.text.contains(selectorText) }.toMutableList()
+            candidates = candidates.filter { it.text == selectorText }.toMutableList()
             if (candidates.isEmpty()) {
                 candidates = candidates.filter { selectorText.contains(it.text) }.toMutableList()
             }
         }
 
-        return candidates.firstOrNull() ?: VisionElement.emptyElement
+        val v = candidates.firstOrNull() ?: VisionElement.emptyElement
+        v.lastError = null
+
+        v.selector = selector
+        if (v.isEmpty) {
+            v.lastError = TestDriverException(
+                message = message(
+                    id = "elementNotFound",
+                    subject = "$selector",
+                    arg1 = selector.getElementExpression()
+                )
+            )
+        }
+
+        if (v.hasError && throwsException) {
+            throw v.lastError!!
+        }
+        return v
+    }
+
+    /**
+     * joinText
+     */
+    fun joinText(): String {
+
+        return visionElements.map { it.text }.joinToString()
     }
 
 }

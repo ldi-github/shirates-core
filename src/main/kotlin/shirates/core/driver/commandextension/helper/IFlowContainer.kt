@@ -6,12 +6,12 @@ interface IFlowContainer {
     /**
      * addElement
      */
-    fun addElement(element: TestElement, force: Boolean = false): Any?
+    fun addElement(element: TestElement, margin: Int = 0, force: Boolean = false): Any?
 
     /**
      * addAll
      */
-    fun addAll(elements: List<TestElement>, force: Boolean = false)
+    fun addAll(elements: List<TestElement>, margin: Int = 0, force: Boolean = false)
 
     /**
      * getElements

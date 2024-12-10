@@ -52,6 +52,7 @@ fun TestElement.next(
 
     return relative(
         command = ":next($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -66,6 +67,7 @@ fun TestElement.next(
 
     return relative(
         command = ":next($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -117,6 +119,7 @@ fun TestElement.previous(
 
     return relative(
         command = ":previous($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -131,6 +134,7 @@ fun TestElement.previous(
 
     return relative(
         command = ":previous($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -225,6 +229,7 @@ fun TestElement.nextLabel(
 
     return relative(
         command = ":nextLabel($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -239,6 +244,7 @@ fun TestElement.nextLabel(
 
     return relative(
         command = ":nextLabel($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -267,6 +273,7 @@ fun TestElement.preLabel(
 
     return relative(
         command = ":preLabel($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -281,6 +288,7 @@ fun TestElement.preLabel(
 
     return relative(
         command = ":preLabel($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -309,6 +317,7 @@ fun TestElement.nextInput(
 
     return relative(
         command = ":nextInput($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -323,6 +332,7 @@ fun TestElement.nextInput(
 
     return relative(
         command = ":nextInput($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -351,6 +361,7 @@ fun TestElement.preInput(
 
     return relative(
         command = ":preInput($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -365,6 +376,7 @@ fun TestElement.preInput(
 
     return relative(
         command = ":preInput($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -393,6 +405,7 @@ fun TestElement.nextImage(
 
     return relative(
         command = ":nextImage($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -407,6 +420,7 @@ fun TestElement.nextImage(
 
     return relative(
         command = ":nextImage($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -435,6 +449,7 @@ fun TestElement.preImage(
 
     return relative(
         command = ":preImage($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -449,6 +464,7 @@ fun TestElement.preImage(
 
     return relative(
         command = ":preImage($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -477,6 +493,7 @@ fun TestElement.nextButton(
 
     return relative(
         command = ":nextButton($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -491,6 +508,7 @@ fun TestElement.nextButton(
 
     return relative(
         command = ":nextButton($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -519,6 +537,7 @@ fun TestElement.preButton(
 
     return relative(
         command = ":preButton($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -533,6 +552,7 @@ fun TestElement.preButton(
 
     return relative(
         command = ":preButton($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -561,6 +581,7 @@ fun TestElement.nextSwitch(
 
     return relative(
         command = ":nextSwitch($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -575,6 +596,7 @@ fun TestElement.nextSwitch(
 
     return relative(
         command = ":nextSwitch($expression)",
+        margin = 0,
         frame = frame
     )
 }
@@ -603,6 +625,7 @@ fun TestElement.preSwitch(
 
     return relative(
         command = ":preSwitch($pos)",
+        margin = 0,
         frame = frame
     )
 }
@@ -617,6 +640,7 @@ fun TestElement.preSwitch(
 
     return relative(
         command = ":preSwitch($expression)",
+        margin = 0,
         frame = frame
     )
 }

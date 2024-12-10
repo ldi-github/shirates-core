@@ -10,6 +10,7 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -295,10 +296,10 @@ fun TestElement.cropImage(
     val message = message(id = command, file = fileName)
 
     val trimObject = TrimObject(trim)
-    val rect = bounds.toRect()
+    val rect = bounds.toRectWithRatio()
     val cropInfo = CropInfo(rect = rect, trimObject = trimObject)
 
-    val lineNo = TestLog.lines.count() + 1
+    val lineNo = TestLog.nextLineNo
     val tm = if (trimObject.isEmpty) "" else "_trim=${trimObject.expression}"
 
     val trimCondition = "[${bounds.x1},${bounds.y1}][${bounds.x2},${bounds.y2}]${tm}"

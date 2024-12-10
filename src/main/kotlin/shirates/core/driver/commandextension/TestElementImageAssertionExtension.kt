@@ -62,7 +62,7 @@ internal fun TestElement.isImageCore(
             val fileName = "$s${testDrive.imageProfile}.png"
             imageMatchResult.image?.saveImage(TestLog.directoryForLog.resolve(fileName).toFile())
 
-            val fileName2 = "${TestLog.lines.count() + 1}_$fileName"
+            val fileName2 = "${TestLog.nextLineNo}_$fileName"
             imageMatchResult.templateImage?.saveImage(TestLog.directoryForLog.resolve(fileName2).toFile())
         }
     }
@@ -293,10 +293,10 @@ internal fun imageAssertionCoreCore(
             }
         }
         if (r.not()) {
-            val croppedImageFileName = "${TestLog.lines.count()}_cropped_image"
+            val croppedImageFileName = "${TestLog.currentLineNo}_cropped_image"
             testElement.lastCropInfo?.croppedImage?.saveImage("${TestLog.directoryForLog.resolve(croppedImageFileName)}")
 
-            val templateImageFileName = "${TestLog.lines.count()}_template_image"
+            val templateImageFileName = "${TestLog.currentLineNo}_template_image"
             expectedSelector.templateImage?.saveImage("${TestLog.directoryForLog.resolve(templateImageFileName)}")
         }
 

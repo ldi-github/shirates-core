@@ -6,7 +6,6 @@ import shirates.core.configuration.Filter
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure

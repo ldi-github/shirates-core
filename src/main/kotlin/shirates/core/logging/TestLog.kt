@@ -89,6 +89,22 @@ object TestLog {
     val lines = mutableListOf<LogLine>()
 
     /**
+     * currentLineNo
+     */
+    val currentLineNo: Int
+        get() {
+            return lines.size
+        }
+
+    /**
+     * nextLineNo
+     */
+    val nextLineNo: Int
+        get() {
+            return currentLineNo + 1
+        }
+
+    /**
      * allLines
      */
     val allLines = mutableListOf<LogLine>()
@@ -571,8 +587,8 @@ object TestLog {
             result = result2,
             resultMessage = resultMsg,
             exception = exception,
-            lastScreenshot = if (CodeExecutionContext.lastScreenshot.isBlank()) ""
-            else CodeExecutionContext.lastScreenshot.toPath().fileName.toString(),
+            lastScreenshot = if (CodeExecutionContext.lastScreenshotName.isBlank()) ""
+            else CodeExecutionContext.lastScreenshotName.toPath().fileName.toString(),
             testClassName = currentTestClassName,
             testMethodName = currentTestMethodName
         )

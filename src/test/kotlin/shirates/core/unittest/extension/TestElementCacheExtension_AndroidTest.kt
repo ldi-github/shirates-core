@@ -384,7 +384,7 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
         run {
             // Act, Assert
             assertThatThrownBy {
-                val e = rootElement.findInDescendantsAndSelf("xpath=//*[@content-desc='Navigate up']")
+                rootElement.findInDescendantsAndSelf("xpath=//*[@content-desc='Navigate up']")
             }.isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("Unsupported noun with evaluate function. (noun=xpath)")
         }

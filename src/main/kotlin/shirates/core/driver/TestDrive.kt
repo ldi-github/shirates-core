@@ -1,24 +1,6 @@
 package shirates.core.driver
 
-import io.appium.java_client.AppiumDriver
-
-interface TestDrive {
-
-    /**
-     * Shortcut for TestDriver object
-     */
-    val driver: TestDriver
-        get() {
-            return TestDriver
-        }
-
-    /**
-     * Shortcut for AppiumDriver object
-     */
-    val appiumDriver: AppiumDriver
-        get() {
-            return TestDriver.appiumDriver
-        }
+interface TestDrive : Drive {
 
     /**
      * Returns last accessed element
@@ -40,13 +22,5 @@ interface TestDrive {
                 return this
             }
             return TestElement.emptyElement
-        }
-
-    /**
-     * Returns lastElement after syncing cache.
-     */
-    val it: TestElement
-        get() {
-            return TestDriver.it
         }
 }

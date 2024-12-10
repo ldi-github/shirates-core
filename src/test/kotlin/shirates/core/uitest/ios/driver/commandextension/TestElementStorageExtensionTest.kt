@@ -2,6 +2,7 @@ package shirates.core.uitest.ios.driver.commandextension
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 

@@ -71,7 +71,10 @@ let evaluation = classifier.evaluation(on: testingData)
 print("\(evaluation)")
 
 // save
-let modelURL = URL(fileURLWithPath: "./SwitchStateClassifier.mlmodel")
+var parent = dataSourceURL
+parent.deleteLastPathComponent()
+parent.append(path: "models")
+let modelURL = URL(fileURLWithPath: "\(dataSourcePath)/\(dataSourceName).mlmodel")
 try classifier.write(to: modelURL)
 
 print("Model saved to \(modelURL.path)")

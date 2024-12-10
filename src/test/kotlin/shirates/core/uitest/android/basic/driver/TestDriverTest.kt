@@ -154,7 +154,7 @@ class TestDriverTest : UITest() {
             case(1, "manualScreenshot = true, force = false(default)") {
                 // Arrange
                 CodeExecutionContext.clear()
-                assertThat(CodeExecutionContext.lastScreenshot).isBlank()
+                assertThat(CodeExecutionContext.lastScreenshotName).isBlank()
                 // Act
                 val original = testContext.manualScreenshot
                 try {
@@ -165,12 +165,12 @@ class TestDriverTest : UITest() {
                 }
                 // Assert
                 assertThat(TestDriver.lastError).isNull()
-                assertThat(Files.exists(TestLog.directoryForLog.resolve(CodeExecutionContext.lastScreenshot))).isTrue()
+                assertThat(Files.exists(TestLog.directoryForLog.resolve(CodeExecutionContext.lastScreenshotName))).isTrue()
             }
             case(2, "manualScreenshot = false, force = true") {
                 // Arrange
                 CodeExecutionContext.clear()
-                assertThat(CodeExecutionContext.lastScreenshot).isBlank()
+                assertThat(CodeExecutionContext.lastScreenshotName).isBlank()
                 // Act
                 val original = testContext.manualScreenshot
                 try {
@@ -181,12 +181,12 @@ class TestDriverTest : UITest() {
                 }
                 // Assert
                 assertThat(TestDriver.lastError).isNull()
-                assertThat(Files.exists(TestLog.directoryForLog.resolve(CodeExecutionContext.lastScreenshot))).isTrue()
+                assertThat(Files.exists(TestLog.directoryForLog.resolve(CodeExecutionContext.lastScreenshotName))).isTrue()
             }
             case(3, "manualScreenshot = false, force = false(default)") {
                 // Arrange
                 CodeExecutionContext.clear()
-                assertThat(CodeExecutionContext.lastScreenshot).isBlank()
+                assertThat(CodeExecutionContext.lastScreenshotName).isBlank()
                 // Act
                 val original = testContext.manualScreenshot
                 try {
@@ -196,12 +196,12 @@ class TestDriverTest : UITest() {
                     testContext.manualScreenshot = original
                 }
                 // Assert
-                assertThat(CodeExecutionContext.lastScreenshot).isBlank()
+                assertThat(CodeExecutionContext.lastScreenshotName).isBlank()
             }
             case(4, "manualScreenshot = true, filename") {
                 // Arrange
                 CodeExecutionContext.clear()
-                assertThat(CodeExecutionContext.lastScreenshot).isBlank()
+                assertThat(CodeExecutionContext.lastScreenshotName).isBlank()
                 // Act
                 val original = testContext.manualScreenshot
                 try {

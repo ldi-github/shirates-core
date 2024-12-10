@@ -4,6 +4,7 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.helper.HorizontalBand
 import shirates.core.driver.commandextension.helper.VerticalBand
+import shirates.core.driver.commandextension.relative
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 
 private fun TestElement.filterCandidates(
@@ -38,6 +39,7 @@ internal fun TestElement.rightLeftCore(
     selector: Selector,
     targetElements: List<TestElement>,
     widgetOnly: Boolean,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -47,9 +49,9 @@ internal fun TestElement.rightLeftCore(
         .filter { it.isWidget }
         .filterBySelector(selector = sel)
 
-    val horizontalBand = HorizontalBand(this)
+    val horizontalBand = HorizontalBand(baseElement = this)
     for (widget in widgets) {
-        horizontalBand.merge(widget)
+        horizontalBand.merge(element = widget, margin = margin)
     }
     val elms = horizontalBand.getElements()
     val candidates = filterCandidates(
@@ -100,6 +102,7 @@ internal fun TestElement.belowAboveCore(
     selector: Selector,
     targetElements: List<TestElement>,
     widgetOnly: Boolean,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -113,7 +116,7 @@ internal fun TestElement.belowAboveCore(
 
     val verticalBand = VerticalBand(this)
     for (element in elements) {
-        verticalBand.merge(element)
+        verticalBand.merge(element = element, margin = margin)
     }
     val elms = verticalBand.getElements()
     val candidates = filterCandidates(
@@ -145,6 +148,7 @@ internal fun TestElement.right(
     selector: Selector,
     targetElements: List<TestElement>,
     widgetOnly: Boolean,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -156,6 +160,7 @@ internal fun TestElement.right(
                 selector = selector,
                 targetElements = targetElements,
                 widgetOnly = widgetOnly,
+                margin = margin,
                 frame = frame
             )
         }
@@ -168,6 +173,7 @@ internal fun TestElement.right(
  */
 fun TestElement.right(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -178,6 +184,7 @@ fun TestElement.right(
     return relative(
         command = ":right($pos)",
         scopeElements = scopedElements,
+        margin = margin,
         frame = frame
     )
 }
@@ -187,6 +194,7 @@ fun TestElement.right(
  */
 fun TestElement.right(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -195,6 +203,7 @@ fun TestElement.right(
     return relative(
         command = ":right($exp)",
         scopeElements = widgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -202,6 +211,7 @@ fun TestElement.right(
 internal fun TestElement.rightInput(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int = 0,
     frame: Bounds?
 ): TestElement {
 
@@ -210,6 +220,7 @@ internal fun TestElement.rightInput(
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
 
@@ -222,6 +233,7 @@ private fun TestElement.getRelativeWidget(
     selector: Selector,
     className: String,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds? = null
 ): TestElement {
 
@@ -231,6 +243,7 @@ private fun TestElement.getRelativeWidget(
         className = className,
         targetElements = targetElements,
         widgetOnly = true,
+        margin = margin,
         frame = frame
     )
 }
@@ -241,6 +254,7 @@ private fun TestElement.getRelativeElement(
     className: String,
     targetElements: List<TestElement>,
     widgetOnly: Boolean,
+    margin: Int,
     frame: Bounds? = null
 ): TestElement {
 
@@ -250,13 +264,13 @@ private fun TestElement.getRelativeElement(
     }
 
     val e = if (relativeCommand.startsWith(":right")) {
-        right(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)
+        right(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, margin = margin, frame = frame)
     } else if (relativeCommand.startsWith(":left")) {
-        left(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)
+        left(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, margin = margin, frame = frame)
     } else if (relativeCommand.startsWith(":above")) {
-        above(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)
+        above(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, margin = margin, frame = frame)
     } else if (relativeCommand.startsWith(":below")) {
-        below(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, frame = frame)
+        below(selector = sel, targetElements = targetElements, widgetOnly = widgetOnly, margin = margin, frame = frame)
     } else {
         throw NotImplementedError(relativeCommand)
     }
@@ -271,12 +285,14 @@ private fun TestElement.getRelativeElement(
  */
 fun TestElement.rightInput(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightInput($pos)",
         scopeElements = inputWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -286,6 +302,7 @@ fun TestElement.rightInput(
  */
 fun TestElement.rightInput(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -294,6 +311,7 @@ fun TestElement.rightInput(
     return relative(
         command = ":rightInput($exp)",
         scopeElements = inputWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -301,6 +319,7 @@ fun TestElement.rightInput(
 internal fun TestElement.rightLabel(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int = 0,
     frame: Bounds?
 ): TestElement {
 
@@ -309,6 +328,7 @@ internal fun TestElement.rightLabel(
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -319,12 +339,14 @@ internal fun TestElement.rightLabel(
  */
 fun TestElement.rightLabel(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightLabel($pos)",
         scopeElements = widgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -334,6 +356,7 @@ fun TestElement.rightLabel(
  */
 fun TestElement.rightLabel(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -342,6 +365,7 @@ fun TestElement.rightLabel(
     return relative(
         command = ":rightLabel($exp)",
         scopeElements = labelWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -349,6 +373,7 @@ fun TestElement.rightLabel(
 internal fun TestElement.rightImage(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -357,6 +382,7 @@ internal fun TestElement.rightImage(
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -367,12 +393,14 @@ internal fun TestElement.rightImage(
  */
 fun TestElement.rightImage(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightImage($pos)",
         scopeElements = imageWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -382,6 +410,7 @@ fun TestElement.rightImage(
  */
 fun TestElement.rightImage(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -390,6 +419,7 @@ fun TestElement.rightImage(
     return relative(
         command = ":rightImage($exp)",
         scopeElements = imageWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -397,6 +427,7 @@ fun TestElement.rightImage(
 internal fun TestElement.rightButton(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -405,6 +436,7 @@ internal fun TestElement.rightButton(
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -415,12 +447,14 @@ internal fun TestElement.rightButton(
  */
 fun TestElement.rightButton(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightButton($pos)",
         scopeElements = buttonWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -430,6 +464,7 @@ fun TestElement.rightButton(
  */
 fun TestElement.rightButton(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -438,6 +473,7 @@ fun TestElement.rightButton(
     return relative(
         command = ":rightButton($exp)",
         scopeElements = buttonWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -445,6 +481,7 @@ fun TestElement.rightButton(
 internal fun TestElement.rightSwitch(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int = 0,
     frame: Bounds?
 ): TestElement {
 
@@ -453,6 +490,7 @@ internal fun TestElement.rightSwitch(
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -463,12 +501,14 @@ internal fun TestElement.rightSwitch(
  */
 fun TestElement.rightSwitch(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":rightSwitch($pos)",
         scopeElements = switchWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -478,6 +518,7 @@ fun TestElement.rightSwitch(
  */
 fun TestElement.rightSwitch(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -486,6 +527,7 @@ fun TestElement.rightSwitch(
     return relative(
         command = ":rightSwitch($exp)",
         scopeElements = switchWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -494,6 +536,7 @@ internal fun TestElement.below(
     selector: Selector,
     targetElements: List<TestElement>,
     widgetOnly: Boolean,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -505,6 +548,7 @@ internal fun TestElement.below(
                 selector = selector,
                 targetElements = targetElements,
                 widgetOnly = widgetOnly,
+                margin = margin,
                 frame = frame
             )
         }
@@ -516,12 +560,14 @@ internal fun TestElement.below(
  */
 fun TestElement.below(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":below($pos)",
         scopeElements = widgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -532,6 +578,7 @@ fun TestElement.below(
 fun TestElement.below(
     expression: String,
     widgetOnly: Boolean? = null,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -541,6 +588,7 @@ fun TestElement.below(
         command = ":below($exp)",
         scopeElements = allElements(),
         widgetOnly = widgetOnly,
+        margin = margin,
         frame = frame
     )
 }
@@ -548,6 +596,7 @@ fun TestElement.below(
 internal fun TestElement.belowInput(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -556,6 +605,7 @@ internal fun TestElement.belowInput(
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
         targetElements = targetElements,
+        margin = margin,
     )
     return e
 }
@@ -565,12 +615,14 @@ internal fun TestElement.belowInput(
  */
 fun TestElement.belowInput(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowInput($pos)",
         scopeElements = inputWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -580,6 +632,7 @@ fun TestElement.belowInput(
  */
 fun TestElement.belowInput(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -588,6 +641,7 @@ fun TestElement.belowInput(
     return relative(
         command = ":belowInput($exp)",
         scopeElements = inputWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -595,6 +649,7 @@ fun TestElement.belowInput(
 internal fun TestElement.belowLabel(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -603,6 +658,7 @@ internal fun TestElement.belowLabel(
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -613,12 +669,14 @@ internal fun TestElement.belowLabel(
  */
 fun TestElement.belowLabel(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowLabel($pos)",
         scopeElements = labelWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -628,6 +686,7 @@ fun TestElement.belowLabel(
  */
 fun TestElement.belowLabel(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -636,6 +695,7 @@ fun TestElement.belowLabel(
     return relative(
         command = ":belowLabel($exp)",
         scopeElements = labelWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -643,6 +703,7 @@ fun TestElement.belowLabel(
 internal fun TestElement.belowImage(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -651,6 +712,7 @@ internal fun TestElement.belowImage(
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -661,12 +723,14 @@ internal fun TestElement.belowImage(
  */
 fun TestElement.belowImage(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowImage($pos)",
         scopeElements = imageWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -676,6 +740,7 @@ fun TestElement.belowImage(
  */
 fun TestElement.belowImage(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -684,6 +749,7 @@ fun TestElement.belowImage(
     return relative(
         command = ":belowImage($exp)",
         scopeElements = imageWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -691,6 +757,7 @@ fun TestElement.belowImage(
 internal fun TestElement.belowButton(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -699,6 +766,7 @@ internal fun TestElement.belowButton(
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -709,12 +777,14 @@ internal fun TestElement.belowButton(
  */
 fun TestElement.belowButton(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowButton($pos)",
         scopeElements = buttonWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -724,6 +794,7 @@ fun TestElement.belowButton(
  */
 fun TestElement.belowButton(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -732,6 +803,7 @@ fun TestElement.belowButton(
     return relative(
         command = ":belowButton($exp)",
         scopeElements = buttonWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -739,6 +811,7 @@ fun TestElement.belowButton(
 internal fun TestElement.belowSwitch(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -747,6 +820,7 @@ internal fun TestElement.belowSwitch(
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -757,12 +831,14 @@ internal fun TestElement.belowSwitch(
  */
 fun TestElement.belowSwitch(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":belowSwitch($pos)",
         scopeElements = switchWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -772,6 +848,7 @@ fun TestElement.belowSwitch(
  */
 fun TestElement.belowSwitch(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -780,6 +857,7 @@ fun TestElement.belowSwitch(
     return relative(
         command = ":belowSwitch($exp)",
         scopeElements = switchWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -787,6 +865,7 @@ fun TestElement.belowSwitch(
 internal fun TestElement.belowScrollable(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -795,6 +874,7 @@ internal fun TestElement.belowScrollable(
         selector = selector,
         className = ElementCategoryExpressionUtility.scrollableTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame,
         widgetOnly = false
     )
@@ -806,6 +886,7 @@ internal fun TestElement.belowScrollable(
  */
 fun TestElement.belowScrollable(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -813,6 +894,7 @@ fun TestElement.belowScrollable(
         command = ":belowScrollable($pos)",
         scopeElements = scrollableElements,
         widgetOnly = false,
+        margin = margin,
         frame = frame
     )
 }
@@ -822,6 +904,7 @@ fun TestElement.belowScrollable(
  */
 fun TestElement.belowScrollable(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -830,6 +913,7 @@ fun TestElement.belowScrollable(
     return relative(
         command = ":belowScrollable($exp)",
         scopeElements = scrollableElements,
+        margin = margin,
         frame = frame
     )
 }
@@ -838,6 +922,7 @@ internal fun TestElement.left(
     selector: Selector,
     targetElements: List<TestElement>,
     widgetOnly: Boolean,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -848,6 +933,7 @@ internal fun TestElement.left(
                 relative = RelativeDirection.left,
                 selector = selector,
                 targetElements = targetElements,
+                margin = margin,
                 widgetOnly = widgetOnly,
                 frame = frame
             )
@@ -862,12 +948,14 @@ internal fun TestElement.left(
  */
 fun TestElement.left(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":left($pos)",
         scopeElements = widgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -877,6 +965,7 @@ fun TestElement.left(
  */
 fun TestElement.left(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -885,6 +974,7 @@ fun TestElement.left(
     return relative(
         command = ":left($exp)",
         scopeElements = widgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -892,6 +982,7 @@ fun TestElement.left(
 internal fun TestElement.leftInput(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -900,6 +991,7 @@ internal fun TestElement.leftInput(
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -910,12 +1002,14 @@ internal fun TestElement.leftInput(
  */
 fun TestElement.leftInput(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftInput($pos)",
         scopeElements = inputWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -925,6 +1019,7 @@ fun TestElement.leftInput(
  */
 fun TestElement.leftInput(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -933,6 +1028,7 @@ fun TestElement.leftInput(
     return relative(
         command = ":leftInput($exp)",
         scopeElements = inputWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -940,6 +1036,7 @@ fun TestElement.leftInput(
 internal fun TestElement.leftLabel(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -948,6 +1045,7 @@ internal fun TestElement.leftLabel(
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -958,12 +1056,14 @@ internal fun TestElement.leftLabel(
  */
 fun TestElement.leftLabel(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftLabel($pos)",
         scopeElements = labelWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -973,6 +1073,7 @@ fun TestElement.leftLabel(
  */
 fun TestElement.leftLabel(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -981,6 +1082,7 @@ fun TestElement.leftLabel(
     return relative(
         command = ":leftLabel($exp)",
         scopeElements = labelWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -988,6 +1090,7 @@ fun TestElement.leftLabel(
 internal fun TestElement.leftImage(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -996,6 +1099,7 @@ internal fun TestElement.leftImage(
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -1006,12 +1110,14 @@ internal fun TestElement.leftImage(
  */
 fun TestElement.leftImage(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftImage($pos)",
         scopeElements = imageWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1021,6 +1127,7 @@ fun TestElement.leftImage(
  */
 fun TestElement.leftImage(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1029,6 +1136,7 @@ fun TestElement.leftImage(
     return relative(
         command = ":leftImage($exp)",
         scopeElements = imageWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1036,6 +1144,7 @@ fun TestElement.leftImage(
 internal fun TestElement.leftButton(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1044,6 +1153,7 @@ internal fun TestElement.leftButton(
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -1054,12 +1164,14 @@ internal fun TestElement.leftButton(
  */
 fun TestElement.leftButton(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftButton($pos)",
         scopeElements = buttonWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1069,6 +1181,7 @@ fun TestElement.leftButton(
  */
 fun TestElement.leftButton(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1077,6 +1190,7 @@ fun TestElement.leftButton(
     return relative(
         command = ":leftButton($exp)",
         scopeElements = buttonWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1084,6 +1198,7 @@ fun TestElement.leftButton(
 internal fun TestElement.leftSwitch(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1092,6 +1207,7 @@ internal fun TestElement.leftSwitch(
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -1102,12 +1218,14 @@ internal fun TestElement.leftSwitch(
  */
 fun TestElement.leftSwitch(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":leftSwitch($pos)",
         scopeElements = switchWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1117,6 +1235,7 @@ fun TestElement.leftSwitch(
  */
 fun TestElement.leftSwitch(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1125,6 +1244,7 @@ fun TestElement.leftSwitch(
     return relative(
         command = ":leftSwitch($exp)",
         scopeElements = switchWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1133,6 +1253,7 @@ internal fun TestElement.above(
     selector: Selector,
     targetElements: List<TestElement>,
     widgetOnly: Boolean,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1144,6 +1265,7 @@ internal fun TestElement.above(
                 selector = selector,
                 targetElements = targetElements,
                 widgetOnly = widgetOnly,
+                margin = margin,
                 frame = frame
             )
         }
@@ -1155,12 +1277,14 @@ internal fun TestElement.above(
  */
 fun TestElement.above(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":above($pos)",
         scopeElements = widgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1170,6 +1294,7 @@ fun TestElement.above(
  */
 fun TestElement.above(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1178,6 +1303,7 @@ fun TestElement.above(
     return relative(
         command = ":above($exp)",
         scopeElements = allElements(),
+        margin = margin,
         frame = frame
     )
 }
@@ -1185,6 +1311,7 @@ fun TestElement.above(
 internal fun TestElement.aboveInput(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1193,6 +1320,7 @@ internal fun TestElement.aboveInput(
         selector = selector,
         className = ElementCategoryExpressionUtility.inputTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -1203,12 +1331,14 @@ internal fun TestElement.aboveInput(
  */
 fun TestElement.aboveInput(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveInput($pos)",
         scopeElements = inputWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1218,6 +1348,7 @@ fun TestElement.aboveInput(
  */
 fun TestElement.aboveInput(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1226,6 +1357,7 @@ fun TestElement.aboveInput(
     return relative(
         command = ":aboveInput($exp)",
         scopeElements = inputWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1233,6 +1365,7 @@ fun TestElement.aboveInput(
 internal fun TestElement.aboveLabel(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1241,6 +1374,7 @@ internal fun TestElement.aboveLabel(
         selector = selector,
         className = ElementCategoryExpressionUtility.labelTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -1251,12 +1385,14 @@ internal fun TestElement.aboveLabel(
  */
 fun TestElement.aboveLabel(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveLabel($pos)",
         scopeElements = labelWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1266,6 +1402,7 @@ fun TestElement.aboveLabel(
  */
 fun TestElement.aboveLabel(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1274,6 +1411,7 @@ fun TestElement.aboveLabel(
     return relative(
         command = ":aboveLabel($exp)",
         scopeElements = labelWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1281,6 +1419,7 @@ fun TestElement.aboveLabel(
 internal fun TestElement.aboveImage(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1289,6 +1428,8 @@ internal fun TestElement.aboveImage(
         selector = selector,
         className = ElementCategoryExpressionUtility.imageTypesExpression,
         targetElements = targetElements,
+        margin = margin,
+        frame = frame
     )
     return e
 }
@@ -1298,12 +1439,14 @@ internal fun TestElement.aboveImage(
  */
 fun TestElement.aboveImage(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveImage($pos)",
         scopeElements = imageWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1313,6 +1456,7 @@ fun TestElement.aboveImage(
  */
 fun TestElement.aboveImage(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1321,6 +1465,7 @@ fun TestElement.aboveImage(
     return relative(
         command = ":aboveImage($exp)",
         scopeElements = imageWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1328,6 +1473,7 @@ fun TestElement.aboveImage(
 internal fun TestElement.aboveButton(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1336,6 +1482,7 @@ internal fun TestElement.aboveButton(
         selector = selector,
         className = ElementCategoryExpressionUtility.buttonTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame,
     )
     return e
@@ -1346,12 +1493,14 @@ internal fun TestElement.aboveButton(
  */
 fun TestElement.aboveButton(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveButton($pos)",
         scopeElements = buttonWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1361,6 +1510,7 @@ fun TestElement.aboveButton(
  */
 fun TestElement.aboveButton(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1369,6 +1519,7 @@ fun TestElement.aboveButton(
     return relative(
         command = ":aboveButton($exp)",
         scopeElements = buttonWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1376,6 +1527,7 @@ fun TestElement.aboveButton(
 internal fun TestElement.aboveSwitch(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1384,6 +1536,7 @@ internal fun TestElement.aboveSwitch(
         selector = selector,
         className = ElementCategoryExpressionUtility.switchTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame
     )
     return e
@@ -1394,12 +1547,14 @@ internal fun TestElement.aboveSwitch(
  */
 fun TestElement.aboveSwitch(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
     return relative(
         command = ":aboveSwitch($pos)",
         scopeElements = switchWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1409,6 +1564,7 @@ fun TestElement.aboveSwitch(
  */
 fun TestElement.aboveSwitch(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1417,6 +1573,7 @@ fun TestElement.aboveSwitch(
     return relative(
         command = ":aboveSwitch($exp)",
         scopeElements = switchWidgets,
+        margin = margin,
         frame = frame
     )
 }
@@ -1424,6 +1581,7 @@ fun TestElement.aboveSwitch(
 internal fun TestElement.aboveScrollable(
     selector: Selector,
     targetElements: List<TestElement>,
+    margin: Int,
     frame: Bounds?
 ): TestElement {
 
@@ -1432,6 +1590,7 @@ internal fun TestElement.aboveScrollable(
         selector = selector,
         className = ElementCategoryExpressionUtility.scrollableTypesExpression,
         targetElements = targetElements,
+        margin = margin,
         frame = frame,
         widgetOnly = false
     )
@@ -1443,6 +1602,7 @@ internal fun TestElement.aboveScrollable(
  */
 fun TestElement.aboveScrollable(
     pos: Int = 1,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1450,6 +1610,7 @@ fun TestElement.aboveScrollable(
         command = ":aboveScrollable($pos)",
         scopeElements = scrollableElements,
         widgetOnly = false,
+        margin = margin,
         frame = frame
     )
 }
@@ -1459,6 +1620,7 @@ fun TestElement.aboveScrollable(
  */
 fun TestElement.aboveScrollable(
     expression: String,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -1467,6 +1629,7 @@ fun TestElement.aboveScrollable(
     return relative(
         command = ":aboveScrollable($exp)",
         scopeElements = scrollableElements,
+        margin = margin,
         frame = frame
     )
 }

@@ -3,7 +3,9 @@ package shirates.core.uitest.ios.driver.commandextension
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestElement
+import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.swipeTo
 import shirates.core.testcode.UITest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")

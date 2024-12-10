@@ -237,6 +237,9 @@ object TestDriver {
      */
     val shouldTakeScreenshot: Boolean
         get() {
+            if (testContext.enableCache.not() && CodeExecutionContext.lastScreenshotImage == null) {
+                return true
+            }
             return CAEPattern.shouldTakeScreenshot && TestDriverCommandContext.shouldTakeScreenshot
         }
 
@@ -819,7 +822,7 @@ object TestDriver {
                      * Emulator process list
                      */
                     val psResult = AdbUtility.ps(udid = profile.udid)
-                    TestLog.directoryForLog.resolve("${TestLog.lines.count()}_android_ps.txt")
+                    TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_android_ps.txt")
                         .toFile().writeText(psResult)
                     restartAdbServerEmulatorAppiumServer(profile, context)
                 } else if (isiOS) {
@@ -1872,7 +1875,7 @@ object TestDriver {
             }
         }
 
-        var screenshotFileName = filename ?: (TestLog.lines.count() + 1).toString()
+        var screenshotFileName = filename ?: (TestLog.nextLineNo).toString()
         if (screenshotFileName.lowercase().contains(".png").not()) {
             screenshotFileName += ".png"
         }
@@ -1886,11 +1889,13 @@ object TestDriver {
         }
 
         var screenshotException: Throwable? = null
+
+        val sw = StopWatch("getScreenshot")
+
         try {
             CpuLoadService.waitForCpuLoadUnder()
 
-            val screenshot = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES)
-            val screenshotImage = screenshot.toBufferedImage()
+            val screenshotImage = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES).toBufferedImage()
 
             if (onChangedOnly && screenshotImage.isSame(CodeExecutionContext.lastScreenshotImage)) {
                 return this
@@ -1899,13 +1904,13 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotImage = screenshotImage
             CodeExecutionContext.lastScreenshotTime = screenshotTime
 
-            val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toFile()
+            val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toString()
             screenshotImage.resizeAndSaveImage(
                 scale = PropertiesManager.screenshotScale,
-                resizedFile = screenshotFile,
+                resizedFile = screenshotFile.toPath().toFile(),
                 log = false
             )
-            CodeExecutionContext.lastScreenshot = screenshotFileName
+            CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
 
             if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout) {
@@ -1944,6 +1949,8 @@ object TestDriver {
             TestLog.warn("screenshot ${screenshotException.message}")
             throw screenshotException
         }
+
+        sw.printInfo()
 
         return this
     }

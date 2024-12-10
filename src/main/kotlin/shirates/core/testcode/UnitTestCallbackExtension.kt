@@ -122,7 +122,7 @@ class UnitTestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEac
         if (throwable != null) {
             TestLog.error(throwable)
             TestLog.info(sourceXml)
-            val filePath = "${TestLog.directoryForLog}/${TestLog.lines.count()}_xmlsource.xml".toPath()
+            val filePath = "${TestLog.directoryForLog}/${TestLog.currentLineNo}_xmlsource.xml".toPath()
             TestDriver.outputXmlSource(filePath = filePath)
 
             throw throwable

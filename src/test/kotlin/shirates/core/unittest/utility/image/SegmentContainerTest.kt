@@ -13,7 +13,7 @@ class SegmentContainerTest {
         run {
             // Arrange
             val margin = 4
-            val container = SegmentContainer(margin = margin)
+            val container = SegmentContainer(segmentMargin = margin)
             // Act
             container.addSegment(10, 10, 10, 10)
             // Assert
@@ -68,7 +68,7 @@ class SegmentContainerTest {
         run {
             // Arrange
             val margin = 5
-            val container = SegmentContainer(margin = margin)
+            val container = SegmentContainer(segmentMargin = margin)
             // Act
             container.addSegment(10, 10, 10, 10)
             // Assert
@@ -112,7 +112,7 @@ class SegmentContainerTest {
         run {
             // Arrange
             val margin = 10
-            val container = SegmentContainer(margin = margin)
+            val container = SegmentContainer(segmentMargin = margin)
             // Act
             container.addSegment(10, 10, 10, 10)
             // Assert

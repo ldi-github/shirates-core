@@ -1,5 +1,8 @@
 package shirates.core.utility.image
 
+import shirates.core.driver.Bounds
+import shirates.core.driver.testContext
+
 class Rectangle(
     var x: Int = 0,
     var y: Int = 0,
@@ -32,13 +35,67 @@ class Rectangle(
             return y + height - 1
         }
 
-    fun area(): Int {
-        return width * height
+    /**
+     * centerX
+     */
+    val centerX: Int
+        get() {
+            return x + width / 2
+        }
+
+    /**
+     * centerY
+     */
+    val centerY: Int
+        get() {
+            return y + height / 2
+        }
+
+    val isEmpty: Boolean
+        get() {
+            return area == 0
+        }
+
+    val area: Int
+        get() {
+            return width * height
+        }
+
+
+    constructor(description: String) : this() {
+
+        try {
+            val r = description.removePrefix("[").split("]").first().split(",").map { it.trim().toInt() }
+            this.x = r[0]
+            this.y = r[1]
+            this.width = r[2] - x + 1
+            this.height = r[3] - y + 1
+        } catch (t: Throwable) {
+            throw IllegalArgumentException(description, t)
+        }
     }
 
     fun trimBy(trimObject: TrimObject): Rectangle {
 
         return trimObject.trim(this)
+    }
+
+    /**
+     * offsetRect
+     */
+    fun offsetRect(offsetX: Int, offsetY: Int): Rectangle {
+
+        return Rectangle(x = offsetX, y = offsetY, width = width, height = height)
+    }
+
+    /**
+     * toBoundsWithRatio
+     */
+    fun toBoundsWithRatio(
+        ratio: Int = testContext.boundsToRectRatio,
+    ): Bounds {
+
+        return Bounds(left = left / ratio, top = top / ratio, width = width / ratio, height = height / ratio)
     }
 
     override fun toString(): String {

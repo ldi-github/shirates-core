@@ -52,7 +52,8 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#TextView1-1")
             // Act, Assert
-            val e2 = e.relative(":right").relative(":below").relative(":left").relative(":above")
+            val e2 = e.relative(":right", margin = 0).relative(":below", margin = 0).relative(":left", margin = 0)
+                .relative(":above", margin = 0)
             assertThat(e2.selector.toString()).isEqualTo("<#TextView1-1>:right:below:left:above")
             assertThat(e2).isEqualTo(e)
         }

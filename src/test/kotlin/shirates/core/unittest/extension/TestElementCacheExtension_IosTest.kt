@@ -411,7 +411,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         run {
             // Act, Assert
             assertThatThrownBy {
-                val e = rootElement.findInDescendantsAndSelf("xpath=//*[@type='XCUIElementTypeNavigationBar']")
+                rootElement.findInDescendantsAndSelf("xpath=//*[@type='XCUIElementTypeNavigationBar']")
             }.isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("Unsupported noun with evaluate function. (noun=xpath)")
         }

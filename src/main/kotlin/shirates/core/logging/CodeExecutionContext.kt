@@ -2,6 +2,7 @@ package shirates.core.logging
 
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.Bounds
 import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestElement
 import shirates.core.driver.testContext
@@ -129,6 +130,12 @@ object CodeExecutionContext {
         internal set
 
     /**
+     * scrollableBounds
+     */
+    var scrollableBounds: Bounds? = null
+        internal set
+
+    /**
      * scrollDurationSeconds
      */
     var scrollDurationSeconds: Double = Const.SWIPE_DURATION_SECONDS
@@ -200,10 +207,18 @@ object CodeExecutionContext {
     // Screenshot --------------------------------------------------
 
     /**
-     * lastScreenshot
+     * lastScreenshotName
      */
-    var lastScreenshot: String = ""
+    var lastScreenshotName: String = ""
         internal set
+
+    /**
+     * lastScreenshotFile
+     */
+    val lastScreenshotFile: String
+        get() {
+            return TestLog.directoryForLog.resolve(lastScreenshotName).toString()
+        }
 
     /**
      * lastScreenshotImage
@@ -289,7 +304,7 @@ object CodeExecutionContext {
         /**
          * Screenshot
          */
-        lastScreenshot = ""
+        lastScreenshotName = ""
         lastScreenshotImage = null
         lastCropInfo = null
         lastScreenshotXmlSource = ""

@@ -232,40 +232,45 @@ object PropertiesManager {
     /**
      * statBarHeight
      */
-    val statBarHeight: Int
+    var statBarHeight: Int = -1
         get() {
-            val p = getPropertyValue("${os}.statBarHeight")
-            val value = p?.toIntOrNull()
-            if (value != null) {
-                return value
-            }
-
-            if (os == "android") {
-                try {
-                    val statBarHeight = capabilities.getCapability("statBarHeight").toString().toInt()
-                    return statBarHeight
-                } catch (t: Throwable) {
-                    return Const.ANDROID_STATBAR_HEIGHT
+            if (field < 0) {
+                val p = getPropertyValue("${os}.statBarHeight")
+                val value = p?.toIntOrNull()
+                if (value != null) {
+                    field = value
+                    return value
                 }
-            }
 
-            val m = testContext.profile.deviceName.removePrefix("iPhone ")
-            return if (m.startsWith("SE")) 20
-            else if (m.startsWith("18")) 53
-            else if (m.startsWith("17")) 53
-            else if (m.startsWith("16")) 47
-            else if (m.startsWith("15")) 47
-            else if (m.startsWith("14")) 47
-            else if (m.startsWith("13")) 47
-            else if (m.startsWith("12")) 47
-            else if (m.startsWith("11")) 48
-            else if (m.startsWith("X")) 44
-            else if (m.startsWith("8")) 20
-            else if (m.startsWith("7")) 20
-            else if (m.startsWith("6")) 20
-            else if (m.startsWith("5")) 20
-            else return Const.IOS_STATBAR_HEIGHT
+                if (os == "android") {
+                    try {
+                        field = capabilities.getCapability("statBarHeight").toString().toInt()
+                        return field
+                    } catch (t: Throwable) {
+                        return Const.ANDROID_STATBAR_HEIGHT
+                    }
+                }
+
+                val m = testContext.profile.deviceName.removePrefix("iPhone ")
+                field = if (m.startsWith("SE")) 20
+                else if (m.startsWith("18")) 53
+                else if (m.startsWith("17")) 53
+                else if (m.startsWith("16")) 47
+                else if (m.startsWith("15")) 47
+                else if (m.startsWith("14")) 47
+                else if (m.startsWith("13")) 47
+                else if (m.startsWith("12")) 47
+                else if (m.startsWith("11")) 48
+                else if (m.startsWith("X")) 44
+                else if (m.startsWith("8")) 20
+                else if (m.startsWith("7")) 20
+                else if (m.startsWith("6")) 20
+                else if (m.startsWith("5")) 20
+                else return Const.IOS_STATBAR_HEIGHT
+            }
+            return field
         }
+        private set
 
     // Priority --------------------------------------------------
 

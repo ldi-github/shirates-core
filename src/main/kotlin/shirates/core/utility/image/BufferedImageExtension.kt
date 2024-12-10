@@ -15,6 +15,46 @@ import javax.imageio.ImageIO
 import javax.imageio.ImageWriter
 
 /**
+ * left
+ */
+val BufferedImage.left: Int
+    get() {
+        return 0
+    }
+
+/**
+ * top
+ */
+val BufferedImage.top: Int
+    get() {
+        return 0
+    }
+
+/**
+ * right
+ */
+val BufferedImage.right: Int
+    get() {
+        return this.width - 1
+    }
+
+/**
+ * bottom
+ */
+val BufferedImage.bottom: Int
+    get() {
+        return this.height - 1
+    }
+
+/**
+ * bounds
+ */
+val BufferedImage.rect: Rectangle
+    get() {
+        return Rectangle(left, top, width, height)
+    }
+
+/**
  * resize
  */
 fun BufferedImage.resize(targetWidth: Int, targetHeight: Int): BufferedImage {
@@ -102,17 +142,21 @@ fun BufferedImage.saveImage(
  */
 fun BufferedImage.resizeAndSaveImage(scale: Double = 0.5, resizedFile: File, log: Boolean = true) {
 
-    val originalImage = this
-    val targetWidth = (originalImage.width * scale).toInt()
-    val targetHeight = (originalImage.height * scale).toInt()
-
-    val resizedImage = originalImage.resize(targetWidth = targetWidth, targetHeight = targetHeight)
-
     val directoryPath = resizedFile.toPath().parent
     if (Files.exists(directoryPath).not()) {
         Files.createDirectory(directoryPath)
     }
 
+    if (scale == 1.0) {
+        this.saveImage(file = resizedFile, log = log)
+        return
+    }
+
+    val originalImage = this
+    val targetWidth = (originalImage.width * scale).toInt()
+    val targetHeight = (originalImage.height * scale).toInt()
+
+    val resizedImage = originalImage.resize(targetWidth = targetWidth, targetHeight = targetHeight)
     resizedImage.saveImage(file = resizedFile, log = log)
 }
 
@@ -123,7 +167,7 @@ fun BufferedImage.cropImage(rect: Rectangle): BufferedImage? {
 
     val originalImage = this
 
-    if (rect.area() <= 0) {
+    if (rect.area <= 0) {
         TestLog.warn("cropImage skipped. (imageSize=(${this.width},${this.height}), rect=${rect})")
         return null
     }

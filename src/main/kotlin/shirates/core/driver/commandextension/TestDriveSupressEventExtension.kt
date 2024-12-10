@@ -14,12 +14,12 @@ fun TestDrive.useHandler(func: () -> Unit): TestElement {
     val original = testContext.enableIrregularHandler
 
     try {
-        TestLog.info("useHandler(${TestLog.lines.count() + 1}) {")
+        TestLog.info("useHandler(${TestLog.nextLineNo}) {")
         testContext.enableIrregularHandler = true
         func()
     } finally {
         testContext.enableIrregularHandler = original
-        TestLog.info("} useHandler(${TestLog.lines.count() + 1}) {")
+        TestLog.info("} useHandler(${TestLog.nextLineNo}) {")
     }
 
     return TestDriver.it

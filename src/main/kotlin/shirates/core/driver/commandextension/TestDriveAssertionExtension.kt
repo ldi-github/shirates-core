@@ -6,6 +6,7 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
+import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -248,7 +249,7 @@ fun TestDrive.screenIs(
     )
 }
 
-private fun TestDrive.doUntilActionResultTrue(
+internal fun TestDrive.doUntilActionResultTrue(
     actionFunc: () -> Boolean,
     waitSeconds: Double,
     useCache: Boolean,

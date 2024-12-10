@@ -32,23 +32,31 @@ class VerticalFlowContainer : IFlowContainer {
         /**
          * canMerge
          */
-        fun canMerge(element: TestElement, force: Boolean = false): Boolean {
+        fun canMerge(
+            element: TestElement,
+            margin: Int = 0,
+            force: Boolean = false
+        ): Boolean {
 
             if (!force && element.isWidget.not()) {
                 return false
             }
-            return verticalBand.canMerge(element)
+            return verticalBand.canMerge(element = element, margin = margin)
         }
 
         /**
          * merge
          */
-        fun merge(element: TestElement, force: Boolean = false): Boolean {
+        fun merge(
+            element: TestElement,
+            margin: Int = 0,
+            force: Boolean = false
+        ): Boolean {
 
-            if (canMerge(element = element, force = force).not()) {
+            if (canMerge(element = element, margin = margin, force = force).not()) {
                 return false
             }
-            verticalBand.merge(element)
+            verticalBand.merge(element = element, margin = margin)
             return true
         }
 
@@ -77,15 +85,23 @@ class VerticalFlowContainer : IFlowContainer {
     /**
      * addElement
      */
-    override fun addElement(element: TestElement, force: Boolean): Any? {
+    override fun addElement(
+        element: TestElement,
+        margin: Int,
+        force: Boolean
+    ): Any? {
 
-        return addElementToColumn(element = element, force = force)
+        return addElementToColumn(element = element, margin = margin, force = force)
     }
 
     /**
      * addElementToColumn
      */
-    fun addElementToColumn(element: TestElement, force: Boolean = false): Column? {
+    fun addElementToColumn(
+        element: TestElement,
+        margin: Int = 0,
+        force: Boolean = false
+    ): Column? {
 
         if (!force && element.isWidget.not()) {
             return null
@@ -106,8 +122,8 @@ class VerticalFlowContainer : IFlowContainer {
             }
 
             for (column in columns) {
-                if (column.canMerge(element = element, force = force)) {
-                    column.merge(element = element, force = force)
+                if (column.canMerge(element = element, margin = margin, force = force)) {
+                    column.merge(element = element, margin = margin, force = force)
                     return column
                 }
             }
@@ -124,11 +140,14 @@ class VerticalFlowContainer : IFlowContainer {
     /**
      * addAll
      */
-    override fun addAll(elements: List<TestElement>, force: Boolean) {
-
+    override fun addAll(
+        elements: List<TestElement>,
+        margin: Int,
+        force: Boolean
+    ) {
         val elms = elements.removeIncludingElements()
         for (e in elms) {
-            addElementToColumn(element = e, force = force)
+            addElementToColumn(element = e, margin = margin, force = force)
         }
     }
 

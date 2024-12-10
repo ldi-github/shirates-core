@@ -11,6 +11,9 @@ import shirates.core.driver.rootElement
 import shirates.core.driver.testDrive
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
+import shirates.core.vision.driver.classify
+import shirates.core.vision.driver.detect
+import shirates.core.vision.driver.existImage
 import shirates.core.vision.driver.tap
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
@@ -114,11 +117,18 @@ class AdHocTestIos : UITest() {
             case(1) {
                 condition {
                     disableCache()
-
-                    detect("Accessibility").tap()
-                    detect("Display & Text Size").tap()
-                    detect("Larger Text").tap()
-                    detect("Larger Accessibility Sizes")
+                }.action {
+                    vision.detect("Accessibility").tap()
+                    vision.detect("Display & Text Size").tap()
+                    vision.detect("Larger Text").tap()
+                }.expectation {
+                    val v = vision.existImage(
+                        "unitTestData/files/srvision/ios/template_switch_OFF.png",
+//                        skinThickness = 0,
+//                        margin = 10
+                    )
+                    val label = v.classify()
+                    printInfo("label: $label")
                 }
             }
         }

@@ -41,7 +41,7 @@ class TestDriveExtensionTest : UITest() {
             assertThat(line.commandGroup).isEqualTo("")
             assertThat(line.commandLevel).isEqualTo(0)
             assertThat(line.scriptCommand).isEqualTo("screenshot")
-            assertThat(line.subject).isEqualTo(CodeExecutionContext.lastScreenshot.toPath().fileName.toString())
+            assertThat(line.subject).isEqualTo(CodeExecutionContext.lastScreenshotFile.toPath().fileName.toString())
             assertThat(line.arg1).isEqualTo("")
             assertThat(line.arg2).isEqualTo("")
             assertThat(line.result).isEqualTo(LogType.NONE)

@@ -18,58 +18,58 @@ class SelectDirectTest : UITest() {
                 }.expectation {
                     val e1 = it.select("[1]")
                     e1.right().textIs("2")
-                    e1.relative(":right").textIs("2")
+                    e1.relative(":right", margin = 0).textIs("2")
 
                     e1.right(2).textIs("3")
-                    e1.relative(":right(2)").textIs("3")
+                    e1.relative(":right(2)", margin = 0).textIs("3")
 
                     e1.right(3).thisIsEmpty()
-                    e1.relative(":right(3)").thisIsEmpty()
+                    e1.relative(":right(3)", margin = 0).thisIsEmpty()
                 }.expectation(useCache = false) {
                     val e1 = it.select("[1]")
                     e1.right().textIs("2")
-                    e1.relative(":right").textIs("2")
+                    e1.relative(":right", margin = 0).textIs("2")
 
                     e1.right(2).textIs("3")
-                    e1.relative(":right(2)").textIs("3")
+                    e1.relative(":right(2)", margin = 0).textIs("3")
 
                     e1.right(3).thisIsEmpty()
-                    e1.relative(":right(3)").thisIsEmpty()
+                    e1.relative(":right(3)", margin = 0).thisIsEmpty()
                 }
             }
             case(2) {
                 expectation {
                     val e1 = it.select("[1]")
                     e1.right("pos=1").textIs("2")
-                    e1.relative(":right(pos=1)").textIs("2")
+                    e1.relative(":right(pos=1)", margin = 0).textIs("2")
 
                     e1.right("pos=2").textIs("3")
-                    e1.relative(":right(pos=2)").textIs("3")
+                    e1.relative(":right(pos=2)", margin = 0).textIs("3")
 
                     e1.right("pos=3").thisIsEmpty()
-                    e1.relative(":right(pos=3)").thisIsEmpty()
+                    e1.relative(":right(pos=3)", margin = 0).thisIsEmpty()
                 }.expectation(useCache = false) {
                     val e1 = it.select("[1]")
                     e1.right("pos=1").textIs("2")
-                    e1.relative(":right(pos=1)").textIs("2")
+                    e1.relative(":right(pos=1)", margin = 0).textIs("2")
 
                     e1.right("pos=2").textIs("3")
-                    e1.relative(":right(pos=2)").textIs("3")
+                    e1.relative(":right(pos=2)", margin = 0).textIs("3")
 
                     e1.right("pos=3").thisIsEmpty()
-                    e1.relative(":right(pos=3)").thisIsEmpty()
+                    e1.relative(":right(pos=3)", margin = 0).thisIsEmpty()
                 }
             }
             case(3) {
                 expectation {
                     val e1 = it.select("[Alarm]")
                     e1.rightLabel().textIs("Clock")
-                    e1.relative(":rightLabel").textIs("Clock")
-                    e1.relative("[:Right label]").textIs("Clock")
+                    e1.relative(":rightLabel", margin = 0).textIs("Clock")
+                    e1.relative("[:Right label]", margin = 0).textIs("Clock")
 
                     e1.rightLabel(2).textIs("Timer")
-                    e1.relative(":rightLabel(2)").textIs("Timer")
-                    e1.relative("[:Right label(2)]").textIs("Timer")
+                    e1.relative(":rightLabel(2)", margin = 0).textIs("Timer")
+                    e1.relative("[:Right label(2)]", margin = 0).textIs("Timer")
                 }
             }
         }
@@ -86,56 +86,56 @@ class SelectDirectTest : UITest() {
                 }.expectation {
                     val e1 = it.select("[1]")
                     e1.flow().textIs("2")
-                    e1.relative(":flow").textIs("2")
+                    e1.relative(":flow", margin = 0).textIs("2")
 
                     e1.flow(2).textIs("3")
-                    e1.relative(":flow(2)").textIs("3")
+                    e1.relative(":flow(2)", margin = 0).textIs("3")
 
                     e1.flow(3).textIs("4")
-                    e1.relative(":flow(3)").textIs("4")
+                    e1.relative(":flow(3)", margin = 0).textIs("4")
                 }.expectation(useCache = false) {
                     val e1 = it.select("[1]")
                     e1.flow().textIs("2")
-                    e1.relative(":flow").textIs("2")
+                    e1.relative(":flow", margin = 0).textIs("2")
 
                     e1.flow(2).textIs("3")
-                    e1.relative(":flow(2)").textIs("3")
+                    e1.relative(":flow(2)", margin = 0).textIs("3")
 
                     e1.flow(3).textIs("4")
-                    e1.relative(":flow(3)").textIs("4")
+                    e1.relative(":flow(3)", margin = 0).textIs("4")
                 }
             }
             case(2) {
                 expectation {
                     val e1 = it.select("[1]")
                     e1.flow("pos=1").textIs("2")
-                    e1.relative(":flow(pos=1)").textIs("2")
+                    e1.relative(":flow(pos=1)", margin = 0).textIs("2")
 
                     e1.flow("pos=2").textIs("3")
-                    e1.relative(":flow(pos=2)").textIs("3")
+                    e1.relative(":flow(pos=2)", margin = 0).textIs("3")
 
                     e1.flow("pos=3").textIs("4")
-                    e1.relative(":flow(pos=3)").textIs("4")
+                    e1.relative(":flow(pos=3)", margin = 0).textIs("4")
                 }.expectation(useCache = false) {
                     val e1 = it.select("[1]")
                     e1.flow("pos=1").textIs("2")
-                    e1.relative(":flow(pos=1)").textIs("2")
+                    e1.relative(":flow(pos=1)", margin = 0).textIs("2")
 
                     e1.flow("pos=2").textIs("3")
-                    e1.relative(":flow(pos=2)").textIs("3")
+                    e1.relative(":flow(pos=2)", margin = 0).textIs("3")
 
                     e1.flow("pos=3").textIs("4")
-                    e1.relative(":flow(pos=3)").textIs("4")
+                    e1.relative(":flow(pos=3)", margin = 0).textIs("4")
                 }
             }
             case(3) {
                 expectation {
                     val e1 = it.select("[Alarm]")
                     e1.flow().textIs("Clock")
-                    e1.relative(":flow").textIs("Clock")
+                    e1.relative(":flow", margin = 0).textIs("Clock")
 
                     e1.flow(2).textIs("Timer")
-                    e1.relative(":flow(2)").textIs("Timer")
+                    e1.relative(":flow(2)", margin = 0).textIs("Timer")
                 }
             }
         }
@@ -152,58 +152,58 @@ class SelectDirectTest : UITest() {
                 }.expectation {
                     val e1 = it.select("#navigation_bar")
                     e1.innerWidget().classIs("android.widget.ImageView")
-                    e1.relative(":innerWidget").classIs("android.widget.ImageView")
+                    e1.relative(":innerWidget", margin = 0).classIs("android.widget.ImageView")
 
                     e1.innerWidget(5).classIs("android.widget.ImageView")
-                    e1.relative(":innerWidget(5)").classIs("android.widget.ImageView")
+                    e1.relative(":innerWidget(5)", margin = 0).classIs("android.widget.ImageView")
 
                     e1.innerWidget(6).textIs("Alarm")
-                    e1.relative(":innerWidget(6)").textIs("Alarm")
+                    e1.relative(":innerWidget(6)", margin = 0).textIs("Alarm")
                 }.expectation(useCache = false) {
                     val e1 = it.select("#navigation_bar")
                     e1.innerWidget().classIs("android.widget.ImageView")
-                    e1.relative(":innerWidget").classIs("android.widget.ImageView")
+                    e1.relative(":innerWidget", margin = 0).classIs("android.widget.ImageView")
 
                     e1.innerWidget(5).classIs("android.widget.ImageView")
-                    e1.relative(":innerWidget(5)").classIs("android.widget.ImageView")
+                    e1.relative(":innerWidget(5)", margin = 0).classIs("android.widget.ImageView")
 
                     e1.innerWidget(6).textIs("Alarm")
-                    e1.relative(":innerWidget(6)").textIs("Alarm")
+                    e1.relative(":innerWidget(6)", margin = 0).textIs("Alarm")
                 }
             }
             case(2) {
                 expectation {
                     val e1 = it.select("#timer_setup")
                     e1.innerWidget("pos=1").textIs("00h 00m 00s")
-                    e1.relative(":innerWidget(pos=1)").textIs("00h 00m 00s")
+                    e1.relative(":innerWidget(pos=1)", margin = 0).textIs("00h 00m 00s")
 
                     e1.innerWidget("pos=2").textIs("1")
-                    e1.relative(":innerWidget(pos=2)").textIs("1")
+                    e1.relative(":innerWidget(pos=2)", margin = 0).textIs("1")
 
                     e1.innerWidget("pos=3").textIs("2")
-                    e1.relative(":innerWidget(pos=3)").textIs("2")
+                    e1.relative(":innerWidget(pos=3)", margin = 0).textIs("2")
 
                     e1.innerWidget("pos=4").textIs("3")
-                    e1.relative(":innerWidget(pos=4)").textIs("3")
+                    e1.relative(":innerWidget(pos=4)", margin = 0).textIs("3")
 
                     e1.innerWidget("pos=5").textIs("4")
-                    e1.relative(":innerWidget(pos=5)").textIs("4")
+                    e1.relative(":innerWidget(pos=5)", margin = 0).textIs("4")
                 }.expectation(useCache = false) {
                     val e1 = it.select("#timer_setup")
                     e1.innerWidget("pos=1").textIs("00h 00m 00s")
-                    e1.relative(":innerWidget(pos=1)").textIs("00h 00m 00s")
+                    e1.relative(":innerWidget(pos=1)", margin = 0).textIs("00h 00m 00s")
 
                     e1.innerWidget("pos=2").textIs("1")
-                    e1.relative(":innerWidget(pos=2)").textIs("1")
+                    e1.relative(":innerWidget(pos=2)", margin = 0).textIs("1")
 
                     e1.innerWidget("pos=3").textIs("2")
-                    e1.relative(":innerWidget(pos=3)").textIs("2")
+                    e1.relative(":innerWidget(pos=3)", margin = 0).textIs("2")
 
                     e1.innerWidget("pos=4").textIs("3")
-                    e1.relative(":innerWidget(pos=4)").textIs("3")
+                    e1.relative(":innerWidget(pos=4)", margin = 0).textIs("3")
 
                     e1.innerWidget("pos=5").textIs("4")
-                    e1.relative(":innerWidget(pos=5)").textIs("4")
+                    e1.relative(":innerWidget(pos=5)", margin = 0).textIs("4")
                 }
             }
         }
@@ -220,24 +220,24 @@ class SelectDirectTest : UITest() {
                 }.expectation {
                     val e1 = it.select("[1]")
                     e1.parent().classIs("android.view.ViewGroup")
-                    e1.relative(":parent").classIs("android.view.ViewGroup")
+                    e1.relative(":parent", margin = 0).classIs("android.view.ViewGroup")
 
                     e1.parent().child(1).textIs("1")
-                    e1.relative(":parent").relative(":child(1)").textIs("1")
+                    e1.relative(":parent", margin = 0).relative(":child(1)", margin = 0).textIs("1")
 
                     e1.parent().child(2).textIs("2")
-                    e1.relative(":parent").relative(":child(2)").textIs("2")
+                    e1.relative(":parent", margin = 0).relative(":child(2)", margin = 0).textIs("2")
 
                 }.expectation(useCache = false) {
                     val e1 = it.select("[1]")
                     e1.parent().classIs("android.view.ViewGroup")
-                    e1.relative(":parent").classIs("android.view.ViewGroup")
+                    e1.relative(":parent", margin = 0).classIs("android.view.ViewGroup")
 
                     e1.parent().child(1).textIs("1")
-                    e1.relative(":parent").relative(":child(1)").textIs("1")
+                    e1.relative(":parent", margin = 0).relative(":child(1)", margin = 0).textIs("1")
 
                     e1.parent().child(2).textIs("2")
-                    e1.relative(":parent").relative(":child(2)").textIs("2")
+                    e1.relative(":parent", margin = 0).relative(":child(2)", margin = 0).textIs("2")
                 }
             }
             case(2) {

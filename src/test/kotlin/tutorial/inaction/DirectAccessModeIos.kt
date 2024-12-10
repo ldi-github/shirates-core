@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
+import shirates.core.driver.commandextension.exist
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.driver.toTestElement

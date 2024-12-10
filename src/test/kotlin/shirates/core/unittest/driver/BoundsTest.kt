@@ -43,7 +43,7 @@ class BoundsTest : UnitTest() {
 
         // String
         assertThat(b.boundString).isEqualTo("[10,20][39,59]")
-        assertThat(b.toString()).isEqualTo("[10,20][39,59] centerX=25, centerY=40")
+        assertThat(b.toString()).isEqualTo("[10,20][39,59] width=30, height=40, centerX=25, centerY=40")
     }
 
     @Test
@@ -66,7 +66,7 @@ class BoundsTest : UnitTest() {
             assertThat(actual.right).isEqualTo(actual.x2)
             assertThat(actual.bottom).isEqualTo(actual.y2)
             assertThat(actual.boundString).isEqualTo("[10,20][1009,2019]")
-            assertThat(actual.toString()).isEqualTo("[10,20][1009,2019] centerX=510, centerY=1020")
+            assertThat(actual.toString()).isEqualTo("[10,20][1009,2019] width=1000, height=2000, centerX=510, centerY=1020")
         }
         run {
             // Act, Assert
@@ -98,7 +98,7 @@ class BoundsTest : UnitTest() {
             assertThat(actual.right).isEqualTo(actual.x2)
             assertThat(actual.bottom).isEqualTo(actual.y2)
             assertThat(actual.boundString).isEqualTo("[10,20][1010,2020]")
-            assertThat(actual.toString()).isEqualTo("[10,20][1010,2020] centerX=510, centerY=1020")
+            assertThat(actual.toString()).isEqualTo("[10,20][1010,2020] width=1001, height=2001, centerX=510, centerY=1020")
         }
         run {
             // Act, Assert
@@ -346,7 +346,7 @@ class BoundsTest : UnitTest() {
         val actual = b.toString()
         // Assert
         //"[$x1, $y1][$x2, $y2] centerX=$centerX, centerY=$centerY"
-        assertThat(actual).isEqualTo("[1000,2000][3999,5999] centerX=2500, centerY=4000")
+        assertThat(actual).isEqualTo("[1000,2000][3999,5999] width=3000, height=4000, centerX=2500, centerY=4000")
     }
 
 }

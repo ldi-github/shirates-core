@@ -864,6 +864,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         scrollDirection: ScrollDirection?,
         scrollFrame: String = "",
         scrollableElement: TestElement? = null,
+        bounds: Bounds? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
         scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
         scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -879,6 +880,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val originalScrollDirection = CodeExecutionContext.scrollDirection
         val originalScrollFrame = CodeExecutionContext.scrollFrame
         val originalScrollableElement = CodeExecutionContext.scrollableElement
+        val originalScrollableBounds = CodeExecutionContext.scrollableBounds
         val originalScrollDurationSeconds = CodeExecutionContext.scrollDurationSeconds
         val originalScrollIntervalSeconds = CodeExecutionContext.scrollIntervalSeconds
         val originalScrollStartMarginRatio = CodeExecutionContext.scrollStartMarginRatio
@@ -892,6 +894,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.scrollDirection = scrollDirection
             CodeExecutionContext.scrollFrame = scrollFrame
             CodeExecutionContext.scrollableElement = scrollableElement
+            CodeExecutionContext.scrollableBounds = bounds
             CodeExecutionContext.scrollDurationSeconds = scrollDurationSeconds
             CodeExecutionContext.scrollIntervalSeconds = scrollIntervalSeconds
             CodeExecutionContext.scrollStartMarginRatio = scrollStartMarginRatio
@@ -920,6 +923,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 CodeExecutionContext.scrollDirection = originalScrollDirection
                 CodeExecutionContext.scrollFrame = originalScrollFrame
                 CodeExecutionContext.scrollableElement = originalScrollableElement
+                CodeExecutionContext.scrollableBounds = originalScrollableBounds
                 CodeExecutionContext.scrollDurationSeconds = originalScrollDurationSeconds
                 CodeExecutionContext.scrollIntervalSeconds = originalScrollIntervalSeconds
                 CodeExecutionContext.scrollStartMarginRatio = originalScrollStartMarginRatio

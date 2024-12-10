@@ -9,7 +9,10 @@ import shirates.core.logging.Message.message
 /**
  * BooleanCompareResult
  */
-class BooleanCompareResult(val value: Boolean, val command: String) : CompareResult(), TestDrive {
+class BooleanCompareResult(
+    val value: Boolean,
+    val command: String
+) : CompareResult(), TestDrive {
 
     private fun ifCore(
         condition: String,

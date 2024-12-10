@@ -14,6 +14,7 @@ fun TestElement.relative(
     command: String,
     scopeElements: List<TestElement> = rootElement.elements,
     widgetOnly: Boolean? = null,
+    margin: Int,
     frame: Bounds? = null
 ): TestElement {
 
@@ -33,6 +34,7 @@ fun TestElement.relative(
             relativeSelector = relativeSelector,
             scopeElements = scopeElements,
             widgetOnly = widgetOnly ?: getWidgetOnly(selector = relativeSelector),
+            margin = margin,
             frame = frame
         )
         if (e == this && TestMode.isNoLoadRun.not()) {
@@ -71,6 +73,7 @@ internal fun TestElement.relative(
     relativeSelector: Selector,
     scopeElements: List<TestElement> = allElements(),
     widgetOnly: Boolean,
+    margin: Int = 0,
     frame: Bounds? = null
 ): TestElement {
 
@@ -106,6 +109,7 @@ internal fun TestElement.relative(
                     selector = relativeSelector,
                     targetElements = targetElements,
                     widgetOnly = widgetOnly,
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -114,6 +118,7 @@ internal fun TestElement.relative(
                 e = this.rightInput(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isInput },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -122,6 +127,7 @@ internal fun TestElement.relative(
                 e = this.rightLabel(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isLabel },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -130,6 +136,7 @@ internal fun TestElement.relative(
                 e = this.rightImage(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isImage },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -138,6 +145,7 @@ internal fun TestElement.relative(
                 e = this.rightButton(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isButton },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -146,6 +154,7 @@ internal fun TestElement.relative(
                 e = this.rightSwitch(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isSwitch },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -155,6 +164,7 @@ internal fun TestElement.relative(
                     selector = relativeSelector,
                     targetElements = targetElements,
                     widgetOnly = widgetOnly,
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -163,6 +173,7 @@ internal fun TestElement.relative(
                 e = this.belowInput(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isInput },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -171,6 +182,7 @@ internal fun TestElement.relative(
                 e = this.belowLabel(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isLabel },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -179,6 +191,7 @@ internal fun TestElement.relative(
                 e = this.belowImage(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isImage },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -187,6 +200,7 @@ internal fun TestElement.relative(
                 e = this.belowButton(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isButton },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -195,6 +209,7 @@ internal fun TestElement.relative(
                 e = this.belowSwitch(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isSwitch },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -203,6 +218,7 @@ internal fun TestElement.relative(
                 e = this.belowScrollable(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isScrollableElement },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -212,6 +228,7 @@ internal fun TestElement.relative(
                     selector = relativeSelector,
                     targetElements = targetElements,
                     widgetOnly = widgetOnly,
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -220,6 +237,7 @@ internal fun TestElement.relative(
                 e = this.leftInput(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isInput },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -228,6 +246,7 @@ internal fun TestElement.relative(
                 e = this.leftLabel(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isLabel },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -236,6 +255,7 @@ internal fun TestElement.relative(
                 e = this.leftImage(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isImage },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -244,6 +264,7 @@ internal fun TestElement.relative(
                 e = this.leftButton(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isButton },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -252,6 +273,7 @@ internal fun TestElement.relative(
                 e = this.leftSwitch(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isSwitch },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -261,6 +283,7 @@ internal fun TestElement.relative(
                     selector = relativeSelector,
                     targetElements = targetElements,
                     widgetOnly = widgetOnly,
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -269,6 +292,7 @@ internal fun TestElement.relative(
                 e = this.aboveInput(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isInput },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -277,6 +301,7 @@ internal fun TestElement.relative(
                 e = this.aboveLabel(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isLabel },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -285,6 +310,7 @@ internal fun TestElement.relative(
                 e = this.aboveImage(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isImage },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -293,6 +319,7 @@ internal fun TestElement.relative(
                 e = this.aboveButton(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isButton },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -301,6 +328,7 @@ internal fun TestElement.relative(
                 e = this.aboveSwitch(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isSwitch },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -309,6 +337,7 @@ internal fun TestElement.relative(
                 e = this.aboveScrollable(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isScrollableElement },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -320,6 +349,7 @@ internal fun TestElement.relative(
                 e = this.flow(
                     selector = relativeSelector,
                     targetElements = targetElements,
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -328,6 +358,7 @@ internal fun TestElement.relative(
                 e = this.vflow(
                     selector = relativeSelector,
                     targetElements = targetElements,
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -336,6 +367,7 @@ internal fun TestElement.relative(
                 e = this.flowLabel(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isLabel },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -344,6 +376,7 @@ internal fun TestElement.relative(
                 e = this.flowInput(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isInput },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -352,6 +385,7 @@ internal fun TestElement.relative(
                 e = this.flowImage(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isImage },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -360,6 +394,7 @@ internal fun TestElement.relative(
                 e = this.flowButton(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isButton },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -368,6 +403,7 @@ internal fun TestElement.relative(
                 e = this.flowSwitch(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isSwitch },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -376,6 +412,7 @@ internal fun TestElement.relative(
                 e = this.flowScrollable(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isScrollableElement },
+                    margin = margin,
                     frame = frame
                 )
             }
@@ -618,6 +655,7 @@ fun TestElement.relative(
     relativeSelectors: List<Selector>,
     scopeElements: List<TestElement> = rootElement.elements,
     widgetOnly: Boolean = false,
+    margin: Int,
     frame: Bounds? = null
 ): TestElement {
 
@@ -627,6 +665,7 @@ fun TestElement.relative(
             relativeSelector = selector,
             scopeElements = scopeElements,
             widgetOnly = widgetOnly,
+            margin = margin,
             frame = frame
         )
     }
@@ -667,7 +706,8 @@ fun TestElement.child(
 
     val e = relative(
         command = ":child($expression)",
-        scopeElements = children
+        scopeElements = children,
+        margin = 0
     )
 
     lastElement = e
@@ -689,7 +729,8 @@ fun TestElement.child(
 
     val e = relative(
         command = ":child($pos)",
-        scopeElements = children
+        scopeElements = children,
+        margin = 0
     )
 
     lastElement = e
@@ -734,7 +775,8 @@ fun TestElement.sibling(
 
     return relative(
         command = ":sibling($expression)",
-        scopeElements = parent().children
+        scopeElements = parent().children,
+        margin = 0
     )
 }
 
@@ -748,7 +790,8 @@ fun TestElement.sibling(
 
     val e = relative(
         command = ":sibling($pos)",
-        scopeElements = parent().children
+        scopeElements = parent().children,
+        margin = 0
     )
 
     lastElement = e
@@ -821,7 +864,10 @@ fun TestElement.ancestor(
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
-    val e = relative(":ancestor($expression)")
+    val e = relative(
+        command = ":ancestor($expression)",
+        margin = 0
+    )
 
     lastElement = e
 
@@ -842,7 +888,8 @@ fun TestElement.ancestor(
 
     val e = relative(
         command = ":ancestor($pos)",
-        scopeElements = this.ancestors
+        scopeElements = this.ancestors,
+        margin = 0
     )
 
     lastElement = e
@@ -884,7 +931,8 @@ fun TestElement.descendant(
 
     val e = relative(
         command = ":descendant($expression)",
-        scopeElements = this.descendants
+        scopeElements = this.descendants,
+        margin = 0
     )
 
     lastElement = e
@@ -906,7 +954,8 @@ fun TestElement.descendant(
 
     val e = relative(
         command = ":descendant($pos)",
-        scopeElements = descendants
+        scopeElements = descendants,
+        margin = 0
     )
 
     lastElement = e

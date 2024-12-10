@@ -103,7 +103,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("1")
                 // Act
                 val r1 = e.right()
-                val r2 = e.relative(":right")
+                val r2 = e.relative(":right", margin = 0)
                 // Assert
                 assertThat(r1.text).isEqualTo("English (United States)")
                 assertThat(r1).isEqualTo(r2)
@@ -114,7 +114,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("1")
                 // Act
                 val r1 = e.rightImage()
-                val r2 = e.relative(":rightImage")
+                val r2 = e.relative(":rightImage", margin = 0)
                 // Assert
                 assertThat(r1).isEqualTo(r2)
                 assertThat(r1.id).isEqualTo("com.android.settings:id/dragHandle")
@@ -127,7 +127,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("1")
                 // Act
                 val r1 = e.right(1)
-                val r2 = e.relative(":right(1)")
+                val r2 = e.relative(":right(1)", margin = 0)
                 // Assert
                 assertThat(r1.text).isEqualTo("English (United States)")
                 assertThat(r1).isEqualTo(r2)
@@ -138,7 +138,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("1")
                 // Act
                 val r1 = e.right(2)
-                val r2 = e.relative(":right(2)")
+                val r2 = e.relative(":right(2)", margin = 0)
                 // Assert
                 assertThat(r1).isEqualTo(r2)
                 assertThat(r1.id).isEqualTo("com.android.settings:id/dragHandle")
@@ -149,7 +149,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("1")
                 // Act
                 val r1 = e.right(3)
-                val r2 = e.relative(":right(3)")
+                val r2 = e.relative(":right(3)", margin = 0)
                 // Assert
                 assertThat(r1.isEmpty).isTrue()
                 assertThat(r2.isEmpty).isTrue()
@@ -212,7 +212,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[More options]")
                 // Act
                 val l1 = e.left()
-                val l2 = e.relative(":left")
+                val l2 = e.relative(":left", margin = 0)
                 // Assert
                 assertThat(l1.access).isEqualTo("Navigate up")
                 assertThat(l1).isEqualTo(l2)
@@ -223,7 +223,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[More options]")
                 // Act
                 val l1 = e.leftButton()
-                val l2 = e.relative(":leftButton")
+                val l2 = e.relative(":leftButton", margin = 0)
                 // Assert
                 assertThat(l1).isEqualTo(l2)
                 assertThat(l1.access).isEqualTo("Navigate up")
@@ -236,7 +236,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[=]")
                 // Act
                 val l1 = e.left(1)
-                val l2 = e.relative(":left(1)")
+                val l2 = e.relative(":left(1)", margin = 0)
                 // Assert
                 assertThat(l1.text).isEqualTo("English (United States)")
                 assertThat(l1).isEqualTo(l2)
@@ -247,7 +247,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[=]")
                 // Act
                 val l1 = e.left(2)
-                val l2 = e.relative(":left(2)")
+                val l2 = e.relative(":left(2)", margin = 0)
                 // Assert
                 assertThat(l1).isEqualTo(l2)
                 assertThat(l1.text).isEqualTo("1")
@@ -258,7 +258,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[=]")
                 // Act
                 val l1 = e.left(3)
-                val l2 = e.relative(":left(3)")
+                val l2 = e.relative(":left(3)", margin = 0)
                 // Assert
                 assertThat(l1.isEmpty).isTrue()
                 assertThat(l2.isEmpty).isTrue()
@@ -324,7 +324,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("Add a language")
                 // Act
                 val a1 = e.above()
-                val a2 = e.relative(":above")
+                val a2 = e.relative(":above", margin = 0)
                 // Assert
                 assertThat(a1.text).isEqualTo("日本語 (日本)")
                 assertThat(a1).isEqualTo(a2)
@@ -335,7 +335,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("Add a language")
                 // Act
                 val a1 = e.aboveButton()
-                val a2 = e.relative(":aboveButton")
+                val a2 = e.relative(":aboveButton", margin = 0)
                 // Assert
                 assertThat(a1).isEqualTo(a2)
                 assertThat(a1.access).isEqualTo("Navigate up")
@@ -348,7 +348,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("Add a language")
                 // Act
                 val a1 = e.above(1)
-                val a2 = e.relative(":above(1)")
+                val a2 = e.relative(":above(1)", margin = 0)
                 // Assert
                 assertThat(a1.text).isEqualTo("日本語 (日本)")
                 assertThat(a1).isEqualTo(a2)
@@ -359,7 +359,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("Add a language")
                 // Act
                 val a1 = e.above(2)
-                val a2 = e.relative(":above(2)")
+                val a2 = e.relative(":above(2)", margin = 0)
                 // Assert
                 assertThat(a1).isEqualTo(a2)
                 assertThat(a1.text).isEqualTo("2")
@@ -425,7 +425,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[More options]")
                 // Act
                 val a1 = e.below()
-                val a2 = e.relative(":below")
+                val a2 = e.relative(":below", margin = 0)
                 // Assert
                 assertThat(a1.id).isEqualTo("com.android.settings:id/dragHandle")
                 assertThat(a1).isEqualTo(a2)
@@ -436,7 +436,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[More options]")
                 // Act
                 val a1 = e.belowButton()
-                val a2 = e.relative(":belowButton")
+                val a2 = e.relative(":belowButton", margin = 0)
                 // Assert
                 assertThat(a1).isEqualTo(a2)
                 assertThat(a1.text).isEqualTo("Add a language")
@@ -449,7 +449,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[More options]")
                 // Act
                 val a1 = e.below(1)
-                val a2 = e.relative(":below(1)")
+                val a2 = e.relative(":below(1)", margin = 0)
                 // Assert
                 assertThat(a1).isEqualTo(a2)
                 assertThat(a1.id).isEqualTo("com.android.settings:id/dragHandle")
@@ -460,7 +460,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
                 val e = TestElementCache.select("[More options]")
                 // Act
                 val a1 = e.below(3)
-                val a2 = e.relative(":below(3)")
+                val a2 = e.relative(":below(3)", margin = 0)
                 // Assert
                 assertThat(a1).isEqualTo(a2)
                 assertThat(a1.text).isEqualTo("Add a language")

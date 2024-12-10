@@ -34,14 +34,14 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
 
         run {
             // Act
-            val parent = e.relative(":parent()")
+            val parent = e.relative(":parent()", margin = 0)
             // Assert
             assertThat(parent.text).isEqualTo("tb1-item1")
             assertThat(parent.selector.toString()).isEqualTo("<tb1-item1-1>:parent")
         }
         run {
             // Act
-            val parent = e.relative(":parent")
+            val parent = e.relative(":parent", margin = 0)
             // Assert
             assertThat(parent.text).isEqualTo("tb1-item1")
             assertThat(parent.selector.toString()).isEqualTo("<tb1-item1-1>:parent")
@@ -56,7 +56,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
 
         run {
             // Act
-            val c1 = e.relative(":child(1)")
+            val c1 = e.relative(":child(1)", margin = 0)
             assertThat(c1.selector.toString()).isEqualTo("<#toolbar1>:child(1)")
             val c2 = e.select(":child(1)")
             assertThat(c2.selector.toString()).isEqualTo("<#toolbar1>:child(1)")
@@ -64,57 +64,57 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             assertThat(c1).isEqualTo(c2)
         }
         run {
-            val c1 = e.relative(":child([2])")
+            val c1 = e.relative(":child([2])", margin = 0)
             assertThat(c1.selector.toString()).isEqualTo("<#toolbar1>:child(2)")
             assertThat(c1.text).isEqualTo("tb1-item2")
         }
         run {
-            val child = e.relative(":child(pos=3)")
+            val child = e.relative(":child(pos=3)", margin = 0)
             assertThat(child.text).isEqualTo("tb1-item3")
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(3)")
         }
         run {
-            val child = e.relative(":child(4)")
+            val child = e.relative(":child(4)", margin = 0)
             assertThat(child.isEmpty).isTrue()
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(4)")
         }
         run {
-            val child = e.relative(":child(-1)")
+            val child = e.relative(":child(-1)", margin = 0)
             assertThat(child.text).isEqualTo("tb1-item3")
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(-1)")
         }
         run {
-            val child = e.relative(":child([-2])")
+            val child = e.relative(":child([-2])", margin = 0)
             assertThat(child.text).isEqualTo("tb1-item2")
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(-2)")
         }
         run {
-            val child = e.relative(":child(pos=-3)")
+            val child = e.relative(":child(pos=-3)", margin = 0)
             assertThat(child.text).isEqualTo("tb1-item1")
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(-3)")
         }
         run {
-            val child = e.relative(":child(-4)")
+            val child = e.relative(":child(-4)", margin = 0)
             assertThat(child.isEmpty).isTrue()
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(-4)")
         }
         run {
-            val child = e.relative(":child(.android.widget.ImageButton)")
+            val child = e.relative(":child(.android.widget.ImageButton)", margin = 0)
             assertThat(child.text).isEqualTo("tb1-item1")
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(.android.widget.ImageButton)")
         }
         run {
-            val child = e.relative(":child(*item*&&[2])")
+            val child = e.relative(":child(*item*&&[2])", margin = 0)
             assertThat(child.text).isEqualTo("tb1-item2")
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(*item*&&[2])")
         }
         run {
-            val child = e.relative(":child")
+            val child = e.relative(":child", margin = 0)
             assertThat(child.text).isEqualTo("tb1-item1")
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(1)")
         }
         run {
-            val child = e.relative(":child(hoge)")
+            val child = e.relative(":child(hoge)", margin = 0)
             assertThat(child.isEmpty).isTrue()
             assertThat(child.selector.toString()).isEqualTo("<#toolbar1>:child(hoge)")
         }
@@ -126,7 +126,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling")
+            val sibling = e.relative(":sibling", margin = 0)
             // Act, Assert
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item1")
@@ -135,7 +135,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling(1)")
+            val sibling = e.relative(":sibling(1)", margin = 0)
             // Act, Assert
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item1")
@@ -144,7 +144,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling([2])")
+            val sibling = e.relative(":sibling([2])", margin = 0)
             // Act, Assert
             assertThat(sibling).isEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item2")
@@ -153,7 +153,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling(pos=3)")
+            val sibling = e.relative(":sibling(pos=3)", margin = 0)
             // Act, Assert
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item3")
@@ -162,7 +162,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling(4)")
+            val sibling = e.relative(":sibling(4)", margin = 0)
             // Act, Assert
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.isEmpty).isTrue()
@@ -171,7 +171,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling(-1)")
+            val sibling = e.relative(":sibling(-1)", margin = 0)
             // Act, Assert
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item3")
@@ -180,7 +180,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling([-2])")
+            val sibling = e.relative(":sibling([-2])", margin = 0)
             // Act, Assert
             assertThat(sibling).isEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item2")
@@ -189,7 +189,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling(pos=-3)")
+            val sibling = e.relative(":sibling(pos=-3)", margin = 0)
             // Act, Assert
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item1")
@@ -198,7 +198,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
         run {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
-            val sibling = e.relative(":sibling(-4)")
+            val sibling = e.relative(":sibling(-4)", margin = 0)
             // Act, Assert
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.isEmpty).isTrue()
@@ -208,7 +208,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val sibling = e.relative(":sibling(.android.widget.ImageButton)")
+            val sibling = e.relative(":sibling(.android.widget.ImageButton)", margin = 0)
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item1")
             assertThat(sibling.subject).isEqualTo("<tb1-item2>:sibling(.android.widget.ImageButton)")
@@ -217,7 +217,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val sibling = e.relative(":sibling(*item*&&[2])")
+            val sibling = e.relative(":sibling(*item*&&[2])", margin = 0)
             assertThat(sibling).isEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item2")
             assertThat(sibling.subject).isEqualTo("<tb1-item2>")
@@ -226,7 +226,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val sibling = e.relative(":sibling")
+            val sibling = e.relative(":sibling", margin = 0)
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.text).isEqualTo("tb1-item1")
             assertThat(sibling.subject).isEqualTo("<tb1-item2>:sibling(1)")
@@ -235,7 +235,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val sibling = e.relative(":sibling(hoge)")
+            val sibling = e.relative(":sibling(hoge)", margin = 0)
             assertThat(sibling).isNotEqualTo(e)
             assertThat(sibling.isEmpty).isTrue()
             assertThat(sibling.subject).isEqualTo("<tb1-item2>:sibling(hoge)")
@@ -249,7 +249,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor")
+            val ancestor = e.relative(":ancestor", margin = 0)
             assertThat(ancestor).isEqualTo(e.parentElement)
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor")
         }
@@ -257,7 +257,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor(1)")
+            val ancestor = e.relative(":ancestor(1)", margin = 0)
             assertThat(ancestor).isEqualTo(e.parentElement)
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor")
         }
@@ -265,23 +265,23 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor([2])")
-            assertThat(ancestor).isEqualTo(e.parentElement?.parentElement)
+            val ancestor = e.relative(":ancestor([2])", margin = 0)
+            assertThat(ancestor).isEqualTo(e.parentElement.parentElement)
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor(2)")
         }
         run {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor(pos=3)")
-            assertThat(ancestor).isEqualTo(e.parentElement?.parentElement?.parentElement)
+            val ancestor = e.relative(":ancestor(pos=3)", margin = 0)
+            assertThat(ancestor).isEqualTo(e.parentElement.parentElement?.parentElement)
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor(3)")
         }
         run {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor(4)")
+            val ancestor = e.relative(":ancestor(4)", margin = 0)
             assertThat(ancestor.isEmpty).isTrue()
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor(4)")
         }
@@ -289,7 +289,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor(-1)")
+            val ancestor = e.relative(":ancestor(-1)", margin = 0)
             assertThat(ancestor.className).isEqualTo("android.widget.FrameLayout")
             assertThat(ancestor).isEqualTo(e.ancestors.first())
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor(-1)")
@@ -298,7 +298,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor([-2])")
+            val ancestor = e.relative(":ancestor([-2])", margin = 0)
             assertThat(ancestor.className).isEqualTo("android.widget.LinearLayout")
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor(-2)")
         }
@@ -306,7 +306,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor(pos=-3)")
+            val ancestor = e.relative(":ancestor(pos=-3)", margin = 0)
             assertThat(ancestor.className).isEqualTo("android.view.ViewGroup")
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor(-3)")
         }
@@ -314,7 +314,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
-            val ancestor = e.relative(":ancestor(-4)")
+            val ancestor = e.relative(":ancestor(-4)", margin = 0)
             assertThat(ancestor.isEmpty).isTrue()
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor(-4)")
         }
@@ -323,7 +323,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-TextView2")
             // Act, Assert
-            val ancestor = e.relative(":ancestor(.android.widget.Button)")
+            val ancestor = e.relative(":ancestor(.android.widget.Button)", margin = 0)
             assertThat(ancestor.text).isEqualTo("tb3-Button1")
             assertThat(ancestor.subject).isEqualTo("<tb3-TextView2>:ancestor(.android.widget.Button)")
         }
@@ -331,7 +331,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-TextView2")
             // Act
-            val ancestor = e.relative(":ancestor(*tb3*&&[1])")
+            val ancestor = e.relative(":ancestor(*tb3*&&[1])", margin = 0)
             assertThat(ancestor.text).isEqualTo("tb3-Button1")
             assertThat(ancestor.subject).isEqualTo("<tb3-TextView2>:ancestor(*tb3*&&[1])")
         }
@@ -339,7 +339,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-TextView2")
             // Act
-            val ancestor = e.relative(":ancestor")
+            val ancestor = e.relative(":ancestor", margin = 0)
             assertThat(ancestor.text).isEqualTo("tb3-Button1")
             assertThat(ancestor.subject).isEqualTo("<tb3-TextView2>:ancestor")
         }
@@ -347,7 +347,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-TextView2")
             // Act
-            val ancestor = e.relative(":ancestor(hoge)")
+            val ancestor = e.relative(":ancestor(hoge)", margin = 0)
             assertThat(ancestor.isEmpty).isTrue()
             assertThat(ancestor.subject).isEqualTo("<tb3-TextView2>:ancestor(hoge)")
         }
@@ -360,7 +360,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant")
+            val descendant = e.relative(":descendant", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item1")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(1)")
         }
@@ -368,7 +368,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant(1)")
+            val descendant = e.relative(":descendant(1)", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item1")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(1)")
         }
@@ -376,7 +376,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant([2])")
+            val descendant = e.relative(":descendant([2])", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item1-1")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(2)")
         }
@@ -384,7 +384,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant(pos=3)")
+            val descendant = e.relative(":descendant(pos=3)", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item2")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(3)")
         }
@@ -392,7 +392,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant(4)")
+            val descendant = e.relative(":descendant(4)", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item3")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(4)")
         }
@@ -400,7 +400,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant(5)")
+            val descendant = e.relative(":descendant(5)", margin = 0)
             assertThat(descendant.isEmpty).isTrue()
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(5)")
         }
@@ -408,7 +408,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant(-1)")
+            val descendant = e.relative(":descendant(-1)", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item3")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(-1)")
         }
@@ -416,7 +416,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant(-2)")
+            val descendant = e.relative(":descendant(-2)", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item2")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(-2)")
         }
@@ -424,7 +424,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant(-3)")
+            val descendant = e.relative(":descendant(-3)", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item1-1")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(-3)")
         }
@@ -432,7 +432,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act, Assert
-            val descendant = e.relative(":descendant(-4)")
+            val descendant = e.relative(":descendant(-4)", margin = 0)
             assertThat(descendant.text).isEqualTo("tb1-item1")
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(-4)")
         }
@@ -440,7 +440,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar1")
             // Act
-            val descendant = e.relative(":descendant(-5)")
+            val descendant = e.relative(":descendant(-5)", margin = 0)
             assertThat(descendant.isEmpty).isTrue()
             assertThat(descendant.subject).isEqualTo("<#toolbar1>:descendant(-5)")
         }
@@ -449,7 +449,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar3")
             // Act, Assert
-            val descendant = e.relative(":descendant(.android.widget.EditText)")
+            val descendant = e.relative(":descendant(.android.widget.EditText)", margin = 0)
             assertThat(descendant.text).isEqualTo("tb3-EditText1")
             assertThat(descendant.subject).isEqualTo("<#toolbar3>:descendant(.android.widget.EditText)")
         }
@@ -457,7 +457,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar3")
             // Act, Assert
-            val descendant = e.relative(":descendant(.android.widget.TextView&&[2])")
+            val descendant = e.relative(":descendant(.android.widget.TextView&&[2])", margin = 0)
             assertThat(descendant.text).isEqualTo("tb3-TextView2")
             assertThat(descendant.subject).isEqualTo("<#toolbar3>:descendant(.android.widget.TextView&&[2])")
         }
@@ -465,7 +465,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar3")
             // Act, Assert
-            val descendant = e.relative(":descendant(tb3*&&[-2])")
+            val descendant = e.relative(":descendant(tb3*&&[-2])", margin = 0)
             assertThat(descendant.text).isEqualTo("tb3-ImageButton1")
             assertThat(descendant.subject).isEqualTo("<#toolbar3>:descendant(tb3*&&[-2])")
         }
@@ -478,7 +478,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next")
+            val next = e.relative(":next", margin = 0)
             assertThat(next.text).isEqualTo("tb1-item3")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next")
         }
@@ -486,7 +486,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(1)")
+            val next = e.relative(":next(1)", margin = 0)
             assertThat(next.text).isEqualTo("tb1-item3")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next")
         }
@@ -494,7 +494,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next([2])")
+            val next = e.relative(":next([2])", margin = 0)
             assertThat(next.id).isEqualTo("jp.co.app.android:id/toolbar2")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(2)")
         }
@@ -502,7 +502,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(pos=3)")
+            val next = e.relative(":next(pos=3)", margin = 0)
             assertThat(next.text).isEqualTo("tb2-item1")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(3)")
         }
@@ -510,7 +510,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(-1)")
+            val next = e.relative(":next(-1)", margin = 0)
             assertThat(next.text).isEqualTo("tb1-item1-1")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(-1)")
         }
@@ -518,7 +518,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next([-2])")
+            val next = e.relative(":next([-2])", margin = 0)
             assertThat(next.text).isEqualTo("tb1-item1")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(-2)")
         }
@@ -526,7 +526,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(999)")
+            val next = e.relative(":next(999)", margin = 0)
             assertThat(next.isEmpty).isTrue()
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(999)")
         }
@@ -534,7 +534,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act
-            val next = e.relative(":next(-999)")
+            val next = e.relative(":next(-999)", margin = 0)
             assertThat(next.isEmpty).isTrue()
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(-999)")
         }
@@ -543,7 +543,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(.android.widget.ImageButton)")
+            val next = e.relative(":next(.android.widget.ImageButton)", margin = 0)
             assertThat(next.text).isEqualTo("tb2-item1")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(.android.widget.ImageButton)")
         }
@@ -551,7 +551,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(.android.widget.ImageButton&&[2])")
+            val next = e.relative(":next(.android.widget.ImageButton&&[2])", margin = 0)
             assertThat(next.text).isEqualTo("tb3-ImageButton1")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(.android.widget.ImageButton&&[2])")
         }
@@ -559,7 +559,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(.android.widget.ImageButton&&pos=3)")
+            val next = e.relative(":next(.android.widget.ImageButton&&pos=3)", margin = 0)
             assertThat(next.text).isEqualTo("tb4-ImageButton1")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(.android.widget.ImageButton&&[3])")
         }
@@ -567,7 +567,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(.android.widget.ImageButton&&[4])")
+            val next = e.relative(":next(.android.widget.ImageButton&&[4])", margin = 0)
             assertThat(next.isEmpty).isTrue()
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(.android.widget.ImageButton&&[4])")
         }
@@ -575,7 +575,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(.android.widget.ImageButton&&[-1])")
+            val next = e.relative(":next(.android.widget.ImageButton&&[-1])", margin = 0)
             assertThat(next.text).isEqualTo("tb1-item1")
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(.android.widget.ImageButton&&[-1])")
         }
@@ -583,7 +583,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb1-item2")
             // Act, Assert
-            val next = e.relative(":next(.android.widget.ImageButton&&[-2])")
+            val next = e.relative(":next(.android.widget.ImageButton&&[-2])", margin = 0)
             assertThat(next.isEmpty).isTrue()
             assertThat(next.subject).isEqualTo("<tb1-item2>:next(.android.widget.ImageButton&&[-2])")
         }
@@ -596,7 +596,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous")
+            val previous = e.relative(":previous", margin = 0)
             assertThat(previous.text).isEqualTo("tb2-item1")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous")
         }
@@ -604,7 +604,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(1)")
+            val previous = e.relative(":previous(1)", margin = 0)
             assertThat(previous.text).isEqualTo("tb2-item1")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous")
         }
@@ -612,7 +612,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous([2])")
+            val previous = e.relative(":previous([2])", margin = 0)
             assertThat(previous.id).isEqualTo("jp.co.app.android:id/toolbar2")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(2)")
         }
@@ -620,7 +620,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(pos=3)")
+            val previous = e.relative(":previous(pos=3)", margin = 0)
             assertThat(previous.text).isEqualTo("tb1-item3")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(3)")
         }
@@ -628,7 +628,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(-1)")
+            val previous = e.relative(":previous(-1)", margin = 0)
             assertThat(previous.text).isEqualTo("tb2-item3")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(-1)")
         }
@@ -636,7 +636,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous([-2])")
+            val previous = e.relative(":previous([-2])", margin = 0)
             assertThat(previous.id).isEqualTo("jp.co.app.android:id/toolbar3")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(-2)")
         }
@@ -644,7 +644,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(999)")
+            val previous = e.relative(":previous(999)", margin = 0)
             assertThat(previous.isEmpty).isTrue()
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(999)")
         }
@@ -652,7 +652,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(-999)")
+            val previous = e.relative(":previous(-999)", margin = 0)
             assertThat(previous.isEmpty).isTrue()
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(-999)")
         }
@@ -661,7 +661,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(.android.widget.ImageButton)")
+            val previous = e.relative(":previous(.android.widget.ImageButton)", margin = 0)
             assertThat(previous.text).isEqualTo("tb2-item1")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(.android.widget.ImageButton)")
         }
@@ -669,7 +669,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(.android.widget.ImageButton&&[2])")
+            val previous = e.relative(":previous(.android.widget.ImageButton&&[2])", margin = 0)
             assertThat(previous.text).isEqualTo("tb1-item1")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(.android.widget.ImageButton&&[2])")
         }
@@ -677,7 +677,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(.android.widget.ImageButton&&pos=3)")
+            val previous = e.relative(":previous(.android.widget.ImageButton&&pos=3)", margin = 0)
             assertThat(previous.isEmpty).isTrue()
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(.android.widget.ImageButton&&[3])")
         }
@@ -685,7 +685,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(.android.widget.ImageButton&&[-1])")
+            val previous = e.relative(":previous(.android.widget.ImageButton&&[-1])", margin = 0)
             assertThat(previous.text).isEqualTo("tb3-ImageButton1")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(.android.widget.ImageButton&&[-1])")
         }
@@ -693,7 +693,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item2")
             // Act, Assert
-            val previous = e.relative(":previous(.android.widget.ImageButton&&[-2])")
+            val previous = e.relative(":previous(.android.widget.ImageButton&&[-2])", margin = 0)
             assertThat(previous.text).isEqualTo("tb4-ImageButton1")
             assertThat(previous.subject).isEqualTo("<tb2-item2>:previous(.android.widget.ImageButton&&[-2])")
         }
@@ -706,7 +706,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act, Assert
-            val nextLabel = e.relative(":nextLabel")
+            val nextLabel = e.relative(":nextLabel", margin = 0)
             assertThat(nextLabel.text).isEqualTo("tb3-TextView1")
             assertThat(nextLabel.subject).isEqualTo("<tb2-item3>:nextLabel")
         }
@@ -714,7 +714,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act, Assert
-            val nextLabel = e.relative(":nextLabel(2)")
+            val nextLabel = e.relative(":nextLabel(2)", margin = 0)
             assertThat(nextLabel.text).isEqualTo("tb3-TextView2")
             assertThat(nextLabel.subject).isEqualTo("<tb2-item3>:nextLabel(2)")
         }
@@ -722,7 +722,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act, Assert
-            val nextLabel = e.relative(":nextLabel([3])")
+            val nextLabel = e.relative(":nextLabel([3])", margin = 0)
             assertThat(nextLabel.text).isEqualTo("tb4-TextView1")
             assertThat(nextLabel.subject).isEqualTo("<tb2-item3>:nextLabel(3)")
         }
@@ -730,7 +730,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act, Assert
-            val nextLabel = e.relative(":nextLabel(pos=-1)")
+            val nextLabel = e.relative(":nextLabel(pos=-1)", margin = 0)
             assertThat(nextLabel.text).isEqualTo("tb2-item2")
             assertThat(nextLabel.subject).isEqualTo("<tb2-item3>:nextLabel(-1)")
         }
@@ -738,7 +738,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act, Assert
-            val nextLabel = e.relative(":nextLabel([-2])")
+            val nextLabel = e.relative(":nextLabel([-2])", margin = 0)
             assertThat(nextLabel.text).isEqualTo("tb1-item2")
             assertThat(nextLabel.subject).isEqualTo("<tb2-item3>:nextLabel(-2)")
         }
@@ -746,7 +746,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act, Assert
-            val nextLabel = e.relative(":nextLabel(*TextView2&&[2])")
+            val nextLabel = e.relative(":nextLabel(*TextView2&&[2])", margin = 0)
             assertThat(nextLabel.text).isEqualTo("tb4-TextView2")
             assertThat(nextLabel.subject).isEqualTo("<tb2-item3>:nextLabel(*TextView2&&[2])")
         }
@@ -754,7 +754,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act, Assert
-            val nextLabel = e.relative(":nextLabel(hoge)")
+            val nextLabel = e.relative(":nextLabel(hoge)", margin = 0)
             assertThat(nextLabel.isEmpty).isTrue()
             assertThat(nextLabel.subject).isEqualTo("<tb2-item3>:nextLabel(hoge)")
         }
@@ -767,11 +767,11 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val previousLabel = e.relative(":preLabel")
-            val previousLabel2 = e.relative(":preLabel(2)")
-            val previousLabel3 = e.relative(":preLabel([3])")
-            val previousLabel_1 = e.relative(":preLabel(pos=-1)")
-            val previousLabel_2 = e.relative(":preLabel([-2])")
+            val previousLabel = e.relative(":preLabel", margin = 0)
+            val previousLabel2 = e.relative(":preLabel(2)", margin = 0)
+            val previousLabel3 = e.relative(":preLabel([3])", margin = 0)
+            val previousLabel_1 = e.relative(":preLabel(pos=-1)", margin = 0)
+            val previousLabel_2 = e.relative(":preLabel([-2])", margin = 0)
             // Assert
             assertThat(previousLabel.text).isEqualTo("tb2-item2")
             assertThat(previousLabel2.text).isEqualTo("tb1-item2")
@@ -784,8 +784,8 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val textView2 = e.relative(":preLabel(*item2&&[2])")
-            val notFound = e.relative(":preLabel(hoge)")
+            val textView2 = e.relative(":preLabel(*item2&&[2])", margin = 0)
+            val notFound = e.relative(":preLabel(hoge)", margin = 0)
             assertThat(textView2.text).isEqualTo("tb1-item2")
             assertThat(notFound.isEmpty).isTrue()
         }
@@ -798,10 +798,10 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val nextInput = e.relative(":nextInput")
-            val nextInput2 = e.relative(":nextInput(2)")
-            val nextInput3 = e.relative(":nextInput([3])")
-            val nextInput_1 = e.relative(":nextInput(pos=-1)")
+            val nextInput = e.relative(":nextInput", margin = 0)
+            val nextInput2 = e.relative(":nextInput(2)", margin = 0)
+            val nextInput3 = e.relative(":nextInput([3])", margin = 0)
+            val nextInput_1 = e.relative(":nextInput(pos=-1)", margin = 0)
             // Assert
             assertThat(nextInput.text).isEqualTo("tb3-EditText1")
             assertThat(nextInput2.text).isEqualTo("tb4-EditText1")
@@ -817,10 +817,10 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-CheckBox1")
             // Act
-            val previousInput = e.relative(":preInput")
-            val previousInput2 = e.relative(":preInput(2)")
-            val previousInput_1 = e.relative(":preInput(pos=-1)")
-            val previousInput_2 = e.relative(":preInput([-2])")
+            val previousInput = e.relative(":preInput", margin = 0)
+            val previousInput2 = e.relative(":preInput(2)", margin = 0)
+            val previousInput_1 = e.relative(":preInput(pos=-1)", margin = 0)
+            val previousInput_2 = e.relative(":preInput([-2])", margin = 0)
             // Assert
             assertThat(previousInput.text).isEqualTo("tb3-EditText1")
             assertThat(previousInput2.isEmpty).isTrue()
@@ -836,11 +836,11 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val nextImage = e.relative(":nextImage")
-            val nextImage2 = e.relative(":nextImage(2)")
-            val nextImage3 = e.relative(":nextImage([3])")
-            val nextImage_1 = e.relative(":nextImage(pos=-1)")
-            val nextImage_2 = e.relative(":nextImage([-2])")
+            val nextImage = e.relative(":nextImage", margin = 0)
+            val nextImage2 = e.relative(":nextImage(2)", margin = 0)
+            val nextImage3 = e.relative(":nextImage([3])", margin = 0)
+            val nextImage_1 = e.relative(":nextImage(pos=-1)", margin = 0)
+            val nextImage_2 = e.relative(":nextImage([-2])", margin = 0)
             // Assert
             assertThat(nextImage.text).isEqualTo("tb3-ImageView1")
             assertThat(nextImage2.text).isEqualTo("tb4-ImageView1")
@@ -853,8 +853,8 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val imageView2 = e.relative(":nextImage(*ImageView1&&[2])")
-            val notFound = e.relative(":nextImage(hoge)")
+            val imageView2 = e.relative(":nextImage(*ImageView1&&[2])", margin = 0)
+            val notFound = e.relative(":nextImage(hoge)", margin = 0)
             assertThat(imageView2.text).isEqualTo("tb4-ImageView1")
             assertThat(notFound.isEmpty).isTrue()
         }
@@ -867,11 +867,11 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-TextView1")
             // Act
-            val previousImage = e.relative(":preImage")
-            val previousImage2 = e.relative(":preImage(2)")
-            val previousImage3 = e.relative(":preImage([3])")
-            val previousImage_1 = e.relative(":preImage(pos=-1)")
-            val previousImage_2 = e.relative(":preImage([-2])")
+            val previousImage = e.relative(":preImage", margin = 0)
+            val previousImage2 = e.relative(":preImage(2)", margin = 0)
+            val previousImage3 = e.relative(":preImage([3])", margin = 0)
+            val previousImage_1 = e.relative(":preImage(pos=-1)", margin = 0)
+            val previousImage_2 = e.relative(":preImage([-2])", margin = 0)
             // Assert
             assertThat(previousImage.text).isEqualTo("tb2-item3")
             assertThat(previousImage.text).isEqualTo("tb2-item3")
@@ -885,8 +885,8 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-ImageView1")
             // Act
-            val imageView2 = e.relative(":preImage(*item3&&[2])")
-            val notFound = e.relative(":preImage(hoge)")
+            val imageView2 = e.relative(":preImage(*item3&&[2])", margin = 0)
+            val notFound = e.relative(":preImage(hoge)", margin = 0)
             assertThat(imageView2.text).isEqualTo("tb1-item3")
             assertThat(notFound.isEmpty).isTrue()
         }
@@ -899,11 +899,11 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val nextButton = e.relative(":nextButton")
-            val nextButton2 = e.relative(":nextButton(2)")
-            val nextButton3 = e.relative(":nextButton([3])")
-            val nextButton_1 = e.relative(":nextButton(pos=-1)")
-            val nextButton_2 = e.relative(":nextButton([-2])")
+            val nextButton = e.relative(":nextButton", margin = 0)
+            val nextButton2 = e.relative(":nextButton(2)", margin = 0)
+            val nextButton3 = e.relative(":nextButton([3])", margin = 0)
+            val nextButton_1 = e.relative(":nextButton(pos=-1)", margin = 0)
+            val nextButton_2 = e.relative(":nextButton([-2])", margin = 0)
             // Assert
             assertThat(nextButton.text).isEqualTo("tb3-Button1")
             assertThat(nextButton2.text).isEqualTo("tb3-CheckBox1")
@@ -916,8 +916,8 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val button2 = e.relative(":nextButton(*ImageButton1&&[2])")
-            val notFound = e.relative(":nextButton(hoge)")
+            val button2 = e.relative(":nextButton(*ImageButton1&&[2])", margin = 0)
+            val notFound = e.relative(":nextButton(hoge)", margin = 0)
             assertThat(button2.text).isEqualTo("tb4-ImageButton1")
             assertThat(notFound.isEmpty).isTrue()
         }
@@ -930,11 +930,11 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-TextView1")
             // Act
-            val previousButton = e.relative(":preButton")
-            val previousButton2 = e.relative(":preButton(2)")
-            val previousButton3 = e.relative(":preButton([3])")
-            val previousButton_1 = e.relative(":preButton(pos=-1)")
-            val previousButton_2 = e.relative(":preButton([-2])")
+            val previousButton = e.relative(":preButton", margin = 0)
+            val previousButton2 = e.relative(":preButton(2)", margin = 0)
+            val previousButton3 = e.relative(":preButton([3])", margin = 0)
+            val previousButton_1 = e.relative(":preButton(pos=-1)", margin = 0)
+            val previousButton_2 = e.relative(":preButton([-2])", margin = 0)
             // Assert
             assertThat(previousButton.text).isEqualTo("tb2-item1")
             assertThat(previousButton2.text).isEqualTo("tb1-item1")
@@ -947,8 +947,8 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb3-ImageButton1")
             // Act
-            val button2 = e.relative(":preButton(*item1&&[2])")
-            val notFound = e.relative(":preButton(hoge)")
+            val button2 = e.relative(":preButton(*item1&&[2])", margin = 0)
+            val notFound = e.relative(":preButton(hoge)", margin = 0)
             assertThat(button2.text).isEqualTo("tb1-item1")
             assertThat(notFound.isEmpty).isTrue()
         }
@@ -961,10 +961,10 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val nextSwitch = e.relative(":nextSwitch")
-            val nextSwitch2 = e.relative(":nextSwitch(2)")
-            val nextSwitch3 = e.relative(":nextSwitch([3])")
-            val nextSwitch_1 = e.relative(":nextSwitch(pos=-1)")
+            val nextSwitch = e.relative(":nextSwitch", margin = 0)
+            val nextSwitch2 = e.relative(":nextSwitch(2)", margin = 0)
+            val nextSwitch3 = e.relative(":nextSwitch([3])", margin = 0)
+            val nextSwitch_1 = e.relative(":nextSwitch(pos=-1)", margin = 0)
             // Assert
             assertThat(nextSwitch.text).isEqualTo("tb3-Switch1")
             assertThat(nextSwitch2.text).isEqualTo("tb4-Switch1")
@@ -976,8 +976,8 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("tb2-item3")
             // Act
-            val switch2 = e.relative(":nextSwitch(*Switch1&&[2])")
-            val notFound = e.relative(":nextSwitch(hoge)")
+            val switch2 = e.relative(":nextSwitch(*Switch1&&[2])", margin = 0)
+            val notFound = e.relative(":nextSwitch(hoge)", margin = 0)
             assertThat(switch2.text).isEqualTo("tb4-Switch1")
             assertThat(notFound.isEmpty).isTrue()
         }
@@ -990,10 +990,10 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar5")
             // Act
-            val preSwitch = e.relative(":preSwitch")
-            val preSwitch2 = e.relative(":preSwitch(2)")
-            val preSwitch3 = e.relative(":preSwitch([3])")
-            val preSwitch_1 = e.relative(":preSwitch(pos=-1)")
+            val preSwitch = e.relative(":preSwitch", margin = 0)
+            val preSwitch2 = e.relative(":preSwitch(2)", margin = 0)
+            val preSwitch3 = e.relative(":preSwitch([3])", margin = 0)
+            val preSwitch_1 = e.relative(":preSwitch(pos=-1)", margin = 0)
             // Assert
             assertThat(preSwitch.text).isEqualTo("tb4-Switch1")
             assertThat(preSwitch.text).isEqualTo("tb4-Switch1")
@@ -1006,8 +1006,8 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#toolbar5")
             // Act
-            val switch2 = e.relative(":preSwitch(*Switch1&&[2])")
-            val notFound = e.relative(":preSwitch(hoge)")
+            val switch2 = e.relative(":preSwitch(*Switch1&&[2])", margin = 0)
+            val notFound = e.relative(":preSwitch(hoge)", margin = 0)
             assertThat(switch2.text).isEqualTo("tb3-Switch1")
             assertThat(notFound.isEmpty).isTrue()
         }
@@ -1021,12 +1021,12 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             val e = TestElementCache.select("#toolbar5")
             assertThat(e.isEmpty).isEqualTo(false)
             // Act
-            val eNot = e.relative(":not")
+            val eNot = e.relative(":not", margin = 0)
             // Assert
             assertThat(eNot.isEmpty).isEqualTo(true)
             assertThat(eNot.isDummy).isEqualTo(false)
             // Act
-            val eNotNot = eNot.relative(":not")
+            val eNotNot = eNot.relative(":not", margin = 0)
             // Assert
             assertThat(eNotNot.isEmpty).isEqualTo(false)
             assertThat(eNotNot.isDummy).isEqualTo(true)
@@ -1041,7 +1041,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             TestElementCache.loadXml(XmlDataAndroid.SettingsTopScreen)
             val e = TestElementCache.select("Network & internet")
             // Act
-            val cell = e.relative(":cell")
+            val cell = e.relative(":cell", margin = 0)
             // Assert
             assertThat(cell.className).isEqualTo("android.widget.LinearLayout")
             assertThat(cell.boundsString).isEqualTo("[0,397][1080,597]")

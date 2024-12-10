@@ -2,14 +2,18 @@ package shirates.core.vision
 
 import org.json.JSONArray
 import org.json.JSONObject
-import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.Bounds
-import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
+import shirates.core.utility.image.Rectangle
+import java.awt.image.BufferedImage
 
 class RecognizeTextParser(
-    val content: String
+    val content: String,
+    val screenshotImage: BufferedImage?,
+    val screenshotFile: String?
 ) {
+    /**
+     * parse
+     */
     fun parse(): List<RecognizeTextObservation> {
 
         val jsonArray = try {
@@ -38,13 +42,13 @@ class RecognizeTextParser(
                 throw TestDriverException("Could not parse rect. `left, top, with, height` is expected.")
             }
 
-            val scale = PropertiesManager.screenshotScale
-            val ratio = if (isiOS) 3 else 1
-            val rect = Bounds()
-            rect.left = (values[0].toInt() / scale / ratio).toInt()
-            rect.top = (values[1].toInt() / scale / ratio).toInt()
-            rect.width = (values[2].toInt() / scale / ratio).toInt()
-            rect.height = (values[3].toInt() / scale / ratio).toInt()
+            val scale = 1.0
+
+            val left = (values[0].toInt() / scale).toInt()
+            val top = (values[1].toInt() / scale).toInt()
+            val width = (values[2].toInt() / scale).toInt()
+            val height = (values[3].toInt() / scale).toInt()
+            val rect = Rectangle(x = left, y = top, width = width, height = height)
 
             if (jsonObject.has("confidence").not()) {
                 throw TestDriverException("confidence not found. \n$json")
@@ -56,7 +60,18 @@ class RecognizeTextParser(
                 throw TestDriverException("Could not parse confidence. \n$json", cause = t)
             }
 
-            list.add(RecognizeTextObservation(text = text, rect = rect, confidence = confidence))
+            val observation = RecognizeTextObservation(
+                text = text,
+                confidence = confidence,
+                jsonString = content,
+                rectOnLocalRegionImage = null,
+                localRegionImage = null,
+                localRegionFile = null,
+                rectOnScreenshotImage = rect,
+                screenshotImage = screenshotImage,
+                screenshotFile = screenshotFile
+            )
+            list.add(observation)
         }
 
         return list

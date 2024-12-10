@@ -31,32 +31,44 @@ class RecognizeTextParserTest : UnitTest() {
 ]            
         """.trimIndent()
         // Act
-        val result = RecognizeTextParser(content = content).parse()
+        val result = RecognizeTextParser(content = content, screenshotImage = null, screenshotFile = null).parse()
         // Assert
         assertThat(result.count()).isEqualTo(3)
         run {
-            assertThat(result[0].text).isEqualTo("text1")
-            assertThat(result[0].rect.left).isEqualTo(17)
-            assertThat(result[0].rect.top).isEqualTo(1153)
-            assertThat(result[0].rect.width).isEqualTo(126)
-            assertThat(result[0].rect.height).isEqualTo(21)
-            assertThat(result[0].confidence).isEqualTo(0.3f)
+            val r = result[0]
+            assertThat(r.text).isEqualTo("text1")
+            assertThat(r.confidence).isEqualTo(0.3f)
+            assertThat(r.jsonString).isEqualTo(content)
+            assertThat(r.rectOnLocalRegionImage).isNull()
+            assertThat(r.localRegionImage).isNull()
+            assertThat(r.localRegionFile).isNull()
+            assertThat(r.rectOnScreenshotImage.toString()).isEqualTo("[17, 1153, 142, 1173](w=126, h=21)")
+            assertThat(r.screenshotImage).isNull()
+            assertThat(r.screenshotFile).isNull()
         }
         run {
-            assertThat(result[1].text).isEqualTo("text2")
-            assertThat(result[1].rect.left).isEqualTo(153)
-            assertThat(result[1].rect.top).isEqualTo(1155)
-            assertThat(result[1].rect.width).isEqualTo(17)
-            assertThat(result[1].rect.height).isEqualTo(19)
-            assertThat(result[1].confidence).isEqualTo(1.0f)
+            val r = result[1]
+            assertThat(r.text).isEqualTo("text2")
+            assertThat(r.confidence).isEqualTo(1.0f)
+            assertThat(r.jsonString).isEqualTo(content)
+            assertThat(r.rectOnLocalRegionImage).isNull()
+            assertThat(r.localRegionImage).isNull()
+            assertThat(r.localRegionFile).isNull()
+            assertThat(r.rectOnScreenshotImage.toString()).isEqualTo("[153, 1155, 169, 1173](w=17, h=19)")
+            assertThat(r.screenshotImage).isNull()
+            assertThat(r.screenshotFile).isNull()
         }
         run {
-            assertThat(result[2].text).isEqualTo("text3")
-            assertThat(result[2].rect.left).isEqualTo(465)
-            assertThat(result[2].rect.top).isEqualTo(1012)
-            assertThat(result[2].rect.width).isEqualTo(24)
-            assertThat(result[2].rect.height).isEqualTo(31)
-            assertThat(result[2].confidence).isEqualTo(0.3f)
+            val r = result[2]
+            assertThat(r.text).isEqualTo("text3")
+            assertThat(r.confidence).isEqualTo(0.3f)
+            assertThat(r.jsonString).isEqualTo(content)
+            assertThat(r.rectOnLocalRegionImage).isNull()
+            assertThat(r.localRegionImage).isNull()
+            assertThat(r.localRegionFile).isNull()
+            assertThat(r.rectOnScreenshotImage.toString()).isEqualTo("[465, 1012, 488, 1042](w=24, h=31)")
+            assertThat(r.screenshotImage).isNull()
+            assertThat(r.screenshotFile).isNull()
         }
     }
 }

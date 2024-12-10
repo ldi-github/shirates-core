@@ -167,6 +167,7 @@ object TestElementCache {
         throwsException: Boolean = true,
         selectContext: TestElement = rootElement,
         widgetOnly: Boolean = false,
+        relativeMargin: Int = 0,
         frame: Bounds? = null
     ): TestElement {
 
@@ -184,6 +185,7 @@ object TestElementCache {
                     relativeSelectors = selector.relativeSelectors,
                     scopeElements = allElements,
                     widgetOnly = widgetOnly,
+                    margin = relativeMargin,
                     frame = frame
                 )
             } else {
