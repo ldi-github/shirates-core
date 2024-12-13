@@ -90,8 +90,8 @@ class Segment(
      */
     fun canMerge(segment: Segment, margin: Int): Boolean {
 
-        val thisBounds = this.bounds
-        val thatBounds = segment.bounds
+        val thisBounds = this.boundsOnSegmentContainer
+        val thatBounds = segment.boundsOnSegmentContainer
 
         thatBounds.left = thatBounds.left - margin - 1
         if (thatBounds.left <= 0) thatBounds.left = 0
@@ -114,19 +114,19 @@ class Segment(
     }
 
     /**
-     * rect
+     * rectOnSegmentContainer
      */
-    val rect: Rectangle
+    val rectOnSegmentContainer: Rectangle
         get() {
             return Rectangle(x = left, y = top, width = width, height = height)
         }
 
     /**
-     * bounds
+     * boundsOnSegmentContainer
      */
-    val bounds: Bounds
+    val boundsOnSegmentContainer: Bounds
         get() {
-            return rect.toBoundsWithRatio()
+            return rectOnSegmentContainer.toBoundsWithRatio()
         }
 
     /**
@@ -140,9 +140,9 @@ class Segment(
         }
 
     /**
-     * boundOnScreenshotImage
+     * boundsOnScreenshotImage
      */
-    val boundOnScreenshotImage: Bounds
+    val boundsOnScreenshotImage: Bounds
         get() {
             return rectOnScreenshotImage.toBoundsWithRatio()
         }
@@ -150,18 +150,17 @@ class Segment(
     /**
      * createVisionElement
      */
-    fun createVisionElement(
-
-    ): VisionElement {
+    fun createVisionElement(): VisionElement {
 
         val v = VisionElement()
         v.segment = this
-        v.screenshotImage = screenshotImage
-        v.screenshotFile = screenshotFile
+        v.visionContext.localRegionImage = this.segmentImage
+        v.visionContext.localRegionFile = this.segmentImageFile
+        v.visionContext.rectOnLocalRegionImage = this.rectOnSegmentContainer
 
-
-        v.rect
-        v.rect
+        v.visionContext.screenshotImage = this.screenshotImage
+        v.visionContext.screenshotFile = this.screenshotFile
+        v.visionContext.rectOnScreenshotImage = this.rectOnScreenshotImage
 
         return v
     }

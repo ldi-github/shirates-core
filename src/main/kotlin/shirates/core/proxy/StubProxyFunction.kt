@@ -1,8 +1,6 @@
 package shirates.core.proxy
 
-import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriver.lastElement
-import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestEnvironmentException
@@ -24,28 +22,16 @@ fun dataPattern(
     if (TestMode.isNoLoadRun)
         return lastElement
 
-    val command = "dataPattern"
-    val context = TestDriverCommandContext(TestDriver.lastElement)
-    context.execOperateCommand(
-        command = command,
-        message = message,
-        subject = apiName,
-        arg1 = dataPatternName,
-        fireEvent = false,
-        log = false
-    ) {
-
-        val response = StubProxy.setDataPattern(urlPathOrApiName = apiName, dataPatternName = dataPatternName)
-        if (response.code != 200) {
-            throw TestEnvironmentException(
-                message(
-                    id = "failedToSetDataPattern",
-                    status = "${response.code}",
-                    arg1 = apiName,
-                    arg2 = dataPatternName
-                )
+    val response = StubProxy.setDataPattern(urlPathOrApiName = apiName, dataPatternName = dataPatternName)
+    if (response.code != 200) {
+        throw TestEnvironmentException(
+            message(
+                id = "failedToSetDataPattern",
+                status = "${response.code}",
+                arg1 = apiName,
+                arg2 = dataPatternName
             )
-        }
+        )
     }
 
     return lastElement
@@ -74,21 +60,14 @@ fun getDataPattern(
  */
 fun resetDataPattern(): TestElement {
 
+    TestLog.describe(message(id = "resetDataPattern"))
+
     if (TestMode.isNoLoadRun)
-        lastElement
+        return lastElement
 
-    val command = "resetDataPattern"
-    val context = TestDriverCommandContext(TestDriver.lastElement)
-    context.execOperateCommand(
-        command = command,
-        message = message(id = command),
-        fireEvent = false
-    ) {
-
-        val response = StubProxy.resetDataPattern()
-        if (response.code != 200) {
-            throw TestEnvironmentException(message(id = "httpErrorInResponseFromStubTool", arg1 = "${response.code}"))
-        }
+    val response = StubProxy.resetDataPattern()
+    if (response.code != 200) {
+        throw TestEnvironmentException(message(id = "httpErrorInResponseFromStubTool", arg1 = "${response.code}"))
     }
 
     return lastElement

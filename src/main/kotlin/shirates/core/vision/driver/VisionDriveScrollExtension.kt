@@ -345,7 +345,6 @@ internal fun VisionDrive.doUntilScrollStopCore(
         try {
             for (i in 1..maxLoopCount) {
                 scroll()
-//                TestDriver.refreshCache()
 
                 if (actionFunc != null) {
                     val result = actionFunc()
@@ -368,7 +367,7 @@ internal fun VisionDrive.doUntilScrollStopCore(
         }
     }
 
-    return lastVisionElement
+    return lastElement
 }
 
 internal fun VisionDrive.edgeElementFound(expressions: List<String>): Boolean {
@@ -386,6 +385,39 @@ internal fun VisionDrive.edgeElementFound(expressions: List<String>): Boolean {
     return false
 }
 
+internal fun VisionDrive.withScroll(
+    direction: ScrollDirection,
+    rect: Rectangle = lastScreenshotImage!!.rect,
+    scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
+    scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
+    scrollMaxCount: Int = testContext.scrollMaxCount,
+    scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
+    proc: () -> Unit
+): VisionElement {
+
+    val command = "withScroll${direction}"
+    val message = message(id = command)
+    val context = TestDriverCommandContext(null)
+    context.execWithScroll(
+        command = command,
+        scrollDirection = direction,
+        bounds = rect.toBoundsWithRatio(),
+        scrollDurationSeconds = scrollDurationSeconds,
+        scrollIntervalSeconds = scrollIntervalSeconds,
+        scrollStartMarginRatio = scrollStartMarginRatio,
+        scrollEndMarginRatio = scrollEndMarginRatio,
+        scrollMaxCount = scrollMaxCount,
+        scrollToEdgeBoost = scrollToEdgeBoost,
+        message = message
+    ) {
+        proc()
+    }
+
+    return lastElement
+}
+
 /**
  * withScrollDown
  */
@@ -400,25 +432,17 @@ fun VisionDrive.withScrollDown(
     proc: () -> Unit
 ): VisionElement {
 
-    val command = "withScrollDown"
-    val message = message(id = command)
-    val context = TestDriverCommandContext(null)
-    context.execWithScroll(
-        command = command,
-        scrollDirection = ScrollDirection.Down,
-        bounds = rect.toBoundsWithRatio(),
+    return withScroll(
+        direction = ScrollDirection.Down,
+        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
-        message = message
-    ) {
-        proc()
-    }
-
-    return lastElement
+        proc = proc
+    )
 }
 
 /**
@@ -435,25 +459,17 @@ fun VisionDrive.withScrollUp(
     proc: () -> Unit
 ): VisionElement {
 
-    val command = "withScrollUp"
-    val message = message(id = command)
-    val context = TestDriverCommandContext(null)
-    context.execWithScroll(
-        command = command,
-        scrollDirection = ScrollDirection.Up,
-        bounds = rect.toBoundsWithRatio(),
+    return withScroll(
+        direction = ScrollDirection.Up,
+        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
-        message = message
-    ) {
-        proc()
-    }
-
-    return lastElement
+        proc = proc
+    )
 }
 
 /**
@@ -470,25 +486,17 @@ fun VisionDrive.withScrollRight(
     proc: () -> Unit
 ): VisionElement {
 
-    val command = "withScrollRight"
-    val message = message(id = command)
-    val context = TestDriverCommandContext(null)
-    context.execWithScroll(
-        command = command,
-        scrollDirection = ScrollDirection.Right,
-        bounds = rect.toBoundsWithRatio(),
+    return withScroll(
+        direction = ScrollDirection.Right,
+        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
-        message = message
-    ) {
-        proc()
-    }
-
-    return lastElement
+        proc = proc
+    )
 }
 
 /**
@@ -505,25 +513,17 @@ fun VisionDrive.withScrollLeft(
     proc: () -> Unit
 ): VisionElement {
 
-    val command = "withScrollLeft"
-    val message = message(id = command)
-    val context = TestDriverCommandContext(null)
-    context.execWithScroll(
-        command = command,
-        scrollDirection = ScrollDirection.Left,
-        bounds = rect.toBoundsWithRatio(),
+    return withScroll(
+        direction = ScrollDirection.Left,
+        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
-        message = message
-    ) {
-        proc()
-    }
-
-    return lastElement
+        proc = proc
+    )
 }
 
 /**

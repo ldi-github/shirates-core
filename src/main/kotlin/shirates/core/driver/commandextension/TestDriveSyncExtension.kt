@@ -23,7 +23,7 @@ fun TestDrive.useCache(func: () -> Unit): TestElement {
         TestLog.info("} useCache(${TestLog.nextLineNo})")
     }
 
-    return TestDriver.it
+    return lastElement
 }
 
 /**
@@ -45,7 +45,7 @@ fun TestDrive.suppressCache(func: () -> Unit): TestElement {
         TestLog.info("} suppressCache(${TestLog.nextLineNo})")
     }
 
-    return TestDriver.it
+    return lastElement
 }
 
 /**
@@ -55,7 +55,7 @@ fun TestDrive.enableCache(): TestElement {
 
     TestLog.info("enableCache")
     testContext.enableCache = true
-    return TestDriver.it
+    return lastElement
 }
 
 /**
@@ -65,14 +65,17 @@ fun TestDrive.disableCache(): TestElement {
 
     TestLog.info("disableCache")
     testContext.enableCache = false
-    return TestDriver.it
+    return lastElement
 }
 
+/**
+ * switchScreen
+ */
 fun TestDrive.switchScreen(screenName: String): TestElement {
 
     TestLog.info("switchScreen($screenName)")
     TestDriver.switchScreen(screenName = screenName)
-    return TestDriver.lastElement
+    return lastElement
 }
 
 /**

@@ -1,9 +1,9 @@
 package shirates.core.vision
 
-import com.google.common.io.Files
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.json.JSONArray
 import org.json.JSONObject
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.commandextension.screenshot
 import shirates.core.driver.testDrive
 import shirates.core.logging.CodeExecutionContext
@@ -15,8 +15,9 @@ import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.SegmentUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
-import shirates.core.vision.driver.VisionElementCache
+import shirates.core.vision.driver.VisionContext
 import java.io.FileNotFoundException
+import java.nio.file.Files
 
 object SrvisionProxy {
 
@@ -26,8 +27,13 @@ object SrvisionProxy {
      * callTextRecognizer
      */
     fun callTextRecognizer(
-        inputFile: String = CodeExecutionContext.lastScreenshotFile,
-    ) {
+        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
+        language: String? = PropertiesManager.logLanguage
+    ): VisionContext {
+
+        if (inputFile == null) {
+            throw IllegalArgumentException("inputFile is null.")
+        }
 
         if (CodeExecutionContext.lastScreenshotName.isBlank()) {
             testDrive.screenshot()
@@ -41,14 +47,29 @@ object SrvisionProxy {
             name = "input",
             value = inputFile
         )
+        if (language.isNullOrBlank().not()) {
+            urlBuilder.addQueryParameter(
+                name = "language",
+                value = language
+            )
+        }
         val url = urlBuilder.build()
         val result = getResponseBody(url)
         lastResult = result
 
         TestLog.directoryForLog.resolve("${TestLog.currentLineNo}.json").toFile().writeText(result)
-        VisionElementCache.loadTextRecognizerJson(json = result)
+        val context = VisionContext(
+            screenshotFile = CodeExecutionContext.lastScreenshotFile,
+        )
+        context.loadTextRecognizerResult(
+            inputFile = inputFile,
+            language = language,
+            jsonString = result
+        )
 
         sw.printInfo()
+
+        return context
     }
 
     /**
@@ -134,8 +155,8 @@ object SrvisionProxy {
         val primaryCandidateImageFile =
             segmentContainer.outputDirectory.toPath().resolve("${result.primaryCandidate.file}")
         Files.copy(
-            primaryCandidateImageFile.toFile(),
-            inputDirectory.toPath().resolve("candidate_${result.primaryCandidate.rectangle}.png").toFile()
+            primaryCandidateImageFile,
+            inputDirectory.toPath().resolve("candidate_${result.primaryCandidate.rectangle}.png")
         )
 
         sw.stop()
@@ -155,6 +176,10 @@ object SrvisionProxy {
     ): ClassificationResult {
 
         val sw = StopWatch("ImageClassifier")
+
+        if (Files.exists(inputFile.toPath()).not()) {
+            throw FileNotFoundException("Input file not found. (inputFile=$inputFile)")
+        }
 
         val urlBuilder = "http://127.0.0.1:8081/ImageClassifier".toHttpUrlOrNull()!!
             .newBuilder()

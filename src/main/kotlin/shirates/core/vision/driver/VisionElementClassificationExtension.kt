@@ -1,7 +1,6 @@
 package shirates.core.vision.driver
 
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
@@ -15,7 +14,7 @@ fun VisionElement.classify(
     }
 
     val result = SrvisionProxy.callImageClassifier(
-        inputFile = TestLog.directoryForLog.resolve(this.imageFile!!).toString(),
+        inputFile = this.imageFile!!,
         mlmodelFile = mlmodelFile,
     )
 

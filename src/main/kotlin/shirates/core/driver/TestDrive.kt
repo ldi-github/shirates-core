@@ -3,7 +3,15 @@ package shirates.core.driver
 interface TestDrive : Drive {
 
     /**
-     * Returns last accessed element
+     * it
+     */
+    val it: TestElement
+        get() {
+            return TestDriver.lastElement
+        }
+
+    /**
+     * lastElement
      */
     var lastElement: TestElement
         get() {

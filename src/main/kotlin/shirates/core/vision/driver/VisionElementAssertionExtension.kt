@@ -4,6 +4,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.commandextension.checkImageLabelContains
 
 /**
  * checkIsON

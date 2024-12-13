@@ -39,7 +39,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
     var testFunctionWatch = StopWatch()
 
     companion object {
-        var uiTest: UITest? = null
+        var uiTestBase: UITestBase? = null
         var failOfTestContext = false
         var failAnnotation: Fail? = null
         var deletedAnnotation: Deleted? = null
@@ -50,27 +50,27 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         val isClassManual: Boolean
             get() {
-                return uiTest?.isClassManual ?: false
+                return uiTestBase?.isClassManual ?: false
             }
         val isMethodManual: Boolean
             get() {
-                return uiTest?.isMethodManual ?: false
+                return uiTestBase?.isMethodManual ?: false
             }
         val isSkippingScenario: Boolean
             get() {
-                return uiTest?.isSkippingScenario ?: false
+                return uiTestBase?.isSkippingScenario ?: false
             }
         val isSkippingCase: Boolean
             get() {
-                return uiTest?.isSkippingCase ?: false
+                return uiTestBase?.isSkippingCase ?: false
             }
         val isManualingScenario: Boolean
             get() {
-                return uiTest?.isManualingScenario ?: false
+                return uiTestBase?.isManualingScenario ?: false
             }
         val isManualingCase: Boolean
             get() {
-                return uiTest?.isManualingCase ?: false
+                return uiTestBase?.isManualingCase ?: false
             }
     }
 
@@ -115,8 +115,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         ParameterRepository.write("sheetName", sheetName)
         ParameterRepository.write("logLanguage", TestLog.logLanguage)
 
-        // can not get UITest instance at this point.
-//        uiTest = getUITest(context)
+        // can not get UITestBase instance at this point.
+//        uiTestBase = getUITestBase(context)
 
     }
 
@@ -167,10 +167,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.resetTestScenarioInfo()
         TestDriver.clearContext()
 
-        uiTest = getUITest(context)
+        uiTestBase = getUITest(context)
 
-        if (uiTest != null) {
-            val testBase = uiTest!!
+        if (uiTestBase != null) {
+            val testBase = uiTestBase!!
             testBase.currentTestMethodName = testMethodName
             testBase.currentDisplayName = displayName
             testBase.currentOrder = orderValue
@@ -187,7 +187,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
             // print config
             if (TestLog.configPrinted.not()) {
-                val profile = uiTest!!.testProfile!!
+                val profile = uiTestBase!!.testProfile
                 val testConfig = profile.testConfig
                 ParameterRepository.write("testrun", PropertiesManager.testrunFile)
                 if (profile.testConfigName.isNullOrBlank().not() && testConfig?.testConfigFile.isNullOrBlank().not()) {
@@ -265,11 +265,11 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         testContext.saveState()
         try {
-            uiTest?.beforeEach(context)
+            uiTestBase?.beforeEach(context)
         } catch (t: Throwable) {
             if (PropertiesManager.enableRerunScenario) {
                 TestLog.warn("$t ${t.stackTraceToString()}")
-                uiTest?.beforeEach(context)
+                uiTestBase?.beforeEach(context)
             } else {
                 TestLog.error("$t ${t.stackTraceToString()}")
                 throw t
@@ -294,7 +294,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.stepNo = null
         TestLog.resetTestScenarioInfo()
 
-        uiTest?.afterEach(context)
+        uiTestBase?.afterEach(context)
 
         if (failAnnotation != null) {
             val ex = TestFailException(message = failAnnotation!!.message)
@@ -311,7 +311,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         testFunctionWatch.stop()
         val duration = "%.1f".format(testFunctionWatch.elapsedSeconds)
         TestLog.info(message(id = "testFunctionExecuted", arg1 = duration))
-        TestLog.info("End of ${uiTest?.TestFunctionDescription}")
+        TestLog.info("End of ${uiTestBase?.TestFunctionDescription}")
 
         if (hasNoException && scenarioLines.any { it.logType == LogType.SCENARIO }.not()) {
             val ex = TestAbortedException("scenario not implemented.")
@@ -325,7 +325,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
      */
     override fun afterAll(context: ExtensionContext?) {
 
-        uiTest?.afterAll(context)
+        uiTestBase?.afterAll(context)
 
         if (CpuLoadService.thread != null) {
             CpuLoadService.stopService()
@@ -378,7 +378,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         val duration = "%.1f".format(testClassWatch.elapsedSeconds)
         TestLog.info(message(id = "testClassExecuted", arg1 = duration))
 
-        uiTest?.finally()
+        uiTestBase?.finally()
     }
 
     /**
@@ -395,9 +395,9 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
     }
 
     /**
-     * getUITest
+     * getUITestBase
      */
-    fun getUITest(context: ExtensionContext?): UITest? {
+    fun getUITest(context: ExtensionContext?): UITestBase? {
 
         if (context == null || context.testInstance == null) {
             return null
@@ -407,7 +407,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         }
         val testInstance = context.testInstance.get()
 
-        if (testInstance is UITest) {
+        if (testInstance is UITestBase) {
             testInstance.extensionContext = context
             return testInstance
         }

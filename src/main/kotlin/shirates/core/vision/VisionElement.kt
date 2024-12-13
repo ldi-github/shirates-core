@@ -6,7 +6,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
-import shirates.core.utility.image.cropImage
+import shirates.core.vision.driver.VisionContext
 import java.awt.image.BufferedImage
 
 class VisionElement() : VisionDrive {
@@ -22,6 +22,11 @@ class VisionElement() : VisionDrive {
     }
 
     /**
+     * visionContext
+     */
+    var visionContext: VisionContext = VisionContext(null)
+
+    /**
      * selector
      */
     var selector: Selector? = null
@@ -29,57 +34,43 @@ class VisionElement() : VisionDrive {
     /**
      * screenshotImage
      */
-    var screenshotImage: BufferedImage? = null
+    val screenshotImage: BufferedImage?
         get() {
-            if (field != null) {
-                return field
-            }
-            if (segment != null) {
-                field = segment!!.segmentImage
-                return field
-            }
-            if (observation != null) {
-                field = observation!!.screenshotImage
-                return field
-            }
-            return field
+            return visionContext.screenshotImage
         }
 
     /**
      * screenshotFile
      */
-    var screenshotFile: String? = null
+    val screenshotFile: String?
         get() {
-            if (field != null) {
-                return field
-            }
-            if (segment != null) {
-                field = segment!!.screenshotFile
-                return field
-            }
-            if (observation != null) {
-                field = observation!!.screenshotFile
-                return field
-            }
-            return field
+            return visionContext.screenshotFile
         }
 
     /**
      * segment
      */
     var segment: Segment? = null
-        set(value) {
-            field = value
-            _rect = null
-        }
 
     /**
      * observation
      */
     var observation: VisionObservation? = null
-        set(value) {
-            field = value
-            _rect = null
+
+    /**
+     * candidate
+     */
+    val candidate: Candidate?
+        get() {
+            return observation as? Candidate
+        }
+
+    /**
+     * textObservation
+     */
+    val textObservation: RecognizeTextObservation?
+        get() {
+            return observation as? RecognizeTextObservation
         }
 
     /**
@@ -97,17 +88,8 @@ class VisionElement() : VisionDrive {
      */
     val rect: Rectangle
         get() {
-            if (_rect != null) {
-                return _rect!!
-            }
-            if (segment != null) {
-                _rect = segment!!.rectOnScreenshotImage
-            } else if (observation != null) {
-                _rect = observation!!.rectOnScreenshotImage
-            }
-            return _rect ?: Rectangle()
+            return visionContext.rectOnScreenshotImage ?: Rectangle()
         }
-    private var _rect: Rectangle? = null
 
     /**
      * bounds
@@ -123,13 +105,7 @@ class VisionElement() : VisionDrive {
     var image: BufferedImage? = null
         get() {
             if (field == null) {
-                if (segment != null) {
-                    field = segment!!.segmentImage
-                } else if (observation != null) {
-                    field = observation!!.image
-                } else if (screenshotImage != null && this.rect.area > 0) {
-                    field = screenshotImage!!.cropImage(this.rect)
-                }
+                return visionContext.localRegionImage
             }
             return field
         }
@@ -140,13 +116,7 @@ class VisionElement() : VisionDrive {
     var imageFile: String? = null
         get() {
             if (field == null) {
-                if (segment != null) {
-                    field = segment!!.segmentImageFile
-                } else if (observation != null) {
-                    field = observation!!.localRegionFile
-                } else {
-                    field = screenshotFile
-                }
+                return visionContext.localRegionFile
             }
             return field
         }
@@ -156,7 +126,7 @@ class VisionElement() : VisionDrive {
      */
     val isEmpty: Boolean
         get() {
-            return image == null
+            return visionContext.rectOnScreenshotImage == null
         }
 
     /**
@@ -229,30 +199,32 @@ class VisionElement() : VisionDrive {
     fun clone(): VisionElement {
 
         val v = VisionElement()
+        v.visionContext = visionContext.clone()
         v.selector = selector
-        v.screenshotImage = screenshotImage
-        v.screenshotFile = screenshotFile
         v.segment = segment
         v.observation = observation
-//        v.lastError = lastError
-//        v.lastResult = lastResult
         return v
     }
 
     /**
-     * refreshImage
+     * createFromScreenshot
      */
     fun createFromScreenshot(): VisionElement {
 
         val v = this.clone()
-        v.screenshotImage = CodeExecutionContext.lastScreenshotImage
-        v.screenshotFile = CodeExecutionContext.lastScreenshotFile
+        v.visionContext.refreshWithLastScreenshot()
 
-        if (rect.isEmpty.not()) {
-            v.image = screenshotImage?.cropImage(rect)
-        }
+        return v
+    }
 
-        return this
+    /**
+     * recognizeText
+     */
+    fun recognizeText(): String {
+
+        this.visionContext.recognizeText()
+
+        return visionContext.joinText()
     }
 
     override fun toString(): String {

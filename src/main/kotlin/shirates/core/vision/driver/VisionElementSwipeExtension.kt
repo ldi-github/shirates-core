@@ -1,5 +1,6 @@
 package shirates.core.vision.driver
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
@@ -15,6 +16,9 @@ import shirates.core.vision.driver.branchextension.lastScreenshotImage
  */
 fun VisionElement.swipeTo(
     expression: String,
+    language: String = PropertiesManager.logLanguage,
+    rect: Rectangle = lastScreenshotImage!!.rect,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
@@ -29,7 +33,15 @@ fun VisionElement.swipeTo(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject, arg1 = expression) {
 
-        v = detectCore(selector = sel)
+        v = detectCore(
+            selector = sel,
+            language = language,
+            rect = rect,
+            waitSeconds = waitSeconds,
+            allowScroll = false,
+            swipeToCenter = false,
+            throwsException = false
+        )
 
         swipeElementToElement(
             startElement = this,

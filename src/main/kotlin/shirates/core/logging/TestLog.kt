@@ -61,7 +61,7 @@ object TestLog {
      */
     val currentTestMethodName: String
         get() {
-            return UITestCallbackExtension.uiTest?.currentTestMethodName ?: ""
+            return UITestCallbackExtension.uiTestBase?.currentTestMethodName ?: ""
         }
 
     /**

@@ -69,6 +69,6 @@ fun VisionElement.right(
     val v = segmentContainer.visionElements.firstOrNull() ?: VisionElement.emptyElement
     v.selector = this.selector?.getChainedSelector(":right")
 
-    lastVisionElement = v
+    lastElement = v
     return v
 }

@@ -437,7 +437,9 @@ object TestDriver {
         }
         set(value) {
             field = value
-            fireScreenHandler(screenName = value)
+            if (testContext.enableCache) {
+                fireScreenHandler(screenName = value)
+            }
         }
 
     internal fun getOverlayElements(): MutableList<TestElement> {
@@ -488,7 +490,7 @@ object TestDriver {
     fun fireIrregularHandler(force: Boolean = false) {
 
         if (force.not()) {
-            if (isFiringIrregularHandler || testContext.enableIrregularHandler.not() || TestMode.isNoLoadRun || isInitialized.not()) {
+            if (isFiringIrregularHandler || testContext.enableIrregularHandler.not() || TestMode.isNoLoadRun || isInitialized.not() || testContext.enableCache.not()) {
                 return
             }
         }
@@ -1794,7 +1796,8 @@ object TestDriver {
         force: Boolean = false,
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
-        withXmlSource: Boolean = TestLog.enableXmlSourceDump
+        withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        log: Boolean = true
     ): TestDriver {
 
         if (!force && !testContext.manualScreenshot) {
@@ -1806,16 +1809,18 @@ object TestDriver {
             force = force,
             onChangedOnly = onChangedOnly,
             filename = filename,
-            withXmlSource = withXmlSource
+            withXmlSource = withXmlSource,
+            log = log
         )
     }
 
     internal fun autoScreenshot(
         force: Boolean = false,
-        sync: Boolean = true,
+        sync: Boolean = testContext.useCache,
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
-        withXmlSource: Boolean = TestLog.enableXmlSourceDump
+        withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        log: Boolean = true
     ) {
         if (testContext.autoScreenshot.not()) {
             return
@@ -1826,7 +1831,8 @@ object TestDriver {
             sync = sync,
             onChangedOnly = onChangedOnly,
             filename = filename,
-            withXmlSource = withXmlSource
+            withXmlSource = withXmlSource,
+            log = log
         )
     }
 
@@ -1835,7 +1841,8 @@ object TestDriver {
         sync: Boolean = testContext.useCache,
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
-        withXmlSource: Boolean = TestLog.enableXmlSourceDump
+        withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        log: Boolean = true
     ): TestDriver {
 
         if (TestMode.isNoLoadRun) {
@@ -1931,14 +1938,16 @@ object TestDriver {
             screenshotException = t
         }
 
-        val screenshotLine = TestLog.write(
-            message = "screenshot",
-            logType = LogType.SCREENSHOT,
-            scriptCommand = "screenshot"
-        )
-        screenshotLine.screenshot = screenshotFileName
-        screenshotLine.lastScreenshot = screenshotFileName
-        screenshotLine.subject = screenshotFileName
+        if (log) {
+            val screenshotLine = TestLog.write(
+                message = "screenshot",
+                logType = LogType.SCREENSHOT,
+                scriptCommand = "screenshot"
+            )
+            screenshotLine.screenshot = screenshotFileName
+            screenshotLine.lastScreenshot = screenshotFileName
+            screenshotLine.subject = screenshotFileName
+        }
 
         if (withXmlSource && testContext.useCache) {
             val fileName = screenshotFileName.replace(".png", ".xml")
@@ -2413,8 +2422,8 @@ object TestDriver {
      * tapAppIconCore
      */
     fun tapAppIconCore(
-        appIconName: String = shirates.core.driver.testContext.appIconName,
-        tapAppIconMethod: TapAppIconMethod = shirates.core.driver.testContext.tapAppIconMethod
+        appIconName: String = testContext.appIconName,
+        tapAppIconMethod: TapAppIconMethod = testContext.tapAppIconMethod
     ): TestElement {
 
         when (tapAppIconMethod) {
@@ -2448,11 +2457,11 @@ object TestDriver {
         appNameOrAppIdOrActivityName: String,
         fallBackToTapAppIcon: Boolean,
         onLaunchHandler: (() -> Unit)?,
-        sync: Boolean
+        sync: Boolean = testContext.enableCache
     ) {
         if (appNameOrAppIdOrActivityName.contains("/")) {
             val activityName = appNameOrAppIdOrActivityName
-            launchByShellCore(packageOrBundleIdOrActivity = activityName)
+            launchByShellCore(packageOrBundleIdOrActivity = activityName, sync = sync)
             return
         }
 
@@ -2505,7 +2514,7 @@ object TestDriver {
 
     internal fun launchByShellCore(
         packageOrBundleIdOrActivity: String,
-        sync: Boolean = true,
+        sync: Boolean,
         onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
     ): TestElement {
 
@@ -2559,41 +2568,44 @@ object TestDriver {
             } catch (t: Throwable) {
                 TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
 
-                SyncUtility.doUntilTrue(
-                    waitSeconds = testContext.waitSecondsForLaunchAppComplete,
-                    maxLoopCount = 2,
-                ) {
-                    /**
-                     * Reset Appium session
-                     */
-                    if (isAndroid) {
-                        AndroidDeviceUtility.reboot(testContext.profile)
-                    } else if (isiOS) {
-                        IosDeviceUtility.terminateSpringBoardByUdid(udid = testContext.profile.udid)
-                    }
-                    createAppiumDriver()
-
-                    /**
-                     * Retry launchApp
-                     */
-                    val retry =
-                        try {
-                            TestDriveObjectIos.launchIosAppByShell(
-                                udid = testContext.profile.udid,
-                                bundleId = bundleId,
-                                log = true
-                            )
-                            false
-                        } catch (t: Throwable) {
-                            if (PropertiesManager.enableWarnOnRetryError) {
-                                TestLog.warn("Error: $t")
-                            }
-                            if (PropertiesManager.enableRetryLog) {
-                                TestLog.info("Retrying launching app. (bundleId=$bundleId)")
-                            }
-                            true
+                if (sync) {
+                    SyncUtility.doUntilTrue(
+                        waitSeconds = testContext.waitSecondsForLaunchAppComplete,
+                        maxLoopCount = 2,
+                    ) {
+                        /**
+                         * Reset Appium session
+                         */
+                        if (isAndroid) {
+                            AndroidDeviceUtility.reboot(testContext.profile)
+                        } else if (isiOS) {
+                            IosDeviceUtility.terminateSpringBoardByUdid(udid = testContext.profile.udid)
                         }
-                    retry
+                        createAppiumDriver()
+
+                        /**
+                         * Retry launchApp
+                         */
+                        val retry =
+                            try {
+                                TestDriveObjectIos.launchIosAppByShell(
+                                    udid = testContext.profile.udid,
+                                    bundleId = bundleId,
+                                    sync = sync,
+                                    log = true
+                                )
+                                false
+                            } catch (t: Throwable) {
+                                if (PropertiesManager.enableWarnOnRetryError) {
+                                    TestLog.warn("Error: $t")
+                                }
+                                if (PropertiesManager.enableRetryLog) {
+                                    TestLog.info("Retrying launching app. (bundleId=$bundleId)")
+                                }
+                                true
+                            }
+                        retry
+                    }
                 }
             }
         }

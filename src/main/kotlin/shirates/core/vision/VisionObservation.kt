@@ -4,15 +4,17 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.cropImage
+import shirates.core.vision.driver.VisionContext
 import java.awt.image.BufferedImage
 
 open class VisionObservation(
     open val rectOnLocalRegionImage: Rectangle? = null,
-    open var localRegionImage: BufferedImage? = null,
     open var localRegionFile: String? = null,
+    open var localRegionImage: BufferedImage? = null,
+
     open var rectOnScreenshotImage: Rectangle? = null,
-    open var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
     open var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
+    open var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
 ) {
     private var _image: BufferedImage? = null
 
@@ -53,10 +55,20 @@ open class VisionObservation(
      */
     fun createVisionElement(): VisionElement {
 
+        val c = VisionContext(
+            screenshotFile = screenshotFile,
+        )
+        c.localRegionFile = localRegionFile
+        c.localRegionImage = localRegionImage
+        c.rectOnLocalRegionImage = rectOnLocalRegionImage
+
+        c.screenshotFile = screenshotFile
+        c.screenshotImage = screenshotImage
+        c.rectOnScreenshotImage = rectOnScreenshotImage
+
         val v = VisionElement()
+        v.visionContext = c
         v.observation = this
-        v.screenshotImage = this.screenshotImage
-        v.screenshotFile = this.screenshotFile
         return v
     }
 }

@@ -7,6 +7,7 @@ import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestElement
 import shirates.core.driver.testContext
 import shirates.core.utility.image.CropInfo
+import shirates.core.vision.driver.VisionContext
 import java.awt.image.BufferedImage
 import java.util.*
 
@@ -210,13 +211,19 @@ object CodeExecutionContext {
      * lastScreenshotName
      */
     var lastScreenshotName: String = ""
-        internal set
+        internal set(value) {
+            field = value
+            VisionContext.current.clear()
+        }
 
     /**
      * lastScreenshotFile
      */
-    val lastScreenshotFile: String
+    val lastScreenshotFile: String?
         get() {
+            if (lastScreenshotName.isBlank()) {
+                return null
+            }
             return TestLog.directoryForLog.resolve(lastScreenshotName).toString()
         }
 
@@ -224,6 +231,10 @@ object CodeExecutionContext {
      * lastScreenshotImage
      */
     var lastScreenshotImage: BufferedImage? = null
+        set(value) {
+            field = value
+            VisionContext.current.clear()
+        }
 
     /**
      * lastScreenshotTime

@@ -38,6 +38,7 @@ class TemplateMatchingResult(
                     throw t
                 }
             }
+            _candidates.sortBy { it.distance }
             return _candidates
         }
 

@@ -1,9 +1,9 @@
 package shirates.core.driver.commandextension
 
-import shirates.core.driver.TestDrive
+import shirates.core.driver.Drive
 import shirates.core.driver.testContext
 
-fun <T> TestDrive.withContext(
+fun <T> Drive.withContext(
     useCache: Boolean? = null,
     func: () -> T
 ): T {

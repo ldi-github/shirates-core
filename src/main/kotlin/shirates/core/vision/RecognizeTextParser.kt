@@ -3,14 +3,16 @@ package shirates.core.vision
 import org.json.JSONArray
 import org.json.JSONObject
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.utility.image.Rectangle
 import java.awt.image.BufferedImage
 
 class RecognizeTextParser(
     val content: String,
-    val screenshotImage: BufferedImage?,
-    val screenshotFile: String?
+    val screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
+    val screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage
 ) {
+
     /**
      * parse
      */
@@ -59,6 +61,7 @@ class RecognizeTextParser(
             } catch (t: Throwable) {
                 throw TestDriverException("Could not parse confidence. \n$json", cause = t)
             }
+
 
             val observation = RecognizeTextObservation(
                 text = text,

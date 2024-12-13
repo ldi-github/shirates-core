@@ -4,13 +4,17 @@ import ifCanDetect
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ios
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
+import shirates.core.driver.commandextension.memoTextAs
+import shirates.core.driver.commandextension.thisIs
 import shirates.core.vision.driver.*
+import shirates.core.vision.driver.branchextension.ios
+import shirates.core.vision.driver.commandextension.appIs
+import shirates.core.vision.driver.commandextension.readMemo
+import shirates.core.vision.driver.commandextension.screenIs
+import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
-class iOSSettingsDemo : UITest() {
+class iOSSettingsDemo : VisionTest() {
 
     @Test
     @DisplayName("[Reset Local Data on Next Launch] exists on [Developer screen]")
@@ -19,17 +23,16 @@ class iOSSettingsDemo : UITest() {
         scenario {
             case(1) {
                 condition {
-                    disableCache()
-                    vision.screenIs("[iOS Settings Top Screen]")
+                    it.screenIs("[iOS Settings Top Screen]")
                 }.action {
-                    vision.tapWithScrollDown("Developer")
+                    it.tapWithScrollDown("Developer")
                 }.expectation {
-                    vision.screenIs("[Developer Screen]")
+                    it.screenIs("[Developer Screen]")
                 }
             }
             case(2) {
                 expectation {
-                    vision.existWithScrollDown("Reset Local Data on Next Launch")
+                    it.existWithScrollDown("Reset Local Data on Next Launch")
                 }
             }
 
@@ -44,18 +47,18 @@ class iOSSettingsDemo : UITest() {
             case(1) {
                 ios {
                     condition {
-                        disableCache()
-                        vision.screenIs("[iOS Settings Top Screen]")
+                        it.screenIs("[iOS Settings Top Screen]")
                             .tap("General")
                             .tap("About")
                     }.action {
                         screenshot()
-                        vision
+                        it
                             .ifCanDetect("iOS Version") {
                                 it.right(segmentMargin = 5)
                                     .recognizeText()
                                     .memoTextAs("iOS Version")
-                            }.ifCanDetect("Model Name") {
+                            }
+                            .ifCanDetect("Model Name") {
                                 it.right(segmentMargin = 5)
                                     .recognizeText()
                                     .memoTextAs("Model Name")

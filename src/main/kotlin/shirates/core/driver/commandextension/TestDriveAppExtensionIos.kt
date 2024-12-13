@@ -12,7 +12,7 @@ import shirates.core.utility.sync.SyncUtility
 internal fun TestDriveObjectIos.launchIosAppByShell(
     udid: String,
     bundleId: String,
-    sync: Boolean = true,
+    sync: Boolean,
     onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
     log: Boolean = PropertiesManager.enableShellExecLog
 ): TestElement {
@@ -113,9 +113,10 @@ internal fun TestDriveObjectIos.terminateIosApp(
 internal fun TestDriveObjectIos.restartIosApp(
     udid: String,
     bundleId: String,
+    sync: Boolean,
     log: Boolean = PropertiesManager.enableShellExecLog
 ): TestElement {
 
     terminateIosApp(udid = udid, bundleId = bundleId, log = log)
-    return launchIosAppByShell(udid = udid, bundleId = bundleId, log = log)
+    return launchIosAppByShell(udid = udid, bundleId = bundleId, sync = sync, log = log)
 }

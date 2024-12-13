@@ -6,6 +6,14 @@ import shirates.core.driver.TestDriver
 interface VisionDrive : Drive {
 
     /**
+     * it
+     */
+    val it: VisionElement
+        get() {
+            return TestDriver.lastVisionElement
+        }
+
+    /**
      * lastElement
      */
     var lastElement: VisionElement

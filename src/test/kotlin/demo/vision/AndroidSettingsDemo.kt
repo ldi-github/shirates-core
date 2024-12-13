@@ -2,46 +2,48 @@ package demo.vision
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.disableCache
-import shirates.core.testcode.UITest
 import shirates.core.vision.driver.*
+import shirates.core.vision.driver.commandextension.screenIs
+import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class AndroidSettingsDemo : UITest() {
+class AndroidSettingsDemo : VisionTest() {
 
     @Test
     fun airplaneModeSwitch() {
 
         scenario {
             case(1) {
-                disableCache()
-
                 condition {
-                    vision.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android Settings Top Screen]")
                 }.action {
-                    vision.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
-                    vision.screenIs("[Network & internet Screen]")
+                    it.screenIs("[Network & internet Screen]")
+                        .exist("Internet")
+                        .exist("AndroidWifi")
+                        .exist("SIMs")
+                        .exist("T-Mobile")
                 }
             }
             case(2) {
                 condition {
-                    vision.detect("Airplane mode")
+                    it.detect("Airplane mode")
                         .right()
                         .checkIsOFF()
                 }.action {
-                    vision.tap()
+                    it.tap()
                 }.expectation {
-                    vision.detect("Airplane mode")
+                    it.detect("Airplane mode")
                         .right()
                         .checkIsON()
                 }
             }
             case(3) {
                 action {
-                    vision.tap()
+                    it.tap()
                 }.expectation {
-                    vision.detect("Airplane mode")
+                    it.detect("Airplane mode")
                         .right()
                         .checkIsOFF()
                 }

@@ -23,7 +23,7 @@ fun VisionDrive.tap(
     repeat: Int = 1,
 ): VisionDrive {
 
-    val testElement = getThisOrLastVisionElement()
+    val testElement = getThisOrIt()
 
     val command = "tap"
     val message = message(id = command, subject = "($x,$y)")
@@ -59,7 +59,7 @@ fun VisionDrive.tap(
     holdSeconds: Double = testContext.tapHoldSeconds
 ): VisionElement {
 
-    val tappedElement = getThisOrLastVisionElement()
+    val tappedElement = getThisOrIt()
 
     val command = "tap"
     val message = message(id = command, subject = tappedElement.subject)
@@ -73,8 +73,8 @@ fun VisionDrive.tap(
         v.tap(x = v.bounds.centerX, y = v.bounds.centerY, holdSeconds = holdSeconds)
     }
 
-    lastVisionElement = v
-    return lastVisionElement
+    lastElement = v
+    return lastElement
 }
 
 private fun VisionDrive.tapWithScrollCommandCore(

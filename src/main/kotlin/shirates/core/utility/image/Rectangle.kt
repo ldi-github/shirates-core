@@ -62,16 +62,16 @@ class Rectangle(
         }
 
 
-    constructor(description: String) : this() {
+    constructor(leftTopRightBottom: String) : this() {
 
         try {
-            val r = description.removePrefix("[").split("]").first().split(",").map { it.trim().toInt() }
+            val r = leftTopRightBottom.removePrefix("[").split("]").first().split(",").map { it.trim().toInt() }
             this.x = r[0]
             this.y = r[1]
             this.width = r[2] - x + 1
             this.height = r[3] - y + 1
         } catch (t: Throwable) {
-            throw IllegalArgumentException(description, t)
+            throw IllegalArgumentException(leftTopRightBottom, t)
         }
     }
 

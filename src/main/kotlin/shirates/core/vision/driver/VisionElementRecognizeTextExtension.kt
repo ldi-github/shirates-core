@@ -15,7 +15,7 @@ fun VisionElement.recognizeText(): String {
 
     SrvisionProxy.callTextRecognizer(inputFile = this.imageFile!!)
 
-    val joinedString = VisionElementCache.joinText()
+    val joinedString = VisionContext.current.joinText()
 
     return joinedString
 }

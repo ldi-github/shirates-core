@@ -14,6 +14,10 @@ fun VisionDrive.classify(
     mlmodelFile: String = "vision/mlmodels/GeneralClassifier/GeneralClassifier.mlmodel".toPath().toString(),
 ): String {
 
+    if (imageFile.isBlank()) {
+        throw IllegalArgumentException("imageFile is blank.")
+    }
+
     val result = SrvisionProxy.callImageClassifier(
         inputFile = TestLog.directoryForLog.resolve(imageFile).toString(),
         mlmodelFile = mlmodelFile,

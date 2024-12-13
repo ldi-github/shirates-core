@@ -7,10 +7,6 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.Testrun
 import shirates.core.driver.*
-import shirates.core.driver.commandextension.appIs
-import shirates.core.driver.commandextension.exist
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.textIs
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException

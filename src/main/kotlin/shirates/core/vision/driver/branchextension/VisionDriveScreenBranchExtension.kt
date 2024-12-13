@@ -5,8 +5,8 @@ import shirates.core.driver.TestMode
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.printInfo
 import shirates.core.vision.VisionDrive
+import shirates.core.vision.configration.repository.VisionImageFileRepository
 import shirates.core.vision.driver.classifyScreen
-import shirates.core.vision.driver.screenshot
 import java.awt.image.BufferedImage
 
 /**
@@ -14,14 +14,26 @@ import java.awt.image.BufferedImage
  */
 val VisionDrive.lastScreenshotImage: BufferedImage?
     get() {
+        if (TestMode.isNoLoadRun) {
+            return null
+        }
+        if (CodeExecutionContext.lastScreenshotImage == null) {
+            TestDriver.screenshot(force = true)
+        }
         return CodeExecutionContext.lastScreenshotImage
     }
 
 /**
  * lastScreenshotFile
  */
-val VisionDrive.lastScreenshotFile: String
+val VisionDrive.lastScreenshotFile: String?
     get() {
+        if (TestMode.isNoLoadRun) {
+            return ""
+        }
+        if (CodeExecutionContext.lastScreenshotImage == null) {
+            TestDriver.screenshot(force = true)
+        }
         return CodeExecutionContext.lastScreenshotFile
     }
 
@@ -38,14 +50,16 @@ fun VisionDrive.isScreen(
         return true
     }
 
-    if (lastScreenshotImage == null) {
-        screenshot(force = true)
+    if (lastScreenshotFile == null) {
+        TestDriver.screenshot(force = true, log = false)
     }
+    val file = VisionImageFileRepository.getFile(label = screenName)
+        ?: return false
 
-    val label = classifyScreen(imageFile = lastScreenshotFile)
-    printInfo("classified as $label")
+    val label = classifyScreen(imageFile = lastScreenshotFile!!)
+    printInfo("classified as $label. ($file)")
 
-    val r = label == screenName
+    val r = (label == screenName)
     if (r) {
         TestDriver.currentScreen = screenName
     }

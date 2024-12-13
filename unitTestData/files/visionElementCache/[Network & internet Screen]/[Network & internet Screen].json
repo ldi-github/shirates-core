@@ -1,0 +1,92 @@
+[
+  {
+    "text": "2:31 0 0",
+    "rect": "38, 48, 195, 43",
+    "confidence": 0.3
+  },
+  {
+    "text": "Network & internet",
+    "rect": "62, 432, 783, 104",
+    "confidence": 1.0
+  },
+  {
+    "text": "Internet",
+    "rect": "149, 666, 222, 38",
+    "confidence": 1.0
+  },
+  {
+    "text": "AndroidWifi",
+    "rect": "188, 724, 195, 36",
+    "confidence": 1.0
+  },
+  {
+    "text": "Calls & SMS",
+    "rect": "188, 865, 289, 45",
+    "confidence": 1.0
+  },
+  {
+    "text": "T-Mobile",
+    "rect": "187, 930, 143, 36",
+    "confidence": 1.0
+  },
+  {
+    "text": "SIMS",
+    "rect": "188, 1070, 121, 48",
+    "confidence": 1.0
+  },
+  {
+    "text": "T-Mobile",
+    "rect": "184, 1136, 146, 36",
+    "confidence": 1.0
+  },
+  {
+    "text": "Airplane mode",
+    "rect": "177, 1273, 355, 56",
+    "confidence": 1.0
+  },
+  {
+    "text": "Hotspot & tethering",
+    "rect": "188, 1430, 459, 56",
+    "confidence": 1.0
+  },
+  {
+    "text": "Off",
+    "rect": "188, 1500, 59, 31",
+    "confidence": 1.0
+  },
+  {
+    "text": "Data Saver",
+    "rect": "187, 1635, 261, 50",
+    "confidence": 1.0
+  },
+  {
+    "text": "Off",
+    "rect": "188, 1702, 59, 38",
+    "confidence": 1.0
+  },
+  {
+    "text": "VPN",
+    "rect": "188, 1841, 114, 45",
+    "confidence": 1.0
+  },
+  {
+    "text": "None",
+    "rect": "188, 1911, 90, 31",
+    "confidence": 1.0
+  },
+  {
+    "text": "Mobile plan",
+    "rect": "62, 2047, 275, 56",
+    "confidence": 1.0
+  },
+  {
+    "text": "Private DNS",
+    "rect": "62, 2200, 285, 48",
+    "confidence": 1.0
+  },
+  {
+    "text": "Automatic",
+    "rect": "62, 2270, 170, 35",
+    "confidence": 1.0
+  }
+]

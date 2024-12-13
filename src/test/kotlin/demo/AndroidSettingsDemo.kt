@@ -22,7 +22,6 @@ class AndroidSettingsDemo : UITest() {
                     it.screenIs("[Network & internet Screen]")
                 }
             }
-
             case(2) {
                 condition {
                     it.select("{Airplane mode switch}")
@@ -34,7 +33,6 @@ class AndroidSettingsDemo : UITest() {
                         .checkIsON()
                 }
             }
-
             case(3) {
                 action {
                     it.tap("{Airplane mode switch}")

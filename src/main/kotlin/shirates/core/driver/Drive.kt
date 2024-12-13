@@ -1,7 +1,6 @@
 package shirates.core.driver
 
 import io.appium.java_client.AppiumDriver
-import shirates.core.vision.VisionElement
 
 interface Drive {
 
@@ -20,21 +19,4 @@ interface Drive {
         get() {
             return TestDriver.appiumDriver
         }
-
-    /**
-     * Returns lastElement after syncing cache.
-     */
-    val it: TestElement
-        get() {
-            return TestDriver.it
-        }
-
-    /**
-     * vision
-     */
-    val vision: VisionElement
-        get() {
-            return TestDriver.lastVisionElement
-        }
-
 }

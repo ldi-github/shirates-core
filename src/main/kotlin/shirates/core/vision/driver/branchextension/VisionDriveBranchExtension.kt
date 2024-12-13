@@ -18,7 +18,7 @@ fun VisionDrive.ifCanDetect(
 
     val command = "ifCanDetect"
 
-    val v = vision.detect(expression = expression, throwsException = false, waitSeconds = 0.0)
+    val v = detect(expression = expression, throwsException = false, waitSeconds = 0.0)
     val matched = v.isFound
 
     val result = BooleanCompareResult(value = matched, command = command)
@@ -47,7 +47,7 @@ fun VisionDrive.ifCanDetectNot(
 
     val command = "ifCanDetectNot"
 
-    val v = vision.detect(expression = expression, throwsException = false, waitSeconds = 0.0)
+    val v = detect(expression = expression, throwsException = false, waitSeconds = 0.0)
     val matched = v.isEmpty
 
     val result = BooleanCompareResult(value = matched, command = command)

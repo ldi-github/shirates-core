@@ -169,9 +169,7 @@ class SegmentContainer(
     /**
      * parse
      */
-    fun parse(
-
-    ): SegmentContainer {
+    fun parse(): SegmentContainer {
 
         /**
          * setup outputDirectory

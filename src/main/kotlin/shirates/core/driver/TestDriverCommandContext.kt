@@ -464,6 +464,10 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         result: LogType = LogType.NONE,
         resultMessage: String? = null
     ): LogLine? {
+        if (CodeExecutionContext.isInSilentCommand) {
+            return null
+        }
+
         try {
             pushToCommandStack()
 

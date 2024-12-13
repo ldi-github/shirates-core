@@ -6,23 +6,6 @@ import shirates.core.driver.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.utility.sync.WaitUtility
-import shirates.core.vision.VisionElement
-
-/**
- * it
- */
-val it: TestElement
-    get() {
-        return TestDriver.lastElement
-    }
-
-/**
- * vision
- */
-val vision: VisionElement
-    get() {
-        return TestDriver.lastVisionElement
-    }
 
 /**
  * getSelector
@@ -69,3 +52,16 @@ private fun Drive.getSelectorCore(expression: String): Selector {
     return newSel
 }
 
+/**
+ * silent
+ */
+fun Drive.silent(
+    proc: () -> Unit
+): Drive {
+
+    val context = TestDriverCommandContext(null)
+    context.execSilentCommand() {
+        proc()
+    }
+    return this
+}
