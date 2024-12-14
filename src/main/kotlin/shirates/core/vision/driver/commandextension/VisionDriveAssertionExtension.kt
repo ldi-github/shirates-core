@@ -94,34 +94,7 @@ fun VisionDrive.keyboardIsNotShown(): VisionElement {
  */
 fun VisionDrive.packageIs(expected: String): VisionElement {
 
-    val testElement = TestDriver.it
-
-    val command = "packageIs"
-    val assertMessage = message(id = command, expected = expected)
-
-    val context = TestDriverCommandContext(testElement)
-    context.execCheckCommand(
-        command = command,
-        message = assertMessage,
-        subject = testElement.subject,
-        arg1 = expected
-    ) {
-        if (TestMode.isiOS) {
-            throw NotImplementedError("packageIs function is for Android.")
-        }
-
-        val actual = rootElement.packageName
-        if (actual == expected) {
-            TestLog.ok(
-                message = assertMessage,
-                arg1 = expected
-            )
-        } else {
-            lastElement.lastError = TestNGException("$assertMessage (actual=\"$actual\")")
-            throw lastElement.lastError!!
-        }
-    }
-
+    testDrive.packageIs(expected = expected)
     return lastElement
 }
 

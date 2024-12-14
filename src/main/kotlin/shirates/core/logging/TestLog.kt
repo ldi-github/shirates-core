@@ -105,6 +105,13 @@ object TestLog {
         }
 
     /**
+     * getNextScreenshotFileName
+     */
+    fun getNextScreenshotFileName(suffix: String = ""): String {
+        return "${nextLineNo}${suffix}.png"
+    }
+
+    /**
      * allLines
      */
     val allLines = mutableListOf<LogLine>()
@@ -587,8 +594,9 @@ object TestLog {
             result = result2,
             resultMessage = resultMsg,
             exception = exception,
-            lastScreenshot = if (CodeExecutionContext.lastScreenshotName.isBlank()) ""
-            else CodeExecutionContext.lastScreenshotName.toPath().fileName.toString(),
+            lastScreenshot =
+                if (CodeExecutionContext.lastScreenshotName.isNullOrBlank()) ""
+                else CodeExecutionContext.lastScreenshotName.toPath().fileName.toString(),
             testClassName = currentTestClassName,
             testMethodName = currentTestMethodName
         )

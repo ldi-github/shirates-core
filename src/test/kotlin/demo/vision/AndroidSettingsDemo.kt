@@ -3,6 +3,7 @@ package demo.vision
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.vision.driver.*
+import shirates.core.vision.driver.commandextension.exist
 import shirates.core.vision.driver.commandextension.screenIs
 import shirates.core.vision.testcode.VisionTest
 

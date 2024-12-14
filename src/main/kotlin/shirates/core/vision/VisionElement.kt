@@ -24,7 +24,7 @@ class VisionElement() : VisionDrive {
     /**
      * visionContext
      */
-    var visionContext: VisionContext = VisionContext(null)
+    var visionContext: VisionContext = VisionContext()
 
     /**
      * selector
@@ -126,7 +126,7 @@ class VisionElement() : VisionDrive {
      */
     val isEmpty: Boolean
         get() {
-            return visionContext.rectOnScreenshotImage == null
+            return isFound.not()
         }
 
     /**
@@ -134,7 +134,7 @@ class VisionElement() : VisionDrive {
      */
     val isFound: Boolean
         get() {
-            return isEmpty.not()
+            return observation != null || segment != null
         }
 
     /**
@@ -220,9 +220,11 @@ class VisionElement() : VisionDrive {
     /**
      * recognizeText
      */
-    fun recognizeText(): String {
+    fun recognizeText(
+        language: String? = visionContext.language,
+    ): String {
 
-        this.visionContext.recognizeText()
+        this.visionContext.recognizeText(language = language)
 
         return visionContext.joinText()
     }

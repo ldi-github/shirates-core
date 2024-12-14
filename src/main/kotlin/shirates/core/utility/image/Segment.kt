@@ -38,9 +38,14 @@ class Segment(
             return container?.containerImage
         }
 
-    val containerRect: Rectangle?
+    val containerX: Int
         get() {
-            return container?.containerRect
+            return container?.containerX ?: 0
+        }
+
+    val containerY: Int
+        get() {
+            return container?.containerY ?: 0
         }
 
     /**
@@ -134,9 +139,7 @@ class Segment(
      */
     val rectOnScreenshotImage: Rectangle
         get() {
-            val offsetX = containerRect?.x ?: 0
-            val offsetY = containerRect?.y ?: 0
-            return Rectangle(x = left + offsetX, y = top + offsetY, width = width, height = height)
+            return Rectangle(x = containerX + left, y = containerY + top, width = width, height = height)
         }
 
     /**
@@ -154,13 +157,16 @@ class Segment(
 
         val v = VisionElement()
         v.segment = this
-        v.visionContext.localRegionImage = this.segmentImage
-        v.visionContext.localRegionFile = this.segmentImageFile
-        v.visionContext.rectOnLocalRegionImage = this.rectOnSegmentContainer
 
         v.visionContext.screenshotImage = this.screenshotImage
         v.visionContext.screenshotFile = this.screenshotFile
-        v.visionContext.rectOnScreenshotImage = this.rectOnScreenshotImage
+
+        v.visionContext.localRegionImage = this.segmentImage
+        v.visionContext.localRegionFile = this.segmentImageFile
+
+        v.visionContext.localRegionX = this.containerX
+        v.visionContext.localRegionY = this.containerY
+        v.visionContext.rectOnLocalRegionImage = this.rectOnSegmentContainer
 
         return v
     }

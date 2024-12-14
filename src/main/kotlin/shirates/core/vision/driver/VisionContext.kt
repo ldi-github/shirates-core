@@ -3,55 +3,41 @@ package shirates.core.vision.driver
 import shirates.core.configuration.Selector
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
-import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.cropImage
+import shirates.core.utility.image.rect
 import shirates.core.utility.image.saveImage
-import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextParser
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
 import java.awt.image.BufferedImage
-import java.nio.file.Files
 
-class VisionContext(
-    var screenshotFile: String?
-) {
+class VisionContext() {
 
     companion object {
-        var current: VisionContext = VisionContext(null)
+        var current: VisionContext = VisionContext()
     }
 
-    constructor(
-        screenshotFile: String,
-        screenshotImage: BufferedImage
-    ) : this(screenshotFile = screenshotFile) {
-        this.screenshotImage = screenshotImage
-    }
+    /**
+     * screenshotFile
+     */
+    var screenshotFile: String? = null
 
     /**
      * screenshotImage
      */
-    var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage
-        get() {
-            if (field == null) {
-                if (screenshotFile.isNullOrBlank().not() && Files.exists(screenshotFile!!.toPath())) {
-                    try {
-                        field = BufferedImageUtility.getBufferedImage(filePath = screenshotFile!!)
-                    } catch (t: Throwable) {
-                        throw IllegalStateException("Could not load screenshot file. ($screenshotFile)")
-                    }
-                }
-            }
-            return field
-        }
+    var screenshotImage: BufferedImage? = null
 
     /**
-     * rectOnScreenshotImage
+     * localRegionX
      */
-    var rectOnScreenshotImage: Rectangle? = null
+    var localRegionX = 0
+
+    /**
+     * localRegionY
+     */
+    var localRegionY = 0
 
     /**
      * localRegionFile
@@ -62,17 +48,19 @@ class VisionContext(
      * localRegionImage
      */
     var localRegionImage: BufferedImage? = null
+
+    /**
+     * rectOnScreenshotImage
+     */
+    val rectOnScreenshotImage: Rectangle?
         get() {
-            if (field == null) {
-                if (localRegionFile.isNullOrBlank().not() && Files.exists(localRegionFile!!.toPath())) {
-                    try {
-                        field = BufferedImageUtility.getBufferedImage(filePath = localRegionFile!!)
-                    } catch (t: Throwable) {
-                        throw IllegalStateException("Could not load localRegionFile. ($localRegionFile)")
-                    }
-                }
-            }
-            return field
+            val rect = rectOnLocalRegionImage ?: return null
+            return Rectangle(
+                x = localRegionX + rect.left,
+                y = localRegionY + rect.top,
+                width = rect.width,
+                height = rect.height
+            )
         }
 
     /**
@@ -95,13 +83,21 @@ class VisionContext(
      */
     val visionElements: MutableList<VisionElement> = mutableListOf()
 
+
     /**
-     * isEmpty
+     * init
      */
-    val isEmpty: Boolean
-        get() {
-            return visionElements.isEmpty()
-        }
+    init {
+        this.screenshotFile = CodeExecutionContext.lastScreenshotFile
+        this.screenshotImage = CodeExecutionContext.lastScreenshotImage
+
+        this.localRegionFile = this.screenshotFile
+        this.localRegionImage = this.screenshotImage
+
+//        this.localRegionX = localRegionX
+//        this.localRegionY = localRegionY
+        this.rectOnLocalRegionImage = this.screenshotImage?.rect
+    }
 
     /**
      * clear
@@ -110,10 +106,12 @@ class VisionContext(
 
         this.screenshotImage = null
         this.screenshotFile = ""
-        this.rectOnScreenshotImage = null
 
         this.localRegionFile = ""
         this.localRegionImage = null
+
+        this.localRegionX = 0
+        this.localRegionY = 0
         this.rectOnLocalRegionImage = null
 
         this.language = ""
@@ -127,13 +125,15 @@ class VisionContext(
      */
     fun clone(): VisionContext {
 
-        val c = VisionContext(null)
+        val c = VisionContext()
         c.screenshotImage = screenshotImage
         c.screenshotFile = screenshotFile
-        c.rectOnScreenshotImage = rectOnScreenshotImage
 
         c.localRegionFile = localRegionFile
         c.localRegionImage = localRegionImage
+
+        c.localRegionX = localRegionX
+        c.localRegionY = localRegionY
         c.rectOnLocalRegionImage = rectOnLocalRegionImage
 
         c.language = language
@@ -159,6 +159,25 @@ class VisionContext(
     }
 
     /**
+     * recognizeText
+     */
+    fun recognizeText(
+        language: String? = this.language,
+    ) {
+        val inputFile = localRegionFile ?: screenshotFile!!
+
+        val json = SrvisionProxy.callTextRecognizer(
+            inputFile = inputFile,
+            language = language
+        )
+        loadTextRecognizerResult(
+            inputFile = inputFile,
+            language = language,
+            jsonString = json
+        )
+    }
+
+    /**
      * loadTextRecognizerResult
      */
     fun loadTextRecognizerResult(
@@ -170,11 +189,20 @@ class VisionContext(
         this.language = language
         this.jsonString = jsonString
 
+        visionElements.clear()
+
         val observations = try {
             RecognizeTextParser(
                 content = jsonString,
+
                 screenshotFile = screenshotFile ?: CodeExecutionContext.lastScreenshotFile,
                 screenshotImage = screenshotImage ?: CodeExecutionContext.lastScreenshotImage,
+
+                localRegionFile = localRegionFile,
+                localRegionImage = localRegionImage ?: CodeExecutionContext.lastScreenshotImage,
+
+                localRegionX = localRegionX,
+                localRegionY = localRegionY,
             ).parse()
         } catch (t: Throwable) {
             throw TestDriverException(message = "Could not parse json. \n$jsonString")
@@ -190,29 +218,41 @@ class VisionContext(
         return this
     }
 
-    /**
-     * recognizeText
-     */
-    fun recognizeText() {
-
-        val newContext = SrvisionProxy.callTextRecognizer(
-            inputFile = localRegionFile,
-            language = language
-        )
-        this.visionElements.clear()
-        this.visionElements.addAll(newContext.visionElements)
-    }
-
 
     /**
      * detect
      */
     fun detect(
         text: String,
+        rect: Rectangle = CodeExecutionContext.region
     ): VisionElement {
-        val candidates = detectCandidates(text = text)
+
+        if (this.visionElements.isEmpty()) {
+            recognizeText()
+        }
+
+        val candidates = detectCandidates(
+            text = text,
+            rect = rect
+        )
 
         val v = candidates.firstOrNull() ?: VisionElement.emptyElement
+        return v
+    }
+
+    /**
+     * detect
+     */
+    fun detect(
+        selector: Selector,
+        rect: Rectangle = CodeExecutionContext.region
+    ): VisionElement {
+
+        val text = selector.text ?: ""
+        val v = detect(
+            text = text,
+            rect = rect
+        )
         return v
     }
 
@@ -221,42 +261,20 @@ class VisionContext(
      */
     fun detectCandidates(
         text: String,
+        rect: Rectangle = CodeExecutionContext.region
     ): List<VisionElement> {
 
         if (text.isBlank()) {
             return visionElements.toList()
         }
 
+        val globalBounds = rect.toBoundsWithRatio()
+
         val list = visionElements
             .filter { it.text.lowercase().contains(text.lowercase()) }
+            .filter { it.bounds.isIncludedIn(globalBounds) }
             .map { Pair(it, it.text.length - text.length) }.sortedBy { it.second }
         return list.map { it.first }
-    }
-
-    /**
-     * detect
-     */
-    fun detect(
-        selector: Selector,
-    ): VisionElement {
-
-        val text = selector.text ?: ""
-        val v = detect(text = text)
-
-        v.lastError = null
-
-        v.selector = selector
-        if (v.isEmpty) {
-            v.lastError = TestDriverException(
-                message = message(
-                    id = "elementNotFound",
-                    subject = "$selector",
-                    arg1 = selector.getElementExpression()
-                )
-            )
-        }
-
-        return v
     }
 
     /**

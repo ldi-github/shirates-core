@@ -1,17 +1,18 @@
-package shirates.core.vision.driver
+package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.currentScreen
+import shirates.core.driver.TestDriver.screenshot
 import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.suppressHandler
 import shirates.core.driver.commandextension.withoutScroll
-import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
+import shirates.core.logging.CodeExecutionContext.lastScreenshotFile
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -25,6 +26,7 @@ import shirates.core.vision.TemplateMatchingResult
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionImageFileRepository
+import shirates.core.vision.driver.*
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
 
 /**
@@ -33,22 +35,13 @@ import shirates.core.vision.driver.branchextension.lastScreenshotImage
 fun VisionDrive.exist(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    ignoreCase: Boolean = false,
+    rect: Rectangle = CodeExecutionContext.region,
+    ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     allowScroll: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
-
-//    if (CodeExecutionContext.isInCell && this is TestElement) {
-//        return existInCell(
-//            expression = expression,
-//            throwsException = throwsException,
-//            mustValidateImage = mustValidateImage
-//        )
-//    }
-
-//    val sel = getSelector(expression = expression)
 
     val sw = StopWatch("exist")
 
@@ -65,6 +58,7 @@ fun VisionDrive.exist(
             message = message,
             expression = expression,
             language = language,
+            rect = rect,
             ignoreCase = ignoreCase,
             allowContains = allowContains,
             allowScroll = allowScroll,
@@ -85,6 +79,7 @@ private fun VisionDrive.existCore(
     message: String,
     expression: String,
     language: String,
+    rect: Rectangle,
     ignoreCase: Boolean,
     allowContains: Boolean,
     allowScroll: Boolean,
@@ -94,13 +89,21 @@ private fun VisionDrive.existCore(
     var v = VisionElement.emptyElement
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
+        intervalSeconds = testContext.retryIntervalSeconds,
+        throwOnFinally = false,
+        onBeforeRetry = {
+            screenshot(force = true)
+        }
     ) {
+        screenshot(force = true)
         v = detect(
             expression = expression,
             language = language,
+            rect = rect,
             allowScroll = allowScroll,
             swipeToCenter = false,
             throwsException = false,
+            waitSeconds = waitSeconds,
         )
         val expected = if (ignoreCase) expression.lowercase() else expression
         val actual = if (ignoreCase) v.text.lowercase() else v.text
@@ -197,10 +200,10 @@ internal fun postProcessForAssertion(
 fun VisionDrive.existWithScrollDown(
     expression: String,
     language: String = PropertiesManager.logLanguage,
+    rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -229,6 +232,7 @@ fun VisionDrive.existWithScrollDown(
                 message = assertMessage,
                 expression = expression,
                 language = language,
+                rect = rect,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
                 allowScroll = true,
@@ -249,10 +253,10 @@ fun VisionDrive.existWithScrollDown(
 fun VisionDrive.existWithScrollUp(
     expression: String,
     language: String = PropertiesManager.logLanguage,
+    rect: Rectangle = lastScreenshotImage!!.rect,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -281,6 +285,7 @@ fun VisionDrive.existWithScrollUp(
                 message = assertMessage,
                 expression = expression,
                 language = language,
+                rect = rect,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
                 allowScroll = true,
@@ -301,10 +306,10 @@ fun VisionDrive.existWithScrollUp(
 fun VisionDrive.existWithScrollRight(
     expression: String,
     language: String = PropertiesManager.logLanguage,
+    rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -333,6 +338,7 @@ fun VisionDrive.existWithScrollRight(
                 message = assertMessage,
                 expression = expression,
                 language = language,
+                rect = rect,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
                 allowScroll = true,
@@ -353,10 +359,10 @@ fun VisionDrive.existWithScrollRight(
 fun VisionDrive.existWithScrollLeft(
     expression: String,
     language: String = PropertiesManager.logLanguage,
+    rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -386,6 +392,7 @@ fun VisionDrive.existWithScrollLeft(
                 message = assertMessage,
                 expression = expression,
                 language = language,
+                rect = rect,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
                 allowScroll = true,
@@ -396,6 +403,67 @@ fun VisionDrive.existWithScrollLeft(
     if (func != null) {
         func(v)
     }
+
+    return v
+}
+
+/**
+ * dontExist
+ */
+fun VisionDrive.dontExist(
+    expression: String,
+    language: String = PropertiesManager.logLanguage,
+    rect: Rectangle = CodeExecutionContext.region,
+    ignoreCase: Boolean = true,
+    allowContains: Boolean = true,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    val sw = StopWatch("dontExist")
+
+    val sel = Selector(expression = expression)
+    var v = VisionElement.emptyElement
+
+    val command = "dontExist"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+
+        doUntilTrue(
+            waitSeconds = waitSeconds,
+        ) {
+            v = detectCore(
+                selector = sel,
+                language = language,
+                rect = rect,
+                waitSeconds = 0.0,
+                allowScroll = false,
+                swipeToCenter = false,
+                throwsException = false,
+            )
+            v.isFound.not()
+        }
+    }
+    val expected = if (ignoreCase) expression.lowercase() else expression
+    val actual = if (ignoreCase) v.text.lowercase() else v.text
+
+    val isFound =
+        if (allowContains) actual.contains(expected)
+        else actual == expected
+    if (isFound) {
+        val error = TestNGException(message = "$message (expected: \"$expression\", actual: \"${v.text}\")")
+        v.lastError = error
+        v.lastResult = LogType.NG
+        throw error
+    }
+
+    if (func != null) {
+        func(v)
+    }
+
+    sw.printInfo()
 
     return v
 }
@@ -430,7 +498,7 @@ fun VisionDrive.existImage(
         lastElement = v
 
         if (throwsException) {
-            if (v.candidate!!.distance > 0.5) {
+            if (v.candidate!!.distance > distance) {
                 val error = TestNGException(message = "$message ($v)")
                 v.lastError = error
                 v.lastResult = LogType.NG
@@ -450,7 +518,7 @@ private fun existImageCore(
     waitSeconds: Double = testContext.syncWaitSeconds,
     distance: Double,
 ): VisionElement {
-    val screenshotFile = CodeExecutionContext.lastScreenshotFile!!
+
     val templateFile = VisionImageFileRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
@@ -458,10 +526,13 @@ private fun existImageCore(
 
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
-        throwOnFinally = false
+        throwOnFinally = false,
+        onBeforeRetry = {
+            screenshot(force = true)
+        }
     ) {
         r = SrvisionProxy.getTemplateMatchingRectangle(
-            imageFile = screenshotFile,
+            imageFile = lastScreenshotFile!!,
             templateFile = templateFile,
             margin = margin,
             skinThickness = skinThickness,
@@ -473,5 +544,85 @@ private fun existImageCore(
     }
 
     val v = r.primaryCandidate.createVisionElement()
+    return v
+}
+
+/**
+ * dontExistImage
+ */
+fun VisionDrive.dontExistImage(
+    label: String,
+    skinThickness: Int = 1,
+    margin: Int = 10,
+    throwsException: Boolean = true,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    distance: Double = 0.5,
+): VisionElement {
+
+    val command = "dontExistImage"
+    val message = message(id = command, subject = label)
+
+    val context = TestDriverCommandContext(null)
+    context.execOperateCommand(command = command, message = message, subject = label) {
+
+        val v = dontExistImageCore(
+            label = label,
+            margin = margin,
+            skinThickness = skinThickness,
+            waitSeconds = waitSeconds,
+            distance = distance,
+        )
+
+        v.selector = Selector(expression = label)
+        lastElement = v
+
+        if (throwsException) {
+            if (v.candidate!!.distance < distance) {
+                val error = TestNGException(message = "$message ($v)")
+                v.lastError = error
+                v.lastResult = LogType.NG
+                throw error
+            }
+        }
+        TestLog.ok(message = "$message ($v)")
+    }
+
+    return lastElement
+}
+
+private fun dontExistImageCore(
+    label: String,
+    margin: Int,
+    skinThickness: Int,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    distance: Double,
+): VisionElement {
+
+    val templateFile = VisionImageFileRepository.getFile(label = label)
+        ?: throw IllegalArgumentException("Template file not found. (label=$label)")
+
+    var r = TemplateMatchingResult("", "", Rectangle())
+
+    val waitContext = doUntilTrue(
+        waitSeconds = waitSeconds,
+        throwOnFinally = false,
+        onBeforeRetry = {
+            screenshot(force = true)
+        }
+    ) {
+        r = SrvisionProxy.getTemplateMatchingRectangle(
+            imageFile = lastScreenshotFile!!,
+            templateFile = templateFile,
+            margin = margin,
+            skinThickness = skinThickness,
+        )
+        r.primaryCandidate.distance >= distance
+    }
+    if (waitContext.hasError) {
+        val v = r.primaryCandidate.createVisionElement()
+        return v
+    }
+
+    val v = VisionElement.emptyElement
     return v
 }

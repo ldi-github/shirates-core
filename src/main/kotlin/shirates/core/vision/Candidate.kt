@@ -7,9 +7,11 @@ class Candidate(
     val file: String?,
     val rectangle: Rectangle,
 ) : VisionObservation(
-    rectOnLocalRegionImage = rectangle,
+    localRegionFile = file,
     localRegionImage = null,
-    localRegionFile = file
+    localRegionX = 0,
+    localRegionY = 0,
+    rectOnLocalRegionImage = rectangle,
 ) {
     /**
      * isEmpty

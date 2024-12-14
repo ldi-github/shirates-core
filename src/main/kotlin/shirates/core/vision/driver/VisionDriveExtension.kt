@@ -8,10 +8,25 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
-import shirates.core.utility.image.rect
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.branchextension.lastScreenshotImage
+
+/**
+ * rootElement
+ */
+val VisionDrive.rootElement: VisionElement
+    get() {
+        val v = VisionElement()
+        return v
+    }
+
+/**
+ * screenRect
+ */
+val VisionDrive.screenRect: Rectangle
+    get() {
+        return TestDriver.screenRect
+    }
 
 /**
  * getThisOrIt
@@ -22,6 +37,17 @@ fun VisionDrive.getThisOrIt(): VisionElement {
         return this
     }
     return TestDriver.lastVisionElement
+}
+
+/**
+ * getThisOrRoot
+ */
+fun VisionDrive.getThisOrRoot(): VisionElement {
+
+    if (this is VisionElement) {
+        return this
+    }
+    return rootElement
 }
 
 ///**
@@ -52,7 +78,7 @@ fun VisionDrive.screenshot(
     val v = getThisOrIt()
 
 
-    return lastElement
+    return TestDriver.visionGlobalElement
 }
 
 /**
@@ -61,7 +87,7 @@ fun VisionDrive.screenshot(
 fun VisionDrive.tap(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    rect: Rectangle = CodeExecutionContext.region,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
 ): VisionElement {
@@ -73,14 +99,12 @@ fun VisionDrive.tap(
 //        return lastElement
     }
 
-    val testElement = rootElement
-
     val sel = getSelector(expression = expression)
 
     val command = "tap"
     val message = message(id = command, subject = "$sel")
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(null)
     var v = VisionElement.emptyElement
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 

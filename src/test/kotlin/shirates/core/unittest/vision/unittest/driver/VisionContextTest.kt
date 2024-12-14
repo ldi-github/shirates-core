@@ -22,13 +22,12 @@ class VisionContextTest {
         val screenshotImage = BufferedImageUtility.getBufferedImage(filePath = screenshotFile)
         val json = jsonFile.toPath().toFile().readText()
         // Act
-        val c = VisionContext(
-            screenshotFile = screenshotFile,
-        ).loadTextRecognizerResult(
-            inputFile = screenshotFile,
-            language = null,
-            jsonString = json,
-        )
+        val c = VisionContext()
+            .loadTextRecognizerResult(
+                inputFile = screenshotFile,
+                language = null,
+                jsonString = json,
+            )
         // Assert
         assertThat(c.jsonString).isEqualTo(json)
         assertThat(c.visionElements.count()).isEqualTo(18)
@@ -59,13 +58,12 @@ class VisionContextTest {
         val screenshotFile =
             "unitTestData/files/visionElementCache/[Network & internet Screen]/[Network & internet Screen].png"
         val json = jsonFile.toPath().toFile().readText()
-        val c = VisionContext(
-            screenshotFile = screenshotFile,
-        ).loadTextRecognizerResult(
-            inputFile = screenshotFile,
-            language = null,
-            jsonString = json,
-        )
+        val c = VisionContext()
+            .loadTextRecognizerResult(
+                inputFile = screenshotFile,
+                language = null,
+                jsonString = json,
+            )
         run {
             // Act
             val v = c.detect(text = "SIMs")

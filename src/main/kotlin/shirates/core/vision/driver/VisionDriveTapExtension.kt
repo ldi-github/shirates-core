@@ -1,11 +1,13 @@
 package shirates.core.vision.driver
 
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.*
+import shirates.core.driver.ScrollDirection
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.SwipeContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.swipePointToPointCore
-import shirates.core.logging.CodeExecutionContext
+import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.rect
@@ -44,8 +46,7 @@ fun VisionDrive.tap(
             repeat = repeat,
         )
         testDrive.swipePointToPointCore(swipeContext = sc)
-        CodeExecutionContext.lastScreenshotImage = null
-        CodeExecutionContext.lastScreenshotName = ""
+//        CodeExecutionContext.clearLastScreenshot()
     }
 
 //    return refreshLastElement()

@@ -9,12 +9,11 @@ import shirates.core.driver.DisableCache
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
 import shirates.core.driver.testDrive
-import shirates.core.driver.vision
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.vision.driver.classify
+import shirates.core.vision.driver.commandextension.existImage
 import shirates.core.vision.driver.detect
-import shirates.core.vision.driver.existImage
 import shirates.core.vision.driver.tap
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")

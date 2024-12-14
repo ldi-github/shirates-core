@@ -17,9 +17,6 @@ val VisionDrive.lastScreenshotImage: BufferedImage?
         if (TestMode.isNoLoadRun) {
             return null
         }
-        if (CodeExecutionContext.lastScreenshotImage == null) {
-            TestDriver.screenshot(force = true)
-        }
         return CodeExecutionContext.lastScreenshotImage
     }
 
@@ -29,10 +26,7 @@ val VisionDrive.lastScreenshotImage: BufferedImage?
 val VisionDrive.lastScreenshotFile: String?
     get() {
         if (TestMode.isNoLoadRun) {
-            return ""
-        }
-        if (CodeExecutionContext.lastScreenshotImage == null) {
-            TestDriver.screenshot(force = true)
+            return null
         }
         return CodeExecutionContext.lastScreenshotFile
     }

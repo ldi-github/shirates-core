@@ -56,7 +56,8 @@ fun VisionElement.right(
     val segmentContainer = SegmentContainer(
         containerImage = rightSideImage,
         containerImageFile = rightImageFile,
-        containerRect = rightSideRect,
+        containerX = rightSideRect.x,
+        containerY = rightSideRect.y,
         segmentMargin = segmentMargin,
     ).parse()
     if (segmentContainer.segments.isEmpty()) {

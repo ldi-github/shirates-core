@@ -1,6 +1,8 @@
 package shirates.core.vision
 
 import shirates.core.driver.Drive
+import shirates.core.driver.TestDrive
+import shirates.core.driver.TestDriveObject
 import shirates.core.driver.TestDriver
 
 interface VisionDrive : Drive {
@@ -33,5 +35,13 @@ interface VisionDrive : Drive {
                 return this
             }
             return VisionElement.emptyElement
+        }
+
+    /**
+     * testDrive
+     */
+    val testDrive: TestDrive
+        get() {
+            return TestDriveObject
         }
 }

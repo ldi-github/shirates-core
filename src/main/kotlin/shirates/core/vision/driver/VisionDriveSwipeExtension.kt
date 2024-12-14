@@ -929,12 +929,10 @@ fun VisionDrive.swipeElementToElement(
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
 ): VisionElement {
 
-    val testElement = rootElement
-
     val command = "swipeElementToElement"
     val message = message(id = command, subject = startElement.subject, to = endElement.subject)
 
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(null)
     context.execOperateCommand(
         command = command,
         message = message,

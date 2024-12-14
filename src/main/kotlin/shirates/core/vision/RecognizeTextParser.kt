@@ -9,8 +9,15 @@ import java.awt.image.BufferedImage
 
 class RecognizeTextParser(
     val content: String,
+
     val screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
-    val screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage
+    val screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
+
+    val localRegionFile: String? = null,
+    val localRegionImage: BufferedImage? = null,
+
+    val localRegionX: Int,
+    val localRegionY: Int,
 ) {
 
     /**
@@ -67,12 +74,16 @@ class RecognizeTextParser(
                 text = text,
                 confidence = confidence,
                 jsonString = content,
-                rectOnLocalRegionImage = null,
-                localRegionImage = null,
-                localRegionFile = null,
-                rectOnScreenshotImage = rect,
+
+                screenshotFile = screenshotFile,
                 screenshotImage = screenshotImage,
-                screenshotFile = screenshotFile
+
+                localRegionFile = localRegionFile,
+                localRegionImage = localRegionImage,
+
+                localRegionX = localRegionX,
+                localRegionY = localRegionY,
+                rectOnLocalRegionImage = rect,
             )
             list.add(observation)
         }

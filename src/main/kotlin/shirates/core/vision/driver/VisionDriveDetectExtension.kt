@@ -15,26 +15,26 @@ import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.rect
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
-import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
 
-/**
- * recognizeText
- */
-fun VisionDrive.recognizeText(
-    language: String = PropertiesManager.logLanguage,
-): VisionElement {
-
-    screenshot(force = true)
-
-    VisionContext.current = SrvisionProxy.callTextRecognizer(
-        language = language
-    )
-
-    return lastElement
-}
+///**
+// * recognizeText
+// */
+//fun VisionDrive.recognizeText(
+//    language: String = PropertiesManager.logLanguage,
+//): VisionElement {
+//
+//    val sw = StopWatch("recognizeText")
+//
+//    val v = getThisOrRoot()
+//    v.visionContext.recognizeText(language = language)
+//
+//    sw.printInfo()
+//
+//    return lastElement
+//}
 
 /**
  * detect
@@ -42,7 +42,7 @@ fun VisionDrive.recognizeText(
 fun VisionDrive.detect(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    rect: Rectangle = CodeExecutionContext.region,
     allowScroll: Boolean = true,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = false,
@@ -82,13 +82,17 @@ internal fun VisionDrive.detectCore(
     throwsException: Boolean,
 ): VisionElement {
 
-    if (VisionContext.current.isEmpty) {
-        recognizeText(language = language)
+    val regionElement = CodeExecutionContext.regionElement
+    if (regionElement.visionContext.visionElements.isEmpty()) {
+        regionElement.recognizeText(language = language)
     }
 
     var v = VisionElement.emptyElement
     try {
-        v = VisionContext.current.detect(selector = selector)
+        v = regionElement.visionContext.detect(
+            selector = selector,
+            rect = rect,
+        )
 
         if (v.isFound) {
             return v
@@ -106,12 +110,11 @@ internal fun VisionDrive.detectCore(
             } else {
                 WaitUtility.doUntilTrue(
                     waitSeconds = waitSeconds,
-                    onBeforeRetry = {
-                        screenshot(force = true)
-                    }
+                    throwOnFinally = throwsException,
                 ) {
-                    recognizeText(language = language)
-                    v = VisionContext.current.detect(selector = selector)
+                    val globalElement = screenshot(force = true)
+                    globalElement.recognizeText(language = language)
+                    v = globalElement.visionContext.detect(selector = selector)
                     v.isFound
                 }
             }
@@ -167,7 +170,7 @@ fun VisionDrive.detectWithScroll(
 internal fun VisionDrive.detectWithScroll(
     selector: Selector,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    rect: Rectangle = CodeExecutionContext.region,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
     durationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
     startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
@@ -184,8 +187,9 @@ internal fun VisionDrive.detectWithScroll(
 
     var v = VisionElement.emptyElement
     val actionFunc = {
-        recognizeText(language = language)
-        v = detectCore(
+        val globalElement = screenshot(force = true)
+        globalElement.recognizeText(language = language)
+        v = globalElement.detectCore(
             selector = selector,
             language = language,
             rect = rect,
@@ -498,7 +502,7 @@ fun VisionDrive.canDetect(
 fun VisionDrive.canDetect(
     selector: Selector,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    rect: Rectangle = CodeExecutionContext.region,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
     swipeToCenter: Boolean = false,

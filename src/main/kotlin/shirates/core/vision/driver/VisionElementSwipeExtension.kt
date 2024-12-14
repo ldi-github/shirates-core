@@ -5,6 +5,7 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.rect
@@ -17,7 +18,7 @@ import shirates.core.vision.driver.branchextension.lastScreenshotImage
 fun VisionElement.swipeTo(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    rect: Rectangle = CodeExecutionContext.region,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,

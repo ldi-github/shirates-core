@@ -15,7 +15,6 @@ import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.SegmentUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
-import shirates.core.vision.driver.VisionContext
 import java.io.FileNotFoundException
 import java.nio.file.Files
 
@@ -29,13 +28,13 @@ object SrvisionProxy {
     fun callTextRecognizer(
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         language: String? = PropertiesManager.logLanguage
-    ): VisionContext {
+    ): String {
 
         if (inputFile == null) {
             throw IllegalArgumentException("inputFile is null.")
         }
 
-        if (CodeExecutionContext.lastScreenshotName.isBlank()) {
+        if (CodeExecutionContext.lastScreenshotName.isNullOrBlank()) {
             testDrive.screenshot()
         }
 
@@ -58,18 +57,10 @@ object SrvisionProxy {
         lastResult = result
 
         TestLog.directoryForLog.resolve("${TestLog.currentLineNo}.json").toFile().writeText(result)
-        val context = VisionContext(
-            screenshotFile = CodeExecutionContext.lastScreenshotFile,
-        )
-        context.loadTextRecognizerResult(
-            inputFile = inputFile,
-            language = language,
-            jsonString = result
-        )
 
         sw.printInfo()
 
-        return context
+        return result
     }
 
     /**

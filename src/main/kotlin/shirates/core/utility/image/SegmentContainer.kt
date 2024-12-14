@@ -13,7 +13,8 @@ import java.nio.file.Files
 class SegmentContainer(
     var containerImage: BufferedImage? = null,
     var containerImageFile: String? = null,
-    var containerRect: Rectangle? = null,
+    var containerX: Int = 0,
+    var containerY: Int = 0,
 
     var filterImage: BufferedImage? = null,
     var filterImageFile: String? = null,

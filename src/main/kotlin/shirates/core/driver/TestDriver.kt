@@ -53,6 +53,7 @@ import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.VisionContext
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -81,6 +82,21 @@ object TestDriver {
             return mAppiumDriver!!
         }
     private var mAppiumDriver: AppiumDriver? = null
+
+
+    /**
+     * visionGlobalElement
+     */
+    lateinit var visionGlobalElement: VisionElement
+
+    /**
+     * screenRect
+     */
+    val screenRect: Rectangle
+        get() {
+            return visionGlobalElement.rect
+        }
+
 
     /**
      * isInitialized
@@ -583,6 +599,11 @@ object TestDriver {
         lockFile(filePath = UserVar.downloads.resolve(".createAppiumDriver")) {
             createAppiumDriverCore(profile = profile)
         }
+
+        // Capture screen information
+        screenshot(force = true)
+        visionGlobalElement = VisionElement()
+        CodeExecutionContext.regionElement = visionGlobalElement
 
         ms.end()
         TestLog.info("AppiumDriver initialized.")
@@ -1908,6 +1929,8 @@ object TestDriver {
                 return this
             }
 
+            VisionContext.current.clear()
+
             CodeExecutionContext.lastScreenshotImage = screenshotImage
             CodeExecutionContext.lastScreenshotTime = screenshotTime
 
@@ -1971,8 +1994,8 @@ object TestDriver {
 
         syncCache()
 
-        if (refresh || CodeExecutionContext.lastScreenshotImage == null) {
-            refreshImage()
+        if (CodeExecutionContext.lastScreenshotImage == null) {
+            screenshot(force = true)
         }
 
         cropInfo.originalImage = CodeExecutionContext.lastScreenshotImage!!
@@ -2307,15 +2330,6 @@ object TestDriver {
         }
 
         return this
-    }
-
-    /**
-     * refreshImage
-     */
-    fun refreshImage() {
-
-        TestLog.info("refreshImage")
-        CodeExecutionContext.lastScreenshotImage = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES).toBufferedImage()
     }
 
     /**

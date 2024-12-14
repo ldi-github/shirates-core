@@ -8,15 +8,32 @@ import shirates.core.vision.driver.VisionContext
 import java.awt.image.BufferedImage
 
 open class VisionObservation(
-    open val rectOnLocalRegionImage: Rectangle? = null,
+    open var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
+    open var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
+
     open var localRegionFile: String? = null,
     open var localRegionImage: BufferedImage? = null,
 
-    open var rectOnScreenshotImage: Rectangle? = null,
-    open var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
-    open var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
-) {
+    open var localRegionX: Int,
+    open var localRegionY: Int,
+    open var rectOnLocalRegionImage: Rectangle? = null,
+
+    ) {
     private var _image: BufferedImage? = null
+
+    /**
+     * rectOnScreenshotImage
+     */
+    val rectOnScreenshotImage: Rectangle?
+        get() {
+            val rect = rectOnLocalRegionImage ?: return null
+            return Rectangle(
+                x = localRegionX + rect.left,
+                y = localRegionY + rect.top,
+                width = rect.width,
+                height = rect.height
+            )
+        }
 
     /**
      * image
@@ -55,16 +72,16 @@ open class VisionObservation(
      */
     fun createVisionElement(): VisionElement {
 
-        val c = VisionContext(
-            screenshotFile = screenshotFile,
-        )
-        c.localRegionFile = localRegionFile
-        c.localRegionImage = localRegionImage
-        c.rectOnLocalRegionImage = rectOnLocalRegionImage
-
+        val c = VisionContext()
         c.screenshotFile = screenshotFile
         c.screenshotImage = screenshotImage
-        c.rectOnScreenshotImage = rectOnScreenshotImage
+
+        c.localRegionFile = localRegionFile
+        c.localRegionImage = localRegionImage
+
+        c.localRegionX = localRegionX
+        c.localRegionY = localRegionY
+        c.rectOnLocalRegionImage = rectOnLocalRegionImage
 
         val v = VisionElement()
         v.visionContext = c

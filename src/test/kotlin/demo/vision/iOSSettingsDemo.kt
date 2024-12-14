@@ -6,11 +6,15 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.memoTextAs
 import shirates.core.driver.commandextension.thisIs
-import shirates.core.vision.driver.*
 import shirates.core.vision.driver.branchextension.ios
 import shirates.core.vision.driver.commandextension.appIs
+import shirates.core.vision.driver.commandextension.existWithScrollDown
 import shirates.core.vision.driver.commandextension.readMemo
 import shirates.core.vision.driver.commandextension.screenIs
+import shirates.core.vision.driver.right
+import shirates.core.vision.driver.screenshot
+import shirates.core.vision.driver.tap
+import shirates.core.vision.driver.tapWithScrollDown
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")

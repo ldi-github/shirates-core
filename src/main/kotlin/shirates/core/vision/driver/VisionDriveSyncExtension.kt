@@ -7,6 +7,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
@@ -120,7 +121,7 @@ fun VisionDrive.waitForClose(
 fun VisionDrive.waitForDisplay(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    rect: Rectangle = CodeExecutionContext.region,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwsException: Boolean = true
 ): VisionElement {
@@ -131,21 +132,13 @@ fun VisionDrive.waitForDisplay(
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
-        var found = false
-
-        SyncUtility.doUntilTrue(
+        val found = canDetectCore(
+            selector = sel,
+            language = language,
+            rect = rect,
             waitSeconds = waitSeconds,
-            refreshCache = testContext.useCache
-        ) {
-            found = canDetectCore(
-                selector = sel,
-                language = language,
-                rect = rect,
-                waitSeconds = waitSeconds,
-                allowScroll = false,
-            )
-            found
-        }
+            allowScroll = false,
+        )
 
         if (throwsException && found.not()) {
             throw TestDriverException(

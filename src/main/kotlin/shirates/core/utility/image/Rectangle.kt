@@ -75,6 +75,15 @@ class Rectangle(
         }
     }
 
+    companion object {
+
+        fun createFrom(left: Int, top: Int, right: Int, bottom: Int): Rectangle {
+            val width = right - left + 1
+            val height = bottom - top + 1
+            return Rectangle(x = left, y = top, width = width, height = height)
+        }
+    }
+
     fun trimBy(trimObject: TrimObject): Rectangle {
 
         return trimObject.trim(this)
@@ -85,7 +94,15 @@ class Rectangle(
      */
     fun offsetRect(offsetX: Int, offsetY: Int): Rectangle {
 
-        return Rectangle(x = offsetX, y = offsetY, width = width, height = height)
+        return Rectangle(x = this.x + offsetX, y = this.y + offsetY, width = width, height = height)
+    }
+
+    /**
+     * localRegionRect
+     */
+    fun localRegionRect(): Rectangle {
+
+        return Rectangle(x = 0, y = 0, width = width, height = height)
     }
 
     /**

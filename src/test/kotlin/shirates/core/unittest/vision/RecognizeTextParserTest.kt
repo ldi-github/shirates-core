@@ -31,7 +31,13 @@ class RecognizeTextParserTest : UnitTest() {
 ]            
         """.trimIndent()
         // Act
-        val result = RecognizeTextParser(content = content, screenshotImage = null, screenshotFile = null).parse()
+        val result = RecognizeTextParser(
+            content = content,
+            screenshotImage = null,
+            screenshotFile = null,
+            localRegionX = 0,
+            localRegionY = 0
+        ).parse()
         // Assert
         assertThat(result.count()).isEqualTo(3)
         run {

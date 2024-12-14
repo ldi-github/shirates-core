@@ -2,12 +2,11 @@ package shirates.core.logging
 
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.Bounds
-import shirates.core.driver.ScrollDirection
-import shirates.core.driver.TestElement
-import shirates.core.driver.testContext
+import shirates.core.driver.*
 import shirates.core.utility.image.CropInfo
-import shirates.core.vision.driver.VisionContext
+import shirates.core.utility.image.Rectangle
+import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.screenRect
 import java.awt.image.BufferedImage
 import java.util.*
 
@@ -103,6 +102,29 @@ object CodeExecutionContext {
      */
     var lastCell: TestElement = TestElement.emptyElement
         internal set
+
+    // Region --------------------------------------------------
+
+    /**
+     * isInLocalRegion
+     */
+    val isInLocalRegion: Boolean
+        get() {
+            return region.area < vision.screenRect.area
+        }
+
+    /**
+     * regionElement
+     */
+    lateinit var regionElement: VisionElement
+
+    /**
+     * region
+     */
+    val region: Rectangle
+        get() {
+            return regionElement.rect
+        }
 
     // With Scroll --------------------------------------------------
 
@@ -210,30 +232,27 @@ object CodeExecutionContext {
     /**
      * lastScreenshotName
      */
-    var lastScreenshotName: String = ""
-        internal set(value) {
-            field = value
-            VisionContext.current.clear()
-        }
+    var lastScreenshotName: String? = null
 
     /**
      * lastScreenshotFile
      */
     val lastScreenshotFile: String?
         get() {
-            if (lastScreenshotName.isBlank()) {
+            if (lastScreenshotName.isNullOrBlank()) {
                 return null
             }
-            return TestLog.directoryForLog.resolve(lastScreenshotName).toString()
+            return TestLog.directoryForLog.resolve(lastScreenshotName!!).toString()
         }
 
     /**
      * lastScreenshotImage
      */
     var lastScreenshotImage: BufferedImage? = null
-        set(value) {
+        internal set(value) {
             field = value
-            VisionContext.current.clear()
+            TestDriver.visionGlobalElement = VisionElement()
+            this.regionElement = TestDriver.visionGlobalElement
         }
 
     /**
