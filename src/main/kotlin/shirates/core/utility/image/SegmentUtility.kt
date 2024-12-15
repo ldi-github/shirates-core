@@ -1,9 +1,7 @@
 package shirates.core.utility.image
 
 import shirates.core.logging.printInfo
-import shirates.core.utility.getSiblingPath
 import shirates.core.utility.time.StopWatch
-import shirates.core.utility.toPath
 
 object SegmentUtility {
 
@@ -12,14 +10,16 @@ object SegmentUtility {
      */
     fun getMergedSegmentContainer(
         imageFile: String,
-        outputDirectory: String = imageFile.toPath().getSiblingPath(imageFile).toString(),
+        outputDirectory: String? = null,
         margin: Int = 100000,
+        saveWithMargin: Boolean = true,
     ): SegmentContainer {
 
         val r = getSegmentContainer(
             imageFile = imageFile,
             outputDirectory = outputDirectory,
             segmentMargin = margin,
+            saveWithMargin = saveWithMargin,
             log = false
         )
         return r
@@ -31,10 +31,13 @@ object SegmentUtility {
     fun getSegmentContainer(
         imageFile: String,
         templateFile: String? = null,
-        outputDirectory: String = imageFile.toPath().getSiblingPath(imageFile).toString(),
+        outputDirectory: String? = null,
         segmentMargin: Int = 20,
         scale: Double = 1.0,
         skinThickness: Int = 2,
+        minimunWidth: Int = segmentMargin,
+        minimunHeight: Int = segmentMargin,
+        saveWithMargin: Boolean = true,
         log: Boolean = false,
     ): SegmentContainer {
 
@@ -46,8 +49,12 @@ object SegmentUtility {
             segmentMargin = segmentMargin,
             scale = scale,
             skinThickness = skinThickness,
-            outputDirectory = outputDirectory
-        ).parse()
+            minimumWidth = minimunWidth,
+            minimumHeight = minimunHeight,
+            outputDirectory = outputDirectory,
+            saveWithMargin = saveWithMargin,
+        )
+        container.parse()
 
         sw.stop()
         if (log) {

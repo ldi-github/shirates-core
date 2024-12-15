@@ -1,4 +1,4 @@
-package shirates.core.unittest.vision.unittest.driver
+package shirates.core.unittest.vision.driver
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

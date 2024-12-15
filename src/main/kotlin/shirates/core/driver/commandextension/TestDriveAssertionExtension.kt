@@ -314,7 +314,7 @@ fun TestDrive.screenIsOf(
 }
 
 /**
- * screenIs
+ * screenIsOf
  */
 fun TestDrive.screenIsOf(
     vararg screenNames: String,

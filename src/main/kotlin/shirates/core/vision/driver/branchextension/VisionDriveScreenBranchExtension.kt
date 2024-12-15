@@ -5,7 +5,7 @@ import shirates.core.driver.TestMode
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.printInfo
 import shirates.core.vision.VisionDrive
-import shirates.core.vision.configration.repository.VisionImageFileRepository
+import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.driver.classifyScreen
 import java.awt.image.BufferedImage
 
@@ -47,7 +47,7 @@ fun VisionDrive.isScreen(
     if (lastScreenshotFile == null) {
         TestDriver.screenshot(force = true, log = false)
     }
-    val file = VisionImageFileRepository.getFile(label = screenName)
+    val file = VisionMLModelRepository.screenClassifierRepository.getFile(label = screenName)
         ?: return false
 
     val label = classifyScreen(imageFile = lastScreenshotFile!!)

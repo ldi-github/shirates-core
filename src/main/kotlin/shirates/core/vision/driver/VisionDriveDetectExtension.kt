@@ -82,6 +82,10 @@ internal fun VisionDrive.detectCore(
     throwsException: Boolean,
 ): VisionElement {
 
+    if (CodeExecutionContext.lastScreenshotImage == null) {
+        screenshot(force = true)
+    }
+
     val regionElement = CodeExecutionContext.regionElement
     if (regionElement.visionContext.visionElements.isEmpty()) {
         regionElement.recognizeText(language = language)
@@ -128,6 +132,8 @@ internal fun VisionDrive.detectCore(
         return v
 
     } finally {
+        lastElement = v
+
         if (TestMode.isNoLoadRun) {
             v.selector = selector
         }

@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.PointerInput
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
@@ -178,6 +179,8 @@ internal fun VisionDrive.swipePointToPointCore(
     swipeContext: SwipeContext,
 ): VisionElement {
 
+    CodeExecutionContext.setScreenshotDirty()
+
     fun swipeFunc() {
 
         val sc = swipeContext
@@ -231,7 +234,7 @@ internal fun VisionDrive.swipePointToPointCore(
         }
         swipeFunc()
     }
-    TestDriver.autoScreenshot()
+    TestDriver.screenshot(force = true)
 
     return lastElement
 }

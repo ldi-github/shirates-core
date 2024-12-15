@@ -30,7 +30,7 @@ import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
-import shirates.core.vision.configration.repository.VisionImageFileRepository
+import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.spec.report.TestListReport
 import java.lang.reflect.InvocationTargetException
 import java.nio.file.Files
@@ -343,8 +343,8 @@ abstract class UITestBase : Drive {
                     importDirectories = ScreenRepository.importDirectories
                 )
 
-                // setup VisionImageUtility
-                VisionImageFileRepository.setup()
+                // setup mlmodel repository
+                VisionMLModelRepository.setup()
 
                 // CustomFunctionRepository
                 CustomFunctionRepository.initialize()

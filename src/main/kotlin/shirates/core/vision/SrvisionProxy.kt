@@ -10,7 +10,6 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.proxy.AppiumProxy.getResponseBody
-import shirates.core.utility.getSiblingPath
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.SegmentUtility
 import shirates.core.utility.time.StopWatch
@@ -110,9 +109,12 @@ object SrvisionProxy {
 
         val sw = StopWatch("getTemplateMatchingRectangle")
 
+        val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
+
         val segmentContainer = SegmentUtility.getSegmentContainer(
             imageFile = imageFile,
             templateFile = templateFile,
+            outputDirectory = outputDirectory,
             segmentMargin = margin,
             skinThickness = skinThickness,
             log = log,
@@ -121,11 +123,9 @@ object SrvisionProxy {
             throw FileNotFoundException("segment not found.")
         }
 
-        val inputDirectory = imageFile.toPath().getSiblingPath(imageFile).toString()
-
         val jsonString = SrvisionProxy.callImageFeaturePrintMatcher(
             templateFile = templateFile,
-            inputDirectory = inputDirectory,
+            inputDirectory = outputDirectory,
             log = log
         )
 
@@ -147,7 +147,7 @@ object SrvisionProxy {
             segmentContainer.outputDirectory.toPath().resolve("${result.primaryCandidate.file}")
         Files.copy(
             primaryCandidateImageFile,
-            inputDirectory.toPath().resolve("candidate_${result.primaryCandidate.rectangle}.png")
+            outputDirectory.toPath().resolve("candidate_${result.primaryCandidate.rectangle}.png")
         )
 
         sw.stop()

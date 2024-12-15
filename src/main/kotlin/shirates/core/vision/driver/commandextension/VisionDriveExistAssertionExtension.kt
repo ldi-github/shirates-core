@@ -25,7 +25,7 @@ import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.TemplateMatchingResult
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.configration.repository.VisionImageFileRepository
+import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.driver.*
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
 
@@ -519,7 +519,7 @@ private fun existImageCore(
     distance: Double,
 ): VisionElement {
 
-    val templateFile = VisionImageFileRepository.getFile(label = label)
+    val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
     var r = TemplateMatchingResult("", "", Rectangle())
@@ -531,8 +531,11 @@ private fun existImageCore(
             screenshot(force = true)
         }
     ) {
+        val re = CodeExecutionContext.regionElement
+        val imageFile = re.visionContext.localRegionFile!!
+
         r = SrvisionProxy.getTemplateMatchingRectangle(
-            imageFile = lastScreenshotFile!!,
+            imageFile = imageFile,
             templateFile = templateFile,
             margin = margin,
             skinThickness = skinThickness,
@@ -598,7 +601,7 @@ private fun dontExistImageCore(
     distance: Double,
 ): VisionElement {
 
-    val templateFile = VisionImageFileRepository.getFile(label = label)
+    val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
     var r = TemplateMatchingResult("", "", Rectangle())

@@ -15,10 +15,6 @@ import java.awt.image.BufferedImage
 
 class VisionContext() {
 
-    companion object {
-        var current: VisionContext = VisionContext()
-    }
-
     /**
      * screenshotFile
      */

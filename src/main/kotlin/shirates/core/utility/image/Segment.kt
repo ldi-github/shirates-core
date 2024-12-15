@@ -3,10 +3,12 @@ package shirates.core.utility.image
 import boofcv.io.image.UtilImageIO
 import shirates.core.driver.Bounds
 import shirates.core.logging.CodeExecutionContext
+import shirates.core.logging.TestLog
 import shirates.core.logging.printWarn
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
 import java.awt.image.BufferedImage
+import java.nio.file.Files
 
 class Segment(
     var left: Int = 0,
@@ -15,9 +17,21 @@ class Segment(
     var height: Int,
     var container: SegmentContainer? = null,
     var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
-    var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile
+    var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
+    var saveWithMargin: Boolean = true,
 ) {
     var segmentImage: BufferedImage? = null
+        get() {
+            if (field == null) {
+                if (screenshotImage != null) {
+                    val rect = Rectangle(x = left, y = top, width = width, height = height)
+                    field = containerImage!!.cropImage(rect = rect)
+                } else if (segmentImageFile != null && Files.exists(segmentImageFile!!.toPath()).not()) {
+                    field = BufferedImageUtility.getBufferedImage(segmentImageFile!!)
+                }
+            }
+            return field
+        }
 
     var segmentImageFile: String? = null
 
@@ -174,9 +188,11 @@ class Segment(
     /**
      * captureAndSave
      */
-    fun captureAndSave(outputDirectory: String) {
+    fun captureAndSave(outputDirectory: String? = TestLog.directoryForLog.toString()) {
 
-        captureImage()
+        if (saveWithMargin) {
+            captureImageWithMargin()
+        }
 
         this.segmentImageFile = outputDirectory.toPath().resolve("${this}.png").toString()
         try {
@@ -187,13 +203,15 @@ class Segment(
     }
 
     /**
-     * captureImage
+     * captureImageWithMargin
      */
-    fun captureImage() {
+    fun captureImageWithMargin() {
 
         if (containerImage == null) {
             throw IllegalStateException("containerImage is null")
         }
+
+        if (saveWithMargin.not()) return
 
         val cImage = containerImage!!
 

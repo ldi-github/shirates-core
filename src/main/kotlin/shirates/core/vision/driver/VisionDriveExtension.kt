@@ -78,7 +78,7 @@ fun VisionDrive.screenshot(
     val v = getThisOrIt()
 
 
-    return TestDriver.visionGlobalElement
+    return TestDriver.visionRootElement
 }
 
 /**
@@ -94,9 +94,6 @@ fun VisionDrive.tap(
 
     if (CodeExecutionContext.isInCell && this is VisionElement) {
         throw NotImplementedError()
-//        val e = this.innerWidget(expression = expression)
-//        e.tap()
-//        return lastElement
     }
 
     val sel = getSelector(expression = expression)

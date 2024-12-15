@@ -53,7 +53,6 @@ import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.VisionContext
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -85,16 +84,16 @@ object TestDriver {
 
 
     /**
-     * visionGlobalElement
+     * visionRootElement
      */
-    lateinit var visionGlobalElement: VisionElement
+    lateinit var visionRootElement: VisionElement
 
     /**
      * screenRect
      */
     val screenRect: Rectangle
         get() {
-            return visionGlobalElement.rect
+            return visionRootElement.rect
         }
 
 
@@ -253,7 +252,10 @@ object TestDriver {
      */
     val shouldTakeScreenshot: Boolean
         get() {
-            if (testContext.enableCache.not() && CodeExecutionContext.lastScreenshotImage == null) {
+            if (CodeExecutionContext.lastScreenshotImage == null) {
+                return true
+            }
+            if (CodeExecutionContext.screenshotSynced.not()) {
                 return true
             }
             return CAEPattern.shouldTakeScreenshot && TestDriverCommandContext.shouldTakeScreenshot
@@ -602,8 +604,8 @@ object TestDriver {
 
         // Capture screen information
         screenshot(force = true)
-        visionGlobalElement = VisionElement()
-        CodeExecutionContext.regionElement = visionGlobalElement
+        visionRootElement = VisionElement()
+        CodeExecutionContext.regionElement = visionRootElement
 
         ms.end()
         TestLog.info("AppiumDriver initialized.")
@@ -1875,30 +1877,42 @@ object TestDriver {
 
         val screenshotTime = Date()
 
-        if (force.not()) {
-            if (CodeExecutionContext.shouldOutputLog.not()) {
-                return this
+        if (testContext.useCache) {
+            /**
+             * Classic cache mode (not for Vision)
+             */
+            if (force.not()) {
+                if (CodeExecutionContext.shouldOutputLog.not()) {
+                    return this
+                }
+                if (shouldTakeScreenshot.not()) {
+                    return this
+                }
+                if (CodeExecutionContext.lastScreenshotTime != null) {
+                    val diff = screenshotTime.time - CodeExecutionContext.lastScreenshotTime!!.time
+                    val intervalMilliseconds = PropertiesManager.screenshotIntervalSeconds * 1000
+                    if (diff < intervalMilliseconds) {
+                        TestLog.trace("screenshot() skipped. ($diff < $intervalMilliseconds)")
+                        return this
+                    }
+                }
             }
-            if (shouldTakeScreenshot.not()) {
-                return this
+            if (sync) {
+                syncCache()
             }
-            if (CodeExecutionContext.lastScreenshotTime != null) {
-                val diff = screenshotTime.time - CodeExecutionContext.lastScreenshotTime!!.time
-                val intervalMilliseconds = PropertiesManager.screenshotIntervalSeconds * 1000
-                if (diff < intervalMilliseconds) {
-                    TestLog.trace("screenshot() skipped. ($diff < $intervalMilliseconds)")
+            if (force.not() && onChangedOnly) {
+                val sourceXml = TestElementCache.sourceXml
+                val xmlHasDifference = sourceXml != CodeExecutionContext.lastScreenshotXmlSource
+                if (xmlHasDifference.not()) {
                     return this
                 }
             }
-        }
-
-        if (sync) {
-            syncCache()
-        }
-        if (testContext.useCache && force.not() && onChangedOnly) {
-            val sourceXml = TestElementCache.sourceXml
-            val xmlHasDifference = sourceXml != CodeExecutionContext.lastScreenshotXmlSource
-            if (xmlHasDifference.not()) {
+        } else {
+            /**
+             * Vision mode
+             */
+            if (CodeExecutionContext.screenshotSynced) {
+                TestLog.printInfo("screenshot() skipped. (screenshotSynced=${CodeExecutionContext.screenshotSynced})")
                 return this
             }
         }
@@ -1908,11 +1922,7 @@ object TestDriver {
             screenshotFileName += ".png"
         }
 
-        if (mAppiumDriver == null) {
-            throw TestDriverException("appiumDriver is null")
-        }
-
-        if (testContext.waitSecondsForAnimationComplete != 0.0) {
+        if (testContext.waitSecondsForAnimationComplete > 0.0) {
             Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
         }
 
@@ -1925,14 +1935,11 @@ object TestDriver {
 
             val screenshotImage = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES).toBufferedImage()
 
-            if (onChangedOnly && screenshotImage.isSame(CodeExecutionContext.lastScreenshotImage)) {
+            val screenshotSynced = screenshotImage.isSame(CodeExecutionContext.lastScreenshotImage)
+            if (onChangedOnly && screenshotSynced) {
+                TestLog.printInfo("screenshot skipped. (no change)")
                 return this
             }
-
-            VisionContext.current.clear()
-
-            CodeExecutionContext.lastScreenshotImage = screenshotImage
-            CodeExecutionContext.lastScreenshotTime = screenshotTime
 
             val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toString()
             screenshotImage.resizeAndSaveImage(
@@ -1940,8 +1947,12 @@ object TestDriver {
                 resizedFile = screenshotFile.toPath().toFile(),
                 log = false
             )
+            CodeExecutionContext.lastScreenshotTime = screenshotTime
             CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
+            CodeExecutionContext.lastScreenshotImage = screenshotImage  // Captures VisionRootElement
+            CodeExecutionContext.regionElement = visionRootElement
+            CodeExecutionContext.screenshotSynced = screenshotSynced
 
             if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout) {
                 val threshold = PropertiesManager.screenshotBlackoutThreshold

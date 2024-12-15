@@ -251,8 +251,11 @@ object CodeExecutionContext {
     var lastScreenshotImage: BufferedImage? = null
         internal set(value) {
             field = value
-            TestDriver.visionGlobalElement = VisionElement()
-            this.regionElement = TestDriver.visionGlobalElement
+            screenshotSynced = false
+            if (value != null) {
+                val v = VisionElement()
+                TestDriver.visionRootElement = v
+            }
         }
 
     /**
@@ -272,6 +275,19 @@ object CodeExecutionContext {
      */
     var lastScreenshotXmlSource: String = ""
         internal set
+
+    /**
+     * screenshotSynced
+     */
+    var screenshotSynced = false
+        internal set
+
+    /**
+     * setScreenshotDirty
+     */
+    fun setScreenshotDirty() {
+        screenshotSynced = false
+    }
 
     // Misc --------------------------------------------------
 
@@ -331,6 +347,7 @@ object CodeExecutionContext {
         isInCondition = false
         isInAction = false
         isInExpectation = false
+        screenshotSynced = false
         /**
          * Screenshot
          */

@@ -2,13 +2,16 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.refreshCache
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
+import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.*
@@ -189,4 +192,134 @@ fun VisionDrive.screenIs(
     )
 }
 
+/**
+ * screenIsOf
+ */
+fun VisionDrive.screenIsOf(
+    vararg screenNames: String,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
+    func: (() -> Unit)? = null
+): VisionElement {
+
+    val command = "screenIsOf"
+    val assertMessage = message(id = command, subject = screenNames.joinToString(","))
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = screenNames.joinToString(",")) {
+        screenIsOfCore(
+            screenNames = screenNames,
+            waitSeconds = waitSeconds,
+            assertMessage = assertMessage,
+            onIrregular = onIrregular
+        )
+    }
+    if (func != null) {
+        func()
+    }
+
+    return lastElement
+}
+
+/**
+ * screenIsOf
+ */
+fun VisionDrive.screenIsOf(
+    vararg screenNames: String,
+    waitSeconds: Int,
+    onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
+    func: (() -> Unit)? = null
+): VisionElement {
+
+    return screenIsOf(
+        screenNames = screenNames,
+        waitSeconds = waitSeconds.toDouble(),
+        onIrregular = onIrregular,
+        func = func
+    )
+}
+
+internal fun VisionDrive.screenIsOfCore(
+    vararg screenNames: String,
+    assertMessage: String,
+    waitSeconds: Double,
+    onIrregular: (() -> Unit)?
+) {
+    var isScreenResult = false
+    var matchedScreenName = ""
+    val checkScreen = {
+        for (name in screenNames) {
+            isScreenResult = isScreen(name)
+            if (isScreenResult) {
+                matchedScreenName = name
+                break
+            }
+        }
+        isScreenResult
+    }
+
+    checkScreen()
+
+    if (isScreenResult.not()) {
+        SyncUtility.doUntilTrue(waitSeconds = waitSeconds) {
+            checkScreen()
+            if (isScreenResult.not()) {
+                onIrregular?.invoke()
+            }
+            isScreenResult
+        }
+    }
+
+    if (isScreenResult) {
+        TestLog.ok(message = assertMessage, arg1 = matchedScreenName)
+    } else {
+        lastElement.lastResult = LogType.NG
+
+        val ex = TestNGException("${assertMessage} (actual=${currentScreen})", lastElement.lastError)
+        throw ex
+    }
+}
+
+/**
+ * verify
+ */
+fun VisionDrive.verify(
+    message: String,
+    func: (() -> Unit)
+): VisionElement {
+    val testElement = TestDriver.it
+
+    val command = "verify"
+
+    val context = TestDriverCommandContext(testElement)
+    context.execCheckCommand(command = command, message = message) {
+
+        val startCount = TestLog.allLines.count()
+        val original = CodeExecutionContext.isInOperationCommand
+        try {
+            CodeExecutionContext.isInOperationCommand = true
+            func()
+            CodeExecutionContext.isInOperationCommand = original
+
+            val endCount = TestLog.allLines.count()
+            val takeCount = endCount - startCount
+            val lines = TestLog.allLines.takeLast(takeCount)
+            if (lines.any() { it.logType == LogType.CHECK || it.logType.isOKType }) {
+                TestLog.ok(message = message)
+            } else {
+                TestLog.info("verify block should include one or mode assertion.")
+                TestLog.manual(message = message)
+            }
+        } catch (t: NotImplementedError) {
+            throw t
+        } catch (t: Throwable) {
+            val ex = TestNGException(message = message, cause = t)
+            throw ex
+        } finally {
+            CodeExecutionContext.isInOperationCommand = original
+        }
+    }
+
+    return lastElement
+}
 

@@ -3,7 +3,6 @@ package shirates.core.utility.image
 import boofcv.io.image.UtilImageIO
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.utility.deleteFilesNonRecursively
-import shirates.core.utility.getSiblingPath
 import shirates.core.utility.image.SegmentUtility.getMergedSegmentContainer
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
@@ -25,10 +24,10 @@ class SegmentContainer(
     var segmentMargin: Int,
     var scale: Double = 1.0,
     var skinThickness: Int = 2,
-    var minimunArea: Int = segmentMargin * segmentMargin,
-    var outputDirectory: String? =
-        if (containerImageFile != null) containerImageFile.toPath().getSiblingPath(containerImageFile)
-            .toString() else null,
+    var minimumWidth: Int? = null,
+    var minimumHeight: Int? = null,
+    var outputDirectory: String? = null,
+    var saveWithMargin: Boolean = true,
 ) {
     var normalizedFilterSegment: Segment? = null
 
@@ -82,6 +81,7 @@ class SegmentContainer(
             container = this,
             screenshotImage = screenshotImage,
             screenshotFile = screenshotFile,
+            saveWithMargin = saveWithMargin,
         )
         segments.clear()
         segments.addAll(cannotMergeSegments)
@@ -130,16 +130,34 @@ class SegmentContainer(
     }
 
     /**
-     * filterByArea
+     * filterByWidthHeight
      */
-    fun filterByArea(
-        area: Int = minimunArea,
-    ) {
-        if (area <= 0) {
-            throw IllegalArgumentException("Area must be greater than zero.")
+    fun filterByWidthAndHeight() {
+
+        var filtered = segments.toList()
+
+        if (minimumWidth != null) {
+            filtered = segments.filter { it.width > minimumWidth!! }
+        }
+        if (minimumHeight != null) {
+            filtered = filtered.filter { it.height > minimumHeight!! }
         }
 
-        val filtered = segments.filter { it.area > area }
+        if (filtered.any()) {
+            segments.clear()
+            segments.addAll(filtered)
+        }
+    }
+
+    /**
+     * filterByHeight
+     */
+    fun filterByHeight() {
+        if (minimumHeight == null) {
+            return
+        }
+
+        val filtered = segments.filter { it.height > minimumHeight!! }
         if (filtered.any()) {
             segments.clear()
             segments.addAll(filtered)
@@ -162,7 +180,7 @@ class SegmentContainer(
         }
 
         for (segment in segments) {
-            segment.captureAndSave(outputDirectory!!)
+            segment.captureAndSave(outputDirectory)
         }
         return this
     }
@@ -223,11 +241,17 @@ class SegmentContainer(
         /**
          * filter
          */
-        filterByArea()
+        filterByWidthAndHeight()
         if (filterImageFile != null && filterImageFile != containerImageFile) {
 
             // Get normalized template image
-            val normalizedTemplateContainer = getMergedSegmentContainer(imageFile = filterImageFile!!)
+            val normalizedTemplateContainer =
+                getMergedSegmentContainer(
+                    imageFile = filterImageFile!!,
+                    saveWithMargin = false,
+                    outputDirectory = outputDirectory
+                )
+            normalizedTemplateContainer.parse()
             this.normalizedFilterSegment = normalizedTemplateContainer.segments.first()
 
             // overrides filter information
