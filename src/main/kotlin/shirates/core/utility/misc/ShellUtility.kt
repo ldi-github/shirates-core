@@ -21,7 +21,7 @@ object ShellUtility {
      */
     fun executeCommand(
         vararg args: String,
-        timeoutSeconds: Double = Const. SHELL_RESULT_WAIT_FOR_SECONDS,
+        timeoutSeconds: Double = Const.SHELL_RESULT_WAIT_FOR_SECONDS,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellResult {
         val r = executeCommandCore(args = args, log = log)
@@ -51,7 +51,8 @@ object ShellUtility {
 
             sw.start()
 
-            executor.execute(commandLine)
+            val env = EnvironmentUtils.getProcEnvironment();
+            executor.execute(commandLine, env)
         } catch (t: Throwable) {
             error = t
             TestLog.trace(t.stackTraceToString())
@@ -158,7 +159,7 @@ object ShellUtility {
 
         val resultString: String
             get() {
-                if(hasCompleted.not()){
+                if (hasCompleted.not()) {
                     waitFor()
                 }
                 if (TestMode.isRunningOnWindows) {

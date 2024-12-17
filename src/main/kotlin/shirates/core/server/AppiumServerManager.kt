@@ -4,6 +4,7 @@ import org.apache.commons.exec.CommandLine
 import org.apache.commons.exec.DefaultExecuteResultHandler
 import org.apache.commons.exec.DefaultExecutor
 import org.apache.commons.exec.PumpStreamHandler
+import org.apache.commons.exec.environment.EnvironmentUtils
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
@@ -177,7 +178,8 @@ object AppiumServerManager {
         executeResultHandler = DefaultExecuteResultHandler()
         TestLog.info("Starting Appium Server.")
         TestLog.info("${commandLine.executable} ${commandLine.arguments.joinToString(" ")}")
-        executor.execute(commandLine, executeResultHandler)
+        val env = EnvironmentUtils.getProcEnvironment();
+        executor.execute(commandLine, env, executeResultHandler)
         Thread.sleep(2000)
 
         // Wait for listening to the port

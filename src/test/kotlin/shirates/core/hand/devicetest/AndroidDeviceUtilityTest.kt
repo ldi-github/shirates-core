@@ -13,7 +13,7 @@ import shirates.core.utility.misc.ShellUtility
 
 class AndroidDeviceUtilityTest : UnitTest() {
 
-    val avd1 = "Pixel_3a_Android_12_"
+    val avd1 = "Pixel_8_Android_14_"
 
     override fun beforeAll(context: ExtensionContext?) {
 
