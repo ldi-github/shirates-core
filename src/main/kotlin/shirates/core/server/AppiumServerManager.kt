@@ -169,7 +169,7 @@ object AppiumServerManager {
         for (arg in commandTokens) {
             commandLine.addArgument(arg)
         }
-        val executor = DefaultExecutor()
+        val executor = DefaultExecutor.builder().get()
         val outputStream = ByteArrayOutputStream()
         val handler = PumpStreamHandler(outputStream)
         executor.streamHandler = handler

@@ -1,4 +1,4 @@
-package shirates.core.vision.driver
+package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
@@ -20,6 +20,7 @@ fun VisionElement.swipeTo(
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
@@ -41,6 +42,7 @@ fun VisionElement.swipeTo(
             waitSeconds = waitSeconds,
             allowScroll = false,
             swipeToCenter = false,
+            intervalSeconds = intervalSeconds,
             throwsException = false
         )
 

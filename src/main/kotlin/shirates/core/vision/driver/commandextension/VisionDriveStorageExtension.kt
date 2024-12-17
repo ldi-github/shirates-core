@@ -8,7 +8,6 @@ import shirates.core.storage.Clipboard
 import shirates.core.storage.Memo
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.getThisOrIt
 
 /**
  * clearMemo

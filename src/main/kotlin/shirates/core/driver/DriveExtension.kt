@@ -2,15 +2,25 @@ package shirates.core.driver
 
 import org.openqa.selenium.Capabilities
 import shirates.core.configuration.repository.ParameterRepository
-import shirates.core.driver.commandextension.getScrollableElement
-import shirates.core.driver.commandextension.getThisOrIt
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.appium.getCapabilityRelaxed
+import shirates.core.vision.VisionElement
+
+/**
+ * toVisionElement
+ */
+val Drive.toVisionElement: VisionElement
+    get() {
+        if (this is VisionElement) {
+            return this
+        }
+        return VisionElement.emptyElement
+    }
 
 /**
  * parameters
  */
-val TestDrive.parameters: Map<String, String>
+val Drive.parameters: Map<String, String>
     get() {
         return ParameterRepository.parameters
     }
@@ -18,7 +28,7 @@ val TestDrive.parameters: Map<String, String>
 /**
  * parameter
  */
-fun TestDrive.parameter(name: String): String {
+fun Drive.parameter(name: String): String {
     if (parameters.containsKey(name)) {
         return parameters[name]!!
     }
@@ -30,32 +40,9 @@ fun TestDrive.parameter(name: String): String {
 }
 
 /**
- * imageProfile
- */
-val TestDrive.imageProfile: String
-    get() {
-        if (TestDriver.isInitialized.not()) {
-            return TestMode.platformAnnotation
-        }
-
-        val viewportRect = capabilities.getCapabilityRelaxed("viewportRect")
-        if (viewportRect.isNotBlank()) {
-            val b = Bounds(viewportRect)
-            return "${TestMode.platformAnnotation}_${b.width}x${b.height}"
-        }
-
-        val b = viewBounds
-        if (b.isEmpty) {
-            return TestMode.platformAnnotation
-        }
-
-        return "${TestMode.platformAnnotation}_${b.width}x${b.height}"
-    }
-
-/**
  * capabilities
  */
-val TestDrive.capabilities: Capabilities
+val Drive.capabilities: Capabilities
     get() {
         if (TestDriver.isInitialized.not()) {
             throw TestDriverException("Failed to get capabilities. TestDriver is not initialized.")
@@ -66,7 +53,7 @@ val TestDrive.capabilities: Capabilities
 /**
  * capabilityRelaxed
  */
-fun TestDrive.capabilityRelaxed(capabilityName: String): String {
+fun Drive.capabilityRelaxed(capabilityName: String): String {
 
     return capabilities.getCapabilityRelaxed(capabilityName = capabilityName)
 }
@@ -74,7 +61,7 @@ fun TestDrive.capabilityRelaxed(capabilityName: String): String {
 /**
  * deviceManufacturer
  */
-val TestDrive.deviceManufacturer: String
+val Drive.deviceManufacturer: String
     get() {
         return parameter("deviceManufacturer")
     }
@@ -82,7 +69,7 @@ val TestDrive.deviceManufacturer: String
 /**
  * deviceModel
  */
-val TestDrive.deviceModel: String
+val Drive.deviceModel: String
     get() {
         return parameter("deviceModel")
     }
@@ -90,7 +77,7 @@ val TestDrive.deviceModel: String
 /**
  * deviceName
  */
-val TestDrive.deviceName: String
+val Drive.deviceName: String
     get() {
         return parameter("deviceName")
     }
@@ -98,7 +85,7 @@ val TestDrive.deviceName: String
 /**
  * isEmulator
  */
-val TestDrive.isEmulator: Boolean
+val Drive.isEmulator: Boolean
     get() {
         return TestMode.isEmulator
     }
@@ -106,7 +93,7 @@ val TestDrive.isEmulator: Boolean
 /**
  * isSimulator
  */
-val TestDrive.isSimulator: Boolean
+val Drive.isSimulator: Boolean
     get() {
         return TestMode.isSimulator
     }
@@ -114,7 +101,7 @@ val TestDrive.isSimulator: Boolean
 /**
  * isVirtualDevice
  */
-val TestDrive.isVirtualDevice: Boolean
+val Drive.isVirtualDevice: Boolean
     get() {
         return TestMode.isVirtualDevice
     }
@@ -122,7 +109,7 @@ val TestDrive.isVirtualDevice: Boolean
 /**
  * isRealDevice
  */
-val TestDrive.isRealDevice: Boolean
+val Drive.isRealDevice: Boolean
     get() {
         return TestMode.isRealDevice
     }
@@ -130,7 +117,7 @@ val TestDrive.isRealDevice: Boolean
 /**
  * isStub
  */
-val TestDrive.isStub: Boolean
+val Drive.isStub: Boolean
     get() {
         return TestMode.isStub
     }
@@ -139,7 +126,7 @@ val TestDrive.isStub: Boolean
  * platformName
  * (Android or iOS)
  */
-val TestDrive.platformName: String
+val Drive.platformName: String
     get() {
         return testContext.profile.platformName
     }
@@ -148,7 +135,7 @@ val TestDrive.platformName: String
  * platformVersion
  * (os version)
  */
-val TestDrive.platformVersion: String
+val Drive.platformVersion: String
     get() {
         if (TestDriver.isInitialized) {
             return TestDriver.appiumDriver.capabilities.getCapabilityRelaxed("platformVersion")
@@ -160,7 +147,7 @@ val TestDrive.platformVersion: String
  * platformMajorVersion
  * (os major version)
  */
-val TestDrive.platformMajorVersion: Int
+val Drive.platformMajorVersion: Int
     get() {
         val tokens = platformVersion.split(".")
         if (tokens.any()) {
@@ -176,27 +163,7 @@ val TestDrive.platformMajorVersion: Int
 /**
  * appIconName
  */
-val TestDrive.appIconName: String
+val Drive.appIconName: String
     get() {
         return testContext.appIconName
     }
-
-/**
- * scrollFrame
- */
-val TestDrive.scrollFrame: TestElement
-    get() {
-        val testElement = getThisOrIt()
-        lastElement = testElement.getScrollableElement()
-        return lastElement
-    }
-
-/**
- * view
- */
-val TestDrive.view: TestElement
-    get() {
-        lastElement = TestElementCache.viewElement
-        return lastElement
-    }
-

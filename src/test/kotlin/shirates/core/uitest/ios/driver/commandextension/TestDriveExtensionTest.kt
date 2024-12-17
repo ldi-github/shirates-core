@@ -9,6 +9,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
 import shirates.core.driver.branchextension.ifScreenIsNot
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.driver
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog

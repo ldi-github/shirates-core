@@ -31,6 +31,8 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.configration.repository.VisionMLModelRepository
+import shirates.core.vision.driver.commandextension.launchApp
+import shirates.core.vision.driver.commandextension.rootElement
 import shirates.spec.report.TestListReport
 import java.lang.reflect.InvocationTargetException
 import java.nio.file.Files
@@ -488,7 +490,7 @@ abstract class UITestBase : Drive {
                 TestLog.skipScenario(message)
                 return
             }
-            driver.screenshotCore()
+            TestDriver.screenshotCore()
             TestLog.skipScenario(message)
             isSkippingScenario = true
             testSkipped = true
@@ -510,7 +512,7 @@ abstract class UITestBase : Drive {
                 TestLog.skipCase(message)
                 return
             }
-            driver.screenshotCore()
+            TestDriver.screenshotCore()
             TestLog.skipCase(message)
             isSkippingCase = true
             testSkipped = true
@@ -528,9 +530,9 @@ abstract class UITestBase : Drive {
     ) {
         if (predicate()) {
             if (isNoLoadRun.not()) {
-                driver.screenshotCore()
+                TestDriver.screenshotCore()
             }
-            driver.screenshotCore()
+            TestDriver.screenshotCore()
             TestLog.manualScenario(message)
             isManualingScenario = true
             testSkipped = true
@@ -548,7 +550,7 @@ abstract class UITestBase : Drive {
     ) {
         if (predicate()) {
             if (isNoLoadRun.not()) {
-                driver.screenshotCore()
+                TestDriver.screenshotCore()
             }
             TestLog.manualCase(message)
             isManualingCase = true
@@ -730,8 +732,10 @@ abstract class UITestBase : Drive {
         TestLog.info("Running scenario ..................................................")
 
         if (isAndroid) {
-            val pack = rootElement.getProperty("package")
-            TestLog.info("Startup package: $pack")
+            val packageName =
+                if (testContext.useCache) testDrive.rootElement.packageName
+                else visionDrive.rootElement.packageName
+            TestLog.info("Startup package: $packageName")
         }
 
         TestLog.testScenarioId = scenarioId!!
@@ -761,7 +765,11 @@ abstract class UITestBase : Drive {
 
             if (launchApp && testDrive.isAppInstalled()) {
                 silent {
-                    testDrive.launchApp()
+                    if (testContext.useCache) {
+                        testDrive.launchApp()
+                    } else {
+                        visionDrive.launchApp()
+                    }
                 }
             }
 
@@ -791,18 +799,18 @@ abstract class UITestBase : Drive {
             throw TestAbortedException(t.message ?: t.stackTraceToString(), t)
         } catch (t: UnsatisfiedLinkError) {
             TestLog.error(t)
-            driver.screenshotCore()
+            TestDriver.screenshotCore()
             throw t
 
         } catch (t: NoClassDefFoundError) {
             TestLog.error(t)
-            driver.screenshotCore()
+            TestDriver.screenshotCore()
             throw t
         } catch (t: RerunScenarioException) {
             throw t
         } catch (t: Throwable) {
             TestLog.error(message = t.message ?: t.toString(), exception = t)
-            driver.screenshotCore()
+            TestDriver.screenshotCore()
             throw t
         } finally {
             scenarioLog.processingTime = TestLog.lastTestLog!!.logDateTime.time - scenarioLog.logDateTime.time

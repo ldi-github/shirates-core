@@ -5,6 +5,7 @@ import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.androidDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.Message.message
@@ -90,9 +91,9 @@ fun TestDrive.pressBack(
     context.execOperateCommand(command = command, message = message) {
         if (isAndroid) {
             if (platformMajorVersion <= 9) {
-                driver.androidDriver.navigate().back()
+                androidDriver.navigate().back()
             } else {
-                TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.BACK))
+                androidDriver.pressKey(KeyEvent(AndroidKey.BACK))
             }
             TestDriver.invalidateCache()
         } else {

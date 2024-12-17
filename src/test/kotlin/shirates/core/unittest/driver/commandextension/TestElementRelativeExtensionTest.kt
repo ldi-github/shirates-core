@@ -8,7 +8,6 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.rootElement
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 
@@ -102,7 +101,7 @@ class TestElementRelativeExtensionTest : UnitTest() {
 
         run {
             // Arrange
-            val leaf = rootElement.descendants.last()
+            val leaf = TestElementCache.rootElement.descendants.last()
             assertThat(leaf.child().isEmpty).isTrue()
         }
 
@@ -179,7 +178,7 @@ class TestElementRelativeExtensionTest : UnitTest() {
         }
 
         run {
-            assertThat(rootElement.sibling().isEmpty).isTrue()
+            assertThat(TestElementCache.rootElement.sibling().isEmpty).isTrue()
         }
 
         assertThatThrownBy {

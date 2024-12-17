@@ -87,7 +87,8 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
     fun getScrollableElement() {
 
         // Arrange
-        rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataAndroid.SettingsTopScreen)
+        TestElementCache.rootElement =
+            ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataAndroid.SettingsTopScreen)
         run {
             // Act
             val e = testDrive.getScrollableElement("#main_content_scrollable_container")
@@ -122,19 +123,19 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
             // Act
             val e = TestElement.emptyElement.getScrollableElement()
             // Assert
-            assertThat(e).isEqualTo(view)
+            assertThat(e).isEqualTo(TestElementCache.rootElement)
         }
         run {
             // Act
-            val e = rootElement.getScrollableElement()
+            val e = TestElementCache.rootElement.getScrollableElement()
             // Assert
-            assertThat(e).isEqualTo(view)
+            assertThat(e).isEqualTo(TestElementCache.rootElement)
         }
         run {
             // Act
-            val e = view.getScrollableElement()
+            val e = TestElementCache.rootElement.getScrollableElement()
             // Assert
-            assertThat(e).isEqualTo(view)
+            assertThat(e).isEqualTo(TestElementCache.rootElement)
         }
         run {
             // Act

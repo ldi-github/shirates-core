@@ -1,4 +1,4 @@
-package shirates.core.vision.driver
+package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
@@ -18,6 +18,7 @@ import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import shirates.core.vision.driver.lastElement
 
 ///**
 // * recognizeText
@@ -47,6 +48,7 @@ fun VisionDrive.detect(
     swipeToCenter: Boolean = false,
     throwsException: Boolean = false,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    intervalSeconds: Double = testContext.syncIntervalSeconds
 //    frame: Bounds? = viewBounds,
 ): VisionElement {
 
@@ -60,6 +62,7 @@ fun VisionDrive.detect(
             language = language,
             rect = rect,
             waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
             allowScroll = allowScroll,
             swipeToCenter = swipeToCenter,
             throwsException = throwsException,
@@ -76,6 +79,7 @@ internal fun VisionDrive.detectCore(
     language: String,
     rect: Rectangle,
     waitSeconds: Double,
+    intervalSeconds: Double,
     allowScroll: Boolean,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
     swipeToCenter: Boolean,
@@ -108,17 +112,19 @@ internal fun VisionDrive.detectCore(
                     selector = selector,
                     rect = rect,
                     direction = direction,
+                    intervalSeconds = intervalSeconds,
                     swipeToCenter = swipeToCenter,
                     throwsException = false,
                 )
             } else {
                 WaitUtility.doUntilTrue(
                     waitSeconds = waitSeconds,
+                    intervalSeconds = intervalSeconds,
                     throwOnFinally = throwsException,
                 ) {
-                    val globalElement = screenshot(force = true)
-                    globalElement.recognizeText(language = language)
-                    v = globalElement.visionContext.detect(selector = selector)
+                    screenshot(force = true)
+                    TestDriver.visionRootElement.recognizeText(language = language)
+                    v = TestDriver.visionRootElement.visionContext.detect(selector = selector)
                     v.isFound
                 }
             }
@@ -193,13 +199,14 @@ internal fun VisionDrive.detectWithScroll(
 
     var v = VisionElement.emptyElement
     val actionFunc = {
-        val globalElement = screenshot(force = true)
-        globalElement.recognizeText(language = language)
-        v = globalElement.detectCore(
+        screenshot(force = true)
+        TestDriver.visionRootElement.recognizeText(language = language)
+        v = detectCore(
             selector = selector,
             language = language,
             rect = rect,
             waitSeconds = 0.0,
+            intervalSeconds = intervalSeconds,
             allowScroll = true,
             swipeToCenter = swipeToCenter,
             throwsException = false,
@@ -275,6 +282,7 @@ fun VisionDrive.detectWithScrollDown(
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             swipeToCenter = swipeToCenter,
+            intervalSeconds = scrollIntervalSeconds,
             throwsException = throwsException,
         )
     }
@@ -297,6 +305,7 @@ private fun VisionDrive.detectWithScrollCore(
     scrollEndMarginRatio: Double,
     scrollMaxCount: Int,
     swipeToCenter: Boolean,
+    intervalSeconds: Double,
     throwsException: Boolean
 ): VisionElement {
     var v1 = v
@@ -307,6 +316,7 @@ private fun VisionDrive.detectWithScrollCore(
         waitSeconds = 0.0,
         allowScroll = false,
         swipeToCenter = false,
+        intervalSeconds = intervalSeconds,
         throwsException = false,
     )
     if (v1.isEmpty) {
@@ -365,6 +375,7 @@ fun VisionDrive.detectWithScrollUp(
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             swipeToCenter = swipeToCenter,
+            intervalSeconds = scrollIntervalSeconds,
             throwsException = throwsException,
         )
     }
@@ -414,6 +425,7 @@ fun VisionDrive.detectWithScrollRight(
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             swipeToCenter = swipeToCenter,
+            intervalSeconds = scrollIntervalSeconds,
             throwsException = throwsException,
         )
     }
@@ -463,6 +475,7 @@ fun VisionDrive.detectWithScrollLeft(
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
             swipeToCenter = swipeToCenter,
+            intervalSeconds = scrollIntervalSeconds,
             throwsException = throwsException,
         )
     }
@@ -530,6 +543,7 @@ fun VisionDrive.canDetect(
             waitSeconds = waitSeconds,
             allowScroll = allowScroll,
             swipeToCenter = swipeToCenter,
+            intervalSeconds = 0.0,
             throwsException = false
         ).isFound
     }
@@ -544,6 +558,7 @@ internal fun VisionDrive.canDetectCore(
     language: String,
     rect: Rectangle,
     waitSeconds: Double,
+    intervalSeconds: Double,
     allowScroll: Boolean,
     scrollDirection: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
 ): Boolean {
@@ -556,6 +571,7 @@ internal fun VisionDrive.canDetectCore(
         allowScroll = allowScroll,
         direction = scrollDirection,
         swipeToCenter = false,
+        intervalSeconds = intervalSeconds,
         throwsException = false,
     )
 
@@ -647,6 +663,7 @@ private fun VisionDrive.canDetectWithScroll(
                 language = language,
                 rect = rect,
                 waitSeconds = waitSeconds,
+                intervalSeconds = scrollIntervalSeconds,
                 allowScroll = true,
                 scrollDirection = direction
             )
@@ -779,6 +796,7 @@ internal fun VisionDrive.canDetectAll(
                 waitSeconds = waitSeconds,
                 allowScroll = allowScroll,
                 scrollDirection = direction,
+                intervalSeconds = 0.0,
             )
             if (foundAll.not()) {
                 break

@@ -1,5 +1,6 @@
-package shirates.core.vision.driver
+package shirates.core.vision.driver.commandextension
 
+import org.apache.commons.text.similarity.LevenshteinDistance
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
@@ -13,6 +14,7 @@ import shirates.core.utility.image.rect
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import shirates.core.vision.driver.lastElement
 
 
 private fun VisionDrive.scrollCommand(
@@ -207,6 +209,105 @@ internal fun VisionDrive.getScrollingInfo(
     return r
 }
 
+private fun VisionDrive.scrollToEdgeCommand(
+    scrollFrame: String = "",
+    scrollableElement: TestElement?,
+    command: String,
+    maxLoopCount: Int,
+    direction: ScrollDirection,
+    flick: Boolean,
+    startMarginRatio: Double = testContext.getScrollStartMarginRatio(direction = direction),
+    endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction = direction),
+    repeat: Int,
+    intervalSeconds: Double = testContext.getIntervalSeconds(flick = flick),
+    edgeSelector: String?,
+) {
+    val message = message(id = command)
+    val context = TestDriverCommandContext(null)
+    context.execOperateCommand(command = command, message = message) {
+
+        doUntilScrollStop(
+//            scrollFrame = scrollFrame,
+//            scrollableElement = scrollableElement,
+            maxLoopCount = maxLoopCount,
+            direction = direction,
+            startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio,
+            repeat = repeat,
+            intervalSeconds = intervalSeconds,
+            edgeSelector = edgeSelector,
+        )
+
+        invalidateScreen()
+    }
+}
+
+/**
+ * scrollToBottom
+ */
+fun VisionDrive.scrollToBottom(
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
+    repeat: Int = testContext.scrollToEdgeBoost,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
+    flick: Boolean = true,
+    maxLoopCount: Int = testContext.scrollMaxCount,
+    edgeSelector: String? = null,
+    imageCompare: Boolean = false
+): VisionElement {
+
+    scrollToEdgeCommand(
+        scrollFrame = scrollFrame,
+        scrollableElement = scrollableElement,
+        command = "scrollToBottom",
+        direction = ScrollDirection.Down,
+        maxLoopCount = maxLoopCount,
+        flick = flick,
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
+        repeat = repeat,
+        intervalSeconds = intervalSeconds,
+        edgeSelector = edgeSelector,
+    )
+
+    return lastElement
+}
+
+/**
+ * scrollToTop
+ */
+fun VisionDrive.scrollToTop(
+    scrollFrame: String = "",
+    scrollableElement: TestElement? = null,
+    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
+    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
+    repeat: Int = testContext.scrollToEdgeBoost,
+    intervalSeconds: Double = testContext.scrollIntervalSeconds,
+    flick: Boolean = true,
+    maxLoopCount: Int = testContext.scrollMaxCount,
+    edgeSelector: String? = null,
+    imageCompare: Boolean = false
+): VisionElement {
+
+    scrollToEdgeCommand(
+        scrollFrame = scrollFrame,
+        scrollableElement = scrollableElement,
+        command = "scrollToTop",
+        direction = ScrollDirection.Up,
+        maxLoopCount = maxLoopCount,
+        flick = flick,
+        startMarginRatio = startMarginRatio,
+        endMarginRatio = endMarginRatio,
+        repeat = repeat,
+        intervalSeconds = intervalSeconds,
+        edgeSelector = edgeSelector,
+    )
+
+    return lastElement
+}
+
 /**
  * doUntilScrollStop
  */
@@ -308,38 +409,16 @@ internal fun VisionDrive.doUntilScrollStopCore(
     val msLastSerialized = Measure("lastSerialized")
     msLastSerialized.end()
 
-    fun isEndOfScroll(): Boolean {
-
-        val ms = Measure("isEndOfScroll")
-        try {
-            val scrollInfo = TestDriver.screenInfo.scrollInfo
-            val expressions = if (edgeSelector != null) {
-                mutableListOf(edgeSelector)
-            } else {
-                when (direction) {
-                    ScrollDirection.Down -> scrollInfo.endElements
-                    ScrollDirection.Up -> scrollInfo.startElements
-                    else -> mutableListOf()
-                }
-            }
-            if (edgeElementFound(expressions = expressions)) {
-                return true
-            }
-            return false
-
-        } finally {
-            ms.end()
-        }
-    }
-
     if (TestDriver.isInitialized) {
-//        TestDriver.refreshCache()
         if (actionFunc != null) {
             val result = actionFunc()
             if (result) {
                 return lastElement
             }
         }
+
+        var lastVisionRootElement = VisionElement()
+        lastVisionRootElement.visionContext.jsonString = ""
 
         val ms = Measure("doUntilScrollStop-loop")
         try {
@@ -353,7 +432,13 @@ internal fun VisionDrive.doUntilScrollStopCore(
                     }
                 }
 
-                val endOfScroll = isEndOfScroll()
+                TestDriver.visionRootElement.recognizeText()
+                val s1 = lastVisionRootElement.visionContext.textObservations.map { it.text }.joinToString("")
+                val s2 = TestDriver.visionRootElement.visionContext.textObservations.map { it.text }.joinToString("")
+                val distance = LevenshteinDistance().apply(s1, s2)
+                val endOfScroll = distance == 0
+                println("distance=$distance, endOfScroll=$endOfScroll")
+                lastVisionRootElement = TestDriver.visionRootElement
                 TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
                 if (endOfScroll) {
                     break

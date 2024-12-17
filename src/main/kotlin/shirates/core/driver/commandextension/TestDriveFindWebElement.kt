@@ -6,6 +6,7 @@ import shirates.core.configuration.Filter
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Measure
@@ -63,12 +64,12 @@ private fun TestDrive.findWebElementsCore(
     val filters = selector.filterMap.values.toList()
     if (filters.isEmpty()) {
         var list = if (isAndroid) {
-            driver.appiumDriver.findElements(By.xpath("//*"))
+            appiumDriver.findElements(By.xpath("//*"))
                 .map { it.toTestElement(selector = selector) }
         } else {
             val sel = Selector()
             val iosClassChain = sel.getIosClassChain()
-            driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain))
+            appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain))
                 .map { it.toTestElement(selector = selector) }
         }
         if (frame != null) {
@@ -96,7 +97,7 @@ private fun TestDrive.findWebElementsCore(
     if (isAndroid || selector.xpath != null || selector.className == "XCUIElementTypeApplication") {
         val xpath = selector.xpath ?: "//*${selector.getXPathCondition()}"
         testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
-            testElements = driver.appiumDriver.findElements(By.xpath(xpath))
+            testElements = appiumDriver.findElements(By.xpath(xpath))
                 .map { it.toTestElement(selector = selector) }
         }
         testElements = filterIgnoreTypes(testElements = testElements, condition = xpath)
@@ -117,7 +118,7 @@ private fun TestDrive.findWebElementsCore(
         sel.relativeSelectors.clear()
         val classChain = sel.getIosClassChain()
         testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
-            testElements = driver.appiumDriver.findElements(AppiumBy.iOSClassChain(classChain))
+            testElements = appiumDriver.findElements(AppiumBy.iOSClassChain(classChain))
                 .map { it.toTestElement(selector = selector) }
         }
         testElements = filterIgnoreTypes(testElements = testElements, condition = classChain)

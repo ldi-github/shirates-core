@@ -64,8 +64,8 @@ dependencies {
     testImplementation("org.apache.commons:commons-text:1.11.0")
 
     // Apache Commons Exec
-    implementation("org.apache.commons:commons-exec:1.3")
-    testImplementation("org.apache.commons:commons-exec:1.3")
+    implementation("org.apache.commons:commons-exec:1.4.0")
+    testImplementation("org.apache.commons:commons-exec:1.4.0")
 
     // Apache Commons Codec
     implementation("commons-codec:commons-codec:1.16.0")

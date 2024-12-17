@@ -1,4 +1,5 @@
 package shirates.core.driver
 
-interface Drive {
+object DriveObject : Drive {
+
 }

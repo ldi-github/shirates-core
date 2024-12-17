@@ -1062,7 +1062,7 @@ class Selector(
      * getXPathCondition
      */
     fun getXPathCondition(
-        packageName: String = rootElement.packageName,
+        packageName: String = testDrive.rootElement.packageName,
     ): String {
 
         val selectors = mutableListOf<Selector>()
@@ -1123,7 +1123,7 @@ class Selector(
     /**
      * getFullXPathCondition
      */
-    fun getFullXPathCondition(packageName: String = rootElement.packageName): String {
+    fun getFullXPathCondition(packageName: String = testDrive.rootElement.packageName): String {
 
         if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {
             return ""

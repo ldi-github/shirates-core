@@ -2,7 +2,7 @@ package shirates.core.utility.image
 
 import boofcv.io.image.UtilImageIO
 import shirates.core.logging.CodeExecutionContext
-import shirates.core.utility.deleteFilesNonRecursively
+import shirates.core.logging.TestLog
 import shirates.core.utility.image.SegmentUtility.getMergedSegmentContainer
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
@@ -26,7 +26,7 @@ class SegmentContainer(
     var skinThickness: Int = 2,
     var minimumWidth: Int? = null,
     var minimumHeight: Int? = null,
-    var outputDirectory: String? = null,
+    var outputDirectory: String? = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     var saveWithMargin: Boolean = true,
 ) {
     var normalizedFilterSegment: Segment? = null
@@ -194,9 +194,7 @@ class SegmentContainer(
          * setup outputDirectory
          */
         val outputDirectoryPath = outputDirectory.toPath()
-        if (Files.exists(outputDirectoryPath)) {
-            outputDirectoryPath.deleteFilesNonRecursively()
-        } else {
+        if (Files.exists(outputDirectoryPath).not()) {
             outputDirectory.toPath().toFile().mkdirs()
         }
 

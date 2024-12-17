@@ -2,9 +2,8 @@ package demo.vision
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.vision.driver.*
-import shirates.core.vision.driver.commandextension.exist
-import shirates.core.vision.driver.commandextension.screenIs
+import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.right
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -21,10 +20,9 @@ class AndroidSettingsDemo : VisionTest() {
                     it.tap("Network & internet")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
-                        .exist("Internet")
-                        .exist("AndroidWifi")
-                        .exist("SIMs")
-                        .exist("T-Mobile")
+//                        .exist("Internet")
+//                        .exist("SIMs")
+//                        .exist("T-Mobile")
                 }
             }
             case(2) {

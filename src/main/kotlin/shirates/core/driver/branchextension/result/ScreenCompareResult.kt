@@ -3,7 +3,9 @@ package shirates.core.driver.branchextension.result
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
+import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
+import shirates.core.vision.driver.commandextension.isScreenOf
 
 /**
  * ScreenCompareResult
@@ -18,10 +20,15 @@ class ScreenCompareResult() : CompareResult() {
             return true
         }
 
-        for (screenName in screenNames) {
-            if (TestDriver.isScreen(screenName)) {
-                return true
+        if (testContext.useCache) {
+            for (screenName in screenNames) {
+                if (TestDriver.isScreen(screenName)) {
+                    return true
+                }
             }
+        } else {
+            val r = vision.isScreenOf(screenNames = screenNames)
+            return r
         }
         return false
     }

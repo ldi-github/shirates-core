@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumBy
 import org.openqa.selenium.By
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.Measure
 import shirates.core.utility.element.ElementCategoryExpressionUtility
@@ -36,7 +37,7 @@ fun TestDrive.findElements(
         val xpath = "${startPart}${sel.getXPathCondition()}"
         val m = Measure("appiumDriver.findElements $xpath")
         try {
-            driver.appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
+            appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
         } finally {
             m.end()
         }
@@ -45,7 +46,7 @@ fun TestDrive.findElements(
         val iosClassChain = "${startPart}/${sel.getIosClassChain()}"
         val m = Measure("appiumDriver.findElements $iosClassChain")
         try {
-            driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain)).map { it.toTestElement() }
+            appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain)).map { it.toTestElement() }
         } finally {
             m.end()
         }
@@ -87,8 +88,8 @@ fun TestDrive.allElements(
     val ms = Measure("allElement")
     try {
         val elements =
-            if (isAndroid) driver.appiumDriver.findElements(By.xpath("//*")).map { TestElement(webElement = it) }
-            else driver.appiumDriver
+            if (isAndroid) appiumDriver.findElements(By.xpath("//*")).map { TestElement(webElement = it) }
+            else appiumDriver
                 .findElements(AppiumBy.iOSClassChain("**/*[`type!='A'`]"))   // Workaround to avoid duplicated elements
                 .map { TestElement(webElement = it) }
         return elements
@@ -125,13 +126,13 @@ val TestDrive.widgets
         if (isAndroid) {
             val condition = "[contains('$widgetNames', string(@class))]"
             val xpath = "//*$condition"
-            val widgets = driver.appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
+            val widgets = appiumDriver.findElements(By.xpath(xpath)).map { it.toTestElement() }
             return widgets
         }
 
         val sel = Selector(".widget")
         val iosClassChain = sel.getIosClassChain()
-        val widgets = driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain)).map { it.toTestElement() }
+        val widgets = appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain)).map { it.toTestElement() }
         return widgets
     }
 

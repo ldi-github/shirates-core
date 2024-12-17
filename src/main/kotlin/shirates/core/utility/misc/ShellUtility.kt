@@ -17,11 +17,39 @@ import java.io.InputStreamReader
 object ShellUtility {
 
     /**
+     * executeCommandByRuntime
+     */
+    fun executeCommandByRuntime(
+        vararg args: String,
+        timeoutSeconds: Double = Const.SHELL_RESULT_WAIT_FOR_SECONDS,
+        log: Boolean = PropertiesManager.enableShellExecLog
+    ): RuntimeResult {
+
+        val sw = StopWatch()
+        var error: Throwable? = null
+        val output = try {
+            val process = Runtime.getRuntime().exec(args)
+            process.inputStream.bufferedReader().use { it.readText() }
+        } catch (t: Throwable) {
+            error = t
+        } finally {
+            sw.stop()
+        }
+
+        return RuntimeResult(
+            args = args.toList(),
+            resultString = output.toString(),
+            error = error,
+            stopWatch = sw
+        )
+    }
+
+    /**
      * executeCommand
      */
     fun executeCommand(
         vararg args: String,
-        timeoutSeconds: Double = Const. SHELL_RESULT_WAIT_FOR_SECONDS,
+        timeoutSeconds: Double = Const.SHELL_RESULT_WAIT_FOR_SECONDS,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellResult {
         val r = executeCommandCore(args = args, log = log)
@@ -36,7 +64,7 @@ object ShellUtility {
 
         val outputStream = ByteArrayOutputStream()
         var error: Throwable? = null
-        val executor = DefaultExecutor()
+        val executor = DefaultExecutor.builder().get()
         val sw = StopWatch()
         try {
             TestLog.execute(message = args.joinToString(" "), log = log)
@@ -51,7 +79,8 @@ object ShellUtility {
 
             sw.start()
 
-            executor.execute(commandLine)
+            val env = EnvironmentVariableUtility.getEnvironmentVariables()
+            executor.execute(commandLine, env)
         } catch (t: Throwable) {
             error = t
             TestLog.trace(t.stackTraceToString())
@@ -93,7 +122,7 @@ object ShellUtility {
 
         val commandLine = CommandLine(command)
         commandLine.addArguments(args2.toTypedArray())
-        val executor = DefaultExecutor()
+        val executor = DefaultExecutor.builder().get()
         val outputStream = ByteArrayOutputStream()
         executor.streamHandler = PumpStreamHandler(outputStream)
         val resultHandler = DefaultExecuteResultHandler();
@@ -123,6 +152,27 @@ object ShellUtility {
         vararg args: String
     ): ShellResult {
         return executeCommandCore(args = args, log = false)
+    }
+
+    /**
+     * RuntimeResult
+     */
+    class RuntimeResult(
+        val args: List<String>,
+        val resultString: String,
+        val error: Throwable? = null,
+        val stopWatch: StopWatch
+    ) {
+        val command: String
+            get() {
+                return args.joinToString(" ")
+            }
+
+        val hasError: Boolean
+            get() {
+                return error != null
+            }
+
     }
 
     /**
@@ -158,7 +208,7 @@ object ShellUtility {
 
         val resultString: String
             get() {
-                if(hasCompleted.not()){
+                if (hasCompleted.not()) {
                     waitFor()
                 }
                 if (TestMode.isRunningOnWindows) {

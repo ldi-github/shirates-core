@@ -1,7 +1,7 @@
 package shirates.core.vision.driver
 
 import shirates.core.Const
-import shirates.core.driver.TestDriver.testContext
+import shirates.core.driver.testContext
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitContext
 import shirates.core.utility.sync.WaitUtility

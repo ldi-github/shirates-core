@@ -53,12 +53,14 @@ fun VisionElement.right(
     /**
      * parse segments
      */
+    val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
     val segmentContainer = SegmentContainer(
         containerImage = rightSideImage,
         containerImageFile = rightImageFile,
         containerX = rightSideRect.x,
         containerY = rightSideRect.y,
         segmentMargin = segmentMargin,
+        outputDirectory = outputDirectory
     ).parse()
     if (segmentContainer.segments.isEmpty()) {
         return VisionElement.emptyElement

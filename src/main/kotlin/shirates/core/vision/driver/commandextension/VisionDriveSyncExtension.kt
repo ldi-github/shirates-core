@@ -5,8 +5,10 @@ import shirates.core.driver.TestElement
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.lastElement
 
 /**
  * useCache
@@ -71,4 +73,13 @@ fun VisionDrive.onDirectAccess(
 ): BooleanCompareResult {
 
     return testDrive.onDirectAccess(func = func)
+}
+
+/**
+ * invalidateScreen
+ */
+fun VisionDrive.invalidateScreen(): VisionElement {
+
+    CodeExecutionContext.setScreenDirty()
+    return lastElement
 }

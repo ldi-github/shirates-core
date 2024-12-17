@@ -1,7 +1,6 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.driver.*
-import shirates.core.driver.TestElementCache.viewElement
 import shirates.core.logging.Message.message
 
 /**
@@ -131,7 +130,7 @@ fun TestElement.swipeToTop(
 ): TestElement {
 
     val frame =
-        if (ofScreen) viewElement
+        if (ofScreen) rootElement
         else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     val headerBottom = TestDriver.screenInfo.scrollInfo.getHeaderBottom()
 
@@ -241,7 +240,7 @@ fun TestElement.swipeToBottom(
 ): TestElement {
 
     val frame =
-        if (ofScreen) viewElement
+        if (ofScreen) rootElement
         else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeToBottom"
@@ -349,7 +348,7 @@ fun TestElement.swipeToCenter(
 ): TestElement {
 
     val frame =
-        if (ofScreen) viewElement
+        if (ofScreen) rootElement
         else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
     val endX =
         if (ofScreen) viewBounds.width / 2 else
@@ -457,7 +456,7 @@ fun TestElement.swipeToRight(
 ): TestElement {
 
     val frame =
-        if (ofScreen) viewElement
+        if (ofScreen) rootElement
         else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeToRight"
@@ -565,7 +564,7 @@ fun TestElement.swipeToLeft(
 ): TestElement {
 
     val frame =
-        if (ofScreen) viewElement
+        if (ofScreen) rootElement
         else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
     val command = "swipeToLeft"

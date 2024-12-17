@@ -6,7 +6,7 @@ import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.cropImage
 import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.screenRect
+import shirates.core.vision.driver.lastElement
 
 /**
  * region

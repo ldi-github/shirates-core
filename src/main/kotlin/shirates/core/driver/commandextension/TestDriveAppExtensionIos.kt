@@ -19,6 +19,13 @@ internal fun TestDriveObjectIos.launchIosAppByShell(
 
     launchIosAppByShellCore(udid = udid, bundleId = bundleId, log = log)
 
+    if (testContext.useCache.not()) {
+        return lastElement
+    }
+
+    /**
+     * Classic mode only
+     */
     var isApp = false
 
     if (sync) {

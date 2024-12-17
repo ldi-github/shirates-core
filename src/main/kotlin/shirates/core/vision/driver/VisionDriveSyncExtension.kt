@@ -16,6 +16,8 @@ import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import shirates.core.vision.driver.commandextension.canDetectCore
+import shirates.core.vision.driver.commandextension.getThisOrIt
 
 /**
  * wait
@@ -66,6 +68,7 @@ fun VisionDrive.waitForClose(
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = lastScreenshotImage!!.rect,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -96,6 +99,7 @@ fun VisionDrive.waitForClose(
                 language = language,
                 rect = rect,
                 waitSeconds = waitSeconds,
+                intervalSeconds = intervalSeconds,
                 allowScroll = false,
             )
             found.not()
@@ -123,6 +127,7 @@ fun VisionDrive.waitForDisplay(
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -137,6 +142,7 @@ fun VisionDrive.waitForDisplay(
             language = language,
             rect = rect,
             waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
             allowScroll = false,
         )
 

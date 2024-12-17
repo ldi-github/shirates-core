@@ -16,6 +16,7 @@ import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import java.io.FileNotFoundException
 import java.nio.file.Files
+import kotlin.io.path.name
 
 object SrvisionProxy {
 
@@ -26,7 +27,8 @@ object SrvisionProxy {
      */
     fun callTextRecognizer(
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
-        language: String? = PropertiesManager.logLanguage
+        language: String? = PropertiesManager.logLanguage,
+        log: Boolean = false,
     ): String {
 
         if (inputFile == null) {
@@ -43,7 +45,7 @@ object SrvisionProxy {
             .newBuilder()
         urlBuilder.addQueryParameter(
             name = "input",
-            value = inputFile
+            value = inputFile.toPath().toString()
         )
         if (language.isNullOrBlank().not()) {
             urlBuilder.addQueryParameter(
@@ -55,11 +57,47 @@ object SrvisionProxy {
         val result = getResponseBody(url)
         lastResult = result
 
+        if (Files.exists(TestLog.directoryForLog).not()) {
+            TestLog.directoryForLog.toFile().mkdirs()
+        }
         TestLog.directoryForLog.resolve("${TestLog.currentLineNo}.json").toFile().writeText(result)
 
-        sw.printInfo()
+        if (log) {
+            sw.printInfo()
+        }
 
         return result
+    }
+
+    /**
+     * compareByImageFeaturePrint
+     */
+    fun compareByImageFeaturePrint(
+        templateFile: String,
+        inputFile: String,
+        log: Boolean = false,
+    ): String {
+
+        val sw = StopWatch("compareByImageFeaturePrint")
+
+        val inputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
+        if (Files.exists(inputDirectory.toPath()).not()) {
+            inputDirectory.toPath().toFile().mkdirs()
+        }
+        val inputFileName = inputFile.toPath().name
+        val inputFileExtension = inputFile.toPath().toFile().extension
+        Files.copy(inputFile.toPath(), inputDirectory.toPath().resolve("[$inputFileName].$inputFileExtension"))
+
+        lastResult = callImageFeaturePrintMatcher(
+            templateFile = templateFile,
+            inputDirectory = inputDirectory,
+        )
+
+        if (log) {
+            sw.printInfo()
+        }
+
+        return lastResult
     }
 
     /**
@@ -77,11 +115,11 @@ object SrvisionProxy {
             .newBuilder()
         urlBuilder.addQueryParameter(
             name = "template",
-            value = templateFile
+            value = templateFile.toPath().toString()
         )
         urlBuilder.addQueryParameter(
             name = "inputDirectory",
-            value = inputDirectory
+            value = inputDirectory.toPath().toString()
         )
         val url = urlBuilder.build()
         val result = getResponseBody(url)
@@ -89,7 +127,6 @@ object SrvisionProxy {
 
         if (log) {
             inputDirectory.toPath().resolve("result.json").toFile().writeText(result)
-            sw.stop()
             sw.printInfo()
         }
 
@@ -164,6 +201,7 @@ object SrvisionProxy {
     fun callImageClassifier(
         inputFile: String,
         mlmodelFile: String,
+        log: Boolean = false,
     ): ClassificationResult {
 
         val sw = StopWatch("ImageClassifier")
@@ -176,17 +214,19 @@ object SrvisionProxy {
             .newBuilder()
         urlBuilder.addQueryParameter(
             name = "input",
-            value = inputFile
+            value = inputFile.toPath().toString()
         )
         urlBuilder.addQueryParameter(
             name = "mlmodel",
-            value = mlmodelFile
+            value = mlmodelFile.toPath().toString()
         )
         val url = urlBuilder.build()
         val result = getResponseBody(url)
         lastResult = result
 
-        sw.printInfo()
+        if (log) {
+            sw.printInfo()
+        }
 
         return ClassificationResult(jsonString = result)
     }

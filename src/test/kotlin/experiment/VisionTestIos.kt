@@ -2,10 +2,11 @@ package experiment
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.vision.driver.checkIsOFF
-import shirates.core.vision.driver.detect
+import shirates.core.vision.driver.commandextension.checkIsOFF
+import shirates.core.vision.driver.commandextension.detect
+import shirates.core.vision.driver.commandextension.scrollToBottom
+import shirates.core.vision.driver.commandextension.tap
 import shirates.core.vision.driver.right
-import shirates.core.vision.driver.tap
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
@@ -25,6 +26,18 @@ class VisionTestIos : VisionTest() {
                     it.detect("Larger Accessibility Sizes")
                         .right()
                         .checkIsOFF()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun scrollToBottom() {
+
+        scenario {
+            case(1) {
+                action {
+                    it.scrollToBottom()
                 }
             }
         }

@@ -1,10 +1,9 @@
-package shirates.core.vision.driver
+package shirates.core.vision.driver.commandextension
 
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.commandextension.checkImageLabelContains
 
 /**
  * checkIsON
@@ -50,4 +49,27 @@ fun VisionElement.checkIsOFF(
     return this
 }
 
+/**
+ * buttonStateIs
+ */
+fun VisionElement.buttonStateIs(
+    expectedLabel: String,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    mlmodelFile: String = "vision/mlmodels/basic/ButtonStateClassifier/ButtonStateClassifier.mlmodel"
+): VisionElement {
 
+    val command = "buttonStateIs"
+    val assertMessage = message(id = command, subject = subject, expected = expectedLabel, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+        this.checkImageLabelContains(
+            containedText = expectedLabel,
+            message = assertMessage,
+            waitSeconds = waitSeconds,
+            mlmodelFile = mlmodelFile
+        )
+    }
+
+    return this
+}

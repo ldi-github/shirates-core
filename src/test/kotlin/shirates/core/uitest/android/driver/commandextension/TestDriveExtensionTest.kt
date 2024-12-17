@@ -9,6 +9,7 @@ import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.TestDriver
 import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.driver
 import shirates.core.driver.rootElement
 import shirates.core.driver.wait
 import shirates.core.logging.CodeExecutionContext

@@ -1,12 +1,10 @@
-package shirates.core.vision.driver
+package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.commandextension.SwipeContext
 import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.commandextension.swipePointToPointCore
 import shirates.core.driver.testContext
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -15,6 +13,7 @@ import shirates.core.utility.image.rect
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import shirates.core.vision.driver.lastElement
 
 /**
  * tap
@@ -31,7 +30,7 @@ fun VisionDrive.tap(
     val command = "tap"
     val message = message(id = command, subject = "($x,$y)")
 
-    CodeExecutionContext.setScreenshotDirty()
+    CodeExecutionContext.setScreenDirty()
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = testElement.subject) {
@@ -48,7 +47,7 @@ fun VisionDrive.tap(
             durationSeconds = holdSeconds,
             repeat = repeat,
         )
-        testDrive.swipePointToPointCore(swipeContext = sc)
+        swipePointToPointCore(swipeContext = sc)
     }
 
     return this
@@ -67,7 +66,7 @@ fun VisionDrive.tap(
     val message = message(id = command, subject = tappedElement.subject)
 
     val context = TestDriverCommandContext(null)
-    var v = tappedElement
+    val v = tappedElement
     context.execOperateCommand(command = command, message = message, subject = tappedElement.subject) {
 //        e = tappedElement.tapCore(holdSeconds = holdSeconds, tapMethod = tapMethod)
 

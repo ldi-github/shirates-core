@@ -15,12 +15,12 @@ import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.*
-import shirates.core.vision.driver.branchextension.isScreen
 
 internal fun VisionDrive.checkImageLabelContains(
     containedText: String,
     message: String,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    mlmodelFile: String = "vision/mlmodels/GeneralClassifier/GeneralClassifier.mlmodel"
 ): VisionElement {
 
     var v = getThisOrIt()
@@ -33,7 +33,7 @@ internal fun VisionDrive.checkImageLabelContains(
             v = v.createFromScreenshot()
         }
     ) {
-        val label = v.classify()
+        val label = v.classify(mlmodelFile = mlmodelFile)
 
         printInfo("label: $label")
         contains = label.contains(containedText)
@@ -97,7 +97,30 @@ fun VisionDrive.keyboardIsNotShown(): VisionElement {
  */
 fun VisionDrive.packageIs(expected: String): VisionElement {
 
-    testDrive.packageIs(expected = expected)
+    val command = "packageIs"
+    val assertMessage = message(id = command, expected = expected)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(
+        command = command,
+        message = assertMessage,
+        arg1 = expected
+    ) {
+        if (TestMode.isiOS) {
+            throw NotImplementedError("packageIs function is for Android.")
+        }
+
+        val actual = rootElement.packageName
+        if (actual == expected) {
+            TestLog.ok(
+                message = assertMessage,
+                arg1 = expected
+            )
+        } else {
+            lastElement.lastError = TestNGException("$assertMessage (actual=\"$actual\")")
+            throw lastElement.lastError!!
+        }
+    }
     return lastElement
 }
 

@@ -6,7 +6,7 @@ import shirates.core.driver.*
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.Rectangle
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.screenRect
+import shirates.core.vision.driver.commandextension.screenRect
 import java.awt.image.BufferedImage
 import java.util.*
 
@@ -110,7 +110,7 @@ object CodeExecutionContext {
      */
     val isInLocalRegion: Boolean
         get() {
-            return region.area < vision.screenRect.area
+            return region.area < visionDrive.screenRect.area
         }
 
     /**
@@ -251,10 +251,8 @@ object CodeExecutionContext {
     var lastScreenshotImage: BufferedImage? = null
         internal set(value) {
             field = value
-            screenshotSynced = false
             if (value != null) {
-                val v = VisionElement()
-                TestDriver.visionRootElement = v
+                TestDriver.visionRootElement = VisionElement()
             }
         }
 
@@ -280,14 +278,29 @@ object CodeExecutionContext {
      * screenshotSynced
      */
     var screenshotSynced = false
-        internal set
+        get() {
+            return field
+        }
+        internal set(value) {
+            if (field == value) {
+                return
+            }
+            field = value
+        }
 
     /**
-     * setScreenshotDirty
+     * setScreenDirty
      */
-    fun setScreenshotDirty() {
+    fun setScreenDirty() {
         screenshotSynced = false
+        screenClassified = false
     }
+
+
+    /**
+     * screenClassified
+     */
+    var screenClassified = false
 
     // Misc --------------------------------------------------
 

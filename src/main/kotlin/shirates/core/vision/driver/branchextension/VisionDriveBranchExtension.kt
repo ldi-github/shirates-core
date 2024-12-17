@@ -5,7 +5,7 @@ import shirates.core.driver.commandextension.getSelector
 import shirates.core.logging.Message.message
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.detect
+import shirates.core.vision.driver.commandextension.detect
 
 
 /**

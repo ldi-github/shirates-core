@@ -7,7 +7,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.getThisOrIt
+import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
 
 /**

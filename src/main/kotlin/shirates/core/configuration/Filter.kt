@@ -2,11 +2,10 @@ package shirates.core.configuration
 
 import shirates.core.configuration.Selector.Companion.getFilterValues
 import shirates.core.configuration.repository.ImageFileRepository
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestElement
+import shirates.core.driver.*
+import shirates.core.driver.TestDriveObject.vision
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.rootElement
 import shirates.core.logging.TestLog
 import shirates.core.testcode.preprocessForComparison
 import shirates.core.utility.element.ElementCategoryExpressionUtility
@@ -16,6 +15,7 @@ import shirates.core.utility.image.ImageMatchUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
 import shirates.core.utility.toPath
+import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 
@@ -347,7 +347,9 @@ class Filter(
             if (id.isNullOrBlank()) return null
             if (id.contains(":id/")) return id
 
-            val pkg = packageName ?: rootElement.packageName
+            val pkg = packageName
+                ?: if (testContext.useCache) testDrive.rootElement.packageName
+                else vision.rootElement.packageName
             if (pkg.isBlank()) return id
 
             return "${pkg}:id/${id}"

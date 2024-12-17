@@ -1,25 +1,33 @@
-package shirates.core.driver.commandextension
+package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.*
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestMode
+import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.sync.SyncUtility
+import shirates.core.logging.printInfo
+import shirates.core.utility.sync.WaitUtility
+import shirates.core.vision.VisionDrive
+import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.branchextension.lastScreenshotFile
+import shirates.core.vision.driver.lastElement
 
 /**
  * screenName
  */
-val TestDrive.screenName: String
-    get() {
-        return TestDriver.currentScreen
-    }
+fun VisionDrive.classifyScreen(): String {
+
+    val label = classifyScreen(imageFile = lastScreenshotFile!!)
+    return label
+}
 
 /**
  * isScreen
  */
-fun TestDrive.isScreen(
+fun VisionDrive.isScreen(
     screenName: String
 ): Boolean {
 
@@ -28,18 +36,20 @@ fun TestDrive.isScreen(
         return true
     }
 
-    val r = TestDriver.isScreen(screenName = screenName)
-    if (r) {
-        TestDriver.currentScreen = screenName
-    }
+//    val file = VisionMLModelRepository.screenClassifierRepository.getFile(label = screenName)
+//        ?: return false
 
+    val label = classifyScreen()
+    printInfo("classified as $label.")
+
+    val r = (label == screenName)
     return r
 }
 
 /**
  * isScreenOf
  */
-fun TestDrive.isScreenOf(
+fun VisionDrive.isScreenOf(
     vararg screenNames: String,
 ): Boolean {
 
@@ -47,23 +57,19 @@ fun TestDrive.isScreenOf(
         return true
     }
 
-    for (screenName in screenNames) {
-        if (isScreen(screenName = screenName)) {
-            return true
-        }
-    }
-    return false
+    val screenName = classifyScreen()
+    return screenNames.contains(screenName)
 }
 
 /**
  * waitScreenOf
  */
-fun TestDrive.waitScreenOf(
+fun VisionDrive.waitScreenOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
-): TestElement {
+): VisionElement {
 
     if (TestMode.isNoLoadRun) {
         return lastElement
@@ -84,48 +90,25 @@ fun TestDrive.waitScreenOf(
     return lastElement
 }
 
-internal fun TestDrive.waitScreenOfCore(
+internal fun VisionDrive.waitScreenOfCore(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
 ) {
 
-    fun ofScreen(): String {
-        for (screenName in screenNames) {
-            if (TestDriver.isScreen(screenName)) {
-                return screenName
-            }
-        }
-        return ""
-    }
-
-    var currentScreenName = ofScreen()
-    if (currentScreenName.isNotBlank()) {
-        TestDriver.switchScreen(screenName = currentScreenName)
-        onTrue?.invoke()
-        return
-    }
-
     var screenFound = false
 
-    val context = SyncUtility.doUntilTrue(
+    WaitUtility.doUntilTrue(
         waitSeconds = waitSeconds,
         intervalSeconds = testContext.waitSecondsForAnimationComplete,
-        throwOnError = false
+        throwOnFinally = false
     ) {
-        for (screenName in testContext.screenHandlers.keys) {
-            isScreen(screenName = screenName)   // Fire screen handler
-        }
-
-        refreshCache()
         withoutScroll {
             irregularHandler?.invoke()
         }
 
-        currentScreenName = ofScreen()
-
-        screenFound = currentScreenName.isNotBlank()
+        screenFound = isScreenOf(screenNames = screenNames)
         if (screenFound.not()) {
             TestDriver.fireIrregularHandler()
         }
@@ -144,20 +127,18 @@ internal fun TestDrive.waitScreenOfCore(
         )
     }
 
-    TestDriver.switchScreen(screenName = currentScreenName)
-
     onTrue?.invoke()
 }
 
 /**
  * waitScreen
  */
-fun TestDrive.waitScreen(
+fun VisionDrive.waitScreen(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
-): TestElement {
+): VisionElement {
 
     if (TestMode.isNoLoadRun) {
         return lastElement

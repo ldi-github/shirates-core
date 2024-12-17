@@ -7,6 +7,7 @@ import org.openqa.selenium.interactions.Sequence
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.load.CpuLoadService
@@ -151,7 +152,7 @@ internal fun TestDrive.swipePointToPointCore(
             finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg())
         )
         try {
-            driver.appiumDriver.perform(mutableListOf(sequence))
+            appiumDriver.perform(mutableListOf(sequence))
         } catch (t: InvalidElementStateException) {
             TestLog.trace(t.message ?: t.stackTraceToString())
             //  https://github.com/appium/java-client/issues/2045

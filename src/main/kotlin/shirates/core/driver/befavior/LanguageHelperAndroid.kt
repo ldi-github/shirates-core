@@ -1,9 +1,9 @@
 package shirates.core.driver.befavior
 
 import shirates.core.driver.TestDrive
-import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.testContext
 import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.misc.ShellUtility

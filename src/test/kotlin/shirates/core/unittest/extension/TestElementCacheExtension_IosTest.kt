@@ -63,7 +63,8 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun getScrollableElement() {
 
         // Arrange
-        rootElement = ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.DateAndTime_ja)
+        TestElementCache.rootElement =
+            ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.DateAndTime_ja)
         run {
             // Act
             val e = testDrive.getScrollableElement("#DayViewContainerView")
@@ -98,19 +99,19 @@ class TestElementCacheExtension_IosTest : UnitTest() {
             // Act
             val e = TestElement.emptyElement.getScrollableElement()
             // Assert
-            assertThat(e).isEqualTo(view)
+            assertThat(e).isEqualTo(TestElementCache.rootElement)
         }
         run {
             // Act
-            val e = rootElement.getScrollableElement()
+            val e = TestElementCache.rootElement.getScrollableElement()
             // Assert
-            assertThat(e).isEqualTo(view)
+            assertThat(e).isEqualTo(TestElementCache.rootElement)
         }
         run {
             // Act
-            val e = view.getScrollableElement()
+            val e = TestElementCache.rootElement.getScrollableElement()
             // Assert
-            assertThat(e).isEqualTo(view)
+            assertThat(e).isEqualTo(TestElementCache.rootElement)
         }
         run {
             // Act
@@ -270,14 +271,14 @@ class TestElementCacheExtension_IosTest : UnitTest() {
     fun rootElement() {
 
         // Arrange
-        rootElement = TestElement()
+        TestElementCache.rootElement = TestElement()
         // Act, Assert
-        assertThat(rootElement.isEmpty).isTrue()
+        assertThat(TestElementCache.rootElement.isEmpty).isTrue()
 
         // Arrange
         TestElementCache.loadXml(XmlDataIos.SettingsTopScreen)
         // Act, Assert
-        assertThat(rootElement.isEmpty).isFalse()
+        assertThat(TestElementCache.rootElement.isEmpty).isFalse()
     }
 
     @Test
@@ -289,7 +290,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // text
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("General")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("General")
             // Assert
             assertThat(e.label).isEqualTo("General")
         }
@@ -297,7 +298,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // textStartsWith
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("Gene*")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("Gene*")
             // Assert
             assertThat(e.label).isEqualTo("General")
         }
@@ -305,7 +306,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // textContains
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("*enera*")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("*enera*")
             // Assert
             assertThat(e.label).isEqualTo("General")
         }
@@ -313,7 +314,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // textEndsWith
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("*eneral")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("*eneral")
             // Assert
             assertThat(e.label).isEqualTo("General")
         }
@@ -321,7 +322,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // textMatches
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("textMatches=.*enera.*")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("textMatches=.*enera.*")
             // Assert
             assertThat(e.label).isEqualTo("General")
         }
@@ -329,7 +330,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // id
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("#General")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("#General")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -337,7 +338,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // access
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("@General")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("@General")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -345,7 +346,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // accessStartsWith
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("@Genera*")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("@Genera*")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -353,7 +354,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // accessContains
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("@*enera*")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("@*enera*")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -361,7 +362,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // accessMatches
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("accessMatches=^Ge.*ral$")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("accessMatches=^Ge.*ral$")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -369,7 +370,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // value
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("value=General")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("value=General")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -377,7 +378,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // valueStartsWith
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("valueStartsWith=Genera")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("valueStartsWith=Genera")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -385,7 +386,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // valueContains
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("valueContains=enera")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("valueContains=enera")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -393,7 +394,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // valueMatches
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf("valueMatches=^Ge.*ral$")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf("valueMatches=^Ge.*ral$")
             // Assert
             assertThat(e.name).isEqualTo("General")
         }
@@ -401,7 +402,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         // class
         run {
             // Act
-            val e = rootElement.findInDescendantsAndSelf(".XCUIElementTypeNavigationBar")
+            val e = TestElementCache.rootElement.findInDescendantsAndSelf(".XCUIElementTypeNavigationBar")
             // Assert
             assertThat(e.type).isEqualTo("XCUIElementTypeNavigationBar")
             assertThat(e.name).isEqualTo("Settings")
@@ -411,7 +412,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         run {
             // Act, Assert
             assertThatThrownBy {
-                rootElement.findInDescendantsAndSelf("xpath=//*[@type='XCUIElementTypeNavigationBar']")
+                TestElementCache.rootElement.findInDescendantsAndSelf("xpath=//*[@type='XCUIElementTypeNavigationBar']")
             }.isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("Unsupported noun with evaluate function. (noun=xpath)")
         }

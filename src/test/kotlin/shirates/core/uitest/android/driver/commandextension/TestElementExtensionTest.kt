@@ -4,8 +4,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.WebElement
 import shirates.core.configuration.Testrun
-import shirates.core.driver.*
+import shirates.core.driver.TestElement
+import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.rootElement
+import shirates.core.driver.scrollFrame
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
@@ -99,7 +102,7 @@ class TestElementExtensionTest : UITest() {
             }
             case(2) {
                 expectation {
-                    view.scrollFrame.thisIs(view)
+                    rootElement.scrollFrame.thisIs(rootElement)
                 }
             }
             case(3) {
@@ -110,9 +113,8 @@ class TestElementExtensionTest : UITest() {
             }
             case(4) {
                 expectation {
-                    TestElement.emptyElement.scrollFrame.thisIs(view)
-                    rootElement.scrollFrame.thisIs(view)
-                    view.scrollFrame.thisIs(view)
+                    TestElement.emptyElement.scrollFrame.thisIs(rootElement)
+                    rootElement.scrollFrame.thisIs(rootElement)
                 }
             }
             case(5) {

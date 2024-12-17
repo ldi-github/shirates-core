@@ -14,9 +14,9 @@ import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.utility.android.AdbUtility
 import shirates.core.vision.driver.classify
+import shirates.core.vision.driver.commandextension.detect
 import shirates.core.vision.driver.commandextension.existImage
-import shirates.core.vision.driver.detect
-import shirates.core.vision.driver.tap
+import shirates.core.vision.driver.commandextension.tap
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class AdHocTestAndroid : UITest() {

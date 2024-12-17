@@ -59,7 +59,7 @@ internal fun TestElement.isImageCore(
     if (imageMatchResult.result.not() && cropImage) {
         silent {
             val s = selector.image!!.removeSuffix(".png")
-            val fileName = "$s${testDrive.imageProfile}.png"
+            val fileName = "$s${imageProfile}.png"
             imageMatchResult.image?.saveImage(TestLog.directoryForLog.resolve(fileName).toFile())
 
             val fileName2 = "${TestLog.nextLineNo}_$fileName"

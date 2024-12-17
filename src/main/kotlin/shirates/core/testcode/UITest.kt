@@ -7,5 +7,4 @@ import shirates.core.driver.TestDrive
  */
 abstract class UITest : UITestBase(), TestDrive {
 
-
 }

@@ -60,8 +60,8 @@ internal fun TestDrive.getScrollableElement(
     if (testElement.isScrollableElement) {
         return testElement
     }
-    if (testElement.isEmpty || testElement == rootElement || testElement == view) {
-        return view
+    if (testElement.isEmpty || testElement == rootElement) {
+        return rootElement
     }
 
     val ancestors = testElement.getScrollableElementsInAncestorsAndSelf()

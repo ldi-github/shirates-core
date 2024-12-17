@@ -2,14 +2,26 @@ package shirates.core.unittest.vision.driver
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import shirates.core.utility.image.BufferedImageUtility
-import shirates.core.utility.image.Rectangle
-import shirates.core.utility.image.cropImage
-import shirates.core.utility.image.isSame
+import shirates.core.utility.image.*
 import shirates.core.utility.toPath
 import shirates.core.vision.driver.VisionContext
 
 class VisionContextTest {
+
+    @Test
+    fun createFromImageFile() {
+
+        // Arrange
+        val imageFile = "unitTestData/files/srvision/android/[Android Settings Screen].png"
+        // Act
+        val c = VisionContext.createFromImageFile(imageFile = imageFile)
+        // Assert
+        assertThat(c.screenshotFile).isEqualTo(imageFile)
+        assertThat(c.screenshotImage.isSame(BufferedImageUtility.getBufferedImage(filePath = imageFile))).isTrue()
+        assertThat(c.localRegionFile).isEqualTo(imageFile)
+        assertThat(c.localRegionImage.isSame(c.screenshotImage)).isTrue()
+        assertThat(c.rectOnLocalRegionImage.toString()).isEqualTo(c.screenshotImage?.rect.toString())
+    }
 
     @Test
     fun loadTextRecognizerJson() {

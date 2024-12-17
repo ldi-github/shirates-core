@@ -7,7 +7,6 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.rootElement
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 
@@ -151,7 +150,7 @@ class TestElementRelativeFlowExtension_AndroidTest : UnitTest() {
         }
         run {
             // Arrange
-            val targetElements = rootElement.descendants.filter { it.id.contains("EditText") }
+            val targetElements = TestElementCache.rootElement.descendants.filter { it.id.contains("EditText") }
             // Act, Assert
             assertThat(
                 e.vflow(

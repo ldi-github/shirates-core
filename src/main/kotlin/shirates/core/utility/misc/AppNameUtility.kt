@@ -2,10 +2,8 @@ package shirates.core.utility.misc
 
 import org.json.JSONObject
 import shirates.core.configuration.NicknameUtility
-import shirates.core.driver.TestDriver.testContext
-import shirates.core.driver.TestMode
+import shirates.core.driver.*
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.rootElement
 import shirates.core.storage.App
 import shirates.core.storage.app
 
@@ -97,16 +95,16 @@ object AppNameUtility {
         }
 
         if (isiOS) {
-            return rootElement.label
+            return testDrive.rootElement.label
         }
 
-        val appNickName = getAppNickNameFromPackageName(packageName = rootElement.packageName)
+        val pkg = packageName
+        val appNickName = getAppNickNameFromPackageName(packageName = pkg)
         if (appNickName.isNotBlank()) {
             return NicknameUtility.getNicknameText(appNickName)
         }
 
-        return rootElement.packageName
+        return pkg
     }
-
 
 }

@@ -5,6 +5,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.driver.sourceXml
+import shirates.core.driver.testDrive
 import shirates.core.logging.LogFileFormat
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.EnvUtility
@@ -121,7 +122,7 @@ class UnitTestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEac
 
         if (throwable != null) {
             TestLog.error(throwable)
-            TestLog.info(sourceXml)
+            TestLog.info(testDrive.sourceXml)
             val filePath = "${TestLog.directoryForLog}/${TestLog.currentLineNo}_xmlsource.xml".toPath()
             TestDriver.outputXmlSource(filePath = filePath)
 

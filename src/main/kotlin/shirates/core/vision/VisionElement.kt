@@ -2,12 +2,16 @@ package shirates.core.vision
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
 import shirates.core.vision.driver.VisionContext
+import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage
+import java.rmi.AccessException
 
 class VisionElement() : VisionDrive {
 
@@ -30,6 +34,29 @@ class VisionElement() : VisionDrive {
      * selector
      */
     var selector: Selector? = null
+
+    /**
+     * packageName
+     */
+    var packageName: String = ""
+        get() {
+            if (isAndroid.not()) {
+                throw AccessException("packageName is supported on Android.")
+            }
+
+            try {
+                val rootElement = rootElement
+                if (this == rootElement) {
+                    return rootElement.packageName
+                }
+                val e = TestDriver.selectDirect(selector = Selector(), throwsException = false)
+                field = e.packageName
+                return field
+            } catch (t: Throwable) {
+                throw AccessException("packageName is not available.")
+            }
+        }
+        private set
 
     /**
      * screenshotImage
@@ -169,6 +196,9 @@ class VisionElement() : VisionDrive {
 //            if (altSubject.isNotBlank()) {
 //                return altSubject
 //            }
+            if (text.isNotBlank()) {
+                return "<text>"
+            }
 
             if (selector == null && isEmpty) {
                 return "(empty)"

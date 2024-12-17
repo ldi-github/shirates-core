@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
-import shirates.core.driver.rootElement
 import shirates.core.testcode.UnitTest
 
 class Selector_IosTest : UnitTest() {
@@ -476,7 +475,7 @@ class Selector_IosTest : UnitTest() {
 
         // Arrange
         TestElementCache.loadXml(xmlDataIos)
-        val e = rootElement
+        val e = TestElementCache.rootElement
         val e1 = e.children[0]
         val e2 = e.children[1]
         val e3 = e.children[2]
@@ -520,7 +519,7 @@ class Selector_IosTest : UnitTest() {
 
         // Arrange
         TestElementCache.loadXml(xmlDataIos)
-        val e = rootElement
+        val e = TestElementCache.rootElement
         val e1 = e.children[0]
         val e2 = e.children[1]
         val e3 = e.children[2]
@@ -565,7 +564,7 @@ class Selector_IosTest : UnitTest() {
 
         // Arrange
         TestElementCache.loadXml(xmlDataIos)
-        val e = rootElement
+        val e = TestElementCache.rootElement
         val e1 = e.children[0]
         val e2 = e.children[1]
         val e3 = e.children[2]
@@ -610,7 +609,7 @@ class Selector_IosTest : UnitTest() {
 
         // Arrange
         TestElementCache.loadXml(xmlDataIos)
-        val e = rootElement
+        val e = TestElementCache.rootElement
         val e1 = e.children[0]
         val e2 = e.children[1]
         val e3 = e.children[2]
@@ -655,7 +654,7 @@ class Selector_IosTest : UnitTest() {
 
         // Arrange
         TestElementCache.loadXml(xmlDataIos)
-        val e = rootElement
+        val e = TestElementCache.rootElement
         val e1 = e.children[0]
         val e2 = e.children[1]
         val e3 = e.children[2]

@@ -4,11 +4,9 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.screenshot
-import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.commandextension.suppressHandler
-import shirates.core.driver.commandextension.withoutScroll
+import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
@@ -26,8 +24,9 @@ import shirates.core.vision.TemplateMatchingResult
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionMLModelRepository
-import shirates.core.vision.driver.*
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import shirates.core.vision.driver.doUntilTrue
+import shirates.core.vision.driver.lastElement
 
 /**
  * exist
@@ -149,8 +148,8 @@ private fun VisionDrive.actionWithOnExistErrorHandler(
          * Retrying with error handler
          */
         TestLog.info("Calling onExistErrorHandler.")
-        testDrive.suppressHandler {
-            testDrive.withoutScroll {
+        suppressHandler {
+            withoutScroll {
                 testContext.onExistErrorHandler!!.invoke()
             }
         }
@@ -439,6 +438,7 @@ fun VisionDrive.dontExist(
                 language = language,
                 rect = rect,
                 waitSeconds = 0.0,
+                intervalSeconds = 0.0,
                 allowScroll = false,
                 swipeToCenter = false,
                 throwsException = false,

@@ -7,6 +7,7 @@ import shirates.core.logging.TestLog
 import shirates.core.macro.MacroRepository
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.lastElement
 import java.lang.reflect.InvocationTargetException
 
 /**

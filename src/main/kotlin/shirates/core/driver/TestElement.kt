@@ -8,6 +8,7 @@ import org.w3c.dom.Node
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.configuration.TestProfile
+import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
@@ -149,7 +150,7 @@ class TestElement(
             }
 
             val xpath = this.getUniqueXpath() + "/child::*"
-            field = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+            field = appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
                 .toMutableList()
             return field
         }
@@ -177,7 +178,7 @@ class TestElement(
             }
 
             val xpath = this.getUniqueXpath() + "/ancestor::*"
-            ancestorsCache = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+            ancestorsCache = appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
                 .toMutableList()
             return ancestorsCache!!
         }
@@ -227,11 +228,11 @@ class TestElement(
             if (isAndroid) {
                 val xpath = this.getUniqueXpath() + "/descendant::*"
                 descendantsCache =
-                    driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+                    appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
                         .toMutableList()
             } else {
                 val iosClassChain = this.getUniqueSelector().getIosClassChain() + "/**/*"
-                descendantsCache = driver.appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain))
+                descendantsCache = appiumDriver.findElements(AppiumBy.iOSClassChain(iosClassChain))
                     .map { it.toTestElement() }.toMutableList()
             }
             return descendantsCache!!
@@ -275,7 +276,7 @@ class TestElement(
             }
 
             val xpath = this.getUniqueXpath() + "/parent::*/child::*"
-            siblingsCache = driver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
+            siblingsCache = TestDriver.appiumDriver.findElements(By.xpath(xpath)).map { TestElement(webElement = it) }
                 .toMutableList()
             return siblingsCache!!
         }

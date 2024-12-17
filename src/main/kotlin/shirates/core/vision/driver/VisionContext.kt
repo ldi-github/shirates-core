@@ -4,14 +4,15 @@ import shirates.core.configuration.Selector
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.Rectangle
-import shirates.core.utility.image.cropImage
-import shirates.core.utility.image.rect
-import shirates.core.utility.image.saveImage
+import shirates.core.utility.image.*
+import shirates.core.utility.toPath
+import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.RecognizeTextParser
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
 import java.awt.image.BufferedImage
+import java.io.FileNotFoundException
+import java.nio.file.Files
 
 class VisionContext() {
 
@@ -75,6 +76,11 @@ class VisionContext() {
     var jsonString: String = ""
 
     /**
+     * textObservations
+     */
+    val textObservations: MutableList<RecognizeTextObservation> = mutableListOf()
+
+    /**
      * visionElements
      */
     val visionElements: MutableList<VisionElement> = mutableListOf()
@@ -94,6 +100,29 @@ class VisionContext() {
 //        this.localRegionY = localRegionY
         this.rectOnLocalRegionImage = this.screenshotImage?.rect
     }
+
+    companion object {
+
+        /**
+         * createFromImageFile
+         */
+        fun createFromImageFile(
+            imageFile: String,
+        ): VisionContext {
+
+            if (Files.exists(imageFile.toPath()).not()) {
+                throw FileNotFoundException("Image file not found. (imageFile=$imageFile)")
+            }
+            val c = VisionContext()
+            c.screenshotFile = imageFile.toPath().toString()
+            c.screenshotImage = BufferedImageUtility.getBufferedImage(filePath = imageFile)
+            c.localRegionFile = c.screenshotFile
+            c.localRegionImage = c.screenshotImage
+            c.rectOnLocalRegionImage = c.screenshotImage?.rect
+            return c
+        }
+    }
+
 
     /**
      * clear
@@ -159,7 +188,7 @@ class VisionContext() {
      */
     fun recognizeText(
         language: String? = this.language,
-    ) {
+    ): VisionContext {
         val inputFile = localRegionFile ?: screenshotFile!!
 
         val json = SrvisionProxy.callTextRecognizer(
@@ -171,6 +200,7 @@ class VisionContext() {
             language = language,
             jsonString = json
         )
+        return this
     }
 
     /**
@@ -203,6 +233,9 @@ class VisionContext() {
         } catch (t: Throwable) {
             throw TestDriverException(message = "Could not parse json. \n$jsonString")
         }
+
+        textObservations.clear()
+        textObservations.addAll(observations)
 
         for (o in observations) {
             val v = o.createVisionElement()

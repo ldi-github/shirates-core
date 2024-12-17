@@ -1,4 +1,4 @@
-package shirates.core.vision.driver
+package shirates.core.vision.driver.commandextension
 
 import org.openqa.selenium.InvalidElementStateException
 import org.openqa.selenium.interactions.Pause
@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.PointerInput
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -15,6 +16,7 @@ import shirates.core.utility.load.CpuLoadService
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import shirates.core.vision.driver.lastElement
 import java.time.Duration
 import kotlin.math.max
 import kotlin.math.min
@@ -179,7 +181,7 @@ internal fun VisionDrive.swipePointToPointCore(
     swipeContext: SwipeContext,
 ): VisionElement {
 
-    CodeExecutionContext.setScreenshotDirty()
+    CodeExecutionContext.setScreenDirty()
 
     fun swipeFunc() {
 
@@ -211,7 +213,7 @@ internal fun VisionDrive.swipePointToPointCore(
             finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg())
         )
         try {
-            driver.appiumDriver.perform(mutableListOf(sequence))
+            appiumDriver.perform(mutableListOf(sequence))
         } catch (t: InvalidElementStateException) {
             TestLog.trace(t.message ?: t.stackTraceToString())
             //  https://github.com/appium/java-client/issues/2045
@@ -232,9 +234,9 @@ internal fun VisionDrive.swipePointToPointCore(
                 Thread.sleep((swipeContext.intervalSeconds * 1000).toLong())
             }
         }
+        CodeExecutionContext.setScreenDirty()
         swipeFunc()
     }
-    TestDriver.screenshot(force = true)
 
     return lastElement
 }

@@ -13,12 +13,15 @@ import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
+import shirates.core.logging.CodeExecutionContext.lastScreenshotImage
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.escapeFileName
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.TrimObject
+import shirates.core.utility.image.cropImage
 import shirates.core.utility.image.saveImage
+import shirates.core.vision.VisionElement
 import java.io.File
 
 internal fun TestElement.getChainedSelector(relativeCommand: String): Selector {
@@ -311,28 +314,10 @@ fun TestElement.cropImage(
     }
     cropInfo.croppedImageFile = TestLog.directoryForLog.resolve(croppedImageFile).toString()
 
-    val context = TestDriverCommandContext(this)
-    context.execOperateCommand(
-        command = command,
-        scriptCommand = command,
-        message = message,
-        subject = subject,
-        arg1 = trimCondition,
-        fileName = croppedImageFile,
-        fireEvent = false
-    ) {
-        lastCropInfo = TestDriver.cropImage(cropInfo = cropInfo, refresh = refresh)
+    lastCropInfo = TestDriver.cropImage(cropInfo = cropInfo, refresh = refresh)
 
-        if (cropInfo.croppedImage == null) {
-            return@execOperateCommand
-        }
-        if (save.not()) {
-            return@execOperateCommand
-        }
-
-        if (save) {
-            cropInfo.croppedImage?.saveImage(File(cropInfo.croppedImageFile!!), log = false)
-        }
+    if (save && cropInfo.croppedImage != null) {
+        cropInfo.croppedImage?.saveImage(File(cropInfo.croppedImageFile!!), log = false)
     }
 
     return this
@@ -408,7 +393,7 @@ fun TestElement.isSafe(
         info("isSafe property returns false. (isInView == false)")
         return false
     }
-    if (driver.currentScreen.isNotBlank()) {
+    if (TestDriver.currentScreen.isNotBlank()) {
         if (CodeExecutionContext.isScrolling) {
             /**
              * Safe boundary check in scrollable view
@@ -470,3 +455,14 @@ fun TestElement.isSafe(
     return true
 }
 
+/**
+ * toVisionElement
+ */
+fun TestElement.toVisionElement(): VisionElement {
+
+    val rect = this.bounds.toRectWithRatio()
+    val v = VisionElement()
+    v.visionContext.localRegionImage = lastScreenshotImage?.cropImage(rect = rect)
+    v.selector = this.selector
+    return v
+}

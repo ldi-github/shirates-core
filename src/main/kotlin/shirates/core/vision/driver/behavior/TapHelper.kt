@@ -3,14 +3,16 @@ package shirates.core.vision.driver.behavior
 import org.openqa.selenium.StaleElementReferenceException
 import shirates.core.driver.TapMethod
 import shirates.core.driver.commandextension.select
+import shirates.core.driver.testDrive
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.ios.PagerInfo
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
-import shirates.core.vision.driver.*
-import shirates.core.vision.driver.commandextension.pressHome
+import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.it
+import shirates.core.vision.driver.wait
 
 
 object TapHelper : VisionDrive {
@@ -104,7 +106,7 @@ object TapHelper : VisionDrive {
      * getPagerInfo(for iOS)
      */
     fun getPagerInfo(): PagerInfo {
-        val pager = testDrive.select(".XCUIElementTypePageIndicator")
+        val pager = testDrive.select(".XCUIElementTypePageIndicator", useCache = false)
         return PagerInfo(pager.value)
     }
 

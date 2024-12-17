@@ -1,9 +1,20 @@
 package shirates.core.driver
 
+import io.appium.java_client.AppiumDriver
+import shirates.core.configuration.PropertiesManager.statBarHeight
 import shirates.core.configuration.TestProfile
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.driver.VisionDriveObject
+import shirates.core.vision.driver.commandextension.rootElement
+
+/**
+ * drive
+ */
+val drive: Drive
+    get() {
+        return DriveObject
+    }
 
 /**
  * testDrive
@@ -14,46 +25,27 @@ val testDrive: TestDrive
     }
 
 /**
- * vision
+ * visionDrive
  */
-val vision: VisionDrive
+val visionDrive: VisionDrive
     get() {
         return VisionDriveObject
     }
 
 /**
- * rootElement
+ * driver
  */
-var rootElement: TestElement
+val driver: TestDriver
     get() {
-        return TestDriver.rootElement
-    }
-    set(value) {
-        TestDriver.rootElement = value
+        return TestDriver
     }
 
 /**
- * view
+ * appiumDriver
  */
-val view: TestElement
+val appiumDriver: AppiumDriver
     get() {
-        return TestElementCache.viewElement
-    }
-
-/**
- * viewBounds
- */
-val viewBounds: Bounds
-    get() {
-        return TestElementCache.viewBounds
-    }
-
-/**
- * sourceXml
- */
-val sourceXml: String
-    get() {
-        return TestElementCache.sourceXml
+        return TestDriver.appiumDriver
     }
 
 /**
@@ -71,3 +63,29 @@ val testProfile: TestProfile
     get() {
         return UITestCallbackExtension.uiTestBase!!.testProfile
     }
+
+/**
+ * packageName
+ */
+val packageName: String
+    get() {
+        if (testContext.useCache) {
+            return testDrive.rootElement.packageName
+        } else {
+            return visionDrive.rootElement.packageName
+        }
+    }
+
+/**
+ * viewBounds
+ */
+val viewBounds: Bounds
+    get() {
+        val b = if (testContext.useCache) {
+            testDrive.rootElement.bounds
+        } else {
+            visionDrive.rootElement.bounds
+        }
+        return Bounds(left = b.left, top = statBarHeight, width = b.width, height = b.height - statBarHeight)
+    }
+
