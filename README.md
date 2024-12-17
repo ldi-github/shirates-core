@@ -6,7 +6,7 @@
 
 ## Problem (Do not update to macOS 15.2)
 
-- [2024/12/17] [Unable to start session after updating to macOS 15.2](https://github.com/ldi-github/shirates-core/issues/31)
+- [2024/12/17] [Unable to start session after updating to macOS 15.2](https://github.com/ldi-github/shirates-core/issues/119)
 
 ## Document
 
