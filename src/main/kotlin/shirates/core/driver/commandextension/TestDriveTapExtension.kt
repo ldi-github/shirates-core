@@ -3,6 +3,7 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
@@ -239,6 +240,9 @@ fun TestDrive.tapSoftwareKey(
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds
 ): TestElement {
 
+    if (isNoLoadRun) {
+        return tap(expression = expression)
+    }
     if (isiOS.not()) {
         throw TestDriverException(message(id = "tapSoftwareKeyNotSupported"))
     }
@@ -446,6 +450,35 @@ fun TestDrive.tapCenterOfScreen(
 
         val bounds = viewBounds
         tap(x = bounds.centerX, y = bounds.centerY, holdSeconds = holdSeconds, repeat = repeat, safeMode = safeMode)
+    }
+
+    return lastElement
+}
+
+/**
+ * tapTopOfScreen
+ */
+fun TestDrive.tapTopOfScreen(
+    margin: Int = 20,
+    holdSeconds: Double = testContext.tapHoldSeconds,
+    repeat: Int = 1,
+    safeMode: Boolean = true
+): TestElement {
+
+    val command = "tapTopOfScreen"
+    val message = message(id = command)
+
+    val context = TestDriverCommandContext(rootElement)
+    context.execOperateCommand(command = command, message = message) {
+
+        val bounds = viewBounds
+        tap(
+            x = bounds.centerX,
+            y = (PropertiesManager.statBarHeight + margin),
+            holdSeconds = holdSeconds,
+            repeat = repeat,
+            safeMode = safeMode
+        )
     }
 
     return lastElement

@@ -167,8 +167,8 @@ object Const {
     /**
      * others
      */
-    const val ANDROID_STATBAR_HEIGHT = 66
-    const val IOS_STATBAR_HEIGHT = 47
+    const val ANDROID_STATBAR_HEIGHT = 137
+    const val IOS_STATBAR_HEIGHT = 53
 
     const val JQUERY_SOURCE = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"
     const val TESTRUN_PROPERTIES = "testConfig/testrun.properties"

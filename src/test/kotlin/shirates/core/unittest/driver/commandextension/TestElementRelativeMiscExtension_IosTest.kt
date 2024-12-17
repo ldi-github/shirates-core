@@ -27,7 +27,7 @@ class TestElementRelativeMiscExtension_IosTest : UnitTest() {
 
         run {
             // Act
-            val e = TestElementCache.select("Male:radio")
+            val e = TestElementCache.select("Male:radioButton")
             // Assert
             assertThat(e.classOrType).isEqualTo("XCUIElementTypeButton")
             assertThat(e.value).isEqualTo("1")
@@ -35,7 +35,7 @@ class TestElementRelativeMiscExtension_IosTest : UnitTest() {
         }
         run {
             // Act
-            val e = TestElementCache.select("Female:radio")
+            val e = TestElementCache.select("Female:radioButton")
             // Assert
             assertThat(e.classOrType).isEqualTo("XCUIElementTypeButton")
             assertThat(e.value).isEqualTo("")
@@ -43,7 +43,7 @@ class TestElementRelativeMiscExtension_IosTest : UnitTest() {
         }
         run {
             // Act
-            val e = TestElementCache.select("<No answer>:radio")
+            val e = TestElementCache.select("<No answer>:radioButton")
             // Assert
             assertThat(e.classOrType).isEqualTo("XCUIElementTypeButton")
             assertThat(e.value).isEqualTo("")

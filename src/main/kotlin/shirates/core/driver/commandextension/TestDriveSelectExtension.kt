@@ -28,7 +28,9 @@ fun TestDrive.select(
     val sel = getSelector(expression = expression)
 
     if (CodeExecutionContext.isInCell) {
-        return CodeExecutionContext.lastCell.innerWidget(expression, frame = frame)
+        val e = CodeExecutionContext.lastCell.innerWidget(selector = sel, frame = frame)
+        e.selector = sel
+        return e
     }
 
     var e = TestElement(selector = sel)

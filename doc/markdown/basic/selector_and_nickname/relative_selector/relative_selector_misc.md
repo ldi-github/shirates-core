@@ -2,7 +2,8 @@
 
 | relative selector | on Android                                         | on iOS                               |
 |:------------------|:---------------------------------------------------|:-------------------------------------|
-| :radio            | returns self if it is `android.widget.RadioButton` | returns left `XCUIElementTypeButton` |
+| :radioButton      | returns self if it is `android.widget.RadioButton` | returns left `XCUIElementTypeButton` |
+| :checkBox         | returns self if it is `android.widget.CheckBox`    | returns left `XCUIElementTypeButton` |
 
 ### Link
 

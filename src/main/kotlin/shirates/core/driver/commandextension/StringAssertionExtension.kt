@@ -342,7 +342,8 @@ fun Any?.thisMatchesDateFormat(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, arg1 = expected) {
         val match = try {
-            val date = value.replace("曜日", "").toDate(pattern = expected.replace("曜日", ""))
+            val date = value.replace("曜日", "")
+                .toDate(pattern = expected.replace("曜日", ""))
             val roundTripValue = date.format(pattern = expected)
             value == roundTripValue
         } catch (t: Throwable) {

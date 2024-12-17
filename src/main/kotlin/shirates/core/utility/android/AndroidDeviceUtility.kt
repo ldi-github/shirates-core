@@ -7,9 +7,11 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isEmulator
+import shirates.core.driver.testProfile
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.utility.appium.getCapabilityRelaxed
 import shirates.core.utility.file.FileLockUtility
 import shirates.core.utility.misc.ProcessUtility
@@ -669,6 +671,105 @@ object AndroidDeviceUtility {
 
         val r = startEmulatorAndWaitDeviceReady(emulatorProfile = emulatorProfile)
         return r
+    }
+
+    /**
+     * enableWiFi
+     */
+    fun enableWiFi(
+        udid: String = testProfile.udid,
+        waitSeconds: Double = 10.0,
+        intervalSeconds: Double = 0.5,
+        log: Boolean = PropertiesManager.enableShellExecLog,
+    ): String {
+
+        return setWiFiStatus(
+            udid = udid,
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            action = "enable",
+            log = log
+        )
+    }
+
+    /**
+     * disableWiFi
+     */
+    fun disableWiFi(
+        udid: String = testProfile.udid,
+        waitSeconds: Double = 10.0,
+        intervalSeconds: Double = 0.5,
+        log: Boolean = PropertiesManager.enableShellExecLog,
+    ): String {
+
+        return setWiFiStatus(
+            udid = udid,
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            action = "disable",
+            log = log
+        )
+    }
+
+    /**
+     * isWiFiEnabled
+     */
+    fun isWiFiEnabled(
+        udid: String = testProfile.udid
+    ): Boolean {
+
+        val settingsResult = ShellUtility.executeCommand(
+            "adb",
+            "-s",
+            udid,
+            "shell",
+            "settings",
+            "get",
+            "global",
+            "wifi_on"
+        )
+
+        return settingsResult.resultLines.last() == "1"
+    }
+
+    internal fun setWiFiStatus(
+        udid: String = testProfile.udid,
+        waitSeconds: Double = 10.0,
+        intervalSeconds: Double = 0.5,
+        action: String,
+        log: Boolean = PropertiesManager.enableShellExecLog,
+    ): String {
+        val expectedStatus =
+            if (action == "enable") true
+            else if (action == "disable") false
+            else throw IllegalArgumentException("Specify 'enable' or 'disable'.")
+
+        val svcResult = ShellUtility.executeCommand(
+            "adb",
+            "-s",
+            udid,
+            "shell",
+            "svc",
+            "wifi",
+            action
+        )
+        if (log) {
+            printInfo(svcResult.command)
+        }
+
+        val context = WaitUtility.doUntilTrue(
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            throwOnFinally = false
+        ) {
+            isWiFiEnabled(udid = udid) == expectedStatus
+        }
+        if (context.hasError) {
+            val message = "Timeout. WiFi could not ${action}."
+            throw TestDriverException(message)
+        }
+
+        return svcResult.command
     }
 
 }
