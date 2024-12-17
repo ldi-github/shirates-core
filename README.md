@@ -6,7 +6,8 @@
 
 ## News
 
-- [2024/6/29] **Linux** support added!
+- [2024/12/17] Bug
+  Fixed [Unable to start session after updating to macOS 15.2](https://github.com/ldi-github/shirates-core/issues/119)
 
 ## Document
 

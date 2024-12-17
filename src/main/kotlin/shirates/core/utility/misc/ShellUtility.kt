@@ -17,34 +17,6 @@ import java.io.InputStreamReader
 object ShellUtility {
 
     /**
-     * executeCommandByRuntime
-     */
-    fun executeCommandByRuntime(
-        vararg args: String,
-        timeoutSeconds: Double = Const.SHELL_RESULT_WAIT_FOR_SECONDS,
-        log: Boolean = PropertiesManager.enableShellExecLog
-    ): RuntimeResult {
-
-        val sw = StopWatch()
-        var error: Throwable? = null
-        val output = try {
-            val process = Runtime.getRuntime().exec(args)
-            process.inputStream.bufferedReader().use { it.readText() }
-        } catch (t: Throwable) {
-            error = t
-        } finally {
-            sw.stop()
-        }
-
-        return RuntimeResult(
-            args = args.toList(),
-            resultString = output.toString(),
-            error = error,
-            stopWatch = sw
-        )
-    }
-
-    /**
      * executeCommand
      */
     fun executeCommand(
@@ -152,27 +124,6 @@ object ShellUtility {
         vararg args: String
     ): ShellResult {
         return executeCommandCore(args = args, log = false)
-    }
-
-    /**
-     * RuntimeResult
-     */
-    class RuntimeResult(
-        val args: List<String>,
-        val resultString: String,
-        val error: Throwable? = null,
-        val stopWatch: StopWatch
-    ) {
-        val command: String
-            get() {
-                return args.joinToString(" ")
-            }
-
-        val hasError: Boolean
-            get() {
-                return error != null
-            }
-
     }
 
     /**
