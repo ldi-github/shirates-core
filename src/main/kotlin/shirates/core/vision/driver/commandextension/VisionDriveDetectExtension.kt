@@ -86,9 +86,7 @@ internal fun VisionDrive.detectCore(
     throwsException: Boolean,
 ): VisionElement {
 
-    if (CodeExecutionContext.lastScreenshotImage == null) {
-        screenshot(force = true)
-    }
+    screenshot()
 
     val regionElement = CodeExecutionContext.regionElement
     if (regionElement.visionContext.visionElements.isEmpty()) {

@@ -28,10 +28,12 @@ internal fun VisionDrive.checkImageLabelContains(
     var v = getThisOrIt()
     var contains = false
 
+    screenshot()
+
     doUntilTrue(
         waitSeconds = waitSeconds,
         onBeforeRetry = {
-            screenshot(force = true)
+            screenshot()
             v = v.createFromScreenshot()
         }
     ) {
@@ -197,7 +199,6 @@ fun VisionDrive.screenIs(
                 match = isScreen(screenName = screenName)
                 match
             }
-            wc.throwIfError()
         }
 
         if (match) {

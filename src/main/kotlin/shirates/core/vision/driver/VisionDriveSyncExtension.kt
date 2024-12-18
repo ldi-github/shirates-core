@@ -1,8 +1,9 @@
 package shirates.core.vision.driver
 
+import org.openqa.selenium.OutputType
 import shirates.core.configuration.PropertiesManager
-import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver
+import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
@@ -11,13 +12,50 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
+import shirates.core.utility.image.isSame
 import shirates.core.utility.image.rect
 import shirates.core.utility.sync.SyncUtility
+import shirates.core.utility.toBufferedImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.commandextension.canDetectCore
-import shirates.core.vision.driver.commandextension.getThisOrIt
+import java.awt.image.BufferedImage
+
+
+/**
+ * syncScreenshot
+ */
+fun VisionDrive.syncScreenshot(
+    syncWaitSeconds: Double = testContext.syncWaitSeconds,
+    maxLoopCount: Int = testContext.syncMaxLoopCount,
+    syncIntervalSeconds: Double = testContext.syncIntervalSeconds,
+    syncOnTimeout: Boolean = true
+): VisionElement {
+
+    var screenshotImage = CodeExecutionContext.lastScreenshotImage
+    var lastScreenshotImage: BufferedImage?
+    var screenshotSynced = false
+
+    val c = doUntilTrue(
+        waitSeconds = syncWaitSeconds,
+        maxLoopCount = maxLoopCount,
+        intervalSeconds = syncIntervalSeconds,
+        throwOnFinally = false
+    ) {
+        lastScreenshotImage = screenshotImage
+        screenshotImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+        screenshotSynced = screenshotImage.isSame(lastScreenshotImage)
+        screenshotSynced
+    }
+    CodeExecutionContext.lastScreenshotImage = screenshotImage
+    CodeExecutionContext.screenshotSynced = screenshotSynced
+
+    if (c.isTimeout && syncOnTimeout) {
+        CodeExecutionContext.screenshotSynced = true
+    }
+    return lastElement
+}
 
 /**
  * wait
@@ -25,8 +63,6 @@ import shirates.core.vision.driver.commandextension.getThisOrIt
 fun VisionDrive.wait(
     waitSeconds: Double
 ): VisionElement {
-
-    val testElement = getThisOrIt()
 
     val command = "wait"
     val message = message(id = command, subject = "$waitSeconds")
@@ -38,7 +74,7 @@ fun VisionDrive.wait(
         Thread.sleep((waitSeconds * 1000).toLong())
     }
 
-    return testElement
+    return lastElement
 }
 
 /**
@@ -64,7 +100,7 @@ fun VisionDrive.wait(): VisionElement {
  * waitForClose
  */
 fun VisionDrive.waitForClose(
-    expression: String? = null,
+    expression: String,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = lastScreenshotImage!!.rect,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -72,20 +108,9 @@ fun VisionDrive.waitForClose(
     throwsException: Boolean = true
 ): VisionElement {
 
-    val testElement = TestDriver.it
+    val sel = getSelector(expression = expression)
 
-    val sel: Selector
-    if (expression == null) {
-        if (testElement.selector == null) {
-            throw TestDriverException("selector is null")
-        } else {
-            sel = testElement.selector!!
-        }
-    } else {
-        sel = getSelector(expression = expression)
-    }
-
-    val context = TestDriverCommandContext(testElement)
+    val context = TestDriverCommandContext(null)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
         var found = false

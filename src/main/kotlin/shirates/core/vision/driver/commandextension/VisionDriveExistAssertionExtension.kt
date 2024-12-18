@@ -90,11 +90,8 @@ private fun VisionDrive.existCore(
         waitSeconds = waitSeconds,
         intervalSeconds = testContext.retryIntervalSeconds,
         throwOnFinally = false,
-        onBeforeRetry = {
-            screenshot(force = true)
-        }
     ) {
-        screenshot(force = true)
+        screenshot()
         v = detect(
             expression = expression,
             language = language,

@@ -1,10 +1,12 @@
 package experiment
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.logging.printInfo
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.SrvisionProxy
+
 
 class SrvisionProxyTest {
 
@@ -14,6 +16,64 @@ class SrvisionProxyTest {
 //        val imageFile = "unitTestData/files/srvision/android/[Android Settings Screen].png".toPath().toString()
 //        SrvisionProxy.callTextRecognizer(inputFile = imageFile)
 //    }
+
+    @Test
+    fun imageFeaturePrintConfigurator() {
+
+        val result = SrvisionProxy.callImageFeaturePrintConfigurator(
+            inputDirectory = "vision/screens"
+        )
+        println(result)
+    }
+
+    @Test
+    fun callImageFeaturePrintClassifier() {
+
+        // Arrange
+        SrvisionProxy.callImageFeaturePrintConfigurator(
+            inputDirectory = "vision/screens"
+        )
+        run {
+            // Act
+            val result = SrvisionProxy.callImageFeaturePrintClassifier(
+                inputFile = "vision/screens/android/[Android Settings Top Screen(misaligned)].png"
+            )
+            // Assert
+            assertThat(result).isEqualTo("[Android Settings Top Screen(misaligned)]")
+        }
+        run {
+            // Act
+            val result = SrvisionProxy.callImageFeaturePrintClassifier(
+                inputFile = "vision/screens/android/[Android Settings Top Screen].png"
+            )
+            // Assert
+            assertThat(result).isEqualTo("[Android Settings Top Screen]")
+        }
+        run {
+            // Act
+            val result = SrvisionProxy.callImageFeaturePrintClassifier(
+                inputFile = "vision/screens/android/[Network & internet Screen].png"
+            )
+            // Assert
+            assertThat(result).isEqualTo("[Network & internet Screen]")
+        }
+        run {
+            // Act
+            val result = SrvisionProxy.callImageFeaturePrintClassifier(
+                inputFile = "vision/screens/ios/[Developer Screen].png"
+            )
+            // Assert
+            assertThat(result).isEqualTo("[Developer Screen]")
+        }
+        run {
+            // Act
+            val result = SrvisionProxy.callImageFeaturePrintClassifier(
+                inputFile = "vision/screens/ios/[iOS Settings Top Screen].png"
+            )
+            // Assert
+            assertThat(result).isEqualTo("[iOS Settings Top Screen]")
+        }
+    }
 
     @Test
     fun getTemplateMatchingRectangle_found() {

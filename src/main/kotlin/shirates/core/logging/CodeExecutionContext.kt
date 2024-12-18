@@ -278,15 +278,7 @@ object CodeExecutionContext {
      * screenshotSynced
      */
     var screenshotSynced = false
-        get() {
-            return field
-        }
-        internal set(value) {
-            if (field == value) {
-                return
-            }
-            field = value
-        }
+        internal set
 
     /**
      * setScreenDirty

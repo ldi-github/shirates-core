@@ -51,7 +51,7 @@ object ShellUtility {
 
             sw.start()
 
-            val env = EnvironmentVariableUtility.getEnvironmentVariables()
+            val env = EnvironmentUtils.getProcEnvironment();
             executor.execute(commandLine, env)
         } catch (t: Throwable) {
             error = t

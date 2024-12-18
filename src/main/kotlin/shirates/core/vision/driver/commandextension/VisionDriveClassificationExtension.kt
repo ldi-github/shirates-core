@@ -15,7 +15,7 @@ private fun VisionDrive.classifyCore(
         throw IllegalArgumentException("imageFile is blank.")
     }
 
-    screenshot(force = true)
+    screenshot()
 
     val result = SrvisionProxy.callImageClassifier(
         inputFile = TestLog.directoryForLog.resolve(imageFile).toString(),

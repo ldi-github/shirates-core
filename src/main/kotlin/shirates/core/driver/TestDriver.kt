@@ -54,6 +54,7 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.syncScreenshot
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -1907,17 +1908,24 @@ object TestDriver {
         try {
             CpuLoadService.waitForCpuLoadUnder()
 
-            val screenshotImage = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+            val oldImage = CodeExecutionContext.lastScreenshotImage
 
-            val screenshotSynced = screenshotImage.isSame(CodeExecutionContext.lastScreenshotImage)
-            CodeExecutionContext.screenshotSynced = screenshotSynced
-            if (onChangedOnly && screenshotSynced) {
-//                TestLog.printInfo("screenshot skipped. (no change)")
+            visionDrive.syncScreenshot()
+
+            val newImage = CodeExecutionContext.lastScreenshotImage
+            val changed = newImage.isSame(oldImage).not()
+
+            if (changed.not() && onChangedOnly) {
+//                TestLog.printInfo("Saving screenshot skipped. (no change)")
                 return this
             }
-            printInfo("screenshotSynced=$screenshotSynced")
+//            printInfo("screenshotSynced=${CodeExecutionContext.screenshotSynced}")
 
+            /**
+             * Save screenshot
+             */
             val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toString()
+            val screenshotImage = CodeExecutionContext.lastScreenshotImage!!
             screenshotImage.resizeAndSaveImage(
                 scale = PropertiesManager.screenshotScale,
                 resizedFile = screenshotFile.toPath().toFile(),
@@ -1927,9 +1935,12 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
             CodeExecutionContext.lastScreenshotImage = screenshotImage  // Captures VisionRootElement
-            CodeExecutionContext.screenshotSynced = screenshotSynced
             CodeExecutionContext.regionElement = VisionElement()
+
             if (testContext.useCache.not()) {
+                /**
+                 * Update currentScreen (Vision mode)
+                 */
                 TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
                 TestLog.printInfo(TestDriver.currentScreen)
             }

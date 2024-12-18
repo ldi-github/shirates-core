@@ -23,6 +23,66 @@ object SrvisionProxy {
     var lastResult = ""
 
     /**
+     * callImageFeaturePrintConfigurator
+     */
+    fun callImageFeaturePrintConfigurator(
+        inputDirectory: String,
+        log: Boolean = false,
+    ): String {
+
+        if (Files.exists(inputDirectory.toPath()).not()) {
+            throw IllegalArgumentException("directory not found: $inputDirectory.")
+        }
+
+        val sw = StopWatch("ImageFeaturePrintConfigurator")
+
+        val urlBuilder = "http://127.0.0.1:8081/ImageFeaturePrintConfigurator".toHttpUrlOrNull()!!
+            .newBuilder()
+        urlBuilder.addQueryParameter(
+            name = "inputDirectory",
+            value = inputDirectory.toPath().toString()
+        )
+        val url = urlBuilder.build()
+        val result = getResponseBody(url)
+        lastResult = result
+
+        if(log){
+            sw.printInfo()
+        }
+        return result
+    }
+
+    /**
+     * callImageFeaturePrintClassifier
+     */
+    fun callImageFeaturePrintClassifier(
+        inputFile: String,
+        log: Boolean = false,
+    ): String {
+
+        if (Files.exists(inputFile.toPath()).not()) {
+            throw IllegalArgumentException("file not found: $inputFile.")
+        }
+
+        val sw = StopWatch("callImageFeaturePrintClassifier")
+
+        val urlBuilder = "http://127.0.0.1:8081/ImageFeaturePrintClassifier".toHttpUrlOrNull()!!
+            .newBuilder()
+        urlBuilder.addQueryParameter(
+            name = "inputFile",
+            value = inputFile.toPath().toString()
+        )
+        val url = urlBuilder.build()
+        val result = getResponseBody(url)
+        lastResult = result
+
+        if(log){
+            sw.printInfo()
+        }
+        return result
+    }
+
+    /**
      * callTextRecognizer
      */
     fun callTextRecognizer(
@@ -65,7 +125,6 @@ object SrvisionProxy {
         if (log) {
             sw.printInfo()
         }
-
         return result
     }
 
@@ -96,7 +155,6 @@ object SrvisionProxy {
         if (log) {
             sw.printInfo()
         }
-
         return lastResult
     }
 
@@ -129,7 +187,6 @@ object SrvisionProxy {
             inputDirectory.toPath().resolve("result.json").toFile().writeText(result)
             sw.printInfo()
         }
-
         return lastResult
     }
 
@@ -191,7 +248,6 @@ object SrvisionProxy {
         if (log) {
             sw.printInfo()
         }
-
         return result
     }
 
@@ -227,7 +283,6 @@ object SrvisionProxy {
         if (log) {
             sw.printInfo()
         }
-
         return ClassificationResult(jsonString = result)
     }
 

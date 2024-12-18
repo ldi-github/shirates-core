@@ -326,7 +326,7 @@ class AdHocTestAndroid : UITest() {
 
         scenario {
             case(1) {
-                select("Network & internet")
+                pressHome()
                 screenshot(force = true)
             }
         }

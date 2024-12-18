@@ -13,13 +13,27 @@ object ScreenRecognizer {
      */
     fun recognizeScreen(
         screenImageFile: String,
-        allowableDifferenceRate: Double = 0.1,
+        maxDistance: Double = 0.5,
     ): String {
 
-        return getScreenTextDistanceInfo(
-            screenImageFile = screenImageFile,
-            allowableDifferenceRate = allowableDifferenceRate
-        )?.screenTextInfo?.screenName ?: "?"
+        val jsonString = SrvisionProxy.callImageFeaturePrintClassifier(
+            inputFile = screenImageFile,
+            log = true,
+        )
+        val jsonObject = try{
+            JSONObject(jsonString)
+        }catch(t: Throwable){
+            throw TestDriverException("Could not parse json.\n$jsonString", cause = t)
+        }
+        if(jsonObject.has("distance").not() || jsonObject.has("name").not()){
+            return "?"
+        }
+        val distance = jsonObject.getDouble("distance")
+        val screenName = jsonObject.getString("name")
+        if(distance > maxDistance){
+            return "?"
+        }
+        return screenName
     }
 
     /**
