@@ -17,7 +17,7 @@ fun VisionElement.checkIsON(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
-        this.checkImageLabelContains(
+        this.checkSwitchState(
             containedText = "ON",
             message = assertMessage,
             waitSeconds = waitSeconds
@@ -39,7 +39,7 @@ fun VisionElement.checkIsOFF(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
-        this.checkImageLabelContains(
+        this.checkSwitchState(
             containedText = "OFF",
             message = assertMessage,
             waitSeconds = waitSeconds

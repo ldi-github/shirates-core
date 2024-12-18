@@ -8,21 +8,10 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.branchextension.lastScreenshotFile
 import shirates.core.vision.driver.lastElement
-
-/**
- * screenName
- */
-fun VisionDrive.classifyScreen(): String {
-
-    val label = classifyScreen(imageFile = lastScreenshotFile!!)
-    return label
-}
 
 /**
  * isScreen
@@ -39,10 +28,7 @@ fun VisionDrive.isScreen(
 //    val file = VisionMLModelRepository.screenClassifierRepository.getFile(label = screenName)
 //        ?: return false
 
-    val label = classifyScreen()
-    printInfo("classified as $label.")
-
-    val r = (label == screenName)
+    val r = (TestDriver.currentScreen == screenName)
     return r
 }
 
@@ -57,7 +43,7 @@ fun VisionDrive.isScreenOf(
         return true
     }
 
-    val screenName = classifyScreen()
+    val screenName = TestDriver.currentScreen
     return screenNames.contains(screenName)
 }
 

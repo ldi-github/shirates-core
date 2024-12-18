@@ -9,24 +9,37 @@ import kotlin.io.path.name
 
 class VisionClassifierRepository {
 
-    val labelMap = mutableMapOf<String, LabelFiles>()
+    var imageClassifierDirectory = ""
+    val labelMap = mutableMapOf<String, LabelFileInfo>()
+
+    /**
+     * classifierName
+     */
+    val classifierName: String
+        get() {
+            return imageClassifierDirectory.toPath().name
+        }
 
     /**
      * setup
      */
     fun setup(imageClassifierDirectory: String) {
 
+        this.imageClassifierDirectory = imageClassifierDirectory.toPath().toString()
         labelMap.clear()
 
-        if (Files.exists(imageClassifierDirectory.toPath()).not()) {
+        if (Files.exists(this.imageClassifierDirectory.toPath()).not()) {
             return
         }
 
-        imageClassifierDirectory.toPath().toFile().walkTopDown().forEach {
+        this.imageClassifierDirectory.toPath().toFile().walkTopDown().forEach {
             if (it.extension == "png" || it.extension == "jpg") {
                 val label = it.toPath().parent.name
                 if (labelMap.containsKey(label).not()) {
-                    labelMap[label] = LabelFiles(label = label)
+                    labelMap[label] = LabelFileInfo(
+                        label = label,
+                        imageClassifierDirectory = this.imageClassifierDirectory
+                    )
                 }
                 val file = it.toString()
                 if (file.toPath().parent.parent.name != "test") {
@@ -78,8 +91,9 @@ class VisionClassifierRepository {
         return files.firstOrNull()
     }
 
-    class LabelFiles(
+    class LabelFileInfo(
         val label: String,
+        val imageClassifierDirectory: String,
         val files: MutableList<String> = mutableListOf()
     )
 }

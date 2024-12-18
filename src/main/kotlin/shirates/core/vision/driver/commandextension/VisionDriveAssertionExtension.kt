@@ -12,15 +12,17 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.utility.sync.SyncUtility
+import shirates.core.utility.toPath
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.driver.*
 
 internal fun VisionDrive.checkImageLabelContains(
     containedText: String,
     message: String,
+    mlmodelFile: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    mlmodelFile: String = "vision/mlmodels/GeneralClassifier/GeneralClassifier.mlmodel"
 ): VisionElement {
 
     var v = getThisOrIt()
@@ -44,6 +46,25 @@ internal fun VisionDrive.checkImageLabelContains(
 
     lastElement = v
     return v
+}
+
+internal fun VisionDrive.checkSwitchState(
+    containedText: String,
+    message: String,
+    mlmodelFile: String? = null,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+): VisionElement {
+
+    val rep = VisionMLModelRepository.getRepository(classifierName = "SwitchStateClassifier")
+    rep.classifierName
+
+    return checkImageLabelContains(
+        containedText = containedText,
+        message = message,
+        mlmodelFile = mlmodelFile ?: rep.imageClassifierDirectory.toPath().resolve("${rep.classifierName}.mlmodel")
+            .toString(),
+        waitSeconds = waitSeconds
+    )
 }
 
 /**

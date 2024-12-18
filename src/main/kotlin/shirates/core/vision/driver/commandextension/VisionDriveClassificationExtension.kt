@@ -1,7 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.driver.TestDriver
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
 import shirates.core.vision.SrvisionProxy
@@ -40,26 +38,4 @@ fun VisionDrive.classifyGeneral(
         imageFile = imageFile,
         mlmodelFile = mlmodelFile,
     )
-}
-
-/**
- * classifyScreen
- */
-fun VisionDrive.classifyScreen(
-    imageFile: String
-): String {
-
-    val mlmodelFile = "vision/mlmodels/ScreenClassifier/ScreenClassifier.mlmodel".toPath().toString()
-
-    if (CodeExecutionContext.screenClassified) {
-        return TestDriver.currentScreen
-    }
-
-    val screenName = classifyCore(
-        imageFile = imageFile,
-        mlmodelFile = mlmodelFile,
-    )
-    TestDriver.currentScreen = screenName
-    CodeExecutionContext.screenClassified = true
-    return screenName
 }

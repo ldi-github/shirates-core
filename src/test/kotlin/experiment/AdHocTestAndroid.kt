@@ -320,4 +320,15 @@ class AdHocTestAndroid : UITest() {
             }
         }
     }
+
+    @Test
+    fun capture2() {
+
+        scenario {
+            case(1) {
+                select("Network & internet")
+                screenshot(force = true)
+            }
+        }
+    }
 }

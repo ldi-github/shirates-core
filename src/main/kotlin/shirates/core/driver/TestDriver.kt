@@ -52,6 +52,7 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionElement
 import java.io.File
 import java.io.FileNotFoundException
@@ -1928,6 +1929,10 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotImage = screenshotImage  // Captures VisionRootElement
             CodeExecutionContext.screenshotSynced = screenshotSynced
             CodeExecutionContext.regionElement = VisionElement()
+            if (testContext.useCache.not()) {
+                TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
+                TestLog.printInfo(TestDriver.currentScreen)
+            }
 
             if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout) {
                 val threshold = PropertiesManager.screenshotBlackoutThreshold

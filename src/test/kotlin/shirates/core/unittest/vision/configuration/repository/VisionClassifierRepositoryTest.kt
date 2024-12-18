@@ -7,6 +7,7 @@ import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
 import shirates.core.utility.toPath
 import shirates.core.vision.configration.repository.VisionClassifierRepository
+import kotlin.io.path.name
 
 class VisionClassifierRepositoryTest {
 
@@ -32,6 +33,7 @@ class VisionClassifierRepositoryTest {
             "unitTestData/files/vision/valid/subdirectory1/[Label3]/img@a.png".toPath().toString(),
             "unitTestData/files/vision/valid/subdirectory1/[Label3]/img@i.png".toPath().toString(),
         )
+        assertThat(repository.classifierName).isEqualTo(repository.imageClassifierDirectory.toPath().name)
     }
 
     @Test

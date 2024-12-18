@@ -1,6 +1,7 @@
 package shirates.core.vision
 
 import org.json.JSONArray
+import shirates.core.exception.TestDriverException
 
 class ClassificationResult(
     val jsonString: String
@@ -16,7 +17,11 @@ class ClassificationResult(
         }
 
     init {
-        val jsonArray = JSONArray(jsonString)
+        val jsonArray = try {
+            JSONArray(jsonString)
+        } catch (t: Throwable) {
+            throw TestDriverException("Error while parsing JSON results. $jsonString", t)
+        }
         for (i in 0 until jsonArray.length()) {
             val jsonObject = jsonArray.getJSONObject(i)
             val identifier = jsonObject.getString("identifier")
