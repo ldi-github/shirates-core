@@ -36,7 +36,7 @@ object ShellUtility {
 
         val outputStream = ByteArrayOutputStream()
         var error: Throwable? = null
-        val executor = DefaultExecutor.builder().get()
+        val executor = DefaultExecutor()
         val sw = StopWatch()
         try {
             TestLog.execute(message = args.joinToString(" "), log = log)
@@ -94,7 +94,7 @@ object ShellUtility {
 
         val commandLine = CommandLine(command)
         commandLine.addArguments(args2.toTypedArray())
-        val executor = DefaultExecutor.builder().get()
+        val executor = DefaultExecutor()
         val outputStream = ByteArrayOutputStream()
         executor.streamHandler = PumpStreamHandler(outputStream)
         val resultHandler = DefaultExecuteResultHandler();
