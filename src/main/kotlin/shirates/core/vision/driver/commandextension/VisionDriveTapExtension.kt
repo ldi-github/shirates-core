@@ -6,7 +6,6 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.rect
@@ -30,7 +29,7 @@ fun VisionDrive.tap(
     val command = "tap"
     val message = message(id = command, subject = "($x,$y)")
 
-    CodeExecutionContext.setScreenDirty()
+    invalidateScreen()
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = testElement.subject) {

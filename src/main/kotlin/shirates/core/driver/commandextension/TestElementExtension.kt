@@ -464,5 +464,6 @@ fun TestElement.toVisionElement(): VisionElement {
     val v = VisionElement()
     v.visionContext.localRegionImage = lastScreenshotImage?.cropImage(rect = rect)
     v.selector = this.selector
+    v.testElement = this
     return v
 }

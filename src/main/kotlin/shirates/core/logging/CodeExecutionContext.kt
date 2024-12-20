@@ -285,14 +285,7 @@ object CodeExecutionContext {
      */
     fun setScreenDirty() {
         screenshotSynced = false
-        screenClassified = false
     }
-
-
-    /**
-     * screenClassified
-     */
-    var screenClassified = false
 
     // Misc --------------------------------------------------
 

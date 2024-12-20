@@ -3,6 +3,7 @@ package shirates.core.vision
 import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
 import shirates.core.driver.TestDriver
+import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -85,6 +86,11 @@ class VisionElement() : VisionDrive {
     var observation: VisionObservation? = null
 
     /**
+     * TestElement
+     */
+    var testElement: TestElement? = null
+
+    /**
      * candidate
      */
     val candidate: Candidate?
@@ -161,7 +167,7 @@ class VisionElement() : VisionDrive {
      */
     val isFound: Boolean
         get() {
-            return observation != null || segment != null
+            return observation != null || segment != null || testElement != null
         }
 
     /**
@@ -185,7 +191,7 @@ class VisionElement() : VisionDrive {
      */
     val text: String
         get() {
-            return recognizeTextObservation?.text ?: return ""
+            return recognizeTextObservation?.text ?: testElement?.text ?: return ""
         }
 
     /**

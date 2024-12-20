@@ -4,18 +4,6 @@ import org.openqa.selenium.Capabilities
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.appium.getCapabilityRelaxed
-import shirates.core.vision.VisionElement
-
-/**
- * toVisionElement
- */
-val Drive.toVisionElement: VisionElement
-    get() {
-        if (this is VisionElement) {
-            return this
-        }
-        return VisionElement.emptyElement
-    }
 
 /**
  * parameters

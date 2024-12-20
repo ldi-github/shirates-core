@@ -46,7 +46,7 @@ object SrvisionProxy {
         val result = getResponseBody(url)
         lastResult = result
 
-        if(log){
+        if (log) {
             sw.printInfo()
         }
         return result
@@ -57,6 +57,7 @@ object SrvisionProxy {
      */
     fun callImageFeaturePrintClassifier(
         inputFile: String,
+        language: String = PropertiesManager.logLanguage,
         log: Boolean = false,
     ): String {
 
@@ -72,11 +73,19 @@ object SrvisionProxy {
             name = "inputFile",
             value = inputFile.toPath().toString()
         )
+        urlBuilder.addQueryParameter(
+            name = "language",
+            value = language
+        )
         val url = urlBuilder.build()
         val result = getResponseBody(url)
         lastResult = result
 
-        if(log){
+        val file = TestLog.directoryForLog.resolve("${TestLog.nextLineNo}.json")
+        file.parent.toFile().mkdirs()
+        file.toFile().writeText(result)
+
+        if (log) {
             sw.printInfo()
         }
         return result

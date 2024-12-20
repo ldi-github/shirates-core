@@ -253,6 +253,7 @@ class VisionContext() {
      */
     fun detect(
         text: String,
+        removeChars: String? = null,
         rect: Rectangle = CodeExecutionContext.region
     ): VisionElement {
 
@@ -262,6 +263,7 @@ class VisionContext() {
 
         val candidates = detectCandidates(
             text = text,
+            removeChars = removeChars,
             rect = rect
         )
 
@@ -274,12 +276,14 @@ class VisionContext() {
      */
     fun detect(
         selector: Selector,
+        removeChars: String? = null,
         rect: Rectangle = CodeExecutionContext.region
     ): VisionElement {
 
         val text = selector.text ?: ""
         val v = detect(
             text = text,
+            removeChars = removeChars,
             rect = rect
         )
         return v
@@ -290,6 +294,7 @@ class VisionContext() {
      */
     fun detectCandidates(
         text: String,
+        removeChars: String?,
         rect: Rectangle = CodeExecutionContext.region
     ): List<VisionElement> {
 
@@ -297,10 +302,22 @@ class VisionContext() {
             return visionElements.toList()
         }
 
+        fun String.removeCharactors(): String {
+            if (removeChars == null) return this
+            return this.filterNot { it in removeChars }
+        }
+
         val globalBounds = rect.toBoundsWithRatio()
+        var whitespaceRemovedLowerCaseText = text.replace("\\s".toRegex(), "").lowercase()
+        if (removeChars != null) {
+            whitespaceRemovedLowerCaseText = whitespaceRemovedLowerCaseText.removeCharactors()
+        }
 
         val list = visionElements
-            .filter { it.text.lowercase().contains(text.lowercase()) }
+            .filter {
+                val t = it.text.replace("\\s".toRegex(), "").lowercase().removeCharactors()
+                t.contains(whitespaceRemovedLowerCaseText)
+            }
             .filter { it.bounds.isIncludedIn(globalBounds) }
             .map { Pair(it, it.text.length - text.length) }.sortedBy { it.second }
         return list.map { it.first }

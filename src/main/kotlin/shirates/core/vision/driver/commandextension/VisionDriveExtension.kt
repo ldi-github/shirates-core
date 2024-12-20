@@ -100,6 +100,7 @@ fun VisionDrive.screenshot(
  */
 fun VisionDrive.tap(
     expression: String,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -122,6 +123,7 @@ fun VisionDrive.tap(
 
         val targetElement = detectCore(
             selector = sel,
+            removeChars = removeChars,
             language = language,
             rect = rect,
             waitSeconds = waitSeconds,

@@ -185,6 +185,8 @@ internal fun VisionDrive.swipePointToPointCore(
 
     fun swipeFunc() {
 
+        invalidateScreen()
+
         val sc = swipeContext
         val finger = PointerInput(PointerInput.Kind.TOUCH, "finger")
         val sequence = org.openqa.selenium.interactions.Sequence(finger, 0)
@@ -219,9 +221,8 @@ internal fun VisionDrive.swipePointToPointCore(
             //  https://github.com/appium/java-client/issues/2045
         }
 
-//        TestDriver.invalidateCache()
         if (testContext.onScrolling) {
-            TestDriver.autoScreenshot()
+            screenshot()
         }
     }
 
@@ -234,7 +235,7 @@ internal fun VisionDrive.swipePointToPointCore(
                 Thread.sleep((swipeContext.intervalSeconds * 1000).toLong())
             }
         }
-        CodeExecutionContext.setScreenDirty()
+        invalidateScreen()
         swipeFunc()
     }
 

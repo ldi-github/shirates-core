@@ -20,17 +20,21 @@ object ScreenRecognizer {
             inputFile = screenImageFile,
             log = true,
         )
-        val jsonObject = try{
-            JSONObject(jsonString)
-        }catch(t: Throwable){
+        val jsonArray = try {
+            JSONArray(jsonString)
+        } catch (t: Throwable) {
             throw TestDriverException("Could not parse json.\n$jsonString", cause = t)
         }
-        if(jsonObject.has("distance").not() || jsonObject.has("name").not()){
+        if (jsonArray.isEmpty) {
+            return "?"
+        }
+        val jsonObject = jsonArray.getJSONObject(0)
+        if (jsonObject.has("distance").not() || jsonObject.has("name").not()) {
             return "?"
         }
         val distance = jsonObject.getDouble("distance")
         val screenName = jsonObject.getString("name")
-        if(distance > maxDistance){
+        if (distance > maxDistance) {
             return "?"
         }
         return screenName

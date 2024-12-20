@@ -34,44 +34,54 @@ class SrvisionProxyTest {
             inputDirectory = "vision/screens"
         )
         run {
+            val sw = StopWatch()
             // Act
             val result = SrvisionProxy.callImageFeaturePrintClassifier(
                 inputFile = "vision/screens/android/[Android Settings Top Screen(misaligned)].png"
             )
             // Assert
-            assertThat(result).isEqualTo("[Android Settings Top Screen(misaligned)]")
+            assertThat(result).contains("[Android Settings Top Screen(misaligned)]")
+            sw.printInfo()
         }
         run {
+            val sw = StopWatch()
             // Act
             val result = SrvisionProxy.callImageFeaturePrintClassifier(
                 inputFile = "vision/screens/android/[Android Settings Top Screen].png"
             )
             // Assert
-            assertThat(result).isEqualTo("[Android Settings Top Screen]")
+            assertThat(result).contains("[Android Settings Top Screen]")
+            sw.printInfo()
         }
         run {
+            val sw = StopWatch()
             // Act
             val result = SrvisionProxy.callImageFeaturePrintClassifier(
                 inputFile = "vision/screens/android/[Network & internet Screen].png"
             )
             // Assert
-            assertThat(result).isEqualTo("[Network & internet Screen]")
+            assertThat(result).contains("[Network & internet Screen]")
+            sw.printInfo()
         }
         run {
+            val sw = StopWatch()
             // Act
             val result = SrvisionProxy.callImageFeaturePrintClassifier(
                 inputFile = "vision/screens/ios/[Developer Screen].png"
             )
             // Assert
-            assertThat(result).isEqualTo("[Developer Screen]")
+            assertThat(result).contains("[Developer Screen]")
+            sw.printInfo()
         }
         run {
+            val sw = StopWatch()
             // Act
             val result = SrvisionProxy.callImageFeaturePrintClassifier(
                 inputFile = "vision/screens/ios/[iOS Settings Top Screen].png"
             )
             // Assert
-            assertThat(result).isEqualTo("[iOS Settings Top Screen]")
+            assertThat(result).contains("[iOS Settings Top Screen]")
+            sw.printInfo()
         }
     }
 

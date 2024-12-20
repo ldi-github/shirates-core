@@ -2,6 +2,7 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
+import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.screenshot
 import shirates.core.driver.TestDriverCommandContext
@@ -33,6 +34,7 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.exist(
     expression: String,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
@@ -56,6 +58,7 @@ fun VisionDrive.exist(
         v = existCore(
             message = message,
             expression = expression,
+            removeChars = removeChars,
             language = language,
             rect = rect,
             ignoreCase = ignoreCase,
@@ -77,6 +80,7 @@ fun VisionDrive.exist(
 private fun VisionDrive.existCore(
     message: String,
     expression: String,
+    removeChars: String?,
     language: String,
     rect: Rectangle,
     ignoreCase: Boolean,
@@ -85,40 +89,59 @@ private fun VisionDrive.existCore(
     waitSeconds: Double,
 ): VisionElement {
 
-    var v = VisionElement.emptyElement
-    val waitContext = doUntilTrue(
+    /**
+     * Try to detect without scroll
+     */
+    var v = detect(
+        expression = expression,
+        removeChars = removeChars,
+        language = language,
+        rect = rect,
+        allowScroll = false,
+        swipeToCenter = false,
+        throwsException = false,
         waitSeconds = waitSeconds,
-        intervalSeconds = testContext.retryIntervalSeconds,
-        throwOnFinally = false,
-    ) {
-        screenshot()
-        v = detect(
-            expression = expression,
-            language = language,
-            rect = rect,
-            allowScroll = allowScroll,
-            swipeToCenter = false,
-            throwsException = false,
-            waitSeconds = waitSeconds,
-        )
-        val expected = if (ignoreCase) expression.lowercase() else expression
-        val actual = if (ignoreCase) v.text.lowercase() else v.text
+    )
 
-        val isFound =
-            if (allowContains) actual.contains(expected)
-            else actual == expected
-        isFound
+    fun String.eval(expression: String): Boolean {
+        fun String.preprocess(): String {
+            val s = if (ignoreCase) this.lowercase() else this
+            return s.replace("\\s".toRegex(), "")
+        }
+
+        val actual = this.preprocess()
+        val expected = expression.preprocess()
+
+        val r = if (allowContains) actual.contains(expected)
+        else actual == expected
+        return r
     }
-    if (waitContext.hasError) {
-        val error = TestNGException(message = "$message (expected: \"$expression\", actual: \"${v.text}\")")
-        v.lastError = error
-        v.lastResult = LogType.NG
-        throw error
-    } else {
+
+    var isFound = v.text.eval(expression = expression)
+
+    if (isFound.not() && allowScroll) {
+        /**
+         * Try to detect with scroll
+         */
+        v = detectWithScroll(
+            expression = expression,
+            direction = ScrollDirection.Down,
+            rect = rect,
+            throwsException = false
+        )
+        isFound = v.text.eval(expression = expression)
+    }
+
+    if (isFound) {
         TestLog.ok(message = message)
         if (v.text != expression) {
             TestLog.warn(message = "There are differences in text.  (expected: \"$expression\", AI-OCR: \"${v.text}\")")
         }
+    } else {
+        val error = TestNGException(message = "$message (expected: \"$expression\", actual: \"${v.text}\")")
+        v.lastError = error
+        v.lastResult = LogType.NG
+        throw error
     }
 
     return v
@@ -195,6 +218,7 @@ internal fun postProcessForAssertion(
  */
 fun VisionDrive.existWithScrollDown(
     expression: String,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
@@ -227,6 +251,7 @@ fun VisionDrive.existWithScrollDown(
             v = existCore(
                 message = assertMessage,
                 expression = expression,
+                removeChars = removeChars,
                 language = language,
                 rect = rect,
                 ignoreCase = ignoreCase,
@@ -248,6 +273,7 @@ fun VisionDrive.existWithScrollDown(
  */
 fun VisionDrive.existWithScrollUp(
     expression: String,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = lastScreenshotImage!!.rect,
     ignoreCase: Boolean = true,
@@ -280,6 +306,7 @@ fun VisionDrive.existWithScrollUp(
             v = existCore(
                 message = assertMessage,
                 expression = expression,
+                removeChars = removeChars,
                 language = language,
                 rect = rect,
                 ignoreCase = ignoreCase,
@@ -301,6 +328,7 @@ fun VisionDrive.existWithScrollUp(
  */
 fun VisionDrive.existWithScrollRight(
     expression: String,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
@@ -333,6 +361,7 @@ fun VisionDrive.existWithScrollRight(
             v = existCore(
                 message = assertMessage,
                 expression = expression,
+                removeChars = removeChars,
                 language = language,
                 rect = rect,
                 ignoreCase = ignoreCase,
@@ -354,6 +383,7 @@ fun VisionDrive.existWithScrollRight(
  */
 fun VisionDrive.existWithScrollLeft(
     expression: String,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
@@ -387,6 +417,7 @@ fun VisionDrive.existWithScrollLeft(
             v = existCore(
                 message = assertMessage,
                 expression = expression,
+                removeChars = removeChars,
                 language = language,
                 rect = rect,
                 ignoreCase = ignoreCase,
@@ -408,6 +439,7 @@ fun VisionDrive.existWithScrollLeft(
  */
 fun VisionDrive.dontExist(
     expression: String,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
@@ -432,6 +464,7 @@ fun VisionDrive.dontExist(
         ) {
             v = detectCore(
                 selector = sel,
+                removeChars = removeChars,
                 language = language,
                 rect = rect,
                 waitSeconds = 0.0,

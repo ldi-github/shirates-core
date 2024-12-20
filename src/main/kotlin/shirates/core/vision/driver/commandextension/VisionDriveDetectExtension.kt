@@ -42,6 +42,7 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.detect(
     expression: String,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     allowScroll: Boolean = true,
@@ -59,6 +60,7 @@ fun VisionDrive.detect(
 
         val v = detectCore(
             selector = sel,
+            removeChars = removeChars,
             language = language,
             rect = rect,
             waitSeconds = waitSeconds,
@@ -76,6 +78,7 @@ fun VisionDrive.detect(
 
 internal fun VisionDrive.detectCore(
     selector: Selector,
+    removeChars: String?,
     language: String,
     rect: Rectangle,
     waitSeconds: Double,
@@ -93,17 +96,19 @@ internal fun VisionDrive.detectCore(
         regionElement.recognizeText(language = language)
     }
 
-    var v = VisionElement.emptyElement
+    /**
+     * Try to detect in visionContext
+     */
+    var v = regionElement.visionContext.detect(
+        selector = selector,
+        removeChars = removeChars,
+        rect = rect,
+    )
+    if (v.isFound) {
+        return v
+    }
+
     try {
-        v = regionElement.visionContext.detect(
-            selector = selector,
-            rect = rect,
-        )
-
-        if (v.isFound) {
-            return v
-        }
-
         if (waitSeconds > 0.0) {
             if (allowScroll && CodeExecutionContext.withScroll != false) {
                 v = detectWithScroll(
@@ -120,7 +125,8 @@ internal fun VisionDrive.detectCore(
                     intervalSeconds = intervalSeconds,
                     throwOnFinally = throwsException,
                 ) {
-                    screenshot(force = true)
+                    invalidateScreen()
+                    screenshot()
                     TestDriver.visionRootElement.recognizeText(language = language)
                     v = TestDriver.visionRootElement.visionContext.detect(selector = selector)
                     v.isFound
@@ -179,6 +185,7 @@ fun VisionDrive.detectWithScroll(
 
 internal fun VisionDrive.detectWithScroll(
     selector: Selector,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
@@ -197,10 +204,9 @@ internal fun VisionDrive.detectWithScroll(
 
     var v = VisionElement.emptyElement
     val actionFunc = {
-        screenshot(force = true)
-        TestDriver.visionRootElement.recognizeText(language = language)
         v = detectCore(
             selector = selector,
+            removeChars = removeChars,
             language = language,
             rect = rect,
             waitSeconds = 0.0,
@@ -295,6 +301,7 @@ private fun VisionDrive.detectWithScrollCore(
     scrollDirection: ScrollDirection,
     v: VisionElement,
     selector: Selector,
+    removeChars: String? = null,
     language: String,
     rect: Rectangle,
     scrollDurationSeconds: Double,
@@ -309,6 +316,7 @@ private fun VisionDrive.detectWithScrollCore(
     var v1 = v
     v1 = detectCore(
         selector = selector,
+        removeChars = removeChars,
         language = language,
         rect = rect,
         waitSeconds = 0.0,
@@ -518,6 +526,7 @@ fun VisionDrive.canDetect(
  */
 fun VisionDrive.canDetect(
     selector: Selector,
+    removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     rect: Rectangle = CodeExecutionContext.region,
     allowScroll: Boolean = true,
@@ -536,6 +545,7 @@ fun VisionDrive.canDetect(
 
         found = detectCore(
             selector = selector,
+            removeChars = removeChars,
             language = language,
             rect = rect,
             waitSeconds = waitSeconds,
@@ -553,6 +563,7 @@ fun VisionDrive.canDetect(
 
 internal fun VisionDrive.canDetectCore(
     selector: Selector,
+    removeChars: String? = null,
     language: String,
     rect: Rectangle,
     waitSeconds: Double,
@@ -563,6 +574,7 @@ internal fun VisionDrive.canDetectCore(
 
     val v = detectCore(
         selector = selector,
+        removeChars = removeChars,
         language = language,
         rect = rect,
         waitSeconds = waitSeconds,

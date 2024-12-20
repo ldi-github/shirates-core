@@ -1849,6 +1849,9 @@ object TestDriver {
         if (isInitialized.not()) {
             return this
         }
+        if (CodeExecutionContext.screenshotSynced && force.not()) {
+            return this
+        }
 
         val screenshotTime = Date()
 
@@ -1882,19 +1885,6 @@ object TestDriver {
                     return this
                 }
             }
-        } else {
-            /**
-             * Vision mode
-             */
-            if (force.not() && CodeExecutionContext.screenshotSynced) {
-//                TestLog.printInfo("screenshot() skipped. (screenshotSynced=${CodeExecutionContext.screenshotSynced})")
-                return this
-            }
-        }
-
-        var screenshotFileName = filename ?: (TestLog.nextLineNo).toString()
-        if (screenshotFileName.lowercase().contains(".png").not()) {
-            screenshotFileName += ".png"
         }
 
         if (testContext.waitSecondsForAnimationComplete > 0.0) {
@@ -1905,6 +1895,7 @@ object TestDriver {
 
         val sw = StopWatch("getScreenshot")
 
+        var screenshotFileName = ""
         try {
             CpuLoadService.waitForCpuLoadUnder()
 
@@ -1921,6 +1912,11 @@ object TestDriver {
             }
 //            printInfo("screenshotSynced=${CodeExecutionContext.screenshotSynced}")
 
+            screenshotFileName = filename ?: (TestLog.nextLineNo).toString()
+            if (screenshotFileName.lowercase().contains(".png").not()) {
+                screenshotFileName += ".png"
+            }
+
             /**
              * Save screenshot
              */
@@ -1936,6 +1932,17 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
             CodeExecutionContext.lastScreenshotImage = screenshotImage  // Captures VisionRootElement
             CodeExecutionContext.regionElement = VisionElement()
+
+            if (log) {
+                val screenshotLine = TestLog.write(
+                    message = "screenshot: $screenshotFileName",
+                    logType = LogType.SCREENSHOT,
+                    scriptCommand = "screenshot"
+                )
+                screenshotLine.screenshot = screenshotFileName
+                screenshotLine.lastScreenshot = screenshotFileName
+                screenshotLine.subject = screenshotFileName
+            }
 
             if (testContext.useCache.not()) {
                 /**
@@ -1963,20 +1970,9 @@ object TestDriver {
             screenshotException = t
         }
 
-        if (log) {
-            val screenshotLine = TestLog.write(
-                message = "screenshot",
-                logType = LogType.SCREENSHOT,
-                scriptCommand = "screenshot"
-            )
-            screenshotLine.screenshot = screenshotFileName
-            screenshotLine.lastScreenshot = screenshotFileName
-            screenshotLine.subject = screenshotFileName
-        }
-
-        if (withXmlSource && testContext.useCache) {
-            val fileName = screenshotFileName.replace(".png", ".xml")
-            outputXmlSource(filePath = TestLog.directoryForLog.resolve(fileName))
+        if (withXmlSource && testContext.useCache && screenshotFileName.isNotBlank()) {
+            val xmlFileName = screenshotFileName.replace(".png", ".xml")
+            outputXmlSource(filePath = TestLog.directoryForLog.resolve(xmlFileName))
         }
 
         if (screenshotException != null) {

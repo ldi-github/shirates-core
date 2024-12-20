@@ -1,6 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import org.apache.commons.text.similarity.LevenshteinDistance
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
@@ -10,7 +9,9 @@ import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
+import shirates.core.utility.image.isSame
 import shirates.core.utility.image.rect
+import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
@@ -37,7 +38,6 @@ private fun VisionDrive.scrollCommand(
         )
         TestLog.info("scrollableRect: $rect")
         swipeAction(r)
-        TestDriver.autoScreenshot()
     }
 }
 
@@ -417,13 +417,24 @@ internal fun VisionDrive.doUntilScrollStopCore(
             }
         }
 
-        var lastVisionRootElement = VisionElement()
-        lastVisionRootElement.visionContext.jsonString = ""
+        var oldScreenshotImage = CodeExecutionContext.lastScreenshotImage
 
         val ms = Measure("doUntilScrollStop-loop")
         try {
             for (i in 1..maxLoopCount) {
+
+                oldScreenshotImage = CodeExecutionContext.lastScreenshotImage
+
                 scroll()
+
+                val endOfScroll = CodeExecutionContext.lastScreenshotImage.isSame(oldScreenshotImage)
+                TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
+                if (endOfScroll) {
+                    CodeExecutionContext.lastScreenshotImage?.saveImage(
+                        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_at_end_of_scroll.png").toString()
+                    )
+                    break
+                }
 
                 if (actionFunc != null) {
                     val result = actionFunc()
@@ -432,17 +443,6 @@ internal fun VisionDrive.doUntilScrollStopCore(
                     }
                 }
 
-                TestDriver.visionRootElement.recognizeText()
-                val s1 = lastVisionRootElement.visionContext.textObservations.map { it.text }.joinToString("")
-                val s2 = TestDriver.visionRootElement.visionContext.textObservations.map { it.text }.joinToString("")
-                val distance = LevenshteinDistance().apply(s1, s2)
-                val endOfScroll = distance == 0
-                println("distance=$distance, endOfScroll=$endOfScroll")
-                lastVisionRootElement = TestDriver.visionRootElement
-                TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
-                if (endOfScroll) {
-                    break
-                }
                 if (i < maxLoopCount && intervalSeconds > 0.0) {
                     Thread.sleep((intervalSeconds * 1000).toLong())
                 }
