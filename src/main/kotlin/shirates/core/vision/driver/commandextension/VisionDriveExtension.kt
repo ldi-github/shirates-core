@@ -79,14 +79,16 @@ fun VisionDrive.screenshot(
     force: Boolean = false,
     onChangedOnly: Boolean = testContext.onChangedOnly,
     filename: String? = null,
-    withXmlSource: Boolean = TestLog.enableXmlSourceDump
+    withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+    withTextMatching: Boolean = false,
 ): VisionElement {
 
     TestDriver.screenshot(
         force = force,
         onChangedOnly = onChangedOnly,
         filename = filename,
-        withXmlSource = withXmlSource
+        withXmlSource = withXmlSource,
+        withTextMatching = withTextMatching,
     )
 
     val v = getThisOrIt()

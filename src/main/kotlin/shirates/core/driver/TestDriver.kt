@@ -1795,6 +1795,7 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        withTextMatching: Boolean = false,
         log: Boolean = true
     ): TestDriver {
 
@@ -1840,6 +1841,7 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        withTextMatching: Boolean = false,
         log: Boolean = true
     ): TestDriver {
 
@@ -1852,6 +1854,8 @@ object TestDriver {
         if (CodeExecutionContext.screenshotSynced && force.not()) {
             return this
         }
+
+        val swScreenshotCore = StopWatch("screenshotCore")
 
         val screenshotTime = Date()
 
@@ -1893,15 +1897,15 @@ object TestDriver {
 
         var screenshotException: Throwable? = null
 
-        val sw = StopWatch("getScreenshot")
-
         var screenshotFileName = ""
         try {
             CpuLoadService.waitForCpuLoadUnder()
 
             val oldImage = CodeExecutionContext.lastScreenshotImage
 
+            val sw = StopWatch("syncScreenshot")
             visionDrive.syncScreenshot()
+            sw.printInfo()
 
             val newImage = CodeExecutionContext.lastScreenshotImage
             val changed = newImage.isSame(oldImage).not()
@@ -1948,8 +1952,12 @@ object TestDriver {
                 /**
                  * Update currentScreen (Vision mode)
                  */
-                TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
-                TestLog.printInfo(TestDriver.currentScreen)
+                TestDriver.currentScreen =
+                    ScreenRecognizer.recognizeScreen(
+                        screenImageFile = screenshotFile,
+                        withTextMatching = withTextMatching
+                    )
+                TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
             }
 
             if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout) {
@@ -1975,12 +1983,12 @@ object TestDriver {
             outputXmlSource(filePath = TestLog.directoryForLog.resolve(xmlFileName))
         }
 
+        swScreenshotCore.printInfo()
+
         if (screenshotException != null) {
             TestLog.warn("screenshot ${screenshotException.message}")
             throw screenshotException
         }
-
-        sw.printInfo()
 
         return this
     }
@@ -2246,6 +2254,7 @@ object TestDriver {
             return this
         }
 
+        val sw = StopWatch("syncCache")
         try {
             isSyncing = true
             invalidateCache()
@@ -2325,6 +2334,7 @@ object TestDriver {
             }
         } finally {
             isSyncing = false
+            sw.printInfo()
         }
 
         return this

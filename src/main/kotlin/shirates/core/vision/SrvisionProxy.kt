@@ -27,6 +27,7 @@ object SrvisionProxy {
      */
     fun callImageFeaturePrintConfigurator(
         inputDirectory: String,
+        language: String = PropertiesManager.logLanguage,
         log: Boolean = false,
     ): String {
 
@@ -57,6 +58,7 @@ object SrvisionProxy {
      */
     fun callImageFeaturePrintClassifier(
         inputFile: String,
+        withTextMatching: Boolean = false,
         language: String = PropertiesManager.logLanguage,
         log: Boolean = false,
     ): String {
@@ -65,7 +67,7 @@ object SrvisionProxy {
             throw IllegalArgumentException("file not found: $inputFile.")
         }
 
-        val sw = StopWatch("callImageFeaturePrintClassifier")
+        val sw = StopWatch("ImageFeaturePrintClassifier")
 
         val urlBuilder = "http://127.0.0.1:8081/ImageFeaturePrintClassifier".toHttpUrlOrNull()!!
             .newBuilder()
@@ -77,11 +79,17 @@ object SrvisionProxy {
             name = "language",
             value = language
         )
+        if (withTextMatching) {
+            urlBuilder.addQueryParameter(
+                name = "withTextMatching",
+                value = withTextMatching.toString()
+            )
+        }
         val url = urlBuilder.build()
         val result = getResponseBody(url)
         lastResult = result
 
-        val file = TestLog.directoryForLog.resolve("${TestLog.nextLineNo}.json")
+        val file = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_ImageFeaturePrintClassifier.json")
         file.parent.toFile().mkdirs()
         file.toFile().writeText(result)
 
@@ -129,7 +137,7 @@ object SrvisionProxy {
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()
         }
-        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}.json").toFile().writeText(result)
+        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_TextRecognizer.json").toFile().writeText(result)
 
         if (log) {
             sw.printInfo()
@@ -193,7 +201,8 @@ object SrvisionProxy {
         lastResult = result
 
         if (log) {
-            inputDirectory.toPath().resolve("result.json").toFile().writeText(result)
+            inputDirectory.toPath().resolve("${TestLog.currentLineNo}_ImageFeaturePrintMatcher.json").toFile()
+                .writeText(result)
             sw.printInfo()
         }
         return lastResult

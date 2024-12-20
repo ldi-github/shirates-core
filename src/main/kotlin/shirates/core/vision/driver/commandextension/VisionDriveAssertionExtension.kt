@@ -177,6 +177,7 @@ fun VisionDrive.appIs(
 fun VisionDrive.screenIs(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    withTextMatching: Boolean = false,
     onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
     func: (() -> Unit)? = null
 ): VisionElement {
@@ -187,15 +188,17 @@ fun VisionDrive.screenIs(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
+        var textMatchingMode = withTextMatching
         var match = isScreen(screenName = screenName)
         if (match.not()) {
-            val wc = doUntilTrue(
+            doUntilTrue(
                 waitSeconds = waitSeconds,
                 onBeforeRetry = {
+                    textMatchingMode = true
                     onIrregular?.invoke()
                 },
             ) {
-                screenshot(force = true)
+                screenshot(force = true, withTextMatching = textMatchingMode)
                 match = isScreen(screenName = screenName)
                 match
             }
