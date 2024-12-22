@@ -28,10 +28,10 @@ class Scroll1 : UITest() {
             case(2) {
                 action {
                     it
-                        .scrollDown(durationSeconds = 5.0, startMarginRatio = 0.1)
-                        .scrollDown(durationSeconds = 3.0, startMarginRatio = 0.3)
-                        .scrollUp(durationSeconds = 5.0, startMarginRatio = 0.1)
-                        .scrollUp(durationSeconds = 3.0, startMarginRatio = 0.3)
+                        .scrollDown(scrollDurationSeconds = 5.0, startMarginRatio = 0.1)
+                        .scrollDown(scrollDurationSeconds = 3.0, startMarginRatio = 0.3)
+                        .scrollUp(scrollDurationSeconds = 5.0, startMarginRatio = 0.1)
+                        .scrollUp(scrollDurationSeconds = 3.0, startMarginRatio = 0.3)
                 }
             }
         }

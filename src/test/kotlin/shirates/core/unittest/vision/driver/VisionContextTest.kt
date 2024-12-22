@@ -20,7 +20,7 @@ class VisionContextTest {
         assertThat(c.screenshotImage.isSame(BufferedImageUtility.getBufferedImage(filePath = imageFile))).isTrue()
         assertThat(c.localRegionFile).isEqualTo(imageFile)
         assertThat(c.localRegionImage.isSame(c.screenshotImage)).isTrue()
-        assertThat(c.rectOnLocalRegionImage.toString()).isEqualTo(c.screenshotImage?.rect.toString())
+        assertThat(c.rectOnLocalRegion.toString()).isEqualTo(c.screenshotImage?.rect.toString())
     }
 
     @Test
@@ -34,7 +34,7 @@ class VisionContextTest {
         val screenshotImage = BufferedImageUtility.getBufferedImage(filePath = screenshotFile)
         val json = jsonFile.toPath().toFile().readText()
         // Act
-        val c = VisionContext()
+        val c = VisionContext(capture = false)
             .loadTextRecognizerResult(
                 inputFile = screenshotFile,
                 language = null,
@@ -52,7 +52,7 @@ class VisionContextTest {
             assertThat(v.textObservation?.confidence).isEqualTo(0.3f)
             assertThat(v.textObservation?.screenshotFile).isEqualTo(screenshotFile)
             assertThat(v.textObservation?.screenshotImage.isSame(screenshotImage)).isTrue()
-            assertThat(v.textObservation?.rectOnScreenshotImage?.toString()).isEqualTo(
+            assertThat(v.textObservation?.rectOnScreen?.toString()).isEqualTo(
                 Rectangle(38, 48, 195, 43).toString()
             )
             assertThat(v.textObservation?.localRegionFile).isEqualTo(null)
@@ -70,7 +70,7 @@ class VisionContextTest {
         val screenshotFile =
             "unitTestData/files/visionElementCache/[Network & internet Screen]/[Network & internet Screen].png"
         val json = jsonFile.toPath().toFile().readText()
-        val c = VisionContext()
+        val c = VisionContext(screenshotFile = screenshotFile)
             .loadTextRecognizerResult(
                 inputFile = screenshotFile,
                 language = null,

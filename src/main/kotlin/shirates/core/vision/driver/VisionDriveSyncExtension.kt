@@ -11,14 +11,11 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.isSame
-import shirates.core.utility.image.rect
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.toBufferedImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.commandextension.canDetectCore
 import java.awt.image.BufferedImage
 
@@ -99,7 +96,6 @@ fun VisionDrive.wait(): VisionElement {
 fun VisionDrive.waitForClose(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = lastScreenshotImage!!.rect,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     throwsException: Boolean = true
@@ -119,7 +115,6 @@ fun VisionDrive.waitForClose(
             found = canDetectCore(
                 selector = sel,
                 language = language,
-                rect = rect,
                 waitSeconds = waitSeconds,
                 intervalSeconds = intervalSeconds,
                 allowScroll = false,
@@ -147,7 +142,6 @@ fun VisionDrive.waitForClose(
 fun VisionDrive.waitForDisplay(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = CodeExecutionContext.region,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     throwsException: Boolean = true
@@ -162,7 +156,6 @@ fun VisionDrive.waitForDisplay(
         val found = canDetectCore(
             selector = sel,
             language = language,
-            rect = rect,
             waitSeconds = waitSeconds,
             intervalSeconds = intervalSeconds,
             allowScroll = false,

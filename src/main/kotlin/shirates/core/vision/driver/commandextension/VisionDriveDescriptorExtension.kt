@@ -9,7 +9,6 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.Rectangle
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -203,7 +202,6 @@ fun VisionDrive.cellOf(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = CodeExecutionContext.region,
     allowScroll: Boolean = true,
     swipeToCenter: Boolean = CodeExecutionContext.withScroll ?: true,
     throwsException: Boolean = true,
@@ -212,11 +210,10 @@ fun VisionDrive.cellOf(
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
-    val v = detect(
+    val baseElement = detect(
         expression = expression,
         removeChars = removeChars,
         language = language,
-        rect = rect,
         allowScroll = allowScroll,
         swipeToCenter = swipeToCenter,
         throwsException = throwsException,
@@ -224,7 +221,7 @@ fun VisionDrive.cellOf(
         intervalSeconds = intervalSeconds,
     )
 
-    return v.cellOfCore(
+    return baseElement.cellOfCore(
         throwsException = throwsException,
         func = func
     )
@@ -271,18 +268,18 @@ private fun VisionElement.cellOfCore(
     if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
         throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
 
-    val target = message(id = command, subject = testElement?.subject)
+    val target = message(id = command, subject = selector?.toString())
 
     val context = TestDriverCommandContext(null)
     context.execBranch(command = command, condition = target) {
-        val original = CodeExecutionContext.lastVisionCell
+        val original = CodeExecutionContext.regionElement
         try {
-            CodeExecutionContext.lastVisionCell = cell
+            CodeExecutionContext.regionElement = cell
             cell.apply {
                 func.invoke(cell)
             }
         } finally {
-            CodeExecutionContext.lastVisionCell = original
+            CodeExecutionContext.regionElement = original
         }
     }
     return this

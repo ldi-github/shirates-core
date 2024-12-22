@@ -13,13 +13,11 @@ import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
-import shirates.core.logging.CodeExecutionContext.lastScreenshotImage
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.escapeFileName
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.TrimObject
-import shirates.core.utility.image.cropImage
 import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionElement
 import java.io.File
@@ -461,8 +459,7 @@ fun TestElement.isSafe(
 fun TestElement.toVisionElement(): VisionElement {
 
     val rect = this.bounds.toRectWithRatio()
-    val v = VisionElement()
-    v.visionContext.localRegionImage = lastScreenshotImage?.cropImage(rect = rect)
+    val v = rect.toVisionElement()
     v.selector = this.selector
     v.testElement = this
     return v

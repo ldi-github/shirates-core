@@ -14,8 +14,9 @@ import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
 
-class VisionContext() {
-
+class VisionContext(
+    capture: Boolean
+) {
     /**
      * screenshotFile
      */
@@ -47,11 +48,11 @@ class VisionContext() {
     var localRegionImage: BufferedImage? = null
 
     /**
-     * rectOnScreenshotImage
+     * rectOnScreen
      */
-    val rectOnScreenshotImage: Rectangle?
+    val rectOnScreen: Rectangle?
         get() {
-            val rect = rectOnLocalRegionImage ?: return null
+            val rect = rectOnLocalRegion ?: return null
             return Rectangle(
                 x = localRegionX + rect.left,
                 y = localRegionY + rect.top,
@@ -61,9 +62,20 @@ class VisionContext() {
         }
 
     /**
-     * rectOnLocalRegionImage
+     * rectOnLocalRegion
      */
-    var rectOnLocalRegionImage: Rectangle? = null
+    var rectOnLocalRegion: Rectangle? = null
+
+    /**
+     * image
+     */
+    val image: BufferedImage?
+        get() {
+            if (rectOnScreen == null) {
+                return null
+            }
+            return screenshotImage?.cropImage(rectOnScreen!!)
+        }
 
     /**
      * language
@@ -85,23 +97,47 @@ class VisionContext() {
      */
     val visionElements: MutableList<VisionElement> = mutableListOf()
 
+    /**
+     * constructor
+     */
+    constructor(screenshotFile: String) : this(capture = false) {
+
+        this.screenshotFile = screenshotFile
+        this.screenshotImage = BufferedImageUtility.getBufferedImage(filePath = screenshotFile)
+
+        this.localRegionFile = this.screenshotFile
+        this.localRegionImage = this.screenshotImage
+
+        this.rectOnLocalRegion = this.screenshotImage?.rect
+    }
 
     /**
      * init
      */
     init {
-        this.screenshotFile = CodeExecutionContext.lastScreenshotFile
-        this.screenshotImage = CodeExecutionContext.lastScreenshotImage
+        if (capture) {
+            this.screenshotFile = CodeExecutionContext.lastScreenshotFile
+            this.screenshotImage = CodeExecutionContext.lastScreenshotImage
 
-        this.localRegionFile = this.screenshotFile
-        this.localRegionImage = this.screenshotImage
+            this.localRegionFile = this.screenshotFile
+            this.localRegionImage = this.screenshotImage
 
 //        this.localRegionX = localRegionX
 //        this.localRegionY = localRegionY
-        this.rectOnLocalRegionImage = this.screenshotImage?.rect
+            this.rectOnLocalRegion = this.screenshotImage?.rect
+        }
     }
 
     companion object {
+
+        /**
+         * emptyContext
+         */
+        val emptyContext: VisionContext
+            get() {
+                val c = VisionContext(capture = false)
+                return c
+            }
 
         /**
          * createFromImageFile
@@ -113,12 +149,12 @@ class VisionContext() {
             if (Files.exists(imageFile.toPath()).not()) {
                 throw FileNotFoundException("Image file not found. (imageFile=$imageFile)")
             }
-            val c = VisionContext()
+            val c = VisionContext(capture = false)
             c.screenshotFile = imageFile.toPath().toString()
             c.screenshotImage = BufferedImageUtility.getBufferedImage(filePath = imageFile)
             c.localRegionFile = c.screenshotFile
             c.localRegionImage = c.screenshotImage
-            c.rectOnLocalRegionImage = c.screenshotImage?.rect
+            c.rectOnLocalRegion = c.screenshotImage?.rect
             return c
         }
     }
@@ -137,7 +173,7 @@ class VisionContext() {
 
         this.localRegionX = 0
         this.localRegionY = 0
-        this.rectOnLocalRegionImage = null
+        this.rectOnLocalRegion = null
 
         this.language = ""
         this.jsonString = ""
@@ -150,7 +186,7 @@ class VisionContext() {
      */
     fun clone(): VisionContext {
 
-        val c = VisionContext()
+        val c = VisionContext(capture = false)
         c.screenshotImage = screenshotImage
         c.screenshotFile = screenshotFile
 
@@ -159,7 +195,7 @@ class VisionContext() {
 
         c.localRegionX = localRegionX
         c.localRegionY = localRegionY
-        c.rectOnLocalRegionImage = rectOnLocalRegionImage
+        c.rectOnLocalRegion = rectOnLocalRegion
 
         c.language = language
         c.jsonString = jsonString
@@ -176,8 +212,8 @@ class VisionContext() {
 
         this.screenshotImage = CodeExecutionContext.lastScreenshotImage
         this.screenshotFile = CodeExecutionContext.lastScreenshotFile
-        if (this.rectOnScreenshotImage != null) {
-            this.localRegionImage = this.screenshotImage?.cropImage(this.rectOnScreenshotImage!!)
+        if (this.rectOnScreen != null) {
+            this.localRegionImage = this.screenshotImage?.cropImage(this.rectOnScreen!!)
             this.localRegionFile = TestLog.directoryForLog.resolve("${TestLog.nextLineNo}.png").toString()
             this.localRegionImage?.saveImage(this.localRegionFile!!)
         }
@@ -188,10 +224,10 @@ class VisionContext() {
      */
     fun saveImage() {
 
-        if (rectOnLocalRegionImage != null) {
+        if (rectOnLocalRegion != null) {
             val fileName =
-                TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rectOnLocalRegionImage}.png").toString()
-            this.screenshotImage?.cropImage(rect = rectOnLocalRegionImage!!)
+                TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rectOnLocalRegion}.png").toString()
+            this.screenshotImage?.cropImage(rect = rectOnLocalRegion!!)
                 ?.saveImage(fileName)
         }
     }
@@ -232,7 +268,8 @@ class VisionContext() {
 
         val observations = try {
             RecognizeTextParser(
-                content = jsonString,
+                language = language,
+                jsonString = jsonString,
 
                 screenshotFile = screenshotFile ?: CodeExecutionContext.lastScreenshotFile,
                 screenshotImage = screenshotImage ?: CodeExecutionContext.lastScreenshotImage,
@@ -250,12 +287,13 @@ class VisionContext() {
         textObservations.clear()
         textObservations.addAll(observations)
 
+        val list = mutableListOf<VisionElement>()
         for (o in observations) {
+            o.createVisionElement()
             val v = o.createVisionElement()
-            v.visionContext.language = language
-            v.visionContext.jsonString = jsonString
-            visionElements.add(v)
+            list.add(v)
         }
+        visionElements.addAll(list)
 
         return this
     }
@@ -263,11 +301,15 @@ class VisionContext() {
 
     /**
      * detect
+     *
+     * returns VisionElement that AI-OCR recognized text
+     * ignoring white space
+     * ignoring upper case, lower case
+     * removing `removeChars`
      */
     fun detect(
         text: String,
         removeChars: String? = null,
-        rect: Rectangle = CodeExecutionContext.region
     ): VisionElement {
 
         if (this.visionElements.isEmpty()) {
@@ -277,7 +319,6 @@ class VisionContext() {
         val candidates = detectCandidates(
             text = text,
             removeChars = removeChars,
-            rect = rect
         )
 
         val v = candidates.firstOrNull() ?: VisionElement.emptyElement
@@ -290,48 +331,51 @@ class VisionContext() {
     fun detect(
         selector: Selector,
         removeChars: String? = null,
-        rect: Rectangle = CodeExecutionContext.region
     ): VisionElement {
 
         val text = selector.text ?: ""
         val v = detect(
             text = text,
             removeChars = removeChars,
-            rect = rect
         )
+        v.selector = selector
         return v
     }
 
     /**
      * detectCandidates
+     *
+     * returns list of VisionElement with AI-OCR recognized text
+     * ignoring white space
+     * ignoring upper case, lower case
+     * removing `removeChars`
      */
     fun detectCandidates(
         text: String,
         removeChars: String?,
-        rect: Rectangle = CodeExecutionContext.region
     ): List<VisionElement> {
 
         if (text.isBlank()) {
             return visionElements.toList()
         }
 
-        fun String.removeCharactors(): String {
+        fun String.removeCharacters(): String {
             if (removeChars == null) return this
             return this.filterNot { it in removeChars }
         }
 
-        val globalBounds = rect.toBoundsWithRatio()
+        val localBounds = rectOnScreen!!.toBoundsWithRatio()
         var whitespaceRemovedLowerCaseText = text.replace("\\s".toRegex(), "").lowercase()
         if (removeChars != null) {
-            whitespaceRemovedLowerCaseText = whitespaceRemovedLowerCaseText.removeCharactors()
+            whitespaceRemovedLowerCaseText = whitespaceRemovedLowerCaseText.removeCharacters()
         }
 
         val list = visionElements
             .filter {
-                val t = it.text.replace("\\s".toRegex(), "").lowercase().removeCharactors()
+                val t = it.text.replace("\\s".toRegex(), "").lowercase().removeCharacters()
                 t.contains(whitespaceRemovedLowerCaseText)
             }
-            .filter { it.bounds.isIncludedIn(globalBounds) }
+            .filter { it.bounds.isIncludedIn(localBounds) }
             .map { Pair(it, it.text.length - text.length) }.sortedBy { it.second }
         return list.map { it.first }
     }

@@ -11,7 +11,7 @@ class Candidate(
     localRegionImage = null,
     localRegionX = 0,
     localRegionY = 0,
-    rectOnLocalRegionImage = rectangle,
+    rectOnLocalRegion = rectangle,
 ) {
     /**
      * isEmpty

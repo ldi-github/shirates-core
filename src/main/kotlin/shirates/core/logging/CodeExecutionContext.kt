@@ -94,10 +94,7 @@ object CodeExecutionContext {
      */
     val isInCell: Boolean
         get() {
-            if (testContext.useCache) {
-                return lastCell.isEmpty.not()
-            }
-            return lastVisionCell.isEmpty.not()
+            return lastCell.isEmpty.not()
         }
 
     /**
@@ -106,11 +103,6 @@ object CodeExecutionContext {
     var lastCell: TestElement = TestElement.emptyElement
         internal set
 
-    /**
-     * lastVisionCell
-     */
-    var lastVisionCell: VisionElement = VisionElement.emptyElement
-        internal set
 
     // Region --------------------------------------------------
 
@@ -119,7 +111,7 @@ object CodeExecutionContext {
      */
     val isInLocalRegion: Boolean
         get() {
-            return region.area < visionDrive.screenRect.area
+            return regionRect.area < visionDrive.screenRect.area
         }
 
     /**
@@ -128,9 +120,9 @@ object CodeExecutionContext {
     lateinit var regionElement: VisionElement
 
     /**
-     * region
+     * regionRect
      */
-    val region: Rectangle
+    val regionRect: Rectangle
         get() {
             return regionElement.rect
         }

@@ -10,7 +10,6 @@ import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.rect
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.vision.VisionDrive
@@ -52,9 +51,9 @@ fun VisionDrive.swipePointToPointByPixel(
         startY = startY,
         endX = endX,
         endY = endY,
-        durationSeconds = durationSeconds,
+        scrollDurationSeconds = durationSeconds,
         repeat = repeat,
-        intervalSeconds = intervalSeconds
+        scrollIntervalSeconds = intervalSeconds
     )
     if (withOffset) {
         sc.endY += offsetY * ratio
@@ -101,9 +100,9 @@ fun VisionDrive.swipePointToPoint(
         startY = startY,
         endX = endX,
         endY = endY,
-        durationSeconds = durationSeconds,
+        scrollDurationSeconds = durationSeconds,
         repeat = repeat,
-        intervalSeconds = intervalSeconds
+        scrollIntervalSeconds = intervalSeconds
     )
     if (withOffset) {
         sc.endY += offsetY
@@ -137,9 +136,9 @@ internal class SwipeContext(
     var endX: Int,
     var endY: Int,
     val safeMode: Boolean = true,
-    val durationSeconds: Double = testContext.swipeDurationSeconds,
+    val scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    val scrollIntervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     val repeat: Int = 1,
-    val intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
 ) {
     init {
         if (safeMode) {
@@ -207,7 +206,7 @@ internal fun VisionDrive.swipePointToPointCore(
         )
         sequence.addAction(
             finger.createPointerMove(
-                Duration.ofMillis((sc.durationSeconds * 1000).toLong()),
+                Duration.ofMillis((sc.scrollDurationSeconds * 1000).toLong()),
                 PointerInput.Origin.viewport(), sc.endX, sc.endY
             )
         )
@@ -231,8 +230,8 @@ internal fun VisionDrive.swipePointToPointCore(
     for (i in 1..swipeContext.repeat) {
         if (swipeContext.repeat > 1) {
             TestLog.trace("$i")
-            if (swipeContext.intervalSeconds > 0.0) {
-                Thread.sleep((swipeContext.intervalSeconds * 1000).toLong())
+            if (swipeContext.scrollIntervalSeconds > 0.0) {
+                Thread.sleep((swipeContext.scrollIntervalSeconds * 1000).toLong())
             }
         }
         invalidateScreen()
@@ -274,7 +273,6 @@ internal fun VisionDrive.swipePointToPointCore(
  * swipeCenterToTop
  */
 fun VisionDrive.swipeCenterToTop(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -285,7 +283,7 @@ fun VisionDrive.swipeCenterToTop(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = rect.toBoundsWithRatio()
+        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -304,7 +302,6 @@ fun VisionDrive.swipeCenterToTop(
  * flickCenterToTop
  */
 fun VisionDrive.flickCenterToTop(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
@@ -315,7 +312,6 @@ fun VisionDrive.flickCenterToTop(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeCenterToTop(
-            rect = rect,
             durationSeconds = durationSeconds,
             repeat = repeat,
             intervalSeconds = intervalSeconds,
@@ -329,7 +325,6 @@ fun VisionDrive.flickCenterToTop(
  * swipeCenterToBottom
  */
 fun VisionDrive.swipeCenterToBottom(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -340,7 +335,7 @@ fun VisionDrive.swipeCenterToBottom(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = rect.toBoundsWithRatio()
+        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -359,7 +354,6 @@ fun VisionDrive.swipeCenterToBottom(
  * flickCenterToBottom
  */
 fun VisionDrive.flickCenterToBottom(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
@@ -371,7 +365,6 @@ fun VisionDrive.flickCenterToBottom(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeCenterToBottom(
-            rect = rect,
             durationSeconds = durationSeconds,
             repeat = repeat,
             intervalSeconds = intervalSeconds,
@@ -385,7 +378,6 @@ fun VisionDrive.flickCenterToBottom(
  * swipeCenterToLeft
  */
 fun VisionDrive.swipeCenterToLeft(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -396,7 +388,7 @@ fun VisionDrive.swipeCenterToLeft(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = rect.toBoundsWithRatio()
+        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -415,7 +407,6 @@ fun VisionDrive.swipeCenterToLeft(
  * flickCenterToLeft
  */
 fun VisionDrive.flickCenterToLeft(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
@@ -427,7 +418,6 @@ fun VisionDrive.flickCenterToLeft(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeCenterToLeft(
-            rect = rect,
             durationSeconds = durationSeconds,
             repeat = repeat,
             intervalSeconds = intervalSeconds,
@@ -441,7 +431,6 @@ fun VisionDrive.flickCenterToLeft(
  * swipeCenterToRight
  */
 fun VisionDrive.swipeCenterToRight(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -452,7 +441,7 @@ fun VisionDrive.swipeCenterToRight(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = rect.toBoundsWithRatio()
+        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -471,7 +460,6 @@ fun VisionDrive.swipeCenterToRight(
  * flickCenterToRight
  */
 fun VisionDrive.flickCenterToRight(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
@@ -483,7 +471,6 @@ fun VisionDrive.flickCenterToRight(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeCenterToRight(
-            rect = rect,
             durationSeconds = durationSeconds,
             intervalSeconds = intervalSeconds,
             repeat = repeat,
@@ -497,7 +484,6 @@ fun VisionDrive.flickCenterToRight(
  * swipeLeftToRight
  */
 fun VisionDrive.swipeLeftToRight(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -509,7 +495,7 @@ fun VisionDrive.swipeLeftToRight(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = rect.toBoundsWithRatio()
+        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
         val startX = (b.right * startMarginRatio).toInt()
         swipePointToPoint(
             startX = startX,
@@ -529,7 +515,6 @@ fun VisionDrive.swipeLeftToRight(
  * flickLeftToRight
  */
 fun VisionDrive.flickLeftToRight(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -543,7 +528,6 @@ fun VisionDrive.flickLeftToRight(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeLeftToRight(
-            rect = rect,
             startMarginRatio = startMarginRatio,
             durationSeconds = durationSeconds,
             repeat = repeat,
@@ -558,7 +542,6 @@ fun VisionDrive.flickLeftToRight(
  * swipeRightToLeft
  */
 fun VisionDrive.swipeRightToLeft(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -570,7 +553,7 @@ fun VisionDrive.swipeRightToLeft(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = rect.toBoundsWithRatio()
+        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
         val startX = (b.right * (1 - startMarginRatio)).toInt()
         swipePointToPoint(
             startX = startX,
@@ -590,7 +573,6 @@ fun VisionDrive.swipeRightToLeft(
  * flickRightToLeft
  */
 fun VisionDrive.flickRightToLeft(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -603,7 +585,6 @@ fun VisionDrive.flickRightToLeft(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeRightToLeft(
-            rect = rect,
             startMarginRatio = startMarginRatio,
             durationSeconds = durationSeconds,
             repeat = repeat,
@@ -618,7 +599,6 @@ fun VisionDrive.flickRightToLeft(
  * swipeBottomToTop
  */
 fun VisionDrive.swipeBottomToTop(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -630,7 +610,7 @@ fun VisionDrive.swipeBottomToTop(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = rect.toBoundsWithRatio()
+        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
         val startY = (b.bottom * (1 - startMarginRatio)).toInt()
 
         swipePointToPoint(
@@ -651,7 +631,6 @@ fun VisionDrive.swipeBottomToTop(
  * flickBottomToTop
  */
 fun VisionDrive.flickBottomToTop(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -664,7 +643,6 @@ fun VisionDrive.flickBottomToTop(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeBottomToTop(
-            rect = rect,
             startMarginRatio = startMarginRatio,
             durationSeconds = durationSeconds,
             repeat = repeat,
@@ -679,7 +657,6 @@ fun VisionDrive.flickBottomToTop(
  * flickAndGoDown
  */
 fun VisionDrive.flickAndGoDown(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.flickDurationSeconds,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -696,12 +673,11 @@ fun VisionDrive.flickAndGoDown(
         try {
             testContext.onScrolling = false
             scrollDown(
-                rect = rect,
-                durationSeconds = durationSeconds,
+                swipeDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                swipeIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -715,7 +691,6 @@ fun VisionDrive.flickAndGoDown(
  * flickAndGoDownTurbo
  */
 fun VisionDrive.flickAndGoDownTurbo(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = 1,
@@ -723,7 +698,6 @@ fun VisionDrive.flickAndGoDownTurbo(
 ): VisionElement {
 
     return flickAndGoDown(
-        rect = rect,
         durationSeconds = 0.1,
         startMarginRatio = startMarginRatio,
         endMarginRatio = endMarginRatio,
@@ -736,7 +710,6 @@ fun VisionDrive.flickAndGoDownTurbo(
  * flickAndGoRight
  */
 fun VisionDrive.flickAndGoRight(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.flickDurationSeconds,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -753,12 +726,11 @@ fun VisionDrive.flickAndGoRight(
         try {
             testContext.onScrolling = false
             scrollRight(
-                rect = rect,
-                durationSeconds = durationSeconds,
+                swipeDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                swipeIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -772,7 +744,6 @@ fun VisionDrive.flickAndGoRight(
  * flickAndGoLeft
  */
 fun VisionDrive.flickAndGoLeft(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.flickDurationSeconds,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -789,12 +760,11 @@ fun VisionDrive.flickAndGoLeft(
         try {
             testContext.onScrolling = false
             scrollLeft(
-                rect = rect,
-                durationSeconds = durationSeconds,
+                swipeDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                swipeIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -808,7 +778,6 @@ fun VisionDrive.flickAndGoLeft(
  * swipeTopToBottom
  */
 fun VisionDrive.swipeTopToBottom(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
@@ -820,7 +789,7 @@ fun VisionDrive.swipeTopToBottom(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = rect.toBoundsWithRatio()
+        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
         val startY = (b.bottom * startMarginRatio).toInt()
 
         swipePointToPoint(
@@ -841,7 +810,6 @@ fun VisionDrive.swipeTopToBottom(
  * flickAndGoUp
  */
 fun VisionDrive.flickAndGoUp(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     durationSeconds: Double = testContext.flickDurationSeconds,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -857,12 +825,11 @@ fun VisionDrive.flickAndGoUp(
         try {
             testContext.onScrolling = false
             scrollUp(
-                rect = rect,
-                durationSeconds = durationSeconds,
+                swipeDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                swipeIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -876,7 +843,6 @@ fun VisionDrive.flickAndGoUp(
  * flickAndGoUpTurbo
  */
 fun VisionDrive.flickAndGoUpTurbo(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = 1,
@@ -884,7 +850,6 @@ fun VisionDrive.flickAndGoUpTurbo(
 ): VisionElement {
 
     return flickAndGoUp(
-        rect = rect,
         startMarginRatio = startMarginRatio,
         endMarginRatio = endMarginRatio,
         repeat = repeat,
@@ -897,7 +862,6 @@ fun VisionDrive.flickAndGoUpTurbo(
  * flickTopToBottom
  */
 fun VisionDrive.flickTopToBottom(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
@@ -909,7 +873,6 @@ fun VisionDrive.flickTopToBottom(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeTopToBottom(
-            rect = rect,
             startMarginRatio = startMarginRatio,
             durationSeconds = durationSeconds,
             repeat = repeat,

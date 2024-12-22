@@ -1,7 +1,8 @@
 package shirates.core.vision
 
-import org.json.JSONArray
+import org.json.JSONObject
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.TestLog
 
 class ClassificationResult(
     val jsonString: String
@@ -17,15 +18,18 @@ class ClassificationResult(
         }
 
     init {
-        val jsonArray = try {
-            JSONArray(jsonString)
+        val jsonObject = try {
+            JSONObject(jsonString)
         } catch (t: Throwable) {
-            throw TestDriverException("Error while parsing JSON results. $jsonString", t)
+            val msg = "Error while parsing JSON results. $jsonString"
+            TestLog.warn(msg)
+            throw TestDriverException(msg, t)
         }
+        val jsonArray = jsonObject.getJSONArray("candidates")
         for (i in 0 until jsonArray.length()) {
-            val jsonObject = jsonArray.getJSONObject(i)
-            val identifier = jsonObject.getString("identifier")
-            val confidence = jsonObject.getFloat("confidence")
+            val jso = jsonArray.getJSONObject(i)
+            val identifier = jso.getString("identifier")
+            val confidence = jso.getFloat("confidence")
             val classification = Classification(identifier = identifier, confidence = confidence)
             classifications.add(classification)
         }

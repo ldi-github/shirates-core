@@ -7,6 +7,7 @@ class RecognizeTextObservation(
     val text: String,
     val confidence: Float,
     val jsonString: String,
+    val language: String?,
 
     override var screenshotFile: String?,
     override var screenshotImage: BufferedImage?,
@@ -16,7 +17,8 @@ class RecognizeTextObservation(
 
     override var localRegionX: Int,
     override var localRegionY: Int,
-    override var rectOnLocalRegionImage: Rectangle?,
+
+    override var rectOnLocalRegion: Rectangle?,
 
     ) : VisionObservation(
 
@@ -28,10 +30,10 @@ class RecognizeTextObservation(
 
     localRegionX = localRegionX,
     localRegionY = localRegionY,
-    rectOnLocalRegionImage = rectOnLocalRegionImage,
+    rectOnLocalRegion = rectOnLocalRegion,
 ) {
 
     override fun toString(): String {
-        return "text=\"$text\", rectOnLocalRegionImage=\"$rectOnLocalRegionImage\", confidence=\"$confidence\""
+        return "text=\"$text\", rectOnLocalRegionImage=\"$rectOnLocalRegion\", confidence=\"$confidence\""
     }
 }

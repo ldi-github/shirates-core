@@ -17,7 +17,9 @@ import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage
 import java.rmi.AccessException
 
-class VisionElement() : VisionDrive {
+class VisionElement(
+    capture: Boolean = true,
+) : VisionDrive {
 
     companion object {
         /**
@@ -25,14 +27,14 @@ class VisionElement() : VisionDrive {
          */
         val emptyElement: VisionElement
             get() {
-                return VisionElement()
+                return VisionElement(capture = false)
             }
     }
 
     /**
      * visionContext
      */
-    var visionContext: VisionContext = VisionContext()
+    var visionContext: VisionContext = VisionContext(capture = capture)
 
     /**
      * selector
@@ -124,7 +126,7 @@ class VisionElement() : VisionDrive {
      */
     val rect: Rectangle
         get() {
-            return visionContext.rectOnScreenshotImage ?: Rectangle()
+            return visionContext.rectOnScreen ?: Rectangle()
         }
 
     /**
@@ -138,12 +140,9 @@ class VisionElement() : VisionDrive {
     /**
      * image
      */
-    var image: BufferedImage? = null
+    val image: BufferedImage?
         get() {
-            if (field == null) {
-                return visionContext.localRegionImage
-            }
-            return field
+            return visionContext.image
         }
 
     /**
@@ -206,10 +205,6 @@ class VisionElement() : VisionDrive {
 //            if (altSubject.isNotBlank()) {
 //                return altSubject
 //            }
-            if (text.isNotBlank()) {
-                return "<text>"
-            }
-
             if (selector == null && isEmpty) {
                 return "(empty)"
             }
@@ -224,6 +219,10 @@ class VisionElement() : VisionDrive {
                     return s.split(">:", "]:").last()
                 }
                 return s
+            }
+
+            if (text.isNotBlank()) {
+                return "<$text>"
             }
 
             if (observation == null) {
@@ -300,10 +299,10 @@ class VisionElement() : VisionDrive {
             saveImage = false,
             log = false,
         )
-        val rects = segmentContainer.segments.map { it.rectOnScreenshotImage }
+        val rects = segmentContainer.segments.map { it.rectOnScreen }
         val includingRects = mutableListOf<Rectangle>()
         for (rect in rects) {
-            if (visionContext.rectOnScreenshotImage!!.toBoundsWithRatio().isIncludedIn(rect.toBoundsWithRatio())) {
+            if (visionContext.rectOnScreen!!.toBoundsWithRatio().isIncludedIn(rect.toBoundsWithRatio())) {
                 includingRects.add(rect)
                 rect.toVisionElement().save()
             }

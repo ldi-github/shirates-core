@@ -40,7 +40,7 @@ private fun VisionElement.regionCore(
     c.localRegionFile = c.localRegionImage!!.saveImage(TestLog.directoryForLog.resolve(fileName).toString())
     c.localRegionX = globalRect.left
     c.localRegionY = globalRect.top
-    c.rectOnLocalRegionImage = globalRect.localRegionRect()
+    c.rectOnLocalRegion = globalRect.localRegionRect()
 
     lastElement = regionElement
 

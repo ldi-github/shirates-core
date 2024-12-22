@@ -59,7 +59,7 @@ fun TestDrive.tap(
             endX = x,
             endY = y,
             safeMode = safeMode,
-            durationSeconds = holdSeconds,
+            scrollDurationSeconds = holdSeconds,
             repeat = repeat,
         )
 
@@ -127,7 +127,7 @@ private fun TestElement.tapCore(
             startY = b.centerY,
             endX = b.centerX,
             endY = b.centerY,
-            durationSeconds = holdSeconds,
+            scrollDurationSeconds = holdSeconds,
         )
         swipePointToPointCore(swipeContext = sc)
         if (PropertiesManager.enableTimeMeasureLog) {
@@ -280,7 +280,7 @@ private fun TestDrive.tapWithScrollCommandCore(
             selector = selector,
             direction = direction,
             scrollableElement = sc,
-            durationSeconds = scrollDurationSeconds,
+            scrollDurationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,

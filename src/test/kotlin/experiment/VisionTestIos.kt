@@ -16,13 +16,16 @@ class VisionTestIos : VisionTest() {
             case(1) {
                 condition {
                     it.screenIs("[iOS Settings Top Screen]")
+                }.expectation {
                     it.cellOf("VPN") {
-                        exist(expression = "Sign in to your iPhone")
-                        dontExist(expression = "Screen Time")
+                        exist(expression = "Sign in to your iPhone")    // OK
+                        dontExist(expression = "Screen Time")   // OK
+//                        exist(expression = "Screen Time")   // NG
                     }
-                    it.detectRectMax(textIncluded = "Screen Time")
-                        .save()
-                }.action {
+                }
+            }
+            case(2) {
+                action {
                     it.detect("Accessibility").tap()
                     it.detect("Display & Text Size").tap()
                     it.detect("Larger Text").tap()

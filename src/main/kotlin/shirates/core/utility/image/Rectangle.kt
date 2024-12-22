@@ -127,7 +127,7 @@ class Rectangle(
 
         val v = VisionElement()
         val c = v.visionContext
-        c.rectOnLocalRegionImage = this
+        c.rectOnLocalRegion = this
         c.localRegionImage = c.screenshotImage?.cropImage(rect = this)
 
 //        val fileName = TestLog.getNextScreenshotFileName(suffix = "_cropRegion_$this")

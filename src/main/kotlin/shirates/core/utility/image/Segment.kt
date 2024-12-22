@@ -149,19 +149,11 @@ class Segment(
         }
 
     /**
-     * rectOnScreenshotImage
+     * rectOnScreen
      */
-    val rectOnScreenshotImage: Rectangle
+    val rectOnScreen: Rectangle
         get() {
             return Rectangle(x = containerX + left, y = containerY + top, width = width, height = height)
-        }
-
-    /**
-     * boundsOnScreenshotImage
-     */
-    val boundsOnScreenshotImage: Bounds
-        get() {
-            return rectOnScreenshotImage.toBoundsWithRatio()
         }
 
     /**
@@ -180,7 +172,7 @@ class Segment(
 
         v.visionContext.localRegionX = this.containerX
         v.visionContext.localRegionY = this.containerY
-        v.visionContext.rectOnLocalRegionImage = this.rectOnSegmentContainer
+        v.visionContext.rectOnLocalRegion = this.rectOnSegmentContainer
 
         return v
     }

@@ -3,11 +3,13 @@ package shirates.core.vision
 import org.json.JSONObject
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
+import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.Rectangle
 import java.awt.image.BufferedImage
 
 class RecognizeTextParser(
-    val content: String,
+    val language: String?,
+    val jsonString: String,
 
     val screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
     val screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
@@ -25,18 +27,21 @@ class RecognizeTextParser(
     fun parse(): List<RecognizeTextObservation> {
 
         val jsonObject = try {
-            JSONObject(content)
+            JSONObject(jsonString)
         } catch (t: Throwable) {
-            throw TestDriverException("The content could not be parsed as JSONObject. \n$content")
+            throw TestDriverException("The content could not be parsed as JSONObject. \n$jsonString")
         }
-        val jsonArray = try {
+        val candidatesArray = try {
             jsonObject.getJSONArray("candidates")
         } catch (t: Throwable) {
-            throw TestDriverException("\"candidates\" not found. \n$content")
+            throw TestDriverException("\"candidates\" not found. \n$jsonString")
         }
 
+        val screenshotImage = screenshotImage ?: BufferedImageUtility.getBufferedImage(filePath = screenshotFile!!)
+        val localRegionImage = localRegionImage ?: screenshotImage
+
         val list = mutableListOf<RecognizeTextObservation>()
-        for (json in jsonArray) {
+        for (json in candidatesArray) {
             val jso = try {
                 json as JSONObject
             } catch (t: Throwable) {
@@ -73,7 +78,8 @@ class RecognizeTextParser(
             val observation = RecognizeTextObservation(
                 text = text,
                 confidence = confidence,
-                jsonString = content,
+                jsonString = jsonString,
+                language = language,
 
                 screenshotFile = screenshotFile,
                 screenshotImage = screenshotImage,
@@ -83,7 +89,7 @@ class RecognizeTextParser(
 
                 localRegionX = localRegionX,
                 localRegionY = localRegionY,
-                rectOnLocalRegionImage = rect,
+                rectOnLocalRegion = rect,
             )
             list.add(observation)
         }

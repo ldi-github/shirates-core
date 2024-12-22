@@ -16,8 +16,6 @@ import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
-import shirates.core.utility.image.Rectangle
-import shirates.core.utility.image.rect
 import shirates.core.utility.sync.WaitUtility.doUntilTrue
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.SrvisionProxy
@@ -25,7 +23,6 @@ import shirates.core.vision.TemplateMatchingResult
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionMLModelRepository
-import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 
@@ -36,10 +33,8 @@ fun VisionDrive.exist(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
-    allowScroll: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
@@ -60,10 +55,8 @@ fun VisionDrive.exist(
             expression = expression,
             removeChars = removeChars,
             language = language,
-            rect = rect,
             ignoreCase = ignoreCase,
             allowContains = allowContains,
-            allowScroll = allowScroll,
             waitSeconds = waitSeconds,
         )
     }
@@ -82,10 +75,8 @@ private fun VisionDrive.existCore(
     expression: String,
     removeChars: String?,
     language: String,
-    rect: Rectangle,
     ignoreCase: Boolean,
     allowContains: Boolean,
-    allowScroll: Boolean,
     waitSeconds: Double,
 ): VisionElement {
 
@@ -96,11 +87,10 @@ private fun VisionDrive.existCore(
         expression = expression,
         removeChars = removeChars,
         language = language,
-        rect = rect,
         allowScroll = false,
         swipeToCenter = false,
         throwsException = false,
-        waitSeconds = waitSeconds,
+        waitSeconds = 1.0,
     )
 
     fun String.eval(expression: String): Boolean {
@@ -119,14 +109,13 @@ private fun VisionDrive.existCore(
 
     var isFound = v.text.eval(expression = expression)
 
-    if (isFound.not() && allowScroll) {
+    if (isFound.not() && CodeExecutionContext.withScroll == true) {
         /**
          * Try to detect with scroll
          */
         v = detectWithScroll(
             expression = expression,
             direction = ScrollDirection.Down,
-            rect = rect,
             throwsException = false
         )
         isFound = v.text.eval(expression = expression)
@@ -135,7 +124,7 @@ private fun VisionDrive.existCore(
     if (isFound) {
         TestLog.ok(message = message)
         if (v.text != expression) {
-            TestLog.warn(message = "There are differences in text.  (expected: \"$expression\", AI-OCR: \"${v.text}\")")
+            TestLog.warn(message = "There are differences in text.  (expected: \"$expression\", actual: \"${v.text}\")")
         }
     } else {
         val error = TestNGException(message = "$message (expected: \"$expression\", actual: \"${v.text}\")")
@@ -220,7 +209,6 @@ fun VisionDrive.existWithScrollDown(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -241,7 +229,6 @@ fun VisionDrive.existWithScrollDown(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollDown(
-            rect = rect,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -253,10 +240,8 @@ fun VisionDrive.existWithScrollDown(
                 expression = expression,
                 removeChars = removeChars,
                 language = language,
-                rect = rect,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
-                allowScroll = true,
                 waitSeconds = waitSeconds,
             )
         }
@@ -275,7 +260,6 @@ fun VisionDrive.existWithScrollUp(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = lastScreenshotImage!!.rect,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -296,7 +280,6 @@ fun VisionDrive.existWithScrollUp(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollUp(
-            rect = rect,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -308,10 +291,8 @@ fun VisionDrive.existWithScrollUp(
                 expression = expression,
                 removeChars = removeChars,
                 language = language,
-                rect = rect,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
-                allowScroll = true,
                 waitSeconds = waitSeconds,
             )
         }
@@ -330,7 +311,6 @@ fun VisionDrive.existWithScrollRight(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -351,7 +331,6 @@ fun VisionDrive.existWithScrollRight(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollRight(
-            rect = rect,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -363,10 +342,8 @@ fun VisionDrive.existWithScrollRight(
                 expression = expression,
                 removeChars = removeChars,
                 language = language,
-                rect = rect,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
-                allowScroll = true,
                 waitSeconds = waitSeconds,
             )
         }
@@ -385,7 +362,6 @@ fun VisionDrive.existWithScrollLeft(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = CodeExecutionContext.region,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -407,7 +383,6 @@ fun VisionDrive.existWithScrollLeft(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollLeft(
-            rect = rect,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -419,10 +394,8 @@ fun VisionDrive.existWithScrollLeft(
                 expression = expression,
                 removeChars = removeChars,
                 language = language,
-                rect = rect,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
-                allowScroll = true,
                 waitSeconds = waitSeconds
             )
         }
@@ -441,7 +414,7 @@ fun VisionDrive.dontExist(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    rect: Rectangle = CodeExecutionContext.region,
+    supplementWithDirectAccess: Boolean = true,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -466,7 +439,7 @@ fun VisionDrive.dontExist(
                 selector = sel,
                 removeChars = removeChars,
                 language = language,
-                rect = rect,
+                supplementWithDirectAccess = supplementWithDirectAccess,
                 waitSeconds = 0.0,
                 intervalSeconds = 0.0,
                 allowScroll = false,

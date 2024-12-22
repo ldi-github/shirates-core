@@ -2,7 +2,7 @@ package shirates.core.driver.eventextension
 
 import shirates.core.driver.TestDrive
 
-class TestDriverOnScreenContext(
+class TestDriveOnScreenContext(
     val screenName: String
 ) : TestDrive {
     var fired: Boolean = false

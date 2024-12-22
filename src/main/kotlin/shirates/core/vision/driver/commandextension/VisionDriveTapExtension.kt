@@ -7,7 +7,6 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
-import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.rect
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -43,7 +42,7 @@ fun VisionDrive.tap(
             startY = y,
             endX = x,
             endY = y,
-            durationSeconds = holdSeconds,
+            scrollDurationSeconds = holdSeconds,
             repeat = repeat,
         )
         swipePointToPointCore(swipeContext = sc)
@@ -79,9 +78,11 @@ fun VisionDrive.tap(
 
 private fun VisionDrive.tapWithScrollCommandCore(
     expression: String,
+    removeChars: String?,
+    language: String,
+    supplementWithDirectAccess: Boolean,
     command: String,
     direction: ScrollDirection,
-    rect: Rectangle,
     scrollDurationSeconds: Double,
     scrollStartMarginRatio: Double,
     scrollEndMarginRatio: Double,
@@ -98,14 +99,17 @@ private fun VisionDrive.tapWithScrollCommandCore(
 
         v = detectWithScroll(
             selector = selector,
-            rect = rect,
+            removeChars = removeChars,
+            language = language,
+            supplementWithDirectAccess = supplementWithDirectAccess,
             direction = direction,
-            durationSeconds = scrollDurationSeconds,
+            scrollDurationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
-            intervalSeconds = scrollIntervalSeconds,
+            scrollIntervalSeconds = scrollIntervalSeconds,
             scrollMaxCount = scrollMaxCount,
             swipeToCenter = false,
+            throwsException = true,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         v = v.tap(holdSeconds = holdSeconds)
@@ -118,7 +122,9 @@ private fun VisionDrive.tapWithScrollCommandCore(
  */
 fun VisionDrive.tapWithScrollDown(
     expression: String,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    removeChars: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    supplementWithDirectAccess: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -132,9 +138,11 @@ fun VisionDrive.tapWithScrollDown(
 
     val v = tapWithScrollCommandCore(
         expression = expression,
+        removeChars = removeChars,
+        language = language,
+        supplementWithDirectAccess = supplementWithDirectAccess,
         command = command,
         direction = direction,
-        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -151,7 +159,9 @@ fun VisionDrive.tapWithScrollDown(
  */
 fun VisionDrive.tapWithScrollUp(
     expression: String,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    removeChars: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    supplementWithDirectAccess: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -165,9 +175,11 @@ fun VisionDrive.tapWithScrollUp(
 
     val v = tapWithScrollCommandCore(
         expression = expression,
+        removeChars = removeChars,
+        language = language,
+        supplementWithDirectAccess = supplementWithDirectAccess,
         command = command,
         direction = direction,
-        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -184,7 +196,9 @@ fun VisionDrive.tapWithScrollUp(
  */
 fun VisionDrive.tapWithScrollRight(
     expression: String,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    removeChars: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    supplementWithDirectAccess: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -198,9 +212,11 @@ fun VisionDrive.tapWithScrollRight(
 
     val v = tapWithScrollCommandCore(
         expression = expression,
+        removeChars = removeChars,
+        language = language,
+        supplementWithDirectAccess = supplementWithDirectAccess,
         command = command,
         direction = direction,
-        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
@@ -217,7 +233,9 @@ fun VisionDrive.tapWithScrollRight(
  */
 fun VisionDrive.tapWithScrollLeft(
     expression: String,
-    rect: Rectangle = lastScreenshotImage!!.rect,
+    removeChars: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    supplementWithDirectAccess: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -231,9 +249,11 @@ fun VisionDrive.tapWithScrollLeft(
 
     val v = tapWithScrollCommandCore(
         expression = expression,
+        removeChars = removeChars,
+        language = language,
+        supplementWithDirectAccess = supplementWithDirectAccess,
         command = command,
         direction = direction,
-        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,

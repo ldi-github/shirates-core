@@ -8,19 +8,15 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.isSame
-import shirates.core.utility.image.rect
 import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.lastElement
 
 
 private fun VisionDrive.scrollCommand(
     command: String,
-    rect: Rectangle,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
     startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
     endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
@@ -31,12 +27,11 @@ private fun VisionDrive.scrollCommand(
     context.execOperateCommand(command = command, message = message) {
 
         val r = getScrollingInfo(
-            rect = rect,
             direction = direction,
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio
         )
-        TestLog.info("scrollableRect: $rect")
+        TestLog.info("scrollableRect: ${r.bounds}")
         swipeAction(r)
     }
 }
@@ -45,16 +40,14 @@ private fun VisionDrive.scrollCommand(
  * scrollDown
  */
 fun VisionDrive.scrollDown(
-    rect: Rectangle = lastScreenshotImage!!.rect,
-    durationSeconds: Double = testContext.swipeDurationSeconds,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
+    swipeDurationSeconds: Double = testContext.swipeDurationSeconds,
+    swipeIntervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = 1,
 ): VisionElement {
 
     scrollCommand(
-        rect = rect,
         command = "scrollDown",
         direction = ScrollDirection.Down,
         startMarginRatio = startMarginRatio,
@@ -68,9 +61,9 @@ fun VisionDrive.scrollDown(
                 startY = s.startY,
                 endX = s.endX,
                 endY = s.endY,
-                durationSeconds = durationSeconds,
+                scrollDurationSeconds = swipeDurationSeconds,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                scrollIntervalSeconds = swipeIntervalSeconds
             )
         )
     }
@@ -82,16 +75,14 @@ fun VisionDrive.scrollDown(
  * scrollUp
  */
 fun VisionDrive.scrollUp(
-    rect: Rectangle = lastScreenshotImage!!.rect,
-    durationSeconds: Double = testContext.swipeDurationSeconds,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
+    swipeDurationSeconds: Double = testContext.swipeDurationSeconds,
+    swipeIntervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = 1,
 ): VisionElement {
 
     scrollCommand(
-        rect = rect,
         command = "scrollUp",
         direction = ScrollDirection.Up,
         startMarginRatio = startMarginRatio,
@@ -105,8 +96,8 @@ fun VisionDrive.scrollUp(
                 startY = s.startY,
                 endX = s.endX,
                 endY = s.endY,
-                durationSeconds = durationSeconds,
-                intervalSeconds = intervalSeconds,
+                scrollDurationSeconds = swipeDurationSeconds,
+                scrollIntervalSeconds = swipeIntervalSeconds,
                 repeat = repeat,
             )
         )
@@ -119,16 +110,14 @@ fun VisionDrive.scrollUp(
  * scrollRight
  */
 fun VisionDrive.scrollRight(
-    rect: Rectangle = lastScreenshotImage!!.rect,
-    durationSeconds: Double = testContext.swipeDurationSeconds,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
+    swipeDurationSeconds: Double = testContext.swipeDurationSeconds,
+    swipeIntervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     repeat: Int = 1,
 ): VisionElement {
 
     scrollCommand(
-        rect = rect,
         command = "scrollRight",
         direction = ScrollDirection.Right,
         startMarginRatio = startMarginRatio,
@@ -142,8 +131,8 @@ fun VisionDrive.scrollRight(
                 startY = s.startY,
                 endX = s.endX,
                 endY = s.endY,
-                durationSeconds = durationSeconds,
-                intervalSeconds = intervalSeconds,
+                scrollDurationSeconds = swipeDurationSeconds,
+                scrollIntervalSeconds = swipeIntervalSeconds,
                 repeat = repeat,
             )
         )
@@ -156,16 +145,14 @@ fun VisionDrive.scrollRight(
  * scrollLeft
  */
 fun VisionDrive.scrollLeft(
-    rect: Rectangle = lastScreenshotImage!!.rect,
-    durationSeconds: Double = testContext.swipeDurationSeconds,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
+    swipeDurationSeconds: Double = testContext.swipeDurationSeconds,
+    swipeIntervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     repeat: Int = 1,
 ): VisionElement {
 
     scrollCommand(
-        rect = rect,
         command = "scrollLeft",
         direction = ScrollDirection.Left,
         startMarginRatio = startMarginRatio,
@@ -179,8 +166,8 @@ fun VisionDrive.scrollLeft(
                 startY = s.startY,
                 endX = s.endX,
                 endY = s.endY,
-                durationSeconds = durationSeconds,
-                intervalSeconds = intervalSeconds,
+                scrollDurationSeconds = swipeDurationSeconds,
+                scrollIntervalSeconds = swipeIntervalSeconds,
                 repeat = repeat,
             )
         )
@@ -190,7 +177,6 @@ fun VisionDrive.scrollLeft(
 }
 
 internal fun VisionDrive.getScrollingInfo(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     direction: ScrollDirection = ScrollDirection.None,
     startMarginRatio: Double = testContext.getScrollStartMarginRatio(direction),
     endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction),
@@ -198,7 +184,7 @@ internal fun VisionDrive.getScrollingInfo(
 
     val r = ScrollingInfo(
         errorMessage = "",
-        bounds = rect.toBoundsWithRatio(),
+        bounds = CodeExecutionContext.regionRect.toBoundsWithRatio(),
         viewport = viewBounds,
         direction = direction,
         startMarginRatio = startMarginRatio,
@@ -234,7 +220,7 @@ private fun VisionDrive.scrollToEdgeCommand(
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio,
             repeat = repeat,
-            intervalSeconds = intervalSeconds,
+            scrollIntervalSeconds = intervalSeconds,
             edgeSelector = edgeSelector,
         )
 
@@ -312,14 +298,13 @@ fun VisionDrive.scrollToTop(
  * doUntilScrollStop
  */
 fun VisionDrive.doUntilScrollStop(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     maxLoopCount: Int = CodeExecutionContext.scrollMaxCount,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
-    durationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+    scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
     endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
     repeat: Int = 1,
-    intervalSeconds: Double = testContext.scrollIntervalSeconds,
     edgeSelector: String? = null,
     scrollFunc: (() -> Unit)? = null,
     actionFunc: (() -> Boolean)? = null
@@ -333,15 +318,14 @@ fun VisionDrive.doUntilScrollStop(
         return doUntilScrollStopCore(
             scrollFunc = scrollFunc,
             direction = direction,
-            rect = rect,
-            durationSeconds = durationSeconds,
+            swipeDurationSeconds = scrollDurationSeconds,
+            swipeIntervalSeconds = scrollIntervalSeconds,
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio,
             edgeSelector = edgeSelector,
             actionFunc = actionFunc,
             maxLoopCount = maxLoopCount,
             repeat = repeat,
-            intervalSeconds = intervalSeconds
         )
     } finally {
         CodeExecutionContext.isScrolling = originalIsScrolling
@@ -352,9 +336,8 @@ fun VisionDrive.doUntilScrollStop(
 internal fun VisionDrive.doUntilScrollStopCore(
     scrollFunc: (() -> Unit)?,
     direction: ScrollDirection,
-    rect: Rectangle,
-    durationSeconds: Double,
-    intervalSeconds: Double,
+    swipeDurationSeconds: Double,
+    swipeIntervalSeconds: Double,
     startMarginRatio: Double,
     endMarginRatio: Double,
     maxLoopCount: Int,
@@ -367,36 +350,32 @@ internal fun VisionDrive.doUntilScrollStopCore(
         testDrive.suppressHandler {
             if (direction.isDown) {
                 scrollDown(
-                    rect = rect,
-                    durationSeconds = durationSeconds,
-                    intervalSeconds = intervalSeconds,
+                    swipeDurationSeconds = swipeDurationSeconds,
+                    swipeIntervalSeconds = swipeIntervalSeconds,
                     startMarginRatio = startMarginRatio,
                     endMarginRatio = endMarginRatio,
                     repeat = repeat
                 )
             } else if (direction.isUp) {
                 scrollUp(
-                    rect = rect,
-                    durationSeconds = durationSeconds,
-                    intervalSeconds = intervalSeconds,
+                    swipeDurationSeconds = swipeDurationSeconds,
+                    swipeIntervalSeconds = swipeIntervalSeconds,
                     startMarginRatio = startMarginRatio,
                     endMarginRatio = endMarginRatio,
                     repeat = repeat
                 )
             } else if (direction.isRight) {
                 scrollRight(
-                    rect = rect,
-                    durationSeconds = durationSeconds,
-                    intervalSeconds = intervalSeconds,
+                    swipeDurationSeconds = swipeDurationSeconds,
+                    swipeIntervalSeconds = swipeIntervalSeconds,
                     startMarginRatio = startMarginRatio,
                     endMarginRatio = endMarginRatio,
                     repeat = repeat
                 )
             } else if (direction.isLeft) {
                 scrollLeft(
-                    rect = rect,
-                    durationSeconds = durationSeconds,
-                    intervalSeconds = intervalSeconds,
+                    swipeDurationSeconds = swipeDurationSeconds,
+                    swipeIntervalSeconds = swipeIntervalSeconds,
                     startMarginRatio = startMarginRatio,
                     endMarginRatio = endMarginRatio,
                     repeat = repeat
@@ -443,8 +422,8 @@ internal fun VisionDrive.doUntilScrollStopCore(
                     }
                 }
 
-                if (i < maxLoopCount && intervalSeconds > 0.0) {
-                    Thread.sleep((intervalSeconds * 1000).toLong())
+                if (i < maxLoopCount && swipeIntervalSeconds > 0.0) {
+                    Thread.sleep((swipeIntervalSeconds * 1000).toLong())
                 }
             }
         } finally {
@@ -472,7 +451,6 @@ internal fun VisionDrive.edgeElementFound(expressions: List<String>): Boolean {
 
 internal fun VisionDrive.withScroll(
     direction: ScrollDirection,
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -488,7 +466,6 @@ internal fun VisionDrive.withScroll(
     context.execWithScroll(
         command = command,
         scrollDirection = direction,
-        bounds = rect.toBoundsWithRatio(),
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
@@ -507,7 +484,6 @@ internal fun VisionDrive.withScroll(
  * withScrollDown
  */
 fun VisionDrive.withScrollDown(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -519,7 +495,6 @@ fun VisionDrive.withScrollDown(
 
     return withScroll(
         direction = ScrollDirection.Down,
-        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
@@ -534,7 +509,6 @@ fun VisionDrive.withScrollDown(
  * withScrollUp
  */
 fun VisionDrive.withScrollUp(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -546,7 +520,6 @@ fun VisionDrive.withScrollUp(
 
     return withScroll(
         direction = ScrollDirection.Up,
-        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
@@ -561,7 +534,6 @@ fun VisionDrive.withScrollUp(
  * withScrollRight
  */
 fun VisionDrive.withScrollRight(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -573,7 +545,6 @@ fun VisionDrive.withScrollRight(
 
     return withScroll(
         direction = ScrollDirection.Right,
-        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
@@ -588,7 +559,6 @@ fun VisionDrive.withScrollRight(
  * withScrollLeft
  */
 fun VisionDrive.withScrollLeft(
-    rect: Rectangle = lastScreenshotImage!!.rect,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -600,7 +570,6 @@ fun VisionDrive.withScrollLeft(
 
     return withScroll(
         direction = ScrollDirection.Left,
-        rect = rect,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,

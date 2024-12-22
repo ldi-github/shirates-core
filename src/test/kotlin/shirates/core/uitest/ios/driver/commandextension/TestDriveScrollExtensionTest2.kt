@@ -33,7 +33,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
             val lastBounds = lastItem.bounds
             val title = lastItem.label
             // Act
-            it.scrollDown(durationSeconds = 5.0)
+            it.scrollDown(scrollDurationSeconds = 5.0)
             // Assert
             var movedItem = it.widget(title)
             println("movedItem:$movedItem")
@@ -59,7 +59,7 @@ class TestDriveScrollExtensionTest2 : UITest() {
             val title = firstItem.label
 
             // Act
-            it.scrollUp(durationSeconds = 5.0)
+            it.scrollUp(scrollDurationSeconds = 5.0)
             // Assert
             var movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
             println("movedItem:$movedItem")

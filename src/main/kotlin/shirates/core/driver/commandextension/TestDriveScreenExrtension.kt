@@ -114,7 +114,7 @@ internal fun TestDrive.waitScreenOfCore(
         intervalSeconds = testContext.waitSecondsForAnimationComplete,
         throwOnError = false
     ) {
-        for (screenName in testContext.screenHandlers.keys) {
+        for (screenName in testContext.testDriveScreenHandlers.keys) {
             isScreen(screenName = screenName)   // Fire screen handler
         }
 

@@ -26,7 +26,7 @@ import shirates.core.driver.TestMode.isVirtualDevice
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.eventextension.TestDriverOnScreenContext
+import shirates.core.driver.eventextension.TestDriveOnScreenContext
 import shirates.core.driver.eventextension.removeScreenHandler
 import shirates.core.exception.*
 import shirates.core.logging.*
@@ -54,6 +54,8 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
+import shirates.core.vision.driver.eventextension.removeScreenHandler
 import shirates.core.vision.driver.syncScreenshot
 import java.io.File
 import java.io.FileNotFoundException
@@ -432,7 +434,9 @@ object TestDriver {
         set(value) {
             field = value
             if (testContext.enableCache) {
-                fireScreenHandler(screenName = value)
+                fireTestDriveScreenHandler(screenName = value)
+            } else {
+                fireVisionDriveScreenHandler(screenName = value)
             }
         }
 
@@ -525,12 +529,9 @@ object TestDriver {
 
     var firingScreenHandlerScreens = mutableListOf<String>()
 
-    /**
-     * fireScreenHandler
-     */
-    fun fireScreenHandler(screenName: String): TestDriverOnScreenContext {
+    private fun fireTestDriveScreenHandler(screenName: String): TestDriveOnScreenContext {
 
-        val context = TestDriverOnScreenContext(screenName = screenName)
+        val context = TestDriveOnScreenContext(screenName = screenName)
 
         if (firingScreenHandlerScreens.contains(screenName)) {
             return context
@@ -543,13 +544,45 @@ object TestDriver {
                 return context
             }
 
-            if (testContext.screenHandlers.containsKey(screenName)) {
-                val handler = testContext.screenHandlers[screenName]!!
+            if (testContext.testDriveScreenHandlers.containsKey(screenName)) {
+                val handler = testContext.testDriveScreenHandlers[screenName]!!
                 context.fired = true
                 screenshot(force = true, onChangedOnly = true)
                 handler(context)
                 if (context.keep.not()) {
                     testDrive.removeScreenHandler(screenName)
+                }
+            }
+        } finally {
+            if (firingScreenHandlerScreens.contains(screenName)) {
+                firingScreenHandlerScreens.remove(screenName)
+            }
+        }
+        return context
+    }
+
+    private fun fireVisionDriveScreenHandler(screenName: String): VisionDriveOnScreenContext {
+
+        val context = VisionDriveOnScreenContext(screenName = screenName)
+
+        if (firingScreenHandlerScreens.contains(screenName)) {
+            return context
+        }
+
+        try {
+            firingScreenHandlerScreens.add(screenName)
+
+            if (testContext.enableScreenHandler.not()) {
+                return context
+            }
+
+            if (testContext.visionDriveScreenHandlers.containsKey(screenName)) {
+                val handler = testContext.visionDriveScreenHandlers[screenName]!!
+                context.fired = true
+                screenshot(force = true, onChangedOnly = true)
+                handler(context)
+                if (context.keep.not()) {
+                    visionDrive.removeScreenHandler(screenName)
                 }
             }
         } finally {
@@ -1626,7 +1659,7 @@ object TestDriver {
                 repeat = 1,
                 maxLoopCount = scrollMaxCount,
                 direction = direction,
-                durationSeconds = scrollDurationSeconds,
+                scrollDurationSeconds = scrollDurationSeconds,
                 startMarginRatio = scrollStartMarginRatio,
                 endMarginRatio = scrollEndMarginRatio,
                 actionFunc = actionFunc
@@ -1678,7 +1711,7 @@ object TestDriver {
         scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
-        durationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+        scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
         startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
         endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
         scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
@@ -1720,7 +1753,7 @@ object TestDriver {
             repeat = 1,
             maxLoopCount = scrollMaxCount,
             direction = direction,
-            durationSeconds = durationSeconds,
+            scrollDurationSeconds = scrollDurationSeconds,
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio,
             actionFunc = actionFunc
@@ -1776,7 +1809,7 @@ object TestDriver {
                 scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 swipeToCenter = swipeToCenter,
-                durationSeconds = scrollDurationSeconds,
+                scrollDurationSeconds = scrollDurationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 scrollMaxCount = scrollMaxCount,

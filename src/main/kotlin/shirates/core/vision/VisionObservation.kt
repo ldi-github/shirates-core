@@ -16,17 +16,17 @@ open class VisionObservation(
 
     open var localRegionX: Int,
     open var localRegionY: Int,
-    open var rectOnLocalRegionImage: Rectangle? = null,
+    open var rectOnLocalRegion: Rectangle? = null,
 
     ) {
     private var _image: BufferedImage? = null
 
     /**
-     * rectOnScreenshotImage
+     * rectOnScreen
      */
-    val rectOnScreenshotImage: Rectangle?
+    val rectOnScreen: Rectangle?
         get() {
-            val rect = rectOnLocalRegionImage ?: return null
+            val rect = rectOnLocalRegion ?: return null
             return Rectangle(
                 x = localRegionX + rect.left,
                 y = localRegionY + rect.top,
@@ -49,8 +49,8 @@ open class VisionObservation(
                 localRegionImage = BufferedImageUtility.getBufferedImage(filePath = localRegionFile!!)
             }
             // crop localImage
-            if (localRegionImage != null && rectOnLocalRegionImage != null) {
-                _image = localRegionImage!!.cropImage(rectOnLocalRegionImage!!)
+            if (localRegionImage != null && rectOnLocalRegion != null) {
+                _image = localRegionImage!!.cropImage(rectOnLocalRegion!!)
                 return _image
             }
 
@@ -59,8 +59,8 @@ open class VisionObservation(
                 screenshotImage = BufferedImageUtility.getBufferedImage(filePath = screenshotFile!!)
             }
 
-            if (screenshotImage != null && rectOnScreenshotImage != null) {
-                _image = screenshotImage!!.cropImage(rectOnScreenshotImage!!)
+            if (screenshotImage != null && rectOnScreen != null) {
+                _image = screenshotImage!!.cropImage(rectOnScreen!!)
                 return _image
             }
 
@@ -68,23 +68,37 @@ open class VisionObservation(
         }
 
     /**
+     * toVisionContext
+     */
+    fun toVisionContext(): VisionContext {
+
+        val c = VisionContext(capture = false)
+        c.screenshotFile = this.screenshotFile
+        c.screenshotImage = this.screenshotImage
+        c.localRegionX = this.localRegionX
+        c.localRegionY = this.localRegionY
+        c.localRegionFile = this.localRegionFile
+        c.localRegionImage = this.localRegionImage
+        c.rectOnLocalRegion = this.rectOnLocalRegion
+        c.localRegionImage = this.localRegionImage
+        if (this is RecognizeTextObservation) {
+            c.language = this.language
+            c.jsonString = this.jsonString
+            c.textObservations.add(this)
+        }
+        return c
+    }
+
+    /**
      * createVisionElement
      */
     fun createVisionElement(): VisionElement {
 
-        val c = VisionContext()
-        c.screenshotFile = screenshotFile
-        c.screenshotImage = screenshotImage
-
-        c.localRegionFile = localRegionFile
-        c.localRegionImage = localRegionImage
-
-        c.localRegionX = localRegionX
-        c.localRegionY = localRegionY
-        c.rectOnLocalRegionImage = rectOnLocalRegionImage
+        val c = this.toVisionContext()
 
         val v = VisionElement()
         v.visionContext = c
+
         v.observation = this
         return v
     }
