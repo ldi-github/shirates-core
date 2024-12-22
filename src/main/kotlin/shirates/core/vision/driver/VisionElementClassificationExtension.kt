@@ -13,7 +13,7 @@ fun VisionElement.classify(
         throw TestDriverException("Failed to classify. `imageFile` is not set. (VisionElement:$this)")
     }
 
-    val result = SrvisionProxy.callImageClassifier(
+    val result = SrvisionProxy.classifyImage(
         inputFile = this.imageFile!!,
         mlmodelFile = mlmodelFile,
     )

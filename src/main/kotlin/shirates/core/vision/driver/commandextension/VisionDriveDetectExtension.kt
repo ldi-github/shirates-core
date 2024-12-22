@@ -20,23 +20,6 @@ import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.lastElement
 
-///**
-// * recognizeText
-// */
-//fun VisionDrive.recognizeText(
-//    language: String = PropertiesManager.logLanguage,
-//): VisionElement {
-//
-//    val sw = StopWatch("recognizeText")
-//
-//    val v = getThisOrRoot()
-//    v.visionContext.recognizeText(language = language)
-//
-//    sw.printInfo()
-//
-//    return lastElement
-//}
-
 /**
  * detect
  */

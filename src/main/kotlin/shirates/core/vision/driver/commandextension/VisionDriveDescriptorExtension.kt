@@ -1,10 +1,15 @@
 package shirates.core.vision.driver.commandextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestElement
+import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
+import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.image.Rectangle
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -192,94 +197,44 @@ fun VisionDrive.codeblock(
 }
 
 /**
- * cell
- */
-fun VisionDrive.cell(
-    expression: String? = null,
-    swipeToCenter: Boolean = true,
-    throwsException: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    useCache: Boolean = testContext.useCache,
-    func: (TestElement.() -> Unit)? = null
-): VisionElement {
-
-    throw NotImplementedError("cell is not implemented.")
-//    val command = "cell"
-//
-//    val cell =
-//        if (expression == null) {
-//            val e = this.toTestElement
-//            if (e.isEmpty && throwsException && TestMode.isNoLoadRun.not())
-//                throw TestDriverException(message(id = "cellIsEmpty", subject = e.subject))
-//            e
-//        } else {
-//            silent {
-//                select(
-//                    expression = expression,
-//                    swipeToCenter = swipeToCenter,
-//                    throwsException = throwsException,
-//                    waitSeconds = waitSeconds,
-//                    useCache = useCache,
-//                )
-//            }
-//        }
-//
-//    val target = message(id = command, subject = cell.subject)
-//
-//    val context = TestDriverCommandContext(cell)
-//    context.execBranch(command = command, condition = target) {
-//        val original = CodeExecutionContext.lastCell
-//        try {
-//            CodeExecutionContext.lastCell = cell
-//            cell.apply {
-//                func?.invoke(cell)
-//            }
-//        } finally {
-//            CodeExecutionContext.lastCell = original
-//        }
-//    }
-//
-//    return cell
-}
-
-/**
  * cellOf
  */
 fun VisionDrive.cellOf(
     expression: String,
+    removeChars: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    rect: Rectangle = CodeExecutionContext.region,
+    allowScroll: Boolean = true,
     swipeToCenter: Boolean = CodeExecutionContext.withScroll ?: true,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    useCache: Boolean = testContext.useCache,
-    func: (TestElement.() -> Unit)? = null
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
+    func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
-    throw NotImplementedError("cellOf is not implemented.")
+    val v = detect(
+        expression = expression,
+        removeChars = removeChars,
+        language = language,
+        rect = rect,
+        allowScroll = allowScroll,
+        swipeToCenter = swipeToCenter,
+        throwsException = throwsException,
+        waitSeconds = waitSeconds,
+        intervalSeconds = intervalSeconds,
+    )
 
-//    var testElement = TestElement.emptyElement
-//    silent {
-//        testElement = select(
-//            expression = expression,
-//            swipeToCenter = swipeToCenter,
-//            throwsException = throwsException,
-//            waitSeconds = waitSeconds,
-//            useCache = useCache,
-//        )
-//    }
-//    screenshot()
-//
-//    return cellOfCore(
-//        testElement = testElement,
-//        throwsException = throwsException,
-//        func = func
-//    )
+    return v.cellOfCore(
+        throwsException = throwsException,
+        func = func
+    )
 }
 
 /**
  * cellOf
  */
 fun VisionDrive.cellOf(
-    swipeToCenter: Boolean = true,
+    swipeToCenter: Boolean,
     throwsException: Boolean = true,
     func: (TestElement.() -> Unit)? = null
 ): VisionElement {
@@ -299,38 +254,38 @@ fun VisionDrive.cellOf(
 //    )
 }
 
-private fun cellOfCore(
-    testElement: TestElement,
+private fun VisionElement.cellOfCore(
     throwsException: Boolean,
-    func: (TestElement.() -> Unit)?
+    func: (VisionElement.() -> Unit)?
 ): VisionElement {
-    throw NotImplementedError("cellOf is not implemented.")
-//    val command = "cellOf"
-//
-//    val cell = testElement.getCell()
-//    if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
-//        throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
-//
-//    if (func == null) {
-//        return cell
-//    }
-//
-//    val target = message(id = command, subject = testElement.subject)
-//
-//    val context = TestDriverCommandContext(cell)
-//    context.execBranch(command = command, condition = target) {
-//        val original = CodeExecutionContext.lastCell
-//        try {
-//            CodeExecutionContext.lastCell = cell
-//            cell.apply {
-//                func.invoke(cell)
-//            }
-//        } finally {
-//            CodeExecutionContext.lastCell = original
-//        }
-//    }
-//
-//    return cell
+
+    if (func == null) {
+        return this
+    }
+    if (text.isBlank()) {
+        throw TestDriverException(message(id = "cellIsEmpty", subject = subject))
+    }
+
+    val command = "cellOf"
+    val cell = this.getCell()
+    if (cell.isEmpty && throwsException && TestMode.isNoLoadRun.not())
+        throw TestDriverException(message(id = "cellIsEmpty", subject = cell.subject))
+
+    val target = message(id = command, subject = testElement?.subject)
+
+    val context = TestDriverCommandContext(null)
+    context.execBranch(command = command, condition = target) {
+        val original = CodeExecutionContext.lastVisionCell
+        try {
+            CodeExecutionContext.lastVisionCell = cell
+            cell.apply {
+                func.invoke(cell)
+            }
+        } finally {
+            CodeExecutionContext.lastVisionCell = original
+        }
+    }
+    return this
 }
 
 /**

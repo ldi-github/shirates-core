@@ -188,7 +188,7 @@ class SegmentContainer(
     /**
      * parse
      */
-    fun parse(): SegmentContainer {
+    fun parse(saveImage: Boolean): SegmentContainer {
 
         /**
          * setup outputDirectory
@@ -213,7 +213,9 @@ class SegmentContainer(
         val smallImage = containerImage!!.resize(scale = scale)
         val binary =
             BinarizationUtility.getBinaryAsGrayU8(image = smallImage, invert = false, skinThickness = skinThickness)
-        binary.toBufferedImage()!!.saveImage(outputDirectory.toPath().resolve("binary").toString())
+        if (saveImage) {
+            binary.toBufferedImage()!!.saveImage(outputDirectory.toPath().resolve("binary").toString())
+        }
 
         /**
          * segmentation
@@ -249,7 +251,7 @@ class SegmentContainer(
                     saveWithMargin = false,
                     outputDirectory = outputDirectory
                 )
-            normalizedTemplateContainer.parse()
+            normalizedTemplateContainer.parse(saveImage = saveImage)
             this.normalizedFilterSegment = normalizedTemplateContainer.segments.first()
 
             // overrides filter information
@@ -260,11 +262,13 @@ class SegmentContainer(
             filterByAspectRatio(imageWidth = filterImage!!.width, imageHeight = filterImage!!.height)
         }
 
-        /**
-         * Save image
-         */
-        filterImage?.saveImage(outputDirectory.toPath().resolve("templateImage").toString())
-        saveSegmentImages()
+        if (saveImage) {
+            /**
+             * Save image
+             */
+            filterImage?.saveImage(outputDirectory.toPath().resolve("templateImage").toString())
+            saveSegmentImages()
+        }
 
         /**
          * VisionElements

@@ -43,6 +43,7 @@ fun VisionDrive.isScreenOf(
         return true
     }
 
+    invalidateScreen()
     screenshot()
     val screenName = TestDriver.currentScreen
     return screenNames.contains(screenName)

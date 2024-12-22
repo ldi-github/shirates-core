@@ -61,7 +61,7 @@ fun VisionElement.right(
         containerY = rightSideRect.y,
         segmentMargin = segmentMargin,
         outputDirectory = outputDirectory
-    ).parse()
+    ).parse(saveImage = true)
     if (segmentContainer.segments.isEmpty()) {
         return VisionElement.emptyElement
     }
@@ -71,6 +71,77 @@ fun VisionElement.right(
      */
     val v = segmentContainer.visionElements.firstOrNull() ?: VisionElement.emptyElement
     v.selector = this.selector?.getChainedSelector(":right")
+
+    lastElement = v
+    return v
+}
+
+/**
+ * left
+ */
+fun VisionElement.left(
+    pos: Int = 1,
+    verticalMargin: Int = this.rect.height / 2,
+    segmentMargin: Int = 20
+): VisionElement {
+
+    if (this.isEmpty) {
+        return this
+    }
+
+    val lastScreenshotImage = CodeExecutionContext.lastScreenshotImage!!
+
+    /**
+     * get leftSideRect
+     */
+    val r = this.rect
+
+    var right = r.left - 1
+    if (right < 0) {
+        right = 0
+    }
+
+    var top = r.top - verticalMargin
+    if (top < 0) top = 0
+
+    val left = 0
+
+    var bottom = r.top + verticalMargin
+    if (bottom > lastScreenshotImage.bottom) bottom = lastScreenshotImage.bottom
+
+    val width = right - left
+    val height = (bottom - top + 1) + verticalMargin * 2
+
+    val leftSideRect = Rectangle(x = left, y = top, width = width, height = height)
+    val leftSideImage = lastScreenshotImage.cropImage(leftSideRect)!!
+
+    /**
+     * save leftSideRect
+     */
+    val leftImageFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_left_side.png").toString()
+    leftSideImage.saveImage(leftImageFile)
+
+    /**
+     * parse segments
+     */
+    val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
+    val segmentContainer = SegmentContainer(
+        containerImage = leftSideImage,
+        containerImageFile = leftImageFile,
+        containerX = leftSideRect.x,
+        containerY = leftSideRect.y,
+        segmentMargin = segmentMargin,
+        outputDirectory = outputDirectory
+    ).parse(saveImage = true)
+    if (segmentContainer.segments.isEmpty()) {
+        return VisionElement.emptyElement
+    }
+
+    /**
+     * create VisionElement from primary segment
+     */
+    val v = segmentContainer.visionElements.firstOrNull() ?: VisionElement.emptyElement
+    v.selector = this.selector?.getChainedSelector(":left")
 
     lastElement = v
     return v

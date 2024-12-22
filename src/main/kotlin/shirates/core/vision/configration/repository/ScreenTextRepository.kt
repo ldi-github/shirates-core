@@ -5,7 +5,6 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
-import shirates.core.vision.ScreenRecognizer
 import java.io.FileNotFoundException
 import java.nio.file.Files
 
@@ -133,15 +132,5 @@ object ScreenTextRepository {
             return "$screenName\n${joinedText}"
         }
 
-        /**
-         * calculateDistance
-         */
-        fun calculateDistance(
-            targetText: String,
-        ): ScreenRecognizer.ScreenTextDistanceInfo {
-
-            val info = ScreenRecognizer.ScreenTextDistanceInfo(screenTextInfo = this, targetText = targetText)
-            return info
-        }
     }
 }

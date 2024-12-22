@@ -4,11 +4,14 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
+import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
+import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
+import shirates.core.utility.image.SegmentUtility
 import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage
@@ -167,7 +170,8 @@ class VisionElement() : VisionDrive {
      */
     val isFound: Boolean
         get() {
-            return observation != null || segment != null || testElement != null
+            return rect.isEmpty.not()
+//                    || observation != null || segment != null || testElement != null ||
         }
 
     /**
@@ -229,6 +233,10 @@ class VisionElement() : VisionDrive {
             return s
         }
 
+    override fun toString(): String {
+        return "text: \"$text\", bounds: $bounds, rect: ${bounds.toRectWithRatio()}"
+    }
+
     /**
      * clone
      */
@@ -265,7 +273,46 @@ class VisionElement() : VisionDrive {
         return visionContext.joinText()
     }
 
-    override fun toString(): String {
-        return "text: \"$text\", bounds: $bounds, rect: ${bounds.toRectWithRatio()}"
+    /**
+     * save
+     */
+    fun save(): VisionElement {
+
+        visionContext.saveImage()
+        return this
+    }
+
+    /**
+     * getCell
+     */
+    fun getCell(): VisionElement {
+
+        if (TestMode.isNoLoadRun) {
+            return this
+        }
+
+        val segmentContainer = SegmentUtility.getSegmentContainer(
+            imageFile = visionContext.screenshotFile!!,
+//            templateFile = templateFile,
+            outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_segments").toString(),
+//            segmentMargin = margin,
+//            skinThickness = skinThickness,
+            saveImage = false,
+            log = false,
+        )
+        val rects = segmentContainer.segments.map { it.rectOnScreenshotImage }
+        val includingRects = mutableListOf<Rectangle>()
+        for (rect in rects) {
+            if (visionContext.rectOnScreenshotImage!!.toBoundsWithRatio().isIncludedIn(rect.toBoundsWithRatio())) {
+                includingRects.add(rect)
+                rect.toVisionElement().save()
+            }
+        }
+        includingRects.sortByDescending { it.area }
+
+        val first = includingRects.firstOrNull() ?: Rectangle()
+        val cell = first.toVisionElement()
+
+        return cell
     }
 }

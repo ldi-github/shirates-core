@@ -38,6 +38,7 @@ object SegmentUtility {
         minimunWidth: Int = segmentMargin,
         minimunHeight: Int = segmentMargin,
         saveWithMargin: Boolean = true,
+        saveImage: Boolean = true,
         log: Boolean = false,
     ): SegmentContainer {
 
@@ -54,7 +55,7 @@ object SegmentUtility {
             outputDirectory = outputDirectory,
             saveWithMargin = saveWithMargin,
         )
-        container.parse()
+        container.parse(saveImage = saveImage)
 
         sw.stop()
         if (log) {

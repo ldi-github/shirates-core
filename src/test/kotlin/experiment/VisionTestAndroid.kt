@@ -2,8 +2,9 @@ package experiment
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.vision.driver.*
 import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.right
+import shirates.core.vision.driver.waitForDisplay
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")

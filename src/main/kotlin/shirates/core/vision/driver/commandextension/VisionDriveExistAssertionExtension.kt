@@ -552,7 +552,7 @@ private fun existImageCore(
     val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
-    var r = TemplateMatchingResult("", "", Rectangle())
+    lateinit var r: TemplateMatchingResult
 
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
@@ -564,7 +564,7 @@ private fun existImageCore(
         val re = CodeExecutionContext.regionElement
         val imageFile = re.visionContext.localRegionFile!!
 
-        r = SrvisionProxy.getTemplateMatchingRectangle(
+        r = SrvisionProxy.getRectanglesWithTemplate(
             imageFile = imageFile,
             templateFile = templateFile,
             margin = margin,
@@ -634,7 +634,7 @@ private fun dontExistImageCore(
     val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
-    var r = TemplateMatchingResult("", "", Rectangle())
+    lateinit var r: TemplateMatchingResult
 
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
@@ -643,7 +643,7 @@ private fun dontExistImageCore(
             screenshot(force = true)
         }
     ) {
-        r = SrvisionProxy.getTemplateMatchingRectangle(
+        r = SrvisionProxy.getRectanglesWithTemplate(
             imageFile = lastScreenshotFile!!,
             templateFile = templateFile,
             margin = margin,

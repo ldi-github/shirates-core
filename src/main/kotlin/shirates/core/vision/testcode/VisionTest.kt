@@ -25,7 +25,7 @@ abstract class VisionTest : UITestBase(), VisionDrive {
     override fun beforeAllAfterSetup(context: ExtensionContext?) {
         super.beforeAllAfterSetup(context)
 
-        SrvisionProxy.callImageFeaturePrintConfigurator(
+        SrvisionProxy.setupImageFeaturePrintConfig(
             inputDirectory = PropertiesManager.visionDirectory.toPath().resolve("screens").toString(),
             log = true
         )

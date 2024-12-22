@@ -1,9 +1,33 @@
 package shirates.core.vision.driver.commandextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
+import shirates.core.testcode.preprocessForComparison
 import shirates.core.vision.VisionElement
+
+/**
+ * textIs
+ */
+fun VisionElement.textIs(
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode
+): VisionElement {
+
+    val command = "textIs"
+    val expected2 = expected.preprocessForComparison(strict = strict)
+    val assertMessage = message(id = command, subject = subject, expected = expected2, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
+        val str = this.text
+        str.thisIs(expected = expected2, message = assertMessage, strict = strict)
+    }
+
+    return this
+}
 
 /**
  * checkIsON

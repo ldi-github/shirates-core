@@ -2,10 +2,7 @@ package experiment
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.vision.driver.commandextension.checkIsOFF
-import shirates.core.vision.driver.commandextension.detect
-import shirates.core.vision.driver.commandextension.scrollToBottom
-import shirates.core.vision.driver.commandextension.tap
+import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.driver.right
 import shirates.core.vision.testcode.VisionTest
 
@@ -18,6 +15,13 @@ class VisionTestIos : VisionTest() {
         scenario {
             case(1) {
                 condition {
+                    it.screenIs("[iOS Settings Top Screen]")
+                    it.cellOf("VPN") {
+                        exist(expression = "Sign in to your iPhone")
+                        dontExist(expression = "Screen Time")
+                    }
+                    it.detectRectMax(textIncluded = "Screen Time")
+                        .save()
                 }.action {
                     it.detect("Accessibility").tap()
                     it.detect("Display & Text Size").tap()

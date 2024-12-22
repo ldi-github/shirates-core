@@ -311,24 +311,4 @@ class AdHocTestAndroid : UITest() {
         }
     }
 
-    @Test
-    fun capture() {
-
-        scenario {
-            case(1) {
-                it.tap("<Network & internet>:leftImage")
-            }
-        }
-    }
-
-    @Test
-    fun capture2() {
-
-        scenario {
-            case(1) {
-                pressHome()
-                screenshot(force = true)
-            }
-        }
-    }
 }

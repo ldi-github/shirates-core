@@ -184,6 +184,19 @@ class VisionContext() {
     }
 
     /**
+     * saveImage
+     */
+    fun saveImage() {
+
+        if (rectOnLocalRegionImage != null) {
+            val fileName =
+                TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rectOnLocalRegionImage}.png").toString()
+            this.screenshotImage?.cropImage(rect = rectOnLocalRegionImage!!)
+                ?.saveImage(fileName)
+        }
+    }
+
+    /**
      * recognizeText
      */
     fun recognizeText(
@@ -191,7 +204,7 @@ class VisionContext() {
     ): VisionContext {
         val inputFile = localRegionFile ?: screenshotFile!!
 
-        val json = SrvisionProxy.callTextRecognizer(
+        val json = SrvisionProxy.recognizeText(
             inputFile = inputFile,
             language = language
         )

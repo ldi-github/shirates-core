@@ -17,7 +17,7 @@ private fun VisionDrive.classifyCore(
 
     screenshot()
 
-    val result = SrvisionProxy.callImageClassifier(
+    val result = SrvisionProxy.classifyImage(
         inputFile = TestLog.directoryForLog.resolve(imageFile).toString(),
         mlmodelFile = mlmodelFile,
     )

@@ -13,7 +13,7 @@ fun VisionElement.recognizeText(): String {
         throw TestDriverException("Failed to recognize text. `imageFile` is not set. (VisionElement:$this)")
     }
 
-    SrvisionProxy.callTextRecognizer(inputFile = this.imageFile!!)
+    SrvisionProxy.recognizeText(inputFile = this.imageFile!!)
 
     val joinedString = this.visionContext.joinText()
 

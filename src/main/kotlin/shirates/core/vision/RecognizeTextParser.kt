@@ -30,9 +30,9 @@ class RecognizeTextParser(
             throw TestDriverException("The content could not be parsed as JSONObject. \n$content")
         }
         val jsonArray = try {
-            jsonObject.getJSONArray("list")
+            jsonObject.getJSONArray("candidates")
         } catch (t: Throwable) {
-            throw TestDriverException("\"list\" not found. \n$content")
+            throw TestDriverException("\"candidates\" not found. \n$content")
         }
 
         val list = mutableListOf<RecognizeTextObservation>()
@@ -50,17 +50,14 @@ class RecognizeTextParser(
             if (jso.has("rect").not()) {
                 throw TestDriverException("rect not found. \n$json")
             }
-            val values = jso.getString("rect").split(",").map { it.trim() }
-            if (values.count() != 4) {
-                throw TestDriverException("Could not parse rect. `left, top, with, height` is expected.")
-            }
+            val rectObj = jso.getJSONObject("rect")
 
             val scale = 1.0
 
-            val left = (values[0].toInt() / scale).toInt()
-            val top = (values[1].toInt() / scale).toInt()
-            val width = (values[2].toInt() / scale).toInt()
-            val height = (values[3].toInt() / scale).toInt()
+            val left = (rectObj.getInt("x") / scale).toInt()
+            val top = (rectObj.getInt("y") / scale).toInt()
+            val width = (rectObj.getInt("width") / scale).toInt()
+            val height = (rectObj.getInt("height") / scale).toInt()
             val rect = Rectangle(x = left, y = top, width = width, height = height)
 
             if (jso.has("confidence").not()) {

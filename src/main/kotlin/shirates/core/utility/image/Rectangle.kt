@@ -2,6 +2,7 @@ package shirates.core.utility.image
 
 import shirates.core.driver.Bounds
 import shirates.core.driver.testContext
+import shirates.core.vision.VisionElement
 
 class Rectangle(
     var x: Int = 0,
@@ -118,4 +119,20 @@ class Rectangle(
     override fun toString(): String {
         return "[$left, $top, $right, $bottom](w=$width, h=$height)"
     }
+
+    /**
+     * toVisionElement
+     */
+    fun toVisionElement(): VisionElement {
+
+        val v = VisionElement()
+        val c = v.visionContext
+        c.rectOnLocalRegionImage = this
+        c.localRegionImage = c.screenshotImage?.cropImage(rect = this)
+
+//        val fileName = TestLog.getNextScreenshotFileName(suffix = "_cropRegion_$this")
+//        c.localRegionFile = c.localRegionImage!!.saveImage(TestLog.directoryForLog.resolve(fileName).toString())
+        return v
+    }
+
 }

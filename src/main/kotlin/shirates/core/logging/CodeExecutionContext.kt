@@ -94,13 +94,22 @@ object CodeExecutionContext {
      */
     val isInCell: Boolean
         get() {
-            return lastCell.isEmpty.not()
+            if (testContext.useCache) {
+                return lastCell.isEmpty.not()
+            }
+            return lastVisionCell.isEmpty.not()
         }
 
     /**
      * lastCell
      */
     var lastCell: TestElement = TestElement.emptyElement
+        internal set
+
+    /**
+     * lastVisionCell
+     */
+    var lastVisionCell: VisionElement = VisionElement.emptyElement
         internal set
 
     // Region --------------------------------------------------

@@ -9,23 +9,6 @@ import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
 
 /**
- * region
- */
-fun VisionElement.region(
-    rect: Rectangle
-): VisionElement {
-
-    val v = VisionElement()
-    val c = v.visionContext
-    c.rectOnLocalRegionImage = rect
-    c.localRegionImage = c.screenshotImage?.cropImage(rect = rect)
-
-    val fileName = TestLog.getNextScreenshotFileName(suffix = "_cropRegion_$rect")
-    c.localRegionFile = c.localRegionImage!!.saveImage(TestLog.directoryForLog.resolve(fileName).toString())
-    return v
-}
-
-/**
  * aboveRegion
  */
 fun VisionElement.aboveRegion(

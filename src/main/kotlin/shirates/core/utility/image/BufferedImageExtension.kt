@@ -6,7 +6,10 @@ import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
+import java.awt.BasicStroke
+import java.awt.Color
 import java.awt.Image
+import java.awt.geom.Path2D
 import java.awt.image.BufferedImage
 import java.io.File
 import java.nio.file.Files
@@ -183,7 +186,7 @@ fun BufferedImage.cropImage(rect: Rectangle): BufferedImage? {
     }
 
     if (y1 < 0 || y1 > originalImage.height) {
-        TestLog.warn("cropImage skipped. y1=$y1, originalImage.width=${originalImage.height}")
+        TestLog.warn("cropImage skipped. y1=$y1, originalImage.height=${originalImage.height}")
         return null
     }
 
@@ -311,4 +314,44 @@ fun BufferedImage.cut(
     }
 
     return this.getSubimage(cropX, cropY, cropWidth, cropHeight)
+}
+
+/**
+ * drawRects
+ */
+fun BufferedImage.drawRects(
+    rects: List<Rectangle>,
+    color: Color = Color.RED,
+    stroke: Float = 3.0f
+): BufferedImage {
+
+    val g2d = this.createGraphics()
+
+    val path = Path2D.Double()
+    for (rect in rects) {
+        path.moveTo(rect.left.toDouble(), rect.top.toDouble())
+        path.lineTo(rect.right.toDouble(), rect.top.toDouble())
+        path.lineTo(rect.right.toDouble(), rect.bottom.toDouble())
+        path.lineTo(rect.left.toDouble(), rect.bottom.toDouble())
+        path.closePath()
+    }
+    g2d.color = color
+    val st = BasicStroke(stroke)
+    g2d.stroke = st
+    g2d.draw(path)
+    g2d.dispose()
+
+    return this
+}
+
+/**
+ * drawRect
+ */
+fun BufferedImage.drawRect(
+    rect: Rectangle,
+    color: Color = Color.RED,
+    stroke: Float = 3f
+): BufferedImage {
+
+    return this.drawRects(rects = listOf(rect), color = color, stroke = stroke)
 }
