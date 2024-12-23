@@ -432,11 +432,13 @@ object TestDriver {
             }
         }
         set(value) {
-            field = value
-            if (testContext.enableCache) {
-                fireTestDriveScreenHandler(screenName = value)
-            } else {
-                fireVisionDriveScreenHandler(screenName = value)
+            if (field != value) {
+                field = value
+                if (testContext.enableCache) {
+                    fireTestDriveScreenHandler(screenName = value)
+                } else {
+                    fireVisionDriveScreenHandler(screenName = value)
+                }
             }
         }
 
@@ -1707,7 +1709,7 @@ object TestDriver {
 
     internal fun selectWithScroll(
         selector: Selector,
-        frame: Bounds? = viewBounds,
+        frame: Bounds? = null,
         scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,

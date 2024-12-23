@@ -27,6 +27,11 @@ object TestElementCache {
     var sourceXml: String = ""
 
     /**
+     * hierarchyBounds (for Android)
+     */
+    var hierarchyBounds: Bounds = Bounds()
+
+    /**
      * rootElement
      */
     var rootElement: TestElement = TestElement.emptyElement
@@ -229,7 +234,7 @@ object TestElementCache {
         expression: String,
         throwsException: Boolean = true,
         selectContext: TestElement = rootElement,
-        frame: Bounds? = viewBounds
+        frame: Bounds? = null
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {

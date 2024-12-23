@@ -2,13 +2,16 @@ package shirates.core.utility.element
 
 import org.w3c.dom.Node
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.Bounds
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestElementCache
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.element.XPathUtility.children
+import shirates.core.utility.getAttribute
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
@@ -44,6 +47,14 @@ object ElementCacheUtility {
         val rootUIElement = TestElement(node = rootUINode)
         rootUIElement.rootUIElement = rootUIElement
         TestElementCache.sourceXml = source
+        TestElementCache.hierarchyBounds = if (isAndroid) {
+            val hierarchyNode = list[0]
+            val width = hierarchyNode.getAttribute("width")
+            val height = hierarchyNode.getAttribute("height")
+            Bounds(width = width.toInt(), height = height.toInt())
+        } else {
+            rootUIElement.bounds
+        }
         addChildren(element = rootUIElement, rootUIElement = rootUIElement)
 
         return rootUIElement
