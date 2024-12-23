@@ -8,7 +8,7 @@ import shirates.core.driver.commandextension.memoTextAs
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.vision.driver.branchextension.ios
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.driver.right
+import shirates.core.vision.driver.rightItem
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
@@ -52,12 +52,12 @@ class iOSSettingsDemo : VisionTest() {
                         screenshot()
                         it
                             .ifCanDetect("iOS Version") {
-                                it.right(segmentMargin = 5)
+                                it.rightItem(segmentMargin = 5)
                                     .recognizeText()
                                     .memoTextAs("iOS Version")
                             }
                             .ifCanDetect("Model Name") {
-                                it.right(segmentMargin = 5)
+                                it.rightItem(segmentMargin = 5)
                                     .recognizeText()
                                     .memoTextAs("Model Name")
                             }

@@ -14,9 +14,9 @@ class VisionMLModelRepositoryTest {
         // Act
         VisionMLModelRepository.setup()
         // Assert
-        assertThat(VisionMLModelRepository.mlmodelClassifiers.count()).isEqualTo(3)
-        assertThat(VisionMLModelRepository.generalClassifierRepository.labelMap.keys.isNotEmpty()).isTrue()
-        assertThat(VisionMLModelRepository.screenClassifierRepository.labelMap.keys.isNotEmpty()).isTrue()
+        assertThat(VisionMLModelRepository.mlmodelClassifiers.count()).isEqualTo(2)
+        assertThat(VisionMLModelRepository.radioButtonStateClassifierRepository.labelMap.keys.isNotEmpty()).isTrue()
+        assertThat(VisionMLModelRepository.switchStateClassifierRepository.labelMap.keys.isNotEmpty()).isTrue()
 
         assertThatThrownBy {
             VisionMLModelRepository.buttonStateClassifierRepository
@@ -29,9 +29,9 @@ class VisionMLModelRepositoryTest {
             .hasMessage("Classifier not found. (classifierName=CheckboxStateClassifier)")
 
         assertThatThrownBy {
-            VisionMLModelRepository.radioButtonStateClassifierRepository
+            VisionMLModelRepository.generalClassifierRepository
         }.isInstanceOf(TestConfigException::class.java)
-            .hasMessage("Classifier not found. (classifierName=RadioButtonStateClassifier)")
+            .hasMessage("Classifier not found. (classifierName=GeneralClassifier)")
 
         assertThat(VisionMLModelRepository.switchStateClassifierRepository.labelMap.keys.isNotEmpty()).isTrue()
     }

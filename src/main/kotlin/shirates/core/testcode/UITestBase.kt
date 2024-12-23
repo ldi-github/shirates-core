@@ -30,7 +30,6 @@ import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
-import shirates.core.vision.configration.repository.ScreenTextRepository
 import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.driver.commandextension.launchApp
 import shirates.core.vision.driver.commandextension.rootElement
@@ -321,8 +320,6 @@ abstract class UITestBase : Drive {
                 screensDirectory = configPath.parent.resolve("screens"),
                 importDirectories = profile.testConfig!!.importScreenDirectories
             )
-            // setup ScreenTextRepository
-            ScreenTextRepository.setup()
 
             if (isNoLoadRun.not()) {
                 // appPackageFile

@@ -2,8 +2,10 @@ package experiment
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.vision.driver.belowItem
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.driver.right
+import shirates.core.vision.driver.leftItem
+import shirates.core.vision.driver.rightItem
 import shirates.core.vision.driver.waitForDisplay
 import shirates.core.vision.testcode.VisionTest
 
@@ -26,24 +28,24 @@ class VisionTestAndroid : VisionTest() {
             case(2) {
                 condition {
                     it.detect("Airplane mode")
-                        .right()
+                        .rightItem()
                         .checkIsOFF()
                 }.action {
                     it.tap()
                 }.expectation {
                     it.detect("Airplane mode")
-                        .right()
+                        .rightItem()
                         .checkIsON()
                 }
             }
             case(3) {
                 action {
                     it.detect("Airplane mode")
-                        .right()
+                        .rightItem()
                         .tap()
                 }.expectation {
                     it.detect("Airplane mode")
-                        .right()
+                        .rightItem()
                         .checkIsOFF()
                 }
             }
@@ -69,6 +71,26 @@ class VisionTestAndroid : VisionTest() {
                             it.dontExist("Network & internet")
                             it.exist("Storage")
                         }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun leftRightAboveBelow() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    val v = it.detect("Network & internet")
+                    val left = v.leftItem()
+                    val below = v.belowItem()
+                    val right = left.rightItem()
+
+                }.expectation {
+
                 }
             }
         }

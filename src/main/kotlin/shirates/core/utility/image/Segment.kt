@@ -24,8 +24,7 @@ class Segment(
         get() {
             if (field == null) {
                 if (screenshotImage != null) {
-                    val rect = Rectangle(x = left, y = top, width = width, height = height)
-                    field = containerImage!!.cropImage(rect = rect)
+                    captureImageWithMargin()
                 } else if (segmentImageFile != null && Files.exists(segmentImageFile!!.toPath()).not()) {
                     field = BufferedImageUtility.getBufferedImage(segmentImageFile!!)
                 }
@@ -112,6 +111,7 @@ class Segment(
         val thisBounds = this.boundsOnSegmentContainer
         val thatBounds = segment.boundsOnSegmentContainer
 
+        // Margin offset
         thatBounds.left = thatBounds.left - margin - 1
         if (thatBounds.left <= 0) thatBounds.left = 0
 
@@ -157,6 +157,13 @@ class Segment(
         }
 
     /**
+     * toRect
+     */
+    fun toRect(): Rectangle {
+        return Rectangle(x = left, y = top, width = width, height = height)
+    }
+
+    /**
      * createVisionElement
      */
     fun createVisionElement(): VisionElement {
@@ -173,6 +180,9 @@ class Segment(
         v.visionContext.localRegionX = this.containerX
         v.visionContext.localRegionY = this.containerY
         v.visionContext.rectOnLocalRegion = this.rectOnSegmentContainer
+        v.visionContext.imageMargin = this.segmentMargin
+        v.visionContext.image
+        v.visionContext.rectOnScreen
 
         return v
     }

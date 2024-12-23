@@ -15,32 +15,33 @@ fun VisionElement.aboveRegion(
     func: (VisionElement.(VisionElement) -> Unit)? = null
 ): VisionElement {
 
+    val command = "aboveRegion"
     var bottom = this.rect.top - 1
     if (bottom < 0) bottom = 0
-    val globalRect = Rectangle.createFrom(
+    val aboveRegion = Rectangle.createFrom(
         left = 0,
         top = 0,
         right = screenRect.right,
         bottom = bottom
     )
-    val regionElement = regionCore(globalRect = globalRect, func = func)
-
+    val regionElement = regionCore(command = command, regionRect = aboveRegion, func = func)
     return regionElement
 }
 
-private fun VisionElement.regionCore(
-    globalRect: Rectangle,
+internal fun VisionElement.regionCore(
+    command: String,
+    regionRect: Rectangle,
     func: (VisionElement.(VisionElement) -> Unit)?
 ): VisionElement {
     val regionElement = VisionElement()
     val c = regionElement.visionContext
 
-    c.localRegionImage = this.screenshotImage!!.cropImage(globalRect)
-    val fileName = TestLog.getNextScreenshotFileName(suffix = "_aboveRegion_${globalRect}")
+    c.localRegionImage = this.screenshotImage!!.cropImage(regionRect)
+    val fileName = TestLog.getNextScreenshotFileName(suffix = "_$command{regionRect}")
     c.localRegionFile = c.localRegionImage!!.saveImage(TestLog.directoryForLog.resolve(fileName).toString())
-    c.localRegionX = globalRect.left
-    c.localRegionY = globalRect.top
-    c.rectOnLocalRegion = globalRect.localRegionRect()
+    c.localRegionX = regionRect.left
+    c.localRegionY = regionRect.top
+    c.rectOnLocalRegion = regionRect.localRegionRect()
 
     lastElement = regionElement
 
@@ -63,16 +64,16 @@ fun VisionElement.belowRegion(
     func: (VisionElement.(VisionElement) -> Unit)? = null
 ): VisionElement {
 
+    val command = "belowRegion"
     var top = this.rect.bottom + 1
     if (top > screenRect.bottom) top = screenRect.bottom
-    val globalRect = Rectangle.createFrom(
+    val belowRegion = Rectangle.createFrom(
         left = 0,
         top = top,
         right = screenRect.right,
         bottom = screenRect.bottom
     )
-    val regionElement = regionCore(globalRect = globalRect, func = func)
-
+    val regionElement = regionCore(command = command, regionRect = belowRegion, func = func)
     return regionElement
 }
 
@@ -83,16 +84,16 @@ fun VisionElement.leftRegion(
     func: (VisionElement.(VisionElement) -> Unit)? = null
 ): VisionElement {
 
+    val command = "leftRegion"
     var right = this.rect.left - 1
     if (right < 0) right = 0
-    val globalRect = Rectangle.createFrom(
+    val leftRegion = Rectangle.createFrom(
         left = 0,
         top = 0,
         right = right,
         bottom = screenRect.bottom
     )
-    val regionElement = regionCore(globalRect = globalRect, func = func)
-
+    val regionElement = regionCore(command = command, regionRect = leftRegion, func = func)
     return regionElement
 }
 
@@ -103,15 +104,33 @@ fun VisionElement.rightRegion(
     func: (VisionElement.(VisionElement) -> Unit)? = null
 ): VisionElement {
 
+    val command = "rightRegion"
     var left = this.rect.right + 1
     if (left > screenRect.right) left = screenRect.right
-    val globalRect = Rectangle.createFrom(
+    val rightRegion = Rectangle.createFrom(
         left = left,
         top = 0,
         right = screenRect.right,
         bottom = screenRect.bottom
     )
-    val regionElement = regionCore(globalRect = globalRect, func = func)
+    val regionElement = regionCore(command = command, regionRect = rightRegion, func = func)
+    return regionElement
+}
 
+/**
+ * horizontalLine
+ */
+fun VisionElement.horizontalLine(
+    func: (VisionElement.(VisionElement) -> Unit)? = null
+): VisionElement {
+
+    val command = "horizontalLine"
+    val horizontalRegion = Rectangle.createFrom(
+        left = 0,
+        right = screenRect.right,
+        top = this.rect.centerY - (this.rect.height / 2),
+        bottom = this.rect.centerY + (this.rect.height / 2)
+    )
+    val regionElement = regionCore(command = command, regionRect = horizontalRegion, func = func)
     return regionElement
 }

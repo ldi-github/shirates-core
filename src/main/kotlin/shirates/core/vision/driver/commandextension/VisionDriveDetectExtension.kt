@@ -7,7 +7,6 @@ import shirates.core.driver.TestDriver.expandExpression
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.hideKeyboard
 import shirates.core.driver.commandextension.isKeyboardShown
-import shirates.core.driver.commandextension.toVisionElement
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
@@ -25,7 +24,7 @@ fun VisionDrive.detect(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     allowScroll: Boolean? = null,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = false,
@@ -35,10 +34,13 @@ fun VisionDrive.detect(
 ): VisionElement {
 
     val swDetect = StopWatch("detect")
+    val sel = getSelector(expression = expression)
+    if (sel.isTextSelector.not()) {
+        val v = VisionElement.emptyElement
+        v.selector = sel
+        return v
+    }
     try {
-//        val sel = getSelector(expression = expression)
-        val sel = Selector(expression = expression)
-
         val v = detectCore(
             selector = sel,
             removeChars = removeChars,
@@ -48,7 +50,7 @@ fun VisionDrive.detect(
             allowScroll = allowScroll,
             swipeToCenter = swipeToCenter,
             throwsException = throwsException,
-            supplementWithDirectAccess = supplementWithDirectAccess
+            directAccessCompletion = directAccessCompletion
         )
         lastElement = v
         return v
@@ -66,7 +68,7 @@ internal fun VisionDrive.detectCore(
     allowScroll: Boolean?,
     swipeToCenter: Boolean,
     throwsException: Boolean,
-    supplementWithDirectAccess: Boolean
+    directAccessCompletion: Boolean
 ): VisionElement {
 
     screenshot()
@@ -76,10 +78,11 @@ internal fun VisionDrive.detectCore(
         regionElement.recognizeText(language = language)
     }
 
+    var v: VisionElement
     /**
      * Try to detect in visionContext
      */
-    var v = regionElement.visionContext.detect(
+    v = regionElement.visionContext.detect(
         selector = selector,
         removeChars = removeChars,
     )
@@ -98,12 +101,13 @@ internal fun VisionDrive.detectCore(
         /**
          * Try to detect in direct access
          */
-        if (supplementWithDirectAccess) {
+        if (directAccessCompletion) {
             val sw = StopWatch("direct access attempted")
             val e = TestDriver.selectDirect(selector = selector, throwsException = false)
             sw.printInfo()
-            if (e.isFound) {
-                return e.toVisionElement()  // strict match
+            if (e.isFound && e.bounds.isIncludedIn(viewBounds)) {
+                v.testElement = e   // strict match
+                return v
             }
         }
     }
@@ -112,10 +116,10 @@ internal fun VisionDrive.detectCore(
         return v    // loose match
     }
 
-    val global = CodeExecutionContext.isInLocalRegion.not()
+    val isInGlobalRegion = CodeExecutionContext.isInLocalRegion.not()
 
     try {
-        if (global && waitSeconds > 0.0) {
+        if (isInGlobalRegion && waitSeconds > 0.0) {
             if (allowScroll == true && CodeExecutionContext.withScroll == true) {
                 /**
                  * Try to detect with scroll
@@ -127,7 +131,7 @@ internal fun VisionDrive.detectCore(
                     direction = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
                     swipeToCenter = swipeToCenter,
                     throwsException = false,
-                    supplementWithDirectAccess = supplementWithDirectAccess
+                    directAccessCompletion = directAccessCompletion
                 )
             } else {
                 /**
@@ -171,7 +175,7 @@ fun VisionDrive.detectWithScroll(
     language: String = PropertiesManager.logLanguage,
     removeChars: String? = null,
     direction: ScrollDirection = ScrollDirection.Down,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = TestDriver.testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     startMarginRatio: Double = TestDriver.testContext.getScrollStartMarginRatio(direction),
@@ -189,7 +193,7 @@ fun VisionDrive.detectWithScroll(
             language = language,
             removeChars = removeChars,
             direction = direction,
-            supplementWithDirectAccess = supplementWithDirectAccess,
+            directAccessCompletion = directAccessCompletion,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             startMarginRatio = startMarginRatio,
@@ -206,7 +210,7 @@ internal fun VisionDrive.detectWithScroll(
     selector: Selector,
     removeChars: String?,
     language: String,
-    supplementWithDirectAccess: Boolean,
+    directAccessCompletion: Boolean,
     direction: ScrollDirection,
     scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
     scrollIntervalSeconds: Double = CodeExecutionContext.scrollIntervalSeconds,
@@ -232,7 +236,7 @@ internal fun VisionDrive.detectWithScroll(
             allowScroll = true,
             swipeToCenter = swipeToCenter,
             throwsException = false,
-            supplementWithDirectAccess = supplementWithDirectAccess
+            directAccessCompletion = directAccessCompletion
         )
         val stopScroll = v.isFound
         stopScroll
@@ -271,7 +275,7 @@ internal fun VisionDrive.detectWithScroll(
 fun VisionDrive.detectWithScrollDown(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -297,7 +301,7 @@ fun VisionDrive.detectWithScrollDown(
             v = v,
             selector = selector,
             language = language,
-            supplementWithDirectAccess = supplementWithDirectAccess,
+            directAccessCompletion = directAccessCompletion,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -321,7 +325,7 @@ private fun VisionDrive.detectWithScrollCore(
     selector: Selector,
     removeChars: String? = null,
     language: String,
-    supplementWithDirectAccess: Boolean,
+    directAccessCompletion: Boolean,
     scrollDurationSeconds: Double,
     scrollIntervalSeconds: Double,
     scrollStartMarginRatio: Double,
@@ -336,7 +340,7 @@ private fun VisionDrive.detectWithScrollCore(
         selector = selector,
         removeChars = removeChars,
         language = language,
-        supplementWithDirectAccess = supplementWithDirectAccess,
+        directAccessCompletion = directAccessCompletion,
         waitSeconds = 0.0,
         allowScroll = false,
         swipeToCenter = false,
@@ -348,7 +352,7 @@ private fun VisionDrive.detectWithScrollCore(
             selector = selector,
             language = language,
             removeChars = removeChars,
-            supplementWithDirectAccess = supplementWithDirectAccess,
+            directAccessCompletion = directAccessCompletion,
             direction = scrollDirection,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
@@ -368,7 +372,7 @@ private fun VisionDrive.detectWithScrollCore(
 fun VisionDrive.detectWithScrollUp(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -394,7 +398,7 @@ fun VisionDrive.detectWithScrollUp(
             v = v,
             selector = selector,
             language = language,
-            supplementWithDirectAccess = supplementWithDirectAccess,
+            directAccessCompletion = directAccessCompletion,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -418,7 +422,7 @@ fun VisionDrive.detectWithScrollUp(
 fun VisionDrive.detectWithScrollRight(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -444,7 +448,7 @@ fun VisionDrive.detectWithScrollRight(
             v = v,
             selector = selector,
             language = language,
-            supplementWithDirectAccess = supplementWithDirectAccess,
+            directAccessCompletion = directAccessCompletion,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -468,7 +472,7 @@ fun VisionDrive.detectWithScrollRight(
 fun VisionDrive.detectWithScrollLeft(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -494,7 +498,7 @@ fun VisionDrive.detectWithScrollLeft(
             v = v,
             selector = selector,
             language = language,
-            supplementWithDirectAccess = supplementWithDirectAccess,
+            directAccessCompletion = directAccessCompletion,
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -519,7 +523,7 @@ fun VisionDrive.canDetect(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
     swipeToCenter: Boolean = false,
@@ -535,7 +539,7 @@ fun VisionDrive.canDetect(
         selector = sel,
         removeChars = removeChars,
         language = language,
-        supplementWithDirectAccess = supplementWithDirectAccess,
+        directAccessCompletion = directAccessCompletion,
         allowScroll = allowScroll,
         waitSeconds = waitSeconds,
         swipeToCenter = swipeToCenter,
@@ -550,7 +554,7 @@ fun VisionDrive.canDetect(
     selector: Selector,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
     swipeToCenter: Boolean = false,
@@ -569,7 +573,7 @@ fun VisionDrive.canDetect(
             selector = selector,
             removeChars = removeChars,
             language = language,
-            supplementWithDirectAccess = supplementWithDirectAccess,
+            directAccessCompletion = directAccessCompletion,
             waitSeconds = waitSeconds,
             allowScroll = allowScroll,
             swipeToCenter = swipeToCenter,
@@ -587,7 +591,7 @@ internal fun VisionDrive.canDetectCore(
     selector: Selector,
     removeChars: String? = null,
     language: String,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     waitSeconds: Double,
     intervalSeconds: Double,
     allowScroll: Boolean,
@@ -597,7 +601,7 @@ internal fun VisionDrive.canDetectCore(
         selector = selector,
         removeChars = removeChars,
         language = language,
-        supplementWithDirectAccess = supplementWithDirectAccess,
+        directAccessCompletion = directAccessCompletion,
         waitSeconds = waitSeconds,
         allowScroll = allowScroll,
         swipeToCenter = false,

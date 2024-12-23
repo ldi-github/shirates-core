@@ -46,7 +46,7 @@ class SegmentContainer(
         top: Int,
         width: Int,
         height: Int,
-    ) {
+    ): Segment {
         val newSegment = Segment(
             left = left,
             top = top,
@@ -86,6 +86,23 @@ class SegmentContainer(
         segments.clear()
         segments.addAll(cannotMergeSegments)
         segments.add(mergedSegment)
+
+        return newSegment
+    }
+
+    /**
+     * mergeSegments
+     */
+    fun mergeSegments() {
+
+        val segmentContainer = SegmentContainer(segmentMargin = segmentMargin)
+        for (s in segments) {
+            segmentContainer.addSegment(left = s.left, top = s.top, width = s.width, height = s.height)
+        }
+        if (segments.count() != segmentContainer.segments.count()) {
+            segments.clear()
+            segments.addAll(segmentContainer.segments)
+        }
     }
 
     /**
@@ -165,6 +182,67 @@ class SegmentContainer(
     }
 
     /**
+     * filterByCutOffPiece
+     */
+    fun filterByCutOffPiece() {
+
+        val filtered = segments.filter {
+            try {
+                it.segmentImage!!.isCutOffPiece().not()
+            } catch (t: Throwable) {
+                println(it)
+                true
+            }
+        }
+        if (filtered.any()) {
+            segments.clear()
+            segments.addAll(filtered)
+        }
+    }
+
+    private fun BufferedImage.isCutOffPiece(): Boolean {
+
+        val binary = BinarizationUtility.getBinaryAsGrayU8(image = this, invert = false)
+        var lastTopValue: Int? = null
+        var lastBottomValue: Int? = null
+        /**
+         * Inspect top edge and bottom edge
+         */
+        for (x in 0 until binary.width) {
+            val topValue = binary.get(x, 0)
+            if (lastTopValue != null && topValue != lastTopValue) {
+                return true
+            }
+            lastTopValue = topValue
+
+            val bottomValue = binary.get(x, binary.height - 1)
+            if (lastBottomValue != null && bottomValue != lastBottomValue) {
+                return true
+            }
+            lastBottomValue = bottomValue
+        }
+        /**
+         * Inspect left edge and right edge
+         */
+        var lastLeftValue: Int? = null
+        var lastRightValue: Int? = null
+        for (y in 0 until binary.height) {
+            val leftValue = binary.get(0, y)
+            if (lastLeftValue != null && leftValue != lastLeftValue) {
+                return true
+            }
+            lastLeftValue = leftValue
+
+            val rightValue = binary.get(binary.width - 1, y)
+            if (lastRightValue != null && rightValue != lastRightValue) {
+                return true
+            }
+            lastRightValue = rightValue
+        }
+        return false
+    }
+
+    /**
      * saveSegmentImages
      */
     fun saveSegmentImages(): SegmentContainer {
@@ -186,9 +264,9 @@ class SegmentContainer(
     }
 
     /**
-     * parse
+     * execute
      */
-    fun parse(saveImage: Boolean): SegmentContainer {
+    fun execute(saveImage: Boolean): SegmentContainer {
 
         /**
          * setup outputDirectory
@@ -242,6 +320,7 @@ class SegmentContainer(
          * filter
          */
         filterByWidthAndHeight()
+        filterByCutOffPiece()
         if (filterImageFile != null && filterImageFile != containerImageFile) {
 
             // Get normalized template image
@@ -251,7 +330,7 @@ class SegmentContainer(
                     saveWithMargin = false,
                     outputDirectory = outputDirectory
                 )
-            normalizedTemplateContainer.parse(saveImage = saveImage)
+            normalizedTemplateContainer.execute(saveImage = saveImage)
             this.normalizedFilterSegment = normalizedTemplateContainer.segments.first()
 
             // overrides filter information

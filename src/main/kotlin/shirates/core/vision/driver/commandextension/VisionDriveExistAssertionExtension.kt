@@ -19,12 +19,12 @@ import shirates.core.logging.printInfo
 import shirates.core.utility.sync.WaitUtility.doUntilTrue
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.SrvisionProxy
-import shirates.core.vision.TemplateMatchingResult
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
+import shirates.core.vision.result.GetRectanglesWithTemplateResult
 
 /**
  * exist
@@ -39,9 +39,9 @@ fun VisionDrive.exist(
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
-    val sw = StopWatch("exist")
+//    val sw = StopWatch("exist")
 
-    val sel = Selector(expression = expression)
+    val sel = getSelector(expression = expression)
     var v = VisionElement.emptyElement
 
     val command = "exist"
@@ -52,7 +52,7 @@ fun VisionDrive.exist(
 
         v = existCore(
             message = message,
-            expression = expression,
+            selector = sel,
             removeChars = removeChars,
             language = language,
             ignoreCase = ignoreCase,
@@ -65,14 +65,14 @@ fun VisionDrive.exist(
         func(v)
     }
 
-    sw.printInfo()
+//    sw.printInfo()
 
     return v
 }
 
 private fun VisionDrive.existCore(
     message: String,
-    expression: String,
+    selector: Selector,
     removeChars: String?,
     language: String,
     ignoreCase: Boolean,
@@ -80,59 +80,90 @@ private fun VisionDrive.existCore(
     waitSeconds: Double,
 ): VisionElement {
 
+    val v = existCoreByDetect(
+        selector = selector,
+        removeChars = removeChars,
+        language = language,
+        waitSeconds = waitSeconds,
+        ignoreCase = ignoreCase,
+        allowContains = allowContains
+    )
+    if (v.isFound.not()) {
+
+    }
+    if (v.isFound) {
+        TestLog.ok(message = message)
+        if (v.text != selector.text) {
+            TestLog.warn(message = "There are differences in text.  (expected: \"${selector.text}\", actual: \"${v.text}\")")
+        }
+    } else {
+        val error = TestNGException(message = "$message (expected: \"${selector.text}\", actual: \"${v.text}\")")
+        v.lastError = error
+        v.lastResult = LogType.NG
+        throw error
+    }
+    return v
+}
+
+private fun VisionDrive.existCoreByDetect(
+    selector: Selector,
+    removeChars: String?,
+    language: String,
+    waitSeconds: Double,
+    ignoreCase: Boolean,
+    allowContains: Boolean
+): VisionElement {
     /**
      * Try to detect without scroll
      */
-    var v = detect(
-        expression = expression,
+    var v = detectCore(
+        selector = selector,
         removeChars = removeChars,
         language = language,
+        waitSeconds = waitSeconds,
+        intervalSeconds = testContext.syncIntervalSeconds,
         allowScroll = false,
         swipeToCenter = false,
         throwsException = false,
-        waitSeconds = 1.0,
+        directAccessCompletion = true
     )
 
-    fun String.eval(expression: String): Boolean {
+    fun String.eval(): Boolean {
         fun String.preprocess(): String {
             val s = if (ignoreCase) this.lowercase() else this
             return s.replace("\\s".toRegex(), "")
         }
 
+        var containedText = selector.text ?: selector.textContains
+        if (containedText.isNullOrBlank()) {
+            return false
+        }
+        containedText = containedText.trim('*')
+
         val actual = this.preprocess()
-        val expected = expression.preprocess()
+        val expected = containedText.preprocess()
 
         val r = if (allowContains) actual.contains(expected)
         else actual == expected
         return r
     }
 
-    var isFound = v.text.eval(expression = expression)
+    var isFound = v.text.eval()
+    if (isFound) {
+        return v
+    }
 
     if (isFound.not() && CodeExecutionContext.withScroll == true) {
         /**
          * Try to detect with scroll
          */
         v = detectWithScroll(
-            expression = expression,
+            expression = selector.text!!,
             direction = ScrollDirection.Down,
             throwsException = false
         )
-        isFound = v.text.eval(expression = expression)
+        isFound = v.text.eval()
     }
-
-    if (isFound) {
-        TestLog.ok(message = message)
-        if (v.text != expression) {
-            TestLog.warn(message = "There are differences in text.  (expected: \"$expression\", actual: \"${v.text}\")")
-        }
-    } else {
-        val error = TestNGException(message = "$message (expected: \"$expression\", actual: \"${v.text}\")")
-        v.lastError = error
-        v.lastResult = LogType.NG
-        throw error
-    }
-
     return v
 }
 
@@ -237,7 +268,7 @@ fun VisionDrive.existWithScrollDown(
         ) {
             v = existCore(
                 message = assertMessage,
-                expression = expression,
+                selector = sel,
                 removeChars = removeChars,
                 language = language,
                 ignoreCase = ignoreCase,
@@ -288,7 +319,7 @@ fun VisionDrive.existWithScrollUp(
         ) {
             v = existCore(
                 message = assertMessage,
-                expression = expression,
+                selector = sel,
                 removeChars = removeChars,
                 language = language,
                 ignoreCase = ignoreCase,
@@ -339,7 +370,7 @@ fun VisionDrive.existWithScrollRight(
         ) {
             v = existCore(
                 message = assertMessage,
-                expression = expression,
+                selector = sel,
                 removeChars = removeChars,
                 language = language,
                 ignoreCase = ignoreCase,
@@ -391,7 +422,7 @@ fun VisionDrive.existWithScrollLeft(
         ) {
             v = existCore(
                 message = assertMessage,
-                expression = expression,
+                selector = sel,
                 removeChars = removeChars,
                 language = language,
                 ignoreCase = ignoreCase,
@@ -414,7 +445,7 @@ fun VisionDrive.dontExist(
     expression: String,
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
-    supplementWithDirectAccess: Boolean = true,
+    directAccessCompletion: Boolean = true,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
@@ -423,7 +454,7 @@ fun VisionDrive.dontExist(
 
     val sw = StopWatch("dontExist")
 
-    val sel = Selector(expression = expression)
+    val sel = getSelector(expression = expression)
     var v = VisionElement.emptyElement
 
     val command = "dontExist"
@@ -439,7 +470,7 @@ fun VisionDrive.dontExist(
                 selector = sel,
                 removeChars = removeChars,
                 language = language,
-                supplementWithDirectAccess = supplementWithDirectAccess,
+                directAccessCompletion = directAccessCompletion,
                 waitSeconds = 0.0,
                 intervalSeconds = 0.0,
                 allowScroll = false,
@@ -487,7 +518,7 @@ fun VisionDrive.existImage(
     val message = message(id = command, subject = label)
 
     val context = TestDriverCommandContext(null)
-    context.execOperateCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = message, subject = label) {
 
         val v = existImageCore(
             label = label,
@@ -508,7 +539,7 @@ fun VisionDrive.existImage(
                 throw error
             }
         }
-        TestLog.ok(message = "$message ($v)")
+        TestLog.ok(message = message)
     }
 
     return lastElement
@@ -525,7 +556,7 @@ private fun existImageCore(
     val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
-    lateinit var r: TemplateMatchingResult
+    lateinit var r: GetRectanglesWithTemplateResult
 
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
@@ -607,7 +638,7 @@ private fun dontExistImageCore(
     val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
-    lateinit var r: TemplateMatchingResult
+    lateinit var r: GetRectanglesWithTemplateResult
 
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,

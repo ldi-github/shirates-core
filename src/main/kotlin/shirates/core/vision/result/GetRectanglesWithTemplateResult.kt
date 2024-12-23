@@ -1,4 +1,4 @@
-package shirates.core.vision
+package shirates.core.vision.result
 
 import org.json.JSONObject
 import shirates.core.exception.TestDriverException
@@ -6,8 +6,9 @@ import shirates.core.logging.printWarn
 import shirates.core.utility.getStringOrNull
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.toPath
+import shirates.core.vision.Candidate
 
-class TemplateMatchingResult(
+class GetRectanglesWithTemplateResult(
     val jsonString: String,
 ) {
     val file: String

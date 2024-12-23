@@ -1,10 +1,10 @@
-package shirates.core.vision
+package shirates.core.vision.result
 
 import org.json.JSONObject
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 
-class ClassificationResult(
+class ClassifyImageResult(
     val jsonString: String
 ) {
     var classifications = mutableListOf<Classification>()

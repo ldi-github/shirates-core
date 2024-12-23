@@ -2,7 +2,6 @@ package shirates.core.vision
 
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.visionDrive
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
@@ -10,14 +9,14 @@ import shirates.core.proxy.AppiumProxy.getResponseBody
 import shirates.core.utility.image.SegmentUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
-import shirates.core.vision.driver.commandextension.screenshot
+import shirates.core.vision.result.*
 import java.io.FileNotFoundException
 import java.nio.file.Files
 import kotlin.io.path.name
 
 object SrvisionProxy {
 
-    var lastResult = ""
+    var lastJsonString = ""
 
     /**
      * setupImageFeaturePrintConfig
@@ -40,13 +39,13 @@ object SrvisionProxy {
             value = inputDirectory.toPath().toString()
         )
         val url = urlBuilder.build()
-        val result = getResponseBody(url)
-        lastResult = result
+        val jsonString = getResponseBody(url)
+        lastJsonString = jsonString
 
         if (log) {
             sw.printInfo()
         }
-        return result
+        return jsonString
     }
 
     /**
@@ -57,7 +56,7 @@ object SrvisionProxy {
         withTextMatching: Boolean = false,
         language: String = PropertiesManager.logLanguage,
         log: Boolean = false,
-    ): String {
+    ): ClassifyWithImageFeaturePrintOrTextResult {
 
         if (Files.exists(inputFile.toPath()).not()) {
             throw IllegalArgumentException("file not found: $inputFile.")
@@ -83,18 +82,18 @@ object SrvisionProxy {
             )
         }
         val url = urlBuilder.build()
-        val result = getResponseBody(url)
-        lastResult = result
+        val jsonString = getResponseBody(url)
+        lastJsonString = jsonString
 
         val file =
             TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_ImageFeaturePrintClassifier_classifyWithImageFeaturePrintOrText.json")
         file.parent.toFile().mkdirs()
-        file.toFile().writeText(result)
+        file.toFile().writeText(jsonString)
 
         if (log) {
             sw.printInfo()
         }
-        return result
+        return ClassifyWithImageFeaturePrintOrTextResult(jsonString)
     }
 
     /**
@@ -104,15 +103,15 @@ object SrvisionProxy {
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         language: String? = PropertiesManager.logLanguage,
         log: Boolean = false,
-    ): String {
+    ): RecognizeTextResult {
 
         if (inputFile == null) {
             throw IllegalArgumentException("inputFile is null.")
         }
 
-        if (CodeExecutionContext.lastScreenshotName.isNullOrBlank()) {
-            visionDrive.screenshot()
-        }
+//        if (CodeExecutionContext.lastScreenshotName.isNullOrBlank()) {
+//            visionDrive.screenshot()
+//        }
 
         val sw = StopWatch("TextRecognizer/recognizeText")
 
@@ -130,7 +129,7 @@ object SrvisionProxy {
         }
         val url = urlBuilder.build()
         val result = getResponseBody(url)
-        lastResult = result
+        lastJsonString = result
 
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()
@@ -141,7 +140,7 @@ object SrvisionProxy {
         if (log) {
             sw.printInfo()
         }
-        return result
+        return RecognizeTextResult(result)
     }
 
     /**
@@ -163,7 +162,7 @@ object SrvisionProxy {
         val inputFileExtension = inputFile.toPath().toFile().extension
         Files.copy(inputFile.toPath(), inputDirectory.toPath().resolve("[$inputFileName].$inputFileExtension"))
 
-        lastResult = matchWithTemplate(
+        lastJsonString = matchWithTemplate(
             templateFile = templateFile,
             inputDirectory = inputDirectory,
         )
@@ -171,7 +170,7 @@ object SrvisionProxy {
         if (log) {
             sw.printInfo()
         }
-        return lastResult
+        return lastJsonString
     }
 
     /**
@@ -197,7 +196,7 @@ object SrvisionProxy {
         )
         val url = urlBuilder.build()
         val result = getResponseBody(url)
-        lastResult = result
+        lastJsonString = result
 
         if (log) {
             inputDirectory.toPath().resolve("${TestLog.currentLineNo}_ImageFeaturePrintMatcher_matchWithTemplate.json")
@@ -205,7 +204,7 @@ object SrvisionProxy {
                 .writeText(result)
             sw.printInfo()
         }
-        return lastResult
+        return lastJsonString
     }
 
     /**
@@ -217,12 +216,16 @@ object SrvisionProxy {
         margin: Int = 20,
         skinThickness: Int = 1,
         log: Boolean = false,
-    ): TemplateMatchingResult {
+    ): GetRectanglesWithTemplateResult {
 
         val sw = StopWatch("getRectanglesWithTemplate")
 
         val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
 
+        /**
+         * Get segments in imageFile.
+         * Save segment image files in outputDirectory.
+         */
         val segmentContainer = SegmentUtility.getSegmentContainer(
             imageFile = imageFile,
             templateFile = templateFile,
@@ -230,18 +233,24 @@ object SrvisionProxy {
             segmentMargin = margin,
             skinThickness = skinThickness,
             log = log,
-        )
+        ).saveSegmentImages()
         if (segmentContainer.segments.isEmpty()) {
             throw FileNotFoundException("segment not found.")
         }
 
+        /**
+         * Match segment images with template image.
+         */
         val jsonString = SrvisionProxy.matchWithTemplate(
             templateFile = templateFile,
             inputDirectory = outputDirectory,
             log = log
         )
+        val result = GetRectanglesWithTemplateResult(jsonString = jsonString)
 
-        val result = TemplateMatchingResult(jsonString = jsonString)
+        /**
+         * Save primary candidate of segment image as candidate_[x, y, width, height].png
+         */
         val primaryCandidateImageFile =
             segmentContainer.outputDirectory.toPath().resolve("${result.primaryCandidate.file}")
         Files.copy(
@@ -263,7 +272,7 @@ object SrvisionProxy {
         inputFile: String,
         mlmodelFile: String,
         log: Boolean = false,
-    ): ClassificationResult {
+    ): ClassifyImageResult {
 
         val sw = StopWatch("ImageClassifier/classifyImage")
 
@@ -283,12 +292,12 @@ object SrvisionProxy {
         )
         val url = urlBuilder.build()
         val result = getResponseBody(url)
-        lastResult = result
+        lastJsonString = result
 
         if (log) {
             sw.printInfo()
         }
-        return ClassificationResult(jsonString = result)
+        return ClassifyImageResult(jsonString = result)
     }
 
     /**
@@ -312,13 +321,13 @@ object SrvisionProxy {
             value = inputFile.toPath().toString()
         )
         val url = urlBuilder.build()
-        val result = getResponseBody(url)
-        lastResult = result
+        val jsonString = getResponseBody(url)
+        lastJsonString = jsonString
 
         if (log) {
             sw.printInfo()
         }
-        return result
+        return jsonString
     }
 
     /**
@@ -328,7 +337,7 @@ object SrvisionProxy {
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         rect: String,
         log: Boolean = false,
-    ): String {
+    ): DetectRectanglesIncludingRectResult {
 
         if (inputFile == null) {
             throw IllegalArgumentException("inputFile is null.")
@@ -347,19 +356,19 @@ object SrvisionProxy {
             value = rect
         )
         val url = urlBuilder.build()
-        val result = getResponseBody(url)
-        lastResult = result
+        val jsonString = getResponseBody(url)
+        lastJsonString = jsonString
 
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()
         }
         TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_RectangleDetector_detectRectanglesIncludingRect.json")
-            .toFile().writeText(result)
+            .toFile().writeText(jsonString)
 
         if (log) {
             sw.printInfo()
         }
-        return result
+        return DetectRectanglesIncludingRectResult(jsonString = jsonString)
     }
 
     /**
@@ -400,7 +409,7 @@ object SrvisionProxy {
         }
         val url = urlBuilder.build()
         val result = getResponseBody(url)
-        lastResult = result
+        lastJsonString = result
 
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()

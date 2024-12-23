@@ -47,13 +47,15 @@ object ElementCacheUtility {
         val rootUIElement = TestElement(node = rootUINode)
         rootUIElement.rootUIElement = rootUIElement
         TestElementCache.sourceXml = source
-        TestElementCache.hierarchyBounds = if (isAndroid) {
-            val hierarchyNode = list[0]
-            val width = hierarchyNode.getAttribute("width")
-            val height = hierarchyNode.getAttribute("height")
-            Bounds(width = width.toInt(), height = height.toInt())
-        } else {
-            rootUIElement.bounds
+        if (TestElementCache.hierarchyBounds.width == 0) {
+            TestElementCache.hierarchyBounds = if (isAndroid) {
+                val hierarchyNode = list[0]
+                val width = hierarchyNode.getAttribute("width")
+                val height = hierarchyNode.getAttribute("height")
+                Bounds(width = width.toInt(), height = height.toInt())
+            } else {
+                rootUIElement.bounds
+            }
         }
         addChildren(element = rootUIElement, rootUIElement = rootUIElement)
 

@@ -2,12 +2,19 @@ package shirates.core.unittest.logging
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.ScrollDirection
+import shirates.core.driver.testContext
 import shirates.core.logging.LogLine
 import shirates.core.logging.LogType
 import shirates.core.testcode.UnitTest
 
 class LogLineTest : UnitTest() {
+
+    override fun beforeEach(context: ExtensionContext?) {
+        PropertiesManager.statBarHeight = 0
+    }
 
     @Test
     fun testScenarioId() {
@@ -79,7 +86,7 @@ class LogLineTest : UnitTest() {
     fun isForDetail() {
 
         assertThat(LogLine(logType = LogType.NONE).isForDetail).isTrue()
-        assertThat(LogLine(logType = LogType.TRACE).isForDetail).isFalse()
+        assertThat(LogLine(logType = LogType.TRACE).isForDetail).isEqualTo(testContext.onScrolling)
         assertThat(LogLine(logType = LogType.INFO).isForDetail).isTrue()
         assertThat(LogLine(logType = LogType.WARN).isForDetail).isTrue()
         assertThat(LogLine(logType = LogType.ERROR).isForDetail).isTrue()

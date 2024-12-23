@@ -270,7 +270,7 @@ object PropertiesManager {
             }
             return field
         }
-        private set
+        internal set
 
     // Priority --------------------------------------------------
 

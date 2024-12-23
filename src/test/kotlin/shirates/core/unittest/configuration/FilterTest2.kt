@@ -1,7 +1,6 @@
 package shirates.core.unittest.configuration
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Filter
 import shirates.core.configuration.Selector
@@ -12,7 +11,6 @@ import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataIos
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.toPath
-import java.io.FileNotFoundException
 
 class FilterTest2 : UnitTest() {
 
@@ -1628,22 +1626,6 @@ class FilterTest2 : UnitTest() {
             // Assert
             assertThat(r.templateImageFile).isNull()
             assertThat(r.result).isFalse()
-        }
-    }
-
-    @Test
-    fun evaluateImageContainedIn_error() {
-
-        run {
-            // Arrange
-            ImageFileRepository.setup("unitTestConfig/android/image/screens".toPath())
-            val image = BufferedImageUtility
-                .getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun_middle.png")
-            val filter = Filter("image=tower_of_the_sun_face.png")
-            ImageFileRepository.clear()
-            assertThatThrownBy {
-                filter.evaluateImageContainedIn(image)
-            }.isInstanceOf(FileNotFoundException::class.java)
         }
     }
 

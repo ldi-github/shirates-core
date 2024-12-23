@@ -55,7 +55,7 @@ object SegmentUtility {
             outputDirectory = outputDirectory,
             saveWithMargin = saveWithMargin,
         )
-        container.parse(saveImage = saveImage)
+        container.execute(saveImage = saveImage)
 
         sw.stop()
         if (log) {

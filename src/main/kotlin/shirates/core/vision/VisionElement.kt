@@ -126,7 +126,7 @@ class VisionElement(
      */
     val rect: Rectangle
         get() {
-            return visionContext.rectOnScreen ?: Rectangle()
+            return visionContext.rectOnScreen ?: testElement?.bounds?.toRectWithRatio() ?: Rectangle()
         }
 
     /**
@@ -194,7 +194,7 @@ class VisionElement(
      */
     val text: String
         get() {
-            return recognizeTextObservation?.text ?: testElement?.text ?: return ""
+            return testElement?.textOrLabelOrValue ?: recognizeTextObservation?.text ?: return ""
         }
 
     /**

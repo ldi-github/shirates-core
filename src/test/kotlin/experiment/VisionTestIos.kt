@@ -3,7 +3,7 @@ package experiment
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.driver.right
+import shirates.core.vision.driver.rightItem
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
@@ -31,7 +31,7 @@ class VisionTestIos : VisionTest() {
                     it.detect("Larger Text").tap()
                 }.expectation {
                     it.detect("Larger Accessibility Sizes")
-                        .right()
+                        .rightItem()
                         .checkIsOFF()
                 }
             }

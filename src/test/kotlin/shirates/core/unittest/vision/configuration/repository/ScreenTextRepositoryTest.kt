@@ -15,11 +15,13 @@ class ScreenTextRepositoryTest {
         )
         // Assert
         val r = ScreenTextRepository
-        assertThat(r.screenTextMap.keys.count()).isEqualTo(3)
-        assertThat(r.screenTextMap.containsKey("[Android Settings Top Screen]")).isTrue()
+        assertThat(r.screenTextMap.keys.count()).isEqualTo(5)
+        assertThat(r.screenTextMap.containsKey("[Android Settings Top Screen(misaligned)]")).isTrue()
         assertThat(r.screenTextMap.containsKey("[Developer Screen]")).isTrue()
+        assertThat(r.screenTextMap.containsKey("[Android Settings Top Screen]")).isTrue()
+        assertThat(r.screenTextMap.containsKey("[Network & internet Screen]")).isTrue()
         assertThat(r.screenTextMap.containsKey("[iOS Settings Top Screen]")).isTrue()
-        assertThat(r.screenInfoList.size).isEqualTo(3)
+        assertThat(r.screenInfoList.size).isEqualTo(5)
     }
 
     @Test

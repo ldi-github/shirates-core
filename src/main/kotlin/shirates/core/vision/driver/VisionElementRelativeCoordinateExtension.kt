@@ -4,11 +4,12 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.*
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.commandextension.screenRect
 
 /**
- * right
+ * rightItem
  */
-fun VisionElement.right(
+fun VisionElement.rightItem(
     pos: Int = 1,
     verticalMargin: Int = this.rect.height / 2,
     segmentMargin: Int = 20
@@ -18,68 +19,42 @@ fun VisionElement.right(
         return this
     }
 
-    val lastScreenshotImage = CodeExecutionContext.lastScreenshotImage!!
+    val rightRect = Rectangle.createFrom(
+        left = rect.right + 1,
+        top = rect.top - verticalMargin,
+        right = screenRect.right,
+        bottom = rect.bottom + verticalMargin
+    )
+    val segmentContainer = getSegmentContainer(containerRect = rightRect, segmentMargin = segmentMargin)
+    val segments = segmentContainer.segments
 
-    /**
-     * get rightSideRect
-     */
-    val r = this.rect
-
-    var left = r.right + 1
-    if (left > lastScreenshotImage.right) {
-        left = lastScreenshotImage.right
+    if (pos <= segments.count()) {
+        val v = segments[pos - 1].createVisionElement()
+        return v
     }
+    return VisionElement.emptyElement
+}
 
-    var top = r.top - verticalMargin
-    if (top < 0) top = 0
+private fun getSegmentContainer(containerRect: Rectangle, segmentMargin: Int): SegmentContainer {
 
-    val right = lastScreenshotImage.right
+    val containerImage = CodeExecutionContext.lastScreenshotImage!!.cropImage(containerRect)!!
 
-    var bottom = r.top + verticalMargin
-    if (bottom > lastScreenshotImage.bottom) bottom = lastScreenshotImage.bottom
-
-    val width = right - left
-    val height = (bottom - top + 1) + verticalMargin * 2
-
-    val rightSideRect = Rectangle(x = left, y = top, width = width, height = height)
-    val rightSideImage = lastScreenshotImage.cropImage(rightSideRect)!!
-
-    /**
-     * save rightSideRect
-     */
-    val rightImageFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_right_side.png").toString()
-    rightSideImage.saveImage(rightImageFile)
-
-    /**
-     * parse segments
-     */
     val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
     val segmentContainer = SegmentContainer(
-        containerImage = rightSideImage,
-        containerImageFile = rightImageFile,
-        containerX = rightSideRect.x,
-        containerY = rightSideRect.y,
+        containerImage = containerImage,
+        containerImageFile = null,
+        containerX = containerRect.x,
+        containerY = containerRect.y,
         segmentMargin = segmentMargin,
         outputDirectory = outputDirectory
-    ).parse(saveImage = true)
-    if (segmentContainer.segments.isEmpty()) {
-        return VisionElement.emptyElement
-    }
-
-    /**
-     * create VisionElement from primary segment
-     */
-    val v = segmentContainer.visionElements.firstOrNull() ?: VisionElement.emptyElement
-    v.selector = this.selector?.getChainedSelector(":right")
-
-    lastElement = v
-    return v
+    ).execute(saveImage = true)
+    return segmentContainer
 }
 
 /**
- * left
+ * leftItem
  */
-fun VisionElement.left(
+fun VisionElement.leftItem(
     pos: Int = 1,
     verticalMargin: Int = this.rect.height / 2,
     segmentMargin: Int = 20
@@ -132,7 +107,7 @@ fun VisionElement.left(
         containerY = leftSideRect.y,
         segmentMargin = segmentMargin,
         outputDirectory = outputDirectory
-    ).parse(saveImage = true)
+    ).execute(saveImage = true)
     if (segmentContainer.segments.isEmpty()) {
         return VisionElement.emptyElement
     }
@@ -142,6 +117,78 @@ fun VisionElement.left(
      */
     val v = segmentContainer.visionElements.firstOrNull() ?: VisionElement.emptyElement
     v.selector = this.selector?.getChainedSelector(":left")
+
+    lastElement = v
+    return v
+}
+
+/**
+ * belowItem
+ */
+fun VisionElement.belowItem(
+    pos: Int = 1,
+    horizontalMargin: Int = this.rect.width / 2,
+    segmentMargin: Int = 20
+): VisionElement {
+
+    if (this.isEmpty) {
+        return this
+    }
+
+    val lastScreenshotImage = CodeExecutionContext.lastScreenshotImage!!
+
+    /**
+     * get belowRect
+     */
+    val r = this.rect
+
+    var left = r.left - horizontalMargin
+    if (left < 0) {
+        left = 0
+    }
+
+    var right = r.right + horizontalMargin
+    if (right > screenRect.right) {
+        right = screenRect.right
+    }
+
+    var top = r.bottom + 1
+    if (top > screenRect.bottom) {
+        top = screenRect.bottom
+    }
+
+    val bottom = screenRect.bottom
+
+    val belowRect = Rectangle.createFrom(left = left, top = top, right = right, bottom = bottom)
+    val belowImage = lastScreenshotImage.cropImage(belowRect)!!
+
+    /**
+     * save belowRect
+     */
+    val belowImageFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_below.png").toString()
+    belowImage.saveImage(belowImageFile)
+
+    /**
+     * parse segments
+     */
+    val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
+    val segmentContainer = SegmentContainer(
+        containerImage = belowImage,
+        containerImageFile = belowImageFile,
+        containerX = belowRect.x,
+        containerY = belowRect.y,
+        segmentMargin = segmentMargin,
+        outputDirectory = outputDirectory
+    ).execute(saveImage = true)
+    if (segmentContainer.segments.isEmpty()) {
+        return VisionElement.emptyElement
+    }
+
+    /**
+     * create VisionElement from primary segment
+     */
+    val v = segmentContainer.visionElements.firstOrNull() ?: VisionElement.emptyElement
+    v.selector = this.selector?.getChainedSelector(":below")
 
     lastElement = v
     return v

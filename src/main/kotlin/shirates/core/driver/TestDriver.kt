@@ -1890,7 +1890,7 @@ object TestDriver {
             return this
         }
 
-        val swScreenshotCore = StopWatch("screenshotCore")
+//        val swScreenshotCore = StopWatch("screenshotCore")
 
         val screenshotTime = Date()
 
@@ -2018,7 +2018,7 @@ object TestDriver {
             outputXmlSource(filePath = TestLog.directoryForLog.resolve(xmlFileName))
         }
 
-        swScreenshotCore.printInfo()
+//        swScreenshotCore.printInfo()
 
         if (screenshotException != null) {
             TestLog.warn("screenshot ${screenshotException.message}")

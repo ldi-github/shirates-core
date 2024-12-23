@@ -1,15 +1,14 @@
 package shirates.core.vision.driver
 
 import shirates.core.configuration.Selector
-import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.*
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
-import shirates.core.vision.RecognizeTextParser
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
+import shirates.core.vision.result.RecognizeTextResult
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
@@ -54,10 +53,10 @@ class VisionContext(
         get() {
             val rect = rectOnLocalRegion ?: return null
             return Rectangle(
-                x = localRegionX + rect.left,
-                y = localRegionY + rect.top,
-                width = rect.width,
-                height = rect.height
+                x = localRegionX + rect.left - imageMargin,
+                y = localRegionY + rect.top - imageMargin,
+                width = rect.width + imageMargin * 2,
+                height = rect.height + imageMargin * 2
             )
         }
 
@@ -65,6 +64,11 @@ class VisionContext(
      * rectOnLocalRegion
      */
     var rectOnLocalRegion: Rectangle? = null
+
+    /**
+     * imageMargin
+     */
+    var imageMargin: Int = 0
 
     /**
      * image
@@ -240,14 +244,14 @@ class VisionContext(
     ): VisionContext {
         val inputFile = localRegionFile ?: screenshotFile!!
 
-        val json = SrvisionProxy.recognizeText(
+        val recognizeTextResult = SrvisionProxy.recognizeText(
             inputFile = inputFile,
             language = language
         )
         loadTextRecognizerResult(
             inputFile = inputFile,
             language = language,
-            jsonString = json
+            recognizeTextResult = recognizeTextResult
         )
         return this
     }
@@ -258,18 +262,19 @@ class VisionContext(
     fun loadTextRecognizerResult(
         inputFile: String,
         language: String? = null,
-        jsonString: String
+        recognizeTextResult: RecognizeTextResult
     ): VisionContext {
         this.localRegionFile = inputFile
         this.language = language
-        this.jsonString = jsonString
 
         visionElements.clear()
 
-        val observations = try {
-            RecognizeTextParser(
+        val observations = recognizeTextResult.candidates.map {
+            RecognizeTextObservation(
+                text = it.text,
+                confidence = it.confidence,
+                jsonString = recognizeTextResult.jsonString,
                 language = language,
-                jsonString = jsonString,
 
                 screenshotFile = screenshotFile ?: CodeExecutionContext.lastScreenshotFile,
                 screenshotImage = screenshotImage ?: CodeExecutionContext.lastScreenshotImage,
@@ -279,11 +284,9 @@ class VisionContext(
 
                 localRegionX = localRegionX,
                 localRegionY = localRegionY,
-            ).parse()
-        } catch (t: Throwable) {
-            throw TestDriverException(message = "Could not parse json. \n$jsonString")
+                rectOnLocalRegion = it.rect,
+            )
         }
-
         textObservations.clear()
         textObservations.addAll(observations)
 

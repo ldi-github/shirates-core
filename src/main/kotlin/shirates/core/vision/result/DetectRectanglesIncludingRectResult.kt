@@ -1,14 +1,13 @@
-package shirates.core.vision
+package shirates.core.vision.result
 
 import org.json.JSONObject
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.image.Rectangle
 
-class TextRectangleResult(
+class DetectRectanglesIncludingRectResult(
     val jsonString: String,
 ) {
-    val text: String
-    val textRectangle: Rectangle
+    val baseRectangle: Rectangle
     val rectangles: List<Rectangle>
 
     init {
@@ -17,9 +16,8 @@ class TextRectangleResult(
         } catch (t: Throwable) {
             throw TestDriverException("Failed to parse JSON object: \n$jsonString", t)
         }
-        text = jso.getString("text")
-        val tr = jso.getJSONObject("textRectangle")
-        textRectangle = Rectangle(
+        val tr = jso.getJSONObject("baseRectangle")
+        baseRectangle = Rectangle(
             tr.getInt("x"),
             tr.getInt("y"),
             tr.getInt("width"),
