@@ -35,7 +35,7 @@ fun VisionDrive.exist(
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -88,9 +88,6 @@ private fun VisionDrive.existCore(
         ignoreCase = ignoreCase,
         allowContains = allowContains
     )
-    if (v.isFound.not()) {
-
-    }
     if (v.isFound) {
         TestLog.ok(message = message)
         if (v.text != selector.text) {
@@ -242,7 +239,7 @@ fun VisionDrive.existWithScrollDown(
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -293,7 +290,7 @@ fun VisionDrive.existWithScrollUp(
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -344,7 +341,7 @@ fun VisionDrive.existWithScrollRight(
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -395,7 +392,7 @@ fun VisionDrive.existWithScrollLeft(
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -448,7 +445,7 @@ fun VisionDrive.dontExist(
     directAccessCompletion: Boolean = true,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -511,8 +508,8 @@ fun VisionDrive.existImage(
     segmentMargin: Int = PropertiesManager.segmentMargin,
     mergeIncluded: Boolean = false,
     throwsException: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    distance: Double = 1.0,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    distance: Double? = null,
 ): VisionElement {
 
     val command = "existImage"
@@ -534,7 +531,7 @@ fun VisionDrive.existImage(
         lastElement = v
 
         if (throwsException) {
-            if (v.candidate!!.distance > distance) {
+            if (distance != null && v.candidate!!.distance > distance) {
                 val error = TestNGException(message = "$message ($v)")
                 v.lastError = error
                 v.lastResult = LogType.NG
@@ -553,7 +550,7 @@ private fun existImageCore(
     mergeIncluded: Boolean,
     skinThickness: Int,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    distance: Double,
+    distance: Double?,
 ): VisionElement {
 
     val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
@@ -579,10 +576,11 @@ private fun existImageCore(
             skinThickness = skinThickness,
         )
 
-        if (r.primaryCandidate.distance < distance) true
-        else {
-            TestLog.info("distance ${r.primaryCandidate.distance} < $distance")
+        if (distance != null && r.primaryCandidate.distance > distance) {
+            TestLog.info("distance ${r.primaryCandidate.distance} > $distance")
             false
+        } else {
+            true
         }
     }
     if (waitContext.hasError) {
@@ -601,8 +599,8 @@ fun VisionDrive.dontExistImage(
     skinThickness: Int = 2,
     segmentMargin: Int = PropertiesManager.segmentMargin,
     throwsException: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    distance: Double = 1.0,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    distance: Double? = null,
 ): VisionElement {
 
     val command = "dontExistImage"
@@ -623,7 +621,7 @@ fun VisionDrive.dontExistImage(
         lastElement = v
 
         if (throwsException) {
-            if (v.candidate!!.distance < distance) {
+            if (distance != null && v.candidate!!.distance < distance) {
                 val error = TestNGException(message = "$message ($v)")
                 v.lastError = error
                 v.lastResult = LogType.NG
@@ -642,7 +640,7 @@ private fun dontExistImageCore(
     mergeIncluded: Boolean = false,
     skinThickness: Int,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    distance: Double,
+    distance: Double?,
 ): VisionElement {
 
     val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
@@ -664,7 +662,12 @@ private fun dontExistImageCore(
             segmentMargin = segmentMargin,
             skinThickness = skinThickness,
         )
-        r.primaryCandidate.distance >= distance
+        if (distance != null && r.primaryCandidate.distance > distance) {
+            TestLog.info("distance ${r.primaryCandidate.distance} > $distance")
+            false
+        } else {
+            true
+        }
     }
     if (waitContext.hasError) {
         val v = r.primaryCandidate.createVisionElement()

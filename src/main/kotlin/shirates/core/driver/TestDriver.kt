@@ -1830,7 +1830,6 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
-        withTextMatching: Boolean = false,
         log: Boolean = true
     ): TestDriver {
 
@@ -1970,7 +1969,7 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
             CodeExecutionContext.lastScreenshotImage = screenshotImage  // Captures VisionRootElement
-            CodeExecutionContext.regionElement = VisionElement()
+            CodeExecutionContext.regionElement = VisionElement(capture = true)
 
             if (log) {
                 val screenshotLine = TestLog.write(

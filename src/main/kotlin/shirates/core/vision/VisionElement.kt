@@ -1,5 +1,6 @@
 package shirates.core.vision
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
 import shirates.core.driver.TestDriver
@@ -11,7 +12,7 @@ import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
-import shirates.core.utility.image.SegmentUtility
+import shirates.core.utility.image.SegmentContainer
 import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage
@@ -290,22 +291,17 @@ class VisionElement(
             return this
         }
 
-        val segmentContainer = SegmentUtility.getSegmentContainer(
+        val segmentContainer = SegmentContainer(
             mergeIncluded = false,
-            imageFile = visionContext.screenshotFile!!,
-//            templateFile = templateFile,
+            containerImageFile = visionContext.screenshotFile!!,
             outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_segments").toString(),
-//            segmentMargin = margin,
-//            skinThickness = skinThickness,
-            saveImage = false,
-            log = false,
-        )
+            segmentMargin = PropertiesManager.segmentMargin,
+        ).analyze()
         val rects = segmentContainer.segments.map { it.rectOnScreen }
         val includingRects = mutableListOf<Rectangle>()
         for (rect in rects) {
             if (visionContext.rectOnScreen!!.toBoundsWithRatio().isIncludedIn(rect.toBoundsWithRatio())) {
                 includingRects.add(rect)
-                rect.toVisionElement().save()
             }
         }
         includingRects.sortByDescending { it.area }

@@ -1,10 +1,7 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.logging.CodeExecutionContext
-import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
-import shirates.core.utility.image.cropImage
-import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
 
@@ -33,15 +30,7 @@ internal fun VisionElement.regionCore(
     regionRect: Rectangle,
     func: (VisionElement.(VisionElement) -> Unit)?
 ): VisionElement {
-    val regionElement = VisionElement()
-    val c = regionElement.visionContext
-
-    c.localRegionImage = this.screenshotImage!!.cropImage(regionRect)
-    val fileName = TestLog.getNextScreenshotFileName(suffix = "_$command{regionRect}")
-    c.localRegionFile = c.localRegionImage!!.saveImage(TestLog.directoryForLog.resolve(fileName).toString())
-    c.localRegionX = regionRect.left
-    c.localRegionY = regionRect.top
-    c.rectOnLocalRegion = regionRect.localRegionRect()
+    val regionElement = regionRect.toVisionElement()
 
     lastElement = regionElement
 

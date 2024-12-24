@@ -47,7 +47,8 @@ private fun getSegmentContainer(containerRect: Rectangle, segmentMargin: Int): S
         containerY = containerRect.y,
         segmentMargin = segmentMargin,
         outputDirectory = outputDirectory
-    ).execute(saveImage = true)
+    ).analyze()
+        .saveImages()
     return segmentContainer
 }
 
@@ -107,7 +108,8 @@ fun VisionElement.leftItem(
         containerY = leftSideRect.y,
         segmentMargin = segmentMargin,
         outputDirectory = outputDirectory
-    ).execute(saveImage = true)
+    ).analyze()
+        .saveImages()
     if (segmentContainer.segments.isEmpty()) {
         return VisionElement.emptyElement
     }
@@ -179,7 +181,8 @@ fun VisionElement.belowItem(
         containerY = belowRect.y,
         segmentMargin = segmentMargin,
         outputDirectory = outputDirectory
-    ).execute(saveImage = true)
+    ).analyze()
+        .saveImages()
     if (segmentContainer.segments.isEmpty()) {
         return VisionElement.emptyElement
     }

@@ -19,7 +19,7 @@ fun VisionElement.swipeTo(
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     directAccessCompletion: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,

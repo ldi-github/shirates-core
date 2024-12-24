@@ -28,9 +28,8 @@ fun VisionDrive.detect(
     allowScroll: Boolean? = null,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = false,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
-//    frame: Bounds? = viewBounds,
 ): VisionElement {
 
     val swDetect = StopWatch("detect")
@@ -71,6 +70,9 @@ internal fun VisionDrive.detectCore(
     directAccessCompletion: Boolean
 ): VisionElement {
 
+    if (lastElement.isEmpty) {
+        invalidateScreen()
+    }
     screenshot()
 
     val regionElement = CodeExecutionContext.regionElement
@@ -637,7 +639,7 @@ fun VisionDrive.canDetectWithoutScroll(
 fun VisionDrive.canDetectWithScrollDown(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -707,7 +709,7 @@ private fun VisionDrive.canDetectWithScroll(
 fun VisionDrive.canDetectWithScrollUp(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -737,7 +739,7 @@ fun VisionDrive.canDetectWithScrollUp(
 fun VisionDrive.canDetectWithScrollRight(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -767,7 +769,7 @@ fun VisionDrive.canDetectWithScrollRight(
 fun VisionDrive.canDetectWithScrollLeft(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -798,7 +800,7 @@ internal fun VisionDrive.canDetectAll(
     selectors: Iterable<Selector>,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     log: Boolean = false
 ): Boolean {
 
@@ -850,7 +852,7 @@ internal fun VisionDrive.canDetectAllWithScroll(
     vararg expressions: String,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -896,7 +898,7 @@ internal fun VisionDrive.canDetectAllWithScroll(
 fun VisionDrive.canDetectAllWithScrollDown(
     vararg expressions: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -927,7 +929,7 @@ fun VisionDrive.canDetectAllWithScrollDown(
 fun VisionDrive.canDetectAllWithScrollUp(
     vararg expressions: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -958,7 +960,7 @@ fun VisionDrive.canDetectAllWithScrollUp(
 fun VisionDrive.canDetectAllWithScrollRight(
     vararg expressions: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -989,7 +991,7 @@ fun VisionDrive.canDetectAllWithScrollRight(
 fun VisionDrive.canDetectAllWithScrollLeft(
     vararg expressions: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,

@@ -1,11 +1,13 @@
 package shirates.core.utility.image
 
 import boofcv.io.image.UtilImageIO
+import boofcv.struct.image.GrayU8
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
 import java.awt.image.BufferedImage
+import java.io.FileNotFoundException
 import java.nio.file.Files
 
 class SegmentContainer(
@@ -29,6 +31,7 @@ class SegmentContainer(
 ) {
     val segments = mutableListOf<Segment>()
     val visionElements = mutableListOf<VisionElement>()
+    var binary: GrayU8? = null
 
     override fun toString(): String {
         return "segments: ${segments.count()} $segments"
@@ -240,9 +243,9 @@ class SegmentContainer(
     }
 
     /**
-     * saveSegmentImages
+     * saveImages
      */
-    fun saveSegmentImages(): SegmentContainer {
+    fun saveImages(): SegmentContainer {
 
         if (containerImage == null) {
             throw IllegalArgumentException("image is null")
@@ -250,10 +253,8 @@ class SegmentContainer(
         if (outputDirectory == null) {
             throw IllegalArgumentException("output directory is null")
         }
-        if (Files.exists(outputDirectory.toPath()).not()) {
-            Files.createDirectories(outputDirectory.toPath())
-        }
-
+        setupOutputDirectory()
+        binary.toBufferedImage()?.saveImage(outputDirectory.toPath().resolve("binary").toString())
         for (segment in segments) {
             segment.captureAndSave(outputDirectory)
         }
@@ -261,17 +262,9 @@ class SegmentContainer(
     }
 
     /**
-     * execute
+     * analyze
      */
-    fun execute(saveImage: Boolean): SegmentContainer {
-
-        /**
-         * setup outputDirectory
-         */
-        val outputDirectoryPath = outputDirectory.toPath()
-        if (Files.exists(outputDirectoryPath).not()) {
-            outputDirectory.toPath().toFile().mkdirs()
-        }
+    fun analyze(): SegmentContainer {
 
         /**
          * setup image
@@ -280,24 +273,25 @@ class SegmentContainer(
             throw IllegalArgumentException("image and imageFile is null")
         }
         if (this.containerImage == null) {
+            if (Files.exists(containerImageFile.toPath()).not()) {
+                throw FileNotFoundException("containerImageFile is null")
+            }
             this.containerImage = UtilImageIO.loadImageNotNull(containerImageFile)
         }
         /**
          * setup binary image
          */
         val smallImage = containerImage!!.resize(scale = scale)
-        val binary =
+        binary =
             BinarizationUtility.getBinaryAsGrayU8(image = smallImage, invert = false, skinThickness = skinThickness)
-        if (saveImage) {
-            binary.toBufferedImage()!!.saveImage(outputDirectory.toPath().resolve("binary").toString())
-        }
+        val b = binary!!
 
         /**
          * segmentation
          */
-        for (y in 0 until binary.height) {
-            for (x in 0 until binary.width) {
-                val v = binary.get(x, y)
+        for (y in 0 until b.height) {
+            for (x in 0 until b.width) {
+                val v = b.get(x, y)
                 if (v > 0) {
                     val sx = (x / scale).toInt()
                     val sy = (y / scale).toInt()
@@ -313,13 +307,6 @@ class SegmentContainer(
         filterByCutOffPiece()
 
         /**
-         * Save image
-         */
-        if (saveImage) {
-            saveSegmentImages()
-        }
-
-        /**
          * VisionElements
          */
         visionElements.clear()
@@ -330,5 +317,15 @@ class SegmentContainer(
         visionElements.addAll(elements)
 
         return this
+    }
+
+    private fun setupOutputDirectory() {
+        /**
+         * setup outputDirectory
+         */
+        val outputDirectoryPath = outputDirectory.toPath()
+        if (Files.exists(outputDirectoryPath).not()) {
+            outputDirectory.toPath().toFile().mkdirs()
+        }
     }
 }

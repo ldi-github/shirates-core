@@ -26,12 +26,11 @@ class VisionElementTest {
         CodeExecutionContext.lastScreenshotName = imageFileName
         CodeExecutionContext.lastScreenshotImage = BufferedImageUtility.getBufferedImage(imageFilePath)
         val baseRect = Rectangle(x = 239, y = 759, width = 99, height = 41) // VPN
-//        val baseRect = Rectangle(x = 230, y = 995, width = 294, height = 44)  // Screen Time
         // Act
         val v = baseRect.toVisionElement()
         val cell = v.getCell()
         cell.save()
         // Assert
-        assertThat(cell.rect.toString()).isEqualTo("[45, 499, 1129, 845](w=1085, h=347)")
+        assertThat(cell.rect.toString()).isEqualTo("[46, 500, 1132, 846](w=1087, h=347)")
     }
 }

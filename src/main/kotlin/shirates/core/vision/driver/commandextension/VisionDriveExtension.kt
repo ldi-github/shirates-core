@@ -80,7 +80,6 @@ fun VisionDrive.screenshot(
     onChangedOnly: Boolean = testContext.onChangedOnly,
     filename: String? = null,
     withXmlSource: Boolean = TestLog.enableXmlSourceDump,
-    withTextMatching: Boolean = false,
 ): VisionElement {
 
     TestDriver.screenshot(
@@ -88,7 +87,6 @@ fun VisionDrive.screenshot(
         onChangedOnly = onChangedOnly,
         filename = filename,
         withXmlSource = withXmlSource,
-        withTextMatching = withTextMatching,
     )
 
     val v = getThisOrIt()
@@ -105,7 +103,7 @@ fun VisionDrive.tap(
     removeChars: String? = null,
     language: String = PropertiesManager.logLanguage,
     directAccessCompletion: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
 ): VisionElement {

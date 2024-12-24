@@ -3,6 +3,7 @@ package shirates.core.vision.driver
 import shirates.core.configuration.Selector
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
+import shirates.core.testcode.normalize
 import shirates.core.utility.image.*
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
@@ -12,6 +13,7 @@ import shirates.core.vision.result.RecognizeTextResult
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
+import java.text.Normalizer
 
 class VisionContext(
     capture: Boolean
@@ -362,25 +364,27 @@ class VisionContext(
             return visionElements.toList()
         }
 
-        fun String.removeCharacters(): String {
-            if (removeChars == null) return this
-            return this.filterNot { it in removeChars }
-        }
-
         val localBounds = rectOnScreen!!.toBoundsWithRatio()
-        var whitespaceRemovedLowerCaseText = text.replace("\\s".toRegex(), "").lowercase()
-        if (removeChars != null) {
-            whitespaceRemovedLowerCaseText = whitespaceRemovedLowerCaseText.removeCharacters()
+
+        fun String.normalizeForComparison(): String {
+            var t = this.normalize(Normalizer.Form.NFKC)
+            t = t.replace("\\s".toRegex(), "").lowercase()
+            if (removeChars != null) {
+                t = t.filterNot { it in removeChars }
+            }
+            return t
         }
 
-        val list = visionElements
+        val normalizedText = text.normalizeForComparison()
+
+        var list = visionElements
             .filter {
-                val t = it.text.replace("\\s".toRegex(), "").lowercase().removeCharacters()
-                t.contains(whitespaceRemovedLowerCaseText)
+                val t = it.text.normalizeForComparison()
+                t.contains(normalizedText)
             }
-            .filter { it.bounds.isIncludedIn(localBounds) }
-            .map { Pair(it, it.text.length - text.length) }.sortedBy { it.second }
-        return list.map { it.first }
+        list = list.filter { it.bounds.isIncludedIn(localBounds) }
+            .sortedBy { Math.abs(normalizedText.length - it.text.length) }
+        return list
     }
 
     /**

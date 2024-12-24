@@ -6,7 +6,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.proxy.AppiumProxy.getResponseBody
-import shirates.core.utility.image.SegmentUtility
+import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.result.*
@@ -227,14 +227,14 @@ object SrvisionProxy {
          * Get segments in imageFile.
          * Save segment image files in outputDirectory.
          */
-        val segmentContainer = SegmentUtility.getSegmentContainer(
+        val segmentContainer = SegmentContainer(
             mergeIncluded = mergeIncluded,
-            imageFile = imageFile,
+            containerImageFile = imageFile,
             outputDirectory = outputDirectory,
             segmentMargin = segmentMargin,
             skinThickness = skinThickness,
-            log = log,
-        ).saveSegmentImages()
+        ).analyze()
+            .saveImages()
         if (segmentContainer.segments.isEmpty()) {
             throw FileNotFoundException("segment not found.")
         }

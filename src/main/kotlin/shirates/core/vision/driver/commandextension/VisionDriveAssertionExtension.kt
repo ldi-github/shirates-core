@@ -22,7 +22,7 @@ internal fun VisionDrive.checkImageLabelContains(
     containedText: String,
     message: String,
     mlmodelFile: String,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
 ): VisionElement {
 
     var v = getThisOrIt()
@@ -54,7 +54,7 @@ internal fun VisionDrive.checkSwitchState(
     containedText: String,
     message: String,
     mlmodelFile: String? = null,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
 ): VisionElement {
 
     val rep = VisionMLModelRepository.getRepository(classifierName = "SwitchStateClassifier")
@@ -177,7 +177,6 @@ fun VisionDrive.appIs(
 fun VisionDrive.screenIs(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    withTextMatching: Boolean = false,
     onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
     func: (() -> Unit)? = null
 ): VisionElement {
@@ -188,17 +187,15 @@ fun VisionDrive.screenIs(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
-        var textMatchingMode = withTextMatching
         var match = isScreen(screenName = screenName)
         if (match.not()) {
             doUntilTrue(
                 waitSeconds = waitSeconds,
                 onBeforeRetry = {
-                    textMatchingMode = true
                     onIrregular?.invoke()
                 },
             ) {
-                screenshot(force = true, withTextMatching = textMatchingMode)
+                screenshot(force = true)
                 match = isScreen(screenName = screenName)
                 match
             }

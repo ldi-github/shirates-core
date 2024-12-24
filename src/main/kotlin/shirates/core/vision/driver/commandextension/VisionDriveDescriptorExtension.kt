@@ -205,7 +205,7 @@ fun VisionDrive.cellOf(
     allowScroll: Boolean = true,
     swipeToCenter: Boolean = CodeExecutionContext.withScroll ?: true,
     throwsException: Boolean = true,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {

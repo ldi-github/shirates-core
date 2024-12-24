@@ -33,7 +33,7 @@ fun VisionElement.textIs(
  * checkIsON
  */
 fun VisionElement.checkIsON(
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen
+    waitSeconds: Double = testContext.syncWaitSeconds
 ): VisionElement {
 
     val command = "checkIsON"
@@ -55,7 +55,7 @@ fun VisionElement.checkIsON(
  * checkIsOFF
  */
 fun VisionElement.checkIsOFF(
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen
+    waitSeconds: Double = testContext.syncWaitSeconds
 ): VisionElement {
 
     val command = "checkIsOFF"
@@ -78,7 +78,7 @@ fun VisionElement.checkIsOFF(
  */
 fun VisionElement.buttonStateIs(
     expectedLabel: String,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.syncWaitSeconds,
     mlmodelFile: String = "vision/mlmodels/basic/ButtonStateClassifier/ButtonStateClassifier.mlmodel"
 ): VisionElement {
 
