@@ -507,11 +507,12 @@ fun VisionDrive.dontExist(
  */
 fun VisionDrive.existImage(
     label: String,
-    skinThickness: Int = 1,
-    margin: Int = 10,
+    skinThickness: Int = 2,
+    segmentMargin: Int = PropertiesManager.segmentMargin,
+    mergeIncluded: Boolean = false,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    distance: Double = 0.5,
+    distance: Double = 1.0,
 ): VisionElement {
 
     val command = "existImage"
@@ -522,7 +523,8 @@ fun VisionDrive.existImage(
 
         val v = existImageCore(
             label = label,
-            margin = margin,
+            segmentMargin = segmentMargin,
+            mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
             distance = distance,
@@ -547,7 +549,8 @@ fun VisionDrive.existImage(
 
 private fun existImageCore(
     label: String,
-    margin: Int,
+    segmentMargin: Int,
+    mergeIncluded: Boolean,
     skinThickness: Int,
     waitSeconds: Double = testContext.syncWaitSeconds,
     distance: Double,
@@ -569,12 +572,18 @@ private fun existImageCore(
         val imageFile = re.visionContext.localRegionFile!!
 
         r = SrvisionProxy.getRectanglesWithTemplate(
+            mergeIncluded = mergeIncluded,
             imageFile = imageFile,
             templateFile = templateFile,
-            margin = margin,
+            segmentMargin = segmentMargin,
             skinThickness = skinThickness,
         )
-        r.primaryCandidate.distance < distance
+
+        if (r.primaryCandidate.distance < distance) true
+        else {
+            TestLog.info("distance ${r.primaryCandidate.distance} < $distance")
+            false
+        }
     }
     if (waitContext.hasError) {
         return VisionElement.emptyElement
@@ -589,11 +598,11 @@ private fun existImageCore(
  */
 fun VisionDrive.dontExistImage(
     label: String,
-    skinThickness: Int = 1,
-    margin: Int = 10,
+    skinThickness: Int = 2,
+    segmentMargin: Int = PropertiesManager.segmentMargin,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    distance: Double = 0.5,
+    distance: Double = 1.0,
 ): VisionElement {
 
     val command = "dontExistImage"
@@ -604,7 +613,7 @@ fun VisionDrive.dontExistImage(
 
         val v = dontExistImageCore(
             label = label,
-            margin = margin,
+            segmentMargin = segmentMargin,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
             distance = distance,
@@ -629,7 +638,8 @@ fun VisionDrive.dontExistImage(
 
 private fun dontExistImageCore(
     label: String,
-    margin: Int,
+    segmentMargin: Int,
+    mergeIncluded: Boolean = false,
     skinThickness: Int,
     waitSeconds: Double = testContext.syncWaitSeconds,
     distance: Double,
@@ -648,9 +658,10 @@ private fun dontExistImageCore(
         }
     ) {
         r = SrvisionProxy.getRectanglesWithTemplate(
+            mergeIncluded = mergeIncluded,
             imageFile = lastScreenshotFile!!,
             templateFile = templateFile,
-            margin = margin,
+            segmentMargin = segmentMargin,
             skinThickness = skinThickness,
         )
         r.primaryCandidate.distance >= distance

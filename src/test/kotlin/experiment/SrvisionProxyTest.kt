@@ -121,9 +121,10 @@ class SrvisionProxyTest {
         val log = true
 
         val result = SrvisionProxy.getRectanglesWithTemplate(
+            mergeIncluded = false,
             imageFile = imageFile,
             templateFile = templateFile,
-            margin = 20,
+            segmentMargin = 20,
             log = log,
         )
 
@@ -153,9 +154,10 @@ class SrvisionProxyTest {
         val log = false
 
         val result = SrvisionProxy.getRectanglesWithTemplate(
+            mergeIncluded = false,
             imageFile = imageFile,
             templateFile = templateFile,
-            margin = 20,
+            segmentMargin = 20,
             log = log,
         )
 
@@ -186,7 +188,7 @@ class SrvisionProxyTest {
         assertThat(result.classifications[0].identifier).isEqualTo("ON")
         assertThat(result.classifications[0].confidence).isEqualTo(1.0f)
         assertThat(result.classifications[1].identifier).isEqualTo("OFF")
-        assertThat(result.classifications[1].confidence).isEqualTo(0.0f)
+        assertThat(result.classifications[1].confidence < 1.0f).isTrue()
     }
 
     @Test

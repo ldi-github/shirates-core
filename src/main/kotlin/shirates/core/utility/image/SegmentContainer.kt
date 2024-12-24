@@ -3,20 +3,18 @@ package shirates.core.utility.image
 import boofcv.io.image.UtilImageIO
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.SegmentUtility.getMergedSegmentContainer
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 
 class SegmentContainer(
+    var mergeIncluded: Boolean = false,
+
     var containerImage: BufferedImage? = null,
     var containerImageFile: String? = null,
     var containerX: Int = 0,
     var containerY: Int = 0,
-
-    var filterImage: BufferedImage? = null,
-    var filterImageFile: String? = null,
 
     var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
     var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
@@ -29,8 +27,6 @@ class SegmentContainer(
     var outputDirectory: String? = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     var saveWithMargin: Boolean = true,
 ) {
-    var normalizedFilterSegment: Segment? = null
-
     val segments = mutableListOf<Segment>()
     val visionElements = mutableListOf<VisionElement>()
 
@@ -46,6 +42,7 @@ class SegmentContainer(
         top: Int,
         width: Int,
         height: Int,
+        mergeIncluded: Boolean = this.mergeIncluded,
     ): Segment {
         val newSegment = Segment(
             left = left,
@@ -61,7 +58,7 @@ class SegmentContainer(
         canMergeSegments.add(newSegment)
 
         for (s in segments) {
-            if (s.canMerge(newSegment, segmentMargin)) {
+            if (s.canMerge(segment = newSegment, margin = segmentMargin, mergeIncluded = mergeIncluded)) {
                 canMergeSegments.add(s)
             } else {
                 cannotMergeSegments.add(s)
@@ -298,19 +295,12 @@ class SegmentContainer(
         /**
          * segmentation
          */
-        val step = (skinThickness + 1) / 2 + 1
-        val half = step / 2
-
-        for (y in 0 until binary.height step step) {
-            var top = y - half
-            if (top < 0) top = 0
-            for (x in 0 until binary.width step step) {
-                var left = x - half
-                if (left < 0) left = 0
+        for (y in 0 until binary.height) {
+            for (x in 0 until binary.width) {
                 val v = binary.get(x, y)
                 if (v > 0) {
-                    val sx = (left / scale).toInt()
-                    val sy = (top / scale).toInt()
+                    val sx = (x / scale).toInt()
+                    val sy = (y / scale).toInt()
                     addSegment(left = sx, top = sy, width = 0, height = 0)
                 }
             }
@@ -321,31 +311,11 @@ class SegmentContainer(
          */
         filterByWidthAndHeight()
         filterByCutOffPiece()
-        if (filterImageFile != null && filterImageFile != containerImageFile) {
 
-            // Get normalized template image
-            val normalizedTemplateContainer =
-                getMergedSegmentContainer(
-                    imageFile = filterImageFile!!,
-                    saveWithMargin = false,
-                    outputDirectory = outputDirectory
-                )
-            normalizedTemplateContainer.execute(saveImage = saveImage)
-            this.normalizedFilterSegment = normalizedTemplateContainer.segments.first()
-
-            // overrides filter information
-            this.filterImage = normalizedFilterSegment!!.segmentImage
-            this.filterImageFile = normalizedFilterSegment!!.segmentImageFile
-
-            // Filter by aspect ratio
-            filterByAspectRatio(imageWidth = filterImage!!.width, imageHeight = filterImage!!.height)
-        }
-
+        /**
+         * Save image
+         */
         if (saveImage) {
-            /**
-             * Save image
-             */
-            filterImage?.saveImage(outputDirectory.toPath().resolve("templateImage").toString())
             saveSegmentImages()
         }
 

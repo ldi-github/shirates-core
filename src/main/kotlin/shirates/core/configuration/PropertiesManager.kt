@@ -933,6 +933,15 @@ object PropertiesManager {
                 ?: Const.VISION_DIRECTORY
         }
 
+    /**
+     * segmentMargin
+     */
+    val segmentMargin: Int
+        get() {
+            return getPropertyValue(propertyName = "segmentMargin")?.toIntOrNull()
+                ?: Const.SEGMENT_MARGIN
+        }
+
     // Custom --------------------------------------------------
 
     /**

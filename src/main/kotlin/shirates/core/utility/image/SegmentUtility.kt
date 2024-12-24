@@ -1,5 +1,6 @@
 package shirates.core.utility.image
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.printInfo
 import shirates.core.utility.time.StopWatch
 
@@ -9,6 +10,7 @@ object SegmentUtility {
      * getMergedSegmentContainer
      */
     fun getMergedSegmentContainer(
+        mergeIncluded: Boolean,
         imageFile: String,
         outputDirectory: String? = null,
         margin: Int = 100000,
@@ -16,6 +18,7 @@ object SegmentUtility {
     ): SegmentContainer {
 
         val r = getSegmentContainer(
+            mergeIncluded = mergeIncluded,
             imageFile = imageFile,
             outputDirectory = outputDirectory,
             segmentMargin = margin,
@@ -29,10 +32,10 @@ object SegmentUtility {
      * getSegmentContainer
      */
     fun getSegmentContainer(
+        mergeIncluded: Boolean,
         imageFile: String,
-        templateFile: String? = null,
         outputDirectory: String? = null,
-        segmentMargin: Int = 20,
+        segmentMargin: Int = PropertiesManager.segmentMargin,
         scale: Double = 1.0,
         skinThickness: Int = 2,
         minimunWidth: Int = segmentMargin,
@@ -45,8 +48,8 @@ object SegmentUtility {
         val sw = StopWatch("getSegmentContainer imageFile=$imageFile, margin=$segmentMargin")
 
         val container = SegmentContainer(
+            mergeIncluded = mergeIncluded,
             containerImageFile = imageFile,
-            filterImageFile = templateFile,
             segmentMargin = segmentMargin,
             scale = scale,
             skinThickness = skinThickness,

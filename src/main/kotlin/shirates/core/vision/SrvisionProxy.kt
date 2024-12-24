@@ -211,10 +211,11 @@ object SrvisionProxy {
      * getRectanglesWithTemplate
      */
     fun getRectanglesWithTemplate(
+        mergeIncluded: Boolean,
         imageFile: String,
         templateFile: String,
-        margin: Int = 20,
-        skinThickness: Int = 1,
+        segmentMargin: Int = 20,
+        skinThickness: Int = 2,
         log: Boolean = false,
     ): GetRectanglesWithTemplateResult {
 
@@ -227,10 +228,10 @@ object SrvisionProxy {
          * Save segment image files in outputDirectory.
          */
         val segmentContainer = SegmentUtility.getSegmentContainer(
+            mergeIncluded = mergeIncluded,
             imageFile = imageFile,
-            templateFile = templateFile,
             outputDirectory = outputDirectory,
-            segmentMargin = margin,
+            segmentMargin = segmentMargin,
             skinThickness = skinThickness,
             log = log,
         ).saveSegmentImages()
@@ -249,6 +250,13 @@ object SrvisionProxy {
         val result = GetRectanglesWithTemplateResult(jsonString = jsonString)
 
         /**
+         * Save template image as template.png
+         */
+        Files.copy(
+            templateFile.toPath(),
+            outputDirectory.toPath().resolve("template_${templateFile.toPath().name}"),
+        )
+        /**
          * Save primary candidate of segment image as candidate_[x, y, width, height].png
          */
         val primaryCandidateImageFile =
@@ -257,7 +265,6 @@ object SrvisionProxy {
             primaryCandidateImageFile,
             outputDirectory.toPath().resolve("candidate_${result.primaryCandidate.rectangle}.png")
         )
-
         sw.stop()
         if (log) {
             sw.printInfo()

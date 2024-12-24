@@ -106,7 +106,11 @@ class Segment(
     /**
      * canMerge
      */
-    fun canMerge(segment: Segment, margin: Int): Boolean {
+    fun canMerge(
+        segment: Segment,
+        margin: Int,
+        mergeIncluded: Boolean = false,
+    ): Boolean {
 
         val thisBounds = this.boundsOnSegmentContainer
         val thatBounds = segment.boundsOnSegmentContainer
@@ -118,8 +122,10 @@ class Segment(
         thatBounds.top = thatBounds.top - margin - 1
         if (thatBounds.top <= 0) thatBounds.top = 0
 
-        if (thisBounds.isIncludedIn(thatBounds) || thatBounds.isIncludedIn(thisBounds)) {
-            return false
+        if (mergeIncluded.not()) {
+            if (thisBounds.isIncludedIn(thatBounds) || thatBounds.isIncludedIn(thisBounds)) {
+                return false
+            }
         }
 
         thatBounds.width += (margin + 1) * 2
@@ -196,7 +202,7 @@ class Segment(
             captureImageWithMargin()
         }
 
-        this.segmentImageFile = outputDirectory.toPath().resolve("${this}.png").toString()
+        this.segmentImageFile = outputDirectory.toPath().resolve("${this}_margin=$segmentMargin.png").toString()
         try {
             UtilImageIO.saveImage(segmentImage, segmentImageFile)
         } catch (t: Throwable) {

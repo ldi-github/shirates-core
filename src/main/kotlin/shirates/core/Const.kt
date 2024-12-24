@@ -155,6 +155,7 @@ object Const {
 
     // Vision
     const val VISION_DIRECTORY = "vision"
+    const val SEGMENT_MARGIN = 20
 
     /**
      * internal

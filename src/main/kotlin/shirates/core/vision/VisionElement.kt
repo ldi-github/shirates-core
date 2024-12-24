@@ -291,6 +291,7 @@ class VisionElement(
         }
 
         val segmentContainer = SegmentUtility.getSegmentContainer(
+            mergeIncluded = false,
             imageFile = visionContext.screenshotFile!!,
 //            templateFile = templateFile,
             outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_segments").toString(),
