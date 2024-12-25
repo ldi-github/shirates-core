@@ -124,7 +124,8 @@ class SrvisionProxyTest {
             mergeIncluded = false,
             imageFile = imageFile,
             templateFile = templateFile,
-            segmentMargin = 20,
+            segmentMarginHorizontal = 20,
+            segmentMarginVertical = 20,
             log = log,
         )
 
@@ -157,7 +158,8 @@ class SrvisionProxyTest {
             mergeIncluded = false,
             imageFile = imageFile,
             templateFile = templateFile,
-            segmentMargin = 20,
+            segmentMarginHorizontal = 20,
+            segmentMarginVertical = 20,
             log = log,
         )
 

@@ -934,12 +934,21 @@ object PropertiesManager {
         }
 
     /**
-     * segmentMargin
+     * segmentMarginHorizontal
      */
-    val segmentMargin: Int
+    val segmentMarginHorizontal: Int
         get() {
-            return getPropertyValue(propertyName = "segmentMargin")?.toIntOrNull()
-                ?: Const.SEGMENT_MARGIN
+            return getPropertyValue(propertyName = "segmentMarginHorizontal")?.toIntOrNull()
+                ?: Const.SEGMENT_MARGIN_HORIZONTAL
+        }
+
+    /**
+     * segmentMarginVertical
+     */
+    val segmentMarginVertical: Int
+        get() {
+            return getPropertyValue(propertyName = "segmentMarginVertical")?.toIntOrNull()
+                ?: Const.SEGMENT_MARGIN_VERTICAL
         }
 
     // Custom --------------------------------------------------

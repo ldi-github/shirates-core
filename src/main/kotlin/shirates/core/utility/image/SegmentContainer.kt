@@ -2,9 +2,11 @@ package shirates.core.utility.image
 
 import boofcv.io.image.UtilImageIO
 import boofcv.struct.image.GrayU8
+import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
+import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
@@ -21,7 +23,8 @@ class SegmentContainer(
     var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
     var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
 
-    var segmentMargin: Int,
+    var segmentMarginHorizontal: Int,
+    var segmentMarginVertical: Int,
     var scale: Double = 1.0,
     var skinThickness: Int = 2,
     var minimumWidth: Int? = null,
@@ -41,11 +44,50 @@ class SegmentContainer(
      * addSegment
      */
     fun addSegment(
+        rect: Rectangle,
+        segmentMarginHorizontal: Int = PropertiesManager.segmentMarginVertical,
+        segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+        merge: Boolean = true
+    ): Segment {
+        return addSegment(
+            rect.x, rect.y, rect.width, rect.height,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            merge = merge
+        )
+    }
+
+    /**
+     * addSegment
+     */
+    fun addSegment(
+        recognizeTextObservation: RecognizeTextObservation,
+        segmentMarginHorizontal: Int = PropertiesManager.segmentMarginVertical,
+        segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+        merge: Boolean = true
+    ): Segment {
+        val rect = recognizeTextObservation.rectOnScreen!!
+        val segment = addSegment(
+            rect.x, rect.y, rect.width, rect.height,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            merge = merge
+        )
+        segment.recognizeTextObservation = recognizeTextObservation
+        return segment
+    }
+
+    /**
+     * addSegment
+     */
+    fun addSegment(
         left: Int,
         top: Int,
         width: Int,
         height: Int,
-        mergeIncluded: Boolean = this.mergeIncluded,
+        segmentMarginHorizontal: Int = PropertiesManager.segmentMarginVertical,
+        segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+        merge: Boolean = true
     ): Segment {
         val newSegment = Segment(
             left = left,
@@ -61,7 +103,13 @@ class SegmentContainer(
         canMergeSegments.add(newSegment)
 
         for (s in segments) {
-            if (s.canMerge(segment = newSegment, margin = segmentMargin, mergeIncluded = mergeIncluded)) {
+            if (merge && s.canMerge(
+                    segment = newSegment,
+                    marginHorizontal = segmentMarginHorizontal,
+                    marginVertical = segmentMarginVertical,
+                    mergeIncluded = mergeIncluded
+                )
+            ) {
                 canMergeSegments.add(s)
             } else {
                 cannotMergeSegments.add(s)
@@ -87,22 +135,7 @@ class SegmentContainer(
         segments.addAll(cannotMergeSegments)
         segments.add(mergedSegment)
 
-        return newSegment
-    }
-
-    /**
-     * mergeSegments
-     */
-    fun mergeSegments() {
-
-        val segmentContainer = SegmentContainer(segmentMargin = segmentMargin)
-        for (s in segments) {
-            segmentContainer.addSegment(left = s.left, top = s.top, width = s.width, height = s.height)
-        }
-        if (segments.count() != segmentContainer.segments.count()) {
-            segments.clear()
-            segments.addAll(segmentContainer.segments)
-        }
+        return mergedSegment
     }
 
     /**
@@ -243,6 +276,24 @@ class SegmentContainer(
     }
 
     /**
+     * mergeIncluded
+     */
+    fun mergeIncluded() {
+
+        val removeList = mutableListOf<Segment>()
+        for (s1 in segments) {
+            for (s2 in segments) {
+                if (s1 != s2) {
+                    if (s1.toRect().toBoundsWithRatio().isIncludedIn(s2.toRect().toBoundsWithRatio())) {
+                        removeList.add(s1)
+                    }
+                }
+            }
+        }
+        segments.removeAll(removeList)
+    }
+
+    /**
      * saveImages
      */
     fun saveImages(): SegmentContainer {
@@ -281,13 +332,14 @@ class SegmentContainer(
         /**
          * setup binary image
          */
-        val smallImage = containerImage!!.resize(scale = scale)
+        val image = containerImage!!.resize(scale = scale)
         binary =
-            BinarizationUtility.getBinaryAsGrayU8(image = smallImage, invert = false, skinThickness = skinThickness)
+            BinarizationUtility.getBinaryAsGrayU8(image = image, invert = false, skinThickness = skinThickness)
         val b = binary!!
 
         /**
-         * segmentation
+         * add segments bit by bit
+         * adjacent segments are merged
          */
         for (y in 0 until b.height) {
             for (x in 0 until b.width) {
@@ -305,6 +357,12 @@ class SegmentContainer(
          */
         filterByWidthAndHeight()
         filterByCutOffPiece()
+        /**
+         * merge
+         */
+        if (mergeIncluded) {
+            mergeIncluded()
+        }
 
         /**
          * VisionElements

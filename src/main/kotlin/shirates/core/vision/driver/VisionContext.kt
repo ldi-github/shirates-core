@@ -47,6 +47,12 @@ class VisionContext(
      * localRegionImage
      */
     var localRegionImage: BufferedImage? = null
+        get() {
+            if (field == null && rectOnScreen != null) {
+                field = screenshotImage?.cropImage(rectOnScreen!!)
+            }
+            return field
+        }
 
     /**
      * rectOnScreen
@@ -55,10 +61,10 @@ class VisionContext(
         get() {
             val rect = rectOnLocalRegion ?: return null
             return Rectangle(
-                x = localRegionX + rect.left - imageMargin,
-                y = localRegionY + rect.top - imageMargin,
-                width = rect.width + imageMargin * 2,
-                height = rect.height + imageMargin * 2
+                x = localRegionX + rect.left - imageMarginHorizontal,
+                y = localRegionY + rect.top - imageMarginVertical,
+                width = rect.width + imageMarginHorizontal * 2,
+                height = rect.height + imageMarginVertical * 2
             )
         }
 
@@ -68,9 +74,14 @@ class VisionContext(
     var rectOnLocalRegion: Rectangle? = null
 
     /**
-     * imageMargin
+     * imageMarginHorizontal
      */
-    var imageMargin: Int = 0
+    var imageMarginHorizontal: Int = 0
+
+    /**
+     * imageMarginVertical
+     */
+    var imageMarginVertical: Int = 0
 
     /**
      * image
@@ -115,6 +126,12 @@ class VisionContext(
         this.localRegionImage = this.screenshotImage
 
         this.rectOnLocalRegion = this.screenshotImage?.rect
+    }
+
+    constructor(rect: Rectangle) : this(capture = true) {
+        this.rectOnLocalRegion = rect
+        this.localRegionFile = null
+        this.localRegionImage = null
     }
 
     /**
@@ -228,13 +245,18 @@ class VisionContext(
     /**
      * saveImage
      */
-    fun saveImage() {
+    fun saveImage(fileName: String? = null) {
 
         if (rectOnLocalRegion != null) {
-            val fileName =
-                TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rectOnLocalRegion}.png").toString()
+            val dir = TestLog.directoryForLog
+            val newFileName = if (fileName == null) {
+                dir.resolve("${TestLog.currentLineNo}_${rectOnLocalRegion}.png").toString()
+            } else {
+                val name = fileName.replace(":", "_").replace("/", "_").replace("\\", "_")
+                dir.resolve("${TestLog.currentLineNo}_${rectOnLocalRegion}_${name}.png").toString()
+            }
             this.screenshotImage?.cropImage(rect = rectOnLocalRegion!!)
-                ?.saveImage(fileName)
+                ?.saveImage(newFileName)
         }
     }
 
@@ -244,7 +266,15 @@ class VisionContext(
     fun recognizeText(
         language: String? = this.language,
     ): VisionContext {
-        val inputFile = localRegionFile ?: screenshotFile!!
+        var inputFile = localRegionFile
+        if (inputFile == null) {
+            inputFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_localRegion.png").toString()
+            localRegionImage!!.saveImage(inputFile)
+        }
+
+        if (textObservations.any()) {
+            return this
+        }
 
         val recognizeTextResult = SrvisionProxy.recognizeText(
             inputFile = inputFile,

@@ -13,8 +13,8 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
 import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.image.saveImage
 import shirates.core.vision.driver.VisionContext
-import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage
 import java.rmi.AccessException
 
@@ -52,12 +52,10 @@ class VisionElement(
             }
 
             try {
-                val rootElement = rootElement
-                if (this == rootElement) {
-                    return rootElement.packageName
+                if (field.isBlank()) {
+                    val e = TestDriver.selectDirect(selector = Selector(), throwsException = false)
+                    field = e.packageName
                 }
-                val e = TestDriver.selectDirect(selector = Selector(), throwsException = false)
-                field = e.packageName
                 return field
             } catch (t: Throwable) {
                 throw AccessException("packageName is not available.")
@@ -195,7 +193,9 @@ class VisionElement(
      */
     val text: String
         get() {
-            return testElement?.textOrLabelOrValue ?: recognizeTextObservation?.text ?: return ""
+            return testElement?.textOrLabelOrValue
+                ?: visionContext.textObservations.firstOrNull()?.text
+                ?: recognizeTextObservation?.text ?: return ""
         }
 
     /**
@@ -265,11 +265,16 @@ class VisionElement(
      * recognizeText
      */
     fun recognizeText(
-        language: String? = visionContext.language,
+        language: String? = visionContext.language ?: PropertiesManager.logLanguage,
     ): String {
 
-        this.visionContext.recognizeText(language = language)
-
+        if (this.visionContext.textObservations.isEmpty()) {
+            val file = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rect}.png").toString()
+            this.image!!.saveImage(file = file)
+            this.visionContext.localRegionFile = file
+            this.visionContext.localRegionImage = this.image
+            this.visionContext.recognizeText(language = language)
+        }
         return visionContext.joinText()
     }
 
@@ -278,7 +283,7 @@ class VisionElement(
      */
     fun save(): VisionElement {
 
-        visionContext.saveImage()
+        visionContext.saveImage(fileName = selector?.toString())
         return this
     }
 
@@ -295,7 +300,8 @@ class VisionElement(
             mergeIncluded = false,
             containerImageFile = visionContext.screenshotFile!!,
             outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_segments").toString(),
-            segmentMargin = PropertiesManager.segmentMargin,
+            segmentMarginHorizontal = PropertiesManager.segmentMarginHorizontal,
+            segmentMarginVertical = PropertiesManager.segmentMarginVertical,
         ).analyze()
         val rects = segmentContainer.segments.map { it.rectOnScreen }
         val includingRects = mutableListOf<Rectangle>()

@@ -3,7 +3,6 @@ package demo.vision
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.driver.rightItem
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")

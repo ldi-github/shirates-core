@@ -30,8 +30,7 @@ val VisionDrive.it: VisionElement
  */
 val VisionDrive.rootElement: VisionElement
     get() {
-        val v = VisionElement()
-        return v
+        return TestDriver.visionRootElement
     }
 
 /**

@@ -6,6 +6,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printWarn
 import shirates.core.utility.toPath
+import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
 import java.awt.image.BufferedImage
 import java.nio.file.Files
@@ -20,6 +21,13 @@ class Segment(
     var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
     var saveWithMargin: Boolean = true,
 ) {
+    var recognizeTextObservation: RecognizeTextObservation? = null
+
+    val text: String
+        get() {
+            return recognizeTextObservation?.text ?: ""
+        }
+
     var segmentImage: BufferedImage? = null
         get() {
             if (field == null) {
@@ -34,17 +42,29 @@ class Segment(
 
     var segmentImageFile: String? = null
 
-    var segmentMargin: Int
+    var segmentMarginHorizontal: Int
         get() {
             if (container != null) {
-                return container!!.segmentMargin
+                return container!!.segmentMarginHorizontal
             }
-            return _segmentMargin ?: 0
+            return _segmentMarginHorizontal ?: 0
         }
         set(value) {
-            _segmentMargin = value
+            _segmentMarginHorizontal = value
         }
-    private var _segmentMargin: Int? = null
+    private var _segmentMarginHorizontal: Int? = null
+
+    var segmentMarginVertical: Int
+        get() {
+            if (container != null) {
+                return container!!.segmentMarginVertical
+            }
+            return _segmentMarginVertical ?: 0
+        }
+        set(value) {
+            _segmentMarginVertical = value
+        }
+    private var _segmentMarginVertical: Int? = null
 
     val containerImage: BufferedImage?
         get() {
@@ -100,7 +120,7 @@ class Segment(
         }
 
     override fun toString(): String {
-        return "[$left, $top, $right, $bottom](w=$width, h=$height, ratio=$aspectRatio)"
+        return "[$left, $top, $right, $bottom](w=$width, h=$height, ratio=$aspectRatio, text=`$text`)"
     }
 
     /**
@@ -108,7 +128,8 @@ class Segment(
      */
     fun canMerge(
         segment: Segment,
-        margin: Int,
+        marginHorizontal: Int,
+        marginVertical: Int,
         mergeIncluded: Boolean = false,
     ): Boolean {
 
@@ -116,10 +137,10 @@ class Segment(
         val thatBounds = segment.boundsOnSegmentContainer
 
         // Margin offset
-        thatBounds.left = thatBounds.left - margin - 1
+        thatBounds.left = thatBounds.left - marginHorizontal - 1
         if (thatBounds.left <= 0) thatBounds.left = 0
 
-        thatBounds.top = thatBounds.top - margin - 1
+        thatBounds.top = thatBounds.top - marginVertical - 1
         if (thatBounds.top <= 0) thatBounds.top = 0
 
         if (mergeIncluded.not()) {
@@ -128,8 +149,8 @@ class Segment(
             }
         }
 
-        thatBounds.width += (margin + 1) * 2
-        thatBounds.height += (margin + 1) * 2
+        thatBounds.width += (marginHorizontal + 1) * 2
+        thatBounds.height += (marginVertical + 1) * 2
 
         if (thisBounds.isOverlapping(thatBounds)) {
             return true
@@ -186,9 +207,11 @@ class Segment(
         v.visionContext.localRegionX = this.containerX
         v.visionContext.localRegionY = this.containerY
         v.visionContext.rectOnLocalRegion = this.rectOnSegmentContainer
-        v.visionContext.imageMargin = this.segmentMargin
+        v.visionContext.imageMarginHorizontal = this.segmentMarginHorizontal
+        v.visionContext.imageMarginVertical = this.segmentMarginVertical
         v.visionContext.image
         v.visionContext.rectOnScreen
+        v.observation = this.recognizeTextObservation
 
         return v
     }
@@ -202,7 +225,8 @@ class Segment(
             captureImageWithMargin()
         }
 
-        this.segmentImageFile = outputDirectory.toPath().resolve("${this}_margin=$segmentMargin.png").toString()
+        this.segmentImageFile = outputDirectory.toPath()
+            .resolve("${this}_hmargin=${segmentMarginHorizontal}_vmargin=${segmentMarginVertical}.png").toString()
         try {
             UtilImageIO.saveImage(segmentImage, segmentImageFile)
         } catch (t: Throwable) {
@@ -223,18 +247,18 @@ class Segment(
 
         val cImage = containerImage!!
 
-        var left = left - segmentMargin
+        var left = left - segmentMarginHorizontal
         if (left < 0) left = 0
 
-        var top = top - segmentMargin
+        var top = top - segmentMarginVertical
         if (top < 0) top = 0
 
-        var right = left + width + segmentMargin * 2
+        var right = left + width + segmentMarginHorizontal * 2
         if (right > cImage.width - 1) {
             right = cImage.width - 1
         }
 
-        var bottom = top + height + segmentMargin * 2
+        var bottom = top + height + segmentMarginVertical * 2
         if (bottom > cImage.height - 1) {
             bottom = cImage.height - 1
         }

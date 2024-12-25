@@ -505,7 +505,8 @@ fun VisionDrive.dontExist(
 fun VisionDrive.existImage(
     label: String,
     skinThickness: Int = 2,
-    segmentMargin: Int = PropertiesManager.segmentMargin,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -520,7 +521,8 @@ fun VisionDrive.existImage(
 
         val v = existImageCore(
             label = label,
-            segmentMargin = segmentMargin,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
@@ -546,7 +548,8 @@ fun VisionDrive.existImage(
 
 private fun existImageCore(
     label: String,
-    segmentMargin: Int,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
     mergeIncluded: Boolean,
     skinThickness: Int,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -572,7 +575,8 @@ private fun existImageCore(
             mergeIncluded = mergeIncluded,
             imageFile = imageFile,
             templateFile = templateFile,
-            segmentMargin = segmentMargin,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
         )
 
@@ -597,7 +601,8 @@ private fun existImageCore(
 fun VisionDrive.dontExistImage(
     label: String,
     skinThickness: Int = 2,
-    segmentMargin: Int = PropertiesManager.segmentMargin,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     distance: Double? = null,
@@ -611,7 +616,8 @@ fun VisionDrive.dontExistImage(
 
         val v = dontExistImageCore(
             label = label,
-            segmentMargin = segmentMargin,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
             distance = distance,
@@ -636,7 +642,8 @@ fun VisionDrive.dontExistImage(
 
 private fun dontExistImageCore(
     label: String,
-    segmentMargin: Int,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
     mergeIncluded: Boolean = false,
     skinThickness: Int,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -659,7 +666,8 @@ private fun dontExistImageCore(
             mergeIncluded = mergeIncluded,
             imageFile = lastScreenshotFile!!,
             templateFile = templateFile,
-            segmentMargin = segmentMargin,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
         )
         if (distance != null && r.primaryCandidate.distance > distance) {

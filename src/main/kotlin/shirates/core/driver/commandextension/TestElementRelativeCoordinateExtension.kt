@@ -25,7 +25,7 @@ private fun TestElement.filterCandidates(
     return filtered
 }
 
-private fun Selector.copyAndRemovePos(): Selector {
+internal fun Selector.copyAndRemovePos(): Selector {
 
     val sel = this.copy()
     if (sel.filterMap.containsKey("pos")) {

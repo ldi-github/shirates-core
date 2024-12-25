@@ -2,10 +2,7 @@ package experiment
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.vision.driver.belowItem
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.driver.leftItem
-import shirates.core.vision.driver.rightItem
 import shirates.core.vision.driver.waitForDisplay
 import shirates.core.vision.testcode.VisionTest
 
@@ -77,7 +74,27 @@ class VisionTestAndroid : VisionTest() {
     }
 
     @Test
-    fun leftRightAboveBelow() {
+    fun leftRight() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.pressHome()
+                    it.screenIs("[Android Home Screen]")
+                }.action {
+                    val v = it.detect("Gmail")
+                    v.rightItem().save()
+                    v.leftItem().save()
+                    println()
+                }.expectation {
+
+                }
+            }
+        }
+    }
+
+    @Test
+    fun aboveBelow() {
 
         scenario {
             case(1) {
@@ -85,10 +102,16 @@ class VisionTestAndroid : VisionTest() {
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
                     val v = it.detect("Network & internet")
-                    val left = v.leftItem()
-                    val below = v.belowItem()
-                    val right = left.rightItem()
+                    v.belowText()
+                        .textIs("Mobile, Wi-Fi, hotspot")
+                    v.belowText(2)
+                        .textIs("Connected devices")
+                    v.belowText(3)
+                        .textIs("Bluetooth, pairing")
+                    v.belowText(4)
+                        .textIs("Apps")
 
+                    println()
                 }.expectation {
 
                 }

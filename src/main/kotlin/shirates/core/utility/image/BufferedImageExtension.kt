@@ -83,6 +83,9 @@ fun BufferedImage.resize(rect: Rectangle): BufferedImage {
  */
 fun BufferedImage.resize(scale: Double = PropertiesManager.screenshotScale): BufferedImage {
 
+    if (scale == 1.0) {
+        return this
+    }
     val workImage = if (scale < 1.0) {
         val adjustedWith = this.width - (this.width % 2)
         val adjustedHeight = this.height - (this.height % 2)
@@ -164,7 +167,7 @@ fun BufferedImage.resizeAndSaveImage(scale: Double = 0.5, resizedFile: File, log
 /**
  * cropImage
  */
-fun BufferedImage.cropImage(rect: Rectangle): BufferedImage? {
+fun BufferedImage.cropImage(rect: Rectangle, margin: Int = 0): BufferedImage? {
 
     val originalImage = this
 
@@ -173,10 +176,10 @@ fun BufferedImage.cropImage(rect: Rectangle): BufferedImage? {
         return null
     }
 
-    val x1 = rect.x
-    val y1 = rect.y
-    var x2 = rect.x + rect.width - 1
-    var y2 = rect.y + rect.height - 1
+    val x1 = rect.x - margin
+    val y1 = rect.y - margin
+    var x2 = rect.x + rect.width - 1 + margin
+    var y2 = rect.y + rect.height - 1 + margin
     var width = x2 - x1 + 1
     var height = y2 - y1 + 1
 
@@ -354,4 +357,33 @@ fun BufferedImage.drawRect(
 ): BufferedImage {
 
     return this.drawRects(rects = listOf(rect), color = color, stroke = stroke)
+}
+
+/**
+ * isInBorder
+ */
+fun BufferedImage.isInBorder(): Boolean {
+
+    val binaryImage = BinarizationUtility.getBinaryAsGrayU8(image = this, invert = false)
+    for (x in 0 until width) {
+        val topValue = binaryImage.get(x, 0)
+        if (topValue != 0) {
+            return false
+        }
+        val bottomValue = binaryImage.get(x, height - 1)
+        if (bottomValue != 0) {
+            return false
+        }
+    }
+    for (y in 0 until height) {
+        val leftValue = binaryImage.get(0, y)
+        if (leftValue != 0) {
+            return false
+        }
+        val rightValue = binaryImage.get(right, y)
+        if (rightValue != 0) {
+            return false
+        }
+    }
+    return true
 }

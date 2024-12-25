@@ -214,7 +214,8 @@ object SrvisionProxy {
         mergeIncluded: Boolean,
         imageFile: String,
         templateFile: String,
-        segmentMargin: Int = 20,
+        segmentMarginHorizontal: Int,
+        segmentMarginVertical: Int,
         skinThickness: Int = 2,
         log: Boolean = false,
     ): GetRectanglesWithTemplateResult {
@@ -231,7 +232,8 @@ object SrvisionProxy {
             mergeIncluded = mergeIncluded,
             containerImageFile = imageFile,
             outputDirectory = outputDirectory,
-            segmentMargin = segmentMargin,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
         ).analyze()
             .saveImages()
