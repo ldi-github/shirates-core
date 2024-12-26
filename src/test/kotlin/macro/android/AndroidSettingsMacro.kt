@@ -1,7 +1,6 @@
 package macro.android
 
 import shirates.core.driver.TestDrive
-import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.*
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
@@ -24,6 +23,7 @@ object AndroidSettingsMacro : TestDrive {
         if (canSelect("[Account Avatar]").not()) {
             it.flickAndGoUp()
         }
+        syncCache(force = true)
     }
 
     @Macro("[Android Settings Search Screen]")

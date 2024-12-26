@@ -78,19 +78,23 @@ val packageName: String
     }
 
 /**
+ * rootBounds
+ */
+val rootBounds: Bounds
+    get() {
+        return if (isAndroid) TestElementCache.hierarchyBounds
+        else {
+            if (testContext.useCache) testDrive.rootElement.bounds
+            else visionDrive.rootElement.bounds
+        }
+    }
+
+/**
  * viewBounds
  */
 val viewBounds: Bounds
     get() {
-        val b = if (testContext.useCache) {
-            if (isAndroid) {
-                TestElementCache.hierarchyBounds
-            } else {
-                testDrive.rootElement.bounds
-            }
-        } else {
-            visionDrive.rootElement.bounds
-        }
+        val b = rootBounds
         return Bounds(left = b.left, top = statBarHeight, width = b.width, height = b.height - statBarHeight)
     }
 

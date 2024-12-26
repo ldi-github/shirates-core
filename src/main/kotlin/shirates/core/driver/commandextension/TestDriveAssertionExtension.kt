@@ -223,6 +223,7 @@ fun TestDrive.screenIs(
         func()
     }
 
+    syncCache()
     lastElement = rootElement
     return lastElement
 }

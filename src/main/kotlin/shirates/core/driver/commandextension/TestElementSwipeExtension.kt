@@ -1,5 +1,6 @@
 package shirates.core.driver.commandextension
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.logging.Message.message
 
@@ -129,10 +130,14 @@ fun TestElement.swipeToTop(
     stickToEdge: Boolean = true
 ): TestElement {
 
-    val frame =
-        if (ofScreen) rootElement
-        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
-    val headerBottom = TestDriver.screenInfo.scrollInfo.getHeaderBottom()
+    val frameBounds =
+        if (ofScreen) viewBounds
+        else (scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)).bounds
+
+    var headerBottom = TestDriver.screenInfo.scrollInfo.getHeaderBottom()
+    if (ofScreen.not() && headerBottom == PropertiesManager.statBarHeight) {
+        headerBottom = frameBounds.top
+    }
 
     val command = "swipeToTop"
     val message = message(id = command, subject = subject)
@@ -141,12 +146,12 @@ fun TestElement.swipeToTop(
     context.execOperateCommand(command = command, message = message, subject = subject) {
         val b = bounds
         val startOffsetY = (startOffsetRatio * b.height).toInt()
-        val endMargin = if (stickToEdge) b.height / 2 else 0
+        val endOffsetY = if (stickToEdge) b.height / 2 else 0
         swipePointToPoint(
             startX = b.centerX,
             startY = b.centerY + startOffsetY,
             endX = b.centerX,
-            endY = frame.bounds.top + endMargin + headerBottom,
+            endY = headerBottom + endOffsetY,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
@@ -239,9 +244,9 @@ fun TestElement.swipeToBottom(
     stickToEdge: Boolean = true
 ): TestElement {
 
-    val frame =
-        if (ofScreen) rootElement
-        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
+    val frameBounds =
+        if (ofScreen) viewBounds
+        else (scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)).bounds
 
     val command = "swipeToBottom"
     val message = message(id = command, subject = subject)
@@ -255,7 +260,7 @@ fun TestElement.swipeToBottom(
             startX = b.centerX,
             startY = b.centerY + startOffsetY,
             endX = b.centerX,
-            endY = frame.bounds.bottom - endMargin,
+            endY = frameBounds.bottom - endMargin,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
@@ -347,15 +352,11 @@ fun TestElement.swipeToCenter(
     force: Boolean = false
 ): TestElement {
 
-    val frame =
-        if (ofScreen) rootElement
-        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
-    val endX =
-        if (ofScreen) viewBounds.width / 2 else
-            frame.bounds.centerX
-    val endY =
-        if (ofScreen) viewBounds.height / 2
-        else frame.bounds.centerY
+    val frameBounds =
+        if (ofScreen) viewBounds
+        else (scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)).bounds
+    val endX = frameBounds.centerX
+    val endY = frameBounds.centerY
 
     val command = "swipeToCenter"
     val message = message(id = command, subject = subject)
@@ -455,9 +456,9 @@ fun TestElement.swipeToRight(
     stickToEdge: Boolean = true
 ): TestElement {
 
-    val frame =
-        if (ofScreen) rootElement
-        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
+    val frameBounds =
+        if (ofScreen) viewBounds
+        else (scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)).bounds
 
     val command = "swipeToRight"
     val message = message(id = command, subject = subject)
@@ -470,7 +471,7 @@ fun TestElement.swipeToRight(
         swipePointToPoint(
             startX = b.centerX + offsetX,
             startY = b.centerY,
-            endX = frame.bounds.right - endMargin,
+            endX = frameBounds.right - endMargin,
             endY = b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat
@@ -563,9 +564,9 @@ fun TestElement.swipeToLeft(
     stickToEdge: Boolean = true
 ): TestElement {
 
-    val frame =
-        if (ofScreen) rootElement
-        else scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
+    val frameBounds =
+        if (ofScreen) viewBounds
+        else (scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)).bounds
 
     val command = "swipeToLeft"
     val message = message(id = command, subject = subject)
@@ -578,7 +579,7 @@ fun TestElement.swipeToLeft(
         swipePointToPoint(
             startX = b.centerX + offsetX,
             startY = b.centerY,
-            endX = frame.bounds.left + endMargin,
+            endX = frameBounds.left + endMargin,
             endY = b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat
