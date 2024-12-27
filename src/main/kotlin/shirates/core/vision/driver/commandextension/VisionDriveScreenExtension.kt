@@ -25,9 +25,6 @@ fun VisionDrive.isScreen(
         return true
     }
 
-//    val file = VisionMLModelRepository.screenClassifierRepository.getFile(label = screenName)
-//        ?: return false
-
     val r = (TestDriver.currentScreen == screenName)
     return r
 }

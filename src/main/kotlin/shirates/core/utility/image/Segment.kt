@@ -201,8 +201,8 @@ class Segment(
         v.visionContext.screenshotImage = this.screenshotImage
         v.visionContext.screenshotFile = this.screenshotFile
 
-        v.visionContext.localRegionImage = this.segmentImage
-        v.visionContext.localRegionFile = this.segmentImageFile
+        v.visionContext.localRegionImage = this.screenshotImage
+        v.visionContext.localRegionFile = this.screenshotFile
 
         v.visionContext.localRegionX = this.containerX
         v.visionContext.localRegionY = this.containerY
@@ -211,7 +211,9 @@ class Segment(
         v.visionContext.imageMarginVertical = this.segmentMarginVertical
         v.visionContext.image
         v.visionContext.rectOnScreen
-        v.observation = this.recognizeTextObservation
+        if (this.recognizeTextObservation != null) {
+            v.visionContext.recognizeTextObservations.add(this.recognizeTextObservation!!)
+        }
 
         return v
     }

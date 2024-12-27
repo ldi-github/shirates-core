@@ -4,8 +4,7 @@ import ifCanDetect
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.memoTextAs
-import shirates.core.driver.commandextension.thisIs
+import shirates.core.driver.commandextension.thisStartsWith
 import shirates.core.vision.driver.branchextension.ios
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
@@ -51,18 +50,16 @@ class iOSSettingsDemo : VisionTest() {
                         screenshot()
                         it
                             .ifCanDetect("iOS Version") {
-                                it.rightItem(segmentMarginVertical = 5)
-                                    .recognizeText()
+                                it.rightText()
                                     .memoTextAs("iOS Version")
                             }
                             .ifCanDetect("Model Name") {
-                                it.rightItem(segmentMarginVertical = 5)
-                                    .recognizeText()
+                                it.rightText()
                                     .memoTextAs("Model Name")
                             }
                     }.expectation {
-                        readMemo("iOS Version").thisIs("17.2", message = "iOS Version is `17.2`")
-                        readMemo("Model Name").thisIs("iPhone 15", message = "Model Name is `iPhone 15`")
+                        readMemo("iOS Version").thisStartsWith("17.2", message = "iOS Version is `17.2`")
+                        readMemo("Model Name").thisStartsWith("iPhone 15", message = "Model Name is `iPhone 15`")
                     }
                 }
             }

@@ -1,17 +1,78 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.ScrollDirection
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.*
 import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.testContext
+import shirates.core.driver.commandextension.silent
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.utility.image.rect
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.lastElement
+
+/**
+ * tap
+ */
+fun VisionDrive.tap(
+    expression: String,
+    removeChars: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    directAccessCompletion: Boolean = true,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+): VisionElement {
+
+    if (CodeExecutionContext.isInCell && this is VisionElement) {
+        throw NotImplementedError()
+    }
+
+    val sel = getSelector(expression = expression)
+
+    val command = "tap"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    var v = VisionElement.emptyElement
+    context.execOperateCommand(command = command, message = message, subject = "$sel") {
+
+        fun getElement(): VisionElement {
+            return detectCore(
+                selector = sel,
+                removeChars = removeChars,
+                language = language,
+                directAccessCompletion = directAccessCompletion,
+                waitSeconds = waitSeconds,
+                intervalSeconds = intervalSeconds,
+                allowScroll = null,
+                swipeToCenter = false,
+                throwsException = true
+            )
+        }
+
+        v = getElement()
+
+        if (CodeExecutionContext.withScroll == true && CodeExecutionContext.scrollDirection == ScrollDirection.Down) {
+            v.swipeVerticalTo(endY = screenRect.toBoundsWithRatio().height / 5)
+            v = getElement()
+        }
+
+        val tapFunc = {
+            silent {
+                v = v.tap(holdSeconds = holdSeconds)
+            }
+        }
+
+        tapFunc()
+    }
+    if (TestMode.isNoLoadRun) {
+        lastElement = v
+    }
+
+    return v
+}
 
 /**
  * tap

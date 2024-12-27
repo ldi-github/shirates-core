@@ -70,13 +70,17 @@ internal fun VisionDrive.detectCore(
     directAccessCompletion: Boolean
 ): VisionElement {
 
+    if (selector.text.isNullOrBlank()) {
+        return VisionElement.emptyElement
+    }
+
     if (lastElement.isEmpty) {
         invalidateScreen()
     }
     screenshot()
 
     val regionElement = CodeExecutionContext.regionElement
-    if (regionElement.visionContext.visionElements.isEmpty()) {
+    if (regionElement.visionContext.recognizeTextObservations.isEmpty()) {
         regionElement.recognizeText(language = language)
     }
 
@@ -87,7 +91,7 @@ internal fun VisionDrive.detectCore(
     v = regionElement.visionContext.detect(
         selector = selector,
         removeChars = removeChars,
-    )
+    )   // loose match
     if (v.text == selector.text) {
         return v    // strict match
         /**
@@ -122,7 +126,7 @@ internal fun VisionDrive.detectCore(
 
     try {
         if (isInGlobalRegion && waitSeconds > 0.0) {
-            if (allowScroll == true && CodeExecutionContext.withScroll == true) {
+            if (allowScroll != false && CodeExecutionContext.withScroll == true) {
                 /**
                  * Try to detect with scroll
                  */
@@ -257,6 +261,30 @@ internal fun VisionDrive.detectWithScroll(
 
     if (v.isFound && swipeToCenter) {
         v = v.swipeToCenter()
+    } else {
+        when (direction) {
+            ScrollDirection.Down -> if ((screenRect.bottom - screenRect.height / 5) < v.bounds.top) {
+                scrollDown()
+                actionFunc()
+            }
+
+            ScrollDirection.Up -> if (v.bounds.bottom < (screenRect.height / 5)) {
+                scrollUp()
+                actionFunc()
+            }
+
+            ScrollDirection.Left -> if ((screenRect.right - screenRect.width / 5) < v.bounds.right) {
+                scrollLeft()
+                actionFunc()
+            }
+
+            ScrollDirection.Right -> if (v.bounds.left < (screenRect.width / 5)) {
+                scrollRight()
+                actionFunc()
+            }
+
+            else -> {}
+        }
     }
 
     lastElement = v

@@ -6,8 +6,10 @@ import shirates.core.driver.commandextension.select
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.testContext
 import shirates.core.driver.testDrive
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
-import shirates.core.testcode.preprocessForComparison
+import shirates.core.utility.string.fullWidth2HalfWidth
+import shirates.core.utility.string.preprocessForComparison
 import shirates.core.vision.VisionElement
 
 /**
@@ -15,27 +17,71 @@ import shirates.core.vision.VisionElement
  */
 fun VisionElement.textIs(
     expected: String,
-    strict: Boolean = PropertiesManager.strictCompareMode
+    strict: Boolean = PropertiesManager.strictCompareMode,
+    removeChars: String? = null,
+    ignoreFullWidthHalfWidth: Boolean = false,
 ): VisionElement {
 
     val command = "textIs"
+
+    fun String.process(): String {
+        var s = this.preprocessForComparison(strict = strict)
+        if (ignoreFullWidthHalfWidth) {
+            s = s.fullWidth2HalfWidth()
+        }
+        return s
+    }
+
+    val context = TestDriverCommandContext(null)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
+    fun strictCompare() {
+        val e = testDrive.select(expression = expected, throwsException = false, useCache = false)
+        val isIncluded = e.bounds.isIncludedIn(CodeExecutionContext.regionRect.toBoundsWithRatio())
+        val actual = if (isIncluded) e.textOrLabelOrValue.process() else ""
+        val expectedForCompare = expected.process()
+        context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
+            actual.thisIs(expected = expectedForCompare, message = assertMessage, strict = strict)
+        }
+    }
+
+    if (strict) {
+        /**
+         * strict compare by parameter `strict` (direct access)
+         */
+        strictCompare()
+        return this
+    }
 
     if (text.isBlank()) {
         recognizeText()
     }
     var actual = text
-    if (actual.preprocessForComparison(strict = strict) != expected.preprocessForComparison(strict = strict)) {
-        val e = testDrive.select(expression = expected, throwsException = false, useCache = false)
-        if (e.textOrLabel.isNotBlank()) {
-            actual = e.textOrLabel
+    if (removeChars != null) {
+        /**
+         * remove characters (in AI-OCR miss-recognized character list)
+         */
+        var removeChars2 = removeChars
+        if (ignoreFullWidthHalfWidth) {
+            removeChars2 = removeChars2.fullWidth2HalfWidth()
         }
+        actual = actual.filterNot { it in removeChars2 }
     }
 
-    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
-
-    val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        actual.thisIs(expected = expected, message = assertMessage, strict = strict)
+    val expectedForCompare = expected.process()
+    val actualForCompare = actual.process()
+    if (actualForCompare == expectedForCompare) {
+        /**
+         * AI-OCR recognized text matched
+         */
+        context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
+            actualForCompare.thisIs(expected = expectedForCompare, message = assertMessage, strict = strict)
+        }
+    } else {
+        /**
+         * strict compare by fallback (direct access)
+         * AI-OCR might fail to detect texts or miss recognized text.
+         */
+        strictCompare()
     }
 
     return this

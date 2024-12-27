@@ -155,7 +155,7 @@ object Const {
 
     // Vision
     const val VISION_DIRECTORY = "vision"
-    const val SEGMENT_MARGIN_VERTICAL = 10
+    const val SEGMENT_MARGIN_VERTICAL = 5
     const val SEGMENT_MARGIN_HORIZONTAL = 20
 
     /**

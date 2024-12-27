@@ -103,14 +103,6 @@ class VisionElement(
         }
 
     /**
-     * textObservation
-     */
-    val textObservation: RecognizeTextObservation?
-        get() {
-            return observation as? RecognizeTextObservation
-        }
-
-    /**
      * lastError
      */
     var lastError: Throwable? = null
@@ -169,7 +161,6 @@ class VisionElement(
     val isFound: Boolean
         get() {
             return rect.isEmpty.not()
-//                    || observation != null || segment != null || testElement != null ||
         }
 
     /**
@@ -185,7 +176,7 @@ class VisionElement(
      */
     val recognizeTextObservation: RecognizeTextObservation?
         get() {
-            return observation as? RecognizeTextObservation
+            return visionContext.recognizeTextObservations.firstOrNull()
         }
 
     /**
@@ -194,7 +185,7 @@ class VisionElement(
     val text: String
         get() {
             return testElement?.textOrLabelOrValue
-                ?: visionContext.textObservations.firstOrNull()?.text
+                ?: visionContext.recognizeTextObservations.firstOrNull()?.text
                 ?: recognizeTextObservation?.text ?: return ""
         }
 
@@ -227,7 +218,7 @@ class VisionElement(
             }
 
             if (observation == null) {
-                return "empty"
+                return "(no name)"
             }
             s = observation.toString()
             return s
@@ -268,7 +259,7 @@ class VisionElement(
         language: String? = visionContext.language ?: PropertiesManager.logLanguage,
     ): String {
 
-        if (this.visionContext.textObservations.isEmpty()) {
+        if (this.visionContext.recognizeTextObservations.isEmpty()) {
             val file = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rect}.png").toString()
             this.image!!.saveImage(file = file)
             this.visionContext.localRegionFile = file

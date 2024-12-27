@@ -4,7 +4,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.exception.BranchException
 import shirates.core.logging.Message.message
-import shirates.core.testcode.preprocessForComparison
+import shirates.core.utility.string.preprocessForComparison
 
 /**
  * TextCompareResult

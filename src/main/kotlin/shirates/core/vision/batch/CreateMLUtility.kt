@@ -210,7 +210,7 @@ object CreateMLUtility {
 
             val binaryImageFile =
                 p.resolve("${imageFile.nameWithoutExtension}_binary.png").toString()
-            visualBinary.saveImage(binaryImageFile)
+            visualBinary.saveImage(binaryImageFile, log = false)
         }
     }
 

@@ -2,7 +2,7 @@ package shirates.core.utility.misc
 
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
-import shirates.core.testcode.normalize
+import shirates.core.utility.string.normalize
 import java.text.Normalizer
 
 /**

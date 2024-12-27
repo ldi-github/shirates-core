@@ -84,7 +84,7 @@ open class VisionObservation(
         if (this is RecognizeTextObservation) {
             c.language = this.language
             c.jsonString = this.jsonString
-            c.textObservations.add(this)
+            c.recognizeTextObservations.add(this)
         }
         return c
     }

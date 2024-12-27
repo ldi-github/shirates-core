@@ -90,7 +90,15 @@ object TestDriver {
     /**
      * visionRootElement
      */
-    lateinit var visionRootElement: VisionElement
+    var visionRootElement: VisionElement
+        get() {
+            return _visionRootElement!!
+        }
+        set(value) {
+            _visionRootElement = value
+        }
+
+    private var _visionRootElement: VisionElement? = null
 
     /**
      * isInitialized
@@ -432,12 +440,13 @@ object TestDriver {
             }
         }
         set(value) {
-            if (field != value) {
-                field = value
+            val screenName = value.getNicknameWithoutSuffix()
+            if (screenName.isNotBlank() && field != screenName) {
+                field = screenName
                 if (testContext.enableCache) {
-                    fireTestDriveScreenHandler(screenName = value)
+                    fireTestDriveScreenHandler(screenName = screenName)
                 } else {
-                    fireVisionDriveScreenHandler(screenName = value)
+                    fireVisionDriveScreenHandler(screenName = screenName)
                 }
             }
         }
@@ -990,7 +999,7 @@ object TestDriver {
         /**
          * Health check
          */
-        if (PropertiesManager.enableHealthCheck) {
+        if (PropertiesManager.enableHealthCheck && testContext.isVisionTest.not()) {
             TestLog.info("[Health check] start")
 
             try {
@@ -1969,7 +1978,8 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
             CodeExecutionContext.lastScreenshotImage = screenshotImage  // Captures VisionRootElement
-            CodeExecutionContext.regionElement = VisionElement(capture = true)
+            TestDriver.visionRootElement = VisionElement(capture = true)
+            CodeExecutionContext.regionElement = visionRootElement
 
             if (log) {
                 val screenshotLine = TestLog.write(
@@ -1994,7 +2004,7 @@ object TestDriver {
                 TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
             }
 
-            if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout) {
+            if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout && testContext.useCache) {
                 val threshold = PropertiesManager.screenshotBlackoutThreshold
                 if (BufferedImageUtility.isBlackout(image = screenshotImage, threshold = threshold)) {
                     val share = BufferedImageUtility.getLargestColorShare(image = screenshotImage)

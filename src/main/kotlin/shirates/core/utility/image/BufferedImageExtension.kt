@@ -128,7 +128,8 @@ fun BufferedImage.saveImage(
  */
 fun BufferedImage.saveImage(
     file: String,
-    writer: ImageWriter = ImageIO.getImageWritersByFormatName("png").next()
+    writer: ImageWriter = ImageIO.getImageWritersByFormatName("png").next(),
+    log: Boolean = true
 ): String {
 
     val f = if (file.endsWith(".png")) file else "${file}.png"
@@ -136,7 +137,7 @@ fun BufferedImage.saveImage(
     if (p.isAbsolute.not()) {
         p = TestLog.directoryForLog.resolve(f.toPath().fileName)
     }
-    saveImage(file = File(p.toUri()), writer = writer)
+    saveImage(file = File(p.toUri()), writer = writer, log = log)
 
     return p.toString()
 }
@@ -171,37 +172,29 @@ fun BufferedImage.cropImage(rect: Rectangle, margin: Int = 0): BufferedImage? {
 
     val originalImage = this
 
-    if (rect.area <= 0) {
+    if (rect.area < 0) {
         TestLog.warn("cropImage skipped. (imageSize=(${this.width},${this.height}), rect=${rect})")
         return null
     }
 
-    val x1 = rect.x - margin
-    val y1 = rect.y - margin
+    var x1 = rect.x - margin
+    if (x1 < 0) x1 = 0
+    if (x1 > originalImage.rect.right) x1 = originalImage.rect.right
+
+    var y1 = rect.y - margin
+    if (y1 < 0) y1 = 0
+    if (y1 > originalImage.rect.bottom) y1 = originalImage.rect.bottom
+
     var x2 = rect.x + rect.width - 1 + margin
+    if (x2 < 0) x2 = 0
+    if (x2 > originalImage.rect.right) x2 = originalImage.rect.right
+
     var y2 = rect.y + rect.height - 1 + margin
-    var width = x2 - x1 + 1
-    var height = y2 - y1 + 1
+    if (y2 < 0) y2 = 0
+    if (y2 > originalImage.rect.bottom) y2 = originalImage.rect.bottom
 
-    if (x1 < 0 || x1 > originalImage.width - 1) {
-        TestLog.warn("cropImage skipped. x1=$x1, originalImage.width=${originalImage.width}")
-        return null
-    }
-
-    if (y1 < 0 || y1 > originalImage.height) {
-        TestLog.warn("cropImage skipped. y1=$y1, originalImage.height=${originalImage.height}")
-        return null
-    }
-
-    if (x2 > originalImage.width - 1) {
-        x2 = originalImage.width - 1
-        width = x2 - x1 + 1
-    }
-
-    if (y2 > originalImage.height - 1) {
-        y2 = originalImage.height - 1
-        height = y2 - y1 + 1
-    }
+    val width = x2 - x1 + 1
+    val height = y2 - y1 + 1
 
     try {
         return originalImage.getSubimage(x1, y1, width, height)

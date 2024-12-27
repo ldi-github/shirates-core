@@ -106,6 +106,9 @@ dependencies {
 
     // md2html
     implementation("io.github.ldi-github:md2html:0.2.0")
+
+    // ICU4J
+    implementation("com.ibm.icu:icu4j:73.2")
 }
 
 configurations.all {

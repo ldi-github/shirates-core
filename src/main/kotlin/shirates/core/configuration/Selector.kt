@@ -5,10 +5,10 @@ import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
-import shirates.core.testcode.normalize
 import shirates.core.utility.element.IosPredicateUtility
 import shirates.core.utility.element.XPathUtility
 import shirates.core.utility.image.ImageMatchResult
+import shirates.core.utility.string.normalize
 import java.awt.image.BufferedImage
 import java.text.Normalizer
 import kotlin.reflect.full.memberProperties

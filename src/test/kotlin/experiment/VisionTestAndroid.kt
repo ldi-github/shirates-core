@@ -50,31 +50,41 @@ class VisionTestAndroid : VisionTest() {
     }
 
     @Test
-    fun cropRegion() {
+    fun region() {
 
         scenario {
             case(1) {
                 condition {
-                    it.waitForDisplay("Apps")
+                    it.tap("Storage")
+                        .waitForDisplay("GB used")
                 }.action {
                 }.expectation {
-                    it.detect("Connected devices")
-                        .aboveRegion {
-                            it.exist("Network & internet")
-                            it.dontExist("Apps")
+                    it.detect("Apps")
+                        .leftItem()
+                        .aboveItem()
+                        .rightItem()
+                        .textIs("Games")
+                        .belowItem(2)
+                        .textIs("Apps")
+                    it.detect("Apps").aboveItem(2)
+                        .textIs("System")
+
+                    it.detect("Games").onRight {
+                        exist("0 B").onLeft {
+                            exist("Games")
                         }
-                    it.detect("Connected devices")
-                        .belowRegion {
-                            it.dontExist("Network & internet")
-                            it.exist("Storage")
-                        }
+                    }
+                    it.detect("Audio").rightText()
+                        .textIs("0 B")
+                        .leftItem()
+                        .textIs("Audio")
                 }
             }
         }
     }
 
     @Test
-    fun leftRight() {
+    fun leftItem_rightItem() {
 
         scenario {
             case(1) {
@@ -94,7 +104,7 @@ class VisionTestAndroid : VisionTest() {
     }
 
     @Test
-    fun aboveBelow() {
+    fun aboveText_belowText() {
 
         scenario {
             case(1) {

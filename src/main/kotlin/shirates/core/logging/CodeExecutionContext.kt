@@ -117,7 +117,14 @@ object CodeExecutionContext {
     /**
      * regionElement
      */
-    lateinit var regionElement: VisionElement
+    var regionElement: VisionElement
+        get() {
+            return _regionElement!!
+        }
+        set(value) {
+            _regionElement = value
+        }
+    private var _regionElement: VisionElement? = null
 
     /**
      * regionRect

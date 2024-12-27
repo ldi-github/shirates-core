@@ -55,17 +55,17 @@ class VisionContextTest {
             val v = c.visionElements[0]
             assertThat(v.text).isEqualTo("1:10 GO •:")
             assertThat(v.rect.toString()).isEqualTo(Rectangle(40, 49, 252, 44).toString())
-            assertThat(v.textObservation?.text).isEqualTo("1:10 GO •:")
-            assertThat(v.textObservation?.jsonString).isEqualTo(json)
-            assertThat(v.textObservation?.confidence).isEqualTo(0.5f)
-            assertThat(v.textObservation?.screenshotFile).isEqualTo(CodeExecutionContext.lastScreenshotFile)
-            assertThat(v.textObservation?.screenshotImage.isSame(screenshotImage)).isTrue()
-            assertThat(v.textObservation?.rectOnScreen?.toString()).isEqualTo(
+            assertThat(v.recognizeTextObservation?.text).isEqualTo("1:10 GO •:")
+            assertThat(v.recognizeTextObservation?.jsonString).isEqualTo(json)
+            assertThat(v.recognizeTextObservation?.confidence).isEqualTo(0.5f)
+            assertThat(v.recognizeTextObservation?.screenshotFile).isEqualTo(CodeExecutionContext.lastScreenshotFile)
+            assertThat(v.recognizeTextObservation?.screenshotImage.isSame(screenshotImage)).isTrue()
+            assertThat(v.recognizeTextObservation?.rectOnScreen?.toString()).isEqualTo(
                 Rectangle(40, 49, 252, 44).toString()
             )
-            assertThat(v.textObservation?.localRegionFile).isEqualTo(CodeExecutionContext.lastScreenshotFile)
-            assertThat(v.textObservation?.localRegionImage).isEqualTo(CodeExecutionContext.lastScreenshotImage)
-            assertThat(v.textObservation?.image?.isSame(screenshotImage.cropImage(rect = v.rect))).isTrue()
+            assertThat(v.recognizeTextObservation?.localRegionFile).isEqualTo(CodeExecutionContext.lastScreenshotFile)
+            assertThat(v.recognizeTextObservation?.localRegionImage).isEqualTo(CodeExecutionContext.lastScreenshotImage)
+            assertThat(v.recognizeTextObservation?.image?.isSame(screenshotImage.cropImage(rect = v.rect))).isTrue()
         }
     }
 

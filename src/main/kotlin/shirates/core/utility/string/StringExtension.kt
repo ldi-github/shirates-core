@@ -1,5 +1,6 @@
-package shirates.core.testcode
+package shirates.core.utility.string
 
+import com.ibm.icu.text.Transliterator
 import shirates.core.configuration.PropertiesManager
 import shirates.core.utility.misc.StringUtility
 import java.text.Normalizer
@@ -35,6 +36,20 @@ fun String.normalize(
 ): String {
 
     return StringUtility.normalize(text = this, unicodeForm = unicodeForm)
+}
+
+/**
+ * fullWidth2HalfWidth
+ */
+fun String.fullWidth2HalfWidth(): String {
+    return Transliterator.getInstance("Fullwidth-Halfwidth").transliterate(this)
+}
+
+/**
+ * halfWidth2fullWidth
+ */
+fun String.halfWidth2fullWidth(): String {
+    return Transliterator.getInstance("Halfwidth-Fullwidth").transliterate(this)
 }
 
 /**

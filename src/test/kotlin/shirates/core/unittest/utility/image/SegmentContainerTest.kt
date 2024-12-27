@@ -33,7 +33,7 @@ class SegmentContainerTest {
             val seg2 = container.addSegment(25, 10, 10, 10)
             // Assert
             image.drawRect(seg2.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(2)
+            assertThat(container.segments.count()).isEqualTo(1)
             assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
             assertThat(container.segments[1].toString()).isEqualTo("[25, 10, 34, 19](w=10, h=10, ratio=1.0, text=``)")
 

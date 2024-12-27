@@ -53,8 +53,13 @@ fun VisionDrive.hideKeyboard(
             val selector = Selector(".XCUIElementTypeKeyboard")
             val e = TestDriver.selectDirectByIosClassChain(selector, frame = null)
             if (e.isFound) {
-                // tap background
-                tap(0, rootElement.bounds.centerY)
+                swipePointToPoint(
+                    startX = 10,
+                    startY = viewBounds.centerY,
+                    endX = 10,
+                    endY = viewBounds.centerY - 10,
+                    durationSeconds = 1.0
+                )
             }
         } else {
             TestDriver.appiumDriver.hideKeyboard()

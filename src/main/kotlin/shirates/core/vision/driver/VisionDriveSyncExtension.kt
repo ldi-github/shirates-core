@@ -5,6 +5,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
@@ -23,10 +24,25 @@ import java.awt.image.BufferedImage
 internal fun VisionDrive.syncScreenshot(
     syncWaitSeconds: Double = testContext.syncWaitSeconds,
     maxLoopCount: Int = testContext.syncMaxLoopCount,
-    syncIntervalSeconds: Double = testContext.syncIntervalSeconds,
+    syncIntervalSeconds: Double = 0.0,
     syncOnTimeout: Boolean = true
 ): VisionElement {
 
+    /**
+     * iOS
+     * has sync mechanism in itself
+     */
+    if (TestMode.isiOS) {
+        CodeExecutionContext.lastScreenshotImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+        CodeExecutionContext.screenshotSynced = true
+        return lastElement
+    }
+
+    /**
+     * Android
+     * has no sync mechanism in itself
+     * so have to take screenshot twice or more to get difference
+     */
     var screenshotImage = CodeExecutionContext.lastScreenshotImage
     var lastScreenshotImage: BufferedImage?
     var screenshotSynced = false

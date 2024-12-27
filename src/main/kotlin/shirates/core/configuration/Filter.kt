@@ -7,13 +7,13 @@ import shirates.core.driver.TestDriveObject.vision
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.TestLog
-import shirates.core.testcode.preprocessForComparison
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.escapeFileName
 import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.ImageMatchUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
+import shirates.core.utility.string.preprocessForComparison
 import shirates.core.utility.toPath
 import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage

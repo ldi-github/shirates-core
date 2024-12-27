@@ -10,7 +10,7 @@ import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.filterBySelector
 import shirates.core.logging.Message.message
-import shirates.core.testcode.preprocessForComparison
+import shirates.core.utility.string.preprocessForComparison
 
 /**
  * idIs

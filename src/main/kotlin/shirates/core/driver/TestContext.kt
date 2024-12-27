@@ -6,6 +6,7 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.eventextension.TestDriveOnScreenContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
+import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.misc.UrlUtility
 import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
 import kotlin.reflect.KMutableProperty
@@ -265,6 +266,11 @@ class TestContext(
         }
 
     internal val saveData = mutableMapOf<String, Any?>()
+
+    val isVisionTest: Boolean
+        get() {
+            return UITestCallbackExtension.isVisionTest
+        }
 
     /**
      * saveState

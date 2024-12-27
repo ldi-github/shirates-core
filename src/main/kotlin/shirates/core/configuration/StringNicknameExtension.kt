@@ -30,3 +30,17 @@ fun String.getNicknameText(): String {
     return content
 }
 
+/**
+ * getNicknameWithoutSuffix()
+ */
+fun String.getNicknameWithoutSuffix(): String {
+
+    if (this.startsWith("[").not()) {
+        return ""
+    }
+    val index = this.lastIndexOf("]")
+    if (index < 0) {
+        return ""
+    }
+    return this.substring(0, index + 1)
+}

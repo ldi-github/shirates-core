@@ -24,6 +24,7 @@ import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.testcode.VisionTest
 import java.nio.file.Files
 
 /**
@@ -70,6 +71,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         val isManualingCase: Boolean
             get() {
                 return uiTestBase?.isManualingCase ?: false
+            }
+        val isVisionTest: Boolean
+            get() {
+                return uiTestBase is VisionTest
             }
     }
 

@@ -6,7 +6,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.testcode.preprocessForComparison
+import shirates.core.utility.string.preprocessForComparison
 
 /**
  * assertEquals
