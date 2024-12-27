@@ -357,9 +357,6 @@ abstract class UITestBase : Drive {
 
             // testContext
             val testContext = TestContext(profile = profile)
-            if (UITestCallbackExtension.isVisionTest) {
-                testContext.enableCache = false
-            }
             TestDriver.setupContext(testContext = testContext)
 
             if (isNoLoadRun) {
