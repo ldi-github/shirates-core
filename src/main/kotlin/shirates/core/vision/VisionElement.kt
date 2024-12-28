@@ -261,7 +261,7 @@ class VisionElement(
 
         if (this.visionContext.recognizeTextObservations.isEmpty()) {
             val file = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rect}.png").toString()
-            this.image!!.saveImage(file = file)
+            this.image!!.saveImage(file = file, log = false)
             this.visionContext.localRegionFile = file
             this.visionContext.localRegionImage = this.image
             this.visionContext.recognizeText(language = language)

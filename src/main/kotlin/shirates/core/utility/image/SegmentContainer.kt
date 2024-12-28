@@ -308,7 +308,10 @@ class SegmentContainer(
             throw IllegalArgumentException("output directory is null")
         }
         setupOutputDirectory()
-        binary.toBufferedImage()?.saveImage(outputDirectory.toPath().resolve("binary").toString())
+        binary.toBufferedImage()?.saveImage(
+            file = outputDirectory.toPath().resolve("binary").toString(),
+            log = false
+        )
         for (segment in segments) {
             segment.captureAndSave(outputDirectory)
         }

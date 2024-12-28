@@ -297,15 +297,21 @@ class VisionContext(
                 recognizeTextResult = recognizeTextResult
             )
         }
-        /**
-         * Get recognizedTextObservations from rootElement.visionContext
-         * into this VisionContext by filtering bounds
-         */
-        val c = rootElement.visionContext
-        val observations = c.recognizeTextObservations.filter {
-            it.rectOnScreen!!.toBoundsWithRatio().isIncludedIn(CodeExecutionContext.regionRect.toBoundsWithRatio())
+        if (this != rootElement.visionContext) {
+            /**
+             * Get visionElements and recognizedTextObservations from rootElement.visionContext
+             * into this VisionContext by filtering bounds
+             */
+            val elements = rootElement.visionContext.visionElements
+                .filter { it.bounds.isIncludedIn(CodeExecutionContext.regionRect.toBoundsWithRatio()) }
+            visionElements.clear()
+            visionElements.addAll(elements)
+
+            val observations =
+                elements.filter { it.recognizeTextObservation != null }.map { it.recognizeTextObservation!! }
+            recognizeTextObservations.clear()
+            recognizeTextObservations.addAll(observations)
         }
-        recognizeTextObservations.addAll(observations)
 
         return this
     }

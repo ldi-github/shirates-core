@@ -102,16 +102,11 @@ object SrvisionProxy {
     fun recognizeText(
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
         language: String? = PropertiesManager.logLanguage,
-        log: Boolean = false,
     ): RecognizeTextResult {
 
         if (inputFile == null) {
             throw IllegalArgumentException("inputFile is null.")
         }
-
-//        if (CodeExecutionContext.lastScreenshotName.isNullOrBlank()) {
-//            visionDrive.screenshot()
-//        }
 
         val sw = StopWatch("TextRecognizer/recognizeText")
 
@@ -137,9 +132,7 @@ object SrvisionProxy {
         TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_TextRecognizer_recognizeText.json").toFile()
             .writeText(result)
 
-        if (log) {
-            sw.printInfo()
-        }
+        sw.printInfo()
         return RecognizeTextResult(result)
     }
 

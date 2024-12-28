@@ -129,7 +129,6 @@ fun VisionDrive.tap(
     context.execOperateCommand(command = command, message = message, subject = tappedElement.subject) {
 //        e = tappedElement.tapCore(holdSeconds = holdSeconds, tapMethod = tapMethod)
 
-        println("tap ${v.bounds.centerX}, ${v.bounds.centerY}")
         v.tap(x = v.bounds.centerX, y = v.bounds.centerY, holdSeconds = holdSeconds)
     }
 

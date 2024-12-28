@@ -12,6 +12,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.printInfo
+import shirates.core.logging.printWarn
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
@@ -68,11 +69,17 @@ internal fun VisionDrive.detectCore(
     allowScroll: Boolean?,
     swipeToCenter: Boolean,
     throwsException: Boolean,
-    directAccessCompletion: Boolean
+    directAccessCompletion: Boolean,
 ): VisionElement {
 
     fun selectDirect(): VisionElement {
-        val sw = StopWatch("direct access attempted")
+        if (selector.text.isNullOrBlank() && selector.textContains.isNullOrBlank()) {
+            printWarn("This selector is not supported in vision. ($selector)")
+            return VisionElement.emptyElement
+        }
+        val exp = (selector.text ?: selector.textContains!!).trim('*')
+        val sel = getSelector("*${exp}*")
+        val sw = StopWatch("direct access attempted. selector=$sel")
         val e = TestDriver.selectDirect(selector = selector, throwsException = false)
         sw.printInfo()
         if (e.isFound && e.bounds.isIncludedIn(viewBounds)) {
@@ -114,12 +121,17 @@ internal fun VisionDrive.detectCore(
          * - character code (WAVE DASH, FULLWIDTH TILDE)
          * - etc
          */
-    } else {
+    } else if (directAccessCompletion.not() ||
+        selector.text.isNullOrBlank().not() && v.text.contains(selector.text!!)
+    ) {
+        return v    // partial match
+    } else if (directAccessCompletion) {
         /**
          * Try to detect in direct access
          */
-        if (directAccessCompletion) {
-            v = selectDirect()
+        v = selectDirect()
+        if (v.isFound) {
+            return v
         }
     }
     if (v.isFound) {
@@ -826,10 +838,7 @@ fun VisionDrive.canDetectWithScrollLeft(
     )
 }
 
-/**
- * canDetectAll
- */
-internal fun VisionDrive.canDetectAll(
+internal fun VisionDrive.canDetectAllCore(
     selectors: Iterable<Selector>,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean = true,
@@ -873,7 +882,7 @@ fun VisionDrive.canDetectAll(
     var foundAll = false
     val context = TestDriverCommandContext(null)
     val logLine = context.execBooleanCommand(subject = subject, log = log) {
-        foundAll = canDetectAll(selectors = selectors)
+        foundAll = canDetectAllCore(selectors = selectors)
     }
     if (logLine != null) {
         logLine.message += " (result=$foundAll)"
