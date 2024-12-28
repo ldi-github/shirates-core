@@ -8,6 +8,7 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
@@ -33,6 +34,7 @@ class SegmentContainer(
     var saveWithMargin: Boolean = true,
 ) {
     val segments = mutableListOf<Segment>()
+    val originalSegments = mutableListOf<Segment>()
     val visionElements = mutableListOf<VisionElement>()
     var binary: GrayU8? = null
 
@@ -98,6 +100,7 @@ class SegmentContainer(
             screenshotImage = screenshotImage,
             screenshotFile = screenshotFile,
         )
+        originalSegments.add(newSegment)
         val cannotMergeSegments = mutableListOf<Segment>()
         val canMergeSegments = mutableListOf<Segment>()
         canMergeSegments.add(newSegment)
@@ -385,5 +388,51 @@ class SegmentContainer(
         if (Files.exists(outputDirectoryPath).not()) {
             outputDirectory.toPath().toFile().mkdirs()
         }
+    }
+
+    /**
+     * draw
+     */
+    fun draw(
+        grid: Boolean = true,
+        gridWidth: Int = 10,
+        gridColor: Color = Color.GRAY,
+    ): BufferedImage {
+        if (containerImage == null) {
+            throw IllegalArgumentException("containerImage is null")
+        }
+        val image = BufferedImage(containerImage!!.width, containerImage!!.height, BufferedImage.TYPE_INT_ARGB)
+        val g2d = image.createGraphics()
+
+        /**
+         * draw grid
+         */
+        if (grid) {
+            g2d.color = gridColor
+            for (x in 0 until image.width step gridWidth) {
+                g2d.drawLine(x, 0, x, image.rect.right)
+            }
+            for (y in 0 until image.height step gridWidth) {
+                g2d.drawLine(0, y, image.rect.bottom, y)
+            }
+        }
+        /**
+         * draw original segments
+         */
+        g2d.color = Color.LIGHT_GRAY
+        for (seg in originalSegments) {
+            val rect = seg.toRect()
+            g2d.fillRect(rect.x, rect.y, rect.width, rect.height)
+            image.drawRect(rect = rect, color = g2d.color, stroke = 1f)
+        }
+        /**
+         * draw segments
+         */
+        for (seg in segments) {
+            val rect = seg.toRect()
+            image.drawRect(rect = rect, stroke = 1f)
+        }
+
+        return image
     }
 }

@@ -16,6 +16,7 @@ import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
+import shirates.core.utility.string.normalizeForComparison
 import shirates.core.utility.sync.WaitUtility.doUntilTrue
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.SrvisionProxy
@@ -126,19 +127,12 @@ private fun VisionDrive.existCoreByDetect(
     )
 
     fun String.eval(): Boolean {
-        fun String.preprocess(): String {
-            val s = if (ignoreCase) this.lowercase() else this
-            return s.replace("\\s".toRegex(), "")
-        }
-
-        var containedText = selector.text ?: selector.textContains
+        val containedText = selector.text ?: selector.textContains
         if (containedText.isNullOrBlank()) {
             return false
         }
-        containedText = containedText.trim('*')
-
-        val actual = this.preprocess()
-        val expected = containedText.preprocess()
+        val actual = this.normalizeForComparison(removeChars = removeChars)
+        val expected = containedText.normalizeForComparison(removeChars = removeChars)
 
         val r = if (allowContains) actual.contains(expected)
         else actual == expected
@@ -155,8 +149,12 @@ private fun VisionDrive.existCoreByDetect(
          * Try to detect with scroll
          */
         v = detectWithScroll(
-            expression = selector.text!!,
+            selector = selector,
+            removeChars = removeChars,
+            language = language,
+            directAccessCompletion = true,
             direction = ScrollDirection.Down,
+            swipeToCenter = false,
             throwsException = false
         )
         isFound = v.text.eval()

@@ -281,7 +281,10 @@ class VisionElement(
     /**
      * getCell
      */
-    fun getCell(): VisionElement {
+    fun getCell(
+        horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
+        verticalMargin: Int = PropertiesManager.segmentMarginVertical,
+    ): VisionElement {
 
         if (TestMode.isNoLoadRun) {
             return this
@@ -291,8 +294,8 @@ class VisionElement(
             mergeIncluded = false,
             containerImageFile = visionContext.screenshotFile!!,
             outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_segments").toString(),
-            segmentMarginHorizontal = PropertiesManager.segmentMarginHorizontal,
-            segmentMarginVertical = PropertiesManager.segmentMarginVertical,
+            segmentMarginHorizontal = horizontalMargin,
+            segmentMarginVertical = verticalMargin,
         ).analyze()
         val rects = segmentContainer.segments.map { it.rectOnScreen }
         val includingRects = mutableListOf<Rectangle>()

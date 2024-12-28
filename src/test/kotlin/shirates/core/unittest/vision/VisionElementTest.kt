@@ -28,9 +28,9 @@ class VisionElementTest {
         val baseRect = Rectangle(x = 239, y = 759, width = 99, height = 41) // VPN
         // Act
         val v = baseRect.toVisionElement()
-        val cell = v.getCell()
+        val cell = v.getCell(horizontalMargin = 20, verticalMargin = 20)
         cell.save()
         // Assert
-        assertThat(cell.rect.toString()).isEqualTo("[46, 500, 1126, 841](w=1081, h=342)")
+        assertThat(cell.rect.toString()).isEqualTo("[46, 500, 1122, 837](w=1077, h=338)")
     }
 }

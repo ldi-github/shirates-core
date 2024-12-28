@@ -2,199 +2,133 @@ package shirates.core.unittest.utility.image
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.logging.TestLog
+import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.SegmentContainer
-import shirates.core.utility.image.drawRect
+import shirates.core.utility.image.saveImage
 import java.awt.Color
 import java.awt.image.BufferedImage
 
 
 class SegmentContainerTest {
 
-    @Test
-    fun addSegment() {
-
-        run {
-            // Arrange
-            val image = BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB)
-            val g2d = image.createGraphics()
-            g2d.color = Color.BLACK!!
-            g2d.fillRect(0, 0, 100, 100)
-            // Arrange
-            val margin = 4
-            val container = SegmentContainer(segmentMarginHorizontal = margin, segmentMarginVertical = margin)
-            // Act
-            val seg1 = container.addSegment(10, 10, 10, 10)
-            // Assert
-            image.drawRect(seg1.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(1)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
-
-            // Act
-            val seg2 = container.addSegment(25, 10, 10, 10)
-            // Assert
-            image.drawRect(seg2.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(1)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[1].toString()).isEqualTo("[25, 10, 34, 19](w=10, h=10, ratio=1.0, text=``)")
-
-            // Act
-            val seg3 = container.addSegment(45, 10, 10, 10)
-            // Assert
-            image.drawRect(seg3.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(3)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[1].toString()).isEqualTo("[25, 10, 34, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[2].toString()).isEqualTo("[45, 10, 54, 19](w=10, h=10, ratio=1.0, text=``)")
-
-            // Act
-            val seg4 = container.addSegment(10, 25, 10, 10)
-            // Assert
-            image.drawRect(seg4.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(4)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[1].toString()).isEqualTo("[25, 10, 34, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[2].toString()).isEqualTo("[45, 10, 54, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[3].toString()).isEqualTo("[10, 25, 19, 34](w=10, h=10, ratio=1.0, text=``)")
-
-            // Act
-            val seg5 = container.addSegment(25, 30, 10, 10)
-            // Assert
-            image.drawRect(seg5.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(5)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[1].toString()).isEqualTo("[25, 10, 34, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[2].toString()).isEqualTo("[45, 10, 54, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[3].toString()).isEqualTo("[10, 25, 19, 34](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[4].toString()).isEqualTo("[25, 30, 34, 39](w=10, h=10, ratio=1.0, text=``)")
-
-            // Act
-            val seg6 = container.addSegment(45, 25, 10, 10)
-            // Assert
-            image.drawRect(seg6.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(6)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[1].toString()).isEqualTo("[25, 10, 34, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[2].toString()).isEqualTo("[45, 10, 54, 19](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[3].toString()).isEqualTo("[10, 25, 19, 34](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[4].toString()).isEqualTo("[25, 30, 34, 39](w=10, h=10, ratio=1.0, text=``)")
-            assertThat(container.segments[5].toString()).isEqualTo("[45, 25, 54, 34](w=10, h=10, ratio=1.0, text=``)")
-        }
-        run {
-            // Arrange
-            val image = BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB)
-            val g2d = image.createGraphics()
-            g2d.color = Color.BLACK!!
-            g2d.fillRect(0, 0, 100, 100)
-            // Arrange
-            val margin = 5
-            val container = SegmentContainer(segmentMarginHorizontal = margin, segmentMarginVertical = margin)
-            // Act
-            val seg1 = container.addSegment(10, 10, 10, 10)
-            // Assert
-            image.drawRect(seg1.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(1)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0)")
-
-            // Act
-            val seg2 = container.addSegment(25, 10, 10, 10)
-            // Assert
-            image.drawRect(seg2.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(1)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 19](w=25, h=10, ratio=2.5)")
-
-            // Act
-            val seg3 = container.addSegment(45, 10, 10, 10)
-            // Assert
-            image.drawRect(seg3.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(2)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 19](w=25, h=10, ratio=2.5)")
-            assertThat(container.segments[1].toString()).isEqualTo("[45, 10, 54, 19](w=10, h=10, ratio=1.0)")
-
-            // Act
-            val seg4 = container.addSegment(10, 25, 10, 10)
-            // Assert
-            image.drawRect(seg4.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(2)
-            assertThat(container.segments[0].toString()).isEqualTo("[45, 10, 54, 19](w=10, h=10, ratio=1.0)")
-            assertThat(container.segments[1].toString()).isEqualTo("[10, 10, 34, 34](w=25, h=25, ratio=1.0)")
-
-            // Act
-            val seg5 = container.addSegment(25, 30, 10, 10)
-            // Assert
-            image.drawRect(seg5.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(3)
-            assertThat(container.segments[0].toString()).isEqualTo("[45, 10, 54, 19](w=10, h=10, ratio=1.0)")
-            assertThat(container.segments[1].toString()).isEqualTo("[10, 10, 34, 34](w=25, h=25, ratio=1.0)")
-
-            // Act
-            val seg6 = container.addSegment(45, 25, 10, 10)
-            // Assert
-            image.drawRect(seg6.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(3)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 34](w=25, h=25, ratio=1.0)")
-            assertThat(container.segments[1].toString()).isEqualTo("[25, 30, 34, 39](w=10, h=10, ratio=1.0)")
-        }
-        run {
-            // Arrange
-            val image = BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB)
-            val g2d = image.createGraphics()
-            g2d.color = Color.BLACK!!
-            g2d.fillRect(0, 0, 100, 100)
-            // Arrange
-            val margin = 10
-            val container = SegmentContainer(segmentMarginHorizontal = margin, segmentMarginVertical = margin)
-            // Act
-            val seg1 = container.addSegment(10, 10, 10, 10)
-            // Assert
-            image.drawRect(seg1.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(1)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0)")
-
-            // Act
-            val seg2 = container.addSegment(25, 10, 10, 10)
-            // Assert
-            image.drawRect(seg2.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(1)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 19](w=25, h=10, ratio=2.5)")
-
-            // Act
-            val seg3 = container.addSegment(45, 10, 10, 10)
-            // Assert
-            image.drawRect(seg3.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(1)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 54, 19](w=45, h=10, ratio=4.5)")
-
-            // Act
-            val seg4 = container.addSegment(10, 25, 10, 10)
-            // Assert
-            image.drawRect(seg4.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(1)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 54, 34](w=45, h=25, ratio=1.8)")
-
-            // Act
-            val seg5 = container.addSegment(25, 30, 10, 10)
-            // Assert
-            image.drawRect(seg5.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(2)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 54, 34](w=45, h=25, ratio=1.8)")
-
-            // Act
-            val seg6 = container.addSegment(45, 25, 10, 10)
-            // Assert
-            image.drawRect(seg6.toRect(), stroke = 1f)
-            assertThat(container.segments.count()).isEqualTo(2)
-            assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 54, 34](w=45, h=25, ratio=1.8)")
-
-            container.mergeIncluded()
-
-            for (seg in container.segments) {
-                val rect = seg.toRect()
-                image.drawRect(rect, color = Color.GREEN, stroke = 1f)
-                println()
-            }
-            println(container.segments.count())
-        }
+    fun getSegmentContainer(margin: Int): SegmentContainer {
+        val container = SegmentContainer(segmentMarginHorizontal = margin, segmentMarginVertical = margin)
+        container.containerImage = BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB)
+        return container
     }
 
+    fun SegmentContainer.saveImage(newRect: Rectangle, count: Int): BufferedImage {
+        val image = this.draw()
+        val g2d = image.createGraphics()
+        g2d.color = Color.GREEN!!
+        g2d.drawRect(newRect.x, newRect.y, newRect.width, newRect.height)
+
+        val path = TestLog.directoryForLog.resolve(count.toString()).toString()
+        image.saveImage(path)
+        return image
+    }
+
+    @Test
+    fun addSegment1() {
+
+        var count = 0
+
+        // Arrange
+        val margin = 0
+        val container = getSegmentContainer(margin = margin)
+        // Act
+        val rect1 = Rectangle(10, 10, 10, 10)
+        container.addSegment(rect1)
+        val img1 = container.saveImage(rect1, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(1)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
+
+        // Act
+        val rect2 = Rectangle(20, 10, 10, 10)
+        val seg2 = container.addSegment(rect2)
+        val img2 = container.saveImage(rect2, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(1)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 29, 19](w=20, h=10, ratio=2.0, text=``)")
+
+        // Act
+        val rect3 = Rectangle(40, 10, 20, 20)
+        container.addSegment(rect3)
+        val img3 = container.saveImage(rect3, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(2)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 29, 19](w=20, h=10, ratio=2.0, text=``)")
+        assertThat(container.segments[1].toString()).isEqualTo("[40, 10, 59, 29](w=20, h=20, ratio=1.0, text=``)")
+
+        // Act
+        val rect4 = Rectangle(30, 10, 10, 10)
+        container.addSegment(rect4)
+        val img4 = container.saveImage(rect4, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(1)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 59, 29](w=50, h=20, ratio=2.5, text=``)")
+
+        // Act
+        val rect5 = Rectangle(30, 25, 10, 10)
+        container.addSegment(rect5)
+        val img5 = container.saveImage(rect5, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(2)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 59, 29](w=50, h=20, ratio=2.5, text=``)")
+        assertThat(container.segments[1].toString()).isEqualTo("[30, 25, 39, 34](w=10, h=10, ratio=1.0, text=``)")
+
+        // Act
+        val rect6 = Rectangle(40, 40, 10, 10)
+        container.addSegment(rect6)
+        val img6 = container.saveImage(rect6, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(2)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 59, 29](w=50, h=20, ratio=2.5, text=``)")
+        assertThat(container.segments[1].toString()).isEqualTo("[30, 25, 49, 49](w=20, h=25, ratio=0.8, text=``)")
+    }
+
+    @Test
+    fun addSegment2() {
+
+        var count = 0
+
+        // Arrange
+        val margin = 5
+        val container = getSegmentContainer(margin = margin)
+        // Act
+        val rect1 = Rectangle(10, 10, 10, 10)
+        container.addSegment(rect1)
+        val img1 = container.saveImage(rect1, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(1)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
+
+        // Act
+        val rect2 = Rectangle(25, 10, 10, 10)
+        container.addSegment(rect2)
+        val img2 = container.saveImage(rect2, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(1)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 19](w=25, h=10, ratio=2.5, text=``)")
+
+        // Act
+        val rect3 = Rectangle(10, 26, 10, 10)
+        container.addSegment(rect3)
+        val img3 = container.saveImage(rect3, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(2)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 19](w=25, h=10, ratio=2.5, text=``)")
+        assertThat(container.segments[1].toString()).isEqualTo("[10, 26, 19, 35](w=10, h=10, ratio=1.0, text=``)")
+
+        // Act
+        val rect4 = Rectangle(20, 25, 10, 10)
+        container.addSegment(rect4)
+        val img10 = container.saveImage(rect4, ++count)
+        // Assert
+        assertThat(container.segments.count()).isEqualTo(1)
+        assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 35](w=25, h=26, ratio=0.96153843, text=``)")
+    }
 
 }

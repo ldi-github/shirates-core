@@ -32,10 +32,22 @@ fun String?.preprocessForComparison(
  * normalize
  */
 fun String.normalize(
-    unicodeForm: Normalizer.Form = Normalizer.Form.NFC
+    unicodeForm: Normalizer.Form
 ): String {
 
     return StringUtility.normalize(text = this, unicodeForm = unicodeForm)
+}
+
+/**
+ * normalizeForComparison
+ */
+fun String.normalizeForComparison(removeChars: String?): String {
+    var t = this.normalize(Normalizer.Form.NFKC)
+    t = t.replace("\\s".toRegex(), "").lowercase()
+    if (removeChars != null) {
+        t = t.filterNot { it in removeChars }
+    }
+    return t
 }
 
 /**

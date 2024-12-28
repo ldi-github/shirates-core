@@ -7,6 +7,7 @@ import shirates.core.driver.TestDriver.expandExpression
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.hideKeyboard
 import shirates.core.driver.commandextension.isKeyboardShown
+import shirates.core.driver.commandextension.toVisionElement
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
@@ -70,8 +71,18 @@ internal fun VisionDrive.detectCore(
     directAccessCompletion: Boolean
 ): VisionElement {
 
-    if (selector.text.isNullOrBlank()) {
+    fun selectDirect(): VisionElement {
+        val sw = StopWatch("direct access attempted")
+        val e = TestDriver.selectDirect(selector = selector, throwsException = false)
+        sw.printInfo()
+        if (e.isFound && e.bounds.isIncludedIn(viewBounds)) {
+            return e.toVisionElement()
+        }
         return VisionElement.emptyElement
+    }
+
+    if (selector.text.isNullOrBlank()) {
+        return selectDirect()
     }
 
     if (lastElement.isEmpty) {
@@ -108,13 +119,7 @@ internal fun VisionDrive.detectCore(
          * Try to detect in direct access
          */
         if (directAccessCompletion) {
-            val sw = StopWatch("direct access attempted")
-            val e = TestDriver.selectDirect(selector = selector, throwsException = false)
-            sw.printInfo()
-            if (e.isFound && e.bounds.isIncludedIn(viewBounds)) {
-                v.testElement = e   // strict match
-                return v
-            }
+            v = selectDirect()
         }
     }
     if (v.isFound) {

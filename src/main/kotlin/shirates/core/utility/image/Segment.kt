@@ -133,8 +133,8 @@ class Segment(
         mergeIncluded: Boolean = false,
     ): Boolean {
 
-        val thisBounds = this.boundsOnSegmentContainer
-        val thatBounds = segment.boundsOnSegmentContainer
+        val thisBounds = this.boundsOnSegmentContainer.copy()
+        val thatBounds = segment.boundsOnSegmentContainer.copy()
 
         // Margin offset
         thatBounds.left = thatBounds.left - marginHorizontal - 1

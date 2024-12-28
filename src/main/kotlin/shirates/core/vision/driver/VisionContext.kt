@@ -5,7 +5,7 @@ import shirates.core.driver.visionDrive
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.*
-import shirates.core.utility.string.normalize
+import shirates.core.utility.string.normalizeForComparison
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.SrvisionProxy
@@ -15,7 +15,6 @@ import shirates.core.vision.result.RecognizeTextResult
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
-import java.text.Normalizer
 
 class VisionContext(
     capture: Boolean
@@ -356,7 +355,6 @@ class VisionContext(
         return this
     }
 
-
     /**
      * detect
      *
@@ -370,7 +368,7 @@ class VisionContext(
         removeChars: String? = null,
     ): VisionElement {
 
-        if (this.visionElements.isEmpty()) {
+        if (this.recognizeTextObservations.isEmpty()) {
             recognizeText()
         }
 
@@ -419,20 +417,11 @@ class VisionContext(
 
         val localBounds = rectOnScreen!!.toBoundsWithRatio()
 
-        fun String.normalizeForComparison(): String {
-            var t = this.normalize(Normalizer.Form.NFKC)
-            t = t.replace("\\s".toRegex(), "").lowercase()
-            if (removeChars != null) {
-                t = t.filterNot { it in removeChars }
-            }
-            return t
-        }
-
-        val normalizedText = text.normalizeForComparison()
+        val normalizedText = text.normalizeForComparison(removeChars = removeChars)
 
         var list = visionElements
             .filter {
-                val t = it.text.normalizeForComparison()
+                val t = it.text.normalizeForComparison(removeChars = removeChars)
                 t.contains(normalizedText)
             }
         list = list.filter { it.bounds.isIncludedIn(localBounds) }
