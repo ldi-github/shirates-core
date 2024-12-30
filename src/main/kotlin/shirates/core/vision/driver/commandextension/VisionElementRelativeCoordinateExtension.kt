@@ -74,7 +74,7 @@ internal fun VisionElement.rightLeftCore(
     for (v in segmentContainer.visionElements) {
         horizontalBand.merge(element = v, margin = 0)
     }
-    val elms = horizontalBand.getElements()
+    val elms = horizontalBand.getElements().map { it as VisionElement }
     val sortedElements =
         if (relative.isRight)
             elms.filter { this.rect.right <= it.rect.left }
@@ -155,7 +155,7 @@ internal fun VisionElement.aboveBelowCore(
     for (v in segmentContainer.visionElements) {
         verticalBand.merge(element = v, margin = 0)
     }
-    val elms = verticalBand.getElements()
+    val elms = verticalBand.getElements().map { it as VisionElement }
     val sortedElements =
         if (relative.isAbove)
             elms.filter { it.rect.bottom < this.rect.top }
@@ -205,13 +205,13 @@ internal fun VisionElement.rightLeftTextCore(
     pos: Int,
 ): VisionElement {
 
-    rootElement.recognizeText()
+    rootElement.visionContext.recognizeText()
 
     val horizontalBand = HorizontalBand(baseElement = this)
-    for (v in rootElement.visionContext.visionElements) {
+    for (v in rootElement.visionContext.getVisionElements()) {
         horizontalBand.merge(element = v, margin = 0)
     }
-    val elms = horizontalBand.getElements()
+    val elms = horizontalBand.getElements().map { it as VisionElement }
     val sortedElements =
         if (relative.isLeft)
             elms.filter { it.rect.right < this.rect.left }
@@ -261,13 +261,13 @@ internal fun VisionElement.aboveBelowTextCore(
     pos: Int,
 ): VisionElement {
 
-    rootElement.recognizeText()
+    rootElement.visionContext.recognizeText()
 
     val verticalBand = VerticalBand(baseElement = this)
-    for (v in rootElement.visionContext.visionElements) {
+    for (v in rootElement.visionContext.getVisionElements()) {
         verticalBand.merge(element = v, margin = 0)
     }
-    val elms = verticalBand.getElements()
+    val elms = verticalBand.getElements().map { it as VisionElement }
     val sortedElements =
         if (relative.isAbove)
             elms.filter { it.rect.bottom < this.rect.top }

@@ -10,7 +10,7 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionElement.onAbove(
     margin: Int = 10,
-    func: (VisionElement.(VisionElement) -> Unit)
+    func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val command = "onAbove"
@@ -36,7 +36,7 @@ fun VisionElement.onAbove(
  */
 fun VisionElement.onBelow(
     margin: Int = 10,
-    func: (VisionElement.(VisionElement) -> Unit)
+    func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val command = "onBelow"
@@ -59,7 +59,7 @@ fun VisionElement.onBelow(
 internal fun VisionElement.regionCore(
     command: String,
     regionRect: Rectangle,
-    func: (VisionElement.(VisionElement) -> Unit)
+    func: (VisionElement.() -> Unit)
 ): VisionElement {
     val regionElement = regionRect.toVisionElement()
 
@@ -68,7 +68,9 @@ internal fun VisionElement.regionCore(
     val original = CodeExecutionContext.regionElement
     try {
         CodeExecutionContext.regionElement = regionElement
-        func(regionElement)
+        regionElement.apply {
+            func(regionElement)
+        }
     } finally {
         CodeExecutionContext.regionElement = original
     }
@@ -80,7 +82,7 @@ internal fun VisionElement.regionCore(
  */
 fun VisionElement.onLeft(
     margin: Int = this.rect.height / 2,
-    func: (VisionElement.(VisionElement) -> Unit)
+    func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val command = "onLeft"
@@ -106,7 +108,7 @@ fun VisionElement.onLeft(
  */
 fun VisionElement.onRight(
     margin: Int = this.rect.height / 2,
-    func: (VisionElement.(VisionElement) -> Unit)
+    func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val command = "onRight"
@@ -131,7 +133,7 @@ fun VisionElement.onRight(
  * onLine
  */
 fun VisionElement.onLine(
-    func: (VisionElement.(VisionElement) -> Unit)
+    func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val command = "onLine"

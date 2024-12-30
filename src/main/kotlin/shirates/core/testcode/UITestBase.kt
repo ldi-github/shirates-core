@@ -490,7 +490,7 @@ abstract class UITestBase : Drive {
                 TestLog.skipScenario(message)
                 return
             }
-            TestDriver.screenshotCore()
+            TestDriver.screenshot()
             TestLog.skipScenario(message)
             isSkippingScenario = true
             testSkipped = true
@@ -512,7 +512,7 @@ abstract class UITestBase : Drive {
                 TestLog.skipCase(message)
                 return
             }
-            TestDriver.screenshotCore()
+            TestDriver.screenshot()
             TestLog.skipCase(message)
             isSkippingCase = true
             testSkipped = true
@@ -530,9 +530,9 @@ abstract class UITestBase : Drive {
     ) {
         if (predicate()) {
             if (isNoLoadRun.not()) {
-                TestDriver.screenshotCore()
+                TestDriver.screenshot()
             }
-            TestDriver.screenshotCore()
+            TestDriver.screenshot()
             TestLog.manualScenario(message)
             isManualingScenario = true
             testSkipped = true
@@ -550,7 +550,7 @@ abstract class UITestBase : Drive {
     ) {
         if (predicate()) {
             if (isNoLoadRun.not()) {
-                TestDriver.screenshotCore()
+                TestDriver.screenshot()
             }
             TestLog.manualCase(message)
             isManualingCase = true
@@ -799,18 +799,18 @@ abstract class UITestBase : Drive {
             throw TestAbortedException(t.message ?: t.stackTraceToString(), t)
         } catch (t: UnsatisfiedLinkError) {
             TestLog.error(t)
-            TestDriver.screenshotCore()
+            TestDriver.screenshot()
             throw t
 
         } catch (t: NoClassDefFoundError) {
             TestLog.error(t)
-            TestDriver.screenshotCore()
+            TestDriver.screenshot()
             throw t
         } catch (t: RerunScenarioException) {
             throw t
         } catch (t: Throwable) {
             TestLog.error(message = t.message ?: t.toString(), exception = t)
-            TestDriver.screenshotCore()
+            TestDriver.screenshot()
             throw t
         } finally {
             scenarioLog.processingTime = TestLog.lastTestLog!!.logDateTime.time - scenarioLog.logDateTime.time

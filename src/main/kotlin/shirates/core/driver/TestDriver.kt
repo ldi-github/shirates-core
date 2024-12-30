@@ -54,9 +54,10 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
 import shirates.core.vision.driver.eventextension.removeScreenHandler
-import shirates.core.vision.driver.syncScreenshot
+import shirates.core.vision.driver.syncScreen
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -1839,6 +1840,7 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        withTextMatching: Boolean = true,
         log: Boolean = true
     ): TestDriver {
 
@@ -1852,6 +1854,7 @@ object TestDriver {
             onChangedOnly = onChangedOnly,
             filename = filename,
             withXmlSource = withXmlSource,
+            withTextMatching = withTextMatching,
             log = log
         )
     }
@@ -1862,6 +1865,7 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        withTextMatching: Boolean = true,
         log: Boolean = true
     ) {
         if (testContext.autoScreenshot.not()) {
@@ -1874,6 +1878,7 @@ object TestDriver {
             onChangedOnly = onChangedOnly,
             filename = filename,
             withXmlSource = withXmlSource,
+            withTextMatching = withTextMatching,
             log = log
         )
     }
@@ -1884,7 +1889,7 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
-        withTextMatching: Boolean = false,
+        withTextMatching: Boolean,
         log: Boolean = true
     ): TestDriver {
 
@@ -1947,7 +1952,7 @@ object TestDriver {
             val oldImage = CodeExecutionContext.lastScreenshotImage
 
             val sw = StopWatch("syncScreenshot")
-            visionDrive.syncScreenshot()
+            visionDrive.syncScreen()
             sw.printInfo()
 
             val newImage = CodeExecutionContext.lastScreenshotImage
@@ -1977,9 +1982,10 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotTime = screenshotTime
             CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
-            CodeExecutionContext.lastScreenshotImage = screenshotImage  // Captures VisionRootElement
-            TestDriver.visionRootElement = VisionElement(capture = true)
-            CodeExecutionContext.regionElement = visionRootElement
+            CodeExecutionContext.lastScreenshotImage = screenshotImage
+            val vc = VisionContext(capture = true)
+            TestDriver.visionRootElement = VisionElement(visionContext = vc)
+            CodeExecutionContext.regionElement = TestDriver.visionRootElement
 
             if (log) {
                 val screenshotLine = TestLog.write(

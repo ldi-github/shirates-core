@@ -32,7 +32,7 @@ import shirates.core.vision.result.GetRectanglesWithTemplateResult
  */
 fun VisionDrive.exist(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
@@ -54,7 +54,7 @@ fun VisionDrive.exist(
         v = existCore(
             message = message,
             selector = sel,
-            removeChars = removeChars,
+            remove = remove,
             language = language,
             ignoreCase = ignoreCase,
             allowContains = allowContains,
@@ -74,7 +74,7 @@ fun VisionDrive.exist(
 private fun VisionDrive.existCore(
     message: String,
     selector: Selector,
-    removeChars: String?,
+    remove: String?,
     language: String,
     ignoreCase: Boolean,
     allowContains: Boolean,
@@ -83,7 +83,7 @@ private fun VisionDrive.existCore(
 
     val v = existCoreByDetect(
         selector = selector,
-        removeChars = removeChars,
+        remove = remove,
         language = language,
         waitSeconds = waitSeconds,
         ignoreCase = ignoreCase,
@@ -105,7 +105,7 @@ private fun VisionDrive.existCore(
 
 private fun VisionDrive.existCoreByDetect(
     selector: Selector,
-    removeChars: String?,
+    remove: String?,
     language: String,
     waitSeconds: Double,
     ignoreCase: Boolean,
@@ -116,7 +116,7 @@ private fun VisionDrive.existCoreByDetect(
      */
     var v = detectCore(
         selector = selector,
-        removeChars = removeChars,
+        remove = remove,
         language = language,
         waitSeconds = waitSeconds,
         intervalSeconds = testContext.syncIntervalSeconds,
@@ -131,8 +131,8 @@ private fun VisionDrive.existCoreByDetect(
         if (containedText.isNullOrBlank()) {
             return false
         }
-        val actual = this.normalizeForComparison(removeChars = removeChars)
-        val expected = containedText.normalizeForComparison(removeChars = removeChars)
+        val actual = this.normalizeForComparison(remove = remove)
+        val expected = containedText.normalizeForComparison(remove = remove)
 
         val r = if (allowContains) actual.contains(expected)
         else actual == expected
@@ -150,9 +150,8 @@ private fun VisionDrive.existCoreByDetect(
          */
         v = detectWithScroll(
             selector = selector,
-            removeChars = removeChars,
+            remove = remove,
             language = language,
-            directAccessCompletion = true,
             direction = ScrollDirection.Down,
             swipeToCenter = false,
             throwsException = false
@@ -233,7 +232,7 @@ internal fun postProcessForAssertion(
  */
 fun VisionDrive.existWithScrollDown(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
@@ -264,7 +263,7 @@ fun VisionDrive.existWithScrollDown(
             v = existCore(
                 message = assertMessage,
                 selector = sel,
-                removeChars = removeChars,
+                remove = remove,
                 language = language,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
@@ -284,7 +283,7 @@ fun VisionDrive.existWithScrollDown(
  */
 fun VisionDrive.existWithScrollUp(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
@@ -315,7 +314,7 @@ fun VisionDrive.existWithScrollUp(
             v = existCore(
                 message = assertMessage,
                 selector = sel,
-                removeChars = removeChars,
+                remove = remove,
                 language = language,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
@@ -335,7 +334,7 @@ fun VisionDrive.existWithScrollUp(
  */
 fun VisionDrive.existWithScrollRight(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
@@ -366,7 +365,7 @@ fun VisionDrive.existWithScrollRight(
             v = existCore(
                 message = assertMessage,
                 selector = sel,
-                removeChars = removeChars,
+                remove = remove,
                 language = language,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
@@ -386,7 +385,7 @@ fun VisionDrive.existWithScrollRight(
  */
 fun VisionDrive.existWithScrollLeft(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
@@ -418,7 +417,7 @@ fun VisionDrive.existWithScrollLeft(
             v = existCore(
                 message = assertMessage,
                 selector = sel,
-                removeChars = removeChars,
+                remove = remove,
                 language = language,
                 ignoreCase = ignoreCase,
                 allowContains = allowContains,
@@ -438,9 +437,9 @@ fun VisionDrive.existWithScrollLeft(
  */
 fun VisionDrive.dontExist(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = true,
+    directAccessCompletion: Boolean = false,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -463,7 +462,7 @@ fun VisionDrive.dontExist(
         ) {
             v = detectCore(
                 selector = sel,
-                removeChars = removeChars,
+                remove = remove,
                 language = language,
                 directAccessCompletion = directAccessCompletion,
                 waitSeconds = 0.0,

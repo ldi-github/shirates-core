@@ -200,7 +200,7 @@ fun VisionDrive.codeblock(
  */
 fun VisionDrive.cellOf(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean = true,
     swipeToCenter: Boolean = CodeExecutionContext.withScroll ?: true,
@@ -212,7 +212,7 @@ fun VisionDrive.cellOf(
 
     val baseElement = detect(
         expression = expression,
-        removeChars = removeChars,
+        remove = remove,
         language = language,
         allowScroll = allowScroll,
         swipeToCenter = swipeToCenter,

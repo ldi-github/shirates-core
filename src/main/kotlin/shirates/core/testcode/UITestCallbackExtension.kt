@@ -393,7 +393,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.trace()
 
         if (throwable != null) {
-            TestDriver.screenshotCore(sync = false)
+            TestDriver.screenshotCore(sync = false, withTextMatching = false)
             throw throwable
         }
     }

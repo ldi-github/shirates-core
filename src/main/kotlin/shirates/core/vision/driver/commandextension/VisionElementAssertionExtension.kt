@@ -18,7 +18,7 @@ import shirates.core.vision.VisionElement
 fun VisionElement.textIs(
     expected: String,
     strict: Boolean = PropertiesManager.strictCompareMode,
-    removeChars: String? = null,
+    remove: String? = null,
     ignoreFullWidthHalfWidth: Boolean = false,
 ): VisionElement {
 
@@ -52,19 +52,18 @@ fun VisionElement.textIs(
         return this
     }
 
-    if (text.isBlank()) {
-        recognizeText()
-    }
+    visionContext.recognizeText()
+
     var actual = text
-    if (removeChars != null) {
+    if (remove != null) {
         /**
          * remove characters (in AI-OCR miss-recognized character list)
          */
-        var removeChars2 = removeChars
+        var removeChars = remove
         if (ignoreFullWidthHalfWidth) {
-            removeChars2 = removeChars2.fullWidth2HalfWidth()
+            removeChars = removeChars.fullWidth2HalfWidth()
         }
-        actual = actual.filterNot { it in removeChars2 }
+        actual = actual.filterNot { it in removeChars }
     }
 
     val expectedForCompare = expected.process()

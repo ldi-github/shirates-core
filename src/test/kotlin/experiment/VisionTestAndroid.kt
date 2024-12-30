@@ -2,7 +2,9 @@ package experiment
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.thisIs
 import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.syncScreen
 import shirates.core.vision.driver.waitForDisplay
 import shirates.core.vision.testcode.VisionTest
 
@@ -57,7 +59,26 @@ class VisionTestAndroid : VisionTest() {
                 condition {
                     it.tap("Storage")
                         .waitForDisplay("GB used")
-                }.action {
+                }.expectation {
+                    syncScreen()
+                    it.detect("Games").onLine {
+                        exist("0 B")
+                        exist("Games")
+                        joinedText.thisIs("Games 0 B")
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun leftItem_rightItem_aboveImage_belowItem() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.tap("Storage")
+                        .waitForDisplay("GB used")
                 }.expectation {
                     it.detect("Apps")
                         .leftItem()
@@ -68,36 +89,10 @@ class VisionTestAndroid : VisionTest() {
                         .textIs("Apps")
                     it.detect("Apps").aboveItem(2)
                         .textIs("System")
-
-                    it.detect("Games").onRight {
-                        exist("0 B").onLeft {
-                            exist("Games")
-                        }
-                    }
                     it.detect("Audio").rightText()
                         .textIs("0 B")
                         .leftItem()
                         .textIs("Audio")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun leftItem_rightItem() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.pressHome()
-                    it.screenIs("[Android Home Screen]")
-                }.action {
-                    val v = it.detect("Gmail")
-                    v.rightItem().save()
-                    v.leftItem().save()
-                    println()
-                }.expectation {
-
                 }
             }
         }

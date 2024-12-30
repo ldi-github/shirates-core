@@ -1,5 +1,6 @@
 package shirates.core.vision.driver
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.visionDrive
 import shirates.core.logging.CodeExecutionContext
@@ -10,6 +11,7 @@ import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.commandextension.helper.FlowContainer
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
 import java.awt.image.BufferedImage
@@ -17,7 +19,8 @@ import java.io.FileNotFoundException
 import java.nio.file.Files
 
 class VisionContext(
-    capture: Boolean
+    val capture: Boolean,
+    val language: String = PropertiesManager.logLanguage
 ) {
     /**
      * screenshotFile
@@ -96,11 +99,6 @@ class VisionContext(
         }
 
     /**
-     * language
-     */
-    var language: String? = null
-
-    /**
      * jsonString
      */
     var jsonString: String = ""
@@ -108,12 +106,23 @@ class VisionContext(
     /**
      * recognizeTextObservations
      */
-    val recognizeTextObservations: MutableList<RecognizeTextObservation> = mutableListOf()
+    var recognizeTextObservations = mutableListOf<RecognizeTextObservation>()
+
+    var isRecognizeTextObservationInitialized = false
 
     /**
-     * visionElements
+     * getVisionElements
      */
-    val visionElements: MutableList<VisionElement> = mutableListOf()
+    fun getVisionElements(): MutableList<VisionElement> {
+
+        val list = mutableListOf<VisionElement>()
+        for (o in recognizeTextObservations) {
+            o.createVisionElement()
+            val v = o.createVisionElement()
+            list.add(v)
+        }
+        return list
+    }
 
     /**
      * constructor
@@ -199,10 +208,8 @@ class VisionContext(
         this.localRegionY = 0
         this.rectOnLocalRegion = null
 
-        this.language = ""
         this.jsonString = ""
 
-        this.visionElements.clear()
     }
 
     /**
@@ -210,7 +217,7 @@ class VisionContext(
      */
     fun clone(): VisionContext {
 
-        val c = VisionContext(capture = false)
+        val c = VisionContext(capture = false, language = this.language)
         c.screenshotFile = screenshotFile
         c.screenshotImage = screenshotImage
 
@@ -224,11 +231,9 @@ class VisionContext(
         c.imageMarginHorizontal = imageMarginHorizontal
         c.imageMarginVertical = imageMarginVertical
 
-        c.language = language
         c.jsonString = jsonString
 
-        c.recognizeTextObservations.addAll(recognizeTextObservations)
-        c.visionElements.addAll(visionElements.map { it.clone() })
+        c.recognizeTextObservations = recognizeTextObservations.toMutableList()
 
         return c
     }
@@ -272,47 +277,42 @@ class VisionContext(
         language: String? = this.language,
     ): VisionContext {
 
-        if (recognizeTextObservations.any()) {
+        if (isRecognizeTextObservationInitialized) {
             return this
         }
 
         val rootElement = visionDrive.rootElement
-        if (rootElement.visionContext.recognizeTextObservations.isEmpty()) {
-            /**
-             * Recognize text
-             * and store the result into rootElement.visionContext
-             */
-            var inputFile = localRegionFile
-            if (inputFile == null) {
-                inputFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_localRegion.png").toString()
-                localRegionImage!!.saveImage(inputFile, log = false)
-            }
-            val recognizeTextResult = SrvisionProxy.recognizeText(
-                inputFile = inputFile,
-                language = language
-            )
-            rootElement.visionContext.loadTextRecognizerResult(
-                inputFile = inputFile,
-                language = language,
-                recognizeTextResult = recognizeTextResult
-            )
+
+        /**
+         * Recognize text
+         * and store the result into rootElement.visionContext
+         */
+        var inputFile = localRegionFile
+        if (inputFile == null) {
+            inputFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_localRegion.png").toString()
+            localRegionImage!!.saveImage(inputFile, log = false)
         }
+        val recognizeTextResult = SrvisionProxy.recognizeText(
+            inputFile = inputFile,
+            language = language
+        )
+        rootElement.visionContext.loadTextRecognizerResult(
+            inputFile = inputFile,
+            recognizeTextResult = recognizeTextResult
+        )
         if (this != rootElement.visionContext) {
             /**
              * Get visionElements and recognizedTextObservations from rootElement.visionContext
              * into this VisionContext by filtering bounds
              */
-            val elements = rootElement.visionContext.visionElements
-                .filter { it.bounds.isIncludedIn(CodeExecutionContext.regionRect.toBoundsWithRatio()) }
-            visionElements.clear()
-            visionElements.addAll(elements)
-
-            val observations =
-                elements.filter { it.recognizeTextObservation != null }.map { it.recognizeTextObservation!! }
-            recognizeTextObservations.clear()
-            recognizeTextObservations.addAll(observations)
+            recognizeTextObservations = rootElement.visionContext.recognizeTextObservations
+                .filter { it.rectOnScreen != null }
+                .filter { it.rectOnScreen!!.toBoundsWithRatio().isIncludedIn(rectOnScreen!!.toBoundsWithRatio()) }
+                .toMutableList()
+            sortRecognizeTextObservations()
         }
 
+        isRecognizeTextObservationInitialized = true
         return this
     }
 
@@ -321,13 +321,10 @@ class VisionContext(
      */
     fun loadTextRecognizerResult(
         inputFile: String,
-        language: String? = null,
         recognizeTextResult: RecognizeTextResult
     ): VisionContext {
         this.localRegionFile = inputFile
-        this.language = language
 
-        visionElements.clear()
 
         val observations = recognizeTextResult.candidates.map {
             RecognizeTextObservation(
@@ -347,18 +344,21 @@ class VisionContext(
                 rectOnLocalRegion = it.rect,
             )
         }
-        recognizeTextObservations.clear()
-        recognizeTextObservations.addAll(observations)
+        recognizeTextObservations = observations.toMutableList()
+        sortRecognizeTextObservations()
 
-        val list = mutableListOf<VisionElement>()
-        for (o in observations) {
-            o.createVisionElement()
-            val v = o.createVisionElement()
-            list.add(v)
-        }
-        visionElements.addAll(list)
 
         return this
+    }
+
+    private fun sortRecognizeTextObservations() {
+
+        val flowContainer = FlowContainer()
+        for (t in recognizeTextObservations) {
+            flowContainer.addElement(element = t)
+        }
+        recognizeTextObservations =
+            flowContainer.getElements().map { it as RecognizeTextObservation }.toMutableList()
     }
 
     /**
@@ -371,16 +371,17 @@ class VisionContext(
      */
     fun detect(
         text: String,
-        removeChars: String? = null,
+        remove: String? = null,
+        language: String? = this.language,
     ): VisionElement {
 
-        if (this.recognizeTextObservations.isEmpty()) {
-            recognizeText()
+        if (isRecognizeTextObservationInitialized.not()) {
+            recognizeText(language = language)
         }
 
         val candidates = detectCandidates(
             text = text,
-            removeChars = removeChars,
+            remove = remove,
         )
 
         val v = candidates.firstOrNull() ?: VisionElement.emptyElement
@@ -392,13 +393,15 @@ class VisionContext(
      */
     fun detect(
         selector: Selector,
-        removeChars: String? = null,
+        remove: String? = null,
+        language: String? = this.language,
     ): VisionElement {
 
         val text = selector.text ?: ""
         val v = detect(
             text = text,
-            removeChars = removeChars,
+            remove = remove,
+            language = language
         )
         v.selector = selector
         return v
@@ -414,20 +417,19 @@ class VisionContext(
      */
     fun detectCandidates(
         text: String,
-        removeChars: String?,
+        remove: String?,
     ): List<VisionElement> {
 
         if (text.isBlank()) {
-            return visionElements.toList()
+            return getVisionElements()
         }
 
         val localBounds = rectOnScreen!!.toBoundsWithRatio()
+        val normalizedText = text.normalizeForComparison(remove = remove)
 
-        val normalizedText = text.normalizeForComparison(removeChars = removeChars)
-
-        var list = visionElements
+        var list = getVisionElements()
             .filter {
-                val t = it.text.normalizeForComparison(removeChars = removeChars)
+                val t = it.text.normalizeForComparison(remove = remove)
                 t.contains(normalizedText)
             }
         list = list.filter { it.bounds.isIncludedIn(localBounds) }
@@ -436,11 +438,12 @@ class VisionContext(
     }
 
     /**
-     * joinText
+     * joinedText
      */
-    fun joinText(): String {
-
-        return visionElements.map { it.text }.joinToString()
-    }
+    val joinedText: String
+        get() {
+            recognizeText()
+            return recognizeTextObservations.map { it.text }.joinToString(" ")
+        }
 
 }

@@ -5,6 +5,7 @@ import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.cropImage
 import shirates.core.vision.driver.VisionContext
+import shirates.core.vision.driver.commandextension.helper.IRect
 import java.awt.image.BufferedImage
 
 open class VisionObservation(
@@ -18,7 +19,7 @@ open class VisionObservation(
     open var localRegionY: Int,
     open var rectOnLocalRegion: Rectangle? = null,
 
-    ) {
+    ) : IRect {
     private var _image: BufferedImage? = null
 
     /**
@@ -82,7 +83,6 @@ open class VisionObservation(
         c.rectOnLocalRegion = this.rectOnLocalRegion
         c.localRegionImage = this.localRegionImage
         if (this is RecognizeTextObservation) {
-            c.language = this.language
             c.jsonString = this.jsonString
             c.recognizeTextObservations.add(this)
         }
@@ -101,5 +101,9 @@ open class VisionObservation(
 
         v.observation = this
         return v
+    }
+
+    override fun getRectInfo(): Rectangle {
+        return rectOnScreen ?: Rectangle()
     }
 }

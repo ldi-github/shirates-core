@@ -17,9 +17,9 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.tap(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = true,
+    directAccessCompletion: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
@@ -41,7 +41,7 @@ fun VisionDrive.tap(
         fun getElement(): VisionElement {
             return detectCore(
                 selector = sel,
-                removeChars = removeChars,
+                remove = remove,
                 language = language,
                 directAccessCompletion = directAccessCompletion,
                 waitSeconds = waitSeconds,
@@ -138,9 +138,8 @@ fun VisionDrive.tap(
 
 private fun VisionDrive.tapWithScrollCommandCore(
     expression: String,
-    removeChars: String?,
+    remove: String?,
     language: String,
-    directAccessCompletion: Boolean,
     command: String,
     direction: ScrollDirection,
     scrollDurationSeconds: Double,
@@ -159,9 +158,8 @@ private fun VisionDrive.tapWithScrollCommandCore(
 
         v = detectWithScroll(
             selector = selector,
-            removeChars = removeChars,
+            remove = remove,
             language = language,
-            directAccessCompletion = directAccessCompletion,
             direction = direction,
             scrollDurationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
@@ -182,9 +180,8 @@ private fun VisionDrive.tapWithScrollCommandCore(
  */
 fun VisionDrive.tapWithScrollDown(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -198,9 +195,8 @@ fun VisionDrive.tapWithScrollDown(
 
     val v = tapWithScrollCommandCore(
         expression = expression,
-        removeChars = removeChars,
+        remove = remove,
         language = language,
-        directAccessCompletion = directAccessCompletion,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -219,9 +215,8 @@ fun VisionDrive.tapWithScrollDown(
  */
 fun VisionDrive.tapWithScrollUp(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -235,9 +230,8 @@ fun VisionDrive.tapWithScrollUp(
 
     val v = tapWithScrollCommandCore(
         expression = expression,
-        removeChars = removeChars,
+        remove = remove,
         language = language,
-        directAccessCompletion = directAccessCompletion,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -256,9 +250,8 @@ fun VisionDrive.tapWithScrollUp(
  */
 fun VisionDrive.tapWithScrollRight(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -272,9 +265,8 @@ fun VisionDrive.tapWithScrollRight(
 
     val v = tapWithScrollCommandCore(
         expression = expression,
-        removeChars = removeChars,
+        remove = remove,
         language = language,
-        directAccessCompletion = directAccessCompletion,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -293,9 +285,8 @@ fun VisionDrive.tapWithScrollRight(
  */
 fun VisionDrive.tapWithScrollLeft(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = true,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -309,9 +300,8 @@ fun VisionDrive.tapWithScrollLeft(
 
     val v = tapWithScrollCommandCore(
         expression = expression,
-        removeChars = removeChars,
+        remove = remove,
         language = language,
-        directAccessCompletion = directAccessCompletion,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,

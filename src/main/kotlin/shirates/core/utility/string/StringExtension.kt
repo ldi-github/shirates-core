@@ -41,11 +41,11 @@ fun String.normalize(
 /**
  * normalizeForComparison
  */
-fun String.normalizeForComparison(removeChars: String?): String {
+fun String.normalizeForComparison(remove: String?): String {
     var t = this.normalize(Normalizer.Form.NFKC)
     t = t.replace("\\s".toRegex(), "").lowercase()
-    if (removeChars != null) {
-        t = t.filterNot { it in removeChars }
+    if (remove != null) {
+        t = t.filterNot { it in remove }
     }
     return t
 }

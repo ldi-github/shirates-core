@@ -46,13 +46,12 @@ class VisionContextTest {
         val c = VisionContext(capture = false)
             .loadTextRecognizerResult(
                 inputFile = CodeExecutionContext.lastScreenshotFile!!,
-                language = null,
                 recognizeTextResult = recognizeTextResult,
             )
         // Assert
-        assertThat(c.visionElements.count()).isEqualTo(18)
+        assertThat(c.getVisionElements().count()).isEqualTo(18)
         run {
-            val v = c.visionElements[0]
+            val v = c.getVisionElements()[0]
             assertThat(v.text).isEqualTo("1:10 GO •:")
             assertThat(v.rect.toString()).isEqualTo(Rectangle(40, 49, 252, 44).toString())
             assertThat(v.recognizeTextObservation?.text).isEqualTo("1:10 GO •:")
@@ -82,7 +81,6 @@ class VisionContextTest {
         val c = VisionContext(screenshotFile = screenshotFile)
             .loadTextRecognizerResult(
                 inputFile = screenshotFile,
-                language = null,
                 recognizeTextResult = recognizeTextResult,
             )
         run {

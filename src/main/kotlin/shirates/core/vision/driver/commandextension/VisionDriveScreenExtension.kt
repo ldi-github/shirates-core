@@ -146,5 +146,5 @@ fun VisionDrive.waitScreen(
         onTrue = onTrue
     )
 
-    return lastElement
+    return rootElement
 }

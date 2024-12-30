@@ -13,14 +13,14 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
 import shirates.core.utility.image.SegmentContainer
-import shirates.core.utility.image.saveImage
 import shirates.core.vision.driver.VisionContext
+import shirates.core.vision.driver.commandextension.helper.IRect
 import java.awt.image.BufferedImage
 import java.rmi.AccessException
 
 class VisionElement(
     capture: Boolean = true,
-) : VisionDrive {
+) : VisionDrive, IRect {
 
     companion object {
         /**
@@ -35,7 +35,17 @@ class VisionElement(
     /**
      * visionContext
      */
-    var visionContext: VisionContext = VisionContext(capture = capture)
+    lateinit var visionContext: VisionContext
+
+    init {
+        visionContext = VisionContext(capture = capture)
+    }
+
+    constructor(visionContext: VisionContext) : this(capture = false) {
+
+        this.visionContext = visionContext
+    }
+
 
     /**
      * selector
@@ -185,8 +195,15 @@ class VisionElement(
     val text: String
         get() {
             return testElement?.textOrLabelOrValue
-                ?: visionContext.recognizeTextObservations.firstOrNull()?.text
                 ?: recognizeTextObservation?.text ?: return ""
+        }
+
+    /**
+     * joinedText
+     */
+    val joinedText: String
+        get() {
+            return visionContext.joinedText
         }
 
     /**
@@ -224,6 +241,10 @@ class VisionElement(
             return s
         }
 
+    override fun getRectInfo(): Rectangle {
+        return rect
+    }
+
     override fun toString(): String {
         return "text: \"$text\", bounds: $bounds, rect: ${bounds.toRectWithRatio()}"
     }
@@ -250,23 +271,6 @@ class VisionElement(
         v.visionContext.refreshWithLastScreenshot()
 
         return v
-    }
-
-    /**
-     * recognizeText
-     */
-    fun recognizeText(
-        language: String? = visionContext.language ?: PropertiesManager.logLanguage,
-    ): String {
-
-        if (this.visionContext.recognizeTextObservations.isEmpty()) {
-            val file = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rect}.png").toString()
-            this.image!!.saveImage(file = file, log = false)
-            this.visionContext.localRegionFile = file
-            this.visionContext.localRegionImage = this.image
-            this.visionContext.recognizeText(language = language)
-        }
-        return visionContext.joinText()
     }
 
     /**

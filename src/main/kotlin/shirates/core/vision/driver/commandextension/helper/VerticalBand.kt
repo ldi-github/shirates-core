@@ -1,12 +1,10 @@
 package shirates.core.vision.driver.commandextension.helper
 
-import shirates.core.vision.VisionElement
-
 class VerticalBand(internal var left: Int, internal var right: Int) {
 
-    internal val members = mutableListOf<VisionElement>()
+    internal val members = mutableListOf<IRect>()
 
-    constructor(baseElement: VisionElement) : this(baseElement.rect.left, baseElement.rect.right) {
+    constructor(baseElement: IRect) : this(baseElement.getRectInfo().left, baseElement.getRectInfo().right) {
 
         members.add(baseElement)
     }
@@ -14,15 +12,15 @@ class VerticalBand(internal var left: Int, internal var right: Int) {
     /**
      * canMerge
      */
-    fun canMerge(element: VisionElement, margin: Int = 0): Boolean {
+    fun canMerge(element: IRect, margin: Int = 0): Boolean {
 
         if (members.isEmpty()) {
             return true
         }
-        if (element.rect.right < this.left + margin) {
+        if (element.getRectInfo().right < this.left + margin) {
             return false
         }
-        if (this.right + margin < element.rect.left) {
+        if (this.right + margin < element.getRectInfo().left) {
             return false
         }
         val s1 = element.toString()
@@ -36,7 +34,7 @@ class VerticalBand(internal var left: Int, internal var right: Int) {
     /**
      * merge
      */
-    fun merge(element: VisionElement, margin: Int = 0): Boolean {
+    fun merge(element: IRect, margin: Int = 0): Boolean {
 
         if (canMerge(element = element, margin = margin).not()) {
             return false
@@ -44,9 +42,9 @@ class VerticalBand(internal var left: Int, internal var right: Int) {
 
         if (members.contains(element).not()) {
             members.add(element)
-            members.sortWith(compareBy<VisionElement> { it.rect.top }
-                .thenBy { it.rect.left }
-                .thenBy { -it.rect.area })
+            members.sortWith(compareBy<IRect> { it.getRectInfo().top }
+                .thenBy { it.getRectInfo().left }
+                .thenBy { -it.getRectInfo().area })
         }
         return true
     }
@@ -54,7 +52,7 @@ class VerticalBand(internal var left: Int, internal var right: Int) {
     /**
      * getElements
      */
-    fun getElements(): MutableList<VisionElement> {
+    fun getElements(): MutableList<IRect> {
         return members.toMutableList()
     }
 

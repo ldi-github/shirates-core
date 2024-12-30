@@ -21,7 +21,10 @@ import shirates.core.vision.driver.commandextension.canDetectCore
 import java.awt.image.BufferedImage
 
 
-internal fun VisionDrive.syncScreenshot(
+/**
+ * syncScreen
+ */
+fun VisionDrive.syncScreen(
     syncWaitSeconds: Double = testContext.syncWaitSeconds,
     maxLoopCount: Int = testContext.syncMaxLoopCount,
     syncIntervalSeconds: Double = 0.0,

@@ -16,9 +16,9 @@ import shirates.core.vision.driver.branchextension.lastScreenshotImage
  */
 fun VisionElement.swipeTo(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = true,
+    directAccessCompletion: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     durationSeconds: Double = testContext.swipeDurationSeconds,
@@ -37,7 +37,7 @@ fun VisionElement.swipeTo(
 
         v = detectCore(
             selector = sel,
-            removeChars = removeChars,
+            remove = remove,
             language = language,
             directAccessCompletion = directAccessCompletion,
             waitSeconds = waitSeconds,
@@ -66,16 +66,16 @@ fun VisionElement.swipeTo(
  */
 fun VisionElement.swipeToAdjust(
     expression: String,
-    removeChars: String? = null,
+    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = true,
+    directAccessCompletion: Boolean = false,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
 ): VisionElement {
 
     return swipeTo(
         expression = expression,
-        removeChars = removeChars,
+        remove = remove,
         language = language,
         directAccessCompletion = directAccessCompletion,
         durationSeconds = durationSeconds,

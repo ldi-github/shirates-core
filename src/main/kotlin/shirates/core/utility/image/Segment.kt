@@ -8,6 +8,7 @@ import shirates.core.logging.printWarn
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.commandextension.helper.IRect
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 
@@ -20,7 +21,7 @@ class Segment(
     var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
     var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
     var saveWithMargin: Boolean = true,
-) {
+) : IRect {
     var recognizeTextObservation: RecognizeTextObservation? = null
 
     val text: String
@@ -118,6 +119,10 @@ class Segment(
         get() {
             return width.toFloat() / height.toFloat()
         }
+
+    override fun getRectInfo(): Rectangle {
+        return rectOnScreen
+    }
 
     override fun toString(): String {
         return "[$left, $top, $right, $bottom](w=$width, h=$height, ratio=$aspectRatio, text=`$text`)"
