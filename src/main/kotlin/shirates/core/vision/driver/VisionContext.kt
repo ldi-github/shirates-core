@@ -6,7 +6,7 @@ import shirates.core.driver.visionDrive
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.*
-import shirates.core.utility.string.normalizeForComparison
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.SrvisionProxy
@@ -274,10 +274,11 @@ class VisionContext(
      * recognizeText
      */
     fun recognizeText(
+        force: Boolean = false,
         language: String? = this.language,
     ): VisionContext {
 
-        if (isRecognizeTextObservationInitialized) {
+        if (force.not() && isRecognizeTextObservationInitialized) {
             return this
         }
 
@@ -300,14 +301,15 @@ class VisionContext(
             inputFile = inputFile,
             recognizeTextResult = recognizeTextResult
         )
-        if (this != rootElement.visionContext) {
+        val regionElement = CodeExecutionContext.regionElement
+        if (regionElement != rootElement) {
             /**
              * Get visionElements and recognizedTextObservations from rootElement.visionContext
              * into this VisionContext by filtering bounds
              */
             recognizeTextObservations = rootElement.visionContext.recognizeTextObservations
                 .filter { it.rectOnScreen != null }
-                .filter { it.rectOnScreen!!.toBoundsWithRatio().isIncludedIn(rectOnScreen!!.toBoundsWithRatio()) }
+                .filter { it.rectOnScreen!!.toBoundsWithRatio().isCenterIncludedIn(regionElement.bounds) }
                 .toMutableList()
             sortRecognizeTextObservations()
         }
@@ -412,6 +414,7 @@ class VisionContext(
      *
      * returns list of VisionElement with AI-OCR recognized text
      * ignoring white space
+     * ignoring full-width, half-width
      * ignoring upper case, lower case
      * removing `removeChars`
      */
@@ -425,15 +428,24 @@ class VisionContext(
         }
 
         val localBounds = rectOnScreen!!.toBoundsWithRatio()
-        val normalizedText = text.normalizeForComparison(remove = remove)
-
-        var list = getVisionElements()
-            .filter {
-                val t = it.text.normalizeForComparison(remove = remove)
-                t.contains(normalizedText)
-            }
-        list = list.filter { it.bounds.isIncludedIn(localBounds) }
-            .sortedBy { Math.abs(normalizedText.length - it.text.length) }
+        val normalizedText = text.forVisionComparison(
+            ignoreCase = true,
+            ignoreFullWidthHalfWidth = true,
+            remove = remove
+        )
+        var list: List<VisionElement> = getVisionElements()
+        list = list.filter {
+            val t = it.text.forVisionComparison(
+                ignoreCase = true,
+                ignoreFullWidthHalfWidth = true,
+                remove = remove
+            )
+            t.contains(normalizedText)
+        }
+        list = list.filter {
+            it.bounds.isCenterIncludedIn(localBounds)
+        }
+        list = list.sortedBy { Math.abs(normalizedText.length - it.text.length) }
         return list
     }
 

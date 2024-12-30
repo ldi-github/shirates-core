@@ -2,12 +2,14 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
-import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.screenshot
 import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.commandextension.exist
 import shirates.core.driver.commandextension.getSelector
+import shirates.core.driver.commandextension.toVisionElement
 import shirates.core.driver.testContext
+import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
@@ -16,7 +18,7 @@ import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
-import shirates.core.utility.string.normalizeForComparison
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.sync.WaitUtility.doUntilTrue
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.SrvisionProxy
@@ -32,15 +34,21 @@ import shirates.core.vision.result.GetRectanglesWithTemplateResult
  */
 fun VisionDrive.exist(
     expression: String,
+    useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
+    ignoreFullWidthHalfWidth: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
 //    val sw = StopWatch("exist")
+    if (useCache) {
+        val e = testDrive.exist(expression = expression, waitSeconds = waitSeconds, useCache = true)
+        return e.toVisionElement()
+    }
 
     val sel = getSelector(expression = expression)
     var v = VisionElement.emptyElement
@@ -57,6 +65,7 @@ fun VisionDrive.exist(
             remove = remove,
             language = language,
             ignoreCase = ignoreCase,
+            ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
             allowContains = allowContains,
             waitSeconds = waitSeconds,
         )
@@ -77,22 +86,48 @@ private fun VisionDrive.existCore(
     remove: String?,
     language: String,
     ignoreCase: Boolean,
+    ignoreFullWidthHalfWidth: Boolean,
     allowContains: Boolean,
     waitSeconds: Double,
 ): VisionElement {
 
-    val v = existCoreByDetect(
+    val v = detectWithAdjustingPosition(
         selector = selector,
         remove = remove,
         language = language,
         waitSeconds = waitSeconds,
-        ignoreCase = ignoreCase,
-        allowContains = allowContains
+//        intervalSeconds = intervalSeconds,
+//        holdSeconds = holdSeconds,
     )
-    if (v.isFound) {
+
+    fun String.eval(): Boolean {
+        val containedText = selector.text ?: selector.textContains
+        if (containedText.isNullOrBlank()) {
+            return false
+        }
+        val actual = this.forVisionComparison(
+            ignoreCase = ignoreCase,
+            ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
+            remove = remove
+        )
+        val expected = containedText.forVisionComparison(
+            ignoreCase = ignoreCase,
+            ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
+            remove = remove
+        )
+        val r = if (allowContains) actual.contains(expected)
+        else actual == expected
+        return r
+    }
+
+    val isFound =
+        if (v == rootElement) true
+        else v.text.eval()
+
+    if (isFound) {
         TestLog.ok(message = message)
-        if (v.text != selector.text) {
-            TestLog.warn(message = "There are differences in text.  (expected: \"${selector.text}\", actual: \"${v.text}\")")
+        if (v != rootElement && v.text != selector.text) {
+            TestLog.info(message = "There are differences in text.  (expected: \"${selector.text}\", actual: \"${v.text}\")")
         }
     } else {
         val error = TestNGException(message = "$message (expected: \"${selector.text}\", actual: \"${v.text}\")")
@@ -102,65 +137,6 @@ private fun VisionDrive.existCore(
     }
     return v
 }
-
-private fun VisionDrive.existCoreByDetect(
-    selector: Selector,
-    remove: String?,
-    language: String,
-    waitSeconds: Double,
-    ignoreCase: Boolean,
-    allowContains: Boolean
-): VisionElement {
-    /**
-     * Try to detect without scroll
-     */
-    var v = detectCore(
-        selector = selector,
-        remove = remove,
-        language = language,
-        waitSeconds = waitSeconds,
-        intervalSeconds = testContext.syncIntervalSeconds,
-        allowScroll = false,
-        swipeToCenter = false,
-        throwsException = false,
-        directAccessCompletion = true
-    )
-
-    fun String.eval(): Boolean {
-        val containedText = selector.text ?: selector.textContains
-        if (containedText.isNullOrBlank()) {
-            return false
-        }
-        val actual = this.normalizeForComparison(remove = remove)
-        val expected = containedText.normalizeForComparison(remove = remove)
-
-        val r = if (allowContains) actual.contains(expected)
-        else actual == expected
-        return r
-    }
-
-    var isFound = v.text.eval()
-    if (isFound) {
-        return v
-    }
-
-    if (isFound.not() && CodeExecutionContext.withScroll == true) {
-        /**
-         * Try to detect with scroll
-         */
-        v = detectWithScroll(
-            selector = selector,
-            remove = remove,
-            language = language,
-            direction = ScrollDirection.Down,
-            swipeToCenter = false,
-            throwsException = false
-        )
-        isFound = v.text.eval()
-    }
-    return v
-}
-
 
 private fun VisionDrive.actionWithOnExistErrorHandler(
     message: String,
@@ -235,6 +211,7 @@ fun VisionDrive.existWithScrollDown(
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
+    ignoreFullWidthHalfWidth: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -266,6 +243,7 @@ fun VisionDrive.existWithScrollDown(
                 remove = remove,
                 language = language,
                 ignoreCase = ignoreCase,
+                ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
                 allowContains = allowContains,
                 waitSeconds = waitSeconds,
             )
@@ -286,6 +264,7 @@ fun VisionDrive.existWithScrollUp(
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
+    ignoreFullWidthHalfWidth: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -317,6 +296,7 @@ fun VisionDrive.existWithScrollUp(
                 remove = remove,
                 language = language,
                 ignoreCase = ignoreCase,
+                ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
                 allowContains = allowContains,
                 waitSeconds = waitSeconds,
             )
@@ -337,6 +317,7 @@ fun VisionDrive.existWithScrollRight(
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
+    ignoreFullWidthHalfWidth: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -368,6 +349,7 @@ fun VisionDrive.existWithScrollRight(
                 remove = remove,
                 language = language,
                 ignoreCase = ignoreCase,
+                ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
                 allowContains = allowContains,
                 waitSeconds = waitSeconds,
             )
@@ -388,6 +370,7 @@ fun VisionDrive.existWithScrollLeft(
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
+    ignoreFullWidthHalfWidth: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -420,6 +403,7 @@ fun VisionDrive.existWithScrollLeft(
                 remove = remove,
                 language = language,
                 ignoreCase = ignoreCase,
+                ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
                 allowContains = allowContains,
                 waitSeconds = waitSeconds
             )
@@ -439,7 +423,6 @@ fun VisionDrive.dontExist(
     expression: String,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = false,
     ignoreCase: Boolean = true,
     allowContains: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
@@ -464,7 +447,6 @@ fun VisionDrive.dontExist(
                 selector = sel,
                 remove = remove,
                 language = language,
-                directAccessCompletion = directAccessCompletion,
                 waitSeconds = 0.0,
                 intervalSeconds = 0.0,
                 allowScroll = false,

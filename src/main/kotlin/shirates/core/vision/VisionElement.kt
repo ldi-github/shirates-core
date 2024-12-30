@@ -207,6 +207,16 @@ class VisionElement(
         }
 
     /**
+     * joinedDigit
+     */
+    val joinedDigit: String
+        get() {
+            val s = joinedText.replace("[^\\d\\s]".toRegex(), "")
+                .replace("[\\s+]".toRegex(), " ")
+            return s
+        }
+
+    /**
      * subject
      */
     val subject: String

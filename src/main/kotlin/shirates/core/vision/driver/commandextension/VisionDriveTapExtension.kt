@@ -1,6 +1,7 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.silent
@@ -19,7 +20,6 @@ fun VisionDrive.tap(
     expression: String,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
@@ -38,26 +38,14 @@ fun VisionDrive.tap(
     var v = VisionElement.emptyElement
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        fun getElement(): VisionElement {
-            return detectCore(
-                selector = sel,
-                remove = remove,
-                language = language,
-                directAccessCompletion = directAccessCompletion,
-                waitSeconds = waitSeconds,
-                intervalSeconds = intervalSeconds,
-                allowScroll = null,
-                swipeToCenter = false,
-                throwsException = true
-            )
-        }
-
-        v = getElement()
-
-        if (CodeExecutionContext.withScroll == true && CodeExecutionContext.scrollDirection == ScrollDirection.Down) {
-            v.swipeVerticalTo(endY = screenRect.toBoundsWithRatio().height / 5)
-            v = getElement()
-        }
+        v = detectWithAdjustingPosition(
+            selector = sel,
+            remove = remove,
+            language = language,
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            holdSeconds = holdSeconds,
+        )
 
         val tapFunc = {
             silent {
@@ -69,6 +57,43 @@ fun VisionDrive.tap(
     }
     if (TestMode.isNoLoadRun) {
         lastElement = v
+    }
+
+    return v
+}
+
+/**
+ * detectWithAdjustingPosition
+ */
+fun VisionDrive.detectWithAdjustingPosition(
+    selector: Selector,
+    remove: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+): VisionElement {
+
+    fun getElement(): VisionElement {
+        return detectCore(
+            selector = selector,
+            remove = remove,
+            language = language,
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            allowScroll = null,
+            swipeToCenter = false,
+            throwsException = true
+        )
+    }
+
+    var v = getElement()
+
+    if (CodeExecutionContext.withScroll == true && CodeExecutionContext.scrollDirection == ScrollDirection.Down &&
+        screenRect.bottom * 0.8 < v.rect.top
+    ) {
+        v.swipeVerticalTo(endY = (screenRect.toBoundsWithRatio().height * 0.2).toInt())
+        v = getElement()
     }
 
     return v

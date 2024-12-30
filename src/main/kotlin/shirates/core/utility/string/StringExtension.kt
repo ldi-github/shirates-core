@@ -2,16 +2,19 @@ package shirates.core.utility.string
 
 import com.ibm.icu.text.Transliterator
 import shirates.core.configuration.PropertiesManager
+import shirates.core.logging.printWarn
 import shirates.core.utility.misc.StringUtility
+import shirates.core.vision.configration.repository.VisionTextReplacementRepository
 import java.text.Normalizer
 
 /**
- * preprocessForComparison
+ * forClassicComparison
  */
-fun String?.preprocessForComparison(
+fun String?.forClassicComparison(
     strict: Boolean = PropertiesManager.strictCompareMode,
     keepLF: Boolean = PropertiesManager.keepLF,
     keepTAB: Boolean = PropertiesManager.keepTAB,
+    keepZenkakuSpace: Boolean = PropertiesManager.keepZenkakuSpace,
     waveDashToFullWidthTilde: Boolean = PropertiesManager.waveDashToFullWidthTilde,
     compressWhitespaceCharacters: Boolean = PropertiesManager.compressWhitespaceCharacters,
     trimString: Boolean = PropertiesManager.trimString,
@@ -22,10 +25,50 @@ fun String?.preprocessForComparison(
         strict = strict,
         keepLF = keepLF,
         keepTAB = keepTAB,
+        keepZenkakuSpace = keepZenkakuSpace,
         waveDashToFullWidthTilde = waveDashToFullWidthTilde,
         compressWhitespaceCharacters = compressWhitespaceCharacters,
         trimString = trimString
     )
+}
+
+/**
+ * forVisionComparison
+ */
+fun String?.forVisionComparison(
+    ignoreCase: Boolean = true,
+    ignoreFullWidthHalfWidth: Boolean = true,
+    remove: String? = null
+): String {
+
+    var removeChars = remove
+
+    var s = this?.normalize(Normalizer.Form.NFC) ?: return ""
+    s = s.removeSpaces()
+    if (ignoreCase) {
+        s = s.lowercase()
+    }
+    if (ignoreFullWidthHalfWidth) {
+        s = s.fullWidth2HalfWidth()
+        removeChars = removeChars?.fullWidth2HalfWidth()
+    }
+    if (removeChars != null) {
+        /**
+         * remove characters (in AI-OCR miss-recognized character list)
+         */
+        s = s.filterNot { it in removeChars }
+    }
+
+    s = s.forClassicComparison(
+        strict = false,
+        keepLF = false,
+        keepTAB = false,
+        keepZenkakuSpace = false,
+        waveDashToFullWidthTilde = true,
+        compressWhitespaceCharacters = true,
+        trimString = true,
+    )
+    return s
 }
 
 /**
@@ -39,15 +82,11 @@ fun String.normalize(
 }
 
 /**
- * normalizeForComparison
+ * removeSpaces
  */
-fun String.normalizeForComparison(remove: String?): String {
-    var t = this.normalize(Normalizer.Form.NFKC)
-    t = t.replace("\\s".toRegex(), "").lowercase()
-    if (remove != null) {
-        t = t.filterNot { it in remove }
-    }
-    return t
+fun String.removeSpaces(): String {
+
+    return this.replace("\\s|　".toRegex(), "")
 }
 
 /**
@@ -70,4 +109,28 @@ fun String.halfWidth2fullWidth(): String {
 fun String.removeHtmlEntity(): String {
 
     return StringUtility.removeHtmlEntity(text = this)
+}
+
+/**
+ * replaceWithRegisteredWord
+ */
+fun String.replaceWithRegisteredWord(): String {
+
+    var s = this
+    for (key in VisionTextReplacementRepository.replaceMap.keys) {
+        val value = VisionTextReplacementRepository.replaceMap[key]!!
+        if (key.contains("*")) {
+            val tokens = key.split("*")
+            val start = tokens[0]
+            val end = tokens[1]
+            val regex = "${start}.*?${end}".toRegex()
+            s = s.replace(regex, value)
+        } else {
+            s = s.replace(key, value)
+        }
+    }
+    if (s != this) {
+        printWarn("\"$this\" is replaced to \"$s\"")
+    }
+    return s
 }

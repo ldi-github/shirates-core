@@ -8,8 +8,7 @@ import shirates.core.driver.testContext
 import shirates.core.driver.testDrive
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
-import shirates.core.utility.string.fullWidth2HalfWidth
-import shirates.core.utility.string.preprocessForComparison
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.VisionElement
 
 /**
@@ -18,22 +17,30 @@ import shirates.core.vision.VisionElement
 fun VisionElement.textIs(
     expected: String,
     strict: Boolean = PropertiesManager.strictCompareMode,
+    ignoreCase: Boolean = true,
+    ignoreFullWidth: Boolean = true,
     remove: String? = null,
-    ignoreFullWidthHalfWidth: Boolean = false,
+    digitOnly: Boolean = false,
 ): VisionElement {
 
     val command = "textIs"
 
     fun String.process(): String {
-        var s = this.preprocessForComparison(strict = strict)
-        if (ignoreFullWidthHalfWidth) {
-            s = s.fullWidth2HalfWidth()
+        var s = this.forVisionComparison(
+            ignoreCase = ignoreCase,
+            ignoreFullWidthHalfWidth = ignoreFullWidth,
+            remove = remove,
+        )
+        if (digitOnly) {
+            s = s.replace("[^\\d\\s]".toRegex(), "")
+                .replace("[\\s+]".toRegex(), " ")
         }
         return s
     }
 
     val context = TestDriverCommandContext(null)
     val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
+
     fun strictCompare() {
         val e = testDrive.select(expression = expected, throwsException = false, useCache = false)
         val isIncluded = e.bounds.isIncludedIn(CodeExecutionContext.regionRect.toBoundsWithRatio())
@@ -43,7 +50,6 @@ fun VisionElement.textIs(
             actual.thisIs(expected = expectedForCompare, message = assertMessage, strict = strict)
         }
     }
-
     if (strict) {
         /**
          * strict compare by parameter `strict` (direct access)
@@ -54,23 +60,13 @@ fun VisionElement.textIs(
 
     visionContext.recognizeText()
 
-    var actual = text
-    if (remove != null) {
-        /**
-         * remove characters (in AI-OCR miss-recognized character list)
-         */
-        var removeChars = remove
-        if (ignoreFullWidthHalfWidth) {
-            removeChars = removeChars.fullWidth2HalfWidth()
-        }
-        actual = actual.filterNot { it in removeChars }
-    }
-
     val expectedForCompare = expected.process()
+    val actual = if (digitOnly) joinedDigit else joinedText
     val actualForCompare = actual.process()
+
     if (actualForCompare == expectedForCompare) {
         /**
-         * AI-OCR recognized text matched
+         * AI-OCR recognized text exactly
          */
         context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
             actualForCompare.thisIs(expected = expectedForCompare, message = assertMessage, strict = strict)

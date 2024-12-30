@@ -3,6 +3,7 @@ package shirates.core.vision.result
 import org.json.JSONObject
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.image.Rectangle
+import shirates.core.utility.string.replaceWithRegisteredWord
 
 class RecognizeTextResult(
     val jsonString: String
@@ -27,9 +28,11 @@ class RecognizeTextResult(
                 width = rectObj.getInt("width"),
                 height = rectObj.getInt("height")
             )
+            val oldText = jso.getString("text")
+            val newText = oldText.replaceWithRegisteredWord()
             Candidate(
                 confidence = jso.getFloat("confidence"),
-                text = jso.getString("text"),
+                text = newText,
                 rect = rect
             )
         }

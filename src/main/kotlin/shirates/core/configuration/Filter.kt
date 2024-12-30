@@ -13,7 +13,7 @@ import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.ImageMatchUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
-import shirates.core.utility.string.preprocessForComparison
+import shirates.core.utility.string.forClassicComparison
 import shirates.core.utility.toPath
 import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage
@@ -295,8 +295,8 @@ class Filter(
          */
         internal fun matchText(text: String, criteria: String): Boolean {
 
-            val normalizedCriteria = criteria.preprocessForComparison()
-            val normalizedText = text.preprocessForComparison()
+            val normalizedCriteria = criteria.forClassicComparison()
+            val normalizedText = text.forClassicComparison()
             val filterValues = getFilterValues(filterValueString = normalizedCriteria)
             if (filterValues.isEmpty())
                 return false
@@ -322,8 +322,8 @@ class Filter(
          */
         internal fun matchLiteral(literal: String, criteria: String): Boolean {
 
-            val normalizedCriteria = criteria.preprocessForComparison()
-            val normalizedLiteral = literal.preprocessForComparison()
+            val normalizedCriteria = criteria.forClassicComparison()
+            val normalizedLiteral = literal.forClassicComparison()
 
             // Single line comparison
             if (normalizedCriteria.contains("\n").not() && normalizedLiteral.contains("\n").not())
@@ -384,14 +384,14 @@ class Filter(
 
     private fun matchTextSomething(text: String, filterValue: String): Boolean {
 
-        val value2 = text.preprocessForComparison()
+        val value2 = text.forClassicComparison()
         val selectorValues = getFilterValues(filterValueString = filterValue)
         for (selectorValue in selectorValues) {
             when (verb) {
-                "Contains" -> if (value2.contains(selectorValue.preprocessForComparison())) return true
-                "StartsWith" -> if (value2.startsWith(selectorValue.preprocessForComparison())) return true
-                "EndsWith" -> if (value2.endsWith(selectorValue.preprocessForComparison())) return true
-                "Matches" -> if (value2.matches(Regex(selectorValue.preprocessForComparison()))) return true
+                "Contains" -> if (value2.contains(selectorValue.forClassicComparison())) return true
+                "StartsWith" -> if (value2.startsWith(selectorValue.forClassicComparison())) return true
+                "EndsWith" -> if (value2.endsWith(selectorValue.forClassicComparison())) return true
+                "Matches" -> if (value2.matches(Regex(selectorValue.forClassicComparison()))) return true
                 else -> return matchText(
                     text = value2,
                     criteria = filterValue
@@ -603,8 +603,8 @@ class Filter(
             string: String
         ): Boolean {
             for (filterValue in filterValues) {
-                val fullId = getFullyQualifiedId(string)?.preprocessForComparison()
-                val fullId2 = getFullyQualifiedId(filterValue)?.preprocessForComparison()
+                val fullId = getFullyQualifiedId(string)?.forClassicComparison()
+                val fullId2 = getFullyQualifiedId(filterValue)?.forClassicComparison()
 
                 if (fullId == fullId2) {
                     return true

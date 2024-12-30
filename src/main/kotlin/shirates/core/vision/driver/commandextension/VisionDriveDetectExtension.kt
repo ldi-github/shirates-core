@@ -4,15 +4,13 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.expandExpression
-import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.commandextension.hideKeyboard
-import shirates.core.driver.commandextension.isKeyboardShown
-import shirates.core.driver.commandextension.toVisionElement
+import shirates.core.driver.commandextension.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.printInfo
-import shirates.core.logging.printWarn
+import shirates.core.utility.string.removeSpaces
+import shirates.core.utility.string.replaceWithRegisteredWord
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
@@ -24,15 +22,25 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.detect(
     expression: String,
+    strict: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = false,
     allowScroll: Boolean? = null,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
 ): VisionElement {
+
+    if (strict) {
+        val e = testDrive.select(
+            expression = expression,
+            throwsException = throwsException,
+            waitSeconds = waitSeconds,
+            useCache = true
+        )
+        return e.toVisionElement()
+    }
 
     val swDetect = StopWatch("detect")
     val sel = getSelector(expression = expression)
@@ -51,7 +59,6 @@ fun VisionDrive.detect(
             allowScroll = allowScroll,
             swipeToCenter = swipeToCenter,
             throwsException = throwsException,
-            directAccessCompletion = directAccessCompletion
         )
         lastElement = v
         return v
@@ -69,41 +76,33 @@ internal fun VisionDrive.detectCore(
     allowScroll: Boolean?,
     swipeToCenter: Boolean,
     throwsException: Boolean,
-    directAccessCompletion: Boolean,
 ): VisionElement {
-
-    fun selectDirect(): VisionElement {
-        if (selector.text.isNullOrBlank() && selector.textContains.isNullOrBlank()) {
-            printWarn("This selector is not supported in vision. ($selector)")
-            return VisionElement.emptyElement
-        }
-        val exp = (selector.text ?: selector.textContains!!).trim('*')
-        val sel = getSelector("*${exp}*")
-        val sw = StopWatch("direct access attempted. selector=$sel")
-        val e = TestDriver.selectDirect(selector = selector, throwsException = false)
-        sw.printInfo()
-        if (e.isFound && e.bounds.isIncludedIn(viewBounds)) {
-            return e.toVisionElement()
-        }
-        return VisionElement.emptyElement
-    }
-
-    if (selector.text.isNullOrBlank()) {
-        return selectDirect()
-    }
 
     if (lastElement.isEmpty) {
         invalidateScreen()
     }
     screenshot()
 
+    if (selector.textContains.isNullOrBlank().not()) {
+        /**
+         * textContains
+         */
+        val containedText = selector.textContains!!
+        rootElement.visionContext.recognizeText(language = language)
+        val joinedText = rootElement.joinedText.removeSpaces().replaceWithRegisteredWord()
+        if (joinedText.contains(containedText)) {
+            return rootElement
+        } else {
+            return VisionElement.emptyElement
+        }
+    }
+
     val regionElement = CodeExecutionContext.regionElement
 
-    var v: VisionElement
     /**
      * Try to detect in visionContext
      */
-    v = regionElement.visionContext.detect(
+    var v = regionElement.visionContext.detect(
         selector = selector,
         remove = remove,
     )   // loose match
@@ -118,18 +117,8 @@ internal fun VisionDrive.detectCore(
          * - character code (WAVE DASH, FULLWIDTH TILDE)
          * - etc
          */
-    } else if (directAccessCompletion.not() &&
-        selector.text.isNullOrBlank().not() && v.text.contains(selector.text!!)
-    ) {
+    } else if (selector.text.isNullOrBlank().not() && v.text.contains(selector.text!!)) {
         return v    // partial match
-    } else if (directAccessCompletion) {
-        /**
-         * Try to detect in direct access
-         */
-        v = selectDirect()
-        if (v.isFound) {
-            return v
-        }
     }
     if (v.isFound) {
         printInfo("Text loose match. expression:\"${selector.expression}\", found:\"${v.text}\"")
@@ -144,6 +133,7 @@ internal fun VisionDrive.detectCore(
                 /**
                  * Try to detect with scroll
                  */
+                printInfo("Text not found. Tring to detect with scroll. selector=$selector")
                 v = detectWithScroll(
                     selector = selector,
                     remove = remove,
@@ -254,7 +244,6 @@ internal fun VisionDrive.detectWithScroll(
             allowScroll = true,
             swipeToCenter = swipeToCenter,
             throwsException = false,
-            directAccessCompletion = false
         )
         val stopScroll = v.isFound
         stopScroll
@@ -379,7 +368,6 @@ private fun VisionDrive.detectWithScrollCore(
         selector = selector,
         remove = remove,
         language = language,
-        directAccessCompletion = false,
         waitSeconds = 0.0,
         allowScroll = false,
         swipeToCenter = false,
@@ -555,7 +543,6 @@ fun VisionDrive.canDetect(
     expression: String,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = false,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
     swipeToCenter: Boolean = false,
@@ -571,7 +558,6 @@ fun VisionDrive.canDetect(
         selector = sel,
         remove = remove,
         language = language,
-        directAccessCompletion = directAccessCompletion,
         allowScroll = allowScroll,
         waitSeconds = waitSeconds,
         swipeToCenter = swipeToCenter,
@@ -586,7 +572,6 @@ fun VisionDrive.canDetect(
     selector: Selector,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    directAccessCompletion: Boolean = false,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
     swipeToCenter: Boolean = false,
@@ -605,7 +590,6 @@ fun VisionDrive.canDetect(
             selector = selector,
             remove = remove,
             language = language,
-            directAccessCompletion = directAccessCompletion,
             waitSeconds = waitSeconds,
             allowScroll = allowScroll,
             swipeToCenter = swipeToCenter,
@@ -623,7 +607,6 @@ internal fun VisionDrive.canDetectCore(
     selector: Selector,
     remove: String? = null,
     language: String,
-    directAccessCompletion: Boolean = false,
     waitSeconds: Double,
     intervalSeconds: Double,
     allowScroll: Boolean,
@@ -633,7 +616,6 @@ internal fun VisionDrive.canDetectCore(
         selector = selector,
         remove = remove,
         language = language,
-        directAccessCompletion = directAccessCompletion,
         waitSeconds = waitSeconds,
         allowScroll = allowScroll,
         swipeToCenter = false,

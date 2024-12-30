@@ -7,6 +7,7 @@ import shirates.core.driver.isLeft
 import shirates.core.driver.isRight
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.helper.HorizontalBand
 import shirates.core.vision.driver.commandextension.helper.VerticalBand
@@ -181,10 +182,36 @@ fun VisionElement.rightText(
     pos: Int = 1,
 ): VisionElement {
 
-    return rightLeftTextCore(
-        relative = RelativeDirection.right,
-        pos = pos,
-    )
+    val elements = getHorizontalElements()
+        .filter { this.rect.right < it.rect.left }
+        .sortedBy { it.rect.left }
+    val v =
+        if (elements.isEmpty() || elements.count() < pos) VisionElement(capture = false)
+        else elements[pos - 1]
+
+    v.selector = this.selector?.getChainedSelector(":rightText($pos)")
+    lastElement = v
+
+    return v
+}
+
+/**
+ * rightText
+ */
+fun VisionElement.rightText(
+    expression: String,
+): VisionElement {
+
+    val elements = getHorizontalElements()
+        .filter { this.rect.right < it.rect.left }
+        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
+        .sortedBy { it.rect.left }
+    val v = elements.firstOrNull() ?: VisionElement(capture = false)
+
+    v.selector = this.selector?.getChainedSelector(":rightText($expression)")
+    lastElement = v
+
+    return v
 }
 
 /**
@@ -194,17 +221,39 @@ fun VisionElement.leftText(
     pos: Int = 1,
 ): VisionElement {
 
-    return rightLeftTextCore(
-        relative = RelativeDirection.left,
-        pos = pos,
-    )
+    val elements = getHorizontalElements()
+        .filter { it.rect.right < this.rect.left }
+        .sortedBy { it.rect.left }
+    val v =
+        if (elements.isEmpty() || elements.count() < pos) VisionElement(capture = false)
+        else elements[elements.count() - pos]
+
+    v.selector = this.selector?.getChainedSelector(":leftText($pos)")
+    lastElement = v
+
+    return v
 }
 
-internal fun VisionElement.rightLeftTextCore(
-    relative: RelativeDirection,
-    pos: Int,
+/**
+ * leftText
+ */
+fun VisionElement.leftText(
+    expression: String,
 ): VisionElement {
 
+    val elements = getHorizontalElements()
+        .filter { it.rect.right < this.rect.left }
+        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
+        .sortedBy { it.rect.left }
+    val v = elements.lastOrNull() ?: VisionElement(capture = false)
+
+    v.selector = this.selector?.getChainedSelector(":leftText($expression)")
+    lastElement = v
+
+    return v
+}
+
+private fun VisionElement.getHorizontalElements(): List<VisionElement> {
     rootElement.visionContext.recognizeText()
 
     val horizontalBand = HorizontalBand(baseElement = this)
@@ -212,22 +261,8 @@ internal fun VisionElement.rightLeftTextCore(
         horizontalBand.merge(element = v, margin = 0)
     }
     val elms = horizontalBand.getElements().map { it as VisionElement }
-    val sortedElements =
-        if (relative.isLeft)
-            elms.filter { it.rect.right < this.rect.left }
-                .sortedByDescending { it.rect.left }
-        else
-            elms.filter { this.rect.right < it.rect.left }
-                .sortedBy { it.rect.left }
-    val v =
-        if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
-        else sortedElements[pos - 1]
-
-    val relativeExpression = if (relative.isAbove) ":aboveText($pos)" else ":belowText($pos)"
-    v.selector = this.selector?.getChainedSelector(relativeExpression)
-    lastElement = v
-
-    return v
+    val sortedElements = elms.sortedByDescending { it.rect.left }
+    return sortedElements
 }
 
 /**

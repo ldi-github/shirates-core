@@ -4,7 +4,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.exception.BranchException
 import shirates.core.logging.Message.message
-import shirates.core.utility.string.preprocessForComparison
+import shirates.core.utility.string.forClassicComparison
 
 /**
  * TextCompareResult
@@ -37,8 +37,8 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "ifStringIs"
-        val v = value.preprocessForComparison()
-        val t = text.preprocessForComparison()
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = v)
 
         val matched = (v == t)
@@ -57,8 +57,8 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "ifStartsWith"
-        val v = value.preprocessForComparison()
-        val t = text.preprocessForComparison()
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = v)
 
         val matched =
@@ -79,8 +79,8 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "ifContains"
-        val v = value.preprocessForComparison()
-        val t = text.preprocessForComparison()
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = v)
 
         val matched =
@@ -101,8 +101,8 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "ifEndsWith"
-        val v = value.preprocessForComparison()
-        val t = text.preprocessForComparison()
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = v)
 
         val matched =
@@ -123,7 +123,7 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "ifMatches"
-        val t = text.preprocessForComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = regex)
 
         val matched =
@@ -181,8 +181,8 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "elseIfStringIs"
-        val v = value.preprocessForComparison()
-        val t = text.preprocessForComparison()
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = v)
 
         val matched = (v == t) && anyMatched.not()
@@ -201,8 +201,8 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "elseIfStartsWith"
-        val v = value.preprocessForComparison()
-        val t = text.preprocessForComparison()
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = v)
 
         val matched =
@@ -223,8 +223,8 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "elseIfContains"
-        val v = value.preprocessForComparison()
-        val t = text.preprocessForComparison()
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = v)
 
         val matched =
@@ -245,8 +245,8 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "elseIfEndsWith"
-        val v = value.preprocessForComparison()
-        val t = text.preprocessForComparison()
+        val v = value.forClassicComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = v)
 
         val matched =
@@ -267,7 +267,7 @@ class TextCompareResult(val text: String?) : CompareResult() {
     ): TextCompareResult {
 
         val command = "elseIfMatches"
-        val t = text.preprocessForComparison()
+        val t = text.forClassicComparison()
         val msg = message ?: message(id = command, subject = t, value = regex)
 
         val matched =

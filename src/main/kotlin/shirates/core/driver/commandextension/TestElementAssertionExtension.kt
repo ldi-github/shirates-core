@@ -10,7 +10,7 @@ import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.filterBySelector
 import shirates.core.logging.Message.message
-import shirates.core.utility.string.preprocessForComparison
+import shirates.core.utility.string.forClassicComparison
 
 /**
  * idIs
@@ -45,7 +45,7 @@ fun TestElement.textIs(
 ): TestElement {
 
     val command = "textIs"
-    val expected2 = expected.preprocessForComparison(strict = strict)
+    val expected2 = expected.forClassicComparison(strict = strict)
     val assertMessage = message(id = command, subject = subject, expected = expected2, replaceRelative = true)
 
     val context = TestDriverCommandContext(this)
