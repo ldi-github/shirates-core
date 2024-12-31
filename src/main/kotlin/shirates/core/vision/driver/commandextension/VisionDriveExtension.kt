@@ -1,5 +1,6 @@
 package shirates.core.vision.driver.commandextension
 
+import shirates.core.driver.Bounds
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriver.lastVisionElement
 import shirates.core.driver.TestDriver.visionRootElement
@@ -31,6 +32,14 @@ val VisionDrive.rootElement: VisionElement
 val VisionDrive.screenRect: Rectangle
     get() {
         return visionRootElement.rect
+    }
+
+/**
+ * screenBounds
+ */
+val VisionDrive.screenBounds: Bounds
+    get() {
+        return visionRootElement.bounds
     }
 
 /**

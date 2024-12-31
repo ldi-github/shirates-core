@@ -3,7 +3,6 @@ package shirates.core.vision.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.expandExpression
 import shirates.core.driver.commandextension.*
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -22,23 +21,26 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.detect(
     expression: String,
-    strict: Boolean = false,
+    useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,
-    swipeToCenter: Boolean = false,
+    swipeToSafePosition: Boolean = true,
     throwsException: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
 ): VisionElement {
 
-    if (strict) {
-        val e = testDrive.select(
-            expression = expression,
-            throwsException = throwsException,
-            waitSeconds = waitSeconds,
-            useCache = true
-        )
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.select(
+                expression = expression,
+                throwsException = throwsException,
+                waitSeconds = waitSeconds,
+                useCache = true
+            )
+        }
         return e.toVisionElement()
     }
 
@@ -49,22 +51,64 @@ fun VisionDrive.detect(
         v.selector = sel
         return v
     }
+    val v: VisionElement
     try {
-        val v = detectCore(
-            selector = sel,
-            remove = remove,
-            language = language,
-            waitSeconds = waitSeconds,
-            intervalSeconds = intervalSeconds,
-            allowScroll = allowScroll,
-            swipeToCenter = swipeToCenter,
-            throwsException = throwsException,
-        )
+        if (swipeToSafePosition) {
+            v = detectCoreWithSwipeToSafePosition(
+                selector = sel,
+                remove = remove,
+                language = language,
+                waitSeconds = waitSeconds,
+                intervalSeconds = intervalSeconds,
+                allowScroll = allowScroll,
+                throwsException = throwsException,
+            )
+        } else {
+            v = detectCore(
+                selector = sel,
+                remove = remove,
+                language = language,
+                waitSeconds = waitSeconds,
+                intervalSeconds = intervalSeconds,
+                allowScroll = allowScroll,
+                throwsException = throwsException,
+            )
+        }
         lastElement = v
         return v
     } finally {
         swDetect.printInfo()
     }
+}
+
+internal fun VisionDrive.detectCoreWithSwipeToSafePosition(
+    selector: Selector,
+    remove: String?,
+    language: String,
+    waitSeconds: Double,
+    intervalSeconds: Double,
+    allowScroll: Boolean?,
+    throwsException: Boolean,
+): VisionElement {
+
+    var v = VisionElement.emptyElement
+    fun action() {
+        v = detectCore(
+            selector = selector,
+            remove = remove,
+            language = language,
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+            allowScroll = allowScroll,
+            throwsException = throwsException,
+        )
+    }
+    action()
+    if (v.isFound && CodeExecutionContext.withScroll != false) {
+        v.swipeToSafePosition()
+        action()
+    }
+    return v
 }
 
 internal fun VisionDrive.detectCore(
@@ -74,7 +118,6 @@ internal fun VisionDrive.detectCore(
     waitSeconds: Double,
     intervalSeconds: Double,
     allowScroll: Boolean?,
-    swipeToCenter: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -134,12 +177,11 @@ internal fun VisionDrive.detectCore(
                  * Try to detect with scroll
                  */
                 printInfo("Text not found. Tring to detect with scroll. selector=$selector")
-                v = detectWithScroll(
+                v = detectWithScrollCore(
                     selector = selector,
                     remove = remove,
                     language = language,
                     direction = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
-                    swipeToCenter = swipeToCenter,
                     throwsException = false,
                 )
             } else {
@@ -178,44 +220,7 @@ internal fun VisionDrive.detectCore(
     }
 }
 
-/**
- * detectWithScroll
- */
-fun VisionDrive.detectWithScroll(
-    expression: String,
-    language: String = PropertiesManager.logLanguage,
-    remove: String? = null,
-    direction: ScrollDirection = ScrollDirection.Down,
-    scrollDurationSeconds: Double = TestDriver.testContext.swipeDurationSeconds,
-    scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
-    startMarginRatio: Double = TestDriver.testContext.getScrollStartMarginRatio(direction),
-    endMarginRatio: Double = TestDriver.testContext.getScrollEndMarginRatio(direction),
-    scrollMaxCount: Int = TestDriver.testContext.scrollMaxCount,
-    swipeToCenter: Boolean = false,
-    throwsException: Boolean = true
-): VisionElement {
-    val sel = expandExpression(expression = expression)
-    val context = TestDriverCommandContext(null)
-    var v = VisionElement.emptyElement
-    context.execSelectCommand(selector = sel, subject = sel.nickname) {
-        v = this.detectWithScroll(
-            selector = sel,
-            language = language,
-            remove = remove,
-            direction = direction,
-            scrollDurationSeconds = scrollDurationSeconds,
-            scrollIntervalSeconds = scrollIntervalSeconds,
-            startMarginRatio = startMarginRatio,
-            endMarginRatio = endMarginRatio,
-            scrollMaxCount = scrollMaxCount,
-            swipeToCenter = swipeToCenter,
-            throwsException = throwsException
-        )
-    }
-    return v
-}
-
-internal fun VisionDrive.detectWithScroll(
+internal fun VisionDrive.detectWithScrollCore(
     selector: Selector,
     remove: String?,
     language: String,
@@ -225,15 +230,11 @@ internal fun VisionDrive.detectWithScroll(
     startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
     endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
     scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
-    swipeToCenter: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
-    if (testDrive.isKeyboardShown) {
-        testDrive.hideKeyboard(waitSeconds = 0.2)
-    }
-
     var v = VisionElement.emptyElement
+
     val actionFunc = {
         v = detectCore(
             selector = selector,
@@ -242,52 +243,28 @@ internal fun VisionDrive.detectWithScroll(
             waitSeconds = 0.0,
             intervalSeconds = scrollIntervalSeconds,
             allowScroll = true,
-            swipeToCenter = swipeToCenter,
             throwsException = false,
         )
         val stopScroll = v.isFound
         stopScroll
     }
+    actionFunc()
 
-    doUntilScrollStop(
-        maxLoopCount = scrollMaxCount,
-        direction = direction,
-        scrollDurationSeconds = scrollDurationSeconds,
-        scrollIntervalSeconds = scrollIntervalSeconds,
-        startMarginRatio = startMarginRatio,
-        endMarginRatio = endMarginRatio,
-        repeat = 1,
-        actionFunc = actionFunc
-    )
-
-    if (v.isFound && swipeToCenter) {
-        v = v.swipeToCenter()
-    } else {
-        when (direction) {
-            ScrollDirection.Down -> if ((screenRect.bottom - screenRect.height / 5) < v.bounds.top) {
-                scrollDown()
-                actionFunc()
-            }
-
-            ScrollDirection.Up -> if (v.bounds.bottom < (screenRect.height / 5)) {
-                scrollUp()
-                actionFunc()
-            }
-
-            ScrollDirection.Left -> if ((screenRect.right - screenRect.width / 5) < v.bounds.right) {
-                scrollLeft()
-                actionFunc()
-            }
-
-            ScrollDirection.Right -> if (v.bounds.left < (screenRect.width / 5)) {
-                scrollRight()
-                actionFunc()
-            }
-
-            else -> {}
-        }
+    if (v.isFound.not()) {
+        /**
+         * detect with scroll
+         */
+        doUntilScrollStopCore(
+            maxLoopCount = scrollMaxCount,
+            direction = direction,
+            scrollDurationSeconds = scrollDurationSeconds,
+            scrollIntervalSeconds = scrollIntervalSeconds,
+            startMarginRatio = startMarginRatio,
+            endMarginRatio = endMarginRatio,
+            repeat = 1,
+            actionFunc = actionFunc
+        )
     }
-
     lastElement = v
     if (v.hasError) {
         v.lastResult = LogType.ERROR
@@ -295,7 +272,6 @@ internal fun VisionDrive.detectWithScroll(
             throw v.lastError!!
         }
     }
-
     return v
 }
 
@@ -305,17 +281,34 @@ internal fun VisionDrive.detectWithScroll(
  */
 fun VisionDrive.detectWithScrollDown(
     expression: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     log: Boolean? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.selectWithScrollDown(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = throwsException,
+                log = log,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val command = "detectWithScrollDown"
 
@@ -336,7 +329,6 @@ fun VisionDrive.detectWithScrollDown(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            swipeToCenter = swipeToCenter,
             intervalSeconds = scrollIntervalSeconds,
             throwsException = throwsException,
         )
@@ -359,7 +351,6 @@ private fun VisionDrive.detectWithScrollCore(
     scrollStartMarginRatio: Double,
     scrollEndMarginRatio: Double,
     scrollMaxCount: Int,
-    swipeToCenter: Boolean,
     intervalSeconds: Double,
     throwsException: Boolean,
 ): VisionElement {
@@ -370,12 +361,11 @@ private fun VisionDrive.detectWithScrollCore(
         language = language,
         waitSeconds = 0.0,
         allowScroll = false,
-        swipeToCenter = false,
         intervalSeconds = intervalSeconds,
         throwsException = false,
     )
     if (v1.isEmpty) {
-        v1 = detectWithScroll(
+        v1 = detectWithScrollCore(
             selector = selector,
             language = language,
             remove = remove,
@@ -385,7 +375,6 @@ private fun VisionDrive.detectWithScrollCore(
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            swipeToCenter = swipeToCenter,
             throwsException = throwsException,
         )
     }
@@ -397,17 +386,33 @@ private fun VisionDrive.detectWithScrollCore(
  */
 fun VisionDrive.detectWithScrollUp(
     expression: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     log: Boolean? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.selectWithScrollUp(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = throwsException,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val command = "detectWithScrollUp"
 
@@ -428,7 +433,6 @@ fun VisionDrive.detectWithScrollUp(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            swipeToCenter = swipeToCenter,
             intervalSeconds = scrollIntervalSeconds,
             throwsException = throwsException,
         )
@@ -445,17 +449,34 @@ fun VisionDrive.detectWithScrollUp(
  */
 fun VisionDrive.detectWithScrollRight(
     expression: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     log: Boolean? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.selectWithScrollRight(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = throwsException,
+                log = log,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val command = "detectWithScrollRight"
 
@@ -476,7 +497,6 @@ fun VisionDrive.detectWithScrollRight(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            swipeToCenter = swipeToCenter,
             intervalSeconds = scrollIntervalSeconds,
             throwsException = throwsException,
         )
@@ -493,17 +513,34 @@ fun VisionDrive.detectWithScrollRight(
  */
 fun VisionDrive.detectWithScrollLeft(
     expression: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
     log: Boolean? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.selectWithScrollLeft(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                throwsException = throwsException,
+                log = log,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val command = "detectWithScrollLeft"
 
@@ -524,7 +561,6 @@ fun VisionDrive.detectWithScrollLeft(
             scrollStartMarginRatio = scrollStartMarginRatio,
             scrollEndMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,
-            swipeToCenter = swipeToCenter,
             intervalSeconds = scrollIntervalSeconds,
             throwsException = throwsException,
         )
@@ -545,7 +581,6 @@ fun VisionDrive.canDetect(
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
-    swipeToCenter: Boolean = false,
     log: Boolean = false
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
@@ -560,7 +595,6 @@ fun VisionDrive.canDetect(
         language = language,
         allowScroll = allowScroll,
         waitSeconds = waitSeconds,
-        swipeToCenter = swipeToCenter,
         log = log
     )
 }
@@ -574,7 +608,6 @@ fun VisionDrive.canDetect(
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
-    swipeToCenter: Boolean = false,
     log: Boolean = false
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
@@ -592,7 +625,6 @@ fun VisionDrive.canDetect(
             language = language,
             waitSeconds = waitSeconds,
             allowScroll = allowScroll,
-            swipeToCenter = swipeToCenter,
             intervalSeconds = 0.0,
             throwsException = false
         ).isFound
@@ -618,7 +650,6 @@ internal fun VisionDrive.canDetectCore(
         language = language,
         waitSeconds = waitSeconds,
         allowScroll = allowScroll,
-        swipeToCenter = false,
         intervalSeconds = intervalSeconds,
         throwsException = false,
     )
@@ -640,7 +671,6 @@ fun VisionDrive.canDetectWithoutScroll(
         language = language,
         allowScroll = false,
         waitSeconds = waitSeconds,
-        swipeToCenter = false,
         log = log
     )
 }
@@ -650,6 +680,7 @@ fun VisionDrive.canDetectWithoutScroll(
  */
 fun VisionDrive.canDetectWithScrollDown(
     expression: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -659,6 +690,22 @@ fun VisionDrive.canDetectWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectWithScrollDown(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                log = log
+            )
+        }
+        return result
+    }
 
     val direction = ScrollDirection.Down
     return canDetectWithScroll(
@@ -720,6 +767,7 @@ private fun VisionDrive.canDetectWithScroll(
  */
 fun VisionDrive.canDetectWithScrollUp(
     expression: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -729,6 +777,22 @@ fun VisionDrive.canDetectWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectWithScrollUp(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                log = log
+            )
+        }
+        return result
+    }
 
     val direction = ScrollDirection.Up
     return canDetectWithScroll(
@@ -750,6 +814,7 @@ fun VisionDrive.canDetectWithScrollUp(
  */
 fun VisionDrive.canDetectWithScrollRight(
     expression: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -759,6 +824,22 @@ fun VisionDrive.canDetectWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectWithScrollRight(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                log = log
+            )
+        }
+        return result
+    }
 
     val direction = ScrollDirection.Right
     return canDetectWithScroll(
@@ -780,6 +861,7 @@ fun VisionDrive.canDetectWithScrollRight(
  */
 fun VisionDrive.canDetectWithScrollLeft(
     expression: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -789,6 +871,22 @@ fun VisionDrive.canDetectWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectWithScrollLeft(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                log = log
+            )
+        }
+        return result
+    }
 
     val direction = ScrollDirection.Left
     return canDetectWithScroll(
@@ -841,8 +939,20 @@ internal fun VisionDrive.canDetectAllCore(
  */
 fun VisionDrive.canDetectAll(
     vararg expressions: String,
+    useCache: Boolean = false,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectAll(
+                expressions = expressions,
+                log = log
+            )
+        }
+        return result
+    }
 
     val selectors = expressions.map { getSelector(expression = it) }
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
@@ -906,6 +1016,7 @@ internal fun VisionDrive.canDetectAllWithScroll(
  */
 fun VisionDrive.canDetectAllWithScrollDown(
     vararg expressions: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -915,6 +1026,22 @@ fun VisionDrive.canDetectAllWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectAllWithScrollDown(
+                expressions = expressions,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                log = log
+            )
+        }
+        return result
+    }
 
     val scrollDirection = ScrollDirection.Down
 
@@ -937,6 +1064,7 @@ fun VisionDrive.canDetectAllWithScrollDown(
  */
 fun VisionDrive.canDetectAllWithScrollUp(
     vararg expressions: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -946,6 +1074,22 @@ fun VisionDrive.canDetectAllWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectAllWithScrollUp(
+                expressions = expressions,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                log = log
+            )
+        }
+        return result
+    }
 
     val scrollDirection = ScrollDirection.Up
 
@@ -968,6 +1112,7 @@ fun VisionDrive.canDetectAllWithScrollUp(
  */
 fun VisionDrive.canDetectAllWithScrollRight(
     vararg expressions: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -977,6 +1122,22 @@ fun VisionDrive.canDetectAllWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectAllWithScrollRight(
+                expressions = expressions,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                log = log
+            )
+        }
+        return result
+    }
 
     val scrollDirection = ScrollDirection.Right
 
@@ -999,6 +1160,7 @@ fun VisionDrive.canDetectAllWithScrollRight(
  */
 fun VisionDrive.canDetectAllWithScrollLeft(
     vararg expressions: String,
+    useCache: Boolean = false,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -1008,6 +1170,22 @@ fun VisionDrive.canDetectAllWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     log: Boolean = false
 ): Boolean {
+
+    if (useCache) {
+        var result = false
+        useCache {
+            result = testDrive.canSelectAllWithScrollLeft(
+                expressions = expressions,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+                log = log
+            )
+        }
+        return result
+    }
 
     val scrollDirection = ScrollDirection.Left
 

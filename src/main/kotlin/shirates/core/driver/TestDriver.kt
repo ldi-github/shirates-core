@@ -176,8 +176,6 @@ object TestDriver {
             return lastElement
         }
 
-        val ms = Measure("$lastElement")
-
         syncCache()
 
         if (lastElement.isEmpty.not()) {
@@ -186,8 +184,6 @@ object TestDriver {
         if (lastElement.isEmpty) {
             lastElement = testDrive.rootElement
         }
-
-        ms.end()
 
         return lastElement
     }

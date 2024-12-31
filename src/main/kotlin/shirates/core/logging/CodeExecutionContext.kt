@@ -3,11 +3,14 @@ package shirates.core.logging
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
+import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.Rectangle
+import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.screenRect
 import java.awt.image.BufferedImage
+import java.nio.file.Files
 import java.util.*
 
 object CodeExecutionContext {
@@ -257,6 +260,14 @@ object CodeExecutionContext {
      * lastScreenshotImage
      */
     var lastScreenshotImage: BufferedImage? = null
+        get() {
+            if (field == null && lastScreenshotName.isNullOrBlank().not()) {
+                if (Files.exists(lastScreenshotFile!!.toPath())) {
+                    field = BufferedImageUtility.getBufferedImage(lastScreenshotFile!!)
+                }
+            }
+            return field
+        }
         internal set(value) {
             field = value
             if (value != null) {

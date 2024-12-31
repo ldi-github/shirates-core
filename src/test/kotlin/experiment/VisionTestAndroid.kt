@@ -52,6 +52,49 @@ class VisionTestAndroid : VisionTest() {
     }
 
     @Test
+    fun cacheMode() {
+
+        scenario {
+            case(1) {
+                useCache {
+                    condition {
+                        it.screenIs("[Android Settings Top Screen]")
+                    }.action {
+                        it.tap("Network & internet")
+                    }.expectation {
+                        it.screenIs("[Network & internet Screen]")
+                    }
+                }
+            }
+            case(2) {
+                condition {
+                    screenshot()
+                    it.detect("Airplane mode")
+                        .rightItem()
+                        .checkIsOFF()
+                }.action {
+                    it.tap()
+                }.expectation {
+                    it.detect("Airplane mode")
+                        .rightItem()
+                        .checkIsON()
+                }
+            }
+            case(3) {
+                action {
+                    it.detect("Airplane mode")
+                        .rightItem()
+                        .tap()
+                }.expectation {
+                    it.detect("Airplane mode")
+                        .rightItem()
+                        .checkIsOFF()
+                }
+            }
+        }
+    }
+
+    @Test
     fun region() {
 
         scenario {

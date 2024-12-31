@@ -13,6 +13,7 @@ import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
+import java.awt.image.BufferedImage
 
 
 private fun VisionDrive.scrollCommand(
@@ -212,9 +213,9 @@ private fun VisionDrive.scrollToEdgeCommand(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
 
-        doUntilScrollStop(
-//            scrollFrame = scrollFrame,
-//            scrollableElement = scrollableElement,
+        doUntilScrollStopCore(
+            //            scrollFrame = scrollFrame,
+            //            scrollableElement = scrollableElement,
             maxLoopCount = maxLoopCount,
             direction = direction,
             startMarginRatio = startMarginRatio,
@@ -294,10 +295,7 @@ fun VisionDrive.scrollToTop(
     return lastElement
 }
 
-/**
- * doUntilScrollStop
- */
-fun VisionDrive.doUntilScrollStop(
+internal fun VisionDrive.doUntilScrollStopCore(
     maxLoopCount: Int = CodeExecutionContext.scrollMaxCount,
     direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
     scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
@@ -389,6 +387,10 @@ internal fun VisionDrive.doUntilScrollStopCore(
     msLastSerialized.end()
 
     if (TestDriver.isInitialized) {
+        if (isKeyboardShown) {
+            hideKeyboard()
+        }
+
         if (actionFunc != null) {
             val result = actionFunc()
             if (result) {
@@ -396,7 +398,7 @@ internal fun VisionDrive.doUntilScrollStopCore(
             }
         }
 
-        var oldScreenshotImage = CodeExecutionContext.lastScreenshotImage
+        var oldScreenshotImage: BufferedImage?
 
         val ms = Measure("doUntilScrollStop-loop")
         try {

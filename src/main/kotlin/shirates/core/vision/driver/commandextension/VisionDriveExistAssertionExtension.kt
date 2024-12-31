@@ -5,9 +5,8 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.screenshot
 import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.commandextension.exist
-import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.commandextension.toVisionElement
+import shirates.core.driver.TestElement
+import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
@@ -46,7 +45,10 @@ fun VisionDrive.exist(
 
 //    val sw = StopWatch("exist")
     if (useCache) {
-        val e = testDrive.exist(expression = expression, waitSeconds = waitSeconds, useCache = true)
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.exist(expression = expression, waitSeconds = waitSeconds, useCache = true)
+        }
         return e.toVisionElement()
     }
 
@@ -208,6 +210,7 @@ internal fun postProcessForAssertion(
  */
 fun VisionDrive.existWithScrollDown(
     expression: String,
+    useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -221,6 +224,21 @@ fun VisionDrive.existWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.existWithScrollDown(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)
@@ -261,6 +279,7 @@ fun VisionDrive.existWithScrollDown(
  */
 fun VisionDrive.existWithScrollUp(
     expression: String,
+    useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -274,6 +293,21 @@ fun VisionDrive.existWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.existWithScrollUp(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val command = "existWithScrollUp"
     val sel = getSelector(expression = expression)
@@ -314,6 +348,7 @@ fun VisionDrive.existWithScrollUp(
  */
 fun VisionDrive.existWithScrollRight(
     expression: String,
+    useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -327,6 +362,21 @@ fun VisionDrive.existWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.existWithScrollRight(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val command = "existWithScrollRight"
     val sel = getSelector(expression = expression)
@@ -367,6 +417,7 @@ fun VisionDrive.existWithScrollRight(
  */
 fun VisionDrive.existWithScrollLeft(
     expression: String,
+    useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -381,6 +432,21 @@ fun VisionDrive.existWithScrollLeft(
     swipeToCenter: Boolean = false,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.existWithScrollLeft(
+                expression = expression,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                scrollStartMarginRatio = scrollStartMarginRatio,
+                scrollEndMarginRatio = scrollEndMarginRatio,
+                scrollMaxCount = scrollMaxCount,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val command = "existWithScrollLeft"
     val sel = getSelector(expression = expression)
@@ -421,6 +487,7 @@ fun VisionDrive.existWithScrollLeft(
  */
 fun VisionDrive.dontExist(
     expression: String,
+    useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -428,6 +495,17 @@ fun VisionDrive.dontExist(
     waitSeconds: Double = testContext.syncWaitSeconds,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
+
+    if (useCache) {
+        var e = TestElement.emptyElement
+        useCache {
+            e = testDrive.dontExist(
+                expression = expression,
+                waitSeconds = waitSeconds,
+            )
+        }
+        return e.toVisionElement()
+    }
 
     val sw = StopWatch("dontExist")
 
@@ -450,7 +528,6 @@ fun VisionDrive.dontExist(
                 waitSeconds = 0.0,
                 intervalSeconds = 0.0,
                 allowScroll = false,
-                swipeToCenter = false,
                 throwsException = false,
             )
             v.isFound.not()

@@ -1,6 +1,7 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
@@ -40,7 +41,6 @@ fun VisionElement.swipeTo(
             language = language,
             waitSeconds = waitSeconds,
             allowScroll = false,
-            swipeToCenter = false,
             intervalSeconds = intervalSeconds,
             throwsException = false
         )
@@ -544,5 +544,37 @@ fun VisionElement.flickToLeft(
         )
     }
 
+    return this
+}
+
+/**
+ * swipeToSafePosition
+ */
+fun VisionElement.swipeToSafePosition(
+    direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+): VisionElement {
+    if (CodeExecutionContext.withScroll == false) {
+        return this
+    }
+
+    when (direction) {
+        ScrollDirection.Down -> if (screenBounds.centerY < this.bounds.top) {
+            this.swipeVerticalTo((screenBounds.height * 0.2).toInt())
+        }
+
+        ScrollDirection.Up -> if (this.bounds.bottom < screenBounds.height * 0.2) {
+            this.swipeVerticalTo((screenBounds.height * 0.8).toInt())
+        }
+
+        ScrollDirection.Left -> if (screenBounds.width * 0.8 < this.bounds.right) {
+            this.swipeHorizontalTo((screenBounds.width * 0.2).toInt())
+        }
+
+        ScrollDirection.Right -> if (this.bounds.left < screenBounds.width * 0.2) {
+            this.swipeHorizontalTo((screenBounds.width * 0.8).toInt())
+        }
+
+        else -> {}
+    }
     return this
 }
