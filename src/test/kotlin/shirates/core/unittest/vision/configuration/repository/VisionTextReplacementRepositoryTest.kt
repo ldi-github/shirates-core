@@ -15,7 +15,7 @@ class VisionTextReplacementRepositoryTest {
         // Act
         repository.setup("unitTestData/files/vision_text_replacement/text.replacement.tsv")
         // Assert
-        assertThat(repository.replaceMap.keys.count()).isEqualTo(2)
+        assertThat(repository.replaceMap.keys.count()).isEqualTo(3)
 
         // Act
         repository.clear()

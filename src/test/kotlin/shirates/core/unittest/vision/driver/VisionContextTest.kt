@@ -3,10 +3,12 @@ package shirates.core.unittest.vision.driver
 import com.google.common.io.Files
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.driver.TestDriver
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.*
 import shirates.core.utility.toPath
+import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.result.RecognizeTextResult
 
@@ -84,6 +86,9 @@ class VisionContextTest {
                 recognizeTextResult = recognizeTextResult,
             )
         run {
+            // Arrange
+            TestDriver.visionRootElement = VisionElement()
+            CodeExecutionContext.regionElement = TestDriver.visionRootElement
             // Act
             val v = c.detect(text = "SIMs")
             // Assert
