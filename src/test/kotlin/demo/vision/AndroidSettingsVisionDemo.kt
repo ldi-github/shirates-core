@@ -5,8 +5,8 @@ import shirates.core.configuration.Testrun
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AndroidSettingsDemo : VisionTest() {
+@Testrun("testConfig/android/androidSettingsVision/testrun.properties")
+class AndroidSettingsVisionDemo : VisionTest() {
 
     @Test
     fun airplaneModeSwitch() {
@@ -19,9 +19,6 @@ class AndroidSettingsDemo : VisionTest() {
                     it.tap("Network & internet")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
-//                        .exist("Internet")
-//                        .exist("SIMs")
-//                        .exist("T-Mobile")
                 }
             }
             case(2) {

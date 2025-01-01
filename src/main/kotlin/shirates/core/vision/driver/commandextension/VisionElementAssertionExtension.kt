@@ -83,6 +83,68 @@ fun VisionElement.textIs(
 }
 
 /**
+ * belowTextIs
+ */
+fun VisionElement.belowTextIs(
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode,
+    ignoreCase: Boolean = true,
+    ignoreFullWidth: Boolean = true,
+    remove: String? = null,
+    digitOnly: Boolean = false,
+): VisionElement {
+
+    val command = "belowTextIs"
+    val context = TestDriverCommandContext(null)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
+
+    var v = VisionElement.emptyElement
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
+        v = belowText()
+        v = v.textIs(
+            expected = expected,
+            strict = strict,
+            ignoreCase = ignoreCase,
+            ignoreFullWidth = ignoreFullWidth,
+            remove = remove,
+            digitOnly = digitOnly,
+        )
+    }
+    return v
+}
+
+/**
+ * rightTextIs
+ */
+fun VisionElement.rightTextIs(
+    expected: String,
+    strict: Boolean = PropertiesManager.strictCompareMode,
+    ignoreCase: Boolean = true,
+    ignoreFullWidth: Boolean = true,
+    remove: String? = null,
+    digitOnly: Boolean = false,
+): VisionElement {
+
+    val command = "rightTextIs"
+    val context = TestDriverCommandContext(null)
+    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
+
+    var v = VisionElement.emptyElement
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
+        v = rightText()
+        v = v.textIs(
+            expected = expected,
+            strict = strict,
+            ignoreCase = ignoreCase,
+            ignoreFullWidth = ignoreFullWidth,
+            remove = remove,
+            digitOnly = digitOnly,
+        )
+    }
+    return v
+}
+
+/**
  * checkIsON
  */
 fun VisionElement.checkIsON(

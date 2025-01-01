@@ -1,4 +1,4 @@
-# Shirates (shirates-core)
+# Shirates/Vision (shirates-core)
 
 **Shirates** is an integration testing framework that makes it easy and fun to write test code for mobile apps.
 
@@ -6,6 +6,7 @@
 
 ## News
 
+- [2025/1/1] **AI-Vision feature** is unleashed in **Shirates/Vision beta1**.
 - [2024/12/17] Bug
   Fixed [Unable to start session after updating to macOS 15.2](https://github.com/ldi-github/shirates-core/issues/119)
 
@@ -13,6 +14,14 @@
 
 - [in English](https://ldi-github.github.io/shirates-core/)
 - [in Japanese](https://ldi-github.github.io/shirates-core/index_ja.html)
+
+## AI-Vision feature powered by Vision Framework is now available
+
+[vision-index](./doc/markdown/vision/vision-index.md)
+
+<hr>
+
+The following is a description of the version up to 7.
 
 ## Features in 3 lines
 

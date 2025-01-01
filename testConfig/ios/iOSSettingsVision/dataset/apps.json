@@ -1,0 +1,23 @@
+{
+  "[Settings]": {
+    "packageOrBundleId": "com.apple.Preferences"
+  },
+  "[Safari]": {
+    "packageOrBundleId": "com.apple.mobilesafari"
+  },
+  "[Maps]": {
+    "packageOrBundleId": "com.apple.Maps"
+  },
+  "[Reminders]": {
+    "packageOrBundleId": "com.apple.reminders"
+  },
+  "[Freeform]": {
+    "packageOrBundleId": "com.apple.freeform"
+  },
+  "[News]": {
+    "packageOrBundleId": "com.apple.news"
+  },
+  "[App1]": {
+    "packageOrBundleId": "com.example.app1"
+  }
+}

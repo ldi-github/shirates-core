@@ -91,15 +91,7 @@ object TestDriver {
     /**
      * visionRootElement
      */
-    var visionRootElement: VisionElement
-        get() {
-            return _visionRootElement!!
-        }
-        set(value) {
-            _visionRootElement = value
-        }
-
-    private var _visionRootElement: VisionElement? = null
+    var visionRootElement: VisionElement = VisionElement(capture = false)
 
     /**
      * isInitialized

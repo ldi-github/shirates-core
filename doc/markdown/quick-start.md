@@ -331,7 +331,7 @@ AndroidSettingsDemo@a.xlsx
 
 ### Run iOSSettingsDemo
 
-1. Open Xcode and setup iOS Simulator.(iPhone 15, iOS 17.2)
+1. Open Xcode and setup iOS Simulator. `iPhone 16(iOS 18.2)`
 
 ![](_images/setup_ios_simulator.png)
 

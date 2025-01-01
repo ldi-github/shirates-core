@@ -1,9 +1,29 @@
-# Shirates/Classic (shirates-core)
+# Shirates/Vision (shirates-core)
 
-[**Shirates/Vision**](vision/vision-index.md) is new version of Shirates.<br>
-**Shirates/Classic** is old version.
+**Shirates/Vision** is new version of Shirates.<br>
+[**Shirates/Classic**]() is old version.
 
-[in Japanese](index_ja.md)
+[//]: # ([in Japanese]&#40;index_ja.md&#41;)
+
+## What is Shirates/Vision?
+
+Shirates is mobile testing framework. <br>
+Shirates/Vision is CV(Computer Vision) driven powered by Vision Framework on macOS.<br>
+
+### Key technologies
+
+- AI-OCR for text recognition
+- Image classification/matching by machine learning
+
+### **Intuitive and configuration-free API**<br>
+
+for manipulating and verifying mobile Apps without cumbersome configuration. (In Shirates/Classic you have to configure
+screen files. Now you don't.)
+
+### Improved performance on iOS<br>
+
+CV-driven API bypasses accessing DOM(This process is very slow). Shirates/Vision has improved dynamically than ever
+(Shirates/Classic).
 
 ## Repository
 
@@ -11,7 +31,7 @@
 
 ## Overview
 
-- [Environments](environments.md)
+- [Environments](../environments.md)
 - [Quick start](quick-start.md)
 
 ## Tutorial(Basic)
@@ -27,12 +47,12 @@
 - [Encoding setting for properties file](tool_settings/properties_file_encoding.md)
 - [Android Device settings](basic/recommended_settings/recommended_settings_android.md)
 
-### Creating project
+### Creating project(for vision)
 
 - [Creating project](basic/creating_project/creating_project.md)
 - [Test Configuration template](basic/creating_project/test_configuration_template.md)
 
-### Creating TestClass
+### Creating TestClass(for vision)
 
 - [Creating TestClass](basic/creating_testclass/creating_testclass.md)
 - [Select and assert](basic/creating_testclass/select_and_assert.md)

@@ -9,8 +9,8 @@ import shirates.core.vision.driver.branchextension.ios
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/ios/iOSSettings/testrun.properties")
-class iOSSettingsDemo : VisionTest() {
+@Testrun("testConfig/ios/iOSSettingsVision/testrun.properties")
+class iOSSettingsVisionDemo : VisionTest() {
 
     @Test
     @DisplayName("[Reset Local Data on Next Launch] exists on [Developer screen]")

@@ -126,6 +126,8 @@ internal fun VisionDrive.detectWithAdjustingPosition(
 fun VisionDrive.tap(
     x: Int,
     y: Int,
+    offsetX: Int = 1,
+    offsetY: Int = 1,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
 ): VisionDrive {
@@ -147,8 +149,8 @@ fun VisionDrive.tap(
             viewport = bounds,
             startX = x,
             startY = y,
-            endX = x,
-            endY = y,
+            endX = x + offsetX,
+            endY = y + offsetY,
             scrollDurationSeconds = holdSeconds,
             repeat = repeat,
         )
@@ -494,4 +496,118 @@ fun VisionDrive.tapCenterOf(
     }
 
     return lastElement
+}
+
+/**
+ * tapBelow
+ */
+fun VisionDrive.tapBelow(
+    expression: String? = null,
+    useCache: Boolean = false,
+    remove: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    allowScroll: Boolean? = null,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+    swipeToSafePosition: Boolean = true,
+): VisionElement {
+
+    if (expression == null) {
+        var v = getThisOrIt().belowItem()
+        v = v.tap(holdSeconds = holdSeconds)
+        return v
+    }
+
+    val sel = getSelector(expression = expression)
+
+    val command = "tapBelow"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    var v = VisionElement.emptyElement
+    context.execOperateCommand(command = command, message = message, subject = "$sel") {
+
+        val labelElement = detect(
+            expression = expression,
+            useCache = useCache,
+            remove = remove,
+            language = language,
+            allowScroll = allowScroll,
+            swipeToSafePosition = swipeToSafePosition,
+            throwsException = true,
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+        )
+        v = labelElement.belowItem()
+        val tapFunc = {
+            silent {
+                v = v.tap(holdSeconds = holdSeconds)
+            }
+        }
+
+        tapFunc()
+    }
+    if (TestMode.isNoLoadRun) {
+        lastElement = v
+    }
+
+    return v
+}
+
+/**
+ * tapRight
+ */
+fun VisionDrive.tapRight(
+    expression: String? = null,
+    useCache: Boolean = false,
+    remove: String? = null,
+    language: String = PropertiesManager.logLanguage,
+    allowScroll: Boolean? = null,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+    swipeToSafePosition: Boolean = true,
+): VisionElement {
+
+    if (expression == null) {
+        var v = getThisOrIt().rightItem()
+        v = v.tap(holdSeconds = holdSeconds)
+        return v
+    }
+
+    val sel = getSelector(expression = expression)
+
+    val command = "tapRight"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    var v = VisionElement.emptyElement
+    context.execOperateCommand(command = command, message = message, subject = "$sel") {
+
+        val labelElement = detect(
+            expression = expression,
+            useCache = useCache,
+            remove = remove,
+            language = language,
+            allowScroll = allowScroll,
+            swipeToSafePosition = swipeToSafePosition,
+            throwsException = true,
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+        )
+        v = labelElement.rightItem()
+        val tapFunc = {
+            silent {
+                v = v.tap(holdSeconds = holdSeconds)
+            }
+        }
+
+        tapFunc()
+    }
+    if (TestMode.isNoLoadRun) {
+        lastElement = v
+    }
+
+    return v
 }
