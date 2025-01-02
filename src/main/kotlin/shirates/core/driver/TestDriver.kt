@@ -1925,6 +1925,10 @@ object TestDriver {
                     return this
                 }
             }
+        } else {
+            if (PropertiesManager.screenshotScale != 1.0) {
+                throw TestConfigException("Parameter `screenshotScale` must be 1.0 on Vision mode. Check testrun.properties file or testrun.global.properties file.")
+            }
         }
 
         if (testContext.waitSecondsForAnimationComplete > 0.0) {

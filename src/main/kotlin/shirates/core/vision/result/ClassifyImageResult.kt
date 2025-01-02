@@ -25,6 +25,12 @@ class ClassifyImageResult(
             TestLog.warn(msg)
             throw TestDriverException(msg, t)
         }
+        if (jsonObject.has("error")) {
+            val reason = jsonObject.getString("reason")
+            if (reason.contains("File not found") && reason.contains(".mlmodel"))
+                throw TestDriverException("mlmodel file not found. $reason")
+        }
+
         val jsonArray = jsonObject.getJSONArray("candidates")
         for (i in 0 until jsonArray.length()) {
             val jso = jsonArray.getJSONObject(i)

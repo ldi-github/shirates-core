@@ -2,6 +2,7 @@ package shirates.core.vision.configration.repository
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestConfigException
+import shirates.core.logging.printInfo
 import shirates.core.utility.toPath
 import java.nio.file.Files
 import kotlin.io.path.name
@@ -17,7 +18,8 @@ object VisionMLModelRepository {
         mlmodelsDirectory: String = PropertiesManager.visionDirectory.toPath().resolve("mlmodels").toString()
     ) {
         if (Files.exists(mlmodelsDirectory.toPath()).not()) {
-            throw TestConfigException("Directory not found. (mlmodelsDirectory=$mlmodelsDirectory)")
+            printInfo("Directory not found. (mlmodelsDirectory=$mlmodelsDirectory)")
+            return
         }
 
         val dirs = mlmodelsDirectory.toPath().toFile().walkTopDown()

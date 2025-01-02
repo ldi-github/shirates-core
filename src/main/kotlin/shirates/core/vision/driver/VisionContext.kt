@@ -14,6 +14,8 @@ import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.helper.FlowContainer
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
+import java.awt.BasicStroke
+import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
@@ -314,6 +316,13 @@ class VisionContext(
             sortRecognizeTextObservations()
         }
 
+        /**
+         * Save screenshotImageWithTextRegion
+         */
+        rootElement.visionContext.screenshotImageWithTextRegion?.saveImage(
+            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_recognized_text_rectangles.png").toString()
+        )
+
         isRecognizeTextObservationInitialized = true
         return this
     }
@@ -456,6 +465,26 @@ class VisionContext(
         get() {
             recognizeText()
             return recognizeTextObservations.map { it.text }.joinToString(" ")
+        }
+
+    /**
+     * screenshotImageWithTextRegion
+     */
+    val screenshotImageWithTextRegion: BufferedImage?
+        get() {
+            if (screenshotImage == null) {
+                return null
+            }
+            val newImage = BufferedImage(screenshotImage!!.width, screenshotImage!!.height, screenshotImage!!.type)
+            newImage.graphics.drawImage(screenshotImage, 0, 0, null)
+            val g2d = newImage.createGraphics()
+            g2d.color = Color.RED!!
+            g2d.stroke = BasicStroke(3f)
+            for (o in recognizeTextObservations) {
+                val rect = o.rectOnScreen!!
+                g2d.drawRect(rect.x, rect.y, rect.width, rect.height)
+            }
+            return newImage
         }
 
 }

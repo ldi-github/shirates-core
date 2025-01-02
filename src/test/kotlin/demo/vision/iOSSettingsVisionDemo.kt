@@ -58,8 +58,8 @@ class iOSSettingsVisionDemo : VisionTest() {
                                     .memoTextAs("Model Name")
                             }
                     }.expectation {
-                        readMemo("iOS Version").thisStartsWith("17.2", message = "iOS Version is `17.2`")
-                        readMemo("Model Name").thisStartsWith("iPhone 15", message = "Model Name is `iPhone 15`")
+                        readMemo("iOS Version").thisStartsWith("18.2", message = "iOS Version is `18.2`")
+                        readMemo("Model Name").thisStartsWith("iPhone 16", message = "Model Name is `iPhone 16`")
                     }
                 }
             }

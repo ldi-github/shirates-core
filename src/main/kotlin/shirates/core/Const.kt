@@ -53,7 +53,7 @@ object Const {
     const val ENABLE_IS_IN_VIEW_LOG = false
     const val ENABLE_IS_SAFE_LOG = true
     const val ENABLE_IS_SCREEN_LOG = false
-    const val SCREENSHOT_SCALE = 0.5
+    const val SCREENSHOT_SCALE = 1.0
     const val ENABLE_IMAGE_ASSERTION = true
     const val IMAGE_MATCHING_SCALE = 0.25
     const val IMAGE_MATCHING_THRESHOLD = 1.0

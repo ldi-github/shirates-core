@@ -53,7 +53,7 @@ fun VisionDrive.detect(
     }
     val v: VisionElement
     try {
-        if (swipeToSafePosition) {
+        if (allowScroll != false && swipeToSafePosition && CodeExecutionContext.withScroll == true) {
             v = detectCoreWithSwipeToSafePosition(
                 selector = sel,
                 remove = remove,
@@ -149,6 +149,7 @@ internal fun VisionDrive.detectCore(
         selector = selector,
         remove = remove,
     )   // loose match
+
     if (v.text == selector.text) {
         return v    // strict match
         /**

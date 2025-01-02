@@ -42,10 +42,10 @@ CV-driven API bypasses accessing DOM(This process is very slow). Shirates/Vision
 
 ### Recommended settings
 
-- [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save.md)
-- [Enable right-click test running (IntelliJ IDEA)](tool_settings/right_click_test_running.md)
-- [Encoding setting for properties file](tool_settings/properties_file_encoding.md)
-- [Android Device settings](basic/recommended_settings/recommended_settings_android.md)
+- [Actions on Save (IntelliJ IDEA)](../tool_settings/actions_on_save.md)
+- [Enable right-click test running (IntelliJ IDEA)](../tool_settings/right_click_test_running.md)
+- [Encoding setting for properties file](../tool_settings/properties_file_encoding.md)
+- [Android Device settings](../basic/recommended_settings/recommended_settings_android.md)
 
 ### Creating project(for vision)
 

@@ -8,7 +8,7 @@
    ![](../_images/creating_package_2.png)
 
 
-2. Create a kotlin class file `TestClass1`.
+2. Create a kotlin class file `VisionTestClass1`.
 
    ![](../_images/creating_testclass.png)
 
@@ -25,9 +25,9 @@
 ```kotlin
 package exercise
 
-import shirates.core.testcode.UITest
+import shirates.core.vision.testcode.VisionTest
 
-class TestClass1 : UITest() {
+class VisionTestClass1: VisionTest() {
 }
 ```
 
