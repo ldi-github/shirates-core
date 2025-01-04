@@ -59,10 +59,10 @@ internal fun VisionElement.rightLeftCore(
     mergeIncluded: Boolean,
 ): VisionElement {
 
-    if (isKeyboardShown) {
-        hideKeyboard()
-    }
-    screenshot()
+//    if (isKeyboardShown) {
+//        hideKeyboard()
+//    }
+//    screenshot()
 
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
@@ -140,10 +140,10 @@ internal fun VisionElement.aboveBelowCore(
     mergeIncluded: Boolean,
 ): VisionElement {
 
-    if (isKeyboardShown) {
-        hideKeyboard()
-    }
-    screenshot()
+//    if (isKeyboardShown) {
+//        hideKeyboard()
+//    }
+//    screenshot()
 
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,

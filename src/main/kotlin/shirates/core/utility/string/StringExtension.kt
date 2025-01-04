@@ -2,7 +2,7 @@ package shirates.core.utility.string
 
 import com.ibm.icu.text.Transliterator
 import shirates.core.configuration.PropertiesManager
-import shirates.core.logging.printWarn
+import shirates.core.logging.printInfo
 import shirates.core.utility.misc.StringUtility
 import shirates.core.vision.configration.repository.VisionTextReplacementRepository
 import java.text.Normalizer
@@ -130,7 +130,7 @@ fun String.replaceWithRegisteredWord(): String {
         }
     }
     if (s != this) {
-        printWarn("\"$this\" is replaced to \"$s\"")
+        printInfo("\"$this\" is replaced to \"$s\"")
     }
     return s
 }

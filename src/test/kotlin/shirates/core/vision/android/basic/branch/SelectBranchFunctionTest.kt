@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.basic.branch
+package shirates.core.vision.android.basic.branch
 
 import ifCanDetect
 import ifCanDetectNot
@@ -8,7 +8,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.vision.driver.commandextension.screenIs
 import shirates.core.vision.testcode.VisionTest
 
-@Testrun("unitTestConfig/android/androidSettings/testrun.properties")
+@Testrun("unitTestConfig/vision/android/androidSettings/testrun.properties")
 class SelectBranchFunctionTest : VisionTest() {
 
     @Test

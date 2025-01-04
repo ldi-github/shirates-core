@@ -5,6 +5,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.exception.BranchException
 import shirates.core.logging.Message.message
+import shirates.core.vision.VisionDrive
 
 /**
  * BooleanCompareResult
@@ -12,7 +13,7 @@ import shirates.core.logging.Message.message
 class BooleanCompareResult(
     val value: Boolean,
     val command: String
-) : CompareResult(), TestDrive {
+) : CompareResult(), TestDrive, VisionDrive {
 
     private fun ifCore(
         condition: String,

@@ -14,7 +14,7 @@ import shirates.core.vision.driver.commandextension.detect
 fun VisionDrive.ifCanDetect(
     expression: String,
     onTrue: (VisionElement) -> Unit = {}
-): VisionDrive {
+): BooleanCompareResult {
 
     val command = "ifCanDetect"
 
@@ -34,7 +34,7 @@ fun VisionDrive.ifCanDetect(
     }
 
     result.setExecuted(condition = message, matched = matched, message = message)
-    return this
+    return result
 }
 
 /**
@@ -43,7 +43,7 @@ fun VisionDrive.ifCanDetect(
 fun VisionDrive.ifCanDetectNot(
     expression: String,
     onTrue: (VisionElement) -> Unit
-): VisionDrive {
+): BooleanCompareResult {
 
     val command = "ifCanDetectNot"
 
@@ -64,6 +64,6 @@ fun VisionDrive.ifCanDetectNot(
     }
 
     result.setExecuted(condition = message, matched = matched, message = message)
-    return this
+    return result
 }
 

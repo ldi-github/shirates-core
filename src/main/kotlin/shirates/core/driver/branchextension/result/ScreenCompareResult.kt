@@ -5,6 +5,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
+import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.commandextension.isScreenOf
 
 /**
@@ -51,6 +52,11 @@ class ScreenCompareResult() : CompareResult() {
     ) {
         if (screenNames.isEmpty()) {
             throw IllegalArgumentException("screenNames is required.")
+        }
+        for (screenName in screenNames) {
+            if (VisionScreenRepository.isRegistered(screenName).not()) {
+                throw IllegalArgumentException("screenName '$screenName' is not registered in ${VisionScreenRepository.directory}.")
+            }
         }
 
         val subject = getSubject(screenNames = screenNames)

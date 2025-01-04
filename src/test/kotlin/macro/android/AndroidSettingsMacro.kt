@@ -2,8 +2,12 @@ package macro.android
 
 import shirates.core.driver.TestDrive
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.testContext
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
+import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.syncScreen
+import shirates.core.vision.visionScope
 
 @MacroObject
 object AndroidSettingsMacro : TestDrive {
@@ -11,19 +15,35 @@ object AndroidSettingsMacro : TestDrive {
     @Macro("[Android Settings Top Screen]")
     fun androidSettingsTopScreen() {
 
-        if (it.isScreen("[Android Settings Top Screen]")) {
-            it.flickAndGoUpTurbo()
-            return
-        }
+        if (testContext.useCache) {
+            if (it.isScreen("[Android Settings Top Screen]")) {
+                it.flickAndGoUpTurbo()
+                return
+            }
 
-        it.restartApp()
-            .launchApp("Settings")
-            .screenIs("[Android Settings Top Screen]")
+            it.restartApp()
+                .launchApp("Settings")
+                .screenIs("[Android Settings Top Screen]")
 
-        if (canSelect("[Account Avatar]").not()) {
-            it.flickAndGoUp()
+            if (canSelect("[Account Avatar]").not()) {
+                it.flickAndGoUp()
+            }
+            syncCache(force = true)
+        } else {
+            visionScope {
+                if (it.isScreen("[Android Settings Top Screen]")) {
+                    it.flickAndGoUpTurbo()
+                    return@visionScope
+                }
+
+                it.restartApp()
+                    .launchApp("Settings")
+                    .screenIs("[Android Settings Top Screen]")
+
+                it.flickAndGoUp()
+                it.syncScreen()
+            }
         }
-        syncCache(force = true)
     }
 
     @Macro("[Android Settings Search Screen]")
@@ -41,14 +61,27 @@ object AndroidSettingsMacro : TestDrive {
     @Macro("[Network & internet Screen]")
     fun networkAndInternetScreen() {
 
-        if (it.isScreen("[Network & internet Screen]")) {
-            it.flickAndGoUpTurbo()
-            return
-        }
+        if (testContext.useCache) {
+            if (it.isScreen("[Network & internet Screen]")) {
+                it.flickAndGoUpTurbo()
+                return
+            }
 
-        androidSettingsTopScreen()
-        it.tapWithScrollUp("Network & internet")
-            .screenIs("[Network & internet Screen]")
+            androidSettingsTopScreen()
+            it.tapWithScrollUp("Network & internet")
+                .screenIs("[Network & internet Screen]")
+        } else {
+            visionScope {
+                if (it.isScreen("[Network & internet Screen]")) {
+                    it.flickAndGoUpTurbo()
+                    return@visionScope
+                }
+
+                androidSettingsTopScreen()
+                it.tapWithScrollUp("Network & internet")
+                    .screenIs("[Network & internet Screen]")
+            }
+        }
     }
 
     @Macro("[Internet Screen]")
@@ -69,14 +102,27 @@ object AndroidSettingsMacro : TestDrive {
     @Macro("[Connected devices Screen]")
     fun connectedDevicesScreen() {
 
-        if (it.isScreen("[Connected devices Screen]")) {
-            it.flickAndGoUpTurbo()
-            return
-        }
+        if (testContext.useCache) {
+            if (it.isScreen("[Connected devices Screen]")) {
+                it.flickAndGoUpTurbo()
+                return
+            }
 
-        androidSettingsTopScreen()
-        it.tapWithScrollDown("Connected devices")
-            .screenIs("[Connected devices Screen]")
+            androidSettingsTopScreen()
+            it.tapWithScrollDown("Connected devices")
+                .screenIs("[Connected devices Screen]")
+        } else {
+            visionScope {
+                if (it.isScreen("[Connected devices Screen]")) {
+                    it.flickAndGoUpTurbo()
+                    return@visionScope
+                }
+
+                androidSettingsTopScreen()
+                it.tapWithScrollDown("Connected devices")
+                    .screenIs("[Connected devices Screen]")
+            }
+        }
     }
 
     @Macro("[Battery Screen]")

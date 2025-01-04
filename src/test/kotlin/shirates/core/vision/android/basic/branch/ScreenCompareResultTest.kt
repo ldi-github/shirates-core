@@ -1,4 +1,4 @@
-package shirates.core.uitest.android.basic.branch
+package shirates.core.vision.android.basic.branch
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -15,7 +15,7 @@ import shirates.core.vision.driver.commandextension.macro
 import shirates.core.vision.testcode.VisionTest
 
 @Want
-@Testrun("unitTestConfig/android/androidSettings/testrun.properties")
+@Testrun("unitTestConfig/vision/android/androidSettings/testrun.properties")
 class ScreenCompareResultTest : VisionTest() {
 
     @Order(10)
@@ -143,10 +143,9 @@ class ScreenCompareResultTest : VisionTest() {
                 expectation {
                     val result = ScreenCompareResult()
                     assertThatThrownBy {
-                        result
-                            .ifScreenIs("[not exist screen]") {
-                                NG("never called")
-                            }
+                        result.ifScreenIs("[not exist screen]") {
+                            NG("never called")
+                        }
                     }.isInstanceOf(IllegalArgumentException::class.java)
                         .hasMessage("screenName '[not exist screen]' is not registered in ${VisionScreenRepository.directory}.")
                 }

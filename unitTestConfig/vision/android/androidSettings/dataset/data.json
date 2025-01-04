@@ -1,0 +1,11 @@
+{
+  "[dataset1]": {
+    "key1-1": "value1-1",
+    "key1-2": "value1-2"
+  },
+
+  "[dataset2]": {
+    "key2-1": "value2-1",
+    "key2-2": "value2-2"
+  }
+}

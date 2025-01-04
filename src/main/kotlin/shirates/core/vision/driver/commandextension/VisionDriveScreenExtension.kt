@@ -11,6 +11,7 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.lastElement
 
 /**
@@ -23,6 +24,10 @@ fun VisionDrive.isScreen(
     if (TestMode.isNoLoadRun) {
         TestDriver.currentScreen = screenName
         return true
+    }
+
+    if (VisionScreenRepository.isRegistered(screenName = screenName).not()) {
+        return false
     }
 
     val r = (TestDriver.currentScreen == screenName)

@@ -1,10 +1,10 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.refreshCache
 import shirates.core.driver.commandextension.*
+import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -16,6 +16,7 @@ import shirates.core.utility.toPath
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionMLModelRepository
+import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.*
 
 internal fun VisionDrive.checkImageLabelContains(
@@ -181,6 +182,10 @@ fun VisionDrive.screenIs(
     func: (() -> Unit)? = null
 ): VisionElement {
 
+    if (VisionScreenRepository.isRegistered(screenName).not()) {
+        throw TestConfigException("screenName $screenName is not registered in directory ${VisionScreenRepository.directory}.")
+    }
+
     val command = "screenIs"
     val assertMessage = message(id = command, subject = screenName)
 
@@ -191,6 +196,7 @@ fun VisionDrive.screenIs(
         if (match.not()) {
             doUntilTrue(
                 waitSeconds = waitSeconds,
+                throwOnFinally = false,
                 onBeforeRetry = {
                     onIrregular?.invoke()
                 },
@@ -208,8 +214,7 @@ fun VisionDrive.screenIs(
             TestDriver.currentScreen = "?"
             lastElement.lastResult = LogType.NG
 
-            val identity = ScreenRepository.get(screenName).identityElements.joinToString("")
-            val message = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected identity=$identity)"
+            val message = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName)"
             val ex = TestNGException(message, lastElement.lastError)
             throw ex
         }

@@ -1,6 +1,7 @@
 package shirates.core.vision
 
 import shirates.core.driver.TestDriver.lastVisionElement
+import shirates.core.driver.visionDrive
 
 /**
  * visionScope
@@ -8,6 +9,7 @@ import shirates.core.driver.TestDriver.lastVisionElement
 fun visionScope(
     func: (VisionElement) -> Unit
 ) {
-
-    func(lastVisionElement)
+    visionDrive.apply {
+        func(lastVisionElement)
+    }
 }
