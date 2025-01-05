@@ -8,6 +8,7 @@ import boofcv.io.image.UtilImageIO
 import boofcv.struct.image.GrayF32
 import boofcv.struct.image.GrayS32
 import boofcv.struct.image.GrayU8
+import org.apache.commons.io.FileUtils
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
@@ -17,7 +18,6 @@ import shirates.core.utility.file.ResourceUtility
 import shirates.core.utility.image.saveImage
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.toPath
-import java.awt.image.BufferedImage
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -64,13 +64,14 @@ object CreateMLUtility {
 
         setupScripts()
         createFilteredImages()
+        setupTrainingDirectories()
 
         for (mlmodelName in runScriptMap.keys) {
             val scriptEntry = getScriptEntry(mlmodelName)
             val args = mutableListOf(
                 "swift",
                 scriptEntry.targetScript.toString(),
-                scriptEntry.dataSourceDirectory.toString()
+                scriptEntry.dataSourceDirectory
             )
             args.addAll(scriptEntry.options)
 
@@ -84,6 +85,9 @@ object CreateMLUtility {
                 throw r.error!!
             }
             println(r.resultString)
+            if (r.resultString.contains("Accuracy: 100.00%").not()) {
+                printWarn("Accuracy is not 100%.")
+            }
         }
     }
 
@@ -132,6 +136,20 @@ object CreateMLUtility {
         }
     }
 
+
+    internal fun setupTrainingDirectories() {
+
+        for (scriptEntry in runScriptMap.values) {
+            if (Files.exists(scriptEntry.testDirectory.toPath())) {
+                FileUtils.deleteDirectory(scriptEntry.testDirectory.toPath().toFile())
+            }
+            FileUtils.copyDirectory(
+                scriptEntry.trainingDirectory.toPath().toFile(),
+                scriptEntry.testDirectory.toPath().toFile()
+            )
+        }
+    }
+
     /**
      * getScriptEntry
      */
@@ -143,19 +161,12 @@ object CreateMLUtility {
         throw TestConfigException(message = "ML script not found. ($mlmodelName)")
     }
 
-    internal fun setupImages() {
-
-        for (scriptEntry in runScriptMap.values) {
-            createFilteredImages(scriptEntry)
-        }
-    }
-
     private fun cleanupFilteredImages(scriptEntry: ScriptEntry) {
 
         val dataSourceDirectoryPath = scriptEntry.trainingDirectory.toPath()
         val filteredImageFiles = dataSourceDirectoryPath.toFile().walkTopDown()
             .filter { it.isFile }
-            .filter { (it.nameWithoutExtension.endsWith("_binary") || it.nameWithoutExtension.endsWith("_contour")) }
+            .filter { (it.nameWithoutExtension.endsWith("_binary")) }
             .filter { it.extension == "png" || it.extension == "jpg" }
             .toList()
         for (filteredImageFile in filteredImageFiles) {
@@ -187,25 +198,9 @@ object CreateMLUtility {
             val label = GrayS32(input.width, input.height)
 
             val threshold = GThresholdImageOps.computeOtsu(input, 0.0, 255.0)
-
             ThresholdImageOps.threshold(input, binary, threshold.toFloat(), true)
 
-//            var filtered = BinaryImageOps.erode8(binary, 1, null)
-//            filtered = BinaryImageOps.dilate8(filtered, 1, null)
-
-//            val contours = BinaryImageOps.contour(filtered, ConnectRule.EIGHT, label)
-//
-//            val colorExternal = 0xFFFFFF
-//            val colorInternal = 0xFF2020
-
-            val visualBinary: BufferedImage = VisualizeBinaryData.renderBinary(binary, false, null)
-//            val visualFiltered: BufferedImage = VisualizeBinaryData.renderBinary(filtered, false, null)
-//            val visualLabel: BufferedImage = VisualizeBinaryData.renderLabeledBG(label, contours.size, null)
-//            val visualContour: BufferedImage = VisualizeBinaryData.renderContours(
-//                contours, colorExternal, colorInternal,
-//                input.width, input.height, null
-//            )
-
+            val visualBinary = VisualizeBinaryData.renderBinary(binary, false, null)
             val p = imageFile.toPath().parent
 
             val binaryImageFile =
@@ -213,6 +208,5 @@ object CreateMLUtility {
             visualBinary.saveImage(binaryImageFile, log = false)
         }
     }
-
 
 }
