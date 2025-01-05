@@ -1,4 +1,4 @@
-# Quick Start [Shirates/Vision] for macOS
+# Quick Start (Shirates/Vision) for macOS
 
 ## Environment
 

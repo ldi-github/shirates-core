@@ -22,6 +22,10 @@ abstract class VisionTest : UITestBase(), VisionDrive {
             return TestDriver.lastVisionElement
         }
 
+    var v1 = VisionElement(capture = false)
+    var v2 = VisionElement(capture = false)
+    var v3 = VisionElement(capture = false)
+
     override fun beforeAllAfterSetup(context: ExtensionContext?) {
         super.beforeAllAfterSetup(context)
 

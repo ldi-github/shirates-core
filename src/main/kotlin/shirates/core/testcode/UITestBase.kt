@@ -68,9 +68,6 @@ abstract class UITestBase : Drive {
     /**
      * temporary variables for user
      */
-    var e1 = TestElement()
-    var e2 = TestElement()
-    var e3 = TestElement()
 
     var b1 = false
     var b2 = false
@@ -122,10 +119,6 @@ abstract class UITestBase : Drive {
     var isManualingCase: Boolean = false
 
     fun clearTempStorages() {
-
-        e1 = TestElement()
-        e2 = TestElement()
-        e3 = TestElement()
 
         b1 = false
         b2 = false

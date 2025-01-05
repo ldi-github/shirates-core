@@ -4,6 +4,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
@@ -267,6 +268,16 @@ internal fun VisionDrive.detectWithScrollCore(
         )
     }
     lastElement = v
+    if (v.isEmpty) {
+        v.lastError =
+            TestDriverException(
+                message = message(
+                    id = "elementNotFound",
+                    subject = selector.toString(),
+                    arg1 = selector.expression,
+                )
+            )
+    }
     if (v.hasError) {
         v.lastResult = LogType.ERROR
         if (throwsException) {

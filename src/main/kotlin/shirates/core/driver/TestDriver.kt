@@ -1137,6 +1137,7 @@ object TestDriver {
     fun clearLast() {
 
         lastElement = TestElement.emptyElement
+        lastVisionElement = VisionElement.emptyElement
     }
 
     /**

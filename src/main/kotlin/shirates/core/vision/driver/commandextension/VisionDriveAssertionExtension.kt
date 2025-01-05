@@ -4,13 +4,9 @@ import shirates.core.driver.*
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.refreshCache
 import shirates.core.driver.commandextension.*
-import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestNGException
-import shirates.core.logging.CodeExecutionContext
-import shirates.core.logging.LogType
+import shirates.core.logging.*
 import shirates.core.logging.Message.message
-import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionDrive
@@ -182,8 +178,18 @@ fun VisionDrive.screenIs(
     func: (() -> Unit)? = null
 ): VisionElement {
 
+    if (testContext.useCache) {
+        val e = testDrive.screenIs(
+            screenName = screenName,
+            waitSeconds = waitSeconds,
+            onIrregular = onIrregular,
+            func = func
+        )
+        return e.toVisionElement()
+    }
+
     if (VisionScreenRepository.isRegistered(screenName).not()) {
-        throw TestConfigException("screenName $screenName is not registered in directory ${VisionScreenRepository.directory}.")
+        printWarn("screenName $screenName is not registered in directory ${VisionScreenRepository.directory}.")
     }
 
     val command = "screenIs"

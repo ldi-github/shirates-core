@@ -5,6 +5,7 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
+import shirates.core.logging.printWarn
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.commandextension.isScreenOf
 
@@ -55,7 +56,7 @@ class ScreenCompareResult() : CompareResult() {
         }
         for (screenName in screenNames) {
             if (VisionScreenRepository.isRegistered(screenName).not()) {
-                throw IllegalArgumentException("screenName '$screenName' is not registered in ${VisionScreenRepository.directory}.")
+                printWarn("screenName '$screenName' is not registered in ${VisionScreenRepository.directory}.")
             }
         }
 

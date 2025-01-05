@@ -85,6 +85,7 @@ open class VisionObservation(
         if (this is RecognizeTextObservation) {
             c.jsonString = this.jsonString
             c.recognizeTextObservations.add(this)
+            c.isRecognizeTextObservationInitialized = true
         }
         return c
     }

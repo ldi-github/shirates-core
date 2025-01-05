@@ -18,6 +18,16 @@
     "data": "unitTestConfig/vision/android/androidSettings/dataset/data.json"
   },
 
+  "screens": {
+    "import": [
+      "testConfig/android/androidSettings/screens",
+      "testConfig/android/calculator/screens",
+      "testConfig/android/maps/screens",
+      "testConfig/android/misc/screens",
+      "testConfig/android/playStore/screen"
+    ]
+  },
+
   "capabilities": {
     "platformVersion": "14",
     "language": "en",

@@ -407,6 +407,7 @@ internal fun VisionDrive.doUntilScrollStopCore(
                 oldScreenshotImage = CodeExecutionContext.lastScreenshotImage
 
                 scroll()
+                screenshot(force = true)
 
                 val endOfScroll = CodeExecutionContext.lastScreenshotImage.isSame(oldScreenshotImage)
                 TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)

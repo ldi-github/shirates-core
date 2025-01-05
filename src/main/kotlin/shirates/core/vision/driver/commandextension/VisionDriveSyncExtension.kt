@@ -1,7 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.driver.TestDrive
-import shirates.core.driver.TestElement
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
@@ -22,7 +20,7 @@ fun VisionDrive.useCache(func: () -> Unit): VisionElement {
 /**
  * suppressCache
  */
-fun TestDrive.suppressCache(func: () -> Unit): TestElement {
+fun VisionDrive.suppressCache(func: () -> Unit): VisionElement {
 
     testDrive.suppressCache(func = func)
     return lastElement

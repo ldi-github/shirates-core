@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.result.ScreenCompareResult
+import shirates.core.logging.TestLog
 import shirates.core.testcode.Want
-import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.branchextension.android
 import shirates.core.vision.driver.commandextension.describe
 import shirates.core.vision.driver.commandextension.ifScreenIsNot
@@ -142,12 +142,10 @@ class ScreenCompareResultTest : VisionTest() {
             case(6) {
                 expectation {
                     val result = ScreenCompareResult()
-                    assertThatThrownBy {
-                        result.ifScreenIs("[not exist screen]") {
-                            NG("never called")
-                        }
-                    }.isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("screenName '[not exist screen]' is not registered in ${VisionScreenRepository.directory}.")
+                    result.ifScreenIs("[not exist screen]") {
+                        NG("never called")
+                    }
+                    assertThat(TestLog.lastTestLog?.message).startsWith("screenName '[not exist screen]' is not registered in ")
                 }
             }
         }
