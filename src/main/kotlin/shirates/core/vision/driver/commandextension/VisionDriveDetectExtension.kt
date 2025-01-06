@@ -16,6 +16,7 @@ import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
+import shirates.core.vision.driver.silent
 
 /**
  * detect
@@ -106,7 +107,9 @@ internal fun VisionDrive.detectCoreWithSwipeToSafePosition(
     }
     action()
     if (v.isFound && CodeExecutionContext.withScroll != false) {
-        v.swipeToSafePosition()
+        silent {
+            v.swipeToSafePosition()
+        }
         action()
     }
     return v
@@ -133,7 +136,7 @@ internal fun VisionDrive.detectCore(
          */
         val containedText = selector.textContains!!
         rootElement.visionContext.recognizeText(language = language)
-        val joinedText = rootElement.joinedText.removeSpaces().replaceWithRegisteredWord()
+        val joinedText = rootElement.regionText.removeSpaces().replaceWithRegisteredWord()
         if (joinedText.contains(containedText)) {
             return rootElement
         } else {

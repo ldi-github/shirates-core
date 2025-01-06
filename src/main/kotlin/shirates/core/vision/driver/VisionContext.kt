@@ -459,9 +459,9 @@ class VisionContext(
     }
 
     /**
-     * joinedText
+     * regionText
      */
-    val joinedText: String
+    val regionText: String
         get() {
             recognizeText()
             return recognizeTextObservations.map { it.text }.joinToString(" ")

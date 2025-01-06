@@ -9,7 +9,7 @@ import shirates.core.vision.driver.branchextension.ios
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/ios/iOSSettingsVision/testrun.properties")
+@Testrun("testConfig/vision/ios/iOSSettings/testrun.properties")
 class iOSSettingsVisionDemo : VisionTest() {
 
     @Test

@@ -291,7 +291,7 @@ Let's see demonstration.
 
 1. Open **shirates-core** project directory in Finder.
 2. Right click `build.gradle.kts` and open with IntelliJ IDEA. <br>
-   ![](_images/opening_project.png)
+   ![](../_images/opening_project.png)
 
 ### Enable right-click test running
 
@@ -299,7 +299,7 @@ Let's see demonstration.
 1. `Build, Execution, Deployment > Build Tools > Gradle`
 1. Set `Run tests using` to `IntelliJ IDEA`
 
-![](basic/_images/build_tools_gradle.png)
+![](../basic/_images/build_tools_gradle.png)
 
 <br>
 
@@ -344,4 +344,4 @@ lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	tim
 
 ### Link
 
-- [index](index.md)
+- [index](vision-index.md)

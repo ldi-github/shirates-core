@@ -5,7 +5,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/android/androidSettingsVision/testrun.properties")
+@Testrun("testConfig/vision/android/androidSettings/testrun.properties")
 class AndroidSettingsVisionDemo : VisionTest() {
 
     @Test

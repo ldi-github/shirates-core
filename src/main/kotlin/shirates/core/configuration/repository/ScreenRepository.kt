@@ -101,7 +101,7 @@ object ScreenRepository {
     fun setup(screensDirectory: Path, importDirectories: List<Path> = mutableListOf()) {
 
         if (Files.exists(screensDirectory).not()) {
-            TestLog.warn(message(id = "screensDirectoryNotFound", file = "$screensDirectory"))
+            TestLog.info(message(id = "screensDirectoryNotFound", file = "$screensDirectory"))
         } else if (Files.isDirectory(screensDirectory).not()) {
             throw TestConfigException("screens is not directory. ($screensDirectory)")
         }

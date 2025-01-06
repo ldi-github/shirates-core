@@ -41,7 +41,7 @@ improved dynamically than former version(Shirates/Classic).
 
 ### Samples
 
-- [Tutorial samples](basic/tutorial_samples.md)
+- [Tutorial samples](../basic/tutorial_samples.md)
 
 ### Recommended settings
 
@@ -50,15 +50,15 @@ improved dynamically than former version(Shirates/Classic).
 - [Encoding setting for properties file](../tool_settings/properties_file_encoding.md)
 - [Android Device settings](../basic/recommended_settings/recommended_settings_android.md)
 
-### Creating project(for vision)
+### Creating project (Shirates/Vision)
 
 - [Creating project](basic/creating_project/creating_project.md)
 - [Test Configuration template](basic/creating_project/test_configuration_template.md)
 
-### Creating TestClass(for vision)
+### Creating TestClass (Shirates/Vision)
 
 - [Creating TestClass](basic/creating_testclass/creating_testclass.md)
-- [Select and assert](basic/creating_testclass/select_and_assert.md)
+- [Detect and assert](basic/creating_testclass/detect_and_assert.md)
 - [Test code structure](basic/creating_testclass/testcode_structure.md)
 - [Test result files](basic/creating_testclass/test_result_files.md)
 

@@ -520,7 +520,8 @@ class Selector(
             }
 
         val relativeCommandSubjectNames = listOf(
-            "label", "image", "button", "switch", "input", "widget", "scrollable"
+            "label", "image", "button", "switch", "input", "widget", "scrollable",  // classic
+            "text", "item"  // vision
         )
 
         private fun String.escapeRelativeNickname(): String {

@@ -11,6 +11,7 @@ import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.lastElement
+import shirates.core.vision.driver.silent
 
 /**
  * tap
@@ -93,7 +94,6 @@ internal fun VisionDrive.detectWithAdjustingPosition(
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
-    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
 ): VisionElement {
 
     fun getElement(): VisionElement {
@@ -113,7 +113,9 @@ internal fun VisionDrive.detectWithAdjustingPosition(
     if (CodeExecutionContext.withScroll == true && CodeExecutionContext.scrollDirection == ScrollDirection.Down &&
         screenRect.bottom * 0.8 < v.rect.top
     ) {
-        v.swipeVerticalTo(endY = (screenRect.toBoundsWithRatio().height * 0.2).toInt())
+        silent {
+            v.swipeVerticalTo(endY = (screenRect.toBoundsWithRatio().height * 0.2).toInt())
+        }
         v = getElement()
     }
 

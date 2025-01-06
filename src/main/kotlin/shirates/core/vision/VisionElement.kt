@@ -199,19 +199,29 @@ class VisionElement(
         }
 
     /**
-     * joinedText
+     * digitText
      */
-    val joinedText: String
+    val digitText: String
         get() {
-            return visionContext.joinedText
+            val s = text.replace("[^\\d\\s]".toRegex(), "")
+                .replace("[\\s+]".toRegex(), " ")
+            return s
         }
 
     /**
-     * joinedDigit
+     * regionText
      */
-    val joinedDigit: String
+    val regionText: String
         get() {
-            val s = joinedText.replace("[^\\d\\s]".toRegex(), "")
+            return visionContext.regionText
+        }
+
+    /**
+     * regionDigit
+     */
+    val regionDigit: String
+        get() {
+            val s = regionText.replace("[^\\d\\s]".toRegex(), "")
                 .replace("[\\s+]".toRegex(), " ")
             return s
         }
@@ -227,12 +237,11 @@ class VisionElement(
             if (selector == null && isEmpty) {
                 return "(empty)"
             }
-            var s = selector?.nickname
-            if (s != null && s.isNotBlank()) {
-                return s
+            if (selector?.nickname != null && selector?.nickname!!.isNotBlank()) {
+                return selector!!.nickname!!
             }
 
-            s = selector?.toString()
+            var s = selector?.toString()
             if (s != null && s.isNotBlank()) {
                 if (CodeExecutionContext.isInCell) {
                     return s.split(">:", "]:").last()
@@ -284,9 +293,9 @@ class VisionElement(
     }
 
     /**
-     * save
+     * saveImage
      */
-    fun save(): VisionElement {
+    fun saveImage(): VisionElement {
 
         visionContext.saveImage(fileName = selector?.toString())
         return this

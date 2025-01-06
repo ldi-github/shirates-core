@@ -3,6 +3,7 @@ package shirates.core.vision.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.currentScreen
+import shirates.core.driver.TestDriver.lastVisionElement
 import shirates.core.driver.TestDriver.screenshot
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestElement
@@ -101,6 +102,7 @@ private fun VisionDrive.existCore(
 //        intervalSeconds = intervalSeconds,
 //        holdSeconds = holdSeconds,
     )
+    lastVisionElement = v
 
     fun String.eval(): Boolean {
         val containedText = selector.text ?: selector.textContains

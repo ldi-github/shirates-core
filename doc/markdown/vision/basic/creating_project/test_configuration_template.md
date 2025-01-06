@@ -1,4 +1,4 @@
-# Test configuration template(for vision)
+# Test configuration template (Shirates/Vision)
 
 Test configuration files are required to initialize test session.
 
@@ -17,7 +17,7 @@ You can set up configuration files in your project using template in shirates-co
 
 ### Link
 
-- [index](../../index.md)
+- [index](../../vision-index.md)
 
 
 

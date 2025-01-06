@@ -1,4 +1,4 @@
-# Creating project(for vision)
+# Creating project (Shirates/Vision)
 
 ## Create new project
 
@@ -58,5 +58,5 @@ Click reload on Gradle pane.
 
 ### Link
 
-- [index](../../index.md)
+- [index](../../vision-index.md)
 
