@@ -78,6 +78,8 @@ fun TestElement.isContainingImage(
     threshold: Double = PropertiesManager.imageMatchingThreshold,
 ): ImageMatchResult {
 
+    screenshot(force = true)
+
     val testElement = this
 
     var sel = TestDriver.screenInfo.getSelector(expression = expression)

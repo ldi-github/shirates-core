@@ -12,47 +12,47 @@
 
     "[NavigationBar]": ".XCUIElementTypeNavigationBar",
 
-    "[Screen Time Icon]": "[Screen Time]:leftImage",
-    "[Screen Time]": "",
-
     "[General Icon]": "[General]:leftImage",
     "[General]": "",
 
     "[Accessibility Icon]": "[Accessibility]:leftImage",
     "[Accessibility]": "",
 
+    "[Action Button Icon]": "[Action Button]:leftImage",
+    "[Action Button]": "",
+
+    "[Apple Intelligence & Siri Icon]": "[Apple Intelligence & Siri]:leftImage",
+    "[Apple Intelligence & Siri]": "",
+
+    "[Camera Icon]": "[Camera]:leftImage",
+    "[Camera]": "",
+
+    "[Home Screen & App Library Icon]": "[Home Screen & App Library]:leftImage",
+    "[Home Screen & App Library]": "",
+
+    "[Search Icon]": "[Search]:leftImage",
+    "[Search]": "",
+
+    "[StandBy Icon]": "[StandBy]:leftImage",
+    "[StandBy]": "",
+
+    "[Screen Time Icon]": "[Screen Time]:leftImage",
+    "[Screen Time]": "",
+
     "[Privacy & Security Icon]": "[Privacy & Security]:leftImage",
     "[Privacy & Security]": "",
 
-    "[Passwords Icon]": "[Passwords]:leftImage",
-    "[Passwords]": "",
-
-    "[Safari Icon]": "[Safari]:leftImage",
-    "[Safari]": "",
-
-    "[News Icon]": "[News]:leftImage",
-    "[News]": "",
-
-    "[Translate Icon]": "[Safari]:leftImage",
-    "[Translate]": "",
-
-    "[Maps Icon]": "[Safari]:leftImage",
-    "[Maps]": "",
-
-    "[Shortcuts Icon]": "[Safari]:leftImage",
-    "[Shortcuts]": "",
-
-    "[Health Icon]": "[Safari]:leftImage",
-    "[Health]": "",
-
-    "[Siri & Search Icon]": "[Safari]:leftImage",
-    "[Siri & Search]": "",
-
-    "[Photos Icon]": "[Safari]:leftImage",
-    "[Photos]": "",
-
-    "[Game Center Icon]": "[Safari]:leftImage",
+    "[Game Center Icon]": "[Game Center]:leftImage",
     "[Game Center]": "",
+
+    "[iCloud Icon]": "[iCloud]:leftImage",
+    "[iCloud]": "",
+
+    "[Wallet Icon]": "[Wallet]:leftImage",
+    "[Wallet]": "",
+
+    "[Apps Icon]": "[Apps]:leftImage",
+    "[Apps]": "",
 
     "[Developer Icon]": "[Developer]:leftImage",
     "[Developer]": ""

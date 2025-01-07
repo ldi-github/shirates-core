@@ -1888,7 +1888,7 @@ object TestDriver {
         if (isInitialized.not()) {
             return this
         }
-        if (CodeExecutionContext.screenshotSynced && force.not()) {
+        if (testContext.useCache.not() && CodeExecutionContext.screenshotSynced && force.not()) {
             return this
         }
 

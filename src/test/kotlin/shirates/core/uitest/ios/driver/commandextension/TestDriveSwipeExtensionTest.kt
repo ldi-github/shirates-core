@@ -20,7 +20,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    e1 = it.select("Passwords")
+                    e1 = it.select("Camera")
                     e2 = it.select("General")
                     output("from=${e1.selector}, target=${e2.selector}")
                     it.swipePointToPoint(
@@ -31,7 +31,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                         durationSeconds = 10
                     )
                 }.expectation {
-                    val current = it.select("Passwords")
+                    val current = it.select("Camera")
                     val diff = current.bounds.centerY - e2.bounds.centerY
                     output("diff=$diff")
                     val result = Math.abs(diff) != 0
@@ -43,7 +43,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                     it.macro("[iOS Settings Top Screen]")
                     testContext.appiumProxyReadTimeoutSeconds = 30.0
                 }.action {
-                    e1 = it.select("Passwords")
+                    e1 = it.select("Camera")
                     e2 = it.select("General")
                     output("from=${e1.selector}, target=${e2.selector}")
                     it.swipePointToPoint(
@@ -55,7 +55,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                         durationSeconds = 10
                     )
                 }.expectation {
-                    val current = it.select("Passwords")
+                    val current = it.select("Camera")
                     val diff = current.bounds.centerY - e2.bounds.centerY
                     output("diff=$diff")
                     val result = Math.abs(diff) < 10
@@ -74,7 +74,7 @@ class TestDriveSwipeExtensionTest : UITest() {
             case(1) {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
-                    e1 = it.select("Passwords")
+                    e1 = it.select("Camera")
                     e2 = it.select("General")
                 }.action {
                     it.swipeElementToElement(
@@ -84,7 +84,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                         adjust = true
                     )
                 }.expectation {
-                    val current = it.select("Passwords")
+                    val current = it.select("Camera")
                     val diff = current.bounds.centerY - e2.bounds.centerY
                     output("diff=$diff")
                     current.bounds.isOverlapping(e2.bounds)
@@ -102,12 +102,12 @@ class TestDriveSwipeExtensionTest : UITest() {
             case(1) {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
-                    e1 = it.select("Passwords")
+                    e1 = it.select("Camera")
                     e2 = it.select("General")
                 }.action {
                     it.swipeElementToElementAdjust(startElement = e1, endElement = e2, durationSeconds = 2.0)
                 }.expectation {
-                    val current = it.select("Passwords")
+                    val current = it.select("Camera")
                     val diff = current.bounds.centerY - e2.bounds.centerY
                     output("diff=$diff")
                     current.bounds.isOverlapping(e2.bounds)
@@ -126,12 +126,12 @@ class TestDriveSwipeExtensionTest : UITest() {
             case(1) {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
-                    e1 = it.select("Passwords")
+                    e1 = it.select("Camera")
                     e2 = e1
                 }.action {
                     it.swipeElementToElement(startElement = e1, endElement = e2, durationSeconds = 2.0, adjust = true)
                 }.expectation {
-                    e3 = it.select("Passwords")
+                    e3 = it.select("Camera")
                     (e3.bounds.centerX == e1.bounds.centerX && e3.bounds.centerY == e1.bounds.centerY)
                         .thisIsTrue("Swipe on the same coordinates skipped")
                 }
@@ -146,12 +146,12 @@ class TestDriveSwipeExtensionTest : UITest() {
         scenario {
             case(1) {
                 action {
-                    e1 = it.select("Passwords")
+                    e1 = it.select("Camera")
                     e2 = it.select("General")
                     e1.swipeVerticalTo(endY = e2.bounds.top, durationSeconds = 5.0)
 
                 }.expectation {
-                    e3 = it.select("Passwords")
+                    e3 = it.select("Camera")
                     val abs = Math.abs(e3.bounds.centerY - e2.bounds.centerY)
                     (abs < e3.bounds.height).thisIsTrue("|${e3.bounds.centerY} - ${e2.bounds.centerY}| < ${abs}")
                 }
@@ -168,7 +168,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    it.select("[Safari]")
+                    it.select("[Screen Time]")
                         .swipeToCenterOfScreen()
                 }.expectation {
                     val b = it.bounds
@@ -180,7 +180,7 @@ class TestDriveSwipeExtensionTest : UITest() {
             }
             case(2) {
                 action {
-                    it.select("General")
+                    it.select("Action Button")
                         .swipeToTopOfScreen(durationSeconds = 3.0)
                 }.expectation {
                     val b = it.bounds
@@ -192,9 +192,9 @@ class TestDriveSwipeExtensionTest : UITest() {
             }
             case(3) {
                 condition {
-                    it.exist("[Photos]")
+                    it.exist("[Game Center]")
                 }.action {
-                    it.select("[Photos]")
+                    it.select("[Game Center]")
                         .swipeToBottomOfScreen(durationSeconds = 3.0)
                 }.expectation {
                 }

@@ -288,6 +288,8 @@ fun TestElement.cropImage(
     trim: String? = null
 ): TestElement {
 
+    screenshot()
+
     val command = "cropImage"
     val subject = this.selector?.nickname ?: this.selector?.originalExpression ?: this.subject
     if (TestMode.isNoLoadRun.not() && this.isEmpty) {
