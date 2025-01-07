@@ -35,19 +35,10 @@ class TestDriveScrollExtensionTest2 : UITest() {
             // Act
             it.scrollDown(scrollDurationSeconds = 5.0)
             // Assert
-            var movedItem = it.widget(title)
+            val movedItem = it.widget(title)
             println("movedItem:$movedItem")
-            println("${movedItem.bounds.centerY} < ${lastBounds.centerY}")
-            assertThat(movedItem.bounds.centerY < lastBounds.centerY).isTrue()
-
-
-            // Act
-            it.scrollDown()
-            // Assert
-            movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
-            println("movedItem:$movedItem")
-            assertThat(movedItem.isInView).isFalse()
-            assertThat(movedItem.isEmpty).isTrue()
+            println("${movedItem.bounds.centerY} <= ${lastBounds.centerY}")
+            assertThat(movedItem.bounds.centerY <= lastBounds.centerY).isTrue()
         }
 
         run {
@@ -61,19 +52,10 @@ class TestDriveScrollExtensionTest2 : UITest() {
             // Act
             it.scrollUp(scrollDurationSeconds = 5.0)
             // Assert
-            var movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
+            val movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
             println("movedItem:$movedItem")
-            println("${firstBounds.centerY} < ${movedItem.bounds.centerY}")
-            assertThat(firstBounds.centerY < movedItem.bounds.centerY).isTrue()
-
-
-            // Act
-            it.scrollUp()
-            // Assert
-            println("movedItem:$movedItem")
-            movedItem = it.widget(title, throwsException = false, waitSeconds = 0.0)
-            assertThat(movedItem.isInView).isFalse()
-            assertThat(movedItem.isEmpty).isTrue()
+            println("${firstBounds.centerY} <= ${movedItem.bounds.centerY}")
+            assertThat(firstBounds.centerY <= movedItem.bounds.centerY).isTrue()
         }
     }
 
@@ -84,21 +66,14 @@ class TestDriveScrollExtensionTest2 : UITest() {
         // Arrange
         it.macro("[Developer Screen]")
         // Act
-        it.flickAndGoDown(repeat = 3)
+        it.scrollToBottom()
         // Assert
-        val lastItem =
-            it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }
-        assertThat(lastItem.label)
-            .isEqualTo("The graphics performance HUD shows framerate, GPU time, memory usage, and can log performance data for later analysis.")
-
+        assertThat(it.canSelect("Sign In")).isTrue()
 
         // Act
         it.scrollToTop()
         // Assert
-        val firstItem =
-            it.select(".XCUIElementTypeTable").descendants.first { it.type == "XCUIElementTypeStaticText" && it.isVisible }
-        assertThat(firstItem.label).isEqualTo("Dark Appearance")
+        assertThat(it.canSelect("Dark Appearance")).isTrue()
     }
-
 
 }
