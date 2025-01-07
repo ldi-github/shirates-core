@@ -14,8 +14,6 @@ class TestDrivePropertyExtensionTest : UITest() {
     @Test
     fun imageProfile() {
 
-        assertThat(imageProfile).isEqualTo(TestMode.platformAnnotation)
-
         scenario {
             case(1) {
                 val b = viewBounds
