@@ -15,44 +15,29 @@ class TestElementCellExtensionTest : UITest() {
             case(1) {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
-                        .tap("General")
-                        .tap("Game Controller")
+                        .tap("Screen Time")
                 }.expectation {
-                    it.cellOf("Gamepad") {
-                        exist("Game Controller")
-                        exist("Gamepad")
-                        exist("Connected")
-                        select("Game Controller").textIs("Game Controller")
-                        select("Gamepad").textIs("Gamepad")
-                        select("Connected").textIs("Connected")
+                    it.cellOf("Screen Distance") {
+                        exist("Reduce eye strain")
                     }
-                    it.cellOf("Identify Controller") {
-                        exist("Identify Controller")
-                    }
-                    it.cellOf("Default") {
-                        exist("Game Controller")
-                        exist("Default")
-                        exist("1 controllers")
+                    it.cellOf("Communication Safety") {
+                        exist("Protect from sensitive content")
                     }
                 }
             }
             case(2) {
                 expectation {
-                    it.cellOf("Gamepad") {
-                        innerWidget(1).textIs("Gamepad, Connected")
-                        innerWidget(2).textIs("Game Controller")
-                        innerWidget(3).textIs("Gamepad")
-                        innerWidget(4).textIs("Connected")
-                        innerWidget(5).type.thisIs("XCUIElementTypeImage")
+                    it.cellOf("Screen Distance") {
+                        innerWidget(1).type.thisIs("XCUIElementTypeImage")
+                        innerWidget(2).textIs("Screen Distance")
+                        innerWidget(3).textIs("Reduce eye strain")
+                        innerWidget(4).textIs("chevron")
                     }
-                    it.cellOf("Identify Controller") {
-                        innerWidget(1).textIs("Identify Controller")
-                    }
-                    it.cellOf("Default") {
-                        innerWidget(1).textIs("Default, 1 controllers")
-                        innerWidget(2).textIs("Game Controller")
-                        innerWidget(3).textIs("Default")
-                        innerWidget(4).textIs("1 controllers")
+                    it.cellOf("Communication Safety") {
+                        innerWidget(1).type.thisIs("XCUIElementTypeImage")
+                        innerWidget(2).textIs("Communication Safety")
+                        innerWidget(3).textIs("Protect from sensitive content")
+                        innerWidget(4).textIs("chevron")
                     }
                 }
             }

@@ -87,7 +87,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                 expectation {
                     val scrollableElements = rootElement.getScrollableElementsInDescendantsAndSelf()
                     val largestScrollableTarget = scrollableElements.maxByOrNull { it.bounds.area }
-                    val nonScrollableElement = select("#WeatherConditionsTitleLabel")
+                    val nonScrollableElement = select("#UserLocationButton")
                     val target2 = nonScrollableElement.getScrollableElement()
                     (target2 == largestScrollableTarget).thisIsTrue()
                 }
