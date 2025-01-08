@@ -30,8 +30,8 @@ class CacheAndDirectCompatibilityTest : UITest() {
             }
             case(2) {
                 action {
-                    e1 = it.select(".XCUIElementTypeCell&&General", useCache = true)
-                    e2 = it.select(".XCUIElementTypeCell&&General", useCache = false)
+                    e1 = it.select(".XCUIElementTypeCell", useCache = true)
+                    e2 = it.select(".XCUIElementTypeCell", useCache = false)
                 }.expectation {
                     e1.thisIs(e2)
                 }

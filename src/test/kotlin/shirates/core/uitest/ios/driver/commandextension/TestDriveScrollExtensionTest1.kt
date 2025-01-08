@@ -38,7 +38,7 @@ class TestDriveScrollExtensionTest1 : UITest() {
                         e.isScrollableElement.thisIsTrue()
                     }
                     scrollableElements.count().thisIs(1)
-                    scrollableElements.filter { it.type == "XCUIElementTypeTable" }.count().thisIs(1)
+                    scrollableElements.filter { it.type == "XCUIElementTypeCollectionView" }.count().thisIs(1)
                 }
             }
             case(2) {

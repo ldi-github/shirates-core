@@ -64,11 +64,11 @@ class TestElementExtensionTest : UITest() {
             }
             case(2) {
                 condition {
-                    e2 = e1.next("Pass*")
+                    e2 = e1.next("Action*")
                 }.action {
                     m2 = e2.getWebElement()
                 }.expectation {
-                    m2?.text.thisIs("Passwords")
+                    m2?.text.thisIs("Action Button")
                 }
             }
         }

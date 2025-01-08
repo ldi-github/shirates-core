@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
+import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.wait
 import shirates.core.testcode.UITest
@@ -33,7 +34,9 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
                         .sendKeys("tokyo tower")
                         .tapSoftwareKey("search||検索")
                         .wait()
-                        .tap("Tokyo Tower")
+                        .ifCanSelect("#xmark") {
+                            it.tap()
+                        }
                         .tap("Website")
                         .tap("Open in Safari")
                         .wait(10.0)

@@ -31,7 +31,7 @@ class TestElementImageExtensionTest : UITest() {
                         .saveImage(path.resolve(it.subject).toString())
                     it.selectWithScrollDown("[Privacy & Security Icon]").cropImage().lastCropInfo!!.croppedImage!!
                         .saveImage(path.resolve(it.subject).toString())
-                    it.selectWithScrollDown("[Passwords Icon]").cropImage().lastCropInfo!!.croppedImage!!
+                    it.selectWithScrollDown("[Privacy & Security Icon]").cropImage().lastCropInfo!!.croppedImage!!
                         .saveImage(path.resolve(it.subject).toString())
                     it.selectWithScrollDown("[Developer Icon]").cropImage().lastCropInfo!!.croppedImage!!
                         .saveImage(path.resolve(it.subject).toString())

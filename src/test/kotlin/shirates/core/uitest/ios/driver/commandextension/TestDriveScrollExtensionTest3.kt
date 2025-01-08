@@ -32,16 +32,17 @@ class TestDriveScrollExtensionTest3 : UITest() {
         it.doUntilScrollStop(
             direction = ScrollDirection.Down,
             actionFunc = {
-                it.canSelect("AirPlay Suggestions")
+                it.canSelect("TV Provider")
             }
         )
         it.tap()
         // Assert
-        it.exist("Always Prompt User with Suggested TV")
+        it.exist("Cache Buster")
 
 
         // Arrange
         it.tap(".XCUIElementTypeButton&&Developer")
+            .flickAndGoDown()
         // Act
         it.doUntilScrollStop(
             direction = ScrollDirection.Down,
@@ -53,7 +54,7 @@ class TestDriveScrollExtensionTest3 : UITest() {
         val lastItem =
             it.select(".XCUIElementTypeTable").descendants.last { it.type == "XCUIElementTypeStaticText" && it.isVisible }
         assertThat(lastItem.label)
-            .isEqualTo("The graphics performance HUD shows framerate, GPU time, memory usage, and can log performance data for later analysis.")
+            .isEqualTo("This account will only be used for testing your in-app purchases in sandbox.")
     }
 
     @Test

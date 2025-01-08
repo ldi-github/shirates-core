@@ -43,8 +43,8 @@ class TestDriveSelectExtensionTest8 : UITest() {
                     it.canSelectInScanResults("textMatches=^Ge.*ral$").thisIsTrue()
                     it.canSelectInScanResults("textMatches=^Dev.*per$").thisIsTrue()
                     it.canSelectInScanResults("textMatches=^no.*exist$").thisIsFalse()
-                    it.canSelectInScanResults("#ACCESSIBILITY").thisIsTrue()
-                    it.canSelectInScanResults("#DEVELOPER_SETTINGS").thisIsTrue()
+                    it.canSelectInScanResults("#com.apple.settings.accessibility").thisIsTrue()
+                    it.canSelectInScanResults("#com.apple.settings.developer").thisIsTrue()
                     it.canSelectInScanResults("#no exist").thisIsFalse()
 
 //        it.canSelectInScanResults("@").thisIsTrue()

@@ -19,9 +19,9 @@ class TestDriveSelectExtensionTest5 : UITest() {
             case(1) {
                 expectation {
                     describe("id")
-                    it.canSelectWithScrollDown("#DEVELOPER_SETTINGS").thisIsTrue()
+                    it.canSelectWithScrollDown("#com.apple.settings.developer").thisIsTrue()
                     it.canSelectWithScrollDown("#no exist").thisIsFalse()
-                    it.canSelectWithScrollUp("#General").thisIsTrue()
+                    it.canSelectWithScrollUp("#com.apple.settings.general").thisIsTrue()
                     it.canSelectWithScrollUp("#no exist").thisIsFalse()
                 }
             }
@@ -29,10 +29,10 @@ class TestDriveSelectExtensionTest5 : UITest() {
             case(2) {
                 expectation {
                     describe("access")
-                    it.canSelectWithScrollDown("@DEVELOPER_SETTINGS").thisIsTrue()
-                    it.canSelectWithScrollDown("@General").thisIsFalse()
-                    it.canSelectWithScrollUp("@General").thisIsTrue()
-                    it.canSelectWithScrollUp("@DEVELOPER_SETTINGS").thisIsFalse()
+                    it.canSelectWithScrollDown("@com.apple.settings.developer").thisIsTrue()
+                    it.canSelectWithScrollDown("@com.apple.settings.general").thisIsFalse()
+                    it.canSelectWithScrollUp("@com.apple.settings.general").thisIsTrue()
+                    it.canSelectWithScrollUp("@com.apple.settings.developer").thisIsFalse()
                 }
             }
         }

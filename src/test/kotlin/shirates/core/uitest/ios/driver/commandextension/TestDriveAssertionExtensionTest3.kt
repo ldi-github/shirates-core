@@ -27,9 +27,9 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                         "Settings",
                         "General",
                         "Accessibility",
-                        "Privacy & Security",
-                        "Passwords",
-                        "Safari",
+                        "Action Button",
+                        "Apple Intelligence & Siri",
+                        "Camera",
                         "Developer"
                     )
                 }
@@ -41,10 +41,11 @@ class TestDriveAssertionExtensionTest3 : UITest() {
                             "Settings",
                             "General",
                             "Accessibility",
+                            "Action Button",
+                            "Apple Intelligence & Siri",
+                            "Camera",
+                            "Developer",
                             "no exist",
-                            "Passwords",
-                            "Safari",
-                            "Developer"
                         )
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
