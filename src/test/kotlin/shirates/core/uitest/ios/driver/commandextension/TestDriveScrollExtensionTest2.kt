@@ -66,11 +66,13 @@ class TestDriveScrollExtensionTest2 : UITest() {
         // Arrange
         it.macro("[Developer Screen]")
         // Act
+        it.flickAndGoDown()
         it.scrollToBottom()
         // Assert
         assertThat(it.canSelect("Sign In")).isTrue()
 
         // Act
+        it.flickAndGoUp()
         it.scrollToTop()
         // Assert
         assertThat(it.canSelect("Dark Appearance")).isTrue()

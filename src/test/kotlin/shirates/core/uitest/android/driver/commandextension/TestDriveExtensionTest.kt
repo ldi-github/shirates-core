@@ -37,12 +37,13 @@ class TestDriveExtensionTest : UITest() {
             it.screenshot()
             val line = TestLog.lines.first { it.scriptCommand == "screenshot" }
             // Assert
-            assertThat(line.message).isEqualTo("screenshot")
+            val subject = CodeExecutionContext.lastScreenshotFile.toPath().fileName.toString()
+            assertThat(line.message).isEqualTo("screenshot: $subject")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)
             assertThat(line.commandGroup).isEqualTo("")
             assertThat(line.commandLevel).isEqualTo(0)
             assertThat(line.scriptCommand).isEqualTo("screenshot")
-            assertThat(line.subject).isEqualTo(CodeExecutionContext.lastScreenshotFile.toPath().fileName.toString())
+            assertThat(line.subject).isEqualTo(subject)
             assertThat(line.arg1).isEqualTo("")
             assertThat(line.arg2).isEqualTo("")
             assertThat(line.result).isEqualTo(LogType.NONE)
@@ -55,7 +56,7 @@ class TestDriveExtensionTest : UITest() {
             it.screenshot(filename = "filename")
             val line = TestLog.lines.first { it.scriptCommand == "screenshot" }
             // Assert
-            assertThat(line.message).isEqualTo("screenshot")
+            assertThat(line.message).isEqualTo("screenshot: filename.png")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)
             assertThat(line.commandGroup).isEqualTo("")
             assertThat(line.commandLevel).isEqualTo(0)
