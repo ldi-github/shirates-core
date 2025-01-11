@@ -10,6 +10,10 @@ import shirates.core.vision.Candidate
 
 class GetRectanglesWithTemplateResult(
     val jsonString: String,
+    val localRegionX: Int = 0,
+    val localRegionY: Int = 0,
+    val horizontalMargin: Int = 0,
+    val verticalMargin: Int = 0,
 ) {
     val file: String
     val rectangle: Rectangle
@@ -51,15 +55,29 @@ class GetRectanglesWithTemplateResult(
             val jsonArray = jso.getJSONArray("candidates")
             if (jsonArray.length() > 0) {
                 for (i in 0 until jsonArray.length()) {
-                    val jsonObject = jsonArray.getJSONObject(0)
+                    val jsonObject = jsonArray.getJSONObject(i)
                     val distance = jsonObject.getFloat("distance")
                     val file = jsonObject.getStringOrNull("file")
                     val fileName = file.toPath().toFile().name
                     val rectangle = if (file == null) Rectangle() else Rectangle(fileName)
-                    val c = Candidate(distance = distance, file = file, rectangle = rectangle)
+                    val c = Candidate(
+                        distance = distance,
+                        file = file,
+                        rectangle = rectangle,
+                        localRegionX = localRegionX,
+                        localRegionY = localRegionY,
+                        rectOnLocalRegion = Rectangle(
+                            x = rectangle.x,
+                            y = rectangle.y,
+                            width = rectangle.width,
+                            height = rectangle.height
+                        ),
+                        horizontalMargin = horizontalMargin,
+                        verticalMargin = verticalMargin,
+                    )
                     candidates.add(c)
+                    c.image
                 }
-                candidates.sortBy { it.distance }
                 file = candidates.first().file!!
                 rectangle = Rectangle(file.toPath().toFile().nameWithoutExtension)
             } else {

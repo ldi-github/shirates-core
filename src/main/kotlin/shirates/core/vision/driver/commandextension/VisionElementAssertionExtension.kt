@@ -305,13 +305,12 @@ fun VisionElement.checkIsON(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
-        this.checkSwitchState(
+        this.checkIsCore(
             containedText = "ON",
             message = assertMessage,
             waitSeconds = waitSeconds
         )
     }
-
     return this
 }
 
@@ -327,13 +326,12 @@ fun VisionElement.checkIsOFF(
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
-        this.checkSwitchState(
+        this.checkIsCore(
             containedText = "OFF",
             message = assertMessage,
             waitSeconds = waitSeconds
         )
     }
-
     return this
 }
 
@@ -358,6 +356,5 @@ fun VisionElement.buttonStateIs(
             mlmodelFile = mlmodelFile
         )
     }
-
     return this
 }

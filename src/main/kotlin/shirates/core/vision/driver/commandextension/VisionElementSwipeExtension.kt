@@ -55,7 +55,7 @@ fun VisionElement.swipeTo(
         )
     }
 
-    v = v.createFromScreenshot()
+    v = v.refresh()
     return v
 }
 

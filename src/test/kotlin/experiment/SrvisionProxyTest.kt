@@ -123,7 +123,9 @@ class SrvisionProxyTest {
         val result = SrvisionProxy.getRectanglesWithTemplate(
             mergeIncluded = false,
             imageFile = imageFile,
-            templateFile = templateFile,
+            imageX = 0,
+            imageY = 0,
+            templateImageFile = templateFile,
             segmentMarginHorizontal = 20,
             segmentMarginVertical = 20,
             log = log,
@@ -157,7 +159,9 @@ class SrvisionProxyTest {
         val result = SrvisionProxy.getRectanglesWithTemplate(
             mergeIncluded = false,
             imageFile = imageFile,
-            templateFile = templateFile,
+            imageX = 0,
+            imageY = 0,
+            templateImageFile = templateFile,
             segmentMarginHorizontal = 20,
             segmentMarginVertical = 20,
             log = log,

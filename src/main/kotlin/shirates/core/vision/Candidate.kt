@@ -6,12 +6,20 @@ class Candidate(
     val distance: Float,
     val file: String?,
     val rectangle: Rectangle,
+    override var localRegionX: Int = 0,
+    override var localRegionY: Int = 0,
+    override var rectOnLocalRegion: Rectangle? = null,
+    override var horizontalMargin: Int = 0,
+    override var verticalMargin: Int = 0
 ) : VisionObservation(
     localRegionFile = file,
     localRegionImage = null,
-    localRegionX = 0,
-    localRegionY = 0,
+    localRegionX = localRegionX,
+    localRegionY = localRegionY,
     rectOnLocalRegion = rectangle,
+    horizontalMargin = horizontalMargin,
+    verticalMargin = verticalMargin,
+    imageFile = file
 ) {
     /**
      * isEmpty

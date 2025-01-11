@@ -934,12 +934,21 @@ object PropertiesManager {
         }
 
     /**
+     * visionServerUrl
+     */
+    val visionServerUrl: String
+        get() {
+            return getPropertyValue(propertyName = "visionServerUrl")
+                ?: Const.VISION_SERVER_URL
+        }
+
+    /**
      * segmentMarginHorizontal
      */
     val segmentMarginHorizontal: Int
         get() {
             return getPropertyValue(propertyName = "segmentMarginHorizontal")?.toIntOrNull()
-                ?: Const.SEGMENT_MARGIN_HORIZONTAL
+                ?: Const.VISION_SEGMENT_MARGIN_HORIZONTAL
         }
 
     /**
@@ -948,7 +957,16 @@ object PropertiesManager {
     val segmentMarginVertical: Int
         get() {
             return getPropertyValue(propertyName = "segmentMarginVertical")?.toIntOrNull()
-                ?: Const.SEGMENT_MARGIN_VERTICAL
+                ?: Const.VISION_SEGMENT_MARGIN_VERTICAL
+        }
+
+    /**
+     * visionFindImageThreshold
+     */
+    val visionFindImageThreshold: Double
+        get() {
+            return getPropertyValue(propertyName = "visionFindImageThreshold")?.toDoubleOrNull()
+                ?: Const.VISION_FIND_IMAGE_THRESHOLD
         }
 
     // Custom --------------------------------------------------

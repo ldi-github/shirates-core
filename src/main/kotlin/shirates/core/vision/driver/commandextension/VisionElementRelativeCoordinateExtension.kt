@@ -1,11 +1,11 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.Selector
 import shirates.core.driver.RelativeDirection
 import shirates.core.driver.isAbove
 import shirates.core.driver.isLeft
 import shirates.core.driver.isRight
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.VisionElement
@@ -18,16 +18,18 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionElement.rightItem(
     pos: Int = 1,
-    horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
-    verticalMargin: Int = PropertiesManager.segmentMarginVertical,
+    verticalMargin: Int = this.rect.height / 2,
+    segmentMarginHhorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     include: Boolean = true
 ): VisionElement {
 
     return rightLeftCore(
         relative = RelativeDirection.right,
         pos = pos,
-        segmentMarginHorizontal = horizontalMargin,
-        segmentMarginVertical = verticalMargin,
+        verticalMargin = verticalMargin,
+        segmentMarginHorizontal = segmentMarginHhorizontal,
+        segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
     )
 }
@@ -37,16 +39,18 @@ fun VisionElement.rightItem(
  */
 fun VisionElement.leftItem(
     pos: Int = 1,
-    horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
-    verticalMargin: Int = PropertiesManager.segmentMarginVertical,
+    verticalMargin: Int = this.rect.height / 2,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     include: Boolean = true,
 ): VisionElement {
 
     return rightLeftCore(
         relative = RelativeDirection.left,
         pos = pos,
-        segmentMarginHorizontal = horizontalMargin,
-        segmentMarginVertical = verticalMargin,
+        verticalMargin = verticalMargin,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
     )
 }
@@ -54,22 +58,23 @@ fun VisionElement.leftItem(
 internal fun VisionElement.rightLeftCore(
     relative: RelativeDirection,
     pos: Int,
+    verticalMargin: Int,
     segmentMarginHorizontal: Int,
     segmentMarginVertical: Int,
     mergeIncluded: Boolean,
 ): VisionElement {
 
-//    if (isKeyboardShown) {
-//        hideKeyboard()
-//    }
-//    screenshot()
-
+    val regionRect =
+        if (relative == RelativeDirection.left) this.leftRegion(verticalMargin = verticalMargin)
+        else this.rightRegion(verticalMargin = verticalMargin)
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = CodeExecutionContext.lastScreenshotImage,
+        containerImage = regionRect.toVisionElement().image,
+        containerX = regionRect.x,
+        containerY = regionRect.y,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
-    ).analyze()
+    ).split()
 
     val horizontalBand = HorizontalBand(baseElement = this)
     for (v in segmentContainer.visionElements) {
@@ -99,8 +104,9 @@ internal fun VisionElement.rightLeftCore(
  */
 fun VisionElement.aboveItem(
     pos: Int = 1,
-    horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
-    verticalMargin: Int = PropertiesManager.segmentMarginVertical,
+    horizontalMargin: Int = this.rect.width / 2,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     include: Boolean = true,
 ): VisionElement {
 
@@ -108,7 +114,8 @@ fun VisionElement.aboveItem(
         relative = RelativeDirection.above,
         pos = pos,
         horizontalMargin = horizontalMargin,
-        verticalMargin = verticalMargin,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
     )
 }
@@ -118,8 +125,9 @@ fun VisionElement.aboveItem(
  */
 fun VisionElement.belowItem(
     pos: Int = 1,
-    horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
-    verticalMargin: Int = PropertiesManager.segmentMarginVertical,
+    horizontalMargin: Int = this.rect.width / 2,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     include: Boolean = true,
 ): VisionElement {
 
@@ -127,7 +135,8 @@ fun VisionElement.belowItem(
         relative = RelativeDirection.below,
         pos = pos,
         horizontalMargin = horizontalMargin,
-        verticalMargin = verticalMargin,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
     )
 }
@@ -136,21 +145,22 @@ internal fun VisionElement.aboveBelowCore(
     relative: RelativeDirection,
     pos: Int,
     horizontalMargin: Int,
-    verticalMargin: Int,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
     mergeIncluded: Boolean,
 ): VisionElement {
 
-//    if (isKeyboardShown) {
-//        hideKeyboard()
-//    }
-//    screenshot()
-
+    val regionRect =
+        if (relative == RelativeDirection.above) this.aboveRegion(horizontalMargin = horizontalMargin)
+        else this.belowRegion(horizontalMargin = horizontalMargin)
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = CodeExecutionContext.lastScreenshotImage,
-        segmentMarginHorizontal = horizontalMargin,
-        segmentMarginVertical = verticalMargin,
-    ).analyze()
+        containerImage = regionRect.toVisionElement().image,
+        containerX = regionRect.x,
+        containerY = regionRect.y,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+    ).split()
 
     val verticalBand = VerticalBand(baseElement = this)
     for (v in segmentContainer.visionElements) {
@@ -318,5 +328,81 @@ internal fun VisionElement.aboveBelowTextCore(
     v.selector = this.selector?.getChainedSelector(relativeExpression)
     lastElement = v
 
+    return v
+}
+
+/**
+ * leftImage
+ */
+fun VisionElement.leftImage(
+    label: String,
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = 0,
+    segmentMarginVertical: Int = 0,
+    mergeIncluded: Boolean = true,
+    skinThickness: Int = 2,
+    distance: Double? = null,
+): VisionElement {
+
+    if (pos <= 0) {
+        throw IllegalArgumentException("pos must be greater than or equal to 0")
+    }
+
+    var imageElements: List<VisionElement> = mutableListOf()
+    onLeft {
+        imageElements = findImages(
+            label = label,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            skinThickness = skinThickness,
+            distance = distance,
+        )
+    }
+    if (imageElements.isEmpty() || imageElements.count() < pos) {
+        return VisionElement.emptyElement
+    }
+    imageElements = imageElements.filter { it.rect.left <= this.rect.left }
+    imageElements = imageElements.sortedByDescending { it.rect.left }
+    val v = imageElements[pos - 1]
+    v.selector = Selector(":leftImage(\"$label\", $pos)")
+    return v
+}
+
+/**
+ * leftRadioButton
+ */
+fun VisionElement.leftRadioButton(
+    label: String = "[RadioButton]",
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = 0,
+    segmentMarginVertical: Int = 0,
+    mergeIncluded: Boolean = true,
+    skinThickness: Int = 2,
+    distance: Double? = 1.0,
+): VisionElement {
+
+    if (pos <= 0) {
+        throw IllegalArgumentException("pos must be greater than or equal to 0")
+    }
+
+    var imageElements: List<VisionElement> = mutableListOf()
+    onLine {
+        imageElements = findImages(
+            label = label,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            skinThickness = skinThickness,
+            distance = distance,
+        )
+    }
+    if (imageElements.isEmpty() || imageElements.count() < pos) {
+        return VisionElement.emptyElement
+    }
+    imageElements = imageElements.filter { it.rect.left <= this.rect.left }
+    imageElements = imageElements.sortedByDescending { it.rect.left }
+    val v = imageElements[pos - 1]
+    v.selector = Selector(":leftRadioButton($pos)")
     return v
 }

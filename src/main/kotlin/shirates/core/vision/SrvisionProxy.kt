@@ -12,6 +12,7 @@ import shirates.core.utility.toPath
 import shirates.core.vision.result.*
 import java.io.FileNotFoundException
 import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import kotlin.io.path.name
 
 object SrvisionProxy {
@@ -31,9 +32,8 @@ object SrvisionProxy {
         }
 
         val sw = StopWatch("ImageFeaturePrintConfigurator/setupImageFeaturePrintConfig")
-        val urlBuilder =
-            "http://127.0.0.1:8081/ImageFeaturePrintConfigurator/setupImageFeaturePrintConfig".toHttpUrlOrNull()!!
-                .newBuilder()
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/ImageFeaturePrintConfigurator/setupImageFeaturePrintConfig").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "inputDirectory",
             value = inputDirectory.toPath().toString()
@@ -64,9 +64,8 @@ object SrvisionProxy {
 
         val sw = StopWatch("ImageFeaturePrintClassifier/classifyWithImageFeaturePrintOrText")
 
-        val urlBuilder =
-            "http://127.0.0.1:8081/ImageFeaturePrintClassifier/classifyWithImageFeaturePrintOrText".toHttpUrlOrNull()!!
-                .newBuilder()
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/ImageFeaturePrintClassifier/classifyWithImageFeaturePrintOrText").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "inputFile",
             value = inputFile.toPath().toString()
@@ -110,8 +109,8 @@ object SrvisionProxy {
 
         val sw = StopWatch("TextRecognizer/recognizeText")
 
-        val urlBuilder = "http://127.0.0.1:8081/TextRecognizer/recognizeText".toHttpUrlOrNull()!!
-            .newBuilder()
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/TextRecognizer/recognizeText").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "input",
             value = inputFile.toPath().toString()
@@ -177,8 +176,8 @@ object SrvisionProxy {
 
         val sw = StopWatch("ImageFeaturePrintMatcher/matchWithTemplate")
 
-        val urlBuilder = "http://127.0.0.1:8081/ImageFeaturePrintMatcher/matchWithTemplate".toHttpUrlOrNull()!!
-            .newBuilder()
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/ImageFeaturePrintMatcher/matchWithTemplate").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "template",
             value = templateFile.toPath().toString()
@@ -206,7 +205,9 @@ object SrvisionProxy {
     fun getRectanglesWithTemplate(
         mergeIncluded: Boolean,
         imageFile: String,
-        templateFile: String,
+        imageX: Int,
+        imageY: Int,
+        templateImageFile: String,
         segmentMarginHorizontal: Int,
         segmentMarginVertical: Int,
         skinThickness: Int = 2,
@@ -224,11 +225,14 @@ object SrvisionProxy {
         val segmentContainer = SegmentContainer(
             mergeIncluded = mergeIncluded,
             containerImageFile = imageFile,
+            containerX = imageX,
+            containerY = imageY,
             outputDirectory = outputDirectory,
+            templateImageFile = templateImageFile,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
-        ).analyze()
+        ).split()
             .saveImages()
         if (segmentContainer.segments.isEmpty()) {
             throw FileNotFoundException("segment not found.")
@@ -238,18 +242,25 @@ object SrvisionProxy {
          * Match segment images with template image.
          */
         val jsonString = SrvisionProxy.matchWithTemplate(
-            templateFile = templateFile,
+            templateFile = templateImageFile,
             inputDirectory = outputDirectory,
             log = log
         )
-        val result = GetRectanglesWithTemplateResult(jsonString = jsonString)
+        val result = GetRectanglesWithTemplateResult(
+            jsonString = jsonString,
+            localRegionX = imageX,
+            localRegionY = imageY,
+            horizontalMargin = segmentMarginHorizontal,
+            verticalMargin = segmentMarginVertical,
+        )
 
         /**
          * Save template image as template.png
          */
         Files.copy(
-            templateFile.toPath(),
-            outputDirectory.toPath().resolve("template_${templateFile.toPath().name}"),
+            templateImageFile.toPath(),
+            outputDirectory.toPath().resolve("template_${templateImageFile.toPath().name}"),
+            StandardCopyOption.REPLACE_EXISTING
         )
         /**
          * Save primary candidate of segment image as candidate_[x, y, width, height].png
@@ -282,8 +293,8 @@ object SrvisionProxy {
             throw FileNotFoundException("Input file not found. (inputFile=$inputFile)")
         }
 
-        val urlBuilder = "http://127.0.0.1:8081/ImageClassifier/classifyImage".toHttpUrlOrNull()!!
-            .newBuilder()
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/ImageClassifier/classifyImage").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "input",
             value = inputFile.toPath().toString()
@@ -316,8 +327,8 @@ object SrvisionProxy {
 
         val sw = StopWatch("RectangleDetector/detectRectangles")
 
-        val urlBuilder = "http://127.0.0.1:8081/RectangleDetector/detectRectangles".toHttpUrlOrNull()!!
-            .newBuilder()
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/RectangleDetector/detectRectangles").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "input",
             value = inputFile.toPath().toString()
@@ -347,8 +358,8 @@ object SrvisionProxy {
 
         val sw = StopWatch("RectangleDetector/detectRectanglesIncludingRect")
 
-        val urlBuilder = "http://127.0.0.1:8081/RectangleDetector/detectRectanglesIncludingRect".toHttpUrlOrNull()!!
-            .newBuilder()
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/RectangleDetector/detectRectanglesIncludingRect").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "input",
             value = inputFile.toPath().toString()
@@ -393,8 +404,8 @@ object SrvisionProxy {
 
         val sw = StopWatch("RectangleDetector/detectRectanglesIncludingText")
 
-        val urlBuilder = "http://127.0.0.1:8081/RectangleDetector/detectRectanglesIncludingText".toHttpUrlOrNull()!!
-            .newBuilder()
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/RectangleDetector/detectRectanglesIncludingText").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "input",
             value = inputFile.toPath().toString()

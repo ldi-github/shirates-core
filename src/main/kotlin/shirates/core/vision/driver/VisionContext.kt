@@ -11,6 +11,7 @@ import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
+import shirates.core.vision.VisionObservation
 import shirates.core.vision.driver.commandextension.helper.FlowContainer
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
@@ -22,83 +23,34 @@ import java.nio.file.Files
 
 class VisionContext(
     val capture: Boolean,
-    val language: String = PropertiesManager.logLanguage
+    val language: String = PropertiesManager.logLanguage,
+
+    override var screenshotFile: String? = null,
+    override var screenshotImage: BufferedImage? = null,
+
+    override var localRegionFile: String? = null,
+    override var localRegionImage: BufferedImage? = null,
+
+    override var localRegionX: Int = 0,
+    override var localRegionY: Int = 0,
+    override var rectOnLocalRegion: Rectangle? = null,
+
+    override var horizontalMargin: Int = 0,
+    override var verticalMargin: Int = 0,
+
+    override var imageFile: String? = null
+) : VisionObservation(
+    screenshotFile = screenshotFile,
+    screenshotImage = screenshotImage,
+    localRegionFile = localRegionFile,
+    localRegionImage = localRegionImage,
+    localRegionX = localRegionX,
+    localRegionY = localRegionY,
+    rectOnLocalRegion = rectOnLocalRegion,
+    horizontalMargin = horizontalMargin,
+    verticalMargin = verticalMargin,
 ) {
-    /**
-     * screenshotFile
-     */
-    var screenshotFile: String? = null
 
-    /**
-     * screenshotImage
-     */
-    var screenshotImage: BufferedImage? = null
-
-    /**
-     * localRegionX
-     */
-    var localRegionX = 0
-
-    /**
-     * localRegionY
-     */
-    var localRegionY = 0
-
-    /**
-     * localRegionFile
-     */
-    var localRegionFile: String? = null
-
-    /**
-     * localRegionImage
-     */
-    var localRegionImage: BufferedImage? = null
-        get() {
-            if (field == null && rectOnScreen != null) {
-                field = screenshotImage?.cropImage(rectOnScreen!!)
-            }
-            return field
-        }
-
-    /**
-     * rectOnScreen
-     */
-    val rectOnScreen: Rectangle?
-        get() {
-            val rect = rectOnLocalRegion ?: return null
-            return Rectangle(
-                x = localRegionX + rect.left - imageMarginHorizontal,
-                y = localRegionY + rect.top - imageMarginVertical,
-                width = rect.width + imageMarginHorizontal * 2,
-                height = rect.height + imageMarginVertical * 2
-            )
-        }
-
-    /**
-     * rectOnLocalRegion
-     */
-    var rectOnLocalRegion: Rectangle? = null
-
-    /**
-     * imageMarginHorizontal
-     */
-    var imageMarginHorizontal: Int = 0
-
-    /**
-     * imageMarginVertical
-     */
-    var imageMarginVertical: Int = 0
-
-    /**
-     * image
-     */
-    val image: BufferedImage?
-        get() {
-            if (rectOnScreen == null) {
-                return null
-            }
-            return screenshotImage?.cropImage(rectOnScreen!!)
-        }
 
     /**
      * jsonString
@@ -119,8 +71,8 @@ class VisionContext(
 
         val list = mutableListOf<VisionElement>()
         for (o in recognizeTextObservations) {
-            o.createVisionElement()
-            val v = o.createVisionElement()
+            o.toVisionElement()
+            val v = o.toVisionElement()
             list.add(v)
         }
         return list
@@ -230,8 +182,8 @@ class VisionContext(
 
         c.rectOnLocalRegion = rectOnLocalRegion
 
-        c.imageMarginHorizontal = imageMarginHorizontal
-        c.imageMarginVertical = imageMarginVertical
+        c.horizontalMargin = horizontalMargin
+        c.verticalMargin = verticalMargin
 
         c.jsonString = jsonString
 
@@ -259,17 +211,20 @@ class VisionContext(
      */
     fun saveImage(fileName: String? = null) {
 
-        if (rectOnLocalRegion != null) {
-            val dir = TestLog.directoryForLog
-            val newFileName = if (fileName == null) {
-                dir.resolve("${TestLog.currentLineNo}_${rectOnLocalRegion}.png").toString()
-            } else {
-                val name = fileName.replace(":", "_").replace("/", "_").replace("\\", "_")
-                dir.resolve("${TestLog.currentLineNo}_${rectOnLocalRegion}_${name}.png").toString()
-            }
-            this.screenshotImage?.cropImage(rect = rectOnLocalRegion!!)
-                ?.saveImage(newFileName)
+        if (this.screenshotImage == null || rectOnLocalRegion == null) {
+            return
         }
+        val dir = TestLog.directoryForLog
+        imageFile = if (fileName == null) {
+            dir.resolve("${TestLog.currentLineNo}_${rectOnLocalRegion}.png").toString()
+        } else {
+            var name = fileName.replace(":", "_").replace("/", "_").replace("\\", "_")
+            if (name.endsWith(".png").not()) {
+                name += ".png"
+            }
+            dir.resolve(name).toString()
+        }
+        this.image!!.saveImage(imageFile!!)
     }
 
     /**
@@ -358,6 +313,7 @@ class VisionContext(
         recognizeTextObservations = observations.toMutableList()
         sortRecognizeTextObservations()
 
+        isRecognizeTextObservationInitialized = true
 
         return this
     }

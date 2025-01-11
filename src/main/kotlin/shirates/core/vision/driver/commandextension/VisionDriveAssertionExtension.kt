@@ -31,7 +31,7 @@ internal fun VisionDrive.checkImageLabelContains(
         waitSeconds = waitSeconds,
         onBeforeRetry = {
             screenshot()
-            v = v.createFromScreenshot()
+            v = v.refresh()
         }
     ) {
         val label = v.classify(mlmodelFile = mlmodelFile)
@@ -47,15 +47,14 @@ internal fun VisionDrive.checkImageLabelContains(
     return v
 }
 
-internal fun VisionDrive.checkSwitchState(
+internal fun VisionDrive.checkIsCore(
     containedText: String,
     message: String,
     mlmodelFile: String? = null,
     waitSeconds: Double = testContext.syncWaitSeconds,
 ): VisionElement {
 
-    val rep = VisionMLModelRepository.getRepository(classifierName = "SwitchStateClassifier")
-    rep.classifierName
+    val rep = VisionMLModelRepository.getRepository(classifierName = "CheckStateClassifier")
 
     return checkImageLabelContains(
         containedText = containedText,

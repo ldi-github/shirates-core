@@ -4,12 +4,15 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
 import shirates.core.utility.image.rect
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
+import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
 
@@ -26,6 +29,7 @@ fun VisionDrive.tap(
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
+    waitForElementFocused: Boolean = false,
 ): VisionElement {
 
     if (useCache) {
@@ -35,6 +39,9 @@ fun VisionDrive.tap(
                 expression = expression,
                 holdSeconds = holdSeconds,
             )
+        }
+        if (waitForElementFocused) {
+            waitForElementFocused()
         }
         return e.toVisionElement()
     }
@@ -84,7 +91,33 @@ fun VisionDrive.tap(
     if (TestMode.isNoLoadRun) {
         lastElement = v
     }
+    if (waitForElementFocused) {
+        waitForElementFocused()
+    }
 
+    return v
+}
+
+internal fun VisionDrive.waitForElementFocused(
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    throwOnError: Boolean = true,
+): VisionElement {
+
+    if (TestMode.isNoLoadRun) {
+        return VisionElement.emptyElement
+    }
+
+    var v = VisionElement.emptyElement
+    doUntilTrue(
+        waitSeconds = waitSeconds,
+        throwOnFinally = false
+    ) {
+        v = getFocusedElement()
+        v.isFound
+    }
+    if (v.isFound.not() && throwOnError) {
+        throw TestDriverException(message = "Focused element not found.")
+    }
     return v
 }
 
@@ -177,12 +210,15 @@ fun VisionDrive.tap(
     val context = TestDriverCommandContext(null)
     val v = tappedElement
     context.execOperateCommand(command = command, message = message, subject = tappedElement.subject) {
-//        e = tappedElement.tapCore(holdSeconds = holdSeconds, tapMethod = tapMethod)
 
+        if (PropertiesManager.enableTapElementImageLog) {
+            val fileName = "${TestLog.nextLineNo}_tap_${tappedElement.subject}_${tappedElement.bounds}"
+            tappedElement.saveImage(fileName = fileName)
+        }
         v.tap(x = v.bounds.centerX, y = v.bounds.centerY, holdSeconds = holdSeconds)
     }
 
-    lastElement = v
+    lastElement = v.refresh()
     return lastElement
 }
 
@@ -505,6 +541,8 @@ fun VisionDrive.tapCenterOf(
  */
 fun VisionDrive.tapBelow(
     expression: String? = null,
+    horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
+    verticalMargin: Int = PropertiesManager.segmentMarginVertical,
     useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
@@ -541,7 +579,10 @@ fun VisionDrive.tapBelow(
             waitSeconds = waitSeconds,
             intervalSeconds = intervalSeconds,
         )
-        v = labelElement.belowItem()
+        v = labelElement.belowItem(
+            segmentMarginHorizontal = horizontalMargin,
+            segmentMarginVertical = verticalMargin,
+        )
         val tapFunc = {
             silent {
                 v = v.tap(holdSeconds = holdSeconds)
@@ -562,6 +603,8 @@ fun VisionDrive.tapBelow(
  */
 fun VisionDrive.tapRight(
     expression: String? = null,
+    horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
+    verticalMargin: Int = PropertiesManager.segmentMarginVertical,
     useCache: Boolean = false,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
@@ -598,7 +641,10 @@ fun VisionDrive.tapRight(
             waitSeconds = waitSeconds,
             intervalSeconds = intervalSeconds,
         )
-        v = labelElement.rightItem()
+        v = labelElement.rightItem(
+            segmentMarginHhorizontal = horizontalMargin,
+            segmentMarginVertical = verticalMargin,
+        )
         val tapFunc = {
             silent {
                 v = v.tap(holdSeconds = holdSeconds)

@@ -1,12 +1,15 @@
 package shirates.core.vision
 
 import shirates.core.logging.CodeExecutionContext
+import shirates.core.logging.printWarn
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.cropImage
+import shirates.core.utility.toPath
 import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.commandextension.helper.IRect
 import java.awt.image.BufferedImage
+import java.nio.file.Files
 
 open class VisionObservation(
     open var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
@@ -19,7 +22,11 @@ open class VisionObservation(
     open var localRegionY: Int,
     open var rectOnLocalRegion: Rectangle? = null,
 
-    ) : IRect {
+    open var horizontalMargin: Int = 0,
+    open var verticalMargin: Int = 0,
+
+    open var imageFile: String? = null
+) : IRect {
     private var _image: BufferedImage? = null
 
     /**
@@ -45,14 +52,13 @@ open class VisionObservation(
                 return _image
             }
 
-            // load localRegionImage from file
-            if (localRegionImage == null && localRegionFile != null) {
-                localRegionImage = BufferedImageUtility.getBufferedImage(filePath = localRegionFile!!)
-            }
-            // crop localImage
-            if (localRegionImage != null && rectOnLocalRegion != null) {
-                _image = localRegionImage!!.cropImage(rectOnLocalRegion!!)
-                return _image
+            if (imageFile != null && Files.exists(imageFile!!.toPath())) {
+                if (Files.exists(imageFile!!.toPath())) {
+                    _image = BufferedImageUtility.getBufferedImage(filePath = imageFile!!)
+                    return _image
+                } else {
+                    printWarn("File not found: imageFile=$imageFile")
+                }
             }
 
             // load screenshotImage from file
@@ -61,7 +67,11 @@ open class VisionObservation(
             }
 
             if (screenshotImage != null && rectOnScreen != null) {
-                _image = screenshotImage!!.cropImage(rectOnScreen!!)
+                _image = screenshotImage!!.cropImage(
+                    rect = rectOnScreen!!,
+                    horizontalMargin = horizontalMargin,
+                    verticalMargin = verticalMargin
+                )
                 return _image
             }
 
@@ -76,12 +86,14 @@ open class VisionObservation(
         val c = VisionContext(capture = false)
         c.screenshotFile = this.screenshotFile
         c.screenshotImage = this.screenshotImage
-        c.localRegionX = this.localRegionX
-        c.localRegionY = this.localRegionY
         c.localRegionFile = this.localRegionFile
         c.localRegionImage = this.localRegionImage
+        c.localRegionX = this.localRegionX
+        c.localRegionY = this.localRegionY
         c.rectOnLocalRegion = this.rectOnLocalRegion
-        c.localRegionImage = this.localRegionImage
+        c.horizontalMargin = this.horizontalMargin
+        c.verticalMargin = this.verticalMargin
+        c.imageFile = this.imageFile
         if (this is RecognizeTextObservation) {
             c.jsonString = this.jsonString
             c.recognizeTextObservations.add(this)
@@ -91,13 +103,13 @@ open class VisionObservation(
     }
 
     /**
-     * createVisionElement
+     * toVisionElement
      */
-    fun createVisionElement(): VisionElement {
+    fun toVisionElement(): VisionElement {
 
         val c = this.toVisionContext()
 
-        val v = VisionElement()
+        val v = VisionElement(capture = false)
         v.visionContext = c
 
         v.observation = this

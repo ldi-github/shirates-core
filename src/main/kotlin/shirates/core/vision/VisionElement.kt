@@ -149,12 +149,9 @@ class VisionElement(
     /**
      * imageFile
      */
-    var imageFile: String? = null
+    val imageFile: String?
         get() {
-            if (field == null) {
-                return visionContext.localRegionFile
-            }
-            return field
+            return visionContext.imageFile
         }
 
     /**
@@ -282,9 +279,9 @@ class VisionElement(
     }
 
     /**
-     * createFromScreenshot
+     * refresh
      */
-    fun createFromScreenshot(): VisionElement {
+    fun refresh(): VisionElement {
 
         val v = this.clone()
         v.visionContext.refreshWithLastScreenshot()
@@ -295,9 +292,11 @@ class VisionElement(
     /**
      * saveImage
      */
-    fun saveImage(): VisionElement {
+    fun saveImage(
+        fileName: String? = null,
+    ): VisionElement {
 
-        visionContext.saveImage(fileName = selector?.toString())
+        visionContext.saveImage(fileName = fileName ?: selector?.toString())
         return this
     }
 
@@ -319,7 +318,7 @@ class VisionElement(
             outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_segments").toString(),
             segmentMarginHorizontal = horizontalMargin,
             segmentMarginVertical = verticalMargin,
-        ).analyze()
+        ).split()
         val rects = segmentContainer.segments.map { it.rectOnScreen }
         val includingRects = mutableListOf<Rectangle>()
         for (rect in rects) {

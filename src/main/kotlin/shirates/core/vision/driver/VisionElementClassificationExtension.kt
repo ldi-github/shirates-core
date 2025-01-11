@@ -9,8 +9,11 @@ fun VisionElement.classify(
     mlmodelFile: String = "vision/mlmodels/GeneralClassifier/GeneralClassifier.mlmodel".toPath().toString(),
 ): String {
 
+    if (this.image == null) {
+        throw TestDriverException("Failed to classify. `image` is not set. (VisionElement:$this)")
+    }
     if (this.imageFile == null) {
-        throw TestDriverException("Failed to classify. `imageFile` is not set. (VisionElement:$this)")
+        this.saveImage()
     }
 
     val result = SrvisionProxy.classifyImage(

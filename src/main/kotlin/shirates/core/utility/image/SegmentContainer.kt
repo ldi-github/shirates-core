@@ -24,12 +24,14 @@ class SegmentContainer(
     var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
     var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
 
+    var templateImageFile: String? = null,
+
     var segmentMarginHorizontal: Int,
     var segmentMarginVertical: Int,
     var scale: Double = 1.0,
     var skinThickness: Int = 2,
-    var minimumWidth: Int? = null,
-    var minimumHeight: Int? = null,
+    var minimumWidth: Int = 5,
+    var minimumHeight: Int = 5,
     var outputDirectory: String? = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     var saveWithMargin: Boolean = true,
 ) {
@@ -187,34 +189,9 @@ class SegmentContainer(
      */
     fun filterByWidthAndHeight() {
 
-        var filtered = segments.toList()
-
-        if (minimumWidth != null) {
-            filtered = segments.filter { it.width > minimumWidth!! }
-        }
-        if (minimumHeight != null) {
-            filtered = filtered.filter { it.height > minimumHeight!! }
-        }
-
-        if (filtered.any()) {
-            segments.clear()
-            segments.addAll(filtered)
-        }
-    }
-
-    /**
-     * filterByHeight
-     */
-    fun filterByHeight() {
-        if (minimumHeight == null) {
-            return
-        }
-
-        val filtered = segments.filter { it.height > minimumHeight!! }
-        if (filtered.any()) {
-            segments.clear()
-            segments.addAll(filtered)
-        }
+        val filtered = segments.filter { it.width >= minimumWidth && it.height >= minimumHeight }
+        segments.clear()
+        segments.addAll(filtered)
     }
 
     /**
@@ -319,9 +296,9 @@ class SegmentContainer(
     }
 
     /**
-     * analyze
+     * split
      */
-    fun analyze(): SegmentContainer {
+    fun split(): SegmentContainer {
 
         /**
          * setup image
@@ -344,6 +321,12 @@ class SegmentContainer(
         val b = binary!!
 
         /**
+         * setup template image
+         */
+        val templateImage =
+            if (templateImageFile != null) BufferedImageUtility.getBufferedImage(templateImageFile!!) else null
+
+        /**
          * add segments bit by bit
          * adjacent segments are merged
          */
@@ -359,10 +342,18 @@ class SegmentContainer(
         }
 
         /**
+         * merge blocks
+         */
+        mergeBlocks()
+
+        /**
          * filter
          */
         filterByWidthAndHeight()
-        filterByCutOffPiece()
+        if (templateImage != null) {
+            filterByAspectRatio(templateImage.width, templateImage.height)
+        }
+//        filterByCutOffPiece()
         /**
          * merge
          */
@@ -381,6 +372,55 @@ class SegmentContainer(
         visionElements.addAll(elements)
 
         return this
+    }
+
+    private fun mergeBlocks() {
+
+        var lastSegmentCount = segments.size
+        do {
+            val list = segments.toList()
+            for (s1 in list) {
+                val canMergeSegments = mutableListOf<Segment>()
+                canMergeSegments.add(s1)
+                for (s2 in list) {
+                    if (s1 != s2) {
+                        if (s1.canMerge(
+                                segment = s2,
+                                marginHorizontal = segmentMarginHorizontal,
+                                marginVertical = segmentMarginVertical,
+                                mergeIncluded = mergeIncluded
+                            )
+                        ) {
+                            canMergeSegments.add(s2)
+                        }
+                    }
+                }
+                if (canMergeSegments.count() > 1) {
+                    val newLeft = canMergeSegments.minOfOrNull { it.left } ?: 0
+                    val newTop = canMergeSegments.minOfOrNull { it.top } ?: 0
+                    val newRight = canMergeSegments.maxOfOrNull { it.right } ?: 0
+                    val newBottom = canMergeSegments.maxOfOrNull { it.bottom } ?: 0
+
+                    segments.removeAll(canMergeSegments)
+                    val mergedSegment = Segment(
+                        left = newLeft,
+                        top = newTop,
+                        width = newRight - newLeft + 1,
+                        height = newBottom - newTop + 1,
+                        container = this,
+                        screenshotImage = screenshotImage,
+                        screenshotFile = screenshotFile,
+                        saveWithMargin = saveWithMargin,
+                    )
+                    segments.add(mergedSegment)
+                    break
+                }
+            }
+            if (segments.size == lastSegmentCount) {
+                break
+            }
+            lastSegmentCount = segments.size
+        } while (true)
     }
 
     private fun setupOutputDirectory() {

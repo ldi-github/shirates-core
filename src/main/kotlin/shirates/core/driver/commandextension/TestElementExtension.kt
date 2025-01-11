@@ -100,29 +100,6 @@ fun TestElement.refreshThisElement(): TestElement {
 }
 
 /**
- * typeChars
- */
-fun TestElement.typeChars(
-    charsToSend: String,
-): TestElement {
-
-    val command = "sendChars"
-    val message = message(id = command, key = charsToSend)
-
-    val context = TestDriverCommandContext(this)
-    context.execOperateCommand(command = command, message = message) {
-
-        for (c in charsToSend) {
-            sendKeys(keysToSend = c.toString() as CharSequence)
-        }
-        refreshCache()
-        TestDriver.lastElement = this.refreshThisElement()
-    }
-
-    return TestDriver.lastElement
-}
-
-/**
  * getWebElement
  */
 fun TestElement.getWebElement(): WebElement {

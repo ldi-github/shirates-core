@@ -4,7 +4,6 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.lastVisionElement
-import shirates.core.driver.TestDriver.screenshot
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestElement
 import shirates.core.driver.commandextension.*
@@ -13,21 +12,16 @@ import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
-import shirates.core.logging.CodeExecutionContext.lastScreenshotFile
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.utility.string.forVisionComparison
-import shirates.core.utility.sync.WaitUtility.doUntilTrue
 import shirates.core.utility.time.StopWatch
-import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
-import shirates.core.vision.result.GetRectanglesWithTemplateResult
 
 /**
  * exist
@@ -431,7 +425,6 @@ fun VisionDrive.existWithScrollLeft(
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
-    swipeToCenter: Boolean = false,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -566,7 +559,6 @@ fun VisionDrive.existImage(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    throwsException: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     distance: Double? = null,
 ): VisionElement {
@@ -577,80 +569,29 @@ fun VisionDrive.existImage(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = message, subject = label) {
 
-        val v = existImageCore(
+        val v = findImage(
             label = label,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            distance = distance,
+            threshold = distance,
         )
 
         v.selector = Selector(expression = label)
         lastElement = v
 
-        if (throwsException) {
-            if (distance != null && v.candidate!!.distance > distance) {
-                val error = TestNGException(message = "$message ($v)")
-                v.lastError = error
-                v.lastResult = LogType.NG
-                throw error
-            }
+        if (v.isFound.not() || (distance != null && v.candidate!!.distance > distance)) {
+            val error = TestNGException(message = "$message ($v)")
+            v.lastError = error
+            v.lastResult = LogType.NG
+            throw error
         }
         TestLog.ok(message = message)
     }
 
     return lastElement
-}
-
-private fun existImageCore(
-    label: String,
-    segmentMarginHorizontal: Int,
-    segmentMarginVertical: Int,
-    mergeIncluded: Boolean,
-    skinThickness: Int,
-    waitSeconds: Double = testContext.syncWaitSeconds,
-    distance: Double?,
-): VisionElement {
-
-    val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
-        ?: throw IllegalArgumentException("Template file not found. (label=$label)")
-
-    lateinit var r: GetRectanglesWithTemplateResult
-
-    val waitContext = doUntilTrue(
-        waitSeconds = waitSeconds,
-        throwOnFinally = false,
-        onBeforeRetry = {
-            screenshot(force = true)
-        }
-    ) {
-        val re = CodeExecutionContext.regionElement
-        val imageFile = re.visionContext.localRegionFile!!
-
-        r = SrvisionProxy.getRectanglesWithTemplate(
-            mergeIncluded = mergeIncluded,
-            imageFile = imageFile,
-            templateFile = templateFile,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            skinThickness = skinThickness,
-        )
-
-        if (distance != null && r.primaryCandidate.distance > distance) {
-            TestLog.info("distance ${r.primaryCandidate.distance} > $distance")
-            false
-        } else {
-            true
-        }
-    }
-    if (waitContext.hasError) {
-        return VisionElement.emptyElement
-    }
-
-    val v = r.primaryCandidate.createVisionElement()
-    return v
 }
 
 /**
@@ -661,7 +602,7 @@ fun VisionDrive.dontExistImage(
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
-    throwsException: Boolean = true,
+    mergeIncluded: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     distance: Double? = null,
 ): VisionElement {
@@ -672,74 +613,27 @@ fun VisionDrive.dontExistImage(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = label) {
 
-        val v = dontExistImageCore(
+        val v = findImage(
             label = label,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            distance = distance,
+            threshold = distance,
         )
 
         v.selector = Selector(expression = label)
         lastElement = v
 
-        if (throwsException) {
-            if (distance != null && v.candidate!!.distance < distance) {
-                val error = TestNGException(message = "$message ($v)")
-                v.lastError = error
-                v.lastResult = LogType.NG
-                throw error
-            }
+        if (v.isFound || (distance != null && v.candidate!!.distance < distance)) {
+            val error = TestNGException(message = "$message ($v)")
+            v.lastError = error
+            v.lastResult = LogType.NG
+            throw error
         }
-        TestLog.ok(message = "$message ($v)")
+        TestLog.ok(message = message)
     }
 
     return lastElement
-}
-
-private fun dontExistImageCore(
-    label: String,
-    segmentMarginHorizontal: Int,
-    segmentMarginVertical: Int,
-    mergeIncluded: Boolean = false,
-    skinThickness: Int,
-    waitSeconds: Double = testContext.syncWaitSeconds,
-    distance: Double?,
-): VisionElement {
-
-    val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
-        ?: throw IllegalArgumentException("Template file not found. (label=$label)")
-
-    lateinit var r: GetRectanglesWithTemplateResult
-
-    val waitContext = doUntilTrue(
-        waitSeconds = waitSeconds,
-        throwOnFinally = false,
-        onBeforeRetry = {
-            screenshot(force = true)
-        }
-    ) {
-        r = SrvisionProxy.getRectanglesWithTemplate(
-            mergeIncluded = mergeIncluded,
-            imageFile = lastScreenshotFile!!,
-            templateFile = templateFile,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            skinThickness = skinThickness,
-        )
-        if (distance != null && r.primaryCandidate.distance > distance) {
-            TestLog.info("distance ${r.primaryCandidate.distance} > $distance")
-            false
-        } else {
-            true
-        }
-    }
-    if (waitContext.hasError) {
-        val v = r.primaryCandidate.createVisionElement()
-        return v
-    }
-
-    val v = VisionElement.emptyElement
-    return v
 }

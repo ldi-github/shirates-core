@@ -147,18 +147,32 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             throw TestConfigException("Do not use @EnableCache and @DisableCache on a function.")
         }
 
+        val isVision = context!!.testInstance.get() is VisionTest
+
         if (context.isClassAnnotated(EnableCache::class)) {
+            if (isVision) {
+                throw TestConfigException("@EnableCache is not supported on VisionTest class.")
+            }
             enableCache = true
         } else if (context.isClassAnnotated(DisableCache::class)) {
+            if (isVision) {
+                throw TestConfigException("@DisableCache is not supported on VisionTest class.")
+            }
             enableCache = false
         }
         if (context.isMethodAnnotated(EnableCache::class)) {
+            if (isVision) {
+                throw TestConfigException("@EnableCache is not supported on VisionTest class.")
+            }
             enableCache = true
         } else if (context.isMethodAnnotated(DisableCache::class)) {
+            if (isVision) {
+                throw TestConfigException("@DisableCache is not supported on VisionTest class.")
+            }
             enableCache = false
         }
 
-        val requiredContext = context!!.requiredContext
+        val requiredContext = context.requiredContext
         if (requiredContext.isRequired.not()) {
             throw TestAbortedException("Test skipped. (${requiredContext.clazz?.simpleName})")
         }

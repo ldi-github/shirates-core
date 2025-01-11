@@ -53,13 +53,13 @@ object VisionMLModelRepository {
             return getRepository("GeneralClassifier")
         }
 
-    /**
-     * screenClassifierRepository
-     */
-    val screenClassifierRepository: VisionClassifierRepository
-        get() {
-            return getRepository("ScreenClassifier")
-        }
+//    /**
+//     * screenClassifierRepository
+//     */
+//    val screenClassifierRepository: VisionClassifierRepository
+//        get() {
+//            return getRepository("ScreenClassifier")
+//        }
 
     /**
      * buttonStateClassifierRepository
@@ -70,27 +70,27 @@ object VisionMLModelRepository {
         }
 
     /**
-     * checkboxStateClassifierRepository
+     * checkStateClassifierRepository
      */
-    val checkboxStateClassifierRepository: VisionClassifierRepository
+    val checkStateClassifierRepository: VisionClassifierRepository
         get() {
-            return getRepository("CheckboxStateClassifier")
+            return getRepository("CheckStateClassifier")
         }
 
-    /**
-     * radioButtonStateClassifierRepository
-     */
-    val radioButtonStateClassifierRepository: VisionClassifierRepository
-        get() {
-            return getRepository("RadioButtonStateClassifier")
-        }
-
-    /**
-     * switchStateClassifierRepository
-     */
-    val switchStateClassifierRepository: VisionClassifierRepository
-        get() {
-            return getRepository("SwitchStateClassifier")
-        }
+//    /**
+//     * radioButtonStateClassifierRepository
+//     */
+//    val radioButtonStateClassifierRepository: VisionClassifierRepository
+//        get() {
+//            return getRepository("RadioButtonStateClassifier")
+//        }
+//
+//    /**
+//     * switchStateClassifierRepository
+//     */
+//    val switchStateClassifierRepository: VisionClassifierRepository
+//        get() {
+//            return getRepository("SwitchStateClassifier")
+//        }
 
 }

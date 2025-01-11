@@ -168,7 +168,7 @@ fun BufferedImage.resizeAndSaveImage(scale: Double = 0.5, resizedFile: File, log
 /**
  * cropImage
  */
-fun BufferedImage.cropImage(rect: Rectangle, margin: Int = 0): BufferedImage? {
+fun BufferedImage.cropImage(rect: Rectangle, horizontalMargin: Int, verticalMargin: Int): BufferedImage? {
 
     val originalImage = this
 
@@ -177,19 +177,19 @@ fun BufferedImage.cropImage(rect: Rectangle, margin: Int = 0): BufferedImage? {
         return null
     }
 
-    var x1 = rect.x - margin
+    var x1 = rect.x - horizontalMargin
     if (x1 < 0) x1 = 0
     if (x1 > originalImage.rect.right) x1 = originalImage.rect.right
 
-    var y1 = rect.y - margin
+    var y1 = rect.y - verticalMargin
     if (y1 < 0) y1 = 0
     if (y1 > originalImage.rect.bottom) y1 = originalImage.rect.bottom
 
-    var x2 = rect.x + rect.width - 1 + margin
+    var x2 = rect.x + rect.width - 1 + horizontalMargin * 2
     if (x2 < 0) x2 = 0
     if (x2 > originalImage.rect.right) x2 = originalImage.rect.right
 
-    var y2 = rect.y + rect.height - 1 + margin
+    var y2 = rect.y + rect.height - 1 + verticalMargin * 2
     if (y2 < 0) y2 = 0
     if (y2 > originalImage.rect.bottom) y2 = originalImage.rect.bottom
 
@@ -201,6 +201,14 @@ fun BufferedImage.cropImage(rect: Rectangle, margin: Int = 0): BufferedImage? {
     } catch (t: Throwable) {
         throw t
     }
+}
+
+/**
+ * cropImage
+ */
+fun BufferedImage.cropImage(rect: Rectangle, margin: Int = 0): BufferedImage? {
+
+    return cropImage(rect = rect, horizontalMargin = margin, verticalMargin = margin)
 }
 
 /**

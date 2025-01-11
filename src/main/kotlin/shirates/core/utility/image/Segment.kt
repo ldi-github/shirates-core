@@ -200,26 +200,23 @@ class Segment(
      */
     fun createVisionElement(): VisionElement {
 
-        val v = VisionElement()
+        val v = VisionElement(capture = false)
         v.segment = this
 
         v.visionContext.screenshotImage = this.screenshotImage
         v.visionContext.screenshotFile = this.screenshotFile
 
-        v.visionContext.localRegionImage = this.screenshotImage
-        v.visionContext.localRegionFile = this.screenshotFile
-
+        v.visionContext.localRegionImage = this.container?.containerImage
+        v.visionContext.localRegionFile = this.container?.containerImageFile
         v.visionContext.localRegionX = this.containerX
         v.visionContext.localRegionY = this.containerY
         v.visionContext.rectOnLocalRegion = this.rectOnSegmentContainer
-        v.visionContext.imageMarginHorizontal = this.segmentMarginHorizontal
-        v.visionContext.imageMarginVertical = this.segmentMarginVertical
-        v.visionContext.image
-        v.visionContext.rectOnScreen
+
+        v.visionContext.horizontalMargin = this.segmentMarginHorizontal
+        v.visionContext.verticalMargin = this.segmentMarginVertical
         if (this.recognizeTextObservation != null) {
             v.visionContext.recognizeTextObservations.add(this.recognizeTextObservation!!)
         }
-
         return v
     }
 

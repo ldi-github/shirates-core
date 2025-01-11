@@ -1757,6 +1757,60 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionServerUrl() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionServerUrl).isEqualTo(Const.VISION_SERVER_URL)
+        }
+        run {
+            // Arrange
+            val value = "http://127.0.0.1:8082"
+            PropertiesManager.setPropertyValue("visionServerUrl", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionServerUrl).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun segmentMarginHorizontal() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.segmentMarginHorizontal).isEqualTo(Const.VISION_SEGMENT_MARGIN_HORIZONTAL)
+        }
+        run {
+            // Arrange
+            val value = 30
+            PropertiesManager.setPropertyValue("segmentMarginHorizontal", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.segmentMarginHorizontal).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun segmentMarginVertical() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.segmentMarginVertical).isEqualTo(Const.VISION_SEGMENT_MARGIN_VERTICAL)
+        }
+        run {
+            // Arrange
+            val value = 15
+            PropertiesManager.setPropertyValue("segmentMarginVertical", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.segmentMarginVertical).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun specReportExcludeIDetail() {
 
         run {
