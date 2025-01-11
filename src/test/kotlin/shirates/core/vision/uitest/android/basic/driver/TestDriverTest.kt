@@ -25,6 +25,7 @@ import java.nio.file.Files
 class TestDriverTest : VisionTest() {
 
     override fun beforeEach(context: ExtensionContext?) {
+        super.beforeEach(context)
         PropertiesManager.screenshotIntervalSeconds = 0.0
     }
 

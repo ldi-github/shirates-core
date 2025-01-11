@@ -23,7 +23,7 @@ import shirates.core.vision.driver.silent
  */
 fun VisionDrive.detect(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,
@@ -296,7 +296,7 @@ internal fun VisionDrive.detectWithScrollCore(
  */
 fun VisionDrive.detectWithScrollDown(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -401,7 +401,7 @@ private fun VisionDrive.detectWithScrollCore(
  */
 fun VisionDrive.detectWithScrollUp(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -464,7 +464,7 @@ fun VisionDrive.detectWithScrollUp(
  */
 fun VisionDrive.detectWithScrollRight(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -528,7 +528,7 @@ fun VisionDrive.detectWithScrollRight(
  */
 fun VisionDrive.detectWithScrollLeft(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -695,7 +695,7 @@ fun VisionDrive.canDetectWithoutScroll(
  */
 fun VisionDrive.canDetectWithScrollDown(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -782,7 +782,7 @@ private fun VisionDrive.canDetectWithScroll(
  */
 fun VisionDrive.canDetectWithScrollUp(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -829,7 +829,7 @@ fun VisionDrive.canDetectWithScrollUp(
  */
 fun VisionDrive.canDetectWithScrollRight(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -876,7 +876,7 @@ fun VisionDrive.canDetectWithScrollRight(
  */
 fun VisionDrive.canDetectWithScrollLeft(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -954,7 +954,7 @@ internal fun VisionDrive.canDetectAllCore(
  */
 fun VisionDrive.canDetectAll(
     vararg expressions: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     log: Boolean = false
 ): Boolean {
 
@@ -1031,7 +1031,7 @@ internal fun VisionDrive.canDetectAllWithScroll(
  */
 fun VisionDrive.canDetectAllWithScrollDown(
     vararg expressions: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -1079,7 +1079,7 @@ fun VisionDrive.canDetectAllWithScrollDown(
  */
 fun VisionDrive.canDetectAllWithScrollUp(
     vararg expressions: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -1127,7 +1127,7 @@ fun VisionDrive.canDetectAllWithScrollUp(
  */
 fun VisionDrive.canDetectAllWithScrollRight(
     vararg expressions: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -1175,7 +1175,7 @@ fun VisionDrive.canDetectAllWithScrollRight(
  */
 fun VisionDrive.canDetectAllWithScrollLeft(
     vararg expressions: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,

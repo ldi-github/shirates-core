@@ -154,7 +154,7 @@ internal fun VisionElement.textIsCore(
  */
 fun VisionElement.belowTextIs(
     expected: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     strict: Boolean = PropertiesManager.strictCompareMode,
     ignoreCase: Boolean = true,
     ignoreFullWidth: Boolean = true,
@@ -190,7 +190,7 @@ fun VisionElement.belowTextIs(
  */
 fun VisionElement.aboveTextIs(
     expected: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     strict: Boolean = PropertiesManager.strictCompareMode,
     ignoreCase: Boolean = true,
     ignoreFullWidth: Boolean = true,
@@ -226,7 +226,7 @@ fun VisionElement.aboveTextIs(
  */
 fun VisionElement.rightTextIs(
     expected: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     strict: Boolean = PropertiesManager.strictCompareMode,
     ignoreCase: Boolean = true,
     ignoreFullWidth: Boolean = true,
@@ -262,7 +262,7 @@ fun VisionElement.rightTextIs(
  */
 fun VisionElement.leftTextIs(
     expected: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     strict: Boolean = PropertiesManager.strictCompareMode,
     ignoreCase: Boolean = true,
     ignoreFullWidth: Boolean = true,

@@ -70,7 +70,7 @@ fun TestDrive.findElements(
  * allElements
  */
 fun TestDrive.allElements(
-    useCache: Boolean = true
+    useCache: Boolean = testContext.useCache
 ): List<TestElement> {
 
     if (TestMode.isNoLoadRun) {

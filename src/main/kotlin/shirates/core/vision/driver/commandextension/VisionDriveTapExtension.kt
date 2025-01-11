@@ -21,7 +21,7 @@ import shirates.core.vision.driver.silent
  */
 fun VisionDrive.tap(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,
@@ -265,7 +265,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
  */
 fun VisionDrive.tapWithScrollDown(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -316,7 +316,7 @@ fun VisionDrive.tapWithScrollDown(
  */
 fun VisionDrive.tapWithScrollUp(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -367,7 +367,7 @@ fun VisionDrive.tapWithScrollUp(
  */
 fun VisionDrive.tapWithScrollRight(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -418,7 +418,7 @@ fun VisionDrive.tapWithScrollRight(
  */
 fun VisionDrive.tapWithScrollLeft(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -543,7 +543,7 @@ fun VisionDrive.tapBelow(
     expression: String? = null,
     horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
     verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,
@@ -605,7 +605,7 @@ fun VisionDrive.tapRight(
     expression: String? = null,
     horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
     verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,

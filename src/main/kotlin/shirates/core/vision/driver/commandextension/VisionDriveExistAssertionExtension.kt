@@ -28,7 +28,7 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.exist(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -206,7 +206,7 @@ internal fun postProcessForAssertion(
  */
 fun VisionDrive.existWithScrollDown(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -275,7 +275,7 @@ fun VisionDrive.existWithScrollDown(
  */
 fun VisionDrive.existWithScrollUp(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -344,7 +344,7 @@ fun VisionDrive.existWithScrollUp(
  */
 fun VisionDrive.existWithScrollRight(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -413,7 +413,7 @@ fun VisionDrive.existWithScrollRight(
  */
 fun VisionDrive.existWithScrollLeft(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
@@ -482,7 +482,7 @@ fun VisionDrive.existWithScrollLeft(
  */
 fun VisionDrive.dontExist(
     expression: String,
-    useCache: Boolean = false,
+    useCache: Boolean = testContext.useCache,
     remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     ignoreCase: Boolean = true,
