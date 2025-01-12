@@ -121,9 +121,7 @@ object TapHelper : VisionDrive {
                 .wait()
             return
         }
-        if (it.canDetect("#apps_list_view").not()) {
-            it.pressHome()
-        }
+        it.pressHome()
         it.flickCenterToTop()
         if (it.canDetectWithScrollDown(appIconName)) {
             it.tap()

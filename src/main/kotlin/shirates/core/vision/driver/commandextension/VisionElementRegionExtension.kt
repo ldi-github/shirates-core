@@ -84,14 +84,17 @@ internal fun VisionElement.regionCore(
 
     lastElement = regionElement
 
-    val original = CodeExecutionContext.regionElement
+    val originalRegionElement = CodeExecutionContext.regionElement
+    val originalScrollVisionElement = CodeExecutionContext.scrollVisionElement
     try {
         CodeExecutionContext.regionElement = regionElement
+        CodeExecutionContext.scrollVisionElement = regionElement
         regionElement.apply {
             func(regionElement)
         }
     } finally {
-        CodeExecutionContext.regionElement = original
+        CodeExecutionContext.regionElement = originalRegionElement
+        CodeExecutionContext.scrollVisionElement = originalScrollVisionElement
     }
     return regionElement
 }
@@ -189,4 +192,17 @@ fun VisionElement.lineRegion(): Rectangle {
         bottom = this.rect.bottom + (this.rect.height / 2)
     )
     return horizontalRegion
+}
+
+/**
+ * columnRegion
+ */
+fun VisionElement.columnRegion(): Rectangle {
+    val verticalRegion = Rectangle.createFrom(
+        left = this.rect.left - (this.rect.width / 2),
+        right = this.rect.right + (this.rect.width / 2),
+        top = 0,
+        bottom = screenRect.bottom
+    )
+    return verticalRegion
 }

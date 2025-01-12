@@ -38,7 +38,7 @@ class AndroidPressKey1 : UITest() {
                 }.action {
                     it.pressHome()
                 }.expectation {
-                    it.screenIs("[Pixel Home Screen]")
+                    it.screenIs("[Android Home Screen]")
                 }
             }
 

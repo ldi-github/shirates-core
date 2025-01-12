@@ -3,6 +3,7 @@ package shirates.core.vision.driver
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.visionDrive
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.*
@@ -241,23 +242,26 @@ class VisionContext(
 
         val rootElement = visionDrive.rootElement
 
-        /**
-         * Recognize text
-         * and store the result into rootElement.visionContext
-         */
-        var inputFile = localRegionFile
-        if (inputFile == null) {
-            inputFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_localRegion.png").toString()
-            localRegionImage!!.saveImage(inputFile, log = false)
+        if (rootElement.visionContext.isRecognizeTextObservationInitialized.not()) {
+            /**
+             * Recognize text
+             * and store the result into rootElement.visionContext
+             */
+            var inputFile = localRegionFile
+            if (inputFile == null) {
+                inputFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_localRegion.png").toString()
+                localRegionImage!!.saveImage(inputFile, log = false)
+            }
+            val recognizeTextResult = SrvisionProxy.recognizeText(
+                inputFile = inputFile,
+                language = language
+            )
+            rootElement.visionContext.loadTextRecognizerResult(
+                inputFile = inputFile,
+                recognizeTextResult = recognizeTextResult
+            )
         }
-        val recognizeTextResult = SrvisionProxy.recognizeText(
-            inputFile = inputFile,
-            language = language
-        )
-        rootElement.visionContext.loadTextRecognizerResult(
-            inputFile = inputFile,
-            recognizeTextResult = recognizeTextResult
-        )
+
         val regionElement = CodeExecutionContext.regionElement
         if (regionElement != rootElement) {
             /**
@@ -303,7 +307,7 @@ class VisionContext(
                 screenshotImage = screenshotImage ?: CodeExecutionContext.lastScreenshotImage,
 
                 localRegionFile = localRegionFile,
-                localRegionImage = localRegionImage ?: CodeExecutionContext.lastScreenshotImage,
+                localRegionImage = localRegionImage,
 
                 localRegionX = localRegionX,
                 localRegionY = localRegionY,
@@ -364,14 +368,28 @@ class VisionContext(
         language: String? = this.language,
     ): VisionElement {
 
-        val text = selector.text ?: ""
-        val v = detect(
-            text = text,
-            remove = remove,
-            language = language
-        )
-        v.selector = selector
-        return v
+        if (selector.hasTextFilter.not()) {
+            throw TestDriverException("Selector doesn't contains text filter. (selector=$selector, expression=${selector.expression})")
+        }
+        if (selector.textMatches.isNullOrBlank().not()) {
+            for (o in this.recognizeTextObservations) {
+                val t = o.text
+                if (t.matches(selector.textMatches!!.toRegex())) {
+                    val v = o.toVisionElement()
+                    return v
+                }
+            }
+            return VisionElement.emptyElement
+        } else {
+            val text = selector.textFilterForDetect!!
+            val v = detect(
+                text = text,
+                remove = remove,
+                language = language
+            )
+            v.selector = selector
+            return v
+        }
     }
 
     /**

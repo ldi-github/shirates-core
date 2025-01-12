@@ -5,14 +5,25 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.utility.sync.WaitUtility
+import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.lastElement
+
+/**
+ * screenName
+ */
+val VisionDrive.screenName: String
+    get() {
+        return TestDriver.currentScreen
+    }
 
 /**
  * isScreen
@@ -30,8 +41,33 @@ fun VisionDrive.isScreen(
         return false
     }
 
+    updateCurrentScreen()
+
     val r = (TestDriver.currentScreen == screenName)
     return r
+}
+
+/**
+ * updateCurrentScreen
+ */
+fun VisionDrive.updateCurrentScreen() {
+    if (CodeExecutionContext.lastScreenshotFile == null) {
+        screenshot(force = true)
+    }
+
+    updateCurrentScreenCore()
+}
+
+internal fun updateCurrentScreenCore() {
+
+    val oldScreenName = TestDriver.currentScreen
+    TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(
+        screenImageFile = CodeExecutionContext.lastScreenshotFile!!,
+        withTextMatching = true
+    )
+    if (TestDriver.currentScreen != oldScreenName) {
+        TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
+    }
 }
 
 /**
@@ -47,6 +83,7 @@ fun VisionDrive.isScreenOf(
 
     invalidateScreen()
     screenshot()
+    updateCurrentScreen()
     val screenName = TestDriver.currentScreen
     return screenNames.contains(screenName)
 }

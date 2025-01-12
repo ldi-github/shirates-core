@@ -52,7 +52,6 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
-import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
@@ -1992,15 +1991,16 @@ object TestDriver {
             }
 
             if (testContext.useCache.not()) {
-                /**
-                 * Update currentScreen (Vision mode)
-                 */
-                TestDriver.currentScreen =
-                    ScreenRecognizer.recognizeScreen(
-                        screenImageFile = screenshotFile,
-                        withTextMatching = withTextMatching
-                    )
-                TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
+                TestDriver.currentScreen = "?"
+//                /**
+//                 * Update currentScreen (Vision mode)
+//                 */
+//                TestDriver.currentScreen =
+//                    ScreenRecognizer.recognizeScreen(
+//                        screenImageFile = screenshotFile,
+//                        withTextMatching = withTextMatching
+//                    )
+//                TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
             }
 
             if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout && testContext.useCache) {

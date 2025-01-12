@@ -94,7 +94,7 @@ private fun VisionDrive.existCore(
         language = language,
         waitSeconds = waitSeconds,
 //        intervalSeconds = intervalSeconds,
-//        holdSeconds = holdSeconds,
+        throwsException = false,
     )
     lastVisionElement = v
 
@@ -245,6 +245,7 @@ fun VisionDrive.existWithScrollDown(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollDown(
+            scrollElement = it.columnRegion().toVisionElement(),
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -314,6 +315,7 @@ fun VisionDrive.existWithScrollUp(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollUp(
+            scrollElement = it.columnRegion().toVisionElement(),
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -383,6 +385,7 @@ fun VisionDrive.existWithScrollRight(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollRight(
+            scrollElement = it.lineRegion().toVisionElement(),
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -452,6 +455,7 @@ fun VisionDrive.existWithScrollLeft(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollLeft(
+            scrollElement = it.lineRegion().toVisionElement(),
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -515,6 +519,7 @@ fun VisionDrive.dontExist(
 
         doUntilTrue(
             waitSeconds = waitSeconds,
+            throwOnFinally = false
         ) {
             v = detectCore(
                 selector = sel,
@@ -535,7 +540,7 @@ fun VisionDrive.dontExist(
         if (allowContains) actual.contains(expected)
         else actual == expected
     if (isFound) {
-        val error = TestNGException(message = "$message (expected: \"$expression\", actual: \"${v.text}\")")
+        val error = TestNGException(message = "$message (actual: exists)")
         v.lastError = error
         v.lastResult = LogType.NG
         throw error

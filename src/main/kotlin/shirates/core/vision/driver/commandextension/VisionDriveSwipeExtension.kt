@@ -673,11 +673,11 @@ fun VisionDrive.flickAndGoDown(
         try {
             testContext.onScrolling = false
             scrollDown(
-                swipeDurationSeconds = durationSeconds,
+                scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                swipeIntervalSeconds = intervalSeconds
+                scrollIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -726,11 +726,11 @@ fun VisionDrive.flickAndGoRight(
         try {
             testContext.onScrolling = false
             scrollRight(
-                swipeDurationSeconds = durationSeconds,
+                scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                swipeIntervalSeconds = intervalSeconds
+                scrollIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -760,11 +760,11 @@ fun VisionDrive.flickAndGoLeft(
         try {
             testContext.onScrolling = false
             scrollLeft(
-                swipeDurationSeconds = durationSeconds,
+                scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                swipeIntervalSeconds = intervalSeconds
+                scrollIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -825,11 +825,11 @@ fun VisionDrive.flickAndGoUp(
         try {
             testContext.onScrolling = false
             scrollUp(
-                swipeDurationSeconds = durationSeconds,
+                scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                swipeIntervalSeconds = intervalSeconds
+                scrollIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling

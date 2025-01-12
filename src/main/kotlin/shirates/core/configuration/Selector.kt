@@ -78,6 +78,22 @@ class Selector(
             this["textMatches"] = value
         }
 
+    /**
+     * textFilterForDetect
+     */
+    val textFilterForDetect: String?
+        get() {
+            return text ?: textStartsWith ?: textContains ?: textEndsWith
+        }
+
+    /**
+     * hasTextFilter
+     */
+    val hasTextFilter: Boolean
+        get() {
+            return textFilterForDetect != null || textMatches != null
+        }
+
     var capturable: String?
         get() {
             return getFieldValue("capturable")

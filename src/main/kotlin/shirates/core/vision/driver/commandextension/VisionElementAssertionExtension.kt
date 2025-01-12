@@ -45,10 +45,9 @@ fun VisionElement.textIs(
     fun strictCheckInDirectAccessMode() {
         val e = testDrive.select(expression = selector!!.expression!!, throwsException = false, useCache = false)
         val isIncluded = e.bounds.isIncludedIn(CodeExecutionContext.regionRect.toBoundsWithRatio())
-        val actual = if (isIncluded) e.textOrLabelOrValue.process() else ""
-        val expectedForCompare = expected.process()
+        val actual = if (isIncluded) e.textOrLabelOrValue else ""
         context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-            actual.thisIs(expected = expectedForCompare, message = assertMessage, strict = strict)
+            actual.thisIs(expected = expected, message = assertMessage, strict = true)
         }
     }
     if (strict && selector?.expression != null) {
@@ -89,7 +88,7 @@ fun VisionElement.textIs(
             strictCheckInDirectAccessMode()
         } else {
             context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-                actualForCompare.thisIs(expected = expectedForCompare, message = assertMessage, strict = strict)
+                actualForCompare.thisIs(expected = expected, message = assertMessage, strict = strict)
             }
         }
     }

@@ -120,14 +120,10 @@ object CodeExecutionContext {
     /**
      * regionElement
      */
-    var regionElement: VisionElement
-        get() {
-            return _regionElement!!
-        }
+    var regionElement: VisionElement = VisionElement.emptyElement
         set(value) {
-            _regionElement = value
+            field = value
         }
-    private var _regionElement: VisionElement? = null
 
     /**
      * regionRect
@@ -164,9 +160,14 @@ object CodeExecutionContext {
         internal set
 
     /**
-     * scrollableBounds
+     * scrollVisionElement
      */
-    var scrollableBounds: Bounds? = null
+    var scrollVisionElement: VisionElement? = null
+
+    /**
+     * scrollBounds
+     */
+    var scrollBounds: Bounds? = null
         internal set
 
     /**

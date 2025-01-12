@@ -379,7 +379,7 @@ fun TestDrive.scrollToRightEdge(
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
-    imageCompare: Boolean = false
+//    imageCompare: Boolean = false
 ): TestElement {
 
     scrollToEdgeCommand(
@@ -412,7 +412,7 @@ fun TestDrive.scrollToLeftEdge(
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
-    imageCompare: Boolean = false
+//    imageCompare: Boolean = false
 ): TestElement {
 
     scrollToEdgeCommand(

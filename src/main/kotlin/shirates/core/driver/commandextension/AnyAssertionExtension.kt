@@ -88,7 +88,7 @@ fun Any?.thisIs(
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (actual=\"$value1\")"
+            val errorMessage = "$assertMessage (actual=\"$this\")"
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }

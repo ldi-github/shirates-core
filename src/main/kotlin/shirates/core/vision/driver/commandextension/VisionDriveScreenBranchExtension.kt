@@ -1,6 +1,5 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.driver.TestDrive
 import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.vision.VisionDrive
 

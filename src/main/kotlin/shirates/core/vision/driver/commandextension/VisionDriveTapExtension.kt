@@ -15,6 +15,7 @@ import shirates.core.vision.driver.branchextension.lastScreenshotImage
 import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
+import shirates.core.vision.driver.wait
 
 /**
  * tap
@@ -127,6 +128,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.syncWaitSeconds,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
+    throwsException: Boolean,
 ): VisionElement {
 
     fun getElement(): VisionElement {
@@ -137,7 +139,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
             waitSeconds = waitSeconds,
             intervalSeconds = intervalSeconds,
             allowScroll = null,
-            throwsException = true
+            throwsException = throwsException,
         )
     }
 
@@ -191,6 +193,8 @@ fun VisionDrive.tap(
         )
         swipePointToPointCore(swipeContext = sc)
     }
+
+    wait(waitSeconds = testContext.waitSecondsForAnimationComplete)
 
     return this
 }
@@ -258,6 +262,36 @@ private fun VisionDrive.tapWithScrollCommandCore(
         v = v.tap(holdSeconds = holdSeconds)
     }
     return v
+}
+
+/**
+ * tapImage
+ */
+fun VisionDrive.tapImage(
+    label: String,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    mergeIncluded: Boolean = false,
+    skinThickness: Int = 2,
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    holdSeconds: Double = testContext.tapHoldSeconds
+): VisionElement {
+
+    val v = findImage(
+        label = label,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        mergeIncluded = mergeIncluded,
+        skinThickness = skinThickness,
+        waitSeconds = waitSeconds,
+        threshold = threshold,
+    )
+
+    v.tap(holdSeconds = holdSeconds)
+
+    lastElement = v.refresh()
+    return lastElement
 }
 
 /**
