@@ -13,17 +13,17 @@ fun VisionElement.onAbove(
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    val aboveRegion = aboveRegion(horizontalMargin = horizontalMargin)
-    val regionElement = regionCore(regionRect = aboveRegion, func = func)
+    val regionElement = aboveRegionElement(horizontalMargin = horizontalMargin)
+    regionCore(regionElement = regionElement, func = func)
     return regionElement
 }
 
 /**
- * aboveRegion
+ * aboveRegionElement
  */
-fun VisionElement.aboveRegion(
+fun VisionElement.aboveRegionElement(
     horizontalMargin: Int = 10
-): Rectangle {
+): VisionElement {
 
     var left = this.rect.left - horizontalMargin
     if (left < 0) left = 0
@@ -38,7 +38,8 @@ fun VisionElement.aboveRegion(
         right = right,
         bottom = bottom
     )
-    return aboveRegion
+    val v = aboveRegion.toVisionElement()
+    return v
 }
 
 /**
@@ -49,17 +50,17 @@ fun VisionElement.onBelow(
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    val belowRegion = belowRegion(horizontalMargin = horizontalMargin)
-    val regionElement = regionCore(regionRect = belowRegion, func = func)
+    val regionElement = belowRegionElement(horizontalMargin = horizontalMargin)
+    regionCore(regionElement = regionElement, func = func)
     return regionElement
 }
 
 /**
- * belowRegion
+ * belowRegionElement
  */
-fun VisionElement.belowRegion(
+fun VisionElement.belowRegionElement(
     horizontalMargin: Int = 10
-): Rectangle {
+): VisionElement {
 
     var left = this.rect.left - horizontalMargin
     if (left < 0) left = 0
@@ -73,27 +74,27 @@ fun VisionElement.belowRegion(
         right = right,
         bottom = bottom
     )
-    return belowRegion
+    val v = belowRegion.toVisionElement()
+    return v
 }
 
 internal fun VisionElement.regionCore(
-    regionRect: Rectangle,
+    regionElement: VisionElement,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
-    val regionElement = regionRect.toVisionElement()
 
     lastElement = regionElement
 
-    val originalRegionElement = CodeExecutionContext.regionElement
+    val originalRegionElement = CodeExecutionContext.workingRegionElement
     val originalScrollVisionElement = CodeExecutionContext.scrollVisionElement
     try {
-        CodeExecutionContext.regionElement = regionElement
+        CodeExecutionContext.workingRegionElement = regionElement
         CodeExecutionContext.scrollVisionElement = regionElement
         regionElement.apply {
             func(regionElement)
         }
     } finally {
-        CodeExecutionContext.regionElement = originalRegionElement
+        CodeExecutionContext.workingRegionElement = originalRegionElement
         CodeExecutionContext.scrollVisionElement = originalScrollVisionElement
     }
     return regionElement
@@ -107,17 +108,17 @@ fun VisionElement.onLeft(
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    val leftRegion = leftRegion(verticalMargin = verticalMargin)
-    val regionElement = regionCore(regionRect = leftRegion, func = func)
+    val regionElement = leftRegionElement(verticalMargin = verticalMargin)
+    regionCore(regionElement = regionElement, func = func)
     return regionElement
 }
 
 /**
- * leftRegion
+ * leftRegionElement
  */
-fun VisionElement.leftRegion(
+fun VisionElement.leftRegionElement(
     verticalMargin: Int = this.rect.height / 2
-): Rectangle {
+): VisionElement {
     val left = 0
     var top = this.rect.top - verticalMargin
     if (top < 0) top = 0
@@ -131,7 +132,8 @@ fun VisionElement.leftRegion(
         right = right,
         bottom = bottom
     )
-    return leftRegion
+    val v = leftRegion.toVisionElement()
+    return v
 }
 
 /**
@@ -142,17 +144,17 @@ fun VisionElement.onRight(
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    val rightRegion = rightRegion(verticalMargin = verticalMargin)
-    val regionElement = regionCore(regionRect = rightRegion, func = func)
+    val regionElement = rightRegionElement(verticalMargin = verticalMargin)
+    regionCore(regionElement = regionElement, func = func)
     return regionElement
 }
 
 /**
- * rightRegion
+ * rightRegionElement
  */
-fun VisionElement.rightRegion(
+fun VisionElement.rightRegionElement(
     verticalMargin: Int = this.rect.right / 2
-): Rectangle {
+): VisionElement {
     var left = this.rect.right + 1
     if (left > screenRect.right) left = screenRect.right
     var top = this.rect.top - verticalMargin
@@ -166,7 +168,8 @@ fun VisionElement.rightRegion(
         right = right,
         bottom = bottom
     )
-    return rightRegion
+    val v = rightRegion.toVisionElement()
+    return v
 }
 
 /**
@@ -176,33 +179,55 @@ fun VisionElement.onLine(
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
-    val horizontalRegion = lineRegion()
-    val regionElement = regionCore(regionRect = horizontalRegion, func = func)
+    val regionElement = lineRegionElement()
+    regionCore(regionElement = regionElement, func = func)
     return regionElement
 }
 
 /**
- * lineRegion
+ * onColumn
  */
-fun VisionElement.lineRegion(): Rectangle {
-    val horizontalRegion = Rectangle.createFrom(
-        left = 0,
-        right = screenRect.right,
-        top = this.rect.top - (this.rect.height / 2),
-        bottom = this.rect.bottom + (this.rect.height / 2)
-    )
-    return horizontalRegion
+fun VisionElement.onColumn(
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val regionElement = columnRegionElement()
+    regionCore(regionElement = regionElement, func = func)
+    return regionElement
 }
 
 /**
- * columnRegion
+ * lineRegionElement
  */
-fun VisionElement.columnRegion(): Rectangle {
+fun VisionElement.lineRegionElement(): VisionElement {
+    var top = this.rect.top - (this.rect.height / 2)
+    if (top < 0) top = 0
+    var bottom = this.rect.bottom + (this.rect.height / 2)
+    if (bottom > screenRect.bottom) bottom = screenRect.bottom
+    val horizontalRegion = Rectangle.createFrom(
+        left = 0,
+        right = screenRect.right,
+        top = top,
+        bottom = bottom
+    )
+    val v = horizontalRegion.toVisionElement()
+    return v
+}
+
+/**
+ * columnRegionElement
+ */
+fun VisionElement.columnRegionElement(): VisionElement {
+    var left = this.rect.left - (this.rect.width / 2)
+    if (left < 0) left = 0
+    var right = this.rect.right + (this.rect.width / 2)
+    if (right > screenRect.right) right = screenRect.right
     val verticalRegion = Rectangle.createFrom(
-        left = this.rect.left - (this.rect.width / 2),
-        right = this.rect.right + (this.rect.width / 2),
+        left = left,
+        right = right,
         top = 0,
         bottom = screenRect.bottom
     )
-    return verticalRegion
+    val v = verticalRegion.toVisionElement()
+    return v
 }

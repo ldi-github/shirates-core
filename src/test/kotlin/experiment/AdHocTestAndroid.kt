@@ -294,14 +294,14 @@ class AdHocTestAndroid : UITest() {
                 condition {
                     disableCache()
                 }.action {
-                    vision.detect("Network & internet")
+                    visionDrive.detect("Network & internet")
                         .tap()
-                    vision.detect("Internet")
+                    visionDrive.detect("Internet")
                         .tap()
-                    vision.detect("AndroidWifi")
+                    visionDrive.detect("AndroidWifi")
                         .tap()
                 }.expectation {
-                    val v = vision.existImage(
+                    val v = visionDrive.existImage(
                         "unitTestData/files/srvision/android/template_Wifi_no_internet_access.png",
                     )
                     val label = v.classify()

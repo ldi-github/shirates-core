@@ -211,7 +211,7 @@ class Selector_IosTest : UnitTest() {
             run {
                 // Act, Assert
                 println(sel.getIosPredicate())
-                assertThat(sel.getIosPredicate(frameBounds = null)).isEqualTo(
+                assertThat(sel.getIosPredicate()).isEqualTo(
                     "(label=='A' OR value=='A') AND NOT(type =='XCUIElementTypeCell' OR type =='XCUIElementTypeApplication')"
                 )
             }

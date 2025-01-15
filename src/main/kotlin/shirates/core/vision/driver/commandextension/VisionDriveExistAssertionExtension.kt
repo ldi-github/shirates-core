@@ -5,10 +5,8 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.lastVisionElement
 import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
-import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
@@ -16,7 +14,6 @@ import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
-import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -28,24 +25,10 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.exist(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    ignoreCase: Boolean = true,
-    ignoreFullWidthHalfWidth: Boolean = true,
-    allowContains: Boolean = true,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
-
-//    val sw = StopWatch("exist")
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.exist(expression = expression, waitSeconds = waitSeconds, useCache = true)
-        }
-        return e.toVisionElement()
-    }
 
     val sel = getSelector(expression = expression)
     var v = VisionElement.emptyElement
@@ -59,12 +42,8 @@ fun VisionDrive.exist(
         v = existCore(
             message = message,
             selector = sel,
-            remove = remove,
             language = language,
-            ignoreCase = ignoreCase,
-            ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
-            allowContains = allowContains,
-            waitSeconds = waitSeconds,
+            swipeToSafePosition = swipeToSafePosition,
         )
     }
 
@@ -80,49 +59,20 @@ fun VisionDrive.exist(
 private fun VisionDrive.existCore(
     message: String,
     selector: Selector,
-    remove: String?,
     language: String,
-    ignoreCase: Boolean,
-    ignoreFullWidthHalfWidth: Boolean,
-    allowContains: Boolean,
-    waitSeconds: Double,
+    swipeToSafePosition: Boolean,
 ): VisionElement {
 
-    val v = detectWithAdjustingPosition(
+    val v = detectCore(
         selector = selector,
-        remove = remove,
         language = language,
-        waitSeconds = waitSeconds,
-//        intervalSeconds = intervalSeconds,
+        allowScroll = null,
         throwsException = false,
+        swipeToSafePosition = swipeToSafePosition,
     )
     lastVisionElement = v
 
-    fun String.eval(): Boolean {
-        val containedText = selector.text ?: selector.textContains
-        if (containedText.isNullOrBlank()) {
-            return false
-        }
-        val actual = this.forVisionComparison(
-            ignoreCase = ignoreCase,
-            ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
-            remove = remove
-        )
-        val expected = containedText.forVisionComparison(
-            ignoreCase = ignoreCase,
-            ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
-            remove = remove
-        )
-        val r = if (allowContains) actual.contains(expected)
-        else actual == expected
-        return r
-    }
-
-    val isFound =
-        if (v == rootElement) true
-        else v.text.eval()
-
-    if (isFound) {
+    if (v.isFound) {
         TestLog.ok(message = message)
         if (v != rootElement && v.text != selector.text) {
             TestLog.info(message = "There are differences in text.  (expected: \"${selector.text}\", actual: \"${v.text}\")")
@@ -206,35 +156,15 @@ internal fun postProcessForAssertion(
  */
 fun VisionDrive.existWithScrollDown(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    ignoreCase: Boolean = true,
-    ignoreFullWidthHalfWidth: Boolean = true,
-    allowContains: Boolean = true,
-    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
-
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.existWithScrollDown(
-                expression = expression,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollIntervalSeconds = scrollIntervalSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-            )
-        }
-        return e.toVisionElement()
-    }
 
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)
@@ -245,7 +175,6 @@ fun VisionDrive.existWithScrollDown(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollDown(
-            scrollElement = it.columnRegion().toVisionElement(),
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -255,12 +184,8 @@ fun VisionDrive.existWithScrollDown(
             v = existCore(
                 message = assertMessage,
                 selector = sel,
-                remove = remove,
                 language = language,
-                ignoreCase = ignoreCase,
-                ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
-                allowContains = allowContains,
-                waitSeconds = waitSeconds,
+                swipeToSafePosition = swipeToSafePosition
             )
         }
     }
@@ -276,35 +201,15 @@ fun VisionDrive.existWithScrollDown(
  */
 fun VisionDrive.existWithScrollUp(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    ignoreCase: Boolean = true,
-    ignoreFullWidthHalfWidth: Boolean = true,
-    allowContains: Boolean = true,
-    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
-
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.existWithScrollUp(
-                expression = expression,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollIntervalSeconds = scrollIntervalSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-            )
-        }
-        return e.toVisionElement()
-    }
 
     val command = "existWithScrollUp"
     val sel = getSelector(expression = expression)
@@ -315,7 +220,6 @@ fun VisionDrive.existWithScrollUp(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollUp(
-            scrollElement = it.columnRegion().toVisionElement(),
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -325,12 +229,8 @@ fun VisionDrive.existWithScrollUp(
             v = existCore(
                 message = assertMessage,
                 selector = sel,
-                remove = remove,
                 language = language,
-                ignoreCase = ignoreCase,
-                ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
-                allowContains = allowContains,
-                waitSeconds = waitSeconds,
+                swipeToSafePosition = swipeToSafePosition
             )
         }
     }
@@ -346,35 +246,15 @@ fun VisionDrive.existWithScrollUp(
  */
 fun VisionDrive.existWithScrollRight(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    ignoreCase: Boolean = true,
-    ignoreFullWidthHalfWidth: Boolean = true,
-    allowContains: Boolean = true,
-    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
-
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.existWithScrollRight(
-                expression = expression,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollIntervalSeconds = scrollIntervalSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-            )
-        }
-        return e.toVisionElement()
-    }
 
     val command = "existWithScrollRight"
     val sel = getSelector(expression = expression)
@@ -385,7 +265,6 @@ fun VisionDrive.existWithScrollRight(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollRight(
-            scrollElement = it.lineRegion().toVisionElement(),
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -395,12 +274,8 @@ fun VisionDrive.existWithScrollRight(
             v = existCore(
                 message = assertMessage,
                 selector = sel,
-                remove = remove,
                 language = language,
-                ignoreCase = ignoreCase,
-                ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
-                allowContains = allowContains,
-                waitSeconds = waitSeconds,
+                swipeToSafePosition = swipeToSafePosition
             )
         }
     }
@@ -416,35 +291,15 @@ fun VisionDrive.existWithScrollRight(
  */
 fun VisionDrive.existWithScrollLeft(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    ignoreCase: Boolean = true,
-    ignoreFullWidthHalfWidth: Boolean = true,
-    allowContains: Boolean = true,
-    waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
-
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.existWithScrollLeft(
-                expression = expression,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollIntervalSeconds = scrollIntervalSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-            )
-        }
-        return e.toVisionElement()
-    }
 
     val command = "existWithScrollLeft"
     val sel = getSelector(expression = expression)
@@ -455,7 +310,6 @@ fun VisionDrive.existWithScrollLeft(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         withScrollLeft(
-            scrollElement = it.lineRegion().toVisionElement(),
             scrollDurationSeconds = scrollDurationSeconds,
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollStartMarginRatio = scrollStartMarginRatio,
@@ -465,12 +319,8 @@ fun VisionDrive.existWithScrollLeft(
             v = existCore(
                 message = assertMessage,
                 selector = sel,
-                remove = remove,
                 language = language,
-                ignoreCase = ignoreCase,
-                ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth,
-                allowContains = allowContains,
-                waitSeconds = waitSeconds
+                swipeToSafePosition = swipeToSafePosition
             )
         }
     }
@@ -486,25 +336,11 @@ fun VisionDrive.existWithScrollLeft(
  */
 fun VisionDrive.dontExist(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    ignoreCase: Boolean = true,
-    allowContains: Boolean = true,
+    allowScroll: Boolean = true,
     waitSeconds: Double = testContext.syncWaitSeconds,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
-
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.dontExist(
-                expression = expression,
-                waitSeconds = waitSeconds,
-            )
-        }
-        return e.toVisionElement()
-    }
 
     val sw = StopWatch("dontExist")
 
@@ -523,23 +359,15 @@ fun VisionDrive.dontExist(
         ) {
             v = detectCore(
                 selector = sel,
-                remove = remove,
                 language = language,
-                waitSeconds = 0.0,
-                intervalSeconds = 0.0,
-                allowScroll = false,
+                allowScroll = allowScroll,
                 throwsException = false,
+                swipeToSafePosition = false,
             )
             v.isFound.not()
         }
     }
-    val expected = if (ignoreCase) expression.lowercase() else expression
-    val actual = if (ignoreCase) v.text.lowercase() else v.text
-
-    val isFound =
-        if (allowContains) actual.contains(expected)
-        else actual == expected
-    if (isFound) {
+    if (v.isFound) {
         val error = TestNGException(message = "$message (actual: exists)")
         v.lastError = error
         v.lastResult = LogType.NG
@@ -560,12 +388,13 @@ fun VisionDrive.dontExist(
  */
 fun VisionDrive.existImage(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    distance: Double? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
     val command = "existImage"
@@ -581,13 +410,14 @@ fun VisionDrive.existImage(
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            threshold = distance,
+            threshold = threshold,
+            swipeToSafePosition = swipeToSafePosition
         )
 
         v.selector = Selector(expression = label)
         lastElement = v
 
-        if (v.isFound.not() || (distance != null && v.candidate!!.distance > distance)) {
+        if (v.isFound.not()) {
             val error = TestNGException(message = "$message ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
@@ -604,34 +434,35 @@ fun VisionDrive.existImage(
  */
 fun VisionDrive.dontExistImage(
     label: String,
-    skinThickness: Int = 2,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
+    skinThickness: Int = 2,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    distance: Double? = null,
 ): VisionElement {
 
     val command = "dontExistImage"
     val message = message(id = command, subject = label)
 
     val context = TestDriverCommandContext(null)
-    context.execOperateCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = message, subject = label) {
 
         val v = findImage(
             label = label,
+            threshold = threshold,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            threshold = distance,
+            swipeToSafePosition = false
         )
 
         v.selector = Selector(expression = label)
         lastElement = v
 
-        if (v.isFound || (distance != null && v.candidate!!.distance < distance)) {
+        if (v.isFound) {
             val error = TestNGException(message = "$message ($v)")
             v.lastError = error
             v.lastResult = LogType.NG

@@ -32,7 +32,7 @@ internal fun VisionDrive.checkImageLabelContains(
         waitSeconds = waitSeconds,
         onBeforeRetry = {
             screenshot()
-            v = v.refresh()
+            v = v.newVisionElement()
         }
     ) {
         val label = v.classify(mlmodelFile = mlmodelFile)

@@ -89,9 +89,6 @@ fun VisionDrive.screenshot(
         withXmlSource = withXmlSource,
     )
 
-    val v = getThisOrIt()
-
-
     return TestDriver.visionRootElement
 }
 

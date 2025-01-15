@@ -2,9 +2,7 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
-import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -200,25 +198,19 @@ fun VisionDrive.codeblock(
  */
 fun VisionDrive.cellOf(
     expression: String,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean = true,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: true,
     throwsException: Boolean = true,
-    waitSeconds: Double = testContext.syncWaitSeconds,
-    intervalSeconds: Double = testContext.syncIntervalSeconds,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
     val baseElement = detect(
         expression = expression,
-        remove = remove,
         language = language,
         allowScroll = allowScroll,
         swipeToSafePosition = swipeToSafePosition,
         throwsException = throwsException,
-        waitSeconds = waitSeconds,
-        intervalSeconds = intervalSeconds,
     )
 
     return baseElement.cellOfCore(
@@ -227,29 +219,29 @@ fun VisionDrive.cellOf(
     )
 }
 
-/**
- * cellOf
- */
-fun VisionDrive.cellOf(
-    swipeToCenter: Boolean,
-    throwsException: Boolean = true,
-    func: (TestElement.() -> Unit)? = null
-): VisionElement {
-
-    throw NotImplementedError("cellOf is not implemented.")
-//    var testElement = this
-//    if (swipeToCenter) {
-//        silent {
-//            testElement = this.swipeToCenter()
-//        }
-//    }
+///**
+// * cellOf
+// */
+//fun VisionDrive.cellOf(
+//    swipeToCenter: Boolean,
+//    throwsException: Boolean = true,
+//    func: (TestElement.() -> Unit)? = null
+//): VisionElement {
 //
-//    return cellOfCore(
-//        testElement = testElement,
-//        throwsException = throwsException,
-//        func = func
-//    )
-}
+//    throw NotImplementedError("cellOf is not implemented.")
+////    var testElement = this
+////    if (swipeToCenter) {
+////        silent {
+////            testElement = this.swipeToCenter()
+////        }
+////    }
+////
+////    return cellOfCore(
+////        testElement = testElement,
+////        throwsException = throwsException,
+////        func = func
+////    )
+//}
 
 private fun VisionElement.cellOfCore(
     throwsException: Boolean,
@@ -272,14 +264,14 @@ private fun VisionElement.cellOfCore(
 
     val context = TestDriverCommandContext(null)
     context.execBranch(command = command, condition = target) {
-        val original = CodeExecutionContext.regionElement
+        val original = CodeExecutionContext.workingRegionElement
         try {
-            CodeExecutionContext.regionElement = cell
+            CodeExecutionContext.workingRegionElement = cell
             cell.apply {
                 func.invoke(cell)
             }
         } finally {
-            CodeExecutionContext.regionElement = original
+            CodeExecutionContext.workingRegionElement = original
         }
     }
     return this

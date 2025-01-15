@@ -91,6 +91,9 @@ object TestDriver {
      * visionRootElement
      */
     var visionRootElement: VisionElement = VisionElement(capture = false)
+        internal set(value) {
+            field = value
+        }
 
     /**
      * isInitialized
@@ -492,7 +495,7 @@ object TestDriver {
             }
         }
 
-        var lastSource = ""
+        var lastSource: String
         for (i in 1..5) {
             lastSource = AppiumProxy.lastSource
             fireIrregularHandlerCore()
@@ -658,8 +661,8 @@ object TestDriver {
             retryMaxCount = testContext.retryMaxCount,
             retryTimeoutSeconds = testContext.retryTimeoutSeconds,
             retryPredicate = getRetryPredicate(profile = profile, capabilities = capabilities),
-            onError = getOnError(profile = profile, capabilities = capabilities),
-            onBeforeRetry = getBeforeRetry(profile = profile, capabilities = capabilities),
+            onError = getOnError(profile = profile),
+            onBeforeRetry = getBeforeRetry(profile = profile),
             action = getInitFunc(profile = profile, capabilities = capabilities)
         )
 
@@ -808,7 +811,6 @@ object TestDriver {
 
     private fun getOnError(
         profile: TestProfile,
-        capabilities: DesiredCapabilities
     ): (RetryContext<Unit>) -> Unit {
 
         val onError: (RetryContext<Unit>) -> Unit = { context ->
@@ -835,7 +837,6 @@ object TestDriver {
 
     private fun getBeforeRetry(
         profile: TestProfile,
-        capabilities: DesiredCapabilities
     ): (RetryContext<Unit>) -> Unit {
 
         val beforeRetry: (RetryContext<Unit>) -> Unit = { context ->
@@ -1162,13 +1163,12 @@ object TestDriver {
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         safeElementOnly: Boolean = false,
-        log: Boolean = false
     ): TestElement {
 
         val sel = expandExpression(expression = expression)
         var e = TestElement(selector = sel)
         val context = TestDriverCommandContext(lastElement)
-        context.execSelectCommand(selector = sel, subject = sel.nickname, log = log) {
+        context.execSelectCommand(selector = sel, subject = sel.nickname) {
             e = findImageOrSelectCore(
                 selector = sel,
                 allowScroll = allowScroll,
@@ -1339,7 +1339,7 @@ object TestDriver {
                     waitSeconds = waitSeconds,
                     refreshCache = useCache,
                     throwOnError = false,
-                    onBeforeRetry = { sc ->
+                    onBeforeRetry = {
                         if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
                             testDrive.withoutScroll {
                                 testContext.onSelectErrorHandler!!.invoke()
@@ -1348,7 +1348,7 @@ object TestDriver {
                         val newSelectContext = currentSelectContext.refreshThisElement()
                         currentSelectContext = if (newSelectContext.isFound) newSelectContext else testDrive.rootElement
                     }
-                ) { sc ->
+                ) {
                     val e = if (useCache) {
                         TestElementCache.select(
                             selector = selector,
@@ -1977,7 +1977,7 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotImage = screenshotImage
             val vc = VisionContext(capture = true)
             TestDriver.visionRootElement = VisionElement(visionContext = vc)
-            CodeExecutionContext.regionElement = TestDriver.visionRootElement
+            CodeExecutionContext.workingRegionElement = CodeExecutionContext.workingRegionElement.newVisionElement()
 
             if (log) {
                 val screenshotLine = TestLog.write(
@@ -2039,7 +2039,7 @@ object TestDriver {
     /**
      * cropImage
      */
-    fun cropImage(cropInfo: CropInfo, refresh: Boolean = true): CropInfo {
+    fun cropImage(cropInfo: CropInfo): CropInfo {
 
         syncCache()
 
@@ -2305,7 +2305,7 @@ object TestDriver {
             val context = TestDriverCommandContext(lastElement)
             context.execSilentCommand() {
                 var lastXml = TestElementCache.sourceXml
-                val sw = StopWatch().start()
+                val sw2 = StopWatch().start()
                 val enableSyncLog = PropertiesManager.enableSyncLog || TestLog.enableTrace
 
                 for (i in 1..maxLoopCount) {
@@ -2332,7 +2332,7 @@ object TestDriver {
                          * Synced
                          */
                         TestLog.info(
-                            "Synced. (elapsed=${sw.elapsedSeconds})",
+                            "Synced. (elapsed=${sw2.elapsedSeconds})",
                             log = enableSyncLog
                         )
                         refreshCurrentScreen()
@@ -2341,7 +2341,7 @@ object TestDriver {
 
                     lastXml = TestElementCache.sourceXml
 
-                    if (sw.elapsedSeconds > syncWaitSeconds) {
+                    if (sw2.elapsedSeconds > syncWaitSeconds) {
                         if (syncOnTimeout) {
                             /**
                              * Synced(Timeout)
@@ -2350,19 +2350,19 @@ object TestDriver {
                             refreshCurrentScreen()
                             val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
                             TestLog.info(
-                                "Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
+                                "Synchronization timed out (elapsed=${sw2.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
                                 log = enableSyncLog
                             )
                             return@execSilentCommand
                         } else {
-                            throw TestDriverException("Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
+                            throw TestDriverException("Synchronization timed out (elapsed=${sw2.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
                         }
                     }
 
                     /**
                      * Before next loop
                      */
-                    TestLog.info("elapsed=${sw.elapsedSeconds}, syncWaitSeconds=$syncWaitSeconds", log = enableSyncLog)
+                    TestLog.info("elapsed=${sw2.elapsedSeconds}, syncWaitSeconds=$syncWaitSeconds", log = enableSyncLog)
                     if (isAndroid) {
                         Thread.sleep((syncIntervalSeconds * 1000).toLong())
                         // Wait is required for Android because getSource of AndroidDriver is too fast.
@@ -2371,7 +2371,7 @@ object TestDriver {
                 TestElementCache.synced = true
                 refreshCurrentScreen()
                 TestLog.info(
-                    "Loop count has been exceeded. (maxLoopCount=$maxLoopCount, elapsed=${sw.elapsedSeconds}, currentScreen=$currentScreen)",
+                    "Loop count has been exceeded. (maxLoopCount=$maxLoopCount, elapsed=${sw2.elapsedSeconds}, currentScreen=$currentScreen)",
                     log = enableSyncLog
                 )
             }

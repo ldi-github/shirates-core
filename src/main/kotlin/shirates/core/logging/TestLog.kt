@@ -725,7 +725,7 @@ object TestLog {
 
         if (log.not()) return LogLine()
 
-        val calledStack = userCalledStackFrame ?: Thread.currentThread().stackTrace[1]
+        val calledStack = userCalledStackFrame
 
         val stacktrace = Thread.currentThread().stackTrace
         val frames = mutableListOf<StackTraceElement>()

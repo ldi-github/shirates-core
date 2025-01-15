@@ -3,14 +3,15 @@ package shirates.core.vision.testcode
 import org.junit.jupiter.api.extension.ExtensionContext
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
-import shirates.core.logging.TestLog
 import shirates.core.testcode.UITestBase
 import shirates.core.utility.toPath
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.disableCache
+import shirates.core.vision.driver.commandextension.invalidateScreen
 import shirates.core.vision.driver.commandextension.screenshot
+import shirates.core.vision.driver.lastElement
 
 /**
  * VisionTest
@@ -40,9 +41,11 @@ abstract class VisionTest : UITestBase(), VisionDrive {
      */
     override fun beforeEach(context: ExtensionContext?) {
 
-        TestLog.trace()
+        super.beforeEach(context)
 
         disableCache()
+        invalidateScreen()
+        lastElement = VisionElement.emptyElement
         screenshot()
     }
 

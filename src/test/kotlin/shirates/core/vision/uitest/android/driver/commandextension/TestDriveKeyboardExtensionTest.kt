@@ -74,7 +74,7 @@ class TestDriveKeyboardExtensionTest : VisionTest() {
                     it.pressHome()
                         .pressHome()
                 }.expectation {
-                    it.screenIs("[Androi Home Screen]")
+                    it.screenIs("[Android Home Screen]")
                 }
             }
         }

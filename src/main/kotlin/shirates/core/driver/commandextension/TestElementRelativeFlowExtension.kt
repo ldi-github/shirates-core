@@ -83,7 +83,7 @@ private fun TestElement.vflowCore(
     val isThisContainingOthers =
         filteredElements.any { it.toString() != this.toString() && it.bounds.isIncludedIn(this.bounds) }
     if (isThisContainingOthers.not()) {
-        vfc.addElementToColumn(element = this, force = true)
+        vfc.addElementToColumn(element = this, margin = margin, force = true)
     }
     vfc.addAll(filteredElements)
 

@@ -408,7 +408,6 @@ private fun findImageAsElement(
     allowScroll: Boolean = true,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
     waitSeconds: Double,
-    selectContext: TestElement = TestElementCache.rootElement,
     useCache: Boolean,
 ): TestElement {
 

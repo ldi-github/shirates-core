@@ -174,7 +174,6 @@ internal fun TestElement.relative(
                     selector = relativeSelector,
                     targetElements = targetElements.filter { it.isInput },
                     margin = margin,
-                    frame = frame
                 )
             }
 

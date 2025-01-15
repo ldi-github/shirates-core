@@ -51,14 +51,8 @@ fun VisionDrive.isScreen(
  * updateCurrentScreen
  */
 fun VisionDrive.updateCurrentScreen() {
-    if (CodeExecutionContext.lastScreenshotFile == null) {
-        screenshot(force = true)
-    }
 
-    updateCurrentScreenCore()
-}
-
-internal fun updateCurrentScreenCore() {
+    screenshot(force = true)
 
     val oldScreenName = TestDriver.currentScreen
     TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(

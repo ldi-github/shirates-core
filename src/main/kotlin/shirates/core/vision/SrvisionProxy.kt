@@ -2,6 +2,7 @@ package shirates.core.vision
 
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import shirates.core.configuration.PropertiesManager
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
@@ -106,6 +107,9 @@ object SrvisionProxy {
         if (inputFile == null) {
             throw IllegalArgumentException("inputFile is null.")
         }
+        if (Files.exists(inputFile.toPath()).not()) {
+            throw IllegalArgumentException("file not found: $inputFile.")
+        }
 
         val sw = StopWatch("TextRecognizer/recognizeText")
 
@@ -128,8 +132,12 @@ object SrvisionProxy {
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()
         }
-        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_TextRecognizer_recognizeText.json").toFile()
-            .writeText(result)
+        val baseFile = inputFile.toPath().toFile().name
+        if (CodeExecutionContext.lastRecognizedFile != baseFile) {
+            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_[$baseFile]_TextRecognizer_recognizeText.json")
+                .toFile()
+                .writeText(result)
+        }
 
         sw.printInfo()
         return RecognizeTextResult(result)
@@ -235,7 +243,9 @@ object SrvisionProxy {
         ).split()
             .saveImages()
         if (segmentContainer.segments.isEmpty()) {
-            throw FileNotFoundException("segment not found.")
+            val r = GetRectanglesWithTemplateResult("")
+            r.error = TestDriverException("No segment found.")
+            return r
         }
 
         /**
@@ -267,10 +277,14 @@ object SrvisionProxy {
          */
         val primaryCandidateImageFile =
             segmentContainer.outputDirectory.toPath().resolve("${result.primaryCandidate.file}")
-        Files.copy(
-            primaryCandidateImageFile,
-            outputDirectory.toPath().resolve("candidate_${result.primaryCandidate.rectangle}.png")
-        )
+        val outputFile = outputDirectory.toPath().resolve("candidate_${result.primaryCandidate.rectangle}.png")
+        if (Files.exists(outputFile).not()) {
+            Files.copy(
+                primaryCandidateImageFile,
+                outputFile,
+                StandardCopyOption.REPLACE_EXISTING
+            )
+        }
         sw.stop()
         if (log) {
             sw.printInfo()

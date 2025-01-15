@@ -65,7 +65,7 @@ class VisionContextTest {
                 Rectangle(40, 49, 252, 44).toString()
             )
             assertThat(v.recognizeTextObservation?.localRegionFile).isEqualTo(CodeExecutionContext.lastScreenshotFile)
-            assertThat(v.recognizeTextObservation?.localRegionImage).isEqualTo(CodeExecutionContext.lastScreenshotImage)
+            assertThat(v.recognizeTextObservation?.localRegionImage).isEqualTo(null)
             assertThat(v.recognizeTextObservation?.image?.isSame(screenshotImage.cropImage(rect = v.rect))).isTrue()
         }
     }
@@ -88,7 +88,7 @@ class VisionContextTest {
         run {
             // Arrange
             TestDriver.visionRootElement = VisionElement()
-            CodeExecutionContext.regionElement = TestDriver.visionRootElement
+            CodeExecutionContext.workingRegionElement = TestDriver.visionRootElement
             // Act
             val v = c.detect(text = "SIMs")
             // Assert

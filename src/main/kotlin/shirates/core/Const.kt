@@ -158,7 +158,7 @@ object Const {
     const val VISION_SERVER_URL = "http://127.0.0.1:8081"
     const val VISION_SEGMENT_MARGIN_VERTICAL = 5
     const val VISION_SEGMENT_MARGIN_HORIZONTAL = 5
-    const val VISION_FIND_IMAGE_THRESHOLD = 0.5
+    const val VISION_FIND_IMAGE_THRESHOLD = 0.1
 
     /**
      * internal

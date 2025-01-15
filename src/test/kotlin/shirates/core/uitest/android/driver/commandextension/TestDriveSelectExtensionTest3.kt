@@ -22,15 +22,15 @@ class TestDriveSelectExtensionTest3 : UITest() {
             case(1, "down, end-elements in screen nickname file") {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                    it.canSelect("[Account Avatar]", log = true).thisIsTrue()
-                    it.canSelect("[Tips & support]", log = true).thisIsFalse()
+                    it.canSelect("[Account Avatar]").thisIsTrue()
+                    it.canSelect("[Tips & support]").thisIsFalse()
                     TestElementCache.scanResults.clear()
                     it.scanElements() // Down
                 }.expectation {
-                    it.canSelect("[Account Avatar]", log = true).thisIsFalse()
-                    it.canSelect("[Tips & support]", log = true).thisIsTrue()
-                    it.selectInScanResults("[Account Avatar]", log = true).isFound.thisIsTrue()
-                    it.selectInScanResults("[Tips & support]", log = true).isFound.thisIsTrue()
+                    it.canSelect("[Account Avatar]").thisIsFalse()
+                    it.canSelect("[Tips & support]").thisIsTrue()
+                    it.selectInScanResults("[Account Avatar]").isFound.thisIsTrue()
+                    it.selectInScanResults("[Tips & support]").isFound.thisIsTrue()
                 }
             }
             case(2, "up, end-elements in screen nickname file") {
@@ -38,10 +38,10 @@ class TestDriveSelectExtensionTest3 : UITest() {
                     TestElementCache.scanResults.clear()
                     it.scanElements(direction = ScrollDirection.Up)
                 }.expectation {
-                    it.canSelect("[Account Avatar]", log = true).thisIsTrue()
-                    it.canSelect("[Tips & support]", log = true).thisIsFalse()
-                    it.selectInScanResults("[Account Avatar]", log = true).isFound.thisIsTrue()
-                    it.selectInScanResults("[Tips & support]", log = true).isFound.thisIsTrue()
+                    it.canSelect("[Account Avatar]").thisIsTrue()
+                    it.canSelect("[Tips & support]").thisIsFalse()
+                    it.selectInScanResults("[Account Avatar]").isFound.thisIsTrue()
+                    it.selectInScanResults("[Tips & support]").isFound.thisIsTrue()
                 }
             }
             case(3, "down, endSelector") {
@@ -49,10 +49,10 @@ class TestDriveSelectExtensionTest3 : UITest() {
                     TestElementCache.scanResults.clear()
                     it.scanElements(direction = ScrollDirection.Down, endSelector = "[Tips & support]")
                 }.expectation {
-                    it.canSelect("[Account Avatar]", log = true).thisIsFalse()
-                    it.canSelect("[Tips & support]", log = true).thisIsTrue()
-                    it.selectInScanResults("[Account Avatar]", log = true).isFound.thisIsTrue()
-                    it.selectInScanResults("[Tips & support]", log = true).isFound.thisIsTrue()
+                    it.canSelect("[Account Avatar]").thisIsFalse()
+                    it.canSelect("[Tips & support]").thisIsTrue()
+                    it.selectInScanResults("[Account Avatar]").isFound.thisIsTrue()
+                    it.selectInScanResults("[Tips & support]").isFound.thisIsTrue()
                 }
             }
             case(4, "up, endSelector") {
@@ -60,17 +60,17 @@ class TestDriveSelectExtensionTest3 : UITest() {
                     TestElementCache.scanResults.clear()
                     it.scanElements(direction = ScrollDirection.Up, endSelector = "[Account Avatar]")
                 }.expectation {
-                    it.canSelect("[Account Avatar]", log = true).thisIsTrue()
-                    it.canSelect("[Tips & support]", log = true).thisIsFalse()
-                    it.selectInScanResults("[Account Avatar]", log = true).isFound.thisIsTrue()
-                    it.selectInScanResults("[Tips & support]", log = true).isFound.thisIsTrue()
+                    it.canSelect("[Account Avatar]").thisIsTrue()
+                    it.canSelect("[Tips & support]").thisIsFalse()
+                    it.selectInScanResults("[Account Avatar]").isFound.thisIsTrue()
+                    it.selectInScanResults("[Tips & support]").isFound.thisIsTrue()
                 }
             }
 
             case(99) {
                 expectation {
                     assertThatThrownBy {
-                        it.selectInScanResults("no exist", log = true)
+                        it.selectInScanResults("no exist")
                     }.isInstanceOf(TestDriverException::class.java)
                         .hasMessage(Message.message(id = "elementNotFoundInScanResults", subject = "<no exist>"))
                 }

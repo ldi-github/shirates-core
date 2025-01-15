@@ -17,9 +17,6 @@ import shirates.core.vision.driver.lastElement
 fun VisionElement.textIs(
     expected: String,
     strict: Boolean = PropertiesManager.strictCompareMode,
-    ignoreCase: Boolean = true,
-    ignoreFullWidth: Boolean = true,
-    remove: String? = null,
     regionText: Boolean = false,
     digitOnly: Boolean = false,
 ): VisionElement {
@@ -27,11 +24,7 @@ fun VisionElement.textIs(
     val command = "textIs"
 
     fun String.process(): String {
-        var s = this.forVisionComparison(
-            ignoreCase = ignoreCase,
-            ignoreFullWidthHalfWidth = ignoreFullWidth,
-            remove = remove,
-        )
+        var s = this.forVisionComparison()
         if (digitOnly) {
             s = s.replace("[^\\d\\s]".toRegex(), "")
                 .replace("[\\s+]".toRegex(), " ")
@@ -44,7 +37,7 @@ fun VisionElement.textIs(
 
     fun strictCheckInDirectAccessMode() {
         val e = testDrive.select(expression = selector!!.expression!!, throwsException = false, useCache = false)
-        val isIncluded = e.bounds.isIncludedIn(CodeExecutionContext.regionRect.toBoundsWithRatio())
+        val isIncluded = e.bounds.isIncludedIn(CodeExecutionContext.workingRegionRect.toBoundsWithRatio())
         val actual = if (isIncluded) e.textOrLabelOrValue else ""
         context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
             actual.thisIs(expected = expected, message = assertMessage, strict = true)
@@ -62,7 +55,7 @@ fun VisionElement.textIs(
 
     val expectedForCompare = expected.process()
     val actual = if (regionText) {
-        if (digitOnly) regionDigit else this.regionText
+        if (digitOnly) regionDigit else this.joinedText
     } else {
         if (digitOnly) digitText else text
     }
@@ -101,18 +94,12 @@ fun VisionElement.textIs(
 fun VisionElement.regionTextIs(
     expected: String,
     strict: Boolean = PropertiesManager.strictCompareMode,
-    ignoreCase: Boolean = true,
-    ignoreFullWidth: Boolean = true,
-    remove: String? = null,
     digitOnly: Boolean = false,
 ): VisionElement {
 
     return textIs(
         expected = expected,
         strict = strict,
-        ignoreCase = ignoreCase,
-        ignoreFullWidth = ignoreFullWidth,
-        remove = remove,
         digitOnly = digitOnly,
         regionText = true
     )
@@ -122,9 +109,6 @@ internal fun VisionElement.textIsCore(
     command: String,
     expected: String,
     strict: Boolean = PropertiesManager.strictCompareMode,
-    ignoreCase: Boolean = true,
-    ignoreFullWidth: Boolean = true,
-    remove: String? = null,
     regionText: Boolean = false,
     digitOnly: Boolean = false,
 ): VisionElement {
@@ -137,9 +121,6 @@ internal fun VisionElement.textIsCore(
         v = v.textIs(
             expected = expected,
             strict = strict,
-            ignoreCase = ignoreCase,
-            ignoreFullWidth = ignoreFullWidth,
-            remove = remove,
             regionText = regionText,
             digitOnly = digitOnly,
         )
@@ -155,9 +136,6 @@ fun VisionElement.belowTextIs(
     expected: String,
     useCache: Boolean = testContext.useCache,
     strict: Boolean = PropertiesManager.strictCompareMode,
-    ignoreCase: Boolean = true,
-    ignoreFullWidth: Boolean = true,
-    remove: String? = null,
     digitOnly: Boolean = false,
 ): VisionElement {
 
@@ -176,9 +154,6 @@ fun VisionElement.belowTextIs(
         command = command,
         expected = expected,
         strict = strict,
-        ignoreCase = ignoreCase,
-        ignoreFullWidth = ignoreFullWidth,
-        remove = remove,
         digitOnly = digitOnly,
     )
     return v
@@ -191,9 +166,6 @@ fun VisionElement.aboveTextIs(
     expected: String,
     useCache: Boolean = testContext.useCache,
     strict: Boolean = PropertiesManager.strictCompareMode,
-    ignoreCase: Boolean = true,
-    ignoreFullWidth: Boolean = true,
-    remove: String? = null,
     digitOnly: Boolean = false,
 ): VisionElement {
 
@@ -212,9 +184,6 @@ fun VisionElement.aboveTextIs(
         command = command,
         expected = expected,
         strict = strict,
-        ignoreCase = ignoreCase,
-        ignoreFullWidth = ignoreFullWidth,
-        remove = remove,
         digitOnly = digitOnly,
     )
     return v
@@ -227,9 +196,6 @@ fun VisionElement.rightTextIs(
     expected: String,
     useCache: Boolean = testContext.useCache,
     strict: Boolean = PropertiesManager.strictCompareMode,
-    ignoreCase: Boolean = true,
-    ignoreFullWidth: Boolean = true,
-    remove: String? = null,
     digitOnly: Boolean = false,
 ): VisionElement {
 
@@ -248,9 +214,6 @@ fun VisionElement.rightTextIs(
         command = command,
         expected = expected,
         strict = strict,
-        ignoreCase = ignoreCase,
-        ignoreFullWidth = ignoreFullWidth,
-        remove = remove,
         digitOnly = digitOnly,
     )
     return v
@@ -263,9 +226,6 @@ fun VisionElement.leftTextIs(
     expected: String,
     useCache: Boolean = testContext.useCache,
     strict: Boolean = PropertiesManager.strictCompareMode,
-    ignoreCase: Boolean = true,
-    ignoreFullWidth: Boolean = true,
-    remove: String? = null,
     digitOnly: Boolean = false,
 ): VisionElement {
 
@@ -284,9 +244,6 @@ fun VisionElement.leftTextIs(
         command = command,
         expected = expected,
         strict = strict,
-        ignoreCase = ignoreCase,
-        ignoreFullWidth = ignoreFullWidth,
-        remove = remove,
         digitOnly = digitOnly,
     )
     return v

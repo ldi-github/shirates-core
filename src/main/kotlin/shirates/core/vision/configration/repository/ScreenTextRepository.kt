@@ -87,19 +87,19 @@ object ScreenTextRepository {
         return screenTextMap[screenName]!!.texts
     }
 
-    /**
-     * getScreenTextInfoListSortedByLengthDistance
-     */
-    fun getScreenTextInfoListSortedByLengthDistance(length: Int): List<ScreenTextInfo> {
-
-        val map = mutableMapOf<ScreenTextInfo, Int>()
-        for (info in screenInfoList) {
-            val lengthDistance = info.joinedTextLength
-            map[info] = lengthDistance
-        }
-        val entries = map.entries.sortedBy { it.value }
-        return entries.map { it.key }
-    }
+//    /**
+//     * getScreenTextInfoListSortedByLengthDistance
+//     */
+//    fun getScreenTextInfoListSortedByLengthDistance(length: Int): List<ScreenTextInfo> {
+//
+//        val map = mutableMapOf<ScreenTextInfo, Int>()
+//        for (info in screenInfoList) {
+//            val lengthDistance = info.joinedTextLength
+//            map[info] = lengthDistance
+//        }
+//        val entries = map.entries.sortedBy { it.value }
+//        return entries.map { it.key }
+//    }
 
     class ScreenTextInfo(
         val screenName: String,

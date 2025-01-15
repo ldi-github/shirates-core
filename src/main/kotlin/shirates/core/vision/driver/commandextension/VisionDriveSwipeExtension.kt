@@ -220,9 +220,7 @@ internal fun VisionDrive.swipePointToPointCore(
             //  https://github.com/appium/java-client/issues/2045
         }
 
-        if (testContext.onScrolling) {
-            screenshot()
-        }
+        screenshot()
     }
 
     CpuLoadService.waitForCpuLoadUnder()
@@ -283,7 +281,7 @@ fun VisionDrive.swipeCenterToTop(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
+        val b = CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -335,7 +333,7 @@ fun VisionDrive.swipeCenterToBottom(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
+        val b = CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -388,7 +386,7 @@ fun VisionDrive.swipeCenterToLeft(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
+        val b = CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -441,7 +439,7 @@ fun VisionDrive.swipeCenterToRight(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
+        val b = CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
         swipePointToPoint(
             b.centerX,
             b.centerY,
@@ -495,7 +493,7 @@ fun VisionDrive.swipeLeftToRight(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
+        val b = CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
         val startX = (b.right * startMarginRatio).toInt()
         swipePointToPoint(
             startX = startX,
@@ -519,7 +517,6 @@ fun VisionDrive.flickLeftToRight(
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1,
     intervalSeconds: Double = Const.FLICK_INTERVAL_SECONDS,
-    safeMode: Boolean = true
 ): VisionElement {
 
     val command = "flickLeftToRight"
@@ -553,7 +550,7 @@ fun VisionDrive.swipeRightToLeft(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
+        val b = CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
         val startX = (b.right * (1 - startMarginRatio)).toInt()
         swipePointToPoint(
             startX = startX,
@@ -610,7 +607,7 @@ fun VisionDrive.swipeBottomToTop(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
+        val b = CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
         val startY = (b.bottom * (1 - startMarginRatio)).toInt()
 
         swipePointToPoint(
@@ -723,8 +720,11 @@ fun VisionDrive.flickAndGoRight(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         val originalOnScrolling = testContext.onScrolling
+        val scrollVisionElement = getScrollLineElement(expression = null)
+        val originalScrollVisionElement = CodeExecutionContext.scrollVisionElement
         try {
             testContext.onScrolling = false
+            CodeExecutionContext.scrollVisionElement = scrollVisionElement
             scrollRight(
                 scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
@@ -734,6 +734,7 @@ fun VisionDrive.flickAndGoRight(
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
+            CodeExecutionContext.scrollVisionElement = originalScrollVisionElement
         }
     }
 
@@ -789,7 +790,7 @@ fun VisionDrive.swipeTopToBottom(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val b = CodeExecutionContext.regionRect.toBoundsWithRatio()
+        val b = CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
         val startY = (b.bottom * startMarginRatio).toInt()
 
         swipePointToPoint(

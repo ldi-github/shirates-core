@@ -21,7 +21,6 @@ fun TestDrive.select(
     useCache: Boolean = testContext.useCache,
     updateLastElement: Boolean = true,
     safeElementOnly: Boolean = CodeExecutionContext.isScrolling,
-    log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -36,7 +35,7 @@ fun TestDrive.select(
     var e = TestElement(selector = sel)
     val testElement = if (useCache) getThisOrIt() else null
     val context = TestDriverCommandContext(testElement)
-    context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
+    context.execSelectCommand(selector = sel, subject = sel.toString()) {
 
         e = TestDriver.findImageOrSelectCore(
             selector = sel,
@@ -74,7 +73,6 @@ fun TestDrive.selectWithoutScroll(
     frame: Bounds? = null,
     useCache: Boolean = testContext.useCache,
     updateLastElement: Boolean = true,
-    log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -87,7 +85,6 @@ fun TestDrive.selectWithoutScroll(
         frame = frame,
         useCache = useCache,
         updateLastElement = updateLastElement,
-        log = log,
         func = func
     )
 }
@@ -101,7 +98,6 @@ fun TestDrive.widget(
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     frame: Bounds? = null,
     useCache: Boolean = testContext.useCache,
-    log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -115,7 +111,6 @@ fun TestDrive.widget(
         waitSeconds = waitSeconds,
         frame = frame,
         useCache = useCache,
-        log = log,
         func = func
     )
 }
@@ -330,14 +325,13 @@ fun TestDrive.selectWithScrollLeft(
 fun TestDrive.selectInScanResults(
     expression: String,
     throwsException: Boolean = true,
-    log: Boolean = false,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
     val sel = getSelector(expression = expression)
     var e = TestElement(selector = sel)
     val context = TestDriverCommandContext(this.toTestElement)
-    context.execSelectCommand(selector = sel, subject = sel.toString(), log = log) {
+    context.execSelectCommand(selector = sel, subject = sel.toString()) {
 
         for (scanRoot in TestElementCache.scanResults) {
             e = TestElementCache.select(
@@ -393,7 +387,6 @@ fun TestDrive.canSelect(
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
     safeElementOnly: Boolean = false,
-    log: Boolean = false
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is TestElement) {
         return this.innerWidget(expression = expression).isFound
@@ -404,7 +397,7 @@ fun TestDrive.canSelect(
     val sel = TestDriver.expandExpression(expression = expression, screenName = screenName)
     var found = false
     val context = TestDriverCommandContext(testElement)
-    val logLine = context.execBooleanCommand(subject = sel.toString(), log = log) {
+    val logLine = context.execBooleanCommand(subject = sel.toString()) {
 
         found = canSelectCore(
             selector = sel,
@@ -426,14 +419,12 @@ fun TestDrive.canSelectWithoutScroll(
     expression: String,
     screenName: String = TestDriver.currentScreen,
     waitSeconds: Double = 0.0,
-    log: Boolean = false
 ): Boolean {
     return canSelect(
         expression = expression,
         screenName = screenName,
         allowScroll = false,
         waitSeconds = waitSeconds,
-        log = log
     )
 }
 
@@ -611,17 +602,15 @@ fun TestDrive.canSelectWithScrollLeft(
  */
 fun TestDrive.canSelectInScanResults(
     expression: String,
-    log: Boolean = false
 ): Boolean {
 
     val subject = TestDriver.screenInfo.getSelector(expression = expression).toString()
     var found = false
     val context = TestDriverCommandContext(this.toTestElement)
-    val logLine = context.execBooleanCommand(subject = subject, log = log) {
+    val logLine = context.execBooleanCommand(subject = subject) {
         val e = selectInScanResults(
             expression = expression,
             throwsException = false,
-            log = log
         )
         found = e.isEmpty.not()
     }

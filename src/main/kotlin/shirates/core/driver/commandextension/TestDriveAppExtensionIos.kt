@@ -23,10 +23,8 @@ internal fun TestDriveObjectIos.launchIosAppByShell(
     /**
      * Classic mode only
      */
-    var isApp = false
-
     if (sync) {
-        isApp = TestDriver.isAppCore(appNameOrAppId = bundleId)
+        val isApp = TestDriver.isAppCore(appNameOrAppId = bundleId)
         if (isApp.not()) {
             testDrive.withoutScroll {
                 onLaunchHandler?.invoke()

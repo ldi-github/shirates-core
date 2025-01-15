@@ -38,10 +38,7 @@ fun String?.forClassicComparison(
 fun String?.forVisionComparison(
     ignoreCase: Boolean = true,
     ignoreFullWidthHalfWidth: Boolean = true,
-    remove: String? = null
 ): String {
-
-    var removeChars = remove
 
     var s = this?.normalize(Normalizer.Form.NFC) ?: return ""
     s = s.removeSpaces()
@@ -50,15 +47,7 @@ fun String?.forVisionComparison(
     }
     if (ignoreFullWidthHalfWidth) {
         s = s.fullWidth2HalfWidth()
-        removeChars = removeChars?.fullWidth2HalfWidth()
     }
-    if (removeChars != null) {
-        /**
-         * remove characters (in AI-OCR miss-recognized character list)
-         */
-        s = s.filterNot { it in removeChars }
-    }
-
     s = s.forClassicComparison(
         strict = false,
         keepLF = false,

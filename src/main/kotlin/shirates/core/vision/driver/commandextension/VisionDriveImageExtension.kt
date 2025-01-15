@@ -1,14 +1,24 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.Selector
+import shirates.core.driver.ScrollDirection
+import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
+import shirates.core.logging.LogType
+import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.utility.sync.WaitUtility.doUntilTrue
+import shirates.core.utility.time.StopWatch
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionMLModelRepository
+import shirates.core.vision.driver.lastElement
+import shirates.core.vision.driver.silent
 import shirates.core.vision.result.GetRectanglesWithTemplateResult
 
 /**
@@ -16,35 +26,35 @@ import shirates.core.vision.result.GetRectanglesWithTemplateResult
  */
 fun VisionDrive.findImages(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = 0,
     segmentMarginVertical: Int = 0,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    distance: Double? = null,
 ): List<VisionElement> {
 
     val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
-    val re = CodeExecutionContext.regionElement
-    if (re.imageFile == null) {
-        re.saveImage()
+    val workingRegionElement = CodeExecutionContext.workingRegionElement
+    if (workingRegionElement.imageFile == null) {
+        workingRegionElement.saveImage()
     }
-    val imageFile = re.imageFile!!
+    val imageFile = workingRegionElement.imageFile!!
 
     val r = SrvisionProxy.getRectanglesWithTemplate(
         mergeIncluded = mergeIncluded,
         imageFile = imageFile,
-        imageX = re.rect.x,
-        imageY = re.rect.y,
+        imageX = workingRegionElement.rect.x,
+        imageY = workingRegionElement.rect.y,
         templateImageFile = templateFile,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         skinThickness = skinThickness,
     )
     var list = r.candidates.toList()
-    if (distance != null) {
-        list = list.filter { it.distance < distance }
+    if (threshold != null) {
+        list = list.filter { it.distance < threshold }
     }
     val result = list.map { it.toVisionElement() }
     return result
@@ -55,14 +65,93 @@ fun VisionDrive.findImages(
  */
 fun VisionDrive.findImage(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
+    allowScroll: Boolean? = null,
+    throwsException: Boolean = false,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
+    var v = VisionElement.emptyElement
+
+    if (TestMode.isNoLoadRun) {
+        v.selector = Selector(label)
+        return v
+    }
+    fun action(): VisionElement {
+        val v2 = findImageCore(
+            label = label,
+            threshold = threshold,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            skinThickness = skinThickness,
+            waitSeconds = waitSeconds,
+            intervalSeconds = intervalSeconds,
+        )
+        return v2
+    }
+
+    val swDetect = StopWatch("findImage")
+
+    try {
+        if (allowScroll != false &&
+            CodeExecutionContext.withScroll == true && CodeExecutionContext.isScrolling.not()
+        ) {
+            /**
+             * Try to find image with scroll
+             */
+            printInfo("Tring to find image with scroll. (label=\"$label\")")
+            v = getElementWithScroll(action = {
+                action()
+            })
+        } else {
+            v = action()
+        }
+        if (v.isFound && swipeToSafePosition && CodeExecutionContext.withScroll != false) {
+            silent {
+                v.swipeToSafePosition()
+            }
+            action()
+        }
+        lastElement = v
+        if (v.isEmpty) {
+            v.lastError =
+                TestDriverException(
+                    message = message(
+                        id = "imageNotFound",
+                        subject = label,
+                    )
+                )
+        }
+        if (v.hasError) {
+            v.lastResult = LogType.ERROR
+            if (throwsException) {
+                throw v.lastError!!
+            }
+        }
+        return v
+    } finally {
+        v.selector = Selector(label)
+        swDetect.printInfo()
+    }
+}
+
+private fun VisionDrive.findImageCore(
+    label: String,
+    threshold: Double?,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
+    mergeIncluded: Boolean,
+    skinThickness: Int,
+    waitSeconds: Double,
+    intervalSeconds: Double,
+): VisionElement {
     val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
@@ -70,19 +159,22 @@ fun VisionDrive.findImage(
 
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
+        intervalSeconds = intervalSeconds,
         throwOnFinally = false,
         onBeforeRetry = {
             screenshot(force = true)
         }
     ) {
-        val re = CodeExecutionContext.regionElement
-        val imageFile = re.visionContext.localRegionFile!!
+        val workingRegionElement = CodeExecutionContext.workingRegionElement
+        if (workingRegionElement.imageFile == null) {
+            workingRegionElement.saveImage()
+        }
 
         r = SrvisionProxy.getRectanglesWithTemplate(
             mergeIncluded = mergeIncluded,
-            imageFile = imageFile,
-            imageX = re.rect.x,
-            imageY = re.rect.y,
+            imageFile = workingRegionElement.imageFile!!,
+            imageX = workingRegionElement.rect.x,
+            imageY = workingRegionElement.rect.y,
             templateImageFile = templateFile,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
@@ -96,11 +188,55 @@ fun VisionDrive.findImage(
             true
         }
     }
-    if (waitContext.hasError) {
+    if (waitContext.hasError && waitContext.isTimeout.not()) {
         return VisionElement.emptyElement
     }
 
-    val v = r.primaryCandidate.toVisionElement()
+    if (threshold == null || r.primaryCandidate.distance < threshold) {
+        val v = r.primaryCandidate.toVisionElement()
+        return v
+    }
+    return VisionElement.emptyElement
+}
+
+internal fun VisionDrive.getElementWithScroll(
+    action: () -> VisionElement,
+    direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
+    scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+    scrollIntervalSeconds: Double = CodeExecutionContext.scrollIntervalSeconds,
+    startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
+    endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
+    scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
+): VisionElement {
+
+    var v = VisionElement.emptyElement
+
+    val actionFunc = {
+        v = action()
+        val stopScroll = v.isFound
+        stopScroll
+    }
+
+    if (CodeExecutionContext.isScrolling.not()) {
+        CodeExecutionContext.isScrolling = true
+        try {
+            /**
+             * detect with scroll
+             */
+            doUntilScrollStop(
+                maxLoopCount = scrollMaxCount,
+                direction = direction,
+                scrollDurationSeconds = scrollDurationSeconds,
+                scrollIntervalSeconds = scrollIntervalSeconds,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
+                repeat = 1,
+                actionFunc = actionFunc
+            )
+        } finally {
+            CodeExecutionContext.isScrolling = false
+        }
+    }
     return v
 }
 
@@ -113,7 +249,7 @@ fun VisionDrive.findImageWithScrollDown(
     segmentMarginVertical: Int = 0,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,

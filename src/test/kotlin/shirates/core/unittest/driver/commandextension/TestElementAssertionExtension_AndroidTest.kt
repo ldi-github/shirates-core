@@ -148,7 +148,7 @@ class TestElementAssertionExtension_AndroidTest : UnitTest() {
             assertThatThrownBy {
                 e.textIs("")
             }.isInstanceOf(TestNGException::class.java)
-                .hasMessage("<> is \"\" (actual=\" \")")
+                .hasMessage("<> is \"\" (actual=\"\t\n\")")
 
             /**
              * Literally interpreted (strict = true)

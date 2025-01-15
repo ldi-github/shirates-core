@@ -1,7 +1,6 @@
 package shirates.core.vision.driver.behavior
 
 import org.openqa.selenium.StaleElementReferenceException
-import shirates.core.driver.TapMethod
 import shirates.core.driver.commandextension.select
 import shirates.core.driver.testDrive
 import shirates.core.exception.TestNGException
@@ -22,7 +21,6 @@ object TapHelper : VisionDrive {
      */
     fun swipeLeftAndTapAppIcon(
         appIconName: String,
-        tapMethod: TapMethod = TapMethod.click
     ) {
 
         if (it.canDetect(appIconName)) {
@@ -52,7 +50,6 @@ object TapHelper : VisionDrive {
      */
     fun tapAppIconAsIos(
         appIconName: String,
-        tapMethod: TapMethod = TapMethod.click
     ) {
 
         if (it.canDetect(appIconName)) {

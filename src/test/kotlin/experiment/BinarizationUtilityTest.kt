@@ -9,8 +9,6 @@ class BinarizationUtilityTest {
     @Test
     fun test1() {
 
-        val imageFile =
-            "unitTestData/files/srvision/android/[Android Settings Screen].png"
         val template =
             "/Users/wave1008/dev/autotest-lax/testData/templateMatching/target/indicator_Android.png"
 

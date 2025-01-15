@@ -313,7 +313,6 @@ fun TestDrive.scrollToBottom(
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
-    imageCompare: Boolean = false
 ): TestElement {
 
     scrollToEdgeCommand(
@@ -346,7 +345,6 @@ fun TestDrive.scrollToTop(
     flick: Boolean = true,
     maxLoopCount: Int = testContext.scrollMaxCount,
     edgeSelector: String? = null,
-    imageCompare: Boolean = false
 ): TestElement {
 
     scrollToEdgeCommand(
@@ -818,7 +816,6 @@ fun TestDrive.scanElements(
     maxScrollTimes: Int = testContext.scrollMaxCount,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     endSelector: String? = null,
-    imageCompare: Boolean = false
 ): TestElement {
 
     val command = "scanElements"

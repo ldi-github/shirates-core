@@ -5,11 +5,8 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
-import shirates.core.driver.DisableCache
+import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.driver
-import shirates.core.driver.rootElement
-import shirates.core.driver.testDrive
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.vision.driver.classify
@@ -119,11 +116,11 @@ class AdHocTestIos : UITest() {
                 condition {
                     disableCache()
                 }.action {
-                    vision.detect("Accessibility").tap()
-                    vision.detect("Display & Text Size").tap()
-                    vision.detect("Larger Text").tap()
+                    visionDrive.detect("Accessibility").tap()
+                    visionDrive.detect("Display & Text Size").tap()
+                    visionDrive.detect("Larger Text").tap()
                 }.expectation {
-                    val v = vision.existImage(
+                    val v = visionDrive.existImage(
                         "unitTestData/files/srvision/ios/template_switch_OFF.png",
 //                        skinThickness = 0,
 //                        margin = 10

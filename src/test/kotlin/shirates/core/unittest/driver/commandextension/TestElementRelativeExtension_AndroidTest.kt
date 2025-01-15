@@ -274,7 +274,7 @@ class TestElementRelativeExtension_AndroidTest : UnitTest() {
             val e = TestElementCache.select("tb3-Button1")
             // Act, Assert
             val ancestor = e.relative(":ancestor(pos=3)", margin = 0)
-            assertThat(ancestor).isEqualTo(e.parentElement.parentElement?.parentElement)
+            assertThat(ancestor).isEqualTo(e.parentElement.parentElement.parentElement)
             assertThat(ancestor.subject).isEqualTo("<tb3-Button1>:ancestor(3)")
         }
         run {

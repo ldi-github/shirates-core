@@ -159,6 +159,8 @@ abstract class UITestBase : Drive {
     open fun beforeEach(context: ExtensionContext?) {
 
         TestLog.trace()
+
+        CodeExecutionContext.clear()
     }
 
     /**
@@ -673,7 +675,7 @@ abstract class UITestBase : Drive {
                     }
                     CodeExecutionContext.scenarioRerunCause = wc.error
                 },
-                onBeforeRetry = { wc ->
+                onBeforeRetry = {
                     TestLog.write("--------------------------------------------------")
                     TestLog.write("Rerunning scenario ...")
                     TestDriver.resetAppiumSession()

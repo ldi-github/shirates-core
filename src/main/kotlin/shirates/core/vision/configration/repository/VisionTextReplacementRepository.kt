@@ -21,7 +21,7 @@ object VisionTextReplacementRepository {
      */
     fun setup(
         textReplacementFile: String =
-            PropertiesManager.visionDirectory.toPath().resolve("texts/text.replacement.tsv").toString()
+            PropertiesManager.visionDirectory.toPath().resolve("texts/errata.tsv").toString()
     ) {
         if (Files.exists(textReplacementFile.toPath()).not()) {
             return

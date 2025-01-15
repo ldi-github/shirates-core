@@ -64,14 +64,14 @@ internal fun VisionElement.rightLeftCore(
     mergeIncluded: Boolean,
 ): VisionElement {
 
-    val regionRect =
-        if (relative == RelativeDirection.left) this.leftRegion(verticalMargin = verticalMargin)
-        else this.rightRegion(verticalMargin = verticalMargin)
+    val regionElement =
+        if (relative == RelativeDirection.left) this.leftRegionElement(verticalMargin = verticalMargin)
+        else this.rightRegionElement(verticalMargin = verticalMargin)
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = regionRect.toVisionElement().image,
-        containerX = regionRect.x,
-        containerY = regionRect.y,
+        containerImage = regionElement.image,
+        containerX = regionElement.rect.x,
+        containerY = regionElement.rect.y,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
     ).split()
@@ -150,14 +150,14 @@ internal fun VisionElement.aboveBelowCore(
     mergeIncluded: Boolean,
 ): VisionElement {
 
-    val regionRect =
-        if (relative == RelativeDirection.above) this.aboveRegion(horizontalMargin = horizontalMargin)
-        else this.belowRegion(horizontalMargin = horizontalMargin)
+    val regionElement =
+        if (relative == RelativeDirection.above) this.aboveRegionElement(horizontalMargin = horizontalMargin)
+        else this.belowRegionElement(horizontalMargin = horizontalMargin)
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = regionRect.toVisionElement().image,
-        containerX = regionRect.x,
-        containerY = regionRect.y,
+        containerImage = regionElement.image,
+        containerX = regionElement.rect.x,
+        containerY = regionElement.rect.y,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
     ).split()
@@ -337,11 +337,11 @@ internal fun VisionElement.aboveBelowTextCore(
 fun VisionElement.leftImage(
     label: String,
     pos: Int = 1,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = 0,
     segmentMarginVertical: Int = 0,
     mergeIncluded: Boolean = true,
     skinThickness: Int = 2,
-    distance: Double? = null,
 ): VisionElement {
 
     if (pos <= 0) {
@@ -352,11 +352,11 @@ fun VisionElement.leftImage(
     onLeft {
         imageElements = findImages(
             label = label,
+            threshold = threshold,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
-            distance = distance,
         )
     }
     if (imageElements.isEmpty() || imageElements.count() < pos) {
@@ -370,16 +370,130 @@ fun VisionElement.leftImage(
 }
 
 /**
+ * rightImage
+ */
+fun VisionElement.rightImage(
+    label: String,
+    pos: Int = 1,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    segmentMarginHorizontal: Int = 0,
+    segmentMarginVertical: Int = 0,
+    mergeIncluded: Boolean = true,
+    skinThickness: Int = 2,
+): VisionElement {
+
+    if (pos <= 0) {
+        throw IllegalArgumentException("pos must be greater than or equal to 0")
+    }
+
+    var imageElements: List<VisionElement> = mutableListOf()
+    onRight {
+        imageElements = findImages(
+            label = label,
+            threshold = threshold,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            skinThickness = skinThickness,
+        )
+    }
+    if (imageElements.isEmpty() || imageElements.count() < pos) {
+        return VisionElement.emptyElement
+    }
+    imageElements = imageElements.filter { this.rect.left < it.rect.left }
+    imageElements = imageElements.sortedBy { it.rect.left }
+    val v = imageElements[pos - 1]
+    v.selector = Selector(":rightImage(\"$label\", $pos)")
+    return v
+}
+
+/**
+ * aboveImage
+ */
+fun VisionElement.aboveImage(
+    label: String,
+    pos: Int = 1,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    segmentMarginHorizontal: Int = 0,
+    segmentMarginVertical: Int = 0,
+    mergeIncluded: Boolean = true,
+    skinThickness: Int = 2,
+): VisionElement {
+
+    if (pos <= 0) {
+        throw IllegalArgumentException("pos must be greater than or equal to 0")
+    }
+
+    var imageElements: List<VisionElement> = mutableListOf()
+    onAbove {
+        imageElements = findImages(
+            label = label,
+            threshold = threshold,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            skinThickness = skinThickness,
+        )
+    }
+    if (imageElements.isEmpty() || imageElements.count() < pos) {
+        return VisionElement.emptyElement
+    }
+    imageElements = imageElements.filter { it.rect.top <= this.rect.top }
+    imageElements = imageElements.sortedByDescending { it.rect.top }
+    val v = imageElements[pos - 1]
+    v.selector = Selector(":aboveImage(\"$label\", $pos)")
+    return v
+}
+
+/**
+ * belowImage
+ */
+fun VisionElement.belowImage(
+    label: String,
+    pos: Int = 1,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    segmentMarginHorizontal: Int = 0,
+    segmentMarginVertical: Int = 0,
+    mergeIncluded: Boolean = true,
+    skinThickness: Int = 2,
+): VisionElement {
+
+    if (pos <= 0) {
+        throw IllegalArgumentException("pos must be greater than or equal to 0")
+    }
+
+    var imageElements: List<VisionElement> = mutableListOf()
+    onBelow {
+        imageElements = findImages(
+            label = label,
+            threshold = threshold,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            skinThickness = skinThickness,
+        )
+    }
+    if (imageElements.isEmpty() || imageElements.count() < pos) {
+        return VisionElement.emptyElement
+    }
+    imageElements = imageElements.filter { this.rect.top < it.rect.top }
+    imageElements = imageElements.sortedBy { it.rect.top }
+    val v = imageElements[pos - 1]
+    v.selector = Selector(":belowImage(\"$label\", $pos)")
+    return v
+}
+
+/**
  * leftRadioButton
  */
 fun VisionElement.leftRadioButton(
     label: String = "[RadioButton]",
     pos: Int = 1,
+    threshold: Double? = 1.0,
     segmentMarginHorizontal: Int = 0,
     segmentMarginVertical: Int = 0,
     mergeIncluded: Boolean = true,
     skinThickness: Int = 2,
-    distance: Double? = 1.0,
 ): VisionElement {
 
     if (pos <= 0) {
@@ -390,11 +504,11 @@ fun VisionElement.leftRadioButton(
     onLine {
         imageElements = findImages(
             label = label,
+            threshold = threshold,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
-            distance = distance,
         )
     }
     if (imageElements.isEmpty() || imageElements.count() < pos) {

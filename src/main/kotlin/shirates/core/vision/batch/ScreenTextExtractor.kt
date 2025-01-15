@@ -48,11 +48,7 @@ object ScreenTextExtractor {
             throw TestDriverException(r.command, cause = r.error)
         }
 
-        if (outputFilename != null) {
-            outputFilename.toPath().toFile().writeText(r.resultString, Charsets.UTF_8)
-        } else {
-            println(r.resultString)
-        }
+        outputFilename.toPath().toFile().writeText(r.resultString, Charsets.UTF_8)
 
         return r.resultString
     }

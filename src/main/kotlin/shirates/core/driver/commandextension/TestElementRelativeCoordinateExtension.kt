@@ -597,7 +597,6 @@ internal fun TestElement.belowInput(
     selector: Selector,
     targetElements: List<TestElement>,
     margin: Int,
-    frame: Bounds?
 ): TestElement {
 
     val e = getRelativeWidget(

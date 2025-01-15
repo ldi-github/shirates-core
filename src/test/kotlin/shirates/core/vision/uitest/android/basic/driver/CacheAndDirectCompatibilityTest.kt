@@ -17,8 +17,8 @@ class CacheAndDirectCompatibilityTest : VisionTest() {
         scenario {
             case(1) {
                 action {
-                    v1 = it.detect("Notifications", useCache = true)
-                    v2 = it.detect("Notifications", useCache = false)
+                    v1 = it.detect("Notifications")
+                    v2 = it.detect("Notifications")
                 }.expectation {
                     v1.textIs(v2.text)
                 }

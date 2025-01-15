@@ -3,7 +3,6 @@ package shirates.core.configuration
 import shirates.core.configuration.Selector.Companion.getFilterValues
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.driver.*
-import shirates.core.driver.TestDriveObject.vision
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.TestLog
@@ -349,7 +348,7 @@ class Filter(
 
             val pkg = packageName
                 ?: if (testContext.useCache) testDrive.rootElement.packageName
-                else vision.rootElement.packageName
+                else visionDrive.rootElement.packageName
             if (pkg.isBlank()) return id
 
             return "${pkg}:id/${id}"

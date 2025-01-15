@@ -213,20 +213,20 @@ class ScreenRepositoryTest : UnitTest() {
             }
             run {
                 assertThat(s.containsKey("{TextBox A}")).isTrue()
-                val sel = s.check("{TextBox A}", "xpath", "xpathA")
+                s.check("{TextBox A}", "xpath", "xpathA")
                 assertThat(s["{TextBox A}"]?.section).isEqualTo("selectors")
             }
             run {
-                val sel = s.check("[Label A]", "text", "textA")
+                s.check("[Label A]", "text", "textA")
             }
             run {
-                val sel = s.check("[Label A2]", "textStartsWith", "textA2")
+                s.check("[Label A2]", "textStartsWith", "textA2")
             }
             run {
-                val sel = s.check("[Label A3]", "textContains", "textA3")
+                s.check("[Label A3]", "textContains", "textA3")
             }
             run {
-                val sel = s.check("[Label A4]", "textMatches", "textA4")
+                s.check("[Label A4]", "textMatches", "textA4")
             }
             run {
                 assertThat(s.containsKey("[empty]")).isTrue()
@@ -243,64 +243,64 @@ class ScreenRepositoryTest : UnitTest() {
                 assertThat(s["[empty]"]?.section).isEqualTo("selectors")
             }
             run {
-                val sel = s.check("[by id]", "id", "idA")
+                s.check("[by id]", "id", "idA")
             }
             run {
-                val sel = s.check("[by xpath]", "xpath", "xpathA")
+                s.check("[by xpath]", "xpath", "xpathA")
             }
             run {
-                val sel = s.check("[by text]", "text", "textA")
+                s.check("[by text]", "text", "textA")
             }
             run {
-                val sel = s.check("[by textStartsWith]", "textStartsWith", "textA")
+                s.check("[by textStartsWith]", "textStartsWith", "textA")
             }
             run {
-                val sel = s.check("[by textContains]", "textContains", "textA")
+                s.check("[by textContains]", "textContains", "textA")
             }
             run {
-                val sel = s.check("[by textEndsWith]", "textEndsWith", "textA")
+                s.check("[by textEndsWith]", "textEndsWith", "textA")
             }
             run {
-                val sel = s.check("[by textMatches]", "textMatches", "textA")
+                s.check("[by textMatches]", "textMatches", "textA")
             }
             run {
-                val sel = s.check("[by access]", "access", "accessA")
+                s.check("[by access]", "access", "accessA")
             }
             run {
-                val sel = s.check("[by access 2]", "access", "accessA2")
+                s.check("[by access 2]", "access", "accessA2")
             }
             run {
-                val sel = s.check("[by accessStartsWith]", "accessStartsWith", "accessA")
+                s.check("[by accessStartsWith]", "accessStartsWith", "accessA")
             }
             run {
-                val sel = s.check("[by accessStartsWith 2]", "accessStartsWith", "accessA2")
+                s.check("[by accessStartsWith 2]", "accessStartsWith", "accessA2")
             }
             run {
-                val sel = s.check("[by accessContains]", "accessContains", "accessA")
+                s.check("[by accessContains]", "accessContains", "accessA")
             }
             run {
-                val sel = s.check("[by accessContains 2]", "accessContains", "accessA2")
+                s.check("[by accessContains 2]", "accessContains", "accessA2")
             }
             run {
-                val sel = s.check("[by accessEndsWith]", "accessEndsWith", "accessA")
+                s.check("[by accessEndsWith]", "accessEndsWith", "accessA")
             }
             run {
-                val sel = s.check("[by accessEndsWith 2]", "accessEndsWith", "accessA2")
+                s.check("[by accessEndsWith 2]", "accessEndsWith", "accessA2")
             }
             run {
-                val sel = s.check("[by accessMatches]", "accessMatches", "accessA")
+                s.check("[by accessMatches]", "accessMatches", "accessA")
             }
             run {
-                val sel = s.check("[by className]", "className", "className1")
+                s.check("[by className]", "className", "className1")
             }
             run {
-                val sel = s.check("[by access,text,className]", "access", "access1")
+                s.check("[by access,text,className]", "access", "access1")
             }
             run {
-                val sel = s.check("[by access,text,className]", "text", "text1")
+                s.check("[by access,text,className]", "text", "text1")
             }
             run {
-                val sel = s.check("[by access,text,className]", "className", "className1")
+                s.check("[by access,text,className]", "className", "className1")
             }
         }
     }

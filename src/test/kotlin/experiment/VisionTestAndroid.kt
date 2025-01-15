@@ -107,7 +107,7 @@ class VisionTestAndroid : VisionTest() {
                     it.detect("Games").onLine {
                         exist("0 B")
                         exist("Games")
-                        regionText.thisIs("Games 0 B")
+                        joinedText.thisIs("Games 0 B")
                     }
                 }
             }

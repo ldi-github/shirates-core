@@ -261,20 +261,15 @@ private fun TestElement.getAttrMapForIos(): MutableMap<String, String> {
 fun TestElement.cropImage(
     fileName: String? = null,
     save: Boolean = true,
-    refresh: Boolean = false,
     trim: String? = null
 ): TestElement {
 
     screenshot()
 
-    val command = "cropImage"
-    val subject = this.selector?.nickname ?: this.selector?.originalExpression ?: this.subject
     if (TestMode.isNoLoadRun.not() && this.isEmpty) {
         TestLog.info("cropImage skipped because the element is empty.")
         return this
     }
-    val message = message(id = command, file = fileName)
-
     val trimObject = TrimObject(trim)
     val rect = bounds.toRectWithRatio()
     val cropInfo = CropInfo(rect = rect, trimObject = trimObject)
@@ -291,7 +286,7 @@ fun TestElement.cropImage(
     }
     cropInfo.croppedImageFile = TestLog.directoryForLog.resolve(croppedImageFile).toString()
 
-    lastCropInfo = TestDriver.cropImage(cropInfo = cropInfo, refresh = refresh)
+    lastCropInfo = TestDriver.cropImage(cropInfo = cropInfo)
 
     if (save && cropInfo.croppedImage != null) {
         cropInfo.croppedImage?.saveImage(File(cropInfo.croppedImageFile!!), log = false)
@@ -305,10 +300,9 @@ fun TestElement.cropImage(
  */
 fun TestElement.cropImage(
     fileName: String,
-    refresh: Boolean = true
 ): TestElement {
 
-    return cropImage(save = true, fileName = fileName, refresh = refresh)
+    return cropImage(save = true, fileName = fileName)
 }
 
 /**

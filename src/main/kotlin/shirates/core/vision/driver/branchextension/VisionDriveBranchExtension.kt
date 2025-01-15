@@ -18,12 +18,12 @@ import shirates.core.vision.driver.commandextension.findImage
  */
 fun VisionDrive.ifImageExist(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    distance: Double? = 0.1,
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
 
@@ -31,12 +31,12 @@ fun VisionDrive.ifImageExist(
 
     val v = findImage(
         label = label,
+        threshold = threshold,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
         waitSeconds = waitSeconds,
-        threshold = distance,
     )
     val matched = v.isFound
     val result = BooleanCompareResult(value = matched, command = command)
@@ -57,12 +57,12 @@ fun VisionDrive.ifImageExist(
  */
 fun VisionDrive.ifImageExistNot(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    distance: Double? = 0.1,
     onTrue: () -> Unit
 ): BooleanCompareResult {
 
@@ -75,7 +75,7 @@ fun VisionDrive.ifImageExistNot(
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
         waitSeconds = waitSeconds,
-        threshold = distance,
+        threshold = threshold,
     )
     val matched = v.isFound.not()
     val result = BooleanCompareResult(value = matched, command = command)
@@ -131,7 +131,10 @@ fun VisionDrive.ifCanDetect(
 
     val command = "ifCanDetect"
 
-    val v = detect(expression = expression, throwsException = false, waitSeconds = 0.0)
+    val v = detect(
+        expression = expression,
+        throwsException = false
+    )
     val matched = v.isFound
 
     val result = BooleanCompareResult(value = matched, command = command)
@@ -160,7 +163,10 @@ fun VisionDrive.ifCanDetectNot(
 
     val command = "ifCanDetectNot"
 
-    val v = detect(expression = expression, throwsException = false, waitSeconds = 0.0)
+    val v = detect(
+        expression = expression,
+        throwsException = false
+    )
     val matched = v.isEmpty
 
     val result = BooleanCompareResult(value = matched, command = command)

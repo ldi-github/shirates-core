@@ -6,7 +6,6 @@ import boofcv.gui.binary.VisualizeBinaryData
 import boofcv.io.image.ConvertBufferedImage
 import boofcv.io.image.UtilImageIO
 import boofcv.struct.image.GrayF32
-import boofcv.struct.image.GrayS32
 import boofcv.struct.image.GrayU8
 import org.apache.commons.io.FileUtils
 import shirates.core.configuration.PropertiesManager
@@ -195,7 +194,6 @@ object CreateMLUtility {
             val image = UtilImageIO.loadImageNotNull(imageFile.toString())
             val input = ConvertBufferedImage.convertFromSingle(image, null, GrayF32::class.java)
             val binary = GrayU8(input.width, input.height)
-            val label = GrayS32(input.width, input.height)
 
             val threshold = GThresholdImageOps.computeOtsu(input, 0.0, 255.0)
             ThresholdImageOps.threshold(input, binary, threshold.toFloat(), true)

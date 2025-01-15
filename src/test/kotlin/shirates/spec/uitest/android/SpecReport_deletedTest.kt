@@ -13,7 +13,6 @@ import shirates.core.testcode.Deleted
 import shirates.core.testcode.Manual
 import shirates.core.testcode.SheetName
 import shirates.core.testcode.UITest
-import shirates.core.utility.format
 import shirates.spec.report.entity.SpecReportData
 import shirates.spec.report.models.SpecReportDataAdapter
 import shirates.spec.uitest.assertHeader
@@ -22,7 +21,6 @@ import shirates.spec.uitest.assertRowHeader
 import shirates.spec.utilily.ExcelUtility
 import shirates.spec.utilily.worksheets
 import java.nio.file.Files
-import java.util.*
 
 @SheetName("SheetName1")
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
@@ -106,8 +104,6 @@ class SpecReport_deletedTest : UITest() {
     }
 
     private fun assertRows(ws: XSSFSheet) {
-
-        val date = Date().format("yyyy/MM/dd")
 
         with(ws) {
 // s10

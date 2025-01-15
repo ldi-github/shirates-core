@@ -7,25 +7,22 @@
 
 ## What is Shirates/Vision?
 
-Shirates is mobile testing framework. <br>
-Shirates/Vision is Computer Vision(CV) driven powered by Vision Framework on macOS.<br>
+Shirates/Vision is Computer Vision(CV) driven mobile testing framework powered by Vision Framework on macOS.<br>
 
 ### Key technologies
 
 - AI-OCR for text recognition
 - Image classification/matching by machine learning
 
-### **Intuitive and configuration-free API**<br>
+### **Intuitive and easy configurable API**<br>
 
-for manipulating and verifying mobile Apps without cumbersome configuration.
-The only thing procedure you have to do is capturing screenshot, place it in screenshot directory and name it as screen
-name.
-In Shirates/Classic you have to configure
-screen files with selector expressions. Now you don't.
+for manipulating and verifying mobile Apps without cumbersome configuration (like screenConfig.json in
+Shirates/Classic).
+All you only have to do is capturing screenshot(screens, icons), place it in directory, and run learning batch process.
 
 ### Improved performance on iOS<br>
 
-Computer vision driven API bypasses accessing DOM(This process is very slow especially for iOS). Shirates/Vision has
+Computer vision driven API bypasses accessing DOM (This process is very slow especially for iOS). Shirates/Vision has
 improved dynamically than former version(Shirates/Classic).
 
 ## Repository

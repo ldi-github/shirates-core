@@ -18,7 +18,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("Network & internet", log = true)
+                    it.select("Network & internet")
                 }.expectation {
                     it
                         .textIs("Network & internet")
@@ -41,7 +41,7 @@ class AssertingAttribute1 : UITest() {
             }
             case(2) {
                 action {
-                    it.select("#account_avatar", log = true)
+                    it.select("#account_avatar")
                 }.expectation {
                     it.textIsEmpty()
                 }
@@ -58,7 +58,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("Network & internet", log = true)
+                    it.select("Network & internet")
                 }.expectation {
                     it.textIs("Connected devices")
                 }
@@ -75,7 +75,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("#account_avatar", log = true)
+                    it.select("#account_avatar")
                 }.expectation {
                     it
                         .idIs("account_avatar")
@@ -94,7 +94,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("#account_avatar", log = true)
+                    it.select("#account_avatar")
                 }.expectation {
                     it
                         // OK. expected is converted to "com.android.settings:id/account_avatar"
@@ -119,7 +119,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Network & internet Screen]")
                 }.action {
-                    it.select("@Network & internet", log = true)
+                    it.select("@Network & internet")
                 }.expectation {
                     it.accessIs("Network & internet")
                         .accessIsNot("System")
@@ -137,7 +137,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Network & internet Screen]")
                 }.action {
-                    it.select("@Network & internet", log = true)
+                    it.select("@Network & internet")
                 }.expectation {
                     it.accessIs("Connected devices")
                 }
@@ -154,7 +154,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("#account_avatar", log = true)
+                    it.select("#account_avatar")
                 }.expectation {
                     it.classIs("android.widget.ImageView")
                         .classIsNot("android.widget.TextView")
@@ -172,7 +172,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("#account_avatar", log = true)
+                    it.select("#account_avatar")
                 }.expectation {
                     it.classIs("android.widget.TextView")
                 }
@@ -189,7 +189,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("#account_avatar", log = true)
+                    it.select("#account_avatar")
                 }.expectation {
                     it.attributeIs("package", "com.android.settings")
                 }
@@ -206,7 +206,7 @@ class AssertingAttribute1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("#account_avatar", log = true)
+                    it.select("#account_avatar")
                 }.expectation {
                     it.attributeIs("package", "com.google.android.calculator")
                 }

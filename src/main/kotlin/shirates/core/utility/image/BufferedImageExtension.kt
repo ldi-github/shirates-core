@@ -252,6 +252,40 @@ fun BufferedImage?.isSame(comparedImage: BufferedImage?): Boolean {
 }
 
 /**
+ * getMatchRate
+ */
+fun BufferedImage?.getMatchRate(comparedImage: BufferedImage?): Double {
+
+    if (this == null || comparedImage == null) {
+        return 0.0
+    }
+
+    if (this.width != comparedImage.width || this.height != comparedImage.height) {
+        return 0.0
+    }
+
+    var match = 0.0
+    var unmatch = 0.0
+    val height = this.height
+    val width = this.width
+    for (y in 0 until height) {
+        for (x in 0 until width) {
+            if (this.getRGB(x, y) != comparedImage.getRGB(x, y)) {
+                unmatch += 1
+            } else {
+                match += 1
+            }
+        }
+    }
+
+    val total = match + unmatch
+    if (total == 0.0) {
+        return 0.0
+    }
+    return match / total
+}
+
+/**
  * toGrayF32
  */
 fun BufferedImage?.toGrayF32(): GrayF32? {

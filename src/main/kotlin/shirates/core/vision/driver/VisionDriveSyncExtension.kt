@@ -13,7 +13,6 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.image.isSame
-import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.toBufferedImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -116,7 +115,6 @@ fun VisionDrive.waitForClose(
     expression: String,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    intervalSeconds: Double = testContext.syncIntervalSeconds,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -126,21 +124,17 @@ fun VisionDrive.waitForClose(
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
         var found = false
-
-        SyncUtility.doUntilTrue(
+        doUntilTrue(
             waitSeconds = waitSeconds,
-            refreshCache = testContext.useCache
+            throwOnFinally = false,
         ) {
             found = canDetectCore(
                 selector = sel,
                 language = language,
-                waitSeconds = waitSeconds,
-                intervalSeconds = intervalSeconds,
                 allowScroll = false,
             )
             found.not()
         }
-
         if (throwsException && found) {
             throw TestDriverException(
                 message = message(
@@ -162,7 +156,6 @@ fun VisionDrive.waitForDisplay(
     expression: String,
     language: String = PropertiesManager.logLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    intervalSeconds: Double = testContext.syncIntervalSeconds,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -172,15 +165,19 @@ fun VisionDrive.waitForDisplay(
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
-        val found = canDetectCore(
-            selector = sel,
-            language = language,
+        var found = false
+        doUntilTrue(
             waitSeconds = waitSeconds,
-            intervalSeconds = intervalSeconds,
-            allowScroll = false,
-        )
-
-        if (throwsException && found.not()) {
+            throwOnFinally = false
+        ) {
+            found = canDetectCore(
+                selector = sel,
+                language = language,
+                allowScroll = false,
+            )
+            found
+        }
+        if (found.not() && throwsException) {
             throw TestDriverException(
                 message = message(
                     id = "waitForDisplayFailed",

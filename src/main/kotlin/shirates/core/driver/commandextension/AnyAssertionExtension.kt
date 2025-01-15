@@ -80,7 +80,8 @@ fun Any?.thisIs(
     val command = "thisIs"
     val value1 = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val value2 = (expected?.toString() ?: "").forClassicComparison(strict = strict)
-    val assertMessage = message ?: message(id = command, subject = value1, expected = value2)
+    var assertMessage = message ?: message(id = command, subject = value1, expected = value2)
+    assertMessage = assertMessage.replace("\"null\"", "null")
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
@@ -88,7 +89,8 @@ fun Any?.thisIs(
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (actual=\"$this\")"
+            var errorMessage = "$assertMessage (actual=\"$this\")"
+            errorMessage = errorMessage.replace("\"null\"", "null")
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }
@@ -109,7 +111,8 @@ fun Any?.thisIsNot(
     val command = "thisIsNot"
     val value1 = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val value2 = (expected?.toString() ?: "").forClassicComparison(strict = strict)
-    val assertMessage = message ?: message(id = command, subject = value1, expected = value2)
+    var assertMessage = message ?: message(id = command, subject = value1, expected = value2)
+    assertMessage = assertMessage.replace("\"null\"", "null")
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage) {
@@ -117,7 +120,8 @@ fun Any?.thisIsNot(
         if (result) {
             TestLog.ok(message = assertMessage)
         } else {
-            val errorMessage = "$assertMessage (actual=\"$value1\")"
+            var errorMessage = "$assertMessage (actual=\"$this\")"
+            errorMessage = errorMessage.replace("\"null\"", "null")
             lastElement.lastError = TestNGException(errorMessage)
             throw lastElement.lastError!!
         }

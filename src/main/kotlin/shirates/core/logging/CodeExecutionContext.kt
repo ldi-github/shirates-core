@@ -110,27 +110,34 @@ object CodeExecutionContext {
     // Region --------------------------------------------------
 
     /**
-     * isInLocalRegion
+     * isWorkingRegionSet (for Vision)
      */
-    val isInLocalRegion: Boolean
+    val isWorkingRegionSet: Boolean
         get() {
-            return regionRect.area < visionDrive.screenRect.area
+            return workingRegionRect.area != 0 && workingRegionRect.area != visionDrive.screenRect.area
         }
 
     /**
-     * regionElement
+     * workingRegionElement (for Vision)
      */
-    var regionElement: VisionElement = VisionElement.emptyElement
+    var workingRegionElement: VisionElement = VisionElement.emptyElement
+        get() {
+            if (lastScreenshotImage != null && field.visionContext.rectOnScreen != null) {
+                val newWorkingRegionElement = field.newVisionElement()
+                field = newWorkingRegionElement
+            }
+            return field
+        }
         set(value) {
             field = value
         }
 
     /**
-     * regionRect
+     * workingRegionRect (for Vision)
      */
-    val regionRect: Rectangle
+    val workingRegionRect: Rectangle
         get() {
-            return regionElement.rect
+            return workingRegionElement.rect
         }
 
     // With Scroll --------------------------------------------------
@@ -206,6 +213,11 @@ object CodeExecutionContext {
     var scrollToEdgeBoost: Int = Const.SCROLL_TO_EDGE_BOOST
         internal set
 
+    /**
+     * swipeToSafePosition (for Vision)
+     */
+    var swipeToSafePosition: Boolean = false
+        internal set
 
     // CAE Pattern --------------------------------------------------
 
@@ -281,6 +293,11 @@ object CodeExecutionContext {
      */
     var lastScreenshotTime: Date? = null
         internal set
+
+    /**
+     * lastRecognizedFile
+     */
+    var lastRecognizedFile: String? = null
 
     /**
      * lastCropInfo

@@ -109,7 +109,7 @@ internal fun TestDrive.waitScreenOfCore(
 
     var screenFound = false
 
-    val context = SyncUtility.doUntilTrue(
+    SyncUtility.doUntilTrue(
         waitSeconds = waitSeconds,
         intervalSeconds = testContext.waitSecondsForAnimationComplete,
         throwOnError = false

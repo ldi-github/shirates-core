@@ -8,12 +8,10 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
-import java.awt.image.BufferedImage
 
 
 private fun VisionDrive.scrollCommand(
@@ -201,64 +199,9 @@ internal fun VisionDrive.getScrollingInfo(
     return r
 }
 
-/**
- * scrollToRight
- */
-fun VisionDrive.scrollToRight(
-    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
-    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
-    repeat: Int = testContext.scrollToEdgeBoost,
-    intervalSeconds: Double = testContext.scrollIntervalSeconds,
-    flick: Boolean = true,
-    maxLoopCount: Int = testContext.scrollMaxCount,
-//    edgeSelector: String? = null,
-): VisionElement {
-
-    scrollToEdgeCommand(
-        command = "scrollToLeft",
-        direction = ScrollDirection.Right,
-        maxLoopCount = maxLoopCount,
-        flick = flick,
-        startMarginRatio = startMarginRatio,
-        endMarginRatio = endMarginRatio,
-        repeat = repeat,
-        scrollIntervalSeconds = intervalSeconds,
-//        edgeSelector = edgeSelector,
-    )
-
-    return lastElement
-}
-
-/**
- * scrollToLeft
- */
-fun VisionDrive.scrollToLeft(
-    startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
-    endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
-    repeat: Int = testContext.scrollToEdgeBoost,
-    intervalSeconds: Double = testContext.scrollIntervalSeconds,
-    flick: Boolean = true,
-    maxLoopCount: Int = testContext.scrollMaxCount,
-//    edgeSelector: String? = null,
-): VisionElement {
-
-    scrollToEdgeCommand(
-        command = "scrollToLeft",
-        direction = ScrollDirection.Left,
-        maxLoopCount = maxLoopCount,
-        flick = flick,
-        startMarginRatio = startMarginRatio,
-        endMarginRatio = endMarginRatio,
-        repeat = repeat,
-        scrollIntervalSeconds = intervalSeconds,
-//        edgeSelector = edgeSelector,
-    )
-
-    return lastElement
-}
-
 private fun VisionDrive.scrollToEdgeCommand(
     command: String,
+    scrollVisionElement: VisionElement = rootElement,
     maxLoopCount: Int,
     direction: ScrollDirection,
     flick: Boolean,
@@ -272,15 +215,21 @@ private fun VisionDrive.scrollToEdgeCommand(
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
 
-        doUntilScrollStop(
-            maxLoopCount = maxLoopCount,
-            direction = direction,
-            startMarginRatio = startMarginRatio,
-            endMarginRatio = endMarginRatio,
-            repeat = repeat,
-            scrollIntervalSeconds = scrollIntervalSeconds,
+        val originalScrollVisionElement = CodeExecutionContext.scrollVisionElement
+        try {
+            CodeExecutionContext.scrollVisionElement = scrollVisionElement
+            doUntilScrollStop(
+                maxLoopCount = maxLoopCount,
+                direction = direction,
+                startMarginRatio = startMarginRatio,
+                endMarginRatio = endMarginRatio,
+                repeat = repeat,
+                scrollIntervalSeconds = scrollIntervalSeconds,
 //            edgeSelector = edgeSelector,
-        )
+            )
+        } finally {
+            CodeExecutionContext.scrollVisionElement = originalScrollVisionElement
+        }
 
         invalidateScreen()
     }
@@ -290,6 +239,7 @@ private fun VisionDrive.scrollToEdgeCommand(
  * scrollToBottom
  */
 fun VisionDrive.scrollToBottom(
+    expression: String? = null,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
@@ -299,10 +249,12 @@ fun VisionDrive.scrollToBottom(
 //    edgeSelector: String? = null,
 ): VisionElement {
 
+    val scrollVisionElement = getScrollColumnElement(
+        expression = expression,
+    )
     scrollToEdgeCommand(
-//        scrollFrame = scrollFrame,
-//        scrollableElement = scrollableElement,
         command = "scrollToBottom",
+        scrollVisionElement = scrollVisionElement,
         direction = ScrollDirection.Down,
         maxLoopCount = maxLoopCount,
         flick = flick,
@@ -320,6 +272,7 @@ fun VisionDrive.scrollToBottom(
  * scrollToTop
  */
 fun VisionDrive.scrollToTop(
+    expression: String? = null,
     startMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
@@ -329,10 +282,12 @@ fun VisionDrive.scrollToTop(
 //    edgeSelector: String? = null,
 ): VisionElement {
 
+    val scrollVisionElement = getScrollColumnElement(
+        expression = expression,
+    )
     scrollToEdgeCommand(
-//        scrollFrame = scrollFrame,
-//        scrollableElement = scrollableElement,
         command = "scrollToTop",
+        scrollVisionElement = scrollVisionElement,
         direction = ScrollDirection.Up,
         maxLoopCount = maxLoopCount,
         flick = flick,
@@ -346,10 +301,43 @@ fun VisionDrive.scrollToTop(
     return lastElement
 }
 
+internal fun VisionDrive.getScrollColumnElement(
+    expression: String?,
+): VisionElement {
+    if (expression != null) {
+        return detect(
+            expression = expression,
+            throwsException = true
+        ).columnRegionElement()
+    }
+    val thisElement = getThisOrIt()
+    if (thisElement.isEmpty.not()) {
+        return thisElement.columnRegionElement()
+    }
+    return rootElement
+}
+
+internal fun VisionDrive.getScrollLineElement(
+    expression: String?,
+): VisionElement {
+    if (expression != null) {
+        return detect(
+            expression = expression,
+            throwsException = true
+        ).lineRegionElement()
+    }
+    val thisElement = getThisOrIt()
+    if (thisElement.isEmpty.not()) {
+        return thisElement.lineRegionElement()
+    }
+    return rootElement
+}
+
 /**
  * scrollToRightEdge
  */
 fun VisionDrive.scrollToRightEdge(
+    expression: String? = null,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
@@ -359,8 +347,10 @@ fun VisionDrive.scrollToRightEdge(
 //    edgeSelector: String? = null,
 ): VisionElement {
 
+    val scrollVisionElement = getScrollLineElement(expression = expression)
     scrollToEdgeCommand(
         command = "scrollToRightEdge",
+        scrollVisionElement = scrollVisionElement,
         direction = ScrollDirection.Right,
         maxLoopCount = maxLoopCount,
         flick = flick,
@@ -378,6 +368,7 @@ fun VisionDrive.scrollToRightEdge(
  * scrollToLeftEdge
  */
 fun VisionDrive.scrollToLeftEdge(
+    expression: String? = null,
     startMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     endMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
     repeat: Int = testContext.scrollToEdgeBoost,
@@ -387,8 +378,10 @@ fun VisionDrive.scrollToLeftEdge(
 //    edgeSelector: String? = null,
 ): VisionElement {
 
+    val scrollVisionElement = getScrollLineElement(expression = expression)
     scrollToEdgeCommand(
         command = "scrollToLeftEdge",
+        scrollVisionElement = scrollVisionElement,
         direction = ScrollDirection.Left,
         maxLoopCount = maxLoopCount,
         flick = flick,
@@ -508,18 +501,22 @@ internal fun VisionDrive.doUntilScrollStopCore(
             }
         }
 
-        var oldScreenshotImage: BufferedImage?
+//        var oldScreenshotImage: BufferedImage?
+        var oldScrollVisionElement: VisionElement
 
         val ms = Measure("doUntilScrollStop-loop")
         try {
             for (i in 1..maxLoopCount) {
 
-                oldScreenshotImage = CodeExecutionContext.lastScreenshotImage
+                oldScrollVisionElement =
+                    CodeExecutionContext.scrollVisionElement?.rect?.toVisionElement() ?: VisionElement(capture = true)
 
                 scroll()
-                screenshot(force = true)
+                screenshot()
+                CodeExecutionContext.workingRegionElement = CodeExecutionContext.workingRegionElement.newVisionElement()
 
-                val endOfScroll = CodeExecutionContext.lastScreenshotImage.isSame(oldScreenshotImage)
+                val newScrollVisionElement = oldScrollVisionElement.newVisionElement()
+                val endOfScroll = newScrollVisionElement.isScrollStopped(oldScrollVisionElement)
                 TestLog.info("endOfScroll=$endOfScroll", log = PropertiesManager.enableSyncLog)
                 if (endOfScroll) {
                     CodeExecutionContext.lastScreenshotImage?.saveImage(
@@ -547,11 +544,17 @@ internal fun VisionDrive.doUntilScrollStopCore(
     return lastElement
 }
 
-internal fun VisionDrive.edgeElementFound(expressions: List<String>): Boolean {
+internal fun VisionDrive.edgeElementFound(
+    expressions: List<String>,
+): Boolean {
 
     for (expression in expressions) {
         val v =
-            detect(expression = expression, allowScroll = false, throwsException = false, waitSeconds = 0.0)
+            detect(
+                expression = expression,
+                allowScroll = false,
+                throwsException = false
+            )
         if (v.isFound) {
             TestLog.info("edge element found. ($expression)")
             return true
@@ -564,13 +567,14 @@ internal fun VisionDrive.edgeElementFound(expressions: List<String>): Boolean {
 
 internal fun VisionDrive.withScroll(
     direction: ScrollDirection,
-    scrollRegionElement: VisionElement = CodeExecutionContext.regionElement,
+    scrollVisionElement: VisionElement = rootElement,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
+    swipeToSafePosition: Boolean,
     proc: () -> Unit
 ): VisionElement {
 
@@ -580,13 +584,15 @@ internal fun VisionDrive.withScroll(
     context.execWithScroll(
         command = command,
         scrollDirection = direction,
-        scrollVisionElement = scrollRegionElement,
+        scrollVisionElement = scrollVisionElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
+        swipeToSafePosition = swipeToSafePosition,
+
         message = message
     ) {
         proc()
@@ -600,7 +606,7 @@ internal fun VisionDrive.withScroll(
  */
 fun VisionDrive.withScrollDown(
     expression: String? = null,
-    scrollElement: VisionElement? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -610,21 +616,19 @@ fun VisionDrive.withScrollDown(
     proc: () -> Unit
 ): VisionElement {
 
-    val scrollRegionElement = scrollElement ?: if (expression != null) {
-        detect(expression = expression, throwsException = true).columnRegion().toVisionElement()
-    } else {
-        CodeExecutionContext.regionElement
-    }
-
+    val scrollVisionElement = getScrollColumnElement(
+        expression = expression,
+    )
     return withScroll(
         direction = ScrollDirection.Down,
-        scrollRegionElement = scrollRegionElement,
+        scrollVisionElement = scrollVisionElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
+        swipeToSafePosition = swipeToSafePosition,
         proc = proc
     )
 }
@@ -634,7 +638,7 @@ fun VisionDrive.withScrollDown(
  */
 fun VisionDrive.withScrollUp(
     expression: String? = null,
-    scrollElement: VisionElement? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -644,21 +648,19 @@ fun VisionDrive.withScrollUp(
     proc: () -> Unit
 ): VisionElement {
 
-    val scrollRegionElement = scrollElement ?: if (expression != null) {
-        detect(expression = expression, throwsException = true).columnRegion().toVisionElement()
-    } else {
-        CodeExecutionContext.regionElement
-    }
-
+    val scrollVisionElement = getScrollColumnElement(
+        expression = expression,
+    )
     return withScroll(
         direction = ScrollDirection.Up,
-        scrollRegionElement = scrollRegionElement,
+        scrollVisionElement = scrollVisionElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
+        swipeToSafePosition = swipeToSafePosition,
         proc = proc
     )
 }
@@ -668,7 +670,7 @@ fun VisionDrive.withScrollUp(
  */
 fun VisionDrive.withScrollRight(
     expression: String? = null,
-    scrollElement: VisionElement? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -678,21 +680,17 @@ fun VisionDrive.withScrollRight(
     proc: () -> Unit
 ): VisionElement {
 
-    val scrollRegionElement = scrollElement ?: if (expression != null) {
-        detect(expression = expression, throwsException = true).lineRegion().toVisionElement()
-    } else {
-        CodeExecutionContext.regionElement
-    }
-
+    val scrollVisionElement = getScrollLineElement(expression = expression)
     return withScroll(
         direction = ScrollDirection.Right,
-        scrollRegionElement = scrollRegionElement,
+        scrollVisionElement = scrollVisionElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
+        swipeToSafePosition = swipeToSafePosition,
         proc = proc
     )
 }
@@ -702,7 +700,7 @@ fun VisionDrive.withScrollRight(
  */
 fun VisionDrive.withScrollLeft(
     expression: String? = null,
-    scrollElement: VisionElement? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -712,21 +710,17 @@ fun VisionDrive.withScrollLeft(
     proc: () -> Unit
 ): VisionElement {
 
-    val scrollRegionElement = scrollElement ?: if (expression != null) {
-        detect(expression = expression, throwsException = true).lineRegion().toVisionElement()
-    } else {
-        CodeExecutionContext.regionElement
-    }
-
+    val scrollVisionElement = getScrollLineElement(expression = expression)
     return withScroll(
         direction = ScrollDirection.Left,
-        scrollRegionElement = scrollRegionElement,
+        scrollVisionElement = scrollVisionElement,
         scrollDurationSeconds = scrollDurationSeconds,
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollStartMarginRatio = scrollStartMarginRatio,
         scrollEndMarginRatio = scrollEndMarginRatio,
         scrollMaxCount = scrollMaxCount,
         scrollToEdgeBoost = scrollToEdgeBoost,
+        swipeToSafePosition = swipeToSafePosition,
         proc = proc
     )
 }

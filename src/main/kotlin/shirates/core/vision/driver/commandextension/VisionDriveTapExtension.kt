@@ -3,7 +3,7 @@ package shirates.core.vision.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.getSelector
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -22,30 +22,11 @@ import shirates.core.vision.driver.wait
  */
 fun VisionDrive.tap(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
-    allowScroll: Boolean? = null,
-    waitSeconds: Double = testContext.syncWaitSeconds,
-    intervalSeconds: Double = testContext.syncIntervalSeconds,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = true,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
 ): VisionElement {
-
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.tap(
-                expression = expression,
-                holdSeconds = holdSeconds,
-            )
-        }
-        if (waitForElementFocused) {
-            waitForElementFocused()
-        }
-        return e.toVisionElement()
-    }
 
     if (CodeExecutionContext.isInCell && this is VisionElement) {
         throw NotImplementedError()
@@ -60,27 +41,13 @@ fun VisionDrive.tap(
     var v = VisionElement.emptyElement
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        if (swipeToSafePosition) {
-            v = detectCoreWithSwipeToSafePosition(
-                selector = sel,
-                remove = remove,
-                language = language,
-                waitSeconds = waitSeconds,
-                intervalSeconds = intervalSeconds,
-                allowScroll = allowScroll,
-                throwsException = true,
-            )
-        } else {
-            v = detectCore(
-                selector = sel,
-                remove = remove,
-                language = language,
-                waitSeconds = waitSeconds,
-                intervalSeconds = intervalSeconds,
-                allowScroll = null,
-                throwsException = true,
-            )
-        }
+        v = detectCore(
+            selector = sel,
+            language = language,
+            allowScroll = null,
+            swipeToSafePosition = swipeToSafePosition,
+            throwsException = true,
+        )
         val tapFunc = {
             silent {
                 v = v.tap(holdSeconds = holdSeconds)
@@ -124,22 +91,17 @@ internal fun VisionDrive.waitForElementFocused(
 
 internal fun VisionDrive.detectWithAdjustingPosition(
     selector: Selector,
-    remove: String? = null,
-    language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.syncWaitSeconds,
-    intervalSeconds: Double = testContext.syncIntervalSeconds,
+    language: String,
     throwsException: Boolean,
 ): VisionElement {
 
     fun getElement(): VisionElement {
         return detectCore(
             selector = selector,
-            remove = remove,
             language = language,
-            waitSeconds = waitSeconds,
-            intervalSeconds = intervalSeconds,
             allowScroll = null,
             throwsException = throwsException,
+            swipeToSafePosition = true,
         )
     }
 
@@ -222,13 +184,12 @@ fun VisionDrive.tap(
         v.tap(x = v.bounds.centerX, y = v.bounds.centerY, holdSeconds = holdSeconds)
     }
 
-    lastElement = v.refresh()
+    lastElement = v.newVisionElement()
     return lastElement
 }
 
 private fun VisionDrive.tapWithScrollCommandCore(
     expression: String,
-    remove: String?,
     language: String,
     command: String,
     direction: ScrollDirection,
@@ -238,6 +199,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
     scrollIntervalSeconds: Double,
     scrollMaxCount: Int,
     holdSeconds: Double,
+    swipeToSafePosition: Boolean,
 ): VisionElement {
 
     val selector = getSelector(expression = expression)
@@ -248,7 +210,6 @@ private fun VisionDrive.tapWithScrollCommandCore(
 
         v = detectWithScrollCore(
             selector = selector,
-            remove = remove,
             language = language,
             direction = direction,
             scrollDurationSeconds = scrollDurationSeconds,
@@ -257,6 +218,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
             scrollIntervalSeconds = scrollIntervalSeconds,
             scrollMaxCount = scrollMaxCount,
             throwsException = true,
+            swipeToSafePosition = swipeToSafePosition,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         v = v.tap(holdSeconds = holdSeconds)
@@ -290,7 +252,7 @@ fun VisionDrive.tapImage(
 
     v.tap(holdSeconds = holdSeconds)
 
-    lastElement = v.refresh()
+    lastElement = v.newVisionElement()
     return lastElement
 }
 
@@ -299,8 +261,6 @@ fun VisionDrive.tapImage(
  */
 fun VisionDrive.tapWithScrollDown(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -308,29 +268,14 @@ fun VisionDrive.tapWithScrollDown(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
-
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.tapWithScrollDown(
-                expression = expression,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-                holdSeconds = holdSeconds,
-            )
-        }
-        return e.toVisionElement()
-    }
 
     val command = "tapWithScrollDown"
     val direction = ScrollDirection.Down
 
     val v = tapWithScrollCommandCore(
         expression = expression,
-        remove = remove,
         language = language,
         command = command,
         direction = direction,
@@ -340,6 +285,7 @@ fun VisionDrive.tapWithScrollDown(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
+        swipeToSafePosition = swipeToSafePosition
     )
 
     return v
@@ -350,8 +296,6 @@ fun VisionDrive.tapWithScrollDown(
  */
 fun VisionDrive.tapWithScrollUp(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -359,29 +303,14 @@ fun VisionDrive.tapWithScrollUp(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition
 ): VisionElement {
-
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.tapWithScrollUp(
-                expression = expression,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-                holdSeconds = holdSeconds,
-            )
-        }
-        return e.toVisionElement()
-    }
 
     val command = "tapWithScrollUp"
     val direction = ScrollDirection.Up
 
     val v = tapWithScrollCommandCore(
         expression = expression,
-        remove = remove,
         language = language,
         command = command,
         direction = direction,
@@ -391,6 +320,7 @@ fun VisionDrive.tapWithScrollUp(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
+        swipeToSafePosition = swipeToSafePosition
     )
 
     return v
@@ -401,8 +331,6 @@ fun VisionDrive.tapWithScrollUp(
  */
 fun VisionDrive.tapWithScrollRight(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -412,27 +340,11 @@ fun VisionDrive.tapWithScrollRight(
     holdSeconds: Double = testContext.tapHoldSeconds,
 ): VisionElement {
 
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.tapWithScrollRight(
-                expression = expression,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-                holdSeconds = holdSeconds,
-            )
-        }
-        return e.toVisionElement()
-    }
-
     val command = "tapWithScrollRight"
     val direction = ScrollDirection.Right
 
     val v = tapWithScrollCommandCore(
         expression = expression,
-        remove = remove,
         language = language,
         command = command,
         direction = direction,
@@ -442,6 +354,7 @@ fun VisionDrive.tapWithScrollRight(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
+        swipeToSafePosition = false
     )
 
     return v
@@ -452,8 +365,6 @@ fun VisionDrive.tapWithScrollRight(
  */
 fun VisionDrive.tapWithScrollLeft(
     expression: String,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
@@ -463,27 +374,11 @@ fun VisionDrive.tapWithScrollLeft(
     holdSeconds: Double = testContext.tapHoldSeconds,
 ): VisionElement {
 
-    if (useCache) {
-        var e = TestElement.emptyElement
-        useCache {
-            e = testDrive.tapWithScrollLeft(
-                expression = expression,
-                scrollDurationSeconds = scrollDurationSeconds,
-                scrollStartMarginRatio = scrollStartMarginRatio,
-                scrollEndMarginRatio = scrollEndMarginRatio,
-                scrollMaxCount = scrollMaxCount,
-                holdSeconds = holdSeconds,
-            )
-        }
-        return e.toVisionElement()
-    }
-
     val command = "tapWithScrollLeft"
     val direction = ScrollDirection.Left
 
     val v = tapWithScrollCommandCore(
         expression = expression,
-        remove = remove,
         language = language,
         command = command,
         direction = direction,
@@ -493,6 +388,7 @@ fun VisionDrive.tapWithScrollLeft(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
+        swipeToSafePosition = false
     )
 
     return v
@@ -551,11 +447,15 @@ fun VisionDrive.tapTopOfScreen(
  */
 fun VisionDrive.tapCenterOf(
     expression: String,
+    language: String = PropertiesManager.logLanguage,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
 ): VisionElement {
 
-    val testElement = detect(expression = expression)
+    val testElement = detect(
+        expression = expression,
+        language = language,
+    )
 
     val command = "tapCenterOf"
     val message = message(id = command, subject = testElement.subject)
@@ -577,12 +477,8 @@ fun VisionDrive.tapBelow(
     expression: String? = null,
     horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
     verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,
-    waitSeconds: Double = testContext.syncWaitSeconds,
-    intervalSeconds: Double = testContext.syncIntervalSeconds,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
 ): VisionElement {
@@ -604,14 +500,10 @@ fun VisionDrive.tapBelow(
 
         val labelElement = detect(
             expression = expression,
-            useCache = useCache,
-            remove = remove,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             throwsException = true,
-            waitSeconds = waitSeconds,
-            intervalSeconds = intervalSeconds,
         )
         v = labelElement.belowItem(
             segmentMarginHorizontal = horizontalMargin,
@@ -639,12 +531,8 @@ fun VisionDrive.tapRight(
     expression: String? = null,
     horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
     verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    useCache: Boolean = testContext.useCache,
-    remove: String? = null,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,
-    waitSeconds: Double = testContext.syncWaitSeconds,
-    intervalSeconds: Double = testContext.syncIntervalSeconds,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
 ): VisionElement {
@@ -666,14 +554,10 @@ fun VisionDrive.tapRight(
 
         val labelElement = detect(
             expression = expression,
-            useCache = useCache,
-            remove = remove,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             throwsException = true,
-            waitSeconds = waitSeconds,
-            intervalSeconds = intervalSeconds,
         )
         v = labelElement.rightItem(
             segmentMarginHhorizontal = horizontalMargin,

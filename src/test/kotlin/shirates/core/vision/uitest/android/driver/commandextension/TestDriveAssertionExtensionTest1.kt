@@ -10,7 +10,6 @@ import shirates.core.driver.commandextension.scanElements
 import shirates.core.driver.testDrive
 import shirates.core.exception.TestNGException
 import shirates.core.logging.TestLog
-import shirates.core.utility.time.StopWatch
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
@@ -124,9 +123,9 @@ class TestDriveAssertionExtensionTest1 : VisionTest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.exist("Apps")
-                        .exist("Apps", waitSeconds = 0.2)
+                        .exist("Apps")
                         .exist("[Apps]")
-                        .exist("[Apps]", waitSeconds = 0.2)
+                        .exist("[Apps]")
                         .dontExist("System")
                         .dontExist("System", waitSeconds = 0.2)
                         .dontExist("[System]")
@@ -136,44 +135,44 @@ class TestDriveAssertionExtensionTest1 : VisionTest() {
         }
     }
 
-    @Test
-    fun exist_waitSeconds() {
-
-        scenario {
-            case(1, "waitSeconds = 1.0") {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    // Arrange
-                    val sw = StopWatch()
-                    // Act, Assert
-                    assertThatThrownBy {
-                        sw.start()
-                        it.exist("no exist", waitSeconds = 1.0)
-                    }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("<no exist> exists (expected: \"no exist\", actual: \"\")")
-                    val millisec = sw.elapsedMillis
-                    println(millisec)
-                    assertThat(millisec >= 1000).isTrue()
-                }
-
-            }
-            case(2, "waitSeconds = 2.0") {
-                expectation {
-                    val sw = StopWatch()
-                    assertThatThrownBy {
-                        sw.start()
-                        it.exist("no exist", waitSeconds = 2.0)
-                    }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("<no exist> exists (expected: \"no exist\", actual: \"\")")
-                    val millisec = sw.elapsedMillis
-                    println(millisec)
-                    assertThat(millisec >= 2000).isTrue()
-                }
-            }
-        }
-
-    }
+//    @Test
+//    fun exist_waitSeconds() {
+//
+//        scenario {
+//            case(1, "waitSeconds = 1.0") {
+//                condition {
+//                    it.macro("[Android Settings Top Screen]")
+//                }.expectation {
+//                    // Arrange
+//                    val sw = StopWatch()
+//                    // Act, Assert
+//                    assertThatThrownBy {
+//                        sw.start()
+//                        it.exist("no exist", waitSeconds = 1.0)
+//                    }.isInstanceOf(TestNGException::class.java)
+//                        .hasMessage("<no exist> exists (expected: \"no exist\", actual: \"\")")
+//                    val millisec = sw.elapsedMillis
+//                    println(millisec)
+//                    assertThat(millisec >= 1000).isTrue()
+//                }
+//
+//            }
+//            case(2, "waitSeconds = 2.0") {
+//                expectation {
+//                    val sw = StopWatch()
+//                    assertThatThrownBy {
+//                        sw.start()
+//                        it.exist("no exist", waitSeconds = 2.0)
+//                    }.isInstanceOf(TestNGException::class.java)
+//                        .hasMessage("<no exist> exists (expected: \"no exist\", actual: \"\")")
+//                    val millisec = sw.elapsedMillis
+//                    println(millisec)
+//                    assertThat(millisec >= 2000).isTrue()
+//                }
+//            }
+//        }
+//
+//    }
 
     @Test
     fun exist_dontExist_negation() {

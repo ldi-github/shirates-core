@@ -40,15 +40,15 @@ class SegmentContainerTest {
         // Act
         val rect1 = Rectangle(10, 10, 10, 10)
         container.addSegment(rect1)
-        val img1 = container.saveImage(rect1, ++count)
+        container.saveImage(rect1, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(1)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
 
         // Act
         val rect2 = Rectangle(20, 10, 10, 10)
-        val seg2 = container.addSegment(rect2)
-        val img2 = container.saveImage(rect2, ++count)
+        container.addSegment(rect2)
+        container.saveImage(rect2, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(1)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 29, 19](w=20, h=10, ratio=2.0, text=``)")
@@ -56,7 +56,7 @@ class SegmentContainerTest {
         // Act
         val rect3 = Rectangle(40, 10, 20, 20)
         container.addSegment(rect3)
-        val img3 = container.saveImage(rect3, ++count)
+        container.saveImage(rect3, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(2)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 29, 19](w=20, h=10, ratio=2.0, text=``)")
@@ -65,7 +65,7 @@ class SegmentContainerTest {
         // Act
         val rect4 = Rectangle(30, 10, 10, 10)
         container.addSegment(rect4)
-        val img4 = container.saveImage(rect4, ++count)
+        container.saveImage(rect4, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(1)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 59, 29](w=50, h=20, ratio=2.5, text=``)")
@@ -73,7 +73,7 @@ class SegmentContainerTest {
         // Act
         val rect5 = Rectangle(30, 25, 10, 10)
         container.addSegment(rect5)
-        val img5 = container.saveImage(rect5, ++count)
+        container.saveImage(rect5, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(2)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 59, 29](w=50, h=20, ratio=2.5, text=``)")
@@ -82,7 +82,7 @@ class SegmentContainerTest {
         // Act
         val rect6 = Rectangle(40, 40, 10, 10)
         container.addSegment(rect6)
-        val img6 = container.saveImage(rect6, ++count)
+        container.saveImage(rect6, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(2)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 59, 29](w=50, h=20, ratio=2.5, text=``)")
@@ -100,7 +100,7 @@ class SegmentContainerTest {
         // Act
         val rect1 = Rectangle(10, 10, 10, 10)
         container.addSegment(rect1)
-        val img1 = container.saveImage(rect1, ++count)
+        container.saveImage(rect1, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(1)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 19, 19](w=10, h=10, ratio=1.0, text=``)")
@@ -108,7 +108,7 @@ class SegmentContainerTest {
         // Act
         val rect2 = Rectangle(25, 10, 10, 10)
         container.addSegment(rect2)
-        val img2 = container.saveImage(rect2, ++count)
+        container.saveImage(rect2, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(1)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 19](w=25, h=10, ratio=2.5, text=``)")
@@ -116,7 +116,7 @@ class SegmentContainerTest {
         // Act
         val rect3 = Rectangle(10, 26, 10, 10)
         container.addSegment(rect3)
-        val img3 = container.saveImage(rect3, ++count)
+        container.saveImage(rect3, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(2)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 19](w=25, h=10, ratio=2.5, text=``)")
@@ -125,7 +125,7 @@ class SegmentContainerTest {
         // Act
         val rect4 = Rectangle(20, 25, 10, 10)
         container.addSegment(rect4)
-        val img10 = container.saveImage(rect4, ++count)
+        container.saveImage(rect4, ++count)
         // Assert
         assertThat(container.segments.count()).isEqualTo(1)
         assertThat(container.segments[0].toString()).isEqualTo("[10, 10, 34, 35](w=25, h=26, ratio=0.96153843, text=``)")

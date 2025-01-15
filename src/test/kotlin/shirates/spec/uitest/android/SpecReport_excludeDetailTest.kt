@@ -11,8 +11,6 @@ import shirates.spec.uitest.assertHeader
 import shirates.spec.uitest.assertRow
 import shirates.spec.uitest.assertRowHeader
 import shirates.spec.utilily.ExcelUtility
-import shirates.spec.utilily.cells
-import shirates.spec.utilily.text
 import shirates.spec.utilily.worksheets
 
 @SheetName("SheetName1")
@@ -45,10 +43,6 @@ class SpecReport_excludeDetailTest : UITest() {
 
         val filePath = TestLog.directoryForLog.resolve("SpecReport_excludeDetailTest/SpecReport_excludeDetailTest.xlsx")
         val ws = ExcelUtility.getWorkbook(filePath = filePath).worksheets("SheetName1")
-        val commandSheet = ws.workbook.worksheets("CommandList")
-
-        val executionDateTime = commandSheet.cells("B4").text
-        val date = executionDateTime.substring(0, 10)
 
         /**
          * Header

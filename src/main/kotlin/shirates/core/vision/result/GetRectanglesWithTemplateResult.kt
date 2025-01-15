@@ -39,7 +39,7 @@ class GetRectanglesWithTemplateResult(
      * error
      */
     var error: Throwable? = null
-        private set
+        internal set
 
     /**
      * hasError
@@ -50,45 +50,53 @@ class GetRectanglesWithTemplateResult(
         }
 
     init {
-        try {
-            val jso = JSONObject(jsonString)
-            val jsonArray = jso.getJSONArray("candidates")
-            if (jsonArray.length() > 0) {
-                for (i in 0 until jsonArray.length()) {
-                    val jsonObject = jsonArray.getJSONObject(i)
-                    val distance = jsonObject.getFloat("distance")
-                    val file = jsonObject.getStringOrNull("file")
-                    val fileName = file.toPath().toFile().name
-                    val rectangle = if (file == null) Rectangle() else Rectangle(fileName)
-                    val c = Candidate(
-                        distance = distance,
-                        file = file,
-                        rectangle = rectangle,
-                        localRegionX = localRegionX,
-                        localRegionY = localRegionY,
-                        rectOnLocalRegion = Rectangle(
-                            x = rectangle.x,
-                            y = rectangle.y,
-                            width = rectangle.width,
-                            height = rectangle.height
-                        ),
-                        horizontalMargin = horizontalMargin,
-                        verticalMargin = verticalMargin,
-                    )
-                    candidates.add(c)
-                    c.image
+        if (jsonString.isNotBlank()) {
+            try {
+                val jso = JSONObject(jsonString)
+                val jsonArray = jso.getJSONArray("candidates")
+                if (jsonArray.length() > 0) {
+                    for (i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        val distance = jsonObject.getFloat("distance")
+                        val file = jsonObject.getStringOrNull("file")
+                        val fileName = file.toPath().toFile().name
+                        val rectangle = if (file == null) Rectangle() else Rectangle(fileName)
+                        val c = Candidate(
+                            distance = distance,
+                            file = file,
+                            rectangle = rectangle,
+                            localRegionX = localRegionX,
+                            localRegionY = localRegionY,
+                            rectOnLocalRegion = Rectangle(
+                                x = rectangle.x,
+                                y = rectangle.y,
+                                width = rectangle.width,
+                                height = rectangle.height
+                            ),
+                            horizontalMargin = horizontalMargin,
+                            verticalMargin = verticalMargin,
+                        )
+                        candidates.add(c)
+                        c.image
+                    }
+                    file = candidates.first().file!!
+                    rectangle = Rectangle(file.toPath().toFile().nameWithoutExtension)
+                } else {
+                    file = ""
+                    rectangle = Rectangle()
                 }
-                file = candidates.first().file!!
-                rectangle = Rectangle(file.toPath().toFile().nameWithoutExtension)
-            } else {
-                file = ""
-                rectangle = Rectangle()
+            } catch (t: Throwable) {
+                error = TestDriverException("Could not parse json string.\n$jsonString", t)
+                printWarn()
+                throw error!!
             }
-        } catch (t: Throwable) {
-            error = TestDriverException("Could not parse json string.\n$jsonString", t)
-            printWarn()
-            throw error!!
+        } else {
+            file = ""
+            rectangle = Rectangle()
         }
+    }
+
+    private fun parse() {
     }
 
     override fun toString(): String {

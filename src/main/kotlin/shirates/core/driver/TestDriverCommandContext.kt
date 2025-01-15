@@ -65,7 +65,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg1: String? = null,
         arg2: String? = null,
         fireEvent: Boolean = true,
-        log: Boolean = TestLog.enableTrace,
         func: () -> Unit
     ): LogLine? {
         if (TestMode.isNoLoadRun) {
@@ -867,7 +866,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         command: String,
         withScroll: Boolean = true,
         scrollDirection: ScrollDirection?,
-        scrollVisionElement: VisionElement = CodeExecutionContext.regionElement,
+        scrollVisionElement: VisionElement = CodeExecutionContext.workingRegionElement,
         scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -876,6 +875,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
+        swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
         message: String = "",
         log: Boolean = false,
         func: () -> Unit
@@ -892,6 +892,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val originalScrollEndMarginRatio = CodeExecutionContext.scrollEndMarginRatio
         val originalScrollMaxCount = CodeExecutionContext.scrollMaxCount
         val originalScrollToEdgeBoost = CodeExecutionContext.scrollToEdgeBoost
+        val originalSwipeToSafePosition = CodeExecutionContext.swipeToSafePosition
 
         val ms = Measure()
         try {
@@ -906,6 +907,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.scrollEndMarginRatio = scrollEndMarginRatio
             CodeExecutionContext.scrollMaxCount = scrollMaxCount
             CodeExecutionContext.scrollToEdgeBoost = scrollToEdgeBoost
+            CodeExecutionContext.swipeToSafePosition = swipeToSafePosition
 
             callerName = StackTraceUtility.getCallerName(
                 filterFileName = COMMAND_CONTEXT_FILE_NAME,
@@ -935,6 +937,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 CodeExecutionContext.scrollEndMarginRatio = originalScrollEndMarginRatio
                 CodeExecutionContext.scrollMaxCount = originalScrollMaxCount
                 CodeExecutionContext.scrollToEdgeBoost = originalScrollToEdgeBoost
+                CodeExecutionContext.swipeToSafePosition = originalSwipeToSafePosition
                 endExecWithScroll(command = command, log = log)
             } finally {
                 ms.end()

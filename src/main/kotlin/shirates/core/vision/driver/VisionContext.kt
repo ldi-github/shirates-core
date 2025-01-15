@@ -62,8 +62,17 @@ class VisionContext(
      * recognizeTextObservations
      */
     var recognizeTextObservations = mutableListOf<RecognizeTextObservation>()
+        get() {
+            if (field.isEmpty()) {
+                return field
+            }
+            return field
+        }
 
-    var isRecognizeTextObservationInitialized = false
+    /**
+     * rootElement
+     */
+    var rootElement: VisionElement? = null
 
     /**
      * getVisionElements
@@ -104,6 +113,7 @@ class VisionContext(
      */
     init {
         if (capture) {
+            this.rootElement = visionDrive.rootElement
             this.screenshotFile = CodeExecutionContext.lastScreenshotFile
             this.screenshotImage = CodeExecutionContext.lastScreenshotImage
 
@@ -153,6 +163,10 @@ class VisionContext(
      */
     fun clear() {
 
+        this.jsonString = ""
+        this.recognizeTextObservations.clear()
+        this.rootElement = null
+
         this.screenshotImage = null
         this.screenshotFile = ""
 
@@ -162,9 +176,6 @@ class VisionContext(
         this.localRegionX = 0
         this.localRegionY = 0
         this.rectOnLocalRegion = null
-
-        this.jsonString = ""
-
     }
 
     /**
@@ -198,13 +209,19 @@ class VisionContext(
      */
     fun refreshWithLastScreenshot() {
 
+        this.clear()
+
         this.screenshotImage = CodeExecutionContext.lastScreenshotImage
         this.screenshotFile = CodeExecutionContext.lastScreenshotFile
         if (this.rectOnScreen != null) {
             this.localRegionImage = this.screenshotImage?.cropImage(this.rectOnScreen!!)
             this.localRegionFile = TestLog.directoryForLog.resolve("${TestLog.nextLineNo}.png").toString()
-            this.localRegionImage?.saveImage(this.localRegionFile!!)
+        } else {
+            this.rectOnLocalRegion = this.screenshotImage?.rect
+            this.localRegionImage = this.screenshotImage
+            this.localRegionFile = this.screenshotFile
         }
+        this.rootElement = visionDrive.rootElement
     }
 
     /**
@@ -226,64 +243,87 @@ class VisionContext(
             dir.resolve(name).toString()
         }
         this.image!!.saveImage(imageFile!!)
+        this.localRegionFile = this.imageFile
     }
 
     /**
      * recognizeText
      */
     fun recognizeText(
-        force: Boolean = false,
         language: String? = this.language,
     ): VisionContext {
 
-        if (force.not() && isRecognizeTextObservationInitialized) {
-            return this
+        if (rootElement == null) {
+            rootElement = visionDrive.rootElement
         }
 
-        val rootElement = visionDrive.rootElement
-
-        if (rootElement.visionContext.isRecognizeTextObservationInitialized.not()) {
-            /**
-             * Recognize text
-             * and store the result into rootElement.visionContext
-             */
-            var inputFile = localRegionFile
-            if (inputFile == null) {
-                inputFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_localRegion.png").toString()
-                localRegionImage!!.saveImage(inputFile, log = false)
-            }
-            val recognizeTextResult = SrvisionProxy.recognizeText(
-                inputFile = inputFile,
-                language = language
+        val rootVisionContext = rootElement!!.visionContext
+        if (rootVisionContext.recognizeTextObservations.isEmpty()) {
+            val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile().name
+            recognizeTextAndSaveRectangleImage(
+                language = language,
+                rootVisionContext = rootVisionContext,
+                recognizedFile = recognizedFile
             )
-            rootElement.visionContext.loadTextRecognizerResult(
-                inputFile = inputFile,
-                recognizeTextResult = recognizeTextResult
-            )
+            CodeExecutionContext.lastRecognizedFile = recognizedFile
         }
 
-        val regionElement = CodeExecutionContext.regionElement
-        if (regionElement != rootElement) {
+        if (this.recognizeTextObservations.isEmpty()) {
             /**
              * Get visionElements and recognizedTextObservations from rootElement.visionContext
              * into this VisionContext by filtering bounds
              */
-            recognizeTextObservations = rootElement.visionContext.recognizeTextObservations
-                .filter { it.rectOnScreen != null }
-                .filter { it.rectOnScreen!!.toBoundsWithRatio().isCenterIncludedIn(regionElement.bounds) }
-                .toMutableList()
+            val thisRectOnScreen = this.rectOnScreen
+            if (thisRectOnScreen != null) {
+                var list = rootVisionContext.recognizeTextObservations.toList()
+                list = list.filter { it.rectOnScreen != null }
+                list = list.filter {
+                    val included = it.rectOnScreen!!.toBoundsWithRatio()
+                        .isCenterIncludedIn(thisRectOnScreen.toBoundsWithRatio())
+                    included
+                }
+                this.recognizeTextObservations = list.toMutableList()
+            }
             sortRecognizeTextObservations()
         }
 
-        /**
-         * Save screenshotImageWithTextRegion
-         */
-        rootElement.visionContext.screenshotImageWithTextRegion?.saveImage(
-            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_recognized_text_rectangles.png").toString()
-        )
-
-        isRecognizeTextObservationInitialized = true
         return this
+    }
+
+    private fun recognizeTextAndSaveRectangleImage(
+        language: String?,
+        rootVisionContext: VisionContext,
+        recognizedFile: String?
+    ) {
+        /**
+         * Recognize text
+         * and store the result into rootElement.visionContext
+         */
+        val inputFile = if (screenshotFile.isNullOrBlank()) {
+            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_recognize_screenshot.png").toString()
+        } else {
+            screenshotFile!!
+        }
+        if (Files.exists(inputFile.toPath()).not()) {
+            screenshotImage!!.saveImage(inputFile, log = false)
+        }
+        val recognizeTextResult = SrvisionProxy.recognizeText(
+            inputFile = inputFile,
+            language = language
+        )
+        rootVisionContext.loadTextRecognizerResult(
+            inputFile = inputFile,
+            recognizeTextResult = recognizeTextResult
+        )
+        if (recognizedFile != CodeExecutionContext.lastRecognizedFile) {
+            /**
+             * Save screenshotImageWithTextRegion
+             */
+            val fileName = "${TestLog.currentLineNo}_[$recognizedFile]_recognized_text_rectangles.png"
+            rootVisionContext.screenshotWithTextRectangle?.saveImage(
+                TestLog.directoryForLog.resolve(fileName).toString()
+            )
+        }
     }
 
     /**
@@ -317,8 +357,6 @@ class VisionContext(
         recognizeTextObservations = observations.toMutableList()
         sortRecognizeTextObservations()
 
-        isRecognizeTextObservationInitialized = true
-
         return this
     }
 
@@ -342,21 +380,28 @@ class VisionContext(
      */
     fun detect(
         text: String,
-        remove: String? = null,
         language: String? = this.language,
+        inJoinedText: Boolean = false,
     ): VisionElement {
 
-        if (isRecognizeTextObservationInitialized.not()) {
-            recognizeText(language = language)
+        recognizeText(language = language)
+
+        if (inJoinedText) {
+            val joinedText = joinedText.forVisionComparison()
+            val text2 = text.forVisionComparison()
+            if (joinedText.contains(text2)) {
+                val v = this.toVisionElement()
+                return v
+            } else {
+                return VisionElement.emptyElement
+            }
+        } else {
+            val candidates = detectCandidates(
+                text = text,
+            )
+            val v = candidates.firstOrNull() ?: VisionElement.emptyElement
+            return v
         }
-
-        val candidates = detectCandidates(
-            text = text,
-            remove = remove,
-        )
-
-        val v = candidates.firstOrNull() ?: VisionElement.emptyElement
-        return v
     }
 
     /**
@@ -364,32 +409,47 @@ class VisionContext(
      */
     fun detect(
         selector: Selector,
-        remove: String? = null,
         language: String? = this.language,
     ): VisionElement {
 
         if (selector.hasTextFilter.not()) {
             throw TestDriverException("Selector doesn't contains text filter. (selector=$selector, expression=${selector.expression})")
         }
+
+        recognizeText(language = language)
+
         if (selector.textMatches.isNullOrBlank().not()) {
-            for (o in this.recognizeTextObservations) {
-                val t = o.text
-                if (t.matches(selector.textMatches!!.toRegex())) {
-                    val v = o.toVisionElement()
-                    return v
-                }
-            }
-            return VisionElement.emptyElement
+            val v = detectMatches(textMatches = selector.textMatches!!)
+            v.selector = selector
+            return v
         } else {
             val text = selector.textFilterForDetect!!
+            val inJoinedText = selector.textContains != null
             val v = detect(
                 text = text,
-                remove = remove,
-                language = language
+                language = language,
+                inJoinedText = inJoinedText,
             )
             v.selector = selector
             return v
         }
+    }
+
+    /**
+     * detectMatches
+     */
+    fun detectMatches(textMatches: String): VisionElement {
+
+        recognizeText(language = language)
+
+        for (o in this.recognizeTextObservations) {
+            val t = o.text
+            if (t.matches(textMatches.toRegex())) {
+                val v = o.toVisionElement()
+                return v
+            }
+        }
+        return VisionElement.emptyElement
     }
 
     /**
@@ -403,7 +463,6 @@ class VisionContext(
      */
     fun detectCandidates(
         text: String,
-        remove: String?,
     ): List<VisionElement> {
 
         if (text.isBlank()) {
@@ -411,18 +470,10 @@ class VisionContext(
         }
 
         val localBounds = rectOnScreen!!.toBoundsWithRatio()
-        val normalizedText = text.forVisionComparison(
-            ignoreCase = true,
-            ignoreFullWidthHalfWidth = true,
-            remove = remove
-        )
+        val normalizedText = text.forVisionComparison()
         var list: List<VisionElement> = getVisionElements()
         list = list.filter {
-            val t = it.text.forVisionComparison(
-                ignoreCase = true,
-                ignoreFullWidthHalfWidth = true,
-                remove = remove
-            )
+            val t = it.text.forVisionComparison()
             t.contains(normalizedText)
         }
         list = list.filter {
@@ -433,18 +484,18 @@ class VisionContext(
     }
 
     /**
-     * regionText
+     * joinedText
      */
-    val regionText: String
+    val joinedText: String
         get() {
             recognizeText()
             return recognizeTextObservations.map { it.text }.joinToString(" ")
         }
 
     /**
-     * screenshotImageWithTextRegion
+     * screenshotWithTextRectangle
      */
-    val screenshotImageWithTextRegion: BufferedImage?
+    val screenshotWithTextRectangle: BufferedImage?
         get() {
             if (screenshotImage == null) {
                 return null

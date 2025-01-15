@@ -1,9 +1,6 @@
 package shirates.core.driver.branchextension.result
 
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestMode
-import shirates.core.driver.testContext
+import shirates.core.driver.*
 import shirates.core.logging.Message.message
 import shirates.core.logging.printWarn
 import shirates.core.vision.configration.repository.VisionScreenRepository
@@ -29,7 +26,7 @@ class ScreenCompareResult() : CompareResult() {
                 }
             }
         } else {
-            val r = vision.isScreenOf(screenNames = screenNames)
+            val r = visionDrive.isScreenOf(screenNames = screenNames)
             return r
         }
         return false

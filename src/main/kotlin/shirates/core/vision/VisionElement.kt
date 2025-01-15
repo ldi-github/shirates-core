@@ -1,5 +1,6 @@
 package shirates.core.vision
 
+import org.apache.commons.text.similarity.LevenshteinDistance
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
@@ -13,6 +14,7 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
 import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.image.getMatchRate
 import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.commandextension.helper.IRect
 import java.awt.image.BufferedImage
@@ -35,7 +37,7 @@ class VisionElement(
     /**
      * visionContext
      */
-    lateinit var visionContext: VisionContext
+    var visionContext: VisionContext
 
     init {
         visionContext = VisionContext(capture = capture)
@@ -206,11 +208,11 @@ class VisionElement(
         }
 
     /**
-     * regionText
+     * joinedText
      */
-    val regionText: String
+    val joinedText: String
         get() {
-            return visionContext.regionText
+            return visionContext.joinedText
         }
 
     /**
@@ -218,7 +220,7 @@ class VisionElement(
      */
     val regionDigit: String
         get() {
-            val s = regionText.replace("[^\\d\\s]".toRegex(), "")
+            val s = joinedText.replace("[^\\d\\s]".toRegex(), "")
                 .replace("[\\s+]".toRegex(), " ")
             return s
         }
@@ -270,7 +272,7 @@ class VisionElement(
      */
     fun clone(): VisionElement {
 
-        val v = VisionElement()
+        val v = VisionElement(capture = true)
         v.visionContext = visionContext.clone()
         v.selector = selector
         v.segment = segment
@@ -279,14 +281,14 @@ class VisionElement(
     }
 
     /**
-     * refresh
+     * newVisionElement
      */
-    fun refresh(): VisionElement {
+    fun newVisionElement(): VisionElement {
 
-        val v = this.clone()
-        v.visionContext.refreshWithLastScreenshot()
-
-        return v
+        if (rect.isEmpty) {
+            return VisionElement(capture = true)
+        }
+        return this.rect.toVisionElement()
     }
 
     /**
@@ -332,5 +334,28 @@ class VisionElement(
         val cell = first.toVisionElement()
 
         return cell
+    }
+
+    /**
+     * isScrollStopped
+     */
+    fun isScrollStopped(
+        oldScrollVisionElement: VisionElement,
+        imageMatchThreshold: Double = 0.99,
+        levenshteinDistanceThreshold: Int = 5
+    ): Boolean {
+
+        val oldImage = oldScrollVisionElement.image ?: return false
+        val newImage = this.image ?: return false
+        val matchRate = newImage.getMatchRate(oldImage)
+        if (matchRate < imageMatchThreshold) {
+            return false
+        }
+        val levenshteinDistance =
+            LevenshteinDistance.getDefaultInstance().apply(oldScrollVisionElement.joinedText, this.joinedText)
+        if (levenshteinDistanceThreshold < levenshteinDistance) {
+            return false
+        }
+        return true
     }
 }

@@ -117,7 +117,7 @@ class TestDrivePropertyExtensionTest : VisionTest() {
             val expected = driver.appiumDriver.capabilities.getCapabilityRelaxed("platformVersion")
             assertThat(platformVersion).isEqualTo(expected)
         } finally {
-            testContext.profile.capabilities.setCapabilityStrict("platformVersion", original ?: "")
+            testContext.profile.capabilities.setCapabilityStrict("platformVersion", original)
         }
     }
 
