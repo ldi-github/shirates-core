@@ -9,7 +9,6 @@ import shirates.core.exception.TestNGException
 import shirates.core.logging.*
 import shirates.core.logging.Message.message
 import shirates.core.utility.sync.SyncUtility
-import shirates.core.utility.toPath
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionMLModelRepository
@@ -19,7 +18,7 @@ import shirates.core.vision.driver.*
 internal fun VisionDrive.checkImageLabelContains(
     containedText: String,
     message: String,
-    mlmodelFile: String,
+    classifierName: String,
     waitSeconds: Double = testContext.syncWaitSeconds,
 ): VisionElement {
 
@@ -35,7 +34,7 @@ internal fun VisionDrive.checkImageLabelContains(
             v = v.newVisionElement()
         }
     ) {
-        val label = v.classify(mlmodelFile = mlmodelFile)
+        val label = v.classify(classifierName = classifierName)
 
         printInfo("label: $label")
         contains = label.contains(containedText)
@@ -51,7 +50,7 @@ internal fun VisionDrive.checkImageLabelContains(
 internal fun VisionDrive.checkIsCore(
     containedText: String,
     message: String,
-    mlmodelFile: String? = null,
+    classifierName: String,
     waitSeconds: Double = testContext.syncWaitSeconds,
 ): VisionElement {
 
@@ -60,8 +59,7 @@ internal fun VisionDrive.checkIsCore(
     return checkImageLabelContains(
         containedText = containedText,
         message = message,
-        mlmodelFile = mlmodelFile ?: rep.imageClassifierDirectory.toPath().resolve("${rep.classifierName}.mlmodel")
-            .toString(),
+        classifierName = classifierName,
         waitSeconds = waitSeconds
     )
 }

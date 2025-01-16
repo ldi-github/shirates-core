@@ -30,6 +30,7 @@ import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
+import shirates.core.vision.batch.CreateMLUtility
 import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.configration.repository.VisionTextReplacementRepository
@@ -356,6 +357,9 @@ abstract class UITestBase : Drive {
 
                 // setup screen repository
                 VisionScreenRepository.setup()
+
+                // run learning
+                CreateMLUtility.runLearning()
             }
 
             // testContext

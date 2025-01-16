@@ -1,258 +1,57 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.thisContains
 import shirates.core.driver.testContext
-import shirates.core.driver.testDrive
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.lastElement
+
+private fun String.process(digitOnly: Boolean): String {
+    var s = this.forVisionComparison()
+    if (digitOnly) {
+        s = s.replace("[^\\d\\s]".toRegex(), "")
+            .replace("[\\s+]".toRegex(), " ")
+    }
+    return s
+}
 
 /**
  * textIs
+ * (textContains)
  */
 fun VisionElement.textIs(
-    expected: String,
-    strict: Boolean = PropertiesManager.strictCompareMode,
-    regionText: Boolean = false,
+    containedText: String,
+    joinText: Boolean = false,
     digitOnly: Boolean = false,
 ): VisionElement {
-
-    val command = "textIs"
-
-    fun String.process(): String {
-        var s = this.forVisionComparison()
-        if (digitOnly) {
-            s = s.replace("[^\\d\\s]".toRegex(), "")
-                .replace("[\\s+]".toRegex(), " ")
-        }
-        return s
-    }
-
-    val context = TestDriverCommandContext(null)
-    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
-
-    fun strictCheckInDirectAccessMode() {
-        val e = testDrive.select(expression = selector!!.expression!!, throwsException = false, useCache = false)
-        val isIncluded = e.bounds.isIncludedIn(CodeExecutionContext.workingRegionRect.toBoundsWithRatio())
-        val actual = if (isIncluded) e.textOrLabelOrValue else ""
-        context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-            actual.thisIs(expected = expected, message = assertMessage, strict = true)
-        }
-    }
-    if (strict && selector?.expression != null) {
-        /**
-         * strict check in direct access mode
-         */
-        strictCheckInDirectAccessMode()
-        return this
-    }
 
     visionContext.recognizeText()
 
-    val expectedForCompare = expected.process()
-    val actual = if (regionText) {
-        if (digitOnly) regionDigit else this.joinedText
+    val command = "textIs"
+
+    val assertMessage = message(id = command, subject = subject, expected = containedText, replaceRelative = true)
+
+    val expectedForCompare = containedText.process(digitOnly = digitOnly)
+    val actual = if (joinText) {
+        if (digitOnly) joinedDigit else this.joinedText
     } else {
-        if (digitOnly) digitText else text
+        if (digitOnly) digit else text
     }
-    val actualForCompare = actual.process()
-
-    if (actualForCompare == expectedForCompare) {
-        /**
-         * OK
-         * AI-OCR recognized text exactly
-         */
-        context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-            actualForCompare.thisIs(expected = expectedForCompare, message = assertMessage, strict = strict)
-        }
-    } else {
-        /**
-         * NG
-         * AI-OCR might fail to detect texts or miss recognized text.
-         */
-        if (selector?.expression != null) {
-            /**
-             * This is fallback.
-             */
-            strictCheckInDirectAccessMode()
-        } else {
-            context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-                actualForCompare.thisIs(expected = expected, message = assertMessage, strict = strict)
-            }
-        }
-    }
-    return this
-}
-
-/**
- * regionTextIs
- */
-fun VisionElement.regionTextIs(
-    expected: String,
-    strict: Boolean = PropertiesManager.strictCompareMode,
-    digitOnly: Boolean = false,
-): VisionElement {
-
-    return textIs(
-        expected = expected,
-        strict = strict,
-        digitOnly = digitOnly,
-        regionText = true
-    )
-}
-
-internal fun VisionElement.textIsCore(
-    command: String,
-    expected: String,
-    strict: Boolean = PropertiesManager.strictCompareMode,
-    regionText: Boolean = false,
-    digitOnly: Boolean = false,
-): VisionElement {
+    val actualForCompare = actual.process(digitOnly = digitOnly)
 
     val context = TestDriverCommandContext(null)
-    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
-
-    var v = this
-    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
-        v = v.textIs(
-            expected = expected,
-            strict = strict,
-            regionText = regionText,
-            digitOnly = digitOnly,
-        )
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = containedText) {
+        actualForCompare.thisContains(expected = expectedForCompare, message = assertMessage, strict = false)
     }
-    lastElement = v
-    return v
-}
-
-/**
- * belowTextIs
- */
-fun VisionElement.belowTextIs(
-    expected: String,
-    useCache: Boolean = testContext.useCache,
-    strict: Boolean = PropertiesManager.strictCompareMode,
-    digitOnly: Boolean = false,
-): VisionElement {
-
-    if (useCache) {
-        val me = testDrive.select(this.selector.toString())
-        val e = me.belowLabel()
-        e.textIs(expected = expected, strict = strict)
-        val v = e.toVisionElement()
-        lastElement = v
-        return v
-    }
-
-    val command = "belowTextIs"
-    val v = belowText()
-    v.textIsCore(
-        command = command,
-        expected = expected,
-        strict = strict,
-        digitOnly = digitOnly,
-    )
-    return v
-}
-
-/**
- * aboveTextIs
- */
-fun VisionElement.aboveTextIs(
-    expected: String,
-    useCache: Boolean = testContext.useCache,
-    strict: Boolean = PropertiesManager.strictCompareMode,
-    digitOnly: Boolean = false,
-): VisionElement {
-
-    if (useCache) {
-        val me = testDrive.select(this.selector.toString())
-        val e = me.aboveLabel()
-        e.textIs(expected = expected, strict = strict)
-        val v = e.toVisionElement()
-        lastElement = v
-        return v
-    }
-
-    val command = "aboveTextIs"
-    val v = aboveText()
-    v.textIsCore(
-        command = command,
-        expected = expected,
-        strict = strict,
-        digitOnly = digitOnly,
-    )
-    return v
-}
-
-/**
- * rightTextIs
- */
-fun VisionElement.rightTextIs(
-    expected: String,
-    useCache: Boolean = testContext.useCache,
-    strict: Boolean = PropertiesManager.strictCompareMode,
-    digitOnly: Boolean = false,
-): VisionElement {
-
-    if (useCache) {
-        val me = testDrive.select(this.selector.toString())
-        val e = me.rightLabel()
-        e.textIs(expected = expected, strict = strict)
-        val v = e.toVisionElement()
-        lastElement = v
-        return v
-    }
-
-    val command = "rightTextIs"
-    val v = rightText()
-    v.textIsCore(
-        command = command,
-        expected = expected,
-        strict = strict,
-        digitOnly = digitOnly,
-    )
-    return v
-}
-
-/**
- * leftTextIs
- */
-fun VisionElement.leftTextIs(
-    expected: String,
-    useCache: Boolean = testContext.useCache,
-    strict: Boolean = PropertiesManager.strictCompareMode,
-    digitOnly: Boolean = false,
-): VisionElement {
-
-    if (useCache) {
-        val me = testDrive.select(this.selector.toString())
-        val e = me.leftLabel()
-        e.textIs(expected = expected, strict = strict)
-        val v = e.toVisionElement()
-        lastElement = v
-        return v
-    }
-
-    val command = "leftTextIs"
-    val v = leftText()
-    v.textIsCore(
-        command = command,
-        expected = expected,
-        strict = strict,
-        digitOnly = digitOnly,
-    )
-    return v
+    return this
 }
 
 /**
  * checkIsON
  */
 fun VisionElement.checkIsON(
+    classifierName: String = "CheckStateClassifier",
     waitSeconds: Double = testContext.syncWaitSeconds
 ): VisionElement {
 
@@ -264,6 +63,7 @@ fun VisionElement.checkIsON(
         this.checkIsCore(
             containedText = "ON",
             message = assertMessage,
+            classifierName = classifierName,
             waitSeconds = waitSeconds
         )
     }
@@ -274,6 +74,7 @@ fun VisionElement.checkIsON(
  * checkIsOFF
  */
 fun VisionElement.checkIsOFF(
+    classifierName: String = "CheckStateClassifier",
     waitSeconds: Double = testContext.syncWaitSeconds
 ): VisionElement {
 
@@ -285,6 +86,7 @@ fun VisionElement.checkIsOFF(
         this.checkIsCore(
             containedText = "OFF",
             message = assertMessage,
+            classifierName = classifierName,
             waitSeconds = waitSeconds
         )
     }
@@ -297,7 +99,7 @@ fun VisionElement.checkIsOFF(
 fun VisionElement.buttonStateIs(
     expectedLabel: String,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    mlmodelFile: String = "vision/mlmodels/basic/ButtonStateClassifier/ButtonStateClassifier.mlmodel"
+    classifierName: String = "ButtonStateClassifier",
 ): VisionElement {
 
     val command = "buttonStateIs"
@@ -309,7 +111,7 @@ fun VisionElement.buttonStateIs(
             containedText = expectedLabel,
             message = assertMessage,
             waitSeconds = waitSeconds,
-            mlmodelFile = mlmodelFile
+            classifierName = classifierName
         )
     }
     return this

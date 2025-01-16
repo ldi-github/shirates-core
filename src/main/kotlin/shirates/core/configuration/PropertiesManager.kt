@@ -934,6 +934,25 @@ object PropertiesManager {
         }
 
     /**
+     * visionBuildDirectory
+     */
+    val visionBuildDirectory: String
+        get() {
+            return getPropertyValue(propertyName = "visionBuildDirectory")
+                ?: Const.VISION_BUILD_DIRECTORY
+        }
+
+    /**
+     * visionEnableLearningOnStartup
+     */
+    val visionEnableLearningOnStartup: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionEnableLearningOnStartup")
+                ?: return Const.VISION_ENABLE_LEARNING_ON_STARTUP
+            return value == "true"
+        }
+
+    /**
      * visionServerUrl
      */
     val visionServerUrl: String

@@ -46,11 +46,11 @@ object VisionMLModelRepository {
     }
 
     /**
-     * generalClassifierRepository
+     * defaultClassifierRepository
      */
-    val generalClassifierRepository: VisionClassifierRepository
+    val defaultClassifierRepository: VisionClassifierRepository
         get() {
-            return getRepository("GeneralClassifier")
+            return getRepository("DefaultClassifier")
         }
 
 //    /**

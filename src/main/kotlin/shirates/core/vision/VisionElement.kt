@@ -198,9 +198,9 @@ class VisionElement(
         }
 
     /**
-     * digitText
+     * digit
      */
-    val digitText: String
+    val digit: String
         get() {
             val s = text.replace("[^\\d\\s]".toRegex(), "")
                 .replace("[\\s+]".toRegex(), " ")
@@ -216,9 +216,9 @@ class VisionElement(
         }
 
     /**
-     * regionDigit
+     * joinedDigit
      */
-    val regionDigit: String
+    val joinedDigit: String
         get() {
             val s = joinedText.replace("[^\\d\\s]".toRegex(), "")
                 .replace("[\\s+]".toRegex(), " ")

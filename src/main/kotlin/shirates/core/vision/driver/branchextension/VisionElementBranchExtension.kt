@@ -4,23 +4,18 @@ import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.logging.Message.message
-import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
-import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.driver.classify
 
 /**
  * ifCheckIsON
  */
 fun VisionElement.ifCheckIsON(
-    mlmodelFile: String? = null,
+    classifierName: String = "CheckStateClassifier",
     onSwitchON: ((VisionElement) -> Unit)
 ): VisionElement {
 
-    val rep = VisionMLModelRepository.getRepository(classifierName = "CheckStateClassifier")
-    val file = mlmodelFile ?: rep.imageClassifierDirectory.toPath().resolve("${rep.classifierName}.mlmodel").toString()
-
-    val label = this.classify(mlmodelFile = file)
+    val label = this.classify(classifierName = classifierName)
 
     if (label == "ON") {
         onSwitchON.invoke(this)
@@ -32,14 +27,11 @@ fun VisionElement.ifCheckIsON(
  * ifCheckIsOFF
  */
 fun VisionElement.ifCheckIsOFF(
-    mlmodelFile: String? = null,
+    classifierName: String = "CheckStateClassifier",
     onSwitchOFF: ((VisionElement) -> Unit)
 ): VisionElement {
 
-    val rep = VisionMLModelRepository.getRepository(classifierName = "CheckStateClassifier")
-    val file = mlmodelFile ?: rep.imageClassifierDirectory.toPath().resolve("${rep.classifierName}.mlmodel").toString()
-
-    val label = this.classify(mlmodelFile = file)
+    val label = this.classify(classifierName = classifierName)
 
     if (label == "OFF") {
         onSwitchOFF.invoke(this)
@@ -52,12 +44,13 @@ fun VisionElement.ifCheckIsOFF(
  */
 fun VisionElement.ifImageIs(
     label: String,
+    classifierName: String = "DefaultClassifier",
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
 
     val command = "ifImageIs"
 
-    val classifyResult = this.classify()
+    val classifyResult = this.classify(classifierName = classifierName)
 
     val matched = classifyResult == label
     val result = BooleanCompareResult(value = matched, command = command)
@@ -78,12 +71,13 @@ fun VisionElement.ifImageIs(
  */
 fun VisionElement.ifImageIsNot(
     label: String,
+    classifierName: String = "DefaultClassifier",
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
 
     val command = "ifImageIsNot"
 
-    val classifyResult = this.classify()
+    val classifyResult = this.classify(classifierName = classifierName)
 
     val matched = classifyResult != label
     val result = BooleanCompareResult(value = matched, command = command)

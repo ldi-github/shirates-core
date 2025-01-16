@@ -1757,6 +1757,42 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionBuildDirectory() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionBuildDirectory).isEqualTo(Const.VISION_BUILD_DIRECTORY)
+        }
+        run {
+            // Arrange
+            val value = "temp"
+            PropertiesManager.setPropertyValue("visionBuildDirectory", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionBuildDirectory).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionEnableLearningOnStartup() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionEnableLearningOnStartup).isEqualTo(Const.VISION_ENABLE_LEARNING_ON_STARTUP)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_ENABLE_LEARNING_ON_STARTUP.not()
+            PropertiesManager.setPropertyValue("visionEnableLearningOnStartup", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionEnableLearningOnStartup).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionServerUrl() {
 
         run {

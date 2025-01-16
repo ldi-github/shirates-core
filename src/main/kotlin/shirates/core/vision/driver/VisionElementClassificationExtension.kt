@@ -1,12 +1,13 @@
 package shirates.core.vision.driver
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestDriverException
-import shirates.core.utility.toPath
+import shirates.core.utility.file.resolve
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
 
 fun VisionElement.classify(
-    mlmodelFile: String = "vision/mlmodels/GeneralClassifier/GeneralClassifier.mlmodel".toPath().toString(),
+    classifierName: String = "DefaultClassifier"
 ): String {
 
     if (this.image == null) {
@@ -15,6 +16,9 @@ fun VisionElement.classify(
     if (this.imageFile == null) {
         this.saveImage()
     }
+
+    val mlmodelFile =
+        PropertiesManager.visionBuildDirectory.resolve("vision/mlmodels/$classifierName/$classifierName.mlmodel")
 
     val result = SrvisionProxy.classifyImage(
         inputFile = this.imageFile!!,

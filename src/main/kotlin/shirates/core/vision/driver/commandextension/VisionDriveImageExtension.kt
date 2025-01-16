@@ -33,7 +33,7 @@ fun VisionDrive.findImages(
     skinThickness: Int = 2,
 ): List<VisionElement> {
 
-    val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
+    val templateFile = VisionMLModelRepository.defaultClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
     val workingRegionElement = CodeExecutionContext.workingRegionElement
@@ -152,10 +152,10 @@ private fun VisionDrive.findImageCore(
     waitSeconds: Double,
     intervalSeconds: Double,
 ): VisionElement {
-    val templateFile = VisionMLModelRepository.generalClassifierRepository.getFile(label = label)
+    val templateFile = VisionMLModelRepository.defaultClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
-    lateinit var r: GetRectanglesWithTemplateResult
+    var r: GetRectanglesWithTemplateResult? = null
 
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
@@ -165,7 +165,10 @@ private fun VisionDrive.findImageCore(
             screenshot(force = true)
         }
     ) {
-        val workingRegionElement = CodeExecutionContext.workingRegionElement
+        var workingRegionElement = CodeExecutionContext.workingRegionElement
+        if (workingRegionElement.isEmpty) {
+            workingRegionElement = workingRegionElement.newVisionElement()
+        }
         if (workingRegionElement.imageFile == null) {
             workingRegionElement.saveImage()
         }
@@ -181,19 +184,19 @@ private fun VisionDrive.findImageCore(
             skinThickness = skinThickness,
         )
 
-        if (threshold != null && r.primaryCandidate.distance > threshold) {
-            TestLog.info("findImage(\"$label\") not found. (distance ${r.primaryCandidate.distance} > $threshold)")
+        if (threshold != null && r!!.primaryCandidate.distance > threshold) {
+            TestLog.info("findImage(\"$label\") not found. (distance ${r!!.primaryCandidate.distance} > $threshold)")
             false
         } else {
             true
         }
     }
     if (waitContext.hasError && waitContext.isTimeout.not()) {
-        return VisionElement.emptyElement
+        waitContext.throwIfError()
     }
 
-    if (threshold == null || r.primaryCandidate.distance < threshold) {
-        val v = r.primaryCandidate.toVisionElement()
+    if (threshold == null || r!!.primaryCandidate.distance < threshold) {
+        val v = r!!.primaryCandidate.toVisionElement()
         return v
     }
     return VisionElement.emptyElement

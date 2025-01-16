@@ -7,6 +7,7 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.proxy.AppiumProxy.getResponseBody
+import shirates.core.utility.file.exists
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
@@ -303,8 +304,11 @@ object SrvisionProxy {
 
         val sw = StopWatch("ImageClassifier/classifyImage")
 
-        if (Files.exists(inputFile.toPath()).not()) {
+        if (inputFile.exists().not()) {
             throw FileNotFoundException("Input file not found. (inputFile=$inputFile)")
+        }
+        if (mlmodelFile.exists().not()) {
+            throw FileNotFoundException("mlmodel file not found. (mlmodelFile=$mlmodelFile)")
         }
 
         val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +

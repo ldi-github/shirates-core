@@ -75,18 +75,19 @@ class TestElementImageExtensionTest : VisionTest() {
                     it.flickAndGoUp()
                 }.expectation {
                     val connectedDeveicesIcon = it.detect("Connected devices")
-                        .leftImage("[Connected devices Icon]")
+                        .leftImage("[Connected devices Icon]", threshold = 0.2)
                     connectedDeveicesIcon.isFound.thisIsTrue("<Connected devices>:leftImage is [Connected devices Icon]")
 
-                    connectedDeveicesIcon.aboveImage("[Network & internet Icon]")
-                        .isFound.thisIsTrue("<Connected devices>:leftImage:aboveImage is [Network & internet Icon]")
+                    val networkAndInternetIcon =
+                        connectedDeveicesIcon.aboveImage("[Network & internet Icon]", threshold = 0.2)
+                    networkAndInternetIcon.isFound.thisIsTrue("<Connected devices>:leftImage:aboveImage is [Network & internet Icon]")
 
-                    connectedDeveicesIcon.belowImage("[Apps Icon]", threshold = 1.0)
-                        .isFound.thisIsTrue("<Connected devices>:leftImage:belowImage is [Apps Icon]")
+                    val appsIcon = connectedDeveicesIcon.belowImage("[Apps Icon]", threshold = 1.0)
+                    appsIcon.isFound.thisIsTrue("<Connected devices>:leftImage:belowImage is [Apps Icon]")
 
-                    it.detect("Connected devices")
-                        .leftImage("[System Icon]")
-                        .isFound.thisIsFalse("<Connected devices>:leftImage is not [System Icon]")
+                    val systemIcon = it.detect("Connected devices")
+                        .leftImage("[System Icon]", threshold = 0.2)
+                    systemIcon.isFound.thisIsFalse("<Connected devices>:leftImage is not [System Icon]")
                 }
             }
 //            case(3, "imageContains") {

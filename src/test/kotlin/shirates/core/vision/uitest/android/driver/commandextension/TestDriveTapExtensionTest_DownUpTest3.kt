@@ -45,7 +45,7 @@ class TestDriveTapExtensionTest_DownUpTest3 : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.tapWithScrollDown("textMatches=^System$")
+                    it.tapWithScrollDown("textMatches=.*System$")
                 }.expectation {
                     it.screenIs("[System Screen]")
                 }

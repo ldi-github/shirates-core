@@ -14,6 +14,6 @@ class VisionMLModelRepositoryTest {
         // Assert
         assertThat(VisionMLModelRepository.mlmodelClassifiers.count()).isEqualTo(2)
         assertThat(VisionMLModelRepository.mlmodelClassifiers.containsKey("CheckStateClassifier")).isTrue()
-        assertThat(VisionMLModelRepository.mlmodelClassifiers.containsKey("GeneralClassifier")).isTrue()
+        assertThat(VisionMLModelRepository.mlmodelClassifiers.containsKey("DefaultClassifier")).isTrue()
     }
 }

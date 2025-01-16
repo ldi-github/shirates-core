@@ -1,5 +1,6 @@
 package shirates.core.vision.uitest.android.driver.commandextension
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -190,10 +191,8 @@ class TestDriveSwipeExtensionTest : VisionTest() {
                 }.expectation {
                     val v = detect("Display")
                     val b = v.bounds
-                    val low = rootElement.bounds.height * 0.2
-                    val high = low + b.height - 1
-                    (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
-                    (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
+                    val diff = Math.abs(b.centerY - rootElement.bounds.height * 0.2)
+                    assertThat(diff < 50).isTrue()
                 }
             }
             case(3) {

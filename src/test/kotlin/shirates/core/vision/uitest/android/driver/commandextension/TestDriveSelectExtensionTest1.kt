@@ -72,7 +72,7 @@ class TestDriveSelectExtensionTest1 : VisionTest() {
                 }.action {
                     it.detectWithScrollDown("System")
                 }.expectation {
-                    it.text.thisIs("System")
+                    it.textIs("System")
                     it.selector!!.text.thisIs("System")
 
                     assertThatThrownBy {
@@ -88,7 +88,7 @@ class TestDriveSelectExtensionTest1 : VisionTest() {
                     it.detectWithScrollUp("Connected devices")
                 }.expectation {
                     // Assert
-                    assertThat(it.text).isEqualTo("Connected devices")
+                    it.textIs("Connected devices")
                     assertThat(it.selector!!.text).isEqualTo("Connected devices")
 
                     // Act, Assert

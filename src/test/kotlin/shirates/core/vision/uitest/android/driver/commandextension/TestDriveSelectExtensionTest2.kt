@@ -27,7 +27,7 @@ class TestDriveSelectExtensionTest2 : VisionTest() {
                         it.macro("[Maps Top Screen]")
                             .select("#below_search_omnibox_container:descendant(.android.widget.Button&&[1])")
                             .text.memoTextAs("1st button")
-                        it.select(readMemo("1st button")).thisIsTrue()
+                        it.select(readMemo("1st button")).textIs(readMemo("1st button"))
                     }.action {
                         it.select("#below_search_omnibox_container")
                             .scanElements(direction = ScrollDirection.Right, endSelector = readMemo("Last button"))

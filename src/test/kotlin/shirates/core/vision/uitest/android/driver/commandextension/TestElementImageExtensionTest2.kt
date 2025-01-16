@@ -8,20 +8,10 @@ import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
-import shirates.helper.ImageSetupHelper
 
 @Want
 @Testrun("testConfig/android/calendar/testrun.properties")
 class TestElementImageExtensionTest2 : VisionTest() {
-
-    @Test
-    @Order(0)
-    fun setupImage() {
-
-        scenario {
-            ImageSetupHelper.setupImageCalendarWeekScreen()
-        }
-    }
 
     @Test
     @Order(10)
@@ -30,15 +20,18 @@ class TestElementImageExtensionTest2 : VisionTest() {
         scenario {
             case(1) {
                 condition {
-                    it.restartApp()
-                    it.macro("[Calendar Week Screen]")
+                    it.macro("[Maps Top Screen]")
                 }.expectation {
-                    it.findImage("[Day1-1].png").thisIsTrue()
-                    it.findImageWithScrollRight("[Day1-1].png", scrollDurationSeconds = 0.2).thisIsTrue()
-                    it.findImage("[Day3-1].png", throwsException = false).thisIsFalse()
-                    it.findImageWithScrollRight("[Day3-2].png", scrollDurationSeconds = 0.2).thisIsTrue()
-                    it.findImage("[Day1-1].png", throwsException = false).thisIsFalse()
-                    it.findImageWithScrollLeft("[Day1-1].png", scrollDurationSeconds = 0.2).thisIsTrue()
+                    var restaurantsIcon = it.findImage("[Restaurants Icon]", threshold = 1.0)
+                    restaurantsIcon.isFound.thisIsTrue()
+
+                    restaurantsIcon.onLine {
+                        val shoppingIcon = it.findImageWithScrollRight("[Shopping Icon]", threshold = 1.0)
+                        shoppingIcon.isFound.thisIsTrue()
+
+                        restaurantsIcon = it.findImageWithScrollLeft("[Restaurants Icon]", threshold = 1.0)
+                        restaurantsIcon.isFound.thisIsTrue()
+                    }
                 }
             }
             case(2) {
