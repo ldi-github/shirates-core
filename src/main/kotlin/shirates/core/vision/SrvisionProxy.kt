@@ -1,8 +1,10 @@
 package shirates.core.vision
 
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestDriverException
+import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
@@ -21,6 +23,15 @@ import kotlin.io.path.name
 object SrvisionProxy {
 
     var lastJsonString = ""
+
+    internal fun getResponseBody(url: HttpUrl): String {
+
+        try {
+            return HttpProxy.getResponseBody(url)
+        } catch (t: Throwable) {
+            throw TestEnvironmentException(message = "Could not connecto to vision-server", cause = t)
+        }
+    }
 
     /**
      * setupImageFeaturePrintConfig
@@ -42,7 +53,7 @@ object SrvisionProxy {
             value = inputDirectory.toPath().toString()
         )
         val url = urlBuilder.build()
-        val jsonString = HttpProxy.getResponseBody(url)
+        val jsonString = getResponseBody(url)
         lastJsonString = jsonString
 
         if (log) {
@@ -84,7 +95,7 @@ object SrvisionProxy {
             )
         }
         val url = urlBuilder.build()
-        val jsonString = HttpProxy.getResponseBody(url)
+        val jsonString = getResponseBody(url)
         lastJsonString = jsonString
 
         val file =
@@ -128,7 +139,7 @@ object SrvisionProxy {
             )
         }
         val url = urlBuilder.build()
-        val result = HttpProxy.getResponseBody(url)
+        val result = getResponseBody(url)
         lastJsonString = result
 
         if (Files.exists(TestLog.directoryForLog).not()) {
@@ -197,7 +208,7 @@ object SrvisionProxy {
             value = inputDirectory.toPath().toString()
         )
         val url = urlBuilder.build()
-        val result = HttpProxy.getResponseBody(url)
+        val result = getResponseBody(url)
         lastJsonString = result
 
         if (log) {
@@ -318,7 +329,7 @@ object SrvisionProxy {
             value = mlmodelFile.toPath().toString()
         )
         val url = urlBuilder.build()
-        val result = HttpProxy.getResponseBody(url)
+        val result = getResponseBody(url)
         lastJsonString = result
 
         if (log) {
@@ -348,7 +359,7 @@ object SrvisionProxy {
             value = inputFile.toPath().toString()
         )
         val url = urlBuilder.build()
-        val jsonString = HttpProxy.getResponseBody(url)
+        val jsonString = getResponseBody(url)
         lastJsonString = jsonString
 
         if (log) {
@@ -383,7 +394,7 @@ object SrvisionProxy {
             value = rect
         )
         val url = urlBuilder.build()
-        val jsonString = HttpProxy.getResponseBody(url)
+        val jsonString = getResponseBody(url)
         lastJsonString = jsonString
 
         if (Files.exists(TestLog.directoryForLog).not()) {
@@ -435,7 +446,7 @@ object SrvisionProxy {
             )
         }
         val url = urlBuilder.build()
-        val result = HttpProxy.getResponseBody(url)
+        val result = getResponseBody(url)
         lastJsonString = result
 
         if (Files.exists(TestLog.directoryForLog).not()) {
