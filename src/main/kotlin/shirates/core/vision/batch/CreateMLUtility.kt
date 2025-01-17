@@ -10,6 +10,7 @@ import boofcv.struct.image.GrayU8
 import org.apache.commons.io.FileUtils
 import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
@@ -157,6 +158,9 @@ object CreateMLUtility {
         visionDirectory: String = PropertiesManager.visionDirectory,
         visionDirectoryInWork: String = VISION_DIRECTORY_IN_WORK,
     ) {
+        if (TestMode.isRunningOnMacOS.not()) {
+            throw NotImplementedError("CreateMLUtility is for only MacOS.")
+        }
         this.visionDirectory = visionDirectory
         this.visionDirectoryInWork = visionDirectoryInWork
 
