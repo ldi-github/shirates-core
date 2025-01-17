@@ -74,7 +74,7 @@ class VisionClassifierRepository {
         if (labelMap.containsKey(label).not()) {
             return listOf()
         }
-        return labelMap[label]!!.files
+        return labelMap[label]!!.files.filter { it.toPath().name.contains("_binary.").not() }
     }
 
     /**
@@ -84,7 +84,9 @@ class VisionClassifierRepository {
 
         val files = getFiles(label = label)
         val platformSymbol = if (isAndroid) "@a." else "@i."
-        val file = files.firstOrNull() { it.toPath().name.contains(platformSymbol) }
+        val file = files.firstOrNull() {
+            it.toPath().name.contains(platformSymbol)
+        }
         if (file != null) {
             return file
         }

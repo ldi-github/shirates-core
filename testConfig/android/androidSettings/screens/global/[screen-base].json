@@ -5,7 +5,7 @@
   ],
 
   "selectors": {
-    "[<-]": "@Navigate up||@Back",
+    "[←]": "@Navigate up||@Back",
     "[More options]": "@More options"
 
   }

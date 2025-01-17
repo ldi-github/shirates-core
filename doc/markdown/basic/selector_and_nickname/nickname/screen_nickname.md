@@ -218,14 +218,14 @@ You can define base screen nickname file named `[screen-base].json` commonly sha
   ],
 
   "selectors": {
-    "[<-]": "@Navigate up||@Back",
+    "[←]": "@Navigate up||@Back",
     "[More options]": "@More options"
 
   }
 }
 ```
 
-Now, you don't have to define "[<-]" and "[More options]" in every other screen nickname file.
+Now, you don't have to define "[←]" and "[More options]" in every other screen nickname file.
 
 ### include
 

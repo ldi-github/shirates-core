@@ -7,7 +7,7 @@
   "identity": "~title=Network & internet",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Network & internet]": "@Network & internet",
 
     "[Internet Icon]": "[Internet]:leftImage",

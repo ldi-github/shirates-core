@@ -7,7 +7,7 @@
   "identity": "[Search Box]",
 
   "selectors": {
-    "[<-]": "@Back",
+    "[←]": "@Back",
     "[Search Box]": "#open_search_view_edit_text",
     "[X]": "@Clear text"
   }

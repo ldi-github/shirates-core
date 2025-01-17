@@ -58,7 +58,7 @@ object CreateMLUtility {
             }
         val imageFileInTraining: String
             get() {
-                return labelDirectoryInVision.resolve(imageFileInVision.toPath().name)
+                return labelDirectoryInTraining.resolve(imageFileInVision.toPath().name)
             }
 
         /**
@@ -200,7 +200,12 @@ object CreateMLUtility {
             logFile.toFile().writeText(r.resultString)
 
             if (r.resultString.contains("Accuracy: 100.00%").not()) {
-                printWarn("Accuracy is not 100%.")
+                printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                printWarn("!!                                                        !!")
+                printWarn("!! CAUTION                                                !!")
+                printWarn("!!                                                        !!")
+                printWarn("!! Learning has a problem. Accuracy is not 100%.          !!")
+                printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
             sw.printInfo()
         }
@@ -266,7 +271,7 @@ object CreateMLUtility {
             // copy image file to test
             imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.labelDirectoryInTest)
             // create binary file in test
-            createBinaryFile(imageFile = imageEntry.imageFileInTest)
+            createBinaryFile(imageFile = imageEntry.imageFileInTraining)
         }
     }
 
@@ -274,7 +279,7 @@ object CreateMLUtility {
         for (scriptFileInVision in scriptFilesInVision) {
             val classifierName = scriptFileInVision.toPath().parent.name
             val scriptFileInWork = mlmodelsDirectoryInWork.resolve(classifierName).resolve(ML_IMAGE_CLASSIFIER_SCRIPT)
-            scriptFileInVision.copyFile(scriptFileInWork)
+            scriptFileInVision.copyFileTo(scriptFileInWork)
         }
     }
 

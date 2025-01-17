@@ -17,6 +17,7 @@ import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isNoLoadRun
+import shirates.core.driver.TestMode.isRunningOnMacOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.*
 import shirates.core.logging.CodeExecutionContext
@@ -349,17 +350,19 @@ abstract class UITestBase : Drive {
                 // MacroRepository
                 MacroRepository.setup()
 
-                // setup mlmodel repository
-                VisionMLModelRepository.setup()
+                if (isRunningOnMacOS) {
+                    // run learning
+                    CreateMLUtility.runLearning()
 
-                // setup textReplacement repository
-                VisionTextReplacementRepository.setup()
+                    // setup mlmodel repository
+                    VisionMLModelRepository.setup()
 
-                // setup screen repository
-                VisionScreenRepository.setup()
+                    // setup textReplacement repository
+                    VisionTextReplacementRepository.setup()
 
-                // run learning
-                CreateMLUtility.runLearning()
+                    // setup screen repository
+                    VisionScreenRepository.setup()
+                }
             }
 
             // testContext

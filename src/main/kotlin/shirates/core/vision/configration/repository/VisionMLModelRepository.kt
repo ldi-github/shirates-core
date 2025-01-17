@@ -15,7 +15,8 @@ object VisionMLModelRepository {
      * setup
      */
     fun setup(
-        mlmodelsDirectory: String = PropertiesManager.visionDirectory.toPath().resolve("mlmodels").toString()
+        mlmodelsDirectory: String = PropertiesManager.visionBuildDirectory.toPath()
+            .resolve("vision").resolve("mlmodels").toString()
     ) {
         if (Files.exists(mlmodelsDirectory.toPath()).not()) {
             printInfo("Directory not found. (mlmodelsDirectory=$mlmodelsDirectory)")
@@ -23,7 +24,7 @@ object VisionMLModelRepository {
         }
 
         val dirs = mlmodelsDirectory.toPath().toFile().walkTopDown()
-            .filter { it.extension == "swift" }.map { it.parentFile.toString() }.toList()
+            .filter { it.extension == "mlmodel" }.map { it.parentFile.toString() }.toList()
 
         for (mlmodelDir in dirs) {
             val classifierName = mlmodelDir.toPath().name

@@ -7,9 +7,9 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 /**
- * copyFile
+ * copyFileTo
  */
-fun String.copyFile(
+fun String.copyFileTo(
     destination: String
 ): String {
 
@@ -21,9 +21,9 @@ fun String.copyFile(
 }
 
 /**
- * copyFile
+ * copyFileTo
  */
-fun String.copyFile(
+fun String.copyFileTo(
     destinationPath: Path
 ): String {
 
@@ -42,7 +42,7 @@ fun String.copyFileIntoDirectory(
 ): String {
 
     val destination = directory.resolve(this.toFile().name)
-    this.copyFile(destination)
+    this.copyFileTo(destination)
 
     return this
 }
@@ -55,7 +55,7 @@ fun String.copyFileIntoDirectory(
 ): String {
 
     val destination = directoryPath.resolve(this.toFile().name)
-    this.copyFile(destination)
+    this.copyFileTo(destination)
 
     return this
 }

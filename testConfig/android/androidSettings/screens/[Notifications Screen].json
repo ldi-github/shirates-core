@@ -7,7 +7,7 @@
   "identity": "~title=Notifications",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Notifications]": "",
     "[action_bar]": "#action_bar"
   },

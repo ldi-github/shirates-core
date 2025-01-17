@@ -22,7 +22,7 @@ class TestDriveTapExtensionTest_DownUpTest5 : VisionTest() {
                     }.action {
                         it.tapWithScrollDown("#android:id/title&&Security & privacy")
                     }.expectation {
-                        it.exist("[<-]")
+                        it.exist("[←]")
                     }
                 }
                 case(2) {
@@ -31,7 +31,7 @@ class TestDriveTapExtensionTest_DownUpTest5 : VisionTest() {
                     }.action {
                         it.tapWithScrollUp("#search_action_bar_title")
                     }.expectation {
-                        it.exist("[<-]")
+                        it.exist("[←]")
                     }
                 }
             }

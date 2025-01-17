@@ -220,14 +220,14 @@
   ],
 
   "selectors": {
-    "[<-]": "@Navigate up||@Back",
+    "[←]": "@Navigate up||@Back",
     "[More options]": "@More options"
 
   }
 }
 ```
 
-これにより"[<-]"と"[More options]"を画面ニックネームを定義するたびに都度定義することなく使用できます。
+これにより"[←]"と"[More options]"を画面ニックネームを定義するたびに都度定義することなく使用できます。
 
 ### include
 

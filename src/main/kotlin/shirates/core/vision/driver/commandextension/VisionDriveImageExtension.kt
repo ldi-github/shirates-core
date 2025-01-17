@@ -106,7 +106,7 @@ fun VisionDrive.findImage(
             /**
              * Try to find image with scroll
              */
-            printInfo("Tring to find image with scroll. (label=\"$label\")")
+            printInfo("Trying to find image with scroll. (label=\"$label\")")
             v = getElementWithScroll(action = {
                 action()
             })

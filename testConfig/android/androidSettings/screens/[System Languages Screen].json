@@ -4,7 +4,7 @@
   "identity": "[Add a language]",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[More options]": "@More options",
     "[Languages]": "@Languages",
 

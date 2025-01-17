@@ -7,14 +7,15 @@ import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.proxy.AppiumProxy.getResponseBody
+import shirates.core.utility.file.copyFileTo
 import shirates.core.utility.file.exists
+import shirates.core.utility.file.resolve
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.result.*
 import java.io.FileNotFoundException
 import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 import kotlin.io.path.name
 
 object SrvisionProxy {
@@ -266,26 +267,21 @@ object SrvisionProxy {
         )
 
         /**
+         * Save working region image as region_[x, y, width, height].png
+         */
+        val workingRegionFile = outputDirectory.resolve("workingRegion_${segmentContainer.rect}.png")
+        imageFile.copyFileTo(workingRegionFile)
+        /**
          * Save template image as template.png
          */
-        Files.copy(
-            templateImageFile.toPath(),
-            outputDirectory.toPath().resolve("template_${templateImageFile.toPath().name}"),
-            StandardCopyOption.REPLACE_EXISTING
-        )
+        templateImageFile.copyFileTo(outputDirectory.resolve("template_${templateImageFile.toPath().name}"))
         /**
          * Save primary candidate of segment image as candidate_[x, y, width, height].png
          */
-        val primaryCandidateImageFile =
-            segmentContainer.outputDirectory.toPath().resolve("${result.primaryCandidate.file}")
-        val outputFile = outputDirectory.toPath().resolve("candidate_${result.primaryCandidate.rectangle}.png")
-        if (Files.exists(outputFile).not()) {
-            Files.copy(
-                primaryCandidateImageFile,
-                outputFile,
-                StandardCopyOption.REPLACE_EXISTING
-            )
-        }
+        val primaryCandidateImageFile = segmentContainer.outputDirectory!!.resolve("${result.primaryCandidate.file}")
+        val pc = result.primaryCandidate
+        val candidateFile = outputDirectory.resolve("candidate_${pc.rectangle}_distance=${pc.distance}.png")
+        primaryCandidateImageFile.copyFileTo(candidateFile)
         sw.stop()
         if (log) {
             sw.printInfo()

@@ -39,14 +39,14 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
         TestMode.runAsScreen("[Languages Screen]") {
             run {
                 // Arrange
-                val e1 = TestElementCache.select("[<-]")
+                val e1 = TestElementCache.select("[←]")
                 assertThat(e1.selector?.expression).isEqualTo("@Navigate up")
                 val e2 = TestElementCache.select("[More options]")
                 assertThat(e2.selector?.expression).isEqualTo("@More options")
                 // Act
                 val r1 = e1.right()
                 // Assert
-                assertThat(e1.right().selector?.expression).isEqualTo("[<-]:right")
+                assertThat(e1.right().selector?.expression).isEqualTo("[←]:right")
                 assertThat(e1.right()).isEqualTo(e2)
 
                 /**
@@ -73,13 +73,13 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
             // right()
             run {
                 // Arrange
-                val e = TestElementCache.select("[<-]")
+                val e = TestElementCache.select("[←]")
                 // Act
                 val r1 = e.right()
                 // Assert
                 assertThat(r1.className).isEqualTo("android.widget.ImageButton")
                 assertThat(r1.access).isEqualTo("More options")
-                assertThat(r1.selector.toString()).isEqualTo("[<-]:right")
+                assertThat(r1.selector.toString()).isEqualTo("[←]:right")
                 // Act
                 val r2 = r1.right()
                 // Assert
@@ -87,12 +87,12 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
             }
             run {
                 // Arrange
-                val e = TestElementCache.select("[<-]")
+                val e = TestElementCache.select("[←]")
                 // Act
                 val r1 = e.right(1)
                 // Assert
                 assertThat(r1.access).isEqualTo("More options")
-                assertThat(r1.selector.toString()).isEqualTo("[<-]:right")
+                assertThat(r1.selector.toString()).isEqualTo("[←]:right")
                 // Act
                 val r2 = e.right(2)
                 // Assert
@@ -375,26 +375,26 @@ class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
             // above()
             run {
                 // Arrange
-                val e = TestElementCache.select("[<-]")
+                val e = TestElementCache.select("[←]")
                 // Act
                 val a1 = e.below()
                 // Assert
                 assertThat(a1.text).isEqualTo("English (United States)")
-                assertThat(a1.selector.toString()).isEqualTo("[<-]:below")
+                assertThat(a1.selector.toString()).isEqualTo("[←]:below")
                 // Act
                 val a2 = a1.below()
                 // Assert
                 assertThat(a2.text).isEqualTo("日本語 (日本)")
-                assertThat(a2.selector.toString()).isEqualTo("[<-]:below(2)")
+                assertThat(a2.selector.toString()).isEqualTo("[←]:below(2)")
                 // Act
                 val a3 = a2.below()
                 // Assert
                 assertThat(a3.text).isEqualTo("Add a language")
-                assertThat(a3.selector.toString()).isEqualTo("[<-]:below(3)")
+                assertThat(a3.selector.toString()).isEqualTo("[←]:below(3)")
                 // Act
                 val a4 = a3.below()
                 assertThat(a4.isEmpty).isTrue()
-                assertThat(a4.selector.toString()).isEqualTo("[<-]:below(4)")
+                assertThat(a4.selector.toString()).isEqualTo("[←]:below(4)")
             }
             run {
                 // Arrange

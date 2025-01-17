@@ -204,6 +204,7 @@ class VisionElement(
         get() {
             val s = text.replace("[^\\d\\s]".toRegex(), "")
                 .replace("[\\s+]".toRegex(), " ")
+                .trim()
             return s
         }
 
@@ -222,6 +223,7 @@ class VisionElement(
         get() {
             val s = joinedText.replace("[^\\d\\s]".toRegex(), "")
                 .replace("[\\s+]".toRegex(), " ")
+                .trim()
             return s
         }
 

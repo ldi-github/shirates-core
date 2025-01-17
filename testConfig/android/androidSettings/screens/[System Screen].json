@@ -7,7 +7,7 @@
   "identity": "~title=System",
 
   "selectors": {
-    "[<-]": "@Navigate up"
+    "[←]": "@Navigate up"
   }
 
 }

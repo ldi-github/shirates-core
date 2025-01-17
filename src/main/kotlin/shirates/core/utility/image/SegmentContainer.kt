@@ -5,6 +5,9 @@ import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
+import shirates.core.utility.file.exists
+import shirates.core.utility.file.resolve
+import shirates.core.utility.file.toFile
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
@@ -32,13 +35,25 @@ class SegmentContainer(
     var skinThickness: Int = 2,
     var minimumWidth: Int = 5,
     var minimumHeight: Int = 5,
-    var outputDirectory: String? = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
+    var outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
     var saveWithMargin: Boolean = true,
 ) {
     val segments = mutableListOf<Segment>()
     val originalSegments = mutableListOf<Segment>()
     val visionElements = mutableListOf<VisionElement>()
     var binary: GrayU8? = null
+
+    val rect: Rectangle
+        get() {
+            if (this.containerImage == null) {
+                if (Files.exists(containerImageFile.toPath()).not()) {
+                    return Rectangle()
+                }
+                this.containerImage = UtilImageIO.loadImageNotNull(containerImageFile)
+            }
+            val imageRect = this.containerImage!!.rect
+            return Rectangle(x = containerX, y = containerY, width = imageRect.width, height = imageRect.height)
+        }
 
     override fun toString(): String {
         return "segments: ${segments.count()} $segments"
@@ -281,12 +296,9 @@ class SegmentContainer(
         if (containerImage == null) {
             throw IllegalArgumentException("image is null")
         }
-        if (outputDirectory == null) {
-            throw IllegalArgumentException("output directory is null")
-        }
         setupOutputDirectory()
         binary.toBufferedImage()?.saveImage(
-            file = outputDirectory.toPath().resolve("binary").toString(),
+            file = outputDirectory.resolve("binary"),
             log = false
         )
         for (segment in segments) {
@@ -371,6 +383,9 @@ class SegmentContainer(
         elements = elements.sortedBy { it.rect.left }
         visionElements.addAll(elements)
 
+        val drawImage = draw()
+        drawImage.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
+
         return this
     }
 
@@ -424,12 +439,9 @@ class SegmentContainer(
     }
 
     private fun setupOutputDirectory() {
-        /**
-         * setup outputDirectory
-         */
-        val outputDirectoryPath = outputDirectory.toPath()
-        if (Files.exists(outputDirectoryPath).not()) {
-            outputDirectory.toPath().toFile().mkdirs()
+
+        if (outputDirectory.exists().not()) {
+            outputDirectory.toFile().mkdirs()
         }
     }
 

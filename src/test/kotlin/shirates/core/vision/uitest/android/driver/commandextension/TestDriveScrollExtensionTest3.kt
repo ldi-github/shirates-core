@@ -124,7 +124,7 @@ class TestDriveScrollExtensionTest3 : VisionTest() {
             }
             case(4) {
                 action {
-                    it.tapImage("[<-]", threshold = 0.3)
+                    it.tapImage("[←]", threshold = 0.3)
                     withScrollUp {
                         it.tap("Network & internet")
                     }

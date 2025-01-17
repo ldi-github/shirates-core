@@ -56,7 +56,7 @@ Let's see `[Connected devices Screen]` as example.
   "identity": "",
 
   "selectors": {
-    "[<-]": "",
+    "[←]": "",
     "[Connected devices]": "",
     "[+]": "",
     "[Pair new device]": "",
@@ -73,10 +73,10 @@ Let's see `[Connected devices Screen]` as example.
 
 6. Inspect each elements to find unique attribute(s).
    (See [Selector expression](../../basic/selector_and_nickname/selector_expression.md))
-    - `[<-]` is determined uniquely by the condition that content-desc is '`Navigate up`'.
+    - `[←]` is determined uniquely by the condition that content-desc is '`Navigate up`'.
       <br>![](../_images/inspect_element_1.png)
       <br>So you can define the selector as follows using **accessibility filter**.
-      <br>```"[<-]": "@Navigate up"```
+      <br>```"[←]": "@Navigate up"```
       <br>
       <br>
     - `[Connected devices]` is uniquely determined by the condition that content-desc is '`Connected devices`'.
@@ -129,7 +129,7 @@ Let's see `[Connected devices Screen]` as example.
   "identity": "",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Connected devices]": "@Connected devices",
     "[+]": "[Pair new device]:leftImage",
     "[Pair new device]": "",
@@ -153,7 +153,7 @@ Let's see `[Connected devices Screen]` as example.
   "identity": "[Connected devices][Pair new device][See all]",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Connected devices]": "@Connected devices",
     "[+]": "[Pair new device]:leftImage",
     "[Pair new device]": "",
@@ -190,7 +190,7 @@ class ConnectedDevicesTest : UITest() {
                     it.tap("Connected devices")
                 }.expectation {
                     it.screenIs("[Connected devices Screen]")
-                        .exist("[<-]").accessIs("Navigate up")
+                        .exist("[←]").accessIs("Navigate up")
                         .exist("[Connected devices]").accessIs("Connected devices")
                         .exist("[+]").classIs("android.widget.ImageView")
                         .exist("[Pair new device]").textIs("Pair new device")
@@ -205,7 +205,7 @@ class ConnectedDevicesTest : UITest() {
             }
             case(2) {
                 action {
-                    it.tap("[<-]")
+                    it.tap("[←]")
                 }.expectation {
                     it.exist("Network & internet")
                 }
@@ -266,7 +266,7 @@ Screen nickname file for `[Network & internet Screen]` can be described as follo
   "identity": "~title=Network & internet",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Network & internet]": "@Network & internet",
 
     "[Internet]": "",

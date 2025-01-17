@@ -57,7 +57,7 @@ Androidの設定アプリを開きます。
   "identity": "",
 
   "selectors": {
-    "[<-]": "",
+    "[←]": "",
     "[Connected devices]": "",
     "[+]": "",
     "[Pair new device]": "",
@@ -74,10 +74,10 @@ Androidの設定アプリを開きます。
 
 6. 各要素を精査しユニークな属性を探します。
    (参照 [セレクター式](../../basic/selector_and_nickname/selector_expression_ja.md))
-    - `[<-]` は content-descが '`Navigate up`'であるという条件で唯一に決定することができます。
+    - `[←]` は content-descが '`Navigate up`'であるという条件で唯一に決定することができます。
       <br>![](../_images/inspect_element_1.png)
       <br>これにより **アクセシビリティフィルター** を使用して以下のようにセレクターを定義できます。
-      <br>```"[<-]": "@Navigate up"```
+      <br>```"[←]": "@Navigate up"```
       <br>
       <br>
     - `[Connected devices]`はcontent-descが '`Connected devices`'であるという条件で唯一に決定することができます。
@@ -129,7 +129,7 @@ Androidの設定アプリを開きます。
   "identity": "",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Connected devices]": "@Connected devices",
     "[+]": "[Pair new device]:leftImage",
     "[Pair new device]": "",
@@ -153,7 +153,7 @@ Androidの設定アプリを開きます。
   "identity": "[Connected devices][Pair new device][See all]",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Connected devices]": "@Connected devices",
     "[+]": "[Pair new device]:leftImage",
     "[Pair new device]": "",
@@ -190,7 +190,7 @@ class ConnectedDevicesTest : UITest() {
                     it.tap("Connected devices")
                 }.expectation {
                     it.screenIs("[Connected devices Screen]")
-                        .exist("[<-]").accessIs("Navigate up")
+                        .exist("[←]").accessIs("Navigate up")
                         .exist("[Connected devices]").accessIs("Connected devices")
                         .exist("[+]").classIs("android.widget.ImageView")
                         .exist("[Pair new device]").textIs("Pair new device")
@@ -205,7 +205,7 @@ class ConnectedDevicesTest : UITest() {
             }
             case(2) {
                 action {
-                    it.tap("[<-]")
+                    it.tap("[←]")
                 }.expectation {
                     it.exist("Network & internet")
                 }
@@ -265,7 +265,7 @@ Androidの設定アプリを起動します。
   "identity": "~title=Network & internet",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Network & internet]": "@Network & internet",
 
     "[Internet]": "",

@@ -50,13 +50,10 @@ fun VisionDrive.exist(
     if (func != null) {
         func(v)
     }
-
-//    sw.printInfo()
-
     return v
 }
 
-private fun VisionDrive.existCore(
+internal fun VisionDrive.existCore(
     message: String,
     selector: Selector,
     language: String,
@@ -85,6 +82,7 @@ private fun VisionDrive.existCore(
     }
     return v
 }
+
 
 private fun VisionDrive.actionWithOnExistErrorHandler(
     message: String,
