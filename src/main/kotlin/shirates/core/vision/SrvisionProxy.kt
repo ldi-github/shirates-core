@@ -29,7 +29,7 @@ object SrvisionProxy {
         try {
             return HttpProxy.getResponseBody(url)
         } catch (t: Throwable) {
-            throw TestEnvironmentException(message = "Could not connecto to vision-server", cause = t)
+            throw TestEnvironmentException(message = "Could not connect to vision-server.", cause = t)
         }
     }
 

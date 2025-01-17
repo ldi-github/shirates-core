@@ -1,15 +1,14 @@
 package shirates.core.uitest.android.basic.branch
 
-import ifCanDetect
-import ifCanDetectNot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.vision.driver.commandextension.screenIs
-import shirates.core.vision.testcode.VisionTest
+import shirates.core.driver.branchextension.ifCanSelect
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.testcode.UITest
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class SelectBranchFunctionTest : VisionTest() {
+class SelectBranchFunctionTest : UITest() {
 
     @Test
     fun ifCanSelectTest() {
@@ -22,7 +21,7 @@ class SelectBranchFunctionTest : VisionTest() {
             var ifCanSelectCalled = false
             var notCalled = false
             // Act
-            ifCanDetect("no exist") {
+            ifCanSelect("no exist") {
                 ifCanSelectCalled = true     // never called
             }.ifElse {
                 notCalled = true
@@ -36,7 +35,7 @@ class SelectBranchFunctionTest : VisionTest() {
             var ifCanSelectCalled = false
             var notCalled = false
             // Act
-            ifCanDetect("Connected devices") {
+            ifCanSelect("Connected devices") {
                 ifCanSelectCalled = true     // called
             }.ifElse {
                 notCalled = true    // never called
@@ -49,7 +48,7 @@ class SelectBranchFunctionTest : VisionTest() {
             // Arrange
             var elseCalled = false
             // Act
-            ifCanDetect("no exist")
+            ifCanSelect("no exist")
                 .ifElse {
                     elseCalled = true    // never called
                 }
@@ -70,7 +69,7 @@ class SelectBranchFunctionTest : VisionTest() {
             var ifCanSelectNotCalled = false
             var notCalled = false
             // Act
-            ifCanDetectNot("no exist") {
+            ifCanSelect("no exist") {
                 ifCanSelectNotCalled = true     // called
             }.ifElse {
                 notCalled = true    // never called
@@ -84,7 +83,7 @@ class SelectBranchFunctionTest : VisionTest() {
             var ifCanSelectNotCalled = false
             var notCalled = false
             // Act
-            ifCanDetectNot("Connected devices") {
+            ifCanSelect("Connected devices") {
                 ifCanSelectNotCalled = true     // never called
             }.ifElse {
                 notCalled = true    // called

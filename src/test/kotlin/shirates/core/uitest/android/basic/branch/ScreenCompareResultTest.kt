@@ -5,18 +5,18 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.branchextension.android
+import shirates.core.driver.branchextension.ifScreenIsNot
 import shirates.core.driver.branchextension.result.ScreenCompareResult
+import shirates.core.driver.commandextension.describe
+import shirates.core.driver.commandextension.macro
+import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.vision.configration.repository.VisionScreenRepository
-import shirates.core.vision.driver.branchextension.android
-import shirates.core.vision.driver.commandextension.describe
-import shirates.core.vision.driver.commandextension.ifScreenIsNot
-import shirates.core.vision.driver.commandextension.macro
-import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class ScreenCompareResultTest : VisionTest() {
+class ScreenCompareResultTest : UITest() {
 
     @Order(10)
     @Test
