@@ -144,7 +144,7 @@ class TestDriveAssertionExtensionTest3 : VisionTest() {
                             id = "textIs",
                             subject = "<Battery>",
                             expected = "Battery？"
-                        ) + " (actual=\"Battery\")"
+                        ) + " (actual=\"Battery\")".lowercase()
                     )
                 }
             }

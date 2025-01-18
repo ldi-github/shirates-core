@@ -1,0 +1,22 @@
+{
+  "testConfigName": "filesConfig",
+
+  "appIconName": "Files",
+
+  "packageOrBundleId": "com.google.android.documentsui",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "dataset": {
+    "apps": "testConfig/android/files/dataset/apps.json"
+  },
+
+  "capabilities": {
+    "language": "en",
+    "locale": "US"
+  },
+
+  "profiles": [
+  ]
+}

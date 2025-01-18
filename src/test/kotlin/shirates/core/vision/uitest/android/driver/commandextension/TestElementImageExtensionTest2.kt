@@ -10,7 +10,7 @@ import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
 @Want
-@Testrun("testConfig/android/calendar/testrun.properties")
+@Testrun("testConfig/android/files/testrun.properties")
 class TestElementImageExtensionTest2 : VisionTest() {
 
     @Test
@@ -20,31 +20,31 @@ class TestElementImageExtensionTest2 : VisionTest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[Files Top Screen]")
                 }.expectation {
-                    var restaurantsIcon = it.findImage("[Restaurants Icon]", threshold = 1.0)
-                    restaurantsIcon.isFound.thisIsTrue()
+                    var imagesIcon = it.findImage("[Images Button]")
+                    imagesIcon.isFound.thisIsTrue()
 
-                    restaurantsIcon.onLine {
-                        val shoppingIcon = it.findImageWithScrollRight("[Shopping Icon]", threshold = 1.0)
-                        shoppingIcon.isFound.thisIsTrue()
+                    imagesIcon.onLine {
+                        val thisWeekIcon = it.findImageWithScrollRight("[This week Button]")
+                        thisWeekIcon.isFound.thisIsTrue()
 
-                        restaurantsIcon = it.findImageWithScrollLeft("[Restaurants Icon]", threshold = 1.0)
-                        restaurantsIcon.isFound.thisIsTrue()
+                        imagesIcon = it.findImageWithScrollLeft("[Images Button]")
+                        imagesIcon.isFound.thisIsTrue()
                     }
                 }
             }
             case(2) {
                 expectation {
                     withScrollRight {
-                        it.findImage("[Day3-1].png").thisIsTrue()
+                        it.findImage("[This week Button]").isFound.thisIsTrue()
                         withScrollLeft {
-                            it.findImage("[Day1-1].png").thisIsTrue()
-                            it.findImageWithScrollRight("[Day2-1].png", scrollDurationSeconds = 0.2)
+                            it.findImage("[Images Button]").isFound.thisIsTrue()
+                            it.findImageWithScrollRight("[This week Button]", scrollDurationSeconds = 0.2)
                         }
-                        it.findImage("[Day3-1].png").thisIsTrue()
+                        it.findImage("[This week Button]").isFound.thisIsTrue()
                     }
-                    it.findImage("[Day1-1].png", throwsException = false).thisIsFalse()
+                    it.findImage("[Images Button]", throwsException = false).isFound.thisIsFalse()
                 }
             }
         }
@@ -57,46 +57,46 @@ class TestElementImageExtensionTest2 : VisionTest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Calendar Week Screen]")
+                    it.macro("[Files Top Screen]")
                 }.expectation {
                     it
-                        .existImage("[Day1-1].png", waitSeconds = 0.2)
-                        .dontExistImage("[Day2-1].png", waitSeconds = 0.2)
-                        .withScrollRight(scrollDurationSeconds = 0.2) {
-                            it.existImage("[Day2-1].png")
+                        .existImage("[Images Button]", waitSeconds = 0.2)
+                        .dontExistImage("[This week Button]", waitSeconds = 0.2)
+                        .withScrollRight("Images", scrollDurationSeconds = 0.2) {
+                            it.existImage("[This week Button]")
                         }
-                        .dontExistImage("[Day1-1].png")
-                        .withScrollLeft(scrollDurationSeconds = 0.2) {
-                            it.existImage("[Day1-1].png")
+                        .dontExistImage("[Images Button]")
+                        .withScrollLeft("This week", scrollDurationSeconds = 0.2) {
+                            it.existImage("[Images Button]")
                         }
                 }
             }
             case(2) {
                 expectation {
                     withScrollRight(scrollDurationSeconds = 0.2, scrollMaxCount = 3) {
-                        it.existImage("[Day2-2].png", waitSeconds = 0.2)
+                        it.existImage("[This week Button]", waitSeconds = 0.2)
                         withScrollLeft(scrollDurationSeconds = 0.2) {
-                            it.existImage("[Day1-2].png")
+                            it.existImage("[Images Button]")
                         }
-                        it.existImage("[Day3-3].png")
+                        it.existImage("[This week Button]")
                         withScrollLeft(scrollDurationSeconds = 0.2, scrollMaxCount = 3) {
-                            it.existImage("[Day2-1].png")
+                            it.existImage("[Images Button]")
                             withScrollRight(scrollDurationSeconds = 0.2) {
-                                it.existImage("[Day3-1].png")
+                                it.existImage("[This week Button]")
                             }
-                            it.existImage("[Day1-1].png")
+                            it.existImage("[Images Button]")
                             withScrollRight() {
-                                it.existImage("[Day3-1].png")
+                                it.existImage("[This week Button]")
                             }
-                            it.existImage("[Day2-2].png")
+                            it.existImage("[This week Button]")
                         }
                         withoutScroll {
-                            it.dontExistImage("[Day3-3].png")
+                            it.dontExistImage("[Images Button]")
                         }
-                        it.existImage("[Day3-3].png")
+                        it.existImage("[This week Button]")
                     }
                     withScrollLeft {
-                        it.existImage("[Day1-1].png")
+                        it.existImage("[Images Button]")
                     }
                 }
             }

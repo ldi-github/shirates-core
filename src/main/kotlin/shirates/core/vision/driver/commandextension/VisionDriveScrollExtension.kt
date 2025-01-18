@@ -4,6 +4,7 @@ import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.suppressHandler
+import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
@@ -619,6 +620,9 @@ fun VisionDrive.withScrollDown(
     val scrollVisionElement = getScrollColumnElement(
         expression = expression,
     )
+    if (scrollVisionElement.isEmpty) {
+        throw TestDriverException("Could not find scroll element.")
+    }
     return withScroll(
         direction = ScrollDirection.Down,
         scrollVisionElement = scrollVisionElement,
@@ -651,6 +655,9 @@ fun VisionDrive.withScrollUp(
     val scrollVisionElement = getScrollColumnElement(
         expression = expression,
     )
+    if (scrollVisionElement.isEmpty) {
+        throw TestDriverException("Could not find scroll element.")
+    }
     return withScroll(
         direction = ScrollDirection.Up,
         scrollVisionElement = scrollVisionElement,
@@ -681,6 +688,9 @@ fun VisionDrive.withScrollRight(
 ): VisionElement {
 
     val scrollVisionElement = getScrollLineElement(expression = expression)
+    if (scrollVisionElement.isEmpty) {
+        throw TestDriverException("Could not find scroll element.")
+    }
     return withScroll(
         direction = ScrollDirection.Right,
         scrollVisionElement = scrollVisionElement,
@@ -711,6 +721,9 @@ fun VisionDrive.withScrollLeft(
 ): VisionElement {
 
     val scrollVisionElement = getScrollLineElement(expression = expression)
+    if (scrollVisionElement.isEmpty) {
+        throw TestDriverException("Could not find scroll element.")
+    }
     return withScroll(
         direction = ScrollDirection.Left,
         scrollVisionElement = scrollVisionElement,

@@ -20,23 +20,23 @@ class TestDriveOnScreenExtensionTest : VisionTest() {
         onScreen("[Network & internet Screen]") { c ->
             printWarn("${c.screenName} is displayed.")
         }
-        assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(1)
+        assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
 
         onScreen("[System Screen]") { c ->
             printWarn("${c.screenName} is displayed.")
         }
-        assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(2)
+        assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
 
         scenario {
             case(1) {
                 condition {
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
-                    assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(2)
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
                     it.tap("[Network & internet]")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
-                    assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(1)
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
                 }
             }
             case(2) {
@@ -44,16 +44,16 @@ class TestDriveOnScreenExtensionTest : VisionTest() {
                     it.pressBack()
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
-                    assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(1)
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
                     it.tapWithScrollDown("[System]")
                 }.expectation {
                     it.screenIs("[System Screen]")
-                    assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(0)
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(0)
                 }
             }
         }
 
-        assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(0)
+        assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(0)
     }
 
     @Test
@@ -72,13 +72,13 @@ class TestDriveOnScreenExtensionTest : VisionTest() {
             case(1) {
                 condition {
                     it.screenIs("[Android Settings Top Screen]")
-                    assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(2)
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
                     disableScreenHandler()
                 }.action {
                     it.tapWithScrollUp("[Network & internet]")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
-                    assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(2)
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(2)
                 }
             }
             case(2) {
@@ -90,7 +90,7 @@ class TestDriveOnScreenExtensionTest : VisionTest() {
                     it.tapWithScrollDown("[System]")
                 }.expectation {
                     it.screenIs("[System Screen]")
-                    assertThat(testContext.testDriveScreenHandlers.count()).isEqualTo(1)
+                    assertThat(testContext.visionDriveScreenHandlers.count()).isEqualTo(1)
                 }
             }
         }
