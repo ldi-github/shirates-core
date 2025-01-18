@@ -91,11 +91,29 @@ class Rectangle(
     }
 
     /**
+     * isSame
+     */
+    fun isSame(other: Rectangle): Boolean {
+
+        return this.toString() == other.toString()
+    }
+
+    /**
      * offsetRect
      */
-    fun offsetRect(offsetX: Int, offsetY: Int): Rectangle {
+    fun offsetRect(
+        offsetX: Int = 0,
+        offsetY: Int = 0,
+        width: Int = this.width,
+        height: Int = this.height
+    ): Rectangle {
 
-        return Rectangle(x = this.x + offsetX, y = this.y + offsetY, width = width, height = height)
+        return Rectangle(
+            x = this.x + offsetX,
+            y = this.y + offsetY,
+            width = width,
+            height = height
+        )
     }
 
     /**

@@ -61,7 +61,8 @@ fun VisionDrive.tapAppIcon(
          * Tap the element on the screen if it can be detected.
          */
         if (canDetect(iconLabel)) {
-            lastElement.tap()
+            val v = lastElement.offsetElement(offsetY = -150)
+            v.tap()
                 .wait()
             return@execOperateCommand
         }

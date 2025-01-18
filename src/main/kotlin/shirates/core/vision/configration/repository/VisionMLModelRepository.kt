@@ -15,15 +15,15 @@ object VisionMLModelRepository {
      * setup
      */
     fun setup(
-        mlmodelsDirectory: String = PropertiesManager.visionBuildDirectory.toPath()
-            .resolve("vision").resolve("mlmodels").toString()
+        classifiersDirectory: String = PropertiesManager.visionBuildDirectory.toPath()
+            .resolve("vision").resolve("classifiers").toString()
     ) {
-        if (Files.exists(mlmodelsDirectory.toPath()).not()) {
-            printInfo("Directory not found. (mlmodelsDirectory=$mlmodelsDirectory)")
+        if (Files.exists(classifiersDirectory.toPath()).not()) {
+            printInfo("Directory not found. (classifiersDirectory=$classifiersDirectory)")
             return
         }
 
-        val dirs = mlmodelsDirectory.toPath().toFile().walkTopDown()
+        val dirs = classifiersDirectory.toPath().toFile().walkTopDown()
             .filter { it.extension == "mlmodel" }.map { it.parentFile.toString() }.toList()
 
         for (mlmodelDir in dirs) {

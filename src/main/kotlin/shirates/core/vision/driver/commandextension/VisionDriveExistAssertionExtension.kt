@@ -75,7 +75,7 @@ internal fun VisionDrive.existCore(
             TestLog.info(message = "There are differences in text.  (expected: \"${selector.text}\", actual: \"${v.text}\")")
         }
     } else {
-        val error = TestNGException(message = "$message (expected: \"${selector.text}\", actual: \"${v.text}\")")
+        val error = TestNGException(message = message)
         v.lastError = error
         v.lastResult = LogType.NG
         throw error
@@ -147,6 +147,34 @@ internal fun postProcessForAssertion(
         setNG()
         return
     }
+}
+
+/**
+ * existAll
+ */
+fun VisionDrive.existAll(
+    vararg expressions: String,
+): VisionElement {
+
+    for (expression in expressions) {
+        this.exist(
+            expression = expression,
+        )
+    }
+    return lastElement
+}
+
+/**
+ * dontExistAll
+ */
+fun VisionDrive.dontExistAll(
+    vararg expressions: String,
+): VisionElement {
+
+    for (expression in expressions) {
+        this.dontExist(expression = expression)
+    }
+    return lastElement
 }
 
 /**
@@ -366,7 +394,7 @@ fun VisionDrive.dontExist(
         }
     }
     if (v.isFound) {
-        val error = TestNGException(message = "$message (actual: exists)")
+        val error = TestNGException(message = message)
         v.lastError = error
         v.lastResult = LogType.NG
         throw error

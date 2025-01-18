@@ -8,6 +8,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.logging.printWarn
 import shirates.core.utility.image.rect
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -61,6 +62,10 @@ fun VisionDrive.tap(
     }
     if (waitForElementFocused) {
         waitForElementFocused()
+    }
+
+    if (testContext.irregularHandler != null) {
+        printWarn("irregularHandler is not supported on vision mode.")
     }
 
     return v

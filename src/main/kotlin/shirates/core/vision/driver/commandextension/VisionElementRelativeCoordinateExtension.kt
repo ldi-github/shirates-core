@@ -18,16 +18,14 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionElement.rightItem(
     pos: Int = 1,
-    verticalMargin: Int = this.rect.height / 2,
     segmentMarginHhorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
-    include: Boolean = true
+    include: Boolean = false
 ): VisionElement {
 
     return rightLeftCore(
         relative = RelativeDirection.right,
         pos = pos,
-        verticalMargin = verticalMargin,
         segmentMarginHorizontal = segmentMarginHhorizontal,
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
@@ -39,16 +37,14 @@ fun VisionElement.rightItem(
  */
 fun VisionElement.leftItem(
     pos: Int = 1,
-    verticalMargin: Int = this.rect.height / 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
-    include: Boolean = true,
+    include: Boolean = false,
 ): VisionElement {
 
     return rightLeftCore(
         relative = RelativeDirection.left,
         pos = pos,
-        verticalMargin = verticalMargin,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
@@ -58,20 +54,18 @@ fun VisionElement.leftItem(
 internal fun VisionElement.rightLeftCore(
     relative: RelativeDirection,
     pos: Int,
-    verticalMargin: Int,
     segmentMarginHorizontal: Int,
     segmentMarginVertical: Int,
     mergeIncluded: Boolean,
 ): VisionElement {
 
-    val regionElement =
-        if (relative == RelativeDirection.left) this.leftRegionElement(verticalMargin = verticalMargin)
-        else this.rightRegionElement(verticalMargin = verticalMargin)
+    val baseElement = this
+    val r = rootElement
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = regionElement.image,
-        containerX = regionElement.rect.x,
-        containerY = regionElement.rect.y,
+        containerImage = r.image,
+        containerX = r.rect.x,
+        containerY = r.rect.y,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
     ).split()
@@ -83,11 +77,11 @@ internal fun VisionElement.rightLeftCore(
     val elms = horizontalBand.getElements().map { it as VisionElement }
     val sortedElements =
         if (relative.isRight)
-            elms.filter { this.rect.right <= it.rect.left }
-                .sortedBy { this.rect.left }
+            elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.right <= it.rect.left }
+                .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         else
-            elms.filter { it.rect.right <= this.rect.right }
-                .sortedBy { this.rect.left }
+            elms.filter { it.isSameRect(baseElement).not() && it.rect.right <= baseElement.rect.right }
+                .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
     val v =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
         else sortedElements[pos - 1]
@@ -104,16 +98,14 @@ internal fun VisionElement.rightLeftCore(
  */
 fun VisionElement.aboveItem(
     pos: Int = 1,
-    horizontalMargin: Int = this.rect.width / 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
-    include: Boolean = true,
+    include: Boolean = false,
 ): VisionElement {
 
     return aboveBelowCore(
         relative = RelativeDirection.above,
         pos = pos,
-        horizontalMargin = horizontalMargin,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
@@ -125,16 +117,14 @@ fun VisionElement.aboveItem(
  */
 fun VisionElement.belowItem(
     pos: Int = 1,
-    horizontalMargin: Int = this.rect.width / 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
-    include: Boolean = true,
+    include: Boolean = false,
 ): VisionElement {
 
     return aboveBelowCore(
         relative = RelativeDirection.below,
         pos = pos,
-        horizontalMargin = horizontalMargin,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = include,
@@ -144,20 +134,18 @@ fun VisionElement.belowItem(
 internal fun VisionElement.aboveBelowCore(
     relative: RelativeDirection,
     pos: Int,
-    horizontalMargin: Int,
     segmentMarginHorizontal: Int,
     segmentMarginVertical: Int,
     mergeIncluded: Boolean,
 ): VisionElement {
 
-    val regionElement =
-        if (relative == RelativeDirection.above) this.aboveRegionElement(horizontalMargin = horizontalMargin)
-        else this.belowRegionElement(horizontalMargin = horizontalMargin)
+    val baseElement = this
+    val r = rootElement
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
-        containerImage = regionElement.image,
-        containerX = regionElement.rect.x,
-        containerY = regionElement.rect.y,
+        containerImage = r.image,
+        containerX = r.rect.x,
+        containerY = r.rect.y,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
     ).split()
@@ -169,11 +157,11 @@ internal fun VisionElement.aboveBelowCore(
     val elms = verticalBand.getElements().map { it as VisionElement }
     val sortedElements =
         if (relative.isAbove)
-            elms.filter { it.rect.bottom < this.rect.top }
-                .sortedByDescending { it.rect.top }
+            elms.filter { it.isSameRect(baseElement).not() && it.rect.bottom < baseElement.rect.top }
+                .sortedWith(compareByDescending<VisionElement> { it.rect.top }.thenBy { Math.abs(it.rect.centerX - this.rect.centerX) })
         else
-            elms.filter { this.rect.bottom < it.rect.top }
-                .sortedBy { it.rect.top }
+            elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.bottom < it.rect.top }
+                .sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { Math.abs(it.rect.centerX - this.rect.centerX) })
     val v =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
         else sortedElements[pos - 1]
@@ -192,12 +180,19 @@ fun VisionElement.rightText(
     pos: Int = 1,
 ): VisionElement {
 
+    val v: VisionElement
+    if (pos == 0) return this
+    else if (pos < 0) {
+        v = this.rightText(pos = -pos)
+        v.selector = this.selector?.getChainedSelector(":leftText($pos)")
+        return v
+    }
     val elements = getHorizontalElements()
         .filter { this.rect.right < it.rect.left }
         .sortedBy { it.rect.left }
-    val v =
-        if (elements.isEmpty() || elements.count() < pos) VisionElement(capture = false)
-        else elements[pos - 1]
+    v = if (elements.isEmpty() || elements.count() < pos)
+        VisionElement(capture = false)
+    else elements[pos - 1]
 
     v.selector = this.selector?.getChainedSelector(":rightText($pos)")
     lastElement = v
@@ -231,12 +226,19 @@ fun VisionElement.leftText(
     pos: Int = 1,
 ): VisionElement {
 
+    val v: VisionElement
+    if (pos == 0) return this
+    else if (pos < 0) {
+        v = this.rightText(pos = -pos)
+        v.selector = this.selector?.getChainedSelector(":leftText($pos)")
+        return v
+    }
     val elements = getHorizontalElements()
         .filter { it.rect.right < this.rect.left }
         .sortedBy { it.rect.left }
-    val v =
-        if (elements.isEmpty() || elements.count() < pos) VisionElement(capture = false)
-        else elements[elements.count() - pos]
+    v = if (elements.isEmpty() || elements.count() < pos)
+        VisionElement(capture = false)
+    else elements[elements.count() - pos]
 
     v.selector = this.selector?.getChainedSelector(":leftText($pos)")
     lastElement = v
@@ -275,6 +277,18 @@ private fun VisionElement.getHorizontalElements(): List<VisionElement> {
     return sortedElements
 }
 
+private fun VisionElement.getVerticalElements(): List<VisionElement> {
+    rootElement.visionContext.recognizeText()
+
+    val verticalBand = VerticalBand(baseElement = this)
+    for (v in rootElement.visionContext.getVisionElements()) {
+        verticalBand.merge(element = v, margin = 0)
+    }
+    val elms = verticalBand.getElements().map { it as VisionElement }
+    val sortedElements = elms.sortedByDescending { it.rect.top }
+    return sortedElements
+}
+
 /**
  * aboveText
  */
@@ -282,10 +296,42 @@ fun VisionElement.aboveText(
     pos: Int = 1,
 ): VisionElement {
 
-    return aboveBelowTextCore(
-        relative = RelativeDirection.above,
-        pos = pos,
-    )
+    val v: VisionElement
+    if (pos == 0) return this
+    else if (pos < 0) {
+        v = this.belowText(pos = -pos)
+        v.selector = this.selector?.getChainedSelector(":aboveText($pos)")
+        return v
+    }
+    val elements = getVerticalElements()
+        .filter { it.rect.top < this.rect.top }
+        .sortedByDescending { it.rect.top }
+    v = if (elements.isEmpty() || elements.count() < pos)
+        VisionElement(capture = false)
+    else elements[pos - 1]
+    v.selector = this.selector?.getChainedSelector(":rightText($pos)")
+    lastElement = v
+
+    return v
+}
+
+/**
+ * aboveText
+ */
+fun VisionElement.aboveText(
+    expression: String,
+): VisionElement {
+
+    val elements = getVerticalElements()
+        .filter { it.rect.top < this.rect.top }
+        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
+        .sortedByDescending { it.rect.top }
+    val v = elements.lastOrNull() ?: VisionElement(capture = false)
+
+    v.selector = this.selector?.getChainedSelector(":aboveText($expression)")
+    lastElement = v
+
+    return v
 }
 
 /**
@@ -295,41 +341,74 @@ fun VisionElement.belowText(
     pos: Int = 1,
 ): VisionElement {
 
-    return aboveBelowTextCore(
-        relative = RelativeDirection.below,
-        pos = pos,
-    )
-}
-
-internal fun VisionElement.aboveBelowTextCore(
-    relative: RelativeDirection,
-    pos: Int,
-): VisionElement {
-
-    rootElement.visionContext.recognizeText()
-
-    val verticalBand = VerticalBand(baseElement = this)
-    for (v in rootElement.visionContext.getVisionElements()) {
-        verticalBand.merge(element = v, margin = 0)
+    val v: VisionElement
+    if (pos == 0) return this
+    else if (pos < 0) {
+        v = this.aboveText(pos = -pos)
+        v.selector = this.selector?.getChainedSelector(":belowText($pos)")
+        return v
     }
-    val elms = verticalBand.getElements().map { it as VisionElement }
-    val sortedElements =
-        if (relative.isAbove)
-            elms.filter { it.rect.bottom < this.rect.top }
-                .sortedByDescending { it.rect.top }
-        else
-            elms.filter { this.rect.bottom < it.rect.top }
-                .sortedBy { it.rect.top }
-    val v =
-        if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
-        else sortedElements[pos - 1]
 
-    val relativeExpression = if (relative.isAbove) ":aboveText($pos)" else ":belowText($pos)"
-    v.selector = this.selector?.getChainedSelector(relativeExpression)
+    val elements = getVerticalElements()
+        .filter { this.rect.top < it.rect.top }
+        .sortedBy { it.rect.top }
+    v = if (elements.isEmpty() || elements.count() < pos)
+        VisionElement(capture = false)
+    else elements[pos - 1]
+    v.selector = this.selector?.getChainedSelector(":belowText($pos)")
     lastElement = v
 
     return v
 }
+
+/**
+ * belowText
+ */
+fun VisionElement.belowText(
+    expression: String,
+): VisionElement {
+
+    val elements = getVerticalElements()
+        .filter { this.rect.top < it.rect.top }
+        .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
+        .sortedBy { it.rect.top }
+    val v = elements.lastOrNull() ?: VisionElement(capture = false)
+
+    v.selector = this.selector?.getChainedSelector(":belowText($expression)")
+    lastElement = v
+
+    return v
+}
+
+//internal fun VisionElement.aboveBelowTextCore(
+//    relative: RelativeDirection,
+//    pos: Int,
+//): VisionElement {
+//
+//    rootElement.visionContext.recognizeText()
+//
+//    val verticalBand = VerticalBand(baseElement = this)
+//    for (v in rootElement.visionContext.getVisionElements()) {
+//        verticalBand.merge(element = v, margin = 0)
+//    }
+//    val elms = verticalBand.getElements().map { it as VisionElement }
+//    val sortedElements =
+//        if (relative.isAbove)
+//            elms.filter { it.rect.bottom < this.rect.top }
+//                .sortedByDescending { it.rect.top }
+//        else
+//            elms.filter { this.rect.bottom < it.rect.top }
+//                .sortedBy { it.rect.top }
+//    val v =
+//        if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
+//        else sortedElements[pos - 1]
+//
+//    val relativeExpression = if (relative.isAbove) ":aboveText($pos)" else ":belowText($pos)"
+//    v.selector = this.selector?.getChainedSelector(relativeExpression)
+//    lastElement = v
+//
+//    return v
+//}
 
 /**
  * leftImage

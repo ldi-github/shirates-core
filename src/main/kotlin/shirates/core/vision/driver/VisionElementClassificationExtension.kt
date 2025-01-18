@@ -6,7 +6,10 @@ import shirates.core.utility.file.resolve
 import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
 
-fun VisionElement.classify(
+/**
+ * classifyFull
+ */
+fun VisionElement.classifyFull(
     classifierName: String = "DefaultClassifier"
 ): String {
 
@@ -18,7 +21,7 @@ fun VisionElement.classify(
     }
 
     val mlmodelFile =
-        PropertiesManager.visionBuildDirectory.resolve("vision/mlmodels/$classifierName/$classifierName.mlmodel")
+        PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName/$classifierName.mlmodel")
 
     val result = SrvisionProxy.classifyImage(
         inputFile = this.imageFile!!,
@@ -26,4 +29,20 @@ fun VisionElement.classify(
     )
 
     return result.primaryClassification.identifier
+}
+
+/**
+ * classify
+ */
+fun VisionElement.classify(
+    classifierName: String = "DefaultClassifier"
+): String {
+
+    val fullLabel = classifyFull(classifierName = classifierName)
+    val lastIndex = fullLabel.lastIndexOf('[')
+    if (lastIndex == -1) {
+        return fullLabel
+    }
+    val label = fullLabel.substring(lastIndex)
+    return label
 }

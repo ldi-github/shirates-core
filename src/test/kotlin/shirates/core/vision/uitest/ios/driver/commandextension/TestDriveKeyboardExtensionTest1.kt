@@ -1,23 +1,25 @@
-package shirates.core.uitest.ios.driver.commandextension
+package shirates.core.vision.uitest.ios.driver.commandextension
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
-import shirates.core.driver.branchextension.ifCanSelect
-import shirates.core.driver.commandextension.*
-import shirates.core.driver.wait
-import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
+import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.wait
+import shirates.core.vision.testDriveScope
+import shirates.core.vision.testcode.VisionTest
 import utility.handleIrregulars
 
 @Want
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
-class TestDriveKeyboardExtensionTest1 : UITest() {
+class TestDriveKeyboardExtensionTest1 : VisionTest() {
 
     override fun setEventHandlers(context: TestDriverEventContext) {
         context.irregularHandler = {
-            it.handleIrregulars()
+            testDriveScope {
+                it.handleIrregulars()
+            }
         }
     }
 
@@ -30,13 +32,13 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
                 condition {
                     it.macro("[Apple Maps Top Screen]")
                     it.appIs("Maps")
-                    it.tap("[Search Maps]")
+                    it.tap("Search Maps")
                         .sendKeys("google")
-                        .tapSoftwareKey("search||検索")
+                        .tap("search")
                         .wait()
-                        .ifCanSelect("#xmark") {
-                            it.tap()
-                        }
+//                        .ifCanSelect("#xmark") {
+//                            it.tap()
+//                        }
                         .tap("Website")
                         .tap("Open in Safari")
                         .wait(10.0)
@@ -61,7 +63,7 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
                 }.action {
                     it.pressHome()
                 }.expectation {
-                    it.exist("#Home screen icons")
+                    it.exist("Reminders")
                 }
             }
         }

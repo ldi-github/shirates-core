@@ -270,6 +270,14 @@ class VisionElement(
     }
 
     /**
+     * isSameRect
+     */
+    fun isSameRect(other: VisionElement): Boolean {
+
+        return this.rect.isSame(other.rect)
+    }
+
+    /**
      * clone
      */
     fun clone(): VisionElement {
@@ -291,6 +299,24 @@ class VisionElement(
             return VisionElement(capture = true)
         }
         return this.rect.toVisionElement()
+    }
+
+    /**
+     * offsetElement
+     */
+    fun offsetElement(
+        offsetX: Int = 0,
+        offsetY: Int = 0,
+        width: Int = this.rect.width,
+        height: Int = this.rect.height,
+    ): VisionElement {
+
+        return rect.offsetRect(
+            offsetX = offsetX,
+            offsetY = offsetY,
+            width = width,
+            height = height
+        ).toVisionElement()
     }
 
     /**

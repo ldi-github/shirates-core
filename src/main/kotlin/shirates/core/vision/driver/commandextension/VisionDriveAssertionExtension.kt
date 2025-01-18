@@ -2,7 +2,6 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.currentScreen
-import shirates.core.driver.TestDriver.refreshCache
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestNGException
@@ -14,6 +13,7 @@ import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.*
+import shirates.core.vision.testDriveScope
 
 internal fun VisionDrive.checkImageLabelContains(
     containedText: String,
@@ -156,12 +156,13 @@ fun VisionDrive.appIs(
     useCache: Boolean = testContext.useCache,
 ): VisionElement {
 
-    refreshCache()
-    testDrive.appIs(
-        appNameOrAppId = appNameOrAppId,
-        waitSeconds = waitSeconds,
-        useCache = useCache,
-    )
+    testDriveScope {
+        testDrive.appIs(
+            appNameOrAppId = appNameOrAppId,
+            waitSeconds = waitSeconds,
+            useCache = useCache,
+        )
+    }
 
     return lastElement
 }

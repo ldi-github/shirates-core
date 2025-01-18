@@ -1,11 +1,13 @@
 package shirates.core.vision.driver
 
 import shirates.core.configuration.repository.ScreenRepository
-import shirates.core.driver.TestDriver
+import shirates.core.driver.*
+import shirates.core.driver.commandextension.isApp
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.testDriveScope
 
 /**
  * it
@@ -45,4 +47,23 @@ fun VisionDrive.clearTempSelectors(): VisionElement {
 
     ScreenRepository.tempSelectorList.clear()
     return lastElement
+}
+
+/**
+ * isApp
+ *
+ * @param appNameOrAppId
+ * Nickname [App1]
+ * or appName App1
+ * or packageOrBundleId com.example.app1
+ */
+fun VisionDrive.isApp(
+    appNameOrAppId: String = testContext.appIconName
+): Boolean {
+
+    var r = false
+    testDriveScope {
+        r = testDrive.isApp(appNameOrAppId = appNameOrAppId)
+    }
+    return r
 }

@@ -8,7 +8,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
 import shirates.core.driver.commandextension.getCurrentAppIconName
 import shirates.core.driver.commandextension.getCurrentAppName
-import shirates.core.driver.commandextension.isApp
 import shirates.core.driver.driver
 import shirates.core.driver.testDrive
 import shirates.core.logging.CodeExecutionContext
@@ -18,6 +17,7 @@ import shirates.core.testcode.Want
 import shirates.core.utility.toPath
 import shirates.core.vision.driver.commandextension.macro
 import shirates.core.vision.driver.commandextension.screenshot
+import shirates.core.vision.driver.isApp
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -103,8 +103,8 @@ class TestDriveExtensionTest : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    assertThat(testDrive.isApp("[Settings]")).isTrue()
-                    assertThat(testDrive.isApp("[Calculator]")).isFalse()
+                    assertThat(it.isApp("[Settings]")).isTrue()
+                    assertThat(it.isApp("[Calculator]")).isFalse()
                 }
             }
         }

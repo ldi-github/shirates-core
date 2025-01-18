@@ -27,86 +27,6 @@ import kotlin.io.path.name
 
 object CreateMLUtility {
 
-    class MlModelImageFileEntry(
-        val visionDirectory: String,
-        val mlmodelsDirectoryInVision: String,
-        val scriptFileInVision: String,
-        val imageFileInVision: String,
-        val workDirectory: String,
-    ) {
-        /**
-         * vision directories/files
-         */
-        val classifierDirectoryInVision: String
-            get() {
-                return scriptFileInVision.parent()
-            }
-        val classifierName: String
-            get() {
-                return classifierDirectoryInVision.toFile().name
-            }
-        val labelDirectoryInVision: String
-            get() {
-                return imageFileInVision.parent()
-            }
-        val label: String
-            get() {
-                return labelDirectoryInVision.toFile().name
-            }
-        val labelParentDirectoryInVision: String
-            get() {
-                return labelDirectoryInVision.parent()
-            }
-        val imageFileInTraining: String
-            get() {
-                return labelDirectoryInTraining.resolve(imageFileInVision.toPath().name)
-            }
-
-        /**
-         * work directories/files
-         */
-        val scriptFileInWork: String
-            get() {
-                return classifierDirectoryInWork.resolve(scriptFileInVision.toPath().name)
-            }
-        val classifierDirectoryInWork: String
-            get() {
-                return mlmodelsDirectoryInWork.resolve(classifierName)
-            }
-
-        /**
-         * training directories/files
-         */
-        val trainingDirectory: String
-            get() {
-                return classifierDirectoryInWork.resolve("training")
-            }
-        val labelDirectoryInTraining: String
-            get() {
-                return trainingDirectory.resolve(label)
-            }
-
-        /**
-         * test directories/files
-         */
-        val testDirectory: String
-            get() {
-                return classifierDirectoryInWork.resolve("test")
-            }
-        val labelDirectoryInTest: String
-            get() {
-                return testDirectory.resolve(label)
-            }
-        val imageFileInTest: String
-            get() {
-                return labelDirectoryInTest.resolve(imageFileInVision.toPath().name)
-            }
-
-        override fun toString(): String {
-            return imageFileInVision
-        }
-    }
-
     const val ML_IMAGE_CLASSIFIER_SCRIPT = "MLImageClassifier.swift"
     const val RESOURCE_NAME_ML_IMAGE_CLASSIFIER_SCRIPT = "createml/$ML_IMAGE_CLASSIFIER_SCRIPT"
 
@@ -118,9 +38,9 @@ object CreateMLUtility {
     val mlModelImageFiles = mutableListOf<MlModelImageFileEntry>()
     var scriptFilesInVision = listOf<String>()
 
-    val mlmodelsDirectoryInVision: String
+    val classifiersDirectoryInVision: String
         get() {
-            return visionDirectory.resolve("mlmodels")
+            return visionDirectory.resolve("classifiers")
         }
 
     val classifierDirectoriesInVision: List<String>
@@ -128,9 +48,9 @@ object CreateMLUtility {
             return scriptFilesInVision.map { it.parent() }
         }
 
-    val mlmodelsDirectoryInWork: String
+    val classifiersDirectoryInWork: String
         get() {
-            return visionDirectoryInWork.resolve("mlmodels")
+            return visionDirectoryInWork.resolve("classifiers")
         }
     val classifierNames: List<String>
         get() {
@@ -165,12 +85,12 @@ object CreateMLUtility {
         this.visionDirectoryInWork = visionDirectoryInWork
 
         /**
-         * Check if any file in visoin/mlmodels is updated
+         * Check if any file in vision/classifiers is updated
          */
-        val fileListFile = mlmodelsDirectoryInWork.resolve("filelist.txt").toFile()
-        val currentListString = getFileListInMlmodelsDirectoryInVision()
+        val fileListFile = classifiersDirectoryInWork.resolve("filelist.txt").toFile()
+        val currentListString = getFileListInClassifiersDirectoryInVision()
         if (fileListFile.exists()) {
-            val sw = StopWatch("Check if any file in visoin/mlmodels is updated")
+            val sw = StopWatch("Check if any file in vision/classifiers is updated")
             val lastListString = fileListFile.readText()
             if (currentListString == lastListString) {
                 TestLog.info("CreateML leaning skipped. Updated file not found.")
@@ -200,16 +120,15 @@ object CreateMLUtility {
             }
             println(r.resultString)
 
-            val logFile = mlmodelsDirectoryInWork.resolve(classifierName).resolve("createml.log")
+            val logFile = classifiersDirectoryInWork.resolve(classifierName).resolve("createml.log")
             logFile.toFile().writeText(r.resultString)
 
             if (r.resultString.contains("Accuracy: 100.00%").not()) {
-                printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                printWarn("!!                                                        !!")
-                printWarn("!! CAUTION                                                !!")
-                printWarn("!!                                                        !!")
-                printWarn("!! Learning has a problem. Accuracy is not 100%.          !!")
-                printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                printWarn("!!                                                                  !!")
+                printWarn("!! CAUTION!  Learning has a problem. Accuracy is not 100%.          !!")
+                printWarn("!!                                                                  !!")
+                printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
             sw.printInfo()
         }
@@ -217,9 +136,9 @@ object CreateMLUtility {
         fileListFile.writeText(currentListString)   // fileListFile is saved on success
     }
 
-    internal fun getFileListInMlmodelsDirectoryInVision(): String {
+    internal fun getFileListInClassifiersDirectoryInVision(): String {
 
-        val files = mlmodelsDirectoryInVision.toFile().walkTopDown()
+        val files = classifiersDirectoryInVision.toFile().walkTopDown()
             .filter { it.isFile && it.name != ".DS_Store" }
             .map { "${Date(it.lastModified()).format("yyyy/MM/dd HH:mm:ss.SSS")} ${it}" }
         val result = files.joinToString("\n")
@@ -233,7 +152,7 @@ object CreateMLUtility {
     }
 
     internal fun getScriptFiles() {
-        scriptFilesInVision = mlmodelsDirectoryInVision.toFile().walkTopDown()
+        scriptFilesInVision = classifiersDirectoryInVision.toFile().walkTopDown()
             .filter { it.name == ML_IMAGE_CLASSIFIER_SCRIPT }.map { it.toString() }.toList()
     }
 
@@ -244,7 +163,7 @@ object CreateMLUtility {
             for (imageFile in imageFiles) {
                 val entry = MlModelImageFileEntry(
                     visionDirectory = visionDirectory,
-                    mlmodelsDirectoryInVision = mlmodelsDirectoryInVision,
+                    classifiersDirectoryInVision = classifiersDirectoryInVision,
                     scriptFileInVision = scriptFileInVision,
                     imageFileInVision = imageFile.toString(),
                     workDirectory = visionDirectoryInWork,
@@ -263,17 +182,17 @@ object CreateMLUtility {
         FileUtils.deleteDirectory(work.toFile())
         for (imageEntry in mlModelImageFiles) {
             // create label directory in training
-            if (imageEntry.labelDirectoryInTraining.exists().not()) {
-                imageEntry.labelDirectoryInTraining.toFile().mkdirs()
+            if (imageEntry.combinedLabelDirectoryInTraining.exists().not()) {
+                imageEntry.combinedLabelDirectoryInTraining.toFile().mkdirs()
             }
             // create label directory in test
-            if (imageEntry.labelDirectoryInTest.exists().not()) {
-                imageEntry.labelDirectoryInTest.toFile().mkdirs()
+            if (imageEntry.combinedLabelDirectoryInTest.exists().not()) {
+                imageEntry.combinedLabelDirectoryInTest.toFile().mkdirs()
             }
             // copy image file to training
-            imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.labelDirectoryInTraining)
+            imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.combinedLabelDirectoryInTraining)
             // copy image file to test
-            imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.labelDirectoryInTest)
+            imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.combinedLabelDirectoryInTest)
             // create binary file in test
             createBinaryFile(imageFile = imageEntry.imageFileInTraining)
         }
@@ -282,14 +201,15 @@ object CreateMLUtility {
     internal fun copyScriptFilesIntoWork() {
         for (scriptFileInVision in scriptFilesInVision) {
             val classifierName = scriptFileInVision.toPath().parent.name
-            val scriptFileInWork = mlmodelsDirectoryInWork.resolve(classifierName).resolve(ML_IMAGE_CLASSIFIER_SCRIPT)
+            val scriptFileInWork =
+                classifiersDirectoryInWork.resolve(classifierName).resolve(ML_IMAGE_CLASSIFIER_SCRIPT)
             scriptFileInVision.copyFileTo(scriptFileInWork)
         }
     }
 
     internal fun setupScripts() {
         for (classifierName in classifierNames) {
-            val classifierDirectory = mlmodelsDirectoryInWork.resolve(classifierName)
+            val classifierDirectory = classifiersDirectoryInWork.resolve(classifierName)
             val scriptFile = classifierDirectory.resolve(ML_IMAGE_CLASSIFIER_SCRIPT)
             val dataSourceDirectory = classifierDirectory
 

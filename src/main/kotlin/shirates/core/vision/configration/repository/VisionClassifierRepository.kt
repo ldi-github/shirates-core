@@ -1,5 +1,6 @@
 package shirates.core.vision.configration.repository
 
+import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.printInfo
@@ -71,10 +72,16 @@ class VisionClassifierRepository {
      */
     fun getFiles(label: String): List<String> {
 
-        if (labelMap.containsKey(label).not()) {
+        val keys = labelMap.keys.filter { it.endsWith(label) }
+        if (keys.isEmpty()) {
             return listOf()
         }
-        return labelMap[label]!!.files.filter { it.toPath().name.contains("_binary.").not() }
+        val files = mutableListOf<String>()
+        for (key in keys) {
+            val items = labelMap[key]!!.files.filter { it.toPath().name.contains("_binary.").not() }
+            files.addAll(items)
+        }
+        return files
     }
 
     /**
@@ -85,10 +92,18 @@ class VisionClassifierRepository {
         val files = getFiles(label = label)
         val platformSymbol = if (isAndroid) "@a." else "@i."
         val file = files.firstOrNull() {
-            it.toPath().name.contains(platformSymbol)
+            it.toPath().name.contains(platformSymbol) ||
+                    it.toPath().toString().replace("\\", "").contains("/@a{platformSymbol}/")
         }
         if (file != null) {
             return file
+        }
+        val currentScreen = TestDriver.currentScreen
+        if (currentScreen.isNotBlank() && currentScreen != "?") {
+            val filesInScreen = files.filter { it.toPath().toString().contains(currentScreen) }
+            if (filesInScreen.isNotEmpty()) {
+                return filesInScreen.first()
+            }
         }
         return files.firstOrNull()
     }
