@@ -11,6 +11,7 @@ import shirates.core.utility.file.toFile
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
+import shirates.core.vision.configration.repository.VisionTemplateImageRepository
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
@@ -336,7 +337,13 @@ class SegmentContainer(
          * setup template image
          */
         val templateImage =
-            if (templateImageFile != null) BufferedImageUtility.getBufferedImage(templateImageFile!!) else null
+            if (templateImageFile != null) VisionTemplateImageRepository.getNormalizedTemplateImage(
+                imageFile = templateImageFile!!,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
+                skinThickness = skinThickness
+            )
+            else null
 
         /**
          * add segments bit by bit

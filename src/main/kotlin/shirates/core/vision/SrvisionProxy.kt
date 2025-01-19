@@ -13,8 +13,10 @@ import shirates.core.utility.file.copyFileTo
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
 import shirates.core.utility.image.SegmentContainer
+import shirates.core.utility.image.saveImage
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
+import shirates.core.vision.configration.repository.VisionTemplateImageRepository
 import shirates.core.vision.result.*
 import java.io.FileNotFoundException
 import java.nio.file.Files
@@ -240,6 +242,17 @@ object SrvisionProxy {
         val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
 
         /**
+         * Get normalized template image file
+         */
+        val normalizedTemplateImage = VisionTemplateImageRepository.getNormalizedTemplateImage(
+            imageFile = templateImageFile,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            skinThickness = skinThickness
+        )
+        val normalizedTemplateImageFile = outputDirectory.resolve("normalized_template_img.png")
+        normalizedTemplateImage?.saveImage(file = normalizedTemplateImageFile)
+        /**
          * Get segments in imageFile.
          * Save segment image files in outputDirectory.
          */
@@ -249,7 +262,7 @@ object SrvisionProxy {
             containerX = imageX,
             containerY = imageY,
             outputDirectory = outputDirectory,
-            templateImageFile = templateImageFile,
+            templateImageFile = normalizedTemplateImageFile,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
@@ -285,11 +298,11 @@ object SrvisionProxy {
         /**
          * Save template image as template.png
          */
-        templateImageFile.copyFileTo(outputDirectory.resolve("template_${templateImageFile.toPath().name}"))
+        normalizedTemplateImageFile.copyFileTo(outputDirectory.resolve("template_${templateImageFile.toPath().name}"))
         /**
          * Save primary candidate of segment image as candidate_[x, y, width, height].png
          */
-        val primaryCandidateImageFile = segmentContainer.outputDirectory!!.resolve("${result.primaryCandidate.file}")
+        val primaryCandidateImageFile = segmentContainer.outputDirectory.resolve("${result.primaryCandidate.file}")
         val pc = result.primaryCandidate
         val candidateFile = outputDirectory.resolve("candidate_${pc.rectangle}_distance=${pc.distance}.png")
         primaryCandidateImageFile.copyFileTo(candidateFile)
