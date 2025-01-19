@@ -22,6 +22,7 @@ import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import java.io.File
+import java.nio.file.DirectoryNotEmptyException
 import java.util.*
 import kotlin.io.path.name
 
@@ -179,7 +180,11 @@ object CreateMLUtility {
         if (work.startsWith(UserVar.project.toString()).not()) {
             throw TestConfigException("visionDirectoryInWork must be under the project directory. (visionDirectoryInWork=$visionDirectoryInWork)")
         }
-        FileUtils.deleteDirectory(work.toFile())
+        try {
+            FileUtils.deleteDirectory(work.toFile())
+        } catch (t: DirectoryNotEmptyException) {
+            FileUtils.deleteDirectory(work.toFile())
+        }
         for (imageEntry in mlModelImageFiles) {
             // create label directory in training
             if (imageEntry.combinedLabelDirectoryInTraining.exists().not()) {

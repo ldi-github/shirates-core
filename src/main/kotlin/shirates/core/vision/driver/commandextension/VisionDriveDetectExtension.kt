@@ -12,6 +12,7 @@ import shirates.core.logging.printInfo
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
 
@@ -23,7 +24,8 @@ fun VisionDrive.detect(
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    throwsException: Boolean = false,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    throwsException: Boolean = true,
 ): VisionElement {
 
     val swDetect = StopWatch("detect")
@@ -40,6 +42,7 @@ fun VisionDrive.detect(
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = waitSeconds,
             throwsException = throwsException,
         )
         lastElement = v
@@ -53,6 +56,7 @@ internal fun VisionDrive.detectCore(
     selector: Selector,
     language: String,
     allowScroll: Boolean?,
+    waitSeconds: Double,
     throwsException: Boolean,
     swipeToSafePosition: Boolean,
 ): VisionElement {
@@ -63,6 +67,7 @@ internal fun VisionDrive.detectCore(
             selector = selector,
             language = language,
             allowScroll = allowScroll,
+            waitSeconds = waitSeconds,
             throwsException = throwsException,
             swipeToSafePosition = swipeToSafePosition,
         )
@@ -85,28 +90,36 @@ private fun VisionDrive.detectCoreCore(
     selector: Selector,
     language: String,
     allowScroll: Boolean?,
+    waitSeconds: Double,
     throwsException: Boolean,
     swipeToSafePosition: Boolean,
 ): VisionElement {
+
     if (lastElement.isEmpty) {
         invalidateScreen()
     }
     screenshot()
 
-    var workingRegionElement = CodeExecutionContext.workingRegionElement
-    if (workingRegionElement.isEmpty) {
-        workingRegionElement = VisionElement(capture = true)
-    }
-
     /**
      * Try to detect in current context
      */
-    var v = workingRegionElement.visionContext.detect(
-        selector = selector,
-        language = language,
-    )
+    var v = VisionElement.emptyElement
+    doUntilTrue(
+        waitSeconds = waitSeconds,
+        intervalSeconds = 1.0,
+        throwOnFinally = false,
+        onBeforeRetry = {
+            screenshot()
+        }
+    ) {
+        v = CodeExecutionContext.workingRegionElement.visionContext.detect(
+            selector = selector,
+            language = language,
+        )
+        v.isFound
+    }
     if (v.isFound) {
-        return v    // loose match
+        return v
     }
 
     if (allowScroll != false && CodeExecutionContext.withScroll == true && CodeExecutionContext.isScrolling.not()) {
@@ -153,6 +166,7 @@ internal fun VisionDrive.detectWithScrollCore(
             language = language,
             allowScroll = false,
             throwsException = false,
+            waitSeconds = 0.0,
             swipeToSafePosition = swipeToSafePosition,
         )
         val stopScroll = v.isFound
@@ -380,6 +394,7 @@ fun VisionDrive.canDetect(
 fun VisionDrive.canDetect(
     selector: Selector,
     language: String = PropertiesManager.logLanguage,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     allowScroll: Boolean = true,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
@@ -395,6 +410,7 @@ fun VisionDrive.canDetect(
             selector = selector,
             language = language,
             allowScroll = allowScroll,
+            waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
         ).isFound
@@ -408,6 +424,7 @@ fun VisionDrive.canDetect(
 internal fun VisionDrive.canDetectCore(
     selector: Selector,
     language: String,
+    waitSeconds: Double,
     allowScroll: Boolean,
 ): Boolean {
 
@@ -415,6 +432,7 @@ internal fun VisionDrive.canDetectCore(
         selector = selector,
         language = language,
         allowScroll = allowScroll,
+        waitSeconds = waitSeconds,
         throwsException = false,
         swipeToSafePosition = false,
     )
@@ -495,6 +513,7 @@ private fun VisionDrive.canDetectWithScroll(
             found = canDetectCore(
                 selector = sel,
                 language = language,
+                waitSeconds = 0.0,
                 allowScroll = true,
             )
         }
@@ -609,6 +628,7 @@ internal fun VisionDrive.canDetectAllCore(
             foundAll = canDetectCore(
                 selector = selector,
                 language = language,
+                waitSeconds = 0.0,
                 allowScroll = allowScroll,
             )
             if (foundAll.not()) {

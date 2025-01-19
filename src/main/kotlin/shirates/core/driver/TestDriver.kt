@@ -1964,6 +1964,7 @@ object TestDriver {
             /**
              * Save screenshot
              */
+            val oldWorkingRegionElement = CodeExecutionContext.workingRegionElement
             val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toString()
             val screenshotImage = CodeExecutionContext.lastScreenshotImage!!
             screenshotImage.resizeAndSaveImage(
@@ -1977,7 +1978,7 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotImage = screenshotImage
             val vc = VisionContext(capture = true)
             TestDriver.visionRootElement = VisionElement(visionContext = vc)
-            CodeExecutionContext.workingRegionElement = CodeExecutionContext.workingRegionElement.newVisionElement()
+            CodeExecutionContext.workingRegionElement = oldWorkingRegionElement.newVisionElement()
 
             if (log) {
                 val screenshotLine = TestLog.write(

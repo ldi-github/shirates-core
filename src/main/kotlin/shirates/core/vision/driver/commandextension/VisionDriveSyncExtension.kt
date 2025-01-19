@@ -79,6 +79,6 @@ fun VisionDrive.onDirectAccess(
 fun VisionDrive.invalidateScreen(): VisionElement {
 
     CodeExecutionContext.setScreenDirty()
-    CodeExecutionContext.workingRegionElement.visionContext.clear()
+//    CodeExecutionContext.workingRegionElement = VisionElement.emptyElement
     return lastElement
 }

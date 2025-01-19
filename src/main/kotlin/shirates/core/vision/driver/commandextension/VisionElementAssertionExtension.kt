@@ -131,8 +131,9 @@ fun VisionElement.buttonStateIs(
 fun VisionElement.existOnLine(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    verticalMargin: Int = getThisOrIt().rect.height / 2,
+    verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -153,6 +154,7 @@ fun VisionElement.existOnLine(
                 message = message,
                 selector = sel,
                 language = language,
+                waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }
@@ -172,6 +174,7 @@ fun VisionElement.existOnColumn(
     language: String = PropertiesManager.logLanguage,
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -192,6 +195,171 @@ fun VisionElement.existOnColumn(
                 message = message,
                 selector = sel,
                 language = language,
+                waitSeconds = waitSeconds,
+                swipeToSafePosition = swipeToSafePosition,
+            )
+        }
+    }
+
+    if (func != null) {
+        func(v)
+    }
+    return v
+}
+
+/**
+ * existOnRight
+ */
+fun VisionElement.existOnRight(
+    expression: String,
+    language: String = PropertiesManager.logLanguage,
+    verticalMargin: Int = this.rect.height / 2,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    val sel = getSelector(expression = expression)
+    var v = VisionElement.emptyElement
+    val thisObject = this
+
+    val command = "existOnRight"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+
+        thisObject.onRight(
+            verticalMargin = verticalMargin,
+        ) {
+            v = existCore(
+                message = message,
+                selector = sel,
+                language = language,
+                waitSeconds = waitSeconds,
+                swipeToSafePosition = swipeToSafePosition,
+            )
+        }
+    }
+
+    if (func != null) {
+        func(v)
+    }
+    return v
+}
+
+/**
+ * existOnLeft
+ */
+fun VisionElement.existOnLeft(
+    expression: String,
+    language: String = PropertiesManager.logLanguage,
+    verticalMargin: Int = this.rect.height / 2,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    val sel = getSelector(expression = expression)
+    var v = VisionElement.emptyElement
+    val thisObject = this
+
+    val command = "existOnLeft"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+
+        thisObject.onLeft(
+            verticalMargin = verticalMargin,
+        ) {
+            v = existCore(
+                message = message,
+                selector = sel,
+                language = language,
+                waitSeconds = waitSeconds,
+                swipeToSafePosition = swipeToSafePosition,
+            )
+        }
+    }
+
+    if (func != null) {
+        func(v)
+    }
+    return v
+}
+
+/**
+ * existOnAbove
+ */
+fun VisionElement.existOnAbove(
+    expression: String,
+    language: String = PropertiesManager.logLanguage,
+    horizontalMargin: Int = this.rect.width / 2,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    val sel = getSelector(expression = expression)
+    var v = VisionElement.emptyElement
+    val thisObject = this
+
+    val command = "existOnAbove"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+
+        thisObject.onAbove(
+            horizontalMargin = horizontalMargin,
+        ) {
+            v = existCore(
+                message = message,
+                selector = sel,
+                language = language,
+                waitSeconds = waitSeconds,
+                swipeToSafePosition = swipeToSafePosition,
+            )
+        }
+    }
+
+    if (func != null) {
+        func(v)
+    }
+    return v
+}
+
+/**
+ * existOnBelow
+ */
+fun VisionElement.existOnBelow(
+    expression: String,
+    language: String = PropertiesManager.logLanguage,
+    horizontalMargin: Int = this.rect.width / 2,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    val sel = getSelector(expression = expression)
+    var v = VisionElement.emptyElement
+    val thisObject = this
+
+    val command = "existOnBelow"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+
+        thisObject.onBelow(
+            horizontalMargin = horizontalMargin,
+        ) {
+            v = existCore(
+                message = message,
+                selector = sel,
+                language = language,
+                waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
             )
         }

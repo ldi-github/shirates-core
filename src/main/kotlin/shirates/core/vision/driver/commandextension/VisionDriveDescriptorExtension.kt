@@ -122,27 +122,27 @@ fun VisionDrive.manual(
     return testElement
 }
 
-internal fun VisionDrive.conditionalAuto(
-    message: String,
-    arg1: String = "",
-    arg2: String = ""
-): VisionElement {
-
-    val testElement = getThisOrIt()
-
-    val context = TestDriverCommandContext(null)
-    context.execLogCommand(message = message, subject = message) {
-        TestLog.conditionalAuto(
-            message = message,
-            scriptCommand = "conditionalAuto",
-            subject = message,
-            arg1 = arg1,
-            arg2 = arg2
-        )
-    }
-
-    return testElement
-}
+//internal fun VisionDrive.conditionalAuto(
+//    message: String,
+//    arg1: String = "",
+//    arg2: String = ""
+//): VisionElement {
+//
+//    val testElement = getThisOrIt()
+//
+//    val context = TestDriverCommandContext(null)
+//    context.execLogCommand(message = message, subject = message) {
+//        TestLog.conditionalAuto(
+//            message = message,
+//            scriptCommand = "conditionalAuto",
+//            subject = message,
+//            arg1 = arg1,
+//            arg2 = arg2
+//        )
+//    }
+//
+//    return testElement
+//}
 
 /**
  * procedure

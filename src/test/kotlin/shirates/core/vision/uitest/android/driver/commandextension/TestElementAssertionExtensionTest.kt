@@ -43,91 +43,201 @@ class TestElementAssertionExtensionTest : VisionTest() {
     fun exist_existImage() {
 
         scenario {
-            case(1, "existOnLine, existImageOnLine") {
+            case(1, "exist") {
                 condition {
                     it.macro("[Network & internet Screen]")
                 }.expectation {
-                    v1 = detect("Airplane mode")
-                    v1.existOnLine("Airplane mode")
-
-                    v2 = v1.leftItem()
-                    v2.existOnLine("Airplane mode")
-
-                    v3 = v1.rightItem()
-                    v3.existOnLine("Airplane mode")
-
-                    v1.existImageOnLine("[Airplane mode Icon]")
-                    v1.existImageOnLine("[RadioButton(OFF)]")
+                    it.exist("Airplane mode")
+                    it.dontExist("No exist")
                 }
             }
             case(2, "onLine") {
                 expectation {
-                    detect("Airplane mode").onLine {
+                    val label = detect("Airplane mode")
+
+                    label.existOnLine("Airplane mode")
+
+                    label.onLine {
                         exist("Airplane mode")
-                        existImage("[Airplane mode Icon]")
-                        existImage("[RadioButton(OFF)]")
                         dontExist("Internet")
-                        dontExistImage("[RadioButton(ON)]")
                     }
                 }
             }
-            case(3) {
-                condition {
-                    v1 = detect("Airplane mode")
-                    v2 = v1.leftItem()
-                    v3 = v1.rightItem()
-                }.expectation {
-//                    v1.existOnRight("Airplane mode")
-                    v2.existOnLine("Airplane mode")
-                    v3.existOnLine("Airplane mode")
+            case(3, "onColumn") {
+                expectation {
+                    val label = detect("SIMs")
 
-                    v2.existImageOnRight("[Airplane mode Icon]")
-                    v2.existImageOnRight("[RadioButton(OFF)]")
-                }
-            }
-            case(4) {
-                expectation {
-                    detect("Airplane mode").onRight {
-                        existImage("[RadioButton(OFF)]")
-                        dontExist("Internet")
-                        dontExistImage("[Airplane mode Icon]")
-                        dontExistImage("[RadioButton(ON)]")
-                    }
-                }
-            }
-            case(4) {
-                condition {
-                    v1 = detect("Airplane mode")
-                    v2 = v1.leftItem()
-                    v3 = v1.rightItem()
-                }.expectation {
-                    v1.existImageOnLeft("Airplane mode")
-                    v2.existOnLine("Airplane mode")
-                    v3.existOnLine("Airplane mode")
+                    label.existOnColumn("Internet")
+                    label.existOnColumn("SIMs")
+                    label.existOnColumn("Airplane mode")
+                    label.existOnColumn("Mobile plan")
 
-                    v2.existImageOnRight("[Airplane mode Icon]")
-                    v2.existImageOnRight("[RadioButton(OFF)]")
-                }
-            }
-            case(5) {
-                expectation {
-                    detect("Airplane mode").onLeft {
-                        existImage("[Airplane mode Icon]")
-                        dontExist("Internet")
-                        dontExistImage("[RadioButton(OFF)]")
+                    label.onColumn {
+                        exist("Internet")
+                        exist("SIMs")
+                        exist("Airplane mode")
+                        exist("VPN")
+                        exist("Mobile plan")
                     }
                 }
             }
-            case(6) {
+            case(4, "onLeft") {
                 expectation {
-                    detect("Airplane mode").onLeft {
-                        existImage("[Airplane mode Icon]")
+                    val radioButton = detect("Airplane mode").rightItem()
+
+                    radioButton.existOnLeft("Airplane mode")
+
+                    radioButton.onLeft {
+                        exist("Airplane mode")
                         dontExist("Internet")
-                        dontExistImage("[RadioButton(OFF)]")
+                    }
+                }
+            }
+            case(5, "onRight") {
+                expectation {
+                    val icon = detect("Airplane mode").leftItem()
+
+                    icon.existOnRight("Airplane mode")
+
+                    icon.onRight {
+                        exist("Airplane mode")
+                        dontExist("Internet")
+                    }
+                }
+            }
+            case(6, "onAbove") {
+                expectation {
+                    val label = detect("Airplane mode")
+
+                    label.existOnAbove("SIMs")
+
+                    label.onAbove {
+                        exist("Internet")
+                        exist("SIMs")
+                        dontExist("Airplane mode")
+                        dontExist("VPN")
+                        dontExist("Mobile plan")
+                    }
+                }
+            }
+            case(7, "onBelow") {
+                expectation {
+                    val label = detect("Airplane mode")
+
+                    label.existOnBelow("VPN")
+                    label.existOnBelow("Mobile plan")
+
+                    label.onBelow {
+                        dontExist("Internet")
+                        dontExist("SIMs")
+                        exist("VPN")
+                        exist("Mobile plan")
                     }
                 }
             }
         }
     }
 
+    @Test
+    fun existImage() {
+
+        scenario {
+            case(1, "existImage, dontExistImage") {
+                condition {
+                    it.macro("[Network & internet Screen]")
+                }.expectation {
+                    it.existImage("[Airplane mode Icon]")
+                    it.existImage("[RadioButton(OFF)]")
+                    it.dontExistImage("[RadioButton(ON)]")
+                }
+            }
+            case(2, "onLine") {
+                expectation {
+                    val label = detect("Airplane mode")
+
+                    label.existImageOnLine("[Airplane mode Icon]")
+                    label.existImageOnLine("[RadioButton(OFF)]")
+
+                    label.onLine {
+                        existImage("[Airplane mode Icon]")
+                        existImage("[RadioButton(OFF)]")
+                        dontExistImage("[RadioButton(ON)]")
+                    }
+                }
+            }
+            case(3, "onColumn") {
+                expectation {
+                    val icon = detect("Internet").leftItem()
+
+                    icon.existImageOnColumn("[Internet Icon]")
+                    icon.existImageOnColumn("[SIMs Icon]")
+                    icon.existImageOnColumn("[Airplane mode Icon]")
+                    icon.existImageOnColumn("[VPN Icon]")
+
+                    icon.onColumn {
+                        existImage("[Internet Icon]")
+                        existImage("[SIMs Icon]")
+                        existImage("[Airplane mode Icon]")
+                        existImage("[VPN Icon]")
+                        dontExistImage("[RadioButton(OFF)]")
+                    }
+                }
+            }
+            case(4, "onLeft") {
+                expectation {
+                    val radioButton = detect("Airplane mode").rightItem()
+
+                    radioButton.existImageOnLeft("[Airplane mode Icon]")
+
+                    radioButton.onLeft {
+                        existImage("[Airplane mode Icon]")
+                        dontExistImage("[RadioButton(OFF)]")
+                        dontExistImage("[SIMs Icon]")
+                    }
+                }
+            }
+            case(5, "onRight") {
+                expectation {
+                    val icon = detect("Airplane mode").leftItem()
+
+                    icon.existImageOnRight("[RadioButton(OFF)]")
+
+                    icon.onRight {
+                        dontExistImage("[Airplane mode Icon]")
+                        existImage("[RadioButton(OFF)]")
+                        dontExistImage("[RadioButton(ON)]")
+                    }
+                }
+            }
+            case(6, "onAbove") {
+                expectation {
+                    val icon = detect("Airplane mode").leftItem()
+
+                    icon.existImageOnAbove("[Internet Icon]")
+                    icon.existImageOnAbove("[SIMs Icon]")
+
+                    icon.onAbove {
+                        existImage("[Internet Icon]")
+                        existImage("[SIMs Icon]")
+                        dontExistImage("[Airplane mode Icon]")
+                        dontExistImage("[VPN Icon]")
+                        dontExist("Mobile plan")
+                    }
+                }
+            }
+            case(7, "onBelow") {
+                expectation {
+                    val icon = detect("Airplane mode").leftItem()
+
+                    icon.existImageOnBelow("[VPN Icon]")
+
+                    icon.onBelow {
+                        dontExistImage("[Internet Icon]")
+                        dontExistImage("[SIMs Icon]")
+                        existImage("[VPN Icon]")
+                    }
+                }
+            }
+        }
+    }
 }

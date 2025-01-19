@@ -17,7 +17,6 @@ import shirates.core.logging.printInfo
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 
 /**
@@ -26,6 +25,7 @@ import shirates.core.vision.driver.lastElement
 fun VisionDrive.exist(
     expression: String,
     language: String = PropertiesManager.logLanguage,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
@@ -43,6 +43,7 @@ fun VisionDrive.exist(
             message = message,
             selector = sel,
             language = language,
+            waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
         )
     }
@@ -57,6 +58,7 @@ internal fun VisionDrive.existCore(
     message: String,
     selector: Selector,
     language: String,
+    waitSeconds: Double,
     swipeToSafePosition: Boolean,
 ): VisionElement {
 
@@ -65,6 +67,7 @@ internal fun VisionDrive.existCore(
         language = language,
         allowScroll = null,
         throwsException = false,
+        waitSeconds = waitSeconds,
         swipeToSafePosition = swipeToSafePosition,
     )
     lastVisionElement = v
@@ -211,6 +214,7 @@ fun VisionDrive.existWithScrollDown(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition
             )
         }
@@ -256,6 +260,7 @@ fun VisionDrive.existWithScrollUp(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition
             )
         }
@@ -301,6 +306,7 @@ fun VisionDrive.existWithScrollRight(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition
             )
         }
@@ -346,6 +352,7 @@ fun VisionDrive.existWithScrollLeft(
                 message = assertMessage,
                 selector = sel,
                 language = language,
+                waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition
             )
         }
@@ -379,19 +386,14 @@ fun VisionDrive.dontExist(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = message, subject = "$sel") {
 
-        doUntilTrue(
+        v = detectCore(
+            selector = sel,
+            language = language,
+            allowScroll = allowScroll,
             waitSeconds = waitSeconds,
-            throwOnFinally = false
-        ) {
-            v = detectCore(
-                selector = sel,
-                language = language,
-                allowScroll = allowScroll,
-                throwsException = false,
-                swipeToSafePosition = false,
-            )
-            v.isFound.not()
-        }
+            throwsException = false,
+            swipeToSafePosition = false,
+        )
     }
     if (v.isFound) {
         val error = TestNGException(message = message)

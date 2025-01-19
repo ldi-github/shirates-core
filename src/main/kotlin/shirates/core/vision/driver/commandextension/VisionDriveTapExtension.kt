@@ -25,6 +25,7 @@ fun VisionDrive.tap(
     expression: String,
     language: String = PropertiesManager.logLanguage,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
 ): VisionElement {
@@ -46,6 +47,7 @@ fun VisionDrive.tap(
             selector = sel,
             language = language,
             allowScroll = null,
+            waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             throwsException = true,
         )
@@ -97,6 +99,7 @@ internal fun VisionDrive.waitForElementFocused(
 internal fun VisionDrive.detectWithAdjustingPosition(
     selector: Selector,
     language: String,
+    waitSeconds: Double,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -105,6 +108,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
             selector = selector,
             language = language,
             allowScroll = null,
+            waitSeconds = waitSeconds,
             throwsException = throwsException,
             swipeToSafePosition = true,
         )

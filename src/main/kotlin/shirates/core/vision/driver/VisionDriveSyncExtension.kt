@@ -123,18 +123,12 @@ fun VisionDrive.waitForClose(
     val context = TestDriverCommandContext(null)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
-        var found = false
-        doUntilTrue(
+        val found = canDetectCore(
+            selector = sel,
+            language = language,
             waitSeconds = waitSeconds,
-            throwOnFinally = false,
-        ) {
-            found = canDetectCore(
-                selector = sel,
-                language = language,
-                allowScroll = false,
-            )
-            found.not()
-        }
+            allowScroll = false,
+        )
         if (throwsException && found) {
             throw TestDriverException(
                 message = message(
@@ -165,18 +159,12 @@ fun VisionDrive.waitForDisplay(
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
-        var found = false
-        doUntilTrue(
+        val found = canDetectCore(
+            selector = sel,
+            language = language,
             waitSeconds = waitSeconds,
-            throwOnFinally = false
-        ) {
-            found = canDetectCore(
-                selector = sel,
-                language = language,
-                allowScroll = false,
-            )
-            found
-        }
+            allowScroll = false,
+        )
         if (found.not() && throwsException) {
             throw TestDriverException(
                 message = message(
