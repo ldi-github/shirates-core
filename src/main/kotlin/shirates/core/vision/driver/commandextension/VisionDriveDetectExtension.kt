@@ -24,7 +24,7 @@ fun VisionDrive.detect(
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -394,7 +394,7 @@ fun VisionDrive.canDetect(
 fun VisionDrive.canDetect(
     selector: Selector,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     allowScroll: Boolean = true,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {

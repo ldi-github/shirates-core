@@ -260,7 +260,10 @@ fun VisionDrive.sendKeys(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val v = waitForElementFocused()
+        val v = waitForElementFocused(
+            waitSeconds = testContext.waitSecondsOnIsScreen,
+            throwOnError = false,
+        )
         if (v.isEmpty) {
             throw TestDriverException("Focused element not found.")
         }

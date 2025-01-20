@@ -25,7 +25,7 @@ fun VisionDrive.tap(
     expression: String,
     language: String = PropertiesManager.logLanguage,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
 ): VisionElement {
@@ -63,7 +63,10 @@ fun VisionDrive.tap(
         lastElement = v
     }
     if (waitForElementFocused) {
-        waitForElementFocused()
+        waitForElementFocused(
+            waitSeconds = waitSeconds,
+            throwOnError = true,
+        )
     }
 
     if (testContext.irregularHandler != null) {
@@ -74,8 +77,8 @@ fun VisionDrive.tap(
 }
 
 internal fun VisionDrive.waitForElementFocused(
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    throwOnError: Boolean = true,
+    waitSeconds: Double,
+    throwOnError: Boolean,
 ): VisionElement {
 
     if (TestMode.isNoLoadRun) {
@@ -244,7 +247,7 @@ fun VisionDrive.tapImage(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
     holdSeconds: Double = testContext.tapHoldSeconds
 ): VisionElement {

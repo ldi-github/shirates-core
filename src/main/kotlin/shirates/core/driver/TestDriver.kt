@@ -2272,6 +2272,8 @@ object TestDriver {
 
     internal var isSyncing = false
 
+    internal var isScreenshotSyncing = false
+
     /**
      * syncCache
      */

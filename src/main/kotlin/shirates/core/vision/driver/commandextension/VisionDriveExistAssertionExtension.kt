@@ -25,7 +25,7 @@ import shirates.core.vision.driver.lastElement
 fun VisionDrive.exist(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
@@ -371,7 +371,7 @@ fun VisionDrive.dontExist(
     expression: String,
     language: String = PropertiesManager.logLanguage,
     allowScroll: Boolean = true,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -421,7 +421,7 @@ fun VisionDrive.existImage(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
@@ -467,7 +467,7 @@ fun VisionDrive.dontExistImage(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
 ): VisionElement {
 
     val command = "dontExistImage"

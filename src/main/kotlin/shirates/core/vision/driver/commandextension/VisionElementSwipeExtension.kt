@@ -17,7 +17,7 @@ import shirates.core.vision.driver.branchextension.lastScreenshotImage
 fun VisionElement.swipeTo(
     expression: String,
     language: String = PropertiesManager.logLanguage,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,

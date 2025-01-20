@@ -19,7 +19,7 @@ internal fun VisionDrive.checkImageLabelContains(
     containedText: String,
     message: String,
     classifierName: String,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double,
 ): VisionElement {
 
     var v = getThisOrIt()
@@ -51,7 +51,7 @@ internal fun VisionDrive.checkIsCore(
     containedText: String,
     message: String,
     classifierName: String,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double,
 ): VisionElement {
 
     val rep = VisionMLModelRepository.getRepository(classifierName = "CheckStateClassifier")

@@ -133,7 +133,7 @@ fun VisionElement.existOnLine(
     language: String = PropertiesManager.logLanguage,
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -174,7 +174,7 @@ fun VisionElement.existOnColumn(
     language: String = PropertiesManager.logLanguage,
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -215,7 +215,7 @@ fun VisionElement.existOnRight(
     language: String = PropertiesManager.logLanguage,
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -256,7 +256,7 @@ fun VisionElement.existOnLeft(
     language: String = PropertiesManager.logLanguage,
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -297,7 +297,7 @@ fun VisionElement.existOnAbove(
     language: String = PropertiesManager.logLanguage,
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -338,7 +338,7 @@ fun VisionElement.existOnBelow(
     language: String = PropertiesManager.logLanguage,
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -383,7 +383,7 @@ fun VisionElement.existImageOnLine(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
@@ -438,7 +438,7 @@ fun VisionElement.existImageOnColumn(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
@@ -493,7 +493,7 @@ fun VisionElement.existImageOnLeft(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 

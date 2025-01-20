@@ -6,7 +6,6 @@ import shirates.core.driver.branchextension.ifFalse
 import shirates.core.driver.branchextension.ifTrue
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -23,7 +22,7 @@ fun VisionDrive.ifImageExist(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
 
@@ -62,7 +61,7 @@ fun VisionDrive.ifImageExistNot(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    waitSeconds: Double = testContext.syncWaitSeconds,
+    waitSeconds: Double = 0.0,
     onTrue: () -> Unit
 ): BooleanCompareResult {
 

@@ -17,56 +17,46 @@ import shirates.core.utility.toBufferedImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.canDetectCore
-import java.awt.image.BufferedImage
 
 
 /**
  * syncScreen
  */
-fun VisionDrive.syncScreen(
-    syncWaitSeconds: Double = testContext.syncWaitSeconds,
-    maxLoopCount: Int = testContext.syncMaxLoopCount,
-    syncIntervalSeconds: Double = 0.0,
-    syncOnTimeout: Boolean = true
-): VisionElement {
+fun VisionDrive.syncScreen(): VisionElement {
 
-    /**
-     * iOS
-     * has sync mechanism in itself
-     */
-    if (TestMode.isiOS) {
-        CodeExecutionContext.lastScreenshotImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
-        CodeExecutionContext.screenshotSynced = true
+    if (TestDriver.isScreenshotSyncing) {
         return lastElement
     }
+    try {
+        TestDriver.isScreenshotSyncing = true
 
-    /**
-     * Android
-     * has no sync mechanism in itself
-     * so have to take screenshot twice or more to get difference
-     */
-    var screenshotImage = CodeExecutionContext.lastScreenshotImage
-    var lastScreenshotImage: BufferedImage?
-    var screenshotSynced = false
-
-    val c = doUntilTrue(
-        waitSeconds = syncWaitSeconds,
-        maxLoopCount = maxLoopCount,
-        intervalSeconds = syncIntervalSeconds,
-        throwOnFinally = false
-    ) {
-        lastScreenshotImage = screenshotImage
-        screenshotImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
-        screenshotSynced = screenshotImage.isSame(lastScreenshotImage)
-        screenshotSynced
-    }
-    CodeExecutionContext.lastScreenshotImage = screenshotImage
-    CodeExecutionContext.screenshotSynced = screenshotSynced
-
-    if (c.isTimeout && syncOnTimeout) {
+        if (TestMode.isAndroid) {
+            /**
+             * Android
+             * has no sync mechanism in itself
+             */
+            val oldImage = CodeExecutionContext.lastScreenshotImage
+            val newImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+            if (newImage.isSame(oldImage)) {
+                CodeExecutionContext.lastScreenshotImage = newImage
+            } else {
+                TestLog.info("Syncing screen.")
+                Thread.sleep(testContext.waitSecondsForAnimationComplete.toLong())
+                CodeExecutionContext.lastScreenshotImage =
+                    appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+            }
+        } else {
+            /**
+             * iOS
+             * has sync mechanism in itself
+             */
+            CodeExecutionContext.lastScreenshotImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+        }
         CodeExecutionContext.screenshotSynced = true
+        return lastElement
+    } finally {
+        TestDriver.isScreenshotSyncing = false
     }
-    return lastElement
 }
 
 /**

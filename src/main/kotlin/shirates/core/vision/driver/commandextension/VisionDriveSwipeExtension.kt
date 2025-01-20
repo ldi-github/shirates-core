@@ -10,8 +10,10 @@ import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.utility.image.rect
 import shirates.core.utility.load.CpuLoadService
+import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage
@@ -220,7 +222,9 @@ internal fun VisionDrive.swipePointToPointCore(
             //  https://github.com/appium/java-client/issues/2045
         }
 
-        screenshot()
+        if (testContext.onScrolling) {
+            screenshot()
+        }
     }
 
     CpuLoadService.waitForCpuLoadUnder()
@@ -278,6 +282,7 @@ fun VisionDrive.swipeCenterToTop(
 
     val command = "swipeCenterToTop"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -292,7 +297,7 @@ fun VisionDrive.swipeCenterToTop(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -307,6 +312,8 @@ fun VisionDrive.flickCenterToTop(
 
     val command = "flickCenterToTop"
     val message = message(id = command)
+    val sw = StopWatch(command)
+
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeCenterToTop(
@@ -315,7 +322,7 @@ fun VisionDrive.flickCenterToTop(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -330,6 +337,7 @@ fun VisionDrive.swipeCenterToBottom(
 
     val command = "swipeCenterToBottom"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -344,7 +352,7 @@ fun VisionDrive.swipeCenterToBottom(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -359,6 +367,7 @@ fun VisionDrive.flickCenterToBottom(
 
     val command = "flickCenterToBottom"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -368,7 +377,7 @@ fun VisionDrive.flickCenterToBottom(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -383,6 +392,7 @@ fun VisionDrive.swipeCenterToLeft(
 
     val command = "swipeCenterToLeft"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -397,7 +407,7 @@ fun VisionDrive.swipeCenterToLeft(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -412,6 +422,7 @@ fun VisionDrive.flickCenterToLeft(
 
     val command = "flickCenterToLeft"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -421,7 +432,7 @@ fun VisionDrive.flickCenterToLeft(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -436,6 +447,7 @@ fun VisionDrive.swipeCenterToRight(
 
     val command = "swipeCenterToRight"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -450,7 +462,7 @@ fun VisionDrive.swipeCenterToRight(
             repeat = repeat,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -465,6 +477,7 @@ fun VisionDrive.flickCenterToRight(
 
     val command = "flickCenterToRight"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -474,7 +487,7 @@ fun VisionDrive.flickCenterToRight(
             repeat = repeat,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -490,6 +503,7 @@ fun VisionDrive.swipeLeftToRight(
 
     val command = "swipeLeftToRight"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -505,7 +519,7 @@ fun VisionDrive.swipeLeftToRight(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -521,6 +535,7 @@ fun VisionDrive.flickLeftToRight(
 
     val command = "flickLeftToRight"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -531,7 +546,7 @@ fun VisionDrive.flickLeftToRight(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -547,6 +562,7 @@ fun VisionDrive.swipeRightToLeft(
 
     val command = "swipeRightToLeft"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -562,7 +578,7 @@ fun VisionDrive.swipeRightToLeft(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -578,6 +594,7 @@ fun VisionDrive.flickRightToLeft(
 
     val command = "flickRightToLeft"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -588,7 +605,7 @@ fun VisionDrive.flickRightToLeft(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -604,6 +621,7 @@ fun VisionDrive.swipeBottomToTop(
 
     val command = "swipeBottomToTop"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -620,7 +638,7 @@ fun VisionDrive.swipeBottomToTop(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -636,6 +654,7 @@ fun VisionDrive.flickBottomToTop(
 
     val command = "flickBottomToTop"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -646,7 +665,7 @@ fun VisionDrive.flickBottomToTop(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -663,6 +682,7 @@ fun VisionDrive.flickAndGoDown(
 
     val command = "flickAndGoDown"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -680,7 +700,7 @@ fun VisionDrive.flickAndGoDown(
             testContext.onScrolling = originalOnScrolling
         }
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -716,6 +736,7 @@ fun VisionDrive.flickAndGoRight(
 
     val command = "flickAndGoRight"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -737,7 +758,7 @@ fun VisionDrive.flickAndGoRight(
             CodeExecutionContext.scrollVisionElement = originalScrollVisionElement
         }
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -754,6 +775,7 @@ fun VisionDrive.flickAndGoLeft(
 
     val command = "flickAndGoLeft"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -771,7 +793,7 @@ fun VisionDrive.flickAndGoLeft(
             testContext.onScrolling = originalOnScrolling
         }
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -787,6 +809,7 @@ fun VisionDrive.swipeTopToBottom(
 
     val command = "swipeTopToBottom"
     val message = message(id = command)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
@@ -803,7 +826,7 @@ fun VisionDrive.swipeTopToBottom(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -820,6 +843,8 @@ fun VisionDrive.flickAndGoUp(
 
     val command = "flickAndGoUp"
     val message = message(id = command)
+    val sw = StopWatch(command)
+
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         val originalOnScrolling = testContext.onScrolling
@@ -836,7 +861,7 @@ fun VisionDrive.flickAndGoUp(
             testContext.onScrolling = originalOnScrolling
         }
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -858,7 +883,6 @@ fun VisionDrive.flickAndGoUpTurbo(
     )
 }
 
-
 /**
  * flickTopToBottom
  */
@@ -871,6 +895,8 @@ fun VisionDrive.flickTopToBottom(
 
     val command = "flickTopToBottom"
     val message = message(id = command)
+    val sw = StopWatch(command)
+
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
         swipeTopToBottom(
@@ -880,7 +906,7 @@ fun VisionDrive.flickTopToBottom(
             intervalSeconds = intervalSeconds,
         )
     }
-
+    sw.printInfo()
     return lastElement
 }
 
@@ -901,6 +927,7 @@ fun VisionDrive.swipeElementToElement(
 
     val command = "swipeElementToElement"
     val message = message(id = command, subject = startElement.subject, to = endElement.subject)
+    val sw = StopWatch(command)
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(
@@ -962,6 +989,7 @@ fun VisionDrive.swipeElementToElement(
 
     if (TestMode.isSkippingScenario || TestMode.isSkippingCase || TestMode.isManualingScenario || TestMode.isManualingCase)
         lastElement = startElement
+    sw.printInfo()
     return lastElement
 }
 
