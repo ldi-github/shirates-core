@@ -30,14 +30,9 @@ fun VisionDrive.detect(
 
     val swDetect = StopWatch("detect")
     val sel = getSelector(expression = expression)
-    if (sel.isTextSelector.not()) {
-        val v = VisionElement.emptyElement
-        v.selector = sel
-        return v
-    }
-    val v: VisionElement
+
     try {
-        v = detectCore(
+        val v = detectCore(
             selector = sel,
             language = language,
             allowScroll = allowScroll,
@@ -100,6 +95,22 @@ private fun VisionDrive.detectCoreCore(
     }
     screenshot()
 
+    if (selector.isTextSelector.not()) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        v.lastError = TestDriverException(
+            message = message(
+                id = "elementNotFound",
+                subject = "$selector",
+                arg1 = selector.getElementExpression()
+            )
+        )
+        if (throwsException) {
+            throw v.lastError!!
+        }
+        return v
+    }
+
     /**
      * Try to detect in current context
      */
@@ -136,8 +147,14 @@ private fun VisionDrive.detectCoreCore(
         )
     }
 
-    if (v.hasError) {
-        v.lastResult = LogType.ERROR
+    if (v.isFound.not()) {
+        v.lastError = TestDriverException(
+            message = message(
+                id = "elementNotFound",
+                subject = "$selector",
+                arg1 = selector.getElementExpression()
+            )
+        )
         if (throwsException) {
             throw v.lastError!!
         }

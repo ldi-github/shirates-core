@@ -1,10 +1,9 @@
 package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.ScrollDirection
-import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.*
 import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.testContext
+import shirates.core.driver.commandextension.select
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.utility.image.rect
@@ -41,7 +40,7 @@ fun VisionElement.swipeTo(
             swipeToSafePosition = false,
         )
 
-        swipeElementToElement(
+        v = swipeElementToElement(
             startElement = this,
             endElement = v,
             durationSeconds = durationSeconds,
@@ -50,8 +49,6 @@ fun VisionElement.swipeTo(
             repeat = repeat
         )
     }
-
-    v = v.newVisionElement()
     return v
 }
 
@@ -85,21 +82,21 @@ fun VisionElement.swipeVerticalTo(
 
     val command = "swipeVerticalTo"
     val message = message(id = command, subject = subject, to = "$endY")
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject, arg1 = "$endY") {
         val b = bounds
-        swipePointToPoint(
+        v = swipePointToPoint(
             startX = b.centerX,
-            startY = b.y1,
+            startY = b.centerY,
             endX = b.centerX,
             endY = endY,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -113,11 +110,12 @@ fun VisionElement.swipeHorizontalTo(
 
     val command = "swipeHorizontalTo"
     val message = message(id = command, subject = subject, to = "$endX")
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject, arg1 = "$endX") {
         val b = bounds
-        swipePointToPoint(
+        v = swipePointToPoint(
             startX = b.x1,
             startY = b.centerY,
             endX = endX,
@@ -126,44 +124,46 @@ fun VisionElement.swipeHorizontalTo(
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
  * swipeToTop
  */
 fun VisionElement.swipeToTop(
-    ofScreen: Boolean = false,
     topOffsetRatio: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1,
     stickToEdge: Boolean = true
 ): VisionElement {
 
-    val frameBounds =
-        if (ofScreen) rootElement.bounds
-        else CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
-
     val command = "swipeToTop"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
+
+    val navigationBar =
+        if (TestMode.isiOS) testDrive.select(".XCUIElementTypeNavigationBar", throwsException = false)
+        else TestElement.emptyElement
+    val top =
+        if (navigationBar.isFound) navigationBar.bounds.bottom + 1
+        else PropertiesManager.statBarHeight
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
         val b = this.bounds
         val topOffsetY = (topOffsetRatio * rootElement.bounds.height).toInt()
-        val endMargin = if (stickToEdge) b.height / 2 else 0
-        swipePointToPoint(
+        val stickToEdgeMargin = if (stickToEdge) b.height / 2 else 0
+        val endY = top + stickToEdgeMargin + topOffsetY
+        v = swipePointToPoint(
             startX = b.centerX,
             startY = b.centerY,
             endX = b.centerX,
-            endY = frameBounds.top + endMargin + topOffsetY,
+            endY = endY,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -177,7 +177,6 @@ fun VisionElement.swipeToTopOfScreen(
 ): VisionElement {
 
     return swipeToTop(
-        ofScreen = true,
         topOffsetRatio = topOffsetRatio,
         durationSeconds = durationSeconds,
         repeat = repeat,
@@ -190,13 +189,11 @@ fun VisionElement.swipeToTopOfScreen(
  * swipeOutTop
  */
 fun VisionElement.swipeOutTop(
-    ofScreen: Boolean = false,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     repeat: Int = 1
 ): VisionElement {
 
     return swipeToTop(
-        ofScreen = ofScreen,
         durationSeconds = durationSeconds,
         repeat = repeat,
         stickToEdge = false
@@ -207,24 +204,22 @@ fun VisionElement.swipeOutTop(
  * flickToTop
  */
 fun VisionElement.flickToTop(
-    ofScreen: Boolean = false,
     durationSeconds: Double = testContext.flickDurationSeconds,
     repeat: Int = 1
 ): VisionElement {
 
     val command = "flickToTop"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        swipeOutTop(
-            ofScreen = ofScreen,
+        v = swipeOutTop(
             durationSeconds = durationSeconds,
             repeat = repeat,
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -244,23 +239,24 @@ fun VisionElement.swipeToBottom(
 
     val command = "swipeToBottom"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
         val b = this.bounds
         val bottomOffsetY = (bottomOffsetRatio * rootElement.bounds.height).toInt()
-        val endMargin = if (stickToEdge) b.height / 2 else 0
-        swipePointToPoint(
+        val stickToEdgeMargin = if (stickToEdge) b.height / 2 else 0
+        val endY = frameBounds.bottom - stickToEdgeMargin - bottomOffsetY
+        v = swipePointToPoint(
             startX = b.centerX,
-            startY = b.centerY + bottomOffsetY,
+            startY = b.centerY,
             endX = b.centerX,
-            endY = frameBounds.bottom - endMargin,
+            endY = endY,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -313,18 +309,18 @@ fun VisionElement.flickToBottom(
 
     val command = "flickToBottom"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        swipeOutBottom(
+        v = swipeOutBottom(
             ofScreen = ofScreen,
             bottomOffsetRatio = bottomOffsetRatio,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -337,29 +333,29 @@ fun VisionElement.swipeToCenter(
 ): VisionElement {
 
     val frame =
-        if (ofScreen) rootElement.rect
-        else CodeExecutionContext.workingRegionRect
+        if (ofScreen) rootElement.bounds
+        else CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
     val endX = frame.centerX
     val endY = frame.centerY
 
     val command = "swipeToCenter"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
 
-        val r = this.bounds.toRectWithRatio()
-        swipePointToPointByPixel(
-            startPixelX = r.centerX,
-            startPixelY = r.centerY,
-            endPixelX = endX,
-            endPixelY = endY,
+        val b = this.bounds
+        v = swipePointToPoint(
+            startX = b.centerX,
+            startY = b.centerY,
+            endX = endX,
+            endY = endY,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -388,29 +384,29 @@ fun VisionElement.swipeToRight(
     stickToEdge: Boolean = true
 ): VisionElement {
 
-    val frame =
-        if (ofScreen) lastScreenshotImage!!.rect
-        else CodeExecutionContext.workingRegionRect
+    val frameBounds =
+        if (ofScreen) lastScreenshotImage!!.rect.toBoundsWithRatio()
+        else CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
 
     val command = "swipeToRight"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        val r = this.bounds.toRectWithRatio()
-        val offsetX = (startOffsetRatio * r.width).toInt()
-        val endMargin = if (stickToEdge) r.width / 2 else 0
-        swipePointToPointByPixel(
-            startPixelX = r.centerX + offsetX,
-            startPixelY = r.centerY,
-            endPixelX = frame.right - endMargin,
-            endPixelY = r.centerY,
+        val b = this.bounds
+        val offsetX = (startOffsetRatio * b.width).toInt()
+        val endMargin = if (stickToEdge) b.width / 2 else 0
+        v = swipePointToPoint(
+            startX = b.centerX + offsetX,
+            startY = b.centerY,
+            endX = frameBounds.right - endMargin,
+            endY = b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -441,17 +437,17 @@ fun VisionElement.flickToRight(
 
     val command = "flickToRight"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        swipeOutRight(
+        v = swipeOutRight(
             startOffsetRatio = startOffsetRatio,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -465,29 +461,29 @@ fun VisionElement.swipeToLeft(
     stickToEdge: Boolean = true
 ): VisionElement {
 
-    val frame =
-        if (ofScreen) lastScreenshotImage!!.rect
-        else CodeExecutionContext.workingRegionRect
+    val frameBounds =
+        if (ofScreen) lastScreenshotImage!!.rect.toBoundsWithRatio()
+        else CodeExecutionContext.workingRegionRect.toBoundsWithRatio()
 
     val command = "swipeToLeft"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, arg1 = subject) {
-        val r = this.bounds.toRectWithRatio()
-        val offsetX = (startOffsetRatio * r.width).toInt()
-        val endMargin = if (stickToEdge) r.width / 2 else 0
-        swipePointToPointByPixel(
-            startPixelX = r.centerX + offsetX,
-            startPixelY = r.centerY,
-            endPixelX = frame.left + endMargin,
-            endPixelY = r.centerY,
+        val b = this.bounds
+        val offsetX = (startOffsetRatio * b.width).toInt()
+        val endMargin = if (stickToEdge) b.width / 2 else 0
+        v = swipePointToPoint(
+            startX = b.centerX + offsetX,
+            startY = b.centerY,
+            endX = frameBounds.left + endMargin,
+            endY = b.centerY,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -518,17 +514,17 @@ fun VisionElement.flickToLeft(
 
     val command = "flickToLeft"
     val message = message(id = command, subject = subject)
+    var v = VisionElement.emptyElement
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message, subject = subject) {
-        swipeOutLeft(
+        v = swipeOutLeft(
             startOffsetRatio = startOffsetRatio,
             durationSeconds = durationSeconds,
             repeat = repeat
         )
     }
-
-    return this
+    return v
 }
 
 /**
@@ -541,24 +537,26 @@ fun VisionElement.swipeToSafePosition(
         return this
     }
 
+    var v = VisionElement.emptyElement
+
     when (direction) {
         ScrollDirection.Down -> if (screenBounds.centerY < this.bounds.top) {
-            this.swipeVerticalTo((screenBounds.height * 0.2).toInt())
+            v = this.swipeVerticalTo((screenBounds.height * 0.2).toInt())
         }
 
         ScrollDirection.Up -> if (this.bounds.bottom < screenBounds.height * 0.2) {
-            this.swipeVerticalTo((screenBounds.height * 0.8).toInt())
+            v = this.swipeVerticalTo((screenBounds.height * 0.8).toInt())
         }
 
         ScrollDirection.Left -> if (screenBounds.width * 0.8 < this.bounds.right) {
-            this.swipeHorizontalTo((screenBounds.width * 0.2).toInt())
+            v = this.swipeHorizontalTo((screenBounds.width * 0.2).toInt())
         }
 
         ScrollDirection.Right -> if (this.bounds.left < screenBounds.width * 0.2) {
-            this.swipeHorizontalTo((screenBounds.width * 0.8).toInt())
+            v = this.swipeHorizontalTo((screenBounds.width * 0.8).toInt())
         }
 
         else -> {}
     }
-    return this
+    return v
 }

@@ -24,64 +24,6 @@ import kotlin.math.min
 
 /**
  * swipePointToPoint
- *
- */
-fun VisionDrive.swipePointToPointByPixel(
-    startPixelX: Int,
-    startPixelY: Int,
-    endPixelX: Int,
-    endPixelY: Int,
-    withOffset: Boolean = false,
-    offsetPixelY: Int = PropertiesManager.swipeOffsetY * testContext.boundsToRectRatio,
-    durationSeconds: Double = testContext.swipeDurationSeconds,
-    intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
-    repeat: Int = 1,
-): VisionElement {
-
-    val ratio = testContext.boundsToRectRatio
-
-    val startX = startPixelX / ratio
-    val startY = startPixelY / ratio
-    val endX = endPixelX + ratio
-    val endY = endPixelY + ratio
-    val offsetY = offsetPixelY / ratio
-
-    val sc = SwipeContext(
-        swipeFrame = lastScreenshotImage!!.rect.toBoundsWithRatio(),
-        viewport = lastScreenshotImage!!.rect.toBoundsWithRatio(),
-        startX = startX,
-        startY = startY,
-        endX = endX,
-        endY = endY,
-        scrollDurationSeconds = durationSeconds,
-        repeat = repeat,
-        scrollIntervalSeconds = intervalSeconds
-    )
-    if (withOffset) {
-        sc.endY += offsetY * ratio
-    }
-
-    val command = "swipePointToPoint"
-    val message = message(id = command, from = "(${startPixelX},${startPixelY})", to = "(${endPixelX},${endPixelY})")
-
-    val context = TestDriverCommandContext(null)
-    context.execOperateCommand(
-        command = command,
-        message = message,
-        arg1 = "(${sc.startX},${sc.startY})",
-        arg2 = "(${sc.endX},${sc.endY})"
-    ) {
-        if (sc.startX == sc.endX && sc.startY == sc.endY) {
-            return@execOperateCommand
-        }
-        swipePointToPointCore(swipeContext = sc)
-    }
-
-    return lastElement
-}
-
-/**
- * swipePointToPoint
  */
 fun VisionDrive.swipePointToPoint(
     startX: Int,
@@ -124,6 +66,12 @@ fun VisionDrive.swipePointToPoint(
             return@execOperateCommand
         }
         swipePointToPointCore(swipeContext = sc)
+    }
+    val thisObject = getThisOrIt()
+    val sel = thisObject.selector
+    if (sel != null) {
+        val v = detect(expression = sel.toString(), throwsException = false)
+        lastElement = v
     }
 
     return lastElement
