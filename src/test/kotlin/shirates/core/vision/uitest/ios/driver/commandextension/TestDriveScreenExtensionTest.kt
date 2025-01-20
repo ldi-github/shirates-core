@@ -4,15 +4,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
-import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveScreenExtensionTest : UITest() {
+class TestDriveScreenExtensionTest : VisionTest() {
 
     @Test
     fun screenName() {

@@ -1,16 +1,22 @@
 package shirates.core.vision.uitest.android.driver.commandextension
 
-import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.existAllInScanResults
+import shirates.core.driver.commandextension.existAllWithScrollDown
+import shirates.core.driver.commandextension.macro
+import shirates.core.driver.commandextension.scanElements
 import shirates.core.exception.TestNGException
-import shirates.core.testcode.UITest
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.driver.commandextension.existAll
+import shirates.core.vision.driver.commandextension.flickAndGoUp
+import shirates.core.vision.driver.commandextension.macro
+import shirates.core.vision.testDriveScope
+import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class TestDriveAssertionExtensionTest2 : UITest() {
+class TestDriveAssertionExtensionTest2 : VisionTest() {
 
     @Test
     fun existAll() {
@@ -28,12 +34,11 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                     val sw = StopWatch()
                     assertThatThrownBy {
                         sw.start()
-                        it.existAll("Network & internet", "Connected devices", "Apps", "no exist", waitSeconds = 3.0)
+                        it.existAll("Network & internet", "Connected devices", "Apps", "no exist")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
                     val millisec = sw.elapsedMillis
                     println(millisec)
-                    assertThat(millisec >= 1000).isTrue()
                 }
             }
             case(3) {
@@ -41,12 +46,11 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                     val sw = StopWatch()
                     assertThatThrownBy {
                         sw.start()
-                        it.existAll("Network & internet", "Connected devices", "Apps", "no exist", waitSeconds = 2.0)
+                        it.existAll("Network & internet", "Connected devices", "Apps", "no exist")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
                     val millisec = sw.elapsedMillis
                     println(millisec)
-                    assertThat(millisec >= 2000).isTrue()
                 }
             }
         }
@@ -60,27 +64,29 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.existAllWithScrollDown(
-                        "Network & internet",
-                        "Connected devices",
-                        "Apps",
-                        "Notifications",
-                        "Battery",
-                        "Storage",
-                        "Sound & vibration",
-                        "Display",
-                        "Wallpaper & style",
-                        "Accessibility",
-                        "Security & privacy",
-                        "Location",
-                        "Safety & emergency",
-                        "Passwords & accounts",
-                        "Digital Wellbeing & parental controls",
-                        "Google",
-                        "System",
-                        "About emulated device||About phone",
-                        "Tips & support"
-                    )
+                    testDriveScope {
+                        it.existAllWithScrollDown(
+                            "Network & internet",
+                            "Connected devices",
+                            "Apps",
+                            "Notifications",
+                            "Battery",
+                            "Storage",
+                            "Sound & vibration",
+                            "Display",
+                            "Wallpaper & style",
+                            "Accessibility",
+                            "Security & privacy",
+                            "Location",
+                            "Safety & emergency",
+                            "Passwords & accounts",
+                            "Digital Wellbeing & parental controls",
+                            "Google",
+                            "System",
+                            "About emulated device||About phone",
+                            "Tips & support"
+                        )
+                    }
                 }
             }
             case(2) {
@@ -88,13 +94,15 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                     it.flickAndGoUp(repeat = 2)
                 }.expectation {
                     assertThatThrownBy {
-                        it.existAllWithScrollDown(
-                            "Network & internet",
-                            "Connected devices",
-                            "no exist",
-                            "Apps",
-                            "Notifications",
-                        )
+                        testDriveScope {
+                            it.existAllWithScrollDown(
+                                "Network & internet",
+                                "Connected devices",
+                                "no exist",
+                                "Apps",
+                                "Notifications",
+                            )
+                        }
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists (scroll down)")
                 }
@@ -105,50 +113,52 @@ class TestDriveAssertionExtensionTest2 : UITest() {
     @Test
     fun existAllInScanResults() {
 
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                        .scanElements()
-                }.expectation {
-                    it.existAllInScanResults(
-                        "Network & internet",
-                        "Connected devices",
-                        "Apps",
-                        "Notifications",
-                        "Battery",
-                        "Storage",
-                        "Sound & vibration",
-                        "Display",
-                        "Wallpaper & style",
-                        "Accessibility",
-                        "Security & privacy",
-                        "Location",
-                        "Safety & emergency",
-                        "Passwords & accounts",
-                        "Digital Wellbeing & parental controls",
-                        "Google",
-                        "System",
-                        "About emulated device||About phone",
-                        "Tips & support"
-                    )
-                }
-            }
-            case(2) {
-                expectation {
-                    assertThatThrownBy {
+        testDriveScope {
+            scenario {
+                case(1) {
+                    condition {
+                        it.macro("[Android Settings Top Screen]")
+                            .scanElements()
+                    }.expectation {
                         it.existAllInScanResults(
                             "Network & internet",
                             "Connected devices",
-                            "no exist",
                             "Apps",
                             "Notifications",
+                            "Battery",
+                            "Storage",
+                            "Sound & vibration",
+                            "Display",
+                            "Wallpaper & style",
+                            "Accessibility",
+                            "Security & privacy",
+                            "Location",
+                            "Safety & emergency",
+                            "Passwords & accounts",
+                            "Digital Wellbeing & parental controls",
+                            "Google",
+                            "System",
+                            "About emulated device||About phone",
+                            "Tips & support"
                         )
-                    }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("<no exist> exists")
+                    }
                 }
-            }
+                case(2) {
+                    expectation {
+                        assertThatThrownBy {
+                            it.existAllInScanResults(
+                                "Network & internet",
+                                "Connected devices",
+                                "no exist",
+                                "Apps",
+                                "Notifications",
+                            )
+                        }.isInstanceOf(TestNGException::class.java)
+                            .hasMessage("<no exist> exists")
+                    }
+                }
 
+            }
         }
     }
 
