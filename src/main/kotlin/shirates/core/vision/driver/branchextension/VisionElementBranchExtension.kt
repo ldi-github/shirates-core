@@ -17,7 +17,7 @@ fun VisionElement.ifCheckIsON(
 
     val label = this.classify(classifierName = classifierName)
 
-    if (label == "ON") {
+    if (label == "[ON]") {
         onSwitchON.invoke(this)
     }
     return this
@@ -33,7 +33,7 @@ fun VisionElement.ifCheckIsOFF(
 
     val label = this.classify(classifierName = classifierName)
 
-    if (label == "OFF") {
+    if (label == "[OFF]") {
         onSwitchOFF.invoke(this)
     }
     return this

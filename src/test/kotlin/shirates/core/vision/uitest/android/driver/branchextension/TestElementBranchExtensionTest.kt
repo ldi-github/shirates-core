@@ -30,7 +30,6 @@ class TestElementBranchExtensionTest : VisionTest() {
                     it.checkIsOFF()
                 }
             }
-
             case(2) {
                 action {
                     it.ifCheckIsON {
