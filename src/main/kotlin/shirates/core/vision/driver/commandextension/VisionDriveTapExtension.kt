@@ -4,6 +4,8 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.getSelector
+import shirates.core.driver.commandextension.tap
+import shirates.core.driver.commandextension.toVisionElement
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
@@ -28,8 +30,17 @@ fun VisionDrive.tap(
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
+    directAccess: Boolean = false
 ): VisionElement {
 
+    if (directAccess) {
+        val e = testDrive.tap(
+            expression = expression,
+            holdSeconds = holdSeconds,
+            safeElementOnly = false,
+        )
+        return e.toVisionElement()
+    }
     if (CodeExecutionContext.isInCell && this is VisionElement) {
         throw NotImplementedError()
     }

@@ -30,17 +30,15 @@ class TestDriveKeyboardExtensionTest1 : VisionTest() {
         scenario {
             case(1) {
                 condition {
+                    it.terminateApp("[Maps]")
                     it.macro("[Apple Maps Top Screen]")
                     it.appIs("Maps")
                     it.tap("Search Maps")
-                        .sendKeys("google")
+                        .sendKeys("google san francisco")
                         .tap("search")
                         .wait()
-//                        .ifCanSelect("#xmark") {
-//                            it.tap()
-//                        }
                         .tap("Website")
-                        .tap("Open in Safari")
+                        .tap("Open in Safari", directAccess = true)
                         .wait(10.0)
                         .appIs("Safari")
                 }.action {
