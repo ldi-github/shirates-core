@@ -31,8 +31,8 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
                     it.macro("[Apple Maps Top Screen]")
                     it.appIs("Maps")
                     it.tap("[Search Maps]")
-                        .sendKeys("google")
-                        .tapSoftwareKey("search||検索")
+                        .sendKeys("google san francisco")
+                        .tapSoftwareKey("search")
                         .wait()
                         .ifCanSelect("#xmark") {
                             it.tap()
