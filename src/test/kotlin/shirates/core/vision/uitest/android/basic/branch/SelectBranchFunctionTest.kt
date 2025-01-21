@@ -67,30 +67,30 @@ class SelectBranchFunctionTest : VisionTest() {
 
         run {
             // Arrange
-            var ifCanSelectNotCalled = false
+            var ifCanDetectNotCalled = false
             var notCalled = false
             // Act
             ifCanDetectNot("no exist") {
-                ifCanSelectNotCalled = true     // called
+                ifCanDetectNotCalled = true     // called
             }.ifElse {
                 notCalled = true    // never called
             }
             // Assert
-            assertThat(ifCanSelectNotCalled).isTrue()
+            assertThat(ifCanDetectNotCalled).isTrue()
             assertThat(notCalled).isFalse()
         }
         run {
             // Arrange
-            var ifCanSelectNotCalled = false
+            var ifCanDetectNotCalled = false
             var notCalled = false
             // Act
             ifCanDetectNot("Connected devices") {
-                ifCanSelectNotCalled = true     // never called
+                ifCanDetectNotCalled = true     // never called
             }.ifElse {
                 notCalled = true    // called
             }
             // Assert
-            assertThat(ifCanSelectNotCalled).isFalse()
+            assertThat(ifCanDetectNotCalled).isFalse()
             assertThat(notCalled).isTrue()
         }
     }

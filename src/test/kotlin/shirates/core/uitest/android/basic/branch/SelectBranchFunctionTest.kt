@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.branchextension.ifCanSelect
+import shirates.core.driver.branchextension.ifCanSelectNot
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.testcode.UITest
 
@@ -69,7 +70,7 @@ class SelectBranchFunctionTest : UITest() {
             var ifCanSelectNotCalled = false
             var notCalled = false
             // Act
-            ifCanSelect("no exist") {
+            ifCanSelectNot("no exist") {
                 ifCanSelectNotCalled = true     // called
             }.ifElse {
                 notCalled = true    // never called
@@ -83,7 +84,7 @@ class SelectBranchFunctionTest : UITest() {
             var ifCanSelectNotCalled = false
             var notCalled = false
             // Act
-            ifCanSelect("Connected devices") {
+            ifCanSelectNot("Connected devices") {
                 ifCanSelectNotCalled = true     // never called
             }.ifElse {
                 notCalled = true    // called
