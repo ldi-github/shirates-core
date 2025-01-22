@@ -154,6 +154,7 @@ object Const {
     const val BOUNDS_TO_RECT_RATIO_IOS = 3
 
     // Vision
+    const val VISION_OCR_LANGUAGE = ""
     const val VISION_DIRECTORY = "vision"
     const val VISION_BUILD_DIRECTORY = "build"
     const val VISION_ENABLE_LEARNING_ON_STARTUP = true

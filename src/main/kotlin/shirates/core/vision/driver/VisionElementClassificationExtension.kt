@@ -3,8 +3,8 @@ package shirates.core.vision.driver
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.file.resolve
-import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
+import shirates.core.vision.VisionServerProxy
 
 /**
  * classifyFull
@@ -23,7 +23,7 @@ fun VisionElement.classifyFull(
     val mlmodelFile =
         PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName/$classifierName.mlmodel")
 
-    val result = SrvisionProxy.classifyImage(
+    val result = VisionServerProxy.classifyImage(
         inputFile = this.imageFile!!,
         mlmodelFile = mlmodelFile,
     )

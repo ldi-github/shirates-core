@@ -8,7 +8,7 @@ import shirates.core.utility.image.Rectangle
 import shirates.core.utility.toPath
 import shirates.core.vision.Candidate
 
-class GetRectanglesWithTemplateResult(
+class FindImagesWithTemplateResult(
     val jsonString: String,
     val localRegionX: Int = 0,
     val localRegionY: Int = 0,

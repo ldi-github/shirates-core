@@ -13,13 +13,13 @@ import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.utility.sync.WaitUtility.doUntilTrue
 import shirates.core.utility.time.StopWatch
-import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
-import shirates.core.vision.result.GetRectanglesWithTemplateResult
+import shirates.core.vision.result.FindImagesWithTemplateResult
 
 /**
  * findImages
@@ -42,7 +42,7 @@ fun VisionDrive.findImages(
     }
     val imageFile = workingRegionElement.imageFile!!
 
-    val r = SrvisionProxy.getRectanglesWithTemplate(
+    val r = VisionServerProxy.findImagesWithTemplate(
         mergeIncluded = mergeIncluded,
         imageFile = imageFile,
         imageX = workingRegionElement.rect.x,
@@ -155,7 +155,7 @@ private fun VisionDrive.findImageCore(
     val templateFile = VisionMLModelRepository.defaultClassifierRepository.getFile(label = label)
         ?: throw IllegalArgumentException("Template file not found. (label=$label)")
 
-    var r: GetRectanglesWithTemplateResult? = null
+    var r: FindImagesWithTemplateResult? = null
 
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
@@ -173,7 +173,7 @@ private fun VisionDrive.findImageCore(
             workingRegionElement.saveImage()
         }
 
-        r = SrvisionProxy.getRectanglesWithTemplate(
+        r = VisionServerProxy.findImagesWithTemplate(
             mergeIncluded = mergeIncluded,
             imageFile = workingRegionElement.imageFile!!,
             imageX = workingRegionElement.rect.x,

@@ -10,9 +10,9 @@ import shirates.core.utility.image.*
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
-import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionObservation
+import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.driver.commandextension.helper.FlowContainer
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
@@ -24,7 +24,7 @@ import java.nio.file.Files
 
 class VisionContext(
     val capture: Boolean,
-    val language: String = PropertiesManager.logLanguage,
+    val language: String = PropertiesManager.visionOCRLanguage,
 
     override var screenshotFile: String? = null,
     override var screenshotImage: BufferedImage? = null,
@@ -307,7 +307,7 @@ class VisionContext(
         if (Files.exists(inputFile.toPath()).not()) {
             screenshotImage!!.saveImage(inputFile, log = false)
         }
-        val recognizeTextResult = SrvisionProxy.recognizeText(
+        val recognizeTextResult = VisionServerProxy.recognizeText(
             inputFile = inputFile,
             language = language
         )

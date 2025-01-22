@@ -925,6 +925,15 @@ object PropertiesManager {
     // Vision --------------------------------------------------
 
     /**
+     * visionOCRLanguage
+     */
+    val visionOCRLanguage: String
+        get() {
+            return getPropertyValue(propertyName = "visionOCRLanguage")
+                ?: Const.VISION_OCR_LANGUAGE
+        }
+
+    /**
      * visionDirectory
      */
     val visionDirectory: String

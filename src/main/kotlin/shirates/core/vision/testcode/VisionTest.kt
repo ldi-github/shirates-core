@@ -5,9 +5,9 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.testcode.UITestBase
 import shirates.core.utility.toPath
-import shirates.core.vision.SrvisionProxy
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.driver.commandextension.disableCache
 import shirates.core.vision.driver.commandextension.invalidateScreen
 import shirates.core.vision.driver.commandextension.screenshot
@@ -30,7 +30,7 @@ abstract class VisionTest : UITestBase(), VisionDrive {
     override fun beforeAllAfterSetup(context: ExtensionContext?) {
         super.beforeAllAfterSetup(context)
 
-        SrvisionProxy.setupImageFeaturePrintConfig(
+        VisionServerProxy.setupImageFeaturePrintConfig(
             inputDirectory = PropertiesManager.visionDirectory.toPath().resolve("screens").toString(),
             log = true
         )

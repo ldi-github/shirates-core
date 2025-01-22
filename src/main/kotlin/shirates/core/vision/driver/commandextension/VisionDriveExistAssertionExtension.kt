@@ -24,7 +24,7 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.exist(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     func: (VisionElement.() -> Unit)? = null
@@ -185,7 +185,7 @@ fun VisionDrive.dontExistAll(
  */
 fun VisionDrive.existWithScrollDown(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -231,7 +231,7 @@ fun VisionDrive.existWithScrollDown(
  */
 fun VisionDrive.existWithScrollUp(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -277,7 +277,7 @@ fun VisionDrive.existWithScrollUp(
  */
 fun VisionDrive.existWithScrollRight(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -323,7 +323,7 @@ fun VisionDrive.existWithScrollRight(
  */
 fun VisionDrive.existWithScrollLeft(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
@@ -369,7 +369,7 @@ fun VisionDrive.existWithScrollLeft(
  */
 fun VisionDrive.dontExist(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
     func: (VisionElement.() -> Unit)? = null

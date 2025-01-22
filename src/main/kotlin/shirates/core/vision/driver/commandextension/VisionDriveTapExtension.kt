@@ -25,7 +25,7 @@ import shirates.core.vision.driver.wait
  */
 fun VisionDrive.tap(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
@@ -284,7 +284,7 @@ fun VisionDrive.tapImage(
  */
 fun VisionDrive.tapWithScrollDown(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -319,7 +319,7 @@ fun VisionDrive.tapWithScrollDown(
  */
 fun VisionDrive.tapWithScrollUp(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
@@ -354,7 +354,7 @@ fun VisionDrive.tapWithScrollUp(
  */
 fun VisionDrive.tapWithScrollRight(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -388,7 +388,7 @@ fun VisionDrive.tapWithScrollRight(
  */
 fun VisionDrive.tapWithScrollLeft(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollStartMarginRatio: Double = testContext.scrollHorizontalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollHorizontalEndMarginRatio,
@@ -470,7 +470,7 @@ fun VisionDrive.tapTopOfScreen(
  */
 fun VisionDrive.tapCenterOf(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     holdSeconds: Double = testContext.tapHoldSeconds,
     repeat: Int = 1,
 ): VisionElement {
@@ -500,7 +500,7 @@ fun VisionDrive.tapBelow(
     expression: String? = null,
     horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
     verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
@@ -554,7 +554,7 @@ fun VisionDrive.tapRight(
     expression: String? = null,
     horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
     verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,

@@ -11,7 +11,7 @@ object ScreenRecognizer {
         maxDistance: Double = 0.5,
     ): String {
 
-        val result = SrvisionProxy.classifyWithImageFeaturePrintOrText(
+        val result = VisionServerProxy.classifyWithImageFeaturePrintOrText(
             inputFile = screenImageFile,
             withTextMatching = withTextMatching,
             log = true,

@@ -198,7 +198,7 @@ fun VisionDrive.codeblock(
  */
 fun VisionDrive.cellOf(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     allowScroll: Boolean = true,
     swipeToSafePosition: Boolean = CodeExecutionContext.withScroll ?: true,
     throwsException: Boolean = true,

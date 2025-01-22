@@ -9,7 +9,9 @@ class RecognizeTextResult(
     val jsonString: String
 ) {
     var input: String? = null
-    var candidates: List<Candidate>
+    var candidates = listOf<Candidate>()
+
+    var errorMessage: String? = null
 
     init {
         val jsonObject = try {
@@ -18,23 +20,31 @@ class RecognizeTextResult(
             throw TestDriverException("Couldn't parse json string.\n$jsonString", t)
         }
 
-        this.input = jsonObject.getString("input")
-        this.candidates = jsonObject.getJSONArray("candidates").map {
-            val jso = it as JSONObject
-            val rectObj = jso.getJSONObject("rect")
-            val rect = Rectangle(
-                x = rectObj.getInt("x"),
-                y = rectObj.getInt("y"),
-                width = rectObj.getInt("width"),
-                height = rectObj.getInt("height")
-            )
-            val oldText = jso.getString("text")
-            val newText = oldText.replaceWithRegisteredWord()
-            Candidate(
-                confidence = jso.getFloat("confidence"),
-                text = newText,
-                rect = rect
-            )
+        if (jsonObject.has("input")) {
+            this.input = jsonObject.getString("input")
+        }
+        if (jsonObject.has("candidates")) {
+            this.candidates = jsonObject.getJSONArray("candidates").map {
+                val jso = it as JSONObject
+                val rectObj = jso.getJSONObject("rect")
+                val rect = Rectangle(
+                    x = rectObj.getInt("x"),
+                    y = rectObj.getInt("y"),
+                    width = rectObj.getInt("width"),
+                    height = rectObj.getInt("height")
+                )
+                val oldText = jso.getString("text")
+                val newText = oldText.replaceWithRegisteredWord()
+                Candidate(
+                    confidence = jso.getFloat("confidence"),
+                    text = newText,
+                    rect = rect
+                )
+            }
+        }
+
+        if (jsonObject.has("reason")) {
+            errorMessage = jsonObject.getString("reason")
         }
     }
 

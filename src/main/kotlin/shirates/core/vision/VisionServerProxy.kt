@@ -2,6 +2,7 @@ package shirates.core.vision
 
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
@@ -22,7 +23,7 @@ import java.io.FileNotFoundException
 import java.nio.file.Files
 import kotlin.io.path.name
 
-object SrvisionProxy {
+object VisionServerProxy {
 
     var lastJsonString = ""
 
@@ -41,7 +42,7 @@ object SrvisionProxy {
     fun setupImageFeaturePrintConfig(
         inputDirectory: String,
         log: Boolean = false,
-    ): String {
+    ): SetupImageFeaturePrintConfigResult {
 
         if (Files.exists(inputDirectory.toPath()).not()) {
             throw IllegalArgumentException("directory not found: $inputDirectory.")
@@ -50,6 +51,10 @@ object SrvisionProxy {
         val sw = StopWatch("ImageFeaturePrintConfigurator/setupImageFeaturePrintConfig")
         val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
                 "/ImageFeaturePrintConfigurator/setupImageFeaturePrintConfig").toHttpUrlOrNull()!!.newBuilder()
+        urlBuilder.addQueryParameter(
+            name = "project",
+            value = UserVar.project.toString()
+        )
         urlBuilder.addQueryParameter(
             name = "inputDirectory",
             value = inputDirectory.toPath().toString()
@@ -61,7 +66,11 @@ object SrvisionProxy {
         if (log) {
             sw.printInfo()
         }
-        return jsonString
+        val result = SetupImageFeaturePrintConfigResult(jsonString)
+        if (result.message.contains("image count: 0")) {
+            TestLog.warn("ImageFeaturePrintRepository could not be initialized. Image file not found in ${inputDirectory.toPath()}")
+        }
+        return result
     }
 
     /**
@@ -70,7 +79,7 @@ object SrvisionProxy {
     fun classifyWithImageFeaturePrintOrText(
         inputFile: String,
         withTextMatching: Boolean = false,
-        language: String = PropertiesManager.logLanguage,
+        language: String = PropertiesManager.visionOCRLanguage,
         log: Boolean = false,
     ): ClassifyWithImageFeaturePrintOrTextResult {
 
@@ -82,6 +91,10 @@ object SrvisionProxy {
 
         val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
                 "/ImageFeaturePrintClassifier/classifyWithImageFeaturePrintOrText").toHttpUrlOrNull()!!.newBuilder()
+        urlBuilder.addQueryParameter(
+            name = "project",
+            value = UserVar.project.toString()
+        )
         urlBuilder.addQueryParameter(
             name = "inputFile",
             value = inputFile.toPath().toString()
@@ -116,7 +129,7 @@ object SrvisionProxy {
      */
     fun recognizeText(
         inputFile: String? = CodeExecutionContext.lastScreenshotFile,
-        language: String? = PropertiesManager.logLanguage,
+        language: String? = PropertiesManager.visionOCRLanguage,
     ): RecognizeTextResult {
 
         if (inputFile == null) {
@@ -133,6 +146,10 @@ object SrvisionProxy {
         urlBuilder.addQueryParameter(
             name = "input",
             value = inputFile.toPath().toString()
+        )
+        urlBuilder.addQueryParameter(
+            name = "language",
+            value = language
         )
         if (language.isNullOrBlank().not()) {
             urlBuilder.addQueryParameter(
@@ -188,10 +205,7 @@ object SrvisionProxy {
         return lastJsonString
     }
 
-    /**
-     * matchWithTemplate
-     */
-    fun matchWithTemplate(
+    internal fun matchWithTemplate(
         templateFile: String,
         inputDirectory: String,
         log: Boolean = false,
@@ -223,9 +237,9 @@ object SrvisionProxy {
     }
 
     /**
-     * getRectanglesWithTemplate
+     * findImagesWithTemplate
      */
-    fun getRectanglesWithTemplate(
+    fun findImagesWithTemplate(
         mergeIncluded: Boolean,
         imageFile: String,
         imageX: Int,
@@ -235,9 +249,9 @@ object SrvisionProxy {
         segmentMarginVertical: Int,
         skinThickness: Int = 2,
         log: Boolean = false,
-    ): GetRectanglesWithTemplateResult {
+    ): FindImagesWithTemplateResult {
 
-        val sw = StopWatch("getRectanglesWithTemplate")
+        val sw = StopWatch("findImagesWithTemplate")
 
         val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
 
@@ -269,7 +283,7 @@ object SrvisionProxy {
         ).split()
             .saveImages()
         if (segmentContainer.segments.isEmpty()) {
-            val r = GetRectanglesWithTemplateResult("")
+            val r = FindImagesWithTemplateResult("")
             r.error = TestDriverException("No segment found.")
             return r
         }
@@ -277,12 +291,12 @@ object SrvisionProxy {
         /**
          * Match segment images with template image.
          */
-        val jsonString = SrvisionProxy.matchWithTemplate(
+        val jsonString = VisionServerProxy.matchWithTemplate(
             templateFile = templateImageFile,
             inputDirectory = outputDirectory,
             log = log
         )
-        val result = GetRectanglesWithTemplateResult(
+        val result = FindImagesWithTemplateResult(
             jsonString = jsonString,
             localRegionX = imageX,
             localRegionY = imageY,
@@ -351,126 +365,129 @@ object SrvisionProxy {
         return ClassifyImageResult(jsonString = result)
     }
 
-    /**
-     * detectRectangles
-     */
-    fun detectRectangles(
-        inputFile: String,
-        log: Boolean = false,
-    ): String {
-
-        if (Files.exists(inputFile.toPath()).not()) {
-            throw IllegalArgumentException("file not found: $inputFile.")
-        }
-
-        val sw = StopWatch("RectangleDetector/detectRectangles")
-
-        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
-                "/RectangleDetector/detectRectangles").toHttpUrlOrNull()!!.newBuilder()
-        urlBuilder.addQueryParameter(
-            name = "input",
-            value = inputFile.toPath().toString()
-        )
-        val url = urlBuilder.build()
-        val jsonString = getResponseBody(url)
-        lastJsonString = jsonString
-
-        if (log) {
-            sw.printInfo()
-        }
-        return jsonString
-    }
-
-    /**
-     * detectRectanglesIncludingRect
-     */
-    fun detectRectanglesIncludingRect(
-        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
-        rect: String,
-        log: Boolean = false,
-    ): DetectRectanglesIncludingRectResult {
-
-        if (inputFile == null) {
-            throw IllegalArgumentException("inputFile is null.")
-        }
-
-        val sw = StopWatch("RectangleDetector/detectRectanglesIncludingRect")
-
-        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
-                "/RectangleDetector/detectRectanglesIncludingRect").toHttpUrlOrNull()!!.newBuilder()
-        urlBuilder.addQueryParameter(
-            name = "input",
-            value = inputFile.toPath().toString()
-        )
-        urlBuilder.addQueryParameter(
-            name = "rect",
-            value = rect
-        )
-        val url = urlBuilder.build()
-        val jsonString = getResponseBody(url)
-        lastJsonString = jsonString
-
-        if (Files.exists(TestLog.directoryForLog).not()) {
-            TestLog.directoryForLog.toFile().mkdirs()
-        }
-        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_RectangleDetector_detectRectanglesIncludingRect.json")
-            .toFile().writeText(jsonString)
-
-        if (log) {
-            sw.printInfo()
-        }
-        return DetectRectanglesIncludingRectResult(jsonString = jsonString)
-    }
-
-    /**
-     * detectRectanglesIncludingText
-     */
-    fun detectRectanglesIncludingText(
-        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
-        text: String,
-        language: String? = PropertiesManager.logLanguage,
-        log: Boolean = false,
-    ): String {
-
-        if (inputFile == null) {
-            throw IllegalArgumentException("inputFile is null.")
-        }
-
-//        if (CodeExecutionContext.lastScreenshotName.isNullOrBlank()) {
-//            visionDrive.screenshot()
+//    /**
+//     * detectRectangles
+//     */
+//    @Deprecated("This function is not used in framework currently.")
+//    fun detectRectangles(
+//        inputFile: String,
+//        log: Boolean = false,
+//    ): String {
+//
+//        if (Files.exists(inputFile.toPath()).not()) {
+//            throw IllegalArgumentException("file not found: $inputFile.")
 //        }
-
-        val sw = StopWatch("RectangleDetector/detectRectanglesIncludingText")
-
-        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
-                "/RectangleDetector/detectRectanglesIncludingText").toHttpUrlOrNull()!!.newBuilder()
-        urlBuilder.addQueryParameter(
-            name = "input",
-            value = inputFile.toPath().toString()
-        )
-        urlBuilder.addQueryParameter(
-            name = "text",
-            value = text
-        )
-        if (language.isNullOrBlank().not()) {
-            urlBuilder.addQueryParameter(
-                name = "language",
-                value = language
-            )
-        }
-        val url = urlBuilder.build()
-        val result = getResponseBody(url)
-        lastJsonString = result
-
-        if (Files.exists(TestLog.directoryForLog).not()) {
-            TestLog.directoryForLog.toFile().mkdirs()
-        }
-        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_RectangleDetector_detectRectanglesIncludingText.json")
-            .toFile().writeText(result)
-
-        if (log) {
-            sw.printInfo()
-        }
-        return result
-    }
+//
+//        val sw = StopWatch("RectangleDetector/detectRectangles")
+//
+//        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+//                "/RectangleDetector/detectRectangles").toHttpUrlOrNull()!!.newBuilder()
+//        urlBuilder.addQueryParameter(
+//            name = "input",
+//            value = inputFile.toPath().toString()
+//        )
+//        val url = urlBuilder.build()
+//        val jsonString = getResponseBody(url)
+//        lastJsonString = jsonString
+//
+//        if (log) {
+//            sw.printInfo()
+//        }
+//        return jsonString
+//    }
+//
+//    /**
+//     * detectRectanglesIncludingRect
+//     */
+//    @Deprecated("This function is not used in framework currently.")
+//    fun detectRectanglesIncludingRect(
+//        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
+//        rect: String,
+//        log: Boolean = false,
+//    ): DetectRectanglesIncludingRectResult {
+//
+//        if (inputFile == null) {
+//            throw IllegalArgumentException("inputFile is null.")
+//        }
+//
+//        val sw = StopWatch("RectangleDetector/detectRectanglesIncludingRect")
+//
+//        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+//                "/RectangleDetector/detectRectanglesIncludingRect").toHttpUrlOrNull()!!.newBuilder()
+//        urlBuilder.addQueryParameter(
+//            name = "input",
+//            value = inputFile.toPath().toString()
+//        )
+//        urlBuilder.addQueryParameter(
+//            name = "rect",
+//            value = rect
+//        )
+//        val url = urlBuilder.build()
+//        val jsonString = getResponseBody(url)
+//        lastJsonString = jsonString
+//
+//        if (Files.exists(TestLog.directoryForLog).not()) {
+//            TestLog.directoryForLog.toFile().mkdirs()
+//        }
+//        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_RectangleDetector_detectRectanglesIncludingRect.json")
+//            .toFile().writeText(jsonString)
+//
+//        if (log) {
+//            sw.printInfo()
+//        }
+//        return DetectRectanglesIncludingRectResult(jsonString = jsonString)
+//    }
+//
+//    /**
+//     * detectRectanglesIncludingText
+//     */
+//    @Deprecated("This function is not used in framework currently.")
+//    fun detectRectanglesIncludingText(
+//        inputFile: String? = CodeExecutionContext.lastScreenshotFile,
+//        text: String,
+//        language: String? = PropertiesManager.visionOCRLanguage,
+//        log: Boolean = false,
+//    ): String {
+//
+//        if (inputFile == null) {
+//            throw IllegalArgumentException("inputFile is null.")
+//        }
+//
+////        if (CodeExecutionContext.lastScreenshotName.isNullOrBlank()) {
+////            visionDrive.screenshot()
+////        }
+//
+//        val sw = StopWatch("RectangleDetector/detectRectanglesIncludingText")
+//
+//        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+//                "/RectangleDetector/detectRectanglesIncludingText").toHttpUrlOrNull()!!.newBuilder()
+//        urlBuilder.addQueryParameter(
+//            name = "input",
+//            value = inputFile.toPath().toString()
+//        )
+//        urlBuilder.addQueryParameter(
+//            name = "text",
+//            value = text
+//        )
+//        if (language.isNullOrBlank().not()) {
+//            urlBuilder.addQueryParameter(
+//                name = "language",
+//                value = language
+//            )
+//        }
+//        val url = urlBuilder.build()
+//        val result = getResponseBody(url)
+//        lastJsonString = result
+//
+//        if (Files.exists(TestLog.directoryForLog).not()) {
+//            TestLog.directoryForLog.toFile().mkdirs()
+//        }
+//        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_RectangleDetector_detectRectanglesIncludingText.json")
+//            .toFile().writeText(result)
+//
+//        if (log) {
+//            sw.printInfo()
+//        }
+//        return result
+//    }
 }

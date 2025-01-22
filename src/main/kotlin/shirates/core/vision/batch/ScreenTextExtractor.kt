@@ -6,7 +6,7 @@ import shirates.core.utility.file.ResourceUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.toPath
 
-@Deprecated("screenText.json is no longer needed. `SrvisionProxy.setupImageFeaturePrintConfig` is called automatically in beforeAllAfterSetup in VisionTest base class.")
+@Deprecated("screenText.json is no longer needed. `VisionServerProxy.setupImageFeaturePrintConfig` is called automatically in beforeAllAfterSetup in VisionTest base class.")
 object ScreenTextExtractor {
 
     const val VISION_SCREEN_TEXT_EXTRACTOR_RESOURCE_NAME = "vision/ScreenTextExtractor.swift"
@@ -29,7 +29,7 @@ object ScreenTextExtractor {
      */
     fun execute(
         inputDirectory: String = DEFAULT_INPUT_DIRECTORY,
-        language: String = PropertiesManager.logLanguage,
+        language: String = PropertiesManager.visionOCRLanguage,
         outputFilename: String = inputDirectory.toPath().resolve(DEFAULT_OUTPUT_FILENAME).toString()
     ): String {
         setupScripts()

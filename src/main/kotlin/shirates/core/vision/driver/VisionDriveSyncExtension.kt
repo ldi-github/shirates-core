@@ -103,7 +103,7 @@ fun VisionDrive.wait(): VisionElement {
  */
 fun VisionDrive.waitForClose(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwsException: Boolean = true
 ): VisionElement {
@@ -138,7 +138,7 @@ fun VisionDrive.waitForClose(
  */
 fun VisionDrive.waitForDisplay(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwsException: Boolean = true
 ): VisionElement {

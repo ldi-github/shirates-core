@@ -130,7 +130,7 @@ fun VisionElement.buttonStateIs(
  */
 fun VisionElement.existOnLine(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
@@ -171,7 +171,7 @@ fun VisionElement.existOnLine(
  */
 fun VisionElement.existOnColumn(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
@@ -212,7 +212,7 @@ fun VisionElement.existOnColumn(
  */
 fun VisionElement.existOnRight(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
@@ -253,7 +253,7 @@ fun VisionElement.existOnRight(
  */
 fun VisionElement.existOnLeft(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
@@ -294,7 +294,7 @@ fun VisionElement.existOnLeft(
  */
 fun VisionElement.existOnAbove(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
@@ -335,7 +335,7 @@ fun VisionElement.existOnAbove(
  */
 fun VisionElement.existOnBelow(
     expression: String,
-    language: String = PropertiesManager.logLanguage,
+    language: String = PropertiesManager.visionOCRLanguage,
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,

@@ -1739,6 +1739,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionOCRLanguage() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionOCRLanguage).isEqualTo(Const.VISION_OCR_LANGUAGE)
+        }
+        run {
+            // Arrange
+            val value = "ja"
+            PropertiesManager.setPropertyValue("visionOCRLanguage", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionOCRLanguage).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionDirectory() {
 
         run {

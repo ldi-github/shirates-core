@@ -8,7 +8,7 @@ import shirates.core.utility.toPath
 import java.io.FileNotFoundException
 import java.nio.file.Files
 
-@Deprecated("This object is no longer needed. `SrvisionProxy.setupImageFeaturePrintConfig` is called automatically in beforeAllAfterSetup in VisionTest base class.")
+@Deprecated("This object is no longer needed. `VisionServerProxy.setupImageFeaturePrintConfig` is called automatically in beforeAllAfterSetup in VisionTest base class.")
 object ScreenTextRepository {
 
     internal val screenTextMap = mutableMapOf<String, ScreenTextInfo>()
