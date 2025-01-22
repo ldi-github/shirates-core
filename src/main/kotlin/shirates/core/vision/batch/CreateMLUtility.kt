@@ -23,6 +23,7 @@ import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import java.io.File
 import java.nio.file.DirectoryNotEmptyException
+import java.nio.file.Files
 import java.util.*
 import kotlin.io.path.name
 
@@ -134,6 +135,10 @@ object CreateMLUtility {
             sw.printInfo()
         }
 
+        val dir = fileListFile.toPath().parent
+        if (Files.exists(dir).not()) {
+            dir.toFile().mkdirs()
+        }
         fileListFile.writeText(currentListString)   // fileListFile is saved on success
     }
 

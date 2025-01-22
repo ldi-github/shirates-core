@@ -226,7 +226,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg2: String? = null,
         fileName: String? = null,
         fireEvent: Boolean = true,
-        log: Boolean? = null,
         suppressBeforeScreenshot: Boolean = false,
         func: () -> Unit
     ): LogLine? {
@@ -242,7 +241,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 arg2 = arg2,
                 fileName = fileName,
                 fireEvent = fireEvent,
-                log = log,
                 scriptCommand = scriptCommand,
                 suppressBeforeScreenshot = suppressBeforeScreenshot,
                 func = func
@@ -260,7 +258,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg2: String?,
         fileName: String?,
         fireEvent: Boolean,
-        log: Boolean?,
         scriptCommand: String?,
         suppressBeforeScreenshot: Boolean = false,
         func: () -> Unit
@@ -269,7 +266,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
         val sw = StopWatch()
 
-        val outputLog = log ?: CodeExecutionContext.shouldOutputLog
+        val outputLog = CodeExecutionContext.shouldOutputLog
 
         if (TestMode.isNoLoadRun) {
             if (outputLog) {

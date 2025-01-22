@@ -58,7 +58,7 @@ class Select1 : UITest() {
         scenario {
             case(1) {
                 action {
-                    it.selectWithScrollDown("Security & privacy", log = false)
+                    it.selectWithScrollDown("Security & privacy")
                     output(it)
                 }
             }

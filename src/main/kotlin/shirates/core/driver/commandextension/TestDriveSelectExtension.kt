@@ -129,7 +129,6 @@ fun TestDrive.selectWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
-    log: Boolean? = null,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -139,7 +138,7 @@ fun TestDrive.selectWithScrollDown(
     val message = message(id = command, subject = selector.toString())
     val context = TestDriverCommandContext(scrollableElement)
     var e = TestElement(selector = selector)
-    context.execOperateCommand(command = command, message = message, subject = selector.toString(), log = log) {
+    context.execOperateCommand(command = command, message = message, subject = selector.toString()) {
 
         val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
@@ -180,7 +179,6 @@ fun TestDrive.selectWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
-    log: Boolean? = null,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -190,7 +188,7 @@ fun TestDrive.selectWithScrollUp(
     val message = message(id = command, subject = selector.toString())
     var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(scrollableElement)
-    context.execOperateCommand(command = command, message = message, subject = selector.toString(), log = log) {
+    context.execOperateCommand(command = command, message = message, subject = selector.toString()) {
 
         val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
@@ -231,7 +229,6 @@ fun TestDrive.selectWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
-    log: Boolean? = null,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -241,7 +238,7 @@ fun TestDrive.selectWithScrollRight(
     val message = message(id = command, subject = selector.toString())
     var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(scrollableElement)
-    context.execOperateCommand(command = command, message = message, subject = selector.toString(), log = log) {
+    context.execOperateCommand(command = command, message = message, subject = selector.toString()) {
 
         val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 
@@ -282,7 +279,6 @@ fun TestDrive.selectWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToCenter: Boolean = false,
     throwsException: Boolean = true,
-    log: Boolean? = null,
     func: (TestElement.() -> Unit)? = null
 ): TestElement {
 
@@ -292,7 +288,7 @@ fun TestDrive.selectWithScrollLeft(
     val message = message(id = command, subject = selector.toString())
     var e = TestElement(selector = selector)
     val context = TestDriverCommandContext(scrollableElement)
-    context.execOperateCommand(command = command, message = message, subject = selector.toString(), log = log) {
+    context.execOperateCommand(command = command, message = message, subject = selector.toString()) {
 
         val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
 

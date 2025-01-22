@@ -177,8 +177,8 @@ class AdHocTestAndroid : UITest() {
                 condition {
                     it.screenIs("[Android Settings Top Screen]")
                 }.expectation {
-                    it.selectWithScrollDown("[Network & internet]", log = true)
-                    it.selectWithScrollDown("[Connected devices]", log = false)
+                    it.selectWithScrollDown("[Network & internet]")
+                    it.selectWithScrollDown("[Connected devices]")
                     it.selectWithScrollDown("[Apps]")
                     silent {
                         it.selectWithScrollDown("[Notifications]")

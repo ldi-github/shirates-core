@@ -68,13 +68,13 @@ class TestDriveSelectExtensionTest1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                         .dontExist("System")
                 }.action {
-                    it.selectWithScrollDown("System", log = true)
+                    it.selectWithScrollDown("System")
                 }.expectation {
                     it.text.thisIs("System")
                     it.selector!!.text.thisIs("System")
 
                     assertThatThrownBy {
-                        it.selectWithScrollDown("no exist", log = true)
+                        it.selectWithScrollDown("no exist")
                     }.isInstanceOf(TestDriverException::class.java)
                     it.isEmpty.thisIsTrue()
                 }
@@ -83,7 +83,7 @@ class TestDriveSelectExtensionTest1 : UITest() {
                 condition {
                     it.flickBottomToTop()
                 }.action {
-                    it.selectWithScrollUp("Connected devices", log = true)
+                    it.selectWithScrollUp("Connected devices")
                 }.expectation {
                     // Assert
                     assertThat(it.text).isEqualTo("Connected devices")
@@ -91,7 +91,7 @@ class TestDriveSelectExtensionTest1 : UITest() {
 
                     // Act, Assert
                     assertThatThrownBy {
-                        it.selectWithScrollUp("no exist", log = true)
+                        it.selectWithScrollUp("no exist")
                     }.isInstanceOf(TestDriverException::class.java)
                     it.isEmpty.thisIsTrue()
                 }
