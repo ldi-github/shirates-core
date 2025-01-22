@@ -5,14 +5,15 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.branchextension.android
 import shirates.core.driver.branchextension.ifScreenIsNot
 import shirates.core.driver.branchextension.result.ScreenCompareResult
 import shirates.core.driver.commandextension.describe
 import shirates.core.driver.commandextension.macro
+import shirates.core.exception.TestConfigException
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
-import shirates.core.vision.configration.repository.VisionScreenRepository
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
@@ -147,8 +148,8 @@ class ScreenCompareResultTest : UITest() {
                             .ifScreenIs("[not exist screen]") {
                                 NG("never called")
                             }
-                    }.isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("screenName '[not exist screen]' is not registered in ${VisionScreenRepository.directory}.")
+                    }.isInstanceOf(TestConfigException::class.java)
+                        .hasMessage("screenName '[not exist screen]' is not registered in ${ScreenRepository.screensDirectory}.")
                 }
             }
         }

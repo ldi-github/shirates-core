@@ -45,6 +45,7 @@ fun VisionDrive.installApp(
         }
 
         invalidateScreen()
+        testDrive.invalidateCache()
     }
 
     return lastElement
@@ -65,6 +66,7 @@ fun VisionDrive.removeApp(
         TestDriver.appiumDriver.removeApp(packageOrBundleId)
 
         invalidateScreen()
+        testDrive.invalidateCache()
     }
 
     return lastElement
@@ -95,6 +97,7 @@ fun VisionDrive.terminateApp(
         }
 
         invalidateScreen()
+        testDrive.invalidateCache()
     }
 
     return lastElement

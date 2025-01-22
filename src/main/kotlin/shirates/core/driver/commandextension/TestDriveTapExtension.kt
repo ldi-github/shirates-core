@@ -175,7 +175,8 @@ fun TestDrive.tap(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    safeElementOnly: Boolean = CodeExecutionContext.isScrolling
+    safeElementOnly: Boolean = CodeExecutionContext.isScrolling,
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     TestDriver.it
@@ -197,7 +198,7 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = select(expression = expression, safeElementOnly = safeElementOnly)
+        val targetElement = select(expression = expression, safeElementOnly = safeElementOnly, useCache = useCache)
 
         val tapFunc = {
             silent {

@@ -2234,7 +2234,11 @@ object TestDriver {
         val originalLastElement = lastElement
         try {
             NicknameUtility.validateScreenName(screenName)
-            val screenInfo = ScreenRepository.get(screenName)
+            val screenInfo = try {
+                ScreenRepository.get(screenName)
+            } catch (t: TestConfigException) {
+                throw TestConfigException("screenName '$screenName' is not registered in ${ScreenRepository.screensDirectory}.")
+            }
 
             var r = TestDriveObject.canSelectAll(
                 selectors = screenInfo.identitySelectors,

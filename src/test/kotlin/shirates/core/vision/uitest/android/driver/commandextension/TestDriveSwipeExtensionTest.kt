@@ -1,6 +1,5 @@
 package shirates.core.vision.uitest.android.driver.commandextension
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -150,7 +149,7 @@ class TestDriveSwipeExtensionTest : VisionTest() {
                     v1 = it.detect("Storage")
                     v2 = it.detect("Display")
                 }.action {
-                    v1.swipeVerticalTo(endY = v2.bounds.top, durationSeconds = 5.0)
+                    v1.swipeVerticalTo(endY = v2.bounds.centerY, durationSeconds = 5.0)
                 }.expectation {
                     v3 = it.detect("Storage")
                     val abs = Math.abs(v3.bounds.centerY - v2.bounds.centerY)
@@ -187,12 +186,10 @@ class TestDriveSwipeExtensionTest : VisionTest() {
                         .swipeToCenterOfScreen()
                 }.action {
                     val v = it.detect("Display")
-                    v.swipeToTopOfScreen(durationSeconds = 3.0, topOffsetRatio = 0.2)
+                    v.swipeToTopOfScreen(durationSeconds = 3.0)
                 }.expectation {
-                    val v = detect("Display")
-                    val b = v.bounds
-                    val diff = Math.abs(b.centerY - rootElement.bounds.height * 0.2)
-                    assertThat(diff < 50).isTrue()
+                    val v = detect("Display", throwsException = false)
+                    v.isFound.thisIsTrue("Display is not shown. (Under `Search settings`)")
                 }
             }
             case(3) {

@@ -10,7 +10,6 @@ import shirates.core.driver.commandextension.getCurrentAppIconName
 import shirates.core.driver.commandextension.getCurrentAppName
 import shirates.core.driver.commandextension.tapDefault
 import shirates.core.driver.driver
-import shirates.core.driver.testDrive
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
@@ -117,7 +116,9 @@ class TestDriveExtensionTest : VisionTest() {
                         it.macro("[General Screen]")
                     }
                 }.action {
-                    testDrive.tapDefault()
+                    testDriveScope {
+                        it.tapDefault()
+                    }
                 }.expectation {
                     it.screenIs("[iOS Settings Top Screen]")
                 }

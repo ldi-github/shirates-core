@@ -49,13 +49,23 @@ object AndroidSettingsMacro : TestDrive {
     @Macro("[Android Settings Search Screen]")
     fun androidSearchScreen() {
 
-        if (it.isScreen("[Android Settings Search Screen]")) {
-            return
+        if (testContext.useCache) {
+            if (it.isScreen("[Android Settings Search Screen]")) {
+                return
+            }
+            androidSettingsTopScreen()
+            it.tap("[Search settings]")
+                .screenIs("[Android Settings Search Screen]")
+        } else {
+            visionScope {
+                if (it.isScreen("[Android Settings Search Screen]")) {
+                    return@visionScope
+                }
+                androidSettingsTopScreen()
+                it.tap("Search settings")
+                    .screenIs("[Android Settings Search Screen]")
+            }
         }
-
-        androidSettingsTopScreen()
-        it.tap("[Search settings]")
-            .screenIs("[Android Settings Search Screen]")
     }
 
     @Macro("[Network & internet Screen]")

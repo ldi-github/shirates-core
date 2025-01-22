@@ -283,7 +283,8 @@ tasks.register("publishToExternalRepository") {
 tasks.test {
     useJUnitPlatform()
     jvmArgs = listOf(
-        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED"
+        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED",
+        "-Xmx4g", "-Xms4g"
     )
 
     // Filter test methods
@@ -307,6 +308,10 @@ tasks.jacocoTestReport {
 tasks.register<Test>("runtest") {
     useJUnitPlatform()
     group = "experiment"
+    jvmArgs = listOf(
+        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED",
+        "-Xmx4g", "-Xms4g"
+    )
 
     val envs = System.getenv()
     val runtestPattern = if (envs.keys.contains("runtestPattern")) envs["runtestPattern"] else "*"

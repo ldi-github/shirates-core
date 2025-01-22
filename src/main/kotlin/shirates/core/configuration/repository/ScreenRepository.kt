@@ -55,7 +55,7 @@ object ScreenRepository {
         if (screenInfoMap.containsKey(key)) {
             return screenInfoMap[key]!!
         } else {
-            throw TestDriverException("key is not registered.(key='$key')")
+            throw TestConfigException("key is not registered.(key='$key')")
         }
     }
 

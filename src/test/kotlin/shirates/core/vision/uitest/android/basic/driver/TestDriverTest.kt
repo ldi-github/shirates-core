@@ -86,14 +86,14 @@ class TestDriverTest : VisionTest() {
 //                    assertThat(TestDriver.lastError).isNotNull()
 //                }
 //            }
-            case(4, "selectWithScrollUp([not exist]) [ERROR]") {
+            case(4, "detectWithScrollUp([not exist]) [ERROR]") {
                 condition {
                     TestDriver.clearLast()
                 }.action {
                     assertThatThrownBy {
                         detectWithScrollUp(expression = "not exist")
                     }.isInstanceOf(TestDriverException::class.java)
-                        .hasMessage(message(id = "elementNotFound", subject = "<not exist>", arg1 = "not exist"))
+                        .hasMessage(message(id = "elementNotFound", subject = "<not exist>", arg1 = "<not exist>"))
                 }.expectation {
                     val v = TestDriver.lastVisionElement
                     assertThat(v.lastError).isNotNull()
@@ -101,7 +101,7 @@ class TestDriverTest : VisionTest() {
                         message(
                             id = "elementNotFound",
                             subject = "<not exist>",
-                            arg1 = "not exist"
+                            arg1 = "<not exist>"
                         )
                     )
                 }

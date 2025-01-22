@@ -68,8 +68,10 @@ class DirectAccessModeTestIos : UITest() {
             case(1) {
                 condition {
                     appiumDriver.findElement(By.id("General")).click()
+                    Thread.sleep(500)
                 }.action {
                     appiumDriver.findElement(By.id("About")).click()
+                    Thread.sleep(500)
                 }.expectation {
                     appiumDriver.findElement(By.id("Name"))
                         .toTestElement().isFound.thisIsTrue("<Name > exists")

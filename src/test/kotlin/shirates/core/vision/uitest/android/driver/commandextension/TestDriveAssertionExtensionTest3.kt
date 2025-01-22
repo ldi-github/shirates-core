@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.exception.TestNGException
-import shirates.core.logging.Message
+import shirates.core.logging.Message.message
 import shirates.core.vision.driver.commandextension.detect
 import shirates.core.vision.driver.commandextension.dontExist
 import shirates.core.vision.driver.commandextension.macro
@@ -28,7 +28,7 @@ class TestDriveAssertionExtensionTest3 : VisionTest() {
                     assertThatThrownBy {
                         it.dontExist("Network & internet")
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("<Network & internet> does not exist (actual: exists)")
+                        .hasMessage("<Network & internet> does not exist")
                 }
             }
         }
@@ -140,11 +140,11 @@ class TestDriveAssertionExtensionTest3 : VisionTest() {
                     assertThatThrownBy {
                         it.textIs("Battery？")
                     }.isInstanceOf(TestNGException::class.java).hasMessageContaining(
-                        Message.message(
+                        message(
                             id = "textIs",
                             subject = "<Battery>",
                             expected = "Battery？"
-                        ) + " (actual=\"Battery\")".lowercase()
+                        )
                     )
                 }
             }

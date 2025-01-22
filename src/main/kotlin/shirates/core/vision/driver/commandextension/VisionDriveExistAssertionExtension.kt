@@ -400,6 +400,9 @@ fun VisionDrive.dontExist(
         v.lastError = error
         v.lastResult = LogType.NG
         throw error
+    } else {
+        v.lastError = null
+        v.lastResult = LogType.NONE
     }
 
     if (func != null) {

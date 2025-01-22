@@ -17,8 +17,7 @@ class TestElementExtensionTest : VisionTest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Search Screen]")
-                        .detect("[Search Box]")
-                        .clearInput()
+                        .tap("Search settings")
                         .textIs("Search settings")
                         .sendKeys("value1")
                         .textIs("value1")

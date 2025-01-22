@@ -29,7 +29,7 @@ class VisionElementTest {
         // Arrange
         val imageFileName = "[iOS Settings Top Screen].png"
         val imageFilePath = TestLog.directoryForLog.resolve(imageFileName).toString()
-        val templateImageFile = "vision/screens/ios/[iOS Settings Top Screen].png"
+        val templateImageFile = "vision/screens/@i/[iOS Settings Top Screen].png"
         TestLog.directoryForLog.toFile().mkdirs()
         Files.copy(
             templateImageFile.toPath().toFile(),

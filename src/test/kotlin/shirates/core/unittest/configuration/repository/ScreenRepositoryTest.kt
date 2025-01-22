@@ -7,7 +7,6 @@ import shirates.core.configuration.ScreenInfo
 import shirates.core.configuration.Selector
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.exception.TestConfigException
-import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.toPath
@@ -398,7 +397,7 @@ class ScreenRepositoryTest : UnitTest() {
         // Act, Assert
         assertThatThrownBy {
             ScreenRepository.get("screenName1")
-        }.isInstanceOf(TestDriverException::class.java)
+        }.isInstanceOf(TestConfigException::class.java)
             .hasMessage("key is not registered.(key='screenName1')")
 
         // Arrange

@@ -3,11 +3,10 @@ package shirates.core.vision.uitest.ios.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.select
+import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.driver.rootBounds
 import shirates.core.driver.testContext
-import shirates.core.driver.testDrive
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
@@ -192,13 +191,8 @@ class TestDriveSwipeExtensionTest : VisionTest() {
                         .swipeToTopOfScreen()
                         .swipeToTopOfScreen(durationSeconds = 2.0)
                 }.expectation {
-                    val v = it.detect("Action Button")
-                    val actionBar = testDrive.select(".XCUIElementTypeNavigationBar", useCache = false)
-                    val b = v.bounds
-                    val low = actionBar.bounds.bottom + 1
-                    val high = low + b.height + 10
-                    (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
-                    (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
+                    val v = it.detect("Action Button", throwsException = false)
+                    v.isFound.thisIsFalse()     // hidden under the navigation bar
                 }
             }
             case(3) {
