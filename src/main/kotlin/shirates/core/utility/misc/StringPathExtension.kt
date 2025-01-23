@@ -65,17 +65,24 @@ fun String?.toPath(): Path {
         .replace("\\", "/")
     if (File.separator == "\\") {
         // for Windows
-        text = text
+        val newText = text
             .replace("/C/", "/")
             .replace("/c/", "/")
             .replace("C:", "/")
             .replace("c:", "/")
             .replace(":", "")
+            .replace("：", "")
+            .replace("*", "_")
             .replace("*", "_")
             .replace("?", "_")
+            .replace("？", "_")
             .replace("\"", "_")
+            .replace("”", "_")
+            .replace("<", "_")
             .replace("<", "_")
             .replace(">", "_")
+            .replace(">", "_")
+        text = newText
     }
     text = text
         .replace("//", "/")
