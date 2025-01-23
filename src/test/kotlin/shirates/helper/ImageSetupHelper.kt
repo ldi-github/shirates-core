@@ -52,6 +52,7 @@ object ImageSetupHelper : TestDrive {
             select("[Wallpaper & style Icon]").cropTo(dir)
             select("[Accessibility Icon]").cropTo(dir)
             select("[Security & privacy Icon]").cropTo(dir)
+            flickAndGoDown()
             select("[Location Icon]").cropTo(dir)
             select("[Safety & emergency Icon]").cropTo(dir)
             select("[Passwords & accounts Icon]").cropTo(dir)
