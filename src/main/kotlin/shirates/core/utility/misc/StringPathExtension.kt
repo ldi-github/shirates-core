@@ -70,6 +70,12 @@ fun String?.toPath(): Path {
             .replace("/c/", "/")
             .replace("C:", "/")
             .replace("c:", "/")
+            .replace(":", "")
+            .replace("*", "_")
+            .replace("?", "_")
+            .replace("\"", "_")
+            .replace("<", "_")
+            .replace(">", "_")
     }
     text = text
         .replace("//", "/")
