@@ -1,11 +1,8 @@
 package demo.vision
 
-import ifCanDetect
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.thisStartsWith
-import shirates.core.vision.driver.branchextension.ios
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
@@ -36,46 +33,35 @@ class iOSSettingsVisionDemo : VisionTest() {
     }
 
     @Test
-    @DisplayName("get version in [About Screen]")
+    @DisplayName("Verify version and model in [About Screen]")
     fun s20() {
 
         scenario {
             case(1) {
-                ios {
-                    condition {
-                        it.screenIs("[iOS Settings Top Screen]")
-                            .tap("General")
-                            .tap("About")
-                    }.action {
-                        screenshot()
-                        it
-                            .ifCanDetect("iOS Version") {
-                                it.rightText()
-                                    .memoTextAs("iOS Version")
-                            }
-                            .ifCanDetect("Model Name") {
-                                it.rightText()
-                                    .memoTextAs("Model Name")
-                            }
-                    }.expectation {
-                        readMemo("iOS Version").thisStartsWith("18.2", message = "iOS Version is `18.2`")
-                        readMemo("Model Name").thisStartsWith("iPhone 16", message = "Model Name is `iPhone 16`")
-                    }
+                condition {
+                    it.screenIs("[iOS Settings Top Screen]")
+                }.expectation {
+                    it.exist("General")
+                }
+            }
+            case(2) {
+                action {
+                    it.tap("General")
+                }.expectation {
+                    it.screenIs("[General Screen]")
+                        .exist("About")
+                }
+            }
+            case(3) {
+                action {
+                    it.tap("About")
+                }.expectation {
+                    it.screenIs("[About Screen]")
+                        .detect("iOS Version").rightTextIs("18.2")
+                        .detect("Model Name").rightTextIs("iPhone 16", message = "[Model Name] is 'iPhone 16'")
                 }
             }
         }
     }
 
-    @Test
-    @DisplayName("appIs")
-    fun s30() {
-
-        scenario {
-            case(1) {
-                ios {
-                    it.appIs("Settings")
-                }
-            }
-        }
-    }
 }

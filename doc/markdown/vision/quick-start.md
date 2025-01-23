@@ -83,29 +83,26 @@ npm -v
 
 Appium 2.0 is required.
 
-If you are already using appium, check version.
-
-```
-appium -v
-```
-
-If you have installed appium 1.x, uninstall it.
+**New install**
 
 ```
 npm uninstall -g appium
+npm install -g appium
+appium -v
 ```
 
-Install appium 2.0 using npm.
+If you are already using appium, update to the latest version.
+
+**Update install**
 
 ```
+appium -v
+npm uninstall -g appium
 npm install -g appium
 appium -v
 ```
 
 See [Tested Environments](environments.md) to get tested version.
-
-<br>
-If you have already installed appium, uninstall it and install it again.
 
 ```
 appium -v
@@ -120,12 +117,13 @@ appium -v
 
 Install UIAutomator2 driver.
 
+**New install**
+
 ```
 appium driver install uiautomator2
 ```
 
-<br>
-If you have already installed the driver, uninstall it and install it again.
+**Update install**
 
 ```
 appium driver list
@@ -142,12 +140,13 @@ See [Tested Environments](environments.md) to get tested version.
 
 Install XCUITest driver.
 
+**New install**
+
 ```
 appium driver install xcuitest
 ```
 
-<br>
-If you have already installed the driver, uninstall it and install it again.
+**Update install**
 
 ```
 appium driver list
@@ -200,75 +199,6 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 <br>
 
-## Setting up MLModel files
-
-1. Open `shirates-core` project in IntelliJ, right click on `kotlin/shirates/batch/CreateMLExecute.kt` and
-   select
-   **Debug 'CreateMLExecute'** <br>![](_images/createml_execute.png)
-2. Wait for the process to complete. The following log will be displayed.
-
-```
-Connected to the target VM, address: '127.0.0.1:64541', transport: 'socket'
-Copying createml/MLImageClassifier.swift to /Users/wave1008/github/ldi-github/shirates-core/bin/createml/MLImageClassifier.swift
-lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	timeDiff	mode	(group)	message
-1	[00:00:00]	2025/01/01 18:42:44.011	{}	0	-	[info]	+0	C	()	Starting leaning.
-2	[00:00:11]	2025/01/01 18:42:54.799	{}	0	-	[info]	+10788	C	()	Learning completed. (in 10.769 sec)
-["/Users/wave1008/github/ldi-github/shirates-core/bin/createml/MLImageClassifier.swift", "/Users/wave1008/github/ldi-github/shirates-core/vision/mlmodels/widget/RadioButtonStateClassifier", "-noise", "-blur"]
-----------------------------------
-dataSourceName: RadioButtonStateClassifier
-dataSourcePath: file:///Users/wave1008/github/ldi-github/shirates-core/vision/mlmodels/widget/RadioButtonStateClassifier/
-options: ["-noise", "-blur"]
-featureExtractor: Image Feature Print V2
-----------------------------------
-Number of examples: 4
-Number of classes: 2
-Accuracy: 100.00%
-
-******CONFUSION MATRIX******
-----------------------------------
-True\Pred OFF ON  
-OFF       2   0   
-ON        0   2   
-
-******PRECISION RECALL******
-----------------------------------
-Cla Precision(%) Recall(%)
-OFF 100.00          100.00         
-ON  100.00          100.00         
-
-
-Model saved to /Users/wave1008/github/ldi-github/shirates-core/vision/mlmodels/widget/RadioButtonStateClassifier/RadioButtonStateClassifier.mlmodel
-3	[00:00:11]	2025/01/01 18:42:54.800	{}	0	-	[info]	+1	C	()	Starting leaning.
-4	[00:00:11]	2025/01/01 18:42:55.712	{}	0	-	[info]	+912	C	()	Learning completed. (in 0.911 sec)
-["/Users/wave1008/github/ldi-github/shirates-core/bin/createml/MLImageClassifier.swift", "/Users/wave1008/github/ldi-github/shirates-core/vision/mlmodels/widget/SwitchStateClassifier", "-noise", "-blur"]
-----------------------------------
-dataSourceName: SwitchStateClassifier
-dataSourcePath: file:///Users/wave1008/github/ldi-github/shirates-core/vision/mlmodels/widget/SwitchStateClassifier/
-options: ["-noise", "-blur"]
-featureExtractor: Image Feature Print V2
-----------------------------------
-Number of examples: 4
-Number of classes: 2
-Accuracy: 100.00%
-
-******CONFUSION MATRIX******
-----------------------------------
-True\Pred OFF ON  
-OFF       2   0   
-ON        0   2   
-
-******PRECISION RECALL******
-----------------------------------
-Cla Precision(%) Recall(%)
-OFF 100.00          100.00         
-ON  100.00          100.00         
-
-
-Model saved to /Users/wave1008/github/ldi-github/shirates-core/vision/mlmodels/widget/SwitchStateClassifier/SwitchStateClassifier.mlmodel
-```
-
-*.mlmodel files are created.
-
 ![](_images/mlmodels.png)
 
 ## Setting up shirates-vision-server
@@ -282,11 +212,16 @@ Model saved to /Users/wave1008/github/ldi-github/shirates-core/vision/mlmodels/w
 
 Let's see demonstration.
 
+### Getting shirates-core-vision-samples
+
+1. Get shirates-core-vision-samples_en
+   from [shirates-core-vision-samples_en](https://github.com/ldi-github/shirates-core-vision-samples_en).
+
 ### Opening Project
 
-1. Open **shirates-core** project directory in Finder.
+1. Open **shirates-core-vision-samples_en** project directory in Finder.
 2. Right click `build.gradle.kts` and open with IntelliJ IDEA. <br>
-   ![](../_images/opening_project.png)
+   ![](_images/opening_project.png)
 
 ### Enable right-click test running
 
@@ -294,48 +229,36 @@ Let's see demonstration.
 1. `Build, Execution, Deployment > Build Tools > Gradle`
 1. Set `Run tests using` to `IntelliJ IDEA`
 
-![](../basic/_images/build_tools_gradle.png)
+![](_images/build_tools_gradle.png)
 
 <br>
 
-### Run AndroidSettingsDemo
+### Run AndroidSettingsVisionDemo
 
 1. Launch the AVD of Android 14 from **Device Manager**.
-1. Open `shirates-core` project in IntelliJ, right click on `kotlin/demo/vision/AndroidSettingsVisionDemo` and
+1. Open `shirates-core-vision-samples_en` project in IntelliJ, right click on
+   `kotlin/demo/vision/AndroidSettingsVisionDemo` and
    select
-   **Debug 'AndroidSettingsVisionDemo'**
-1. You'll see logs in the Console like this.
-
-#### Console output
-
-```
-lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	timeDiff	mode	(group)	message
-1	[00:00:00]	2025/01/01 21:16:30.822	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
-2	[00:00:00]	2025/01/01 21:16:30.840	{}	0	-	[-]	+18	C	()	///
-3	[00:00:00]	2025/01/01 21:16:30.841	{}	0	-	[-]	+1	C	()	/// shirates-core 8.0.0-SNAPSHOT
-4	[00:00:00]	2025/01/01 21:16:30.841	{}	0	-	[-]	+0	C	()	///
-5	[00:00:00]	2025/01/01 21:16:30.842	{}	0	-	[-]	+1	C	()	powered by Appium (io.appium:java-client:9.1.0)
-6	[00:00:00]	2025/01/01 21:16:30.842	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
-7	[00:00:00]	2025/01/01 21:16:30.842	{}	0	-	[-]	+0	C	()	testClass: demo.vision.AndroidSettingsVisionDemo
-8	[00:00:00]	2025/01/01 21:16:30.842	{}	0	-	[-]	+0	C	()	sheetName: AndroidSettingsVisionDemo
-9	[00:00:00]	2025/01/01 21:16:30.842	{}	0	-	[-]	+0	C	()	logLanguage: 
-10	[00:00:00]	2025/01/01 21:16:30.863	{}	0	-	[info]	+21	C	()	
-11	[00:00:00]	2025/01/01 21:16:30.863	{}	0	-	[info]	+0	C	()	----------------------------------------------------------------------------------------------------
-12	[00:00:00]	2025/01/01 21:16:30.863	{}	0	-	[info]	+0	C	()	Test function: airplaneModeSwitch [airplaneModeSwitch()]
-13	[00:00:00]	2025/01/01 21:16:30.864	{}	0	-	[info]	+1	C	()	----------------------------------------------------------------------------------------------------
-14	[00:00:00]	2025/01/01 21:16:31.540	{}	0	-	[info]	+676	C	()	Initializing with testrun file.(testConfig/android/androidSettingsVision/testrun.properties)
-...
-```
+   **Debug 'AndroidSettingsVisionDemo'** ![](_images/android_settings_vision_demo.png)
+3. You'll see logs in the console like this. ![](_images/console_android.png)
+4. Click the link to open the log directory.
+5. Open **_Report(simple).html**. <br> ![](_images/log_directory.png) <br> ![](_images/report_simple.png) <br><br>
+6. Open **AndroidSettingsVisionDemo@a.xlsx**. <br> ![](_images/android_settings_vision_demo_xls.png)
 
 <br>
 
-### Run iOSSettingsDemo
+### Run iOSSettingsVisionDemo
 
 1. Open Xcode and setup iOS Simulator. `iPhone 16(iOS 18.2)`
 
-2. Open shirates-core project in IntelliJ, right click on `src/test/Kotlin/demo/iOSSettingsVisionDemo` and select
+2. Open `shirates-core-vision-samples_en` project in IntelliJ, right click on
+   `src/test/Kotlin/demo/vision/iOSSettingsVisionDemo`
+   and select
    **Debug 'iOSSettingsVisionDemo'**
-3. You'll see the iOS Settings test works.
+3. You'll see logs in the console like this. ![](_images/console_ios.png)
+4. Click the link to open the log directory.
+5. Open **_Report(simple).html**. <br> ![](_images/log_directory.png) <br> ![](_images/report_simple_ios.png) <br><br>
+6. Open **iOSSettingsVisionDemo@i.xlsx**. <br> ![](_images/ios_settings_vision_demo.png)
 
 ### Link
 

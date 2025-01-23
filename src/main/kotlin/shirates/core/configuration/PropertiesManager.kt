@@ -8,7 +8,9 @@ import shirates.core.driver.testContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.PropertiesUtility
+import shirates.core.utility.file.exists
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.replaceUserVars
 import shirates.core.utility.toPath
@@ -153,6 +155,13 @@ object PropertiesManager {
      */
     val os: String
         get() {
+            if (UITestCallbackExtension.androidAnnotation != null) {
+                return TestMode.ANDROID
+            }
+            if (UITestCallbackExtension.iosAnnotation != null) {
+                return TestMode.IOS
+            }
+
             val value = getPropertyValueOrEnvValue("os")
             if (value.isNotBlank()) {
                 return value
@@ -190,6 +199,18 @@ object PropertiesManager {
             value = getPropertyValueOrEnvValue("$os.configFile")
             if (value.isNotBlank()) {
                 return value
+            }
+
+            if (isAndroid) {
+                val defaultConfigFile = "testConfig/android/testConfig.json"
+                if (defaultConfigFile.exists()) {
+                    return defaultConfigFile
+                }
+            } else {
+                val defaultConfigFile = "testConfig/ios/testConfig.json"
+                if (defaultConfigFile.exists()) {
+                    return defaultConfigFile
+                }
             }
 
             throw TestConfigException(

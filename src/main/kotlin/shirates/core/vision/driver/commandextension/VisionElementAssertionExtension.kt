@@ -32,13 +32,15 @@ fun VisionElement.textIs(
     containedText: String,
     joinText: Boolean = false,
     digitOnly: Boolean = false,
+    message: String? = null,
 ): VisionElement {
 
     visionContext.recognizeText()
 
     val command = "textIs"
 
-    val assertMessage = message(id = command, subject = subject, expected = containedText, replaceRelative = true)
+    val assertMessage =
+        message ?: message(id = command, subject = subject, expected = containedText, replaceRelative = true)
 
     val expectedForCompare = containedText.process(digitOnly = digitOnly)
     val actual = if (joinText) {
@@ -60,11 +62,12 @@ fun VisionElement.textIs(
  */
 fun VisionElement.checkIsON(
     classifierName: String = "CheckStateClassifier",
-    waitSeconds: Double = testContext.syncWaitSeconds
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    message: String? = null,
 ): VisionElement {
 
     val command = "checkIsON"
-    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
@@ -83,11 +86,12 @@ fun VisionElement.checkIsON(
  */
 fun VisionElement.checkIsOFF(
     classifierName: String = "CheckStateClassifier",
-    waitSeconds: Double = testContext.syncWaitSeconds
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    message: String? = null,
 ): VisionElement {
 
     val command = "checkIsOFF"
-    val assertMessage = message(id = command, subject = subject, replaceRelative = true)
+    val assertMessage = message ?: message(id = command, subject = subject, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
@@ -108,10 +112,12 @@ fun VisionElement.buttonStateIs(
     expectedLabel: String,
     waitSeconds: Double = testContext.syncWaitSeconds,
     classifierName: String = "ButtonStateClassifier",
+    message: String? = null,
 ): VisionElement {
 
     val command = "buttonStateIs"
-    val assertMessage = message(id = command, subject = subject, expected = expectedLabel, replaceRelative = true)
+    val assertMessage =
+        message ?: message(id = command, subject = subject, expected = expectedLabel, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
@@ -134,6 +140,7 @@ fun VisionElement.existOnLine(
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -142,16 +149,16 @@ fun VisionElement.existOnLine(
     val thisObject = this
 
     val command = "existOnLine"
-    val message = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onLine(
             verticalMargin = verticalMargin,
         ) {
             v = existCore(
-                message = message,
+                message = assertMessage,
                 selector = sel,
                 language = language,
                 waitSeconds = waitSeconds,
@@ -175,6 +182,7 @@ fun VisionElement.existOnColumn(
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -183,16 +191,16 @@ fun VisionElement.existOnColumn(
     val thisObject = this
 
     val command = "existOnColumn"
-    val message = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onColumn(
             horizontalMargin = horizontalMargin,
         ) {
             v = existCore(
-                message = message,
+                message = assertMessage,
                 selector = sel,
                 language = language,
                 waitSeconds = waitSeconds,
@@ -216,6 +224,7 @@ fun VisionElement.existOnRight(
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -224,16 +233,16 @@ fun VisionElement.existOnRight(
     val thisObject = this
 
     val command = "existOnRight"
-    val message = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onRight(
             verticalMargin = verticalMargin,
         ) {
             v = existCore(
-                message = message,
+                message = assertMessage,
                 selector = sel,
                 language = language,
                 waitSeconds = waitSeconds,
@@ -257,6 +266,7 @@ fun VisionElement.existOnLeft(
     verticalMargin: Int = this.rect.height / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -265,16 +275,16 @@ fun VisionElement.existOnLeft(
     val thisObject = this
 
     val command = "existOnLeft"
-    val message = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onLeft(
             verticalMargin = verticalMargin,
         ) {
             v = existCore(
-                message = message,
+                message = assertMessage,
                 selector = sel,
                 language = language,
                 waitSeconds = waitSeconds,
@@ -298,6 +308,7 @@ fun VisionElement.existOnAbove(
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -306,16 +317,16 @@ fun VisionElement.existOnAbove(
     val thisObject = this
 
     val command = "existOnAbove"
-    val message = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onAbove(
             horizontalMargin = horizontalMargin,
         ) {
             v = existCore(
-                message = message,
+                message = assertMessage,
                 selector = sel,
                 language = language,
                 waitSeconds = waitSeconds,
@@ -339,6 +350,7 @@ fun VisionElement.existOnBelow(
     horizontalMargin: Int = this.rect.width / 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -347,16 +359,16 @@ fun VisionElement.existOnBelow(
     val thisObject = this
 
     val command = "existOnBelow"
-    val message = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onBelow(
             horizontalMargin = horizontalMargin,
         ) {
             v = existCore(
-                message = message,
+                message = assertMessage,
                 selector = sel,
                 language = language,
                 waitSeconds = waitSeconds,
@@ -385,15 +397,16 @@ fun VisionElement.existImageOnLine(
     mergeIncluded: Boolean = false,
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
 ): VisionElement {
 
     val command = "existImageOnLine"
-    val message = message(id = command, subject = label)
+    val assertMessage = message ?: message(id = command, subject = label)
     var v = VisionElement.emptyElement
     val thisObject = this
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onLine(
             verticalMargin = verticalMargin,
@@ -415,12 +428,12 @@ fun VisionElement.existImageOnLine(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$message ($v)")
+            val error = TestNGException(message = "$assertMessage ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
         }
-        TestLog.ok(message = message)
+        TestLog.ok(message = assertMessage)
     }
 
     return lastElement
@@ -440,15 +453,16 @@ fun VisionElement.existImageOnColumn(
     mergeIncluded: Boolean = false,
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
 ): VisionElement {
 
     val command = "existImageOnColumn"
-    val message = message(id = command, subject = label)
+    val assertMessage = message ?: message(id = command, subject = label)
     var v = VisionElement.emptyElement
     val thisObject = this
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onColumn(
             horizontalMargin = horizontalMargin,
@@ -470,12 +484,12 @@ fun VisionElement.existImageOnColumn(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$message ($v)")
+            val error = TestNGException(message = "$assertMessage ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
         }
-        TestLog.ok(message = message)
+        TestLog.ok(message = assertMessage)
     }
 
     return lastElement
@@ -495,15 +509,16 @@ fun VisionElement.existImageOnLeft(
     mergeIncluded: Boolean = false,
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
 ): VisionElement {
 
     val command = "existImageOnLeft"
-    val message = message(id = command, subject = label)
+    val assertMessage = message ?: message(id = command, subject = label)
     var v = VisionElement.emptyElement
     val thisObject = this
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onLeft(
             verticalMargin = verticalMargin,
@@ -525,12 +540,12 @@ fun VisionElement.existImageOnLeft(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$message ($v)")
+            val error = TestNGException(message = "$assertMessage ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
         }
-        TestLog.ok(message = message)
+        TestLog.ok(message = assertMessage)
     }
 
     return lastElement
@@ -550,15 +565,16 @@ fun VisionElement.existImageOnRight(
     mergeIncluded: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
 ): VisionElement {
 
     val command = "existImageOnRight"
-    val message = message(id = command, subject = label)
+    val assertMessage = message ?: message(id = command, subject = label)
     var v = VisionElement.emptyElement
     val thisObject = this
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onRight(
             verticalMargin = verticalMargin,
@@ -580,12 +596,12 @@ fun VisionElement.existImageOnRight(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$message ($v)")
+            val error = TestNGException(message = "$assertMessage ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
         }
-        TestLog.ok(message = message)
+        TestLog.ok(message = assertMessage)
     }
 
     return lastElement
@@ -605,15 +621,16 @@ fun VisionElement.existImageOnAbove(
     mergeIncluded: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
 ): VisionElement {
 
     val command = "existImageOnAbove"
-    val message = message(id = command, subject = label)
+    val assertMessage = message ?: message(id = command, subject = label)
     var v = VisionElement.emptyElement
     val thisObject = this
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onAbove(
             horizontalMargin = horizontalMargin,
@@ -635,12 +652,12 @@ fun VisionElement.existImageOnAbove(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$message ($v)")
+            val error = TestNGException(message = "$assertMessage ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
         }
-        TestLog.ok(message = message)
+        TestLog.ok(message = assertMessage)
     }
 
     return lastElement
@@ -660,15 +677,16 @@ fun VisionElement.existImageOnBelow(
     mergeIncluded: Boolean = false,
     waitSeconds: Double = testContext.syncWaitSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
 ): VisionElement {
 
     val command = "existImageOnBelow"
-    val message = message(id = command, subject = label)
+    val assertMessage = message ?: message(id = command, subject = label)
     var v = VisionElement.emptyElement
     val thisObject = this
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onBelow(
             horizontalMargin = horizontalMargin,
@@ -690,12 +708,12 @@ fun VisionElement.existImageOnBelow(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$message ($v)")
+            val error = TestNGException(message = "$assertMessage ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
         }
-        TestLog.ok(message = message)
+        TestLog.ok(message = assertMessage)
     }
 
     return lastElement
@@ -706,10 +724,10 @@ internal fun VisionElement.textIsCore(
     expected: String,
     joinText: Boolean,
     digitOnly: Boolean,
+    assertMessage: String,
 ): VisionElement {
 
     val context = TestDriverCommandContext(null)
-    val assertMessage = message(id = command, subject = subject, expected = expected, replaceRelative = true)
 
     var v = this
     context.execCheckCommand(command = command, message = assertMessage, subject = subject, arg1 = expected) {
@@ -717,6 +735,7 @@ internal fun VisionElement.textIsCore(
             containedText = expected,
             joinText = joinText,
             digitOnly = digitOnly,
+            message = assertMessage,
         )
     }
     lastElement = v
@@ -730,15 +749,18 @@ fun VisionElement.aboveTextIs(
     expected: String,
     joinText: Boolean = false,
     digitOnly: Boolean = false,
+    message: String? = null,
 ): VisionElement {
 
     val command = "aboveTextIs"
+    val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
     val v = aboveText()
     v.textIsCore(
         command = command,
         expected = expected,
         joinText = joinText,
         digitOnly = digitOnly,
+        assertMessage = assertMessage,
     )
     return v
 }
@@ -750,15 +772,18 @@ fun VisionElement.belowTextIs(
     expected: String,
     joinText: Boolean = false,
     digitOnly: Boolean = false,
+    message: String? = null,
 ): VisionElement {
 
     val command = "belowTextIs"
+    val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
     val v = belowText()
     v.textIsCore(
         command = command,
         expected = expected,
         joinText = joinText,
         digitOnly = digitOnly,
+        assertMessage = assertMessage,
     )
     return v
 }
@@ -770,15 +795,18 @@ fun VisionElement.rightTextIs(
     expected: String,
     joinText: Boolean = false,
     digitOnly: Boolean = false,
+    message: String? = null,
 ): VisionElement {
 
     val command = "rightTextIs"
+    val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
     val v = rightText()
     v.textIsCore(
         command = command,
         expected = expected,
         joinText = joinText,
         digitOnly = digitOnly,
+        assertMessage = assertMessage,
     )
     return v
 }
@@ -790,15 +818,18 @@ fun VisionElement.leftTextIs(
     expected: String,
     joinText: Boolean = false,
     digitOnly: Boolean = false,
+    message: String? = null,
 ): VisionElement {
 
     val command = "leftTextIs"
+    val assertMessage = message ?: message(id = command, subject = this.subject, expected = expected)
     val v = leftText()
     v.textIsCore(
         command = command,
         expected = expected,
         joinText = joinText,
         digitOnly = digitOnly,
+        assertMessage = assertMessage,
     )
     return v
 }

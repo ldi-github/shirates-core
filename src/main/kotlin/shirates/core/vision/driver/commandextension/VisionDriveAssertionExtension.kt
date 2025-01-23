@@ -174,6 +174,7 @@ fun VisionDrive.screenIs(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
+    message: String? = null,
     func: (() -> Unit)? = null
 ): VisionElement {
 
@@ -192,7 +193,7 @@ fun VisionDrive.screenIs(
     }
 
     val command = "screenIs"
-    val assertMessage = message(id = command, subject = screenName)
+    val assertMessage = message ?: message(id = command, subject = screenName)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
@@ -237,12 +238,14 @@ fun VisionDrive.screenIs(
 fun VisionDrive.screenIs(
     screenName: String,
     waitSeconds: Int,
+    message: String? = null,
     func: (() -> Unit)? = null
 ): VisionElement {
 
     return screenIs(
         screenName = screenName,
         waitSeconds = waitSeconds.toDouble(),
+        message = message,
         func = func
     )
 }
@@ -254,11 +257,12 @@ fun VisionDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
+    message: String? = null,
     func: (() -> Unit)? = null
 ): VisionElement {
 
     val command = "screenIsOf"
-    val assertMessage = message(id = command, subject = screenNames.joinToString(","))
+    val assertMessage = message ?: message(id = command, subject = screenNames.joinToString(","))
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenNames.joinToString(",")) {
@@ -283,6 +287,7 @@ fun VisionDrive.screenIsOf(
     vararg screenNames: String,
     waitSeconds: Int,
     onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
+    message: String? = null,
     func: (() -> Unit)? = null
 ): VisionElement {
 
@@ -290,6 +295,7 @@ fun VisionDrive.screenIsOf(
         screenNames = screenNames,
         waitSeconds = waitSeconds.toDouble(),
         onIrregular = onIrregular,
+        message = message,
         func = func
     )
 }

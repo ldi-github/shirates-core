@@ -1,0 +1,16 @@
+{
+  "testConfigName": "testConfig",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.apple.Preferences",
+
+  "startupPackageOrBundleId": "com.apple.Preferences",
+
+  "capabilities": {
+    "useJSONSource": true,
+    "appium:showXcodeLog": true,
+    "language": "en",
+    "locale": "US"
+  }
+}

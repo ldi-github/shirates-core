@@ -2,12 +2,10 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
-import shirates.core.driver.TestDriver.currentScreen
 import shirates.core.driver.TestDriver.lastVisionElement
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.testContext
-import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
@@ -27,6 +25,7 @@ fun VisionDrive.exist(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -34,13 +33,13 @@ fun VisionDrive.exist(
     var v = VisionElement.emptyElement
 
     val command = "exist"
-    val message = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         v = existCore(
-            message = message,
+            message = assertMessage,
             selector = sel,
             language = language,
             waitSeconds = waitSeconds,
@@ -86,72 +85,6 @@ internal fun VisionDrive.existCore(
     return v
 }
 
-
-private fun VisionDrive.actionWithOnExistErrorHandler(
-    message: String,
-    throwsException: Boolean,
-    action: () -> VisionElement
-): VisionElement {
-
-    var v = action()
-    screenshot()
-
-    postProcessForAssertion(
-        detectResult = v,
-        assertMessage = message,
-        log = false
-    )
-
-    if (v.hasError && throwsException && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
-        /**
-         * Retrying with error handler
-         */
-        TestLog.info("Calling onExistErrorHandler.")
-        suppressHandler {
-            withoutScroll {
-                testContext.onExistErrorHandler!!.invoke()
-            }
-        }
-        v = action()
-        screenshot()
-
-        postProcessForAssertion(
-            detectResult = v,
-            assertMessage = message,
-            log = false
-        )
-    }
-    return v
-}
-
-internal fun postProcessForAssertion(
-    detectResult: VisionElement,
-    assertMessage: String,
-    auto: String = "A",
-    log: Boolean = CodeExecutionContext.shouldOutputLog,
-    dontExist: Boolean = false
-) {
-    val v = detectResult
-
-    fun setNG() {
-        v.lastResult = LogType.NG
-        val selectorString = "${v.selector} ($currentScreen})"
-        v.lastError = TestNGException(message = assertMessage, cause = TestDriverException(selectorString))
-    }
-
-    val result = v.isFound && dontExist.not() || v.isFound.not() && dontExist
-    if (result) {
-        v.lastResult = TestLog.getOKType()
-        if (log) {
-            TestLog.ok(message = assertMessage, auto = auto)
-        }
-        return
-    } else {
-        setNG()
-        return
-    }
-}
-
 /**
  * existAll
  */
@@ -192,13 +125,14 @@ fun VisionDrive.existWithScrollDown(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
     val command = "existWithScrollDown"
     val sel = getSelector(expression = expression)
     var v = VisionElement.emptyElement
-    val assertMessage = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
@@ -238,13 +172,14 @@ fun VisionDrive.existWithScrollUp(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
     val command = "existWithScrollUp"
     val sel = getSelector(expression = expression)
     var v = VisionElement.emptyElement
-    val assertMessage = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
@@ -284,13 +219,14 @@ fun VisionDrive.existWithScrollRight(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
     val command = "existWithScrollRight"
     val sel = getSelector(expression = expression)
     var v = VisionElement.emptyElement
-    val assertMessage = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
@@ -330,13 +266,14 @@ fun VisionDrive.existWithScrollLeft(
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
     val command = "existWithScrollLeft"
     val sel = getSelector(expression = expression)
     var v = VisionElement.emptyElement
-    val assertMessage = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
@@ -372,6 +309,7 @@ fun VisionDrive.dontExist(
     language: String = PropertiesManager.visionOCRLanguage,
     allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
+    message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -381,10 +319,10 @@ fun VisionDrive.dontExist(
     var v = VisionElement.emptyElement
 
     val command = "dontExist"
-    val message = message(id = command, subject = "$sel")
+    val assertMessage = message ?: message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = "$sel") {
+    context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         v = detectCore(
             selector = sel,
@@ -396,7 +334,7 @@ fun VisionDrive.dontExist(
         )
     }
     if (v.isFound) {
-        val error = TestNGException(message = message)
+        val error = TestNGException(message = assertMessage)
         v.lastError = error
         v.lastResult = LogType.NG
         throw error
@@ -426,13 +364,14 @@ fun VisionDrive.existImage(
     mergeIncluded: Boolean = false,
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
 ): VisionElement {
 
     val command = "existImage"
-    val message = message(id = command, subject = label)
+    val assertMessage = message ?: message(id = command, subject = label)
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         val v = findImage(
             label = label,
@@ -449,12 +388,12 @@ fun VisionDrive.existImage(
         lastElement = v
 
         if (v.isFound.not()) {
-            val error = TestNGException(message = "$message ($v)")
+            val error = TestNGException(message = "$assertMessage ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
         }
-        TestLog.ok(message = message)
+        TestLog.ok(message = assertMessage)
     }
 
     return lastElement
@@ -471,13 +410,14 @@ fun VisionDrive.dontExistImage(
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     waitSeconds: Double = 0.0,
+    message: String? = null,
 ): VisionElement {
 
     val command = "dontExistImage"
-    val message = message(id = command, subject = label)
+    val assertMessage = message ?: message(id = command, subject = label)
 
     val context = TestDriverCommandContext(null)
-    context.execCheckCommand(command = command, message = message, subject = label) {
+    context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         val v = findImage(
             label = label,
@@ -494,12 +434,12 @@ fun VisionDrive.dontExistImage(
         lastElement = v
 
         if (v.isFound) {
-            val error = TestNGException(message = "$message ($v)")
+            val error = TestNGException(message = "$assertMessage ($v)")
             v.lastError = error
             v.lastResult = LogType.NG
             throw error
         }
-        TestLog.ok(message = message)
+        TestLog.ok(message = assertMessage)
     }
 
     return lastElement

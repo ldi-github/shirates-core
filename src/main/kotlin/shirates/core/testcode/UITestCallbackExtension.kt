@@ -40,6 +40,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
     companion object {
         var uiTestBase: UITestBase? = null
+
+        var androidAnnotation: android? = null
+        var iosAnnotation: ios? = null
+
         var failOfTestContext = false
         var failAnnotation: Fail? = null
         var deletedAnnotation: Deleted? = null
@@ -88,6 +92,18 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failAnnotation = null
 
         testClassWatch = StopWatch("testClassWatch").start()
+
+        androidAnnotation = context.getClassAnnotation(android::class)
+        iosAnnotation = context.getClassAnnotation(ios::class)
+        if (androidAnnotation != null && iosAnnotation != null) {
+            throw TestConfigException("Do not use @android annotation and @ios annotation at the same time.")
+        }
+        if (androidAnnotation != null && context.getClassAnnotation(Testrun::class) != null) {
+            throw TestConfigException("Do not use @android annotation and @Testrun annotation at the same time.")
+        }
+        if (iosAnnotation != null && context.getClassAnnotation(Testrun::class) != null) {
+            throw TestConfigException("Do not use @ios annotation and @Testrun annotation at the same time.")
+        }
 
         val tr = context!!.requiredTestClass.annotations.firstOrNull() { it is Testrun } as Testrun?
         PropertiesManager.testrun = tr

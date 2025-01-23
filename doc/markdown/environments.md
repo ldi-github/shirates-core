@@ -2,6 +2,21 @@
 
 ## Tested Environments
 
+2025/1/23
+
+- macOS Sequoia 15.2
+- node v22.9.0
+- Appium 2.15.0
+- java-client v9.1.0
+- uiautomator2@3.9.9
+- xcuitest@7.34.1
+- Android Studio Ladybug | 2024.2.1 Patch 3
+- Android Emulator Pixel 8(Android 14)
+- Xcode 16.2
+- iOS Simulator iPhone 16(iOS 18.2)
+
+<br>
+
 2024/12/17
 
 - macOS Sequoia 15.2/Sequoia 15.1.1

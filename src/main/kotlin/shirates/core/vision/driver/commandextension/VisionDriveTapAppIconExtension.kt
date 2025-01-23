@@ -30,12 +30,6 @@ fun VisionDrive.tapAppIcon(
 
         pressHome()
 
-//        if (isiOS) {
-//            if (rootElement.name.isNotBlank()) {
-//                pressHome()
-//            }
-//        }
-
         val iconLabel =
             if (appIconName.hasBracket()) appIconName(datasetName = appIconName)
             else appIconName
