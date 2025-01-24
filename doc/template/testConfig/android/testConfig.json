@@ -1,0 +1,26 @@
+{
+  "testConfigName": "testConfig",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "settings": {
+    "always_finish_activities": "0"
+  },
+
+  "dataset": {
+    "accounts": "testConfig/android/dataset/accounts.json",
+    "apps": "testConfig/android/dataset/apps.json",
+    "data": "testConfig/android/dataset/data.json"
+  },
+
+  "capabilities": {
+    "language": "en",
+    "locale": "US"
+  }
+
+}

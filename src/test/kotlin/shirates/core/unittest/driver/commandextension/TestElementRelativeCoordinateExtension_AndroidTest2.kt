@@ -10,14 +10,13 @@ import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
-import shirates.core.utility.toPath
 
 class TestElementRelativeCoordinateExtension_AndroidTest2 : UnitTest() {
 
     override fun beforeAll(context: ExtensionContext?) {
 
         TestMode.setAndroid()
-        ScreenRepository.setup("testConfig/android/androidSettings/screens".toPath())
+        ScreenRepository.setup("testConfig/android/androidSettings/screens")
         TestElementCache.loadXml(XmlDataAndroid.Languages)
         TestDriver.currentScreen = "[Languages Screen]"
         TestElementCache.synced = true

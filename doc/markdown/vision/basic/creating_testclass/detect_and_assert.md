@@ -1,27 +1,29 @@
-# Detect and assert (Shirates/Vision)
+# Detect and assert
 
-You can detect an element by text and assert its properties.
+You can detect text in the screen by **AI-OCR text recognition** and assert its value.
+
+### Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### DetectAndAssert1.kt
 
 (`kotlin/tutorial_vision/basic/DetectAndAssert1.kt`)
 
 ```kotlin
-package tutorial_vision.basic
+package tutorial.basic
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
 import shirates.core.vision.driver.commandextension.detect
 import shirates.core.vision.driver.commandextension.textIs
 import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/vision/android/androidSettings/testrun.properties")
 class DetectAndAssert1 : VisionTest() {
 
     @Test
     @Order(10)
-    fun selectAndAssert1_OK() {
+    fun detectAndAssert1_OK() {
 
         scenario {
             case(1) {
@@ -35,7 +37,7 @@ class DetectAndAssert1 : VisionTest() {
 
     @Test
     @Order(20)
-    fun selectAndAssert2_NG() {
+    fun detectAndAssert2_NG() {
 
         scenario {
             case(1) {
@@ -51,10 +53,9 @@ class DetectAndAssert1 : VisionTest() {
 ```
 
 In the above example, **detect** function recognizes texts of the screenshot,
-finds an rectangle where text equals to "Settings"
-and returns the VisionElement object. VisionElement is extended by **textIs** extension function. When the text equals
-to
-expected value, assertion log like below is output.
+finds the rectangle where text equals to "Settings"
+and returns the `VisionElement` object. `VisionElement` is extended by **textIs** extension function. When the text
+equals to expected value, assertion log like below is output.
 
 ```
 [OK]	(textIs)	<Settings> is "Settings"
@@ -70,4 +71,4 @@ it.detect("Settings")
 
 ### Link
 
-- [index](../../vision-index.md)
+- [index](../../../index.md)

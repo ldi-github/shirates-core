@@ -11,7 +11,6 @@ import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.toPath
 import java.io.File
-import java.nio.file.Path
 
 class ScreenRepositoryTest : UnitTest() {
 
@@ -104,9 +103,9 @@ class ScreenRepositoryTest : UnitTest() {
     fun setup_with_args() {
 
         // Act
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         // Assert
-        assertThat(ScreenRepository.screensDirectory).isEqualTo("unitTestData/testConfig/nicknames1/screens".toPath())
+        assertThat(ScreenRepository.screensDirectory).isEqualTo("unitTestData/testConfig/nicknames1/screens")
         assertThat(ScreenRepository.screenInfoMap.count()).isEqualTo(11)
         assertThat(ScreenRepository.screenInfoSearchList.count()).isEqualTo(11)
 
@@ -309,7 +308,7 @@ class ScreenRepositoryTest : UnitTest() {
 
         run {
             // Arrange
-            val path = "unitTestConfig/android/androidSettings/androidSettingsConfig.json".toPath().toAbsolutePath()
+            val path = "unitTestConfig/android/androidSettings/androidSettingsConfig.json".toPath().toString()
             // Act, Assert
             assertThatThrownBy {
                 ScreenRepository.setup(screensDirectory = path)
@@ -323,7 +322,7 @@ class ScreenRepositoryTest : UnitTest() {
 
         run {
             // Act
-            ScreenRepository.setup("unitTestData/testConfig/errorScreens/screenDuplicated".toPath())
+            ScreenRepository.setup("unitTestData/testConfig/errorScreens/screenDuplicated")
             // Assert
             val msg = TestLog.lastTestLog?.message
             assertThat(msg?.startsWith("Screen nickname [A Screen] is duplicated. Registered file"))
@@ -335,8 +334,8 @@ class ScreenRepositoryTest : UnitTest() {
 
         run {
             // Act, Assert
-            val directory = "unitTestData/testConfig/errorScreens/includeNotRegisteredScreen".toPath().toAbsolutePath()
-            val notRegisteredScreenPath = directory.resolve("[includeNotRegisteredScreen].json")
+            val directory = "unitTestData/testConfig/errorScreens/includeNotRegisteredScreen".toPath().toString()
+            val notRegisteredScreenPath = directory.toPath().resolve("[includeNotRegisteredScreen].json")
             assertThatThrownBy {
                 ScreenRepository.setup(directory)
             }.isInstanceOf(TestConfigException::class.java)
@@ -348,7 +347,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun screensDirectory_directory() {
 
         // Arrange
-        val notExitDirectory = "not/exist/directory".toPath().toAbsolutePath()
+        val notExitDirectory = "not/exist/directory".toPath().toString()
         // Act
         ScreenRepository.setup(notExitDirectory)
         // Assert
@@ -359,11 +358,11 @@ class ScreenRepositoryTest : UnitTest() {
     fun setup_importDirectories() {
 
         // Arrange
-        val importDirectories = mutableListOf<Path>()
-        importDirectories.add("unitTestConfig/android/androidSettings/screens".toPath())
+        val importDirectories = mutableListOf<String>()
+        importDirectories.add("unitTestConfig/android/androidSettings/screens")
         // Act
         ScreenRepository.setup(
-            "unitTestData/testConfig/nicknames1/screens".toPath(),
+            "unitTestData/testConfig/nicknames1/screens",
             importDirectories = importDirectories
         )
         // Assert
@@ -375,7 +374,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun has() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         // Act, Assert
         assertThat(ScreenRepository.has("screenName1")).isFalse()
 
@@ -393,7 +392,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun get_test() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         // Act, Assert
         assertThatThrownBy {
             ScreenRepository.get("screenName1")
@@ -413,7 +412,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun getScreenInfo() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         run {
             // Act
             val screenInfo = ScreenRepository.getScreenInfo(screenName = "[A Screen]")
@@ -433,7 +432,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun getSelector() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         run {
             // Act
             val selector = ScreenRepository.getSelector(screenName = "[A Screen]", nickName = "[Label A]")
@@ -447,7 +446,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun nicknameIndex() {
 
         // Arrange, Act
-        ScreenRepository.setup("unitTestData/testConfig/weight/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/weight/screens")
         run {
             val nicknameIndex = ScreenRepository.nicknameIndex
             // Assert

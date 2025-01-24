@@ -8,7 +8,6 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.commandextension.switchScreen
 import shirates.core.driver.testDrive
 import shirates.core.testcode.UnitTest
-import shirates.core.utility.toPath
 
 class Selector_CopyTest : UnitTest() {
 
@@ -20,7 +19,7 @@ class Selector_CopyTest : UnitTest() {
     @Test
     fun copyTest() {
 
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
 
         fun copyAndAssert(s: Selector) {
             val c = s.copy()

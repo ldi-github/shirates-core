@@ -61,7 +61,7 @@ class ImageFileRepositoryTest : UnitTest() {
 
         run {
             // Act
-            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
+            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens")
             // Assert
             run {
                 val entry = ImageFileRepository.getImageFileEntry(imageExpression = "tower_of_the_sun_face.png")!!
@@ -123,7 +123,7 @@ class ImageFileRepositoryTest : UnitTest() {
     fun getImageFileEntry() {
 
         // Arrange
-        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
+        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens")
 
         run {
             // Act
@@ -144,7 +144,7 @@ class ImageFileRepositoryTest : UnitTest() {
     fun getImageFileEntry_same_file_name() {
 
         // Arrange
-        ImageFileRepository.setup(screenDirectory = "unitTestConfig/others/app1/screens".toPath())
+        ImageFileRepository.setup(screenDirectory = "unitTestConfig/others/app1/screens")
 
         run {
             // Act
@@ -170,7 +170,7 @@ class ImageFileRepositoryTest : UnitTest() {
     fun getFilePath() {
 
         // Arrange
-        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
+        ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens")
 
         run {
             // Act
@@ -195,7 +195,7 @@ class ImageFileRepositoryTest : UnitTest() {
 
         run {
             // Arrange
-            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens".toPath())
+            ImageFileRepository.setup(screenDirectory = "unitTestConfig/android/image/screens")
             // Act
             val bufferedImage = ImageFileRepository.getBufferedImage("tower_of_the_sun_face.png?s=0.5&t=10")
             // Assert

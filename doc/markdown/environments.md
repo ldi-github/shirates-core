@@ -1,8 +1,6 @@
-# Environments
+# Tested Environments
 
-## Tested Environments
-
-2025/1/23
+2025/1/24 (8.0.3)
 
 - macOS Sequoia 15.2
 - node v22.9.0
@@ -830,6 +828,3 @@
 - iOS Simulator iPhone 13(15.5)
 - Xcode 13.4.1
 
-### Link
-
-- [index](index.md)

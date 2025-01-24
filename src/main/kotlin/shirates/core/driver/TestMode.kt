@@ -336,6 +336,22 @@ object TestMode {
         }
 
     /**
+     * isClassicTest
+     */
+    val isClassicTest: Boolean
+        get() {
+            return isVisionTest.not()
+        }
+
+    /**
+     * isVisionTest
+     */
+    val isVisionTest: Boolean
+        get() {
+            return UITestCallbackExtension.isVisionTest
+        }
+
+    /**
      * setAndroid
      */
     fun setAndroid() {

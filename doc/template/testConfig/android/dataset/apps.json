@@ -1,0 +1,23 @@
+{
+  "[設定]": {
+    "packageOrBundleId": "com.android.settings"
+  },
+  "[電卓]": {
+    "packageOrBundleId": "com.google.android.calculator"
+  },
+  "[Chrome]": {
+    "packageOrBundleId": "com.android.chrome"
+  },
+  "[マップ]": {
+    "packageOrBundleId": "com.google.android.apps.maps"
+  },
+  "[Play ストア]": {
+    "packageOrBundleId": "com.android.vending"
+  },
+  "[時計]": {
+    "packageOrBundleId": "com.google.android.deskclock"
+  },
+  "[アプリ1]": {
+    "packageOrBundleId": "com.example.app1"
+  }
+}

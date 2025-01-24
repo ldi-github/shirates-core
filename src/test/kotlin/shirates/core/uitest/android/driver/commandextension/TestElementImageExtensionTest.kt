@@ -123,7 +123,7 @@ class TestElementImageExtensionTest : UITest() {
     @Order(30)
     fun existImage() {
 
-        val dir = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
+        val dir = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen"
 
         scenario {
             case(1) {
@@ -151,9 +151,10 @@ class TestElementImageExtensionTest : UITest() {
             case(2) {
                 condition {
                     // Create an image for finding image by file name
-                    val batteryIconFile = dir.listFiles().firstOrNull() { it.name.startsWith("[Battery Icon]") }
-                        ?: throw FileNotFoundException("[Battery Icon].png")
-                    batteryIconFile.copyTo(dir.resolve("[Battery Icon2].png").toFile(), overwrite = true)
+                    val batteryIconFile =
+                        dir.toPath().listFiles().firstOrNull() { it.name.startsWith("[Battery Icon]") }
+                            ?: throw FileNotFoundException("[Battery Icon].png")
+                    batteryIconFile.copyTo(dir.toPath().resolve("[Battery Icon2].png").toFile(), overwrite = true)
                     ImageFileRepository.setup(dir)
                 }.expectation {
                     it.existImage("[Battery Icon2]") {    // nickname [Battery Icon2] is not defined, but file exists, OK

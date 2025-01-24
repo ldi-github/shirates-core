@@ -1,6 +1,7 @@
-# Shirates (shirates-core) 日本語ドキュメント
+# Shirates/Vision
 
-[in English](index.md)
+**Shirates/Vision** はShiratesの新しいバージョンです。<br>
+[**Shirates/Classic**](classic/index.md) は古いバージョンです。
 
 ## リポジトリ
 
@@ -8,21 +9,22 @@
 
 ## 概要
 
+- [Shirates/Visionとは](vision/about_ja.md)
 - [テスト済みの環境](environments.md)
-- [クイックスタート](quick-start_ja.md)
+- [クイックスタート(Shirates/Vision)](quick-start.md)
 
 ## チュートリアル(Basic)
 
 ### サンプル
 
-- [チュートリアルのサンプル](basic/tutorial_samples_ja.md)
+- [サンプルの入手](vision/getting_samples.md)
 
 ### 推奨設定
 
-- [Actions on Save (IntelliJ IDEA)](tool_settings/actions_on_save_ja.md)
-- [右クリックによるテスト実行を有効にする (IntelliJ IDEA)](tool_settings/right_click_test_running_ja.md)
-- [propertiesファイルのエンコーディング設定](tool_settings/properties_file_encoding_ja.md)
-- [Androidデバイスの設定](basic/recommended_settings/recommended_settings_android_ja.md)
+- [コードフォーマット (IntelliJ IDEA)](common/tool_settings/code_format_ja.md)
+- [右クリックによるテスト実行を有効にする (IntelliJ IDEA)](common/tool_settings/right_click_test_running_ja.md)
+- [propertiesファイルのエンコーディング設定 (IntelliJ IDEA)](common/tool_settings/properties_file_encoding_ja.md)
+- [Androidデバイスの設定](vision/basic/recommended_settings/recommended_settings_android_ja.md)
 
 ### プロジェクトの作成
 
@@ -44,20 +46,7 @@
 
 - [セレクター式](basic/selector_and_nickname/selector_expression_ja.md)
 - [ニックネーム](basic/selector_and_nickname/nickname/nickname_ja.md)
-    - [セレクターネックネーム](basic/selector_and_nickname/nickname/selector_nickname_ja.md)
-    - [画面ニックネーム](basic/selector_and_nickname/nickname/screen_nickname_ja.md)
     - [データセットニックネーム](basic/selector_and_nickname/nickname/dataset_nickname_ja.md)
-- [ウィジェット](basic/selector_and_nickname/widget/widget_ja.md)
-- [相対セレクター](basic/selector_and_nickname/relative_selector/relative_selector_ja.md)
-    - [相対セレクター(方向ベース)](basic/selector_and_nickname/relative_selector/relative_selector_direction_ja.md)
-    - [相対セレクター(ウィジェットフローベース)](basic/selector_and_nickname/relative_selector/relative_selector_flow_ja.md)
-    - [相対セレクター(XMLベース)](basic/selector_and_nickname/relative_selector/relative_selector_xml_ja.md)
-    - [相対セレクター(その他)](basic/selector_and_nickname/relative_selector/relative_selector_misc_ja.md)
-- [スペシャルフィルター](basic/selector_and_nickname/special_filter/special_filter_ja.md)
-    - [クラスエイリアス](basic/selector_and_nickname/special_filter/class_alias_ja.md)
-- [スペシャルセレクター](basic/selector_and_nickname/special_selector/special_selector_ja.md)
-    - [タイトルセレクター](basic/selector_and_nickname/special_selector/title_selector_ja.md)
-    - [Webタイトルセレクター](basic/selector_and_nickname/special_selector/webtitle_selector_ja.md)
 
 ### パラメーター
 
@@ -224,13 +213,13 @@
 
 ## チュートリアル(Advanced)
 
-- [独自のデータ関数を作成する](advanced/creating_you_own_data_function_ja.md)
-- [メッセージをカスタマイズする](advanced/customizing_message_ja.md)
-- [スタブ(shirates-stub)を使用する](advanced/using_shirates_stub_ja.md)
-- [ローカルへパブリッシュする](advanced/local_publishing_ja.md)
-- [HTMLレポートのスタイルをカスタマイズする](advanced/customizing_html_report_style_ja.md)
-- [独自のオペレーション関数を作成する](advanced/creating_you_own_operation_function_ja.md)
-- [コード生成をカスタマイズする](advanced/customizing_code_generation_ja.md)
+- [独自のデータ関数を作成する](common/advanced/creating_you_own_data_function_ja.md)
+- [メッセージをカスタマイズする](common/advanced/customizing_message_ja.md)
+- [スタブ(shirates-stub)を使用する](common/advanced/using_shirates_stub_ja.md)
+- [ローカルへパブリッシュする](common/advanced/local_publishing_ja.md)
+- [HTMLレポートのスタイルをカスタマイズする](common/advanced/customizing_html_report_style_ja.md)
+- [独自のオペレーション関数を作成する](common/advanced/creating_you_own_operation_function_ja.md)
+- [コード生成をカスタマイズする](common/advanced/customizing_code_generation_ja.md)
 
 ## ツールの設定
 

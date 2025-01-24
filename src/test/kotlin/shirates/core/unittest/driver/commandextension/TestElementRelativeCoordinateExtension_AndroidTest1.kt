@@ -11,7 +11,6 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
-import shirates.core.utility.toPath
 
 class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
 
@@ -30,7 +29,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
 
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
 
         /**
@@ -92,7 +91,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
     fun right() {
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
 
         /**
@@ -476,7 +475,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
     fun right2() {
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
 
         /**
@@ -856,7 +855,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
     fun left() {
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
 
         /**
@@ -1226,7 +1225,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
         TestMode.setAndroid()
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest2)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest2 Screen]"
 
         /**
@@ -1639,7 +1638,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
         TestMode.setAndroid()
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest2)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.switchScreen("[RelativeCoordinateTest2 Screen]")
 
         /**

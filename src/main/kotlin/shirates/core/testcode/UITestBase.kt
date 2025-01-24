@@ -42,6 +42,7 @@ import java.lang.reflect.InvocationTargetException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
+import kotlin.io.path.exists
 
 @ExtendWith(UITestCallbackExtension::class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
@@ -315,10 +316,13 @@ abstract class UITestBase : Drive {
             testProfile = profile
 
             // setup ScreenRepository
-            ScreenRepository.setup(
-                screensDirectory = configPath.parent.resolve("screens"),
-                importDirectories = profile.testConfig!!.importScreenDirectories
-            )
+            val screens = configPath.parent.resolve("screens")
+            if (screens.exists()) {
+                ScreenRepository.setup(
+                    screensDirectory = configPath.parent.resolve("screens").toString(),
+                    importDirectories = profile.testConfig!!.importScreenDirectories
+                )
+            }
 
             if (isNoLoadRun.not()) {
                 // appPackageFile
@@ -339,10 +343,12 @@ abstract class UITestBase : Drive {
                 }
 
                 // setup ImageFileRepository
-                ImageFileRepository.setup(
-                    screenDirectory = ScreenRepository.screensDirectory,
-                    importDirectories = ScreenRepository.importDirectories
-                )
+                if (screens.exists()) {
+                    ImageFileRepository.setup(
+                        screenDirectory = ScreenRepository.screensDirectory,
+                        importDirectories = ScreenRepository.importDirectories
+                    )
+                }
 
                 // CustomFunctionRepository
                 CustomFunctionRepository.initialize()

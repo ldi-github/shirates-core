@@ -17,25 +17,24 @@
 1. Wait for a while until background tasks finish. It may take minutes.
 1. Edit `build.gradle.kts` as follows.
 
-### build.gradle.kts (after edit)
+### build.gradle.kts (example)
 
 ```kotlin
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.1.0"
 }
-
-val shiratesCoreVersion = "8.0.1"
-val appiumClientVersion = "9.1.0"
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
+
+val shiratesCoreVersion = "8.0.3"
+val appiumClientVersion = "9.1.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-
     // JUnit 5
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
@@ -50,13 +49,16 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+kotlin {
+    jvmToolchain(17)
+}
 ```
 
 Click reload on Gradle pane.
 
-![](../_images/gradle_refresh.png)
+![](../../../classic/basic/_images/gradle_refresh.png)
 
 ### Link
 
-- [index](../../vision-index.md)
+- [index](../../../index.md)
 

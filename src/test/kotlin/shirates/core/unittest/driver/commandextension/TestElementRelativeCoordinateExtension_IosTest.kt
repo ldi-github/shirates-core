@@ -10,7 +10,6 @@ import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataIos
-import shirates.core.utility.toPath
 
 class TestElementRelativeCoordinateExtension_IosTest : UnitTest() {
 
@@ -19,7 +18,7 @@ class TestElementRelativeCoordinateExtension_IosTest : UnitTest() {
         TestMode.setIos()
         TestElementCache.loadXml(XmlDataIos.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
     }
 

@@ -1,0 +1,11 @@
+{
+  "[アカウント1]": {
+    "ID": "account1@example.com",
+    "パスワード": "p@ssword"
+  },
+
+  "[アカウント2]": {
+    "ID": "account2@example.com",
+    "パスワード": "p@ssword"
+  }
+}

@@ -4,6 +4,10 @@
 
 In Shirates, a JUnit 5 test method is an autotest session that includes a scenario and one or more test cases.
 
+### Sample code
+
+[Getting samples](../../getting_samples.md)
+
 ### TestScenarioAndTestCase1.kt
 
 (`kotlin/tutorial_vision/basic/TestScenarioAndTestCase1.kt`)
@@ -13,13 +17,11 @@ package tutorial.basic
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.tap
-import shirates.core.testcode.UITest
+import shirates.core.vision.driver.commandextension.screenIs
+import shirates.core.vision.driver.commandextension.tap
+import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class TestScenarioAndTestCase1 : UITest() {
+class TestScenarioAndTestCase1 : VisionTest() {
 
     @Test
     @Order(10)
@@ -45,13 +47,12 @@ class TestScenarioAndTestCase1 : UITest() {
                 condition {
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
-                    it.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                 }
             }
         }
-
     }
 }
 ```
@@ -76,13 +77,12 @@ A test case is a combination of these blocks.
                 condition {
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
-                    it.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                 }
             }
         }
-
     }
 ```
 
@@ -91,8 +91,8 @@ pattern)".
 
 ### Test Report
 
-![cae1](../../../basic/_images/cae1.png)
+![cae1](../../basic/_images/cae1.png)
 
 ### Link
 
-- [index](../../vision-index.md)
+- [index](../../../index.md)

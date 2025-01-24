@@ -3,6 +3,7 @@ package shirates.core.configuration.repository
 import shirates.core.configuration.ImageInfo
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.utility.image.BufferedImageUtility
+import shirates.core.utility.toPath
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileNotFoundException
@@ -46,14 +47,14 @@ object ImageFileRepository {
     /**
      * setup
      */
-    fun setup(screenDirectory: Path, importDirectories: List<Path> = listOf()) {
+    fun setup(screenDirectory: String, importDirectories: List<String> = listOf()) {
 
         clear()
         val directories = importDirectories.toMutableList()
         directories.add(screenDirectory)
 
         for (directory in directories) {
-            val files = File(directory.toUri()).walkTopDown()
+            val files = File(directory.toPath().toUri()).walkTopDown()
                 .filter { it.name.lowercase().endsWith(".png") }.toList()
             for (file in files) {
                 setFile(file.toPath())

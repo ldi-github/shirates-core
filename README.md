@@ -17,7 +17,7 @@
 
 ## AI-Vision feature powered by Vision Framework is now available
 
-[Shirates/Vision](./doc/markdown/vision/vision-index.md)
+[Shirates/Vision](doc/markdown/index)
 
 <hr>
 
@@ -162,6 +162,6 @@ https://github.com/ldi-github/shirates-builder
 
 <br>
 
-- [index](doc/markdown/index.md)
+- [index](doc/markdown/classic/index.md)
 
 <br>

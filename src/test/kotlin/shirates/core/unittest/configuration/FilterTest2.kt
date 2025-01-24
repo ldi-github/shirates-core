@@ -10,7 +10,6 @@ import shirates.core.driver.TestMode
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataIos
 import shirates.core.utility.image.BufferedImageUtility
-import shirates.core.utility.toPath
 
 class FilterTest2 : UnitTest() {
 
@@ -1616,7 +1615,7 @@ class FilterTest2 : UnitTest() {
 
         run {
             // Arrange
-            ImageFileRepository.setup("unitTestConfig/android/image/screens".toPath())
+            ImageFileRepository.setup("unitTestConfig/android/image/screens")
             val image = BufferedImageUtility
                 .getBufferedImage("unitTestConfig/android/image/screens/images/tower_of_the_sun_middle.png")
             val filter = Filter("image=tower_of_the_sun_face.png")
