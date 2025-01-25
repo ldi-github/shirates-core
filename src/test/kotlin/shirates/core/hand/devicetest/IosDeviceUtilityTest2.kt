@@ -7,6 +7,7 @@ import shirates.core.configuration.TestProfile
 import shirates.core.configuration.Testrun
 import shirates.core.exception.TestDriverException
 import shirates.core.testcode.UITest
+import shirates.core.utility.ios.IosDeviceInfo
 import shirates.core.utility.ios.IosDeviceUtility
 
 @Testrun(testrunFile = "unitTestConfig/ios/iOSSettings/iosDeviceUtilityTest.testrun.properties")
@@ -212,6 +213,10 @@ class IosDeviceUtilityTest2 : UITest() {
         // Arrange
         val expectedDevice = run {
             val devices = IosDeviceUtility.getIosDeviceList()
+                .sortedWith(compareBy<IosDeviceInfo> { it.platformVersion }
+                    .thenBy { it.modelVersion }
+                    .thenBy { it.devicename }
+                    .thenBy { it.udid })
             val realDevice = devices.lastOrNull() { it.isRealDevice }
             val simulator = devices.last() { it.isSimulator && it.devicename.contains("iPhone") }
             realDevice ?: simulator

@@ -29,6 +29,7 @@ internal fun VisionDrive.checkImageLabelContains(
 
     doUntilTrue(
         waitSeconds = waitSeconds,
+        throwOnFinally = false,
         onBeforeRetry = {
             screenshot()
             v = v.newVisionElement()

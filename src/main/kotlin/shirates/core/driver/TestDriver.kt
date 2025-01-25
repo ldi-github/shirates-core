@@ -2231,6 +2231,10 @@ object TestDriver {
         }
 
         val ms = Measure("■■■ Trying isScreen($screenName)")
+        if (ScreenRepository.screensDirectory.isBlank()) {
+            throw TestConfigException("screens directory is not configured. (useCache=${testContext.useCache})")
+        }
+
         val originalLastElement = lastElement
         try {
             NicknameUtility.validateScreenName(screenName)

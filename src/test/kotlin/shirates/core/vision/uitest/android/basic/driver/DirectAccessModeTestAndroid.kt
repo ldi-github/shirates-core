@@ -1,24 +1,33 @@
 package shirates.core.vision.uitest.android.basic.driver
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver.appiumDriver
+import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.driver.testContext
 import shirates.core.driver.toTestElement
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.driver.wait
 import shirates.core.vision.testcode.VisionTest
 
-@Testrun("unitTestConfig/vision/android/androidSettings/testrun.properties")
+@Testrun("testConfig/android/androidSettings/testrun.properties")
 class DirectAccessModeTestAndroid : VisionTest() {
 
     @Test
     @Order(10)
     fun enableCacheTest() {
 
+        assertThat(TestMode.isVisionTest).isTrue()
+        assertThat(testContext.useCache).isFalse()
+
         enableCache()   // This should not be specified if cache mode is default
+
+        assertThat(TestMode.isVisionTest).isTrue()
+        assertThat(testContext.useCache).isTrue()
 
         scenario {
             case(1) {
@@ -39,6 +48,9 @@ class DirectAccessModeTestAndroid : VisionTest() {
     @Test
     @Order(20)
     fun disableCacheTest() {
+
+        assertThat(TestMode.isVisionTest).isTrue()
+        assertThat(testContext.useCache).isFalse()
 
 //        disableCache()   // This should not be specified if vision mode is default
 
@@ -61,6 +73,9 @@ class DirectAccessModeTestAndroid : VisionTest() {
     @Test
     @Order(25)
     fun appiumDriverTest() {
+
+        assertThat(TestMode.isVisionTest).isTrue()
+        assertThat(testContext.useCache).isFalse()
 
 //        disableCache()   // This should not be specified if vision mode is default
 
@@ -109,6 +124,9 @@ class DirectAccessModeTestAndroid : VisionTest() {
     @Test
     @Order(40)
     fun suppressCacheTest() {
+
+        assertThat(TestMode.isVisionTest).isTrue()
+        assertThat(testContext.useCache).isFalse()
 
         scenario {
             case(1) {

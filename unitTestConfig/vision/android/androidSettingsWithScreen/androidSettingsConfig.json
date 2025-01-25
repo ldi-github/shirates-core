@@ -1,0 +1,37 @@
+{
+  "testConfigName": "androidSettingsConfig",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.android.settings",
+
+  "startupPackageOrBundleId": "com.android.settings",
+  "startupActivity": "com.android.settings.Settings",
+
+  "settings": {
+    "always_finish_activities": "0"
+  },
+
+  "dataset": {
+    "accounts": "unitTestConfig/vision/android/androidSettings/dataset/accounts.json",
+    "apps": "unitTestConfig/vision/android/androidSettings/dataset/apps.json",
+    "data": "unitTestConfig/vision/android/androidSettings/dataset/data.json"
+  },
+
+  "screens": {
+    "import": [
+      "testConfig/android/androidSettings/screens",
+      "testConfig/android/calculator/screens",
+      "testConfig/android/maps/screens",
+      "testConfig/android/misc/screens",
+      "testConfig/android/playStore/screen"
+    ]
+  },
+
+  "capabilities": {
+    "platformVersion": "14",
+    "language": "en",
+    "locale": "US"
+  }
+
+}

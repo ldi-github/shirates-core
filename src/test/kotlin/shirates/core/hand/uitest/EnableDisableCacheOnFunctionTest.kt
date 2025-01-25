@@ -9,12 +9,14 @@ import shirates.core.testcode.UITest
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class EnableDisableCacheOnFunctionTest : UITest() {
 
+    /**
+     * shirates.core.exception.TestConfigException: Do not use @EnableCache and @DisableCache on a function.
+     */
     @Test
     @EnableCache
     @DisableCache
     fun test1() {
 
-        // ERROR: Do not use @EnableCache and @DisableCache on a function.
     }
 
 }

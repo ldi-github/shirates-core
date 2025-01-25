@@ -308,12 +308,21 @@ class ScreenRepositoryTest : UnitTest() {
 
         run {
             // Arrange
-            val path = "unitTestConfig/android/androidSettings/androidSettingsConfig.json".toPath().toString()
+            val path = "no/exist/directory"
             // Act, Assert
             assertThatThrownBy {
                 ScreenRepository.setup(screensDirectory = path)
             }.isInstanceOf(TestConfigException::class.java)
-                .hasMessage("screens is not directory. ($path)")
+                .hasMessage("screens directory not found. ($path)")
+        }
+        run {
+            // Arrange
+            val path = "unitTestConfig/android/androidSettings/androidSettingsConfig.json"
+            // Act, Assert
+            assertThatThrownBy {
+                ScreenRepository.setup(screensDirectory = path)
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("screensDirectory is not directory. ($path)")
         }
     }
 
@@ -348,10 +357,11 @@ class ScreenRepositoryTest : UnitTest() {
 
         // Arrange
         val notExitDirectory = "not/exist/directory".toPath().toString()
-        // Act
-        ScreenRepository.setup(notExitDirectory)
-        // Assert
-        assertThat(TestLog.lastTestLog?.message)?.isEqualTo("screens directory not found. ($notExitDirectory)")
+        // Act, Assert
+        assertThatThrownBy {
+            ScreenRepository.setup(notExitDirectory)
+        }.isInstanceOf(TestConfigException::class.java)
+            .hasMessage("screens directory not found. ($notExitDirectory)")
     }
 
     @Test

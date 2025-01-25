@@ -336,12 +336,17 @@ class PropertiesManagerTest : UnitTest() {
         }
         run {
             // Arrange
+            TestMode.setAndroid()
             PropertiesManager.clear()
             // Act, Assert
-            assertThatThrownBy {
-                PropertiesManager.configFile
-            }.isInstanceOf(TestConfigException::class.java)
-                .hasMessageStartingWith("android.configFile is required.")
+            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig.json")
+        }
+        run {
+            // Arrange
+            TestMode.setIos()
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/ios/testConfig.json")
         }
         run {
             // Arrange

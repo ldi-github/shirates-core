@@ -296,9 +296,13 @@ class VisionElement(
     fun newVisionElement(): VisionElement {
 
         if (rect.isEmpty) {
-            return VisionElement(capture = true)
+            val v = VisionElement(capture = true)
+            v.selector = selector
+            return v
         }
-        return this.rect.toVisionElement()
+        val v = this.rect.toVisionElement()
+        v.selector = selector
+        return v
     }
 
     /**

@@ -3,14 +3,12 @@ package shirates.core.uitest.android.basic.uitest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.PropertiesManager
-import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
 import shirates.core.testcode.android
 import shirates.core.vision.testcode.VisionTest
 
 @android
-@Testrun("testConfig/vision/android/androidSettings/testrun.properties")
-class PlatformAnnotationTestAndroidTest : VisionTest() {
+class PlatformAnnotationAndroidTest : VisionTest() {
 
     @Test
     fun android() {
