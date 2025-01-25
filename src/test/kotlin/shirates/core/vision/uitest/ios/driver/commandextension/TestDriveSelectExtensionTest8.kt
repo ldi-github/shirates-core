@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testDriveScope
@@ -91,7 +90,6 @@ class TestDriveSelectExtensionTest8 : VisionTest() {
         }
     }
 
-    @Unstable("Direct mode")
     @Test
     @Order(20)
     fun canSelectAllWithScrollDown_canSelectAllWithScrollUp() {
@@ -101,26 +99,34 @@ class TestDriveSelectExtensionTest8 : VisionTest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.expectation {
-                    it.canDetectAllWithScrollDown("General", "Privacy & Security", "Developer")
-                        .thisIsTrue("General,Privacy & Security,Developer")
+                    withScrollDown {
+                        it.canDetectAll("General", "Privacy & Security", "Developer")
+                            .thisIsTrue("General,Privacy & Security,Developer")
+                    }
                 }
             }
             case(2) {
                 condition {
                     it.flickTopToBottom()
                 }.expectation {
-                    it.canDetectAllWithScrollDown("Developer", "Privacy & Security", "General")
-                        .thisIsFalse("Developer,Privacy & Security,General")
-                    it.canDetectAllWithScrollUp("Developer", "Privacy & Security", "General")
-                        .thisIsTrue("Developer,Privacy & Security,General")
+                    withScrollDown {
+                        it.canDetectAll("Developer", "Privacy & Security", "General")
+                            .thisIsFalse("Developer,Privacy & Security,General")
+                    }
+                    withScrollUp {
+                        it.canDetectAll("Developer", "Privacy & Security", "General")
+                            .thisIsTrue("Developer,Privacy & Security,General")
+                    }
                 }
             }
             case(3) {
                 condition {
                     it.flickBottomToTop()
                 }.expectation {
-                    it.canDetectAllWithScrollUp("General", "Privacy & Security", "Developer")
-                        .thisIsFalse("General,Privacy & Security,Developer")
+                    withScrollUp {
+                        it.canDetectAll("General", "Privacy & Security", "Developer")
+                            .thisIsFalse("General,Privacy & Security,Developer")
+                    }
                 }
             }
         }

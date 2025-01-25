@@ -13,44 +13,40 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("testConfig/android/maps/testrun.properties")
-class TestDriveScrollExtensionTest5 : VisionTest() {
+class TestDriveSelectExtensionTest6 : VisionTest() {
 
     @Test
     @Order(10)
-    fun withScrollDown_withScrollUp() {
+    fun withScrollRightCanDetectAll_withScrollLeftCanDetectAll() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Maps Top Screen]")
-                    withScrollRight("Restaurants") {
-                        flickAndGoRight(repeat = 2)
-                        tap("More")
-                    }
                 }.expectation {
-                    withScrollDown {
-                        exist("Car wash")
+                    withScrollRight("Restaurants") {
+                        it.canDetectAll("Restaurants", "Gas", "Coffee", "More")
+                            .thisIsTrue()
                     }
                 }
             }
             case(2) {
                 expectation {
-                    withScrollUp {
-                        exist("Dessert")
+                    withScrollLeft("More") {
+                        it.canDetectAll("Restaurants", "Gas", "Coffee", "More")
+                            .thisIsFalse()
                     }
                 }
             }
             case(3) {
-                expectation {
-                    withScrollDown {
-                        exist("Gas")
+                condition {
+                    withScrollRight("Restaurants") {
+                        it.flickAndGoRight(repeat = 2)
                     }
-                }
-            }
-            case(4) {
-                expectation {
-                    withScrollUp {
-                        exist("Coffee")
+                }.expectation {
+                    withScrollLeft("More") {
+                        it.canDetectAll("More", "Coffee", "Gas", "Restaurants")
+                            .thisIsTrue()
                     }
                 }
             }

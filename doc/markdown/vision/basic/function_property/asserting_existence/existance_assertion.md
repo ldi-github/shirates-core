@@ -7,15 +7,13 @@ You can check existence of element using these functions.
 |   group   | function                | description                                                                                              | return value                                                  |
 |:---------:|:------------------------|:---------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------|
 |   exist   | exist                   | Assert that the element exists in current screen <br> Scrolling occurs within `withScroll` function      | TestElement(if exists)<br>TestNGException(if doesn't exist)   |
-|   exist   | existWithoutScroll      | Assert that the element exists without scrolling                                                         | (same as above)                                               |
 |   exist   | existWithScrollDown     | Assert that the element exists with scrolling down                                                       | (same as above)                                               |
 |   exist   | existWithScrollUp       | Assert that the element exists with scrolling up                                                         | (same as above)                                               |
-|   exist   | existInScanResults      | Assert that the element exists in scan results                                                           | (same as above)                                               |
+|   exist   | existWithoutScroll      | Assert that the element exists without scrolling                                                         | (same as above)                                               |
 | dontExist | dontExist               | Assert that the element doesn't exist in current screen <br> Scrolling occurs within withScroll function | empty element(if doesn't exist)<br>TestNGException(if exists) |
-| dontExist | dontExistWithoutScroll  | Assert that the element doesn't exist **without** scrolling                                              | (same as above)                                               |
 | dontExist | dontExistWithScrollDown | Assert that the element doesn't exist with scrolling down                                                | (same as above)                                               |
 | dontExist | dontExistWithScrollUp   | Assert that the element doesn't exist with scrolling up                                                  | (same as above)                                               |
-| dontExist | dontExistInScanResults  | Assert that the element doesn't exist in scan results                                                    | (same as above)                                               |
+| dontExist | dontExistWithoutScroll  | Assert that the element doesn't exist **without** scrolling                                              | (same as above)                                               |
 
 ## Example
 

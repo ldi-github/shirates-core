@@ -109,11 +109,12 @@ object PropertiesManager {
                 println("File not found. ($srTestrunFile)")
             }
         }
-
         // default
         if (this.testrunFile.isBlank()) {
             this.testrunFile = Const.TESTRUN_PROPERTIES
-            println("Using default testrun file. (${this.testrunFile})")
+        }
+        if (this.testrunFile.exists().not()) {
+            this.testrunFile = Const.TESTRUN_GLOBAL_PROPERTIES
         }
     }
 
@@ -201,15 +202,19 @@ object PropertiesManager {
                 return value
             }
 
-            if (isAndroid) {
-                val defaultConfigFile = "testConfig/android/testConfig@a.json"
-                if (defaultConfigFile.exists()) {
-                    return defaultConfigFile
-                }
-            } else {
-                val defaultConfigFile = "testConfig/ios/testConfig@i.json"
-                if (defaultConfigFile.exists()) {
-                    return defaultConfigFile
+            if (TestMode.isVisionTest) {
+                if (isAndroid) {
+                    val defaultConfigFile = "testConfig/android/testConfig@a.json"
+                    if (defaultConfigFile.exists()) {
+                        return defaultConfigFile
+                    }
+                    throw TestConfigException("testConfig File not found. ($defaultConfigFile)")
+                } else {
+                    val defaultConfigFile = "testConfig/ios/testConfig@i.json"
+                    if (defaultConfigFile.exists()) {
+                        return defaultConfigFile
+                    }
+                    throw TestConfigException("testConfig File not found. ($defaultConfigFile)")
                 }
             }
 

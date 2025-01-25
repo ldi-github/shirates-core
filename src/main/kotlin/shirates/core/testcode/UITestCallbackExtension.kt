@@ -384,20 +384,20 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             }
             TestLog.outputLogDetail(LogFileFormat.Html)
             TestLog.outputLogSimple(LogFileFormat.Html)
+
+            // Spec-Report
+            if (TestLog.lines.any() { it.logType == LogType.SCENARIO }) {
+                TestLog.outputSpecReport()
+            } else {
+                println("No scenario found. Outputting Spec-Report skipped.")
+            }
+
+            // TestList
+            TestLog.outputTestList()
+
+            // TestClassList
+            TestLog.outputTestClassList()
         }
-
-        // Spec-Report
-        if (TestLog.lines.any() { it.logType == LogType.SCENARIO }) {
-            TestLog.outputSpecReport()
-        } else {
-            println("No scenario found. Outputting Spec-Report skipped.")
-        }
-
-        // TestList
-        TestLog.outputTestList()
-
-        // TestClassList
-        TestLog.outputTestClassList()
 
         // close
         val appiumClose = AppiumServerManager.appiumClose

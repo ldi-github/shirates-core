@@ -38,6 +38,11 @@
 - [Test code structure](vision/basic/creating_testclass/testcode_structure.md)
 - [Test result files](vision/basic/creating_testclass/test_result_files.md)
 
+### Text and image recognition by Computer Vision
+
+- [Text recognition by AI-OCR](vision/basic/text_and_image_recognition/text_recognition_by_ai_ocr.md)
+- [Image classification by ML](vision/basic/text_and_image_recognition/image_recognition_by_ml.md)
+
 ### Macro
 
 - [Macro](vision/basic/routine_work/macro.md)
@@ -59,7 +64,7 @@
 
 - Detect text
     - [detect](vision/basic/function_property/detect_text/detect.md)
-    - [canSelect](vision/basic/function_property/detect_text/can_detect.md)
+    - [canDetect](vision/basic/function_property/detect_text/can_detect.md)
 - Tap element
     - [tap](vision/basic/function_property/tap_element/tap.md)
     - [tapAppIcon](vision/basic/function_property/tap_element/tap_app_icon.md)

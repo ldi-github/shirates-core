@@ -13,7 +13,7 @@ import shirates.core.vision.testcode.VisionTest
 class TestDriveSelectExtensionTest4 : VisionTest() {
 
     @Test
-    fun canSelectWithScrollDown_canSelectWithScrollUp() {
+    fun canDetectWithScrollDown_canDetectWithScrollUp() {
 
         scenario {
             case(1) {
@@ -37,24 +37,35 @@ class TestDriveSelectExtensionTest4 : VisionTest() {
 
 
     @Test
-    fun canSelectAllWithScrollDown_canSelectAllWithScrollUp() {
+    fun withScrollDownCanDetectAll_withScrollUpCanDetectAll() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.canDetectAllWithScrollDown("Network & internet", "Storage", "System")
-                        .thisIsTrue()
-                    it.flickAndGoUp()
-                        .canDetectAllWithScrollDown("Accessibility", "System", "Network & internet")
-                        .thisIsFalse()
+                    withScrollDown {
+                        it.canDetectAll("Network & internet", "Storage", "System")
+                            .thisIsTrue()
+                    }
 
-                    it.canDetectAllWithScrollUp("System", "Accessibility", "Network & internet")
-                        .thisIsTrue()
-                    it.flickAndGoDown()
-                        .canDetectAllWithScrollUp("Network & internet", "Storage", "System")
-                        .thisIsFalse()
+                    it.flickAndGoUp()
+
+                    withScrollDown {
+                        it.canDetectAll("Accessibility", "System", "Network & internet")
+                            .thisIsFalse()
+                    }
+
+                    withScrollUp {
+                        it.canDetectAll("System", "Accessibility", "Network & internet")
+                            .thisIsTrue()
+                    }
+
+                    withScrollUp {
+                        it.flickAndGoDown()
+                            .canDetectAll("Network & internet", "Storage", "System")
+                            .thisIsFalse()
+                    }
 
                     it.flickAndGoUpTurbo()
                     it.flickAndGoDownTurbo()
