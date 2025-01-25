@@ -32,7 +32,6 @@ abstract class VisionTest : UITestBase(), VisionDrive {
 
         VisionServerProxy.setupImageFeaturePrintConfig(
             inputDirectory = PropertiesManager.visionDirectory.toPath().resolve("screens").toString(),
-            log = true
         )
     }
 

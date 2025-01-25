@@ -252,6 +252,7 @@ class VisionServerProxyTest {
             val result = VisionServerProxy.matchWithTemplate(
                 templateFile = "not/exist/file.png",
                 inputDirectory = "unitTestData/vision/screens/1",
+                log = true
             )
             // Assert
             val jsonObject = JSONObject(result)
@@ -263,6 +264,7 @@ class VisionServerProxyTest {
             val result = VisionServerProxy.matchWithTemplate(
                 templateFile = "unitTestData/vision/screens/1/[System Screen].png",
                 inputDirectory = "not/exist/directory",
+                log = true
             )
             // Assert
             val jsonObject = JSONObject(result)
@@ -274,6 +276,7 @@ class VisionServerProxyTest {
             val result = VisionServerProxy.matchWithTemplate(
                 templateFile = "unitTestData/vision/screens/1/[System Screen].png",
                 inputDirectory = "unitTestData/vision/screens/1",
+                log = true
             )
             // Assert
             val jsonObject = JSONObject(result)

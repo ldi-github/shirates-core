@@ -1829,7 +1829,7 @@ object TestDriver {
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
         withTextMatching: Boolean = true,
-        log: Boolean = true
+        log: Boolean = CodeExecutionContext.shouldOutputLog
     ): TestDriver {
 
         if (!force && !testContext.manualScreenshot) {
@@ -1854,7 +1854,7 @@ object TestDriver {
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
         withTextMatching: Boolean = true,
-        log: Boolean = true
+        log: Boolean = CodeExecutionContext.shouldOutputLog
     ) {
         if (testContext.autoScreenshot.not()) {
             return
@@ -1878,7 +1878,7 @@ object TestDriver {
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
         withTextMatching: Boolean,
-        log: Boolean = true
+        log: Boolean = CodeExecutionContext.shouldOutputLog
     ): TestDriver {
 
         if (TestMode.isNoLoadRun) {
@@ -1900,7 +1900,7 @@ object TestDriver {
              * Classic cache mode (not for Vision)
              */
             if (force.not()) {
-                if (CodeExecutionContext.shouldOutputLog.not()) {
+                if (log.not()) {
                     return this
                 }
                 if (shouldTakeScreenshot.not()) {
@@ -1945,7 +1945,9 @@ object TestDriver {
 
             val sw = StopWatch("syncScreenshot")
             visionDrive.syncScreen()
-            sw.printInfo()
+            if (CodeExecutionContext.shouldOutputLog) {
+                sw.printInfo()
+            }
 
             val newImage = CodeExecutionContext.lastScreenshotImage
             val changed = newImage.isSame(oldImage).not()

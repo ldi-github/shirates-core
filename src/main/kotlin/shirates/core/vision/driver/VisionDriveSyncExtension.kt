@@ -40,7 +40,9 @@ fun VisionDrive.syncScreen(): VisionElement {
             if (newImage.isSame(oldImage)) {
                 CodeExecutionContext.lastScreenshotImage = newImage
             } else {
-                TestLog.info("Syncing screen.")
+                if (CodeExecutionContext.shouldOutputLog) {
+                    TestLog.info("Syncing screen.")
+                }
                 Thread.sleep(testContext.waitSecondsForAnimationComplete.toLong())
                 CodeExecutionContext.lastScreenshotImage =
                     appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()

@@ -116,5 +116,5 @@ ios.profile=iPhone 15(iOS 18.2)
 
 ### Link
 
-- [index(vision)](../../index.md)
-- [index(classic)](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)

@@ -7,7 +7,7 @@ object CreateMLExecute {
     @JvmStatic
     fun main(args: Array<String>) {
 
-        CreateMLUtility.runLearning()
+        CreateMLUtility.runLearning(force = true)
     }
 
 }

@@ -496,4 +496,6 @@ over screens.
 - [Using Screen Builder](using_screen_builder.md)
 
 
-- [index](../../index.md)
+- [index(Classic)](../../index.md)
+- [index(Vision)](../../../index.md)
+

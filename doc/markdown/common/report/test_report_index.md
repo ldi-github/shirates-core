@@ -10,5 +10,5 @@ You can see summary of the test results in near realtime(polling).
 
 ### Link
 
-- [index(vision)](../../index.md)
-- [index(classic)](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)

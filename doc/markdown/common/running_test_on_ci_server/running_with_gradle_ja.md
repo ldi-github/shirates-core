@@ -99,5 +99,5 @@ export includeTestsMatching="product1.Test1,product1.Test2,product1.Test3"
 
 ### Link
 
-- [index(vision)](../../index_ja.md)
-- [index(classic)](../../classic/index_ja.md)
+- [index(Vision)](../../index_ja.md)
+- [index(Classic)](../../classic/index_ja.md)

@@ -115,5 +115,5 @@ Specified simulator device is automatically launched in test startup process if 
 
 ### Link
 
-- [index(vision)](../../index.md)
-- [index(classic)](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)

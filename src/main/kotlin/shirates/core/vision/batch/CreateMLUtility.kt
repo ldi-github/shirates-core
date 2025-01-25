@@ -79,6 +79,7 @@ object CreateMLUtility {
     fun runLearning(
         visionDirectory: String = PropertiesManager.visionDirectory,
         visionDirectoryInWork: String = VISION_DIRECTORY_IN_WORK,
+        force: Boolean = false,
     ) {
         if (TestMode.isRunningOnMacOS.not()) {
             throw NotImplementedError("CreateMLUtility is for only MacOS.")
@@ -92,13 +93,15 @@ object CreateMLUtility {
         val fileListFile = classifiersDirectoryInWork.resolve("filelist.txt").toFile()
         val currentListString = getFileListInClassifiersDirectoryInVision()
         if (fileListFile.exists()) {
-            val sw = StopWatch("Check if any file in vision/classifiers is updated")
-            val lastListString = fileListFile.readText()
-            if (currentListString == lastListString) {
-                TestLog.info("CreateML leaning skipped. Updated file not found.")
-                return
+            if (force.not()) {
+                val sw = StopWatch("Check if any file in vision/classifiers is updated")
+                val lastListString = fileListFile.readText()
+                if (currentListString == lastListString) {
+                    TestLog.info("CreateML leaning skipped. Updated file not found.")
+                    return
+                }
+                sw.printInfo()
             }
-            sw.printInfo()
             fileListFile.delete()   // fileListFile is saved at the end of this function
         }
 

@@ -169,5 +169,5 @@ You can use **Path macro** for log directories.
 
 ### Link
 
-- [index(vision)](../../index.md)
-- [index(classic)](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)

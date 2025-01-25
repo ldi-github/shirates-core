@@ -14,7 +14,6 @@ object ScreenRecognizer {
         val result = VisionServerProxy.classifyWithImageFeaturePrintOrText(
             inputFile = screenImageFile,
             withTextMatching = withTextMatching,
-            log = true,
         )
         val firstCandidate = result.firstCandidate ?: return "?"
         if (firstCandidate.distance > maxDistance) {

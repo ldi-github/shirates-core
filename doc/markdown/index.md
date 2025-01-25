@@ -163,10 +163,10 @@
 
 ## Tutorial(In action)
 
-- Creating screen nickname file
-    - [Introducing Appium Inspector](vision/in_action/creating_screen_nickname_file/using_appium_inspector.md)
-    - [Creating screen nickname file](vision/in_action/creating_screen_nickname_file/creating_screen_nickname_file.md)
-    - [Using Screen Builder](vision/in_action/creating_screen_nickname_file/using_screen_builder.md)
+- Creating screen nickname file(classic)
+    - [Introducing Appium Inspector](classic/in_action/creating_screen_nickname_file/using_appium_inspector.md)
+    - [Creating screen nickname file](classic/in_action/creating_screen_nickname_file/creating_screen_nickname_file.md)
+    - [Using Screen Builder](classic/in_action/creating_screen_nickname_file/using_screen_builder.md)
 - Message and language
     - [Log language](common/message_and_language/log_language.md)
     - [Device language](common/message_and_language/device_language.md)

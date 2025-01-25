@@ -75,5 +75,5 @@ This is test result report in MS-Excel format.
 
 ### Link
 
-- [index(vision)](../../../index.md)
-- [index(classic)](../../index.md)
+- [index(Vision)](../../../index.md)
+- [index(Classic)](../../index.md)

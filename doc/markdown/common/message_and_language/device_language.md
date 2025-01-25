@@ -19,6 +19,6 @@ Set `language` and `locale` in capabilities section in testConfig.json
 - [LanguageHelperIos](../../basic/behavior/language_helper/language_helper_ios.md)
 
 
-- [index(vision)](../../index.md)
-- [index(classic)](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)
 

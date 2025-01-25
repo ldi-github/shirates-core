@@ -26,5 +26,5 @@
 - [Error messages / Warning messages](error_warning_messages.md)
 
 
-- [index(vision)](../../index.md)
-- [index(classic)](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)

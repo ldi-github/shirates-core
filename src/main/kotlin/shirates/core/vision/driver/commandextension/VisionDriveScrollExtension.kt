@@ -31,7 +31,9 @@ private fun VisionDrive.scrollCommand(
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio
         )
-        TestLog.info("scrollableRect: ${r.bounds}")
+        if (CodeExecutionContext.shouldOutputLog) {
+            TestLog.info("scrollableRect: ${r.bounds}")
+        }
         swipeAction(r)
     }
 }

@@ -103,6 +103,6 @@ specialTagに関するより詳細な情報はこちら
 
 ### Link
 
-- [index(vision)](../../index_ja.md)
-- [index(classic)](../../classic/index_ja.md)
+- [index(Vision)](../../index_ja.md)
+- [index(Classic)](../../classic/index_ja.md)
 

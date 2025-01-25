@@ -41,7 +41,6 @@ object VisionServerProxy {
      */
     fun setupImageFeaturePrintConfig(
         inputDirectory: String,
-        log: Boolean = false,
     ): SetupImageFeaturePrintConfigResult {
 
         if (Files.exists(inputDirectory.toPath()).not()) {
@@ -63,9 +62,7 @@ object VisionServerProxy {
         val jsonString = getResponseBody(url)
         lastJsonString = jsonString
 
-        if (log) {
-            sw.printInfo()
-        }
+        sw.printInfo()
         val result = SetupImageFeaturePrintConfigResult(jsonString)
         if (result.message.contains("image count: 0")) {
             TestLog.warn("ImageFeaturePrintRepository could not be initialized. Image file not found in ${inputDirectory.toPath()}")
@@ -80,7 +77,6 @@ object VisionServerProxy {
         inputFile: String,
         withTextMatching: Boolean = false,
         language: String = PropertiesManager.visionOCRLanguage,
-        log: Boolean = false,
     ): ClassifyWithImageFeaturePrintOrTextResult {
 
         if (Files.exists(inputFile.toPath()).not()) {
@@ -118,7 +114,7 @@ object VisionServerProxy {
         file.parent.toFile().mkdirs()
         file.toFile().writeText(jsonString)
 
-        if (log) {
+        if (CodeExecutionContext.shouldOutputLog) {
             sw.printInfo()
         }
         return ClassifyWithImageFeaturePrintOrTextResult(jsonString)
@@ -181,7 +177,7 @@ object VisionServerProxy {
     fun compareByImageFeaturePrint(
         templateFile: String,
         inputFile: String,
-        log: Boolean = false,
+        log: Boolean = CodeExecutionContext.shouldOutputLog
     ): String {
 
         val sw = StopWatch("compareByImageFeaturePrint")
@@ -197,6 +193,7 @@ object VisionServerProxy {
         lastJsonString = matchWithTemplate(
             templateFile = templateFile,
             inputDirectory = inputDirectory,
+            log = log,
         )
 
         if (log) {
@@ -208,7 +205,7 @@ object VisionServerProxy {
     internal fun matchWithTemplate(
         templateFile: String,
         inputDirectory: String,
-        log: Boolean = false,
+        log: Boolean,
     ): String {
 
         val sw = StopWatch("ImageFeaturePrintMatcher/matchWithTemplate")
@@ -333,7 +330,7 @@ object VisionServerProxy {
     fun classifyImage(
         inputFile: String,
         mlmodelFile: String,
-        log: Boolean = false,
+        log: Boolean = CodeExecutionContext.shouldOutputLog,
     ): ClassifyImageResult {
 
         val sw = StopWatch("ImageClassifier/classifyImage")

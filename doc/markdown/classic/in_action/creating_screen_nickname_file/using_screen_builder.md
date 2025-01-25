@@ -59,4 +59,6 @@ git clone https://github.com/ldi-github/shirates-builder.git
 - [Using Appium Inspector](using_appium_inspector.md)
 
 
-- [index](../../index.md)
+- [index(Classic)](../../index.md)
+- [index(Vision)](../../../index.md)
+

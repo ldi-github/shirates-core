@@ -47,5 +47,5 @@ Some tests may succeed, and others may fail. Let's see TestList in this case.
 
 ### Link
 
-- [index(vision)](../../index.md)
-- [index(classic)](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)

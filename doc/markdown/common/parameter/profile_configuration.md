@@ -103,6 +103,6 @@ see [Special branch function](../../classic/basic/function_property/branch/speci
 
 ### Link
 
-- [index(vision)](../../index.md)
-- [index(classic)](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)
 

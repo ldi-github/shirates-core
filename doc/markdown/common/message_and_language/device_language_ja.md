@@ -19,6 +19,6 @@ capabilitiesを設定するとデバイスの言語を指定できます。
 - [LanguageHelperIos](../../basic/behavior/language_helper/language_helper_ios_ja.md)
 
 
-- [index(vision)](../../index_ja.md)
-- [index(classic)](../../classic/index_ja.md)
+- [index(Vision)](../../index_ja.md)
+- [index(Classic)](../../classic/index_ja.md)
 
