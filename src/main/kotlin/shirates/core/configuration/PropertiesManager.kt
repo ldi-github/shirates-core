@@ -202,12 +202,12 @@ object PropertiesManager {
             }
 
             if (isAndroid) {
-                val defaultConfigFile = "testConfig/android/testConfig.json"
+                val defaultConfigFile = "testConfig/android/testConfig@a.json"
                 if (defaultConfigFile.exists()) {
                     return defaultConfigFile
                 }
             } else {
-                val defaultConfigFile = "testConfig/ios/testConfig.json"
+                val defaultConfigFile = "testConfig/ios/testConfig@i.json"
                 if (defaultConfigFile.exists()) {
                     return defaultConfigFile
                 }

@@ -339,14 +339,14 @@ class PropertiesManagerTest : UnitTest() {
             TestMode.setAndroid()
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig.json")
+            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig@a.json")
         }
         run {
             // Arrange
             TestMode.setIos()
             PropertiesManager.clear()
             // Act, Assert
-            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/ios/testConfig.json")
+            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/ios/testConfig@i.json")
         }
         run {
             // Arrange

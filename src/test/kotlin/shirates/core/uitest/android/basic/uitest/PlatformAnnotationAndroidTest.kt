@@ -15,7 +15,7 @@ class PlatformAnnotationAndroidTest : VisionTest() {
 
         assertThat(TestMode.isAndroid).isTrue()
         assertThat(PropertiesManager.os).isEqualTo(TestMode.ANDROID)
-        assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig.json")
+        assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig@a.json")
         assertThat(PropertiesManager.profile).isEqualTo("Pixel 8(Android 14)")
         assertThat(testProfile.isAndroid).isTrue()
     }
