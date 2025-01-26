@@ -13,11 +13,11 @@ import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.element.ElementCategory
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.getAttribute

@@ -8,7 +8,7 @@ import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestElement
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.CropInfo
 import java.awt.image.BufferedImage

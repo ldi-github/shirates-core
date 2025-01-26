@@ -20,7 +20,6 @@ import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isRunningOnMacOS
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.*
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -197,7 +196,10 @@ abstract class UITestBase : Drive {
 
         TestLog.trace()
 
-        setupFromTestrun(PropertiesManager.testrunFile)
+        val testrunFile = PropertiesManager.getDefaultTestrunFile()
+        val profileName = PropertiesManager.getDefaultProfileName()
+        PropertiesManager.profile = profileName
+        setupFromTestrun(testrunFile = testrunFile, profileName = profileName)
     }
 
     /**
@@ -211,8 +213,8 @@ abstract class UITestBase : Drive {
      * setupFromTestrun
      */
     fun setupFromTestrun(
-        testrunFile: String = PropertiesManager.testrunFile,
-        profileName: String = PropertiesManager.profile
+        testrunFile: String,
+        profileName: String
     ) {
         TestLog.info("")
         TestLog.info(Const.SEPARATOR_LONG)

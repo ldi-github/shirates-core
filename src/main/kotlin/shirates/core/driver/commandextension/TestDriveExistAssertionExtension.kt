@@ -6,10 +6,10 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
 import shirates.core.driver.*
 import shirates.core.exception.TestNGException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.time.StopWatch

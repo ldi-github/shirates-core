@@ -34,6 +34,7 @@ import shirates.core.logging.Message.message
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.*
 import shirates.core.utility.android.AdbUtility
 import shirates.core.utility.android.AndroidDeviceUtility

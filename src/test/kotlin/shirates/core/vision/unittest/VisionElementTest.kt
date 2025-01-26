@@ -4,8 +4,8 @@ import com.google.common.io.Files
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Selector
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.toPath

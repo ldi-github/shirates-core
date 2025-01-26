@@ -7,10 +7,10 @@ import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.thisContains
 import shirates.core.driver.testContext
 import shirates.core.exception.TestNGException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement

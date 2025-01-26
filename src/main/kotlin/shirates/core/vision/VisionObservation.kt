@@ -1,7 +1,7 @@
 package shirates.core.vision
 
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.printWarn
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.cropImage

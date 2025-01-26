@@ -9,6 +9,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.report.TestReport
 import shirates.core.report.TestReportIndex
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.format

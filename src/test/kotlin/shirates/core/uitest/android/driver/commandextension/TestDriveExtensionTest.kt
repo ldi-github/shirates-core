@@ -12,9 +12,9 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.driver
 import shirates.core.driver.rootElement
 import shirates.core.driver.wait
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.utility.toPath

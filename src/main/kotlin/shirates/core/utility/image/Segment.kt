@@ -2,9 +2,9 @@ package shirates.core.utility.image
 
 import boofcv.io.image.UtilImageIO
 import shirates.core.driver.Bounds
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printWarn
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement

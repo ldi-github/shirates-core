@@ -2,9 +2,9 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.driver.ErrorEventArgs
 import shirates.core.driver.TestMode
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.macro.MacroRepository
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement

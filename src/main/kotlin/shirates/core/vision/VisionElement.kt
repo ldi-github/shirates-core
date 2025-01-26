@@ -8,9 +8,9 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
 import shirates.core.utility.image.SegmentContainer

@@ -7,10 +7,10 @@ import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.tap
 import shirates.core.driver.commandextension.toVisionElement
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printWarn
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.rect
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement

@@ -6,10 +6,10 @@ import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestNGException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.sync.SyncContext

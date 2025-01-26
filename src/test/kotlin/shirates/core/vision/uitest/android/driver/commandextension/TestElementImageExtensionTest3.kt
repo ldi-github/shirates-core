@@ -1,4 +1,4 @@
-//package shirates.core.vision.uitest.android.driver.commandextension
+//package shirates.core.vision.testcode.android.driver.commandextension
 //
 //import org.assertj.core.api.Assertions.assertThat
 //import org.assertj.core.api.Assertions.assertThatThrownBy

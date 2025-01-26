@@ -7,6 +7,7 @@ import shirates.core.exception.TestConfigException
 import shirates.core.exception.TestNGException
 import shirates.core.logging.*
 import shirates.core.logging.Message.message
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement

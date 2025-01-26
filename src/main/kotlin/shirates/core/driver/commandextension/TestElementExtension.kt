@@ -10,11 +10,10 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.escapeFileName
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.TrimObject

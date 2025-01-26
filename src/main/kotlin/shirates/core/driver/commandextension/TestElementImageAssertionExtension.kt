@@ -3,9 +3,9 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.saveImage
 

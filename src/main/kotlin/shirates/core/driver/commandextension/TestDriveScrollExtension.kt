@@ -5,11 +5,11 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.ScanRecord
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 
 
 internal fun TestElement.getScrollableElementsInDescendantsAndSelf(): List<TestElement> {

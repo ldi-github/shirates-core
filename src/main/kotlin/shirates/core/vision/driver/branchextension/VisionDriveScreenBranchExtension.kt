@@ -1,7 +1,7 @@
 package shirates.core.vision.driver.branchextension
 
 import shirates.core.driver.TestMode
-import shirates.core.logging.CodeExecutionContext
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.vision.VisionDrive
 import java.awt.image.BufferedImage
 

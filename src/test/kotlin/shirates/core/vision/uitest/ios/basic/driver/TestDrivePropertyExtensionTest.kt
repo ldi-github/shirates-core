@@ -1,4 +1,4 @@
-//package shirates.core.vision.uitest.ios.basic.driver
+//package shirates.core.vision.testcode.ios.basic.driver
 //
 //import org.assertj.core.api.Assertions.assertThat
 //import org.junit.jupiter.api.Test

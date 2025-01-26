@@ -7,10 +7,10 @@ import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.appiumDriver
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.rect
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.time.StopWatch

@@ -5,10 +5,10 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.printInfo
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement

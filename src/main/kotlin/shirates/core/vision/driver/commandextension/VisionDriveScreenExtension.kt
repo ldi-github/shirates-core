@@ -5,11 +5,11 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionDrive

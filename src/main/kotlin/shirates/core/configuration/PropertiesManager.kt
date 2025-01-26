@@ -14,6 +14,7 @@ import shirates.core.utility.file.exists
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.replaceUserVars
 import shirates.core.utility.toPath
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.util.*
 
@@ -53,6 +54,7 @@ object PropertiesManager {
      */
     fun clear() {
 
+        testrunFile = ""
         testrunGlobalProperties = Properties()
         testrunProperties = Properties()
         envProperties = Properties()
@@ -61,13 +63,24 @@ object PropertiesManager {
         _selectIgnoreTypesForIos = null
     }
 
+
     /**
      * setup
      */
-    fun setup(testrunFile: String = Const.TESTRUN_PROPERTIES) {
+    fun setup(testrunFile: String? = null) {
+
+        if (testrunFile != null) {
+            if (testrunFile.isBlank()) {
+                throw IllegalArgumentException("testrunFile is required.")
+            }
+            if (testrunFile.exists().not()) {
+                throw FileNotFoundException("testrunFile is not found. (testrunFile=$testrunFile)")
+            }
+        }
 
         clear()
-        setupTestrunFile(testrunFile)
+        val file = testrunFile ?: getDefaultTestrunFile()
+        setupTestrunFile(testrunFile = file)
 
         // Get properties from testrun.global.properties
         testrunGlobalProperties = getProperties(propertiesFile = Const.TESTRUN_GLOBAL_PROPERTIES)
@@ -115,6 +128,9 @@ object PropertiesManager {
         }
         if (this.testrunFile.exists().not()) {
             this.testrunFile = Const.TESTRUN_GLOBAL_PROPERTIES
+        }
+        if (this.testrunFile.exists().not()) {
+            throw TestConfigException("testrunFile not found. (${this.testrunFile})")
         }
     }
 
@@ -192,6 +208,10 @@ object PropertiesManager {
      */
     val configFile: String
         get() {
+            if (testrunFile.isBlank()) {
+                throw TestConfigException("PropertiesManager is not initialized.")
+            }
+
             var value = getPropertyValueOrEnvValue("configFile")
             if (value.isNotBlank()) {
                 return value
@@ -202,57 +222,63 @@ object PropertiesManager {
                 return value
             }
 
-            if (TestMode.isVisionTest) {
-                if (isAndroid) {
-                    val defaultConfigFile = "testConfig/android/testConfig@a.json"
-                    if (defaultConfigFile.exists()) {
-                        return defaultConfigFile
-                    }
-                    throw TestConfigException("testConfig File not found. ($defaultConfigFile)")
-                } else {
-                    val defaultConfigFile = "testConfig/ios/testConfig@i.json"
-                    if (defaultConfigFile.exists()) {
-                        return defaultConfigFile
-                    }
-                    throw TestConfigException("testConfig File not found. ($defaultConfigFile)")
+            if (isAndroid) {
+                val defaultConfigFile = "testConfig/android/testConfig@a.json"
+                if (defaultConfigFile.exists()) {
+                    return defaultConfigFile
                 }
+                throw TestConfigException("testConfig File not found. ($defaultConfigFile)")
+            } else {
+                val defaultConfigFile = "testConfig/ios/testConfig@i.json"
+                if (defaultConfigFile.exists()) {
+                    return defaultConfigFile
+                }
+                throw TestConfigException("testConfig File not found. ($defaultConfigFile)")
             }
-
-            throw TestConfigException(
-                message(
-                    id = "requiredInFile",
-                    subject = "${os}.configFile",
-                    file = testrunFile
-                )
-            )
         }
+
+    internal fun getDefaultTestrunFile(): String {
+
+        if (TestMode.isVisionTest) {
+            return Const.TESTRUN_GLOBAL_PROPERTIES
+        }
+        return Const.TESTRUN_PROPERTIES
+    }
+
+    internal fun getDefaultProfileName(): String {
+
+        if (testrun?.profile.isNullOrBlank().not()) {
+            return testrun!!.profile
+        }
+
+        var value = getPropertyValueOrEnvValue("profile")
+        if (value.isNotBlank()) {
+            return value
+        }
+
+        value = getPropertyValueOrEnvValue("$os.profile")
+        if (value.isNotBlank()) {
+            return value
+        }
+
+        throw TestConfigException(
+            message(
+                id = "requiredInFile",
+                subject = "$os.profile",
+                file = testrunFile
+            )
+        )
+    }
 
     /**
      * profile
      */
-    val profile: String
+    var profile: String
         get() {
-            if (testrun?.profile.isNullOrBlank().not()) {
-                return testrun!!.profile
-            }
-
-            var value = getPropertyValueOrEnvValue("profile")
-            if (value.isNotBlank()) {
-                return value
-            }
-
-            value = getPropertyValueOrEnvValue("$os.profile")
-            if (value.isNotBlank()) {
-                return value
-            }
-
-            throw TestConfigException(
-                message(
-                    id = "requiredInFile",
-                    subject = "${os}.profile",
-                    file = testrunFile
-                )
-            )
+            return getPropertyValue(propertyName = "profile") ?: ""
+        }
+        set(value) {
+            setPropertyValue(propertyName = "profile", value = value)
         }
 
     /**

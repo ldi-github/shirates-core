@@ -3,8 +3,8 @@ package shirates.core.utility.image
 import boofcv.io.image.UtilImageIO
 import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
 import shirates.core.utility.file.toFile

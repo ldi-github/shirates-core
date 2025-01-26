@@ -5,7 +5,6 @@ import shirates.core.driver.commandextension.withContext
 import shirates.core.driver.testContext
 import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 

@@ -3,7 +3,7 @@ package shirates.core.vision.driver.commandextension
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
-import shirates.core.logging.CodeExecutionContext
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement

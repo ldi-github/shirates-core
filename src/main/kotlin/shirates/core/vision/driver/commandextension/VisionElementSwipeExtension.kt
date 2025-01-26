@@ -4,8 +4,8 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.select
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.rect
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.lastScreenshotImage

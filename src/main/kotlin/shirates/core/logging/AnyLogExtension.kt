@@ -2,6 +2,7 @@ package shirates.core.logging
 
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestElement
+import shirates.core.testcode.CodeExecutionContext
 
 
 /**

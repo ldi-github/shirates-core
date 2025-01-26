@@ -6,10 +6,10 @@ import shirates.core.UserVar
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.proxy.HttpProxy
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.file.copyFileTo
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve

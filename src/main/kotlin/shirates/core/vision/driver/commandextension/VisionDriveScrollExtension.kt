@@ -5,10 +5,10 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.driver.commandextension.suppressHandler
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.saveImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement

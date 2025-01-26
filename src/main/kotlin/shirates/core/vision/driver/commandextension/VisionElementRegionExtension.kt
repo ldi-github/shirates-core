@@ -1,6 +1,6 @@
 package shirates.core.vision.driver.commandextension
 
-import shirates.core.logging.CodeExecutionContext
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.Rectangle
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
