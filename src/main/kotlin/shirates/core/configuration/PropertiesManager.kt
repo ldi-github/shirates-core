@@ -239,6 +239,9 @@ object PropertiesManager {
 
     internal fun getDefaultTestrunFile(): String {
 
+        if (testrun?.testrunFile.isNullOrBlank().not()) {
+            return testrun!!.testrunFile
+        }
         if (TestMode.isVisionTest) {
             return Const.TESTRUN_GLOBAL_PROPERTIES
         }
