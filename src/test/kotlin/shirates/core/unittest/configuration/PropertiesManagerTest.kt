@@ -27,12 +27,6 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
-    fun getDefaultTestrunFile() {
-
-
-    }
-
-    @Test
     fun clear_setup() {
 
         fun clear() {
@@ -57,9 +51,9 @@ class PropertiesManagerTest : UnitTest() {
             // Act
             PropertiesManager.setup()
             // Assert
-            assertThat(PropertiesManager.testrunFile).isEqualTo(Const.TESTRUN_GLOBAL_PROPERTIES)
+            assertThat(PropertiesManager.testrunFile).isEqualTo(Const.TESTRUN_PROPERTIES)
             assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(6)
-            assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(6)
+            assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(0)
             assertThat(PropertiesManager.envProperties.count()).isEqualTo(1)
             assertThat(PropertiesManager.properties.count()).isEqualTo(7)
             assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig@a.json")

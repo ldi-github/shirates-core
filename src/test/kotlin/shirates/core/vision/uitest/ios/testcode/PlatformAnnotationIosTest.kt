@@ -1,4 +1,4 @@
-package experiment
+package shirates.core.vision.uitest.ios.testcode
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -8,7 +8,7 @@ import shirates.core.testcode.ios
 import shirates.core.vision.testcode.VisionTest
 
 @ios
-class PlatformAnnotationTestAndroidIosTest : VisionTest() {
+class PlatformAnnotationIosTest : VisionTest() {
 
     @Test
     fun ios() {

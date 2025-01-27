@@ -2221,7 +2221,7 @@ object TestDriver {
     }
 
     /**
-     * isScreen
+     * isScreen(for Classic mode)
      */
     fun isScreen(
         screenName: String,

@@ -329,7 +329,7 @@ tasks.register<Test>("test-spec-report-tutorial") {
     filter {
         includeTestsMatching("tutorial*")
         excludeTestsMatching("tutorial.inaction.Drivers*")
-        excludeTestsMatching("tutorial.basic.iOSKeyboard1*")
+        excludeTestsMatching("tutorial.misc.iOSKeyboard1*")
     }
 
     environment("SR_noLoadRun", "true")

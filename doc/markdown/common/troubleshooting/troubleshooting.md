@@ -6,6 +6,10 @@
 - [Garbled properties file](intellij_idea/garbled_properties_file.md)
 - [Can not build project on network using proxy](intellij_idea/can_not_build_project_on_network_using_proxy.md)
 
+## Learning
+
+- [CAUTION! Learning has a problem. Accuracy is not 100%.](warnings/learningHasAProblem_accuracyIsNot100%25.md)
+
 ## Performance and stability(Android)
 
 - [No response to mouse action](performance_and_stability_android/android_no_response_to_mouse_action.md)

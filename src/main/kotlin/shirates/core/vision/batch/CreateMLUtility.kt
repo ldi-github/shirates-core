@@ -73,6 +73,19 @@ object CreateMLUtility {
         scriptFilesInVision = listOf()
     }
 
+    private fun checkAccuracy(content: String): Boolean {
+
+        val accuracy100 = content.contains("Accuracy: 100.00%")
+        if (accuracy100.not()) {
+            printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            printWarn("!!                                                                  !!")
+            printWarn("!! CAUTION!  Learning has a problem. Accuracy is not 100%.          !!")
+            printWarn("!!                                                                  !!")
+            printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        }
+        return accuracy100
+    }
+
     /**
      * runLearning
      */
@@ -80,9 +93,13 @@ object CreateMLUtility {
         visionDirectory: String = PropertiesManager.visionDirectory,
         visionDirectoryInWork: String = VISION_DIRECTORY_IN_WORK,
         force: Boolean = false,
+        createBinary: Boolean = true
     ) {
         if (TestMode.isRunningOnMacOS.not()) {
             throw NotImplementedError("CreateMLUtility is for only MacOS.")
+        }
+        if (visionDirectory.exists().not()) {
+            throw IllegalArgumentException("visionDirectory does not exist. (visionDirectory=$visionDirectory)")
         }
         this.visionDirectory = visionDirectory
         this.visionDirectoryInWork = visionDirectoryInWork
@@ -90,24 +107,19 @@ object CreateMLUtility {
         /**
          * Check if any file in vision/classifiers is updated
          */
-        val fileListFile = classifiersDirectoryInWork.resolve("filelist.txt").toFile()
+        val fileListFile = classifiersDirectoryInWork.resolve("fileList.txt")
+        val lastListString = if (fileListFile.exists()) fileListFile.toFile().readText() else ""
         val currentListString = getFileListInClassifiersDirectoryInVision()
-        if (fileListFile.exists()) {
-            if (force.not()) {
-                val sw = StopWatch("Check if any file in vision/classifiers is updated")
-                val lastListString = fileListFile.readText()
-                if (currentListString == lastListString) {
-                    TestLog.info("CreateML leaning skipped. Updated file not found.")
-                    return
-                }
-                sw.printInfo()
-            }
-            fileListFile.delete()   // fileListFile is saved at the end of this function
+        val doLearning = currentListString != lastListString || force
+        if (doLearning.not()) {
+            printLastLearningResultOnWarning()
+            TestLog.info("Learning skipped. Updated file not found. (visionDirectory=${CreateMLUtility.visionDirectory})")
+            return
         }
 
         getScriptFiles()
         getImageFiles()
-        createWorkDirectoriesAndFiles()
+        createWorkDirectoriesAndFiles(createBinary = createBinary)
         copyScriptFilesIntoWork()
         setupScripts()
 
@@ -125,16 +137,10 @@ object CreateMLUtility {
             }
             println(r.resultString)
 
-            val logFile = classifiersDirectoryInWork.resolve(classifierName).resolve("createml.log")
+            val logFile = classifiersDirectoryInWork.resolve(classifierName).resolve("createML.log")
             logFile.toFile().writeText(r.resultString)
 
-            if (r.resultString.contains("Accuracy: 100.00%").not()) {
-                printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                printWarn("!!                                                                  !!")
-                printWarn("!! CAUTION!  Learning has a problem. Accuracy is not 100%.          !!")
-                printWarn("!!                                                                  !!")
-                printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            }
+            checkAccuracy(content = r.resultString)
             sw.printInfo()
         }
 
@@ -142,7 +148,22 @@ object CreateMLUtility {
         if (Files.exists(dir).not()) {
             dir.toFile().mkdirs()
         }
-        fileListFile.writeText(currentListString)   // fileListFile is saved on success
+        fileListFile.toFile().writeText(currentListString)   // fileListFile is saved on success
+    }
+
+    private fun printLastLearningResultOnWarning() {
+
+        getScriptFiles()
+        for (classifierName in classifierNames) {
+            val logFile = classifiersDirectoryInWork.resolve(classifierName).resolve("createML.log")
+            if (logFile.exists()) {
+                val content = logFile.toFile().readText()
+                val accuracy100 = checkAccuracy(content = content)
+                if (accuracy100.not()) {
+                    println(content)
+                }
+            }
+        }
     }
 
     internal fun getFileListInClassifiersDirectoryInVision(): String {
@@ -182,7 +203,7 @@ object CreateMLUtility {
         }
     }
 
-    internal fun createWorkDirectoriesAndFiles() {
+    internal fun createWorkDirectoriesAndFiles(createBinary: Boolean) {
 
         val work = visionDirectoryInWork.toPath().toString()
         if (work.startsWith(UserVar.project.toString()).not()) {
@@ -206,8 +227,10 @@ object CreateMLUtility {
             imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.combinedLabelDirectoryInTraining)
             // copy image file to test
             imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.combinedLabelDirectoryInTest)
-            // create binary file in test
-            createBinaryFile(imageFile = imageEntry.imageFileInTraining)
+            if (createBinary) {
+                // create binary file in test
+                createBinaryFile(imageFile = imageEntry.imageFileInTraining)
+            }
         }
     }
 
