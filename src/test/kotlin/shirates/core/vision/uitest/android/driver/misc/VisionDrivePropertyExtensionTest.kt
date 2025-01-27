@@ -21,7 +21,7 @@ class VisionDrivePropertyExtensionTest : VisionTest() {
     @Test
     fun parameters2() {
 
-        assertThat(visionDrive.parameter("sheetName")).isEqualTo("TestDrivePropertyExtensionTest")
+        assertThat(visionDrive.parameter("sheetName")).isEqualTo("VisionDrivePropertyExtensionTest")
     }
 
     @Test
