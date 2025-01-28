@@ -11,7 +11,6 @@ import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.configration.repository.VisionMLModelRepository
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.*
 import shirates.core.vision.testDriveScope
@@ -21,29 +20,39 @@ internal fun VisionDrive.checkImageLabelContains(
     message: String,
     classifierName: String,
     waitSeconds: Double,
+    fullLabel: Boolean
 ): VisionElement {
 
     var v = getThisOrIt()
-    var contains = false
+    var result = false
 
     screenshot()
 
     doUntilTrue(
         waitSeconds = waitSeconds,
+        intervalSeconds = testContext.waitSecondsForAnimationComplete,
         throwOnFinally = false,
         onBeforeRetry = {
             screenshot()
             v = v.newVisionElement()
         }
     ) {
-        val label = v.classify(classifierName = classifierName)
+        if (fullLabel) {
+            val label = v.classifyFull(classifierName = classifierName)
+            printInfo("fullLabel: $label")
+            result = label == containedText
+        } else {
+            val label = v.classify(classifierName = classifierName)
+            printInfo("label: $label")
+            result = label.contains(containedText)
+        }
 
-        printInfo("label: $label")
-        contains = label.contains(containedText)
-        contains
+        result
     }
 
-    contains.thisIsTrue(message = message)
+    v.saveImage("${TestLog.currentLineNo}_${v}")
+
+    result.thisIsTrue(message = message)
 
     lastElement = v
     return v
@@ -56,13 +65,12 @@ internal fun VisionDrive.checkIsCore(
     waitSeconds: Double,
 ): VisionElement {
 
-    val rep = VisionMLModelRepository.getRepository(classifierName = "CheckStateClassifier")
-
     return checkImageLabelContains(
         containedText = containedText,
         message = message,
         classifierName = classifierName,
-        waitSeconds = waitSeconds
+        waitSeconds = waitSeconds,
+        fullLabel = false
     )
 }
 

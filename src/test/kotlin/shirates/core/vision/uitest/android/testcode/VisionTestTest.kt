@@ -11,6 +11,7 @@ class VisionTestTest : VisionTest() {
     @Test
     fun default() {
 
-        assertThat(PropertiesManager.getDefaultTestrunFile()).isEqualTo(Const.TESTRUN_GLOBAL_PROPERTIES)
+        assertThat(PropertiesManager.getDefaultTestrunFile()).isEqualTo(Const.TESTRUN_PROPERTIES)
+        assertThat(PropertiesManager.testrunFile).isEqualTo(Const.TESTRUN_PROPERTIES)
     }
 }

@@ -242,10 +242,10 @@ object PropertiesManager {
         if (testrun?.testrunFile.isNullOrBlank().not()) {
             return testrun!!.testrunFile
         }
-        if (TestMode.isVisionTest) {
-            return Const.TESTRUN_GLOBAL_PROPERTIES
+        if (Const.TESTRUN_PROPERTIES.exists()) {
+            return Const.TESTRUN_PROPERTIES
         }
-        return Const.TESTRUN_PROPERTIES
+        return Const.TESTRUN_GLOBAL_PROPERTIES
     }
 
     internal fun getDefaultProfileName(): String {

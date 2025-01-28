@@ -58,10 +58,68 @@ fun VisionElement.textIs(
 }
 
 /**
+ * imageLabelIs
+ * (image label contains)
+ */
+fun VisionElement.imageLabelIs(
+    containedText: String,
+    classifierName: String = "DefaultClassifier",
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    message: String? = null,
+): VisionElement {
+
+    val command = "imageLabelIs"
+    val assertMessage =
+        message ?: message(id = command, subject = subject, expected = containedText, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+
+        this.checkImageLabelContains(
+            containedText = containedText,
+            message = assertMessage,
+            classifierName = classifierName,
+            waitSeconds = waitSeconds,
+            fullLabel = false
+        )
+    }
+    return this
+}
+
+/**
+ * imageFullLabelIs
+ */
+fun VisionElement.imageFullLabelIs(
+    label: String,
+    classifierName: String = "DefaultClassifier",
+    waitSeconds: Double = testContext.syncWaitSeconds,
+    message: String? = null,
+): VisionElement {
+
+    val command = "imageFullLabelIs"
+    val assertMessage =
+        message ?: message(id = command, subject = subject, expected = label, replaceRelative = true)
+
+    val context = TestDriverCommandContext(null)
+    context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
+
+        this.checkImageLabelContains(
+            containedText = label,
+            message = assertMessage,
+            classifierName = classifierName,
+            waitSeconds = waitSeconds,
+            fullLabel = true
+        )
+    }
+    return this
+}
+
+/**
  * checkIsON
  */
 fun VisionElement.checkIsON(
     classifierName: String = "CheckStateClassifier",
+    containedText: String = "[ON]",
     waitSeconds: Double = testContext.syncWaitSeconds,
     message: String? = null,
 ): VisionElement {
@@ -72,7 +130,7 @@ fun VisionElement.checkIsON(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
         this.checkIsCore(
-            containedText = "ON",
+            containedText = containedText,
             message = assertMessage,
             classifierName = classifierName,
             waitSeconds = waitSeconds
@@ -86,6 +144,7 @@ fun VisionElement.checkIsON(
  */
 fun VisionElement.checkIsOFF(
     classifierName: String = "CheckStateClassifier",
+    containedText: String = "[OFF]",
     waitSeconds: Double = testContext.syncWaitSeconds,
     message: String? = null,
 ): VisionElement {
@@ -96,7 +155,7 @@ fun VisionElement.checkIsOFF(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
         this.checkIsCore(
-            containedText = "OFF",
+            containedText = containedText,
             message = assertMessage,
             classifierName = classifierName,
             waitSeconds = waitSeconds
@@ -125,7 +184,8 @@ fun VisionElement.buttonStateIs(
             containedText = expectedLabel,
             message = assertMessage,
             waitSeconds = waitSeconds,
-            classifierName = classifierName
+            classifierName = classifierName,
+            fullLabel = false
         )
     }
     return this

@@ -41,7 +41,11 @@
 ### Text and image recognition by Computer Vision
 
 - [Text recognition by AI-OCR](vision/basic/text_and_image_recognition/text_recognition_by_ai_ocr.md)
-- [Image classification by ML](vision/basic/text_and_image_recognition/image_recognition_by_ml.md)
+- [Finding image by ML](vision/basic/text_and_image_recognition/finding_image_by_ml.md)
+- [Learning images](vision/basic/text_and_image_recognition/learning_images.md)
+- [Using CheckStateClassifier](vision/basic/text_and_image_recognition/using_check_state_classifier.md)
+- [Using DefaultClassifier](vision/basic/text_and_image_recognition/using_default_classifier.md)
+- [Screen identification using FeaturePrint and text recognition](vision/basic/text_and_image_recognition/screen_assertion_using_feature_print_and_text_recognition.md)
 
 ### Macro
 
