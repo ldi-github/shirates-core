@@ -26,6 +26,31 @@ class PropertiesManagerTest : UnitTest() {
         EnvUtility.setEnvForTesting("SR_os", "")
     }
 
+    private fun getSREnvMap(): MutableMap<String, String> {
+
+        val map = System.getenv().filter { it.key.startsWith("SR_") }.toMutableMap()
+        if (map.containsKey("SR_os").not()) {
+            map["SR_os"] = ""   // EnvUtility.setEnvForTesting("SR_os", "")
+        }
+        return map
+    }
+
+    private fun getProperties(): MutableMap<Any, Any> {
+
+        val properties = mutableMapOf<Any, Any>()
+        properties["os"] = ""
+        for (p in PropertiesManager.testrunGlobalProperties) {
+            properties[p.key] = p.value
+        }
+        for (p in PropertiesManager.testrunProperties) {
+            properties[p.key] = p.value
+        }
+        for (p in PropertiesManager.envProperties) {
+            properties[p.key] = p.value
+        }
+        return properties
+    }
+
     @Test
     fun clear_setup() {
 
@@ -54,10 +79,20 @@ class PropertiesManagerTest : UnitTest() {
             assertThat(PropertiesManager.testrunFile).isEqualTo(Const.TESTRUN_PROPERTIES)
             assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(6)
             assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(0)
-            assertThat(PropertiesManager.envProperties.count()).isEqualTo(1)
-            assertThat(PropertiesManager.properties.count()).isEqualTo(7)
+            val srEnvMap = getSREnvMap()
+            assertThat(PropertiesManager.envProperties.count()).isEqualTo(srEnvMap.count())
+            val properties = getProperties()
+            for (p in PropertiesManager.properties) {
+                println("PropertiesManager.properties[\"${p.key}\"]=${p.value}")
+            }
+            for (p in properties) {
+                println("properties[\"${p.key}\"]=${p.value}")
+            }
+            assertThat(PropertiesManager.properties.count()).isEqualTo(properties.count())
             assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig@a.json")
-            assertThat(PropertiesManager.profile).isEqualTo("")
+
+            val expectedProfile = if (srEnvMap.containsKey("SR_profile")) srEnvMap["SR_profile"] else ""
+            assertThat(PropertiesManager.profile).isEqualTo(expectedProfile)
         }
         run {
             // Clear
@@ -68,10 +103,14 @@ class PropertiesManagerTest : UnitTest() {
             assertThat(PropertiesManager.testrunFile).isEqualTo("unitTestConfig/android/androidSettings/testrun.properties")
             assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(6)
             assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(2)
-            assertThat(PropertiesManager.envProperties.count()).isEqualTo(1)
-            assertThat(PropertiesManager.properties.count()).isEqualTo(8)
+            val srEnvMap = getSREnvMap()
+            assertThat(PropertiesManager.envProperties.count()).isEqualTo(srEnvMap.count())
+            val properties = getProperties()
+            assertThat(PropertiesManager.properties.count()).isEqualTo(properties.count())
             assertThat(PropertiesManager.configFile).isEqualTo("unitTestConfig/android/androidSettings/androidSettingsConfig.json")
-            assertThat(PropertiesManager.profile).isEqualTo("")
+
+            val expectedProfile = if (srEnvMap.containsKey("SR_profile")) srEnvMap["SR_profile"] else ""
+            assertThat(PropertiesManager.profile).isEqualTo(expectedProfile)
         }
     }
 
