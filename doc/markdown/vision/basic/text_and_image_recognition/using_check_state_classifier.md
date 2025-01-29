@@ -1,4 +1,4 @@
-# Using CheckStateClassifier (Shirates/Vision)
+# Using CheckStateClassifier (Vision)
 
 Shirates/Vision recognizes check state (`[ON]`/`[OFF]`) of the image.
 
@@ -50,7 +50,16 @@ Shirates/Vision recognizes check state (`[ON]`/`[OFF]`) of the image.
     }
 ```
 
-Right-click on `airplaneModeSwitch()` and select `debug` to run test.
+### Running test
+
+1. Set `os` in `testrun.global.properties` to run as android (default is android).
+
+```properties
+## OS --------------------
+#os=ios
+```
+
+2. Right-click on `airplaneModeSwitch()` and select `debug` to run test.
 
 ### TestResults
 

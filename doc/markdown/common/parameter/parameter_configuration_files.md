@@ -1,4 +1,4 @@
-# Parameter configuration files (Classic)
+# Parameter configuration files (Vision/Classic)
 
 ## Overview
 
@@ -60,33 +60,53 @@ this project, but they can be overridden by other configuration files(`testrun.p
 #android.configFile=
 
 # auto
-android.profile=Android *
+#android.profile=Android *
 
 #by AVD Name
-#android.profile=Pixel 8(Android 14)
+#android.profile=Pixel 9(Android 15)
+#android.profile=Pixel 8(Android 15)
+android.profile=Pixel 8(Android 14)
+#android.profile=Pixel 8(Android 14)-01
 #android.profile=Pixel 7(Android 14)
 #android.profile=Pixel 6(Android 13)
+#android.profile=Pixel 3a(Android 13)
+#android.profile=Pixel 3a(Android 12)
+#android.profile=Pixel 3(Android 11)
+#android.profile=Pixel 3a(Android 10)
+#android.profile=Pixel 3a(Android 9)
 
 #by platformVersion
 #android.profile=14
 #android.profile=13
 #android.profile=Android 14
+#android.profile=Android 13
 
 #by model and platformVersion
+#android.profile=sdk_gphone64_arm64(Android 14)
+#android.profile=sdk_gphone64_arm64(Android 13)
+#android.profile=sdk_gphone64_arm64(13)
 #android.profile=Pixel 8(14)
 #android.profile=Pixel_6(13)
+#android.profile=SO-02K(Android 9)
+#android.profile=Hoge-01(12)
+#android.profile=Fuga-01(6)
 
 # by model
-#android.profile=Pixel 8
+#android.profile=sdk_gphone64_arm64
+#android.profile=Pixel 3a
+#android.profile=pixel_3a
+#android.profile=SO-02K
+#android.profile=Hoge-01
 
 # by udid
 #android.profile=emulator-5554
+#android.profile=emulator-5556
 #android.profile=93MAY0CY1M
+#android.profile=14141JEC204922
+
 
 ## [iOS]
 #ios.configFile=
-# auto
-ios.profile=iOS *
 
 #by deviceName
 #ios.profile=My iPhone
@@ -96,10 +116,8 @@ ios.profile=iOS *
 #ios.profile=17.2
 
 #by model and platformVersion
-#ios.profile=iPhone 15(iOS 17.4)
+ios.profile=iPhone 16(iOS 18.2)
 #ios.profile=iPhone 15(iOS 17.2)
-#ios.profile=iPhone 15 Pro Max(iOS 17.4)
-#ios.profile=Hoge-01(16.1)
 
 # by model
 #ios.profile=iPhone 15
@@ -212,8 +230,8 @@ appiumArgs=--session-override --relaxed-security
 #enableAutoSyncAndroid=true
 #enableAutoSyncIos=true
 #enableLaunchOnScenario=false
-#launchAppMethod=auto
-launchAppMethod=tapAppIcon
+#launchAppMethod=shell
+#launchAppMethod=tapAppIcon
 #launchAppMethod=[My Launch Macro]
 #enableRerunScenario=false
 #enableAlwaysRerunOnErrorAndroid=true
@@ -251,6 +269,16 @@ launchAppMethod=tapAppIcon
 #findWebElementTimeoutSeconds=
 #syncWaitSeconds=
 #syncMaxLoopCount=
+
+## Vision --------------------
+#visionOCRLanguage=
+#visionDirectory=
+#visionBuildDirectory=
+#visionEnableLearningOnStartup=false
+#visionServerUrl=http://127.0.0.1:8081
+#segmentMarginHorizontal=
+#segmentMarginVertical=
+#visionFindImageThreshold=
 
 ## Custom --------------------
 #CustomObject.scan.dir=src/test/kotlin

@@ -89,7 +89,7 @@ class TestDriveScrollExtensionTest2 : VisionTest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.action {
-                    it.detect("Restaurants").onLine {
+                    it.onLineOf("Restaurants") {
                         it.scrollToRightEdge()
                     }
                 }.expectation {
@@ -98,7 +98,7 @@ class TestDriveScrollExtensionTest2 : VisionTest() {
             }
             case(2) {
                 action {
-                    it.detect("More").onLine {
+                    it.onLineOf("More") {
                         it.scrollToLeftEdge()
                     }
                 }.expectation {

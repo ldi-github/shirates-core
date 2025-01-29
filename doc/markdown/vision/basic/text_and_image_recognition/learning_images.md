@@ -1,4 +1,4 @@
-# Learning images (Shirates/Vision)
+# Learning images (Vision)
 
 Shirates/Vision integrates machine learning tool(**CreateML**) in test running process. <br>
 You can utilize the power of image classification in your test code. <br>
@@ -29,7 +29,7 @@ If you want to support checkbox state, append images into [ON]/[OFF] directory a
 
 To run learning explicitly
 
-1. Right-Click `CreateMlExecute` (`src/test/kotlin/batch/CreateMLExecute.kt`) and select `Debug 'CreateMLExecute'`.
+1. Right-click `CreateMlExecute` (`src/test/kotlin/batch/CreateMLExecute.kt`) and select `Debug 'CreateMLExecute'`.
 
 **Note**<br>
 You don't have to run learning explicitly. Learning is executed on demand when you start run your test.

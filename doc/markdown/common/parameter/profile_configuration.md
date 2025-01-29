@@ -1,4 +1,4 @@
-# Profile configuration (Classic)
+# Profile configuration (Vision/Classic)
 
 You can configure profiles in the testConfig file for the specific condition of the device used for testing.
 

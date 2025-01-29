@@ -278,4 +278,51 @@ class TestElementAssertionExtensionTest : VisionTest() {
             }
         }
     }
+
+    @Test
+    fun existImageWithScrollDown_existImageWithScrollUp() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    it.existImageWithScrollDown("[Location Icon]")
+                    it.existImageWithScrollUp("[Apps Icon]")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun existImageWithoutScroll_dontExistImageWithoutScroll() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    withScrollDown {
+                        it.existImageWithoutScroll("[Network & internet Icon]")
+                        assertThatThrownBy {
+                            it.existImageWithoutScroll("[System Icon]")
+                        }.isInstanceOf(TestNGException::class.java)
+                            .hasMessage("Image of [System Icon] exists (text: \"\", bounds: [0,0][-1,-1] width=0, height=0, centerX=0, centerY=0, rect: [0, 0, 0, 0](w=0, h=0))")
+                    }
+                }
+            }
+            case(2) {
+                expectation {
+                    withScrollDown {
+                        it.dontExistImageWithoutScroll("[System Icon]")
+                        assertThatThrownBy {
+                            it.dontExistImageWithoutScroll("[Network & internet Icon]")
+                        }.isInstanceOf(TestNGException::class.java)
+                            .hasMessageStartingWith("Image of [Network & internet Icon] does not exist (text: \"\", bounds:")
+                    }
+                }
+            }
+        }
+    }
+
 }

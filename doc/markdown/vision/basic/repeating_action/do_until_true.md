@@ -1,4 +1,4 @@
-# doUntilTrue (Shirates/Vision)
+# doUntilTrue (Vision)
 
 You can repeat action until the action returns true using **doUntilTrue** function.
 

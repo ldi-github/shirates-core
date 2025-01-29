@@ -1,4 +1,4 @@
-# Platform function (Shirates/Vision)
+# Platform function (Vision)
 
 Conditional branches are required on specific test situation. You can use platform functions.
 

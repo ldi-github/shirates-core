@@ -1,4 +1,4 @@
-# Selector expression (Shirates/Vision)
+# Selector expression (Vision)
 
 Shirates **Selector expression** is expression to filter visual elements.
 
@@ -16,19 +16,21 @@ So features of Selector is restricted in Shirates/Vision.
 
 ### Vision mode
 
-The following selectors are allowed in Vision mode.
+The following selectors are allowed in **Vision mode**.
 
 ```kotlin
 it.detect("text1")
 
 it.detect("*text1*")
 
+it.detect("text1||text2")
+
 it.findImage("[Display Icon]")
 ```
 
 ### Classic mode
 
-The following selectors are allowed in only Classic mode.
+The following selectors are allowed in only **Classic mode**.
 
 ```kotlin
 it.select("#id1")    // id filter
@@ -46,13 +48,7 @@ it.select("About phone||About emulated device") // text filters combined with "|
 
 ### Note
 
-Currently, operators `&&` and `||` are not supported. <br>
-
-#### Invalid
-
-```kotlin
-it.detect("text1||text2")
-```
+Operator `&&`are not supported in vision mode. <br>
 
 ### Link
 

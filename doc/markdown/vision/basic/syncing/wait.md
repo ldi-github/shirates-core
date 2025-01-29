@@ -1,4 +1,4 @@
-# wait (Shirates/Vision)
+# wait (Vision)
 
 Sometimes, waiting for some seconds is required in particular situation.
 

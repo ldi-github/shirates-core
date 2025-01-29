@@ -1,4 +1,4 @@
-# Branch function (ifImageIs, ifImageIsNot) (Shirates/Vision)
+# Branch function (ifImageIs, ifImageIsNot) (Vision)
 
 You can use special branch functions for image.
 

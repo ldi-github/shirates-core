@@ -1,4 +1,4 @@
-# data function (Shirates/Vision)
+# data function (Vision)
 
 You can configure any data in **data.json** file, and you can get properties of data with **data** function.
 

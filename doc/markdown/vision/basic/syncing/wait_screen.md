@@ -1,4 +1,4 @@
-# waitScreen, waitScreenOf (Shirates/Vision)
+# waitScreen, waitScreenOf (Vision)
 
 You can use **waitScreen** function to wait until specified screen is displayed.
 

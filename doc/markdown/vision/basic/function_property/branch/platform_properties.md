@@ -1,4 +1,4 @@
-# Platform property (Shirates/Vision)
+# Platform property (Vision)
 
 You can get information of the platform using these properties.
 

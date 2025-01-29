@@ -1,4 +1,4 @@
-# sendKeys (Shirates/Vision)
+# sendKeys (Vision)
 
 You can input text into input widget using **sendKeys** function.
 

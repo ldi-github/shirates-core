@@ -1,4 +1,4 @@
-# Descriptors (Shirates/Vision)
+# Descriptors (Vision)
 
 You can describe your test procedure using these functions. These are for readable documentation in Spec-Report.
 

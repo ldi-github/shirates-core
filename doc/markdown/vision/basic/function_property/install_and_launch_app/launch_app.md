@@ -1,4 +1,4 @@
-# launchApp, terminateApp (Shirates/Vision)
+# launchApp, terminateApp (Vision)
 
 You can launch or terminate app using these functions.
 
@@ -9,25 +9,15 @@ You can launch or terminate app using these functions.
 | launchApp    | Launch app. Accepts appName or packageOrBundleId or activityName    |
 | terminateApp | Terminate app. Accepts appName or packageOrBundleId or activityName |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### LaunchApp1.kt
 
-(`kotlin/tutorial/basic/LaunchApp1.kt`)
+(`src/test/kotlin/tutorial/basic/LaunchApp1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.appIs
-import shirates.core.driver.commandextension.launchApp
-import shirates.core.driver.commandextension.terminateApp
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class LaunchApp1 : UITest() {
-
     @Test
     fun launchApp() {
 
@@ -81,8 +71,6 @@ class LaunchApp1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

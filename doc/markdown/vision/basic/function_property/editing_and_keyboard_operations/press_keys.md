@@ -1,4 +1,4 @@
-# Press keys (Shirates/Vision)
+# Press keys (Vision)
 
 You can press key using these functions.
 

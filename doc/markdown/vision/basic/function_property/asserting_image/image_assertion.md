@@ -1,15 +1,6 @@
-# Image assertion (Shirates/Vision)
+# Image assertion (Vision)
 
 ## functions
-
-### Image Matching
-
-You can try image matching using these functions.
-
-| function          | return type      |
-|:------------------|------------------|
-| isImage           | ImageMatchResult |
-| isContainingImage | ImageMatchResult |
 
 ### Image Assertion
 
@@ -17,67 +8,10 @@ You can assert image using these functions.
 
 | function       |
 |:---------------|
-| imageIs        |
+| imageLabelIs   |
 | imageContains  |
 | existImage     |
 | dontExistImage |
-
-## Example
-
-### Getting image files
-
-Get image files for template matching.
-
-See [Cropping images for template matching](../../../in_action/image_matching/cropping_images_for_template_matching.md).
-
-### Images directory
-
-1. Create `images` directory under `screens` directory. Put images files in images directory.
-
-![cropped images](../../../in_action/_images/put_cropped_images_in_images_directory.png)
-
-### Screen nickname file
-
-Define image nicknames in screen nickname file. File name must be unique.
-
-#### [Clock(shared)].json
-
-(`testConfig/android/clock/screens/[Clock(shared)].json`)
-
-```
-{
-  "key": "[Clock(shared)]",
-
-  "selectors": {
-    "[Alarm]": "Alarm&&!#action_bar_title",
-    "[Alarm Tab]": "@Alarm",
-    "[Alarm Image]": "Alarm.png",
-    "[Alarm Image(selected)]": "Alarm(selected).png",
-
-    "[Clock]": "Clock&&!#action_bar_title",
-    "[Clock Tab]": "@Clock",
-    "[Clock Image]": "Clock.png",
-    "[Clock Image(selected)]": "Clock(selected).png",
-
-    "[Timer]": "Timer&&!#action_bar_title",
-    "[Timer Tab]": "@Timer",
-    "[Timer Image]": "Timer.png",
-    "[Timer Image(selected)]": "Timer(selected).png",
-
-    "[Stopwatch]": "Stopwatch&&!#action_bar_title",
-    "[Stopwatch Tab]": "@Stopwatch",
-    "[Stopwatch Image]": "Stopwatch.png",
-    "[Stopwatch Image(selected)]": "Stopwatch(selected).png",
-
-    "[Bedtime]": "Bedtime&&!#action_bar_title",
-    "[Bedtime Tab]": "@Bedtime",
-    "[Bedtime Image]": "Bedtime.png",
-    "[Bedtime Image(selected)]": "Bedtime(selected).png"
-
-  }
-
-}
-```
 
 ## Example
 
@@ -164,14 +98,6 @@ class AssertingImage1 : UITest() {
 
 }
 ```
-
-### On unexpected NG occurs
-
-You can see **template_image.png** (expected image) and **cropped_image.png** (actual image) in the log directory.
-
-### Note
-
-See [WARNING: An illegal reflective access operation has occurred](../../../troubleshooting/warnings/anIllegalRefrectiveAccessOperationHasOccured.md)
 
 ### Link
 

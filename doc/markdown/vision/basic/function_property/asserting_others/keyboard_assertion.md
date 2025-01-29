@@ -1,4 +1,4 @@
-# Keyboard assertion (Shirates/Vision)
+# Keyboard assertion (Vision)
 
 You can assert showing status of keyboard using these functions.
 

@@ -1,4 +1,4 @@
-# Asserting existence of image（existImage, dontExistImage）
+# // [To-Be-Deleted] Asserting existence of image（existImage, dontExistImage）
 
 To confirm the existence of an image, use the `existImage` function instead of `exist` function.
 

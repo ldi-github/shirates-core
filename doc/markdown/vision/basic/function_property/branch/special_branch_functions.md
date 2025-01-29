@@ -1,4 +1,4 @@
-# Special branch function (Shirates/Vision)
+# Special branch function (Vision)
 
 ## functions
 

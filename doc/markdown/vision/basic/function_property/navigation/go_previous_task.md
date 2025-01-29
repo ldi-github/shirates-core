@@ -1,4 +1,4 @@
-# goPreviousApp (Shirates/Vision)
+# goPreviousApp (Vision)
 
 You can go back to previous app using **goPreviousApps** function.
 

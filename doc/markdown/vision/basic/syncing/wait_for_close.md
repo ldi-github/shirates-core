@@ -1,4 +1,4 @@
-# waitForClose (Shirates/Vision)
+# waitForClose (Vision)
 
 In case of waiting for some element to disappear, you can use **waitForClose** function.
 

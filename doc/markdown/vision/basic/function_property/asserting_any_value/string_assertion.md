@@ -1,4 +1,4 @@
-# string value assertion (Shirates/Vision)
+# string value assertion (Vision)
 
 You can assert string value using these functions.
 
@@ -22,24 +22,15 @@ You can assert string value using these functions.
 | thisMatchesNot        | Assert that this does not match expected pattern      |
 | thisMatchesDateFormat | Assert that this matches expected date format pattern |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### AssertingAnyValue1.kt
 
 (`kotlin/tutorial/basic/AssertingAnyValue1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AssertingAnyValue1 : UITest() {
-
     @Test
     @Order(10)
     fun stringAssertion_OK() {
@@ -95,49 +86,6 @@ class AssertingAnyValue1 : UITest() {
             }
         }
     }
-
-    @Test
-    @Order(30)
-    fun booleanAssertion_OK() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    true.thisIsTrue()
-                    false.thisIsFalse()
-
-                    true.thisIsTrue("The value is true")
-                    false.thisIsFalse("The value is false")
-                }
-            }
-            case(2) {
-                expectation {
-                    it.isApp("Settings")
-                        .thisIsTrue("This app is <Settings>")
-                    it.isApp("Chrome")
-                        .thisIsFalse("This app is not <Chrome>")
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(40)
-    fun booleanAssertion_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    false.thisIsTrue()
-                }
-            }
-        }
-    }
-}
 ```
 
 ### Link

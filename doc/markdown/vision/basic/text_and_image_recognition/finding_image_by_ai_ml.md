@@ -1,4 +1,4 @@
-# Finding image by ML (Shirates/Vision)
+# Finding image by AI/ML (Vision)
 
 Shirates/Vision recognizes images in the screen by AI/ML feature of Vision Framework.
 
@@ -47,7 +47,16 @@ If you have to match images pixel-by-pixel, use classic mode (Boof-CV).
     }
 ```
 
-Right-click on `findImage()` and select `debug` to run test.
+### Running test
+
+1. Set `os` in `testrun.global.properties` to run as android (default is android).
+
+```properties
+## OS --------------------
+#os=ios
+```
+
+2. Right-click on `findImage()` and select `debug` to run test.
 
 ### Console output
 

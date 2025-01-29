@@ -1,4 +1,4 @@
-# waitForDisplay (Shirates/Vision)
+# waitForDisplay (Vision)
 
 In case of waiting for some element to appear, you can use **waitForDisplay** function.
 

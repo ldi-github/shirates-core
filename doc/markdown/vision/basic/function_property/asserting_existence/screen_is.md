@@ -1,4 +1,4 @@
-# Screen assertion (Shirates/Vision)
+# Screen assertion (Vision)
 
 You can assert screen using **screenIs** function.
 

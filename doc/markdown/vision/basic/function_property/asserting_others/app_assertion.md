@@ -1,4 +1,4 @@
-# App assertion (Shirates/Vision)
+# App assertion (Vision)
 
 You can assert app using these functions.
 

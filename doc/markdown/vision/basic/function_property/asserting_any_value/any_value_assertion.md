@@ -1,4 +1,4 @@
-# Any value assertion (Shirates/Vision)
+# Any value assertion (Vision)
 
 You can assert any value using these functions.
 
@@ -11,25 +11,15 @@ You can assert any value using these functions.
 | thisIsTrue  | Assert that this value is true               |
 | thisIsFalse | Assert that this value is false              |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### AssertingAnyValue1.kt
 
-(`kotlin/tutorial/basic/AssertingAnyValue1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingAnyValue1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-import java.util.*
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AssertingAnyValue1 : UITest() {
-
     @Test
     @Order(10)
     fun stringAssertion_OK() {
@@ -166,8 +156,6 @@ class AssertingAnyValue1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

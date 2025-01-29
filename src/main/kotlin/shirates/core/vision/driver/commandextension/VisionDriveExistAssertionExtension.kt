@@ -86,6 +86,32 @@ internal fun VisionDrive.existCore(
 }
 
 /**
+ * existWithoutScroll
+ */
+fun VisionDrive.existWithoutScroll(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    waitSeconds: Double = 0.0,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    withoutScroll {
+        exist(
+            expression = expression,
+            language = language,
+            waitSeconds = waitSeconds,
+            swipeToSafePosition = swipeToSafePosition,
+            message = message,
+            func = func
+        )
+    }
+    return lastElement
+}
+
+
+/**
  * existAll
  */
 fun VisionDrive.existAll(
@@ -307,7 +333,6 @@ fun VisionDrive.existWithScrollLeft(
 fun VisionDrive.dontExist(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    allowScroll: Boolean = true,
     waitSeconds: Double = 0.0,
     message: String? = null,
     func: (VisionElement.() -> Unit)? = null
@@ -327,7 +352,7 @@ fun VisionDrive.dontExist(
         v = detectCore(
             selector = sel,
             language = language,
-            allowScroll = allowScroll,
+            allowScroll = null,
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
@@ -339,6 +364,7 @@ fun VisionDrive.dontExist(
         v.lastResult = LogType.NG
         throw error
     } else {
+        TestLog.ok(message = assertMessage)
         v.lastError = null
         v.lastResult = LogType.NONE
     }
@@ -350,6 +376,29 @@ fun VisionDrive.dontExist(
     sw.printInfo()
 
     return v
+}
+
+/**
+ * dontExistWithoutScroll
+ */
+fun VisionDrive.dontExistWithoutScroll(
+    expression: String,
+    language: String = PropertiesManager.visionOCRLanguage,
+    waitSeconds: Double = 0.0,
+    message: String? = null,
+    func: (VisionElement.() -> Unit)? = null
+): VisionElement {
+
+    withoutScroll {
+        dontExist(
+            expression = expression,
+            language = language,
+            waitSeconds = waitSeconds,
+            message = message,
+            func = func
+        )
+    }
+    return lastElement
 }
 
 /**
@@ -400,6 +449,38 @@ fun VisionDrive.existImage(
 }
 
 /**
+ * existImageWithoutScroll
+ */
+fun VisionDrive.existImageWithoutScroll(
+    label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    skinThickness: Int = 2,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    mergeIncluded: Boolean = false,
+    waitSeconds: Double = 0.0,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
+): VisionElement {
+
+    withoutScroll {
+        existImage(
+            label = label,
+            threshold = threshold,
+            skinThickness = skinThickness,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            waitSeconds = waitSeconds,
+            swipeToSafePosition = swipeToSafePosition,
+            message = message,
+        )
+    }
+
+    return lastElement
+}
+
+/**
  * dontExistImage
  */
 fun VisionDrive.dontExistImage(
@@ -440,6 +521,100 @@ fun VisionDrive.dontExistImage(
             throw error
         }
         TestLog.ok(message = assertMessage)
+    }
+
+    return lastElement
+}
+
+/**
+ * dontExistImageWithoutScroll
+ */
+fun VisionDrive.dontExistImageWithoutScroll(
+    label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    mergeIncluded: Boolean = false,
+    skinThickness: Int = 2,
+    waitSeconds: Double = 0.0,
+    message: String? = null,
+): VisionElement {
+
+    withoutScroll {
+        dontExistImage(
+            label = label,
+            threshold = threshold,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            skinThickness = skinThickness,
+            waitSeconds = waitSeconds,
+            message = message,
+        )
+    }
+
+    return lastElement
+}
+
+/**
+ * existImageWithScrollDown
+ */
+fun VisionDrive.existImageWithScrollDown(
+    label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    skinThickness: Int = 2,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    mergeIncluded: Boolean = false,
+    waitSeconds: Double = 0.0,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
+): VisionElement {
+
+    withScrollDown {
+        existImage(
+            label = label,
+            threshold = threshold,
+            skinThickness = skinThickness,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            waitSeconds = waitSeconds,
+            swipeToSafePosition = swipeToSafePosition,
+            message = message,
+        )
+    }
+
+    return lastElement
+}
+
+/**
+ * existImageWithScrollUp
+ */
+fun VisionDrive.existImageWithScrollUp(
+    label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    skinThickness: Int = 2,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    mergeIncluded: Boolean = false,
+    waitSeconds: Double = 0.0,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    message: String? = null,
+): VisionElement {
+
+    withScrollUp {
+        existImage(
+            label = label,
+            threshold = threshold,
+            skinThickness = skinThickness,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            waitSeconds = waitSeconds,
+            swipeToSafePosition = swipeToSafePosition,
+            message = message,
+        )
     }
 
     return lastElement

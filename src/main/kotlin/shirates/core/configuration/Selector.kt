@@ -79,11 +79,18 @@ class Selector(
         }
 
     /**
-     * textFilterForDetect
+     * textFiltersForDetect
      */
-    val textFilterForDetect: String?
+    val textFiltersForDetect: List<Filter>
         get() {
-            return text ?: textStartsWith ?: textContains ?: textEndsWith
+            val selectors = mutableListOf(this)
+            selectors.addAll(orSelectors)
+            val filters = mutableListOf<Filter>()
+            for (sel in selectors) {
+                filters.addAll(sel.filterMap.values)
+            }
+            val textFilters = filters.filter { it.name == "text" || it.name == "textContains" }
+            return textFilters
         }
 
     /**
@@ -91,7 +98,7 @@ class Selector(
      */
     val hasTextFilter: Boolean
         get() {
-            return textFilterForDetect != null || textMatches != null
+            return textFiltersForDetect.any() || textMatches != null
         }
 
     var capturable: String?

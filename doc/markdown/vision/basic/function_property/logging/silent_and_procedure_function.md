@@ -1,4 +1,4 @@
-# silent, procedure (Shirates/Vision)
+# silent, procedure (Vision)
 
 ## silent function
 

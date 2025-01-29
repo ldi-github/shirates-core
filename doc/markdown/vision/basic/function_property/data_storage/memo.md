@@ -1,4 +1,4 @@
-# memo (Shirates/Vision)
+# memo (Vision)
 
 You can write and read memo using these functions.
 

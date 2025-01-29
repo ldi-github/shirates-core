@@ -1,4 +1,4 @@
-# app (Shirates/Vision)
+# app (Vision)
 
 You can configure apps data in **apps.json** file, and you can get properties of apps with **app**
 function.

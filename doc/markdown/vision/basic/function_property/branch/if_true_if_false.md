@@ -1,4 +1,4 @@
-# Branch function (ifTrue, ifFalse) (Shirates/Vision)
+# Branch function (ifTrue, ifFalse) (Vision)
 
 You can use branch functions instead of Kotlin if-else statement.
 

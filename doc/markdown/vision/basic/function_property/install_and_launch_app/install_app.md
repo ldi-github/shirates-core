@@ -1,13 +1,15 @@
-# installApp, removeApp (Shirates/Vision)
+# installApp, removeApp (Vision)
 
 You can install app by app package file.
 
-Put your app's package file (`.apk` or `.app` or `.ipa`) in Download directory, set app file name to `appPackageFile` in
+Put your app's package file (`.apk` or `.app` or `.apks` or `.ipa`) in Download directory, set app file name to
+`appPackageFile` in
 `testConfig.json`.
 
 ## iOS package file (.app or .ipa)
 
-Use `.app` on simulator. Use `.ipa` on real device.
+Use `.app` on simulator. <br>
+Use `.ipa` on real device.
 
 ## Example
 
@@ -41,18 +43,7 @@ This is a sample configuration for Android apps.
   "capabilities": {
     "language": "en",
     "locale": "US"
-  },
-
-  "profiles": [
-    {
-      "profileName": "Android 14",
-      "tapAppIconMethod": "",
-      "tapAppIconMacro": "",
-      "capabilities": {
-        "platformVersion": "14"
-      }
-    }
-  ]
+  }
 
 }
 ```
@@ -71,26 +62,10 @@ This is a sample configuration for iOS apps.
 
   "packageOrBundleId": "com.example.ios.yourapp",
 
-  "#startupPackageOrBundleId": "",
-
-  "#startupActivity": "",
-
   "capabilities": {
-    "useJSONSource": true,
-    "showXcodeLog": true,
     "language": "en",
     "locale": "US"
-  },
-
-  "profiles": [
-    {
-      "profileName": "iPhone 13(15.5)",
-      "tapAppIconMethod": "",
-      "tapAppIconMacro": "",
-      "capabilities": {
-      }
-    }
-  ]
+  }
 
 }
 ```

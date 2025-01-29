@@ -1,4 +1,4 @@
-# Test result files (Shirates/Vision)
+# Test result files (Vision)
 
 Shirates outputs test result files at the end of test.
 

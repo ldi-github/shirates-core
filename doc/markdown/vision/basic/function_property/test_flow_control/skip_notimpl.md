@@ -1,4 +1,4 @@
-# Test flow control using SKIP, MANUAL, NOTIMPL (Shirates/Vision)
+# Test flow control using SKIP, MANUAL, NOTIMPL (Vision)
 
 You can skip or abort test using these functions.
 

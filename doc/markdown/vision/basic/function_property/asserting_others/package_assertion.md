@@ -1,4 +1,4 @@
-# Package assertion (Shirates/Vision)
+# Package assertion (Vision)
 
 You can assert package of current app using these functions.
 

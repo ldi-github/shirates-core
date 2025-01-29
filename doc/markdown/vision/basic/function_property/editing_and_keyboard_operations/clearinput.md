@@ -1,4 +1,4 @@
-# clearInput (Shirates/Vision)
+# clearInput (Vision)
 
 You can clear value of input widget using **clearInput** function.
 

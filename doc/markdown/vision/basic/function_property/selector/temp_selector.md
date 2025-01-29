@@ -1,4 +1,4 @@
-# tempSelector (Shirates/Vision)
+# tempSelector (Vision)
 
 You can register selector on demand using `tempSelector` function.
 

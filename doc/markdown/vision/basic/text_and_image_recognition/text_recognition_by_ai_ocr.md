@@ -1,4 +1,4 @@
-# Text Recognition by AI-OCR (Shirates/Vision)
+# Text Recognition by AI-OCR (Vision)
 
 Shirates/Vision recognizes texts in the screen by AI-OCR feature of Vision Framework.
 
@@ -43,7 +43,16 @@ If you have to avoid the cons, use classic mode.
     }
 ```
 
-Right-click on `detect()` and select `debug` to run test.
+### Running test
+
+1. Set `os` in `testrun.global.properties` to run as android (default is android).
+
+```properties
+## OS --------------------
+#os=ios
+```
+
+2. Right-click on `detect()` and select `debug` to run test.
 
 ### Console output
 

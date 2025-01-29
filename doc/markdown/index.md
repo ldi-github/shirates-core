@@ -26,22 +26,30 @@
 - [Encoding setting for properties file (IntelliJ IDEA)](common/tool_settings/properties_file_encoding.md)
 - [Android Device settings](common/recommended_settings/recommended_settings_android.md)
 
-### Creating project (Shirates/Vision)
+### Switching environment
+
+- [Switching Android/iOS](vision/basic/switching_environment/switching_android_ios.md)
+- [Switching device](vision/basic/switching_environment/switching_device.md)
+- [Switching log language](common/message_and_language/log_language.md)
+- [Switching AI-OCR language](vision/basic/switching_environment/switching_ai_ocr_language.md)
+
+### Creating project
 
 - [Creating project](vision/basic/creating_project/creating_project.md)
 - [Test Configuration template](vision/basic/creating_project/test_configuration_template.md)
 
-### Creating TestClass (Shirates/Vision)
+### Creating TestClass
 
 - [Creating TestClass](vision/basic/creating_testclass/creating_testclass.md)
 - [Detect and assert](vision/basic/creating_testclass/detect_and_assert.md)
 - [Test code structure](vision/basic/creating_testclass/testcode_structure.md)
-- [Test result files](vision/basic/creating_testclass/test_result_files.md)
+
+[//]: # (- [Test result files]&#40;vision/basic/creating_testclass/test_result_files.md&#41;)
 
 ### Text and image recognition by Computer Vision
 
 - [Text recognition by AI-OCR](vision/basic/text_and_image_recognition/text_recognition_by_ai_ocr.md)
-- [Finding image by ML](vision/basic/text_and_image_recognition/finding_image_by_ml.md)
+- [Finding image by AI/ML](vision/basic/text_and_image_recognition/finding_image_by_ai_ml.md)
 - [Learning images](vision/basic/text_and_image_recognition/learning_images.md)
 - [Using CheckStateClassifier](vision/basic/text_and_image_recognition/using_check_state_classifier.md)
 - [Using DefaultClassifier](vision/basic/text_and_image_recognition/using_default_classifier.md)
@@ -79,20 +87,21 @@
     - [swipe, flick](vision/basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](vision/basic/function_property/swipe_screen/scroll.md)
     - [Determining scrollable area](vision/basic/function_property/swipe_screen/determining_scrollable_area.md)
-- Asserting attribute
-    - [text assertion](vision/basic/function_property/asserting_attribute/text_assertion.md)
+- Getting image
+    - [findImage](vision/basic/function_property/getting_image/find_image.md)
+    - [Relative text (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text.md)
+    - [Relative image (leftItem, rightItem, belowItem, aboveItem)](vision/basic/function_property/getting_image/relative_image.md)
+- Asserting text
+    - [Text assertion](vision/basic/function_property/asserting_attribute/text_assertion.md)
+- Asserting image
+    - [Image assertion](vision/basic/function_property/asserting_image/image_assertion.md)
 - Asserting any value
     - [Any value assertion](vision/basic/function_property/asserting_any_value/any_value_assertion.md)
     - [String value assertion](vision/basic/function_property/asserting_any_value/string_assertion.md)
 - Asserting existence
-    - [Existence assertion](vision/basic/function_property/asserting_existence/existance_assertion.md)
-    - [Existence assertion in cell](vision/basic/function_property/asserting_existence/in_cell_existance_assertion.md)
+    - [Text existence assertion](vision/basic/function_property/asserting_existence/text_existance_assertion.md)
+    - [Image existence assertion](vision/basic/function_property/asserting_existence/image_existance_assertion.md)
     - [Screen assertion](vision/basic/function_property/asserting_existence/screen_is.md)
-- Find image
-    - [find image](vision/basic/function_property/find_image/find_image.md)
-- Asserting image
-    - [Image assertion](vision/basic/function_property/asserting_image/image_assertion.md)
-    - [Existence assertion of image (existImage, dontExistImage)](vision/basic/function_property/asserting_image/image_assertion.md)
 - Asserting others
     - [App assertion](vision/basic/function_property/asserting_others/app_assertion.md)
     - [Keyboard assertion](vision/basic/function_property/asserting_others/keyboard_assertion.md)

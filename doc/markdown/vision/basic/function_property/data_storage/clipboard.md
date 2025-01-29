@@ -1,4 +1,4 @@
-# clipboard (Shirates/Vision)
+# clipboard (Vision)
 
 You can write to and read from clipboard using these functions.
 

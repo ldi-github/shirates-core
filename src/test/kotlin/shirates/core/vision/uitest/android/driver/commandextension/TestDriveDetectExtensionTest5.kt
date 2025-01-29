@@ -10,7 +10,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class TestDriveSelectExtensionTest5 : VisionTest() {
+class TestDriveDetectExtensionTest5 : VisionTest() {
 
     @Test
     fun canDetectWithoutScroll() {

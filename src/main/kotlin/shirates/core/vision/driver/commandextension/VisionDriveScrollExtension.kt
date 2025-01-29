@@ -761,3 +761,65 @@ fun VisionDrive.withoutScroll(
 
     return lastElement
 }
+
+///**
+// * scanElements
+// */
+//fun VisionDrive.scanElements(
+//    scrollFrame: String = "",
+//    direction: ScrollDirection = ScrollDirection.Down,
+//    startMarginRatio: Double = testContext.getScrollStartMarginRatio(direction),
+//    endMarginRatio: Double = testContext.getScrollEndMarginRatio(direction),
+//    maxScrollTimes: Int = testContext.scrollMaxCount,
+//    durationSeconds: Double = testContext.swipeDurationSeconds,
+//): VisionElement {
+//
+//    val command = "scanElements"
+//    val message = message(id = command, arg1 = direction.toString())
+//
+//    val context = TestDriverCommandContext(null)
+//    context.execOperateCommand(command = command, message = message) {
+//        useCache {
+//            val lineNo = TestLog.nextLineNo
+//
+//            TestElementCache.scanResults.clear()
+//            TestDriver.refreshCache()
+//            TestElementCache.scanResults.add(
+//                ScanRecord(
+//                    lineNo = lineNo,
+//                    sourceContent = TestElementCache.recognizedJson,
+//                    contentType = ScanRecord.ContentType.json,
+//                    element = TestElementCache.rootElement
+//                )
+//            )
+//            TestDriver.autoScreenshot()
+//
+//            doUntilScrollStop(
+//                repeat = 1,
+//                maxLoopCount = maxScrollTimes,
+//                direction = direction,
+//                scrollDurationSeconds = durationSeconds,
+//                startMarginRatio = startMarginRatio,
+//                endMarginRatio = endMarginRatio,
+//            ) {
+//                val lastJson = TestElementCache.scanResults.last().sourceContent
+//                val thisJson = TestElementCache.recognizedJson
+//                if (thisJson != lastJson) {
+//                    TestElementCache.scanResults.add(
+//                        ScanRecord(
+//                            lineNo = lineNo,
+//                            sourceContent = thisJson,
+//                            contentType = ScanRecord.ContentType.json,
+//                            element = TestElement.emptyElement
+//                        )
+//                    )
+//                }
+//
+//                false
+//            }
+//        }
+//    }
+//    TestLog.trace("scanElements completed.(pageCount=${TestElementCache.scanResults.count()})")
+//
+//    return lastElement
+//}

@@ -7,6 +7,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
+import shirates.core.logging.printInfo
 import shirates.core.testcode.Must
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.commandextension.*
@@ -15,10 +16,27 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class TestDriveSelectExtensionTest1 : VisionTest() {
+class TestDriveDetectExtensionTest1 : VisionTest() {
+
+    @Test
+    fun detect() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
+                    v1 = it.detect("Apps||Notifications")
+                }.expectation {
+                    printInfo("v1.text=${v1.text}")
+                    v1.isFound.thisIsTrue()
+                }
+            }
+        }
+    }
 
 //    @Test
-//    fun select_waitSeconds() {
+//    fun detect_waitSeconds() {
 //
 //        // Arrange
 //        it.macro("[Android Settings Top Screen]")
@@ -62,7 +80,7 @@ class TestDriveSelectExtensionTest1 : VisionTest() {
 
     @Must
     @Test
-    fun select_selectWithScrollDown_selectWithScrollUp() {
+    fun detect_selectWithScrollDown_detectWithScrollUp() {
 
         scenario {
             case(1) {
@@ -103,7 +121,7 @@ class TestDriveSelectExtensionTest1 : VisionTest() {
     }
 
     @Test
-    fun canSelectInScanResults() {
+    fun canDetectInScanResults() {
 
         scenario {
             case(1) {

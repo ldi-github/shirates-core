@@ -1,4 +1,4 @@
-# info, warn (Shirates/Vision)
+# info, warn (Vision)
 
 You can use info and warn function to output additional information.
 

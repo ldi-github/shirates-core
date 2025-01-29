@@ -1,4 +1,4 @@
-# Parameters
+# Parameters (Vision/Classic)
 
 In testrun files and testConfig files you can set parameters below.
 

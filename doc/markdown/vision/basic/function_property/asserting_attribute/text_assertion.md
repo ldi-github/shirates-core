@@ -1,96 +1,63 @@
-# text assertion (Shirates/Vision)
+# Text assertion (Vision)
 
-You can assert the value of `text` or `label` or `value` attribute of the element using these functions.
+You can assert the value of `text` using these functions.
 
 ## functions
 
-| function              |
-|:----------------------|
-| textIs                |
-| textIsNot             |
-| textStartsWith        |
-| textStartsWithNot     |
-| textContains          |
-| textContainsNot       |
-| textEndsWith          |
-| textEndsWithNot       |
-| textMatches           |
-| textMatchesNot        |
-| textMatchesDateFormat |
-| textIsEmpty           |
-| textIsNotEmpty        |
+| function    |
+|:------------|
+| textIs      |
+| rightTextIs |
+| leftTextIs  |
+| belowTextIs |
+| aboveTextIs |
 
-### Note
+## Sample code
 
-`text` attribute is for Android.
+[Getting samples](../../getting_samples.md)
 
-`label` attribute and `value` attribute are for iOS. `value` attribute is applied when `label` attribute is empty.
+### AssertingText1.kt
 
-![](../../_images/xml_data_text_label_value.png)
-
-## Example
-
-### AssertingAttribute1.kt
-
-(`kotlin/tutorial/basic/AssertingAttribute1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingText1.kt`)
 
 ```kotlin
-@Test
-@Order(10)
-fun textAssertion_OK() {
+    @Test
+    @Order(10)
+    fun textAssertion_belowTextis_aboveTextIs() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.action {
-                it.select("Network & internet", log = true)
-            }.expectation {
-                it
-                    .textIs("Network & internet")
-                    .textIsNot("Notifications")
-
-                    .textStartsWith("Network &")
-                    .textStartsWithNot("Connected")
-
-                    .textContains("work & int")
-                    .textContainsNot("device")
-
-                    .textEndsWith("& internet")
-                    .textEndsWithNot("devices")
-
-                    .textMatches("^Net.*")
-                    .textMatchesNot("^Connected.*")
-
-                    .textIsNotEmpty()
-            }
-        }
-        case(2) {
-            action {
-                it.select("#account_avatar", log = true)
-            }.expectation {
-                it.textIsEmpty()
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    it.detect("Network & internet")
+                }.expectation {
+                    it.textIs("Network & internet")
+                        .belowTextIs("Mobile, Wi-Fi, hotspot")
+                        .aboveTextIs("Network & internet")
+                }
             }
         }
     }
-}
 
-@Test
-@Order(20)
-fun textAssertion_NG() {
+    @Test
+    @Order(20)
+    fun textAssertion_rightTextIs_leftTextIs() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Top Screen]")
-            }.action {
-                it.select("Network & internet", log = true)
-            }.expectation {
-                it.textIs("Connected devices")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Maps Top Screen]")
+                }.action {
+                    it.detect("Restaurants")
+                }.expectation {
+                    it.textIs("Restaurants")
+                        .rightTextIs("Gas")
+                        .leftTextIs("Restaurants")
+                }
             }
         }
     }
-}
 ```
 
 ### Link

@@ -1,4 +1,4 @@
-# Macro
+# Macro (Shiraetes/Vision)
 
 It's very important to reuse test code. You can register routine work as macro.
 

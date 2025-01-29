@@ -1,4 +1,4 @@
-# Branch function (ifStringIs, ifStartsWith, etc) (Shirates/Vision)
+# Branch function (ifStringIs, ifStartsWith, etc) (Vision)
 
 You can use branch functions for string.
 

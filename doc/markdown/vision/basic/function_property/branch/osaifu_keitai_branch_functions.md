@@ -1,4 +1,4 @@
-# OsaifuKeitai function (Shirates/Vision)
+# OsaifuKeitai function (Vision)
 
 You can use special branch functions for [Osaifu-Keitai](https://en.wikipedia.org/wiki/Osaifu-Keitai).
 

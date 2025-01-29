@@ -1,4 +1,4 @@
-# scroll (Shirates/Vision)
+# scroll (Vision)
 
 You can scroll screen using these functions.
 
@@ -20,24 +20,15 @@ You can scroll screen using these functions.
 | withScrollLeft    | select element with scrolling left      |
 | withoutScroll     | select element without scrolling        |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### Scroll1.kt
 
 (`kotlin/tutorial/basic/Scroll1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Scroll1 : UITest() {
-
     @Test
     @Order(10)
     fun scrollDown_scrollUp() {
@@ -57,10 +48,10 @@ class Scroll1 : UITest() {
             case(2) {
                 action {
                     it
-                        .scrollDown(durationSeconds = 5.0, startMarginRatio = 0.1)
-                        .scrollDown(durationSeconds = 3.0, startMarginRatio = 0.3)
-                        .scrollUp(durationSeconds = 5.0, startMarginRatio = 0.1)
-                        .scrollUp(durationSeconds = 3.0, startMarginRatio = 0.3)
+                        .scrollDown(scrollDurationSeconds = 5.0, startMarginRatio = 0.1)
+                        .scrollDown(scrollDurationSeconds = 3.0, startMarginRatio = 0.3)
+                        .scrollUp(scrollDurationSeconds = 5.0, startMarginRatio = 0.1)
+                        .scrollUp(scrollDurationSeconds = 3.0, startMarginRatio = 0.3)
                 }
             }
         }
@@ -77,7 +68,7 @@ class Scroll1 : UITest() {
                 }.action {
                     it.scrollToBottom(repeat = 2)
                 }.expectation {
-                    it.exist("[Tips & support]")
+                    it.exist("Tips & support")
                 }
             }
             case(2) {
@@ -101,14 +92,14 @@ class Scroll1 : UITest() {
                 }.expectation {
                     withScrollDown {
                         it
-                            .select("[Notifications]").textIs("Notifications")
-                            .select("[Accessibility]").textIs("Accessibility")
-                            .select("[Tips & support]").textIs("Tips & support")
+                            .detect("Notifications").textIs("Notifications")
+                            .detect("Accessibility").textIs("Accessibility")
+                            .detect("Tips & support").textIs("Tips & support")
                     }
                     withScrollUp {
                         it
-                            .select("[Accessibility]").textIs("Accessibility")
-                            .select("[Notifications]").textIs("Notifications")
+                            .detect("Accessibility").textIs("Accessibility")
+                            .detect("Notifications").textIs("Notifications")
                     }
                 }
             }
@@ -116,22 +107,22 @@ class Scroll1 : UITest() {
                 expectation {
                     withScrollDown {
                         it
-                            .exist("[Notifications]")
-                            .exist("[Accessibility]")
-                            .exist("[Tips & support]")
+                            .exist("Notifications")
+                            .exist("Accessibility")
+                            .exist("Tips & support")
                     }
                     withScrollUp {
                         it
-                            .exist("[Tips & support]")
-                            .exist("[Accessibility]")
-                            .exist("[Notifications]")
+                            .exist("Tips & support")
+                            .exist("Accessibility")
+                            .exist("Notifications")
                     }
                 }
             }
             case(3) {
                 action {
                     withScrollDown {
-                        it.tap("[Accessibility]")
+                        it.tap("Accessibility")
                     }
                 }.expectation {
                     it.screenIs("[Accessibility Screen]")
@@ -139,9 +130,9 @@ class Scroll1 : UITest() {
             }
             case(4) {
                 action {
-                    it.tap("[←]")
+                    it.pressBack()
                     withScrollUp {
-                        it.tap("[Network & internet]")
+                        it.tap("Network & internet")
                     }
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
@@ -149,8 +140,6 @@ class Scroll1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

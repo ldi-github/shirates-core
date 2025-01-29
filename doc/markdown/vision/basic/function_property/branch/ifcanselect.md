@@ -1,4 +1,4 @@
-# Branch function (ifCanSelect, ifCanSelectNot) (Shirates/Vision)
+# Branch function (ifCanSelect, ifCanSelectNot) (Vision)
 
 You can use special branch functions for element.
 

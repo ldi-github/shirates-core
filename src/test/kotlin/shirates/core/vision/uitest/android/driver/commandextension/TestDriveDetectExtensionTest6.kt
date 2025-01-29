@@ -13,7 +13,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("testConfig/android/maps/testrun.properties")
-class TestDriveSelectExtensionTest6 : VisionTest() {
+class TestDriveDetectExtensionTest6 : VisionTest() {
 
     @Test
     @Order(10)

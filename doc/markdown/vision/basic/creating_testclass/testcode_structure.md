@@ -1,4 +1,4 @@
-# Test code structure (Shirates/Vision)
+# Test code structure (Vision)
 
 ## scenario and case
 
@@ -56,6 +56,17 @@ class TestScenarioAndTestCase1 : VisionTest() {
     }
 }
 ```
+
+### Running test
+
+1. Set `os` in `testrun.global.properties` to run as android (default is android).
+
+```properties
+## OS --------------------
+#os=ios
+```
+
+2. Right-click on the `TestScenarioAndTestCase1` and select `Debug`.
 
 ## condition-action-expectation (CAE)
 

@@ -217,7 +217,6 @@ fun VisionDrive.screenIs(
                     onIrregular?.invoke()
                 },
             ) {
-//                screenshot(force = true)
                 match = isScreen(screenName = screenName)
                 match
             }
@@ -230,8 +229,8 @@ fun VisionDrive.screenIs(
             TestDriver.currentScreen = "?"
             lastElement.lastResult = LogType.NG
 
-            val message = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName)"
-            val ex = TestNGException(message, lastElement.lastError)
+            val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName)"
+            val ex = TestNGException(msg, lastElement.lastError)
             throw ex
         }
     }

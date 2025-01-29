@@ -1,4 +1,4 @@
-# account (Shirates/Vision)
+# account (Vision)
 
 You can configure account data in **accounts.json** file, and you can get properties of accounts with **account**
 function.

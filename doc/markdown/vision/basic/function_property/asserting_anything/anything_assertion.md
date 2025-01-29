@@ -1,4 +1,4 @@
-# Anything assertion(verify function) (Shirates/Vision)
+# Anything assertion(verify function) (Vision)
 
 You can assert anything using `verify` function.
 

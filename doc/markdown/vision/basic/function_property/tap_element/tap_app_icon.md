@@ -1,4 +1,4 @@
-# tapAppIcon (Shirates/Vision)
+# tapAppIcon (Vision)
 
 You can tap app icon and launch app using **tapAppIcon** function.
 
@@ -8,24 +8,15 @@ You can tap app icon and launch app using **tapAppIcon** function.
 |:-----------|:-------------------------------------------|
 | tapAppIcon | Tap app icon on home or app launcher menu. |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### TapAppIcon1.kt
 
-(`kotlin/tutorial/basic/TapAppIcon1.kt`)
+(`src/test/kotlin/tutorial/basic/TapAppIcon1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.appIs
-import shirates.core.driver.commandextension.launchApp
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class TapAppIcon1 : UITest() {
-
     @Test
     fun tapAppIcon() {
 
@@ -46,8 +37,6 @@ class TapAppIcon1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

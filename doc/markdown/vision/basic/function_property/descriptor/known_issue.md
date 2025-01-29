@@ -1,4 +1,4 @@
-# knownIssue (Shirates/Vision)
+# knownIssue (Vision)
 
 You can describe known issue using **knownIssue** function.
 

@@ -6,10 +6,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
-import shirates.core.vision.driver.commandextension.detect
-import shirates.core.vision.driver.commandextension.dontExist
-import shirates.core.vision.driver.commandextension.macro
-import shirates.core.vision.driver.commandextension.textIs
+import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
@@ -34,55 +31,104 @@ class TestDriveAssertionExtensionTest3 : VisionTest() {
         }
     }
 
-//    @Test
-//    fun dontExistWithScrollDown() {
-//
-//        scenario {
-//            case(1) {
-//                condition {
-//                    it.macro("[Android Settings Top Screen]")
-//                }.expectation {
-//                    it.dontExistWithScrollDown("no exist")
-//                }
-//            }
-//            case(2) {
-//                condition {
-//                    it.flickBottomToTop()
-//                }.expectation {
-//                    assertThatThrownBy {
-//                        it.dontExistWithScrollDown("System")
-//                    }.isInstanceOf(TestNGException::class.java)
-//                        .hasMessage("<System> does not exist (scroll down)")
-//                }
-//            }
-//
-//        }
-//    }
-//
-//    @Test
-//    fun dontExistWithScrollUp() {
-//
-//        scenario {
-//            case(1) {
-//                condition {
-//                    it.macro("[Android Settings Top Screen]")
-//                }.expectation {
-//                    it.dontExistWithScrollUp("no exist")
-//                }
-//            }
-//            case(2) {
-//                condition {
-//                    it.flickBottomToTop()
-//                }.expectation {
-//                    assertThatThrownBy {
-//                        it.dontExistWithScrollUp("Network & internet")
-//                    }.isInstanceOf(TestNGException::class.java)
-//                        .hasMessage("<Network & internet> does not exist (scroll up)")
-//                }
-//            }
-//        }
-//    }
-//
+    @Test
+    fun withScrollDown_dontExist() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    withScrollDown {
+                        it.dontExist("no exist")
+                    }
+                }
+            }
+            case(2) {
+                condition {
+                    it.flickBottomToTop()
+                }.expectation {
+                    assertThatThrownBy {
+                        withScrollDown {
+                            it.dontExist("System")
+                        }
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("<System> does not exist")
+                }
+            }
+
+        }
+    }
+
+    @Test
+    fun withScrollUp_dontExist() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    withScrollUp {
+                        it.dontExist("no exist")
+                    }
+                }
+            }
+            case(2) {
+                condition {
+                    it.flickBottomToTop()
+                }.expectation {
+                    assertThatThrownBy {
+                        withScrollUp {
+                            it.dontExist("Network & internet")
+                        }
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("<Network & internet> does not exist")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun withScrollDown_existWithoutScroll() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.expectation {
+                    withScrollDown() {
+                        it.existWithoutScroll("Network & internet")    // OK
+                        assertThatThrownBy {
+                            it.existWithoutScroll("System")    // NG
+                        }.isInstanceOf(TestNGException::class.java)
+                            .hasMessage("<System> exists")
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun withScrollUp_dontExistWithoutScroll() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                        .flickAndGoDown()
+                }.expectation {
+                    withScrollUp {
+                        it.dontExistWithoutScroll("Display")    // OK
+                        assertThatThrownBy {
+                            it.dontExistWithoutScroll("System")    // NG
+                        }.isInstanceOf(TestNGException::class.java)
+                            .hasMessage("<System> does not exist")
+                    }
+                }
+            }
+        }
+    }
+
 //    @Test
 //    fun dontExistAll() {
 //

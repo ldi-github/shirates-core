@@ -232,32 +232,27 @@ Let's see demonstration.
 
 ### Run AndroidSettingsVisionDemo
 
-1. Launch the AVD of Android 14 from **Device Manager**.
-1. Open `shirates-core-vision-samples_en` project in IntelliJ, right click on
-   `kotlin/demo/vision/AndroidSettingsVisionDemo` and
-   select
-   **Debug 'AndroidSettingsVisionDemo'** ![](vision/_images/android_settings_vision_demo.png)
-3. You'll see logs in the console like this. ![](vision/_images/console_android.png)
-4. Click the link to open the log directory.
-5. Open **_Report(simple).html
+1. Open `shirates-core-vision-samples_en` project in IntelliJ, <br>
+   right click on `kotlin/demo/vision/AndroidSettingsVisionDemo` <br> and select
+   **Debug 'AndroidSettingsVisionDemo'** <br> ![](vision/_images/android_settings_vision_demo.png)
+2. You'll see logs in the console like this. ![](vision/_images/console_android.png)
+3. Click the link to open the log directory.
+4. Open **_Report(simple).html
    **. <br> ![](vision/_images/log_directory.png) <br> ![](vision/_images/report_simple.png) <br><br>
-6. Open **AndroidSettingsVisionDemo@a.xlsx**. <br> ![](vision/_images/android_settings_vision_demo_xls.png)
+5. Open **AndroidSettingsVisionDemo@a.xlsx**. <br> ![](vision/_images/android_settings_vision_demo_xls.png)
 
 <br>
 
 ### Run iOSSettingsVisionDemo
 
-1. Open Xcode and setup iOS Simulator. `iPhone 16(iOS 18.2)`
-
-2. Open `shirates-core-vision-samples_en` project in IntelliJ, right click on
-   `src/test/Kotlin/demo/vision/iOSSettingsVisionDemo`
-   and select
-   **Debug 'iOSSettingsVisionDemo'**
-3. You'll see logs in the console like this. ![](vision/_images/console_ios.png)
-4. Click the link to open the log directory.
-5. Open **_Report(simple).html
+1. Open `shirates-core-vision-samples_en` project in IntelliJ, <br>
+   right click on `src/test/Kotlin/demo/vision/iOSSettingsVisionDemo` <br>
+   and select **Debug 'iOSSettingsVisionDemo'**
+2. You'll see logs in the console like this. ![](vision/_images/console_ios.png)
+3. Click the link to open the log directory.
+4. Open **_Report(simple).html
    **. <br> ![](vision/_images/log_directory.png) <br> ![](_images/report_simple_ios.png) <br><br>
-6. Open **iOSSettingsVisionDemo@i.xlsx**. <br> ![](vision/_images/ios_settings_vision_demo.png)
+5. Open **iOSSettingsVisionDemo@i.xlsx**. <br> ![](vision/_images/ios_settings_vision_demo.png)
 
 ### Link
 

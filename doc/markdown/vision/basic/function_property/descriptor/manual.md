@@ -1,4 +1,4 @@
-# manual (Shirates/Vision)
+# manual (Vision)
 
 In general, you can not automate all of your manual test cases because of reasons. Instead, you can describe manual
 procedure using **manual** function.

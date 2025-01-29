@@ -1,4 +1,4 @@
-# Using DefaultClassifier (Shirates/Vision)
+# Using DefaultClassifier (Vision)
 
 Shirates/Vision classifies the image using DefaultClassifier.
 
@@ -172,7 +172,16 @@ Right-click on `imageLabelIs()` and select `debug` to run test.
     }
 ```
 
-Right-click on `findImage()` and select `debug` to run test.
+### Running test
+
+1. Set `os` in `testrun.global.properties` to run as android (default is android).
+
+```properties
+## OS --------------------
+#os=ios
+```
+
+2. Right-click on `findImage()` and select `debug` to run test.
 
 ### Console output
 

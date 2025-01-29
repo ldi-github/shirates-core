@@ -10,7 +10,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class TestDriveSelectExtensionTest4 : VisionTest() {
+class TestDriveDetectExtensionTest4 : VisionTest() {
 
     @Test
     fun canDetectWithScrollDown_canDetectWithScrollUp() {

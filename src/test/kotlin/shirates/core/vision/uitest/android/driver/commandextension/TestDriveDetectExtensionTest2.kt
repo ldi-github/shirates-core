@@ -13,7 +13,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class TestDriveSelectExtensionTest2 : VisionTest() {
+class TestDriveDetectExtensionTest2 : VisionTest() {
 
     @Test
     fun selectInScanResults_withScrollRight_withScrollLeft() {

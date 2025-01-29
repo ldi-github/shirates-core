@@ -1,4 +1,4 @@
-# LanguageHelperAndroid (Shirates/Vision)
+# LanguageHelperAndroid (Vision)
 
 You can set android device language using these functions.
 

@@ -1,4 +1,4 @@
-# Creating TestClass (Shirates/Vision)
+# Creating TestClass (Vision)
 
 ## UITest class
 

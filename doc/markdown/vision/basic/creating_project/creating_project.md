@@ -1,4 +1,4 @@
-# Creating project (Shirates/Vision)
+# Creating project (Vision)
 
 ## Create new project
 

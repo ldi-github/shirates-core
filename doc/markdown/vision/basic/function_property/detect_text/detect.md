@@ -1,4 +1,4 @@
-# detect (Shirates/Vision)
+# detect (Vision)
 
 You can detect text element using these functions.
 

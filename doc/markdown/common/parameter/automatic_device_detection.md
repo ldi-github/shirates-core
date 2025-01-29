@@ -1,4 +1,4 @@
-# Automatic device detection with profile naming convention
+# Automatic device detection with profile naming convention (Vision/Classic)
 
 You can determine the virtual/real device to use in the test by profile naming convention.
 

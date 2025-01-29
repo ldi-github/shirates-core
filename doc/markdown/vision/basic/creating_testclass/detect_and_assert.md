@@ -8,7 +8,7 @@ You can detect text in the screen by **AI-OCR text recognition** and assert its 
 
 ### DetectAndAssert1.kt
 
-(`kotlin/tutorial_vision/basic/DetectAndAssert1.kt`)
+(`src/test/kotlin/tutorial/basic/DetectAndAssert1.kt`)
 
 ```kotlin
 package tutorial.basic
@@ -52,6 +52,17 @@ class DetectAndAssert1 : VisionTest() {
 }
 ```
 
+### Running test
+
+1. Set `os` in `testrun.global.properties` to run as android (default is android).
+
+```properties
+## OS --------------------
+#os=ios
+```
+
+2. Right-click on the test and select `Debug`.
+
 In the above example, **detect** function recognizes texts of the screenshot,
 finds the rectangle where text equals to "Settings"
 and returns the `VisionElement` object. `VisionElement` is extended by **textIs** extension function. When the text
@@ -59,14 +70,6 @@ equals to expected value, assertion log like below is output.
 
 ```
 [OK]	(textIs)	<Settings> is "Settings"
-```
-
-Shirates's APIs are designed as _fluent API_, so you can chain functions as follows.
-
-```kotlin
-it.detect("Settings")
-    .textIs("Settings")   // OK
-    .textIs("Network & internet")   // NG
 ```
 
 ### Link

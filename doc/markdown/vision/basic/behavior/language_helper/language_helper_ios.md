@@ -1,4 +1,4 @@
-# LanguageHelperIos (Shirates/Vision)
+# LanguageHelperIos (Vision)
 
 You can set iOS device language using these functions.
 

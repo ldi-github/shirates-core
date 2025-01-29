@@ -1,4 +1,4 @@
-# Screen identification using FeaturePrint and Text recognition (Shirates/Vision)
+# Screen identification using FeaturePrint and Text recognition (Vision)
 
 Shirates/Vision combines two techniques to identify screens.
 
@@ -34,8 +34,7 @@ in the template images and inspecting texts on them is required.
 
 ## Template screen images
 
-See
-```(vision/screens)```
+See ```vision/screens```
 
 ![](_images/template_screen_images.png)
 
@@ -88,6 +87,17 @@ You can append template images under the directory `vision/screens`.
         }
     }
 ```
+
+### Running test
+
+1. Set `os` in `testrun.global.properties` to run as android (default is android).
+
+```properties
+## OS --------------------
+#os=ios
+```
+
+2. Right-click on `airplaneModeSwitch()` and select `debug` to run test.
 
 ### Link
 

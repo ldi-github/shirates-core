@@ -1,4 +1,4 @@
-# Branch function (ifScreenIs, ifScreenIsNot) (Shirates/Vision)
+# Branch function (ifScreenIs, ifScreenIsNot) (Vision)
 
 You can use special branch functions for screen.
 

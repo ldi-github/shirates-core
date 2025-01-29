@@ -1,4 +1,4 @@
-# hideKeyboard (Shirates/Vision)
+# hideKeyboard (Vision)
 
 To hide software keyboard, you can use **hideKeyboard** function.
 
@@ -48,7 +48,7 @@ class AndroidKeyboard1 : UITest() {
 }
 ```
 
-####         
+####          
 
 ### Link
 

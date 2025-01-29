@@ -423,16 +423,21 @@ class VisionContext(
             v.selector = selector
             return v
         } else {
-            val text = selector.textFilterForDetect!!
-            val inJoinedText = selector.textContains != null
-            val v = detect(
-                text = text,
-                language = language,
-                inJoinedText = inJoinedText,
-            )
-            v.selector = selector
-            return v
+            for (filter in selector.textFiltersForDetect) {
+                val text = filter.value
+                val inJoinedText = filter.name == "textContains"
+                val v = detect(
+                    text = text,
+                    language = language,
+                    inJoinedText = inJoinedText,
+                )
+                if (v.isFound) {
+                    v.selector = Selector(expression = text)
+                    return v
+                }
+            }
         }
+        return VisionElement.emptyElement
     }
 
     /**

@@ -1,4 +1,4 @@
-# 画像が存在することの検証（existImage, dontExistImage）
+# [削除予定] 画像が存在することの検証（existImage, dontExistImage）
 
 画像の存在確認は通常の `exist` 関数ではなく、画像専用の `existImage` 関数を使用します。
 
@@ -95,7 +95,8 @@ class ExistDontExist2 : UITest() {
 ## サンプルの解説
 
 1. `ExistDontExist2`
-   を実行すると、画像マッチング用の画像が作成されます。Mapsアプリの画面をキャプチャして以下のディレクトリに画像ファイルが出力されます。<br><br>`testConfig/android/maps/screens/images/mapsTopScreen`
+   を実行すると、画像マッチング用の画像が作成されます。Mapsアプリの画面をキャプチャして以下のディレクトリに画像ファイルが出力されます。<br><br>
+   `testConfig/android/maps/screens/images/mapsTopScreen`
    <br><br> ![img.png](../../_images/setup_image_android_settings_top_screen.png) <br><br> ![img.png](../../_images/setup_image_android_settings_top_screen_2.png)
 
 <br>

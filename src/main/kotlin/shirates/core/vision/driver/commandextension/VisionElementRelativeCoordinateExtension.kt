@@ -78,10 +78,10 @@ internal fun VisionElement.rightLeftCore(
     val sortedElements =
         if (relative.isRight)
             elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.right <= it.rect.left }
-                .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
+                .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         else
             elms.filter { it.isSameRect(baseElement).not() && it.rect.right <= baseElement.rect.right }
-                .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
+                .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
     val v =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
         else sortedElements[pos - 1]

@@ -1,4 +1,4 @@
-# swipe, flick (Shirates/Vision)
+# swipe, flick (Vision)
 
 You can swipe or flick screen using these functions.
 
@@ -28,11 +28,15 @@ You can swipe or flick screen using these functions.
 | swipeElementToElement       | Swipe from the start element to the end element                 | n/a                                                   |
 | swipeElementToElementAdjust | Swipe from the start element to the end element with adjustment | n/a                                                   |
 
+## Sample code
+
+[Getting samples](../../getting_samples.md)
+
 ## swipeTo, swipeToAdjust
 
 ### Swipe1.kt
 
-(`kotlin/tutorial/basic/Swipe1.kt`)
+(`src/test/kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
     @Test
@@ -44,8 +48,8 @@ You can swipe or flick screen using these functions.
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("[Battery]")
-                        .swipeTo("[Network & internet]")
+                    it.detect("Battery")
+                        .swipeTo("Network & internet")
                 }.expectation {
                 }
             }
@@ -53,8 +57,8 @@ You can swipe or flick screen using these functions.
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("[Battery]")
-                        .swipeToAdjust("[Network & internet]")
+                    it.detect("Battery")
+                        .swipeToAdjust("Network & internet")
                 }.expectation {
                 }
             }
@@ -64,17 +68,13 @@ You can swipe or flick screen using these functions.
 
 **swipeTo** is not precise, but fast.
 
-![swipeTo](../../_images/swipeTo.png)
-
 **swipeToAdjust** is more precise, but slow.
-
-![swipeTo](../../_images/swipeToAdjust.png)
 
 ## swipeToCenter, swipeToTop, swipeToBottom
 
 ### Swipe1.kt
 
-(`kotlin/tutorial/basic/Swipe1.kt`)
+(`src/test/kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
     @Test
@@ -85,27 +85,27 @@ You can swipe or flick screen using these functions.
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                        .exist("[Notifications]")
-                        .exist("[Battery]")
+                        .exist("Notifications")
+                        .exist("Battery")
                 }.action {
-                    it.select("[Battery]")
+                    it.detect("Battery")
                         .swipeToCenterOfScreen()
-                        .swipeToTopOfScreen(durationSeconds = 10.0)
+                        .swipeToTopOfScreen(durationSeconds = 5.0)
                 }.expectation {
-                    it.dontExist("[Notifications]")
-                        .exist("[Storage]")
+                    it.dontExist("Notifications")
+                        .exist("Storage")
                 }
             }
             case(2) {
                 condition {
-                    it.exist("[Security & privacy]")
-                        .exist("[Location]")
+                    it.exist("Security & privacy")
+                        .exist("Location")
                 }.action {
-                    it.select("[Security & privacy]")
-                        .swipeToBottomOfScreen(durationSeconds = 10.0)
+                    it.detect("Security & privacy")
+                        .swipeToBottomOfScreen(durationSeconds = 5.0)
                 }.expectation {
-                    it.exist("[Security & privacy]")
-                        .dontExist("[Location]")
+                    it.exist("Security & privacy")
+                        .dontExist("Location")
                 }
             }
         }
@@ -116,7 +116,7 @@ You can swipe or flick screen using these functions.
 
 ### Swipe1.kt
 
-(`kotlin/tutorial/basic/Swipe1.kt`)
+(`src/test/kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
     @Test

@@ -1,4 +1,4 @@
-# Shell (Shirates/Vision)
+# Shell (Vision)
 
 You can execute shell command using these functions.
 
