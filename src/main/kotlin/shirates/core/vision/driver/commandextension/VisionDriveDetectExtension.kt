@@ -118,6 +118,7 @@ private fun VisionDrive.detectCoreCore(
     doUntilTrue(
         waitSeconds = waitSeconds,
         intervalSeconds = 1.0,
+        retryOnError = false,
         throwOnFinally = false,
         onBeforeRetry = {
             screenshot()

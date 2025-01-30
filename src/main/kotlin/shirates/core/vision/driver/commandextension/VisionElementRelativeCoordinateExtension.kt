@@ -2,10 +2,7 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
-import shirates.core.driver.RelativeDirection
-import shirates.core.driver.isAbove
-import shirates.core.driver.isLeft
-import shirates.core.driver.isRight
+import shirates.core.driver.*
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.VisionElement
@@ -60,7 +57,7 @@ internal fun VisionElement.rightLeftCore(
 ): VisionElement {
 
     val baseElement = this
-    val r = rootElement
+    val r = baseElement.lineRegionElement()
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
         containerImage = r.image,
@@ -77,10 +74,10 @@ internal fun VisionElement.rightLeftCore(
     val elms = horizontalBand.getElements().map { it as VisionElement }
     val sortedElements =
         if (relative.isRight)
-            elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.right <= it.rect.left }
+            elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerX <= it.rect.left }
                 .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         else
-            elms.filter { it.isSameRect(baseElement).not() && it.rect.right <= baseElement.rect.right }
+            elms.filter { it.isSameRect(baseElement).not() && it.rect.right <= baseElement.rect.centerX }
                 .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
     val v =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
@@ -156,12 +153,12 @@ internal fun VisionElement.aboveBelowCore(
     }
     val elms = verticalBand.getElements().map { it as VisionElement }
     val sortedElements =
-        if (relative.isAbove)
-            elms.filter { it.isSameRect(baseElement).not() && it.rect.bottom < baseElement.rect.top }
-                .sortedWith(compareByDescending<VisionElement> { it.rect.top }.thenBy { Math.abs(it.rect.centerX - this.rect.centerX) })
-        else
-            elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.bottom < it.rect.top }
+        if (relative.isBelow)
+            elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerY < it.rect.top }
                 .sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { Math.abs(it.rect.centerX - this.rect.centerX) })
+        else
+            elms.filter { it.isSameRect(baseElement).not() && it.rect.bottom < baseElement.rect.centerY }
+                .sortedWith(compareByDescending<VisionElement> { it.rect.top }.thenBy { Math.abs(it.rect.centerX - this.rect.centerX) })
     val v =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
         else sortedElements[pos - 1]

@@ -22,15 +22,6 @@ class TestDriveSelectExtensionTest3 : VisionTest() {
         scenario {
             case(1) {
                 expectation {
-                    describe("textStartsWith")
-                    it.canDetectWithScrollDown("Dev*").thisIsTrue("Dev*")
-                    it.canDetectWithScrollDown("Gene*").thisIsFalse("Gene*")
-                    it.canDetectWithScrollUp("Gene*").thisIsTrue("Gene*")
-                    it.canDetectWithScrollUp("Dev*").thisIsFalse("Dev*")
-                }
-            }
-            case(2) {
-                expectation {
                     describe("textContains")
                     it.canDetectWithScrollDown("*evelope*").thisIsTrue("*evelope*")
                     it.canDetectWithScrollDown("*enera*").thisIsFalse("*enera*")

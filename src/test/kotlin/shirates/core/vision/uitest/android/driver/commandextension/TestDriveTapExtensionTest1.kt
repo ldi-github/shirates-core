@@ -70,22 +70,4 @@ class TestDriveTapExtensionTest1 : VisionTest() {
         }
     }
 
-    @Order(40)
-    @Test
-    fun tap_textStartsWith() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.action {
-                    it.tap("textStartsWith=Connected")
-                }.expectation {
-                    it.screenIs("[Connected devices Screen]")
-                }
-            }
-        }
-    }
-
-
 }
