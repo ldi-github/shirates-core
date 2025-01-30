@@ -2,7 +2,9 @@
 
 You can describe known issue using **knownIssue** function.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### KnownIssues1.kt
 

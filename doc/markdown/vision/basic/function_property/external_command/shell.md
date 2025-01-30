@@ -9,7 +9,9 @@ You can execute shell command using these functions.
 | shell      | Execute shell                |
 | shellAsync | Execute shell asynchronously |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### Shell1.kt
 

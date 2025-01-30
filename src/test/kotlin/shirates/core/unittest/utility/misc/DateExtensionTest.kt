@@ -12,6 +12,101 @@ import java.util.*
 class DateExtensionTest : UnitTest() {
 
     @Test
+    fun toDateTest() {
+
+        /**
+         * yyyy/M/d
+         */
+        run {
+            val date = "2025/1/2".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(1)
+            assertThat(date.dayValue).isEqualTo(2)
+        }
+        run {
+            val date = "2025/1/23".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(1)
+            assertThat(date.dayValue).isEqualTo(23)
+        }
+        run {
+            val date = "2025/12/3".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(12)
+            assertThat(date.dayValue).isEqualTo(3)
+        }
+        /**
+         * yyyyMMdd
+         */
+        run {
+            val date = "20250102".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(1)
+            assertThat(date.dayValue).isEqualTo(2)
+        }
+        /**
+         * yyyy/MM/dd
+         */
+        run {
+            val date = "2025/01/02".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(1)
+            assertThat(date.dayValue).isEqualTo(2)
+        }
+        /**
+         * yyyyMMddHHmmss
+         */
+        run {
+            val date = "20250102030405".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(1)
+            assertThat(date.dayValue).isEqualTo(2)
+            assertThat(date.hourValue).isEqualTo(3)
+            assertThat(date.minuteValue).isEqualTo(4)
+            assertThat(date.secondValue).isEqualTo(5)
+        }
+        /**
+         * yyyyMMddHHmmssSSS
+         */
+        run {
+            val date = "20250102030405666".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(1)
+            assertThat(date.dayValue).isEqualTo(2)
+            assertThat(date.hourValue).isEqualTo(3)
+            assertThat(date.minuteValue).isEqualTo(4)
+            assertThat(date.secondValue).isEqualTo(5)
+            assertThat(date.millisecondValue).isEqualTo(666)
+        }
+        /**
+         * yyyy/MM/dd HH:mm:ss
+         */
+        run {
+            val date = "2025/01/02 03:04:05".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(1)
+            assertThat(date.dayValue).isEqualTo(2)
+            assertThat(date.hourValue).isEqualTo(3)
+            assertThat(date.minuteValue).isEqualTo(4)
+            assertThat(date.secondValue).isEqualTo(5)
+        }
+        /**
+         * yyyy/MM/dd HH:mm:ss.SSS
+         */
+        run {
+            val date = "2025/01/02 03:04:05.666".toDate()
+            assertThat(date.yearValue).isEqualTo(2025)
+            assertThat(date.monthValue).isEqualTo(1)
+            assertThat(date.dayValue).isEqualTo(2)
+            assertThat(date.hourValue).isEqualTo(3)
+            assertThat(date.minuteValue).isEqualTo(4)
+            assertThat(date.secondValue).isEqualTo(5)
+            assertThat(date.millisecondValue).isEqualTo(666)
+        }
+
+    }
+
+    @Test
     fun calendar() {
 
         // Arrange

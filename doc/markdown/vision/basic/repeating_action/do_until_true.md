@@ -17,6 +17,10 @@ You can repeat action until the action returns true using **doUntilTrue** functi
 | onError         | Function called on exception thrown.                       |
 | action          | Repeated action. Returns true(break loop) or false(retry). |
 
+## Sample code
+
+[Getting samples](../../getting_samples.md)
+
 ### DoUntilTrue1.kt
 
 (`kotlin/tutorial/basic/DoUntilTrue1.kt`)

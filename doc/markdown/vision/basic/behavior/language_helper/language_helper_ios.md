@@ -8,7 +8,9 @@ You can set iOS device language using these functions.
 |:------------|:--------------|
 | setLanguage | Set language. |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### SetLanguageOnIos1.kt
 

@@ -2,7 +2,9 @@
 
 You can register selector on demand using `tempSelector` function.
 
-## Example 1
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### TempSelector1.kt
 

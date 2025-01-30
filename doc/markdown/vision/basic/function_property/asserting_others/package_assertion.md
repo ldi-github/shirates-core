@@ -8,11 +8,13 @@ You can assert package of current app using these functions.
 |:----------|
 | packageIs |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### AssertingOthers1.kt
 
-(`kotlin/tutorial/basic/AssertingOthers1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingOthers1.kt`)
 
 ```kotlin
     @Test

@@ -198,7 +198,7 @@ fun VisionDrive.screenIs(
         return e.toVisionElement()
     }
 
-    if (VisionScreenRepository.isRegistered(screenName).not()) {
+    if (TestMode.isNoLoadRun.not() && VisionScreenRepository.isRegistered(screenName).not()) {
         throw TestConfigException("screenName $screenName is not registered in directory ${VisionScreenRepository.directory}.")
     }
 

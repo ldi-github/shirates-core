@@ -28,11 +28,11 @@ You can assert string value using these functions.
 
 ### AssertingAnyValue1.kt
 
-(`kotlin/tutorial/basic/AssertingAnyValue1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingAnyValue1.kt`)
 
 ```kotlin
     @Test
-    @Order(10)
+    @Order(20)
     fun stringAssertion_OK() {
 
         scenario {
@@ -72,7 +72,7 @@ You can assert string value using these functions.
     }
 
     @Test
-    @Order(20)
+    @Order(30)
     fun stringAssertion_NG() {
 
         scenario {
@@ -87,6 +87,8 @@ You can assert string value using these functions.
         }
     }
 ```
+
+![](_images/asserting_string_value.png)
 
 ### Link
 

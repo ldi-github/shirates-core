@@ -17,7 +17,9 @@ You can describe your test procedure using these functions. These are for readab
 
 **Note:** bullet, caption and comment can be customized in `spec.properties` resource file.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### Descriptor1.kt
 

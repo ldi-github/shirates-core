@@ -6,7 +6,7 @@ You can assert anything using `verify` function.
 
 ```kotlin
 it.verify("The packageName is \"com.android.settings\"") {
-    if (rootElement.packageName == "com.android.settings") {
+    if (packageName == "com.android.settings") {
         OK()
     } else {
         NG()
@@ -31,33 +31,20 @@ Calling OK function/NG function are not necessary if existing verification funct
 ### Example of output
 
 ```
-141	[00:00:18]	2024/04/12 02:46:17.832	{ok1-1}	0	-	[EXPECTATION]	+196	C	()	expectation
-142	[00:00:18]	2024/04/12 02:46:17.835	{ok1-1}	0	-	[OK]	+3	C	(verify)	The packageName is "com.android.settings"
-143	[00:00:18]	2024/04/12 02:46:17.840	{ok1-1}	0	-	[OK]	+5	C	(verify)	The app is Settings and the screen is [Android Settings Top Screen]
+128	[00:00:24]	2025/01/31 02:21:14.502	{ok-1}	0	-	[EXPECTATION]	+3650	!	()	expectation
+129	[00:00:24]	2025/01/31 02:21:14.656	{ok-1}	0	-	[OK]	+154	!	(verify)	The packageName is "com.android.settings"
+132	[00:00:26]	2025/01/31 02:21:16.720	{ok-1}	0	-	[OK]	+1261	!	(verify)	The app is 'Settings' and the screen is [Android Settings Top Screen]
 ```
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### AssertingAnything1.kt
 
-(`kotlin/tutorial/basic/AssertingAnything1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingAnything1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.TestElementCache.rootElement
-import shirates.core.driver.commandextension.appIs
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.verify
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AssertingAnything1 : UITest() {
-
     @Test
     @Order(10)
     fun ok() {
@@ -68,7 +55,7 @@ class AssertingAnything1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.verify("The packageName is \"com.android.settings\"") {
-                        if (rootElement.packageName == "com.android.settings") {
+                        if (packageName == "com.android.settings") {
                             OK()
                         } else {
                             NG()
@@ -116,8 +103,9 @@ class AssertingAnything1 : UITest() {
             }
         }
     }
-}
 ```
+
+![](_images/verify.png)
 
 ### Link
 

@@ -13,33 +13,23 @@ You can use **isScreen** function to getting whether the screen is displayed or 
 | screenIsOf | Assert that any of the screens is displayed     |
 | isScreenOf | Returns true if any of the screens is displayed |
 
-## Screen nickname file
+## Template screen images
 
-In advance of using these functions, you must
-define [Screen Nickname File](../../selector_and_nickname/nickname/screen_nickname.md)
+Before using these functions, you have to prepare template screen images.<br>
 
-## Example
+![](_images/template_screen_images.png)
+
+See [Setting up template screen images](../../text_and_image_recognition/setting_up_template_screen_images)
+
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### ScreenIsAndIsScreen1.kt
 
-(`kotlin/tutorial/basic/ScreenIsAndIsScreen1.kt`)
+(`src/test/kotlin/tutorial/basic/ScreenIsAndIsScreen1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifFalse
-import shirates.core.driver.branchextension.ifTrue
-import shirates.core.driver.commandextension.isScreen
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class ScreenIsAndIsScreen1 : UITest() {
-
     @Test
     @Order(10)
     fun screenIs_OK() {
@@ -105,32 +95,15 @@ class ScreenIsAndIsScreen1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ## Example
 
 ### ScreenIsOfAndIsScreenOf1.kt
 
-(`kotlin/tutorial/basic/ScreenIsOfAndIsScreenOf1.kt`)
+(`src/test/kotlin/tutorial/basic/ScreenIsOfAndIsScreenOf1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifFalse
-import shirates.core.driver.branchextension.ifTrue
-import shirates.core.driver.commandextension.isScreenOf
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIsOf
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class ScreenIsOfAndIsScreenOf1 : UITest() {
-
     @Test
     @Order(10)
     fun screenIsOf_OK() {
@@ -201,8 +174,6 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

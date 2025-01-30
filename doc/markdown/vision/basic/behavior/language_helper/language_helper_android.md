@@ -17,7 +17,9 @@ customized by device manufacturer.
 | removeLanguage     | Remove language.                                                   |
 | gotoLocaleSettings | Go to Languages screen.                                            |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### SetLanguageOnAndroid1.kt
 

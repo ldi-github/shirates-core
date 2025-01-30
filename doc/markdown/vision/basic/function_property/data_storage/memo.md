@@ -12,7 +12,9 @@ You can write and read memo using these functions.
 | readMemo(key)        | Read remo of the key                                      |
 | memoTextAs(key)      | Get text value of the element and take a memo as the key. |
 
-## Example 1
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### Memo1.kt
 

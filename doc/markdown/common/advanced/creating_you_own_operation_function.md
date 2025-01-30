@@ -2,7 +2,9 @@
 
 You can create your own operation function with extension function.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### CreatingCommandFunction1.kt
 

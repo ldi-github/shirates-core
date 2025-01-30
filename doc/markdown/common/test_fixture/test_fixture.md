@@ -13,7 +13,9 @@ You can set up/clean up test environment using **test fixture** of `UITest`.
 | afterAll            | After all functions are called                                                               | available     |
 | finally             | **After AppiumServer is shutdown**                                                           | NOT available |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### TestFixtureEvent1.kt
 

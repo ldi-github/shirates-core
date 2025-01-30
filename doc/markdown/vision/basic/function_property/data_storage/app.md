@@ -3,7 +3,9 @@
 You can configure apps data in **apps.json** file, and you can get properties of apps with **app**
 function.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### apps.json
 

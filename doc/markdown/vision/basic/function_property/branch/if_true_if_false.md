@@ -9,27 +9,15 @@ You can use branch functions instead of Kotlin if-else statement.
 | ifTrue   | The code block is executed on true  |
 | ifFalse  | The code block is executed on false |
 
+## Sample code
+
+[Getting samples](../../getting_samples.md)
+
 ### IfTrueIfFalse1.kt
 
-(`kotlin/tutorial/basic/IfTrueIfFalse1.kt`)
+(`src/test/kotlin/tutorial/basic/IfTrueIfFalse1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifTrue
-import shirates.core.driver.commandextension.caption
-import shirates.core.driver.commandextension.exist
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.tapWithScrollDown
-import shirates.core.driver.isEmulator
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class IfTrueIfFalse1 : UITest() {
-
     @Test
     @Order(10)
     fun ifTrueIfFalse() {
@@ -52,11 +40,11 @@ class IfTrueIfFalse1 : UITest() {
                     isEmulator
                         .ifTrue {
                             it.caption("on emulator")
-                                .exist("@About emulated device")
+                                .exist("*About emulated device*")
                         }
                         .ifElse {
                             it.caption("on real device")
-                                .exist("@About phone")
+                                .exist("About phone")
                         }
                 }
             }
@@ -82,17 +70,24 @@ class IfTrueIfFalse1 : UITest() {
                 }.expectation {
                     isEmulator
                         .ifTrue("on emulator") {
-                            it.exist("@About emulated device")
+                            it.exist("About emulated device")
                         }
                         .ifElse("on real device") {
-                            it.exist("@About phone")
+                            it.exist("About phone")
                         }
                 }
             }
         }
     }
-}
 ```
+
+#### html-report
+
+![](_images/if_true_if_false.png)
+
+#### spec-report
+
+![](_images/if_true_if_false_spec_report.png)
 
 ## Why use branch function, instead of if-else statements?
 

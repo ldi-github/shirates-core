@@ -8,6 +8,10 @@ Calling without `waitSeconds` argument uses default duration of `waitSecondsOnIs
 
 See Also [Parameters](../parameter/parameters.md)
 
+## Sample code
+
+[Getting samples](../../getting_samples.md)
+
 ## waitScreen
 
 ### WaitScreen1.kt

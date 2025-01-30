@@ -54,6 +54,7 @@
 - [Using CheckStateClassifier](vision/basic/text_and_image_recognition/using_check_state_classifier.md)
 - [Using DefaultClassifier](vision/basic/text_and_image_recognition/using_default_classifier.md)
 - [Screen identification using FeaturePrint and text recognition](vision/basic/text_and_image_recognition/screen_assertion_using_feature_print_and_text_recognition.md)
+- [Setting up template screen images](vision/basic/text_and_image_recognition/setting_up_template_screen_images.md)
 
 ### Macro
 
@@ -77,6 +78,8 @@
 - Detect text
     - [detect](vision/basic/function_property/detect_text/detect.md)
     - [canDetect](vision/basic/function_property/detect_text/can_detect.md)
+- Find image
+    - [findImage](vision/basic/function_property/getting_image/find_image.md)
 - Tap element
     - [tap](vision/basic/function_property/tap_element/tap.md)
     - [tapAppIcon](vision/basic/function_property/tap_element/tap_app_icon.md)
@@ -87,8 +90,7 @@
     - [swipe, flick](vision/basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](vision/basic/function_property/swipe_screen/scroll.md)
     - [Determining scrollable area](vision/basic/function_property/swipe_screen/determining_scrollable_area.md)
-- Getting image
-    - [findImage](vision/basic/function_property/getting_image/find_image.md)
+- Getting image/text relatively
     - [Relative text (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text.md)
     - [Relative image (leftItem, rightItem, belowItem, aboveItem)](vision/basic/function_property/getting_image/relative_image.md)
 - Asserting text
@@ -98,6 +100,7 @@
 - Asserting any value
     - [Any value assertion](vision/basic/function_property/asserting_any_value/any_value_assertion.md)
     - [String value assertion](vision/basic/function_property/asserting_any_value/string_assertion.md)
+    - [Boolean value assertion](vision/basic/function_property/asserting_any_value/boolean_assertion.md)
 - Asserting existence
     - [Text existence assertion](vision/basic/function_property/asserting_existence/text_existance_assertion.md)
     - [Image existence assertion](vision/basic/function_property/asserting_existence/image_existance_assertion.md)
@@ -111,21 +114,17 @@
 - Branch
     - [Branch function (ifTrue, ifFalse)](vision/basic/function_property/branch/if_true_if_false.md)
     - [Branch function (ifScreenIs, ifScreenIsNot)](vision/basic/function_property/branch/ifscreenis.md)
-    - [Branch function (ifCanSelect, ifCanSelectNot)](vision/basic/function_property/branch/ifcanselect.md)
+    - [Branch function (ifCanDetect, ifCanDetectNot)](vision/basic/function_property/branch/ifcanselect.md)
     - [Branch function (ifImageExist, ifImageExistNot)](vision/basic/function_property/branch/ifimageexist.md)
     - [Branch function (ifImageIs, ifImageIsNot)](vision/basic/function_property/branch/ifimageis.md)
     - [Branch function (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/ifString.md)
     - [Platform function (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions.md)
     - [Platform property (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties.md)
-    - [Osaifukeitai function (osaifuKeitai, osaifuKeitaiNot)](vision/basic/function_property/branch/osaifu_keitai_branch_functions.md)
-    - [Special branch function (specialTag)](vision/basic/function_property/branch/special_branch_functions.md)
 - Editing and Keyboard operations
     - [sendKeys](vision/basic/function_property/editing_and_keyboard_operations/sendkeys.md)
     - [clearInput](vision/basic/function_property/editing_and_keyboard_operations/clearinput.md)
     - [press keys](vision/basic/function_property/editing_and_keyboard_operations/press_keys.md)
     - [hideKeyboard](vision/basic/function_property/editing_and_keyboard_operations/hide_keyboard.md)
-- Swich Apps
-    - [goPreviousApp](vision/basic/function_property/navigation/go_previous_task.md)
 - Syncing
     - [wait](vision/basic/syncing/wait.md)
     - [waitScreen, waitScreenOf](vision/basic/syncing/wait_screen.md)

@@ -2,31 +2,67 @@
 
 You can clear value of input widget using **clearInput** function.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### AndroidSendKeys1.kt
 
-(`kotlin/tutorial/basic/AndroidSendKeys1.kt`)
+(`src/test/kotlin/tutorial/basic/AndroidSendKeys1.kt`)
 
 ```kotlin
     @Test
-    @Order(20)
-    fun clearInput() {
+    @Order(10)
+    fun sendKeys_clearInput() {
 
         scenario {
             case(1) {
                 condition {
-                    it.restartApp()
-                        .macro("[Android Settings Search Screen]")
-                        .select("[Search Box]")
-                        .textIs("Search settings")
-                        .sendKeys("clock")
-                        .textIs("clock")
+                    it.macro("[Android Settings Search Screen]")
                 }.action {
+                    it.sendKeys("clock")
+                }.expectation {
+                    it.textIs("clock")
+                }
+            }
+            case(2) {
+                action {
                     it.clearInput()
                 }.expectation {
-                    it.select("[Search Box]")
-                        .textIs("Search settings")
+                    it.textIs("Search settings")
+                }
+            }
+        }
+    }
+```
+
+### iOSSendKeys1.kt
+
+(`src/test/kotlin/tutorial/basic/iOSSendKeys1.kt`)
+
+```kotlin
+    @Test
+    @Order(10)
+    fun sendKeys_clearInput() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.pressHome()
+                        .swipeCenterToBottom()
+                        .tap("Search")
+                        .clearInput()
+                }.action {
+                    it.sendKeys("safari")
+                }.expectation {
+                    it.textIs("safari")
+                }
+            }
+            case(2) {
+                action {
+                    it.clearInput()
+                }.expectation {
+                    it.textIs("Search")
                 }
             }
         }

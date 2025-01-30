@@ -2,11 +2,13 @@
 
 To hide software keyboard, you can use **hideKeyboard** function.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 #### AndroidKeyboard1.kt
 
-(`kotlin/tutorial/basic/AndroidKeyboard1.kt`)
+(`src/test/kotlin/tutorial/basic/AndroidKeyboard1.kt`)
 
 ```kotlin
 package tutorial.basic
@@ -48,7 +50,7 @@ class AndroidKeyboard1 : UITest() {
 }
 ```
 
-####          
+####               
 
 ### Link
 

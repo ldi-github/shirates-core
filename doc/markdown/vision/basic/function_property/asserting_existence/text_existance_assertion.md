@@ -4,14 +4,14 @@ You can check existence of text using these functions.
 
 ## Functions
 
-|   group   | function               | description                                                                                             | return value                                                  |
-|:---------:|:-----------------------|:--------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------|
-|   exist   | exist                  | Assert that the text exists in current screen <br> Scrolling occurs within `withScroll` function        | VisionElement(if exists)<br>TestNGException(if doesn't exist) |
-|   exist   | existWithScrollDown    | Assert that the text exists with scrolling down                                                         | (same as above)                                               |
-|   exist   | existWithScrollUp      | Assert that the text exists with scrolling up                                                           | (same as above)                                               |
-|   exist   | existWithoutScroll     | Assert that the text exists without scrolling                                                           | (same as above)                                               |
-| dontExist | dontExist              | Assert that the text doesn't exist in current screen <br> Scrolling occurs within `withScroll` function | empty element(if doesn't exist)<br>TestNGException(if exists) |
-| dontExist | dontExistWithoutScroll | Assert that the text doesn't exist without scrolling                                                    | (same as above)                                               |
+|   group   | function               | description                                                                                              | return value                                                  |
+|:---------:|:-----------------------|:---------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------|
+|   exist   | exist                  | Assert that the text exists in current screen. <br> Scrolling occurs within `withScroll` function        | VisionElement(if exists)<br>TestNGException(if doesn't exist) |
+|   exist   | existWithScrollDown    | Assert that the text exists with scrolling down                                                          | (same as above)                                               |
+|   exist   | existWithScrollUp      | Assert that the text exists with scrolling up                                                            | (same as above)                                               |
+|   exist   | existWithoutScroll     | Assert that the text exists without scrolling                                                            | (same as above)                                               |
+| dontExist | dontExist              | Assert that the text doesn't exist in current screen. <br> Scrolling occurs within `withScroll` function | empty element(if doesn't exist)<br>TestNGException(if exists) |
+| dontExist | dontExistWithoutScroll | Assert that the text doesn't exist without scrolling                                                     | (same as above)                                               |
 
 ## Sample code
 

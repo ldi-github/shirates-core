@@ -7,7 +7,9 @@ You can use info and warn function to output additional information.
 | info     | For **detail** report only                |
 | warn     | For both **simple** and **detail** report |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### InfoAndWarn1.kt
 

@@ -11,7 +11,9 @@ You can write to and read from clipboard using these functions.
 | writeToClipboard | Write text to clipboard                |
 | clipboardText    | Write text of the element to clipboard |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### Clipboard1.kt
 

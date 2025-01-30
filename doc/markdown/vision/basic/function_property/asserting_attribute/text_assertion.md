@@ -23,7 +23,7 @@ You can assert the value of `text` using these functions.
 ```kotlin
     @Test
     @Order(10)
-    fun textAssertion_belowTextis_aboveTextIs() {
+    fun belowTextIs_aboveTextIs() {
 
         scenario {
             case(1) {
@@ -42,7 +42,7 @@ You can assert the value of `text` using these functions.
 
     @Test
     @Order(20)
-    fun textAssertion_rightTextIs_leftTextIs() {
+    fun rightTextIs_leftTextIs() {
 
         scenario {
             case(1) {

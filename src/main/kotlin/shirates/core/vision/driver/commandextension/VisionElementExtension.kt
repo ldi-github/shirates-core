@@ -19,7 +19,8 @@ fun VisionElement.clearInput(): VisionElement {
         val we = v.testElement!!.webElement!!
         we.clear()
         invalidateScreen()
-        lastElement = v
+        screenshot()
+        lastElement = v.newVisionElement()
     }
 
     return lastElement

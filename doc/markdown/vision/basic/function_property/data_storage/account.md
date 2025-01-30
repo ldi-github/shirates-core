@@ -3,7 +3,9 @@
 You can configure account data in **accounts.json** file, and you can get properties of accounts with **account**
 function.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### accounts.json
 

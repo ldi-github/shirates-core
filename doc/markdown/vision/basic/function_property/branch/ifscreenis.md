@@ -1,6 +1,6 @@
 # Branch function (ifScreenIs, ifScreenIsNot) (Vision)
 
-You can use special branch functions for screen.
+You can use branch functions for screen.
 
 ## functions
 
@@ -9,25 +9,15 @@ You can use special branch functions for screen.
 | ifScreenIs    | The code block is executed when specified screen is displayed     |
 | ifScreenIsNot | The code block is executed when specified screen is not displayed |
 
+## Sample code
+
+[Getting samples](../../getting_samples.md)
+
 ### IfScreenIs1.kt
 
-(`kotlin/tutorial/basic/IfScreenIs1.kt`)
+(`src/test/kotlin/tutorial/basic/IfScreenIs1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifScreenIs
-import shirates.core.driver.branchextension.ifScreenIsNot
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.tap
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class IfScreenIs1 : UITest() {
-
     @Test
     @Order(10)
     fun ifScreenIsTest() {
@@ -46,7 +36,7 @@ class IfScreenIs1 : UITest() {
             }
             case(2) {
                 action {
-                    it.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
                     ifScreenIs("[Network & internet Screen]") {
                         OK("ifScreenIs called")
@@ -76,7 +66,7 @@ class IfScreenIs1 : UITest() {
             }
             case(2) {
                 action {
-                    it.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
                     ifScreenIsNot("[Network & internet Screen]") {
                         NG()
@@ -87,8 +77,6 @@ class IfScreenIs1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

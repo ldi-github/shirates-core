@@ -2,7 +2,9 @@
 
 You can specify device language setting using capability settings.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 Set `language` and `locale` in capabilities section in testConfig.json
 

@@ -18,23 +18,15 @@ You can use branch functions for string.
 | elseIfMatches    | The code block is executed if specified string matches with the regular expression on all of the preceding conditions do not match. |
 | ifElse           | The code block is executed on all of the preceding conditions do not match.                                                         |
 
+## Sample code
+
+[Getting samples](../../getting_samples.md)
+
 ### IfStringIs1.kt
 
-(`kotlin/tutorial/basic/IfStringIs1.kt`)
+(`src/test/kotlin/tutorial/basic/IfStringIs1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifStringIs
-import shirates.core.driver.commandextension.describe
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class IfStringIs1 : UITest() {
-
     @Test
     @Order(10)
     fun ifStringIsTest() {
@@ -83,8 +75,6 @@ class IfStringIs1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Spec-Report(Normal mode)

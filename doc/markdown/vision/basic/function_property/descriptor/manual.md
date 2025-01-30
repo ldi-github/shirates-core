@@ -3,7 +3,9 @@
 In general, you can not automate all of your manual test cases because of reasons. Instead, you can describe manual
 procedure using **manual** function.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### Manual1.kt
 

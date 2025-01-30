@@ -2,7 +2,9 @@
 
 You can configure any data in **data.json** file, and you can get properties of data with **data** function.
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### data.json
 

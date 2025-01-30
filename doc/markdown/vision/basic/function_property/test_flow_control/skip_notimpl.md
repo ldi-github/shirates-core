@@ -10,7 +10,9 @@ You can skip or abort test using these functions.
 | MANUAL_SCENARIO | Skip the test scenario. MANUAL is set.   |
 | NOTIMPL         | Abort the test as it is not implemented. |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### SkipAndNotImpl1.kt
 

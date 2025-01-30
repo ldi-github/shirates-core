@@ -14,7 +14,9 @@ You can change language for logging and reporting using **logLanguage** paramete
 | ""(empty)   | English  |
 | ja          | Japanese |
 
-## Example
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### AndroidSettingsDemo.kt
 

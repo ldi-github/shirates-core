@@ -7,25 +7,17 @@ You can use **wait** function.
 Calling without `waitSeconds` argument uses default duration of `shortWaitSeconds`.
 You can configure parameter `shortWaitSeconds` in testrun files.
 
-See Also [Parameters](../parameter/parameters.md)
+See Also [Parameters](../../../common/parameter/parameters.md)
+
+## Sample code
+
+[Getting samples](../../getting_samples.md)
 
 ### Wait1.kt
 
-(`kotlin/tutorial/basic/Wait1.kt`)
+(`src/test/kotlin/tutorial/basic/Wait1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.describe
-import shirates.core.driver.wait
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Wait1 : UITest() {
-
     @Test
     @Order(10)
     fun wait1() {
@@ -46,8 +38,6 @@ class Wait1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link
