@@ -17,6 +17,7 @@ fun VisionElement.rightItem(
     pos: Int = 1,
     segmentMarginHhorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    minimumHeight: Int = this.rect.height / 2,
     include: Boolean = false
 ): VisionElement {
 
@@ -25,6 +26,7 @@ fun VisionElement.rightItem(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHhorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        minimumHeight = minimumHeight,
         mergeIncluded = include,
     )
 }
@@ -36,6 +38,7 @@ fun VisionElement.leftItem(
     pos: Int = 1,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    minimumHeight: Int = this.rect.height / 2,
     include: Boolean = false,
 ): VisionElement {
 
@@ -44,6 +47,7 @@ fun VisionElement.leftItem(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        minimumHeight = minimumHeight,
         mergeIncluded = include,
     )
 }
@@ -53,12 +57,24 @@ internal fun VisionElement.rightLeftCore(
     pos: Int,
     segmentMarginHorizontal: Int,
     segmentMarginVertical: Int,
+    minimumHeight: Int,
     mergeIncluded: Boolean,
 ): VisionElement {
 
-    val baseElement = this
+    val thisSegmentContainer = SegmentContainer(
+        mergeIncluded = mergeIncluded,
+        containerImage = this.image,
+        containerX = this.rect.x,
+        containerY = this.rect.y,
+        segmentMarginHorizontal = 0,
+        segmentMarginVertical = 0,
+        minimumHeight = minimumHeight,
+    ).split()
+    val visionElements = thisSegmentContainer.visionElements.sortedBy { it.rect.left }
+    val baseElement = if (relative.isLeft) visionElements.first() else visionElements.last()
+
     val r = baseElement.lineRegionElement()
-    val segmentContainer = SegmentContainer(
+    val baseSegmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
         containerImage = r.image,
         containerX = r.rect.x,
@@ -68,10 +84,10 @@ internal fun VisionElement.rightLeftCore(
     ).split()
 
     val horizontalBand = HorizontalBand(baseElement = this)
-    for (v in segmentContainer.visionElements) {
+    for (v in baseSegmentContainer.visionElements) {
         horizontalBand.merge(element = v, margin = 0)
     }
-    val elms = horizontalBand.getElements().map { it as VisionElement }
+    val elms = horizontalBand.getElements().map { it as VisionElement }.filter { minimumHeight <= it.rect.height }
     val sortedElements =
         if (relative.isRight)
             elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerX <= it.rect.left }
@@ -97,6 +113,7 @@ fun VisionElement.aboveItem(
     pos: Int = 1,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    minimumWidth: Int = this.rect.width / 2,
     include: Boolean = false,
 ): VisionElement {
 
@@ -105,6 +122,7 @@ fun VisionElement.aboveItem(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        minimumWidth = minimumWidth,
         mergeIncluded = include,
     )
 }
@@ -116,6 +134,7 @@ fun VisionElement.belowItem(
     pos: Int = 1,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    minimumWidth: Int = this.rect.width / 2,
     include: Boolean = false,
 ): VisionElement {
 
@@ -124,6 +143,7 @@ fun VisionElement.belowItem(
         pos = pos,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        minimumWidth = minimumWidth,
         mergeIncluded = include,
     )
 }
@@ -133,6 +153,7 @@ internal fun VisionElement.aboveBelowCore(
     pos: Int,
     segmentMarginHorizontal: Int,
     segmentMarginVertical: Int,
+    minimumWidth: Int,
     mergeIncluded: Boolean,
 ): VisionElement {
 
@@ -151,7 +172,7 @@ internal fun VisionElement.aboveBelowCore(
     for (v in segmentContainer.visionElements) {
         verticalBand.merge(element = v, margin = 0)
     }
-    val elms = verticalBand.getElements().map { it as VisionElement }
+    val elms = verticalBand.getElements().map { it as VisionElement }.filter { minimumWidth <= it.rect.width }
     val sortedElements =
         if (relative.isBelow)
             elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerY < it.rect.top }

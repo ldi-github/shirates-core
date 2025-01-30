@@ -47,7 +47,7 @@ class TestElementAssertionExtensionTest : VisionTest() {
                 condition {
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
-                    v1 = detect("[Network & internet]")
+                    v1 = detect("Network & internet")
                         .leftItem()
                 }.expectation {
                     v1.imageLabelIs("[Network & internet Icon]")
