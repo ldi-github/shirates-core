@@ -9,6 +9,7 @@ import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -32,7 +33,7 @@ fun VisionDrive.detect(
     val sel = getSelector(expression = expression)
 
     try {
-        val v = detectCore(
+        var v = detectCore(
             selector = sel,
             language = language,
             allowScroll = allowScroll,
@@ -40,11 +41,55 @@ fun VisionDrive.detect(
             waitSeconds = waitSeconds,
             throwsException = throwsException,
         )
+        if (v.text.indexOf(expression) > 0) {
+            val v2 = removeRedundantText(v)
+            v = v2
+        }
         lastElement = v
         return v
     } finally {
         swDetect.printInfo()
     }
+}
+
+private fun removeRedundantText(visionElement: VisionElement): VisionElement {
+    /**
+     * Remove redundant text
+     * e.g. "# Airplane mode" -> "Airplane mode"
+     */
+    val segmentContainer = SegmentContainer(
+        mergeIncluded = true,
+        containerImage = visionElement.image,
+        containerX = visionElement.rect.x,
+        containerY = visionElement.rect.y,
+        segmentMarginHorizontal = 0,
+        segmentMarginVertical = 0,
+        minimumHeight = visionElement.rect.height / 2,
+    ).split()
+    val elements = segmentContainer.visionElements.sortedBy { it.rect.left }.toMutableList()
+    if (elements.size > 1) {
+        elements.removeFirst()
+    }
+
+    var rect = elements[0].rect
+    for (i in 1 until elements.size) {
+        rect = rect.mergeWith(elements[i].rect)
+    }
+    val v2 = rect.toVisionElement()
+    v2.visionContext.recognizeTextObservations = visionElement.visionContext.recognizeTextObservations
+
+    if (v2.recognizeTextObservation != null && visionElement.selector?.text.isNullOrBlank().not()) {
+        val index = visionElement.text.indexOf(visionElement.selector!!.text!!)
+        if (index > 0) {
+            v2.recognizeTextObservation!!.text = visionElement.text.substring(index)
+        }
+    }
+
+    v2.selector = visionElement.selector
+    return v2
+
+//    visionElement.visionContext.rectOnLocalRegion = rect
+//    return visionElement
 }
 
 internal fun VisionDrive.detectCore(

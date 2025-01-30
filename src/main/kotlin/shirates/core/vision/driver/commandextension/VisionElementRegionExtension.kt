@@ -9,13 +9,13 @@ import shirates.core.vision.driver.lastElement
  * onAbove
  */
 fun VisionElement.onAbove(
-    horizontalMargin: Int = 10,
+    columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val regionElement = aboveRegionElement(
-        horizontalMargin = horizontalMargin,
+        columnWidth = columnWidth,
         horizontalOffset = horizontalOffset
     )
     regionCore(regionElement = regionElement, func = func)
@@ -26,14 +26,14 @@ fun VisionElement.onAbove(
  * aboveRegionElement
  */
 fun VisionElement.aboveRegionElement(
-    horizontalMargin: Int = 10,
+    columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
 ): VisionElement {
 
-    var left = this.rect.left - horizontalMargin + horizontalOffset
+    var left = this.rect.centerX - columnWidth / 2 + horizontalOffset
     if (left < 0) left = 0
     val top = 0
-    var right = this.rect.right + horizontalMargin + horizontalOffset
+    var right = this.rect.centerX + columnWidth / 2 + horizontalOffset
     if (right > screenRect.right) right = screenRect.right
     var bottom = this.rect.top - 1
     if (bottom < 0) bottom = 0
@@ -51,13 +51,13 @@ fun VisionElement.aboveRegionElement(
  * onBelow
  */
 fun VisionElement.onBelow(
-    horizontalMargin: Int = 10,
+    columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val regionElement = belowRegionElement(
-        horizontalMargin = horizontalMargin,
+        columnWidth = columnWidth,
         horizontalOffset = horizontalOffset
     )
     regionCore(regionElement = regionElement, func = func)
@@ -68,14 +68,14 @@ fun VisionElement.onBelow(
  * belowRegionElement
  */
 fun VisionElement.belowRegionElement(
-    horizontalMargin: Int = 10,
+    columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
 ): VisionElement {
 
-    var left = this.rect.left - horizontalMargin + horizontalOffset
+    var left = this.rect.centerX - columnWidth / 2 + horizontalOffset
     if (left < 0) left = 0
     val top = this.rect.bottom + 1
-    var right = this.rect.right + horizontalMargin + horizontalOffset
+    var right = this.rect.centerX + columnWidth / 2 + horizontalOffset
     if (right > screenRect.right) right = screenRect.right
     val bottom = screenRect.bottom
     val belowRegion = Rectangle.createFrom(
@@ -114,13 +114,13 @@ internal fun VisionElement.regionCore(
  * onLeft
  */
 fun VisionElement.onLeft(
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val regionElement = leftRegionElement(
-        verticalMargin = verticalMargin,
+        lineHeight = lineHeight,
         verticalOffset = verticalOffset
     )
     regionCore(regionElement = regionElement, func = func)
@@ -131,15 +131,15 @@ fun VisionElement.onLeft(
  * leftRegionElement
  */
 fun VisionElement.leftRegionElement(
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
 ): VisionElement {
     val left = 0
-    var top = this.rect.top - verticalMargin + verticalOffset
+    var top = this.rect.centerY - lineHeight / 2 + verticalOffset
     if (top < 0) top = 0
     var right = this.rect.left - 1
     if (right < 0) right = 0
-    var bottom = this.rect.bottom + verticalMargin + verticalOffset
+    var bottom = this.rect.centerY + lineHeight / 2 + verticalOffset
     if (bottom > screenRect.bottom) bottom = screenRect.bottom
     val leftRegion = Rectangle.createFrom(
         left = left,
@@ -155,13 +155,13 @@ fun VisionElement.leftRegionElement(
  * onRight
  */
 fun VisionElement.onRight(
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val regionElement = rightRegionElement(
-        verticalMargin = verticalMargin,
+        lineHeight = lineHeight,
         verticalOffset = verticalOffset
     )
     regionCore(regionElement = regionElement, func = func)
@@ -172,15 +172,15 @@ fun VisionElement.onRight(
  * rightRegionElement
  */
 fun VisionElement.rightRegionElement(
-    verticalMargin: Int = this.rect.right / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
 ): VisionElement {
     var left = this.rect.right + 1
     if (left > screenRect.right) left = screenRect.right
-    var top = this.rect.top - verticalMargin + verticalOffset
+    var top = this.rect.centerY - lineHeight / 2 + verticalOffset
     if (top < 0) top = 0
     val right = screenRect.right
-    var bottom = this.rect.bottom + verticalMargin + verticalOffset
+    var bottom = this.rect.centerY + lineHeight / 2 + verticalOffset
     if (bottom > screenRect.bottom) bottom = screenRect.bottom
     val rightRegion = Rectangle.createFrom(
         left = left,
@@ -196,14 +196,14 @@ fun VisionElement.rightRegionElement(
  * onLine
  */
 fun VisionElement.onLine(
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val regionElement = lineRegionElement(
-        verticalMargin = verticalMargin,
-        verticalOffset = verticalOffset
+        lineHeight = lineHeight,
+        verticalOffset = verticalOffset,
     )
     regionCore(regionElement = regionElement, func = func)
     return regionElement
@@ -213,13 +213,13 @@ fun VisionElement.onLine(
  * onColumn
  */
 fun VisionElement.onColumn(
-    horizontalMargin: Int = this.rect.width / 2,
+    columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val regionElement = columnRegionElement(
-        horizontalMargin = horizontalMargin,
+        columnWidth = columnWidth,
         horizontalOffset = horizontalOffset
     )
     regionCore(regionElement = regionElement, func = func)
@@ -230,12 +230,12 @@ fun VisionElement.onColumn(
  * lineRegionElement
  */
 fun VisionElement.lineRegionElement(
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
 ): VisionElement {
-    var top = this.rect.top - verticalMargin + verticalOffset
+    var top = this.rect.centerY - lineHeight / 2 + verticalOffset
     if (top < 0) top = 0
-    var bottom = this.rect.bottom + verticalMargin + verticalOffset
+    var bottom = this.rect.centerY + lineHeight / 2 + verticalOffset
     if (bottom > screenRect.bottom) bottom = screenRect.bottom
     val horizontalRegion = Rectangle.createFrom(
         left = 0,
@@ -251,12 +251,12 @@ fun VisionElement.lineRegionElement(
  * columnRegionElement
  */
 fun VisionElement.columnRegionElement(
-    horizontalMargin: Int = this.rect.width / 2,
+    columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
 ): VisionElement {
-    var left = this.rect.left - horizontalMargin + horizontalOffset
+    var left = this.rect.centerX - columnWidth / 2 + horizontalOffset
     if (left < 0) left = 0
-    var right = this.rect.right + horizontalMargin + horizontalOffset
+    var right = this.rect.centerX + columnWidth / 2 + horizontalOffset
     if (right > screenRect.right) right = screenRect.right
     val verticalRegion = Rectangle.createFrom(
         left = left,

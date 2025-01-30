@@ -197,7 +197,7 @@ fun VisionElement.buttonStateIs(
 fun VisionElement.existOnLine(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
@@ -215,7 +215,7 @@ fun VisionElement.existOnLine(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onLine(
-            verticalMargin = verticalMargin,
+            lineHeight = lineHeight,
         ) {
             v = existCore(
                 message = assertMessage,
@@ -239,7 +239,7 @@ fun VisionElement.existOnLine(
 fun VisionElement.existOnColumn(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    horizontalMargin: Int = this.rect.width / 2,
+    columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
@@ -257,7 +257,7 @@ fun VisionElement.existOnColumn(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onColumn(
-            horizontalMargin = horizontalMargin,
+            columnWidth = columnWidth,
         ) {
             v = existCore(
                 message = assertMessage,
@@ -281,7 +281,7 @@ fun VisionElement.existOnColumn(
 fun VisionElement.existOnRight(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
@@ -299,7 +299,7 @@ fun VisionElement.existOnRight(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onRight(
-            verticalMargin = verticalMargin,
+            lineHeight = lineHeight,
         ) {
             v = existCore(
                 message = assertMessage,
@@ -323,7 +323,7 @@ fun VisionElement.existOnRight(
 fun VisionElement.existOnLeft(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
@@ -341,7 +341,7 @@ fun VisionElement.existOnLeft(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onLeft(
-            verticalMargin = verticalMargin,
+            lineHeight = lineHeight,
         ) {
             v = existCore(
                 message = assertMessage,
@@ -365,7 +365,7 @@ fun VisionElement.existOnLeft(
 fun VisionElement.existOnAbove(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    horizontalMargin: Int = this.rect.width / 2,
+    columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
@@ -383,7 +383,7 @@ fun VisionElement.existOnAbove(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onAbove(
-            horizontalMargin = horizontalMargin,
+            columnWidth = columnWidth,
         ) {
             v = existCore(
                 message = assertMessage,
@@ -407,7 +407,7 @@ fun VisionElement.existOnAbove(
 fun VisionElement.existOnBelow(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    horizontalMargin: Int = this.rect.width / 2,
+    columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
@@ -425,7 +425,7 @@ fun VisionElement.existOnBelow(
     context.execCheckCommand(command = command, message = assertMessage, subject = "$sel") {
 
         thisObject.onBelow(
-            horizontalMargin = horizontalMargin,
+            columnWidth = columnWidth,
         ) {
             v = existCore(
                 message = assertMessage,
@@ -449,7 +449,7 @@ fun VisionElement.existOnBelow(
 fun VisionElement.existImageOnLine(
     label: String,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
@@ -469,7 +469,7 @@ fun VisionElement.existImageOnLine(
     context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onLine(
-            verticalMargin = verticalMargin,
+            lineHeight = lineHeight,
             verticalOffset = verticalOffset,
         ) {
             v = findImage(
@@ -505,7 +505,7 @@ fun VisionElement.existImageOnLine(
 fun VisionElement.existImageOnColumn(
     label: String,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    horizontalMargin: Int = this.rect.height / 2,
+    columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
@@ -525,7 +525,7 @@ fun VisionElement.existImageOnColumn(
     context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onColumn(
-            horizontalMargin = horizontalMargin,
+            columnWidth = columnWidth,
             horizontalOffset = horizontalOffset,
         ) {
             v = findImage(
@@ -561,7 +561,7 @@ fun VisionElement.existImageOnColumn(
 fun VisionElement.existImageOnLeft(
     label: String,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
@@ -581,7 +581,7 @@ fun VisionElement.existImageOnLeft(
     context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onLeft(
-            verticalMargin = verticalMargin,
+            lineHeight = lineHeight,
             verticalOffset = verticalOffset,
         ) {
             v = findImage(
@@ -617,7 +617,7 @@ fun VisionElement.existImageOnLeft(
 fun VisionElement.existImageOnRight(
     label: String,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    verticalMargin: Int = this.rect.height / 2,
+    lineHeight: Int = this.rect.height * 2,
     verticalOffset: Int = 0,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
@@ -637,7 +637,7 @@ fun VisionElement.existImageOnRight(
     context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onRight(
-            verticalMargin = verticalMargin,
+            lineHeight = lineHeight,
             verticalOffset = verticalOffset,
         ) {
             v = findImage(
@@ -673,7 +673,7 @@ fun VisionElement.existImageOnRight(
 fun VisionElement.existImageOnAbove(
     label: String,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    horizontalMargin: Int = this.rect.height / 2,
+    columnWidth: Int = this.rect.width * 2,
     horizontalOffset: Int = 0,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
@@ -693,7 +693,7 @@ fun VisionElement.existImageOnAbove(
     context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onAbove(
-            horizontalMargin = horizontalMargin,
+            columnWidth = columnWidth,
             horizontalOffset = horizontalOffset,
         ) {
             v = findImage(
@@ -729,7 +729,7 @@ fun VisionElement.existImageOnAbove(
 fun VisionElement.existImageOnBelow(
     label: String,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    horizontalMargin: Int = this.rect.height / 2,
+    columnWidth: Int = this.rect.height * 2,
     horizontalOffset: Int = 0,
     skinThickness: Int = 2,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
@@ -749,7 +749,7 @@ fun VisionElement.existImageOnBelow(
     context.execCheckCommand(command = command, message = assertMessage, subject = label) {
 
         thisObject.onBelow(
-            horizontalMargin = horizontalMargin,
+            columnWidth = columnWidth,
             horizontalOffset = horizontalOffset,
         ) {
             v = findImage(

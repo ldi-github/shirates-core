@@ -156,4 +156,15 @@ class Rectangle(
         return v
     }
 
+    /**
+     * mergeWith
+     */
+    fun mergeWith(other: Rectangle): Rectangle {
+
+        val minLeft = Math.min(this.left, other.left)
+        val minTop = Math.min(this.top, other.top)
+        val maxRight = Math.max(this.right, other.right)
+        val maxBottom = Math.max(this.bottom, other.bottom)
+        return Rectangle.createFrom(left = minLeft, top = minTop, right = maxRight, bottom = maxBottom)
+    }
 }

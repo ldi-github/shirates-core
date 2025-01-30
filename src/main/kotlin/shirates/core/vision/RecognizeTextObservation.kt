@@ -4,10 +4,10 @@ import shirates.core.utility.image.Rectangle
 import java.awt.image.BufferedImage
 
 class RecognizeTextObservation(
-    val text: String,
-    val confidence: Float,
-    val jsonString: String,
-    val language: String?,
+    var text: String,
+    var confidence: Float,
+    var jsonString: String,
+    var language: String?,
 
     override var screenshotFile: String?,
     override var screenshotImage: BufferedImage?,

@@ -10,14 +10,14 @@ import shirates.core.vision.VisionElement
 fun VisionDrive.onLineOf(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    verticalMargin: Int? = null,
+    lineHeight: Int = this.getThisOrIt().rect.height * 2,
     verticalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val v = detect(expression = expression, language = language)
     return v.onLine(
-        verticalMargin = verticalMargin ?: (v.rect.height / 2),
+        lineHeight = lineHeight,
         verticalOffset = verticalOffset,
         func = func
     )
@@ -29,14 +29,14 @@ fun VisionDrive.onLineOf(
 fun VisionDrive.onColumnOf(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    horizontalMargin: Int? = null,
+    columnWidth: Int = this.getThisOrIt().rect.width * 2,
     horizontalOffset: Int = 0,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     val v = detect(expression = expression, language = language)
     return v.onColumn(
-        horizontalMargin = horizontalMargin ?: (v.rect.width / 2),
+        columnWidth = columnWidth,
         horizontalOffset = horizontalOffset,
         func = func
     )
