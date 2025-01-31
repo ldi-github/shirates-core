@@ -982,10 +982,13 @@ object PropertiesManager {
     /**
      * visionOCRLanguage
      */
-    val visionOCRLanguage: String
+    var visionOCRLanguage: String
         get() {
             return getPropertyValue(propertyName = "visionOCRLanguage")
                 ?: Const.VISION_OCR_LANGUAGE
+        }
+        set(value) {
+            properties.setProperty("visionOCRLanguage", value)
         }
 
     /**

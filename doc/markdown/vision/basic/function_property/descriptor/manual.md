@@ -9,21 +9,9 @@ procedure using **manual** function.
 
 ### Manual1.kt
 
-(`kotlin/tutorial/basic/Manual1.kt`)
+(`src/test/kotlin/tutorial/basic/Manual1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.manual
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Manual1 : UITest() {
-
     @Test
     @Order(10)
     fun manualTest() {
@@ -39,8 +27,15 @@ class Manual1 : UITest() {
         }
 
     }
-}
 ```
+
+#### Html-Report
+
+![](_images/manual_html_report.png)
+
+#### Spec-Report
+
+![](_images/manual_spec_report.png)
 
 ### Link
 

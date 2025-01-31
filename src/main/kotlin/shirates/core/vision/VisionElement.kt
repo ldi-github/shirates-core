@@ -20,7 +20,7 @@ import shirates.core.vision.driver.commandextension.helper.IRect
 import java.awt.image.BufferedImage
 import java.rmi.AccessException
 
-class VisionElement(
+open class VisionElement(
     capture: Boolean = true,
 ) : VisionDrive, IRect {
 
@@ -175,7 +175,7 @@ class VisionElement(
     /**
      * hasError
      */
-    val hasError: Boolean
+    open val hasError: Boolean
         get() {
             return lastError != null
         }

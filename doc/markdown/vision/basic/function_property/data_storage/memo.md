@@ -18,20 +18,9 @@ You can write and read memo using these functions.
 
 ### Memo1.kt
 
-(`kotlin/tutorial/basic/Memo1.kt`)
+(`src/test/kotlin/tutorial/basic/Memo1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/calculator/testrun.properties")
-class Memo1 : UITest() {
-
     @Order(10)
     @Test
     fun writeMemo_readMemo() {
@@ -39,21 +28,15 @@ class Memo1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Calculator Main Screen]")
-                    writeMemo("First key", "[1]")
-                    writeMemo("Second key", "[+]")
-                    writeMemo("Third key", "[2]")
-                    writeMemo("Fourth key", "[=]")
-                    writeMemo("Expected result", "3")
+                    it.macro("[Android Settings Top Screen]")
+                        .tap("Storage")
+                        .waitForDisplay("GB")
                 }.action {
-                    it
-                        .tap(readMemo("First key"))
-                        .tap(readMemo("Second key"))
-                        .tap(readMemo("Third key"))
-                        .tap(readMemo("Fourth key"))
+                    writeMemo("System", it.detect("System").rightText().text)
+                    writeMemo("Apps", it.detect("Apps").rightText().text)
                 }.expectation {
-                    it.select("[result final]")
-                        .textIs(readMemo("Expected result"))
+                    readMemo("System").printInfo()
+                    readMemo("Apps").printInfo()
                 }
             }
         }
@@ -66,40 +49,18 @@ class Memo1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Calculator Main Screen]")
+                    it.macro("[Network & internet Screen]")
                 }.action {
-                    it.tap("[1]")
-                        .tap("[2]")
-                        .tap("[+]")
-                        .tap("[3]")
-                        .tap("[=]")
+                    it.detect("SIMs").belowText().memoTextAs("SIMs")
+                    it.detect("VPN").belowText().memoTextAs("VPN")
                 }.expectation {
-                    it.select("[result final]")
-                        .textIs("15")
-                        .memoTextAs("result1")    // memo TestElement.text as "result1"
-                }
-            }
-
-            case(2) {
-                condition {
-                    it.tap("[AC]")
-                }.action {
-                    it.readMemo("result1")
-                        .forEach { key ->
-                            it.tap("[$key]")
-                        }
-                    it.tap("[+]")
-                        .tap("[5]")
-                        .tap("[=]")
-                }.expectation {
-                    it.select("[result final]")
-                        .textIs("20")
+                    it.readMemo("SIMs").thisIs("T-Mobile")
+                    it.readMemo("VPN").thisIs("None")
                 }
             }
         }
 
     }
-}
 ```
 
 ### Link

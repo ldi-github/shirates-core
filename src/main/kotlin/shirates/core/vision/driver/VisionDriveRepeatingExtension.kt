@@ -3,9 +3,9 @@ package shirates.core.vision.driver
 import shirates.core.Const
 import shirates.core.driver.testContext
 import shirates.core.utility.sync.SyncUtility
-import shirates.core.utility.sync.WaitContext
-import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.VisionDrive
+import shirates.core.vision.utility.sync.VisionWaitContext
+import shirates.core.vision.utility.sync.VisionWaitUtility
 
 /**
  * doUntilTrue
@@ -16,14 +16,14 @@ fun VisionDrive.doUntilTrue(
     maxLoopCount: Int = SyncUtility.MAX_LOOP_COUNT,
     retryOnError: Boolean = true,
     throwOnFinally: Boolean = true,
-    onTimeout: (WaitContext) -> Unit = {},
-    onMaxLoop: (WaitContext) -> Unit = {},
-    onError: (WaitContext) -> Unit = {},
-    onBeforeRetry: (WaitContext) -> Unit = {},
-    action: (WaitContext) -> Boolean
-): WaitContext {
+    onTimeout: (VisionWaitContext) -> Unit = {},
+    onMaxLoop: (VisionWaitContext) -> Unit = {},
+    onError: (VisionWaitContext) -> Unit = {},
+    onBeforeRetry: (VisionWaitContext) -> Unit = {},
+    action: (VisionWaitContext) -> Boolean
+): VisionWaitContext {
 
-    return WaitUtility.doUntilTrue(
+    return VisionWaitUtility.doUntilTrue(
         waitSeconds = waitSeconds,
         intervalSeconds = intervalSeconds,
         maxLoopCount = maxLoopCount,

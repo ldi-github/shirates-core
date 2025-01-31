@@ -153,11 +153,9 @@
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
 
-### ビヘイビアヘルパー
+### ヘルパー
 
-- 言語設定
-    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android_ja.md)
-    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios_ja.md)
+- [LanguageHelper](basic/helper/language_helper/language_helper_ja.md)
 
 ### レポート
 
@@ -214,10 +212,10 @@
 - CIサーバーでテストを実行する
     - [テストをGradleで実行する](../common/running_test_on_ci_server/running_with_gradle_ja.md)
 - リモートのAppium Serverを利用する
-    - [リモートのAppium Serverの構成](in_action/using_remote_appium_server/configuring_remote_appium_server_ja.md)
+    - [リモートのAppium Serverの構成](../common/using_remote_appium_server/configuring_remote_appium_server_ja.md)
 - テストの実行を安定化させる(フレーキーテストの改善)
-    - [フレーキーテストの原因](in_action/stabilizing_test_execution/causes_of_flaky_test_ja.md)
-    - [scenarioの再実行](in_action/stabilizing_test_execution/rerun_scenario_ja.md)
+    - [フレーキーテストの原因](../common/stabilizing_test_execution/causes_of_flaky_test_ja.md)
+    - [scenarioの再実行](../common/stabilizing_test_execution/rerun_scenario_ja.md)
 - キャッシュの制御によるパフォーマンスチューニング
     - [iOSにおけるgetSource実行時のパフォーマンス問題](in_action/performance_tuning_with_cache_control/performance_problem_of_getpagesource_in_ios_ja.md)
     - [ダイレクトアクセスモード](in_action/performance_tuning_with_cache_control/direct_access_mode_ja.md)
@@ -253,7 +251,7 @@
 
 ## Appendix
 
-- [アノテーション](appendix/annotations_ja.md)
+- [アノテーション](../common/appendix/annotations_ja.md)
 
 <br>
 <br>

@@ -29,7 +29,7 @@ In case you want to create data function for customer.
 
 ```
   "dataset": {
-    "customers": "testConfig/android/androidSettings/dataset/customers.json"
+    "customers": "testConfig/android/dataset/customers.json"
   },
 ```
 
@@ -45,9 +45,6 @@ package exercise
 import shirates.core.configuration.repository.DatasetRepository
 import shirates.core.configuration.repository.DatasetRepositoryManager
 
-/**
- * Customer
- */
 object Customer {
 
     /**
@@ -69,7 +66,6 @@ object Customer {
         val value = repository!!.getValue(longKey = key)
         return value
     }
-
 }
 
 /**
@@ -89,12 +85,10 @@ Now you can use customer data function as follows.
 package exercise
 
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.output
-import shirates.core.testcode.UITest
+import shirates.core.vision.driver.commandextension.output
+import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class CustomerTest : UITest() {
+class CustomerTest : VisionTest() {
 
     @Test
     fun test() {
@@ -114,11 +108,10 @@ class CustomerTest : UITest() {
 #### Console
 
 ```
-96	2022/09/28 21:16:24.736	{test}	[SCENARIO]	(scenario)	test()
-97	2022/09/28 21:16:24.736	{test-1}	[CASE]	(case)	(1)
-98	2022/09/28 21:16:24.736	{test-1}	[ACTION]	(action)	action
-99	2022/09/28 21:16:24.737	{test-1}	[output]	(output)	customer1
-100	2022/09/28 21:16:24.738	{test-1}	[output]	(output)	customer1@example.com
+126	[00:00:21]	2025/01/31 14:10:31.442	{test-1}	0	-	[CASE]	+425	!	()	(1)
+127	[00:00:21]	2025/01/31 14:10:31.446	{test-1}	0	-	[ACTION]	+4	!	()	action
+128	[00:00:21]	2025/01/31 14:10:31.448	{test-1}	0	-	[output]	+2	!	(output)	customer1
+129	[00:00:21]	2025/01/31 14:10:31.449	{test-1}	0	-	[output]	+1	!	(output)	customer1@example.com
 ```
 
 ### Link

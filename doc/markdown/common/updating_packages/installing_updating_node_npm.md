@@ -72,4 +72,5 @@ npm -v
 
 ### Link
 
-- [index](../../classic/index.md)
+- [index(Vision)](../../index.md)
+- [index(Classic)](../../classic/index.md)

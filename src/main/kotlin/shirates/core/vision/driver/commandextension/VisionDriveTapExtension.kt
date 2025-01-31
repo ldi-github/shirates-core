@@ -52,6 +52,7 @@ fun VisionDrive.tap(
 
     val context = TestDriverCommandContext(null)
     var v = VisionElement.emptyElement
+    v.selector = sel
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
         v = detectCore(

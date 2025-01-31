@@ -42,23 +42,11 @@ Set the path of accounts.json to "**accounts**" in **dataset** section of the `t
 
 ### Account1.kt
 
-(`kotlin/tutorial/basic/Account1.kt`)
+(`src/test/kotlin/tutorial/basic/Account1.kt`)
 
 Use account function.
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.storage.account
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Account1 : UITest() {
-
     @Test
     @Order(10)
     fun account() {
@@ -69,7 +57,6 @@ class Account1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                         .tap("Search settings")
                         .screenIs("[Android Settings Search Screen]")
-                        .tap("[Search Box]")
                 }.action {
                     it.sendKeys(account("[account1].id"))
                 }.expectation {
@@ -79,7 +66,6 @@ class Account1 : UITest() {
         }
 
     }
-}
 ```
 
 ### Link

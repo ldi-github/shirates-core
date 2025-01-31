@@ -16,24 +16,9 @@ You can skip or abort test using these functions.
 
 ### SkipAndNotImpl1.kt
 
-(`kotlin/tutorial/basic/SkipAndNotImpl1.kt`)
+(`src/test/kotlin/tutorial/basic/SkipAndNotImpl1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.output
-import shirates.core.driver.commandextension.tap
-import shirates.core.driver.commandextension.textIs
-import shirates.core.driver.commandextension.textIsNot
-import shirates.core.driver.platformMajorVersion
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class SkipAndNotImpl1 : UITest() {
-
     @Test
     @Order(10)
     fun skipCase() {
@@ -61,7 +46,13 @@ class SkipAndNotImpl1 : UITest() {
             }
         }
     }
+```
 
+#### Spec-Report
+
+![](_images/skip_case_spec_report.png)
+
+```kotlin
     @Test
     @Order(20)
     fun skipScenario() {
@@ -89,7 +80,13 @@ class SkipAndNotImpl1 : UITest() {
             }
         }
     }
+```
 
+#### Spec-Report
+
+![](_images/skip_scenario_spec_report.png)
+
+```kotlin
     @Test
     @Order(30)
     fun notImpl_case() {
@@ -119,12 +116,17 @@ class SkipAndNotImpl1 : UITest() {
                 }.expectation {
                     it.textIs("Settings")    // Not reached
                     NOTIMPL("To be implement.")     // Not reached
-                    it.textIsNot("Connected devices")   // Not reached
                 }
             }
         }
     }
+```
 
+#### Spec-Report
+
+![](_images/notimpl_case_spec_report.png)
+
+```kotlin
     @Test
     @Order(40)
     fun notImpl_scenario() {
@@ -149,9 +151,11 @@ class SkipAndNotImpl1 : UITest() {
             }
         }
     }
-
-}
 ```
+
+#### Spec-Report
+
+![](_images/notimpl_scenario_spec_report.png)
 
 ### Link
 

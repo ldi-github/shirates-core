@@ -4,7 +4,7 @@ In case of waiting for some element to disappear, you can use **waitForClose** f
 
 Calling without `waitSeconds` argument uses default duration of `shortWaitSeconds`.
 
-See Also [Parameters](../parameter/parameters.md)
+See Also [Parameters](../../../common/parameter/parameters.md)
 
 ## Example
 

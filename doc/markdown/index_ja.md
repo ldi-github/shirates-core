@@ -141,11 +141,9 @@
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
 
-### ビヘイビアヘルパー
+### ヘルパー
 
-- 言語設定
-    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android_ja.md)
-    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios_ja.md)
+- [LanguageHelper](vision/basic/helper/language_helper/language_helper_ja.md)
 
 ### レポート
 

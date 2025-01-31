@@ -4,7 +4,7 @@ Shirates outputs test result files at the end of test.
 
 ## Sample code
 
-[shirates-core-vision-samples_en](../../vision/getting_samples.md)
+[Getting samples](../../getting_samples.md)
 
 ## Running sample
 

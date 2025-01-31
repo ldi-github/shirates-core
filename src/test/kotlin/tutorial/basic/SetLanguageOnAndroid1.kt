@@ -1,11 +1,8 @@
 package tutorial.basic
 
-import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.befavior.LanguageHelperAndroid
-import shirates.core.driver.commandextension.cellOf
-import shirates.core.driver.commandextension.dontExist
+import shirates.core.driver.befavior.LanguageHelper
 import shirates.core.driver.commandextension.exist
 import shirates.core.testcode.UITest
 
@@ -13,30 +10,21 @@ import shirates.core.testcode.UITest
 class SetLanguageOnAndroid1 : UITest() {
 
     @Test
-    @Order(10)
-    fun setLanguage_getLanguage_removeLanguage1() {
+    fun setLanguageAndLocale() {
 
         scenario {
             case(1) {
                 action {
-                    LanguageHelperAndroid.setLanguage(language = "日本語", region = "日本")
+                    LanguageHelper.setLanguageAndLocale(language = "ja", locale = "JP")
                 }.expectation {
-                    it.exist("@言語")
-                    it.cellOf("1") {
-                        exist("日本語 (日本)")
-                        dontExist("English (United States)")
-                    }
+                    it.exist("設定")
                 }
             }
             case(2) {
                 action {
-                    LanguageHelperAndroid.setLanguage(language = "English", region = "United States")
+                    LanguageHelper.setLanguageAndLocale(language = "en", locale = "US")
                 }.expectation {
-                    it.exist("@Languages")
-                    it.cellOf("1") {
-                        exist("English (United States)")
-                        dontExist("日本語 (日本)")
-                    }
+                    it.exist("Settings")
                 }
             }
         }

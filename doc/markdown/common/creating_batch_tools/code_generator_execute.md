@@ -2,9 +2,9 @@
 
 You can generate **test code template** from Spec-Report format.
 
-![](../_images/code_generator_spec_report.png)
+![](_images/code_generator_spec_report.png)
 
-![](../_images/code_generator_code_template.png)
+![](_images/code_generator_code_template.png)
 
 ## Creating function
 
@@ -24,10 +24,10 @@ fun main() {
 
 1. Create `SpecInput` directory in download directory.
 2. Put **test specification file** in Spec-Report format into `SpecInput` directory.<br>
-   ![](../_images/code_generator_execute_1.png)
+   ![](_images/code_generator_execute_1.png)
 3. Right click `CodeGeneratorExecute.kt` and select `run`.
 4. You can see generated test code template in `CodeOutput` directory.<br>
-   ![](../_images/code_generator_execute_2.png)
+   ![](_images/code_generator_execute_2.png)
 
 ### CalculatorTestDemo.kt (Generated)
 

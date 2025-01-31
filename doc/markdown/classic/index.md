@@ -156,11 +156,9 @@
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
 
-### Behavior Helper
+### Helper
 
-- Language
-    - [LanguageHelperAndroid](basic/behavior/language_helper/language_helper_android.md)
-    - [LanguageHelperIos](basic/behavior/language_helper/language_helper_ios.md)
+- [LanguageHelper](basic/helper/language_helper/language_helper.md)
 
 ### Report
 
@@ -183,7 +181,7 @@
     - [Using Screen Builder](in_action/creating_screen_nickname_file/using_screen_builder.md)
 - Message and language
     - [Log language](../common/message_and_language/log_language.md)
-    - [Device language](in_action/message_and_language/device_language.md)
+    - [Device language](../common/message_and_language/device_language.md)
 - Log and screenshot
     - [Configuring log](in_action/log_and_screenshot/configuring_log.md)
     - [Configuring screenshot](in_action/log_and_screenshot/configuring_screenshot.md)
@@ -210,17 +208,17 @@
 - Filtering tests with priority
     - [must, should, want](in_action/filtering_tests_with_priority/must_should_want.md)
 - Migrating from manual testing
-    - [Generating test code template](in_action/migrating_from_manual_testing/generating_test_code_template.md)
-    - [Using Template Code Generator](in_action/migrating_from_manual_testing/using_template_code_generator.md)
+    - [Generating test code template](../common/migrating_from_manual_testing/generating_test_code_template.md)
+    - [Using Template Code Generator](../common/migrating_from_manual_testing/using_template_code_generator.md)
 - Designing test in code first
-    - [Designing test in code first](in_action/designing_and_implementing_test/designing_test_in_code_first.md)
+    - [Designing test in code first](../common/designing_and_implementing_test/designing_test_in_code_first.md)
 - Running test on CI server
     - [Running with Gradle](../common/running_test_on_ci_server/running_with_gradle.md)
 - Using remote Appium Server
-    - [Configuring remote Appium Server](in_action/using_remote_appium_server/configuring_remote_appium_server.md)
+    - [Configuring remote Appium Server](../common/using_remote_appium_server/configuring_remote_appium_server.md)
 - Stabilizing test execution (Improve Flaky Test)
-    - [Causes of flaky test](in_action/stabilizing_test_execution/causes_of_flaky_test.md)
-    - [Rerun scenario](in_action/stabilizing_test_execution/rerun_scenario.md)
+    - [Causes of flaky test](../common/stabilizing_test_execution/causes_of_flaky_test.md)
+    - [Rerun scenario](../common/stabilizing_test_execution/rerun_scenario.md)
 - Performance tuning with cache control
     - [Performance problem of getSource in iOS](in_action/performance_tuning_with_cache_control/performance_problem_of_getpagesource_in_ios.md)
     - [Direct access mode](in_action/performance_tuning_with_cache_control/direct_access_mode.md)
@@ -238,7 +236,7 @@
 ## Tool settings
 
 - IntelliJ IDEA
-    - [JVM version, JDK version](tool_settings/jvm_version.md)
+    - [JVM version, JDK version](../common/tool_settings/jvm_version.md)
 
 ## Virtual machine settings
 
@@ -251,12 +249,12 @@
 
 ## Troubleshooting
 
-- [Error messages / Warning messages](troubleshooting/error_warning_messages.md)
+- [Error messages / Warning messages](../common/troubleshooting/error_warning_messages.md)
 - [Troubleshooting](troubleshooting/troubleshooting.md)
 
 ## Appendix
 
-- [Annotations](appendix/annotations.md)
+- [Annotations](../common/appendix/annotations.md)
 
 <br>
 <br>

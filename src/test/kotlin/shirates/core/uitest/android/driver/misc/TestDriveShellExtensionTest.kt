@@ -1,12 +1,11 @@
 package shirates.core.uitest.android.driver.misc
 
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode
-import shirates.core.driver.commandextension.shell
-import shirates.core.driver.commandextension.shellAsync
-import shirates.core.driver.commandextension.thisIsNotEmpty
-import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.driver.TestMode.isRunningOnWindows
+import shirates.core.driver.commandextension.*
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.utility.misc.ShellUtility
@@ -38,26 +37,28 @@ class TestDriveShellExtensionTest : UITest() {
     }
 
     @Test
+    @Order(20)
     fun shellAsync() {
+
+        var shellResult: ShellUtility.ShellResult? = null
 
         scenario {
             case(1) {
-                expectation {
-                    // Arrange
-                    val shellResult: ShellUtility.ShellResult
-                    // Act
-                    if (TestMode.isRunningOnWindows) {
+                action {
+                    if (isRunningOnWindows) {
                         shellResult = it.shellAsync("ping", "localhost")
                     } else {
                         shellResult = it.shellAsync("ping", "localhost", "-c", "3")
                     }
-//                    // Assert
-//                    shellResult.resultString.thisIsEmpty("resultString is empty")
-
-                    // Act
-                    shellResult.waitFor()
-                    // Assert
-                    shellResult.resultString.thisIsNotEmpty("resultString is not empty")
+                }.expectation {
+                    shellResult!!.hasCompleted.thisIsFalse("hasCompleted=false")
+                }
+            }
+            case(2) {
+                expectation {
+                    // resultString calls waitFor() in it
+                    shellResult!!.resultString.thisStartsWith("PING localhost (127.0.0.1)")
+                    shellResult!!.hasCompleted.thisIsTrue("hasCompleted=true")
                 }
             }
         }

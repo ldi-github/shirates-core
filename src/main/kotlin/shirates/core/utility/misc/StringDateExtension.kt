@@ -1,6 +1,5 @@
 package shirates.core.utility
 
-import org.apache.logging.log4j.core.parser.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -32,7 +31,7 @@ fun String.toDate(
             val localDate = LocalDateTime.of(year, month, day, 0, 0, 0)
             return Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant())
         } catch (t: Throwable) {
-            throw ParseException("Could not parse date. ($this)", t)
+            //
         }
     }
 

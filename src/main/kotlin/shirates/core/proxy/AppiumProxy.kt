@@ -126,7 +126,7 @@ object AppiumProxy {
                 val count = c.count
                 TestLog.info("getSource($count)")
             }
-            lastSource = TestDriver.appiumDriver.pageSource
+            lastSource = TestDriver.appiumDriver.pageSource ?: ""
             val r = validateSource()
             if (r) {
                 root = ElementCacheUtility.createTestElementFromXml(sourceXml = lastSource)

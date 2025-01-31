@@ -15,22 +15,9 @@ You can execute shell command using these functions.
 
 ### Shell1.kt
 
-(`kotlin/tutorial/basic/Shell1.kt`)
+(`src/test/kotlin/tutorial/basic/Shell1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.TestMode.isRunningOnWindows
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-import shirates.core.utility.misc.ShellUtility
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Shell1 : UITest() {
-
     @Test
     @Order(10)
     fun shell() {
@@ -65,21 +52,18 @@ class Shell1 : UITest() {
                         shellResult = it.shellAsync("ping", "localhost", "-c", "3")
                     }
                 }.expectation {
-                    shellResult!!.resultString.thisIsEmpty("resultString is empty")
+                    shellResult!!.hasCompleted.thisIsFalse("hasCompleted=false")
                 }
             }
             case(2) {
-                action {
-                    output("waitFor()")
-                    shellResult!!.waitFor()
-                }.expectation {
-                    shellResult!!.resultString.thisIsNotEmpty("resultString is not empty")
-                    output(shellResult!!.resultString)
+                expectation {
+                    // resultString calls waitFor() in it
+                    shellResult!!.resultString.thisStartsWith("PING localhost (127.0.0.1)")
+                    shellResult!!.hasCompleted.thisIsTrue("hasCompleted=true")
                 }
             }
         }
     }
-}
 ```
 
 ### Note

@@ -17,8 +17,7 @@ Set `language` and `locale` in capabilities section in testConfig.json
 
 ### Link
 
-- [LanguageHelperAndroid](../../basic/behavior/language_helper/language_helper_android.md)
-- [LanguageHelperIos](../../basic/behavior/language_helper/language_helper_ios.md)
+- [LanguageHelper](../../vision/basic/helper/language_helper/language_helper.md)
 
 
 - [index(Vision)](../../index.md)

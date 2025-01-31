@@ -154,11 +154,9 @@
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
 
-### Behavior Helper
+### Helper
 
-- Language
-    - [LanguageHelperAndroid](vision/basic/behavior/language_helper/language_helper_android.md)
-    - [LanguageHelperIos](vision/basic/behavior/language_helper/language_helper_ios.md)
+- [LanguageHelper](vision/basic/helper/language_helper/language_helper.md)
 
 ### Report
 
@@ -170,15 +168,11 @@
 
 ### Creating batch tools
 
-- [Summary-Report](vision/basic/creating_batch_tools/summary_report_execute.md)
-- [Code Generator](vision/basic/creating_batch_tools/code_generator_execute.md)
+- [Summary-Report](common/creating_batch_tools/summary_report_execute.md)
+- [Code Generator](common/creating_batch_tools/code_generator_execute.md)
 
 ## Tutorial(In action)
 
-- Creating screen nickname file(classic)
-    - [Introducing Appium Inspector](classic/in_action/creating_screen_nickname_file/using_appium_inspector.md)
-    - [Creating screen nickname file](classic/in_action/creating_screen_nickname_file/creating_screen_nickname_file.md)
-    - [Using Screen Builder](classic/in_action/creating_screen_nickname_file/using_screen_builder.md)
 - Message and language
     - [Log language](common/message_and_language/log_language.md)
     - [Device language](common/message_and_language/device_language.md)
@@ -186,49 +180,30 @@
     - [Configuring log](vision/in_action/log_and_screenshot/configuring_log.md)
     - [Configuring screenshot](vision/in_action/log_and_screenshot/configuring_screenshot.md)
 - Debugging
-    - [Watching sourceXML in file](vision/in_action/debugging/watching_source_xml_in_file.md)
-    - [Watching sourceXML in debugger](vision/in_action/debugging/watching_source_xml_in_debugger.md)
-    - [Tracing internal execution steps](vision/in_action/debugging/tracing_internal_execution_steps.md)
-- Adapting to various environments
-    - [Configuring tapAppIcon function](vision/in_action/adapting_to_environments/configuring_tap_appIcon_function.md)
-    - [Adapting to changes in OS message](vision/in_action/adapting_to_environments/adapting_to_changes_in_os_messages.md)
-- Handling irregulars
-    - [Irregular Handler(Global Handler)](vision/in_action/handling_irregulars/irregular_handler.md)
-    - [On Error Handler](vision/in_action/handling_irregulars/on_error_handler.md)
-    - [Screen Handler(onScreen function)](vision/in_action/handling_irregulars/screen_handler.md)
+    - [Watching recognizeText.json](vision/in_action/debugging/watching_recognize_text_json.md)
+    - [Watching image in debugger](vision/in_action/debugging/)
 - Test Fixture
     - [Test fixture](common/test_fixture/test_fixture.md)
-- Image matching
-    - [Cropping images for template matching](vision/in_action/image_matching/cropping_images_for_template_matching.md)
-- Optimizing performance and resources
-    - [end of scroll](vision/in_action/performance_resource/end_of_scroll.md)
-    - [screenshot size](vision/in_action/performance_resource/screenshot_scale.md)
 - Using Appium APIs
-    - [Using Appium Client bare APIs](vision/in_action/using_appium_apis/using_appium_client_bare_apis.md)
-- Filtering tests with priority
-    - [must, should, want](vision/in_action/filtering_tests_with_priority/must_should_want.md)
+    - [Using Appium Client bare APIs](common/using_appium_apis/using_appium_client_bare_apis.md)
 - Migrating from manual testing
-    - [Generating test code template](vision/in_action/migrating_from_manual_testing/generating_test_code_template.md)
-    - [Using Template Code Generator](vision/in_action/migrating_from_manual_testing/using_template_code_generator.md)
+    - [Generating test code template](common/migrating_from_manual_testing/generating_test_code_template.md)
+    - [Using Template Code Generator](common/migrating_from_manual_testing/using_template_code_generator.md)
 - Designing test in code first
-    - [Designing test in code first](vision/in_action/designing_and_implementing_test/designing_test_in_code_first.md)
+    - [Designing test in code first](common/designing_and_implementing_test/designing_test_in_code_first.md)
 - Running test on CI server
-    - [Running with Gradle](vision/in_action/running_test_on_ci_server/running_with_gradle.md)
+    - [Running with Gradle](common/running_test_on_ci_server/running_with_gradle.md)
 - Using remote Appium Server
-    - [Configuring remote Appium Server](vision/in_action/using_remote_appium_server/configuring_remote_appium_server.md)
+    - [Configuring remote Appium Server](common/using_remote_appium_server/configuring_remote_appium_server.md)
 - Stabilizing test execution (Improve Flaky Test)
-    - [Causes of flaky test](vision/in_action/stabilizing_test_execution/causes_of_flaky_test.md)
-    - [Rerun scenario](vision/in_action/stabilizing_test_execution/rerun_scenario.md)
-- Performance tuning with cache control
-    - [Performance problem of getSource in iOS](vision/in_action/performance_tuning_with_cache_control/performance_problem_of_getpagesource_in_ios.md)
-    - [Direct access mode](vision/in_action/performance_tuning_with_cache_control/direct_access_mode.md)
+    - [Causes of flaky test](common/stabilizing_test_execution/causes_of_flaky_test.md)
+    - [Rerun scenario](common/stabilizing_test_execution/rerun_scenario.md)
 
 ## Tutorial(Advanced)
 
 - [Creating your own data function](common/advanced/creating_you_own_data_function.md)
 - [Customizing Messages](common/advanced/customizing_message.md)
 - [Using shirates-stub](common/advanced/using_shirates_stub.md)
-- [Local publishing](common/advanced/local_publishing.md)
 - [Customizing HTML-Report style](common/advanced/customizing_html_report_style.md)
 - [Creating your own operation function](common/advanced/creating_you_own_operation_function.md)
 - [Customizing code generation](common/advanced/customizing_code_generation.md)
@@ -240,21 +215,21 @@
 
 ## Virtual machine settings
 
-- [Enabling Google Play Store](vision/virtual_machine_settings/enabling_google_play_store.md)
+- [Enabling Google Play Store](common/virtual_machine_settings/enabling_google_play_store.md)
 
 ## Installing/Updating packages
 
-- [Installing/Updating node & npm](vision/updating_packages/installing_updating_node_npm.md)
-- [Installing/Updating Appium & drivers](vision/updating_packages/installing_updating_appium_drivers.md)
+- [Installing/Updating node & npm](common/updating_packages/installing_updating_node_npm.md)
+- [Installing/Updating Appium & drivers](common/updating_packages/installing_updating_appium_drivers.md)
 
 ## Troubleshooting
 
-- [Error messages / Warning messages](vision/troubleshooting/error_warning_messages.md)
-- [Troubleshooting](vision/troubleshooting/troubleshooting.md)
+- [Error messages / Warning messages](common/troubleshooting/error_warning_messages.md)
+- [Troubleshooting](common/troubleshooting/troubleshooting.md)
 
 ## Appendix
 
-- [Annotations](vision/appendix/annotations.md)
+- [Annotations](common/appendix/annotations.md)
 
 <br>
 <br>

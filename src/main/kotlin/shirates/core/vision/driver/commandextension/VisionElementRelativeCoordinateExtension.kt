@@ -81,7 +81,9 @@ internal fun VisionElement.rightLeftCore(
     ).split()
     val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumHeight <= it.rect.height }
         .sortedBy { it.rect.left }
-    val baseElement = visionElements.first()
+    val baseElement =
+        if (relative.isLeft) visionElements.first()
+        else visionElements.last()
 
     val r = baseElement.lineRegionElement(lineHeight = lineHeight, verticalOffset = verticalOffset)
     val baseSegmentContainer = SegmentContainer(

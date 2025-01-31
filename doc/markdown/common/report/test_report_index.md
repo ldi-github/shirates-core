@@ -1,6 +1,6 @@
 # Test Report Index
 
-**Test Report Index** is the index of some [Html-Reports](../creating_testclass/test_result_files.md).
+**Test Report Index** is the index of some Html-Reports.
 
 You can see summary of the test results in near realtime(polling).
 

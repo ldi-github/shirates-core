@@ -10,7 +10,7 @@ You can suppress logging using **silent** function.
 
 ### SilentAndProcedure1.kt
 
-(`kotlin/tutorial/basic/SilentAndProcedure1.kt`)
+(`src/test/kotlin/tutorial/basic/SilentAndProcedure1.kt`)
 
 ```kotlin
     @Test
@@ -37,10 +37,10 @@ You can suppress logging using **silent** function.
 
 ### Html-Report
 
-![](../../_images/silent_and_procedure_1.png)
+![](_images/silent_and_procedure_1.png)
 
 `describe` is logged.<br>
-`scrollToEnd` and `tap` are not logged.
+`scrollToBottom` and `tap` are not logged.
 
 <br>
 
@@ -74,10 +74,10 @@ You can use **procedure** function instead of describe + silent.
 
 ### Html-Report
 
-![](../../_images/silent_and_procedure_2.png )
+![](_images/silent_and_procedure_2.png )
 
 `procedure` is logged.<br>
-`scrollToEnd` and `tap` are not logged.
+`scrollToBottom` and `tap` are not logged.
 
 ### Link
 

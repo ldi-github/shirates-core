@@ -42,23 +42,11 @@ Set the path of `apps.json` to "**apps**" in **dataset** section of the testConf
 
 ### App1.kt
 
-(`kotlin/tutorial/basic/App1.kt`)
+(`src/test/kotlin/tutorial/basic/App1.kt`)
 
 Use app function.
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.storage.app
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class App1 : UITest() {
-
     @Test
     @Order(10)
     fun app() {
@@ -66,7 +54,7 @@ class App1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.launchApp("[Settings]")
                         .tap("Search settings")
                         .screenIs("[Android Settings Search Screen]")
                         .tap("[Search Box]")
@@ -78,7 +66,6 @@ class App1 : UITest() {
             }
         }
     }
-}
 ```
 
 ### Link

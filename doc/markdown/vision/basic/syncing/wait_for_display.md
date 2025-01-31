@@ -4,7 +4,7 @@ In case of waiting for some element to appear, you can use **waitForDisplay** fu
 
 Calling without `waitSeconds` argument uses default duration of `waitSecondsOnIsScreen`.
 
-See Also [Parameters](../parameter/parameters.md)
+See Also [Parameters](../../../common/parameter/parameters.md)
 
 ## Example
 

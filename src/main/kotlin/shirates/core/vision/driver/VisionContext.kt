@@ -2,6 +2,7 @@ package shirates.core.vision.driver
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
+import shirates.core.driver.TestMode
 import shirates.core.driver.visionDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
@@ -252,6 +253,10 @@ class VisionContext(
     fun recognizeText(
         language: String? = this.language,
     ): VisionContext {
+
+        if (TestMode.isNoLoadRun) {
+            return this
+        }
 
         if (rootElement == null) {
             rootElement = visionDrive.rootElement

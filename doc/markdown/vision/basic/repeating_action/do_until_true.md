@@ -23,21 +23,9 @@ You can repeat action until the action returns true using **doUntilTrue** functi
 
 ### DoUntilTrue1.kt
 
-(`kotlin/tutorial/basic/DoUntilTrue1.kt`)
+(`src/test/kotlin/tutorial/basic/DoUntilTrue1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.driver.doUntilTrue
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class DoUntilTrue1 : UITest() {
-
     @Test
     @Order(10)
     fun doUntilTrue_action() {
@@ -51,7 +39,7 @@ class DoUntilTrue1 : UITest() {
                 }.action {
                     doUntilTrue {
                         it.swipeCenterToTop()
-                        it.canSelect("System")
+                        it.canDetect("System")
                     }
                     it.tap()
                 }.expectation {
@@ -79,7 +67,7 @@ class DoUntilTrue1 : UITest() {
                         }
                     ) {
                         it.swipeCenterToTop()
-                        it.canSelect("System")
+                        it.canDetect("System")
                     }
                     it.tap()
                 }.expectation {
@@ -102,13 +90,12 @@ class DoUntilTrue1 : UITest() {
                 }.action {
                     doUntilTrue(
                         maxLoopCount = 2,
-                        throwOnOverMaxLoopCount = false,
                         onMaxLoop = { c ->
                             SKIP_SCENARIO("MaxLoopCount. (maxLoopCount=${c.maxLoopCount})")
                         }
                     ) {
                         it.swipeCenterToTop()
-                        it.canSelect("System")
+                        it.canDetect("System")
                     }
                     it.tap()
                 }.expectation {
@@ -131,28 +118,13 @@ class DoUntilTrue1 : UITest() {
                             c.cancelRetry = c.count >= 3
                         },
                     ) {
-                        it.select("#no-exist", waitSeconds = 0.0)   // throws TestDriverException
-                        false
-                    }
-                }
-            }
-            case(2) {
-                expectation {
-                    doUntilTrue(
-                        onError = { c ->
-                            output("${c.error} (${c.count})")
-                            c.cancelRetry = true
-                        }
-                    ) {
-                        it.select("#no-exist", waitSeconds = 0.0)   // throws TestDriverException
+                        it.detect("no-exist", waitSeconds = 0.0)   // throws TestDriverException
                         false
                     }
                 }
             }
         }
     }
-
-}
 ```
 
 ### Link
