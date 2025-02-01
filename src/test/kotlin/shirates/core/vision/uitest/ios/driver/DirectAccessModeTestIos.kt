@@ -9,6 +9,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.driver.toTestElement
 import shirates.core.vision.driver.commandextension.enableCache
+import shirates.core.vision.driver.wait
 import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
@@ -67,8 +68,10 @@ class DirectAccessModeTestIos : VisionTest() {
             case(1) {
                 condition {
                     appiumDriver.findElement(By.id("General")).click()
+                    wait()
                 }.action {
                     appiumDriver.findElement(By.id("About")).click()
+                    wait()
                 }.expectation {
                     appiumDriver.findElement(By.id("Name"))
                         .toTestElement().isFound.thisIsTrue("<Name > exists")
