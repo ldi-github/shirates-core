@@ -79,9 +79,7 @@ npm -v
 
 <br>
 
-### Appium 2.0
-
-Appium 2.0 is required.
+### Appium
 
 **New install**
 
@@ -104,18 +102,9 @@ appium -v
 
 See [Tested Environments](environments.md) to get tested version.
 
-```
-appium -v
-npm uninstall -g appium
-npm install -g appium
-appium -v
-```
-
 <br>
 
 ### UIAutomator2 driver
-
-Install UIAutomator2 driver.
 
 **New install**
 
@@ -187,7 +176,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 2. Select menu `Tools > Device Manager`.
 3. Click `[+]`. <br>
    ![](classic/_images/create_avd_1.png)
-4. Select `Pixcel 8` and click Next.<br>
+4. Select `Pixcel 8` and click `Next`.<br>
    ![](classic/_images/create_avd_2.png)
 5. Select `UsideDownCake 34 Android 14.0 (Google Play)` and click `Next` (Google Play Store is required for
    demonstration using **Calculator** app). Select **arm64** image for Mac.<br>
@@ -201,7 +190,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 1. Get shirates-vision-server from [shirates-vision-server](https://github.com/ldi-github/shirates-vision-server).
 2. Open the project (open `Package.swift` with Xcode). Wait a while for the background process to finish.
-3. Select `Product > Destination > My Mac`.
+3. Select `Product > Destination > My Mac`.<br>![](vision/_images/product_destination_mymac.png)
 4. Select `Product > Run`. You can see `[ NOTICE ] Server started on http://127.0.0.1:8081`.<br>
    ![](vision/_images/running_vision_server.png)
 
@@ -211,13 +200,13 @@ Let's see demonstration.
 
 ### Getting shirates-core-vision-samples
 
-1. Get shirates-core-vision-samples_en
+1. Get **shirates-core-vision-samples_en**
    from [shirates-core-vision-samples_en](https://github.com/ldi-github/shirates-core-vision-samples_en).
 
 ### Opening Project
 
 1. Open **shirates-core-vision-samples_en** project directory in Finder.
-2. Right click `build.gradle.kts` and open with IntelliJ IDEA. <br>
+2. Right click `build.gradle.kts` and open with `IntelliJ IDEA`. <br>
    ![](vision/_images/opening_project.png)
 
 ### Enable right-click test running
@@ -232,13 +221,12 @@ Let's see demonstration.
 
 ### Run AndroidSettingsVisionDemo
 
-1. Open `shirates-core-vision-samples_en` project in IntelliJ, <br>
+1. Open `shirates-core-vision-samples_en` project in `IntelliJ IDEA`, <br>
    right click on `kotlin/demo/vision/AndroidSettingsVisionDemo` <br> and select
    **Debug 'AndroidSettingsVisionDemo'** <br> ![](vision/_images/android_settings_vision_demo.png)
 2. You'll see logs in the console like this. ![](vision/_images/console_android.png)
-3. Click the link to open the log directory.
-4. Open **_Report(simple).html
-   **. <br> ![](vision/_images/log_directory.png) <br> ![](vision/_images/report_simple.png) <br><br>
+3. Click the link to open the log directory. <br> ![](vision/_images/log_directory.png)
+4. Open **_Report(simple).html**. <br> ![](vision/_images/report_simple.png) <br><br>
 5. Open **AndroidSettingsVisionDemo@a.xlsx**. <br> ![](vision/_images/android_settings_vision_demo_xls.png)
 
 <br>

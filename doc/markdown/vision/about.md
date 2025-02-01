@@ -17,7 +17,7 @@ Shirates/Vision is Computer Vision(CV) driven mobile testing framework powered b
 ### Improved performance especially on iOS<br>
 
 Computer vision driven API bypasses accessing DOM (This process is very slow especially for iOS). The performance of
-Shirates/Vision has been improved dramatically over the former version(Shirates/Classic).
+Shirates/Vision has been improved on iOS dramatically over the former version(Shirates/Classic).
 
 ### Shirates/Classic
 
