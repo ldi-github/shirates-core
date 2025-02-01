@@ -9,6 +9,7 @@ import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
@@ -69,25 +70,31 @@ internal fun removeRedundantText(
         minimumHeight = visionElement.rect.height / 2,
     ).split()
     val elements = segmentContainer.visionElements.sortedBy { it.rect.left }.toMutableList()
-    if (elements.size > 1) {
-        elements.removeFirst()
+    var offsetRect = Rectangle()
+    if (elements.count() > 1) {
+        val firstElement = elements[0]
+        val secondElement = elements[1]
+        elements.remove(firstElement)
+        offsetRect = secondElement.rect
     }
-
-    var rect = elements[0].rect
-
-    val expectedTokens = expectedText.split(" ").filter { it.isNotBlank() }
-    if (expectedTokens.count() > 1) {
-        for (i in 1 until expectedTokens.count()) {
+    val v2: VisionElement
+    if (elements.count() == 1) {
+        v2 = elements[0]
+    } else {
+        val expectedTokens = expectedText.split(" ").filter { it.isNotBlank() }
+        val minCount = Math.min(expectedTokens.count(), elements.count())
+        var rect = elements[0].rect
+        for (i in 1 until minCount) {
             rect = rect.mergeWith(elements[i].rect)
         }
+        v2 = rect.toVisionElement()
     }
-    val v2 = rect.toVisionElement()
+
     v2.recognizeTextLocal(language = language)
-
-    if (v2.recognizeTextObservation != null && expectedText.isNotBlank()) {
+    if (v2.recognizeTextObservation != null) {
         v2.recognizeTextObservation!!.text = expectedText
+        v2.recognizeTextObservation!!.localRegionX = offsetRect.x
     }
-
     v2.selector = visionElement.selector
     return v2
 

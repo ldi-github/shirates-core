@@ -19,7 +19,7 @@ fun VisionElement.rightItem(
     segmentMarginHhorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     segmentMinimumHeight: Int = this.rect.height / 2,
-    include: Boolean = true
+    include: Boolean = false
 ): VisionElement {
 
     return rightLeftCore(
@@ -40,7 +40,7 @@ fun VisionElement.leftItem(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     segmentMinimumHeight: Int = this.rect.height / 2,
-    include: Boolean = true,
+    include: Boolean = false,
 ): VisionElement {
 
     return rightLeftCore(
@@ -111,7 +111,7 @@ fun VisionElement.aboveItem(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     segmentMinimumWidth: Int = this.rect.width / 2,
-    include: Boolean = true,
+    include: Boolean = false,
 ): VisionElement {
 
     return aboveBelowCore(
@@ -132,7 +132,7 @@ fun VisionElement.belowItem(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     segmentMinimumWidth: Int = this.rect.width / 2,
-    include: Boolean = true,
+    include: Boolean = false,
 ): VisionElement {
 
     return aboveBelowCore(
