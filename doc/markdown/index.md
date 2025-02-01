@@ -1,4 +1,4 @@
-# Shirates/Vision
+# Shirates/Vision [Beta]
 
 **Shirates/Vision** is new version of Shirates.<br>
 [**Shirates/Classic**](classic/index.md) is old version.

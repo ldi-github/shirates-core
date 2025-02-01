@@ -4,14 +4,19 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
+import shirates.core.utility.image.saveImage
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionServerProxy
+import shirates.core.vision.driver.VisionContext
 
-class VisionServerProxyTest {
+class VisionServerProxyTest : UnitTest() {
 
     @Test
     fun setupImageFeaturePrintConfig() {
@@ -431,5 +436,22 @@ class VisionServerProxyTest {
 //
 //    }
 
+    @Test
+    fun splittingComplexText() {
 
+        PropertiesManager.setup()
+
+        val inputFile = "unitTestData/vision/files/[○あり○なし]/img.png"
+        val image = BufferedImageUtility.getBufferedImage(inputFile)
+        CodeExecutionContext.lastScreenshotName = "${TestLog.currentLineNo}.png"
+        CodeExecutionContext.lastScreenshotImage = image
+        image.saveImage(file = CodeExecutionContext.lastScreenshotFile!!)
+
+        val context = VisionContext(screenshotFile = inputFile)
+        context.recognizeText(language = "ja")
+
+        val v = context.detect(text = "男性", language = "ja")
+
+        v.text.printInfo()
+    }
 }

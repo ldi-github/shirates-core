@@ -193,9 +193,19 @@ open class VisionElement(
      */
     val text: String
         get() {
-            return testElement?.textOrLabelOrValue
-                ?: recognizeTextObservation?.text ?: return ""
+            val t = testElement?.textOrLabelOrValue
+                ?: recognizeTextObservation?.text ?: ""
+            return t
         }
+
+    /**
+     * recognizeTextLocal
+     */
+    fun recognizeTextLocal(
+        language: String = PropertiesManager.visionOCRLanguage
+    ) {
+        visionContext.recognizeTextLocal(language = language)
+    }
 
     /**
      * digit

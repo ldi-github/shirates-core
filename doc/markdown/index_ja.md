@@ -1,4 +1,4 @@
-# Shirates/Vision
+# Shirates/Vision [Beta]
 
 **Shirates/Vision** はShiratesの新しいバージョンです。<br>
 [**Shirates/Classic**](classic/index.md) は古いバージョンです。

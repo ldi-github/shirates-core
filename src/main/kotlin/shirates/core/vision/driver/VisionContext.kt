@@ -7,6 +7,7 @@ import shirates.core.driver.visionDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.utility.file.toFile
 import shirates.core.utility.image.*
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.toPath
@@ -15,6 +16,7 @@ import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionObservation
 import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.driver.commandextension.helper.FlowContainer
+import shirates.core.vision.driver.commandextension.removeRedundantText
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
 import java.awt.BasicStroke
@@ -25,7 +27,7 @@ import java.nio.file.Files
 
 class VisionContext(
     val capture: Boolean,
-    val language: String = PropertiesManager.visionOCRLanguage,
+    var language: String = PropertiesManager.visionOCRLanguage,
 
     override var screenshotFile: String? = null,
     override var screenshotImage: BufferedImage? = null,
@@ -84,6 +86,8 @@ class VisionContext(
         for (o in recognizeTextObservations) {
             o.toVisionElement()
             val v = o.toVisionElement()
+            v.visionContext.screenshotFile = this.screenshotFile
+            v.visionContext.screenshotImage = this.screenshotImage
             list.add(v)
         }
         return list
@@ -251,7 +255,7 @@ class VisionContext(
      * recognizeText
      */
     fun recognizeText(
-        language: String? = this.language,
+        language: String = this.language,
     ): VisionContext {
 
         if (TestMode.isNoLoadRun) {
@@ -266,12 +270,13 @@ class VisionContext(
         if (rootVisionContext.recognizeTextObservations.isEmpty()) {
             val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile().name
             recognizeTextAndSaveRectangleImage(
+                inputFile = rootVisionContext.screenshotFile!!,
                 language = language,
-                rootVisionContext = rootVisionContext,
-                recognizedFile = recognizedFile
+                visionContext = rootVisionContext,
             )
             CodeExecutionContext.lastRecognizedFile = recognizedFile
         }
+        this.language = language
 
         if (this.recognizeTextObservations.isEmpty()) {
             /**
@@ -295,37 +300,49 @@ class VisionContext(
         return this
     }
 
+    /**
+     * recognizeTextLocal
+     */
+    fun recognizeTextLocal(
+        language: String = this.language,
+    ): VisionContext {
+
+        if (imageFile == null) {
+            imageFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_${rectOnScreen}.png").toString()
+            image!!.saveImage(imageFile!!)
+        }
+        recognizeTextAndSaveRectangleImage(
+            inputFile = imageFile!!,
+            language = language,
+            visionContext = this,
+        )
+        CodeExecutionContext.lastRecognizedFile = imageFile
+        this.language = language
+
+        return this
+    }
+
     private fun recognizeTextAndSaveRectangleImage(
-        language: String?,
-        rootVisionContext: VisionContext,
-        recognizedFile: String?
+        inputFile: String,
+        language: String,
+        visionContext: VisionContext,
     ) {
-        /**
-         * Recognize text
-         * and store the result into rootElement.visionContext
-         */
-        val inputFile = if (screenshotFile.isNullOrBlank()) {
-            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_recognize_screenshot.png").toString()
-        } else {
-            screenshotFile!!
-        }
-        if (Files.exists(inputFile.toPath()).not()) {
-            screenshotImage!!.saveImage(inputFile, log = false)
-        }
         val recognizeTextResult = VisionServerProxy.recognizeText(
             inputFile = inputFile,
             language = language
         )
-        rootVisionContext.loadTextRecognizerResult(
+        visionContext.loadTextRecognizerResult(
             inputFile = inputFile,
             recognizeTextResult = recognizeTextResult
         )
-        if (recognizedFile != CodeExecutionContext.lastRecognizedFile) {
+        visionContext.language = language
+        if (inputFile != CodeExecutionContext.lastRecognizedFile) {
             /**
              * Save screenshotImageWithTextRegion
              */
-            val fileName = "${TestLog.currentLineNo}_[$recognizedFile]_recognized_text_rectangles.png"
-            rootVisionContext.screenshotWithTextRectangle?.saveImage(
+            val nameWithoutExtension = inputFile.toFile().name
+            val fileName = "${TestLog.currentLineNo}_[$nameWithoutExtension]_recognized_text_rectangles.png"
+            visionContext.screenshotWithTextRectangle?.saveImage(
                 TestLog.directoryForLog.resolve(fileName).toString()
             )
         }
@@ -339,7 +356,6 @@ class VisionContext(
         recognizeTextResult: RecognizeTextResult
     ): VisionContext {
         this.localRegionFile = inputFile
-
 
         val observations = recognizeTextResult.candidates.map {
             RecognizeTextObservation(
@@ -385,7 +401,7 @@ class VisionContext(
      */
     fun detect(
         text: String,
-        language: String? = this.language,
+        language: String = this.language,
         inJoinedText: Boolean = false,
     ): VisionElement {
 
@@ -404,7 +420,11 @@ class VisionContext(
             val candidates = detectCandidates(
                 text = text,
             )
-            val v = candidates.firstOrNull() ?: VisionElement.emptyElement
+            var v = candidates.firstOrNull() ?: VisionElement.emptyElement
+            if (v.text.indexOf(text) > 0) {
+                val v2 = removeRedundantText(visionElement = v, expectedText = text, language = language)
+                v = v2
+            }
             return v
         }
     }
@@ -414,7 +434,7 @@ class VisionContext(
      */
     fun detect(
         selector: Selector,
-        language: String? = this.language,
+        language: String = this.language,
     ): VisionElement {
 
         if (selector.hasTextFilter.not()) {

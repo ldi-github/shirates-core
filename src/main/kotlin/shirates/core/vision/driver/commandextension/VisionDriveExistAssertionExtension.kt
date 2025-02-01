@@ -61,7 +61,7 @@ internal fun VisionDrive.existCore(
     swipeToSafePosition: Boolean,
 ): VisionElement {
 
-    val v = detectCore(
+    var v = detectCore(
         selector = selector,
         language = language,
         allowScroll = null,

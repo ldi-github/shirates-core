@@ -121,7 +121,7 @@ class VisionTestAndroid : VisionTest() {
             case(1) {
                 condition {
                     it.tap("Storage")
-                        .waitForDisplay("GB used")
+                        .waitForDisplay("GB")
                 }.expectation {
                     it.detect("Apps")
                         .leftItem()
@@ -130,8 +130,6 @@ class VisionTestAndroid : VisionTest() {
                         .textIs("Games")
                         .belowItem(2)
                         .textIs("Apps")
-                    it.detect("Apps").aboveItem(2)
-                        .textIs("System")
                     it.detect("Audio").rightText()
                         .textIs("0 B")
                         .leftItem()

@@ -41,10 +41,6 @@ fun VisionDrive.detect(
             waitSeconds = waitSeconds,
             throwsException = throwsException,
         )
-        if (v.text.indexOf(expression) > 0) {
-            val v2 = removeRedundantText(v)
-            v = v2
-        }
         lastElement = v
         return v
     } finally {
@@ -52,7 +48,11 @@ fun VisionDrive.detect(
     }
 }
 
-private fun removeRedundantText(visionElement: VisionElement): VisionElement {
+internal fun removeRedundantText(
+    visionElement: VisionElement,
+    expectedText: String,
+    language: String,
+): VisionElement {
     /**
      * Remove redundant text
      * e.g. "# Airplane mode" -> "Airplane mode"
@@ -62,6 +62,8 @@ private fun removeRedundantText(visionElement: VisionElement): VisionElement {
         containerImage = visionElement.image,
         containerX = visionElement.rect.x,
         containerY = visionElement.rect.y,
+        screenshotFile = visionElement.screenshotFile,
+        screenshotImage = visionElement.screenshotImage,
         segmentMarginHorizontal = 0,
         segmentMarginVertical = 0,
         minimumHeight = visionElement.rect.height / 2,
@@ -72,17 +74,18 @@ private fun removeRedundantText(visionElement: VisionElement): VisionElement {
     }
 
     var rect = elements[0].rect
-    for (i in 1 until elements.size) {
-        rect = rect.mergeWith(elements[i].rect)
+
+    val expectedTokens = expectedText.split(" ").filter { it.isNotBlank() }
+    if (expectedTokens.count() > 1) {
+        for (i in 1 until expectedTokens.count()) {
+            rect = rect.mergeWith(elements[i].rect)
+        }
     }
     val v2 = rect.toVisionElement()
-    v2.visionContext.recognizeTextObservations = visionElement.visionContext.recognizeTextObservations
+    v2.recognizeTextLocal(language = language)
 
-    if (v2.recognizeTextObservation != null && visionElement.selector?.text.isNullOrBlank().not()) {
-        val index = visionElement.text.indexOf(visionElement.selector!!.text!!)
-        if (index > 0) {
-            v2.recognizeTextObservation!!.text = visionElement.text.substring(index)
-        }
+    if (v2.recognizeTextObservation != null && expectedText.isNotBlank()) {
+        v2.recognizeTextObservation!!.text = expectedText
     }
 
     v2.selector = visionElement.selector

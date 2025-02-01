@@ -5,7 +5,7 @@ import shirates.core.driver.befavior.LanguageHelper
 import shirates.core.vision.driver.commandextension.exist
 import shirates.core.vision.testcode.VisionTest
 
-class AndroidLanguateTest : VisionTest() {
+class AndroidLanguageTest : VisionTest() {
 
     @Test
     fun setLanguageAndLocale() {
