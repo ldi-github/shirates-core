@@ -176,7 +176,7 @@ private fun VisionDrive.detectCoreCore(
         retryOnError = false,
         throwOnFinally = false,
         onBeforeRetry = {
-            screenshot()
+            screenshot(force = true)
         }
     ) {
         v = CodeExecutionContext.workingRegionElement.visionContext.detect(
