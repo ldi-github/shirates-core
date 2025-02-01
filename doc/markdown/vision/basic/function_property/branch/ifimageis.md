@@ -1,62 +1,42 @@
-# Branch function (ifImageIs, ifImageIsNot) (Vision)
+# Branch function (ifImageLabelIs, ifImageLabelIsNot) (Vision)
 
-You can use special branch functions for image.
+You can use special branch functions for image label.
 
 ## functions
 
-| function     | description                                                                             |
-|:-------------|:----------------------------------------------------------------------------------------|
-| ifImageIs    | The code block is executed when specified image matches the image of the element        |
-| ifImageIsNot | The code block is executed when specified image does not match the image of the element |
+| function          | description                                                                                   |
+|:------------------|:----------------------------------------------------------------------------------------------|
+| ifImageLabelIs    | The code block is executed when specified image label matches the image of the element        |
+| ifImageLabelIsNot | The code block is executed when specified image label does not match the image of the element |
 
 ## Sample code
 
 [Getting samples](../../getting_samples.md)
 
-### IfImageIs1.kt
+### IfImageLabelIs1.kt
 
-(`kotlin/tutorial/basic/IfImageIs1.kt`)
+(`src/test/kotlin/tutorial/basic/IfImageLabelIs1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifImageIs
-import shirates.core.driver.branchextension.ifImageIsNot
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.select
-import shirates.core.testcode.UITest
-import shirates.helper.ImageSetupHelper
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class IfImageIs1 : UITest() {
-
-    @Test
-    @Order(0)
-    fun setupImage() {
-
-        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
-    }
-
     @Test
     @Order(10)
-    fun ifImageIsTest() {
+    fun ifImageLabelIsTest() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.select("[Network & internet Icon]")
-                        .ifImageIs("[Network & internet Icon].png") {
-                            OK("ifImageIs called")
+                    it.detect("Network & internet")
+                        .leftItem()
+                        .ifImageLabelIs("[Network & internet Icon]") {
+                            OK("ifImageLabelIs called")
                         }.ifElse {
                             NG()
                         }
-                    it.select("[Network & internet Icon]")
-                        .ifImageIsNot("[Network & internet Icon].png") {
+                    it.detect("Network & internet")
+                        .leftItem()
+                        .ifImageLabelIsNot("[Network & internet Icon]") {
                             NG()
                         }.ifElse {
                             OK("ifElse called")
@@ -65,15 +45,17 @@ class IfImageIs1 : UITest() {
             }
             case(2) {
                 expectation {
-                    it.select("[Network & internet Icon]")
-                        .ifImageIs("[App Icon].png") {
+                    it.detect("Network & internet")
+                        .leftItem()
+                        .ifImageLabelIs("[App Icon]") {
                             NG()
                         }.ifElse {
                             OK("ifElse called")
                         }
-                    it.select("[Network & internet Icon]")
-                        .ifImageIsNot("[App Icon].png") {
-                            OK("ifImageIsNot called")
+                    it.detect("Network & internet")
+                        .leftItem()
+                        .ifImageLabelIsNot("[App Icon]") {
+                            OK("ifImageLabelIsNot called")
                         }.ifElse {
                             NG()
                         }
@@ -81,8 +63,6 @@ class IfImageIs1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

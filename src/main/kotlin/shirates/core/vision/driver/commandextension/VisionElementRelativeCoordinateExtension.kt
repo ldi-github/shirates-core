@@ -92,8 +92,11 @@ internal fun VisionElement.rightLeftCore(
     /**
      * filter items
      */
-    val elms = segmentContainer.visionElements.filter {
+    var elms = segmentContainer.visionElements.filter {
         (it.rect.top <= baseElement.rect.bottom && baseElement.rect.top <= it.rect.bottom)
+    }
+    if (mergeIncluded.not()) {
+        elms = elms.filter { baseElement.bounds.isIncludedIn(it.bounds).not() }
     }
 
     /**
@@ -204,8 +207,11 @@ internal fun VisionElement.aboveBelowCore(
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
     ).split()
-    val elms = segmentContainer.visionElements.filter {
+    var elms = segmentContainer.visionElements.filter {
         (it.rect.left <= baseElement.rect.right && baseElement.rect.left <= it.rect.right)
+    }
+    if (mergeIncluded.not()) {
+        elms = elms.filter { baseElement.bounds.isIncludedIn(it.bounds).not() }
     }
 
     /**

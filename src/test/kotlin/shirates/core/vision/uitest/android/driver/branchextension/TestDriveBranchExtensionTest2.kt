@@ -9,8 +9,8 @@ import shirates.core.driver.branchextension.ifTrue
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.testcode.Manual
-import shirates.core.vision.driver.branchextension.ifImageIs
-import shirates.core.vision.driver.branchextension.ifImageIsNot
+import shirates.core.vision.driver.branchextension.ifImageLabelIs
+import shirates.core.vision.driver.branchextension.ifImageLabelIsNot
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
@@ -131,13 +131,13 @@ class TestDriveBranchExtensionTest2 : VisionTest() {
                 }.action {
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageIs("[Apps Icon]") {
+                        .ifImageLabelIs("[Apps Icon]") {
                             describe("ifImageIs('[Apps Icon]') called")
                             ifImageIsCalled = true     // never called
                         }
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageIsNot("[Apps Icon]") {
+                        .ifImageLabelIsNot("[Apps Icon]") {
                             describe("ifImageIsNot('[Apps Icon]') called")
                             ifImageIsNotCalled = true     // called
                         }
@@ -152,13 +152,13 @@ class TestDriveBranchExtensionTest2 : VisionTest() {
                 }.action {
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageIs("[Connected devices Icon]") {
+                        .ifImageLabelIs("[Connected devices Icon]") {
                             describe("ifImageIs('[Connected devices Icon]') called")
                             ifImageIsCalled = true  // called
                         }
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageIsNot("[Connected devices Icon]") {
+                        .ifImageLabelIsNot("[Connected devices Icon]") {
                             describe("ifImageIsNot('[Connected devices Icon]') called")
                             ifImageIsNotCalled = true   //never called
                         }
@@ -173,7 +173,7 @@ class TestDriveBranchExtensionTest2 : VisionTest() {
                 }.action {
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageIs("[Connected devices Icon]") {
+                        .ifImageLabelIs("[Connected devices Icon]") {
                             describe("ifImageIs('[Connected devices Icon]') called")
                             ifImageIsCalled = true  // called
                         }.ifElse {
@@ -191,7 +191,7 @@ class TestDriveBranchExtensionTest2 : VisionTest() {
                 }.action {
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageIs("[App Icon]") {
+                        .ifImageLabelIs("[App Icon]") {
                             describe("ifImageIs('[App Icon]') called")
                             ifImageIsCalled = true  // never called
                         }.ifElse {
@@ -209,7 +209,7 @@ class TestDriveBranchExtensionTest2 : VisionTest() {
                 }.action {
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageIs("[App Icon]") {
+                        .ifImageLabelIs("[App Icon]") {
                             describe("ifImageIs('[App Icon]') called")
                             ifImageIsCalled = true  // never called
                         }.ifElse {

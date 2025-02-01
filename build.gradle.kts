@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "8.0.4-SNAPSHOT"
+version = "8.0.6-SNAPSHOT"
 
 val appiumClientVersion = "9.4.0"
 
@@ -128,10 +128,12 @@ tasks {
     compileTestKotlin {
         kotlinOptions.jvmTarget = "17"
     }
-    val sourcesJar by creating(Jar::class) {
+
+    val sourcesJar by registering(Jar::class, fun Jar.() {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
-    }
+        mustRunAfter("generateBuildConfig")
+    })
 }
 
 // Dokka
