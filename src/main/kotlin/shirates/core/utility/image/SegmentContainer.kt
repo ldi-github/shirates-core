@@ -41,8 +41,16 @@ class SegmentContainer(
 ) {
     val segments = mutableListOf<Segment>()
     val originalSegments = mutableListOf<Segment>()
-    val visionElements = mutableListOf<VisionElement>()
     var binary: GrayU8? = null
+
+    val visionElements: List<VisionElement>
+        get() {
+            var elements = segments.map {
+                it.createVisionElement()
+            }
+            elements = elements.sortedBy { it.rect.left }
+            return elements
+        }
 
     val rect: Rectangle
         get() {
@@ -380,23 +388,13 @@ class SegmentContainer(
             mergeIncluded()
         }
 
-        /**
-         * VisionElements
-         */
-        visionElements.clear()
-        var elements = segments.map {
-            it.createVisionElement()
-        }
-        elements = elements.sortedBy { it.rect.left }
-        visionElements.addAll(elements)
-
         val drawImage = draw()
         drawImage.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
 
         return this
     }
 
-    private fun mergeBlocks() {
+    internal fun mergeBlocks() {
 
         var lastSegmentCount = segments.size
         do {

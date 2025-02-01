@@ -62,6 +62,9 @@ internal fun VisionElement.rightLeftCore(
     mergeIncluded: Boolean,
 ): VisionElement {
 
+    /**
+     * get baseElement
+     */
     val thisSegmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
         containerImage = this.image,
@@ -76,21 +79,43 @@ internal fun VisionElement.rightLeftCore(
         if (relative.isLeft) visionElements.firstOrNull() ?: this
         else visionElements.lastOrNull() ?: this
 
+    /**
+     * split screenshot into segments
+     */
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
         containerImage = CodeExecutionContext.lastScreenshotImage,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
     ).split()
+
+    /**
+     * filter items
+     */
     val elms = segmentContainer.visionElements.filter {
-        (it.rect.top <= this.rect.bottom && this.rect.top <= it.rect.bottom)
+        (it.rect.top <= baseElement.rect.bottom && baseElement.rect.top <= it.rect.bottom)
     }
+
+    /**
+     * merge
+     */
+    val mergeContainer = SegmentContainer(
+        mergeIncluded = true,
+        containerImage = CodeExecutionContext.lastScreenshotImage,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+    )
+    for (e in elms) {
+        mergeContainer.addSegment(rect = e.rect)
+    }
+    val mergedElements = mergeContainer.visionElements
+
     val sortedElements =
         if (relative.isRight)
-            elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerX <= it.rect.left }
+            mergedElements.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerX <= it.rect.left }
                 .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         else
-            elms.filter { it.isSameRect(baseElement).not() && it.rect.right <= baseElement.rect.centerX }
+            mergedElements.filter { it.isSameRect(baseElement).not() && it.rect.right <= baseElement.rect.centerX }
                 .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
     val v =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
@@ -154,6 +179,9 @@ internal fun VisionElement.aboveBelowCore(
     mergeIncluded: Boolean,
 ): VisionElement {
 
+    /**
+     * split screenshot into segments
+     */
     val thisSegmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
         containerImage = this.image,
@@ -167,6 +195,9 @@ internal fun VisionElement.aboveBelowCore(
         if (relative.isAbove) visionElements.firstOrNull() ?: this
         else visionElements.lastOrNull() ?: this
 
+    /**
+     * filter items
+     */
     val segmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
         containerImage = CodeExecutionContext.lastScreenshotImage,
@@ -174,14 +205,29 @@ internal fun VisionElement.aboveBelowCore(
         segmentMarginVertical = segmentMarginVertical,
     ).split()
     val elms = segmentContainer.visionElements.filter {
-        (it.rect.left <= this.rect.right && this.rect.left <= it.rect.right)
+        (it.rect.left <= baseElement.rect.right && baseElement.rect.left <= it.rect.right)
     }
+
+    /**
+     * merge
+     */
+    val mergeContainer = SegmentContainer(
+        mergeIncluded = true,
+        containerImage = CodeExecutionContext.lastScreenshotImage,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+    )
+    for (e in elms) {
+        mergeContainer.addSegment(rect = e.rect)
+    }
+    val mergedElements = mergeContainer.visionElements
+
     val sortedElements =
         if (relative.isBelow)
-            elms.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerY < it.rect.top }
+            mergedElements.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerY < it.rect.top }
                 .sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { Math.abs(it.rect.centerX - this.rect.centerX) })
         else
-            elms.filter { it.isSameRect(baseElement).not() && it.rect.bottom < baseElement.rect.centerY }
+            mergedElements.filter { it.isSameRect(baseElement).not() && it.rect.bottom < baseElement.rect.centerY }
                 .sortedWith(compareByDescending<VisionElement> { it.rect.top }.thenBy { Math.abs(it.rect.centerX - this.rect.centerX) })
     val v =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
