@@ -77,11 +77,11 @@ object CreateMLUtility {
 
         val accuracy100 = content.contains("Accuracy: 100.00%")
         if (accuracy100.not()) {
-            printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            printWarn("!!                                                                  !!")
+            printInfo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            printInfo("!!                                                                  !!")
             printWarn("!! CAUTION!  Learning has a problem. Accuracy is not 100%.          !!")
-            printWarn("!!                                                                  !!")
-            printWarn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            printInfo("!!                                                                  !!")
+            printInfo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         }
         return accuracy100
     }

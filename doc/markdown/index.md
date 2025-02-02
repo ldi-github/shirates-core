@@ -1,5 +1,9 @@
 # Shirates/Vision [Beta]
 
+[in Japanese(日本語)](index_ja.md)
+
+### Shirates versions
+
 **Shirates/Vision** is new version of Shirates.<br>
 [**Shirates/Classic**](classic/index.md) is old version.
 

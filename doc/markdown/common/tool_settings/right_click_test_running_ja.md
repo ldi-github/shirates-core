@@ -1,6 +1,6 @@
 # 右クリックによるテスト実行を有効にする
 
-### 右クリックによるテスト実行を有効にする
+右クリックでテストを実行できるようにします。
 
 1. `IntelliJ IDEA > Settings` (or `File > Settings`)
 1. `Build, Execution, Deployment > Build Tools > Gradle`

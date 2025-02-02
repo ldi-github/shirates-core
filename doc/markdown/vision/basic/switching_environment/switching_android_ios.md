@@ -65,7 +65,7 @@ class iOSSettingsVisionDemo : VisionTest() {
 <br>
 <hr>
 
-## testrun annotation
+## @testrun annotation
 
 You can specify arbitrary testrun.properties with `@testrun` annotation.
 
@@ -79,8 +79,6 @@ class AndroidSettingsDemo : UITest() {
 
 }
 ```
-
-#### testrun.properties
 
 2. Set `os` parameter in the `testrun.properties` file.
 

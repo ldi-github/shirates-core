@@ -1,9 +1,11 @@
 # Shirates/Classic (Classic)
 
-[**Shirates/Vision**](../index) is new version of Shirates.<br>
-**Shirates/Classic** is old version.
-
 [in Japanese](index_ja.md)
+
+## Shirates versions
+
+[Shirates/Vision](../index) is new version of Shirates.<br>
+**Shirates/Classic** is old version.
 
 ## Repository
 

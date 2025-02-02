@@ -1,21 +1,21 @@
-# Creating project (Vision)
+# プロジェクトを作成する (Vision)
 
-## Create new project
+## 新規プロジェクトの作成
 
-1. Open IntelliJ IDEA, select `File > New > Project`.
-1. In New Project window, select `Kotlin` tab.
-1. Input fields.
+1. IntelliJ IDEAを開き、`File > New > Project`を選択します。
+1. New Projectウィンドウで`Kotlin`タブを選択します。
+1. 以下の内容で項目に入力します。
     - `Name: Vision1`
-    - `Location: (Your location)`
+    - `Location: (選択してください)`
     - `Build system: Gradle`
-    - `JDK: (Your choice)`
+    - `JDK: (選択してください)`
     - `Gradle DSL: Kotlin`
     - `Add sample code: OFF`
     - `Generate multi-module build`: OFF
       <br>![](_images/new_project.png)
-1. Click `Create`.
-1. Wait for a while until background tasks finish. It may take minutes.
-1. Edit `build.gradle.kts` as follows.
+1. `Create`をクリックします。
+1. バックグラウンドタスクが完了するまで待ちます。これには数分かかる場合があります。
+1. `build.gradle.kts`を下記のように編集します。
 
 ### build.gradle.kts (example)
 
@@ -54,11 +54,11 @@ kotlin {
 }
 ```
 
-Click reload on Gradle pane.
+Gradleペインの `reload` をクリックしてロードします。
 
-![](../../../classic/basic/_images/gradle_refresh.png)
+![](_images/gradle_refresh.png)
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

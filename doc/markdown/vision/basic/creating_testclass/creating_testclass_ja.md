@@ -1,14 +1,14 @@
-# Creating TestClass (Vision)
+# テストクラスを作成する (Vision)
 
-## UITest class
+## VisionTest class
 
-1. Create a package directory `src/test/kotlin/exercise`.
+1. `src/test/kotlin/exercise`にパッケージディレクトリを作成します。
 
    ![](../_images/creating_package_1.png)<br><br>
    ![](../_images/creating_package_2.png)
 
 
-2. Create a kotlin class file `VisionTestClass1`.
+2. kotlinのクラスファイルとして`VisionTestClass1`を作成します。
 
    ![](../_images/creating_testclass.png)
 
@@ -17,9 +17,9 @@
    ![](../_images/creating_testclass_3.png)
 
 
-3. Type `" : VisionTest()"` after class name, move mouse cursor to it, then click `import` on context menu. <br>Shortcut
-   is
-   useful. (Mac: option+Enter, Windows: Alt+Enter)
+3. クラス名の後で`" : VisionTest()"`とタイプし、 マウスカーソルをその上に移動し、コンテキストメニューの`import`
+   を選択します。 <br>
+   ショートカット(option+Enter)を使用すると便利です。
 
    ![](../_images/import_package.png)
 
@@ -32,9 +32,9 @@ class VisionTestClass1: VisionTest() {
 }
 ```
 
-## @Test annotation
+## @Testアノテーション
 
-Create a function (`testFunc1`) and put `@Test` annotation of **JUnit 5** (**org.junit.jupiter.api.Test**).
+`testFunc1`という名前で関数を作成し **JUnit 5** (**org.junit.jupiter.api.Test**)の`@Test`アノテーションを付与します。
 
 ```kotlin
 package exercise
@@ -53,23 +53,23 @@ class VisionTestClass1: VisionTest() {
 
 ## Running test (as Android)
 
-Now you can run `testFunc1()`. Default os is Android.<br>
-Right-click on `testFunc1()` and select `Debug`. <br>
+これで `testFunc1()` を実行できるようになりました。デフォルトのOSはAndroidです。<br>
+`testFunc1()` を右クリックして`Debug`を選択します。 <br>
 ![](../_images/run_testfunc1.png)
 
-When **Vision-Server** is not running, you will see the following error messages.
+以下のようなエラーが出力された場合はVision-Serverが起動していません。
 
 ```
 Could not connect to vision-server.
 shirates.core.exception.TestEnvironmentException: Could not connect to vision-server.
 ```
 
-See **Setting up shirates-vision-server** in [Quick Start](../../../quick-start.md)
-to run the server.
+この場合、[クイックスタート](../../../quick-start_ja.md)
+の**shirates-vision-server のセットアップ**を参照してサーバーを起動してください。
 
-You can see output in the console as followings if succeeded.
+正常に起動した場合はコンソールに以下のように出力されます。
 
-#### Console output
+#### コンソール出力
 
 ```
 lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	timeDiff	mode	(group)	message
@@ -309,13 +309,13 @@ BUILD SUCCESSFUL in 31s
 2:36:01: Execution finished ':test --tests "exercise.VisionTestClass1.testFunc1"'.
 ```
 
-## Running test (as iOS)
+## テストを実行する (iOS)
 
-1. Open `testrun.global.properties`.
-2. Set `os=ios`. <br> ![](../_images/testrun_global_properties_ios.png)
-3. Right-click on `testFunc1()` and select `Debug`.
+1. `testrun.global.properties`を開きます。
+2. `os=ios`を指定します。 <br> ![](../_images/testrun_global_properties_ios.png)
+3. `testFunc1()`を右クリックして`Debug`を選択します。
 
-#### Console output
+#### コンソール出力
 
 ```
 ...
@@ -329,15 +329,15 @@ BUILD SUCCESSFUL in 31s
 ...
 ```
 
-If you encounter another error see [Error messages](../../troubleshooting/error_warning_messages.md).
+他のエラーが出る場合は [Error messages](../../../common/troubleshooting/error_warning_messages.md)を参照してください。
 
-## @Order annotation
+## @Orderアノテーション
 
-You can use **@Order** annotation of JUnit 5 to indicate execution order you want.
+JUnit 5の **@Order** アノテーションを使用することで実行順を指定できます。
 
-## @DisplayName annotation
+## @DisplayNameアノテーション
 
-You can use **@DisplayName** annotation of JUnit 5 to describe test scenario.
+JUnit 5の **@DisplayName** アノテーションを使用することでテストシナリオの説明を記載できます。
 
 ### Example
 
@@ -376,11 +376,11 @@ class VisionTestClass1 : VisionTest() {
 
 ![](../_images/order_display_annotation.png)
 
-## @Nested support?
+## @Nestedのサポートについて
 
-No. **Do not** use `@Nested annotation` of JUnit 5. This limitation is of software design of shirates-core.
+JUnit5の `@Nested`アノテーションは使用しないでください。 これはshirates-coreのソフトウェアデザインに伴う制限です。
 
 ### Link
 
-- [index](../../../index.md)
+- [index](../../../index_ja.md)
 

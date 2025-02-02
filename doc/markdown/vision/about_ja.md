@@ -28,6 +28,10 @@ CV駆動なのでAndroidとiOS上の全てのアプリケーションプラッ�
 コンピュータービジョン駆動のAPIはDOMへのアクセス（この処理が特にiOSでは非常に遅い）をバイパスします。 Shirates/Vision
 のパフォーマンスは旧バージョン(Shirates/Classic)と比較してiOSにおけるパフォーマンスが劇的に改善されています。
 
+### Androidにおける安定性改善
+
+Shirates/Vision の安定性は旧バージョン(Shirates/Classic)と比較して改善されています。
+
 ### Shirates/Classic
 
 [**Shirates/Classic**](classic/index.md) は古いバージョンです。従来は単に**Shirates**

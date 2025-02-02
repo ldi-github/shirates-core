@@ -29,10 +29,14 @@ You can run tests on every application platform on Android and iOS because of CV
 Computer vision driven API bypasses accessing DOM (This process is very slow especially for iOS). The performance of
 Shirates/Vision has been improved on iOS dramatically over the former version(Shirates/Classic).
 
+### Improved stability especially on Android<br>
+
+The stability of Shirates/Vision has been improved on Android over the former version(Shirates/Classic).
+
 ### Shirates/Classic
 
-[**Shirates/Classic**](classic/index.md) is an older version of Shirates, previously simply Shirates. It is a
-traditional method testing framework with DOM access using appium.
+[**Shirates/Classic**](classic/index.md) is an older version of Shirates, previously simply **Shirates**.
+It is a traditional testing framework using appium with DOM access.<br>
 **Shirates/Vision** is a newer version of Shirates.
 
 ### Link

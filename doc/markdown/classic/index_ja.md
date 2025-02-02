@@ -2,6 +2,11 @@
 
 [in English](index.md)
 
+## Shiratesのバージョン
+
+[Shirates/Vision](../index_ja.md) はShiratesの新しいバージョンです。<br>
+**Shirates/Classic** は古いバージョンです。
+
 ## リポジトリ
 
 - [shirates-core](https://github.com/ldi-github/shirates-core)
@@ -64,7 +69,7 @@
 - [パラメーター構成ファイル](../common/parameter/parameter_configuration_files_ja.md)
 - [パラメーター](../common/parameter/parameters_ja.md)
 - [プロファイルの構成](../common/parameter/profile_configuration_ja.md)
-- [自動デバイス検出](basic/parameter/automatic_device_detection_ja.md)
+- [自動デバイス検出](../common/parameter/automatic_device_detection_ja.md)
 
 ### 関数/プロパティ
 
