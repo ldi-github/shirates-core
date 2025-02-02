@@ -6,7 +6,7 @@
 
 ## News
 
-- [2025/2/2] **AI-Vision feature** is unleashed in **Shirates/Vision[Beta]**.
+- [2025/2/2] **Shirates/Vision[Beta]** released. **AI-Vision feature** is unleashed.
 - [2024/12/17] Bug
   Fixed [Unable to start session after updating to macOS 15.2](https://github.com/ldi-github/shirates-core/issues/119)
 
