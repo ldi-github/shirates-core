@@ -3,6 +3,7 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 

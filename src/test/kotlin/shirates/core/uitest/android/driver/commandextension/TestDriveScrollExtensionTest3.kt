@@ -122,7 +122,7 @@ class TestDriveScrollExtensionTest3 : UITest() {
             }
             case(4) {
                 action {
-                    it.tap("[<-]")
+                    it.tap("[←]")
                     withScrollUp {
                         it.tap("[Network & internet]")
                     }

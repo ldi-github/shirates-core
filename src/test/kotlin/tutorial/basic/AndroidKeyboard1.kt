@@ -3,6 +3,9 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.keyboardIsNotShown
+import shirates.core.driver.commandextension.keyboardIsShown
+import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.UITest
 

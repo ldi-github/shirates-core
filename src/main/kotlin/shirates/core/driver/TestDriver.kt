@@ -26,7 +26,7 @@ import shirates.core.driver.TestMode.isVirtualDevice
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.befavior.TapHelper
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.eventextension.TestDriverOnScreenContext
+import shirates.core.driver.eventextension.TestDriveOnScreenContext
 import shirates.core.driver.eventextension.removeScreenHandler
 import shirates.core.exception.*
 import shirates.core.logging.*
@@ -34,6 +34,7 @@ import shirates.core.logging.Message.message
 import shirates.core.proxy.AppiumProxy
 import shirates.core.server.AppiumServerManager
 import shirates.core.testcode.CAEPattern
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.*
 import shirates.core.utility.android.AdbUtility
 import shirates.core.utility.android.AndroidDeviceUtility
@@ -52,6 +53,11 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.VisionContext
+import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
+import shirates.core.vision.driver.eventextension.removeScreenHandler
+import shirates.core.vision.driver.syncScreen
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -80,6 +86,15 @@ object TestDriver {
             return mAppiumDriver!!
         }
     private var mAppiumDriver: AppiumDriver? = null
+
+
+    /**
+     * visionRootElement
+     */
+    var visionRootElement: VisionElement = VisionElement(capture = false)
+        internal set(value) {
+            field = value
+        }
 
     /**
      * isInitialized
@@ -140,23 +155,6 @@ object TestDriver {
         }
 
     /**
-     * rootElement
-     */
-    var rootElement: TestElement
-        get() {
-            if (testContext.useCache || isNoLoadRun) {
-                return TestElementCache.rootElement
-            }
-            val ms = Measure("rootElement")
-            TestElementCache.rootElement = appiumDriver.findElement(By.xpath("//*")).toTestElement()
-            ms.end()
-            return TestElementCache.rootElement
-        }
-        set(value) {
-            TestElementCache.rootElement = value
-        }
-
-    /**
      * refreshLastElement
      */
     fun refreshLastElement(): TestElement {
@@ -173,18 +171,14 @@ object TestDriver {
             return lastElement
         }
 
-        val ms = Measure("$lastElement")
-
         syncCache()
 
         if (lastElement.isEmpty.not()) {
             lastElement = lastElement.refreshThisElement()
         }
         if (lastElement.isEmpty) {
-            lastElement = rootElement
+            lastElement = testDrive.rootElement
         }
-
-        ms.end()
 
         return lastElement
     }
@@ -193,6 +187,11 @@ object TestDriver {
      * lastElement
      */
     var lastElement: TestElement = TestElement.emptyElement
+
+    /**
+     * lastVisionElement
+     */
+    var lastVisionElement: VisionElement = VisionElement.emptyElement
 
     /**
      * lastError
@@ -231,6 +230,12 @@ object TestDriver {
      */
     val shouldTakeScreenshot: Boolean
         get() {
+            if (CodeExecutionContext.lastScreenshotImage == null) {
+                return true
+            }
+            if (CodeExecutionContext.screenshotSynced.not()) {
+                return true
+            }
             return CAEPattern.shouldTakeScreenshot && TestDriverCommandContext.shouldTakeScreenshot
         }
 
@@ -427,8 +432,15 @@ object TestDriver {
             }
         }
         set(value) {
-            field = value
-            fireScreenHandler(screenName = value)
+            val screenName = value.getNicknameWithoutSuffix()
+            if (screenName.isNotBlank() && field != screenName) {
+                field = screenName
+                if (testContext.enableCache) {
+                    fireTestDriveScreenHandler(screenName = screenName)
+                } else {
+                    fireVisionDriveScreenHandler(screenName = screenName)
+                }
+            }
         }
 
     internal fun getOverlayElements(): MutableList<TestElement> {
@@ -479,12 +491,12 @@ object TestDriver {
     fun fireIrregularHandler(force: Boolean = false) {
 
         if (force.not()) {
-            if (isFiringIrregularHandler || testContext.enableIrregularHandler.not() || TestMode.isNoLoadRun || isInitialized.not()) {
+            if (isFiringIrregularHandler || testContext.enableIrregularHandler.not() || TestMode.isNoLoadRun || isInitialized.not() || testContext.enableCache.not()) {
                 return
             }
         }
 
-        var lastSource = ""
+        var lastSource: String
         for (i in 1..5) {
             lastSource = AppiumProxy.lastSource
             fireIrregularHandlerCore()
@@ -520,12 +532,9 @@ object TestDriver {
 
     var firingScreenHandlerScreens = mutableListOf<String>()
 
-    /**
-     * fireScreenHandler
-     */
-    fun fireScreenHandler(screenName: String): TestDriverOnScreenContext {
+    private fun fireTestDriveScreenHandler(screenName: String): TestDriveOnScreenContext {
 
-        val context = TestDriverOnScreenContext(screenName = screenName)
+        val context = TestDriveOnScreenContext(screenName = screenName)
 
         if (firingScreenHandlerScreens.contains(screenName)) {
             return context
@@ -538,13 +547,45 @@ object TestDriver {
                 return context
             }
 
-            if (testContext.screenHandlers.containsKey(screenName)) {
-                val handler = testContext.screenHandlers[screenName]!!
+            if (testContext.testDriveScreenHandlers.containsKey(screenName)) {
+                val handler = testContext.testDriveScreenHandlers[screenName]!!
                 context.fired = true
                 screenshot(force = true, onChangedOnly = true)
                 handler(context)
                 if (context.keep.not()) {
                     testDrive.removeScreenHandler(screenName)
+                }
+            }
+        } finally {
+            if (firingScreenHandlerScreens.contains(screenName)) {
+                firingScreenHandlerScreens.remove(screenName)
+            }
+        }
+        return context
+    }
+
+    private fun fireVisionDriveScreenHandler(screenName: String): VisionDriveOnScreenContext {
+
+        val context = VisionDriveOnScreenContext(screenName = screenName)
+
+        if (firingScreenHandlerScreens.contains(screenName)) {
+            return context
+        }
+
+        try {
+            firingScreenHandlerScreens.add(screenName)
+
+            if (testContext.enableScreenHandler.not()) {
+                return context
+            }
+
+            if (testContext.visionDriveScreenHandlers.containsKey(screenName)) {
+                val handler = testContext.visionDriveScreenHandlers[screenName]!!
+                context.fired = true
+                screenshot(force = true, onChangedOnly = true)
+                handler(context)
+                if (context.keep.not()) {
+                    visionDrive.removeScreenHandler(screenName)
                 }
             }
         } finally {
@@ -572,6 +613,10 @@ object TestDriver {
         lockFile(filePath = UserVar.downloads.resolve(".createAppiumDriver")) {
             createAppiumDriverCore(profile = profile)
         }
+
+        // Capture screen information
+        screenshot(force = true)
+        visionRootElement = VisionElement()
 
         ms.end()
         TestLog.info("AppiumDriver initialized.")
@@ -617,8 +662,8 @@ object TestDriver {
             retryMaxCount = testContext.retryMaxCount,
             retryTimeoutSeconds = testContext.retryTimeoutSeconds,
             retryPredicate = getRetryPredicate(profile = profile, capabilities = capabilities),
-            onError = getOnError(profile = profile, capabilities = capabilities),
-            onBeforeRetry = getBeforeRetry(profile = profile, capabilities = capabilities),
+            onError = getOnError(profile = profile),
+            onBeforeRetry = getBeforeRetry(profile = profile),
             action = getInitFunc(profile = profile, capabilities = capabilities)
         )
 
@@ -767,7 +812,6 @@ object TestDriver {
 
     private fun getOnError(
         profile: TestProfile,
-        capabilities: DesiredCapabilities
     ): (RetryContext<Unit>) -> Unit {
 
         val onError: (RetryContext<Unit>) -> Unit = { context ->
@@ -794,7 +838,6 @@ object TestDriver {
 
     private fun getBeforeRetry(
         profile: TestProfile,
-        capabilities: DesiredCapabilities
     ): (RetryContext<Unit>) -> Unit {
 
         val beforeRetry: (RetryContext<Unit>) -> Unit = { context ->
@@ -813,7 +856,7 @@ object TestDriver {
                      * Emulator process list
                      */
                     val psResult = AdbUtility.ps(udid = profile.udid)
-                    TestLog.directoryForLog.resolve("${TestLog.lines.count()}_android_ps.txt")
+                    TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_android_ps.txt")
                         .toFile().writeText(psResult)
                     restartAdbServerEmulatorAppiumServer(profile, context)
                 } else if (isiOS) {
@@ -946,7 +989,7 @@ object TestDriver {
         /**
          * Health check
          */
-        if (PropertiesManager.enableHealthCheck) {
+        if (PropertiesManager.enableHealthCheck && testContext.isVisionTest.not()) {
             TestLog.info("[Health check] start")
 
             try {
@@ -1010,24 +1053,24 @@ object TestDriver {
                         }
                     }
                 ) { wc ->
-                    rootElement = AppiumProxy.getSource()
+                    testDrive.rootElement = AppiumProxy.getSource()
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
-                    rootElement.sourceCaptureFailed = false
+                    testDrive.rootElement.sourceCaptureFailed = false
                     if (hasIncompleteWebView()) {
                         if (wc.stopWatch.elapsedSeconds < wc.waitSeconds) {
                             TestLog.info("WebView is incomplete", PropertiesManager.enableSyncLog)
-                            rootElement.sourceCaptureFailed = true
+                            testDrive.rootElement.sourceCaptureFailed = true
                         }
                     } else {
                         if (isiOS && TestElementCache.allElements.count() < 3) {
-                            rootElement.sourceCaptureFailed = true
+                            testDrive.rootElement.sourceCaptureFailed = true
                             TestLog.warn("Source capture failed.", PropertiesManager.enableSyncLog)
                         }
                     }
-                    rootElement.sourceCaptureFailed.not()
+                    testDrive.rootElement.sourceCaptureFailed.not()
                 }
-                if (rootElement.sourceCaptureFailed) {
+                if (testDrive.rootElement.sourceCaptureFailed) {
                     TestLog.warn("WebView is incomplete.", PropertiesManager.enableSyncLog)
                 }
 
@@ -1040,7 +1083,7 @@ object TestDriver {
                 if (lastElement.selector != null) {
                     lastElement = lastElement.refreshLastElement()
                 } else {
-                    lastElement = rootElement
+                    lastElement = testDrive.rootElement
                 }
 
             }
@@ -1095,6 +1138,7 @@ object TestDriver {
     fun clearLast() {
 
         lastElement = TestElement.emptyElement
+        lastVisionElement = VisionElement.emptyElement
     }
 
     /**
@@ -1120,13 +1164,12 @@ object TestDriver {
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         safeElementOnly: Boolean = false,
-        log: Boolean = false
     ): TestElement {
 
         val sel = expandExpression(expression = expression)
         var e = TestElement(selector = sel)
         val context = TestDriverCommandContext(lastElement)
-        context.execSelectCommand(selector = sel, subject = sel.nickname, log = log) {
+        context.execSelectCommand(selector = sel, subject = sel.nickname) {
             e = findImageOrSelectCore(
                 selector = sel,
                 allowScroll = allowScroll,
@@ -1148,7 +1191,7 @@ object TestDriver {
         swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
-        selectContext: TestElement = rootElement,
+        selectContext: TestElement = testDrive.rootElement,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         safeElementOnly: Boolean
@@ -1201,7 +1244,7 @@ object TestDriver {
     private fun selectCore(
         selector: Selector,
         allowScroll: Boolean,
-        selectContext: TestElement = rootElement,
+        selectContext: TestElement = testDrive.rootElement,
         frame: Bounds?,
         useCache: Boolean,
         swipeToCenter: Boolean,
@@ -1297,16 +1340,16 @@ object TestDriver {
                     waitSeconds = waitSeconds,
                     refreshCache = useCache,
                     throwOnError = false,
-                    onBeforeRetry = { sc ->
+                    onBeforeRetry = {
                         if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
                             testDrive.withoutScroll {
                                 testContext.onSelectErrorHandler!!.invoke()
                             }
                         }
                         val newSelectContext = currentSelectContext.refreshThisElement()
-                        currentSelectContext = if (newSelectContext.isFound) newSelectContext else rootElement
+                        currentSelectContext = if (newSelectContext.isFound) newSelectContext else testDrive.rootElement
                     }
-                ) { sc ->
+                ) {
                     val e = if (useCache) {
                         TestElementCache.select(
                             selector = selector,
@@ -1464,7 +1507,7 @@ object TestDriver {
         return e
     }
 
-    private fun selectDirectByXPath(
+    internal fun selectDirectByXPath(
         selector: Selector,
         fullXPathCondition: String,
         frame: Bounds? = null
@@ -1617,7 +1660,7 @@ object TestDriver {
                 repeat = 1,
                 maxLoopCount = scrollMaxCount,
                 direction = direction,
-                durationSeconds = scrollDurationSeconds,
+                scrollDurationSeconds = scrollDurationSeconds,
                 startMarginRatio = scrollStartMarginRatio,
                 endMarginRatio = scrollEndMarginRatio,
                 actionFunc = actionFunc
@@ -1665,11 +1708,11 @@ object TestDriver {
 
     internal fun selectWithScroll(
         selector: Selector,
-        frame: Bounds? = viewBounds,
+        frame: Bounds? = null,
         scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         direction: ScrollDirection = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
-        durationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
+        scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
         startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
         endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
         scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
@@ -1711,7 +1754,7 @@ object TestDriver {
             repeat = 1,
             maxLoopCount = scrollMaxCount,
             direction = direction,
-            durationSeconds = durationSeconds,
+            scrollDurationSeconds = scrollDurationSeconds,
             startMarginRatio = startMarginRatio,
             endMarginRatio = endMarginRatio,
             actionFunc = actionFunc
@@ -1767,7 +1810,7 @@ object TestDriver {
                 scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 swipeToCenter = swipeToCenter,
-                durationSeconds = scrollDurationSeconds,
+                scrollDurationSeconds = scrollDurationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 scrollMaxCount = scrollMaxCount,
@@ -1785,7 +1828,9 @@ object TestDriver {
         force: Boolean = false,
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
-        withXmlSource: Boolean = TestLog.enableXmlSourceDump
+        withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        withTextMatching: Boolean = true,
+        log: Boolean = CodeExecutionContext.shouldOutputLog
     ): TestDriver {
 
         if (!force && !testContext.manualScreenshot) {
@@ -1797,16 +1842,20 @@ object TestDriver {
             force = force,
             onChangedOnly = onChangedOnly,
             filename = filename,
-            withXmlSource = withXmlSource
+            withXmlSource = withXmlSource,
+            withTextMatching = withTextMatching,
+            log = log
         )
     }
 
     internal fun autoScreenshot(
         force: Boolean = false,
-        sync: Boolean = true,
+        sync: Boolean = testContext.useCache,
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
-        withXmlSource: Boolean = TestLog.enableXmlSourceDump
+        withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        withTextMatching: Boolean = true,
+        log: Boolean = CodeExecutionContext.shouldOutputLog
     ) {
         if (testContext.autoScreenshot.not()) {
             return
@@ -1817,7 +1866,9 @@ object TestDriver {
             sync = sync,
             onChangedOnly = onChangedOnly,
             filename = filename,
-            withXmlSource = withXmlSource
+            withXmlSource = withXmlSource,
+            withTextMatching = withTextMatching,
+            log = log
         )
     }
 
@@ -1826,7 +1877,9 @@ object TestDriver {
         sync: Boolean = testContext.useCache,
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
-        withXmlSource: Boolean = TestLog.enableXmlSourceDump
+        withXmlSource: Boolean = TestLog.enableXmlSourceDump,
+        withTextMatching: Boolean,
+        log: Boolean = CodeExecutionContext.shouldOutputLog
     ): TestDriver {
 
         if (TestMode.isNoLoadRun) {
@@ -1835,74 +1888,126 @@ object TestDriver {
         if (isInitialized.not()) {
             return this
         }
+        if (testContext.useCache.not() && CodeExecutionContext.screenshotSynced && force.not()) {
+            return this
+        }
+
+//        val swScreenshotCore = StopWatch("screenshotCore")
 
         val screenshotTime = Date()
 
-        if (force.not()) {
-            if (CodeExecutionContext.shouldOutputLog.not()) {
-                return this
+        if (testContext.useCache) {
+            /**
+             * Classic cache mode (not for Vision)
+             */
+            if (force.not()) {
+                if (log.not()) {
+                    return this
+                }
+                if (shouldTakeScreenshot.not()) {
+                    return this
+                }
+                if (CodeExecutionContext.lastScreenshotTime != null) {
+                    val diff = screenshotTime.time - CodeExecutionContext.lastScreenshotTime!!.time
+                    val intervalMilliseconds = PropertiesManager.screenshotIntervalSeconds * 1000
+                    if (diff < intervalMilliseconds) {
+                        TestLog.trace("screenshot() skipped. ($diff < $intervalMilliseconds)")
+                        return this
+                    }
+                }
             }
-            if (shouldTakeScreenshot.not()) {
-                return this
+            if (sync) {
+                syncCache()
             }
-            if (CodeExecutionContext.lastScreenshotTime != null) {
-                val diff = screenshotTime.time - CodeExecutionContext.lastScreenshotTime!!.time
-                val intervalMilliseconds = PropertiesManager.screenshotIntervalSeconds * 1000
-                if (diff < intervalMilliseconds) {
-                    TestLog.trace("screenshot() skipped. ($diff < $intervalMilliseconds)")
+            if (force.not() && onChangedOnly) {
+                val sourceXml = TestElementCache.sourceXml
+                val xmlHasDifference = sourceXml != CodeExecutionContext.lastScreenshotXmlSource
+                if (xmlHasDifference.not()) {
                     return this
                 }
             }
-        }
-
-        if (sync) {
-            syncCache()
-        }
-        if (testContext.useCache && force.not() && onChangedOnly) {
-            val sourceXml = TestElementCache.sourceXml
-            val xmlHasDifference = sourceXml != CodeExecutionContext.lastScreenshotXmlSource
-            if (xmlHasDifference.not()) {
-                return this
+        } else {
+            if (PropertiesManager.screenshotScale != 1.0) {
+                throw TestConfigException("Parameter `screenshotScale` must be 1.0 on Vision mode. Check testrun.properties file or testrun.global.properties file.")
             }
         }
 
-        var screenshotFileName = filename ?: (TestLog.lines.count() + 1).toString()
-        if (screenshotFileName.lowercase().contains(".png").not()) {
-            screenshotFileName += ".png"
-        }
-
-        if (mAppiumDriver == null) {
-            throw TestDriverException("appiumDriver is null")
-        }
-
-        if (testContext.waitSecondsForAnimationComplete != 0.0) {
+        if (testContext.waitSecondsForAnimationComplete > 0.0) {
             Thread.sleep((testContext.waitSecondsForAnimationComplete * 1000).toLong())
         }
 
         var screenshotException: Throwable? = null
+
+        var screenshotFileName = ""
         try {
             CpuLoadService.waitForCpuLoadUnder()
 
-            val screenshot = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES)
-            val screenshotImage = screenshot.toBufferedImage()
+            val oldImage = CodeExecutionContext.lastScreenshotImage
 
-            if (onChangedOnly && screenshotImage.isSame(CodeExecutionContext.lastScreenshotImage)) {
-                return this
+            val sw = StopWatch("syncScreenshot")
+            visionDrive.syncScreen()
+            if (CodeExecutionContext.shouldOutputLog) {
+                sw.printInfo()
             }
 
-            CodeExecutionContext.lastScreenshotImage = screenshotImage
-            CodeExecutionContext.lastScreenshotTime = screenshotTime
+            val newImage = CodeExecutionContext.lastScreenshotImage
+            val changed = newImage.isSame(oldImage).not()
 
-            val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toFile()
+            if (changed.not() && onChangedOnly) {
+//                TestLog.printInfo("Saving screenshot skipped. (no change)")
+                return this
+            }
+//            printInfo("screenshotSynced=${CodeExecutionContext.screenshotSynced}")
+
+            screenshotFileName = filename ?: (TestLog.nextLineNo).toString()
+            if (screenshotFileName.lowercase().contains(".png").not()) {
+                screenshotFileName += ".png"
+            }
+
+            /**
+             * Save screenshot
+             */
+            val oldWorkingRegionElement = CodeExecutionContext.workingRegionElement
+            val screenshotFile = TestLog.directoryForLog.resolve(screenshotFileName).toString()
+            val screenshotImage = CodeExecutionContext.lastScreenshotImage!!
             screenshotImage.resizeAndSaveImage(
                 scale = PropertiesManager.screenshotScale,
-                resizedFile = screenshotFile,
+                resizedFile = screenshotFile.toPath().toFile(),
                 log = false
             )
-            CodeExecutionContext.lastScreenshot = screenshotFileName
+            CodeExecutionContext.lastScreenshotTime = screenshotTime
+            CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
+            CodeExecutionContext.lastScreenshotImage = screenshotImage
+            val vc = VisionContext(capture = true)
+            TestDriver.visionRootElement = VisionElement(visionContext = vc)
+            CodeExecutionContext.workingRegionElement = oldWorkingRegionElement.newVisionElement()
 
-            if (PropertiesManager.enableRerunOnScreenshotBlackout) {
+            if (log) {
+                val screenshotLine = TestLog.write(
+                    message = "screenshot: $screenshotFileName",
+                    logType = LogType.SCREENSHOT,
+                    scriptCommand = "screenshot"
+                )
+                screenshotLine.screenshot = screenshotFileName
+                screenshotLine.lastScreenshot = screenshotFileName
+                screenshotLine.subject = screenshotFileName
+            }
+
+            if (testContext.useCache.not()) {
+                TestDriver.currentScreen = "?"
+//                /**
+//                 * Update currentScreen (Vision mode)
+//                 */
+//                TestDriver.currentScreen =
+//                    ScreenRecognizer.recognizeScreen(
+//                        screenImageFile = screenshotFile,
+//                        withTextMatching = withTextMatching
+//                    )
+//                TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
+            }
+
+            if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout && testContext.useCache) {
                 val threshold = PropertiesManager.screenshotBlackoutThreshold
                 if (BufferedImageUtility.isBlackout(image = screenshotImage, threshold = threshold)) {
                     val share = BufferedImageUtility.getLargestColorShare(image = screenshotImage)
@@ -1920,19 +2025,12 @@ object TestDriver {
             screenshotException = t
         }
 
-        val screenshotLine = TestLog.write(
-            message = "screenshot",
-            logType = LogType.SCREENSHOT,
-            scriptCommand = "screenshot"
-        )
-        screenshotLine.screenshot = screenshotFileName
-        screenshotLine.lastScreenshot = screenshotFileName
-        screenshotLine.subject = screenshotFileName
-
-        if (withXmlSource && testContext.useCache) {
-            val fileName = screenshotFileName.replace(".png", ".xml")
-            outputXmlSource(filePath = TestLog.directoryForLog.resolve(fileName))
+        if (withXmlSource && testContext.useCache && screenshotFileName.isNotBlank()) {
+            val xmlFileName = screenshotFileName.replace(".png", ".xml")
+            outputXmlSource(filePath = TestLog.directoryForLog.resolve(xmlFileName))
         }
+
+//        swScreenshotCore.printInfo()
 
         if (screenshotException != null) {
             TestLog.warn("screenshot ${screenshotException.message}")
@@ -1945,12 +2043,12 @@ object TestDriver {
     /**
      * cropImage
      */
-    fun cropImage(cropInfo: CropInfo, refresh: Boolean = true): CropInfo {
+    fun cropImage(cropInfo: CropInfo): CropInfo {
 
         syncCache()
 
-        if (refresh || CodeExecutionContext.lastScreenshotImage == null) {
-            refreshImage()
+        if (CodeExecutionContext.lastScreenshotImage == null) {
+            screenshot(force = true)
         }
 
         cropInfo.originalImage = CodeExecutionContext.lastScreenshotImage!!
@@ -2123,7 +2221,7 @@ object TestDriver {
     }
 
     /**
-     * isScreen
+     * isScreen(for Classic mode)
      */
     fun isScreen(
         screenName: String,
@@ -2136,10 +2234,18 @@ object TestDriver {
         }
 
         val ms = Measure("■■■ Trying isScreen($screenName)")
+        if (ScreenRepository.screensDirectory.isBlank()) {
+            throw TestConfigException("screens directory is not configured. (useCache=${testContext.useCache})")
+        }
+
         val originalLastElement = lastElement
         try {
             NicknameUtility.validateScreenName(screenName)
-            val screenInfo = ScreenRepository.get(screenName)
+            val screenInfo = try {
+                ScreenRepository.get(screenName)
+            } catch (t: TestConfigException) {
+                throw TestConfigException("screenName '$screenName' is not registered in ${ScreenRepository.screensDirectory}.")
+            }
 
             var r = TestDriveObject.canSelectAll(
                 selectors = screenInfo.identitySelectors,
@@ -2177,6 +2283,8 @@ object TestDriver {
 
     internal var isSyncing = false
 
+    internal var isScreenshotSyncing = false
+
     /**
      * syncCache
      */
@@ -2203,6 +2311,7 @@ object TestDriver {
             return this
         }
 
+        val sw = StopWatch("syncCache")
         try {
             isSyncing = true
             invalidateCache()
@@ -2210,7 +2319,7 @@ object TestDriver {
             val context = TestDriverCommandContext(lastElement)
             context.execSilentCommand() {
                 var lastXml = TestElementCache.sourceXml
-                val sw = StopWatch().start()
+                val sw2 = StopWatch().start()
                 val enableSyncLog = PropertiesManager.enableSyncLog || TestLog.enableTrace
 
                 for (i in 1..maxLoopCount) {
@@ -2237,7 +2346,7 @@ object TestDriver {
                          * Synced
                          */
                         TestLog.info(
-                            "Synced. (elapsed=${sw.elapsedSeconds})",
+                            "Synced. (elapsed=${sw2.elapsedSeconds})",
                             log = enableSyncLog
                         )
                         refreshCurrentScreen()
@@ -2246,7 +2355,7 @@ object TestDriver {
 
                     lastXml = TestElementCache.sourceXml
 
-                    if (sw.elapsedSeconds > syncWaitSeconds) {
+                    if (sw2.elapsedSeconds > syncWaitSeconds) {
                         if (syncOnTimeout) {
                             /**
                              * Synced(Timeout)
@@ -2255,19 +2364,19 @@ object TestDriver {
                             refreshCurrentScreen()
                             val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
                             TestLog.info(
-                                "Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
+                                "Synchronization timed out (elapsed=${sw2.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
                                 log = enableSyncLog
                             )
                             return@execSilentCommand
                         } else {
-                            throw TestDriverException("Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
+                            throw TestDriverException("Synchronization timed out (elapsed=${sw2.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
                         }
                     }
 
                     /**
                      * Before next loop
                      */
-                    TestLog.info("elapsed=${sw.elapsedSeconds}, syncWaitSeconds=$syncWaitSeconds", log = enableSyncLog)
+                    TestLog.info("elapsed=${sw2.elapsedSeconds}, syncWaitSeconds=$syncWaitSeconds", log = enableSyncLog)
                     if (isAndroid) {
                         Thread.sleep((syncIntervalSeconds * 1000).toLong())
                         // Wait is required for Android because getSource of AndroidDriver is too fast.
@@ -2276,24 +2385,16 @@ object TestDriver {
                 TestElementCache.synced = true
                 refreshCurrentScreen()
                 TestLog.info(
-                    "Loop count has been exceeded. (maxLoopCount=$maxLoopCount, elapsed=${sw.elapsedSeconds}, currentScreen=$currentScreen)",
+                    "Loop count has been exceeded. (maxLoopCount=$maxLoopCount, elapsed=${sw2.elapsedSeconds}, currentScreen=$currentScreen)",
                     log = enableSyncLog
                 )
             }
         } finally {
             isSyncing = false
+            sw.printInfo()
         }
 
         return this
-    }
-
-    /**
-     * refreshImage
-     */
-    fun refreshImage() {
-
-        TestLog.info("refreshImage")
-        CodeExecutionContext.lastScreenshotImage = mAppiumDriver!!.getScreenshotAs(OutputType.BYTES).toBufferedImage()
     }
 
     /**
@@ -2377,7 +2478,7 @@ object TestDriver {
         try {
             val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             if (isAndroid) {
-                return rootElement.packageName == packageOrBundleId
+                return testDrive.rootElement.packageName == packageOrBundleId
             }
 
             var appName = AppNameUtility.getAppNameFromPackageName(packageName = packageOrBundleId)
@@ -2400,8 +2501,8 @@ object TestDriver {
      * tapAppIconCore
      */
     fun tapAppIconCore(
-        appIconName: String = shirates.core.driver.testContext.appIconName,
-        tapAppIconMethod: TapAppIconMethod = shirates.core.driver.testContext.tapAppIconMethod
+        appIconName: String = testContext.appIconName,
+        tapAppIconMethod: TapAppIconMethod = testContext.tapAppIconMethod
     ): TestElement {
 
         when (tapAppIconMethod) {
@@ -2417,7 +2518,7 @@ object TestDriver {
 
             else -> {
                 if (isAndroid) {
-                    if (testDrive.deviceManufacturer == "Google" || testDrive.deviceModel.contains("Android SDK")) {
+                    if (drive.deviceManufacturer == "Google" || drive.deviceModel.contains("Android SDK")) {
                         TapHelper.tapAppIconAsGooglePixel(appIconName = appIconName)
                     } else {
                         TapHelper.swipeLeftAndTapAppIcon(appIconName = appIconName)
@@ -2435,11 +2536,11 @@ object TestDriver {
         appNameOrAppIdOrActivityName: String,
         fallBackToTapAppIcon: Boolean,
         onLaunchHandler: (() -> Unit)?,
-        sync: Boolean
+        sync: Boolean = testContext.enableCache
     ) {
         if (appNameOrAppIdOrActivityName.contains("/")) {
             val activityName = appNameOrAppIdOrActivityName
-            launchByShellCore(packageOrBundleIdOrActivity = activityName)
+            launchByShellCore(packageOrBundleIdOrActivity = activityName, sync = sync)
             return
         }
 
@@ -2492,7 +2593,7 @@ object TestDriver {
 
     internal fun launchByShellCore(
         packageOrBundleIdOrActivity: String,
-        sync: Boolean = true,
+        sync: Boolean,
         onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler
     ): TestElement {
 
@@ -2508,6 +2609,31 @@ object TestDriver {
             }
         }
 
+        if (testContext.useCache.not()) {
+            /**
+             * Vision mode
+             */
+            if (isAndroid) {
+                TestDriveObjectAndroid.launchAndroidAppByShell(
+                    udid = testContext.profile.udid,
+                    packageNameOrActivityName = packageOrBundleIdOrActivity,
+                    onLaunchHandler = onLaunchHandler
+                )
+            } else {
+                TestDriveObjectIos.launchIosAppByShell(
+                    udid = testContext.profile.udid,
+                    bundleId = packageOrBundleIdOrActivity,
+                    sync = sync,
+                    onLaunchHandler = onLaunchHandler,
+                    log = true
+                )
+            }
+            return lastElement
+        }
+
+        /**
+         * Classic mode
+         */
         if (isAndroid) {
             TestDriveObjectAndroid.launchAndroidAppByShell(
                 udid = testContext.profile.udid,
@@ -2546,41 +2672,44 @@ object TestDriver {
             } catch (t: Throwable) {
                 TestLog.info("Launching app failed. Retrying. (bundleId=$bundleId) $t")
 
-                SyncUtility.doUntilTrue(
-                    waitSeconds = testContext.waitSecondsForLaunchAppComplete,
-                    maxLoopCount = 2,
-                ) {
-                    /**
-                     * Reset Appium session
-                     */
-                    if (isAndroid) {
-                        AndroidDeviceUtility.reboot(testContext.profile)
-                    } else if (isiOS) {
-                        IosDeviceUtility.terminateSpringBoardByUdid(udid = testContext.profile.udid)
-                    }
-                    createAppiumDriver()
-
-                    /**
-                     * Retry launchApp
-                     */
-                    val retry =
-                        try {
-                            TestDriveObjectIos.launchIosAppByShell(
-                                udid = testContext.profile.udid,
-                                bundleId = bundleId,
-                                log = true
-                            )
-                            false
-                        } catch (t: Throwable) {
-                            if (PropertiesManager.enableWarnOnRetryError) {
-                                TestLog.warn("Error: $t")
-                            }
-                            if (PropertiesManager.enableRetryLog) {
-                                TestLog.info("Retrying launching app. (bundleId=$bundleId)")
-                            }
-                            true
+                if (sync) {
+                    SyncUtility.doUntilTrue(
+                        waitSeconds = testContext.waitSecondsForLaunchAppComplete,
+                        maxLoopCount = 2,
+                    ) {
+                        /**
+                         * Reset Appium session
+                         */
+                        if (isAndroid) {
+                            AndroidDeviceUtility.reboot(testContext.profile)
+                        } else if (isiOS) {
+                            IosDeviceUtility.terminateSpringBoardByUdid(udid = testContext.profile.udid)
                         }
-                    retry
+                        createAppiumDriver()
+
+                        /**
+                         * Retry launchApp
+                         */
+                        val retry =
+                            try {
+                                TestDriveObjectIos.launchIosAppByShell(
+                                    udid = testContext.profile.udid,
+                                    bundleId = bundleId,
+                                    sync = sync,
+                                    log = true
+                                )
+                                false
+                            } catch (t: Throwable) {
+                                if (PropertiesManager.enableWarnOnRetryError) {
+                                    TestLog.warn("Error: $t")
+                                }
+                                if (PropertiesManager.enableRetryLog) {
+                                    TestLog.info("Retrying launching app. (bundleId=$bundleId)")
+                                }
+                                true
+                            }
+                        retry
+                    }
                 }
             }
         }

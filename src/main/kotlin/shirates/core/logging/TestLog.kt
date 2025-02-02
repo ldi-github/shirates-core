@@ -9,6 +9,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.report.TestReport
 import shirates.core.report.TestReportIndex
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.format
@@ -61,7 +62,7 @@ object TestLog {
      */
     val currentTestMethodName: String
         get() {
-            return UITestCallbackExtension.uiTest?.currentTestMethodName ?: ""
+            return UITestCallbackExtension.uiTestBase?.currentTestMethodName ?: ""
         }
 
     /**
@@ -87,6 +88,29 @@ object TestLog {
      * lines
      */
     val lines = mutableListOf<LogLine>()
+
+    /**
+     * currentLineNo
+     */
+    val currentLineNo: Int
+        get() {
+            return lines.size
+        }
+
+    /**
+     * nextLineNo
+     */
+    val nextLineNo: Int
+        get() {
+            return currentLineNo + 1
+        }
+
+    /**
+     * getNextScreenshotFileName
+     */
+    fun getNextScreenshotFileName(suffix: String = ""): String {
+        return "${nextLineNo}${suffix}.png"
+    }
 
     /**
      * allLines
@@ -571,8 +595,9 @@ object TestLog {
             result = result2,
             resultMessage = resultMsg,
             exception = exception,
-            lastScreenshot = if (CodeExecutionContext.lastScreenshot.isBlank()) ""
-            else CodeExecutionContext.lastScreenshot.toPath().fileName.toString(),
+            lastScreenshot =
+                if (CodeExecutionContext.lastScreenshotName.isNullOrBlank()) ""
+                else CodeExecutionContext.lastScreenshotName.toPath().fileName.toString(),
             testClassName = currentTestClassName,
             testMethodName = currentTestMethodName
         )
@@ -701,7 +726,7 @@ object TestLog {
 
         if (log.not()) return LogLine()
 
-        val calledStack = userCalledStackFrame ?: Thread.currentThread().stackTrace[1]
+        val calledStack = userCalledStackFrame
 
         val stacktrace = Thread.currentThread().stackTrace
         val frames = mutableListOf<StackTraceElement>()

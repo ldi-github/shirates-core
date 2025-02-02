@@ -5,10 +5,10 @@ import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
-import shirates.core.testcode.normalize
 import shirates.core.utility.element.IosPredicateUtility
 import shirates.core.utility.element.XPathUtility
 import shirates.core.utility.image.ImageMatchResult
+import shirates.core.utility.string.normalize
 import java.awt.image.BufferedImage
 import java.text.Normalizer
 import kotlin.reflect.full.memberProperties
@@ -76,6 +76,29 @@ class Selector(
         }
         set(value) {
             this["textMatches"] = value
+        }
+
+    /**
+     * textFiltersForDetect
+     */
+    val textFiltersForDetect: List<Filter>
+        get() {
+            val selectors = mutableListOf(this)
+            selectors.addAll(orSelectors)
+            val filters = mutableListOf<Filter>()
+            for (sel in selectors) {
+                filters.addAll(sel.filterMap.values)
+            }
+            val textFilters = filters.filter { it.name == "text" || it.name == "textContains" }
+            return textFilters
+        }
+
+    /**
+     * hasTextFilter
+     */
+    val hasTextFilter: Boolean
+        get() {
+            return textFiltersForDetect.any() || textMatches != null
         }
 
     var capturable: String?
@@ -336,10 +359,10 @@ class Selector(
 
     val hasMatches: Boolean
         get() {
-            fun hasAnyMatches(sel: Selector): Boolean {
+            fun hasAnyMatches(): Boolean {
                 return textMatches?.isNotBlank() ?: accessMatches?.isNotBlank() ?: valueMatches?.isNotBlank() ?: false
             }
-            if (hasAnyMatches(this)) {
+            if (hasAnyMatches()) {
                 return true
             }
             for (s in orSelectors) {
@@ -369,6 +392,11 @@ class Selector(
     val isNegation: Boolean
         get() {
             return relativeSelectors.filter { it.expression == ":not" }.any()
+        }
+
+    val isTextSelector: Boolean
+        get() {
+            return filterMap.keys.any() { it.startsWith("text") }
         }
 
     val isImageSelector: Boolean
@@ -515,7 +543,8 @@ class Selector(
             }
 
         val relativeCommandSubjectNames = listOf(
-            "label", "image", "button", "switch", "input", "widget", "scrollable"
+            "label", "image", "button", "switch", "input", "widget", "scrollable",  // classic
+            "text", "item"  // vision
         )
 
         private fun String.escapeRelativeNickname(): String {
@@ -958,9 +987,7 @@ class Selector(
     /**
      * getIosPredicate
      */
-    fun getIosPredicate(
-        frameBounds: Bounds? = viewBounds
-    ): String {
+    fun getIosPredicate(): String {
 
         if (relativeSelectors.any() { it.command != ":descendant" }) {
             return ""
@@ -969,12 +996,12 @@ class Selector(
         val selectors = mutableListOf(this)
         selectors.addAll(orSelectors)
 
-        val p0 = selectors[0].getIosPredicateCore(frameBounds = frameBounds)
+        val p0 = selectors[0].getIosPredicateCore()
         val predicates = mutableListOf(p0)
 
         for (i in 1 until selectors.count()) {
             val s = selectors[i]
-            val c = s.getIosPredicateCore(frameBounds = frameBounds)
+            val c = s.getIosPredicateCore()
             predicates.add(c)
         }
         val predicate = predicates.joinToString(" OR ")
@@ -982,12 +1009,10 @@ class Selector(
         return predicate
     }
 
-    private fun getIosPredicateCore(
-        frameBounds: Bounds?
-    ): String {
+    private fun getIosPredicateCore(): String {
         val list = mutableListOf<String>()
 
-        addIosPredicate(list = list, frameBounds = frameBounds)
+        addIosPredicate(list = list)
 
         if (list.any() { it.startsWith("type==") }.not()) {
             val ignoreTypes = ignoreTypes?.split(",")?.map { it.trim() } ?: PropertiesManager.selectIgnoreTypes
@@ -1016,9 +1041,7 @@ class Selector(
     /**
      * getIosClassChain
      */
-    fun getIosClassChain(
-        frameBounds: Bounds? = viewBounds
-    ): String {
+    fun getIosClassChain(): String {
 
         if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {
             return ""
@@ -1029,7 +1052,7 @@ class Selector(
 
         val relSelectors = relativeSelectors
         if (relSelectors.isEmpty()) {
-            val pred = getIosPredicate(frameBounds = frameBounds)
+            val pred = getIosPredicate()
             val pos = getPositionCondition(this)
             if (pred.isBlank()) {
                 return "**/*$pos"
@@ -1039,13 +1062,13 @@ class Selector(
 
         val relativePredicates = mutableListOf<String>()
         for (r in relSelectors) {
-            val predicate = r.getIosPredicate(frameBounds = frameBounds)
+            val predicate = r.getIosPredicate()
             val pos = getPositionCondition(r)
             relativePredicates.add("/**/*[`$predicate`]$pos")
         }
 
         val subPredicate = relativePredicates.joinToString("")
-        val pred = getIosPredicate(frameBounds = frameBounds)
+        val pred = getIosPredicate()
         val pos = getPositionCondition(this)
         val predicate =
             if (pred.isBlank()) "**/*$pos$subPredicate"
@@ -1057,7 +1080,7 @@ class Selector(
      * getXPathCondition
      */
     fun getXPathCondition(
-        packageName: String = rootElement.packageName,
+        packageName: String = testDrive.rootElement.packageName,
     ): String {
 
         val selectors = mutableListOf<Selector>()
@@ -1118,7 +1141,7 @@ class Selector(
     /**
      * getFullXPathCondition
      */
-    fun getFullXPathCondition(packageName: String = rootElement.packageName): String {
+    fun getFullXPathCondition(packageName: String = testDrive.rootElement.packageName): String {
 
         if (relativeSelectors.any() { isSupportedRelativeCommand(it.command).not() }) {
             return ""
@@ -1299,7 +1322,6 @@ class Selector(
 
     private fun addIosPredicate(
         list: MutableList<String>,
-        frameBounds: Bounds?
     ) {
 
         list.addFunctionByFilterName("type==%s", "className", predicate = true)

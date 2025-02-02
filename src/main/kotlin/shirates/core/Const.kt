@@ -53,7 +53,7 @@ object Const {
     const val ENABLE_IS_IN_VIEW_LOG = false
     const val ENABLE_IS_SAFE_LOG = true
     const val ENABLE_IS_SCREEN_LOG = false
-    const val SCREENSHOT_SCALE = 0.5
+    const val SCREENSHOT_SCALE = 1.0
     const val ENABLE_IMAGE_ASSERTION = true
     const val IMAGE_MATCHING_SCALE = 0.25
     const val IMAGE_MATCHING_THRESHOLD = 1.0
@@ -152,6 +152,16 @@ object Const {
     const val SYNC_INTERVAL_SECONDS = 0.5
     const val BOUNDS_TO_RECT_RATIO_ANDROID = 1
     const val BOUNDS_TO_RECT_RATIO_IOS = 3
+
+    // Vision
+    const val VISION_OCR_LANGUAGE = ""
+    const val VISION_DIRECTORY = "vision"
+    const val VISION_BUILD_DIRECTORY = "build"
+    const val VISION_ENABLE_LEARNING_ON_STARTUP = true
+    const val VISION_SERVER_URL = "http://127.0.0.1:8081"
+    const val VISION_SEGMENT_MARGIN_VERTICAL = 5
+    const val VISION_SEGMENT_MARGIN_HORIZONTAL = 5
+    const val VISION_FIND_IMAGE_THRESHOLD = 0.1
 
     /**
      * internal

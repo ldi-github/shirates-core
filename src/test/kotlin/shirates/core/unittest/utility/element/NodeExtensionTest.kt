@@ -8,7 +8,6 @@ import shirates.core.configuration.TestConfig
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
-import shirates.core.driver.rootElement
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.*
 
@@ -51,7 +50,7 @@ class NodeExtensionTest : UnitTest() {
 
         // Arrange
         TestElementCache.loadXml(xmlData)
-        val e = rootElement
+        val e = TestElementCache.rootElement
         // Act
         e.node.setAttribute("content-desc", "a1")
         // Assert
@@ -69,7 +68,7 @@ class NodeExtensionTest : UnitTest() {
 
         // Arrange
         TestElementCache.loadXml(xmlData)
-        val e = rootElement
+        val e = TestElementCache.rootElement
         // Act, Assert
         assertThat(e.node.hasAttribute("content-desc")).isFalse()
 
@@ -85,7 +84,7 @@ class NodeExtensionTest : UnitTest() {
 
         // Arrange
         TestElementCache.loadXml(xmlData)
-        val e = rootElement
+        val e = TestElementCache.rootElement
         // Act
         val children = e.node!!.children()
         // Assert

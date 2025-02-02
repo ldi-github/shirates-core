@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.wait
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import utility.handleIrregulars
@@ -27,21 +26,13 @@ class TestDriveKeyboardExtensionTest1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Apple Maps Top Screen]")
-                    it.appIs("Maps")
-                    it.tap("[Search Maps]")
-                        .sendKeys("tokyo tower")
-                        .tapSoftwareKey("search||検索")
-                        .wait()
-                        .tap("Tokyo Tower")
-                        .tap("Website")
-                        .tap("Open in Safari")
-                        .wait(10.0)
-                        .appIs("Safari")
+                    it.screenIs("[iOS Settings Top Screen]")
+                        .launchApp("Maps")
+                        .appIs("[Maps]")
                 }.action {
                     it.pressBack()
                 }.expectation {
-                    it.appIs("Maps")
+                    it.appIs("[Settings]")
                 }
             }
         }

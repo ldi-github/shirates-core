@@ -1,14 +1,17 @@
-# クイックスタート
+# クイックスタート (Shirates/Vision) for macOS
 
-## 環境
+## Environment
 
 インストールの前に [Tested Environments](environments.md) を確認してください。
+
+**注意:** AI-Vision機能は現時点でmacOSでのみ利用できます。
 
 ## インストール
 
 以下の前提となるツールをインストールしてください。
 
 **注意:** ユーザー名に非ASCII文字や空白を含むOSのアカウントを使用しないでください。以下のツールのいくつかは動作しない場合があります。
+
 
 
 <br>
@@ -30,13 +33,13 @@ https://developer.android.com/studio
 
 <br>
 
-### Xcode (Macのみ)
+### Xcode (Mac only)
 
 インストールしていない場合はApp StoreでXcodeを検索してインストールしてください。
 
 <br>
 
-### Command Line Tools for Xcode (Macのみ)
+### Command Line Tools for Xcode (Mac only)
 
 インストールしていない場合はターミナルウィンドウを開いて以下のコマンドを実行してください。
 
@@ -49,6 +52,7 @@ xcode-select --install
 ### Homebrew (Macのみ)
 
 インストールしていない場合は https://brew.sh/ を参考にしてインストールしてください。
+
 
 <br>
 
@@ -72,55 +76,23 @@ node -v
 npm -v
 ```
 
-#### (Windowsの場合)
-
-インストール用パッケージをダウンロードしてください。
-https://nodejs.org/en/download/
-
-#### (Ubuntuの場合)
-
-NPMをaptでインストールすることができます。ターミナルウィンドウを開いて以下を実行してください。
-
-```
-sudo apt update
-sudo apt install nodejs
-node -v
-npm -v
-```
+**注意:** appiumのインストールのトラブルを避けるために比較的新しいバージョンを使用してください。
 
 <br>
 
-**注意:** Appiumのインストールで問題が発生しないようにするため比較的新しいバージョンを使用してください。
+### Appium
 
-<br>
-
-### Appium 2.0
-
-Appium 2.0が必要です。
-
-すでにAppiumを使用している場合はインストールされているバージョンを確認してください。
-
-```
-appium -v
-```
-
-Appium 1.xがインストールされている場合はアンインストールしてください。
+**新規インストール**
 
 ```
 npm uninstall -g appium
-```
-
-npmでAppium 2.0をインストールしてください。
-
-```
 npm install -g appium
 appium -v
 ```
 
-参照 [テスト済みの環境](environments.md)
+すでにappiumを使用中の場合は最新バージョンへアップデートしてください。
 
-<br>
-Appiumをすでにインストールしている場合はアンインストールしてから再度インストールしてください。
+**アップデートインストール**
 
 ```
 appium -v
@@ -128,19 +100,21 @@ npm uninstall -g appium
 npm install -g appium
 appium -v
 ```
+
+テスト済みの環境を [Tested Environments](environments.md) で確認してください。
+
 
 <br>
 
 ### UIAutomator2 driver
 
-UIAutomator2ドライバーをインストールしてください。
+**新規インストール**
 
 ```
 appium driver install uiautomator2
 ```
 
-<br>
-すでにドライバーをインストールしている場合はアンインストールしてから再度インストールしてください。
+**アップデートインストール**
 
 ```
 appium driver list
@@ -149,20 +123,19 @@ appium driver install uiautomator2
 appium driver list
 ```
 
-参照 [テスト済みの環境](environments.md)
+テスト済みの環境を [Tested Environments](environments.md) で確認してください。
 
 <br>
 
 ### XCUITest driver(Macのみ)
 
-XCUITestドライバーをインストールしてください。
+**新規インストール**
 
 ```
 appium driver install xcuitest
 ```
 
-<br>
-すでにドライバーをインストールしている場合はアンインストールしてから再度インストールしてください。
+**アップデートインストール**
 
 ```
 appium driver list
@@ -171,177 +144,105 @@ appium driver install xcuitest
 appium driver list
 ```
 
-参照 [テスト済みの環境](environments.md)
+テスト済みの環境を [Tested Environments](environments.md) で確認してください。
 
 <br>
 
 ### 環境変数の設定 (Macのみ)
 
-初期化スクリプト(.zshrcなど)で環境変数を設定してください。
+初期化スクリプト(.zshrc など)で環境変数を設定してください。
 
-#### 例
+#### Example
 
 ```
 export ANDROID_SDK_ROOT=/Users/$USER/Library/Android/sdk
 export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
 ```
 
-**注意:** 上記の設定を有効にするためにログアウト/ログインを実行してください。
+**注意:** 上記セッティングを有効にするためにログアウト/ログインを実行してください。
 
-### 環境変数の設定(Windowsのみ)
-
-1. **Android Studio**を開きます。
-2. メニューから`Tools > SDK Manager > Appearance & Behavior > System Settings > Android SDK`を選択します。
-3. Android SDK Locationをコピーします。<br>
-   ![](_images/android_sdk_location.png)
-4. 環境変数を設定します。 `ANDROID_SDK_ROOT`.<br>
-   ![](_images/set_environment_variable_windows.png)
-5. `Path`環境変数を編集します。 以下のようにエントリーを追加してください。
-    - `%ANDROID_SDK_ROOT%\emulator`
-    - `%ANDROID_SDK_ROOT%\platform-tools`
-    - `%ANDROID_SDK_ROOT%\tools`<br>
-      ![](_images/set_environment_variable_windows_2.png)
-6. PCを再起動します。
-
-### 環境変数の設定(Ubuntuのみ)
-
-初期化スクリプト(.bashrcなど)で環境変数を設定してください。
-
-#### 例
+#### Example
 
 ```
 export ANDROID_SDK_ROOT=/home/$USER/Android/Sdk
 export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
 ```
 
-## AVD (Android Virtual Device)の設定
+## AVD(Android Virtual Device)の設定
 
-### デモ用のAVDの作成
+### AVD作成のデモ
 
 1. **Android Studio**を開きます。
-2. メニューから`Tools > Device Manager`を選択します。
+2. メニューから `Tools > Device Manager` を選択します。
 3. `[+]`をクリックします。 <br>
-   ![](_images/create_avd_1.png)
-
-
-4. `Pixcel 8` を選択して `Next` をクリックします。<br>
-   ![](_images/create_avd_2.png)
-
-
-5. `UsideDownCake 34 Android 14.0 (Google Play)` を選択して`Next`をクリックします。 (**Calculator**アプリをデモで使用するのでGoogle
-   Play Storeが必要です)。 M1 Macの場合は**arm64** イメージを、 それ以外の場合は **x86_64** イメージを選択します。<br>
-   ![](_images/create_avd_3.png)
-
-
-6. AVD名を `Pixel 8(Android 14)`に設定します。<br>
-   `Enable device frame`のチェックをOFFに設定します。<br>
+   ![](classic/_images/create_avd_1.png)
+4. `Pixcel 8`を選択して`Next`をクリックします。<br>
+   ![](classic/_images/create_avd_2.png)
+5. `UsideDownCake 34 Android 14.0 (Google Play)`を選択して`Next`をクリックします。 (**電卓アプリ** を使用したデモではGoogle
+   Play Storeが必要となります). Macでは**arm64**のイメージを選択します。<br>
+   ![](classic/_images/create_avd_3.png)
+6. AVD名を`Pixel 8(Android 14)`に設定します。<br>
+   `Enable device frame`はオフに設定します。<br>
    `Finish`をクリックします。<br>
-   ![](_images/create_avd_4.png)
+   ![](classic/_images/create_avd_4.png)
 
-<br>
+## shirates-vision-server のセットアップ
+
+1. **shirates-vision-server** を[shirates-vision-server](https://github.com/ldi-github/shirates-vision-server)
+   から入手します。
+2. プロジェクトを開きます(`Package.swift`をXcodeで開きます)。バックグラウンド処理が完了するのを待ちます。
+3. `Product > Destination > My Mac`を選択します。<br>![](vision/_images/product_destination_mymac.png)
+4. `Product > Run`を選択します。 `[ NOTICE ] Server started on http://127.0.0.1:8081`がログ出力されます。<br>
+   ![](vision/_images/running_vision_server.png)
 
 ## デモンストレーション
 
-デモを実行してみましょう。
+デモンストレーションをやってみましょう。
+
+### shirates-core-vision-samples を入手する
+
+1. **shirates-core-vision-samples_ja**
+   を[shirates-core-vision-samples_ja](https://github.com/ldi-github/shirates-core-vision-samples_ja)から入手します。
 
 ### プロジェクトを開く
 
-1. **shirates-core** プロジェクトのディレクトリを Finder または Explorerで開きます。
-2. `build.gradle.kts` を右クリックし、IntelliJ IDEAで開きます。 <br>
-   ![](_images/opening_project.png)
+1. **shirates-core-vision-samples_en** プロジェクトのディレクトリを Finder で開きます。
+2. `build.gradle.kts` を右クリックして`IntelliJ IDEA`で開きます。 <br>
+   ![](vision/_images/opening_project.png)
 
 ### 右クリックによるテスト実行を有効にする
 
-1. メニューから`IntelliJ IDEA > Settings` (または `File > Settings`)を選択します。
-1. `Build, Execution, Deployment > Build Tools > Gradle`を選択します。
-1. `Run tests using` を `IntelliJ IDEA`に設定します
+1. `IntelliJ IDEA > Settings`
+1. `Build, Execution, Deployment > Build Tools > Gradle`
+1. `Run tests using` を `IntelliJ IDEA` に設定します
 
-![](basic/_images/build_tools_gradle.png)
-
-<br>
-
-### AndroidSettingsDemoを実行する
-
-1. **Device Manager** から Android 14 の AVD を起動します。
-1. `shirates-core` プロジェクトを IntelliJで開き、 `src/test/Kotlin/demo/AndroidSettingsDemo` を右クリックして **Debug '
-   AndroidSettingsDemo'** を選択します。
-1. コンソールに以下のようなログが出力されます。
-
-#### Console output
-
-```
-Connected to the target VM, address: '127.0.0.1:62387', transport: 'socket'
-lineNo	[elapsedTime]	logDateTime	{testCaseId}	macroDepth	macroName	[logType]	timeDiff	mode	(group)	message
-1	[00:00:00]	2024/04/14 12:45:59.874	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
-2	[00:00:00]	2024/04/14 12:45:59.890	{}	0	-	[-]	+16	C	()	///
-3	[00:00:00]	2024/04/14 12:45:59.891	{}	0	-	[-]	+1	C	()	/// shirates-core 6.8.0
-4	[00:00:00]	2024/04/14 12:45:59.891	{}	0	-	[-]	+0	C	()	///
-5	[00:00:00]	2024/04/14 12:45:59.892	{}	0	-	[-]	+1	C	()	powered by Appium (io.appium:java-client:9.1.0)
-6	[00:00:00]	2024/04/14 12:45:59.892	{}	0	-	[-]	+0	C	()	----------------------------------------------------------------------------------------------------
-7	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+1	C	()	testClass: demo.AndroidSettingsDemo
-8	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+0	C	()	sheetName: AndroidSettingsDemo
-9	[00:00:00]	2024/04/14 12:45:59.893	{}	0	-	[-]	+0	C	()	logLanguage: 
-...
-```
+![](vision/_images/build_tools_gradle.png)
 
 <br>
 
-### 出力されたレポートの確認
+### AndroidSettingsVisionDemo を実行する
 
-1. IntelliJ IDEAのコンソールのハイパーリンクをクリックしてログのディレクトリを開きます。<br>
-   ![](_images/hyper_link_to_testresults.png)
-2. ログやレポートのファイルが出力されていることが確認できます。<br>
-   ![](_images/test_results.png)
-3. 最初に **_Report(simple).html** ファイルを開きます。シンプルなテストレポートを確認することができます。行をクリックするとスクリーンショット画像がハイライト表示されます。
-   行をダブりクリックすると大きな画像が表示されます。
-4. 次に **_Report(detail).html** ファイルを開きます。ログタイプが"info"である情報が追加されていることがわかります。
-5. 最後に **AndroidSettingsDemo@a.xlsx** ファイルをMicrosoft Excel か互換性のあるソフトウェアで開きます。
-
-### HTMLレポート(simple)
-
-![](_images/html_report.png)
-
-### Spec-Report
-
-AndroidSettingsDemo@a.xlsx
-
-![](_images/spec_report.png)
-
-### TestList
-
-1. ダウンロード/TestResults フォルダを Finder (または Explorer)で開きます。
-1. **TestList_androidSettingsConfig.xlsx** ファイルを Microsoft Excelか互換性のあるソフトウェアで開きます。
-
-**TestList_androidSettingsConfig.xlsx<br>**
-![](_images/test_list.png)
+1. `shirates-core-vision-samples_ja` プロジェクトを`IntelliJ IDEA`で開き、 <br>
+   `kotlin/demo/vision/AndroidSettingsVisionDemo`を右クリックして <br>
+   **Debug 'AndroidSettingsVisionDemo'** 選択します<br> ![](vision/_images/android_settings_vision_demo.png)
+2. コンソールにこのようなログが出力されます。 ![](vision/_images/console_android.png)
+3. リンクをクリックしてディレクトリを開きます。<br> ![](vision/_images/log_directory.png)
+4. **_Report(simple).html**
+   を開きます。 <br> ![](vision/_images/report_simple.png) <br><br>
+5. **AndroidSettingsVisionDemo@a.xlsx**を開きます。<br> ![](vision/_images/android_settings_vision_demo_xls.png)
 
 <br>
 
-### CalculatorDemoを実行する
+### iOSSettingsVisionDemo を実行する
 
-1. **Device Manager**でAndroid 14 のAVDを起動します。
-2. **Google Playストア** を開いて **電卓(Calculator)**(Google LLC)をインストールします。
-3. IntelliJでこのプロジェクトを開き、`src/test/Kotlin/demo/CalculatorDemo`を右クリックして **Debug 'CalculatorDemo'**
-   を選択します。
-4. 電卓アプリのテストが実行されます。
-
-![](_images/calculator_demo.png)
-
-<br>
-
-### iOSSettingsDemoの実行
-
-1. Xcode を開き、iOSシミュレーター(iPhone 15, iOS 17.2)をセットアップします。
-
-![](_images/setup_ios_simulator.png)
-
-2. shirates-core プロジェクトをIntelliJで開き,`src/test/Kotlin/demo/iOSSettingsDemo` を右クリックして **Debug '
-   iOSSettingsDemo'**
-   を選択します。
-3. iOSの設定アプリのテストが実行されます。
-
-![](_images/ios_settings_demo.png)
+1. `shirates-core-vision-samples_en`プロジェクトを`IntelliJ IDEA`で開き、 <br>
+   `src/test/Kotlin/demo/vision/iOSSettingsVisionDemo`を右クリックして <br>
+   **Debug 'iOSSettingsVisionDemo'** を選択します。
+2. コンソールにこのようなログが出力されます。 ![](vision/_images/console_ios.png)
+3. Click the link to open the log directory.<br> ![](vision/_images/log_directory.png)
+4. **_Report(simple).html**を開きます。 <br> ![](_images/report_simple_ios.png) <br><br>
+5. **iOSSettingsVisionDemo@i.xlsx** を開きます。<br> ![](vision/_images/ios_settings_vision_demo.png)
 
 ### Link
 
-- [index](index_ja.md)
+- [index](index.md)

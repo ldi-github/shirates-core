@@ -1,6 +1,7 @@
 package shirates.core.utility
 
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
@@ -18,9 +19,21 @@ fun String.toDate(
     val datePart = tokens[0]
     val zonePart = if (tokens.count() == 2) tokens[1] else ""
     val zonePattern =
-        if (tz != null) tz
-        else if (tokens.count() == 2) "X"
+        tz ?: if (tokens.count() == 2) "X"
         else ""
+
+    val dateParts = datePart.split("/")
+    if (dateParts.count() == 3 && dateParts[2].contains(" ").not()) {
+        try {
+            val year = dateParts[0].toInt()
+            val month = dateParts[1].toInt()
+            val day = dateParts[2].toInt()
+            val localDate = LocalDateTime.of(year, month, day, 0, 0, 0)
+            return Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant())
+        } catch (t: Throwable) {
+            //
+        }
+    }
 
     val sdfPattern = pattern
         ?: (when (datePart.length) {

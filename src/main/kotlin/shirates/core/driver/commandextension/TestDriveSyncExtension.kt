@@ -15,15 +15,15 @@ fun TestDrive.useCache(func: () -> Unit): TestElement {
     val original = testContext.forceUseCache
 
     try {
-        TestLog.info("useCache(${TestLog.lines.count() + 1}) {")
+        TestLog.info("useCache(${TestLog.nextLineNo}) {")
         testContext.forceUseCache = true
         func()
     } finally {
         testContext.forceUseCache = original
-        TestLog.info("} useCache(${TestLog.lines.count() + 1})")
+        TestLog.info("} useCache(${TestLog.nextLineNo})")
     }
 
-    return TestDriver.it
+    return lastElement
 }
 
 /**
@@ -35,17 +35,17 @@ fun TestDrive.suppressCache(func: () -> Unit): TestElement {
     val originalEnableCache = testContext.enableCache
 
     try {
-        TestLog.info("suppressCache(${TestLog.lines.count() + 1}) {")
+        TestLog.info("suppressCache(${TestLog.nextLineNo}) {")
         testContext.forceUseCache = false
         testContext.enableCache = false
         func()
     } finally {
         testContext.forceUseCache = originalForceUseCache
         testContext.enableCache = originalEnableCache
-        TestLog.info("} suppressCache(${TestLog.lines.count() + 1})")
+        TestLog.info("} suppressCache(${TestLog.nextLineNo})")
     }
 
-    return TestDriver.it
+    return lastElement
 }
 
 /**
@@ -55,7 +55,7 @@ fun TestDrive.enableCache(): TestElement {
 
     TestLog.info("enableCache")
     testContext.enableCache = true
-    return TestDriver.it
+    return lastElement
 }
 
 /**
@@ -65,14 +65,17 @@ fun TestDrive.disableCache(): TestElement {
 
     TestLog.info("disableCache")
     testContext.enableCache = false
-    return TestDriver.it
+    return lastElement
 }
 
+/**
+ * switchScreen
+ */
 fun TestDrive.switchScreen(screenName: String): TestElement {
 
     TestLog.info("switchScreen($screenName)")
     TestDriver.switchScreen(screenName = screenName)
-    return TestDriver.lastElement
+    return lastElement
 }
 
 /**
@@ -85,9 +88,7 @@ fun TestDrive.onCache(
     val command = "onCache"
 
     val match = testContext.useCache
-    val result =
-        if (this is BooleanCompareResult) this
-        else BooleanCompareResult(value = match, command = command)
+    val result = BooleanCompareResult(value = match, command = command)
     if (match.not()) {
         return result
     }
@@ -107,9 +108,7 @@ fun TestDrive.onDirectAccess(
     val command = "onDirectAccess"
 
     val match = testContext.useCache.not()
-    val result =
-        if (this is BooleanCompareResult) this
-        else BooleanCompareResult(value = match, command = command)
+    val result = BooleanCompareResult(value = match, command = command)
     if (match.not()) {
         return result
     }

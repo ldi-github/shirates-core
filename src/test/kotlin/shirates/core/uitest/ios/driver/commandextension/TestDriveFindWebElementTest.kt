@@ -18,7 +18,7 @@ class TestDriveFindWebElementTest : UITest() {
         scenario {
             case(1, "id") {
                 expectation {
-                    it.findWebElement("#SCREEN_TIME").getAttribute("name").thisIs("SCREEN_TIME")
+                    it.findWebElement("#Screen Time").getAttribute("name").thisIs("Screen Time")
                 }
             }
             case(2, "className") {
@@ -26,54 +26,49 @@ class TestDriveFindWebElementTest : UITest() {
                     it.findWebElement(".XCUIElementTypeNavigationBar").getAttribute("type")
                         .thisIs("XCUIElementTypeNavigationBar")
                     it.findWebElement(".XCUIElementTypeStaticText&&[2]").getAttribute("label")
-                        .thisIs("Sign in to your iPhone")
+                        .thisIs("Apple Account")
                 }
             }
             case(3, "literal") {
                 expectation {
-                    it.findWebElement("literal=Set up iCloud, the App Store, and more.").getAttribute("label")
-                        .thisIs("Set up iCloud, the App Store, and more.")
+                    it.findWebElement("literal=Sign in to access your iCloud data, the App Store, Apple services, and more.")
+                        .getAttribute("label")
+                        .thisIs("Sign in to access your iCloud data, the App Store, Apple services, and more.")
                 }
             }
             case(4, "text") {
                 expectation {
-                    it.findWebElement("Sign in to your iPhone").getAttribute("label").thisIs("Sign in to your iPhone")
-                    it.findWebElement("Sign in to*").getAttribute("label").thisIs("Sign in to your iPhone")
-                    it.findWebElement("*ign in to your iPho*").getAttribute("label").thisIs("Sign in to your iPhone")
-                    it.findWebElement("*ign in to your iPhone").getAttribute("label").thisIs("Sign in to your iPhone")
-                    it.findWebElement("textMatches=^Sign.*iPhone$").getAttribute("label")
-                        .thisIs("Sign in to your iPhone")
+                    it.findWebElement("Apple Account").getAttribute("label").thisIs("Apple Account")
+                    it.findWebElement("Apple A*").getAttribute("label")
+                        .thisIs("Apple Account, Sign in to access your iCloud data, the App Store, Apple services, and more.")
+                    it.findWebElement("*pple Acc*").getAttribute("label")
+                        .thisIs("Apple Account, Sign in to access your iCloud data, the App Store, Apple services, and more.")
+                    it.findWebElement("*pple Account").getAttribute("label").thisIs("Apple Account")
+                    it.findWebElement("textMatches=^Apple .*Account$").getAttribute("label").thisIs("Apple Account")
                 }
             }
             case(5, "access") {
                 expectation {
-                    it.findWebElement("@Sign in to your iPhone").getAttribute("name").thisIs("Sign in to your iPhone")
-                    it.findWebElement("@Sign in to*").getAttribute("name").thisIs("Sign in to your iPhone")
-                    it.findWebElement("@*ign in to your iPho*").getAttribute("name").thisIs("Sign in to your iPhone")
-                    it.findWebElement("@*ign in to your iPhone").getAttribute("name").thisIs("Sign in to your iPhone")
-                    it.findWebElement("accessMatches=^Sign.*iPhone$").getAttribute("name")
-                        .thisIs("Sign in to your iPhone")
+                    it.findWebElement("@Apple Account").getAttribute("name").thisIs("Apple Account")
+                    it.findWebElement("@Apple A*").getAttribute("name").thisIs("Apple Account")
+                    it.findWebElement("@*pple Accoun*").getAttribute("name").thisIs("Apple Account")
+                    it.findWebElement("@*pple Account").getAttribute("name").thisIs("Apple Account")
+                    it.findWebElement("accessMatches=^Apple .*Account$").getAttribute("name").thisIs("Apple Account")
                 }
             }
             case(6, "value") {
                 expectation {
-                    it.findWebElement("value=Sign in to your iPhone").getAttribute("value")
-                        .thisIs("Sign in to your iPhone")
-                    it.findWebElement("valueStartsWith=Sign in to").getAttribute("value")
-                        .thisIs("Sign in to your iPhone")
-                    it.findWebElement("valueContains=ign in to your iPho").getAttribute("value")
-                        .thisIs("Sign in to your iPhone")
-                    it.findWebElement("valueEndsWith=ign in to your iPhone").getAttribute("value")
-                        .thisIs("Sign in to your iPhone")
-                    it.findWebElement("valueMatches=^Sign.*iPhone$").getAttribute("value")
-                        .thisIs("Sign in to your iPhone")
+                    it.findWebElement("value=Apple Account").getAttribute("value").thisIs("Apple Account")
+                    it.findWebElement("valueStartsWith=Apple A").getAttribute("value").thisIs("Apple Account")
+                    it.findWebElement("valueContains=pple Accoun").getAttribute("value").thisIs("Apple Account")
+                    it.findWebElement("valueEndsWith=le Account").getAttribute("value").thisIs("Apple Account")
+                    it.findWebElement("valueMatches=^Apple .*Account$").getAttribute("value").thisIs("Apple Account")
                 }
             }
             case(7, "pos") {
                 expectation {
                     it.findWebElement(".XCUIElementTypeStaticText&&[1]").getAttribute("label").thisIs("Settings")
-                    it.findWebElement(".XCUIElementTypeStaticText&&[2]").getAttribute("label")
-                        .thisIs("Sign in to your iPhone")
+                    it.findWebElement(".XCUIElementTypeStaticText&&[2]").getAttribute("label").thisIs("Apple Account")
                     it.findWebElement(".XCUIElementTypeStaticText&&[999]").thisIsEmpty()
                 }
             }

@@ -207,7 +207,7 @@ class StopWatchTest : UnitTest() {
             // Act
             val actual = sw.toString()
             println(actual)
-            val expected = "00:00:00.000"
+            val expected = "in 0.000 sec"
             // Act, Assert
             assertThat(actual).isEqualTo(expected)
         }
@@ -216,7 +216,7 @@ class StopWatchTest : UnitTest() {
             val sw = StopWatch()
             sw.stop()
             sw.endTime = sw.startTime + 123
-            val expected = "00:00:00.123"
+            val expected = "in 0.123 sec"
             // Actual
             val actual = sw.toString()
             println(actual)
@@ -228,7 +228,7 @@ class StopWatchTest : UnitTest() {
             val sw = StopWatch()
             sw.stop()
             sw.endTime = sw.startTime + (25 * 3600 + 12 * 60 + 34) * 1000 + 567
-            val expected = "25:12:34.567"
+            val expected = "in 25:12:34.567"
             // Actual
             val actual = sw.toString()
             println(actual)

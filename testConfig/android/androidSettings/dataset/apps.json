@@ -27,6 +27,10 @@
     "packageOrBundleId": "com.google.android.deskclock",
     "appIconName": "Clock"
   },
+  "[Downloads]": {
+    "packageOrBundleId": "com.google.android.documentsui",
+    "appIconName": "Downloads"
+  },
   "[App1]": {
     "packageOrBundleId": "com.example.app1",
     "appIconName": "App1"

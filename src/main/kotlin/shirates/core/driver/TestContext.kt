@@ -3,10 +3,12 @@ package shirates.core.driver
 import shirates.core.Const
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
-import shirates.core.driver.eventextension.TestDriverOnScreenContext
+import shirates.core.driver.eventextension.TestDriveOnScreenContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
+import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.misc.UrlUtility
+import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KVisibility
 import kotlin.reflect.full.memberProperties
@@ -247,7 +249,9 @@ class TestContext(
     @SaveTarget
     var onRefreshCurrentScreenHandler: (() -> Unit)? = null
 
-    val screenHandlers = mutableMapOf<String, ((TestDriverOnScreenContext) -> Unit)?>()
+    val testDriveScreenHandlers = mutableMapOf<String, ((TestDriveOnScreenContext) -> Unit)?>()
+
+    val visionDriveScreenHandlers = mutableMapOf<String, ((VisionDriveOnScreenContext) -> Unit)?>()
 
     @SaveTarget
     var enableIrregularHandler = true
@@ -262,6 +266,11 @@ class TestContext(
         }
 
     internal val saveData = mutableMapOf<String, Any?>()
+
+    val isVisionTest: Boolean
+        get() {
+            return UITestCallbackExtension.isVisionTest
+        }
 
     /**
      * saveState

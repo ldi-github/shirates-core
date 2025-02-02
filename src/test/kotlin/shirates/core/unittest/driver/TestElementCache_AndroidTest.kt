@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
@@ -21,6 +22,7 @@ class TestElementCache_AndroidTest : UnitTest() {
 
     override fun beforeEach(context: ExtensionContext?) {
 
+        PropertiesManager.statBarHeight = 0
         TestMode.setAndroid()
     }
 
@@ -392,6 +394,7 @@ class TestElementCache_AndroidTest : UnitTest() {
     @Test
     fun select_access() {
 
+        PropertiesManager.statBarHeight = 0
         TestMode.runAsAndroid {
             // Arrange
             TestElementCache.loadXml(xmlData = XmlDataAndroid.NetworkAndInternetScreen)
@@ -767,8 +770,8 @@ class TestElementCache_AndroidTest : UnitTest() {
         TestElementCache.loadXml(xmlData = XmlDataAndroid.NetworkAndInternetScreen)
         TestElementCache.synced = true
         val mobileNetwork = TestElementCache.select("Mobile network")
-        val parent = mobileNetwork.relative(":parent")
-        val summary = parent.relative(":descendant(#android:id/summary)")
+        val parent = mobileNetwork.relative(":parent", margin = 0)
+        val summary = parent.relative(":descendant(#android:id/summary)", margin = 0)
 
         run {
             // Act

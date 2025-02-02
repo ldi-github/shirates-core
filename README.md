@@ -1,4 +1,4 @@
-# Shirates (shirates-core)
+# Shirates/Vision (shirates-core)
 
 **Shirates** is an integration testing framework that makes it easy and fun to write test code for mobile apps.
 
@@ -6,6 +6,7 @@
 
 ## News
 
+- [2025/2/2] **Shirates/Vision[Beta]** released. **AI-Vision feature** is unleashed.
 - [2024/12/17] Bug
   Fixed [Unable to start session after updating to macOS 15.2](https://github.com/ldi-github/shirates-core/issues/119)
 
@@ -13,6 +14,14 @@
 
 - [in English](https://ldi-github.github.io/shirates-core/)
 - [in Japanese](https://ldi-github.github.io/shirates-core/index_ja.html)
+
+## AI-Vision feature powered by Vision Framework is now available
+
+[Shirates/Vision[Beta]](doc/markdown/vision/about.md)
+
+<hr>
+
+The following is a description of the version up to 7.
 
 ## Features in 3 lines
 
@@ -35,15 +44,14 @@
 ### Test Code
 
 ```kotlin
-package demo
+package demo.vision
 
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
+import shirates.core.testcode.android
+import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AndroidSettingsDemo : UITest() {
+class AndroidSettingsVisionDemo : VisionTest() {
 
     @Test
     fun airplaneModeSwitch() {
@@ -51,32 +59,32 @@ class AndroidSettingsDemo : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.launchApp("Settings")
-                        .screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android Settings Top Screen]")
                 }.action {
-                    it.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                 }
             }
-
             case(2) {
                 condition {
-                    it.select("{Airplane mode switch}")
+                    it.detect("Airplane mode")
+                        .rightItem()
                         .checkIsOFF()
                 }.action {
-                    it.tap("{Airplane mode switch}")
+                    it.tap()
                 }.expectation {
-                    it.select("{Airplane mode switch}")
+                    it.detect("Airplane mode")
+                        .rightItem()
                         .checkIsON()
                 }
             }
-
             case(3) {
                 action {
-                    it.tap("{Airplane mode switch}")
+                    it.tap()
                 }.expectation {
-                    it.select("{Airplane mode switch}")
+                    it.detect("Airplane mode")
+                        .rightItem()
                         .checkIsOFF()
                 }
             }
@@ -87,11 +95,11 @@ class AndroidSettingsDemo : UITest() {
 
 ### HTML Report
 
-![](doc/markdown/basic/_images/report1.png)
+![](doc/markdown/vision/_images/report_simple.png)
 
 ## Spec-Report
 
-![](doc/markdown/basic/_images/spec_report_calculator_normal.png)
+![](doc/markdown/vision/_images/android_settings_vision_demo_xls.png)
 
 ## What and why Shirates?
 
@@ -153,6 +161,6 @@ https://github.com/ldi-github/shirates-builder
 
 <br>
 
-- [index](doc/markdown/index.md)
+- [index](doc/markdown/classic/index.md)
 
 <br>

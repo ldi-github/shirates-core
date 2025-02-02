@@ -1,0 +1,13 @@
+{
+  "[Customer list]": {
+    "urlPath": "/customer/list"
+  },
+
+  "[Product list]": {
+    "urlPath": "/product/list"
+  },
+
+  "[Supplier list]": {
+    "urlPath": "/supplier/list"
+  }
+}

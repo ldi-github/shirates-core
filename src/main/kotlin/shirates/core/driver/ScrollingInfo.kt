@@ -6,7 +6,7 @@ import kotlin.math.min
 
 class ScrollingInfo(
     val errorMessage: String,
-    val scrollableBounds: Bounds,
+    val bounds: Bounds,
     val viewport: Bounds,
     val direction: ScrollDirection,
     val startMarginRatio: Double,
@@ -21,18 +21,18 @@ class ScrollingInfo(
 
     val leftEdge: Int
         get() {
-            return max(scrollableBounds.left, viewport.left)
+            return max(bounds.left, viewport.left)
         }
 
     val rightEdge: Int
         get() {
-            return min(scrollableBounds.right, viewport.right)
+            return min(bounds.right, viewport.right)
         }
 
     val topEdge: Int
         get() {
             val headerBottom = headerBottom ?: PropertiesManager.statBarHeight
-            val m1 = max(scrollableBounds.top, viewport.top)
+            val m1 = max(bounds.top, viewport.top)
             val m2 = max(m1, headerBottom)
             return m2
         }
@@ -40,7 +40,7 @@ class ScrollingInfo(
     val bottomEdge: Int
         get() {
             val footerTop = footerTop ?: viewBounds.bottom
-            val m1 = min(scrollableBounds.bottom, viewport.bottom)
+            val m1 = min(bounds.bottom, viewport.bottom)
             val m2 = min(m1, footerTop)
             return m2
         }
@@ -134,6 +134,6 @@ class ScrollingInfo(
         }
 
     override fun toString(): String {
-        return "safeBounds=$safeBounds, scrollableBounds=$scrollableBounds, viewport=$viewport, direction=$direction, startMarginRatio=$startMarginRatio, endMarginRatio=$endMarginRatio, headerBottom=$headerBottom, footerTop=$footerTop, "
+        return "safeBounds=$safeBounds, scrollableBounds=$bounds, viewport=$viewport, direction=$direction, startMarginRatio=$startMarginRatio, endMarginRatio=$endMarginRatio, headerBottom=$headerBottom, footerTop=$footerTop, "
     }
 }

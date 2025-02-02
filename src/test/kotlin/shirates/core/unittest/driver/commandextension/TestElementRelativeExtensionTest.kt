@@ -8,7 +8,6 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.rootElement
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 
@@ -34,7 +33,7 @@ class TestElementRelativeExtensionTest : UnitTest() {
         val selectors = mutableListOf<Selector>()
         selectors.add(Selector(":next(1)"))
         // Act
-        val next1 = e.relative(selectors)
+        val next1 = e.relative(selectors, margin = 0)
         // Assert
         assertThat(next1).isEqualTo(e.next())
         assertThat(next1.className).isEqualTo("android.widget.ImageButton")
@@ -102,7 +101,7 @@ class TestElementRelativeExtensionTest : UnitTest() {
 
         run {
             // Arrange
-            val leaf = rootElement.descendants.last()
+            val leaf = TestElementCache.rootElement.descendants.last()
             assertThat(leaf.child().isEmpty).isTrue()
         }
 
@@ -179,7 +178,7 @@ class TestElementRelativeExtensionTest : UnitTest() {
         }
 
         run {
-            assertThat(rootElement.sibling().isEmpty).isTrue()
+            assertThat(TestElementCache.rootElement.sibling().isEmpty).isTrue()
         }
 
         assertThatThrownBy {

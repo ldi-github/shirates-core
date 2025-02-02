@@ -39,7 +39,7 @@ class TestDriveRelativeCoordinateExtensionTest : UITest() {
             case(3) {
                 condition {
                     it.selectWithScrollDown("Game Center")
-                    e1 = it.select("Siri & Search")
+                    e1 = it.select("Screen Time")
                     e2 = it.select("Game Center")
                 }.expectation {
                     val i1 = e1.leftImage().belowImage()

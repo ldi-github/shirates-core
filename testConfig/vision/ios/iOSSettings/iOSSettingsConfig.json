@@ -1,0 +1,19 @@
+{
+  "testConfigName": "iOSSettingsConfig",
+
+  "appIconName": "Settings",
+
+  "packageOrBundleId": "com.apple.Preferences",
+
+  "startupPackageOrBundleId": "com.apple.Preferences",
+
+  "dataset": {
+    "apps": "testConfig/vision/ios/iOSSettings/dataset/apps.json"
+  },
+
+  "capabilities": {
+    "language": "en",
+    "locale": "US"
+  }
+
+}

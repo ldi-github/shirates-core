@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.TestProfile
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.ios.IosDeviceUtility
-import shirates.core.utility.ios.IosLanguageUtility
 
 class IosDeviceUtilityTest : UnitTest() {
 
@@ -85,33 +84,6 @@ class IosDeviceUtilityTest : UnitTest() {
             iosDeviceInfo = iosDeviceInfo
         )
         println("isInstalled=$isInstalled")
-    }
-
-
-    @Test
-    @Order(8)
-    fun setAppleLanguages() {
-
-        val profile = TestProfile(profileName = profileName)
-        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
-
-        IosLanguageUtility.setAppleLanguages(udid = iosDeviceInfo.udid, "ja-JP", "en-US")
-    }
-
-    @Test
-    @Order(9)
-    fun setLanguage() {
-
-        val profile = TestProfile(profileName = profileName)
-        val iosDeviceInfo = IosDeviceUtility.getIosDeviceInfo(testProfile = profile)
-
-        if (iosDeviceInfo.status == "Shutdown") {
-            IosDeviceUtility.startSimulator(iosDeviceInfo)
-        }
-
-        IosLanguageUtility.setAppleLocale(udid = iosDeviceInfo.udid, "ja-JP")
-        Thread.sleep(3000)
-        IosLanguageUtility.setAppleLocale(udid = iosDeviceInfo.udid, "en-US")
     }
 
     @Test

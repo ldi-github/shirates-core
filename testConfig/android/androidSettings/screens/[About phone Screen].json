@@ -7,7 +7,7 @@
   "identity": "~title=About phone",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Search Button]": "@Search settings",
 
     "[Device name]": "",

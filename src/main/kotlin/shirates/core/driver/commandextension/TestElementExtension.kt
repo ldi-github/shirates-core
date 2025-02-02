@@ -11,13 +11,14 @@ import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.escapeFileName
 import shirates.core.utility.image.CropInfo
 import shirates.core.utility.image.TrimObject
 import shirates.core.utility.image.saveImage
+import shirates.core.vision.VisionElement
 import java.io.File
 
 internal fun TestElement.getChainedSelector(relativeCommand: String): Selector {
@@ -95,29 +96,6 @@ fun TestElement.refreshThisElement(): TestElement {
     }
 
     return e
-}
-
-/**
- * typeChars
- */
-fun TestElement.typeChars(
-    charsToSend: String,
-): TestElement {
-
-    val command = "sendChars"
-    val message = message(id = command, key = charsToSend)
-
-    val context = TestDriverCommandContext(this)
-    context.execOperateCommand(command = command, message = message) {
-
-        for (c in charsToSend) {
-            sendKeys(keysToSend = c.toString() as CharSequence)
-        }
-        refreshCache()
-        TestDriver.lastElement = this.refreshThisElement()
-    }
-
-    return TestDriver.lastElement
 }
 
 /**
@@ -282,23 +260,20 @@ private fun TestElement.getAttrMapForIos(): MutableMap<String, String> {
 fun TestElement.cropImage(
     fileName: String? = null,
     save: Boolean = true,
-    refresh: Boolean = false,
     trim: String? = null
 ): TestElement {
 
-    val command = "cropImage"
-    val subject = this.selector?.nickname ?: this.selector?.originalExpression ?: this.subject
+    screenshot()
+
     if (TestMode.isNoLoadRun.not() && this.isEmpty) {
         TestLog.info("cropImage skipped because the element is empty.")
         return this
     }
-    val message = message(id = command, file = fileName)
-
     val trimObject = TrimObject(trim)
-    val rect = bounds.toRect()
+    val rect = bounds.toRectWithRatio()
     val cropInfo = CropInfo(rect = rect, trimObject = trimObject)
 
-    val lineNo = TestLog.lines.count() + 1
+    val lineNo = TestLog.nextLineNo
     val tm = if (trimObject.isEmpty) "" else "_trim=${trimObject.expression}"
 
     val trimCondition = "[${bounds.x1},${bounds.y1}][${bounds.x2},${bounds.y2}]${tm}"
@@ -310,28 +285,10 @@ fun TestElement.cropImage(
     }
     cropInfo.croppedImageFile = TestLog.directoryForLog.resolve(croppedImageFile).toString()
 
-    val context = TestDriverCommandContext(this)
-    context.execOperateCommand(
-        command = command,
-        scriptCommand = command,
-        message = message,
-        subject = subject,
-        arg1 = trimCondition,
-        fileName = croppedImageFile,
-        fireEvent = false
-    ) {
-        lastCropInfo = TestDriver.cropImage(cropInfo = cropInfo, refresh = refresh)
+    lastCropInfo = TestDriver.cropImage(cropInfo = cropInfo)
 
-        if (cropInfo.croppedImage == null) {
-            return@execOperateCommand
-        }
-        if (save.not()) {
-            return@execOperateCommand
-        }
-
-        if (save) {
-            cropInfo.croppedImage?.saveImage(File(cropInfo.croppedImageFile!!), log = false)
-        }
+    if (save && cropInfo.croppedImage != null) {
+        cropInfo.croppedImage?.saveImage(File(cropInfo.croppedImageFile!!), log = false)
     }
 
     return this
@@ -342,10 +299,9 @@ fun TestElement.cropImage(
  */
 fun TestElement.cropImage(
     fileName: String,
-    refresh: Boolean = true
 ): TestElement {
 
-    return cropImage(save = true, fileName = fileName, refresh = refresh)
+    return cropImage(save = true, fileName = fileName)
 }
 
 /**
@@ -407,7 +363,7 @@ fun TestElement.isSafe(
         info("isSafe property returns false. (isInView == false)")
         return false
     }
-    if (driver.currentScreen.isNotBlank()) {
+    if (TestDriver.currentScreen.isNotBlank()) {
         if (CodeExecutionContext.isScrolling) {
             /**
              * Safe boundary check in scrollable view
@@ -469,3 +425,14 @@ fun TestElement.isSafe(
     return true
 }
 
+/**
+ * toVisionElement
+ */
+fun TestElement.toVisionElement(): VisionElement {
+
+    val rect = this.bounds.toRectWithRatio()
+    val v = rect.toVisionElement()
+    v.selector = this.selector
+    v.testElement = this
+    return v
+}

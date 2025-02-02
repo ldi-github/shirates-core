@@ -11,7 +11,6 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.testDrive
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
-import shirates.core.utility.toPath
 
 class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
 
@@ -30,7 +29,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
 
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
 
         /**
@@ -52,7 +51,8 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
             // Arrange
             val e = TestElementCache.select("#TextView1-1")
             // Act, Assert
-            val e2 = e.relative(":right").relative(":below").relative(":left").relative(":above")
+            val e2 = e.relative(":right", margin = 0).relative(":below", margin = 0).relative(":left", margin = 0)
+                .relative(":above", margin = 0)
             assertThat(e2.selector.toString()).isEqualTo("<#TextView1-1>:right:below:left:above")
             assertThat(e2).isEqualTo(e)
         }
@@ -91,7 +91,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
     fun right() {
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
 
         /**
@@ -475,7 +475,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
     fun right2() {
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
 
         /**
@@ -855,7 +855,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
     fun left() {
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest Screen]"
 
         /**
@@ -1225,7 +1225,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
         TestMode.setAndroid()
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest2)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.currentScreen = "[RelativeCoordinateTest2 Screen]"
 
         /**
@@ -1638,7 +1638,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
         TestMode.setAndroid()
         TestElementCache.loadXml(XmlDataAndroid.RelativeCoordinateTest2)
         TestElementCache.synced = true
-        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative".toPath())
+        ScreenRepository.setup(screensDirectory = "unitTestData/testConfig/nicknames1/screens/relative")
         TestDriver.switchScreen("[RelativeCoordinateTest2 Screen]")
 
         /**

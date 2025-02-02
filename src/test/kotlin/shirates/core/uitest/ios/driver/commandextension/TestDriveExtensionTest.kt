@@ -9,9 +9,10 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.DisableCache
 import shirates.core.driver.branchextension.ifScreenIsNot
 import shirates.core.driver.commandextension.*
-import shirates.core.logging.CodeExecutionContext
+import shirates.core.driver.driver
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 import shirates.core.utility.toPath
@@ -37,12 +38,12 @@ class TestDriveExtensionTest : UITest() {
             it.screenshot()
             val line = TestLog.lines.first { it.scriptCommand == "screenshot" }
             // Assert
-            assertThat(line.message).isEqualTo("screenshot")
+            assertThat(line.message).isEqualTo("screenshot: 2.png")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)
             assertThat(line.commandGroup).isEqualTo("")
             assertThat(line.commandLevel).isEqualTo(0)
             assertThat(line.scriptCommand).isEqualTo("screenshot")
-            assertThat(line.subject).isEqualTo(CodeExecutionContext.lastScreenshot.toPath().fileName.toString())
+            assertThat(line.subject).isEqualTo(CodeExecutionContext.lastScreenshotFile.toPath().fileName.toString())
             assertThat(line.arg1).isEqualTo("")
             assertThat(line.arg2).isEqualTo("")
             assertThat(line.result).isEqualTo(LogType.NONE)
@@ -53,9 +54,9 @@ class TestDriveExtensionTest : UITest() {
             TestLog.clear()
             // Act
             it.screenshot(filename = "filename")
-            val line = TestLog.lines.first() { it.logType != LogType.TRACE }
+            val line = TestLog.lines.last() { it.logType != LogType.TRACE }
             // Assert
-            assertThat(line.message).isEqualTo("screenshot")
+            assertThat(line.message).isEqualTo("screenshot: filename.png")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)
             assertThat(line.commandGroup).isEqualTo("")
             assertThat(line.commandLevel).isEqualTo(0)

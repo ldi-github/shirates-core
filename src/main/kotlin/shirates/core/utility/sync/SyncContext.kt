@@ -1,5 +1,6 @@
 package shirates.core.utility.sync
 
+import shirates.core.driver.TestDrive
 import shirates.core.utility.time.StopWatch
 
 class SyncContext(
@@ -19,7 +20,7 @@ class SyncContext(
     override var onError: (SyncContext) -> Unit,
     override var onBeforeRetry: (SyncContext) -> Unit,
     override var action: (SyncContext) -> Boolean
-) : WaitContextBase<SyncContext>, RefreshCacheInterface {
+) : WaitContextBase<SyncContext>, RefreshCacheInterface, TestDrive {
 }
 
 interface RefreshCacheInterface {

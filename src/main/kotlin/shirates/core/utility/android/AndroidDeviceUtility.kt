@@ -270,7 +270,7 @@ object AndroidDeviceUtility {
          *
          * android.profile=12
          */
-        if (platformVersion.isNotBlank()) {
+        if (testProfile.platformVersion.isNotBlank()) {
             val devices = sortedDeviceList.filter { it.platformVersion.lowercase() == platformVersion.lowercase() }
 
             val realDevice = devices.lastOrNull { it.isRealDevice }

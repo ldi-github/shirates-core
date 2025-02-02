@@ -8,7 +8,7 @@ import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestElement
 import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.CropInfo
 import java.awt.image.BufferedImage
@@ -52,7 +52,7 @@ class CodeExecutionContextTest : UnitTest() {
         context.isInCondition = true
         context.isInAction = true
         context.isInExpectation = true
-        context.lastScreenshot = "1.png"
+        context.lastScreenshotName = "1.png"
         context.lastScreenshotImage = BufferedImage(100, 200, 1)
         context.lastCropInfo = CropInfo()
         context.lastScreenshotXmlSource = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -93,7 +93,7 @@ class CodeExecutionContextTest : UnitTest() {
         assertThat(context.isInCondition).isFalse()
         assertThat(context.isInAction).isFalse()
         assertThat(context.isInExpectation).isFalse()
-        assertThat(context.lastScreenshot).isEqualTo("")
+        assertThat(context.lastScreenshotName).isEqualTo("")
         assertThat(context.lastScreenshotImage).isNull()
         assertThat(context.lastCropInfo).isNull()
         assertThat(context.lastScreenshotXmlSource).isEqualTo("")
@@ -130,7 +130,7 @@ class CodeExecutionContextTest : UnitTest() {
         assertThat(context.isInCondition).isTrue()
         assertThat(context.isInAction).isTrue()
         assertThat(context.isInExpectation).isTrue()
-        assertThat(context.lastScreenshot).isNotEqualTo("")
+        assertThat(context.lastScreenshotName).isNotEqualTo("")
         assertThat(context.lastScreenshotImage).isNotNull()
         assertThat(context.lastCropInfo).isNotNull()
         assertThat(context.lastScreenshotXmlSource).isNotEqualTo("")

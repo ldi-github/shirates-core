@@ -4,6 +4,7 @@ import org.openqa.selenium.InvalidElementStateException
 import org.openqa.selenium.interactions.Pause
 import org.openqa.selenium.interactions.PointerInput
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.invalidateCache
@@ -152,7 +153,7 @@ internal fun TestDrive.goPreviousAppWithGestureAndroid() {
         finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg())
     )
     try {
-        driver.appiumDriver.perform(mutableListOf(sequence))
+        appiumDriver.perform(mutableListOf(sequence))
     } catch (t: InvalidElementStateException) {
         TestLog.trace(t.message ?: t.stackTraceToString())
         //  https://github.com/appium/java-client/issues/2045
@@ -205,7 +206,7 @@ internal fun TestDrive.goPreviousAppWithGestureIos() {
         finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg())
     )
     try {
-        driver.appiumDriver.perform(mutableListOf(sequence))
+        appiumDriver.perform(mutableListOf(sequence))
     } catch (t: InvalidElementStateException) {
         TestLog.trace(t.message ?: t.stackTraceToString())
         //  https://github.com/appium/java-client/issues/2045

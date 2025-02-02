@@ -13,7 +13,6 @@ import shirates.core.testcode.Manual
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.time.StopWatch
-import shirates.core.utility.toPath
 
 class Selector_AndroidTest : UnitTest() {
 
@@ -507,7 +506,7 @@ class Selector_AndroidTest : UnitTest() {
     @Test
     fun init_image() {
 
-        val screensDirectory = "unitTestConfig/android/image/screens".toPath()
+        val screensDirectory = "unitTestConfig/android/image/screens"
         ScreenRepository.setup(screensDirectory = screensDirectory)
         ImageFileRepository.setup(screenDirectory = screensDirectory)
 

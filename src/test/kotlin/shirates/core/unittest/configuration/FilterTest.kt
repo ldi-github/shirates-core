@@ -13,7 +13,6 @@ import shirates.core.exception.TestConfigException
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 import shirates.core.testdata.XmlDataIos
-import shirates.core.utility.toPath
 
 class FilterTest : UnitTest() {
 
@@ -449,7 +448,7 @@ class FilterTest : UnitTest() {
     @Test
     fun image() {
 
-        val screensDirectory = "unitTestConfig/android/image/screens".toPath()
+        val screensDirectory = "unitTestConfig/android/image/screens"
         ScreenRepository.setup(screensDirectory = screensDirectory)
         ImageFileRepository.setup(screenDirectory = screensDirectory)
 

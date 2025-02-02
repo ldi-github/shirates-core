@@ -4,10 +4,7 @@ import shirates.core.logging.TestLog
 import java.io.FileNotFoundException
 import java.net.URI
 import java.nio.charset.StandardCharsets
-import java.nio.file.FileSystem
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.Path
+import java.nio.file.*
 import java.util.*
 
 
@@ -76,6 +73,9 @@ object JarUtility {
         jarFileSystem: FileSystem? = null
     ) {
 
+        if (Files.exists(targetFile.parent).not()) {
+            targetFile.parent.toFile().mkdirs()
+        }
         val jarFs = jarFileSystem ?: getFileSystem()
         jarFs.use {
             val resourcePath = ResourceUtility.getResourcePath(fileName = fileName, logLanguage = logLanguage)
@@ -85,7 +85,7 @@ object JarUtility {
             }
             TestLog.createDirectoryForLog()
             println("Copying jar content $resourcePath to ${TestLog.directoryForLog}")
-            Files.copy(path, targetFile)
+            Files.copy(path, targetFile, StandardCopyOption.REPLACE_EXISTING)
         }
     }
 }

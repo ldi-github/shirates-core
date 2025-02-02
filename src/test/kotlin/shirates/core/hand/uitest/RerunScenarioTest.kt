@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test
 import org.opentest4j.TestAbortedException
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Testrun
-import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.commandextension.restartApp
 import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.testContext
 import shirates.core.exception.RerunScenarioException
 import shirates.core.exception.TestDriverException
 import shirates.core.testcode.Manual

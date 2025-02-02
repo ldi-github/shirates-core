@@ -2,20 +2,19 @@ package shirates.core.configuration
 
 import shirates.core.configuration.Selector.Companion.getFilterValues
 import shirates.core.configuration.repository.ImageFileRepository
-import shirates.core.driver.TestDriver
-import shirates.core.driver.TestElement
+import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.rootElement
 import shirates.core.logging.TestLog
-import shirates.core.testcode.preprocessForComparison
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.escapeFileName
 import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.ImageMatchUtility
 import shirates.core.utility.image.isSame
 import shirates.core.utility.image.saveImage
+import shirates.core.utility.string.forClassicComparison
 import shirates.core.utility.toPath
+import shirates.core.vision.driver.commandextension.rootElement
 import java.awt.image.BufferedImage
 import java.nio.file.Files
 
@@ -295,8 +294,8 @@ class Filter(
          */
         internal fun matchText(text: String, criteria: String): Boolean {
 
-            val normalizedCriteria = criteria.preprocessForComparison()
-            val normalizedText = text.preprocessForComparison()
+            val normalizedCriteria = criteria.forClassicComparison()
+            val normalizedText = text.forClassicComparison()
             val filterValues = getFilterValues(filterValueString = normalizedCriteria)
             if (filterValues.isEmpty())
                 return false
@@ -322,8 +321,8 @@ class Filter(
          */
         internal fun matchLiteral(literal: String, criteria: String): Boolean {
 
-            val normalizedCriteria = criteria.preprocessForComparison()
-            val normalizedLiteral = literal.preprocessForComparison()
+            val normalizedCriteria = criteria.forClassicComparison()
+            val normalizedLiteral = literal.forClassicComparison()
 
             // Single line comparison
             if (normalizedCriteria.contains("\n").not() && normalizedLiteral.contains("\n").not())
@@ -347,7 +346,9 @@ class Filter(
             if (id.isNullOrBlank()) return null
             if (id.contains(":id/")) return id
 
-            val pkg = packageName ?: rootElement.packageName
+            val pkg = packageName
+                ?: if (testContext.useCache) testDrive.rootElement.packageName
+                else visionDrive.rootElement.packageName
             if (pkg.isBlank()) return id
 
             return "${pkg}:id/${id}"
@@ -382,14 +383,14 @@ class Filter(
 
     private fun matchTextSomething(text: String, filterValue: String): Boolean {
 
-        val value2 = text.preprocessForComparison()
+        val value2 = text.forClassicComparison()
         val selectorValues = getFilterValues(filterValueString = filterValue)
         for (selectorValue in selectorValues) {
             when (verb) {
-                "Contains" -> if (value2.contains(selectorValue.preprocessForComparison())) return true
-                "StartsWith" -> if (value2.startsWith(selectorValue.preprocessForComparison())) return true
-                "EndsWith" -> if (value2.endsWith(selectorValue.preprocessForComparison())) return true
-                "Matches" -> if (value2.matches(Regex(selectorValue.preprocessForComparison()))) return true
+                "Contains" -> if (value2.contains(selectorValue.forClassicComparison())) return true
+                "StartsWith" -> if (value2.startsWith(selectorValue.forClassicComparison())) return true
+                "EndsWith" -> if (value2.endsWith(selectorValue.forClassicComparison())) return true
+                "Matches" -> if (value2.matches(Regex(selectorValue.forClassicComparison()))) return true
                 else -> return matchText(
                     text = value2,
                     criteria = filterValue
@@ -601,8 +602,8 @@ class Filter(
             string: String
         ): Boolean {
             for (filterValue in filterValues) {
-                val fullId = getFullyQualifiedId(string)?.preprocessForComparison()
-                val fullId2 = getFullyQualifiedId(filterValue)?.preprocessForComparison()
+                val fullId = getFullyQualifiedId(string)?.forClassicComparison()
+                val fullId2 = getFullyQualifiedId(filterValue)?.forClassicComparison()
 
                 if (fullId == fullId2) {
                     return true

@@ -1,8 +1,8 @@
 package shirates.core.driver
 
 import shirates.core.configuration.PropertiesManager
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.element.ElementCategoryExpressionUtility
 import shirates.core.utility.host.HostOSUtility
@@ -333,6 +333,22 @@ object TestMode {
     val isRunningOnMacIntel: Boolean
         get() {
             return isRunningOnMacOS && isIntel
+        }
+
+    /**
+     * isClassicTest
+     */
+    val isClassicTest: Boolean
+        get() {
+            return isVisionTest.not()
+        }
+
+    /**
+     * isVisionTest
+     */
+    val isVisionTest: Boolean
+        get() {
+            return UITestCallbackExtension.isVisionTest
         }
 
     /**

@@ -6,12 +6,8 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.existImage
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.withScrollDown
-import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest
-import shirates.core.utility.toPath
 import shirates.helper.ImageSetupHelper
-import java.nio.file.Files
-import kotlin.io.path.copyTo
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class AssertingImage2 : UITest() {

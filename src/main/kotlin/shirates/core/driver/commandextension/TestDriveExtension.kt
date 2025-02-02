@@ -1,8 +1,6 @@
 package shirates.core.driver.commandextension
 
 import shirates.core.configuration.NicknameUtility
-import shirates.core.configuration.Selector
-import shirates.core.configuration.isRelativeNickname
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestMode.isAndroid
@@ -38,6 +36,7 @@ fun TestDrive.getThisOrIt(): TestElement {
  */
 fun TestDrive.sendKeys(
     keysToSend: CharSequence,
+    refreshCache: Boolean = true
 ): TestElement {
 
     val command = "sendKeys"
@@ -52,7 +51,9 @@ fun TestDrive.sendKeys(
         val we = testElement.webElement ?: testElement.getWebElement()
         we.sendKeys(keysToSend)
 
-        TestDriver.refreshCache()
+        if (refreshCache) {
+            TestDriver.refreshCache()
+        }
 
         lastElement = TestDriver.getFocusedElement()
     }
@@ -61,48 +62,29 @@ fun TestDrive.sendKeys(
 }
 
 /**
- * getSelector
+ * typeChars
  */
-fun TestDrive.getSelector(expression: String): Selector {
+fun TestElement.typeChars(
+    charsToSend: String,
+): TestElement {
 
-    if (TestMode.isNoLoadRun) {
-        return getSelectorCore(expression = expression)
-    } else {
-        var sel: Selector? = null
-        try {
-            doUntilTrue {
-                try {
-                    sel = getSelectorCore(expression = expression)
-                    true
-                } catch (t: Throwable) {
-                    false
-                }
-            }
-        } catch (t: Throwable) {
-            throw TestDriverException(
-                message(id = "couldNotGetSelector", subject = expression, arg1 = screenName),
-                cause = t
+    val command = "typeChars"
+    val message = message(id = command, key = charsToSend)
+
+    val context = TestDriverCommandContext(this)
+    context.execOperateCommand(command = command, message = message) {
+
+        for (c in charsToSend) {
+            sendKeys(
+                keysToSend = c.toString() as CharSequence,
+                refreshCache = false
             )
         }
-        return sel!!
-    }
-}
-
-private fun TestDrive.getSelectorCore(expression: String): Selector {
-    val sel = TestDriver.screenInfo.expandExpression(expression = expression)
-    val newSel = sel.copy()
-    if (newSel.isRelative.not()) {
-        return newSel
+        refreshCache()
+        TestDriver.lastElement = this.refreshThisElement()
     }
 
-    if (this is TestElement) {
-        if (TestMode.isNoLoadRun && expression.isRelativeNickname()) {
-            return Selector("${this.selector}$expression")
-        }
-        return this.getChainedSelector(newSel)
-    }
-
-    return newSel
+    return TestDriver.lastElement
 }
 
 /**

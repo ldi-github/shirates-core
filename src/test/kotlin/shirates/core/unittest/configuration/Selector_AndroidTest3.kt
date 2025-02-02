@@ -295,7 +295,8 @@ class Selector_AndroidTest3 : UnitTest() {
             assertThat(Selector.relativeCommandBaseNames).containsExactlyInAnyOrderElementsOf(list)
         }
         assertThat(Selector.relativeCommandSubjectNames).containsExactlyInAnyOrder(
-            "label", "image", "button", "switch", "input", "widget", "scrollable"
+            "label", "image", "button", "switch", "input", "widget", "scrollable",
+            "text", "item"
         )
     }
 

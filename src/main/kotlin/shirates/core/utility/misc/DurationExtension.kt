@@ -12,11 +12,19 @@ val Duration.label: String
         )
     }
 
-val Duration.shortLabel: String
+val Duration.secondLabel: String
     get() {
-        return "%02d:%02d:%02d".format(
-            this.toHours(),
-            this.toMinutesPart(),
-            this.toSecondsPart()
+        return "%d.%03d sec".format(
+            this.toSecondsPart(),
+            this.toMillisPart()
         )
+    }
+
+val Duration.debugLabel: String
+    get() {
+        if (this.toMinutes() < 1) {
+            return secondLabel  // 1.234 sec
+        } else {
+            return label    // 01:23:45.678
+        }
     }

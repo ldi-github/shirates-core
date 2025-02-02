@@ -3,8 +3,10 @@ package tutorial.inaction
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestElement
+import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
+import shirates.core.driver.commandextension.cropImage
 import shirates.core.driver.wait
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UITest

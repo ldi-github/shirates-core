@@ -3,6 +3,9 @@ package experiment
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.thisIsFalse
+import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.isEmulator
 import shirates.core.testcode.UITest

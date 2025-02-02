@@ -38,7 +38,7 @@ class StringAssertionExtensionTest {
             assertThatThrownBy {
                 string1.thisIs("A")
             }.isInstanceOf(TestNGException::class.java)
-                .hasMessage(message(id = "thisIs", subject = "", expected = "A") + " (actual=\"\")")
+                .hasMessage(message(id = "thisIs", subject = "", expected = "A") + " (actual=null)")
         }
     }
 
@@ -98,7 +98,7 @@ class StringAssertionExtensionTest {
             assertThatThrownBy {
                 string1.thisIsNot(null)
             }.isInstanceOf(TestNGException::class.java)
-                .hasMessage(message(id = "thisIsNot", subject = "", expected = "") + " (actual=\"\")")
+                .hasMessage(message(id = "thisIsNot", subject = "", expected = "") + " (actual=null)")
         }
     }
 

@@ -1,0 +1,11 @@
+{
+  "[account1]": {
+    "id": "account1@example.com",
+    "password": "p@ssword"
+  },
+
+  "[account2]": {
+    "id": "account2@example.com",
+    "password": "p@ssword"
+  }
+}

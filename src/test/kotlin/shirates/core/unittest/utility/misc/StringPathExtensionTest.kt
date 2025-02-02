@@ -192,6 +192,24 @@ class StringPathExtensionTest : UnitTest() {
                 // Assert
                 assertThat(actual).isEqualTo(Path.of(expected))
             }
+            run {
+                // Arrange
+                val text = "C:\\Users\\hoge\\：*？\"<>.txt"
+                val expected = "C:\\Users\\hoge\\_____.txt"
+                // Act
+                val actual = text.toPath()
+                // Assert
+                assertThat(actual).isEqualTo(Path.of(expected))
+            }
+            run {
+                // Arrange
+                val text = "C:¥Users¥hoge¥：*？\"<>.txt"
+                val expected = "C:\\Users\\hoge\\_____.txt"
+                // Act
+                val actual = text.toPath()
+                // Assert
+                assertThat(actual).isEqualTo(Path.of(expected))
+            }
         }
     }
 

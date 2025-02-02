@@ -1,6 +1,19 @@
-# Environments
+# Tested Environments
 
-## Tested Environments
+2025/2/2 **Shirates/Vision** (8.0.6)
+
+- macOS Sequoia 15.2
+- node v22.9.0
+- Appium 2.15.0
+- java-client v9.1.0
+- uiautomator2@3.9.9
+- xcuitest@7.34.1
+- Android Studio Ladybug Feature Drop | 2024.2.2
+- Android Emulator Pixel 8(Android 14)
+- Xcode 16.2
+- iOS Simulator iPhone 16(iOS 18.2)
+
+<br>
 
 2024/12/17
 
@@ -815,6 +828,3 @@
 - iOS Simulator iPhone 13(15.5)
 - Xcode 13.4.1
 
-### Link
-
-- [index](index.md)

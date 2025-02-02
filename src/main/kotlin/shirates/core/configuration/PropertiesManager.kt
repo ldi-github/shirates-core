@@ -8,10 +8,13 @@ import shirates.core.driver.testContext
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.UITestCallbackExtension
 import shirates.core.utility.file.PropertiesUtility
+import shirates.core.utility.file.exists
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.replaceUserVars
 import shirates.core.utility.toPath
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.util.*
 
@@ -51,6 +54,7 @@ object PropertiesManager {
      */
     fun clear() {
 
+        testrunFile = ""
         testrunGlobalProperties = Properties()
         testrunProperties = Properties()
         envProperties = Properties()
@@ -59,13 +63,24 @@ object PropertiesManager {
         _selectIgnoreTypesForIos = null
     }
 
+
     /**
      * setup
      */
-    fun setup(testrunFile: String = Const.TESTRUN_PROPERTIES) {
+    fun setup(testrunFile: String? = null) {
+
+        if (testrunFile != null) {
+            if (testrunFile.isBlank()) {
+                throw IllegalArgumentException("testrunFile is required.")
+            }
+            if (testrunFile.exists().not()) {
+                throw FileNotFoundException("testrunFile is not found. (testrunFile=$testrunFile)")
+            }
+        }
 
         clear()
-        setupTestrunFile(testrunFile)
+        val file = testrunFile ?: getDefaultTestrunFile()
+        setupTestrunFile(testrunFile = file)
 
         // Get properties from testrun.global.properties
         testrunGlobalProperties = getProperties(propertiesFile = Const.TESTRUN_GLOBAL_PROPERTIES)
@@ -107,11 +122,15 @@ object PropertiesManager {
                 println("File not found. ($srTestrunFile)")
             }
         }
-
         // default
         if (this.testrunFile.isBlank()) {
             this.testrunFile = Const.TESTRUN_PROPERTIES
-            println("Using default testrun file. (${this.testrunFile})")
+        }
+        if (this.testrunFile.exists().not()) {
+            this.testrunFile = Const.TESTRUN_GLOBAL_PROPERTIES
+        }
+        if (this.testrunFile.exists().not()) {
+            throw TestConfigException("testrunFile not found. (${this.testrunFile})")
         }
     }
 
@@ -153,6 +172,13 @@ object PropertiesManager {
      */
     val os: String
         get() {
+            if (UITestCallbackExtension.androidAnnotation != null) {
+                return TestMode.ANDROID
+            }
+            if (UITestCallbackExtension.iosAnnotation != null) {
+                return TestMode.IOS
+            }
+
             val value = getPropertyValueOrEnvValue("os")
             if (value.isNotBlank()) {
                 return value
@@ -182,6 +208,10 @@ object PropertiesManager {
      */
     val configFile: String
         get() {
+            if (testrunFile.isBlank()) {
+                throw TestConfigException("PropertiesManager is not initialized.")
+            }
+
             var value = getPropertyValueOrEnvValue("configFile")
             if (value.isNotBlank()) {
                 return value
@@ -192,80 +222,110 @@ object PropertiesManager {
                 return value
             }
 
-            throw TestConfigException(
-                message(
-                    id = "requiredInFile",
-                    subject = "${os}.configFile",
-                    file = testrunFile
-                )
-            )
+            if (isAndroid) {
+                val defaultConfigFile = "testConfig/android/testConfig@a.json"
+                if (defaultConfigFile.exists()) {
+                    return defaultConfigFile
+                }
+                throw TestConfigException("testConfig File not found. ($defaultConfigFile)")
+            } else {
+                val defaultConfigFile = "testConfig/ios/testConfig@i.json"
+                if (defaultConfigFile.exists()) {
+                    return defaultConfigFile
+                }
+                throw TestConfigException("testConfig File not found. ($defaultConfigFile)")
+            }
         }
+
+    internal fun getDefaultTestrunFile(): String {
+
+        if (testrun?.testrunFile.isNullOrBlank().not()) {
+            return testrun!!.testrunFile
+        }
+        if (Const.TESTRUN_PROPERTIES.exists()) {
+            return Const.TESTRUN_PROPERTIES
+        }
+        return Const.TESTRUN_GLOBAL_PROPERTIES
+    }
+
+    internal fun getDefaultProfileName(): String {
+
+        if (testrun?.profile.isNullOrBlank().not()) {
+            return testrun!!.profile
+        }
+
+        var value = getPropertyValueOrEnvValue("profile")
+        if (value.isNotBlank()) {
+            return value
+        }
+
+        value = getPropertyValueOrEnvValue("$os.profile")
+        if (value.isNotBlank()) {
+            return value
+        }
+
+        throw TestConfigException(
+            message(
+                id = "requiredInFile",
+                subject = "$os.profile",
+                file = testrunFile
+            )
+        )
+    }
 
     /**
      * profile
      */
-    val profile: String
+    var profile: String
         get() {
-            if (testrun?.profile.isNullOrBlank().not()) {
-                return testrun!!.profile
-            }
-
-            var value = getPropertyValueOrEnvValue("profile")
-            if (value.isNotBlank()) {
-                return value
-            }
-
-            value = getPropertyValueOrEnvValue("$os.profile")
-            if (value.isNotBlank()) {
-                return value
-            }
-
-            throw TestConfigException(
-                message(
-                    id = "requiredInFile",
-                    subject = "${os}.profile",
-                    file = testrunFile
-                )
-            )
+            return getPropertyValue(propertyName = "profile") ?: ""
+        }
+        set(value) {
+            setPropertyValue(propertyName = "profile", value = value)
         }
 
     /**
      * statBarHeight
      */
-    val statBarHeight: Int
+    var statBarHeight: Int = -1
         get() {
-            val p = getPropertyValue("${os}.statBarHeight")
-            val value = p?.toIntOrNull()
-            if (value != null) {
-                return value
-            }
-
-            if (os == "android") {
-                try {
-                    val statBarHeight = capabilities.getCapability("statBarHeight").toString().toInt()
-                    return statBarHeight
-                } catch (t: Throwable) {
-                    return Const.ANDROID_STATBAR_HEIGHT
+            if (field < 0) {
+                val p = getPropertyValue("${os}.statBarHeight")
+                val value = p?.toIntOrNull()
+                if (value != null) {
+                    field = value
+                    return value
                 }
-            }
 
-            val m = testContext.profile.deviceName.removePrefix("iPhone ")
-            return if (m.startsWith("SE")) 20
-            else if (m.startsWith("18")) 53
-            else if (m.startsWith("17")) 53
-            else if (m.startsWith("16")) 47
-            else if (m.startsWith("15")) 47
-            else if (m.startsWith("14")) 47
-            else if (m.startsWith("13")) 47
-            else if (m.startsWith("12")) 47
-            else if (m.startsWith("11")) 48
-            else if (m.startsWith("X")) 44
-            else if (m.startsWith("8")) 20
-            else if (m.startsWith("7")) 20
-            else if (m.startsWith("6")) 20
-            else if (m.startsWith("5")) 20
-            else return Const.IOS_STATBAR_HEIGHT
+                if (os == "android") {
+                    try {
+                        field = capabilities.getCapability("statBarHeight").toString().toInt()
+                        return field
+                    } catch (t: Throwable) {
+                        return Const.ANDROID_STATBAR_HEIGHT
+                    }
+                }
+
+                val m = testContext.profile.deviceName.removePrefix("iPhone ")
+                field = if (m.startsWith("SE")) 20
+                else if (m.startsWith("18")) 53
+                else if (m.startsWith("17")) 53
+                else if (m.startsWith("16")) 47
+                else if (m.startsWith("15")) 47
+                else if (m.startsWith("14")) 47
+                else if (m.startsWith("13")) 47
+                else if (m.startsWith("12")) 47
+                else if (m.startsWith("11")) 48
+                else if (m.startsWith("X")) 44
+                else if (m.startsWith("8")) 20
+                else if (m.startsWith("7")) 20
+                else if (m.startsWith("6")) 20
+                else if (m.startsWith("5")) 20
+                else return Const.IOS_STATBAR_HEIGHT
+            }
+            return field
         }
+        internal set
 
     // Priority --------------------------------------------------
 
@@ -915,6 +975,84 @@ object PropertiesManager {
             val value = getPropertyValue(propertyName = "enableWaitCpuLoadPrintDebug")
                 ?: return Const.ENABLE_WAIT_CPU_LOAD_PRINT_DEBUG
             return value == "true"
+        }
+
+    // Vision --------------------------------------------------
+
+    /**
+     * visionOCRLanguage
+     */
+    var visionOCRLanguage: String
+        get() {
+            return getPropertyValue(propertyName = "visionOCRLanguage")
+                ?: Const.VISION_OCR_LANGUAGE
+        }
+        set(value) {
+            properties.setProperty("visionOCRLanguage", value)
+        }
+
+    /**
+     * visionDirectory
+     */
+    val visionDirectory: String
+        get() {
+            return getPropertyValue(propertyName = "visionDirectory")
+                ?: Const.VISION_DIRECTORY
+        }
+
+    /**
+     * visionBuildDirectory
+     */
+    val visionBuildDirectory: String
+        get() {
+            return getPropertyValue(propertyName = "visionBuildDirectory")
+                ?: Const.VISION_BUILD_DIRECTORY
+        }
+
+    /**
+     * visionEnableLearningOnStartup
+     */
+    val visionEnableLearningOnStartup: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "visionEnableLearningOnStartup")
+                ?: return Const.VISION_ENABLE_LEARNING_ON_STARTUP
+            return value == "true"
+        }
+
+    /**
+     * visionServerUrl
+     */
+    val visionServerUrl: String
+        get() {
+            return getPropertyValue(propertyName = "visionServerUrl")
+                ?: Const.VISION_SERVER_URL
+        }
+
+    /**
+     * segmentMarginHorizontal
+     */
+    val segmentMarginHorizontal: Int
+        get() {
+            return getPropertyValue(propertyName = "segmentMarginHorizontal")?.toIntOrNull()
+                ?: Const.VISION_SEGMENT_MARGIN_HORIZONTAL
+        }
+
+    /**
+     * segmentMarginVertical
+     */
+    val segmentMarginVertical: Int
+        get() {
+            return getPropertyValue(propertyName = "segmentMarginVertical")?.toIntOrNull()
+                ?: Const.VISION_SEGMENT_MARGIN_VERTICAL
+        }
+
+    /**
+     * visionFindImageThreshold
+     */
+    val visionFindImageThreshold: Double
+        get() {
+            return getPropertyValue(propertyName = "visionFindImageThreshold")?.toDoubleOrNull()
+                ?: Const.VISION_FIND_IMAGE_THRESHOLD
         }
 
     // Custom --------------------------------------------------

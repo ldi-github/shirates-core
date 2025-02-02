@@ -14,15 +14,15 @@ class VerticalBand(internal var left: Int, internal var right: Int) {
     /**
      * canMerge
      */
-    fun canMerge(element: TestElement): Boolean {
+    fun canMerge(element: TestElement, margin: Int = 0): Boolean {
 
         if (members.isEmpty()) {
             return true
         }
-        if (element.bounds.right < this.left) {
+        if (element.bounds.right < this.left + margin) {
             return false
         }
-        if (this.right < element.bounds.left) {
+        if (this.right + margin < element.bounds.left) {
             return false
         }
         val s1 = element.toString()
@@ -36,9 +36,9 @@ class VerticalBand(internal var left: Int, internal var right: Int) {
     /**
      * merge
      */
-    fun merge(element: TestElement): Boolean {
+    fun merge(element: TestElement, margin: Int = 0): Boolean {
 
-        if (canMerge(element = element).not()) {
+        if (canMerge(element = element, margin = margin).not()) {
             return false
         }
 

@@ -68,13 +68,13 @@ class TestDriveSelectExtensionTest1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                         .dontExist("System")
                 }.action {
-                    it.selectWithScrollDown("System", log = true)
+                    it.selectWithScrollDown("System")
                 }.expectation {
                     it.text.thisIs("System")
                     it.selector!!.text.thisIs("System")
 
                     assertThatThrownBy {
-                        it.selectWithScrollDown("no exist", log = true)
+                        it.selectWithScrollDown("no exist")
                     }.isInstanceOf(TestDriverException::class.java)
                     it.isEmpty.thisIsTrue()
                 }
@@ -83,7 +83,7 @@ class TestDriveSelectExtensionTest1 : UITest() {
                 condition {
                     it.flickBottomToTop()
                 }.action {
-                    it.selectWithScrollUp("Connected devices", log = true)
+                    it.selectWithScrollUp("Connected devices")
                 }.expectation {
                     // Assert
                     assertThat(it.text).isEqualTo("Connected devices")
@@ -91,7 +91,7 @@ class TestDriveSelectExtensionTest1 : UITest() {
 
                     // Act, Assert
                     assertThatThrownBy {
-                        it.selectWithScrollUp("no exist", log = true)
+                        it.selectWithScrollUp("no exist")
                     }.isInstanceOf(TestDriverException::class.java)
                     it.isEmpty.thisIsTrue()
                 }
@@ -109,44 +109,44 @@ class TestDriveSelectExtensionTest1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                         .scanElements()
                 }.expectation {
-                    it.canSelectInScanResults("[Network & internet]", log = true).thisIsTrue()
-                    it.canSelectInScanResults("[Display]", log = true).thisIsTrue()
-                    it.canSelectInScanResults("[Tips & support]", log = true).thisIsTrue()
+                    it.canSelectInScanResults("[Network & internet]").thisIsTrue()
+                    it.canSelectInScanResults("[Display]").thisIsTrue()
+                    it.canSelectInScanResults("[Tips & support]").thisIsTrue()
 
-                    it.canSelectInScanResults("Apps", log = true).thisIsTrue()
-                    it.canSelectInScanResults("Sound*", log = true).thisIsTrue()
-                    it.canSelectInScanResults("*privacy", log = true).thisIsTrue()
-                    it.canSelectInScanResults("*Wellbeing*", log = true).thisIsTrue()
+                    it.canSelectInScanResults("Apps").thisIsTrue()
+                    it.canSelectInScanResults("Sound*").thisIsTrue()
+                    it.canSelectInScanResults("*privacy").thisIsTrue()
+                    it.canSelectInScanResults("*Wellbeing*").thisIsTrue()
 
-                    it.canSelectInScanResults("no exist", log = true).thisIsFalse()
-                    it.canSelectInScanResults("no exi*", log = true).thisIsFalse()
-                    it.canSelectInScanResults("*exist", log = true).thisIsFalse()
-                    it.canSelectInScanResults("*o exi*", log = true).thisIsFalse()
+                    it.canSelectInScanResults("no exist").thisIsFalse()
+                    it.canSelectInScanResults("no exi*").thisIsFalse()
+                    it.canSelectInScanResults("*exist").thisIsFalse()
+                    it.canSelectInScanResults("*o exi*").thisIsFalse()
 
-                    it.canSelectInScanResults("textMatches=^Pass.*counts$", log = true).thisIsTrue()
-                    it.canSelectInScanResults("textMatches=^no.*exist$", log = true).thisIsFalse()
+                    it.canSelectInScanResults("textMatches=^Pass.*counts$").thisIsTrue()
+                    it.canSelectInScanResults("textMatches=^no.*exist$").thisIsFalse()
 
-                    it.canSelectInScanResults("#com.android.settings:id/account_avatar", log = true).thisIsTrue()
-                    it.canSelectInScanResults("#no exist", log = true).thisIsFalse()
+                    it.canSelectInScanResults("#com.android.settings:id/account_avatar").thisIsTrue()
+                    it.canSelectInScanResults("#no exist").thisIsFalse()
 
-                    it.canSelectInScanResults("@Profile picture, double tap to open Google Account", log = true)
+                    it.canSelectInScanResults("@Profile picture, double tap to open Google Account")
                         .thisIsTrue()
-                    it.canSelectInScanResults("@Profile picture*", log = true).thisIsTrue()
-                    it.canSelectInScanResults("@*Google Account", log = true).thisIsTrue()
-                    it.canSelectInScanResults("@*double tap to open Google*", log = true).thisIsTrue()
+                    it.canSelectInScanResults("@Profile picture*").thisIsTrue()
+                    it.canSelectInScanResults("@*Google Account").thisIsTrue()
+                    it.canSelectInScanResults("@*double tap to open Google*").thisIsTrue()
 
-                    it.canSelectInScanResults("@no exist", log = true).thisIsFalse()
-                    it.canSelectInScanResults("@no exi*", log = true).thisIsFalse()
-                    it.canSelectInScanResults("@*exist", log = true).thisIsFalse()
-                    it.canSelectInScanResults("@*exi*", log = true).thisIsFalse()
+                    it.canSelectInScanResults("@no exist").thisIsFalse()
+                    it.canSelectInScanResults("@no exi*").thisIsFalse()
+                    it.canSelectInScanResults("@*exist").thisIsFalse()
+                    it.canSelectInScanResults("@*exi*").thisIsFalse()
 
-                    it.canSelectInScanResults(".android.widget.FrameLayout", log = true).thisIsTrue()
-                    it.canSelectInScanResults(".android.widget.RelativeLayout", log = true).thisIsTrue()
-                    it.canSelectInScanResults(".no exist", log = true).thisIsFalse()
+                    it.canSelectInScanResults(".android.widget.FrameLayout").thisIsTrue()
+                    it.canSelectInScanResults(".android.widget.RelativeLayout").thisIsTrue()
+                    it.canSelectInScanResults(".no exist").thisIsFalse()
 
-                    it.canSelectInScanResults("scrollable=true", log = true).thisIsTrue()
-                    it.canSelectInScanResults("scrollable=false", log = true).thisIsTrue()
-                    it.canSelectInScanResults("scrollable=hoge", log = true).thisIsFalse()
+                    it.canSelectInScanResults("scrollable=true").thisIsTrue()
+                    it.canSelectInScanResults("scrollable=false").thisIsTrue()
+                    it.canSelectInScanResults("scrollable=hoge").thisIsFalse()
                 }
             }
         }

@@ -30,7 +30,7 @@ class TestConfig(val testConfigFile: String) {
     val commonProfile = TestProfile("common")
     lateinit var jso: JSONObject
     val profileMap: MutableMap<String, TestProfile> = mutableMapOf()
-    val importScreenDirectories = mutableListOf<Path>()
+    val importScreenDirectories = mutableListOf<String>()
 
     /**
      * companion object
@@ -296,7 +296,7 @@ class TestConfig(val testConfigFile: String) {
             if (Files.exists(path.toPath()).not()) {
                 throw TestConfigException(message(id = "screensDirectoryNotFound", file = path))
             }
-            importScreenDirectories.add(path.toPath())
+            importScreenDirectories.add(path)
         }
     }
 

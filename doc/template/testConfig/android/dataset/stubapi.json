@@ -1,0 +1,13 @@
+{
+  "[顧客リスト]": {
+    "urlPath": "/customer/list"
+  },
+
+  "[製品リスト]": {
+    "urlPath": "/product/list"
+  },
+
+  "[仕入先リスト]": {
+    "urlPath": "/supplier/list"
+  }
+}

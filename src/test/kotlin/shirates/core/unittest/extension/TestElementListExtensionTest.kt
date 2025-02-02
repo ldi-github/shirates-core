@@ -3,7 +3,9 @@ package shirates.core.unittest.extension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Selector
-import shirates.core.driver.*
+import shirates.core.driver.TestElementCache
+import shirates.core.driver.TestMode
+import shirates.core.driver.filterBySelector
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 import shirates.core.testdata.XmlDataIos
@@ -18,7 +20,7 @@ class TestElementListExtensionTest : UnitTest() {
             // Arrange
             TestElementCache.loadXml(xmlData = XmlDataAndroid.SettingsTopScreen)
             TestElementCache.synced = true
-            val list = rootElement.descendantsAndSelf
+            val list = TestElementCache.rootElement.descendantsAndSelf
 
             run {
                 // Arrange
@@ -46,7 +48,7 @@ class TestElementListExtensionTest : UnitTest() {
             // Arrange
             TestElementCache.loadXml(xmlData = XmlDataIos.SettingsTopScreen)
             TestElementCache.synced = true
-            val list = rootElement.descendantsAndSelf
+            val list = TestElementCache.rootElement.descendantsAndSelf
 
             run {
                 // Arrange
@@ -65,7 +67,7 @@ class TestElementListExtensionTest : UnitTest() {
                 val filtered = list.filterBySelector(selector = selector)
                 // Assert
                 assertThat(filtered.any()).isEqualTo(true)
-                assertThat(filtered[0].parentElement?.type).isEqualTo("XCUIElementTypeCell")
+                assertThat(filtered[0].parentElement.type).isEqualTo("XCUIElementTypeCell")
             }
 
             run {

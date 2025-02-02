@@ -1,28 +1,33 @@
 package tutorial.basic
 
-import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.befavior.LanguageHelperIos
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.befavior.LanguageHelper
+import shirates.core.driver.commandextension.exist
+import shirates.core.driver.commandextension.launchApp
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
 class SetLanguageOnIos1 : UITest() {
 
     @Test
-    @Order(10)
-    fun setLanguage1() {
+    fun setLanguageAndLocale() {
 
         scenario {
             case(1) {
                 action {
-                    LanguageHelperIos.setLanguage(locale = "ja-JP")
+                    LanguageHelper.setLanguageAndLocale(language = "ja", locale = "JP")
+                    it.launchApp("com.apple.Preferences")
+                }.expectation {
+                    it.exist("設定")
                 }
             }
             case(2) {
                 action {
-                    LanguageHelperIos.setLanguage(locale = "en-US")
+                    LanguageHelper.setLanguageAndLocale(language = "en", locale = "US")
+                    it.launchApp("com.apple.Preferences")
+                }.expectation {
+                    it.exist("Settings")
                 }
             }
         }

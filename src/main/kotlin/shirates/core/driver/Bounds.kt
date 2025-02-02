@@ -7,7 +7,12 @@ import shirates.core.utility.image.TrimObject
 /**
  * Bounds
  */
-data class Bounds(var left: Int = 0, var top: Int = 0, var width: Int = 0, var height: Int = 0) {
+data class Bounds(
+    var left: Int = 0,
+    var top: Int = 0,
+    var width: Int = 0,
+    var height: Int = 0
+) {
 
     var viewPortOrBoundString = ""
 
@@ -288,11 +293,13 @@ data class Bounds(var left: Int = 0, var top: Int = 0, var width: Int = 0, var h
     }
 
     /**
-     * toRect
+     * toRectWithRatio
      */
-    fun toRect(trimObject: TrimObject? = null): Rectangle {
+    fun toRectWithRatio(
+        ratio: Int = testContext.boundsToRectRatio,
+        trimObject: TrimObject? = null
+    ): Rectangle {
 
-        val ratio = testContext.boundsToRectRatio
         var r = Rectangle(
             x1 * ratio,
             y1 * ratio,
@@ -317,6 +324,20 @@ data class Bounds(var left: Int = 0, var top: Int = 0, var width: Int = 0, var h
         val height = this.height * scale
         val r = Rectangle(x.toInt(), y.toInt(), width.toInt(), height.toInt())
         return r
+    }
+
+    /**
+     * offsetBounds
+     */
+    fun offsetBounds(offsetX: Int = 0, offsetY: Int = 0): Bounds {
+
+        val newBounds = Bounds(
+            left = left + offsetX,
+            top = top + offsetY,
+            width = width,
+            height = height
+        )
+        return newBounds
     }
 
     /**
@@ -347,6 +368,6 @@ data class Bounds(var left: Int = 0, var top: Int = 0, var width: Int = 0, var h
      * toString
      */
     override fun toString(): String {
-        return "$boundString centerX=$centerX, centerY=$centerY"
+        return "$boundString width=$width, height=$height, centerX=$centerX, centerY=$centerY"
     }
 }

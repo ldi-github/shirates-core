@@ -13,9 +13,9 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "7.5.6"
+version = "8.0.6"
 
-val appiumClientVersion = "9.1.0"
+val appiumClientVersion = "9.4.0"
 
 val userHome = System.getProperty("user.home")
 
@@ -34,55 +34,55 @@ dependencies {
 
     // JUnit 5
     // (Required) Writing and executing Unit Tests on the JUnit Platform
-    implementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+    implementation("org.junit.jupiter:junit-jupiter-api:5.10.5")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.5")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.5")
 
     // Assert J
-    implementation("org.assertj:assertj-core:3.25.2")
-    testImplementation("org.assertj:assertj-core:3.25.2")
+    implementation("org.assertj:assertj-core:3.27.3")
+    testImplementation("org.assertj:assertj-core:3.27.3")
 
     // Apache POI
-    implementation("org.apache.poi:poi:5.2.5")
-    implementation("org.apache.poi:poi-ooxml:5.2.5")
-    testImplementation("org.apache.poi:poi:5.2.5")
-    testImplementation("org.apache.poi:poi-ooxml:5.2.5")
+    implementation("org.apache.poi:poi:5.4.0")
+    implementation("org.apache.poi:poi-ooxml:5.4.0")
+    testImplementation("org.apache.poi:poi:5.4.0")
+    testImplementation("org.apache.poi:poi-ooxml:5.4.0")
 
     // SLF4J NOP Binding
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
-    testImplementation("org.slf4j:slf4j-nop:2.0.9")
+    testImplementation("org.slf4j:slf4j-nop:2.0.16")
 
     // Apache Log4j Core
-    implementation("org.apache.logging.log4j:log4j-core:2.22.1")
+    implementation("org.apache.logging.log4j:log4j-core:2.24.3")
 
     // Apache Commons IO
-    implementation("commons-io:commons-io:2.15.1")
-    testImplementation("commons-io:commons-io:2.15.1")
+    implementation("commons-io:commons-io:2.18.0")
+    testImplementation("commons-io:commons-io:2.18.0")
 
     // Apache Commons Text
-    implementation("org.apache.commons:commons-text:1.11.0")
-    testImplementation("org.apache.commons:commons-text:1.11.0")
+    implementation("org.apache.commons:commons-text:1.13.0")
+    testImplementation("org.apache.commons:commons-text:1.13.0")
 
     // Apache Commons Exec
-    implementation("org.apache.commons:commons-exec:1.3")
-    testImplementation("org.apache.commons:commons-exec:1.3")
+    implementation("org.apache.commons:commons-exec:1.4.0")
+    testImplementation("org.apache.commons:commons-exec:1.4.0")
 
     // Apache Commons Codec
-    implementation("commons-codec:commons-codec:1.16.0")
-    testImplementation("commons-codec:commons-codec:1.16.0")
+    implementation("commons-codec:commons-codec:1.17.2")
+    testImplementation("commons-codec:commons-codec:1.17.2")
 
     // Jackson Module Kotlin
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2")
 
     // Jackson Dataformat XML
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1")
-    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.2")
+    testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.2")
 
     // org.json
     // workaround for 'java.lang.RuntimeException: Method getString in org.json.JSONObject not mocked.'
-    implementation("org.json:json:20231013")
-    testImplementation("org.json:json:20231013")
+    implementation("org.json:json:20250107")
+    testImplementation("org.json:json:20250107")
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
@@ -90,18 +90,25 @@ dependencies {
 
     // Dokka
     // https://github.com/Kotlin/dokka
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.10")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.20")
 
-    // BoofCV
-    implementation("org.boofcv:boofcv-core:1.1.2")
-    testImplementation("org.boofcv:boofcv-core:1.1.2")
+    // BoofCV(core)
+    implementation("org.boofcv:boofcv-core:1.1.7")
+    testImplementation("org.boofcv:boofcv-core:1.1.7")
+
+    // BoofCV(swing)
+    implementation("org.boofcv:boofcv-swing:1.1.7")
+    testImplementation("org.boofcv:boofcv-swing:1.1.7")
 
     // jsoup
-    implementation("org.jsoup:jsoup:1.17.2")
-    testImplementation("org.jsoup:jsoup:1.17.2")
+    implementation("org.jsoup:jsoup:1.18.3")
+    testImplementation("org.jsoup:jsoup:1.18.3")
 
     // md2html
     implementation("io.github.ldi-github:md2html:0.2.0")
+
+    // ICU4J
+    implementation("com.ibm.icu:icu4j:76.1")
 }
 
 configurations.all {
@@ -121,10 +128,12 @@ tasks {
     compileTestKotlin {
         kotlinOptions.jvmTarget = "17"
     }
-    val sourcesJar by creating(Jar::class) {
+
+    val sourcesJar by registering(Jar::class, fun Jar.() {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
-    }
+        mustRunAfter("generateBuildConfig")
+    })
 }
 
 // Dokka
@@ -276,7 +285,8 @@ tasks.register("publishToExternalRepository") {
 tasks.test {
     useJUnitPlatform()
     jvmArgs = listOf(
-        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED"
+        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED",
+        "-Xmx4g", "-Xms4g"
     )
 
     // Filter test methods
@@ -300,6 +310,10 @@ tasks.jacocoTestReport {
 tasks.register<Test>("runtest") {
     useJUnitPlatform()
     group = "experiment"
+    jvmArgs = listOf(
+        "--add-exports", "java.desktop/sun.awt.image=ALL-UNNAMED",
+        "-Xmx4g", "-Xms4g"
+    )
 
     val envs = System.getenv()
     val runtestPattern = if (envs.keys.contains("runtestPattern")) envs["runtestPattern"] else "*"
@@ -317,7 +331,7 @@ tasks.register<Test>("test-spec-report-tutorial") {
     filter {
         includeTestsMatching("tutorial*")
         excludeTestsMatching("tutorial.inaction.Drivers*")
-        excludeTestsMatching("tutorial.basic.iOSKeyboard1*")
+        excludeTestsMatching("tutorial.misc.iOSKeyboard1*")
     }
 
     environment("SR_noLoadRun", "true")

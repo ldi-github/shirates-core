@@ -3,6 +3,7 @@ package shirates.core.uitest.android.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.TestDriver
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.viewBounds
 import shirates.core.testcode.UITest
@@ -53,9 +54,9 @@ class TestDriveSwipeExtensionTest : UITest() {
                         durationSeconds = 10
                     )
                 }.expectation {
+                    syncCache(force = true)
                     val current = it.select("Notifications")
                     val diff = current.bounds.centerY - e2.bounds.centerY
-                    output("diff=$diff")
                     val result = Math.abs(diff) < 10
                     result.thisIsTrue("Math.abs(diff) < 10. diff=$diff")
                 }
@@ -174,7 +175,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                     val low = b.top
                     val high = b.bottom
                     (low <= viewBounds.centerY).thisIsTrue("$low <= ${viewBounds.centerY}")
-                    (viewBounds.centerY <= high).thisIsTrue("${viewBounds.centerY} <= $high")
+                    (viewBounds.centerY <= high).thisIsTrue("viewBounds.centerY:${viewBounds.centerY} <= [Battery].bottom:$high")
                 }
             }
             case(2) {
@@ -185,8 +186,8 @@ class TestDriveSwipeExtensionTest : UITest() {
                     it.swipeToTopOfScreen(durationSeconds = 3.0)
                 }.expectation {
                     val b = it.bounds
-                    val actionBarBounds = select("[Header]").bounds
-                    val low = actionBarBounds.bottom + 1
+                    val headerBottom = TestDriver.screenInfo.scrollInfo.getHeaderBottom()
+                    val low = headerBottom + 1
                     val high = low + b.height - 1
                     (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
                     (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
@@ -198,11 +199,10 @@ class TestDriveSwipeExtensionTest : UITest() {
                         .swipeToBottomOfScreen(durationSeconds = 5.0)
                 }.expectation {
                     val b = it.bounds
-                    val scrollHostBounds = it.scrollHost.bounds
-                    val low = scrollHostBounds.bottom - b.height + 1
-                    val high = scrollHostBounds.bottom
-                    (low <= b.centerY).thisIsTrue("$low <= ${b.centerY}")
-                    (b.centerY <= high).thisIsTrue("${b.centerY} <= $high")
+                    val low = viewBounds.bottom - b.height + 1
+                    val high = viewBounds.bottom
+                    (low <= b.centerY).thisIsTrue("low:$low <= centerY:${b.centerY}")
+                    (b.centerY <= high).thisIsTrue("centerY:${b.centerY} <= high:$high")
                 }
             }
         }

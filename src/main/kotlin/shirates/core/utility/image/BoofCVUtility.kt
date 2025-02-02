@@ -15,6 +15,24 @@ object BoofCVUtility {
      * findMatches
      */
     fun findMatches(
+        image: BufferedImage,
+        templateImage: BufferedImage,
+        expectedMatches: Int = 1
+    ): List<Match> {
+
+        val grayImage = image.toGrayF32()!!
+        val templateGrayImage = templateImage.toGrayF32()!!
+        return findMatches(
+            image = grayImage,
+            templateImage = templateGrayImage,
+            expectedMatches = expectedMatches
+        )
+    }
+
+    /**
+     * findMatches
+     */
+    fun findMatches(
         image: GrayF32,
         templateImage: GrayF32,
         expectedMatches: Int = 1
@@ -28,7 +46,14 @@ object BoofCVUtility {
         matcher.setImage(image)
         matcher.setTemplate(templateImage, null, expectedMatches)
         matcher.process()
-        return matcher.getResults().toList()
+
+        val results = mutableListOf<Match>()
+        val list = matcher.getResults().toList()
+        for (e in list) {
+            results.add(e)
+        }
+
+        return results.sortedByDescending { it.score }
     }
 
     /**

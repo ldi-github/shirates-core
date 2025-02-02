@@ -2,27 +2,37 @@ package shirates.core.driver.commandextension.helper
 
 import shirates.core.driver.TestElement
 
-class HorizontalBand(internal var top: Int, internal var bottom: Int) {
+class HorizontalBand(
+    internal var top: Int,
+    internal var bottom: Int,
+) {
 
     internal val members = mutableListOf<TestElement>()
 
-    constructor(baseElement: TestElement) : this(baseElement.bounds.top, baseElement.bounds.bottom) {
-
-        merge(baseElement)
+    constructor(
+        baseElement: TestElement,
+    ) : this(
+        top = baseElement.bounds.top,
+        bottom = baseElement.bounds.bottom,
+    ) {
+        merge(element = baseElement)
     }
 
     /**
      * canMerge
      */
-    fun canMerge(element: TestElement): Boolean {
+    fun canMerge(
+        element: TestElement,
+        margin: Int = 0
+    ): Boolean {
 
         if (members.isEmpty()) {
             return true
         }
-        if (element.bounds.bottom <= this.top) {
+        if (element.bounds.bottom <= this.top - margin) {
             return false
         }
-        if (this.bottom <= element.bounds.top) {
+        if (this.bottom + margin <= element.bounds.top) {
             return false
         }
         val s1 = element.toString()
@@ -41,9 +51,12 @@ class HorizontalBand(internal var top: Int, internal var bottom: Int) {
     /**
      * merge
      */
-    fun merge(element: TestElement): Boolean {
+    fun merge(
+        element: TestElement,
+        margin: Int = 0
+    ): Boolean {
 
-        if (canMerge(element = element).not()) {
+        if (canMerge(element = element, margin = margin).not()) {
             return false
         }
 

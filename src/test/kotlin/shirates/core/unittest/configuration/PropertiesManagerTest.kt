@@ -14,8 +14,8 @@ import shirates.core.testcode.UnitTest
 import shirates.core.utility.file.PropertiesUtility
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.toPath
+import java.io.FileNotFoundException
 import java.nio.file.Files
-import java.util.*
 
 class PropertiesManagerTest : UnitTest() {
 
@@ -26,10 +26,35 @@ class PropertiesManagerTest : UnitTest() {
         EnvUtility.setEnvForTesting("SR_os", "")
     }
 
-    @Test
-    fun setup_clear() {
+    private fun getSREnvMap(): MutableMap<String, String> {
 
-        run {
+        val map = System.getenv().filter { it.key.startsWith("SR_") }.toMutableMap()
+        if (map.containsKey("SR_os").not()) {
+            map["SR_os"] = ""   // EnvUtility.setEnvForTesting("SR_os", "")
+        }
+        return map
+    }
+
+    private fun getProperties(): MutableMap<Any, Any> {
+
+        val properties = mutableMapOf<Any, Any>()
+        properties["os"] = ""
+        for (p in PropertiesManager.testrunGlobalProperties) {
+            properties[p.key] = p.value
+        }
+        for (p in PropertiesManager.testrunProperties) {
+            properties[p.key] = p.value
+        }
+        for (p in PropertiesManager.envProperties) {
+            properties[p.key] = p.value
+        }
+        return properties
+    }
+
+    @Test
+    fun clear_setup() {
+
+        fun clear() {
             // Act
             PropertiesManager.clear()
             // Assert
@@ -38,72 +63,55 @@ class PropertiesManagerTest : UnitTest() {
             assertThat(PropertiesManager.envProperties.count()).isEqualTo(0)
             assertThat(PropertiesManager.properties.count()).isEqualTo(0)
         }
+
         run {
-            // Arrange
+            // Act
+            clear()
+            // Assert
             assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(0)
             assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(0)
             assertThat(PropertiesManager.envProperties.count()).isEqualTo(0)
             assertThat(PropertiesManager.properties.count()).isEqualTo(0)
 
-            val globalPropsPath = Const.TESTRUN_GLOBAL_PROPERTIES.toPath()
-            val testrunPath = Const.TESTRUN_PROPERTIES.toPath()
-            var props = Properties()
-            var globalProps = Properties()
-            var testrunProps = Properties()
-            var srEnvs = mapOf<String, String>()
-
-            val refreshAction = {
-                props = Properties()
-                globalProps = PropertiesUtility.getProperties(globalPropsPath)
-                println()
-                println("[testrun.global.properties] $globalPropsPath")
-                for (p in globalProps) {
-                    props[p.key] = p.value
-                    println("${p.key}=${p.value}")
-                }
-                testrunProps =
-                    if (Files.exists(testrunPath)) PropertiesUtility.getProperties(testrunPath)
-                    else Properties()
-                println()
-                println("[testrun.properties] $testrunPath")
-                for (p in testrunProps) {
-                    props[p.key] = p.value
-                    println("${p.key}=${p.value}")
-                }
-                srEnvs = EnvUtility.getEnv().filter { it.key.uppercase().startsWith("SR_") }
-                println()
-                println("[SR_ environment variables]")
-                for (env in srEnvs) {
-                    val key = env.key.substring("SR_".length)
-                    props[key] = env.value
-                    println("${key}=${env.value}")
-                }
-            }
-            refreshAction()
             // Act
             PropertiesManager.setup()
-            println()
-            println("[properties] count=${PropertiesManager.properties.count()}")
-            for (p in PropertiesManager.properties) {
-                println(p)
-            }
-            refreshAction()
             // Assert
-            println("// testrunGlobalProperties=${PropertiesManager.testrunGlobalProperties.count()}")
-            assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(globalProps.count())
-            println("// testrunProperties=${PropertiesManager.testrunProperties.count()}")
-            assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(testrunProps.count())
-            println("// envProperties=${PropertiesManager.envProperties.count()}")
-            assertThat(PropertiesManager.envProperties.count()).isEqualTo(srEnvs.count())
-            println("// properties=${PropertiesManager.properties.count()}")
-            assertThat(PropertiesManager.properties.count()).isEqualTo(props.count())
-            PropertiesManager.properties.forEach { println(it) }
-        }
+            assertThat(PropertiesManager.testrunFile).isEqualTo(Const.TESTRUN_PROPERTIES)
+            assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(6)
+            assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(0)
+            val srEnvMap = getSREnvMap()
+            assertThat(PropertiesManager.envProperties.count()).isEqualTo(srEnvMap.count())
+            val properties = getProperties()
+            for (p in PropertiesManager.properties) {
+                println("PropertiesManager.properties[\"${p.key}\"]=${p.value}")
+            }
+            for (p in properties) {
+                println("properties[\"${p.key}\"]=${p.value}")
+            }
+            assertThat(PropertiesManager.properties.count()).isEqualTo(properties.count())
+            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig@a.json")
 
-        // Act
-        PropertiesManager.clear()
-        // Assert
-        assertThat(PropertiesManager.properties.count()).isEqualTo(0)
+            val expectedProfile = if (srEnvMap.containsKey("SR_profile")) srEnvMap["SR_profile"] else ""
+            assertThat(PropertiesManager.profile).isEqualTo(expectedProfile)
+        }
+        run {
+            // Clear
+            clear()
+            // Act
+            PropertiesManager.setup(testrunFile = "unitTestConfig/android/androidSettings/testrun.properties")
+            // Assert
+            assertThat(PropertiesManager.testrunFile).isEqualTo("unitTestConfig/android/androidSettings/testrun.properties")
+            assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(6)
+            assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(2)
+            val srEnvMap = getSREnvMap()
+            assertThat(PropertiesManager.envProperties.count()).isEqualTo(srEnvMap.count())
+            val properties = getProperties()
+            assertThat(PropertiesManager.properties.count()).isEqualTo(properties.count())
+            assertThat(PropertiesManager.configFile).isEqualTo("unitTestConfig/android/androidSettings/androidSettingsConfig.json")
+
+            val expectedProfile = if (srEnvMap.containsKey("SR_profile")) srEnvMap["SR_profile"] else ""
+            assertThat(PropertiesManager.profile).isEqualTo(expectedProfile)
+        }
     }
 
     @Test
@@ -112,17 +120,26 @@ class PropertiesManagerTest : UnitTest() {
         // Arrange
         val globalProps = PropertiesUtility.getProperties("testrun.global.properties".toPath())
 
+        // testrunFile(blank)
+        run {
+            // Arrange
+            val testrunFile = ""
+            // Act, Assert
+            assertThatThrownBy {
+                PropertiesManager.setup(testrunFile = testrunFile)
+            }.isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("testrunFile is required.")
+        }
         // testrunFile(not exist)
         run {
             // Arrange
             val testrunFile = "not.exist.testrun.properties"
             assertThat(Files.exists(testrunFile.toPath())).isFalse()
-            // Act
-            PropertiesManager.setup(testrunFile = testrunFile)
-            // Assert
-            assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(globalProps.count())
-            assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(0)
-            assertThat(PropertiesManager.envProperties.count()).isEqualTo(EnvUtility.getSREnvMap().count())
+            // Act, Assert
+            assertThatThrownBy {
+                PropertiesManager.setup(testrunFile = testrunFile)
+            }.isInstanceOf(FileNotFoundException::class.java)
+                .hasMessage("testrunFile is not found. (testrunFile=not.exist.testrun.properties)")
         }
         // testrunFile(exist)
         run {
@@ -185,24 +202,11 @@ class PropertiesManagerTest : UnitTest() {
             val testrunFile = "not.exist.testrun.properties"
             EnvUtility.reset()
             EnvUtility.setEnvForTesting("SR_testrunFile", testrunFile)
-            // Act
-            PropertiesManager.setup(testrunFile)
-            // Assert
-            assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(globalProps.count())
-            assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(0)
-            assertThat(PropertiesManager.envProperties.count()).isEqualTo(EnvUtility.getSREnvMap().count())
-        }
-        //
-        run {
-            // Arrange
-            val testrunFile = ""
-            EnvUtility.reset()
-            // Act
-            PropertiesManager.setup(testrunFile = testrunFile)
-            // Assert
-            assertThat(PropertiesManager.testrunGlobalProperties.count()).isEqualTo(globalProps.count())
-            assertThat(PropertiesManager.testrunProperties.count()).isEqualTo(0)
-            assertThat(PropertiesManager.envProperties.count()).isEqualTo(EnvUtility.getSREnvMap().count())
+            // Act, Assert
+            assertThatThrownBy {
+                PropertiesManager.setup(testrunFile = testrunFile)
+            }.isInstanceOf(FileNotFoundException::class.java)
+                .hasMessage("testrunFile is not found. (testrunFile=not.exist.testrun.properties)")
         }
     }
 
@@ -325,10 +329,20 @@ class PropertiesManagerTest : UnitTest() {
     @Test
     fun configFile() {
 
-        run {
+        kotlin.run {
             // Arrange
             TestMode.setAndroid()
             PropertiesManager.clear()
+            // Act, Assert
+            assertThatThrownBy {
+                PropertiesManager.configFile
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("PropertiesManager is not initialized.")
+        }
+        run {
+            // Arrange
+            TestMode.setAndroid()
+            PropertiesManager.setup()
             val configFile = "unitTestConfig/android/androidSettings/testrun.properties"
             PropertiesManager.setPropertyValue("android.configFile", configFile)
             // Act, Assert
@@ -336,12 +350,17 @@ class PropertiesManagerTest : UnitTest() {
         }
         run {
             // Arrange
-            PropertiesManager.clear()
+            TestMode.setAndroid()
+            PropertiesManager.setup()
             // Act, Assert
-            assertThatThrownBy {
-                PropertiesManager.configFile
-            }.isInstanceOf(TestConfigException::class.java)
-                .hasMessageStartingWith("android.configFile is required.")
+            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/android/testConfig@a.json")
+        }
+        run {
+            // Arrange
+            TestMode.setIos()
+            PropertiesManager.setup()
+            // Act, Assert
+            assertThat(PropertiesManager.configFile).isEqualTo("testConfig/ios/testConfig@i.json")
         }
         run {
             // Arrange
@@ -367,15 +386,11 @@ class PropertiesManagerTest : UnitTest() {
             if (EnvUtility.getSREnvMap().containsKey("SR_profile").not()) {
                 // Arrange
                 PropertiesManager.clear()
-                // Act, Assert
-                assertThatThrownBy {
-                    PropertiesManager.profile
-                }.isInstanceOf(TestConfigException::class.java)
-                    .hasMessageStartingWith("android.profile is required.")
+                // Act
+                val result = PropertiesManager.profile
+                // Assert
+                assertThat(result).isEqualTo("")
             }
-        }
-        run {
-
         }
     }
 
@@ -1735,6 +1750,132 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("MacroObject.scan.dir", value)
             // Act, Assert
             assertThat(PropertiesManager.macroObjectScanDir).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionOCRLanguage() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionOCRLanguage).isEqualTo(Const.VISION_OCR_LANGUAGE)
+        }
+        run {
+            // Arrange
+            val value = "ja"
+            PropertiesManager.setPropertyValue("visionOCRLanguage", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionOCRLanguage).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionDirectory() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionDirectory).isEqualTo(Const.VISION_DIRECTORY)
+        }
+        run {
+            // Arrange
+            val value = "temp"
+            PropertiesManager.setPropertyValue("visionDirectory", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionDirectory).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionBuildDirectory() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionBuildDirectory).isEqualTo(Const.VISION_BUILD_DIRECTORY)
+        }
+        run {
+            // Arrange
+            val value = "temp"
+            PropertiesManager.setPropertyValue("visionBuildDirectory", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionBuildDirectory).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionEnableLearningOnStartup() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionEnableLearningOnStartup).isEqualTo(Const.VISION_ENABLE_LEARNING_ON_STARTUP)
+        }
+        run {
+            // Arrange
+            val value = Const.VISION_ENABLE_LEARNING_ON_STARTUP.not()
+            PropertiesManager.setPropertyValue("visionEnableLearningOnStartup", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionEnableLearningOnStartup).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionServerUrl() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionServerUrl).isEqualTo(Const.VISION_SERVER_URL)
+        }
+        run {
+            // Arrange
+            val value = "http://127.0.0.1:8082"
+            PropertiesManager.setPropertyValue("visionServerUrl", value)
+            // Act, Assert
+            assertThat(PropertiesManager.visionServerUrl).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun segmentMarginHorizontal() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.segmentMarginHorizontal).isEqualTo(Const.VISION_SEGMENT_MARGIN_HORIZONTAL)
+        }
+        run {
+            // Arrange
+            val value = 30
+            PropertiesManager.setPropertyValue("segmentMarginHorizontal", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.segmentMarginHorizontal).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun segmentMarginVertical() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.segmentMarginVertical).isEqualTo(Const.VISION_SEGMENT_MARGIN_VERTICAL)
+        }
+        run {
+            // Arrange
+            val value = 15
+            PropertiesManager.setPropertyValue("segmentMarginVertical", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.segmentMarginVertical).isEqualTo(value)
         }
     }
 

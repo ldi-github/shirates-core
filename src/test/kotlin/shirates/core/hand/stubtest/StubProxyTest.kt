@@ -44,7 +44,6 @@ class StubProxyTest : UITest() {
     @Test
     fun noInstance() {
 
-        val instanceKey1 = "1"
         val profile1 = "profile1"
         StubProxy.removeInstance(profile = profile1)
 

@@ -2,10 +2,15 @@ package shirates.core.driver
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
-import shirates.core.logging.*
+import shirates.core.logging.LogLine
+import shirates.core.logging.LogType
+import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
+import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.misc.StackTraceUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.VisionElement
 
 private const val COMMAND_CONTEXT_FILE_NAME: String = "TestDriverCommandContext.kt"
 
@@ -64,7 +69,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg1: String? = null,
         arg2: String? = null,
         fireEvent: Boolean = true,
-        log: Boolean = TestLog.enableTrace,
         func: () -> Unit
     ): LogLine? {
         if (TestMode.isNoLoadRun) {
@@ -226,7 +230,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg2: String? = null,
         fileName: String? = null,
         fireEvent: Boolean = true,
-        log: Boolean? = null,
         suppressBeforeScreenshot: Boolean = false,
         func: () -> Unit
     ): LogLine? {
@@ -242,7 +245,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 arg2 = arg2,
                 fileName = fileName,
                 fireEvent = fireEvent,
-                log = log,
                 scriptCommand = scriptCommand,
                 suppressBeforeScreenshot = suppressBeforeScreenshot,
                 func = func
@@ -260,7 +262,6 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         arg2: String?,
         fileName: String?,
         fireEvent: Boolean,
-        log: Boolean?,
         scriptCommand: String?,
         suppressBeforeScreenshot: Boolean = false,
         func: () -> Unit
@@ -269,7 +270,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
 
         val sw = StopWatch()
 
-        val outputLog = log ?: CodeExecutionContext.shouldOutputLog
+        val outputLog = CodeExecutionContext.shouldOutputLog
 
         if (TestMode.isNoLoadRun) {
             if (outputLog) {
@@ -464,6 +465,10 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         result: LogType = LogType.NONE,
         resultMessage: String? = null
     ): LogLine? {
+        if (CodeExecutionContext.isInSilentCommand) {
+            return null
+        }
+
         try {
             pushToCommandStack()
 
@@ -862,6 +867,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         command: String,
         withScroll: Boolean = true,
         scrollDirection: ScrollDirection?,
+        scrollVisionElement: VisionElement = CodeExecutionContext.workingRegionElement,
         scrollFrame: String = "",
         scrollableElement: TestElement? = null,
         scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -870,6 +876,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
         scrollMaxCount: Int = testContext.scrollMaxCount,
         scrollToEdgeBoost: Int = testContext.scrollToEdgeBoost,
+        swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
         message: String = "",
         log: Boolean = false,
         func: () -> Unit
@@ -879,12 +886,14 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val originalScrollDirection = CodeExecutionContext.scrollDirection
         val originalScrollFrame = CodeExecutionContext.scrollFrame
         val originalScrollableElement = CodeExecutionContext.scrollableElement
+        val originalScrollVisionElement = CodeExecutionContext.scrollVisionElement
         val originalScrollDurationSeconds = CodeExecutionContext.scrollDurationSeconds
         val originalScrollIntervalSeconds = CodeExecutionContext.scrollIntervalSeconds
         val originalScrollStartMarginRatio = CodeExecutionContext.scrollStartMarginRatio
         val originalScrollEndMarginRatio = CodeExecutionContext.scrollEndMarginRatio
         val originalScrollMaxCount = CodeExecutionContext.scrollMaxCount
         val originalScrollToEdgeBoost = CodeExecutionContext.scrollToEdgeBoost
+        val originalSwipeToSafePosition = CodeExecutionContext.swipeToSafePosition
 
         val ms = Measure()
         try {
@@ -892,12 +901,14 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
             CodeExecutionContext.scrollDirection = scrollDirection
             CodeExecutionContext.scrollFrame = scrollFrame
             CodeExecutionContext.scrollableElement = scrollableElement
+            CodeExecutionContext.scrollVisionElement = scrollVisionElement
             CodeExecutionContext.scrollDurationSeconds = scrollDurationSeconds
             CodeExecutionContext.scrollIntervalSeconds = scrollIntervalSeconds
             CodeExecutionContext.scrollStartMarginRatio = scrollStartMarginRatio
             CodeExecutionContext.scrollEndMarginRatio = scrollEndMarginRatio
             CodeExecutionContext.scrollMaxCount = scrollMaxCount
             CodeExecutionContext.scrollToEdgeBoost = scrollToEdgeBoost
+            CodeExecutionContext.swipeToSafePosition = swipeToSafePosition
 
             callerName = StackTraceUtility.getCallerName(
                 filterFileName = COMMAND_CONTEXT_FILE_NAME,
@@ -920,12 +931,14 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
                 CodeExecutionContext.scrollDirection = originalScrollDirection
                 CodeExecutionContext.scrollFrame = originalScrollFrame
                 CodeExecutionContext.scrollableElement = originalScrollableElement
+                CodeExecutionContext.scrollVisionElement = originalScrollVisionElement
                 CodeExecutionContext.scrollDurationSeconds = originalScrollDurationSeconds
                 CodeExecutionContext.scrollIntervalSeconds = originalScrollIntervalSeconds
                 CodeExecutionContext.scrollStartMarginRatio = originalScrollStartMarginRatio
                 CodeExecutionContext.scrollEndMarginRatio = originalScrollEndMarginRatio
                 CodeExecutionContext.scrollMaxCount = originalScrollMaxCount
                 CodeExecutionContext.scrollToEdgeBoost = originalScrollToEdgeBoost
+                CodeExecutionContext.swipeToSafePosition = originalSwipeToSafePosition
                 endExecWithScroll(command = command, log = log)
             } finally {
                 ms.end()

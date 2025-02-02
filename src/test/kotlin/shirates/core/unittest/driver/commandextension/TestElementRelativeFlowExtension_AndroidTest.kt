@@ -7,7 +7,6 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.rootElement
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 
@@ -151,18 +150,26 @@ class TestElementRelativeFlowExtension_AndroidTest : UnitTest() {
         }
         run {
             // Arrange
-            val targetElements = rootElement.descendants.filter { it.id.contains("EditText") }
+            val targetElements = TestElementCache.rootElement.descendants.filter { it.id.contains("EditText") }
             // Act, Assert
-            assertThat(e.vflow(Selector("[1]"), TestElementCache.allElements, frame = null).id).isEqualTo("EditText3-1")
+            assertThat(
+                e.vflow(
+                    Selector("[1]"),
+                    TestElementCache.allElements,
+                    margin = 0,
+                    frame = null
+                ).id
+            ).isEqualTo("EditText3-1")
             assertThat(
                 e.vflow(
                     Selector("[2]"),
                     TestElementCache.allElements,
+                    margin = 0,
                     frame = null
                 ).id
             ).isEqualTo("ImageView1-1")
-            assertThat(e.vflow(Selector("[1]"), targetElements, frame = null).id).isEqualTo("EditText3-1")
-            assertThat(e.vflow(Selector("[2]"), targetElements, frame = null).isEmpty).isTrue()
+            assertThat(e.vflow(Selector("[1]"), targetElements, margin = 0, frame = null).id).isEqualTo("EditText3-1")
+            assertThat(e.vflow(Selector("[2]"), targetElements, margin = 0, frame = null).isEmpty).isTrue()
         }
 
         // flow(pos)

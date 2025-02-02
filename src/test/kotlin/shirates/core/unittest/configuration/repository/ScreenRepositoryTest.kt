@@ -7,12 +7,10 @@ import shirates.core.configuration.ScreenInfo
 import shirates.core.configuration.Selector
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.exception.TestConfigException
-import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.toPath
 import java.io.File
-import java.nio.file.Path
 
 class ScreenRepositoryTest : UnitTest() {
 
@@ -105,9 +103,9 @@ class ScreenRepositoryTest : UnitTest() {
     fun setup_with_args() {
 
         // Act
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         // Assert
-        assertThat(ScreenRepository.screensDirectory).isEqualTo("unitTestData/testConfig/nicknames1/screens".toPath())
+        assertThat(ScreenRepository.screensDirectory).isEqualTo("unitTestData/testConfig/nicknames1/screens")
         assertThat(ScreenRepository.screenInfoMap.count()).isEqualTo(11)
         assertThat(ScreenRepository.screenInfoSearchList.count()).isEqualTo(11)
 
@@ -213,20 +211,20 @@ class ScreenRepositoryTest : UnitTest() {
             }
             run {
                 assertThat(s.containsKey("{TextBox A}")).isTrue()
-                val sel = s.check("{TextBox A}", "xpath", "xpathA")
+                s.check("{TextBox A}", "xpath", "xpathA")
                 assertThat(s["{TextBox A}"]?.section).isEqualTo("selectors")
             }
             run {
-                val sel = s.check("[Label A]", "text", "textA")
+                s.check("[Label A]", "text", "textA")
             }
             run {
-                val sel = s.check("[Label A2]", "textStartsWith", "textA2")
+                s.check("[Label A2]", "textStartsWith", "textA2")
             }
             run {
-                val sel = s.check("[Label A3]", "textContains", "textA3")
+                s.check("[Label A3]", "textContains", "textA3")
             }
             run {
-                val sel = s.check("[Label A4]", "textMatches", "textA4")
+                s.check("[Label A4]", "textMatches", "textA4")
             }
             run {
                 assertThat(s.containsKey("[empty]")).isTrue()
@@ -243,64 +241,64 @@ class ScreenRepositoryTest : UnitTest() {
                 assertThat(s["[empty]"]?.section).isEqualTo("selectors")
             }
             run {
-                val sel = s.check("[by id]", "id", "idA")
+                s.check("[by id]", "id", "idA")
             }
             run {
-                val sel = s.check("[by xpath]", "xpath", "xpathA")
+                s.check("[by xpath]", "xpath", "xpathA")
             }
             run {
-                val sel = s.check("[by text]", "text", "textA")
+                s.check("[by text]", "text", "textA")
             }
             run {
-                val sel = s.check("[by textStartsWith]", "textStartsWith", "textA")
+                s.check("[by textStartsWith]", "textStartsWith", "textA")
             }
             run {
-                val sel = s.check("[by textContains]", "textContains", "textA")
+                s.check("[by textContains]", "textContains", "textA")
             }
             run {
-                val sel = s.check("[by textEndsWith]", "textEndsWith", "textA")
+                s.check("[by textEndsWith]", "textEndsWith", "textA")
             }
             run {
-                val sel = s.check("[by textMatches]", "textMatches", "textA")
+                s.check("[by textMatches]", "textMatches", "textA")
             }
             run {
-                val sel = s.check("[by access]", "access", "accessA")
+                s.check("[by access]", "access", "accessA")
             }
             run {
-                val sel = s.check("[by access 2]", "access", "accessA2")
+                s.check("[by access 2]", "access", "accessA2")
             }
             run {
-                val sel = s.check("[by accessStartsWith]", "accessStartsWith", "accessA")
+                s.check("[by accessStartsWith]", "accessStartsWith", "accessA")
             }
             run {
-                val sel = s.check("[by accessStartsWith 2]", "accessStartsWith", "accessA2")
+                s.check("[by accessStartsWith 2]", "accessStartsWith", "accessA2")
             }
             run {
-                val sel = s.check("[by accessContains]", "accessContains", "accessA")
+                s.check("[by accessContains]", "accessContains", "accessA")
             }
             run {
-                val sel = s.check("[by accessContains 2]", "accessContains", "accessA2")
+                s.check("[by accessContains 2]", "accessContains", "accessA2")
             }
             run {
-                val sel = s.check("[by accessEndsWith]", "accessEndsWith", "accessA")
+                s.check("[by accessEndsWith]", "accessEndsWith", "accessA")
             }
             run {
-                val sel = s.check("[by accessEndsWith 2]", "accessEndsWith", "accessA2")
+                s.check("[by accessEndsWith 2]", "accessEndsWith", "accessA2")
             }
             run {
-                val sel = s.check("[by accessMatches]", "accessMatches", "accessA")
+                s.check("[by accessMatches]", "accessMatches", "accessA")
             }
             run {
-                val sel = s.check("[by className]", "className", "className1")
+                s.check("[by className]", "className", "className1")
             }
             run {
-                val sel = s.check("[by access,text,className]", "access", "access1")
+                s.check("[by access,text,className]", "access", "access1")
             }
             run {
-                val sel = s.check("[by access,text,className]", "text", "text1")
+                s.check("[by access,text,className]", "text", "text1")
             }
             run {
-                val sel = s.check("[by access,text,className]", "className", "className1")
+                s.check("[by access,text,className]", "className", "className1")
             }
         }
     }
@@ -310,12 +308,21 @@ class ScreenRepositoryTest : UnitTest() {
 
         run {
             // Arrange
-            val path = "unitTestConfig/android/androidSettings/androidSettingsConfig.json".toPath().toAbsolutePath()
+            val path = "no/exist/directory"
             // Act, Assert
             assertThatThrownBy {
                 ScreenRepository.setup(screensDirectory = path)
             }.isInstanceOf(TestConfigException::class.java)
-                .hasMessage("screens is not directory. ($path)")
+                .hasMessage("screens directory not found. ($path)")
+        }
+        run {
+            // Arrange
+            val path = "unitTestConfig/android/androidSettings/androidSettingsConfig.json"
+            // Act, Assert
+            assertThatThrownBy {
+                ScreenRepository.setup(screensDirectory = path)
+            }.isInstanceOf(TestConfigException::class.java)
+                .hasMessage("screensDirectory is not directory. ($path)")
         }
     }
 
@@ -324,7 +331,7 @@ class ScreenRepositoryTest : UnitTest() {
 
         run {
             // Act
-            ScreenRepository.setup("unitTestData/testConfig/errorScreens/screenDuplicated".toPath())
+            ScreenRepository.setup("unitTestData/testConfig/errorScreens/screenDuplicated")
             // Assert
             val msg = TestLog.lastTestLog?.message
             assertThat(msg?.startsWith("Screen nickname [A Screen] is duplicated. Registered file"))
@@ -336,8 +343,8 @@ class ScreenRepositoryTest : UnitTest() {
 
         run {
             // Act, Assert
-            val directory = "unitTestData/testConfig/errorScreens/includeNotRegisteredScreen".toPath().toAbsolutePath()
-            val notRegisteredScreenPath = directory.resolve("[includeNotRegisteredScreen].json")
+            val directory = "unitTestData/testConfig/errorScreens/includeNotRegisteredScreen".toPath().toString()
+            val notRegisteredScreenPath = directory.toPath().resolve("[includeNotRegisteredScreen].json")
             assertThatThrownBy {
                 ScreenRepository.setup(directory)
             }.isInstanceOf(TestConfigException::class.java)
@@ -349,22 +356,23 @@ class ScreenRepositoryTest : UnitTest() {
     fun screensDirectory_directory() {
 
         // Arrange
-        val notExitDirectory = "not/exist/directory".toPath().toAbsolutePath()
-        // Act
-        ScreenRepository.setup(notExitDirectory)
-        // Assert
-        assertThat(TestLog.lastTestLog?.message)?.isEqualTo("screens directory not found. ($notExitDirectory)")
+        val notExitDirectory = "not/exist/directory".toPath().toString()
+        // Act, Assert
+        assertThatThrownBy {
+            ScreenRepository.setup(notExitDirectory)
+        }.isInstanceOf(TestConfigException::class.java)
+            .hasMessage("screens directory not found. ($notExitDirectory)")
     }
 
     @Test
     fun setup_importDirectories() {
 
         // Arrange
-        val importDirectories = mutableListOf<Path>()
-        importDirectories.add("unitTestConfig/android/androidSettings/screens".toPath())
+        val importDirectories = mutableListOf<String>()
+        importDirectories.add("unitTestConfig/android/androidSettings/screens")
         // Act
         ScreenRepository.setup(
-            "unitTestData/testConfig/nicknames1/screens".toPath(),
+            "unitTestData/testConfig/nicknames1/screens",
             importDirectories = importDirectories
         )
         // Assert
@@ -376,7 +384,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun has() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         // Act, Assert
         assertThat(ScreenRepository.has("screenName1")).isFalse()
 
@@ -394,11 +402,11 @@ class ScreenRepositoryTest : UnitTest() {
     fun get_test() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         // Act, Assert
         assertThatThrownBy {
             ScreenRepository.get("screenName1")
-        }.isInstanceOf(TestDriverException::class.java)
+        }.isInstanceOf(TestConfigException::class.java)
             .hasMessage("key is not registered.(key='screenName1')")
 
         // Arrange
@@ -414,7 +422,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun getScreenInfo() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         run {
             // Act
             val screenInfo = ScreenRepository.getScreenInfo(screenName = "[A Screen]")
@@ -434,7 +442,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun getSelector() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         run {
             // Act
             val selector = ScreenRepository.getSelector(screenName = "[A Screen]", nickName = "[Label A]")
@@ -448,7 +456,7 @@ class ScreenRepositoryTest : UnitTest() {
     fun nicknameIndex() {
 
         // Arrange, Act
-        ScreenRepository.setup("unitTestData/testConfig/weight/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/weight/screens")
         run {
             val nicknameIndex = ScreenRepository.nicknameIndex
             // Assert

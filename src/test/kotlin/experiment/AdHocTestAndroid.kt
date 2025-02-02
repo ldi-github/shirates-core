@@ -13,6 +13,10 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.utility.android.AdbUtility
+import shirates.core.vision.driver.classify
+import shirates.core.vision.driver.commandextension.detect
+import shirates.core.vision.driver.commandextension.existImage
+import shirates.core.vision.driver.commandextension.tap
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class AdHocTestAndroid : UITest() {
@@ -173,8 +177,8 @@ class AdHocTestAndroid : UITest() {
                 condition {
                     it.screenIs("[Android Settings Top Screen]")
                 }.expectation {
-                    it.selectWithScrollDown("[Network & internet]", log = true)
-                    it.selectWithScrollDown("[Connected devices]", log = false)
+                    it.selectWithScrollDown("[Network & internet]")
+                    it.selectWithScrollDown("[Connected devices]")
                     it.selectWithScrollDown("[Apps]")
                     silent {
                         it.selectWithScrollDown("[Notifications]")
@@ -281,4 +285,30 @@ class AdHocTestAndroid : UITest() {
             }
         }
     }
+
+    @Test
+    fun visionTest() {
+
+        scenario {
+            case(1) {
+                condition {
+                    disableCache()
+                }.action {
+                    visionDrive.detect("Network & internet")
+                        .tap()
+                    visionDrive.detect("Internet")
+                        .tap()
+                    visionDrive.detect("AndroidWifi")
+                        .tap()
+                }.expectation {
+                    val v = visionDrive.existImage(
+                        "unitTestData/files/srvision/android/template_Wifi_no_internet_access.png",
+                    )
+                    val label = v.classify()
+                    printInfo("label: $label")
+                }
+            }
+        }
+    }
+
 }

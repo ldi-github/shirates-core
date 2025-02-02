@@ -82,8 +82,9 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                         "Settings",
                         "General",
                         "Accessibility",
-                        "Privacy & Security",
-                        "Passwords"
+                        "Action Button",
+                        "Apple Intelligence & Siri",
+                        "Camera"
                     )
                 }
             }
@@ -98,7 +99,9 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                             "Settings",
                             "General",
                             "Accessibility",
-                            "Privacy & Security",
+                            "Action Button",
+                            "Apple Intelligence & Siri",
+                            "Camera",
                             "no exist",
                             waitSeconds = 1.0
                         )
@@ -118,7 +121,9 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                             "Settings",
                             "General",
                             "Accessibility",
-                            "Privacy & Security",
+                            "Action Button",
+                            "Apple Intelligence & Siri",
+                            "Camera",
                             "no exist",
                             waitSeconds = 2.0
                         )
@@ -145,9 +150,9 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                         "Settings",
                         "General",
                         "Accessibility",
-                        "Privacy & Security",
-                        "Passwords",
-                        "Safari",
+                        "Action Button",
+                        "Apple Intelligence & Siri",
+                        "Camera",
                         "Developer"
                     )
                 }
@@ -161,10 +166,11 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                             "Settings",
                             "General",
                             "Accessibility",
-                            "no exist",
-                            "Passwords",
-                            "Safari",
-                            "Developer"
+                            "Action Button",
+                            "Apple Intelligence & Siri",
+                            "Camera",
+                            "Developer",
+                            "no exist"
                         )
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists (scroll down)")

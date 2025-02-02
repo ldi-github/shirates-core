@@ -3,6 +3,7 @@ package shirates.core.unittest.configuration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
@@ -14,6 +15,7 @@ class Selector_AndroidTest2 : UnitTest() {
 
     override fun beforeEach(context: ExtensionContext?) {
 
+        PropertiesManager.statBarHeight = 0
         TestMode.setAndroid()
     }
 

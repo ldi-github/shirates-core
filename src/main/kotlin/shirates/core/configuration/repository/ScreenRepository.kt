@@ -3,21 +3,22 @@ package shirates.core.configuration.repository
 import shirates.core.configuration.ScreenInfo
 import shirates.core.configuration.Selector
 import shirates.core.configuration.isValidNickname
+import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
-import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.file.exists
+import shirates.core.utility.toPath
 import java.io.File
 import java.nio.file.Files
-import java.nio.file.Path
 
 /**
  * ScreenRepository
  */
 object ScreenRepository {
 
-    lateinit var screensDirectory: Path
-    lateinit var importDirectories: List<Path>
+    var screensDirectory: String = ""
+    var importDirectories: List<String> = listOf()
 
     val screenInfoMap = mutableMapOf<String, ScreenInfo>()
     val nicknameIndex = mutableMapOf<String, MutableList<ScreenInfo>>()
@@ -55,7 +56,7 @@ object ScreenRepository {
         if (screenInfoMap.containsKey(key)) {
             return screenInfoMap[key]!!
         } else {
-            throw TestDriverException("key is not registered.(key='$key')")
+            throw TestConfigException("key is not registered.(key='$key')")
         }
     }
 
@@ -98,12 +99,23 @@ object ScreenRepository {
     /**
      * setup
      */
-    fun setup(screensDirectory: Path, importDirectories: List<Path> = mutableListOf()) {
+    fun setup(screensDirectory: String, importDirectories: List<String> = mutableListOf()) {
 
-        if (Files.exists(screensDirectory).not()) {
-            TestLog.warn(message(id = "screensDirectoryNotFound", file = "$screensDirectory"))
-        } else if (Files.isDirectory(screensDirectory).not()) {
-            throw TestConfigException("screens is not directory. ($screensDirectory)")
+        if (screensDirectory.exists().not()) {
+            if (TestMode.isClassicTest) {
+                throw TestConfigException(message(id = "screensDirectoryNotFound", file = screensDirectory))
+            } else {
+                return  // VisionTest
+            }
+        }
+        if (Files.isDirectory(screensDirectory.toPath()).not()) {
+            val message = "screensDirectory is not directory. ($screensDirectory)"
+            if (TestMode.isClassicTest) {
+                throw TestConfigException(message)
+            } else {
+                TestLog.warn(message)
+                return  // VisionTest
+            }
         }
         this.screensDirectory = screensDirectory
         this.importDirectories = importDirectories
@@ -121,14 +133,14 @@ object ScreenRepository {
         loadFromDirectory(screensDirectory)
     }
 
-    private fun loadFromDirectory(directory: Path): List<File> {
+    private fun loadFromDirectory(directory: String): List<File> {
 
-        if (Files.isDirectory(directory).not()) {
+        if (Files.isDirectory(directory.toPath()).not()) {
             return mutableListOf()
         }
         TestLog.info("Loading screen files.(directory=$directory)")
 
-        val files = File(directory.toUri()).walkTopDown()
+        val files = File(directory.toPath().toUri()).walkTopDown()
             .filter {
                 it.name.lowercase().endsWith(".json") &&
                         it.nameWithoutExtension.startsWith("[")

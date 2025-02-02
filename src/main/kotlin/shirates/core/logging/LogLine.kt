@@ -1,6 +1,7 @@
 package shirates.core.logging
 
 import shirates.core.driver.ScrollDirection
+import shirates.core.driver.testContext
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
@@ -161,6 +162,9 @@ data class LogLine(
                 return true
             }
             if (logType == LogType.INFO) {
+                return true
+            }
+            if (testContext.onScrolling) {
                 return true
             }
 

@@ -6,10 +6,10 @@ import shirates.core.driver.*
 import shirates.core.driver.TestMode.isNoLoadRun
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.exception.TestDriverException
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Measure
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.time.StopWatch
 
@@ -59,7 +59,7 @@ fun TestDrive.tap(
             endX = x,
             endY = y,
             safeMode = safeMode,
-            durationSeconds = holdSeconds,
+            scrollDurationSeconds = holdSeconds,
             repeat = repeat,
         )
 
@@ -127,7 +127,7 @@ private fun TestElement.tapCore(
             startY = b.centerY,
             endX = b.centerX,
             endY = b.centerY,
-            durationSeconds = holdSeconds,
+            scrollDurationSeconds = holdSeconds,
         )
         swipePointToPointCore(swipeContext = sc)
         if (PropertiesManager.enableTimeMeasureLog) {
@@ -137,7 +137,7 @@ private fun TestElement.tapCore(
     }
 
     if (PropertiesManager.enableTapElementImageLog) {
-        val fileName = "${TestLog.lines.count() + 1}_TAP_${this.subject}_${this.bounds}"
+        val fileName = "${TestLog.nextLineNo}_tap_${this.subject}_${this.bounds}"
         this.cropImage(fileName = fileName)
     }
 
@@ -175,7 +175,8 @@ fun TestDrive.tap(
     expression: String,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     tapMethod: TapMethod = TapMethod.auto,
-    safeElementOnly: Boolean = CodeExecutionContext.isScrolling
+    safeElementOnly: Boolean = CodeExecutionContext.isScrolling,
+    useCache: Boolean = testContext.useCache
 ): TestElement {
 
     TestDriver.it
@@ -197,7 +198,7 @@ fun TestDrive.tap(
     var e = TestElement(selector = sel)
     context.execOperateCommand(command = command, message = message, subject = "$sel") {
 
-        val targetElement = select(expression = expression, safeElementOnly = safeElementOnly)
+        val targetElement = select(expression = expression, safeElementOnly = safeElementOnly, useCache = useCache)
 
         val tapFunc = {
             silent {
@@ -280,7 +281,7 @@ private fun TestDrive.tapWithScrollCommandCore(
             selector = selector,
             direction = direction,
             scrollableElement = sc,
-            durationSeconds = scrollDurationSeconds,
+            scrollDurationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
             endMarginRatio = scrollEndMarginRatio,
             scrollMaxCount = scrollMaxCount,

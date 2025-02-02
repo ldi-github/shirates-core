@@ -1,9 +1,8 @@
 package shirates.core.utility.sync
 
-import shirates.core.driver.TestDrive
 import shirates.core.utility.time.StopWatch
 
-interface WaitContextBase<T> : TestDrive {
+interface WaitContextBase<T> {
 
     var waitSeconds: Double
     var intervalSeconds: Double

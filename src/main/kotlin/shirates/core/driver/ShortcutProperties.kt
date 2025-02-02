@@ -1,7 +1,21 @@
 package shirates.core.driver
 
+import io.appium.java_client.AppiumDriver
+import shirates.core.configuration.PropertiesManager.statBarHeight
 import shirates.core.configuration.TestProfile
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.testcode.UITestCallbackExtension
+import shirates.core.vision.VisionDrive
+import shirates.core.vision.driver.VisionDriveObject
+import shirates.core.vision.driver.commandextension.rootElement
+
+/**
+ * drive
+ */
+val drive: Drive
+    get() {
+        return DriveObject
+    }
 
 /**
  * testDrive
@@ -12,38 +26,27 @@ val testDrive: TestDrive
     }
 
 /**
- * rootElement
+ * visionDrive
  */
-var rootElement: TestElement
+val visionDrive: VisionDrive
     get() {
-        return TestDriver.rootElement
-    }
-    set(value) {
-        TestDriver.rootElement = value
+        return VisionDriveObject
     }
 
 /**
- * view
+ * driver
  */
-val view: TestElement
+val driver: TestDriver
     get() {
-        return TestElementCache.viewElement
+        return TestDriver
     }
 
 /**
- * viewBounds
+ * appiumDriver
  */
-val viewBounds: Bounds
+val appiumDriver: AppiumDriver
     get() {
-        return TestElementCache.viewBounds
-    }
-
-/**
- * sourceXml
- */
-val sourceXml: String
-    get() {
-        return TestElementCache.sourceXml
+        return TestDriver.appiumDriver
     }
 
 /**
@@ -59,5 +62,39 @@ val testContext: TestContext
  */
 val testProfile: TestProfile
     get() {
-        return UITestCallbackExtension.uiTest!!.testProfile
+        return UITestCallbackExtension.uiTestBase!!.testProfile
     }
+
+/**
+ * packageName
+ */
+val packageName: String
+    get() {
+        if (testContext.useCache) {
+            return testDrive.rootElement.packageName
+        } else {
+            return visionDrive.rootElement.packageName
+        }
+    }
+
+/**
+ * rootBounds
+ */
+val rootBounds: Bounds
+    get() {
+        return if (isAndroid) TestElementCache.hierarchyBounds
+        else {
+            if (testContext.useCache) testDrive.rootElement.bounds
+            else visionDrive.rootElement.bounds
+        }
+    }
+
+/**
+ * viewBounds
+ */
+val viewBounds: Bounds
+    get() {
+        val b = rootBounds
+        return Bounds(left = b.left, top = statBarHeight, width = b.width, height = b.height - statBarHeight)
+    }
+

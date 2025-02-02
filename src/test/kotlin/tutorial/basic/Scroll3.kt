@@ -3,8 +3,8 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.view
 import shirates.core.testcode.UITest
 
 @Testrun("testConfig/android/maps/testrun.properties")
@@ -62,7 +62,7 @@ class Scroll3 : UITest() {
                 condition {
                     it.macro("[Maps Top Screen]")
                 }.action {
-                    view.scrollRight()
+                    TestElementCache.rootElement.scrollRight()
                         .scrollLeft()
                 }
             }

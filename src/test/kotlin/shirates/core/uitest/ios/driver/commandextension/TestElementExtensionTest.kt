@@ -9,7 +9,6 @@ import shirates.core.driver.TestElement
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
 import shirates.core.driver.scrollFrame
-import shirates.core.driver.view
 import shirates.core.testcode.UITest
 import shirates.core.testcode.Want
 
@@ -65,11 +64,11 @@ class TestElementExtensionTest : UITest() {
             }
             case(2) {
                 condition {
-                    e2 = e1.next("Pass*")
+                    e2 = e1.next("Action*")
                 }.action {
                     m2 = e2.getWebElement()
                 }.expectation {
-                    m2?.text.thisIs("Passwords")
+                    m2?.text.thisIs("Action Button")
                 }
             }
         }
@@ -91,7 +90,7 @@ class TestElementExtensionTest : UITest() {
             }
             case(2) {
                 expectation {
-                    view.scrollFrame.thisIs(view)
+                    rootElement.scrollFrame.thisIs(rootElement)
                 }
             }
             case(3) {
@@ -102,9 +101,8 @@ class TestElementExtensionTest : UITest() {
             }
             case(4) {
                 expectation {
-                    TestElement.emptyElement.scrollFrame.thisIs(view)
-                    rootElement.scrollFrame.thisIs(view)
-                    view.scrollFrame.thisIs(view)
+                    TestElement.emptyElement.scrollFrame.thisIs(rootElement)
+                    rootElement.scrollFrame.thisIs(rootElement)
                 }
             }
             case(5) {

@@ -7,7 +7,7 @@
   "identity": "~title=Apps",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[Apps]": ""
   }
 

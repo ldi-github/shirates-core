@@ -36,7 +36,6 @@ class AnyAssertionExtensionTest : UnitTest() {
             }
             // NG, default message
             run {
-                val message = message(id = "assertEquals", arg1 = "A", arg2 = "B") + " (arg1=A, arg2=B)"
                 assertThatThrownBy {
                     assertEquals("A", "B")
                 }.isInstanceOf(TestNGException::class.java)

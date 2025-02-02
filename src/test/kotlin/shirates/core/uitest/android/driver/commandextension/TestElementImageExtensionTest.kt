@@ -109,7 +109,7 @@ class TestElementImageExtensionTest : UITest() {
                 expectation {
                     rootElement.imageContains("[Display Icon].png") {
                         assertThat(TestLog.lastTestLog?.result).isEqualTo(LogType.OK)
-                        assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of <Settings> contains [Display Icon].png")
+                        assertThat(TestLog.lastTestLog?.message).isEqualTo("Image of <.android.widget.FrameLayout&&focusable=false&&scrollable=false> contains [Display Icon].png")
                     }
                     assertThatThrownBy {
                         it.select("[Display Icon].png").imageContains("[Network & internet Icon].png")
@@ -123,7 +123,7 @@ class TestElementImageExtensionTest : UITest() {
     @Order(30)
     fun existImage() {
 
-        val dir = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen".toPath()
+        val dir = "testConfig/android/androidSettings/screens/images/androidSettingsTopScreen"
 
         scenario {
             case(1) {
@@ -151,9 +151,10 @@ class TestElementImageExtensionTest : UITest() {
             case(2) {
                 condition {
                     // Create an image for finding image by file name
-                    val batteryIconFile = dir.listFiles().firstOrNull() { it.name.startsWith("[Battery Icon]") }
-                        ?: throw FileNotFoundException("[Battery Icon].png")
-                    batteryIconFile.copyTo(dir.resolve("[Battery Icon2].png").toFile(), overwrite = true)
+                    val batteryIconFile =
+                        dir.toPath().listFiles().firstOrNull() { it.name.startsWith("[Battery Icon]") }
+                            ?: throw FileNotFoundException("[Battery Icon].png")
+                    batteryIconFile.copyTo(dir.toPath().resolve("[Battery Icon2].png").toFile(), overwrite = true)
                     ImageFileRepository.setup(dir)
                 }.expectation {
                     it.existImage("[Battery Icon2]") {    // nickname [Battery Icon2] is not defined, but file exists, OK

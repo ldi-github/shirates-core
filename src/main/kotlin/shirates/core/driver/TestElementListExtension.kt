@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage
 fun List<TestElement>.filterBySelector(
     selector: Selector,
     throwsException: Boolean = false,
+    relativeMargin: Int = 0,
     frame: Bounds? = null
 ): MutableList<TestElement> {
 
@@ -38,7 +39,7 @@ fun List<TestElement>.filterBySelector(
                 val exps = selector.expandRelativeExpressions()
                 var relative = e
                 for (exp in exps) {
-                    relative = relative.relative(command = exp, scopeElements = this)
+                    relative = relative.relative(command = exp, scopeElements = this, margin = relativeMargin)
                 }
                 relative.selector = selector
                 if (relative.isEmpty.not() && filtered.contains(relative).not()) {
@@ -174,7 +175,7 @@ fun List<TestElement>.filterBySizeStrategy(
     val threshold = templareArea * ratio
 
     val result = this.filter { item ->
-        val area = item.bounds.toScaledRect().area()
+        val area = item.bounds.toScaledRect().area
         area <= threshold
     }
     return result

@@ -3,9 +3,9 @@ package shirates.core.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.logging.CodeExecutionContext
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.ImageMatchResult
 import shirates.core.utility.image.saveImage
 
@@ -59,10 +59,10 @@ internal fun TestElement.isImageCore(
     if (imageMatchResult.result.not() && cropImage) {
         silent {
             val s = selector.image!!.removeSuffix(".png")
-            val fileName = "$s${testDrive.imageProfile}.png"
+            val fileName = "$s${imageProfile}.png"
             imageMatchResult.image?.saveImage(TestLog.directoryForLog.resolve(fileName).toFile())
 
-            val fileName2 = "${TestLog.lines.count() + 1}_$fileName"
+            val fileName2 = "${TestLog.nextLineNo}_$fileName"
             imageMatchResult.templateImage?.saveImage(TestLog.directoryForLog.resolve(fileName2).toFile())
         }
     }
@@ -77,6 +77,8 @@ fun TestElement.isContainingImage(
     expression: String,
     threshold: Double = PropertiesManager.imageMatchingThreshold,
 ): ImageMatchResult {
+
+    screenshot(force = true)
 
     val testElement = this
 
@@ -293,10 +295,10 @@ internal fun imageAssertionCoreCore(
             }
         }
         if (r.not()) {
-            val croppedImageFileName = "${TestLog.lines.count()}_cropped_image"
+            val croppedImageFileName = "${TestLog.currentLineNo}_cropped_image"
             testElement.lastCropInfo?.croppedImage?.saveImage("${TestLog.directoryForLog.resolve(croppedImageFileName)}")
 
-            val templateImageFileName = "${TestLog.lines.count()}_template_image"
+            val templateImageFileName = "${TestLog.currentLineNo}_template_image"
             expectedSelector.templateImage?.saveImage("${TestLog.directoryForLog.resolve(templateImageFileName)}")
         }
 

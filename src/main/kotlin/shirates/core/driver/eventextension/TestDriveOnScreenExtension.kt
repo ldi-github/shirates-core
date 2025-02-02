@@ -9,12 +9,12 @@ import shirates.core.driver.testContext
  */
 fun TestDrive.onScreen(
     vararg screenNames: String,
-    onTrue: (TestDriverOnScreenContext) -> Unit
+    onTrue: (TestDriveOnScreenContext) -> Unit
 ): TestElement {
 
     for (screenName in screenNames) {
-        if (testContext.screenHandlers.containsKey(screenName).not()) {
-            testContext.screenHandlers[screenName] = onTrue
+        if (testContext.testDriveScreenHandlers.containsKey(screenName).not()) {
+            testContext.testDriveScreenHandlers[screenName] = onTrue
         }
     }
 
@@ -32,9 +32,9 @@ fun TestDrive.removeScreenHandler(
     val list = screenNames.toMutableList()
     list.add(0, screenName)
 
-    for (screenName in list) {
-        if (testContext.screenHandlers.containsKey(screenName)) {
-            testContext.screenHandlers.remove(screenName)
+    for (name in list) {
+        if (testContext.testDriveScreenHandlers.containsKey(name)) {
+            testContext.testDriveScreenHandlers.remove(name)
         }
     }
 
@@ -46,7 +46,7 @@ fun TestDrive.removeScreenHandler(
  */
 fun TestDrive.clearScreenHandlers(): TestElement {
 
-    testContext.screenHandlers.clear()
+    testContext.testDriveScreenHandlers.clear()
 
     return lastElement
 }

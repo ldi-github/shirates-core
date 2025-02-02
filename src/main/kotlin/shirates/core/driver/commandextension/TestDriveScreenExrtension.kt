@@ -109,17 +109,17 @@ internal fun TestDrive.waitScreenOfCore(
 
     var screenFound = false
 
-    val context = SyncUtility.doUntilTrue(
+    SyncUtility.doUntilTrue(
         waitSeconds = waitSeconds,
         intervalSeconds = testContext.waitSecondsForAnimationComplete,
         throwOnError = false
     ) {
-        for (screenName in testContext.screenHandlers.keys) {
+        for (screenName in testContext.testDriveScreenHandlers.keys) {
             isScreen(screenName = screenName)   // Fire screen handler
         }
 
         refreshCache()
-        testDrive.withoutScroll {
+        withoutScroll {
             irregularHandler?.invoke()
         }
 

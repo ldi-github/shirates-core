@@ -22,10 +22,11 @@ class TestDriveSelectExtensionTest6 : UITest() {
             case(1) {
                 expectation {
                     describe("accessStartsWith")
-                    it.canSelectWithScrollDown("@DEVELOPER_SET*").thisIsTrue("@DEVELOPER_SET*")
-                    it.canSelectWithScrollDown("@Gener*").thisIsFalse("@Gener*")
-                    it.canSelectWithScrollUp("@Genera*").thisIsTrue("@Genera*")
-                    it.canSelectWithScrollUp("@DEVELOPER*").thisIsFalse("@DEVELOPER*")
+                    it.canSelectWithScrollDown("@com.apple.settings.dev*").thisIsTrue("@com.apple.settings.dev*")
+                    it.canSelectWithScrollDown("@com.apple.settings.gener*").thisIsFalse("@com.apple.settings.gener*")
+                    it.canSelectWithScrollUp("@com.apple.settings.genera*").thisIsTrue("@com.apple.settings.genera*")
+                    it.canSelectWithScrollUp("@com.apple.settings.developer*")
+                        .thisIsFalse("@com.apple.settings.developer*")
                 }
             }
             case(2) {

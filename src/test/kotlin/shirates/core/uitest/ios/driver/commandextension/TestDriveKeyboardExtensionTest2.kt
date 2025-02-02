@@ -64,7 +64,7 @@ class TestDriveKeyboardExtensionTest2 : UITest() {
                         .sendKeys("appium")
                         .keyboardIsShown()
                 }.action {
-                    it.tapSoftwareKey("search||検索")
+                    it.tapSoftwareKey("search")
                 }.expectation {
                     it.keyboardIsNotShown()
                 }
@@ -72,7 +72,7 @@ class TestDriveKeyboardExtensionTest2 : UITest() {
             case(2) {
                 expectation {
                     try {
-                        it.tapSoftwareKey("search||検索")
+                        it.tapSoftwareKey("search")
                         NG()
                     } catch (t: Throwable) {
                         OK(t.message!!)

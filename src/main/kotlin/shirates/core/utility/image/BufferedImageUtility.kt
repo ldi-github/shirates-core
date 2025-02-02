@@ -1,6 +1,7 @@
 package shirates.core.utility.image
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.TestMode.isAndroid
 import shirates.core.utility.toPath
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
@@ -78,6 +79,9 @@ object BufferedImageUtility {
      */
     fun isBlackout(image: BufferedImage, threshold: Double = PropertiesManager.screenshotBlackoutThreshold): Boolean {
 
+        if (isAndroid.not()) {
+            return false
+        }
         val largestColorShare = getLargestColorShare(image = image)
         val result = largestColorShare.colorShare > threshold && largestColorShare.color == -16777216
         return result

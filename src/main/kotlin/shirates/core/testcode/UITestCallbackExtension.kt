@@ -9,7 +9,6 @@ import shirates.core.configuration.Testrun
 import shirates.core.configuration.repository.ParameterRepository
 import shirates.core.driver.*
 import shirates.core.driver.TestDriver.lastElement
-import shirates.core.driver.TestDriver.testContext
 import shirates.core.driver.TestMode.hasOsaifuKeitai
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isNoLoadRun
@@ -25,6 +24,7 @@ import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.testcode.VisionTest
 import java.nio.file.Files
 
 /**
@@ -39,7 +39,11 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
     var testFunctionWatch = StopWatch()
 
     companion object {
-        var uiTest: UITest? = null
+        var uiTestBase: UITestBase? = null
+
+        var androidAnnotation: android? = null
+        var iosAnnotation: ios? = null
+
         var failOfTestContext = false
         var failAnnotation: Fail? = null
         var deletedAnnotation: Deleted? = null
@@ -50,27 +54,31 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         val isClassManual: Boolean
             get() {
-                return uiTest?.isClassManual ?: false
+                return uiTestBase?.isClassManual ?: false
             }
         val isMethodManual: Boolean
             get() {
-                return uiTest?.isMethodManual ?: false
+                return uiTestBase?.isMethodManual ?: false
             }
         val isSkippingScenario: Boolean
             get() {
-                return uiTest?.isSkippingScenario ?: false
+                return uiTestBase?.isSkippingScenario ?: false
             }
         val isSkippingCase: Boolean
             get() {
-                return uiTest?.isSkippingCase ?: false
+                return uiTestBase?.isSkippingCase ?: false
             }
         val isManualingScenario: Boolean
             get() {
-                return uiTest?.isManualingScenario ?: false
+                return uiTestBase?.isManualingScenario ?: false
             }
         val isManualingCase: Boolean
             get() {
-                return uiTest?.isManualingCase ?: false
+                return uiTestBase?.isManualingCase ?: false
+            }
+        val isVisionTest: Boolean
+            get() {
+                return uiTestBase is VisionTest
             }
     }
 
@@ -84,6 +92,18 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         failAnnotation = null
 
         testClassWatch = StopWatch("testClassWatch").start()
+
+        androidAnnotation = context.getClassAnnotation(android::class)
+        iosAnnotation = context.getClassAnnotation(ios::class)
+        if (androidAnnotation != null && iosAnnotation != null) {
+            throw TestConfigException("Do not use @android annotation and @ios annotation at the same time.")
+        }
+        if (androidAnnotation != null && context.getClassAnnotation(Testrun::class) != null) {
+            throw TestConfigException("Do not use @android annotation and @Testrun annotation at the same time.")
+        }
+        if (iosAnnotation != null && context.getClassAnnotation(Testrun::class) != null) {
+            throw TestConfigException("Do not use @ios annotation and @Testrun annotation at the same time.")
+        }
 
         val tr = context!!.requiredTestClass.annotations.firstOrNull() { it is Testrun } as Testrun?
         PropertiesManager.testrun = tr
@@ -115,8 +135,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         ParameterRepository.write("sheetName", sheetName)
         ParameterRepository.write("logLanguage", TestLog.logLanguage)
 
-        // can not get UITest instance at this point.
-//        uiTest = getUITest(context)
+        // can not get UITestBase instance at this point.
+//        uiTestBase = getUITestBase(context)
 
     }
 
@@ -143,18 +163,32 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             throw TestConfigException("Do not use @EnableCache and @DisableCache on a function.")
         }
 
+        val isVision = context!!.testInstance.get() is VisionTest
+
         if (context.isClassAnnotated(EnableCache::class)) {
+            if (isVision) {
+                throw TestConfigException("@EnableCache is not supported on VisionTest class.")
+            }
             enableCache = true
         } else if (context.isClassAnnotated(DisableCache::class)) {
+            if (isVision) {
+                throw TestConfigException("@DisableCache is not supported on VisionTest class.")
+            }
             enableCache = false
         }
         if (context.isMethodAnnotated(EnableCache::class)) {
+            if (isVision) {
+                throw TestConfigException("@EnableCache is not supported on VisionTest class.")
+            }
             enableCache = true
         } else if (context.isMethodAnnotated(DisableCache::class)) {
+            if (isVision) {
+                throw TestConfigException("@DisableCache is not supported on VisionTest class.")
+            }
             enableCache = false
         }
 
-        val requiredContext = context!!.requiredContext
+        val requiredContext = context.requiredContext
         if (requiredContext.isRequired.not()) {
             throw TestAbortedException("Test skipped. (${requiredContext.clazz?.simpleName})")
         }
@@ -167,10 +201,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.resetTestScenarioInfo()
         TestDriver.clearContext()
 
-        uiTest = getUITest(context)
+        uiTestBase = getUITest(context)
 
-        if (uiTest != null) {
-            val testBase = uiTest!!
+        if (uiTestBase != null) {
+            val testBase = uiTestBase!!
             testBase.currentTestMethodName = testMethodName
             testBase.currentDisplayName = displayName
             testBase.currentOrder = orderValue
@@ -187,7 +221,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
             // print config
             if (TestLog.configPrinted.not()) {
-                val profile = uiTest!!.testProfile!!
+                val profile = uiTestBase!!.testProfile
                 val testConfig = profile.testConfig
                 ParameterRepository.write("testrun", PropertiesManager.testrunFile)
                 if (profile.testConfigName.isNullOrBlank().not() && testConfig?.testConfigFile.isNullOrBlank().not()) {
@@ -265,11 +299,11 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
         testContext.saveState()
         try {
-            uiTest?.beforeEach(context)
+            uiTestBase?.beforeEach(context)
         } catch (t: Throwable) {
             if (PropertiesManager.enableRerunScenario) {
                 TestLog.warn("$t ${t.stackTraceToString()}")
-                uiTest?.beforeEach(context)
+                uiTestBase?.beforeEach(context)
             } else {
                 TestLog.error("$t ${t.stackTraceToString()}")
                 throw t
@@ -294,7 +328,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.stepNo = null
         TestLog.resetTestScenarioInfo()
 
-        uiTest?.afterEach(context)
+        uiTestBase?.afterEach(context)
 
         if (failAnnotation != null) {
             val ex = TestFailException(message = failAnnotation!!.message)
@@ -311,7 +345,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         testFunctionWatch.stop()
         val duration = "%.1f".format(testFunctionWatch.elapsedSeconds)
         TestLog.info(message(id = "testFunctionExecuted", arg1 = duration))
-        TestLog.info("End of ${uiTest?.TestFunctionDescription}")
+        TestLog.info("End of ${uiTestBase?.TestFunctionDescription}")
 
         if (hasNoException && scenarioLines.any { it.logType == LogType.SCENARIO }.not()) {
             val ex = TestAbortedException("scenario not implemented.")
@@ -325,7 +359,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
      */
     override fun afterAll(context: ExtensionContext?) {
 
-        uiTest?.afterAll(context)
+        uiTestBase?.afterAll(context)
 
         if (CpuLoadService.thread != null) {
             CpuLoadService.stopService()
@@ -350,20 +384,20 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
             }
             TestLog.outputLogDetail(LogFileFormat.Html)
             TestLog.outputLogSimple(LogFileFormat.Html)
+
+            // Spec-Report
+            if (TestLog.lines.any() { it.logType == LogType.SCENARIO }) {
+                TestLog.outputSpecReport()
+            } else {
+                println("No scenario found. Outputting Spec-Report skipped.")
+            }
+
+            // TestList
+            TestLog.outputTestList()
+
+            // TestClassList
+            TestLog.outputTestClassList()
         }
-
-        // Spec-Report
-        if (TestLog.lines.any() { it.logType == LogType.SCENARIO }) {
-            TestLog.outputSpecReport()
-        } else {
-            println("No scenario found. Outputting Spec-Report skipped.")
-        }
-
-        // TestList
-        TestLog.outputTestList()
-
-        // TestClassList
-        TestLog.outputTestClassList()
 
         // close
         val appiumClose = AppiumServerManager.appiumClose
@@ -378,7 +412,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         val duration = "%.1f".format(testClassWatch.elapsedSeconds)
         TestLog.info(message(id = "testClassExecuted", arg1 = duration))
 
-        uiTest?.finally()
+        uiTestBase?.finally()
     }
 
     /**
@@ -389,15 +423,15 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.trace()
 
         if (throwable != null) {
-            TestDriver.screenshotCore(sync = false)
+            TestDriver.screenshotCore(sync = false, withTextMatching = false)
             throw throwable
         }
     }
 
     /**
-     * getUITest
+     * getUITestBase
      */
-    fun getUITest(context: ExtensionContext?): UITest? {
+    fun getUITest(context: ExtensionContext?): UITestBase? {
 
         if (context == null || context.testInstance == null) {
             return null
@@ -407,7 +441,7 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         }
         val testInstance = context.testInstance.get()
 
-        if (testInstance is UITest) {
+        if (testInstance is UITestBase) {
             testInstance.extensionContext = context
             return testInstance
         }

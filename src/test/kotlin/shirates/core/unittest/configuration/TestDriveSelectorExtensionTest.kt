@@ -10,7 +10,6 @@ import shirates.core.driver.commandextension.tempSelector
 import shirates.core.driver.testDrive
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
-import shirates.core.utility.toPath
 
 class TestDriveSelectorExtensionTest : UnitTest() {
 
@@ -18,7 +17,7 @@ class TestDriveSelectorExtensionTest : UnitTest() {
     fun getSelector_tempSelector() {
 
         // Arrange
-        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens".toPath())
+        ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
         testDrive.switchScreen(screenName = "[A Screen]")
         run {
             // Assert

@@ -24,11 +24,8 @@ fun TestElement.radioButton(
 fun TestElement.checkBox(
 ): TestElement {
 
-    if (isAndroid) {
-        if (this.className == "android.widget.CheckBox") {
-            return this
-        }
-        return TestElement.emptyElement
+    if (isAndroid && this.className == "android.widget.CheckBox") {
+        return this
     }
     return this.leftButton()
 }

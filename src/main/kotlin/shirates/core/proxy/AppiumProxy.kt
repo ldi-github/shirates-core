@@ -1,6 +1,5 @@
 package shirates.core.proxy
 
-import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -20,7 +19,6 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.element.ElementCacheUtility
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.sync.WaitUtility
-import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -128,7 +126,7 @@ object AppiumProxy {
                 val count = c.count
                 TestLog.info("getSource($count)")
             }
-            lastSource = TestDriver.appiumDriver.pageSource
+            lastSource = TestDriver.appiumDriver.pageSource ?: ""
             val r = validateSource()
             if (r) {
                 root = ElementCacheUtility.createTestElementFromXml(sourceXml = lastSource)
@@ -166,7 +164,7 @@ object AppiumProxy {
         val d = TestDriver.appiumDriver
         val url = "${d.remoteAddress}/session/${d.sessionId}/source".toHttpUrlOrNull()!!.newBuilder()
             .build()
-        val response = getResponse(url)
+        val response = HttpProxy.getResponse(url)
 
         return response
     }
@@ -206,34 +204,9 @@ object AppiumProxy {
         }
 
         val url = uri2.toHttpUrlOrNull()!!.newBuilder().build()
-        val response = getResponse(url)
+        val response = HttpProxy.getResponse(url)
 
         return response
-    }
-
-    /**
-     * getResponse
-     */
-    fun getResponse(url: HttpUrl): Response {
-
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        val client = OkHttpClient().newBuilder()
-            .connectTimeout(Duration.ofMillis(8000))
-            .build()
-
-        var response: Response? = null
-        try {
-            response = client.newCall(request).execute()
-            return response
-        } finally {
-            try {
-                response?.close()
-            } catch (t: Throwable) {
-                TestLog.error(t)
-            }
-        }
     }
 
     /**

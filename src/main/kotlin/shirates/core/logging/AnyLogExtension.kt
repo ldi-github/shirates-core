@@ -2,6 +2,7 @@ package shirates.core.logging
 
 import shirates.core.driver.TestDriver.lastElement
 import shirates.core.driver.TestElement
+import shirates.core.testcode.CodeExecutionContext
 
 
 /**
@@ -9,8 +10,9 @@ import shirates.core.driver.TestElement
  */
 fun Any?.printInfo(message: String? = this.toString()): TestElement {
 
-    TestLog.info(message = message ?: "")
-
+    if (CodeExecutionContext.shouldOutputLog) {
+        TestLog.info(message = message ?: "")
+    }
     return lastElement
 }
 
@@ -20,7 +22,6 @@ fun Any?.printInfo(message: String? = this.toString()): TestElement {
 fun Any?.printWarn(message: String? = this.toString()): TestElement {
 
     TestLog.warn(message = message ?: "")
-
     return lastElement
 }
 
@@ -29,7 +30,8 @@ fun Any?.printWarn(message: String? = this.toString()): TestElement {
  */
 fun Any?.printLog(logType: LogType = LogType.NONE, message: String? = this.toString()): TestElement {
 
-    TestLog.write(message = message!!, logType = logType)
-
+    if (CodeExecutionContext.shouldOutputLog) {
+        TestLog.write(message = message!!, logType = logType)
+    }
     return lastElement
 }

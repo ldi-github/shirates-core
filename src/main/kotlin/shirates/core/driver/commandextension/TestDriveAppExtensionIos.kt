@@ -4,54 +4,32 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
-import shirates.core.logging.TestLog
-import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.misc.ShellUtility
-import shirates.core.utility.sync.SyncUtility
 
 internal fun TestDriveObjectIos.launchIosAppByShell(
     udid: String,
     bundleId: String,
-    sync: Boolean = true,
+    sync: Boolean,
     onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
     log: Boolean = PropertiesManager.enableShellExecLog
 ): TestElement {
 
     launchIosAppByShellCore(udid = udid, bundleId = bundleId, log = log)
 
-    var isApp = false
+    if (testContext.useCache.not()) {
+        return lastElement
+    }
 
+    /**
+     * Classic mode only
+     */
     if (sync) {
-        SyncUtility.doUntilTrue(
-            waitSeconds = testContext.waitSecondsForLaunchAppComplete
-        ) { context ->
-            TestLog.info("doUntilTrue(${context.count})")
-            testDrive.wait(waitSeconds = 2)
-            isApp = TestDriver.isAppCore(appNameOrAppId = bundleId)
-
-            val lastMessage = TestLog.lastTestLog!!.message
-            val kAXErrorServerNotFound = lastMessage.contains("kAXErrorServerNotFound") // SpringBoard is corrupted
-            if (kAXErrorServerNotFound) {
-                TestLog.info("SpringBoard is corrupted.")
-                IosDeviceUtility.terminateSpringBoardByUdid(udid = udid, log = log)
-                TestLog.info("Retrying launchApp.")
-                launchIosAppByShellCore(udid = udid, bundleId = bundleId, log = log)
-                testDrive.withoutScroll {
-                    onLaunchHandler?.invoke()
-                }
-                false
-            } else if (isApp) {
-                TestLog.info("App launched. ($bundleId)")
-                true
-            } else {
-                testDrive.withoutScroll {
-                    onLaunchHandler?.invoke()
-                }
-                false
-            }
-        }
+        val isApp = TestDriver.isAppCore(appNameOrAppId = bundleId)
         if (isApp.not()) {
-            throw TestDriverException("launchApp timed out. (waitSecondsForLaunchAppComplete=${testContext.waitSecondsForLaunchAppComplete}, bundleId=$bundleId)")
+            testDrive.withoutScroll {
+                onLaunchHandler?.invoke()
+            }
+            Thread.sleep(3000)
         }
     } else {
         Thread.sleep(3000)
@@ -113,9 +91,10 @@ internal fun TestDriveObjectIos.terminateIosApp(
 internal fun TestDriveObjectIos.restartIosApp(
     udid: String,
     bundleId: String,
+    sync: Boolean,
     log: Boolean = PropertiesManager.enableShellExecLog
 ): TestElement {
 
     terminateIosApp(udid = udid, bundleId = bundleId, log = log)
-    return launchIosAppByShell(udid = udid, bundleId = bundleId, log = log)
+    return launchIosAppByShell(udid = udid, bundleId = bundleId, sync = sync, log = log)
 }

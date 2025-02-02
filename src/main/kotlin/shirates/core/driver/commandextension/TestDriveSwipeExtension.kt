@@ -7,6 +7,7 @@ import org.openqa.selenium.interactions.Sequence
 import shirates.core.Const
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.load.CpuLoadService
@@ -42,9 +43,9 @@ fun TestDrive.swipePointToPoint(
         endX = endX,
         endY = endY,
         safeMode = safeMode,
-        durationSeconds = durationSeconds,
+        scrollDurationSeconds = durationSeconds,
         repeat = repeat,
-        intervalSeconds = intervalSeconds
+        scrollIntervalSeconds = intervalSeconds
     )
     if (withOffset) {
         sc.endY += offsetY
@@ -77,9 +78,9 @@ internal class SwipeContext(
     var endX: Int,
     var endY: Int,
     val safeMode: Boolean = true,
-    val durationSeconds: Double = testContext.swipeDurationSeconds,
+    val scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
+    val scrollIntervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
     val repeat: Int = 1,
-    val intervalSeconds: Double = Const.SWIPE_INTERVAL_SECONDS,
 ) {
     init {
         if (safeMode) {
@@ -143,7 +144,7 @@ internal fun TestDrive.swipePointToPointCore(
         )
         sequence.addAction(
             finger.createPointerMove(
-                Duration.ofMillis((sc.durationSeconds * 1000).toLong()),
+                Duration.ofMillis((sc.scrollDurationSeconds * 1000).toLong()),
                 PointerInput.Origin.viewport(), sc.endX, sc.endY
             )
         )
@@ -151,7 +152,7 @@ internal fun TestDrive.swipePointToPointCore(
             finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg())
         )
         try {
-            driver.appiumDriver.perform(mutableListOf(sequence))
+            appiumDriver.perform(mutableListOf(sequence))
         } catch (t: InvalidElementStateException) {
             TestLog.trace(t.message ?: t.stackTraceToString())
             //  https://github.com/appium/java-client/issues/2045
@@ -168,8 +169,8 @@ internal fun TestDrive.swipePointToPointCore(
     for (i in 1..swipeContext.repeat) {
         if (swipeContext.repeat > 1) {
             TestLog.trace("$i")
-            if (swipeContext.intervalSeconds > 0.0) {
-                Thread.sleep((swipeContext.intervalSeconds * 1000).toLong())
+            if (swipeContext.scrollIntervalSeconds > 0.0) {
+                Thread.sleep((swipeContext.scrollIntervalSeconds * 1000).toLong())
             }
         }
         swipeFunc()
@@ -697,11 +698,11 @@ fun TestDrive.flickAndGoDown(
             val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
             scrollDown(
                 scrollableElement = sc,
-                durationSeconds = durationSeconds,
+                scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                scrollIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -759,11 +760,11 @@ fun TestDrive.flickAndGoRight(
             val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
             scrollRight(
                 scrollableElement = sc,
-                durationSeconds = durationSeconds,
+                scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                scrollIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -797,11 +798,11 @@ fun TestDrive.flickAndGoLeft(
             val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
             scrollLeft(
                 scrollableElement = sc,
-                durationSeconds = durationSeconds,
+                scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                scrollIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling
@@ -872,11 +873,11 @@ fun TestDrive.flickAndGoUp(
             val sc = scrollableElement ?: getScrollableElement(scrollFrame = scrollFrame)
             scrollUp(
                 scrollableElement = sc,
-                durationSeconds = durationSeconds,
+                scrollDurationSeconds = durationSeconds,
                 startMarginRatio = startMarginRatio,
                 endMarginRatio = endMarginRatio,
                 repeat = repeat,
-                intervalSeconds = intervalSeconds
+                scrollIntervalSeconds = intervalSeconds
             )
         } finally {
             testContext.onScrolling = originalOnScrolling

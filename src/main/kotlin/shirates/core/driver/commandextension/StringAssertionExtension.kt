@@ -7,8 +7,8 @@ import shirates.core.driver.TestElement
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.testcode.preprocessForComparison
 import shirates.core.utility.format
+import shirates.core.utility.string.forClassicComparison
 import shirates.core.utility.toDate
 
 /**
@@ -29,7 +29,7 @@ fun Any?.thisIsEmpty(
             result.thisCore(match = result, assertMessage = assertMessage)
         }
     } else {
-        val value = (this?.toString() ?: "").preprocessForComparison(strict = strict, trimString = false)
+        val value = (this?.toString() ?: "").forClassicComparison(strict = strict, trimString = false)
         val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
         val context = TestDriverCommandContext(null)
         context.execCheckCommand(command = command, message = assertMessage) {
@@ -59,7 +59,7 @@ fun Any?.thisIsNotEmpty(
             result.thisCore(match = result, assertMessage = assertMessage)
         }
     } else {
-        val value = (this?.toString() ?: "").preprocessForComparison(strict = strict, trimString = false)
+        val value = (this?.toString() ?: "").forClassicComparison(strict = strict, trimString = false)
         val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
         val context = TestDriverCommandContext(null)
         context.execCheckCommand(command = command, message = assertMessage) {
@@ -80,7 +80,7 @@ fun Any?.thisIsBlank(
 ): Any? {
 
     val command = "thisIsBlank"
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict, trimString = false)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict, trimString = false)
     val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
@@ -101,7 +101,7 @@ fun Any?.thisIsNotBlank(
 ): Any? {
 
     val command = "thisIsNotBlank"
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict, trimString = false)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict, trimString = false)
     val assertMessage = message ?: message(id = command, subject = value, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
@@ -123,8 +123,8 @@ fun Any?.thisContains(
 ): Any? {
 
     val command = "thisContains"
-    val containedText = expected.preprocessForComparison(strict = strict)
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val containedText = expected.forClassicComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = containedText, replaceRelative = true)
 
@@ -147,8 +147,8 @@ fun Any?.thisContainsNot(
 ): Any? {
 
     val command = "thisContainsNot"
-    val containedText = expected.preprocessForComparison(strict = strict)
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val containedText = expected.forClassicComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = containedText, replaceRelative = true)
 
@@ -171,8 +171,8 @@ fun Any?.thisStartsWith(
 ): Any? {
 
     val command = "thisStartsWith"
-    val startingText = expected.preprocessForComparison(strict = strict)
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val startingText = expected.forClassicComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = startingText, replaceRelative = true)
 
@@ -195,8 +195,8 @@ fun Any?.thisStartsWithNot(
 ): Any? {
 
     val command = "thisStartsWithNot"
-    val startingText = expected.preprocessForComparison(strict = strict)
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val startingText = expected.forClassicComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = startingText, replaceRelative = true)
 
@@ -241,8 +241,8 @@ fun Any?.thisEndsWith(
 ): Any? {
 
     val command = "thisEndsWith"
-    val endingText = expected.preprocessForComparison(strict = strict)
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val endingText = expected.forClassicComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = endingText, replaceRelative = true)
 
@@ -265,8 +265,8 @@ fun Any?.thisEndsWithNot(
 ): Any? {
 
     val command = "thisEndsWithNot"
-    val contained = endingText.preprocessForComparison(strict = strict)
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val contained = endingText.forClassicComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = contained, replaceRelative = true)
 
@@ -289,7 +289,7 @@ fun Any?.thisMatches(
 ): Any? {
 
     val command = "thisMatches"
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = expected, replaceRelative = true)
 
@@ -312,7 +312,7 @@ fun Any?.thisMatchesNot(
 ): Any? {
 
     val command = "thisMatchesNot"
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = expected, replaceRelative = true)
 
@@ -335,7 +335,7 @@ fun Any?.thisMatchesDateFormat(
 ): Any? {
 
     val command = "thisMatchesDateFormat"
-    val value = (this?.toString() ?: "").preprocessForComparison(strict = strict)
+    val value = (this?.toString() ?: "").forClassicComparison(strict = strict)
     val assertMessage =
         message ?: message(id = command, subject = value, expected = expected, replaceRelative = false)
 

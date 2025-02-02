@@ -16,19 +16,19 @@ class Select1 : UITest() {
         scenario {
             case(1) {
                 action {
-                    it.select("Settings", log = true)
+                    it.select("Settings")
                     output(it)
                 }
             }
             case(2) {
                 action {
-                    it.selectWithScrollDown("System", log = true)
+                    it.selectWithScrollDown("System")
                     output(it)
                 }
             }
             case(3) {
                 action {
-                    it.selectWithScrollUp("Settings", log = true)
+                    it.selectWithScrollUp("Settings")
                     output(it)
                 }
             }
@@ -43,9 +43,9 @@ class Select1 : UITest() {
             case(1) {
                 action {
                     it.scanElements()
-                        .selectInScanResults("Settings", log = true)
-                        .selectInScanResults("Accessibility", log = true)
-                        .selectInScanResults("System", log = true)
+                        .selectInScanResults("Settings")
+                        .selectInScanResults("Accessibility")
+                        .selectInScanResults("System")
                 }
             }
         }
@@ -58,13 +58,13 @@ class Select1 : UITest() {
         scenario {
             case(1) {
                 action {
-                    it.selectWithScrollDown("Security & privacy", log = false)
+                    it.selectWithScrollDown("Security & privacy")
                     output(it)
                 }
             }
             case(2) {
                 action {
-                    it.selectWithScrollUp("Notifications", log = true)
+                    it.selectWithScrollUp("Notifications")
                     output(it)
                 }
             }

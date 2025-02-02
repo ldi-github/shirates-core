@@ -1,0 +1,71 @@
+# canDetect (Vision)
+
+You can know whether you can select the element or not using these functions that return true or false.
+
+## Functions
+
+| function                 | description                                                                                                                                |
+|:-------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
+| canDetect                | Finds the first element that matches the selector in current screen and returns true/false. Scrolling occurs within `withScroll` function. |
+| canDetectWithScrollDown  | Finds the first element that matches the selector with scrolling down and returns true/false.                                              |
+| canDetectWithScrollUp    | Finds the first element that matches the selector with scrolling up and returns true/false.                                                |
+| canDetectWithScrollRight | Finds the first element that matches the selector with scrolling right and returns true/false.                                             |
+| canDetectWithScrollLeft  | Finds the first element that matches the selector with scrolling left and returns true/false.                                              |
+| canDetectWithoutScroll   | Finds the first element that matches the selector **without** scrolling and returns true/false.                                            |
+| canDetectAll             | Finds all elements that matches the selector in current screen and returns true/false. Scrolling occurs within `withScroll` function.      |
+
+## Sample code
+
+[Getting samples](../../getting_samples.md)
+
+### CanDetect1.kt
+
+(`src/test/kotlin/tutorial/basic/CanDetect1.kt`)
+
+```kotlin
+    @Test
+    @Order(10)
+    fun canDetect() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    it.canDetect("Settings")
+                        .thisIsTrue("<Settings> found.")
+                }
+            }
+            case(2) {
+                expectation {
+                    it.canDetectWithScrollDown("System")
+                        .thisIsTrue("<System> found with scroll down.")
+                }
+            }
+            case(3) {
+                expectation {
+                    it.canDetectWithScrollUp("Settings")
+                        .thisIsTrue("<Settings> found with scroll up.")
+                }
+            }
+            case(4) {
+                expectation {
+                    withScrollDown {
+                        it.canDetectAll("Settings", "System")
+                            .thisIsTrue("<Settings> found with scroll down.")
+                    }
+                }
+            }
+            case(5) {
+                expectation {
+                    withScrollUp {
+                        it.canDetectAll("Settings", "System")
+                            .thisIsTrue("<Settings> found with scroll up.")
+                    }
+                }
+            }
+        }
+    }
+```
+
+### Link
+
+- [index](../../../../index.md)

@@ -12,7 +12,7 @@ object WaitUtility {
     /**
      * doUntilTrue
      */
-    fun doUntilTrue(
+    internal fun doUntilTrue(
         waitSeconds: Double = Const.WAIT_UTILITY_WAIT_SECONDS,
         intervalSeconds: Double = Const.WAIT_UTILITY_DO_UNTIL_INTERVAL_SECONDS,
         maxLoopCount: Int = MAX_LOOP_COUNT,
@@ -44,7 +44,7 @@ object WaitUtility {
      * doUntilTrue
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> doUntilTrue(context: WaitContextBase<T>): T {
+    internal fun <T> doUntilTrue(context: WaitContextBase<T>): T {
 
         context.stopWatch.start()
 

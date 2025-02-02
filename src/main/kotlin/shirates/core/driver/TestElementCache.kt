@@ -2,7 +2,6 @@ package shirates.core.driver
 
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver.lastElement
-import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.driver.commandextension.getKeyboardInIos
 import shirates.core.driver.commandextension.getSelector
@@ -17,8 +16,6 @@ import shirates.core.utility.element.XPathUtility
 
 object TestElementCache {
 
-    const val UNKOWN_SCREEN_NAME = ""
-
     /**
      * synced
      */
@@ -30,6 +27,11 @@ object TestElementCache {
     var sourceXml: String = ""
 
     /**
+     * hierarchyBounds (for Android)
+     */
+    var hierarchyBounds: Bounds = Bounds()
+
+    /**
      * rootElement
      */
     var rootElement: TestElement = TestElement.emptyElement
@@ -37,29 +39,6 @@ object TestElementCache {
             field = value
             allElements = listOf()
             synced = false
-            if (field.isEmpty) {
-                viewElement = TestElement.emptyElement
-            } else {
-                viewElement =
-                    if (isAndroid) field.children.firstOrNull() ?: field
-                    else field
-            }
-        }
-
-    /**
-     * viewElement
-     */
-    var viewElement: TestElement = TestElement.emptyElement
-        internal set(value) {
-            field = value
-        }
-
-    /**
-     * viewBounds
-     */
-    val viewBounds: Bounds
-        get() {
-            return viewElement.bounds
         }
 
     /**
@@ -169,6 +148,7 @@ object TestElementCache {
         throwsException: Boolean = true,
         selectContext: TestElement = rootElement,
         widgetOnly: Boolean = false,
+        relativeMargin: Int = 0,
         frame: Bounds? = null
     ): TestElement {
 
@@ -186,6 +166,7 @@ object TestElementCache {
                     relativeSelectors = selector.relativeSelectors,
                     scopeElements = allElements,
                     widgetOnly = widgetOnly,
+                    margin = relativeMargin,
                     frame = frame
                 )
             } else {
@@ -253,7 +234,7 @@ object TestElementCache {
         expression: String,
         throwsException: Boolean = true,
         selectContext: TestElement = rootElement,
-        frame: Bounds? = viewBounds
+        frame: Bounds? = null
     ): TestElement {
 
         if (TestMode.isNoLoadRun) {

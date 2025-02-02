@@ -32,23 +32,31 @@ class FlowContainer : IFlowContainer {
         /**
          * canMerge
          */
-        fun canMerge(element: TestElement, force: Boolean = false): Boolean {
+        fun canMerge(
+            element: TestElement,
+            margin: Int = 0,
+            force: Boolean = false
+        ): Boolean {
 
             if (!force && element.isWidget.not()) {
                 return false
             }
-            return horizontalBand.canMerge(element)
+            return horizontalBand.canMerge(element = element, margin = margin)
         }
 
         /**
          * merge
          */
-        fun merge(element: TestElement, force: Boolean = false): Boolean {
+        fun merge(
+            element: TestElement,
+            margin: Int = 0,
+            force: Boolean = false
+        ): Boolean {
 
-            if (canMerge(element = element, force = force).not()) {
+            if (canMerge(element = element, margin = margin, force = force).not()) {
                 return false
             }
-            horizontalBand.merge(element)
+            horizontalBand.merge(element = element, margin = margin)
             return true
         }
 
@@ -77,15 +85,23 @@ class FlowContainer : IFlowContainer {
     /**
      * addElement
      */
-    override fun addElement(element: TestElement, force: Boolean): Any? {
+    override fun addElement(
+        element: TestElement,
+        margin: Int,
+        force: Boolean
+    ): Any? {
 
-        return addElementToRow(element = element, force = force)
+        return addElementToRow(element = element, margin = margin, force = force)
     }
 
     /**
      * addElementToRow
      */
-    fun addElementToRow(element: TestElement, force: Boolean = false): Row? {
+    fun addElementToRow(
+        element: TestElement,
+        margin: Int = 0,
+        force: Boolean = false
+    ): Row? {
 
         if (!force && element.isWidget.not()) {
             return null
@@ -106,8 +122,8 @@ class FlowContainer : IFlowContainer {
             }
 
             for (row in rows) {
-                if (row.canMerge(element = element, force = force)) {
-                    row.merge(element = element, force = force)
+                if (row.canMerge(element = element, margin = margin, force = force)) {
+                    row.merge(element = element, margin = margin, force = force)
                     return row
                 }
             }
@@ -124,7 +140,7 @@ class FlowContainer : IFlowContainer {
     /**
      * addAll
      */
-    override fun addAll(elements: List<TestElement>, force: Boolean) {
+    override fun addAll(elements: List<TestElement>, margin: Int, force: Boolean) {
 
         val elms = elements.removeIncludingElements()
         for (e in elms) {

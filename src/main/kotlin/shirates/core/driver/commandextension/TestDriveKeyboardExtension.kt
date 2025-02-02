@@ -5,6 +5,7 @@ import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.driver.TestDriver.androidDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
 import shirates.core.logging.Message.message
@@ -45,8 +46,13 @@ fun TestDrive.hideKeyboard(
             // hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
             val keyboard = testDrive.getKeyboardInIos()
             if (keyboard.isFound) {
-                // tap background
-                tap(0, viewBounds.centerY)
+                swipePointToPoint(
+                    startX = 0,
+                    startY = viewBounds.centerY,
+                    endX = 0,
+                    endY = viewBounds.centerY - 1,
+                    durationSeconds = 0.3
+                )
             }
         } else {
             TestDriver.appiumDriver.hideKeyboard()
@@ -90,9 +96,9 @@ fun TestDrive.pressBack(
     context.execOperateCommand(command = command, message = message) {
         if (isAndroid) {
             if (platformMajorVersion <= 9) {
-                driver.androidDriver.navigate().back()
+                androidDriver.navigate().back()
             } else {
-                TestDriver.androidDriver.pressKey(KeyEvent(AndroidKey.BACK))
+                androidDriver.pressKey(KeyEvent(AndroidKey.BACK))
             }
             TestDriver.invalidateCache()
         } else {

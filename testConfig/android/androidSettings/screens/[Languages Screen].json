@@ -4,7 +4,7 @@
   "identity": "[Preferred Language][System Languages]",
 
   "selectors": {
-    "[<-]": "@Navigate up",
+    "[←]": "@Navigate up",
     "[More options]": "@More options",
     "[Languages]": "@Languages",
 

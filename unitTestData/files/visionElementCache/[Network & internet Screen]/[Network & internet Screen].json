@@ -1,0 +1,185 @@
+{
+  "input": "\/Users\/wave1008\/Downloads\/TestResults\/androidSettingsConfig\/2024-12-23_010958\/AndroidSettingsDemo\/187.png",
+  "candidates": [
+    {
+      "confidence": 0.5,
+      "text": "1:10 GO •:",
+      "rect": {
+        "width": 252,
+        "height": 44,
+        "x": 40,
+        "y": 49
+      }
+    },
+    {
+      "confidence": 1,
+      "text": "Network & internet",
+      "rect": {
+        "width": 778,
+        "y": 444,
+        "x": 67,
+        "height": 76
+      }
+    },
+    {
+      "text": "Internet",
+      "confidence": 1,
+      "rect": {
+        "y": 664,
+        "height": 41,
+        "x": 166,
+        "width": 207
+      }
+    },
+    {
+      "confidence": 1,
+      "text": "Airplane mode is on",
+      "rect": {
+        "x": 193,
+        "y": 728,
+        "width": 324,
+        "height": 35
+      }
+    },
+    {
+      "text": "Calls & SMS",
+      "rect": {
+        "width": 319,
+        "height": 44,
+        "y": 867,
+        "x": 157
+      },
+      "confidence": 1
+    },
+    {
+      "text": "T-Mobile (Temporarily unavailable)",
+      "rect": {
+        "height": 40,
+        "y": 930,
+        "x": 189,
+        "width": 571
+      },
+      "confidence": 1
+    },
+    {
+      "rect": {
+        "y": 1073,
+        "width": 126,
+        "height": 46,
+        "x": 184
+      },
+      "confidence": 0.5,
+      "text": "SIMs"
+    },
+    {
+      "text": "T-Mobilel",
+      "rect": {
+        "y": 1141,
+        "width": 144,
+        "x": 188,
+        "height": 27
+      },
+      "confidence": 0.5
+    },
+    {
+      "confidence": 1,
+      "text": "* Airplane mode",
+      "rect": {
+        "x": 67,
+        "y": 1271,
+        "width": 463,
+        "height": 62
+      }
+    },
+    {
+      "confidence": 1,
+      "rect": {
+        "height": 53,
+        "width": 477,
+        "y": 1433,
+        "x": 166
+      },
+      "text": "Hotspot & tethering"
+    },
+    {
+      "text": "Off",
+      "rect": {
+        "height": 40,
+        "width": 58,
+        "y": 1496,
+        "x": 184
+      },
+      "confidence": 1
+    },
+    {
+      "confidence": 1,
+      "text": "Data Saver",
+      "rect": {
+        "width": 274,
+        "height": 50,
+        "y": 1639,
+        "x": 170
+      }
+    },
+    {
+      "confidence": 1,
+      "rect": {
+        "width": 58,
+        "x": 184,
+        "y": 1703,
+        "height": 40
+      },
+      "text": "Off"
+    },
+    {
+      "rect": {
+        "width": 108,
+        "y": 1838,
+        "x": 189,
+        "height": 53
+      },
+      "confidence": 0.3,
+      "text": "VPN"
+    },
+    {
+      "confidence": 1,
+      "text": "None",
+      "rect": {
+        "x": 184,
+        "y": 1909,
+        "height": 41,
+        "width": 94
+      }
+    },
+    {
+      "confidence": 1,
+      "rect": {
+        "y": 2053,
+        "width": 280,
+        "x": 57,
+        "height": 50
+      },
+      "text": "Mobile plan"
+    },
+    {
+      "text": "Private DNS",
+      "rect": {
+        "width": 284,
+        "y": 2199,
+        "height": 58,
+        "x": 62
+      },
+      "confidence": 0.5
+    },
+    {
+      "rect": {
+        "x": 62,
+        "width": 171,
+        "y": 2274,
+        "height": 31
+      },
+      "text": "Automatic",
+      "confidence": 1
+    }
+  ]
+}

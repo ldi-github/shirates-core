@@ -20,7 +20,7 @@ class TestContextTest : UnitTest() {
 
         run {
             // Arrange
-            ScreenRepository.setup("unitTestConfig/android/androidSettings/screens".toPath())
+            ScreenRepository.setup("unitTestConfig/android/androidSettings/screens")
             TestDriver.currentScreen = "[Sample Accessibility Screen]"
             // Act
             val actual = TestDriver.screenInfo

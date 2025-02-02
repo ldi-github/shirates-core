@@ -16,27 +16,27 @@ class CanSelect1 : UITest() {
         scenario {
             case(1) {
                 action {
-                    it.canSelect("Settings", log = true)
+                    it.canSelect("Settings")
                 }
             }
             case(2) {
                 action {
-                    it.canSelectWithScrollDown("System", log = true)
+                    it.canSelectWithScrollDown("System")
                 }
             }
             case(3) {
                 action {
-                    it.canSelectWithScrollUp("Settings", log = true)
+                    it.canSelectWithScrollUp("Settings")
                 }
             }
             case(4) {
                 action {
-                    it.canSelectAllWithScrollDown("Settings", "System", log = true)
+                    it.canSelectAllWithScrollDown("Settings", "System")
                 }
             }
             case(5) {
                 action {
-                    it.canSelectAllWithScrollUp("Settings", "System", log = true)
+                    it.canSelectAllWithScrollUp("Settings", "System")
                 }
             }
         }
@@ -51,16 +51,16 @@ class CanSelect1 : UITest() {
                 condition {
                     it.scanElements()
                 }.action {
-                    it.canSelectInScanResults("Settings", log = true)
-                    it.canSelectInScanResults("Accessibility", log = true)
-                    it.canSelectInScanResults("System", log = true)
-                    it.canSelectInScanResults("Foo", log = true)
+                    it.canSelectInScanResults("Settings")
+                    it.canSelectInScanResults("Accessibility")
+                    it.canSelectInScanResults("System")
+                    it.canSelectInScanResults("Foo")
                 }
             }
             case(2) {
                 action {
-                    it.canSelectAllInScanResults("Settings", "Accessibility", "System", log = true)
-                    it.canSelectAllInScanResults("Settings", "Accessibility", "Foo", log = true)
+                    it.canSelectAllInScanResults("Settings", "Accessibility", "System")
+                    it.canSelectAllInScanResults("Settings", "Accessibility", "Foo")
                 }
             }
         }
