@@ -10,7 +10,7 @@ Test configuration files are required to initialize test session.
 
 You can copy configuration files in the sample project into you project.
 
-1. Select the following files.
+1. Select the following items.
     - `testConfig`
     - `vision`
     - `testrun.global.properties`.

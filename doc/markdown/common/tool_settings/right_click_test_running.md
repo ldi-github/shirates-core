@@ -1,6 +1,6 @@
 # Enable right-click test running
 
-### Enable right-click test running
+Enable right-click test running.
 
 1. `IntelliJ IDEA > Settings` (or `File > Settings`)
 1. `Build, Execution, Deployment > Build Tools > Gradle`

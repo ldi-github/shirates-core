@@ -1,7 +1,11 @@
 # Shirates/Vision [Beta]
 
+[in English(英語)](index.md)
+
+### Shiratesのバージョン
+
 **Shirates/Vision** はShiratesの新しいバージョンです。<br>
-[**Shirates/Classic**](classic/index.md) は古いバージョンです。
+[Shirates/Classic](classic/index_ja.md) は古いバージョンです。
 
 ## リポジトリ
 
@@ -11,7 +15,7 @@
 
 - [Shirates/Visionとは](vision/about_ja.md)
 - [テスト済みの環境](environments.md)
-- [クイックスタート(Shirates/Vision)](quick-start.md)
+- [クイックスタート(Shirates/Vision)](quick-start_ja.md)
 
 ## チュートリアル(Basic)
 
@@ -26,6 +30,13 @@
 - [propertiesファイルのエンコーディング設定 (IntelliJ IDEA)](common/tool_settings/properties_file_encoding_ja.md)
 - [Androidデバイスの設定](vision/basic/recommended_settings/recommended_settings_android_ja.md)
 
+### 環境の切り替え
+
+- [Android/iOSの切り替え](vision/basic/switching_environment/switching_android_ios_ja.md)
+- [デバイスの切り替え](vision/basic/switching_environment/switching_device_ja.md)
+- [ログ言語の切り替え](common/message_and_language/log_language_ja.md)
+- [AI-OCR言語の切り替え](vision/basic/switching_environment/switching_ai_ocr_language_ja.md)
+
 ### プロジェクトの作成
 
 - [プロジェクトの作成](basic/creating_project/creating_project_ja.md)
@@ -33,7 +44,7 @@
 
 ### テストクラスの作成
 
-- [テストクラスの作成](basic/creating_testclass/creating_testclass_ja.md)
+- [テストクラスの作成](vision/basic/creating_testclass/creating_testclass_ja.md)
 - [要素の選択と検証](basic/creating_testclass/select_and_assert_ja.md)
 - [テストコードの構造](basic/creating_testclass/testcode_structure_ja.md)
 - [テスト結果ファイル](basic/creating_testclass/test_result_files_ja.md)
@@ -50,10 +61,10 @@
 
 ### パラメーター
 
-- [パラメーター構成ファイル](basic/parameter/parameter_configuration_files_ja.md)
-- [パラメーター](basic/parameter/parameters_ja.md)
-- [プロファイルの構成](basic/parameter/profile_configuration_ja.md)
-- [自動デバイス検出](basic/parameter/automatic_device_detection_ja.md)
+- [パラメーター構成ファイル](common/parameter/parameter_configuration_files_ja.md)
+- [パラメーター](common/parameter/parameters_ja.md)
+- [プロファイルの構成](common/parameter/profile_configuration_ja.md)
+- [自動デバイス検出](common/parameter/automatic_device_detection_ja.md)
 
 ### 関数/プロパティ
 
