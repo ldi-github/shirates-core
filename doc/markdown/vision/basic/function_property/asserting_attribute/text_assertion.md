@@ -52,7 +52,7 @@ You can assert the value of `text` using these functions.
                     it.detect("Restaurants")
                 }.expectation {
                     it.textIs("Restaurants")
-                        .rightTextIs("Gas")
+                        .rightTextIs("Hotels")
                         .leftTextIs("Restaurants")
                 }
             }

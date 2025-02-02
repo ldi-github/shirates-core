@@ -31,10 +31,10 @@ Set the path of `apps.json` to "**apps**" in **dataset** section of the testConf
 
 ```
 {
-  "testConfigName": "androidSettingsConfig",
+  "testConfigName": "testConfig",
 
   "dataset": {
-    "apps": "testConfig/android/androidSettings/dataset/apps.json"
+    "apps": "path/to/apps.json"
   },
 
 ...
@@ -57,7 +57,7 @@ Use app function.
                     it.launchApp("[Settings]")
                         .tap("Search settings")
                         .screenIs("[Android Settings Search Screen]")
-                        .tap("[Search Box]")
+                        .tap("Search settings")
                 }.action {
                     it.sendKeys(app("[Settings].packageOrBundleId"))
                 }.expectation {

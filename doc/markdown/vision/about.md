@@ -2,6 +2,16 @@
 
 Shirates/Vision is Computer Vision(CV) driven mobile testing framework powered by Vision Framework on macOS.<br>
 
+### True multi-platform
+
+You can run tests on every application platform on Android and iOS because of CV driven.
+
+- Android native
+- iOS native
+- Flutter
+- Compose Multiplatform
+- etc
+
 ### Key technologies
 
 - AI-OCR for text recognition

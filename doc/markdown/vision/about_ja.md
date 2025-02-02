@@ -3,6 +3,16 @@
 **Shirates/Vision** はmacOSのVision Frameworkを活用したコンピュータービジョン(CV)
 駆動のモバイルアプリテストフレームワークです。<br>
 
+### 真のマルチプラットフォーム
+
+CV駆動なのでAndroidとiOS上の全てのアプリケーションプラットフォームでテストを実行できます。
+
+- Androidネイティブ
+- iOSネイティブ
+- Flutter
+- Compose Multiplatform
+- 他
+
 ### キーテクノロジー
 
 - AI-OCRによるテキスト認識
@@ -15,7 +25,7 @@
 
 ### iOSにおける顕著なパフォーマンス改善<br>
 
-コンピュータービジョン起動のAPIはDOMへのアクセス（この処理が特にiOSでは非常に遅い）をバイパスします。 Shirates/Vision
+コンピュータービジョン駆動のAPIはDOMへのアクセス（この処理が特にiOSでは非常に遅い）をバイパスします。 Shirates/Vision
 のパフォーマンスは旧バージョン(Shirates/Classic)と比較してiOSにおけるパフォーマンスが劇的に改善されています。
 
 ### Shirates/Classic

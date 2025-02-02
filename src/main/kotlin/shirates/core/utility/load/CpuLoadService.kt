@@ -131,7 +131,7 @@ object CpuLoadService {
         if (loadRecords.isEmpty()) {
             addRecord()
         }
-        return loadRecords.last().cpuLoad
+        return loadRecords.lastOrNull()?.cpuLoad ?: -0.0
     }
 
     /**

@@ -16,7 +16,6 @@ You can determine the scrollable area explicitly by `withScroll` functions.
 (`src/test/kotlin/tutorial/basic/Scroll2.kt`)
 
 ```kotlin
-    @Order(20)
     @Test
     fun scrollToRightEdge_scrollToLeftEdge() {
 

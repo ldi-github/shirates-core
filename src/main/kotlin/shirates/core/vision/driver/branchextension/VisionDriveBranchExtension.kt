@@ -36,6 +36,7 @@ fun VisionDrive.ifImageExist(
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
         waitSeconds = waitSeconds,
+        throwsException = false
     )
     val matched = v.isFound
     val result = BooleanCompareResult(value = matched, command = command)
@@ -69,12 +70,13 @@ fun VisionDrive.ifImageExistNot(
 
     val v = findImage(
         label = label,
+        threshold = threshold,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
         waitSeconds = waitSeconds,
-        threshold = threshold,
+        throwsException = false
     )
     val matched = v.isFound.not()
     val result = BooleanCompareResult(value = matched, command = command)

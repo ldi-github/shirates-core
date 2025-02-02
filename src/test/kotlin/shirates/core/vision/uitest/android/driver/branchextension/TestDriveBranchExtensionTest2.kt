@@ -255,7 +255,7 @@ class TestDriveBranchExtensionTest2 : VisionTest() {
             }
             case(2) {
                 expectation {
-                    it.findImage("[System Icon]").isFound
+                    it.findImage("[System Icon]", throwsException = false).isFound
                         .ifTrue {
                             NG()
                         }.ifFalse {

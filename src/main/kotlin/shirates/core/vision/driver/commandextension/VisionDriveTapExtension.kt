@@ -255,23 +255,25 @@ private fun VisionDrive.tapWithScrollCommandCore(
  */
 fun VisionDrive.tapImage(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     waitSeconds: Double = 0.0,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    holdSeconds: Double = testContext.tapHoldSeconds
+    holdSeconds: Double = testContext.tapHoldSeconds,
+    throwsException: Boolean = true,
 ): VisionElement {
 
     val v = findImage(
         label = label,
+        threshold = threshold,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
         waitSeconds = waitSeconds,
-        threshold = threshold,
+        throwsException = throwsException,
     )
 
     v.tap(holdSeconds = holdSeconds)

@@ -261,7 +261,7 @@ fun VisionElement.rightText(
         return v
     }
     val elements = getHorizontalElements()
-        .filter { this.rect.right < it.rect.left }
+        .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedBy { it.rect.left }
     v = if (elements.isEmpty() || elements.count() < pos)
         VisionElement(capture = false)
@@ -281,7 +281,7 @@ fun VisionElement.rightText(
 ): VisionElement {
 
     val elements = getHorizontalElements()
-        .filter { this.rect.right < it.rect.left }
+        .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.left }
     val v = elements.firstOrNull() ?: VisionElement(capture = false)
@@ -307,7 +307,7 @@ fun VisionElement.leftText(
         return v
     }
     val elements = getHorizontalElements()
-        .filter { it.rect.right < this.rect.left }
+        .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedBy { it.rect.left }
     v = if (elements.isEmpty() || elements.count() < pos)
         VisionElement(capture = false)
@@ -327,7 +327,7 @@ fun VisionElement.leftText(
 ): VisionElement {
 
     val elements = getHorizontalElements()
-        .filter { it.rect.right < this.rect.left }
+        .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.left }
     val v = elements.lastOrNull() ?: VisionElement(capture = false)
@@ -377,7 +377,7 @@ fun VisionElement.aboveText(
         return v
     }
     val elements = getVerticalElements()
-        .filter { it.rect.top < this.rect.top }
+        .filter { it.rect.top < this.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedByDescending { it.rect.top }
     v = if (elements.isEmpty() || elements.count() < pos)
         VisionElement(capture = false)
@@ -396,7 +396,7 @@ fun VisionElement.aboveText(
 ): VisionElement {
 
     val elements = getVerticalElements()
-        .filter { it.rect.top < this.rect.top }
+        .filter { it.rect.top < this.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedByDescending { it.rect.top }
     val v = elements.lastOrNull() ?: VisionElement(capture = false)
@@ -423,7 +423,7 @@ fun VisionElement.belowText(
     }
 
     val elements = getVerticalElements()
-        .filter { this.rect.top < it.rect.top }
+        .filter { this.rect.top < it.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .sortedBy { it.rect.top }
     v = if (elements.isEmpty() || elements.count() < pos)
         VisionElement(capture = false)
@@ -442,7 +442,7 @@ fun VisionElement.belowText(
 ): VisionElement {
 
     val elements = getVerticalElements()
-        .filter { this.rect.top < it.rect.top }
+        .filter { this.rect.top < it.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.top }
     val v = elements.lastOrNull() ?: VisionElement(capture = false)

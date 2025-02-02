@@ -474,13 +474,14 @@ fun VisionElement.existImageOnLine(
         ) {
             v = findImage(
                 label = label,
+                threshold = threshold,
                 segmentMarginHorizontal = segmentMarginHorizontal,
                 segmentMarginVertical = segmentMarginVertical,
                 mergeIncluded = mergeIncluded,
                 skinThickness = skinThickness,
                 waitSeconds = waitSeconds,
-                threshold = threshold,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                throwsException = false,
             )
         }
 
@@ -530,13 +531,14 @@ fun VisionElement.existImageOnColumn(
         ) {
             v = findImage(
                 label = label,
+                threshold = threshold,
                 segmentMarginHorizontal = segmentMarginHorizontal,
                 segmentMarginVertical = segmentMarginVertical,
                 mergeIncluded = mergeIncluded,
                 skinThickness = skinThickness,
                 waitSeconds = waitSeconds,
-                threshold = threshold,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                throwsException = false,
             )
         }
 
@@ -586,13 +588,14 @@ fun VisionElement.existImageOnLeft(
         ) {
             v = findImage(
                 label = label,
+                threshold = threshold,
                 segmentMarginHorizontal = segmentMarginHorizontal,
                 segmentMarginVertical = segmentMarginVertical,
                 mergeIncluded = mergeIncluded,
                 skinThickness = skinThickness,
                 waitSeconds = waitSeconds,
-                threshold = threshold,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                throwsException = false,
             )
         }
 
@@ -642,13 +645,14 @@ fun VisionElement.existImageOnRight(
         ) {
             v = findImage(
                 label = label,
+                threshold = threshold,
                 segmentMarginHorizontal = segmentMarginHorizontal,
                 segmentMarginVertical = segmentMarginVertical,
                 mergeIncluded = mergeIncluded,
                 skinThickness = skinThickness,
                 waitSeconds = waitSeconds,
-                threshold = threshold,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                throwsException = false,
             )
         }
 
@@ -698,13 +702,14 @@ fun VisionElement.existImageOnAbove(
         ) {
             v = findImage(
                 label = label,
+                threshold = threshold,
                 segmentMarginHorizontal = segmentMarginHorizontal,
                 segmentMarginVertical = segmentMarginVertical,
                 mergeIncluded = mergeIncluded,
                 skinThickness = skinThickness,
                 waitSeconds = waitSeconds,
-                threshold = threshold,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                throwsException = false,
             )
         }
 
@@ -754,13 +759,14 @@ fun VisionElement.existImageOnBelow(
         ) {
             v = findImage(
                 label = label,
+                threshold = threshold,
                 segmentMarginHorizontal = segmentMarginHorizontal,
                 segmentMarginVertical = segmentMarginVertical,
                 mergeIncluded = mergeIncluded,
                 skinThickness = skinThickness,
                 waitSeconds = waitSeconds,
-                threshold = threshold,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                throwsException = false,
             )
         }
 

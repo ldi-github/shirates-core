@@ -12,6 +12,21 @@ You can find an image using these functions.
 | findImageWithScrollRight | Finds an image that matches the template image with scrolling right. |
 | findImageWithScrollLeft  | Finds an image that matches the template image with scrolling left.  |
 
+### Tuning threshold
+
+You may encounter an error in spite of the image is accually existing,
+and see message as followings.
+
+```
+[info]	+1727	!	()	findImage("[Location Icon]") not found. (distance:0.40028667 > threshold:0.1)
+```
+
+In this case, specify argument `threshold` to explicitly.
+
+```
+findImageWithScrollDown("[Location Icon]", threshold = 0.5)
+```
+
 ## Sample code
 
 [Getting samples](../../getting_samples.md)
@@ -55,7 +70,7 @@ You can find an image using these functions.
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    v1 = findImageWithScrollDown("[Location Icon]")
+                    v1 = findImageWithScrollDown("[Location Icon]", threshold = 0.5)
                 }.expectation {
                     v1.imageLabelIs("[Location Icon]")
                 }

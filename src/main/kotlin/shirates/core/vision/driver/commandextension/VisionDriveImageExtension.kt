@@ -73,7 +73,7 @@ fun VisionDrive.findImage(
     waitSeconds: Double = 0.0,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     allowScroll: Boolean? = null,
-    throwsException: Boolean = false,
+    throwsException: Boolean = true,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
 ): VisionElement {
 
@@ -157,6 +157,7 @@ private fun VisionDrive.findImageCore(
 
     var r: FindImagesWithTemplateResult? = null
 
+    var found = false
     val waitContext = doUntilTrue(
         waitSeconds = waitSeconds,
         intervalSeconds = intervalSeconds,
@@ -184,22 +185,21 @@ private fun VisionDrive.findImageCore(
             skinThickness = skinThickness,
         )
 
-        if (threshold != null && r!!.primaryCandidate.distance > threshold) {
-            TestLog.info("findImage(\"$label\") not found. (distance ${r!!.primaryCandidate.distance} > $threshold)")
-            false
-        } else {
-            true
-        }
+        found = threshold == null || r!!.primaryCandidate.distance <= threshold
+        found
     }
     if (waitContext.hasError && waitContext.isTimeout.not()) {
         waitContext.throwIfError()
     }
-
-    if (threshold == null || r!!.primaryCandidate.distance < threshold) {
+    if (found) {
         val v = r!!.primaryCandidate.toVisionElement()
         return v
     }
-    return VisionElement.emptyElement
+    val v = VisionElement.emptyElement
+    v.lastError =
+        TestDriverException("findImage(\"$label\") not found. (distance:${r!!.primaryCandidate.distance} > threshold:$threshold)")
+    TestLog.info(v.lastError!!.message!!)
+    return v
 }
 
 internal fun VisionDrive.getElementWithScroll(
@@ -259,6 +259,7 @@ fun VisionDrive.findImageWithScrollDown(
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    throwsException: Boolean = true,
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -277,7 +278,8 @@ fun VisionDrive.findImageWithScrollDown(
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            threshold = threshold
+            threshold = threshold,
+            throwsException = throwsException,
         )
     }
     return v
@@ -288,17 +290,18 @@ fun VisionDrive.findImageWithScrollDown(
  */
 fun VisionDrive.findImageWithScrollUp(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     waitSeconds: Double = 0.0,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    throwsException: Boolean = true,
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -312,12 +315,13 @@ fun VisionDrive.findImageWithScrollUp(
     ) {
         v = findImage(
             label = label,
+            threshold = threshold,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            threshold = threshold
+            throwsException = throwsException,
         )
     }
     return v
@@ -328,17 +332,18 @@ fun VisionDrive.findImageWithScrollUp(
  */
 fun VisionDrive.findImageWithScrollRight(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    throwsException: Boolean = true,
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -352,12 +357,13 @@ fun VisionDrive.findImageWithScrollRight(
     ) {
         v = findImage(
             label = label,
+            threshold = threshold,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            threshold = threshold
+            throwsException = throwsException,
         )
     }
     return v
@@ -368,17 +374,18 @@ fun VisionDrive.findImageWithScrollRight(
  */
 fun VisionDrive.findImageWithScrollLeft(
     label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     waitSeconds: Double = testContext.syncWaitSeconds,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollStartMarginRatio: Double = testContext.scrollVerticalStartMarginRatio,
     scrollEndMarginRatio: Double = testContext.scrollVerticalEndMarginRatio,
     scrollMaxCount: Int = testContext.scrollMaxCount,
+    throwsException: Boolean = true,
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -397,7 +404,8 @@ fun VisionDrive.findImageWithScrollLeft(
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            threshold = threshold
+            threshold = threshold,
+            throwsException = throwsException,
         )
     }
     return v

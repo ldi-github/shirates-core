@@ -424,13 +424,14 @@ fun VisionDrive.existImage(
 
         val v = findImage(
             label = label,
+            threshold = threshold,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            threshold = threshold,
-            swipeToSafePosition = swipeToSafePosition
+            swipeToSafePosition = swipeToSafePosition,
+            throwsException = false,
         )
 
         v.selector = Selector(expression = label)
@@ -508,7 +509,8 @@ fun VisionDrive.dontExistImage(
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             waitSeconds = waitSeconds,
-            swipeToSafePosition = false
+            swipeToSafePosition = false,
+            throwsException = false,
         )
 
         v.selector = Selector(expression = label)
