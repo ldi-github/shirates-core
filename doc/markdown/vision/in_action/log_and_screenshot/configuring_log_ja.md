@@ -1,7 +1,7 @@
 # ログ出力を構成する (Vision)
 
 testrunファイルでログ出力を構成することができます。
-参照 [パラメーター](../../basic/parameter/parameters_ja.md)
+参照 [パラメーター](../../../common/parameter/parameters_ja.md)
 
 ```
 ## Log --------------------

@@ -28,6 +28,10 @@ class ClassifyWithImageFeaturePrintOrTextResult(
         } catch (t: Throwable) {
             throw TestDriverException("Could not parse json.\n$jsonString", cause = t)
         }
+        if (jsonObject.has("error") && jsonObject.getBoolean("error")) {
+            val reason = jsonObject.getString("reason")
+            throw TestDriverException(reason)
+        }
         withTextMatching = jsonObject.getBoolean("withTextMatching")
         baseImageFile = jsonObject.getString("baseImageFile")
         textMatchingRequiredDiffThreshold = jsonObject.getDouble("textMatchingRequiredDiffThreshold")

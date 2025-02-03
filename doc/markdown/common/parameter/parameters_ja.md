@@ -1,4 +1,4 @@
-# パラメーター
+# パラメーター (Vision/Classic)
 
 testrunファイルやtestConfigファイルで以下のパラメーターを設定することができます。
 

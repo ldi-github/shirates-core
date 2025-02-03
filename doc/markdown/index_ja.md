@@ -34,13 +34,14 @@
 
 - [Android/iOSの切り替え](vision/basic/switching_environment/switching_android_ios_ja.md)
 - [デバイスの切り替え](vision/basic/switching_environment/switching_device_ja.md)
+- [デバイスの言語の切り替え](vision/basic/switching_environment/switching_device_language_ja.md)
 - [ログ言語の切り替え](common/message_and_language/log_language_ja.md)
 - [AI-OCR言語の切り替え](vision/basic/switching_environment/switching_ai_ocr_language_ja.md)
 
 ### プロジェクトの作成
 
-- [プロジェクトの作成](basic/creating_project/creating_project_ja.md)
-- [テスト構成テンプレート](basic/creating_project/test_configuration_template_ja.md)
+- [プロジェクトの作成](vision/basic/creating_project/creating_project_ja.md)
+- [テスト構成テンプレート](vision/basic/creating_project/test_configuration_template_ja.md)
 
 ### テストクラスの作成
 
@@ -49,15 +50,25 @@
 - [テストコードの構造](basic/creating_testclass/testcode_structure_ja.md)
 - [テスト結果ファイル](basic/creating_testclass/test_result_files_ja.md)
 
+### コンピュータービジョンによるテキストと画像の認識
+
+- [AI-OCRによるテキスト認識](vision/basic/text_and_image_recognition/text_recognition_by_ai_ocr_ja.md)
+- [AI/MLによる画像検索](vision/basic/text_and_image_recognition/finding_image_by_ai_ml_ja.md)
+- [画像の学習](vision/basic/text_and_image_recognition/learning_images_ja.md)
+- [CheckStateClassifierを使用する](vision/basic/text_and_image_recognition/using_check_state_classifier_ja.md)
+- [DefaultClassifierを使用する](vision/basic/text_and_image_recognition/using_default_classifier_ja.md)
+- [FeaturePrintとテキスト認識による画面の識別](vision/basic/text_and_image_recognition/screen_assertion_using_feature_print_and_text_recognition_ja.md)
+- [画面イメージテンプレートの設定](vision/basic/text_and_image_recognition/setting_up_screen_image_templates_ja.md)
+
 ### マクロ
 
-- [マクロ](basic/routine_work/macro_ja.md)
+- [マクロ](vision/basic/routine_work/macro_ja.md)
 
 ### セレクターとニックネーム
 
-- [セレクター式](basic/selector_and_nickname/selector_expression_ja.md)
-- [ニックネーム](basic/selector_and_nickname/nickname/nickname_ja.md)
-    - [データセットニックネーム](basic/selector_and_nickname/nickname/dataset_nickname_ja.md)
+- [セレクター式](vision/basic/selector_and_nickname/selector_expression_ja.md)
+- [ニックネーム](vision/basic/selector_and_nickname/nickname_ja.md)
+    - [データセットニックネーム](classic/basic/selector_and_nickname/nickname/dataset_nickname.md)
 
 ### パラメーター
 
@@ -69,155 +80,129 @@
 ### 関数/プロパティ
 
 - 要素を選択する
-    - [select](basic/function_property/select_element/select_ja.md)
-    - [canSelect](basic/function_property/select_element/can_select_ja.md)
-- 要素をタップする
-    - [tap](basic/function_property/tap_element/tap_ja.md)
-    - [tapAppIcon](basic/function_property/tap_element/tap_app_icon_ja.md)
-- インストールとアプリの起動
-    - [installApp, removeApp](basic/function_property/install_and_launch_app/install_app_ja.md)
-    - [launchApp, terminateApp](basic/function_property/install_and_launch_app/launch_app_ja.md)
-- 画面をスワイプ/スクロールする
-    - [swipe, flick](basic/function_property/swipe_screen/swipe_flick_ja.md)
-    - [scroll](basic/function_property/swipe_screen/scroll_ja.md)
-    - [スクロール可能領域の決定 (NEW v7.0.0)](basic/function_property/swipe_screen/determining_scrollable_area_ja.md)
-- 属性を検証する
-    - [text属性の検証](basic/function_property/asserting_attribute/text_assertion_ja.md)
-    - [id属性の検証](basic/function_property/asserting_attribute/id_assertion_ja.md)
-    - [access属性の検証](basic/function_property/asserting_attribute/access_assertion_ja.md)
-    - [value属性の検証](basic/function_property/asserting_attribute/value_assertion_ja.md)
-    - [クラス名の検証](basic/function_property/asserting_attribute/classname_assertion_ja.md)
-    - [任意の属性の検証](basic/function_property/asserting_attribute/attribute_assertion_ja.md)
-- 任意の値を検証する
-    - [任意の値の検証](basic/function_property/asserting_any_value/any_value_assertion_ja.md)
-    - [文字列の検証](basic/function_property/asserting_any_value/string_assertion_ja.md)
-- 存在することを検証する
-    - [要素が存在することの検証](basic/function_property/asserting_existence/existance_assertion_ja.md)
-    - [画面が表示されていることの検証](basic/function_property/asserting_existence/screen_is_ja.md)
+    - [detect](vision/basic/function_property/detect_text/detect_ja.md)
+    - [canDetect](vision/basic/function_property/detect_text/can_detect_ja.md)
 - 画像を見つける
-    - [find image](basic/function_property/find_image/find_image_ja.md)
+    - [findImage](vision/basic/function_property/getting_image/find_image_ja.md)
+- 要素をタップする
+    - [tap](vision/basic/function_property/tap_element/tap_ja.md)
+    - [tapAppIcon](vision/basic/function_property/tap_element/tap_app_icon_ja.md)
+- インストールとアプリの起動
+    - [installApp, removeApp](vision/basic/function_property/install_and_launch_app/install_app_ja.md)
+    - [launchApp, terminateApp](vision/basic/function_property/install_and_launch_app/launch_app_ja.md)
+- 画面をスワイプ/スクロールする
+    - [swipe, flick](vision/basic/function_property/swipe_screen/swipe_flick_ja.md)
+    - [scroll](vision/basic/function_property/swipe_screen/scroll_ja.md)
+    - [スクロール可能領域の決定(onLine, onLineOf, onColum, onColumnOf)](vision/basic/function_property/swipe_screen/determining_scrollable_area_ja.md)
+- 画像/テキストを相対的に取得する
+    - [相対テキスト (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text_ja.md)
+    - [相対イメージ (leftItem, rightItem, belowItem, aboveItem)](vision/basic/function_property/getting_image/relative_image_ja.md)
+- テキストを検証する
+    - [textの検証](vision/basic/function_property/asserting_text/text_assertion_ja.md)
 - 画像を検証する
-    - [画像の検証](basic/function_property/asserting_image/image_assertion_ja.md)
-    - [画像が存在することの検証（existImage, dontExistImage）](basic/function_property/asserting_image/asserting_existence_of_image_ja.md)
+    - [画像の検証](vision/basic/function_property/asserting_image/image_assertion_ja.md)
+- 任意の値を検証する
+    - [任意の値の検証](vision/basic/function_property/asserting_any_value/any_value_assertion_ja.md)
+    - [文字列の検証](vision/basic/function_property/asserting_any_value/string_assertion_ja.md)
+    - [真偽値の検証](vision/basic/function_property/asserting_any_value/boolean_assertion_ja.md)
+
+- 存在することを検証する
+    - [テキストが存在することの検証](vision/basic/function_property/asserting_existence/text_existance_assertion_ja.md)
+    - [画像が存在することの検証](vision/basic/function_property/asserting_existence/image_existance_assertion_ja.md)
+    - [画面が表示されていることの検証](vision/basic/function_property/asserting_existence/screen_assertion_ja.md)
 - その他を検証する
-    - [アプリが表示されていることの検証](basic/function_property/asserting_others/app_assertion_ja.md)
-    - [キーボードが表示されていることの検証](basic/function_property/asserting_others/keyboard_assertion_ja.md)
-    - [表示中のアプリのパッケージの検証](basic/function_property/asserting_others/package_assertion_ja.md)
+    - [アプリが表示されていることの検証](vision/basic/function_property/asserting_others/app_assertion_ja.md)
+    - [キーボードが表示されていることの検証](vision/basic/function_property/asserting_others/keyboard_assertion_ja.md)
+    - [表示中のアプリのパッケージの検証](vision/basic/function_property/asserting_others/package_assertion_ja.md)
 - 任意の内容を検証する
-    - [任意の内容の検証 (verify)](basic/function_property/asserting_anything/anything_assertion_ja.md)
+    - [任意の内容の検証 (verify)](vision/basic/function_property/asserting_anything/anything_assertion_ja.md)
 - 分岐する
-    - [分岐関数 (ifTrue, ifFalse)](basic/function_property/branch/if_true_if_false_ja.md)
-    - [分岐関数 (ifScreenIs, ifScreenIsNot)](basic/function_property/branch/ifscreenis_ja.md)
-    - [分岐関数 (ifCanSelect, ifCanSelectNot)](basic/function_property/branch/ifcanselect_ja.md)
-    - [分岐関数 (ifImageExist, ifImageExistNot)](basic/function_property/branch/ifimageexist_ja.md)
-    - [分岐関数 (ifImageIs, ifImageIsNot)](basic/function_property/branch/ifimageis_ja.md)
-    - [分岐関数 (ifStringIs, ifStartsWith, etc)](basic/function_property/branch/ifString_ja.md)
-    - [プラットフォーム関数 (android, ios, emulator, simulator, virtualDevice, realDevice)](basic/function_property/branch/platform_branch_functions_ja.md)
-    - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](basic/function_property/branch/platform_properties_ja.md)
-    - [おサイフケータイ関数 (osaifuKeitai, osaifuKeitaiNot)](basic/function_property/branch/osaifu_keitai_branch_functions_ja.md)
-    - [スペシャルタグ分岐関数 (specialTag)](basic/function_property/branch/special_branch_functions_ja.md)
+    - [分岐関数 (ifTrue, ifFalse)](vision/basic/function_property/branch/if_true_if_false_ja.md)
+    - [分岐関数 (ifScreenIs, ifScreenIsNot)](vision/basic/function_property/branch/if_screen_is_ja.md)
+    - [分岐関数 (ifCanDetect, ifCanDetectNot)](vision/basic/function_property/branch/if_can_detect_ja.md)
+    - [分岐関数 (ifImageExist, ifImageExistNot)](vision/basic/function_property/branch/if_image_exist_ja.md)
+    - [分岐関数 (ifImageLabelIs, ifImageLabelIsNot)](vision/basic/function_property/branch/if_image_label_is_ja.md)
+    - [分岐関数 (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/if_string_ja.md)
+    - [プラットフォーム関数 (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions_ja.md)
+    - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties_ja.md)
 - 編集とキーボード操作を行う
-    - [sendKeys](basic/function_property/editing_and_keyboard_operations/sendkeys_ja.md)
-    - [clearInput](basic/function_property/editing_and_keyboard_operations/clearinput_ja.md)
-    - [press keys](basic/function_property/editing_and_keyboard_operations/press_keys_ja.md)
-    - [hideKeyboard](basic/function_property/editing_and_keyboard_operations/hide_keyboard_ja.md)
-- アプリを切り替える
-    - [goPreviousApp](basic/function_property/navigation/go_previous_task_ja.md)
+    - [sendKeys](vision/basic/function_property/editing_and_keyboard_operations/sendkeys_ja.md)
+    - [clearInput](vision/basic/function_property/editing_and_keyboard_operations/clearinput_ja.md)
+    - [press keys](vision/basic/function_property/editing_and_keyboard_operations/press_keys_ja.md)
+    - [hideKeyboard](vision/basic/function_property/editing_and_keyboard_operations/hide_keyboard_ja.md)
 - 同期する
-    - [wait](basic/syncing/wait_ja.md)
-    - [waitScreen, waitScreenOf](basic/syncing/wait_screen_ja.md)
-    - [waitForClose](basic/syncing/wait_for_close_ja.md)
-    - [waitForDisplay](basic/syncing/wait_for_display_ja.md)
+    - [wait](vision/basic/syncing/wait_ja.md)
+    - [waitScreen, waitScreenOf](vision/basic/syncing/wait_screen_ja.md)
+    - [waitForClose](vision/basic/syncing/wait_for_close_ja.md)
+    - [waitForDisplay](vision/basic/syncing/wait_for_display_ja.md)
 - アクションを繰り返す
-    - [doUntilTrue](basic/repeating_action/do_until_true_ja.md)
+    - [doUntilTrue](vision/basic/repeating_action/do_until_true_ja.md)
 - データストレージ
-    - [writeMemo, readMemo, memoTextAs](basic/function_property/data_storage/memo_ja.md)
-    - [clipboard, readClipboard](basic/function_property/data_storage/clipboard_ja.md)
-    - [account](basic/function_property/data_storage/account_ja.md)
-    - [app](basic/function_property/data_storage/app_ja.md)
-    - [data](basic/function_property/data_storage/data_ja.md)
+    - [writeMemo, readMemo, memoTextAs](vision/basic/function_property/data_storage/memo_ja.md)
+    - [clipboard, readClipboard](vision/basic/function_property/data_storage/clipboard_ja.md)
+    - [account](vision/basic/function_property/data_storage/account_ja.md)
+    - [app](vision/basic/function_property/data_storage/app_ja.md)
+    - [data](vision/basic/function_property/data_storage/data_ja.md)
 - ディスクリプター
-    - [describe, procedure, caption, comment, manual, knownIssue, target, output](basic/function_property/descriptor/descriptors_ja.md)
-    - [manual](basic/function_property/descriptor/manual_ja.md)
-    - [knownIssue](basic/function_property/descriptor/known_issue_ja.md)
+    - [describe, procedure, caption, comment, manual, knownIssue, target, output](vision/basic/function_property/descriptor/descriptors_ja.md)
+    - [manual](vision/basic/function_property/descriptor/manual_ja.md)
+    - [knownIssue](vision/basic/function_property/descriptor/known_issue_ja.md)
 - セレクターをオンデマンドで登録する
-    - [tempSelector](basic/function_property/selector/temp_selector_ja.md)
+    - [tempSelector](vision/basic/function_property/selector/temp_selector_ja.md)
 - テストフロー制御
-    - [SKIP/MANUAL/NOTIMPL](basic/function_property/test_flow_control/skip_notimpl_ja.md)
+    - [SKIP/MANUAL/NOTIMPL](vision/basic/function_property/test_flow_control/skip_notimpl_ja.md)
 - ロギング
-    - [info, warn](basic/function_property/logging/info_warn_ja.md)
-    - [silent, procedure](basic/function_property/logging/silent_and_procedure_function_ja.md)
+    - [info, warn](vision/basic/function_property/logging/info_warn_ja.md)
+    - [silent, procedure](vision/basic/function_property/logging/silent_and_procedure_function_ja.md)
 - 外部コマンドを実行する
-    - [shell](basic/function_property/external_command/shell_ja.md)
+    - [shell](vision/basic/function_property/external_command/shell_ja.md)
 
 [//]: # (    - [Scale and threshold]&#40;basic/function_property/find_image/scale_and_threshold.md&#41;)
 
 ### ヘルパー
 
-- [LanguageHelper](vision/basic/helper/language_helper/language_helper_ja.md)
+- [言語ヘルパー](common/helper/language_helper/language_helper_ja.md)
 
 ### レポート
 
-- [HTMLレポート](basic/creating_testclass/test_result_files_ja.md)
-- [Test Report Index](basic/report/test_report_index_ja.md)
-- [Spec-Report](basic/report/spec_report_ja.md)
-- [無負荷実行モード](basic/report/no_load_run_mode_ja.md)
-- [TestList](basic/report/testlist_ja.md)
+- [HTMLレポート](common/report/test_result_files_ja.md)
+- [Test Report Index](common/report/test_report_index_ja.md)
+- [Spec-Report](common/report/spec_report_ja.md)
+- [無負荷実行モード](common/report/no_load_run_mode_ja.md)
+- [TestList](common/report/testlist_ja.md)
 
 ### バッチ処理を作成する
 
-- [Summary-Report](basic/creating_batch_tools/summary_report_execute_ja.md)
-- [Code Generator](basic/creating_batch_tools/code_generator_execute_ja.md)
+- [Summary-Report](common/creating_batch_tools/summary_report_execute_ja.md)
+- [Code Generator](common/creating_batch_tools/code_generator_execute_ja.md)
 
 ## チュートリアル(In action)
 
-- 画面ニックネームを作成する
-    - [Appium Inspectorを使用する](in_action/creating_screen_nickname_file/using_appium_inspector_ja.md)
-    - [画面ニックネームファイルを作成する](in_action/creating_screen_nickname_file/creating_screen_nickname_file_ja.md)
-    - [Screen Builderを使用する](in_action/creating_screen_nickname_file/using_screen_builder_ja.md)
 - メッセージと言語
-    - [ログ出力の言語](in_action/message_and_language/log_language_ja.md)
-    - [デバイスの言語](in_action/message_and_language/device_language_ja.md)
+    - [ログ出力の言語](common/message_and_language/log_language_ja.md)
+    - [デバイスの言語](common/message_and_language/device_language_ja.md)
 - ログとスクリーンショット
-    - [ログ出力を構成する](in_action/log_and_screenshot/configuring_log_ja.md)
-    - [スクリーンショットを構成する](in_action/log_and_screenshot/configuring_screenshot_ja.md)
+    - [ログ出力を構成する](vision/in_action/log_and_screenshot/configuring_log_ja.md)
+    - [スクリーンショットを構成する](vision/in_action/log_and_screenshot/configuring_screenshot_ja.md)
 - デバッグ
-    - [ソースXMLをファイルで確認する](in_action/debugging/watching_source_xml_in_file_ja.md)
-    - [ソースXMLをデバッガーで確認する](in_action/debugging/watching_source_xml_in_debugger_ja.md)
-    - [内部実行ステップのトレース](in_action/debugging/tracing_internal_execution_steps_ja.md)
-- さまざまな環境に適応する
-    - [tapAppIcon関数を構成する](in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md)
-    - [OSのメッセージの変更に適応する](in_action/adapting_to_environments/adapting_to_changes_in_os_messages_ja.md)
-- イレギュラーを処理する
-    - [イレギュラーハンドラー(グローバルハンドラー)](in_action/handling_irregulars/irregular_handler_ja.md)
-    - [スクリーンハンドラー(onScreen関数)](in_action/handling_irregulars/screen_handler_ja.md)
-    - [エラーハンドラー](in_action/handling_irregulars/on_error_handler_ja.md)
+    - [recognizeText.jsonを確認する](vision/in_action/debugging/watching_recognize_text_json_ja.md)
+    - [デバッガで画像をウォッチする](vision/in_action/debugging/watching_image_in_debugger_ja.md)
 - テストフィクスチャ
-    - [テストフィクスチャ](in_action/test_fixture/test_fixture_ja.md)
-- 画像マッチング
-    - [テンプレートマッチングのための画像を切り出す](in_action/image_matching/cropping_images_for_template_matching_ja.md)
-- パフォーマンスとリソースの最適化
-    - [スクロール終端位置の検出の最適化](in_action/performance_resource/end_of_scroll_ja.md)
-    - [スクリーンショットの縮小率](in_action/performance_resource/screenshot_scale_ja.md)
+    - [テストフィクスチャ](common/test_fixture/test_fixture_ja.md)
 - AppiumのAPIを使用する
-    - [Appium ClientのAPIを使用する](in_action/using_appium_apis/using_appium_client_bare_apis_ja.md)
-- テストを優先度でフィルターする
-    - [must, should, want](in_action/filtering_tests_with_priority/must_should_want_ja.md)
+    - [Appium ClientのAPIを使用する](common/using_appium_apis/using_appium_client_bare_apis_ja.md)
 - 手動テストから移行する
-    - [テストコードのテンプレートを生成する](in_action/migrating_from_manual_testing/generating_test_code_template_ja.md)
-    - [Template Code Generatorを使用する](in_action/migrating_from_manual_testing/using_template_code_generator_ja.md)
+    - [テストコードのテンプレートを生成する](common/migrating_from_manual_testing/generating_test_code_template_ja.md)
+    - [Template Code Generatorを使用する](common/migrating_from_manual_testing/using_template_code_generator_ja.md)
 - コードファーストでテストを設計する
-    - [コードファーストでテストを設計する](in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)
+    - [コードファーストでテストを設計する](common/designing_and_implementing_test/designing_test_in_code_first_ja.md)
 - CIサーバーでテストを実行する
-    - [テストをGradleで実行する](in_action/running_test_on_ci_server/running_with_gradle_ja.md)
+    - [テストをGradleで実行する](common/running_test_on_ci_server/running_with_gradle_ja.md)
 - リモートのAppium Serverを利用する
-    - [リモートのAppium Serverの構成](in_action/using_remote_appium_server/configuring_remote_appium_server_ja.md)
+    - [リモートのAppium Serverの構成](common/using_remote_appium_server/configuring_remote_appium_server_ja.md)
 - テストの実行を安定化させる(フレーキーテストの改善)
     - [フレーキーテストの原因](in_action/stabilizing_test_execution/causes_of_flaky_test_ja.md)
     - [scenarioの再実行](in_action/stabilizing_test_execution/rerun_scenario_ja.md)
-- キャッシュの制御によるパフォーマンスチューニング
-    - [iOSにおけるgetSource実行時のパフォーマンス問題](in_action/performance_tuning_with_cache_control/performance_problem_of_getpagesource_in_ios_ja.md)
-    - [ダイレクトアクセスモード](in_action/performance_tuning_with_cache_control/direct_access_mode_ja.md)
 
 ## チュートリアル(Advanced)
 
@@ -232,25 +217,25 @@
 ## ツールの設定
 
 - IntelliJ IDEA
-    - [JVMのバージョン, JDKのバージョン](tool_settings/jvm_version_ja.md)
+    - [JVMのバージョン, JDKのバージョン](common/tool_settings/jvm_version_ja.md)
 
 ## 仮想マシンの設定
 
-- [Google Play Storeを有効にする](virtual_machine_settings/enabling_google_play_store_ja.md)
+- [Google Play Storeを有効にする](common/virtual_machine_settings/enabling_google_play_store_ja.md)
 
 ## パッケージのインストール/アップデート
 
-- [nodeとnpmのインストール/アップデート](updating_packages/installing_updating_node_npm_ja.md)
-- [Appiumとドライバーのインストール/アップデート](updating_packages/installing_updating_appium_drivers_ja.md)
+- [nodeとnpmのインストール/アップデート](common/updating_packages/installing_updating_node_npm_ja.md)
+- [Appiumとドライバーのインストール/アップデート](common/updating_packages/installing_updating_appium_drivers_ja.md)
 
 ## トラブルシューティング
 
-- [エラーメッセージ/警告メッセージ](troubleshooting/error_warning_messages.md)
-- [トラブルシューティング](troubleshooting/troubleshooting.md)
+- [エラーメッセージ/警告メッセージ](common/troubleshooting/error_warning_messages.md)
+- [トラブルシューティング](common/troubleshooting/troubleshooting.md)
 
 ## Appendix
 
-- [アノテーション](appendix/annotations_ja.md)
+- [アノテーション](common/appendix/annotations_ja.md)
 
 <br>
 <br>

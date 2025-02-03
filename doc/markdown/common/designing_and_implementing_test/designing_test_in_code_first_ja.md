@@ -11,8 +11,7 @@
 テストクラスを作成し、`@Manual`を付与したテスト関数を作成します。
 
 ```kotlin
-@Testrun("testConfig/android/calculator/testrun.properties")
-class CodeFirst1 : UITest() {
+class CodeFirst1 : VisionTest() {
 
     @Manual
     @Test
@@ -62,8 +61,7 @@ class CodeFirst1 : UITest() {
 画面ニックネームファイル"[Calculator Main Screen]"もこの時点では実装する必要はありません。
 
 ```kotlin
-@Testrun("testConfig/android/calculator/testrun.properties")
-class CodeFirst2 : UITest() {
+class CodeFirst2 : VisionTest() {
 
     @Manual
     @Test
@@ -141,8 +139,7 @@ class CodeFirst2 : UITest() {
 テスト対象のアプリが提供されたら`@Manual`アノテーションを削除し、テストを実装して完成させ、実行します。
 
 ```kotlin
-@Testrun("testConfig/android/calculator/testrun.properties")
-class CodeFirst3 : UITest() {
+class CodeFirst3 : VisionTest() {
 
     @Test
     @DisplayName("Start calculator")

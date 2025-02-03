@@ -11,25 +11,15 @@
 | writeToClipboard | クリップボードへテキストを書き込みます    |
 | clipboardText    | 要素のtextをクリップボードへ書き込みます |
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### Clipboard1.kt
 
-(`kotlin/tutorial/basic/Clipboard1.kt`)
+(`src/test/kotlin/tutorial/basic/Clipboard1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.driver.function.readClipboard
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Clipboard1 : UITest() {
-
     @Test
     @Order(10)
     fun element_clipboard() {
@@ -39,7 +29,7 @@ class Clipboard1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("Settings")
+                    it.detect("Settings")
                         .clipboardText()
                 }.expectation {
                     readClipboard()
@@ -78,12 +68,10 @@ class Clipboard1 : UITest() {
         }
 
     }
-
-}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 
 

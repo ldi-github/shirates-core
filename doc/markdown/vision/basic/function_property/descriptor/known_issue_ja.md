@@ -1,25 +1,16 @@
-# knownIssue
+# knownIssue (Vision)
 
 **knownIssue**関数を使用して既知の問題を説明することができます。
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### KnownIssues1.kt
 
+(`src/test/kotlin/tutorial/basic/KnownIssues1.kt`)
+
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.knownIssue
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.manual
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class KnownIssues1 : UITest() {
-
     @Test
     @Order(10)
     fun knownIssue() {
@@ -39,12 +30,18 @@ class KnownIssues1 : UITest() {
         }
 
     }
-
-}
 ```
+
+### HTML-Report
+
+![](_images/known_issue_html_report.png)
+
+### Spec-Report
+
+![](_images/known_issue_speec_report.png)
 
 **message** and **ticketUrl** は必須指定です。 ticketUrlが不要な場合は`ticketUrl = ""`を設定してください。
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

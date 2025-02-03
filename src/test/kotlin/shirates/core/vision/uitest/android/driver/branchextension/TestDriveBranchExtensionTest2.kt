@@ -158,7 +158,7 @@ class TestDriveBranchExtensionTest2 : VisionTest() {
                         }
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageLabelIsNot("[Connected devices Icon]") {
+                        .ifImageLabelIs("[Connected devices Icon]") {
                             describe("ifImageIsNot('[Connected devices Icon]') called")
                             ifImageIsNotCalled = true   //never called
                         }

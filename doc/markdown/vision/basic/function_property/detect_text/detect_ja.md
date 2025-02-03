@@ -1,81 +1,80 @@
-# detect
+# detect (Vision)
 
-これらの関数を使用して要素を選択することができます。
+これらの関数を使用してテキスト要素を検出することができます。
 
-[セレクター式](../../selector_and_nickname/selector_expression_ja.md) is accepted as argument.
+[セレクター式](../../selector_and_nickname/selector_expression.md) を引数に取ります。
 
-関数は`TestElement`を返します。
+関数は`VisionElement`オブジェクトを返します。
 
 ## 関数
 
-| 関数                    | 説明                                                     |
-|:----------------------|:-------------------------------------------------------|
-| select                | 現在の画面においてセレクターにマッチする最初の要素を取得します（withScroll使用時はスクロールあり） |
-| selectWithoutScroll   | 現在の画面においてセレクターにマッチする最初の要素を取得します（スクロールなし）               |
-| selectWithScrollDown  | 現在の画面においてセレクターにマッチする最初の要素を取得します（下方向スクロールあり）            |
-| selectWithScrollUp    | 現在の画面においてセレクターにマッチする最初の要素を取得します（上方向スクロールあり）            |
-| selectWithScrollRight | 現在の画面においてセレクターにマッチする最初の要素を取得します（右方向スクロールあり）            |
-| selectWithScrollLeft  | 現在の画面においてセレクターにマッチする最初の要素を取得します（左方向スクロールあり）            |
-| selectInScanResults   | スキャン結果においてセレクターにマッチする最初の要素を取得します                       |
+| 関数                    | 説明                                                              |
+|:----------------------|:----------------------------------------------------------------|
+| detect                | 現在の画面内でセレクターにマッチする最初の要素を取得します。`withScroll`関数内で使用するとスクロールが発生します。 |
+| detectWithScrollDown  | セレクターにマッチする最初の要素を取得します。（下方向スクロールあり）                             |
+| detectWithScrollUp    | セレクターにマッチする最初の要素を取得します。（上方向スクロールあり）                             |
+| detectWithScrollRight | セレクターにマッチする最初の要素を取得します。（右方向スクロールあり）                             |
+| detectWithScrollLeft  | セレクターにマッチする最初の要素を取得します。（左方向スクロールあり）                             |
+| detectWithoutScroll   | セレクターにマッチする最初の要素を取得します。（スクロールなし）                                |
 
-## 例1: select
+### サンプルコード
 
-### Select1.kt
+[サンプルの入手](../../../getting_samples_ja.md)
 
-(`kotlin/tutorial/basic/Select1.kt`)
+### Detect1.kt
+
+(`kotlin/tutorial/basic/Detect1.kt`)
 
 ```kotlin
+package tutorial.basic
+
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import shirates.core.vision.driver.commandextension.detect
+import shirates.core.vision.driver.commandextension.detectWithScrollDown
+import shirates.core.vision.driver.commandextension.detectWithScrollUp
+import shirates.core.vision.driver.commandextension.output
+import shirates.core.vision.testcode.VisionTest
+
+class Detect1 : VisionTest() {
+
     @Test
     @Order(10)
-    fun select() {
+    fun detect() {
 
         scenario {
             case(1) {
                 action {
-                    it.select("Settings", log = true)
+                    it.detect("Network & internet")
+                    output(it)
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(20)
+    fun detectWithScrollDown_detectWithScrollUp() {
+
+        scenario {
+            case(1) {
+                action {
+                    it.detectWithScrollDown("System")
                     output(it)
                 }
             }
             case(2) {
                 action {
-                    it.selectWithScrollDown("System", log = true)
-                    output(it)
-                }
-            }
-            case(3) {
-                action {
-                    it.selectWithScrollUp("Settings", log = true)
+                    it.detectWithScrollUp("Settings")
                     output(it)
                 }
             }
         }
     }
-```
 
-## 例2: scanElements
-
-### Select1.kt
-
-(`kotlin/tutorial/basic/Select1.kt`)
-
-```kotlin
-    @Test
-    @Order(20)
-    fun selectInScanElements() {
-
-        scenario {
-            case(1) {
-                action {
-                    it.scanElements()
-                        .selectInScanResults("Settings", log = true)
-                        .selectInScanResults("Accessibility", log = true)
-                        .selectInScanResults("System", log = true)
-                }
-            }
-        }
-    }
+}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

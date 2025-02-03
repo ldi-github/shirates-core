@@ -16,7 +16,7 @@ You can know whether you can select the element or not using these functions tha
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### CanDetect1.kt
 

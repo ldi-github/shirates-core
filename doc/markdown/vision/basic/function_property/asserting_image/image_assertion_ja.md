@@ -1,178 +1,41 @@
-# [削除予定] 画像の検証
+# 画像の検証 (Vision)
 
-## 関数
+これらの関数を使用して画像を検証することができます。
 
-### 画像マッチング
+### 関数
 
-これらの関数を使用して画像マッチングを試行することができます。
+| 関数           |
+|:-------------|
+| imageLabelIs |
 
-| 関数                | 戻り値の型            |
-|:------------------|------------------|
-| isImage           | ImageMatchResult |
-| isContainingImage | ImageMatchResult |
+### サンプルコード
 
-### 画像の検証
-
-これらの関数を使用して画像の検証を行うことができます。
-
-| 関数             |
-|:---------------|
-| imageIs        |
-| imageContains  |
-| existImage     |
-| dontExistImage |
-
-## 例
-
-### 画像ファイルの取得
-
-テンプレートマッチングのための画像ファイルを取得してください。
-
-参照 [テンプレートマッチングのための画像を切り出す](../../../in_action/image_matching/cropping_images_for_template_matching_ja.md)
-
-### imagesディレクトリ
-
-1. `screens`ディレクトリの下に`images`ディレクトリを作成し、画像ファイルを配置します。
-
-![cropped images](../../../in_action/_images/put_cropped_images_in_images_directory.png)
-
-### 画面ニックネームファイル
-
-画面ニックネームファイル内で画像ニックネームを定義します。ファイル名はユニークであることが必要です。
-
-#### [Clock(shared)].json
-
-(`testConfig/android/clock/screens/[Clock(shared)].json`)
-
-```
-{
-  "key": "[Clock(shared)]",
-
-  "selectors": {
-    "[Alarm]": "Alarm&&!#action_bar_title",
-    "[Alarm Tab]": "@Alarm",
-    "[Alarm Image]": "Alarm.png",
-    "[Alarm Image(selected)]": "Alarm(selected).png",
-
-    "[Clock]": "Clock&&!#action_bar_title",
-    "[Clock Tab]": "@Clock",
-    "[Clock Image]": "Clock.png",
-    "[Clock Image(selected)]": "Clock(selected).png",
-
-    "[Timer]": "Timer&&!#action_bar_title",
-    "[Timer Tab]": "@Timer",
-    "[Timer Image]": "Timer.png",
-    "[Timer Image(selected)]": "Timer(selected).png",
-
-    "[Stopwatch]": "Stopwatch&&!#action_bar_title",
-    "[Stopwatch Tab]": "@Stopwatch",
-    "[Stopwatch Image]": "Stopwatch.png",
-    "[Stopwatch Image(selected)]": "Stopwatch(selected).png",
-
-    "[Bedtime]": "Bedtime&&!#action_bar_title",
-    "[Bedtime Tab]": "@Bedtime",
-    "[Bedtime Image]": "Bedtime.png",
-    "[Bedtime Image(selected)]": "Bedtime(selected).png"
-
-  }
-
-}
-```
-
-## 例
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### AssertingImage1.kt
 
-(`kotlin/tutorial/basic/AssertingImage1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingImage1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-import shirates.helper.ImageSetupHelper
-
-@Testrun("testConfig/android/maps/testrun.properties")
-class AssertingImage1 : UITest() {
-
-    @Test
-    @Order(0)
-    fun setupImage() {
-
-        scenario {
-            ImageSetupHelper.setupImagesMapsTopScreen()
-        }
-    }
-
     @Test
     @Order(10)
-    fun imageIs_isImage_OK() {
+    fun imageLabelIs() {
 
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    v1 = it.detect("Network & internet")
+                        .leftItem()
                 }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab(selected)]")     // OK
-                    it.select("[Explore Tab]").isImage("[Explore Tab(selected)]").thisIsTrue()      // OK
+                    v1.imageLabelIs("[Network & internet Icon]")
                 }
             }
         }
     }
-
-    @Test
-    @Order(20)
-    fun imageIs_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Maps Top Screen]")
-                }.expectation {
-                    it.select("[Contribute Tab]").imageIs("[Contribute Tab(selected)]")     // NG
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(30)
-    fun checkingTabState() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Maps Top Screen]")
-                }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab(selected)]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Tab]")
-                }
-            }
-            case(2) {
-                action {
-                    it.tap("[Contribute Tab]")
-                }.expectation {
-                    it.select("[Explore Tab]").imageIs("[Explore Tab]")
-                    it.select("[Contribute Tab]").imageIs("[Contribute Tab(selected)]")
-                }
-            }
-        }
-    }
-
-}
 ```
-
-### 予期せぬNGが起きる場合
-
-ログディレクトリにおいてテンプレート画像のファイルと切り出された画像のファイルを確認することができます。
-
-### 注意
-
-参照 [WARNING: An illegal reflective access operation has occurred](../../../troubleshooting/warnings/anIllegalRefrectiveAccessOperationHasOccured.md)
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

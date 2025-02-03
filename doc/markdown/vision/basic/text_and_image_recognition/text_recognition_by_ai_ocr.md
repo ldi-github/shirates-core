@@ -277,42 +277,14 @@ You can see text recognition results in json file.
 
 ### Text recognition errors
 
-**Text recognition error** may occur. It depends on the accuracy of AI-OCR(RecognizeTextRequest) of Vision Framework (
-maybe improved in the future).<br>
+**Text recognition error** may occur. It depends on the accuracy of AI-OCR(RecognizeTextRequest) of Vision Framework.
+It maybe improved in the future version.<br>
 
 ![](_images/text_recognition_errors.png)
 
-### Detect1.kt
-
-(`kotlin/tutorial/basic/Detect1.kt`)
-
-```kotlin
-    @Test
-    @Order(20)
-    fun detectWithScrollDown_detectWithScrollUp() {
-
-        scenario {
-            case(1) {
-                action {
-                    it.detectWithScrollDown("Tips & support")
-                    output(it)
-                }
-            }
-        }
-    }
-```
-
-Right-click on `detect()` and select `debug` to run test.
-
-### TestResults
-
-You got test results files in TestResults directory(`~/Downloads/TestResults` is default).
-
-### Text recognition errors
-
 ![](_images/text_recognition_errors_2.png)
 
-You can detect **substrings** text by `detect` function.
+You can detect text by `detect` function with **substrings** argument.
 
 ```kotlin
 // works
@@ -324,8 +296,8 @@ detect("Google")
 detect("System")
 ```
 
-But you **can not** detect the followings because text recognition does not work properly because of **garbled
-characters**.
+On the other hand, if text recognition does not function properly and results in garbled characters, the expected text
+cannot be detected.
 
 ```kotlin
 // does not work
@@ -340,10 +312,12 @@ If garbled characters occur, use erratta(correction table).
 
 ![](_images/eratta_table.png)
 
-### Console
+**CSV Editor** plugin is usuful.
+
+### Rerun test
 
 Run the test again.
-Garbled characters are corrected.
+The garbled characters are corrected and a message like this is output.
 
 ```
 [info]	+14	!	()	"® ips & support" is replaced to "Tips & support"

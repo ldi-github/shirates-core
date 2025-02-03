@@ -1,4 +1,4 @@
-# installApp, removeApp
+# installApp, removeApp (Vision)
 
 アプリをパッケージファイルからインストールすることができます。
 
@@ -97,4 +97,4 @@ it.installApp()
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

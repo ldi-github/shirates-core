@@ -1,4 +1,4 @@
-# Spec-Report
+# Spec-Report (Vision/Classic)
 
 テストの実行が完了するとテスト結果はTestResultディレクトリに **Spec-Report**の書式で出力されます。
 

@@ -1,51 +1,46 @@
-# findImage
+# findImage (Vision)
 
 これらの関数を使用すると画像を検索することができます。
-
-[セレクター式](../../selector_and_nickname/selector_expression_ja.md)を引数として使用します。
-
-関数は`TestElement`オブジェクトではなく`ImageMatchResult`オブジェクトを返却します。
 
 ## 関数
 
 | 関数                       | 説明                                 |
 |:-------------------------|:-----------------------------------|
-| findImage                | selectorにマッチする画像を検索します（現在の画面）      |
-| findImageWithScrollDown  | selectorにマッチする画像を検索します（下方向スクロールあり） |
-| findImageWithScrollUp    | selectorにマッチする画像を検索します（上方向スクロールあり） |
-| findImageWithScrollRight | selectorにマッチする画像を検索します（右方向スクロールあり） |
-| findImageWithScrollLeft  | selectorにマッチする画像を検索します（左方向スクロールあり） |
+| findImage                | 現在の画面内でテンプレート画像にマッチする画像を見つけます      |
+| findImageWithScrollDown  | テンプレート画像にマッチする画像を見つけます（下方向スクロールあり） |
+| findImageWithScrollUp    | テンプレート画像にマッチする画像を見つけます（上方向スクロールあり） |
+| findImageWithScrollRight | テンプレート画像にマッチする画像を見つけます（右方向スクロールあり） |
+| findImageWithScrollLeft  | テンプレート画像にマッチする画像を見つけます（左方向スクロールあり） |
+
+### しきい値の調整
+
+実際には画像が存在しているにもかかわらずエラーが発生する場合があり、以下のようなメッセージが表示されます。
+
+```
+[info]	+1727	!	()	findImage("[Location Icon]") not found. (distance:0.40028667 > threshold:0.1)
+```
+
+この場合、`threshold`引数を明示的に指定します。
+
+```
+findImageWithScrollDown("[Location Icon]", threshold = 0.5)
+```
+
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
+
+### テンプレート画像
+
+![](_images/template_images.png)
 
 ### FindImage1.kt
 
-(`kotlin/tutorial/basic/FindImage1.kt`)
-
-`findImage()`を実行して画像マッチングのデモを行います。
+(`src/test/kotlin/tutorial/basic/FindImage1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-import shirates.helper.ImageSetupHelper
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class FindImage1 : UITest() {
-
     @Test
     @Order(10)
-    fun croppingImages() {
-
-        scenario {
-            ImageSetupHelper.setupImageAndroidSettingsTopScreen()
-        }
-    }
-
-    @Test
-    @Order(20)
     fun findImage() {
 
         scenario {
@@ -54,44 +49,70 @@ class FindImage1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
                     withScrollDown {
-                        it.findImage("[Network & internet Icon].png")
-                        it.findImage("[Display Icon].png")
-                        it.findImage("[Tips & support Icon].png")
-                    }
-                    withScrollUp {
-                        it.findImage("[Display Icon].png")
-                        it.findImage("[Network & internet Icon].png")
+                        v1 = it.findImage("[Network & internet Icon]")
+                        v2 = it.findImage("[Display Icon]")
                     }
                 }.expectation {
-                    withScrollDown {
-                        it.existImage("[Network & internet Icon].png")
-                        it.existImage("[Display Icon].png")
-                        it.existImage("[Tips & support Icon].png")
-                    }
-                    withScrollUp {
-                        it.existImage("[Display Icon].png")
-                        it.existImage("[Network & internet Icon].png")
-                    }
+                    v1.isFound.thisIsTrue("[Network & internet Icon] is found.")
+                    v2.isFound.thisIsTrue("[Display Icon] is found.")
                 }
             }
         }
     }
 
-}
+    @Test
+    @Order(20)
+    fun findImageWithScrollDown_findImageWithScrollUp() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
+                    v1 = findImageWithScrollDown("[Location Icon]", threshold = 0.5)
+                }.expectation {
+                    v1.imageLabelIs("[Location Icon]")
+                }
+            }
+            case(2) {
+                action {
+                    v1 = findImageWithScrollUp("[Connected devices Icon]")
+                }.expectation {
+                    v1.imageLabelIs("[Connected devices Icon]")
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(30)
+    fun findImageWithScrollRight_findImageWithScrollLeft() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Files Top Screen]")
+                }.action {
+                    it.onLineOf("Images", verticalMargin = 40) {
+                        v1 = findImageWithScrollRight("[This week Button]")
+                    }
+                }.expectation {
+                    v1.imageLabelIs("[This week Button]")
+                }
+            }
+            case(2) {
+                action {
+                    v1.onLine(verticalMargin = 40) {
+                        v2 = findImageWithScrollLeft("[Audio Button]")
+                    }
+                }.expectation {
+                    v2.imageLabelIs("[Audio Button]")
+                }
+            }
+        }
+    }
 ```
-
-アイコンがキャプチャされて画像ファイルとして切り出されます。
-
-![](../../_images/crop_icon.png)
-
-画像ファイルは`unitTestConfig/android/androidSettings/screens/images/`ディレクトリにコピーされます。
-
-![](../../_images/prepare_image.png)
-
-### 注意
-
-参照 [Due to JRE encapsulation, low level data structures needed for fast conversion of BufferedImages are no longer accessible.](../../../troubleshooting/errors/dueToJREencapsulationLowLevelDataStructuresNeededForFastConversionOfBufferedImagesAreNoLongerAccessible.md)
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

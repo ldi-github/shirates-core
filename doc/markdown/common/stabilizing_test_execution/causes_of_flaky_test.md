@@ -1,4 +1,4 @@
-# Causes of flaky test (Classic)
+# Causes of flaky test (Vision/Classic)
 
 Some time you can see that running the test that passed before fails this time, and after rerunning the test the problem
 is resolved. This means the test is not reliable.

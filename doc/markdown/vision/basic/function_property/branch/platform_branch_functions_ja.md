@@ -1,4 +1,4 @@
-# プラットフォーム関数
+# プラットフォーム関数 (Vision)
 
 テストにおける特定の状況下では条件分岐が必要となります。
 これらのプラットフォーム関数を使用することができます。
@@ -14,26 +14,15 @@
 | virtualDevice | 仮想デバイスの場合にコードブロックが実行されます         |
 | realDevice    | 実デバイスの場合にコードブロックが実行されます          |
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### BranchFunctions1.kt
 
-(`kotlin/tutorial/basic/BranchFunctions1.kt`)
+(`src/test/kotlin/tutorial/basic/BranchFunctions1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.*
-import shirates.core.driver.commandextension.describe
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties", profile = "Android")
-class BranchFunctions1 : UITest() {
-
     @Test
     @Order(10)
     fun branch_platform_device() {
@@ -78,19 +67,17 @@ class BranchFunctions1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Spec-Report(通常モード)
 
-![](../../_images/branch_functions_normal.png)
+![](_images/branch_functions_normal.png)
 
 ### Spec-Report(無負荷実行モード)
 
-![](../../_images/branch_functions_no_load_run.png)
+![](_images/branch_functions_no_load_run.png)
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

@@ -1,8 +1,8 @@
-# JVMのバージョン, JDKのバージョン
+# JVMのバージョン, JDKのバージョン (Vision/Classic)
 
 ## IntelliJ IDEA
 
-### Preferences > Build,Execution,Deployment > Build Tools > Gradle
+### IntelliJ IDEA > Settings > Build,Execution,Deployment > Build Tools > Gradle
 
 ![](_images/intellij_preferences_gradle.png)
 

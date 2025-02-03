@@ -1,19 +1,19 @@
 # Relative image (Vision)
 
-You can find a text relatively using these functions.
+You can find an image relatively using these functions.
 
 ## Functions
 
-| function  | description                        |
-|:----------|:-----------------------------------|
-| rightItem | Finds a item right of the element. |
-| leftItem  | Finds a item left of the element.  |
-| belowItem | Finds a item below of the element. |
-| aboveItem | Finds a item above of the element. |
+| function  | description                         |
+|:----------|:------------------------------------|
+| rightItem | Finds an item right of the element. |
+| leftItem  | Finds an item left of the element.  |
+| belowItem | Finds an item below of the element. |
+| aboveItem | Finds an item above of the element. |
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### RelativeItem1.kt
 

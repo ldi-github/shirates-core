@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.github.ldi-github"
-version = "8.0.7-SNAPSHOT"
+version = "8.0.7"
 
 val appiumClientVersion = "9.4.0"
 
@@ -173,7 +173,7 @@ publishing {
     repositories {
         maven {
             name = "local"
-            url = uri("${layout.buildDirectory}/repository")
+            url = uri("build/repository")
         }
         maven {
             name = "ossrh"

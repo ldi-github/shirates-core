@@ -67,7 +67,7 @@ shirates.core.exception.TestEnvironmentException: Could not connect to vision-se
 See **Setting up shirates-vision-server** in [Quick Start](../../../quick-start.md)
 to run the server.
 
-You can see output in the console as followings if succeeded.
+You can see output in the console as follows if succeeded.
 
 #### Console output
 

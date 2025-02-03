@@ -15,13 +15,13 @@ You can find an image using these functions.
 ### Tuning threshold
 
 You may encounter an error in spite of the image is accually existing,
-and see message as followings.
+and see message as follows.
 
 ```
 [info]	+1727	!	()	findImage("[Location Icon]") not found. (distance:0.40028667 > threshold:0.1)
 ```
 
-In this case, specify argument `threshold` to explicitly.
+In this case, specify argument `threshold` explicitly.
 
 ```
 findImageWithScrollDown("[Location Icon]", threshold = 0.5)

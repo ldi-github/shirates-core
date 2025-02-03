@@ -1,4 +1,4 @@
-# Spec-Report
+# Spec-Report (Vision/Classic)
 
 Test results in **Spec-Report** format is output into TestResults folder after test execution finished.
 

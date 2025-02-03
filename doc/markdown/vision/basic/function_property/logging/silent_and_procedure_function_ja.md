@@ -1,12 +1,16 @@
-# silent, procedure
+# silent, procedure (Vision)
 
 ## silent関数
 
 **silent**関数を使用するとログ出力を抑制することができます。
 
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
+
 ### SilentAndProcedure1.kt
 
-(`kotlin/tutorial/basic/SilentAndProcedure1.kt`)
+(`src/test/kotlin/tutorial/basic/SilentAndProcedure1.kt`)
 
 ```kotlin
     @Test
@@ -33,7 +37,7 @@
 
 ### Html-Report
 
-![](../../_images/silent_and_procedure_1.png)
+![](_images/silent_and_procedure_2.png )
 
 `describe`は出力されています。<br>
 `scrollToEnd`と`tap`は出力されていません。
@@ -70,11 +74,11 @@
 
 ### Html-Report
 
-![](../../_images/silent_and_procedure_2.png )
+![](_images/silent_and_procedure_2.png)
 
 `procedure` は出力されています。<br>
 `scrollToEnd` と `tap`は出力されていません。
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

@@ -34,6 +34,7 @@
 
 - [Switching Android/iOS](vision/basic/switching_environment/switching_android_ios.md)
 - [Switching device](vision/basic/switching_environment/switching_device.md)
+- [Switching device language](vision/basic/switching_environment/switching_device_language.md)
 - [Switching log language](common/message_and_language/log_language.md)
 - [Switching AI-OCR language](vision/basic/switching_environment/switching_ai_ocr_language.md)
 
@@ -58,7 +59,7 @@
 - [Using CheckStateClassifier](vision/basic/text_and_image_recognition/using_check_state_classifier.md)
 - [Using DefaultClassifier](vision/basic/text_and_image_recognition/using_default_classifier.md)
 - [Screen identification using FeaturePrint and text recognition](vision/basic/text_and_image_recognition/screen_assertion_using_feature_print_and_text_recognition.md)
-- [Setting up template screen images](vision/basic/text_and_image_recognition/setting_up_template_screen_images.md)
+- [Setting up screen image_templates](vision/basic/text_and_image_recognition/setting_up_screen_image_templates.md)
 
 ### Macro
 
@@ -67,7 +68,7 @@
 ### Selector and Nickname
 
 - [Selector expression](vision/basic/selector_and_nickname/selector_expression.md)
-- [Nickname](vision/basic/selector_and_nickname/nickname/nickname.md)
+- [Nickname](vision/basic/selector_and_nickname/nickname.md)
     - [Dataset nickname](classic/basic/selector_and_nickname/nickname/dataset_nickname.md)
 
 ### Parameter
@@ -93,12 +94,12 @@
 - Swipe/Scroll screen
     - [swipe, flick](vision/basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](vision/basic/function_property/swipe_screen/scroll.md)
-    - [Determining scrollable area](vision/basic/function_property/swipe_screen/determining_scrollable_area.md)
+    - [Determining scrollable area(onLine, onLineOf, onColumn, onColumnOf)](vision/basic/function_property/swipe_screen/determining_scrollable_area.md)
 - Getting image/text relatively
     - [Relative text (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text.md)
     - [Relative image (leftItem, rightItem, belowItem, aboveItem)](vision/basic/function_property/getting_image/relative_image.md)
 - Asserting text
-    - [Text assertion](vision/basic/function_property/asserting_attribute/text_assertion.md)
+    - [Text assertion](vision/basic/function_property/asserting_text/text_assertion.md)
 - Asserting image
     - [Image assertion](vision/basic/function_property/asserting_image/image_assertion.md)
 - Asserting any value
@@ -117,11 +118,11 @@
     - [Anyting assertion (verify)](vision/basic/function_property/asserting_anything/anything_assertion.md)
 - Branch
     - [Branch function (ifTrue, ifFalse)](vision/basic/function_property/branch/if_true_if_false.md)
-    - [Branch function (ifScreenIs, ifScreenIsNot)](vision/basic/function_property/branch/ifscreenis.md)
-    - [Branch function (ifCanDetect, ifCanDetectNot)](vision/basic/function_property/branch/ifcanselect.md)
-    - [Branch function (ifImageExist, ifImageExistNot)](vision/basic/function_property/branch/ifimageexist.md)
-    - [Branch function (ifImageIs, ifImageIsNot)](vision/basic/function_property/branch/ifimageis.md)
-    - [Branch function (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/ifString.md)
+    - [Branch function (ifScreenIs, ifScreenIsNot)](vision/basic/function_property/branch/if_screen_is.md)
+    - [Branch function (ifCanDetect, ifCanDetectNot)](vision/basic/function_property/branch/if_can_detect.md)
+    - [Branch function (ifImageExist, ifImageExistNot)](vision/basic/function_property/branch/if_image_exist.md)
+    - [Branch function (ifImageLabelIs, ifImageLabelIsNot)](vision/basic/function_property/branch/if_image_label_is.md)
+    - [Branch function (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/if_string.md)
     - [Platform function (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions.md)
     - [Platform property (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties.md)
 - Editing and Keyboard operations
@@ -160,7 +161,7 @@
 
 ### Helper
 
-- [LanguageHelper](vision/basic/helper/language_helper/language_helper.md)
+- [LanguageHelper](common/helper/language_helper/language_helper.md)
 
 ### Report
 
@@ -185,7 +186,7 @@
     - [Configuring screenshot](vision/in_action/log_and_screenshot/configuring_screenshot.md)
 - Debugging
     - [Watching recognizeText.json](vision/in_action/debugging/watching_recognize_text_json.md)
-    - [Watching image in debugger](vision/in_action/debugging/)
+    - [Watching image in debugger](vision/in_action/debugging/watching_image_in_debugger.md)
 - Test Fixture
     - [Test fixture](common/test_fixture/test_fixture.md)
 - Using Appium APIs

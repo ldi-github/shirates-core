@@ -52,4 +52,4 @@ class TapAppIcon1 : UITest() {
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

@@ -1,4 +1,4 @@
-# アノテーション
+# アノテーション (Vision/Classic)
 
 ## JUnit 5のアノテーション
 
@@ -19,6 +19,8 @@ Shiratesには以下のカスタムアノテーションがあります。
 | アノテーション         | 対象      | 説明                                                                                                                |
 |:----------------|:--------|:------------------------------------------------------------------------------------------------------------------|
 | @Testrun        | クラス     | テストセッションを初期化するためのTestrunファイルを指定する([参照](../../classic/basic/creating_testclass/creating_testclass_ja.md))          |
+| @android        | クラス     | Androidのデフォルト構成でテストセッションを初期化する                                                                                    |
+| @ios            | クラス     | iosのデフォルト構成でテストセッションを初期化する                                                                                        |
 | @MacroObject    | クラス     | MacroObjectを宣言する ([参照](../../classic/basic/routine_work/macro_ja.md))                                             |
 | @Macro          | 関数      | Macro関数を宣言する ([参照](../../classic/basic/routine_work/macro_ja.md))                                                 |
 | @CustomObject   | クラス     | CustomObjectを宣言する ([参照](../../classic/in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md)) |

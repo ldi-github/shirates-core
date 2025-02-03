@@ -1,4 +1,4 @@
-# TestList
+# TestList (Vision/Classic)
 
 **TestList** はテストの実行が完了した時に出力されます。すでに存在する場合は後から実行したテストの結果でアップデートされます。
 

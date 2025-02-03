@@ -1,4 +1,4 @@
-# Error messages
+# Error messages (Vision/Classic)
 
 - [ERROR StatusLogger Log4j2 could not find a logging implementation](errors/statuslogger_log4j2_could_not_find_a_logging_implementation.md)
 - [Execution failed for task ':test'](errors/execution_failed_for_tast_test.md)

@@ -1,4 +1,4 @@
-# CodeGeneratorExecute (Classic)
+# CodeGeneratorExecute (Vision/Classic)
 
 You can generate **test code template** from Spec-Report format.
 

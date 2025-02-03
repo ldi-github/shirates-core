@@ -2,7 +2,7 @@
 
 You can see recognized texts by AI-OCR in **recognizeText.json**.
 
-### testresults directory
+### TestResults
 
 ![](_images/recognize_text_json_in_test_result.png)
 

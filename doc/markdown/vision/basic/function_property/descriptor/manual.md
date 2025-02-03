@@ -29,11 +29,11 @@ procedure using **manual** function.
     }
 ```
 
-#### Html-Report
+### Html-Report
 
 ![](_images/manual_html_report.png)
 
-#### Spec-Report
+### Spec-Report
 
 ![](_images/manual_spec_report.png)
 

@@ -10,7 +10,9 @@
 | keyboardIsNotShown |
 | isKeyboardShown    |
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### AssertingOthers1.kt
 
@@ -60,4 +62,4 @@
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

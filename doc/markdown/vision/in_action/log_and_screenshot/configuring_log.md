@@ -1,7 +1,7 @@
 # Configuring log (Vision)
 
 You can configure log in testrun file.
-See also [parameters](../../basic/parameter/parameters.md).
+See also [parameters](../../../common/parameter/parameters.md).
 
 ```
 ## Log --------------------

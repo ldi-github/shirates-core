@@ -11,166 +11,58 @@
 | thisIsTrue  | この値がtrueであることを検証します  |
 | thisIsFalse | この値がfalseであることを検証します |
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### AssertingAnyValue1.kt
 
-(`kotlin/tutorial/basic/AssertingAnyValue1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingAnyValue1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-import java.util.*
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AssertingAnyValue1 : UITest() {
-
     @Test
     @Order(10)
-    fun stringAssertion_OK() {
+    fun anyAssertion() {
 
         scenario {
-            case(1) {
+            case(1, "Int") {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    "string1"
-                        .thisIs("string1")
-                        .thisIsNot("string2")
-
-                        .thisStartsWith("s")
-                        .thisStartsWithNot("t")
-
-                        .thisContains("ring")
-                        .thisContainsNot("square")
-
-                        .thisEndsWith("ring1")
-                        .thisEndsWithNot("ring2")
-
-                        .thisMatches("^str.*")
-                        .thisMatchesNot("^tex.*")
+                    123.thisIs(123)
+                    123.thisIsNot(456)
                 }
             }
-
-            case(2) {
-                expectation {
-                    "".thisIsEmpty()
-                    "hoge".thisIsNotEmpty()
-
-                    " ".thisIsBlank()
-                    "hoge".thisIsNotBlank()
-                }
-            }
-
-        }
-    }
-
-    @Test
-    @Order(20)
-    fun stringAssertion_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
+            case(2, "Date") {
+                action {
+                    d1 = "2025/1/1".toDate()
+                    d2 = "2025/1/1".toDate()
+                    d3 = "2025/1/2".toDate()
                 }.expectation {
-                    "string1"
-                        .thisContains("square")
+                    d1.thisIs(d1, "d1 is d1")
+                    d1.thisIs(d2, "d1 is d2")
+                    d1.thisIsNot(d3, "d1 is not d3")
+                }
+            }
+            case(3, "VisionElement") {
+                action {
+                    v1 = detect("Apps")
+                    v2 = detect("Apps")
+                    v3 = detect("Notifications")
+                }.expectation {
+                    v1.thisIs(v1, "v1 is v1")   // OK
+                    v1.thisIs(v2, "v1 is v2")   // OK
+                    v1.thisIsNot(v3, "v1 is not v3") // OK
+                    v2.thisIs(v3, "v2 is v3")   // NG
                 }
             }
         }
     }
-
-    @Test
-    @Order(30)
-    fun booleanAssertion_OK() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    true.thisIsTrue()
-                    false.thisIsFalse()
-
-                    true.thisIsTrue("The value is true")
-                    false.thisIsFalse("The value is false")
-                }
-            }
-            case(2) {
-                expectation {
-                    it.isApp("Settings")
-                        .thisIsTrue("This app is <Settings>")
-                    it.isApp("Chrome")
-                        .thisIsFalse("This app is not <Chrome>")
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(40)
-    fun booleanAssertion_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    false.thisIsTrue()
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(50)
-    fun dateFormatAssertion_OK() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    "2023/12/15".thisMatchesDateFormat("yyyy/MM/dd")
-                }
-            }
-            case(2) {
-                condition {
-                    if (Locale.getDefault().toString() != "ja_JP") {
-                        SKIP_CASE()
-                    }
-                }.expectation {
-                    "2023/12/15(金)".thisMatchesDateFormat("yyyy/MM/dd(E)")
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(60)
-    fun dateFormatAssertion_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    "2023/12/15".thisMatchesDateFormat("yyyy.MM.dd")
-                }
-            }
-        }
-    }
-
-}
 ```
+
+![](_images/asserting_any_value.png)
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

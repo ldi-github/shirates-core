@@ -1,17 +1,19 @@
-# sendKeys
+# sendKeys (Vision)
 
 **sendKeys**関数を使用するとinputウィジェットにテキストを入力することができます。
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### AndroidSendKeys1.kt
 
-(`kotlin/tutorial/basic/AndroidSendKeys1.kt`)
+(`src/test/kotlin/tutorial/basic/AndroidSendKeys1.kt`)
 
 ```kotlin
     @Test
     @Order(10)
-    fun sendKeys() {
+    fun sendKeys_clearInput() {
 
         scenario {
             case(1) {
@@ -23,30 +25,44 @@
                     it.textIs("clock")
                 }
             }
+            case(2) {
+                action {
+                    it.clearInput()
+                }.expectation {
+                    it.textIs("Search settings")
+                }
+            }
         }
     }
 ```
 
 ### iOSSendKeys1.kt
 
-(`kotlin/tutorial/basic/iOSSendKeys1.kt`)
+(`src/test/kotlin/tutorial/basic/iOSSendKeys1.kt`)
 
 ```kotlin
     @Test
     @Order(10)
-    fun sendKeys() {
+    fun sendKeys_clearInput() {
 
         scenario {
             case(1) {
                 condition {
                     it.pressHome()
                         .swipeCenterToBottom()
-                        .tap("[SpotlightSearchField]")
+                        .tap("Search")
                         .clearInput()
                 }.action {
                     it.sendKeys("safari")
                 }.expectation {
                     it.textIs("safari")
+                }
+            }
+            case(2) {
+                action {
+                    it.clearInput()
+                }.expectation {
+                    it.textIs("Search")
                 }
             }
         }
@@ -55,5 +71,5 @@
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

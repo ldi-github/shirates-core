@@ -1,4 +1,4 @@
-# プロファイル命名規約による自動デバイス検出
+# プロファイル命名規約による自動デバイス検出 (Vision/Classic)
 
 テストで使用する仮想デバイス/実デバイスを **プロファイル命名規約** によって決定することができます。
 
@@ -86,7 +86,7 @@ ios.profile=iPhone 15(iOS 18.2)
 
 **Android Studio**を開いて**Device Manager**で **virtual** タブを確認します。
 
-![Device Manager](../_images/device_manager.png)
+![Device Manager](_images/device_manager.png)
 
 プロファイル名としてAVD名を使用できます。
 
@@ -100,7 +100,7 @@ ios.profile=iPhone 15(iOS 18.2)
 
 **Xcode** を起動して **Simulators** タブを確認します。
 
-![Simulators](../_images/simulators.png)
+![Simulators](_images/simulators.png)
 
 プロファイル名としてシミュレーターのデバイス名を使用できます。
 

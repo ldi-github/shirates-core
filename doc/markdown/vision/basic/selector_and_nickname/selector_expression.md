@@ -2,13 +2,13 @@
 
 Shirates **Selector expression** is expression to filter visual elements.
 
-**select** function accepts selector expressions, parses them, retrieves and filters elements, and returns result
+**detect** function accepts selector expressions, parses them, retrieves and filters elements, and returns result
 element.
 
 In **vision mode**
 
-- You can use information of text and image.
-- You cannot use information of DOM element metadata(id, accessibility, class, xpath).
+- You can use information of text.
+- You cannot use information of DOM element metadata(id, accessibility, class, etc.).
 
 So features of Selector is restricted in Shirates/Vision.
 

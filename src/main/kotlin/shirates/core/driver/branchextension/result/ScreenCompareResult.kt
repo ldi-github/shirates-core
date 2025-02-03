@@ -1,6 +1,9 @@
 package shirates.core.driver.branchextension.result
 
-import shirates.core.driver.*
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestDriverCommandContext
+import shirates.core.driver.TestMode
+import shirates.core.driver.visionDrive
 import shirates.core.logging.Message.message
 import shirates.core.logging.printWarn
 import shirates.core.vision.configration.repository.VisionScreenRepository
@@ -19,7 +22,7 @@ class ScreenCompareResult() : CompareResult() {
             return true
         }
 
-        if (testContext.useCache) {
+        if (TestMode.isClassicTest) {
             for (screenName in screenNames) {
                 if (TestDriver.isScreen(screenName)) {
                     return true
@@ -51,7 +54,7 @@ class ScreenCompareResult() : CompareResult() {
         if (screenNames.isEmpty()) {
             throw IllegalArgumentException("screenNames is required.")
         }
-        if (testContext.useCache.not()) {
+        if (TestMode.isVisionTest) {
             for (screenName in screenNames) {
                 if (VisionScreenRepository.isRegistered(screenName).not()) {
                     printWarn("screenName '$screenName' is not registered in ${VisionScreenRepository.directory}.")

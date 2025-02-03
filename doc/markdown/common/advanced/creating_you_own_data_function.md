@@ -1,4 +1,4 @@
-# Creating your own data function
+# Creating your own data function (Vision/Classic)
 
 You can create your own data function using `DatasetRepositoryManager`.
 

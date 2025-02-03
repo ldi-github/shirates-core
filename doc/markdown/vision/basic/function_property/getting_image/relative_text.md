@@ -13,7 +13,7 @@ You can find a text relatively using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### RelativeText1.kt
 

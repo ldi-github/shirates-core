@@ -1,11 +1,12 @@
-# マクロ
+# マクロ (Vision)
 
 テストコードを再利用することはとても重要です。定型処理はマクロとして登録することができます。
 
 ## マクロオブジェクト/マクロ関数を作成する
 
-1. `src/test/kotlin`の配下の任意の場所にobjectクラスを作成します。例えば、`macro`ディレクトリを作成し、その下に`MacroObject1`を作成します。
-   <br>![](../_images/creating_macro_object.png)
+1. `src/test/kotlin`の配下の任意の場所にobjectクラスを作成します。例えば、`macro`packageディレクトリを作成し、その下に
+   `MacroObject1`を作成します。<br>![](_images/creating_macro_object.png)
+   <br>![](../_images/creating_macro_object.png)<br>![](_images/macro_object.png)
 2. 以下のようにコードを実装します。
     1. **@MacroObject** アノテーションをobjectクラスに付与します。
     2. **TestDrive** インターフェースを継承します。
@@ -14,19 +15,23 @@
 ```kotlin
 package macro
 
-import shirates.core.driver.TestDrive
-import shirates.core.driver.commandextension.tap
 import shirates.core.macro.Macro
 import shirates.core.macro.MacroObject
+import shirates.core.vision.driver.commandextension.tap
+import shirates.core.vision.driver.commandextension.waitScreen
+import shirates.core.vision.testcode.VisionTest
 
 @MacroObject
-object MacroObject1 : TestDrive {
+object MacroObject1 : VisionTest() {
 
     @Macro("[Network preferences Screen]")
     fun internetScreen() {
 
-        it.tap("Network & internet")
+        it.waitScreen("[Android Settings Top Screen]")
+            .tap("Network & internet")
+        it.waitScreen("[Network & internet Screen]")
             .tap("Internet")
+        it.waitScreen("[Internet Screen]")
             .tap("Network preferences")
     }
 
@@ -34,7 +39,7 @@ object MacroObject1 : TestDrive {
 ```
 
 4. プロジェクトをビルドします。`out` ディレクトリ内にマクロのクラスファイルが作成されます。
-   <br>![](../_images/macro_object_class_file.png)
+   <br>![](_images/macro_object_class_file.png)
 
 ## マクロ関数の使用
 
@@ -46,13 +51,11 @@ package exercise
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.exist
-import shirates.core.driver.commandextension.macro
-import shirates.core.testcode.UITest
+import shirates.core.vision.driver.commandextension.exist
+import shirates.core.vision.driver.commandextension.macro
+import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Macro1 : UITest() {
+class Macro1 : VisionTest() {
 
     @Test
     @Order(10)
@@ -68,7 +71,6 @@ class Macro1 : UITest() {
             }
         }
     }
-
 }
 ```
 
@@ -80,5 +82,5 @@ class Macro1 : UITest() {
 
 ### Link
 
-- [index](../../index_ja.md)
+- [index](../../../index_ja.md)
 

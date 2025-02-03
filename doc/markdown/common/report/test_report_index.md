@@ -1,4 +1,4 @@
-# Test Report Index
+# Test Report Index (Vision/Classic)
 
 **Test Report Index** is the index of some Html-Reports.
 

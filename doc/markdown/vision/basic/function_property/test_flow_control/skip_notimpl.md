@@ -48,7 +48,7 @@ You can skip or abort test using these functions.
     }
 ```
 
-#### Spec-Report
+### Spec-Report
 
 ![](_images/skip_case_spec_report.png)
 
@@ -122,7 +122,7 @@ You can skip or abort test using these functions.
     }
 ```
 
-#### Spec-Report
+### Spec-Report
 
 ![](_images/notimpl_case_spec_report.png)
 
@@ -153,7 +153,7 @@ You can skip or abort test using these functions.
     }
 ```
 
-#### Spec-Report
+### Spec-Report
 
 ![](_images/notimpl_scenario_spec_report.png)
 

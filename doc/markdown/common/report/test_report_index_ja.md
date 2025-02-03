@@ -1,4 +1,4 @@
-# Test Report Index
+# Test Report Index (Vision/Classic)
 
 **Test Report Index** は[HTMLレポート](../creating_testclass/test_result_files_ja.md)のインデックスです。
 

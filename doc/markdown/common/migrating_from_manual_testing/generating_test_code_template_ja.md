@@ -1,4 +1,4 @@
-# テストコードのテンプレートを生成する (Classic)
+# テストコードのテンプレートを生成する (Vision/Classic)
 
 既存の手動テスト仕様書をShiratesのテストコードに移行することができます。
 
@@ -6,9 +6,11 @@
 
 1. `SpecInput` ディレクトリをダウンロードディレクトリの下に作成します。
 
-2. `src/main/resources/TestSpec.xlsx` を `SpecInput`にコピーし、任意の名前に変更します。
+2. shirates-coreプロジェクトの `src/main/resources/TestSpec.xlsx` を `SpecInput`にコピーし、任意の名前に変更します。
 
-   ![](_images/spec_input.png)
+![](_images/test_spec.png)
+
+![](_images/spec_input.png)
 
 3. TestClassNameを入力します。
 
