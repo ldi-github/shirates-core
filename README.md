@@ -13,7 +13,7 @@
 ## Document
 
 - [in English](https://ldi-github.github.io/shirates-core/)
-- [in Japanese](https://ldi-github.github.io/shirates-core/index_ja.html)
+- [in Japanese(日本語)](https://ldi-github.github.io/shirates-core/index_ja.html)
 
 ## What is Shirates/Vision?
 
