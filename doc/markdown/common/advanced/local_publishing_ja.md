@@ -1,7 +1,7 @@
 # ローカルへパブリッシュする
 
 何らかの状況下ではshirates-coreのリポジトリをローカルにパブリッシュしたい場合があるかもしれません。
-例えばリモートのshirates-coreリポジトリにアクセスできない場合や、shirates-coreの新機能を開発する場合なのです。
+例えばリモートのshirates-coreリポジトリにアクセスできない場合や、shirates-coreの新機能を開発する場合です。
 shirates-coreプロジェクトをビルドしてローカルにパブリッシュすることでそれを参照できるようになります。
 
 1. shirates-coreプロジェクトを開き、Gradleペインの`publishToLocalRepository`をダブルクリックします。
@@ -9,40 +9,36 @@ shirates-coreプロジェクトをビルドしてローカルにパブリッシ�
 ![](_images/publish_to_local_repository.png)
 
 ```
-1:20:48: Executing 'publishToLocalRepository'...
+1:58:09: Executing 'publishToLocalRepository'…
+
+
+> Configure project :
+The org.gradle.api.plugins.Convention type has been deprecated. This is scheduled to be removed in Gradle 9.0. Consult the upgrading guide for further information: https://docs.gradle.org/8.12.1/userguide/upgrading_version_8.html#deprecated_access_to_conventions
+The org.gradle.api.plugins.JavaPluginConvention type has been deprecated. This is scheduled to be removed in Gradle 9.0. Consult the upgrading guide for further information: https://docs.gradle.org/8.12.1/userguide/upgrading_version_8.html#java_convention_deprecation
 
 > Task :generateBuildConfig UP-TO-DATE
 > Task :compileKotlin UP-TO-DATE
 > Task :compileJava NO-SOURCE
-> Task :processResources UP-TO-DATE
-> Task :classes UP-TO-DATE
-> Task :inspectClassesForKotlinIC UP-TO-DATE
-> Task :jar UP-TO-DATE
+> Task :processResources
+> Task :classes
+> Task :jar
 > Task :generateMetadataFileForBinaryAndSourcesPublication
 > Task :generatePomFileForBinaryAndSourcesPublication
-
+> Task :javadoc NO-SOURCE
+> Task :javadocJar UP-TO-DATE
 > Task :sourcesJar
-Execution optimizations have been disabled for task ':sourcesJar' to ensure correctness due to the following reasons:
-  - Gradle detected a problem with the following location: '/Users/wave1008/github/ldi-github/shirates-core/build/generated/source/buildConfig/main/main'. Reason: Task ':sourcesJar' uses this output of task ':generateBuildConfig' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed. Please refer to https://docs.gradle.org/7.4.2/userguide/validation_problems.html#implicit_dependency for more details about this problem.
-
+> Task :signBinaryAndSourcesPublication
 > Task :publishBinaryAndSourcesPublicationToLocalRepository
 > Task :generateMetadataFileForGprPublication
 > Task :generatePomFileForGprPublication
 > Task :publishGprPublicationToLocalRepository SKIPPED
 > Task :publishToLocalRepository
 
-Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+[Incubating] Problems report is available at: file:///Users/wave1008/github/ldi-github/shirates-core/build/reports/problems/problems-report.html
 
-You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
-
-See https://docs.gradle.org/7.4.2/userguide/command_line_interface.html#sec:command_line_warnings
-
-Execution optimizations have been disabled for 1 invalid unit(s) of work during this build to ensure correctness.
-Please consult deprecation warnings for more details.
-
-BUILD SUCCESSFUL in 163ms
-11 actionable tasks: 6 executed, 5 up-to-date
-1:20:48: Execution finished 'publishToLocalRepository'.
+BUILD SUCCESSFUL in 7s
+12 actionable tasks: 9 executed, 3 up-to-date
+1:58:17: Execution finished 'publishToLocalRepository'.
 ```
 
 2. `build/repository`が作成されたことを確認します。

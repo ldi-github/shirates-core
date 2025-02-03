@@ -1,6 +1,6 @@
-# Watching image in debugger (Vision)
+# 画像をデバッガで確認する (Vision)
 
-You can see image of `VisionElement` in debugger.
+You can see image of `VisionElement` in debugg.
 
 1. Set break points. <br>![](_images/debugger_set_break_point.png)
 2. Add watch expression `it.image`. <br>![](_images/debugger_add_watch.png)
@@ -11,6 +11,6 @@ You can see image of `VisionElement` in debugger.
 
 ### Link
 
-- [index(Vision)](../../../index.md)
-- [index(Classic)](../../../classic/index.md)
+- [index(Vision)](../../../index_ja.md)
+- [index(Classic)](../../../classic/index_ja.md)
 

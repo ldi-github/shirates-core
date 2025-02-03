@@ -1,4 +1,4 @@
-# 無負荷実行モード (NLRモード)
+# 無負荷実行モード (NLRモード) (Vision/Classic)
 
 **無負荷実行モード**を使用すると手動テストで利用できる[Spec-Report](../report/spec_report_ja.md)が出力されます。
 

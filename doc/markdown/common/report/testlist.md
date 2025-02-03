@@ -1,4 +1,4 @@
-# TestList
+# TestList (Vision/Classic)
 
 **TestList** is generated after test finished. If already exists, TestList is updated by succeeding tests.
 

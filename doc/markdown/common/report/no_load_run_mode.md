@@ -1,4 +1,4 @@
-# No-Load-Run mode (NLR mode)
+# No-Load-Run mode (NLR mode) (Vision/Classic)
 
 To generate [Spec-Report](../report/spec_report.md) for manual testing, use **"No-Load-Run mode"**.
 

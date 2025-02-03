@@ -1,6 +1,6 @@
 # iOSにおけるgetPageSource実行時のパフォーマンス問題 (Classic)
 
-要素を選択する前に**shirates-core** は`getPageSource()`を実行してソースXMLを取得し、**TestElementCache** に格納します。
+要素を選択する前に**Shirates/Classic** は`getPageSource()`を実行してソースXMLを取得し、**TestElementCache** に格納します。
 TestElementCache内の要素に対して柔軟な問い合わせ（例：相対セレクター）を行うことができます。
 
 残念ながらiOSのWebDriverAgentにはgetPageSource()

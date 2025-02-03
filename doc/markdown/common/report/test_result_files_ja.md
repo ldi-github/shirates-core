@@ -1,4 +1,4 @@
-# テスト結果ファイル (Classic)
+# テスト結果ファイル (Vision/Classic)
 
 Shirates はテスト実行が完了した時にテスト結果ファイルを出力します。
 
@@ -75,4 +75,4 @@ Shirates はテスト実行が完了した時にテスト結果ファイルを�
 
 ### Link
 
-- [index](../../index_ja.md)
+- [index](../../classic/index_ja.md)

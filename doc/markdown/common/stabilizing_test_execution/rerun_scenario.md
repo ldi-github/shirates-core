@@ -1,4 +1,4 @@
-# Rerun scenario (Classic)
+# Rerun scenario (Vision/Classic)
 
 Rerunning test is simple and powerful solution to resolve flaky test. shirates-core's built in **rerunning scenario**
 mechanism makes

@@ -1,4 +1,4 @@
-# Google Play Storeを有効にする
+# Google Play Storeを有効にする (Vision/Classic)
 
 以下の手順で **Google Play Store** を有効にすることができます。
 

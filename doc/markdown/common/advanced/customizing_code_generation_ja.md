@@ -1,4 +1,4 @@
-# コード生成のカスタマイズ
+# コード生成のカスタマイズ (Vision/Classic)
 
 **Translator** インターフェースを使用するとコード生成をカスタマイズすることができます。
 
@@ -441,7 +441,7 @@ interface Translator {
 ## 例
 
 1. `AndroidSettingdDemo`を実行して**Spec-Report**(`AndroidSettingsDemo@a.xlsx`)を作成します。  (
-   参照 [クイックスタート](../quick-start_ja.md))
+   参照 [クイックスタート](../../quick-start_ja.md))
 2. `ダウンロード`ディレクトリの下に`SpecInput`ディレクトリを作成し、`AndroidSettingsDemo@a.xlsx`を配置します。
 3. `CodeGeneratorExecute` を実行して `AndroidSettingsDemo.kt`を生成します。
 

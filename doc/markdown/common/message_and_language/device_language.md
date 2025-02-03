@@ -1,4 +1,4 @@
-# Device language
+# Device language (Vision/Classic)
 
 You can specify device language setting using capability settings.
 
@@ -17,7 +17,7 @@ Set `language` and `locale` in capabilities section in testConfig.json
 
 ### Link
 
-- [LanguageHelper](../../vision/basic/helper/language_helper/language_helper.md)
+- [LanguageHelper](../helper/language_helper/language_helper.md)
 
 
 - [index(Vision)](../../index.md)

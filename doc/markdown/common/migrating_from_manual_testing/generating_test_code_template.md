@@ -8,7 +8,9 @@ Generating and using template code can reduce amount of typing.
 
 2. Copy `src/main/resources/TestSpec.xlsx` to `SpecInput`, and rename it as desired.
 
-   ![](_images/spec_input.png)
+![](_images/test_spec.png)
+
+![](_images/spec_input.png)
 
 3. Specify TestClassName.
 

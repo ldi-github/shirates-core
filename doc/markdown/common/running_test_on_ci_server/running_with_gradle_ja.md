@@ -1,4 +1,4 @@
-# テストをGradleで実行する
+# テストをGradleで実行する (Vision/Classic)
 
 テストをGradleで実行することができます。
 

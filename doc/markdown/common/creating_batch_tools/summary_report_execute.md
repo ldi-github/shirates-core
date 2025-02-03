@@ -22,11 +22,11 @@ fun main() {
 2. Right click `SummaryReportExecute.kt` and select `run`.
 3. You can get **Summary-Report**.
 
-![](../_images/summary_report_execute_1.png)
+![](_images/summary_report_execute_1.png)
 
 ## Summary-Report
 
-![](../_images/summary_report_1.png)
+![](_images/summary_report_1.png)
 
 ### Link
 

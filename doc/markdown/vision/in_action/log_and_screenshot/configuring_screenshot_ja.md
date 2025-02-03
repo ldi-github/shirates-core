@@ -1,61 +1,19 @@
 # スクリーンショットを構成する (Vision)
 
-testrunファイルでスクリーンショットを構成することができます。
-参照 [パラメーター](../../basic/parameter/parameters_ja.md)
+Classicモードではtestrunファイルでスクリーンショットを構成することができます。
+(参照 [parameters](../../../common/parameter/parameters.md))
 
-```
-## Screenshot --------------------
-#screenshotScale=0.333333
-#screenshotIntervalSeconds=0.5
-#autoScreenshot=false
-#onChangedOnly=false
-#onCondition=false
-#onAction=false
-#onExpectation=false
-#onExecOperateCommand=false
-#onCheckCommand=false
-#onScrolling=false
-#manualScreenshot=false
-```
+Visionモードではtestrunファイルでスクリーンショットを構成することはできません。
 
-## ファイルサイズの縮小
-
-`screenshotScale` はデフォルトで 0.5 です。スクリーンショットのサイズを縮小したい場合はこのパラメーターを小さくします。
-
-```
-screenshotScale=0.333333
-```
-
-### スクリーンショットファイルサイズの例
-
-![](../_images/screenshot_scale_and_size.png)
-
-### スクリーンショットの明瞭さ
-
-![](../_images/screenshot_clarity.png)
+`screenshotScale` は 1.0 に固定されます。
 
 <br>
-
-## トリガーの削減
-
-例えばconditionとactionでスクリーンショットが必要ないならばスクリーンショットの取得を抑制することができます。
-
-```
-onCondition=false
-onAction=false
-```
-
-<br>
-スクロール中のスクリーンショットが不要ならばスクリーンショットの取得を抑制することができます。
-
-```
-onScrolling=false
-```
 
 ### Link
 
 - [ログ出力を構成する](configuring_log_ja.md)
 
 
-- [index](../../index_ja.md)
+- [index(Vision)](../../../index_ja.md)
+- [index(Classic)](../../../classic/index_ja.md)
 

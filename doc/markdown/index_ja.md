@@ -160,70 +160,48 @@
 
 ### ヘルパー
 
-- [LanguageHelper](vision/basic/helper/language_helper/language_helper_ja.md)
+- [言語ヘルパー](common/helper/language_helper/language_helper_ja.md)
 
 ### レポート
 
-- [HTMLレポート](basic/creating_testclass/test_result_files_ja.md)
-- [Test Report Index](basic/report/test_report_index_ja.md)
-- [Spec-Report](basic/report/spec_report_ja.md)
-- [無負荷実行モード](basic/report/no_load_run_mode_ja.md)
-- [TestList](basic/report/testlist_ja.md)
+- [HTMLレポート](common/report/test_result_files_ja.md)
+- [Test Report Index](common/report/test_report_index_ja.md)
+- [Spec-Report](common/report/spec_report_ja.md)
+- [無負荷実行モード](common/report/no_load_run_mode_ja.md)
+- [TestList](common/report/testlist_ja.md)
 
 ### バッチ処理を作成する
 
-- [Summary-Report](basic/creating_batch_tools/summary_report_execute_ja.md)
-- [Code Generator](basic/creating_batch_tools/code_generator_execute_ja.md)
+- [Summary-Report](common/creating_batch_tools/summary_report_execute_ja.md)
+- [Code Generator](common/creating_batch_tools/code_generator_execute_ja.md)
 
 ## チュートリアル(In action)
 
-- 画面ニックネームを作成する
-    - [Appium Inspectorを使用する](in_action/creating_screen_nickname_file/using_appium_inspector_ja.md)
-    - [画面ニックネームファイルを作成する](in_action/creating_screen_nickname_file/creating_screen_nickname_file_ja.md)
-    - [Screen Builderを使用する](in_action/creating_screen_nickname_file/using_screen_builder_ja.md)
 - メッセージと言語
-    - [ログ出力の言語](in_action/message_and_language/log_language_ja.md)
-    - [デバイスの言語](in_action/message_and_language/device_language_ja.md)
+    - [ログ出力の言語](common/message_and_language/log_language_ja.md)
+    - [デバイスの言語](common/message_and_language/device_language_ja.md)
 - ログとスクリーンショット
-    - [ログ出力を構成する](in_action/log_and_screenshot/configuring_log_ja.md)
-    - [スクリーンショットを構成する](in_action/log_and_screenshot/configuring_screenshot_ja.md)
+    - [ログ出力を構成する](vision/in_action/log_and_screenshot/configuring_log_ja.md)
+    - [スクリーンショットを構成する](vision/in_action/log_and_screenshot/configuring_screenshot_ja.md)
 - デバッグ
-    - [ソースXMLをファイルで確認する](in_action/debugging/watching_source_xml_in_file_ja.md)
-    - [ソースXMLをデバッガーで確認する](in_action/debugging/watching_source_xml_in_debugger_ja.md)
-    - [内部実行ステップのトレース](in_action/debugging/tracing_internal_execution_steps_ja.md)
-- さまざまな環境に適応する
-    - [tapAppIcon関数を構成する](in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md)
-    - [OSのメッセージの変更に適応する](in_action/adapting_to_environments/adapting_to_changes_in_os_messages_ja.md)
-- イレギュラーを処理する
-    - [イレギュラーハンドラー(グローバルハンドラー)](in_action/handling_irregulars/irregular_handler_ja.md)
-    - [スクリーンハンドラー(onScreen関数)](in_action/handling_irregulars/screen_handler_ja.md)
-    - [エラーハンドラー](in_action/handling_irregulars/on_error_handler_ja.md)
+    - [recognizeText.jsonを確認する](vision/in_action/debugging/watching_recognize_text_json_ja.md)
+    - [デバッガで画像をウォッチする](vision/in_action/debugging/watching_image_in_debugger_ja.md)
 - テストフィクスチャ
-    - [テストフィクスチャ](in_action/test_fixture/test_fixture_ja.md)
-- 画像マッチング
-    - [テンプレートマッチングのための画像を切り出す](in_action/image_matching/cropping_images_for_template_matching_ja.md)
-- パフォーマンスとリソースの最適化
-    - [スクロール終端位置の検出の最適化](in_action/performance_resource/end_of_scroll_ja.md)
-    - [スクリーンショットの縮小率](in_action/performance_resource/screenshot_scale_ja.md)
+    - [テストフィクスチャ](common/test_fixture/test_fixture_ja.md)
 - AppiumのAPIを使用する
-    - [Appium ClientのAPIを使用する](in_action/using_appium_apis/using_appium_client_bare_apis_ja.md)
-- テストを優先度でフィルターする
-    - [must, should, want](in_action/filtering_tests_with_priority/must_should_want_ja.md)
+    - [Appium ClientのAPIを使用する](common/using_appium_apis/using_appium_client_bare_apis_ja.md)
 - 手動テストから移行する
-    - [テストコードのテンプレートを生成する](in_action/migrating_from_manual_testing/generating_test_code_template_ja.md)
-    - [Template Code Generatorを使用する](in_action/migrating_from_manual_testing/using_template_code_generator_ja.md)
+    - [テストコードのテンプレートを生成する](common/migrating_from_manual_testing/generating_test_code_template_ja.md)
+    - [Template Code Generatorを使用する](common/migrating_from_manual_testing/using_template_code_generator_ja.md)
 - コードファーストでテストを設計する
-    - [コードファーストでテストを設計する](in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)
+    - [コードファーストでテストを設計する](common/designing_and_implementing_test/designing_test_in_code_first_ja.md)
 - CIサーバーでテストを実行する
-    - [テストをGradleで実行する](in_action/running_test_on_ci_server/running_with_gradle_ja.md)
+    - [テストをGradleで実行する](common/running_test_on_ci_server/running_with_gradle_ja.md)
 - リモートのAppium Serverを利用する
-    - [リモートのAppium Serverの構成](in_action/using_remote_appium_server/configuring_remote_appium_server_ja.md)
+    - [リモートのAppium Serverの構成](common/using_remote_appium_server/configuring_remote_appium_server_ja.md)
 - テストの実行を安定化させる(フレーキーテストの改善)
     - [フレーキーテストの原因](in_action/stabilizing_test_execution/causes_of_flaky_test_ja.md)
     - [scenarioの再実行](in_action/stabilizing_test_execution/rerun_scenario_ja.md)
-- キャッシュの制御によるパフォーマンスチューニング
-    - [iOSにおけるgetSource実行時のパフォーマンス問題](in_action/performance_tuning_with_cache_control/performance_problem_of_getpagesource_in_ios_ja.md)
-    - [ダイレクトアクセスモード](in_action/performance_tuning_with_cache_control/direct_access_mode_ja.md)
 
 ## チュートリアル(Advanced)
 
@@ -238,25 +216,25 @@
 ## ツールの設定
 
 - IntelliJ IDEA
-    - [JVMのバージョン, JDKのバージョン](tool_settings/jvm_version_ja.md)
+    - [JVMのバージョン, JDKのバージョン](common/tool_settings/jvm_version_ja.md)
 
 ## 仮想マシンの設定
 
-- [Google Play Storeを有効にする](virtual_machine_settings/enabling_google_play_store_ja.md)
+- [Google Play Storeを有効にする](common/virtual_machine_settings/enabling_google_play_store_ja.md)
 
 ## パッケージのインストール/アップデート
 
-- [nodeとnpmのインストール/アップデート](updating_packages/installing_updating_node_npm_ja.md)
-- [Appiumとドライバーのインストール/アップデート](updating_packages/installing_updating_appium_drivers_ja.md)
+- [nodeとnpmのインストール/アップデート](common/updating_packages/installing_updating_node_npm_ja.md)
+- [Appiumとドライバーのインストール/アップデート](common/updating_packages/installing_updating_appium_drivers_ja.md)
 
 ## トラブルシューティング
 
-- [エラーメッセージ/警告メッセージ](troubleshooting/error_warning_messages.md)
-- [トラブルシューティング](troubleshooting/troubleshooting.md)
+- [エラーメッセージ/警告メッセージ](common/troubleshooting/error_warning_messages.md)
+- [トラブルシューティング](common/troubleshooting/troubleshooting.md)
 
 ## Appendix
 
-- [アノテーション](appendix/annotations_ja.md)
+- [アノテーション](common/appendix/annotations_ja.md)
 
 <br>
 <br>

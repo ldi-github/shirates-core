@@ -160,7 +160,7 @@
 
 ### Helper
 
-- [LanguageHelper](vision/basic/helper/language_helper/language_helper.md)
+- [LanguageHelper](common/helper/language_helper/language_helper.md)
 
 ### Report
 
@@ -185,7 +185,7 @@
     - [Configuring screenshot](vision/in_action/log_and_screenshot/configuring_screenshot.md)
 - Debugging
     - [Watching recognizeText.json](vision/in_action/debugging/watching_recognize_text_json.md)
-    - [Watching image in debugger](vision/in_action/debugging/)
+    - [Watching image in debugger](vision/in_action/debugging/watching_image_in_debugger.md)
 - Test Fixture
     - [Test fixture](common/test_fixture/test_fixture.md)
 - Using Appium APIs

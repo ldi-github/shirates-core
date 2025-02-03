@@ -1,16 +1,16 @@
 # LanguageHelper (Vision)
 
-You can set android device language using these functions.
+You can set device language using these functions.
 
 ## Functions
 
-| function             | description              |
-|:---------------------|:-------------------------|
-| setLanguageAndLocale | Set language and locale. |
+| function             | description                                                |
+|:---------------------|:-----------------------------------------------------------|
+| setLanguageAndLocale | Set language and locale. Appium session will be restarted. |
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../vision/getting_samples.md)
 
 ### SetLanguageOnAndroid1.kt
 
@@ -18,8 +18,7 @@ You can set android device language using these functions.
 
 ```kotlin
     @Test
-    @Order(10)
-    fun setLanguage_getLanguage_removeLanguage1() {
+    fun setLanguageAndLocale() {
 
         scenario {
             case(1) {
@@ -73,6 +72,13 @@ You can set android device language using these functions.
     }
 ```
 
+### language and locale
+
+Refer to the URL below for details on language and locale<br>
+
+- [appium-uiautomator2-driver](https://github.com/appium/appium-uiautomator2-driver)<br>
+- [XCUITest Driver](https://appium.github.io/appium-xcuitest-driver/4.16/capabilities/)
+
 ### Link
 
-- [index](../../../../index.md)
+- [index](../../../index.md)

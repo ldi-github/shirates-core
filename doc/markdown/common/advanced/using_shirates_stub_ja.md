@@ -1,4 +1,4 @@
-# スタブ(shirates-stub)を使用する
+# スタブ(shirates-stub)を使用する (Vision/Classic)
 
 テスト用のフェイクAPIを提供する**shirates-stub**を使用することができます。
 管理APIを使用するとスタブサーバーのデータパターンを動的に変更することができます。

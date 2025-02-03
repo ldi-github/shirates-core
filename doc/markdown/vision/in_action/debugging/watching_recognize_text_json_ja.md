@@ -1,6 +1,6 @@
-# Watching recognizeText.json (Vision)
+# recognizeText.jsonを確認する (Vision)
 
-You can see recognized texts by AI-OCR in **recognizeText.json**.
+AI-OCRが認識したテキスト情報を **recognizeText.json** で確認することができます。
 
 ### TestResults
 
@@ -203,6 +203,6 @@ You can see recognized texts by AI-OCR in **recognizeText.json**.
 
 ### Link
 
-- [index(Vision)](../../../index.md)
-- [index(Classic)](../../../classic/index.md)
+- [index(Vision)](../../../index_ja.md)
+- [index(Classic)](../../../classic/index_ja.md)
 

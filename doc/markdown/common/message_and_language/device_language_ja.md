@@ -1,4 +1,4 @@
-# デバイスの言語
+# デバイスの言語 (Vision/Classic)
 
 capabilitiesを設定するとデバイスの言語を指定できます。
 
@@ -15,8 +15,7 @@ capabilitiesを設定するとデバイスの言語を指定できます。
 
 ### Link
 
-- [LanguageHelperAndroid](../../basic/behavior/language_helper/language_helper_android_ja.md)
-- [LanguageHelperIos](../../basic/behavior/language_helper/language_helper_ios_ja.md)
+- [LanguageHelper](../helper/language_helper/language_helper.md)
 
 
 - [index(Vision)](../../index_ja.md)

@@ -1,4 +1,4 @@
-# 独自のデータ関数を作成する (Vision)
+# 独自のデータ関数を作成する (Vision/Classic)
 
 `DatasetRepositoryManager`を使用すると独自のデータ関数を作成することができます。
 

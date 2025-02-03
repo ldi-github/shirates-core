@@ -1,6 +1,6 @@
-# Appiumとdriverのインストール/アップデート
+# Appiumとdriverのインストール/アップデート (Vision/Classic)
 
-## Appium 2.0
+## Appium
 
 ### インストール
 

@@ -1,6 +1,6 @@
-# Installing/Updating Appium & drivers
+# Installing/Updating Appium & drivers (Vision/Classic)
 
-## Appium 2.0
+## Appium
 
 ### Installing
 

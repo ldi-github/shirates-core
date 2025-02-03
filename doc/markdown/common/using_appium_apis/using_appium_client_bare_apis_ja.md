@@ -1,4 +1,4 @@
-# Appium ClientのAPIを使用する
+# Appium ClientのAPIを使用する (Vision/Classic)
 
 これらのプロパティを使用するとUiAutomator2ドライバーやiOSドライバーのAPIにアクセスできます。
 共通のインターフェースはappiumDriverに実装されていますが、androidDriver/iosDriverを使用すればドライバーに固有のインターフェースを利用できます。

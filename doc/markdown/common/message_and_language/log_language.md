@@ -1,4 +1,4 @@
-# Log language
+# Log language (Vision/Classic)
 
 You can change language for logging and reporting using **logLanguage** parameter.
 

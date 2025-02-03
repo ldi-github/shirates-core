@@ -1,10 +1,10 @@
-# CodeGeneratorExecute (Classic)
+# CodeGeneratorExecute (Vision/Classic)
 
 Spec-Reportの書式から **テストコードのテンプレート** を生成することができます。
 
-![](../_images/code_generator_spec_report.png)
+![](_images/code_generator_spec_report.png)
 
-![](../_images/code_generator_code_template.png)
+![](_images/code_generator_code_template.png)
 
 ## 関数を作成する
 
@@ -24,10 +24,10 @@ fun main() {
 
 1. ダウンロードディレクトリの下に`SpecInput`ディレクトリを作成します。
 2. Spec-Reportの書式で記述した **テスト仕様書ファイル** を`SpecInput`ディレクトリに配置します。<br>
-   ![](../_images/code_generator_execute_1.png)
+   ![](_images/code_generator_execute_1.png)
 3. `CodeGeneratorExecute.kt`を右クリックして`run`を選択します。
 4. `CodeOutput`ディレクトリにテストコードのテンプレートが生成されます。<br>
-   ![](../_images/code_generator_execute_2.png)
+   ![](_images/code_generator_execute_2.png)
 
 ### CalculatorTestDemo.kt (生成されたファイル)
 

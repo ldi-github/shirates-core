@@ -1,4 +1,4 @@
-# SummaryReportExecute (Classic)
+# SummaryReportExecute (Vision/Classic)
 
 **Summary-Report** を作成する関数を作成することができます。
 
@@ -22,11 +22,11 @@ fun main() {
 2. `SummaryReportExecute.kt`を右クリックして`run`を選択します。
 3. **Summary-Report**が作成されます。
 
-![](../_images/summary_report_execute_1.png)
+![](_images/summary_report_execute_1.png)
 
 ## Summary-Report
 
-![](../_images/summary_report_1.png)
+![](_images/summary_report_1.png)
 
 ### Link
 

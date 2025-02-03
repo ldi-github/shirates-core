@@ -19,6 +19,8 @@ Shirates has these custom annotations.
 | annotation      | target          | description                                                                                                                       |
 |:----------------|:----------------|:----------------------------------------------------------------------------------------------------------------------------------|
 | @Testrun        | Class           | Testrun file to initialize test session ([see](../../classic/basic/creating_testclass/creating_testclass.md))                     |
+| @android        | Class           | Initialize test session as Android default configuration                                                                          |
+| @ios            | Class           | Initialize test session as iOS default configuration                                                                              |
 | @MacroObject    | Class           | Declares it to be a MacroObject ([see](../../classic/basic/routine_work/macro.md))                                                |
 | @Macro          | Function        | Declares it to be a Macro function ([see](../../classic/basic/routine_work/macro.md))                                             |
 | @CustomObject   | Class           | Declares it to be a CustomObject ([see](../../classic/in_action/adapting_to_environments/configuring_tap_appIcon_function.md))    |

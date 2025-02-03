@@ -173,7 +173,7 @@ publishing {
     repositories {
         maven {
             name = "local"
-            url = uri("${layout.buildDirectory}/repository")
+            url = uri("build/repository")
         }
         maven {
             name = "ossrh"

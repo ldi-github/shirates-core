@@ -1,15 +1,11 @@
-# Test result files (Vision)
+# Test result files (Classic)
 
 Shirates outputs test result files at the end of test.
 
-## Sample code
-
-[Getting samples](../../getting_samples.md)
-
 ## Running sample
 
-1. Open `src/test/kotlin/demo/vision/AndroidSettingsVisionDemo.kt`.
-2. Right click `AndroidSettingsVisionDemo` and select `Debug` to run.
+1. Open `src/test/kotlin/demo/` in shirates-core project.
+2. Right click `AndroidSettingsDemo` and select `Debug` to run.
 
 ## TestResults directory
 
@@ -19,8 +15,6 @@ in [Parameter](../parameter/parameters.md) file.
 ![](_images/test_results.png)
 
 ## HTML-Report
-
-`_Report(simple).html` <br>
 
 ### Overview
 
@@ -65,18 +59,21 @@ in [Parameter](../parameter/parameters.md) file.
 
 This is simple report.
 
+![](_images/report(simple).png)
+
 ### Report(detail).html
 
 This is detail report. Additional "info" logs are output.
+
+![](_images/report(detail).png)
 
 ## Spec-Report.xlsx
 
 This is test result report in MS-Excel format.
 
-![](_images/spec-report.png)
+![](_images/spec_report.png)
 
 ### Link
 
 - [index(Vision)](../../index.md)
 - [index(Classic)](../../classic/index.md)
-
