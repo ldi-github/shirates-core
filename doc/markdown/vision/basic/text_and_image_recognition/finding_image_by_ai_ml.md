@@ -5,8 +5,8 @@ Shirates/Vision recognizes images in the screen by AI/ML feature of Vision Frame
 ### Pros.
 
 - Using AI inference, it is more robust than pixel-by-pixel comparisons
-- Images for template matching can be shared between Android and iOS at each display resolution (if the design is the
-  same)
+- Fewer template images for matching are required. They can be shared between Android and iOS at each display
+  resolution (if the design is the same).
 
 ### Cons.
 

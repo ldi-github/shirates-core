@@ -19,11 +19,15 @@
 | pressHome  |
 | pressEnter |
 
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
+
 ## pressBack (Android)
 
-#### AndroidPressKey1.kt
+### AndroidPressKey1.kt
 
-(`kotlin/tutorial/basic/AndroidPressKey1.kt`)
+(`src/test/kotlin/tutorial/basic/AndroidPressKey1.kt`)
 
 ```kotlin
     @Test
@@ -43,15 +47,7 @@
 
         }
     }
-```
 
-## pressHome (Android)
-
-#### AndroidPressKey1.kt
-
-(`kotlin/tutorial/basic/AndroidPressKey1.kt`)
-
-```kotlin
     @Test
     @Order(20)
     fun pressHome() {
@@ -63,133 +59,77 @@
                 }.action {
                     it.pressHome()
                 }.expectation {
-                    it.screenIs("[Pixel Home Screen]")
+                    it.screenIs("[Android Home Screen]")
                 }
             }
 
         }
     }
-```
 
-## pressSearch (Android)
+    @Test
+    @Order(30)
+    fun pressTab() {
 
-#### AndroidPressKey1.kt
-
-(`kotlin/tutorial/basic/AndroidPressKey1.kt`)
-
-```kotlin
-@Test
-@Order(30)
-fun pressSearch() {
-
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[Android Settings Search Screen]")
-                    .sendKeys("clock")
-            }.action {
-                it.pressSearch()
-            }.expectation {
-                it.exist("Open Clock app")
-            }
-        }
-    }
-
-}
-```
-
-## pressBack (iOS)
-
-#### iOSPressKey1.kt
-
-(`kotlin/tutorial/basic/iOSPressKey1.kt`)
-
-```kotlin
-@Test
-@Order(10)
-fun pressBack() {
-
-    scenario {
-        case(1) {
-            condition {
-                it.terminateApp("[News]")
-                it.launchApp("[News]")
-
-                if (canSelect("Allow While Using App")) {
-                    it.tap()
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Files Top Screen]")
+                }.action {
+                    it.pressTab()
+                        .pressTab()
+                        .pressTab()
+                        .pressTab()
+                        .pressTab()
+                        .pressTab()
+                        .pressTab()
+                        .pressTab()
                 }
-
-                it.wait()
-                it.tapCenterOfScreen()
-
-                it.waitForDisplay("#OpenInSafariButton")
-                it.tap("#OpenInSafariButton")
-                    .appIs("[Safari]")
-            }.action {
-                it.pressBack()
-            }.expectation {
-                it.exist("#OpenInSafariButton")
             }
         }
-    }
-}
 ```
 
-## pressHome (iOS)
+### iOSPressKey1.kt
 
-#### iOSPressKey1.kt
-
-(`kotlin/tutorial/basic/iOSPressKey1.kt`)
+(`src/test/kotlin/tutorial/basic/iOSPressKey1.kt`)
 
 ```kotlin
-@Test
-@Order(20)
-fun pressHome() {
+    @Test
+    @Order(10)
+    fun pressBack() {
 
-    scenario {
-        case(1) {
-            condition {
-                it.macro("[iOS Settings Top Screen]")
-            }.action {
-                it.pressHome()
-            }.expectation {
-                it.exist(".XCUIElementTypePageIndicator")
-                    .exist("#Safari")
+        scenario {
+            case(1) {
+                condition {
+                    it.appIs("[Settings]")
+                        .launchApp("Maps")
+                        .appIs("[Maps]")
+                }.action {
+                    it.pressBack()
+                }.expectation {
+                    it.appIs("[Settings]")
+                }
             }
         }
     }
-}
-```
 
-## pressEnter (iOS)
+    @Test
+    @Order(20)
+    fun pressHome() {
 
-#### iOSPressKey1.kt
-
-(`kotlin/tutorial/basic/iOSPressKey1.kt`)
-
-```kotlin
-@Test
-@Order(30)
-fun pressEnter() {
-
-    scenario {
-        case(1) {
-            condition {
-                it.pressHome()
-                    .swipeCenterToBottom()
-                    .tap("#SpotlightSearchField")
-                    .clearInput()
-                    .sendKeys("safari")
-            }.action {
-                it.pressEnter()
-            }.expectation {
-                it.appIs("[Safari]")
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[iOS Settings Top Screen]")
+                }.action {
+                    it.pressHome()
+                }.expectation {
+                    it.screenIs("[iOS Home Screen]")
+                }
             }
         }
     }
-}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

@@ -9,7 +9,7 @@ function.
 
 ### accounts.json
 
-Create `accounts.json` file, and describe data items. Property names(id, password, etc) are arbitrary.
+Create `accounts.json` file, and describe data items. Property names(id, password, etc.) are arbitrary.
 
 ```
 {

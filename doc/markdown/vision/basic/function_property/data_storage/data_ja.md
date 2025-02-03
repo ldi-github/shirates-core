@@ -1,8 +1,10 @@
-# data関数
+# data関数 (Vision)
 
 **data**関数を使用すると**data.json**ファイルに設定したアカウント情報のプロパティを取得することができます。
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### data.json
 
@@ -41,24 +43,9 @@
 
 ### Data1.kt
 
-data関数を使用します。
+Use data function.
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.sendKeys
-import shirates.core.driver.commandextension.tap
-import shirates.core.driver.commandextension.textIs
-import shirates.core.storage.data
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Data1 : UITest() {
-
     @Test
     @Order(10)
     fun data1() {
@@ -67,7 +54,7 @@ class Data1 : UITest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Search Screen]")
-                        .tap("[Search Box]")
+                        .tap("Search settings")
                 }.action {
                     it.sendKeys(data("[product1].product_name"))
                 }.expectation {
@@ -77,13 +64,12 @@ class Data1 : UITest() {
         }
 
     }
-}
 ```
 
 ### 参照
 
-[独自のデータ関数を作成する](../../../advanced/creating_you_own_data_function_ja.md)
+[独自のデータ関数を作成する](../../../../common/advanced/creating_you_own_data_function_ja.md)
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

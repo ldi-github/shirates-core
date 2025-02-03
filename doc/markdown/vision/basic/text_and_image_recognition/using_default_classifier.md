@@ -86,10 +86,6 @@ Open the directory `build/vision/classifiers/DefaultClassifier/training`.
 <br>
 <hr>
 
-## Sample code
-
-[Getting samples](../../getting_samples.md)
-
 ### ImageLabelIs1.kt
 
 (`src/test/kotlin/tutorial/basic/ImageLabelIs1.kt`)

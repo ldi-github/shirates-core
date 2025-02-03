@@ -77,10 +77,6 @@ You can use branch functions for string.
     }
 ```
 
-### Spec-Report(Normal mode)
-
-![img.png](../../_images/ifstringis.png)
-
 ### Link
 
 - [index](../../../../index.md)

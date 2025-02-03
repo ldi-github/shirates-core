@@ -1,33 +1,21 @@
-# launchApp, terminateApp
+# launchApp, terminateApp (Vision)
 
-これらの関数を使用してアプリを起動/終了できます。
+これらの関数を使用してアプリを起動/終了することができます。
 
 ## 関数
 
-| 関数           | 設定                                      |
-|:-------------|:----------------------------------------|
-| launchApp    | アプリを起動します。アプリ名、packageOrBundleIdを指定できます |
-| terminateApp | アプリを終了します。アプリ名、packageOrBundleIdを指定できます |
+| 関数           | 設定                                             |
+|:-------------|:-----------------------------------------------|
+| launchApp    | アプリを起動します。アプリ名 または `packageOrBundleId` を指定できます |
+| terminateApp | アプリを終了します。アプリ名 または `packageOrBundleId` を指定できます |
 
 ## 例
 
 ### LaunchApp1.kt
 
-(`kotlin/tutorial/basic/LaunchApp1.kt`)
+(`src/test/kotlin/tutorial/basic/LaunchApp1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.appIs
-import shirates.core.driver.commandextension.launchApp
-import shirates.core.driver.commandextension.terminateApp
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class LaunchApp1 : UITest() {
-
     @Test
     fun launchApp() {
 
@@ -81,10 +69,8 @@ class LaunchApp1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

@@ -1,8 +1,10 @@
-# account
+# account (Vision)
 
 **account**関数を使用すると**accounts.json**ファイルに設定したアカウント情報のプロパティを取得することができます。
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### accounts.json
 
@@ -39,23 +41,11 @@
 
 ### Account1.kt
 
-(`kotlin/tutorial/basic/Account1.kt`)
+(`src/test/kotlin/tutorial/basic/Account1.kt`)
 
-account関数を使用します。
+Use account function.
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.storage.account
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Account1 : UITest() {
-
     @Test
     @Order(10)
     fun account() {
@@ -66,7 +56,6 @@ class Account1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                         .tap("Search settings")
                         .screenIs("[Android Settings Search Screen]")
-                        .tap("[Search Box]")
                 }.action {
                     it.sendKeys(account("[account1].id"))
                 }.expectation {
@@ -76,10 +65,9 @@ class Account1 : UITest() {
         }
 
     }
-}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

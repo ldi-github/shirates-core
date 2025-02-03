@@ -18,6 +18,10 @@
 | elseIfMatches    | 先行する条件がいずれもマッチしない　かつ　指定した文字列が正規表現にマッチする場合にコードブロックが実行されます。 |
 | ifElse           | 先行する条件がいずれもマッチしない場合にコードブロックが実行されます。                       |
 
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
+
 ### IfStringIs1.kt
 
 (`kotlin/tutorial/basic/IfStringIs1.kt`)
@@ -87,11 +91,7 @@ class IfStringIs1 : UITest() {
 }
 ```
 
-### Spec-Report(通常モード)
-
-![img.png](../../_images/ifstringis_ja.png)
-
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

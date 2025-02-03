@@ -8,11 +8,13 @@
 |:----------|
 | packageIs |
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### AssertingOthers1.kt
 
-(`kotlin/tutorial/basic/AssertingOthers1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingOthers1.kt`)
 
 ```kotlin
     @Test
@@ -56,4 +58,4 @@
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

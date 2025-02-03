@@ -1,10 +1,10 @@
 # Text assertion (Vision)
 
-You can assert the value of `text` using these functions.
+これらの関数を使用してテキストの値の検証を行うことができます。
 
-## functions
+## 関数
 
-| function    |
+| 関数          |
 |:------------|
 | textIs      |
 | rightTextIs |
@@ -12,9 +12,9 @@ You can assert the value of `text` using these functions.
 | belowTextIs |
 | aboveTextIs |
 
-## Sample code
+### サンプルコード
 
-[Getting samples](../../getting_samples.md)
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### AssertingText1.kt
 
@@ -62,5 +62,5 @@ You can assert the value of `text` using these functions.
 
 ### Link
 
-- [index](../../../../index.md)
+- [index](../../../../index_ja.md)
 

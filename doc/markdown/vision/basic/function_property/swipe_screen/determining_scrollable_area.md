@@ -5,11 +5,18 @@ the scrollable area is determined and operations are performed on that area.
 
 ## Determining the scrollable area explicitly
 
-You can determine the scrollable area explicitly by `withScroll` functions.
+You can determine the scrollable area explicitly using these functions.
+
+| 関数                     | 説明                                                                                                                 |
+|:-----------------------|:-------------------------------------------------------------------------------------------------------------------|
+| onLine                 | Set the horizontal line including current selected element as scrollable area.                                     |
+| onColumn               | Set the Vertical line including current selected element as scrollable area.                                       |
+| onLineOf(expression)   | Gets the text that matches with expression, then set the horizontal line including the element as scrollable area. |
+| onColumnOf(expression) | Gets the text that matches with expression, then set the vertical line including the element as scrollable area.   |
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### Scroll2.kt
 

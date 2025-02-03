@@ -26,14 +26,44 @@ You can describe your test procedure using these functions. These are for readab
 (`src/test/kotlin/tutorial/basic/Descriptor1.kt`)
 
 ```kotlin
+    @Test
+    @Order(10)
+    fun descriptors() {
 
+        scenario {
+            case(1) {
+                condition {
+                    describe("describe")
+                    procedure("procedure") {
+                        manual("manual")
+                    }
+                    caption("caption")
+                    comment("comment")
+                    manual("manual")
+                    output("output")
+                }.action {
+                    caption("caption")
+                        .describe("describe1")
+                        .describe("describe2")
+                    procedure("procedure") {
+                        manual("manual")
+                    }
+                }.expectation {
+                    target("target1")
+                        .manual("manual")
+                    target("target2")
+                        .knownIssue("knownIssue", ticketUrl = "https://example.com/ticket/12345")
+                }
+            }
+        }
+    }
 ```
 
-#### Html-Report
+### Html-Report
 
 ![](_images/descriptors_html_report.png)
 
-#### Spec-Report
+### Spec-Report
 
 ![](_images/descriptors_spec_report.png)
 

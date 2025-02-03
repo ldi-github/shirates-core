@@ -1,12 +1,12 @@
-# Macro (Shiraetes/Vision)
+# Macro (Vision)
 
 It's very important to reuse test code. You can register routine work as macro.
 
 ## Creating macro object/function
 
-1. Create an object class in any place under `src/test/kotlin`. For example, create `macro` directory, then
-   create `MacroObject1`.
-   <br>![](../_images/creating_macro_object.png)
+1. Create an object class in any place under `src/test/kotlin`. For example, create `macro` package directory, then
+   create `MacroObject1`.<br>![](_images/creating_macro_object.png)
+   <br>![](../_images/creating_macro_object.png)<br>![](_images/macro_object.png)
 2. Implement code as follows.
     1. Put **@MacroObject** annotation on the object class.
     2. Inherit from **TestDrive** interface.
@@ -25,7 +25,7 @@ import shirates.core.vision.testcode.VisionTest
 object MacroObject1 : VisionTest() {
 
     @Macro("[Network preferences Screen]")
-    fun networkPreferencesScreen() {
+    fun internetScreen() {
 
         it.waitScreen("[Android Settings Top Screen]")
             .tap("Network & internet")
@@ -74,7 +74,7 @@ class Macro1 : VisionTest() {
 }
 ```
 
-Run the test code. You can see a log line on console like this.
+Run the test code. You can see a log line on console as follows.
 
 ```
 [info]	()	Registering macro. (macro.MacroObject1)

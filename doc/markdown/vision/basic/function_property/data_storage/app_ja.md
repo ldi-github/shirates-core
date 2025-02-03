@@ -1,8 +1,10 @@
-# app
+# app (Vision)
 
 **app**関数を使用すると**app.json**ファイルに設定したアプリ情報のプロパティを取得することができます。
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### apps.json
 
@@ -39,23 +41,11 @@
 
 ### App1.kt
 
-(`kotlin/tutorial/basic/App1.kt`)
+(`src/test/kotlin/tutorial/basic/App1.kt`)
 
-app関数を使用します。
+Use app function.
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.storage.app
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class App1 : UITest() {
-
     @Test
     @Order(10)
     fun app() {
@@ -63,10 +53,10 @@ class App1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.launchApp("[Settings]")
                         .tap("Search settings")
                         .screenIs("[Android Settings Search Screen]")
-                        .tap("[Search Box]")
+                        .tap("Search settings")
                 }.action {
                     it.sendKeys(app("[Settings].packageOrBundleId"))
                 }.expectation {
@@ -75,10 +65,9 @@ class App1 : UITest() {
             }
         }
     }
-}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

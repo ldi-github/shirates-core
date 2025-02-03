@@ -1,31 +1,23 @@
-# wait
+# wait (Vision)
 
-特定の条件下では数秒の待つことが必要になる場合があります。
+特定の条件下では数秒待つことが必要になる場合があります。
 
 **wait**関数を使用することができます。
 
 引数`waitSeconds`を指定せずに使用した場合はデフォルトで`shortWaitSeconds`が適用されます。
 `shortWaitSeconds`はtestrunファイルで設定することができます。
 
-参照 [パラメーター](../parameter/parameters_ja.md)
+参照 [パラメーター](../../../common/parameter/parameters_ja.md)
+
+### サンプルコード
+
+[サンプルの入手](../../getting_samples_ja.md)
 
 ### Wait1.kt
 
-(`kotlin/tutorial/basic/Wait1.kt`)
+(`src/test/kotlin/tutorial/basic/Wait1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.describe
-import shirates.core.driver.wait
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Wait1 : UITest() {
-
     @Test
     @Order(10)
     fun wait1() {
@@ -46,10 +38,8 @@ class Wait1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link
 
-- [index](../../index_ja.md)
+- [index](../../../index_ja.md)

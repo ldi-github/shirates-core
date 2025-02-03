@@ -1,6 +1,6 @@
 # 文字列の検証
 
-これらの関数を使用して文字列値を検証することができます。
+これらの関数を使用して文字列の値を検証することができます。
 
 ## 関数
 
@@ -22,26 +22,17 @@
 | thisMatchesNot        | 指定したパターンにマッチしないことを検証します    |
 | thisMatchesDateFormat | 指定した日付書式パターンにマッチすることを検証します |
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### AssertingAnyValue1.kt
 
-(`kotlin/tutorial/basic/AssertingAnyValue1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingAnyValue1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AssertingAnyValue1 : UITest() {
-
     @Test
-    @Order(10)
+    @Order(20)
     fun stringAssertion_OK() {
 
         scenario {
@@ -81,7 +72,7 @@ class AssertingAnyValue1 : UITest() {
     }
 
     @Test
-    @Order(20)
+    @Order(30)
     fun stringAssertion_NG() {
 
         scenario {
@@ -95,52 +86,11 @@ class AssertingAnyValue1 : UITest() {
             }
         }
     }
-
-    @Test
-    @Order(30)
-    fun booleanAssertion_OK() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    true.thisIsTrue()
-                    false.thisIsFalse()
-
-                    true.thisIsTrue("The value is true")
-                    false.thisIsFalse("The value is false")
-                }
-            }
-            case(2) {
-                expectation {
-                    it.isApp("Settings")
-                        .thisIsTrue("This app is <Settings>")
-                    it.isApp("Chrome")
-                        .thisIsFalse("This app is not <Chrome>")
-                }
-            }
-        }
-    }
-
-    @Test
-    @Order(40)
-    fun booleanAssertion_NG() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.expectation {
-                    false.thisIsTrue()
-                }
-            }
-        }
-    }
-}
 ```
+
+![](_images/asserting_string_value.png)
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

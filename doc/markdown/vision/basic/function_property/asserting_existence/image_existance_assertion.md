@@ -4,14 +4,14 @@ You can check existence of image using these functions.
 
 ## Functions
 
-|   group   | function               | description                                                                                              | return value                                                  |
-|:---------:|:-----------------------|:---------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------|
-|   exist   | existImage             | Assert that the image exists in current screen <br> Scrolling occurs within `withScroll` function        | VisionElement(if exists)<br>TestNGException(if doesn't exist) |
-|   exist   | existWithScrollDown    | Assert that the image exists with scrolling down                                                         | (same as above)                                               |
-|   exist   | existWithScrollUp      | Assert that the image exists with scrolling up                                                           | (same as above)                                               |
-|   exist   | existWithoutScroll     | Assert that the image exists without scrolling                                                           | (same as above)                                               |
-| dontExist | dontExistImage         | Assert that the image doesn't exist in current screen <br> Scrolling occurs within `withScroll` function | empty element(if doesn't exist)<br>TestNGException(if exists) |
-| dontExist | dontExistWithoutScroll | Assert that the image doesn't exist without scrolling                                                    | (same as above)                                               |
+|   group   | function                    | description                                                                                              | return value                                                  |
+|:---------:|:----------------------------|:---------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------|
+|   exist   | existImage                  | Assert that the image exists in current screen <br> Scrolling occurs within `withScroll` function        | VisionElement(if exists)<br>TestNGException(if doesn't exist) |
+|   exist   | existImageWithScrollDown    | Assert that the image exists with scrolling down                                                         | (same as above)                                               |
+|   exist   | existImageWithScrollUp      | Assert that the image exists with scrolling up                                                           | (same as above)                                               |
+|   exist   | existImageWithoutScroll     | Assert that the image exists without scrolling                                                           | (same as above)                                               |
+| dontExist | dontExistImage              | Assert that the image doesn't exist in current screen <br> Scrolling occurs within `withScroll` function | empty element(if doesn't exist)<br>TestNGException(if exists) |
+| dontExist | dontExistImageWithoutScroll | Assert that the image doesn't exist without scrolling                                                    | (same as above)                                               |
 
 ## Sample code
 

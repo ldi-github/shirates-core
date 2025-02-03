@@ -36,28 +36,15 @@ verify関数内で既存の検証関数を使用する場合はOK関数、NG関�
 143	[00:00:18]	2024/04/12 02:46:17.840	{ok1-1}	0	-	[OK]	+5	C	(verify)	The app is Settings and the screen is [Android Settings Top Screen]
 ```
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### AssertingAnything1.kt
 
-(`kotlin/tutorial/basic/AssertingAnything1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingAnything1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.TestElementCache.rootElement
-import shirates.core.driver.commandextension.appIs
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.verify
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AssertingAnything1 : UITest() {
-
     @Test
     @Order(10)
     fun ok() {
@@ -68,13 +55,13 @@ class AssertingAnything1 : UITest() {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
                     it.verify("The packageName is \"com.android.settings\"") {
-                        if (rootElement.packageName == "com.android.settings") {
+                        if (packageName == "com.android.settings") {
                             OK()
                         } else {
                             NG()
                         }
                     }
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
+                    it.verify("The app is 'Settings' and the screen is [Android Settings Top Screen]") {
                         it.appIs("Settings")
                         it.screenIs("[Android Settings Top Screen]")
                     }
@@ -92,8 +79,9 @@ class AssertingAnything1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
+                    it.verify("The app is 'Settings2' and the screen is [Android Settings Top Screen]") {
                         it.appIs("Settings2")
+                        it.screenIs("[Android Settings Top Screen]")
                     }
                 }
             }
@@ -109,16 +97,17 @@ class AssertingAnything1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
+                    it.verify("The app is 'Settings' and the screen is [Android Settings Top Screen]") {
                     }
                 }
             }
         }
     }
-}
 ```
+
+![](_images/verify.png)
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

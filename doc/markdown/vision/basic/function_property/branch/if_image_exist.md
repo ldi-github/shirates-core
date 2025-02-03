@@ -4,10 +4,10 @@ You can use special branch functions for image.
 
 ## functions
 
-| function        | description                                                          |
-|:----------------|:---------------------------------------------------------------------|
-| ifImageExist    | The code block is executed when specified image is on the screen     |
-| ifImageExistNot | The code block is executed when specified image is not on the screen |
+| function        | description                                                                        |
+|:----------------|:-----------------------------------------------------------------------------------|
+| ifImageExist    | The code block is executed when an image with specified label is on the screen     |
+| ifImageExistNot | The code block is executed when an image with specified label is not on the screen |
 
 ## Sample code
 

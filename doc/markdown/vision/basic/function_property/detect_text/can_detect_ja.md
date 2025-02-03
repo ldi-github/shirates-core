@@ -1,89 +1,65 @@
-# canDetect
+# canDetect (Vision)
 
-これらの関数を使用して要素が選択可能かどうかを調べることができます。関数はtrueまたはfalseを返します。
+これらの関数を使用して要素を取得できるかどうかを調べることができます。関数はtrueまたはfalseを返します。
 
 ## 関数
 
-| 関数                         | 説明                                                                      |
-|:---------------------------|:------------------------------------------------------------------------|
-| canSelect                  | 現在の画面においてselectorにマッチする最初の要素を検索してtrue/falseを返します（withScroll使用時はスクロールあり） |
-| canSelectWithoutScroll     | selectorにマッチする最初の要素を検索してtrue/falseを返します(スクロールなし)                        |
-| canSelectWithScrollDown    | selectorにマッチする最初の要素を検索してtrue/falseを返します(下方向スクロールあり)                     |
-| canSelectWithScrollUp      | selectorにマッチする最初の要素を検索してtrue/falseを返します(上方向スクロールあり)                     |
-| canSelectWithScrollRight   | selectorにマッチする最初の要素を検索してtrue/falseを返します(右方向スクロールあり)                     |
-| canSelectWithScrollLeft    | selectorにマッチする最初の要素を検索してtrue/falseを返します(左方向スクロールあり)                     |
-| canSelectAllWithScrollDown | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します(下方向スクロールあり)          |
-| canSelectAllWithScrollUp   | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します(上方向スクロールあり)          |
-| canSelectInScanResults     | スキャン結果内でselectorにマッチする最初の要素を検索してtrue/falseを返します                         |
-| canSelectAllInScanResults  | 指定した全てのselectorについてselect可能であるかどうかをtrue/falseで返します                      |
+| 関数                       | 説明                                                                               |
+|:-------------------------|:---------------------------------------------------------------------------------|
+| canDetect                | 現在の画面内でセレクターにマッチする最初の要素を取得し、trueまたはfalseを返します。 `withScroll`関数内で使用するとスクロールが発生します。 |
+| canDetectWithScrollDown  | セレクターにマッチする最初の要素を取得し、true または falseを返します。（下方向スクロールあり）                            |
+| canDetectWithScrollUp    | セレクターにマッチする最初の要素を取得し、true または falseを返します。（上方向スクロールあり）                            |
+| canDetectWithScrollRight | セレクターにマッチする最初の要素を取得し、true または falseを返します。（右方向スクロールあり）                            |
+| canDetectWithScrollLeft  | セレクターにマッチする最初の要素を取得し、true または falseを返します。（左方向スクロールあり）                            |
+| canDetectWithoutScroll   | セレクターにマッチする最初の要素を取得し、true または falseを返します。（スクロールなし）                               |
+| canDetectAll             | セレクターにマッチする全ての要素を取得し、true または falseを返します。 `withScroll`関数内で使用するとスクロールが発生します。      |
 
-## 例1: canSelect
+### サンプルコード
 
-### CanSelect1.kt
+[サンプルの入手](../../../getting_samples_ja.md)
 
-(`kotlin/tutorial/basic/CanSelect1.kt`)
+### CanDetect1.kt
+
+(`src/test/kotlin/tutorial/basic/CanDetect1.kt`)
 
 ```kotlin
     @Test
     @Order(10)
-    fun canSelect() {
+    fun canDetect() {
 
         scenario {
             case(1) {
-                action {
-                    it.canSelect("Settings", log = true)
+                expectation {
+                    it.canDetect("Settings")
+                        .thisIsTrue("<Settings> found.")
                 }
             }
             case(2) {
-                action {
-                    it.canSelectWithScrollDown("System", log = true)
+                expectation {
+                    it.canDetectWithScrollDown("System")
+                        .thisIsTrue("<System> found with scroll down.")
                 }
             }
             case(3) {
-                action {
-                    it.canSelectWithScrollUp("Settings", log = true)
+                expectation {
+                    it.canDetectWithScrollUp("Settings")
+                        .thisIsTrue("<Settings> found with scroll up.")
                 }
             }
             case(4) {
-                action {
-                    it.canSelectAllWithScrollDown("Settings", "System", log = true)
+                expectation {
+                    withScrollDown {
+                        it.canDetectAll("Settings", "System")
+                            .thisIsTrue("<Settings> found with scroll down.")
+                    }
                 }
             }
             case(5) {
-                action {
-                    it.canSelectAllWithScrollUp("Settings", "System", log = true)
-                }
-            }
-        }
-    }
-```
-
-## 例2: canSelectInScanElements
-
-### CanSelect1.kt
-
-(`kotlin/tutorial/basic/CanSelect1.kt`)
-
-```kotlin
-    @Test
-    @Order(20)
-    fun canSelectInScanElements() {
-
-        scenario {
-            case(1) {
-                condition {
-                    it.scanElements()
-                }.action {
-                    it.canSelectInScanResults("Settings", log = true)
-                    it.canSelectInScanResults("Accessibility", log = true)
-                    it.canSelectInScanResults("System", log = true)
-                    it.canSelectInScanResults("Foo", log = true)
-                }
-            }
-            case(2) {
-                action {
-                    it.canSelectAllInScanResults("Settings", "Accessibility", "System", log = true)
-                    it.canSelectAllInScanResults("Settings", "Accessibility", "Foo", log = true)
+                expectation {
+                    withScrollUp {
+                        it.canDetectAll("Settings", "System")
+                            .thisIsTrue("<Settings> found with scroll up.")
+                    }
                 }
             }
         }
@@ -92,4 +68,4 @@
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

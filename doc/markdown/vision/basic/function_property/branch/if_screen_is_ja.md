@@ -1,4 +1,4 @@
-# 分岐関数 (ifScreenIs, ifScreenIsNot)
+# 分岐関数 (ifScreenIs, ifScreenIsNot) (Vision)
 
 画面に対してこれらの分岐関数を使用することができます。
 
@@ -9,25 +9,15 @@
 | ifScreenIs    | 指定した画面が表示されている場合にコードブロックが実行されます |
 | ifScreenIsNot | 指定した画面が表示されている場合にコードブロックが実行されます |
 
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
+
 ### IfScreenIs1.kt
 
-(`kotlin/tutorial/basic/IfScreenIs1.kt`)
+(`src/test/kotlin/tutorial/basic/IfScreenIs1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifScreenIs
-import shirates.core.driver.branchextension.ifScreenIsNot
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.tap
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class IfScreenIs1 : UITest() {
-
     @Test
     @Order(10)
     fun ifScreenIsTest() {
@@ -46,7 +36,7 @@ class IfScreenIs1 : UITest() {
             }
             case(2) {
                 action {
-                    it.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
                     ifScreenIs("[Network & internet Screen]") {
                         OK("ifScreenIs called")
@@ -76,7 +66,7 @@ class IfScreenIs1 : UITest() {
             }
             case(2) {
                 action {
-                    it.tap("[Network & internet]")
+                    it.tap("Network & internet")
                 }.expectation {
                     ifScreenIsNot("[Network & internet Screen]") {
                         NG()
@@ -87,11 +77,9 @@ class IfScreenIs1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

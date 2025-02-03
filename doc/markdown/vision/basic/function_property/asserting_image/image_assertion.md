@@ -1,16 +1,16 @@
 # Image assertion (Vision)
 
-## functions
-
-### Image Assertion
-
 You can assert image using these functions.
+
+## functions
 
 | function     |
 |:-------------|
 | imageLabelIs |
 
-## Example
+## Sample code
+
+[Getting samples](../../../getting_samples.md)
 
 ### AssertingImage1.kt
 

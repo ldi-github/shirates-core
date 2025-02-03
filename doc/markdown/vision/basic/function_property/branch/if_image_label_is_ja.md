@@ -1,4 +1,4 @@
-# 分岐関数 (ifImageIs, ifImageIsNot)
+# 分岐関数 (ifImageLabelIs, ifImageLabelIsNot) (Vision)
 
 画像に対してこれらの分岐関数を使用することができます。
 
@@ -8,6 +8,10 @@
 |:-------------|:-------------------------------------|
 | ifImageIs    | 指定した画像に要素の画像がマッチする場合にコードブロックが実行されます  |
 | ifImageIsNot | 指定した画像に要素の画像がマッチしない場合にコードブロックが実行されます |
+
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### IfImageIs1.kt
 
@@ -83,5 +87,5 @@ class IfImageIs1 : UITest() {
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

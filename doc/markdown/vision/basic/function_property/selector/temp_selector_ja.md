@@ -2,30 +2,18 @@
 
 `tempSelector`関数を使用してセレクターをオンデマンドで登録することができます。
 
-## Example 1
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### TempSelector1.kt
 
-(`kotlin/tutorial/basic/TempSelector1.kt`)
+(`src/test/kotlin/tutorial/basic/TempSelector1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.tap
-import shirates.core.driver.commandextension.tempSelector
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class TempSelector1 : UITest() {
-
     @Test
     @Order(10)
-    fun tempSelector() {
+    fun tempSelector1() {
 
         tempSelector("[First Item]", "Network & internet")
 
@@ -41,11 +29,9 @@ class TempSelector1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

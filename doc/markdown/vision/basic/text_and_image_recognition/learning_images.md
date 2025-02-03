@@ -12,11 +12,12 @@ The name of parent directory of the image corresponds to the label.
 ![](_images/default_classifier.png)
 
 A label directory has at least one child image file. Basically you may prepare one image file for one label.<br>
-Label name is arbitrary, but we recommend `[Nickname]` like placeholder.
+Label name is arbitrary, but we recommend notation like `[Nickname]`.
 
 ## CheckStateClassifier
 
-**CheckStateClassifier** is for toggle widget states. This classifier has only two label (`[ON]` and `[OFF]`).
+**CheckStateClassifier** is the classifier for toggle widget states. This classifier has only two label (`[ON]` and
+`[OFF]`).
 
 ![](_images/check_state_classifier.png)
 
@@ -29,7 +30,7 @@ If you want to support checkbox state, append images into [ON]/[OFF] directory a
 
 To run learning explicitly
 
-1. Right-click `CreateMlExecute` (`src/test/kotlin/batch/CreateMLExecute.kt`) and select `Debug 'CreateMLExecute'`.
+Right-click `CreateMlExecute` (`src/test/kotlin/batch/CreateMLExecute.kt`) and select `Debug 'CreateMLExecute'`.
 
 **Note**<br>
 You don't have to run learning explicitly. Learning is executed on demand when you start run your test.

@@ -28,11 +28,15 @@
 | swipeElementToElement       | 要素を他の要素の位置までスワイプします         | n/a                                                   |
 | swipeElementToElementAdjust | 要素を他の要素の位置までスワイプします（位置調整あり） | n/a                                                   |
 
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
+
 ## swipeTo, swipeToAdjust
 
 ### Swipe1.kt
 
-(`kotlin/tutorial/basic/Swipe1.kt`)
+(`src/test/kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
     @Test
@@ -44,8 +48,8 @@
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("[Battery]")
-                        .swipeTo("[Network & internet]")
+                    it.detect("Battery")
+                        .swipeTo("Network & internet")
                 }.expectation {
                 }
             }
@@ -53,8 +57,8 @@
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.select("[Battery]")
-                        .swipeToAdjust("[Network & internet]")
+                    it.detect("Battery")
+                        .swipeToAdjust("Network & internet")
                 }.expectation {
                 }
             }
@@ -64,17 +68,13 @@
 
 **swipeTo** は正確ではないですが速いです。
 
-![swipeTo](../../_images/swipeTo.png)
-
 **swipeToAdjust** はより正確ですが遅いです。
-
-![swipeTo](../../_images/swipeToAdjust.png)
 
 ## swipeToCenter, swipeToTop, swipeToBottom
 
 ### Swipe1.kt
 
-(`kotlin/tutorial/basic/Swipe1.kt`)
+(`src/test/kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
     @Test
@@ -85,27 +85,27 @@
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                        .exist("[Notifications]")
-                        .exist("[Battery]")
+                        .exist("Notifications")
+                        .exist("Battery")
                 }.action {
-                    it.select("[Battery]")
+                    it.detect("Battery")
                         .swipeToCenterOfScreen()
-                        .swipeToTopOfScreen(durationSeconds = 10.0)
+                        .swipeToTopOfScreen(durationSeconds = 5.0)
                 }.expectation {
-                    it.dontExist("[Notifications]")
-                        .exist("[Storage]")
+                    it.dontExist("Notifications")
+                        .exist("Storage")
                 }
             }
             case(2) {
                 condition {
-                    it.exist("[Security & privacy]")
-                        .exist("[Location]")
+                    it.exist("Security & privacy")
+                        .exist("Location")
                 }.action {
-                    it.select("[Security & privacy]")
-                        .swipeToBottomOfScreen(durationSeconds = 10.0)
+                    it.detect("Security & privacy")
+                        .swipeToBottomOfScreen(durationSeconds = 5.0)
                 }.expectation {
-                    it.exist("[Security & privacy]")
-                        .dontExist("[Location]")
+                    it.exist("Security & privacy")
+                        .dontExist("Location")
                 }
             }
         }
@@ -116,7 +116,7 @@
 
 ### Swipe1.kt
 
-(`kotlin/tutorial/basic/Swipe1.kt`)
+(`src/test/kotlin/tutorial/basic/Swipe1.kt`)
 
 ```kotlin
     @Test

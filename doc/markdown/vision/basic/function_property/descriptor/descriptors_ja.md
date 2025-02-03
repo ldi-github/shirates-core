@@ -1,8 +1,8 @@
-# ディスクリプター
+# ディスクリプター (Vision)
 
 これらの関数を使用してテストの手続きを説明することができます。これはSpec-Reportを読みやすいドキュメントにするために使用します。
 
-## 関数
+### 関数
 
 | 関数         | 説明          | 出力例                       | 出力例(日本語)                |
 |:-----------|:------------|:--------------------------|:------------------------|
@@ -18,26 +18,15 @@
 **注意:** 行頭文字(bullet), 見出し(caption), コメントのプレフィックス(comment)は リソースファイルの`spec.properties`
 でカスタマイズすることができます。
 
-## 例
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### Descriptor1.kt
 
-(`kotlin/tutorial/basic/Descriptor1.kt`)
+(`src/test/kotlin/tutorial/basic/Descriptor1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.osaifuKeitai
-import shirates.core.driver.branchextension.osaifuKeitaiNot
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Descriptor1 : UITest() {
-
     @Test
     @Order(10)
     fun descriptors() {
@@ -68,59 +57,16 @@ class Descriptor1 : UITest() {
                 }
             }
         }
-
     }
-
-    @Test
-    fun example() {
-
-        scenario {
-            case(1) {
-                condition {
-                    macro("[Setup stock]")
-                    macro("[Login]")
-                    macro("[Order Screen]")
-                }.action {
-                    osaifuKeitai {
-                        caption("Osaifu keitai")
-                            .procedure("Order by osaifu-keitai") {
-                                // implement
-                            }
-                            .comment("note: must be charged")
-                    }
-                    osaifuKeitaiNot {
-                        caption("Not osaifu keitai")
-                            .procedure("Order by credit card") {
-                                // implement
-                            }
-                    }
-                }.expectation {
-                    target("[Completion message]")
-                        .manual("is displayed")
-                    target("[OK]")
-                        .manual("is displayed")
-                }
-            }
-
-            case(2) {
-                action {
-                    manual("Tap [OK]")
-                }.expectation {
-                    manual("[Home screen] is displayed")
-                    target("target3")
-                        .knownIssue("knownIssue", ticketUrl = "https://example.com/ticket/12345")
-                }
-            }
-        }
-    }
-}
 ```
+
+### Html-Report
+
+![](_images/descriptors_html_report.png)
 
 ### Spec-Report
 
-![](../../_images/descriptor1_descriptors.png)
-
-![](../../_images/descriptor1_example.png)
+![](_images/descriptors_spec_report.png)
 
 ### Link
 

@@ -1,6 +1,6 @@
 # アプリが表示されていることの検証
 
-これらの関数を使用してアプリが表示さrていることを検証することができます。
+これらの関数を使用してアプリが表示されていることを検証することができます。
 
 ## 関数
 
@@ -9,9 +9,13 @@
 | appIs |
 | isApp |
 
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
+
 ### AssertingOthers1.kt
 
-(`kotlin/tutorial/basic/AssertingOthers1.kt`)
+(`src/test/kotlin/tutorial/basic/AssertingOthers1.kt`)
 
 ```kotlin
     @Test
@@ -57,4 +61,4 @@
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

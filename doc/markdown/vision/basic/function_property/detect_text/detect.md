@@ -19,7 +19,7 @@ The function returns `VisionElement` object.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### Detect1.kt
 

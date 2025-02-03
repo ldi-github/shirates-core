@@ -11,15 +11,18 @@
 
 ニックネームはニックネームファイルに記述することができます。
 
-![nickname_files](../../_images/nickname_files.png)
+![nickname_files](_images/nickname_files.png)
 
 ## ニックネームの種類
 
 以下の種類のニックネームを使用することができます。
 
-- [セレクターニックネーム](selector_nickname_ja.md)
-- [画面ニックネーム](screen_nickname_ja.md)
-- [データセットニックネーム](dataset_nickname_ja.md)
+- [セレクターニックネーム (classicモード用)](../../../classic/basic/selector_and_nickname/nickname/selector_nickname_ja.md)
+- [画面ニックネーム (classicモード用)](../../../classic/basic/selector_and_nickname/nickname/screen_nickname_ja.md)
+- [データセットニックネーム](../../../classic/basic/selector_and_nickname/nickname/dataset_nickname_ja.md)
+
+**セレクターニックネーム** と **画面ニックネーム** はClassicモードで使用するためのものです。<br>
+**データセットニックネーム** はClassicモード/Visionモードの両方で使用できます。
 
 ## ニックネーム宣言 (一般形)
 
@@ -37,11 +40,13 @@
 
 "[ ]" は **静的なコンテンツ**. "{ }" **動的なコンテンツ** に使用することが推奨されます。
 
+<br>
+
 ### Link
 
-- [セレクターニックネーム](selector_nickname_ja.md)
-- [画面ニックネーム](screen_nickname_ja.md)
-- [データセットニックネーム](dataset_nickname_ja.md)
+- [account](../../../vision/basic/function_property/data_storage/account_ja.md)
+- [app](basic/function_property/data_storage/app_ja.md)
+- [data](basic/function_property/data_storage/data_ja.md)
 
 
 - [index](../../../index_ja.md)

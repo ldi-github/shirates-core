@@ -8,13 +8,17 @@
 |:-------------------|:---------------------------------------|
 | tap(expression)    | selectorにマッチする最初の要素をタップします（現在の画面）      |
 | tap(x, y)          | (x, y)座標をタップします                        |
-| tapWithoutScroll   | selectorにマッチする最初の要素をタップします（スクロールなし）    |
 | tapWithScrollDown  | selectorにマッチする最初の要素をタップします（下方向スクロールあり） |
 | tapWithScrollUp    | selectorにマッチする最初の要素をタップします（上方向スクロールあり） |
 | tapWithScrollRight | selectorにマッチする最初の要素をタップします（右方向スクロールあり） |
 | tapWithScrollLeft  | selectorにマッチする最初の要素をタップします（左方向スクロールあり） |
+| tapWithoutScroll   | selectorにマッチする最初の要素をタップします（スクロールなし）    |
 | tapCenterOfScreen  | 画面の中心をタップします                           |
 | tapCenterOf        | 要素の中心をタップします                           |
+
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ## 例
 
@@ -23,19 +27,6 @@
 (`kotlin/tutorial/basic/Tap1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.select
-import shirates.core.driver.commandextension.tap
-import shirates.core.driver.commandextension.tapWithScrollDown
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class Tap1 : UITest() {
-
     @Test
     fun tap() {
 
@@ -44,16 +35,16 @@ class Tap1 : UITest() {
                 action {
                     it.tap("Network & internet")
                         .tap("Internet")
-                    it.tap("@Navigate up")
-                        .tap("@Navigate up")
+                    it.pressBack()
+                        .pressBack()
                 }
             }
             case(2) {
                 action {
                     it.tapWithScrollDown("Display")
                         .tapWithScrollDown("Colors")
-                    it.tap("@Navigate up")
-                        .tap("@Navigate up")
+                    it.pressBack()
+                        .pressBack()
                 }
             }
         }
@@ -65,18 +56,16 @@ class Tap1 : UITest() {
         scenario {
             case(1) {
                 action {
-                    val e = select("Network & internet")
-                    it.tap(x = e.bounds.centerX, y = e.bounds.centerY)
+                    val v = detect("Network & internet")
+                    it.tap(x = v.bounds.centerX, y = v.bounds.centerY)
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                 }
             }
         }
     }
-
-}
 ```
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

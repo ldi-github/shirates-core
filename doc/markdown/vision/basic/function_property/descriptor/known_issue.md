@@ -32,11 +32,11 @@ You can describe known issue using **knownIssue** function.
     }
 ```
 
-#### HTML-Report
+### HTML-Report
 
 ![](_images/known_issue_html_report.png)
 
-#### Spec-Report
+### Spec-Report
 
 ![](_images/known_issue_speec_report.png)
 
