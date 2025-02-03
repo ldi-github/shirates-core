@@ -34,6 +34,7 @@
 
 - [Switching Android/iOS](vision/basic/switching_environment/switching_android_ios.md)
 - [Switching device](vision/basic/switching_environment/switching_device.md)
+- [Switching device language](vision/basic/switching_environment/switching_device_language.md)
 - [Switching log language](common/message_and_language/log_language.md)
 - [Switching AI-OCR language](vision/basic/switching_environment/switching_ai_ocr_language.md)
 

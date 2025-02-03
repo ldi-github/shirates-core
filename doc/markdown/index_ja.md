@@ -34,6 +34,7 @@
 
 - [Android/iOSの切り替え](vision/basic/switching_environment/switching_android_ios_ja.md)
 - [デバイスの切り替え](vision/basic/switching_environment/switching_device_ja.md)
+- [デバイスの言語の切り替え](vision/basic/switching_environment/switching_device_language_ja.md)
 - [ログ言語の切り替え](common/message_and_language/log_language_ja.md)
 - [AI-OCR言語の切り替え](vision/basic/switching_environment/switching_ai_ocr_language_ja.md)
 
