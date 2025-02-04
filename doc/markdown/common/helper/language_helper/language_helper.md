@@ -25,14 +25,14 @@ You can set device language using these functions.
                 action {
                     LanguageHelper.setLanguageAndLocale(language = "ja", locale = "JP")
                 }.expectation {
-                    it.exist("設定")
+                    it.exist("設定", waitSeconds = 15.0)
                 }
             }
             case(2) {
                 action {
                     LanguageHelper.setLanguageAndLocale(language = "en", locale = "US")
                 }.expectation {
-                    it.exist("Settings")
+                    it.exist("Settings", waitSeconds = 15.0)
                 }
             }
         }
@@ -51,21 +51,15 @@ You can set device language using these functions.
             case(1) {
                 action {
                     LanguageHelper.setLanguageAndLocale(language = "ja", locale = "JP")
-                    it.launchApp("com.apple.Preferences")
-                        .wait()
                 }.expectation {
-                    it.screenIs("[iOS Settings Top Screen]")
-                        .exist("設定")
+                    it.exist("設定", waitSeconds = 10.0)
                 }
             }
             case(2) {
                 action {
                     LanguageHelper.setLanguageAndLocale(language = "en", locale = "US")
-                    it.launchApp("com.apple.Preferences")
-                        .wait()
                 }.expectation {
-                    it.screenIs("[iOS Settings Top Screen]")
-                        .exist("Settings")
+                    it.exist("Settings", waitSeconds = 10.0)
                 }
             }
         }

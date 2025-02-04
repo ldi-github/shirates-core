@@ -17,22 +17,6 @@ import shirates.core.vision.testcode.VisionTest
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
 class TestDriveBranchExtensionTest2 : VisionTest() {
 
-//    @Test
-//    @Order(0)
-//    fun setupImage() {
-//
-//        scenario {
-//            case(1) {
-//                action {
-//                    describe("Setting up image")
-//                    ImageSetupHelper.setupImageAndroidSettingsTopScreen()
-//                }.expectation {
-//                    OK()
-//                }
-//            }
-//        }
-//    }
-
     @Manual
     @Test
     @Order(10)
@@ -158,7 +142,7 @@ class TestDriveBranchExtensionTest2 : VisionTest() {
                         }
                     it.detect("Connected devices")
                         .leftItem()
-                        .ifImageIs("[Connected devices Icon]") {
+                        .ifImageIsNot("[Connected devices Icon]") {
                             describe("ifImageIsNot('[Connected devices Icon]') called")
                             ifImageIsNotCalled = true   //never called
                         }
