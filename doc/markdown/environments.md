@@ -1,6 +1,6 @@
 # Tested Environments
 
-2025/2/2 **Shirates/Vision** (8.0.9)
+2025/2/4 **Shirates/Vision** (8.0.9)
 
 - macOS Sequoia 15.2
 - node v22.9.0
