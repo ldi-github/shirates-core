@@ -403,8 +403,7 @@ class VisionContext(
         text: String,
         language: String = this.language,
         inJoinedText: Boolean = false,
-        segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-        segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+        removeRedundantText: Boolean,
     ): VisionElement {
 
         recognizeText(language = language)
@@ -423,13 +422,11 @@ class VisionContext(
                 text = text,
             )
             var v = candidates.firstOrNull() ?: VisionElement.emptyElement
-            if (v.text.indexOf(text) > 0) {
+            if (removeRedundantText && v.text.indexOf(text) > 0) {
                 val v2 = removeRedundantText(
                     visionElement = v,
                     expectedText = text,
                     language = language,
-                    segmentMarginHorizontal = segmentMarginHorizontal,
-                    segmentMarginVertical = segmentMarginVertical,
                 )
                 v = v2
             }
@@ -443,8 +440,7 @@ class VisionContext(
     fun detect(
         selector: Selector,
         language: String = this.language,
-        segmentMarginHorizontal: Int,
-        segmentMarginVertical: Int,
+        removeRedundantText: Boolean = true,
     ): VisionElement {
 
         if (selector.hasTextFilter.not()) {
@@ -465,8 +461,7 @@ class VisionContext(
                     text = text,
                     language = language,
                     inJoinedText = inJoinedText,
-                    segmentMarginHorizontal = segmentMarginHorizontal,
-                    segmentMarginVertical = segmentMarginVertical,
+                    removeRedundantText = removeRedundantText,
                 )
                 if (v.isFound) {
                     v.selector = Selector(expression = text)

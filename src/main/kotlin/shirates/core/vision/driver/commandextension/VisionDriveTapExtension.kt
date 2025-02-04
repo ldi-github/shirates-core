@@ -31,8 +31,7 @@ fun VisionDrive.tap(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = false,
 ): VisionElement {
 
     if (directAccess) {
@@ -63,9 +62,8 @@ fun VisionDrive.tap(
             allowScroll = null,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
+            removeRedundantText = removeRedundantText,
             throwsException = true,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
         )
         val tapFunc = {
             silent {
@@ -119,8 +117,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
     selector: Selector,
     language: String,
     waitSeconds: Double,
-    segmentMarginHorizontal: Int,
-    segmentMarginVertical: Int,
+    removeRedundantText: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -132,8 +129,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
             waitSeconds = waitSeconds,
             throwsException = throwsException,
             swipeToSafePosition = true,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
+            removeRedundantText = removeRedundantText,
         )
     }
 
@@ -232,8 +228,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
     scrollMaxCount: Int,
     holdSeconds: Double,
     swipeToSafePosition: Boolean,
-    segmentMarginHorizontal: Int,
-    segmentMarginVertical: Int,
+    removeRedundantText: Boolean,
 ): VisionElement {
 
     val selector = getSelector(expression = expression)
@@ -253,8 +248,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
             scrollMaxCount = scrollMaxCount,
             throwsException = true,
             swipeToSafePosition = swipeToSafePosition,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
+            removeRedundantText = removeRedundantText,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         v = v.tap(holdSeconds = holdSeconds)
@@ -307,8 +301,7 @@ fun VisionDrive.tapWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollDown"
@@ -326,8 +319,7 @@ fun VisionDrive.tapWithScrollDown(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         swipeToSafePosition = swipeToSafePosition,
-        segmentMarginHorizontal = segmentMarginHorizontal,
-        segmentMarginVertical = segmentMarginVertical,
+        removeRedundantText = removeRedundantText,
     )
 
     return v
@@ -346,8 +338,7 @@ fun VisionDrive.tapWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollUp"
@@ -365,8 +356,7 @@ fun VisionDrive.tapWithScrollUp(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         swipeToSafePosition = swipeToSafePosition,
-        segmentMarginHorizontal = segmentMarginHorizontal,
-        segmentMarginVertical = segmentMarginVertical,
+        removeRedundantText = removeRedundantText,
     )
 
     return v
@@ -384,8 +374,7 @@ fun VisionDrive.tapWithScrollRight(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollRight"
@@ -403,8 +392,7 @@ fun VisionDrive.tapWithScrollRight(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         swipeToSafePosition = false,
-        segmentMarginHorizontal = segmentMarginHorizontal,
-        segmentMarginVertical = segmentMarginVertical,
+        removeRedundantText = removeRedundantText,
     )
 
     return v
@@ -422,8 +410,7 @@ fun VisionDrive.tapWithScrollLeft(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollLeft"
@@ -441,8 +428,7 @@ fun VisionDrive.tapWithScrollLeft(
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
         swipeToSafePosition = false,
-        segmentMarginHorizontal = segmentMarginHorizontal,
-        segmentMarginVertical = segmentMarginVertical,
+        removeRedundantText = removeRedundantText,
     )
 
     return v

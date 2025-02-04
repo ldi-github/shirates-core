@@ -26,8 +26,7 @@ fun VisionDrive.exist(
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -46,8 +45,7 @@ fun VisionDrive.exist(
             language = language,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
+            removeRedundantText = removeRedundantText,
         )
     }
 
@@ -63,19 +61,17 @@ internal fun VisionDrive.existCore(
     language: String,
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
-    segmentMarginHorizontal: Int,
-    segmentMarginVertical: Int,
+    removeRedundantText: Boolean,
 ): VisionElement {
 
     val v = detectCore(
         selector = selector,
         language = language,
         allowScroll = null,
-        throwsException = false,
         waitSeconds = waitSeconds,
         swipeToSafePosition = swipeToSafePosition,
-        segmentMarginHorizontal = segmentMarginHorizontal,
-        segmentMarginVertical = segmentMarginVertical,
+        removeRedundantText = removeRedundantText,
+        throwsException = false,
     )
     lastVisionElement = v
 
@@ -160,8 +156,7 @@ fun VisionDrive.existWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -186,8 +181,7 @@ fun VisionDrive.existWithScrollDown(
                 language = language,
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
-                segmentMarginHorizontal = segmentMarginHorizontal,
-                segmentMarginVertical = segmentMarginVertical,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -211,8 +205,7 @@ fun VisionDrive.existWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -237,8 +230,7 @@ fun VisionDrive.existWithScrollUp(
                 language = language,
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
-                segmentMarginHorizontal = segmentMarginHorizontal,
-                segmentMarginVertical = segmentMarginVertical,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -262,8 +254,7 @@ fun VisionDrive.existWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -288,8 +279,7 @@ fun VisionDrive.existWithScrollRight(
                 language = language,
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
-                segmentMarginHorizontal = segmentMarginHorizontal,
-                segmentMarginVertical = segmentMarginVertical,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -313,8 +303,7 @@ fun VisionDrive.existWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -339,8 +328,7 @@ fun VisionDrive.existWithScrollLeft(
                 language = language,
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
-                segmentMarginHorizontal = segmentMarginHorizontal,
-                segmentMarginVertical = segmentMarginVertical,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -359,8 +347,6 @@ fun VisionDrive.dontExist(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = 0.0,
     message: String? = null,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -382,8 +368,7 @@ fun VisionDrive.dontExist(
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
+            removeRedundantText = false,
         )
     }
     if (v.isFound) {

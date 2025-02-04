@@ -18,9 +18,9 @@
 
 [サンプルの入手](../../../getting_samples_ja.md)
 
-### BranchFunctions1.kt
+### BranchFunctionsOnAndroid.kt
 
-(`src/test/kotlin/tutorial/basic/BranchFunctions1.kt`)
+(`src/test/kotlin/tutorial/basic/BranchFunctionsOnAndroid.kt`)
 
 ```kotlin
     @Test
@@ -29,7 +29,9 @@
 
         scenario {
             case(1) {
-                action {
+                condition {
+                    it.screenIs("[Android Settings Top Screen]")
+                }.action {
                     android {
                         virtualDevice {
                             describe("This is called on android emulator")
