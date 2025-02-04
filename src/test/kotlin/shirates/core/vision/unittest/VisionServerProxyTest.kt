@@ -450,7 +450,7 @@ class VisionServerProxyTest : UnitTest() {
         val context = VisionContext(screenshotFile = inputFile)
         context.recognizeText(language = "ja")
 
-        val v = context.detect(text = "男性", language = "ja")
+        val v = context.detect(text = "男性", language = "ja", removeRedundantText = true)
 
         v.text.printInfo()
     }

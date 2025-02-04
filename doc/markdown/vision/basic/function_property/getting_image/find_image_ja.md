@@ -71,14 +71,14 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
                 }.action {
                     v1 = findImageWithScrollDown("[Location Icon]", threshold = 0.5)
                 }.expectation {
-                    v1.imageLabelIs("[Location Icon]")
+                    v1.imageIs("[Location Icon]")
                 }
             }
             case(2) {
                 action {
                     v1 = findImageWithScrollUp("[Connected devices Icon]")
                 }.expectation {
-                    v1.imageLabelIs("[Connected devices Icon]")
+                    v1.imageIs("[Connected devices Icon]")
                 }
             }
         }
@@ -93,20 +93,20 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
                 condition {
                     it.macro("[Files Top Screen]")
                 }.action {
-                    it.onLineOf("Images", verticalMargin = 40) {
+                    it.onLineOf("Images") {
                         v1 = findImageWithScrollRight("[This week Button]")
                     }
                 }.expectation {
-                    v1.imageLabelIs("[This week Button]")
+                    v1.imageIs("[This week Button]")
                 }
             }
             case(2) {
                 action {
-                    v1.onLine(verticalMargin = 40) {
+                    v1.onLine {
                         v2 = findImageWithScrollLeft("[Audio Button]")
                     }
                 }.expectation {
-                    v2.imageLabelIs("[Audio Button]")
+                    v2.imageIs("[Audio Button]")
                 }
             }
         }

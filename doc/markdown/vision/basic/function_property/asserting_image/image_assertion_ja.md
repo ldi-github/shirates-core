@@ -4,9 +4,9 @@
 
 ### 関数
 
-| 関数           |
-|:-------------|
-| imageLabelIs |
+| 関数      |
+|:--------|
+| imageIs |
 
 ### サンプルコード
 
@@ -19,7 +19,7 @@
 ```kotlin
     @Test
     @Order(10)
-    fun imageLabelIs() {
+    fun imageIs() {
 
         scenario {
             case(1) {
@@ -29,7 +29,7 @@
                     v1 = it.detect("Network & internet")
                         .leftItem()
                 }.expectation {
-                    v1.imageLabelIs("[Network & internet Icon]")
+                    v1.imageIs("[Network & internet Icon]")
                 }
             }
         }

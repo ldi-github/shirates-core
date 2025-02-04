@@ -403,6 +403,7 @@ class VisionContext(
         text: String,
         language: String = this.language,
         inJoinedText: Boolean = false,
+        removeRedundantText: Boolean,
     ): VisionElement {
 
         recognizeText(language = language)
@@ -421,8 +422,12 @@ class VisionContext(
                 text = text,
             )
             var v = candidates.firstOrNull() ?: VisionElement.emptyElement
-            if (v.text.indexOf(text) > 0) {
-                val v2 = removeRedundantText(visionElement = v, expectedText = text, language = language)
+            if (removeRedundantText && v.text.indexOf(text) > 0) {
+                val v2 = removeRedundantText(
+                    visionElement = v,
+                    expectedText = text,
+                    language = language,
+                )
                 v = v2
             }
             return v
@@ -435,6 +440,7 @@ class VisionContext(
     fun detect(
         selector: Selector,
         language: String = this.language,
+        removeRedundantText: Boolean = true,
     ): VisionElement {
 
         if (selector.hasTextFilter.not()) {
@@ -455,6 +461,7 @@ class VisionContext(
                     text = text,
                     language = language,
                     inJoinedText = inJoinedText,
+                    removeRedundantText = removeRedundantText,
                 )
                 if (v.isFound) {
                     v.selector = Selector(expression = text)

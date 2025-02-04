@@ -40,15 +40,15 @@ fun VisionElement.ifCheckIsOFF(
 }
 
 /**
- * ifImageLabelIs
+ * ifImageIs
  */
-fun VisionElement.ifImageLabelIs(
+fun VisionElement.ifImageIs(
     label: String,
     classifierName: String = "DefaultClassifier",
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
 
-    val command = "ifImageLabelIs"
+    val command = "ifImageIs"
 
     val classifyResult = this.classify(classifierName = classifierName)
 
@@ -67,15 +67,15 @@ fun VisionElement.ifImageLabelIs(
 }
 
 /**
- * ifImageLabelIsNot
+ * ifImageIsNot
  */
-fun VisionElement.ifImageLabelIsNot(
+fun VisionElement.ifImageIsNot(
     label: String,
     classifierName: String = "DefaultClassifier",
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
 
-    val command = "ifImageLabelIsNot"
+    val command = "ifImageIsNot"
 
     val classifyResult = this.classify(classifierName = classifierName)
 

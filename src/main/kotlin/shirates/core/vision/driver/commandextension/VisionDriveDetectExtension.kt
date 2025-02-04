@@ -27,6 +27,7 @@ fun VisionDrive.detect(
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
+    removeRedundantText: Boolean = true,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -34,12 +35,13 @@ fun VisionDrive.detect(
     val sel = getSelector(expression = expression)
 
     try {
-        var v = detectCore(
+        val v = detectCore(
             selector = sel,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = waitSeconds,
+            removeRedundantText = removeRedundantText,
             throwsException = throwsException,
         )
         lastElement = v
@@ -65,8 +67,8 @@ internal fun removeRedundantText(
         containerY = visionElement.rect.y,
         screenshotFile = visionElement.screenshotFile,
         screenshotImage = visionElement.screenshotImage,
-        segmentMarginHorizontal = 0,
-        segmentMarginVertical = 0,
+        segmentMarginHorizontal = visionElement.rect.height / 2,
+        segmentMarginVertical = PropertiesManager.segmentMarginVertical,
         minimumHeight = visionElement.rect.height / 2,
     ).split()
     val elements = segmentContainer.visionElements.sortedBy { it.rect.left }.toMutableList()
@@ -107,8 +109,9 @@ internal fun VisionDrive.detectCore(
     language: String,
     allowScroll: Boolean?,
     waitSeconds: Double,
-    throwsException: Boolean,
     swipeToSafePosition: Boolean,
+    removeRedundantText: Boolean,
+    throwsException: Boolean,
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -118,8 +121,9 @@ internal fun VisionDrive.detectCore(
             language = language,
             allowScroll = allowScroll,
             waitSeconds = waitSeconds,
-            throwsException = throwsException,
             swipeToSafePosition = swipeToSafePosition,
+            removeRedundantText = removeRedundantText,
+            throwsException = throwsException,
         )
     }
     action()
@@ -141,8 +145,9 @@ private fun VisionDrive.detectCoreCore(
     language: String,
     allowScroll: Boolean?,
     waitSeconds: Double,
-    throwsException: Boolean,
     swipeToSafePosition: Boolean,
+    removeRedundantText: Boolean,
+    throwsException: Boolean,
 ): VisionElement {
 
     if (lastElement.isEmpty) {
@@ -182,6 +187,7 @@ private fun VisionDrive.detectCoreCore(
         v = CodeExecutionContext.workingRegionElement.visionContext.detect(
             selector = selector,
             language = language,
+            removeRedundantText = removeRedundantText,
         )
         v.isFound
     }
@@ -200,6 +206,7 @@ private fun VisionDrive.detectCoreCore(
             direction = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
             throwsException = false,
             swipeToSafePosition = swipeToSafePosition,
+            removeRedundantText = removeRedundantText,
         )
     }
 
@@ -227,8 +234,9 @@ internal fun VisionDrive.detectWithScrollCore(
     startMarginRatio: Double = CodeExecutionContext.scrollStartMarginRatio,
     endMarginRatio: Double = CodeExecutionContext.scrollEndMarginRatio,
     scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
-    throwsException: Boolean,
     swipeToSafePosition: Boolean,
+    removeRedundantText: Boolean,
+    throwsException: Boolean,
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -238,9 +246,10 @@ internal fun VisionDrive.detectWithScrollCore(
             selector = selector,
             language = language,
             allowScroll = false,
-            throwsException = false,
             waitSeconds = 0.0,
             swipeToSafePosition = swipeToSafePosition,
+            removeRedundantText = removeRedundantText,
+            throwsException = false,
         )
         val stopScroll = v.isFound
         stopScroll
@@ -490,6 +499,7 @@ fun VisionDrive.canDetect(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = 0.0,
     allowScroll: Boolean = true,
+    removeRedundantText: Boolean = true,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
 //        return this.innerWidget(expression = expression).isFound
@@ -505,8 +515,9 @@ fun VisionDrive.canDetect(
             language = language,
             allowScroll = allowScroll,
             waitSeconds = waitSeconds,
-            throwsException = false,
             swipeToSafePosition = false,
+            removeRedundantText = removeRedundantText,
+            throwsException = false,
         ).isFound
     }
     if (logLine != null) {
@@ -520,6 +531,7 @@ internal fun VisionDrive.canDetectCore(
     language: String,
     waitSeconds: Double,
     allowScroll: Boolean?,
+    removeRedundantText: Boolean,
 ): Boolean {
 
     val v = detectCore(
@@ -527,8 +539,9 @@ internal fun VisionDrive.canDetectCore(
         language = language,
         allowScroll = allowScroll,
         waitSeconds = waitSeconds,
-        throwsException = false,
         swipeToSafePosition = false,
+        removeRedundantText = removeRedundantText,
+        throwsException = false,
     )
     lastElement = v
 
@@ -685,6 +698,7 @@ internal fun VisionDrive.canDetectAllCore(
                 language = language,
                 waitSeconds = 0.0,
                 allowScroll = allowScroll,
+                removeRedundantText = false,
             )
             if (foundAll.not()) {
                 break

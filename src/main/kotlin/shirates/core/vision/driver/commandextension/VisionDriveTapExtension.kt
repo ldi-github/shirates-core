@@ -30,7 +30,8 @@ fun VisionDrive.tap(
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
-    directAccess: Boolean = false
+    directAccess: Boolean = false,
+    removeRedundantText: Boolean = false,
 ): VisionElement {
 
     if (directAccess) {
@@ -61,6 +62,7 @@ fun VisionDrive.tap(
             allowScroll = null,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
+            removeRedundantText = removeRedundantText,
             throwsException = true,
         )
         val tapFunc = {
@@ -115,6 +117,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
     selector: Selector,
     language: String,
     waitSeconds: Double,
+    removeRedundantText: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -126,6 +129,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
             waitSeconds = waitSeconds,
             throwsException = throwsException,
             swipeToSafePosition = true,
+            removeRedundantText = removeRedundantText,
         )
     }
 
@@ -224,6 +228,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
     scrollMaxCount: Int,
     holdSeconds: Double,
     swipeToSafePosition: Boolean,
+    removeRedundantText: Boolean,
 ): VisionElement {
 
     val selector = getSelector(expression = expression)
@@ -243,6 +248,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
             scrollMaxCount = scrollMaxCount,
             throwsException = true,
             swipeToSafePosition = swipeToSafePosition,
+            removeRedundantText = removeRedundantText,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         v = v.tap(holdSeconds = holdSeconds)
@@ -294,7 +300,8 @@ fun VisionDrive.tapWithScrollDown(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollDown"
@@ -311,7 +318,8 @@ fun VisionDrive.tapWithScrollDown(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        swipeToSafePosition = swipeToSafePosition
+        swipeToSafePosition = swipeToSafePosition,
+        removeRedundantText = removeRedundantText,
     )
 
     return v
@@ -329,7 +337,8 @@ fun VisionDrive.tapWithScrollUp(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollUp"
@@ -346,7 +355,8 @@ fun VisionDrive.tapWithScrollUp(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        swipeToSafePosition = swipeToSafePosition
+        swipeToSafePosition = swipeToSafePosition,
+        removeRedundantText = removeRedundantText,
     )
 
     return v
@@ -364,6 +374,7 @@ fun VisionDrive.tapWithScrollRight(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollRight"
@@ -380,7 +391,8 @@ fun VisionDrive.tapWithScrollRight(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        swipeToSafePosition = false
+        swipeToSafePosition = false,
+        removeRedundantText = removeRedundantText,
     )
 
     return v
@@ -398,6 +410,7 @@ fun VisionDrive.tapWithScrollLeft(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollLeft"
@@ -414,7 +427,8 @@ fun VisionDrive.tapWithScrollLeft(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        swipeToSafePosition = false
+        swipeToSafePosition = false,
+        removeRedundantText = removeRedundantText,
     )
 
     return v

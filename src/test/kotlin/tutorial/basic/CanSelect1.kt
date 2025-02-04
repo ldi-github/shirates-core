@@ -141,7 +141,7 @@ class CanSelect1 : UITest() {
                         .flickBottomToTop()
                 }.expectation {
                     it.canSelectWithScrollUp("Network & internet")
-                        .thisIsTrue("canSelectWithScrollUp(\"Netowork & internet\") is true")
+                        .thisIsTrue("canSelectWithScrollUp(\"Network & internet\") is true")
                 }
             }
         }

@@ -206,9 +206,9 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 ### プロジェクトを開く
 
-1. **shirates-core-vision-samples_en** プロジェクトのディレクトリを Finder で開きます。
+1. **shirates-core-vision-samples_ja** プロジェクトのディレクトリを Finder で開きます。
 2. `build.gradle.kts` を右クリックして`IntelliJ IDEA`で開きます。 <br>
-   ![](vision/_images/opening_project.png)
+   ![](vision/_images/opening_project_ja.png)
 
 ### 右クリックによるテスト実行を有効にする
 
@@ -224,7 +224,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 1. `shirates-core-vision-samples_ja` プロジェクトを`IntelliJ IDEA`で開き、 <br>
    `kotlin/demo/vision/AndroidSettingsVisionDemo`を右クリックして <br>
-   **Debug 'AndroidSettingsVisionDemo'** 選択します<br> ![](vision/_images/android_settings_vision_demo.png)
+   **Debug 'AndroidSettingsVisionDemo'** 選択します<br> ![](vision/_images/android_settings_vision_demo_ja.png)
 2. コンソールにこのようなログが出力されます。 ![](vision/_images/console_android.png)
 3. リンクをクリックしてディレクトリを開きます。<br> ![](vision/_images/log_directory.png)
 4. **_Report(simple).html**

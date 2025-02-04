@@ -1,4 +1,4 @@
-# 分岐関数 (ifImageLabelIs, ifImageLabelIsNot) (Vision)
+# 分岐関数 (ifImageIs, ifImageIsNot) (Vision)
 
 画像に対してこれらの分岐関数を使用することができます。
 
@@ -18,28 +18,6 @@
 (`kotlin/tutorial/basic/IfImageIs1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifImageIs
-import shirates.core.driver.branchextension.ifImageIsNot
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.select
-import shirates.core.testcode.UITest
-import shirates.helper.ImageSetupHelper
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class IfImageIs1 : UITest() {
-
-    @Test
-    @Order(0)
-    fun setupImage() {
-
-        ImageSetupHelper.setupImageAndroidSettingsTopScreen()
-    }
-
     @Test
     @Order(10)
     fun ifImageIsTest() {
@@ -49,14 +27,16 @@ class IfImageIs1 : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    it.select("[Network & internet Icon]")
-                        .ifImageIs("[Network & internet Icon].png") {
+                    it.detect("Network & internet")
+                        .leftItem()
+                        .ifImageIs("[Network & internet Icon]") {
                             OK("ifImageIs called")
                         }.ifElse {
                             NG()
                         }
-                    it.select("[Network & internet Icon]")
-                        .ifImageIsNot("[Network & internet Icon].png") {
+                    it.detect("Network & internet")
+                        .leftItem()
+                        .ifImageIsNot("[Network & internet Icon]") {
                             NG()
                         }.ifElse {
                             OK("ifElse called")
@@ -65,14 +45,16 @@ class IfImageIs1 : UITest() {
             }
             case(2) {
                 expectation {
-                    it.select("[Network & internet Icon]")
-                        .ifImageIs("[App Icon].png") {
+                    it.detect("Network & internet")
+                        .leftItem()
+                        .ifImageIs("[App Icon]") {
                             NG()
                         }.ifElse {
                             OK("ifElse called")
                         }
-                    it.select("[Network & internet Icon]")
-                        .ifImageIsNot("[App Icon].png") {
+                    it.detect("Network & internet")
+                        .leftItem()
+                        .ifImageIsNot("[App Icon]") {
                             OK("ifImageIsNot called")
                         }.ifElse {
                             NG()
@@ -81,8 +63,6 @@ class IfImageIs1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

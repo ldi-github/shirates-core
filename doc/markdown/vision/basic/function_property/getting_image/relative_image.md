@@ -31,8 +31,8 @@ You can find an image relatively using these functions.
                 }.action {
                     v1 = findImage("[Connected devices Icon]")
                 }.expectation {
-                    v1.belowItem().imageLabelIs("[Apps Icon]")
-                    v1.aboveItem().imageLabelIs("[Network & internet Icon]")
+                    v1.belowItem().imageIs("[Apps Icon]")
+                    v1.aboveItem().imageIs("[Network & internet Icon]")
                 }
             }
         }
@@ -54,8 +54,8 @@ You can find an image relatively using these functions.
                 }.action {
                     v1 = findImage("[Audio Button]")
                 }.expectation {
-                    v1.rightItem(include = true).imageLabelIs("[Videos Button]")
-                    v1.leftItem(include = true).imageLabelIs("[Images Button]")
+                    v1.rightItem(include = true).imageIs("[Videos Button]")
+                    v1.leftItem(include = true).imageIs("[Images Button]")
                 }
             }
         }

@@ -3,8 +3,10 @@ package shirates.core.vision.driver
 import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.file.resolve
+import shirates.core.utility.string.normalize
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
+import java.text.Normalizer
 
 /**
  * classifyFull
@@ -28,7 +30,7 @@ fun VisionElement.classifyFull(
         mlmodelFile = mlmodelFile,
     )
 
-    return result.primaryClassification.identifier
+    return result.primaryClassification.identifier.normalize(Normalizer.Form.NFKC)
 }
 
 /**

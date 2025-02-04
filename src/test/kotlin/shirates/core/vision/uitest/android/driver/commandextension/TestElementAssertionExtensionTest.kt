@@ -40,7 +40,7 @@ class TestElementAssertionExtensionTest : VisionTest() {
     }
 
     @Test
-    fun imageLabelIs_imageFullLabelIs() {
+    fun imageIs_imageFullLabelIs() {
 
         scenario {
             case(1) {
@@ -50,7 +50,7 @@ class TestElementAssertionExtensionTest : VisionTest() {
                     v1 = detect("Network & internet")
                         .leftItem()
                 }.expectation {
-                    v1.imageLabelIs("[Network & internet Icon]")
+                    v1.imageIs("[Network & internet Icon]")
                 }
             }
             case(2) {
@@ -61,9 +61,9 @@ class TestElementAssertionExtensionTest : VisionTest() {
             case(3) {
                 expectation {
                     assertThatThrownBy {
-                        v1.imageLabelIs("[App Icon]")
+                        v1.imageIs("[App Icon]")
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("Image label of <Network & internet>:leftItem is [App Icon] (actual=false)")
+                        .hasMessage("Image of <Network & internet>:leftItem is [App Icon] (actual=false)")
                 }
             }
             case(4) {

@@ -26,6 +26,7 @@ fun VisionDrive.exist(
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -44,6 +45,7 @@ fun VisionDrive.exist(
             language = language,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
+            removeRedundantText = removeRedundantText,
         )
     }
 
@@ -59,15 +61,17 @@ internal fun VisionDrive.existCore(
     language: String,
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
+    removeRedundantText: Boolean,
 ): VisionElement {
 
     val v = detectCore(
         selector = selector,
         language = language,
         allowScroll = null,
-        throwsException = false,
         waitSeconds = waitSeconds,
         swipeToSafePosition = swipeToSafePosition,
+        removeRedundantText = removeRedundantText,
+        throwsException = false,
     )
     lastVisionElement = v
 
@@ -152,6 +156,7 @@ fun VisionDrive.existWithScrollDown(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -175,7 +180,8 @@ fun VisionDrive.existWithScrollDown(
                 selector = sel,
                 language = language,
                 waitSeconds = 0.0,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -199,6 +205,7 @@ fun VisionDrive.existWithScrollUp(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -222,7 +229,8 @@ fun VisionDrive.existWithScrollUp(
                 selector = sel,
                 language = language,
                 waitSeconds = 0.0,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -246,6 +254,7 @@ fun VisionDrive.existWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -269,7 +278,8 @@ fun VisionDrive.existWithScrollRight(
                 selector = sel,
                 language = language,
                 waitSeconds = 0.0,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -293,6 +303,7 @@ fun VisionDrive.existWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -316,7 +327,8 @@ fun VisionDrive.existWithScrollLeft(
                 selector = sel,
                 language = language,
                 waitSeconds = 0.0,
-                swipeToSafePosition = swipeToSafePosition
+                swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -356,6 +368,7 @@ fun VisionDrive.dontExist(
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
+            removeRedundantText = false,
         )
     }
     if (v.isFound) {

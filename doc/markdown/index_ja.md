@@ -21,7 +21,7 @@
 
 ### サンプル
 
-- [サンプルの入手](vision/getting_samples.md)
+- [サンプルの入手](vision/getting_samples_ja.md)
 
 ### 推奨設定
 
@@ -46,9 +46,8 @@
 ### テストクラスの作成
 
 - [テストクラスの作成](vision/basic/creating_testclass/creating_testclass_ja.md)
-- [要素の選択と検証](basic/creating_testclass/select_and_assert_ja.md)
-- [テストコードの構造](basic/creating_testclass/testcode_structure_ja.md)
-- [テスト結果ファイル](basic/creating_testclass/test_result_files_ja.md)
+- [要素の選択と検証](vision/basic/creating_testclass/detect_and_assert_ja.md)
+- [テストコードの構造](vision/basic/creating_testclass/testcode_structure_ja.md)
 
 ### コンピュータービジョンによるテキストと画像の認識
 
@@ -121,7 +120,7 @@
     - [分岐関数 (ifScreenIs, ifScreenIsNot)](vision/basic/function_property/branch/if_screen_is_ja.md)
     - [分岐関数 (ifCanDetect, ifCanDetectNot)](vision/basic/function_property/branch/if_can_detect_ja.md)
     - [分岐関数 (ifImageExist, ifImageExistNot)](vision/basic/function_property/branch/if_image_exist_ja.md)
-    - [分岐関数 (ifImageLabelIs, ifImageLabelIsNot)](vision/basic/function_property/branch/if_image_label_is_ja.md)
+    - [分岐関数 (ifImageIs, ifImageIsNot)](vision/basic/function_property/branch/if_image_is_ja.md)
     - [分岐関数 (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/if_string_ja.md)
     - [プラットフォーム関数 (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions_ja.md)
     - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties_ja.md)

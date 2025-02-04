@@ -51,7 +51,7 @@ class VisionTestClass1: VisionTest() {
 }
 ```
 
-## Running test (as Android)
+## テストを実行する(Android)
 
 これで `testFunc1()` を実行できるようになりました。デフォルトのOSはAndroidです。<br>
 `testFunc1()` を右クリックして`Debug`を選択します。 <br>

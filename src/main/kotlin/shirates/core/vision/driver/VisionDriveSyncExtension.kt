@@ -107,6 +107,7 @@ fun VisionDrive.waitForClose(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    removeRedundantText: Boolean = true,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -120,6 +121,7 @@ fun VisionDrive.waitForClose(
             language = language,
             waitSeconds = waitSeconds,
             allowScroll = false,
+            removeRedundantText = removeRedundantText,
         )
         if (throwsException && found) {
             throw TestDriverException(
@@ -142,7 +144,8 @@ fun VisionDrive.waitForDisplay(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    throwsException: Boolean = true
+    removeRedundantText: Boolean = true,
+    throwsException: Boolean = true,
 ): VisionElement {
 
     val testElement = TestDriver.it
@@ -156,6 +159,7 @@ fun VisionDrive.waitForDisplay(
             language = language,
             waitSeconds = waitSeconds,
             allowScroll = false,
+            removeRedundantText = removeRedundantText
         )
         if (found.not() && throwsException) {
             throw TestDriverException(

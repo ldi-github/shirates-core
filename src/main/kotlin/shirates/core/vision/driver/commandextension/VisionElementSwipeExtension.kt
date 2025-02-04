@@ -21,6 +21,7 @@ fun VisionElement.swipeTo(
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
     repeat: Int = 1,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     val command = "swipeTo"
@@ -38,6 +39,7 @@ fun VisionElement.swipeTo(
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
+            removeRedundantText = removeRedundantText,
         )
 
         v = swipeElementToElement(

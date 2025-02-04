@@ -58,25 +58,25 @@ fun VisionElement.textIs(
 }
 
 /**
- * imageLabelIs
+ * imageIs
  * (image label contains)
  */
-fun VisionElement.imageLabelIs(
-    containedText: String,
+fun VisionElement.imageIs(
+    label: String,
     classifierName: String = "DefaultClassifier",
     waitSeconds: Double = testContext.syncWaitSeconds,
     message: String? = null,
 ): VisionElement {
 
-    val command = "imageLabelIs"
+    val command = "imageIs"
     val assertMessage =
-        message ?: message(id = command, subject = subject, expected = containedText, replaceRelative = true)
+        message ?: message(id = command, subject = subject, expected = label, replaceRelative = true)
 
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = subject) {
 
         this.checkImageLabelContains(
-            containedText = containedText,
+            containedText = label,
             message = assertMessage,
             classifierName = classifierName,
             waitSeconds = waitSeconds,
@@ -223,6 +223,7 @@ fun VisionElement.existOnLine(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = false,
             )
         }
     }
@@ -243,6 +244,7 @@ fun VisionElement.existOnColumn(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -265,6 +267,7 @@ fun VisionElement.existOnColumn(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -285,6 +288,7 @@ fun VisionElement.existOnRight(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -307,6 +311,7 @@ fun VisionElement.existOnRight(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -327,6 +332,7 @@ fun VisionElement.existOnLeft(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -349,6 +355,7 @@ fun VisionElement.existOnLeft(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -369,6 +376,7 @@ fun VisionElement.existOnAbove(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -391,6 +399,7 @@ fun VisionElement.existOnAbove(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
@@ -411,6 +420,7 @@ fun VisionElement.existOnBelow(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -433,6 +443,7 @@ fun VisionElement.existOnBelow(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
             )
         }
     }
