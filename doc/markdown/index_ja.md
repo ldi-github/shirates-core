@@ -21,7 +21,7 @@
 
 ### サンプル
 
-- [サンプルの入手](vision/getting_samples.md)
+- [サンプルの入手](vision/getting_samples_ja.md)
 
 ### 推奨設定
 
@@ -46,9 +46,8 @@
 ### テストクラスの作成
 
 - [テストクラスの作成](vision/basic/creating_testclass/creating_testclass_ja.md)
-- [要素の選択と検証](basic/creating_testclass/select_and_assert_ja.md)
-- [テストコードの構造](basic/creating_testclass/testcode_structure_ja.md)
-- [テスト結果ファイル](basic/creating_testclass/test_result_files_ja.md)
+- [要素の選択と検証](vision/basic/creating_testclass/detect_and_assert_ja.md)
+- [テストコードの構造](vision/basic/creating_testclass/testcode_structure_ja.md)
 
 ### コンピュータービジョンによるテキストと画像の認識
 

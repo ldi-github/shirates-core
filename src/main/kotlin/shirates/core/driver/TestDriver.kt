@@ -48,6 +48,7 @@ import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.utility.misc.ProcessUtility
+import shirates.core.utility.string.normalize
 import shirates.core.utility.sync.RetryContext
 import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
@@ -63,6 +64,7 @@ import java.io.FileNotFoundException
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
+import java.text.Normalizer
 import java.time.Duration
 import java.util.*
 
@@ -432,7 +434,7 @@ object TestDriver {
             }
         }
         set(value) {
-            val screenName = value.getNicknameWithoutSuffix()
+            val screenName = value.getNicknameWithoutSuffix().normalize(Normalizer.Form.NFKC)
             if (screenName.isNotBlank() && field != screenName) {
                 field = screenName
                 if (testContext.enableCache) {
