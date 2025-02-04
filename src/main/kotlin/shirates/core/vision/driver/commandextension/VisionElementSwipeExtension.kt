@@ -21,6 +21,8 @@ fun VisionElement.swipeTo(
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
     repeat: Int = 1,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
 ): VisionElement {
 
     val command = "swipeTo"
@@ -38,6 +40,8 @@ fun VisionElement.swipeTo(
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
 
         v = swipeElementToElement(

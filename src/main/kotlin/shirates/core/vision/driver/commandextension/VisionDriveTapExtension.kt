@@ -30,7 +30,9 @@ fun VisionDrive.tap(
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
-    directAccess: Boolean = false
+    directAccess: Boolean = false,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
 ): VisionElement {
 
     if (directAccess) {
@@ -62,6 +64,8 @@ fun VisionDrive.tap(
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             throwsException = true,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
         val tapFunc = {
             silent {
@@ -115,6 +119,8 @@ internal fun VisionDrive.detectWithAdjustingPosition(
     selector: Selector,
     language: String,
     waitSeconds: Double,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -126,6 +132,8 @@ internal fun VisionDrive.detectWithAdjustingPosition(
             waitSeconds = waitSeconds,
             throwsException = throwsException,
             swipeToSafePosition = true,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
     }
 
@@ -224,6 +232,8 @@ private fun VisionDrive.tapWithScrollCommandCore(
     scrollMaxCount: Int,
     holdSeconds: Double,
     swipeToSafePosition: Boolean,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
 ): VisionElement {
 
     val selector = getSelector(expression = expression)
@@ -243,6 +253,8 @@ private fun VisionDrive.tapWithScrollCommandCore(
             scrollMaxCount = scrollMaxCount,
             throwsException = true,
             swipeToSafePosition = swipeToSafePosition,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         v = v.tap(holdSeconds = holdSeconds)
@@ -294,7 +306,9 @@ fun VisionDrive.tapWithScrollDown(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
 ): VisionElement {
 
     val command = "tapWithScrollDown"
@@ -311,7 +325,9 @@ fun VisionDrive.tapWithScrollDown(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        swipeToSafePosition = swipeToSafePosition
+        swipeToSafePosition = swipeToSafePosition,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
     )
 
     return v
@@ -329,7 +345,9 @@ fun VisionDrive.tapWithScrollUp(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
-    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
 ): VisionElement {
 
     val command = "tapWithScrollUp"
@@ -346,7 +364,9 @@ fun VisionDrive.tapWithScrollUp(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        swipeToSafePosition = swipeToSafePosition
+        swipeToSafePosition = swipeToSafePosition,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
     )
 
     return v
@@ -364,6 +384,8 @@ fun VisionDrive.tapWithScrollRight(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
 ): VisionElement {
 
     val command = "tapWithScrollRight"
@@ -380,7 +402,9 @@ fun VisionDrive.tapWithScrollRight(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        swipeToSafePosition = false
+        swipeToSafePosition = false,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
     )
 
     return v
@@ -398,6 +422,8 @@ fun VisionDrive.tapWithScrollLeft(
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
 ): VisionElement {
 
     val command = "tapWithScrollLeft"
@@ -414,7 +440,9 @@ fun VisionDrive.tapWithScrollLeft(
         scrollIntervalSeconds = scrollIntervalSeconds,
         scrollMaxCount = scrollMaxCount,
         holdSeconds = holdSeconds,
-        swipeToSafePosition = false
+        swipeToSafePosition = false,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
     )
 
     return v

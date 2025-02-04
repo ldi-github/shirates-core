@@ -201,6 +201,8 @@ fun VisionElement.existOnLine(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -223,6 +225,8 @@ fun VisionElement.existOnLine(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
             )
         }
     }
@@ -243,6 +247,8 @@ fun VisionElement.existOnColumn(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -265,6 +271,8 @@ fun VisionElement.existOnColumn(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
             )
         }
     }
@@ -285,6 +293,8 @@ fun VisionElement.existOnRight(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -307,6 +317,8 @@ fun VisionElement.existOnRight(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
             )
         }
     }
@@ -327,6 +339,8 @@ fun VisionElement.existOnLeft(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -349,6 +363,8 @@ fun VisionElement.existOnLeft(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
             )
         }
     }
@@ -369,6 +385,8 @@ fun VisionElement.existOnAbove(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -391,6 +409,8 @@ fun VisionElement.existOnAbove(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
             )
         }
     }
@@ -411,6 +431,8 @@ fun VisionElement.existOnBelow(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -433,6 +455,8 @@ fun VisionElement.existOnBelow(
                 language = language,
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
             )
         }
     }

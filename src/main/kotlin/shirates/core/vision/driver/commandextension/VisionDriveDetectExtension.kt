@@ -27,6 +27,8 @@ fun VisionDrive.detect(
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -34,12 +36,14 @@ fun VisionDrive.detect(
     val sel = getSelector(expression = expression)
 
     try {
-        var v = detectCore(
+        val v = detectCore(
             selector = sel,
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = waitSeconds,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
             throwsException = throwsException,
         )
         lastElement = v
@@ -53,6 +57,8 @@ internal fun removeRedundantText(
     visionElement: VisionElement,
     expectedText: String,
     language: String,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
 ): VisionElement {
     /**
      * Remove redundant text
@@ -65,8 +71,8 @@ internal fun removeRedundantText(
         containerY = visionElement.rect.y,
         screenshotFile = visionElement.screenshotFile,
         screenshotImage = visionElement.screenshotImage,
-        segmentMarginHorizontal = 0,
-        segmentMarginVertical = 0,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
         minimumHeight = visionElement.rect.height / 2,
     ).split()
     val elements = segmentContainer.visionElements.sortedBy { it.rect.left }.toMutableList()
@@ -109,6 +115,8 @@ internal fun VisionDrive.detectCore(
     waitSeconds: Double,
     throwsException: Boolean,
     swipeToSafePosition: Boolean,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -120,6 +128,8 @@ internal fun VisionDrive.detectCore(
             waitSeconds = waitSeconds,
             throwsException = throwsException,
             swipeToSafePosition = swipeToSafePosition,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
     }
     action()
@@ -143,6 +153,8 @@ private fun VisionDrive.detectCoreCore(
     waitSeconds: Double,
     throwsException: Boolean,
     swipeToSafePosition: Boolean,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
 ): VisionElement {
 
     if (lastElement.isEmpty) {
@@ -182,6 +194,8 @@ private fun VisionDrive.detectCoreCore(
         v = CodeExecutionContext.workingRegionElement.visionContext.detect(
             selector = selector,
             language = language,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
         v.isFound
     }
@@ -200,6 +214,8 @@ private fun VisionDrive.detectCoreCore(
             direction = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
             throwsException = false,
             swipeToSafePosition = swipeToSafePosition,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
     }
 
@@ -229,6 +245,8 @@ internal fun VisionDrive.detectWithScrollCore(
     scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
     throwsException: Boolean,
     swipeToSafePosition: Boolean,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
 ): VisionElement {
 
     var v = VisionElement.emptyElement
@@ -241,6 +259,8 @@ internal fun VisionDrive.detectWithScrollCore(
             throwsException = false,
             waitSeconds = 0.0,
             swipeToSafePosition = swipeToSafePosition,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
         val stopScroll = v.isFound
         stopScroll
@@ -490,6 +510,8 @@ fun VisionDrive.canDetect(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = 0.0,
     allowScroll: Boolean = true,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
 //        return this.innerWidget(expression = expression).isFound
@@ -507,6 +529,8 @@ fun VisionDrive.canDetect(
             waitSeconds = waitSeconds,
             throwsException = false,
             swipeToSafePosition = false,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         ).isFound
     }
     if (logLine != null) {
@@ -520,6 +544,8 @@ internal fun VisionDrive.canDetectCore(
     language: String,
     waitSeconds: Double,
     allowScroll: Boolean?,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
 ): Boolean {
 
     val v = detectCore(
@@ -529,6 +555,8 @@ internal fun VisionDrive.canDetectCore(
         waitSeconds = waitSeconds,
         throwsException = false,
         swipeToSafePosition = false,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
     )
     lastElement = v
 
@@ -673,6 +701,8 @@ internal fun VisionDrive.canDetectAllCore(
     selectors: Iterable<Selector>,
     language: String,
     allowScroll: Boolean?,
+    segmentMarginHorizontal: Int,
+    segmentMarginVertical: Int,
 ): Boolean {
 
     val subject = selectors.joinToString()
@@ -685,6 +715,8 @@ internal fun VisionDrive.canDetectAllCore(
                 language = language,
                 waitSeconds = 0.0,
                 allowScroll = allowScroll,
+                segmentMarginHorizontal = segmentMarginHorizontal,
+                segmentMarginVertical = segmentMarginVertical,
             )
             if (foundAll.not()) {
                 break
@@ -704,7 +736,10 @@ fun VisionDrive.canDetectAll(
     vararg expressions: String,
     language: String = PropertiesManager.visionOCRLanguage,
     allowScroll: Boolean? = null,
-): Boolean {
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+
+    ): Boolean {
 
     val selectors = expressions.map { getSelector(expression = it) }
     val subject = expressions.map { TestDriver.screenInfo.getSelector(expression = it) }.joinToString()
@@ -715,6 +750,8 @@ fun VisionDrive.canDetectAll(
             selectors = selectors,
             language = language,
             allowScroll = allowScroll,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
     }
     if (logLine != null) {

@@ -107,6 +107,8 @@ fun VisionDrive.waitForClose(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -120,6 +122,8 @@ fun VisionDrive.waitForClose(
             language = language,
             waitSeconds = waitSeconds,
             allowScroll = false,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
         if (throwsException && found) {
             throw TestDriverException(
@@ -142,7 +146,9 @@ fun VisionDrive.waitForDisplay(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    throwsException: Boolean = true
+    throwsException: Boolean = true,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
 ): VisionElement {
 
     val testElement = TestDriver.it
@@ -156,6 +162,8 @@ fun VisionDrive.waitForDisplay(
             language = language,
             waitSeconds = waitSeconds,
             allowScroll = false,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
         )
         if (found.not() && throwsException) {
             throw TestDriverException(
