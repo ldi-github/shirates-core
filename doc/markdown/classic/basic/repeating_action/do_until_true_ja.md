@@ -46,7 +46,7 @@ class DoUntilTrue1 : UITest() {
                     it.screenIs("[Android Settings Top Screen]")
                 }.action {
                     doUntilTrue {
-                        it.swipeCenterToTop()
+                        it.scrollDown()
                         it.canSelect("System")
                     }
                     it.tap()

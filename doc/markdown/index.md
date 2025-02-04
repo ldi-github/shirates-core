@@ -121,7 +121,7 @@
     - [Branch function (ifScreenIs, ifScreenIsNot)](vision/basic/function_property/branch/if_screen_is.md)
     - [Branch function (ifCanDetect, ifCanDetectNot)](vision/basic/function_property/branch/if_can_detect.md)
     - [Branch function (ifImageExist, ifImageExistNot)](vision/basic/function_property/branch/if_image_exist.md)
-    - [Branch function (ifImageLabelIs, ifImageLabelIsNot)](vision/basic/function_property/branch/if_image_label_is.md)
+    - [Branch function (ifImageIs, ifImageIsNot)](vision/basic/function_property/branch/if_image_is.md)
     - [Branch function (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/if_string.md)
     - [Platform function (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions.md)
     - [Platform property (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties.md)

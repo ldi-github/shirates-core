@@ -29,10 +29,9 @@
                     it.packageIs("com.android.settings")
                 }
             }
-
             case(2) {
                 action {
-                    it.launchApp("Chrome")
+                    it.launchApp("[Chrome]")
                 }.expectation {
                     it.packageIs("com.android.chrome")
                 }

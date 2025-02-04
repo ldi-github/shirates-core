@@ -86,14 +86,14 @@ Open the directory `build/vision/classifiers/DefaultClassifier/training`.
 <br>
 <hr>
 
-### ImageLabelIs1.kt
+### ImageIs1.kt
 
-(`src/test/kotlin/tutorial/basic/ImageLabelIs1.kt`)
+(`src/test/kotlin/tutorial/basic/ImageIs1.kt`)
 
 ```kotlin
     @Test
     @Order(10)
-    fun imageLabelIs() {
+    fun imageIs() {
 
         scenario {
             case(1) {
@@ -103,7 +103,7 @@ Open the directory `build/vision/classifiers/DefaultClassifier/training`.
                     v1 = it.detect("Network & internet")
                         .leftItem()
                 }.expectation {
-                    v1.imageLabelIs("[Network & internet Icon]")
+                    v1.imageIs("[Network & internet Icon]")
                 }
             }
             case(2) {
@@ -115,31 +115,27 @@ Open the directory `build/vision/classifiers/DefaultClassifier/training`.
     }
 ```
 
-Right-click on `imageLabelIs()` and select `debug` to run test.
+Right-click on `imageIs()` and select `debug` to run test.
 
 ### Console output
 
 ```
-138	[00:00:22]	2025/01/28 16:08:14.065	{imageLabelIs-1}	0	-	[EXPECTATION]	+1082	!	()	expectation
-139	[00:00:22]	2025/01/28 16:08:14.069	{imageLabelIs-1}	0	-	[info]	+4	!	(imageLabelIs)	<Network & internet>_leftItem.png
-140	[00:00:22]	2025/01/28 16:08:14.135	{imageLabelIs-1}	0	-	[info]	+66	!	(imageLabelIs)	[ImageClassifier/classifyImage] in 0.064 sec
-141	[00:00:22]	2025/01/28 16:08:14.136	{imageLabelIs-1}	0	-	[info]	+1	!	(imageLabelIs)	label: [Network & internet Icon]
-142	[00:00:22]	2025/01/28 16:08:14.137	{imageLabelIs-1}	0	-	[info]	+1	!	(imageLabelIs)	141_text_ "", bounds_ [84,867][146,913] width=63, height=47, centerX=115, centerY=890, rect_ [84, 867, 146, 913](w=63, h=47).png
-143	[00:00:22]	2025/01/28 16:08:14.139	{imageLabelIs-1}	0	-	[OK]	+2	!	(imageLabelIs)	Image label of <Network & internet>:leftItem is [Network & internet Icon]
-144	[00:00:22]	2025/01/28 16:08:14.141	{imageLabelIs-2}	0	-	[CASE]	+2	!	()	(2)
-145	[00:00:22]	2025/01/28 16:08:14.141	{imageLabelIs-2}	0	-	[EXPECTATION]	+0	!	()	expectation
-146	[00:00:22]	2025/01/28 16:08:14.187	{imageLabelIs-2}	0	-	[info]	+46	!	(imageFullLabelIs)	[ImageClassifier/classifyImage] in 0.044 sec
-147	[00:00:22]	2025/01/28 16:08:14.188	{imageLabelIs-2}	0	-	[info]	+1	!	(imageFullLabelIs)	fullLabel: @a[Android Settings App][Android Settings Top Screen][Network & internet Icon]
-148	[00:00:22]	2025/01/28 16:08:14.189	{imageLabelIs-2}	0	-	[info]	+1	!	(imageFullLabelIs)	147_text_ "", bounds_ [84,867][146,913] width=63, height=47, centerX=115, centerY=890, rect_ [84, 867, 146, 913](w=63, h=47).png
-149	[00:00:22]	2025/01/28 16:08:14.191	{imageLabelIs-2}	0	-	[OK]	+2	!	(imageFullLabelIs)	Image fullLabel of <Network & internet>:leftItem is @a[Android Settings App][Android Settings Top Screen][Network & internet Icon]
+141	[00:00:26]	2025/02/04 18:16:18.529	{imageIs-1}	0	-	[EXPECTATION]	+975	!	()	expectation
+142	[00:00:26]	2025/02/04 18:16:18.532	{imageIs-1}	0	-	[info]	+3	!	(imageIs)	<Network & internet>_leftItem.png
+143	[00:00:26]	2025/02/04 18:16:18.603	{imageIs-1}	0	-	[info]	+71	!	(imageIs)	[ImageClassifier/classifyImage] in 0.069 sec
+144	[00:00:26]	2025/02/04 18:16:18.604	{imageIs-1}	0	-	[info]	+1	!	(imageIs)	label: [Network & internet Icon]
+145	[00:00:26]	2025/02/04 18:16:18.608	{imageIs-1}	0	-	[info]	+4	!	(imageIs)	144_text_ "", bounds_ [84,867][146,913] width=63, height=47, centerX=115, centerY=890, rect_ [84, 867, 146, 913](w=63, h=47).png
+146	[00:00:26]	2025/02/04 18:16:18.611	{imageIs-1}	0	-	[OK]	+3	!	(imageIs)	Image of <Network & internet>:leftItem is [Network & internet Icon]
+147	[00:00:26]	2025/02/04 18:16:18.612	{imageIs-2}	0	-	[CASE]	+1	!	()	(2)
+148	[00:00:26]	2025/02/04 18:16:18.613	{imageIs-2}	0	-	[EXPECTATION]	+1	!	()	expectation
+149	[00:00:26]	2025/02/04 18:16:18.655	{imageIs-2}	0	-	[info]	+42	!	(imageFullLabelIs)	[ImageClassifier/classifyImage] in 0.041 sec
+150	[00:00:26]	2025/02/04 18:16:18.656	{imageIs-2}	0	-	[info]	+1	!	(imageFullLabelIs)	fullLabel: @a[Android Settings App][Android Settings Top Screen][Network & internet Icon]
+151	[00:00:26]	2025/02/04 18:16:18.659	{imageIs-2}	0	-	[info]	+3	!	(imageFullLabelIs)	150_text_ "", bounds_ [84,867][146,913] width=63, height=47, centerX=115, centerY=890, rect_ [84, 867, 146, 913](w=63, h=47).png
+152	[00:00:26]	2025/02/04 18:16:18.661	{imageIs-2}	0	-	[OK]	+2	!	(imageFullLabelIs)	Image fullLabel of <Network & internet>:leftItem is @a[Android Settings App][Android Settings Top Screen][Network & internet Icon]
 ```
 
 <br>
 <hr>
-
-## Sample code
-
-[Getting samples](../../getting_samples.md)
 
 ### FindImage1.kt
 

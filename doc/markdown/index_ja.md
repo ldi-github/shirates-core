@@ -121,7 +121,7 @@
     - [分岐関数 (ifScreenIs, ifScreenIsNot)](vision/basic/function_property/branch/if_screen_is_ja.md)
     - [分岐関数 (ifCanDetect, ifCanDetectNot)](vision/basic/function_property/branch/if_can_detect_ja.md)
     - [分岐関数 (ifImageExist, ifImageExistNot)](vision/basic/function_property/branch/if_image_exist_ja.md)
-    - [分岐関数 (ifImageLabelIs, ifImageLabelIsNot)](vision/basic/function_property/branch/if_image_label_is_ja.md)
+    - [分岐関数 (ifImageIs, ifImageIsNot)](vision/basic/function_property/branch/if_image_is_ja.md)
     - [分岐関数 (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/if_string_ja.md)
     - [プラットフォーム関数 (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions_ja.md)
     - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties_ja.md)

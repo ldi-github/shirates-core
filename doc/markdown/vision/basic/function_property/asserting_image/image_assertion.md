@@ -4,9 +4,9 @@ You can assert image using these functions.
 
 ## functions
 
-| function     |
-|:-------------|
-| imageLabelIs |
+| function |
+|:---------|
+| imageIs  |
 
 ## Sample code
 
@@ -19,7 +19,7 @@ You can assert image using these functions.
 ```kotlin
     @Test
     @Order(10)
-    fun imageLabelIs() {
+    fun imageIs() {
 
         scenario {
             case(1) {
@@ -29,7 +29,7 @@ You can assert image using these functions.
                     v1 = it.detect("Network & internet")
                         .leftItem()
                 }.expectation {
-                    v1.imageLabelIs("[Network & internet Icon]")
+                    v1.imageIs("[Network & internet Icon]")
                 }
             }
         }

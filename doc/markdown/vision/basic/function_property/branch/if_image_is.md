@@ -1,26 +1,26 @@
-# Branch function (ifImageLabelIs, ifImageLabelIsNot) (Vision)
+# Branch function (ifImageIs, ifImageIsNot) (Vision)
 
 You can use special branch functions for image label.
 
 ## functions
 
-| function          | description                                                                                   |
-|:------------------|:----------------------------------------------------------------------------------------------|
-| ifImageLabelIs    | The code block is executed when specified image label matches the image of the element        |
-| ifImageLabelIsNot | The code block is executed when specified image label does not match the image of the element |
+| function     | description                                                                                   |
+|:-------------|:----------------------------------------------------------------------------------------------|
+| ifImageIs    | The code block is executed when specified image label matches the image of the element        |
+| ifImageIsNot | The code block is executed when specified image label does not match the image of the element |
 
 ## Sample code
 
 [Getting samples](../../getting_samples.md)
 
-### IfImageLabelIs1.kt
+### IfImageIs1.kt
 
-(`src/test/kotlin/tutorial/basic/IfImageLabelIs1.kt`)
+(`src/test/kotlin/tutorial/basic/IfImageIs1.kt`)
 
 ```kotlin
     @Test
     @Order(10)
-    fun ifImageLabelIsTest() {
+    fun ifImageIsTest() {
 
         scenario {
             case(1) {
@@ -29,14 +29,14 @@ You can use special branch functions for image label.
                 }.expectation {
                     it.detect("Network & internet")
                         .leftItem()
-                        .ifImageLabelIs("[Network & internet Icon]") {
-                            OK("ifImageLabelIs called")
+                        .ifImageIs("[Network & internet Icon]") {
+                            OK("ifImageIs called")
                         }.ifElse {
                             NG()
                         }
                     it.detect("Network & internet")
                         .leftItem()
-                        .ifImageLabelIsNot("[Network & internet Icon]") {
+                        .ifImageIsNot("[Network & internet Icon]") {
                             NG()
                         }.ifElse {
                             OK("ifElse called")
@@ -47,15 +47,15 @@ You can use special branch functions for image label.
                 expectation {
                     it.detect("Network & internet")
                         .leftItem()
-                        .ifImageLabelIs("[App Icon]") {
+                        .ifImageIs("[App Icon]") {
                             NG()
                         }.ifElse {
                             OK("ifElse called")
                         }
                     it.detect("Network & internet")
                         .leftItem()
-                        .ifImageLabelIsNot("[App Icon]") {
-                            OK("ifImageLabelIsNot called")
+                        .ifImageIsNot("[App Icon]") {
+                            OK("ifImageIsNot called")
                         }.ifElse {
                             NG()
                         }
