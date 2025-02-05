@@ -61,6 +61,8 @@ object CreateMLUtility {
 
     val argsMap = mutableMapOf<String, List<String>>()
 
+    val imageFilterMap = mutableMapOf<String, String>()
+
     @JvmStatic
     fun main(args: Array<String>) {
 
@@ -93,7 +95,7 @@ object CreateMLUtility {
         visionDirectory: String = PropertiesManager.visionDirectory,
         visionDirectoryInWork: String = VISION_DIRECTORY_IN_WORK,
         force: Boolean = false,
-        createBinary: Boolean = true
+        createBinary: Boolean? = null
     ) {
         if (TestMode.isRunningOnMacOS.not()) {
             throw NotImplementedError("CreateMLUtility is for only MacOS.")
@@ -184,6 +186,14 @@ object CreateMLUtility {
     internal fun getScriptFiles() {
         scriptFilesInVision = classifiersDirectoryInVision.toFile().walkTopDown()
             .filter { it.name == ML_IMAGE_CLASSIFIER_SCRIPT }.map { it.toString() }.toList()
+        for (scriptFileInVision in scriptFilesInVision) {
+            val classifierName = scriptFileInVision.toPath().parent.name
+            val filterName = scriptFileInVision.toFile().readLines().firstOrNull { it.contains("imageFilter=") }
+                ?.split("=")?.last()
+            if (filterName != null) {
+                imageFilterMap[classifierName] = filterName
+            }
+        }
     }
 
     internal fun getImageFiles() {
@@ -203,7 +213,7 @@ object CreateMLUtility {
         }
     }
 
-    internal fun createWorkDirectoriesAndFiles(createBinary: Boolean) {
+    internal fun createWorkDirectoriesAndFiles(createBinary: Boolean?) {
 
         val work = visionDirectoryInWork.toPath().toString()
         if (work.startsWith(UserVar.project.toString()).not()) {
@@ -227,7 +237,12 @@ object CreateMLUtility {
             imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.combinedLabelDirectoryInTraining)
             // copy image file to test
             imageEntry.imageFileInVision.copyFileIntoDirectory(imageEntry.combinedLabelDirectoryInTest)
-            if (createBinary) {
+
+            val filterName =
+                if (createBinary == true) "binary"
+                else if (imageFilterMap.containsKey(imageEntry.classifierName)) imageFilterMap[imageEntry.classifierName]
+                else null
+            if (filterName == "binary") {
                 // create binary file in test
                 createBinaryFile(imageFile = imageEntry.imageFileInTraining)
             }

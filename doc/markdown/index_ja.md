@@ -40,13 +40,13 @@
 
 ### プロジェクトの作成
 
-- [プロジェクトの作成](vision/basic/creating_project/creating_project_ja.md)
+- [プロジェクトを作成する](vision/basic/creating_project/creating_project_ja.md)
 - [テスト構成テンプレート](vision/basic/creating_project/test_configuration_template_ja.md)
 
 ### テストクラスの作成
 
-- [テストクラスの作成](vision/basic/creating_testclass/creating_testclass_ja.md)
-- [要素の選択と検証](vision/basic/creating_testclass/detect_and_assert_ja.md)
+- [テストクラスを作成する](vision/basic/creating_testclass/creating_testclass_ja.md)
+- [テキストを検出して検証する](vision/basic/creating_testclass/detect_and_assert_ja.md)
 - [テストコードの構造](vision/basic/creating_testclass/testcode_structure_ja.md)
 
 ### コンピュータービジョンによるテキストと画像の認識
