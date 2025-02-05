@@ -11,12 +11,17 @@
 | screenIsOf | 指定した画面の何れかが表示されていることを検証します     |
 | isScreenOf | 指定した画面の何れかが表示されている場合にtrueを返します |
 
-## 画面ニックネームファイル
+## Template screen images
 
-これらの関数を使用する前に[画面ニックネームファイル](../../selector_and_nickname/nickname/screen_nickname_ja.md)
-を定義しておく必要があります。
+Before using these functions, you have to prepare template screen images.<br>
 
-## 例
+![](_images/screen_image_templates.png)
+
+参照: [画面イメージテンプレートのセットアップ](../../text_and_image_recognition/setting_up_screen_image_templates_ja.md)
+
+### サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### ScreenIsAndIsScreen1.kt
 
@@ -205,5 +210,5 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)
 

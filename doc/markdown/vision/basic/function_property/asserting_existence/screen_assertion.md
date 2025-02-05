@@ -13,13 +13,13 @@ You can use **isScreen** function to getting whether the screen is displayed or 
 | screenIsOf | Assert that any of the screens is displayed     |
 | isScreenOf | Returns true if any of the screens is displayed |
 
-## Template screen images
+## Screen image templates
 
-Before using these functions, you have to prepare template screen images.<br>
+Before using these functions, you have to prepare screen image templates.<br>
 
-![](_images/template_screen_images.png)
+![](_images/screen_image_templates.png)
 
-See [Setting up template screen images](../../text_and_image_recognition/setting_up_template_screen_images)
+See [Setting up screen image templates](../../text_and_image_recognition/setting_up_screen_image_templates.md)
 
 ## Sample code
 

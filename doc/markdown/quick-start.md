@@ -84,7 +84,6 @@ npm -v
 **New install**
 
 ```
-npm uninstall -g appium
 npm install -g appium
 appium -v
 ```
