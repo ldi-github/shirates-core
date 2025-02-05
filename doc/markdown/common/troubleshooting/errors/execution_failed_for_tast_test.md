@@ -15,7 +15,7 @@ You run test with gradle but test task was not configured.
 
 Configure gradle test task,<br>
 or use IntelliJ IDEA to build and run.
-See [Enable right-click test running](../../../classic/tool_settings/right_click_test_running.md)
+See [Enable right-click test running](../../../common/tool_settings/right_click_test_running.md)
 
 ### Link
 

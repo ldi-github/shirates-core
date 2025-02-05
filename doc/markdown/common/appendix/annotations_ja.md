@@ -18,16 +18,16 @@ Shiratesには以下のカスタムアノテーションがあります。
 
 | アノテーション         | 対象      | 説明                                                                                                                |
 |:----------------|:--------|:------------------------------------------------------------------------------------------------------------------|
-| @Testrun        | クラス     | テストセッションを初期化するためのTestrunファイルを指定する([参照](../../classic/basic/creating_testclass/creating_testclass_ja.md))          |
+| @Testrun        | クラス     | テストセッションを初期化するためのTestrunファイルを指定する([参照](../../vision/basic/creating_testclass/creating_testclass_ja.md))           |
 | @android        | クラス     | Androidのデフォルト構成でテストセッションを初期化する                                                                                    |
 | @ios            | クラス     | iosのデフォルト構成でテストセッションを初期化する                                                                                        |
-| @MacroObject    | クラス     | MacroObjectを宣言する ([参照](../../classic/basic/routine_work/macro_ja.md))                                             |
-| @Macro          | 関数      | Macro関数を宣言する ([参照](../../classic/basic/routine_work/macro_ja.md))                                                 |
+| @MacroObject    | クラス     | MacroObjectを宣言する ([参照](../../vision/basic/routine_work/macro_ja.md))                                              |
+| @Macro          | 関数      | Macro関数を宣言する ([参照](../../vision/basic/routine_work/macro_ja.md))                                                  |
 | @CustomObject   | クラス     | CustomObjectを宣言する ([参照](../../classic/in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md)) |
 | @CustomFunction | 関数      | Custom関数を宣言する ([参照](../../classic/in_action/adapting_to_environments/configuring_tap_appIcon_function_ja.md))     |
 | @DisableCache   | クラス, 関数 | キャッシュを無効にする                                                                                                       |
 | @NoLoadRun      | クラス, 関数 | (廃止予定。代わりに@Manualを使用してください。)                                                                                      |
-| @Manual         | クラス, 関数 | テストを無負荷実行モード(NLRモード)で実行する ([参照](../in_action/designing_and_implementing_test/designing_test_in_code_first_ja.md)) |
+| @Manual         | クラス, 関数 | テストを無負荷実行モード(NLRモード)で実行する ([参照](../../common/designing_and_implementing_test/designing_test_in_code_first_ja.md)) |
 | @Environment    | クラス, 関数 | テスト実施環境を宣言する                                                                                                      |
 | @Unstable       | クラス, 関数 | テストが不安定であることを宣言する                                                                                                 |
 | @Deleted        | クラス, 関数 | テストが削除予定であることを宣言する                                                                                                |
