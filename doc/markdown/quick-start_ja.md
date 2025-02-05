@@ -85,7 +85,6 @@ npm -v
 **新規インストール**
 
 ```
-npm uninstall -g appium
 npm install -g appium
 appium -v
 ```
@@ -239,10 +238,10 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
    `src/test/Kotlin/demo/vision/iOSSettingsVisionDemo`を右クリックして <br>
    **Debug 'iOSSettingsVisionDemo'** を選択します。
 2. コンソールにこのようなログが出力されます。 ![](vision/_images/console_ios.png)
-3. Click the link to open the log directory.<br> ![](vision/_images/log_directory.png)
+3. リンクをクリックしてログディレクトリを開きます。<br> ![](vision/_images/log_directory.png)
 4. **_Report(simple).html**を開きます。 <br> ![](_images/report_simple_ios.png) <br><br>
 5. **iOSSettingsVisionDemo@i.xlsx** を開きます。<br> ![](vision/_images/ios_settings_vision_demo.png)
 
 ### Link
 
-- [index](index.md)
+- [index](index_ja.md)

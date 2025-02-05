@@ -16,15 +16,15 @@ In Shirates/Vision, FeaturePrint is used to find most similar images.
 
 ## Text recognition by AI-OCR
 
-When you get the most similar template screen image with FeaturePrint distance,
+When you get the most similar screen image template with FeaturePrint distance,
 you can not determine if the image corresponds to the screen of the screenshot exactly.<br>
 It's just that it's the most similar.
 
 To complement this, a textual similarity comparison is performed using AI-OCR.<br>
 
-AI-OCR is not performed to every template screen images because of performance problem.
+AI-OCR is not performed to every screen image templates because of performance problem.
 On the other hand, calculating FeaturePrint is so fast that can be performed
-to every template screen images on starting up the vision-server.
+to every screen image templates on starting up the vision-server.
 FeaturePrint is used to improve performance like indexing.
 
 ## Why not just using ImageClassifier?
@@ -33,13 +33,13 @@ Classifiers are not always 100% accurate, so you cannot simply use ImageClassifi
 To overcome this weakness, getting some screen candidates (e.g. top 3)
 in the template images and inspecting texts on them is required.
 
-## Template screen images
+## Screen image templates
 
 See ```vision/screens```
 
-![](_images/template_screen_images.png)
+![](_images/screen_image_templates.png)
 
-You can append template images under the directory `vision/screens`.
+You can append screen image templates under the directory `vision/screens`.
 
 ### Link
 

@@ -57,7 +57,7 @@
 - [CheckStateClassifierを使用する](vision/basic/text_and_image_recognition/using_check_state_classifier_ja.md)
 - [DefaultClassifierを使用する](vision/basic/text_and_image_recognition/using_default_classifier_ja.md)
 - [FeaturePrintとテキスト認識による画面の識別](vision/basic/text_and_image_recognition/screen_assertion_using_feature_print_and_text_recognition_ja.md)
-- [画面イメージテンプレートの設定](vision/basic/text_and_image_recognition/setting_up_screen_image_templates_ja.md)
+- [画面イメージテンプレートのセットアップ](vision/basic/text_and_image_recognition/setting_up_screen_image_templates_ja.md)
 
 ### マクロ
 
@@ -67,7 +67,7 @@
 
 - [セレクター式](vision/basic/selector_and_nickname/selector_expression_ja.md)
 - [ニックネーム](vision/basic/selector_and_nickname/nickname_ja.md)
-    - [データセットニックネーム](classic/basic/selector_and_nickname/nickname/dataset_nickname.md)
+    - [データセットニックネーム](classic/basic/selector_and_nickname/nickname/dataset_nickname_ja.md)
 
 ### パラメーター
 

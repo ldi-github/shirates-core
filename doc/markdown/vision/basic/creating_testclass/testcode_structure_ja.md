@@ -1,12 +1,12 @@
 # テストコードの構造 (Vision)
 
-## scenario and case
+## scenario と case
 
-In Shirates, a JUnit 5 test method is an autotest session that includes a scenario and one or more test cases.
+Shiratesでは JUnit 5のテストメソッドが自動テストのセッションに対応し、その中に1つの scenario と1つ以上の case を含みます。
 
-### Sample code
+### サンプルコード
 
-[Getting samples](../../getting_samples.md)
+[サンプルの入手](../../getting_samples_ja.md)
 
 ### TestScenarioAndTestCase1.kt
 
@@ -45,11 +45,11 @@ class TestScenarioAndTestCase1 : VisionTest() {
         scenario {
             case(1) {
                 condition {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }.action {
-                    it.tap("Network & internet")
+                    it.tap("ネットワークとインターネット")
                 }.expectation {
-                    it.screenIs("[Network & internet Screen]")
+                    it.screenIs("[ネットワークとインターネット画面]")
                 }
             }
         }
@@ -57,24 +57,25 @@ class TestScenarioAndTestCase1 : VisionTest() {
 }
 ```
 
-### Running test
+### テストを実行する
 
-1. Set `os` in `testrun.global.properties` to run as android (default is android).
+1. Androidで実行されるように`testrun.global.properties`の`os`を設定します (デフォルトは`android`
+   なので単にコメントアウトします)。
 
 ```properties
 ## OS --------------------
 #os=ios
 ```
 
-2. Right-click on the `TestScenarioAndTestCase1` and select `Debug`.
+2. `TestScenarioAndTestCase1`を右クリックして`Debug`を選択します。
 
 ## condition-action-expectation (CAE)
 
-A test case is a combination of these blocks.
+case（テストケース）は以下のブロックの組み合わせです。
 
-- `condition`
-- `action`
-- `expectation`
+- `condition`(事前条件)
+- `action`（アクション）
+- `expectation`（期待結果）
 
 ### TestScenarioAndTestCase1.kt
 
@@ -86,19 +87,20 @@ A test case is a combination of these blocks.
         scenario {
             case(1) {
                 condition {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }.action {
-                    it.tap("Network & internet")
+                    it.tap("ネットワークとインターネット")
                 }.expectation {
-                    it.screenIs("[Network & internet Screen]")
+                    it.screenIs("[ネットワークとインターネット画面]")
                 }
             }
         }
     }
 ```
 
-This pattern is Shirates's "**CAE pattern**", like well known unit testing practice "AAA pattern (Arrange-Act-Assert
-pattern)".
+このパターンはShiratesでは "**CAE pattern**" と呼びます。これは有名なUnitテストプラクティスの "AAAパターン (
+Arrange-Act-Assert
+pattern)" に対応するものです。
 
 ### Test Report
 
