@@ -73,6 +73,16 @@ Refer to the URL below for details on language and locale<br>
 - [appium-uiautomator2-driver](https://github.com/appium/appium-uiautomator2-driver)<br>
 - [XCUITest Driver](https://appium.github.io/appium-xcuitest-driver/4.16/capabilities/)
 
+## Troubleshooting
+
+The following error may occur on Android.
+
+```
+Cannot set the device locale to 'ja_JP'. You may want to apply one of the following locales instead: ja_JP 
+```
+
+Check [Cannot set the device locale to '(locale)'](../../troubleshooting/performance_and_stability_android/cannot_set_the_device_locale_to.md)
+
 ### Link
 
 - [index](../../../index.md)

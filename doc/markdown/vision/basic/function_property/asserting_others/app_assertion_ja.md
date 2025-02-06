@@ -25,19 +25,18 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.appIs("Settings")
+                    it.appIs("[設定]")
                 }
             }
-
             case(2) {
                 condition {
-                    it.launchApp("Chrome")
+                    it.launchApp("[Chrome]")
                 }.expectation {
-                    val isApp = it.isApp("Chrome")
-                    output("isApp(\"Chrome\")=$isApp")
-                    it.appIs("Chrome")
+                    val isApp = it.isApp("[Chrome]")
+                    output("isApp(\"[Chrome]\")=$isApp")
+                    it.appIs("[Chrome]")
                 }
             }
         }
@@ -50,9 +49,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.appIs("Chrome")
+                    it.appIs("[Chrome]")
                 }
             }
         }

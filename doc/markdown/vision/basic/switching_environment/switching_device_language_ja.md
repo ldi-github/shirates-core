@@ -13,7 +13,7 @@ capabilitiesはtestConfig.jsonで設定できます。
 {
   "testConfigName": "testConfig@a",
 
-  "appIconName": "Settings",
+  "appIconName": "設定",
 
   "packageOrBundleId": "com.android.settings",
 
@@ -46,7 +46,7 @@ capabilitiesはtestConfig.jsonで設定できます。
 {
   "testConfigName": "testConfig@i",
 
-  "appIconName": "Settings",
+  "appIconName": "設定",
 
   "packageOrBundleId": "com.apple.Preferences",
 

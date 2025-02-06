@@ -38,7 +38,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     "string1"
                         .thisIs("string1")
@@ -78,7 +78,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     "string1"
                         .thisContains("square")
@@ -88,7 +88,7 @@
     }
 ```
 
-![](_images/asserting_string_value.png)
+![](_images/asserting_string_value_ja.png)
 
 ### Link
 

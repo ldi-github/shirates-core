@@ -26,8 +26,8 @@
                 }.action {
                     it.launchApp()  // Refers packageOrBundleId in testConfig.json
                 }.expectation {
-                    it.appIs("[Settings]")  // App Nickname in app.json
-                    it.appIs("Settings")    // App Nickname in app.json
+                    it.appIs("[設定]")  // App Nickname in app.json
+                    it.appIs("設定")    // App Nickname in app.json
                     it.appIs("com.android.settings")    // package
                 }
             }
@@ -60,11 +60,11 @@
             }
             case(5) {
                 condition {
-                    it.terminateApp("[Play Store]")     // App Nickname in app.json
+                    it.terminateApp("[Playストア]")     // App Nickname in app.json
                 }.action {
-                    it.launchApp("[Play Store]")
+                    it.launchApp("[Playストア]")
                 }.expectation {
-                    it.appIs("[Play Store]")
+                    it.appIs("[Playストア]")
                 }
             }
         }

@@ -27,12 +27,12 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
-                    v1 = findImage("[Connected devices Icon]")
+                    v1 = findImage("[接続設定アイコン]")
                 }.expectation {
-                    v1.belowItem().imageIs("[Apps Icon]")
-                    v1.aboveItem().imageIs("[Network & internet Icon]")
+                    v1.belowItem().imageIs("[アプリアイコン]")
+                    v1.aboveItem().imageIs("[ネットワークとインターネットアイコン]")
                 }
             }
         }
@@ -40,7 +40,7 @@
     }
 ```
 
-![](_images/above_item_below_item.png)
+![](_images/above_item_below_item_ja.png)
 
 ```kotlin
     @Test
@@ -50,12 +50,12 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Files Top Screen]")
+                    it.macro("[ファイルトップ画面]")
                 }.action {
-                    v1 = findImage("[Audio Button]")
+                    v1 = findImage("[音声ボタン]")
                 }.expectation {
-                    v1.rightItem(include = true).imageIs("[Videos Button]")
-                    v1.leftItem(include = true).imageIs("[Images Button]")
+                    v1.rightItem(include = true).imageIs("[動画ボタン]")
+                    v1.leftItem(include = true).imageIs("[画像ボタン]")
                 }
             }
         }
@@ -65,7 +65,7 @@
 **Note:**<br>
 `include = true` combines image pieces that are overlapped into a group. `include = false` is default.
 
-![](_images/left_item_right_item.png)
+![](_images/left_item_right_item_ja.png)
 
 ### Link
 

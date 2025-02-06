@@ -36,7 +36,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
                     it
                         .scrollDown()
@@ -64,18 +64,18 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
                     it.scrollToBottom(repeat = 2)
                 }.expectation {
-                    it.exist("Tips & support")
+                    it.exist("ヒントとサポート")
                 }
             }
             case(2) {
                 action {
                     it.scrollToTop(repeat = 2)
                 }.expectation {
-                    it.exist("Settings")
+                    it.exist("設定")
                 }
             }
         }
@@ -88,18 +88,18 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
                         it
-                            .detect("Notifications").textIs("Notifications")
-                            .detect("Accessibility").textIs("Accessibility")
-                            .detect("Tips & support").textIs("Tips & support")
+                            .detect("通知").textIs("通知")
+                            .detect("ユーザー補助").textIs("ユーザー補助")
+                            .detect("ヒントとサポート").textIs("ヒントとサポート")
                     }
                     withScrollUp {
                         it
-                            .detect("Accessibility").textIs("Accessibility")
-                            .detect("Notifications").textIs("Notifications")
+                            .detect("ユーザー補助").textIs("ユーザー補助")
+                            .detect("通知").textIs("通知")
                     }
                 }
             }
@@ -107,35 +107,35 @@
                 expectation {
                     withScrollDown {
                         it
-                            .exist("Notifications")
-                            .exist("Accessibility")
-                            .exist("Tips & support")
+                            .exist("通知")
+                            .exist("ユーザー補助")
+                            .exist("ヒントとサポート")
                     }
                     withScrollUp {
                         it
-                            .exist("Tips & support")
-                            .exist("Accessibility")
-                            .exist("Notifications")
+                            .exist("ヒントとサポート")
+                            .exist("ユーザー補助")
+                            .exist("通知")
                     }
                 }
             }
             case(3) {
                 action {
                     withScrollDown {
-                        it.tap("Accessibility")
+                        it.tap("ユーザー補助")
                     }
                 }.expectation {
-                    it.screenIs("[Accessibility Screen]")
+                    it.screenIs("[ユーザー補助画面]")
                 }
             }
             case(4) {
                 action {
                     it.pressBack()
                     withScrollUp {
-                        it.tap("Network & internet")
+                        it.tap("ネットワークとインターネット")
                     }
                 }.expectation {
-                    it.screenIs("[Network & internet Screen]")
+                    it.screenIs("[ネットワークとインターネット画面]")
                 }
             }
         }

@@ -1,4 +1,4 @@
-# 任意の値の検証
+# 任意の値の検証 (Vision)
 
 これらの関数を使用して任意の値の検証を行うことができます。
 
@@ -27,7 +27,7 @@
         scenario {
             case(1, "Int") {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     123.thisIs(123)
                     123.thisIsNot(456)
@@ -46,9 +46,9 @@
             }
             case(3, "VisionElement") {
                 action {
-                    v1 = detect("Apps")
-                    v2 = detect("Apps")
-                    v3 = detect("Notifications")
+                    v1 = detect("アプリ")
+                    v2 = detect("アプリ")
+                    v3 = detect("通知")
                 }.expectation {
                     v1.thisIs(v1, "v1 is v1")   // OK
                     v1.thisIs(v2, "v1 is v2")   // OK
@@ -60,7 +60,7 @@
     }
 ```
 
-![](_images/asserting_any_value.png)
+![](_images/asserting_any_value_ja.png)
 
 ### Link
 

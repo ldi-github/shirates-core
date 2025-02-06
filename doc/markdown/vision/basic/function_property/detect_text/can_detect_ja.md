@@ -30,35 +30,35 @@
         scenario {
             case(1) {
                 expectation {
-                    it.canDetect("Settings")
-                        .thisIsTrue("<Settings> found.")
+                    it.canDetect("設定")
+                        .thisIsTrue("<設定>が見つかりました")
                 }
             }
             case(2) {
                 expectation {
-                    it.canDetectWithScrollDown("System")
-                        .thisIsTrue("<System> found with scroll down.")
+                    it.canDetectWithScrollDown("システム")
+                        .thisIsTrue("<システム>が見つかりました（下方向スクロールあり）")
                 }
             }
             case(3) {
                 expectation {
-                    it.canDetectWithScrollUp("Settings")
-                        .thisIsTrue("<Settings> found with scroll up.")
+                    it.canDetectWithScrollUp("設定")
+                        .thisIsTrue("<設定>が見つかりました（上方向スクロールあり）")
                 }
             }
             case(4) {
                 expectation {
                     withScrollDown {
-                        it.canDetectAll("Settings", "System")
-                            .thisIsTrue("<Settings> found with scroll down.")
+                        it.canDetectAll("設定", "システム")
+                            .thisIsTrue("<設定>が見つかりました（下方向スクロールあり）")
                     }
                 }
             }
             case(5) {
                 expectation {
                     withScrollUp {
-                        it.canDetectAll("Settings", "System")
-                            .thisIsTrue("<Settings> found with scroll up.")
+                        it.canDetectAll("設定", "システム")
+                            .thisIsTrue("<設定>が見つかりました（上方向スクロールあり）")
                     }
                 }
             }

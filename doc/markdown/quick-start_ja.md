@@ -151,7 +151,7 @@ appium driver list
 
 初期化スクリプト(.zshrc など)で環境変数を設定してください。
 
-#### Example
+#### 例
 
 ```
 export ANDROID_SDK_ROOT=/Users/$USER/Library/Android/sdk
@@ -160,7 +160,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 **注意:** 上記セッティングを有効にするためにログアウト/ログインを実行してください。
 
-#### Example
+#### 例
 
 ```
 export ANDROID_SDK_ROOT=/home/$USER/Android/Sdk

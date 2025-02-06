@@ -27,9 +27,9 @@ object MacroObject1 : VisionTest() {
     @Macro("[Network preferences Screen]")
     fun internetScreen() {
 
-        it.waitScreen("[Android Settings Top Screen]")
-            .tap("Network & internet")
-        it.waitScreen("[Network & internet Screen]")
+        it.waitScreen("[Android設定トップ画面]")
+            .tap("ネットワークとインターネット")
+        it.waitScreen("[ネットワークとインターネット画面]")
             .tap("Internet")
         it.waitScreen("[Internet Screen]")
             .tap("Network preferences")
@@ -47,7 +47,7 @@ object MacroObject1 : VisionTest() {
 2. テストコードを以下のように実装します。
 
 ```kotlin
-package exercise
+package tutorial.basic
 
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -64,12 +64,13 @@ class Macro1 : VisionTest() {
         scenario {
             case(1) {
                 action {
-                    it.macro("[Network preferences Screen]")
+                    it.macro("[システム画面]")
                 }.expectation {
-                    it.exist("Install certificates")
+                    it.exist("言語")
                 }
             }
         }
+
     }
 }
 ```

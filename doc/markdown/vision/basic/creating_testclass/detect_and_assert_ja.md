@@ -4,7 +4,7 @@
 
 ### サンプルコード
 
-[サンプルの入手](../../../getting_samples_ja.md)
+[サンプルの入手](../../../vision/getting_samples_ja.md)
 
 ### DetectAndAssert1.kt
 
@@ -18,8 +18,8 @@
         scenario {
             case(1) {
                 expectation {
-                    it.detect("Settings")
-                        .textIs("Settings")   // OK
+                    it.detect("設定")
+                        .textIs("設定")   // OK
                 }
             }
         }
@@ -32,8 +32,8 @@
         scenario {
             case(1) {
                 expectation {
-                    it.detect("Settings")
-                        .textIs("Network & internet")   // NG
+                    it.detect("設定")
+                        .textIs("ネットワークとインターネット")   // NG
                 }
             }
         }
@@ -52,12 +52,12 @@ os=android
 
 2. テストを右クリックして`Debug`を選択します。
 
-上の例では**detect**関数がスクリーンショットのテキストを認識し、"Settings"に一致するテキストを探して`VisionElement`
+上の例では**detect**関数がスクリーンショットのテキストを認識し、"設定"に一致するテキストを探して`VisionElement`
 として返します。
 テキストの値が期待した値に一致する場合以下のような検証ログが出力されます。
 
 ```
-[OK]	(textIs)	<Settings> is "Settings"
+[OK]	+5	!	(textIs)	<設定>: "設定"
 ```
 
 ### Link

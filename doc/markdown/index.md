@@ -109,7 +109,7 @@
 - Asserting existence
     - [Text existence assertion](vision/basic/function_property/asserting_existence/text_existance_assertion.md)
     - [Image existence assertion](vision/basic/function_property/asserting_existence/image_existance_assertion.md)
-    - [Screen assertion](vision/basic/function_property/asserting_existence/screen_is.md)
+    - [Screen assertion](vision/basic/function_property/asserting_existence/screen_assertion.md)
 - Asserting others
     - [App assertion](vision/basic/function_property/asserting_others/app_assertion.md)
     - [Keyboard assertion](vision/basic/function_property/asserting_others/keyboard_assertion.md)

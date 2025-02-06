@@ -46,19 +46,19 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
-                    it.detect("Battery")
-                        .swipeTo("Network & internet")
+                    it.detect("バッテリー")
+                        .swipeTo("ネットワークとインターネット")
                 }.expectation {
                 }
             }
             case(2) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
-                    it.detect("Battery")
-                        .swipeToAdjust("Network & internet")
+                    it.detect("バッテリー")
+                        .swipeToAdjust("ネットワークとインターネット")
                 }.expectation {
                 }
             }
@@ -84,28 +84,28 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
-                        .exist("Notifications")
-                        .exist("Battery")
+                    it.macro("[Android設定トップ画面]")
+                        .exist("通知")
+                        .exist("バッテリー")
                 }.action {
-                    it.detect("Battery")
+                    it.detect("バッテリー")
                         .swipeToCenterOfScreen()
                         .swipeToTopOfScreen(durationSeconds = 5.0)
                 }.expectation {
-                    it.dontExist("Notifications")
-                        .exist("Storage")
+                    it.dontExist("通知")
+                        .exist("ストレージ")
                 }
             }
             case(2) {
                 condition {
-                    it.exist("Security & privacy")
-                        .exist("Location")
+                    it.exist("セキュリティとプライバシー")
+                        .exist("位置情報")
                 }.action {
-                    it.detect("Security & privacy")
+                    it.detect("セキュリティとプライバシー")
                         .swipeToBottomOfScreen(durationSeconds = 5.0)
                 }.expectation {
-                    it.exist("Security & privacy")
-                        .dontExist("Location")
+                    it.exist("セキュリティとプライバシー")
+                        .dontExist("位置情報")
                 }
             }
         }
@@ -126,7 +126,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
                     it.swipePointToPoint(
                         startX = viewBounds.centerX,

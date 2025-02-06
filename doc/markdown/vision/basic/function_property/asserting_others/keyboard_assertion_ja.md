@@ -26,16 +26,15 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     output("isKeyboardShown=$isKeyboardShown")
                     it.keyboardIsNotShown()
                 }
             }
-
             case(2) {
                 action {
-                    it.tap("[Search settings]")
+                    it.tap("設定を検索")
                 }.expectation {
                     it.keyboardIsShown()
                 }
@@ -50,7 +49,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     it.keyboardIsNotShown()
                         .keyboardIsShown()
