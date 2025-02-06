@@ -26,18 +26,6 @@
 (`kotlin/tutorial/basic/Detect1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.vision.driver.commandextension.detect
-import shirates.core.vision.driver.commandextension.detectWithScrollDown
-import shirates.core.vision.driver.commandextension.detectWithScrollUp
-import shirates.core.vision.driver.commandextension.output
-import shirates.core.vision.testcode.VisionTest
-
-class Detect1 : VisionTest() {
-
     @Test
     @Order(10)
     fun detect() {
@@ -45,7 +33,10 @@ class Detect1 : VisionTest() {
         scenario {
             case(1) {
                 action {
-                    it.detect("Network & internet")
+                    it.detect("設定を検索")
+                    output(it)
+
+                    it.detect("ネットワークとインターネット")
                     output(it)
                 }
             }
@@ -59,20 +50,12 @@ class Detect1 : VisionTest() {
         scenario {
             case(1) {
                 action {
-                    it.detectWithScrollDown("System")
-                    output(it)
-                }
-            }
-            case(2) {
-                action {
-                    it.detectWithScrollUp("Settings")
+                    it.detectWithScrollDown("ヒントとサポート")
                     output(it)
                 }
             }
         }
     }
-
-}
 ```
 
 ### Link

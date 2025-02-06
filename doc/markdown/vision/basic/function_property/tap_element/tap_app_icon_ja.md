@@ -28,9 +28,9 @@
             }
             case(2) {
                 action {
-                    it.tapAppIcon("Play Store")
+                    it.tapAppIcon("Play ストア")
                 }.expectation {
-                    it.appIs("[Play Store]")
+                    it.appIs("[Playストア]")
                 }
             }
         }

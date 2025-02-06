@@ -32,7 +32,7 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
 
 ### テンプレート画像
 
-![](_images/template_images.png)
+![](_images/template_images_ja.png)
 
 ### FindImage1.kt
 
@@ -46,15 +46,15 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
                     withScrollDown {
-                        v1 = it.findImage("[Network & internet Icon]")
-                        v2 = it.findImage("[Display Icon]")
+                        v1 = it.findImage("[ネットワークとインターネットアイコン]")
+                        v2 = it.findImage("[ディスプレイアイコン]")
                     }
                 }.expectation {
-                    v1.isFound.thisIsTrue("[Network & internet Icon] is found.")
-                    v2.isFound.thisIsTrue("[Display Icon] is found.")
+                    v1.isFound.thisIsTrue("[ネットワークとインターネットアイコン]が見つかりました。")
+                    v2.isFound.thisIsTrue("[ディスプレイアイコン]が見つかりました。")
                 }
             }
         }
@@ -67,18 +67,18 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
-                    v1 = findImageWithScrollDown("[Location Icon]", threshold = 0.5)
+                    v1 = findImageWithScrollDown("[位置情報アイコン]", threshold = 0.5)
                 }.expectation {
-                    v1.imageIs("[Location Icon]")
+                    v1.imageIs("[位置情報アイコン]")
                 }
             }
             case(2) {
                 action {
-                    v1 = findImageWithScrollUp("[Connected devices Icon]")
+                    v1 = findImageWithScrollUp("[接続設定アイコン]")
                 }.expectation {
-                    v1.imageIs("[Connected devices Icon]")
+                    v1.imageIs("[接続設定アイコン]")
                 }
             }
         }
@@ -91,22 +91,22 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Files Top Screen]")
+                    it.macro("[ファイルトップ画面]")
                 }.action {
-                    it.onLineOf("Images") {
-                        v1 = findImageWithScrollRight("[This week Button]")
+                    it.onLineOf("画像") {
+                        v1 = findImageWithScrollRight("[今週ボタン]")
                     }
                 }.expectation {
-                    v1.imageIs("[This week Button]")
+                    v1.imageIs("[今週ボタン]")
                 }
             }
             case(2) {
                 action {
                     v1.onLine {
-                        v2 = findImageWithScrollLeft("[Audio Button]")
+                        v2 = findImageWithScrollLeft("[音声ボタン]")
                     }
                 }.expectation {
-                    v2.imageIs("[Audio Button]")
+                    v2.imageIs("[音声ボタン]")
                 }
             }
         }

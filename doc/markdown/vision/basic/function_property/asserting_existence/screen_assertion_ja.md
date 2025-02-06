@@ -11,11 +11,11 @@
 | screenIsOf | 指定した画面の何れかが表示されていることを検証します     |
 | isScreenOf | 指定した画面の何れかが表示されている場合にtrueを返します |
 
-## Template screen images
+## 画面イメージテンプレート
 
-Before using these functions, you have to prepare template screen images.<br>
+これらの関数を使用する前に画面イメージテンプレートを準備してください。
 
-![](_images/screen_image_templates.png)
+![](_images/screen_image_templates_ja.png)
 
 参照: [画面イメージテンプレートのセットアップ](../../text_and_image_recognition/setting_up_screen_image_templates_ja.md)
 
@@ -28,21 +28,6 @@ Before using these functions, you have to prepare template screen images.<br>
 (`kotlin/tutorial/basic/ScreenIsAndIsScreen1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifFalse
-import shirates.core.driver.branchextension.ifTrue
-import shirates.core.driver.commandextension.isScreen
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class ScreenIsAndIsScreen1 : UITest() {
-
     @Test
     @Order(10)
     fun screenIs_OK() {
@@ -50,9 +35,9 @@ class ScreenIsAndIsScreen1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }
             }
         }
@@ -65,9 +50,9 @@ class ScreenIsAndIsScreen1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.screenIs("[System Screen]")
+                    it.screenIs("[システム画面]")
                 }
             }
         }
@@ -80,11 +65,11 @@ class ScreenIsAndIsScreen1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.isScreen("[Android Settings Top Screen]")
-                        .ifTrue("If screen is [Android Settings Top Screen]") {
-                            OK("This is [Android Settings Top Screen]")
+                    it.isScreen("[Android設定トップ画面]")
+                        .ifTrue("[Android設定トップ画面]の場合") {
+                            OK("これは[Android設定トップ画面]です")
                         }
                 }
             }
@@ -98,42 +83,23 @@ class ScreenIsAndIsScreen1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.isScreen("[System Screen]")
-                        .ifFalse("If screen is not [System Screen]") {
-                            OK("This is not [System Screen]")
+                    it.isScreen("[システム画面]")
+                        .ifFalse("[システム画面]ではない場合") {
+                            OK("これは[システム画面]ではありません")
                         }
                 }
             }
         }
     }
-
-}
 ```
-
-## 例
 
 ### ScreenIsOfAndIsScreenOf1.kt
 
 (`kotlin/tutorial/basic/ScreenIsOfAndIsScreenOf1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifFalse
-import shirates.core.driver.branchextension.ifTrue
-import shirates.core.driver.commandextension.isScreenOf
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIsOf
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class ScreenIsOfAndIsScreenOf1 : UITest() {
-
     @Test
     @Order(10)
     fun screenIsOf_OK() {
@@ -141,10 +107,10 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.screenIsOf("[Android Settings Top Screen]")
-                        .screenIsOf("[Android Settings Top Screen]", "[Network & internet Screen]", "[System Screen]")
+                    it.screenIsOf("[Android設定トップ画面]")
+                        .screenIsOf("[Android設定トップ画面]", "[ネットワークとインターネット画面]", "[システム画面]")
                 }
             }
         }
@@ -157,9 +123,9 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.screenIsOf("[Network & internet Screen]", "[System Screen]")
+                    it.screenIsOf("[ネットワークとインターネット画面]", "[システム画面]")
                 }
             }
         }
@@ -172,15 +138,15 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.isScreenOf("[Android Settings Top Screen]")
+                    it.isScreenOf("[Android設定トップ画面]")
                         .ifTrue {
-                            OK("This is [Android Settings Top Screen]")
+                            OK("This is [Android設定トップ画面]")
                         }
-                    it.isScreenOf("[Android Settings Top Screen]", "[Network & internet Screen]", "[System Screen]")
+                    it.isScreenOf("[Android設定トップ画面]", "[ネットワークとインターネット画面]", "[システム画面]")
                         .ifTrue {
-                            OK("This is of [Android Settings Top Screen],[Network & internet Screen],[System Screen]")
+                            OK("これは[Android設定トップ画面],[ネットワークとインターネット画面],[システム画面]のいずれかです")
                         }
                 }
             }
@@ -194,18 +160,16 @@ class ScreenIsOfAndIsScreenOf1 : UITest() {
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.isScreenOf("[Network & internet Screen]", "[System Screen]")
+                    it.isScreenOf("[ネットワークとインターネット画面]", "[システム画面]")
                         .ifFalse {
-                            OK("This is not of [Network & internet Screen],[System Screen]")
+                            OK("これは[ネットワークとインターネット画面],[システム画面]のいずれでもありません")
                         }
                 }
             }
         }
     }
-
-}
 ```
 
 ### Link

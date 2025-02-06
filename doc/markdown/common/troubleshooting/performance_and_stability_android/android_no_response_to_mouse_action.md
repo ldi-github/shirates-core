@@ -10,7 +10,7 @@ Android emulator, M1 Mac
 
 ## Solution
 
-Reboot emulator.
+Reboot the emulator.
 
 ### Link
 

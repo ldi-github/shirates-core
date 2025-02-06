@@ -1,4 +1,4 @@
-# Text assertion (Vision)
+# テキストの検証 (Vision)
 
 これらの関数を使用してテキストの値の検証を行うことができます。
 
@@ -28,13 +28,13 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
-                    it.detect("Network & internet")
+                    it.detect("ネットワークとインターネット")
                 }.expectation {
-                    it.textIs("Network & internet")
-                        .belowTextIs("Mobile, Wi-Fi, hotspot")
-                        .aboveTextIs("Network & internet")
+                    it.textIs("ネットワークとインターネット")
+                        .belowTextIs("モバイル、Wi-Fi、アクセスポイント")
+                        .aboveTextIs("ネットワークとインターネット")
                 }
             }
         }
@@ -47,13 +47,13 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[マップトップ画面]")
                 }.action {
-                    it.detect("Restaurants")
+                    it.detect("レストラン")
                 }.expectation {
-                    it.textIs("Restaurants")
-                        .rightTextIs("Hotels")
-                        .leftTextIs("Restaurants")
+                    it.textIs("レストラン")
+                        .rightTextIs("ホテル")
+                        .leftTextIs("レストラン")
                 }
             }
         }

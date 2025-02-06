@@ -97,7 +97,7 @@
     - [相対テキスト (leftText, rightText, belowText, aboveText)](vision/basic/function_property/getting_image/relative_text_ja.md)
     - [相対イメージ (leftItem, rightItem, belowItem, aboveItem)](vision/basic/function_property/getting_image/relative_image_ja.md)
 - テキストを検証する
-    - [textの検証](vision/basic/function_property/asserting_text/text_assertion_ja.md)
+    - [テキストの検証](vision/basic/function_property/asserting_text/text_assertion_ja.md)
 - 画像を検証する
     - [画像の検証](vision/basic/function_property/asserting_image/image_assertion_ja.md)
 - 任意の値を検証する

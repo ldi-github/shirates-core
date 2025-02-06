@@ -32,10 +32,10 @@ Shirates/Visionは Vision Framework のAI-OCR機能によって画面のテキ�
         scenario {
             case(1) {
                 action {
-                    it.detect("Search settings")
+                    it.detect("設定を検索")
                     output(it)
 
-                    it.detect("Network & internet")
+                    it.detect("ネットワークとインターネット")
                     output(it)
                 }
             }
@@ -58,30 +58,33 @@ Shirates/Visionは Vision Framework のAI-OCR機能によって画面のテキ�
 ### コンソール出力
 
 ```
-125	[00:00:20]	2025/01/26 02:47:26.298	{detect-1}	0	-	[CASE]	+834	!	()	(1)
-126	[00:00:20]	2025/01/26 02:47:26.299	{detect-1}	0	-	[ACTION]	+1	!	()	action
-127	[00:00:20]	2025/01/26 02:47:27.051	{detect-1}	0	-	[info]	+752	!	()	Syncing screen.
-128	[00:00:21]	2025/01/26 02:47:27.267	{detect-1}	0	-	[info]	+216	!	()	[syncScreenshot] in 0.459 sec
-129	[00:00:21]	2025/01/26 02:47:27.354	{detect-1}	0	-	[screenshot]	+87	!	()	screenshot: 129.png
-130	[00:00:21]	2025/01/26 02:47:27.688	{detect-1}	0	-	[info]	+334	!	()	[TextRecognizer/recognizeText] in 0.332 sec
-131	[00:00:21]	2025/01/26 02:47:27.990	{detect-1}	0	-	[info]	+302	!	()	130_[129.png]_recognized_text_rectangles.png
-132	[00:00:22]	2025/01/26 02:47:28.180	{detect-1}	0	-	[info]	+190	!	()	[detect] in 1.879 sec
-133	[00:00:22]	2025/01/26 02:47:28.185	{detect-1}	0	-	[output]	+5	!	(output)	text: "Q Search settings", bounds: [97,634][552,701] width=456, height=68, centerX=325, centerY=668, rect: [97, 634, 552, 701](w=456, h=68)
-134	[00:00:22]	2025/01/26 02:47:28.190	{detect-1}	0	-	[info]	+5	!	()	[detect] in 0.004 sec
-135	[00:00:22]	2025/01/26 02:47:28.198	{detect-1}	0	-	[output]	+8	!	(output)	text: "Network & internet", bounds: [184,844][628,887] width=445, height=44, centerX=406, centerY=866, rect: [184, 844, 628, 887](w=445, h=44)
+126	[00:00:18]	2025/02/07 00:51:21.746	{detect-1}	0	-	[CASE]	+451	!	()	(1)
+127	[00:00:18]	2025/02/07 00:51:21.747	{detect-1}	0	-	[ACTION]	+1	!	()	アクション
+128	[00:00:18]	2025/02/07 00:51:22.455	{detect-1}	0	-	[info]	+708	!	()	Syncing screen.
+129	[00:00:19]	2025/02/07 00:51:22.695	{detect-1}	0	-	[info]	+240	!	()	[syncScreenshot] in 0.440 sec
+130	[00:00:19]	2025/02/07 00:51:22.780	{detect-1}	0	-	[screenshot]	+85	!	()	screenshot: 130.png
+131	[00:00:19]	2025/02/07 00:51:23.393	{detect-1}	0	-	[info]	+613	!	()	[TextRecognizer/recognizeText] in 0.608 sec
+132	[00:00:20]	2025/02/07 00:51:23.725	{detect-1}	0	-	[info]	+332	!	()	131_[130.png]_recognized_text_rectangles.png
+133	[00:00:20]	2025/02/07 00:51:24.034	{detect-1}	0	-	[info]	+309	!	()	132_[101, 650, 452, 704](w=352, h=55).png
+134	[00:00:20]	2025/02/07 00:51:24.126	{detect-1}	0	-	[info]	+92	!	()	[TextRecognizer/recognizeText] in 0.086 sec
+135	[00:00:20]	2025/02/07 00:51:24.135	{detect-1}	0	-	[info]	+9	!	()	134_[132_[101, 650, 452, 704](w=352, h=55).png]_recognized_text_rectangles.png
+136	[00:00:20]	2025/02/07 00:51:24.338	{detect-1}	0	-	[info]	+203	!	()	[detect] in 2.589 sec
+137	[00:00:20]	2025/02/07 00:51:24.343	{detect-1}	0	-	[output]	+5	!	(output)	text: "設定を検索", bounds: [101,650][452,704] width=352, height=55, centerX=277, centerY=677, rect: [101, 650, 452, 704](w=352, h=55)
+138	[00:00:20]	2025/02/07 00:51:24.351	{detect-1}	0	-	[info]	+8	!	()	[detect] in 0.005 sec
+139	[00:00:20]	2025/02/07 00:51:24.353	{detect-1}	0	-	[output]	+2	!	(output)	text: "ネットワークとインターネット", bounds: [188,853][925,905] width=738, height=53, centerX=557, centerY=879, rect: [188, 853, 925, 905](w=738, h=53)
 ```
 
 ### TestResults
 
 TestResults ディレクトリ(デフォルトは`~/Downloads/TestResults`)にテスト結果のファイルが出力されます。
 
-![](_images/detect_testresults.png)
+![](_images/detect_testresults_ja.png)
 
-### 130_[129.png]_recognized_text_rectangles.png
+### 131_[130.png]_recognized_text_rectangles.png
 
 認識されたテキストの矩形を確認できます。
 
-![](_images/recognized_texts.png)
+![](_images/recognized_texts_ja.png)
 
 ### 129_[129.png]_TextRecognizer_recognizeText.json
 
@@ -89,190 +92,220 @@ TestResults ディレクトリ(デフォルトは`~/Downloads/TestResults`)に�
 
 ```json
 {
-  "input" : "\/Users\/wave1008\/Downloads\/TestResults\/testConfig@a\/2025-01-26_024706\/Detect1\/129.png",
-  "language" : "",
+  "input" : "\/Users\/wave1008\/Downloads\/TestResults\/testConfig@a\/2025-02-07_005432\/Detect1\/130.png",
   "candidates" : [
     {
+      "text" : "0:54@ ロ",
       "confidence" : 0.5,
-      "text" : "2:47 0 0•0•",
       "rect" : {
-        "height" : 44,
-        "width" : 364,
-        "y" : 49,
-        "x" : 36
+        "height" : 47,
+        "x" : 40,
+        "y" : 48,
+        "width" : 180
       }
     },
     {
-      "text" : "Settings",
+      "confidence" : 0.5,
       "rect" : {
-        "y" : 435,
+        "width" : 189,
+        "height" : 98,
         "x" : 67,
-        "width" : 342,
-        "height" : 90
+        "y" : 431
       },
-      "confidence" : 1
+      "text" : "設定"
+    },
+    {
+      "confidence" : 0.5,
+      "rect" : {
+        "width" : 360,
+        "y" : 647,
+        "x" : 99,
+        "height" : 58
+      },
+      "text" : "Q 設定を検索"
+    },
+    {
+      "confidence" : 1,
+      "text" : "ネットワークとインターネット",
+      "rect" : {
+        "x" : 188,
+        "width" : 738,
+        "height" : 53,
+        "y" : 853
+      }
     },
     {
       "rect" : {
-        "width" : 456,
-        "x" : 97,
-        "y" : 634,
-        "height" : 68
+        "width" : 607,
+        "x" : 189,
+        "y" : 925,
+        "height" : 44
       },
-      "text" : "Q Search settings",
+      "text" : "モバイル、Wi-Fi、アクセスポイント",
       "confidence" : 1
     },
     {
-      "text" : "Network & internet",
+      "confidence" : 0.5,
+      "text" : "Loo",
+      "rect" : {
+        "y" : 1110,
+        "width" : 72,
+        "x" : 81,
+        "height" : 49
+      }
+    },
+    {
+      "text" : "接続設定",
+      "rect" : {
+        "y" : 1077,
+        "width" : 252,
+        "height" : 60,
+        "x" : 152
+      },
+      "confidence" : 0.5
+    },
+    {
+      "text" : "Bluetooth、ペア設定",
       "rect" : {
         "x" : 184,
-        "y" : 844,
-        "width" : 445,
+        "y" : 1155,
+        "width" : 346,
         "height" : 44
       },
       "confidence" : 1
     },
     {
-      "rect" : {
-        "y" : 912,
-        "x" : 184,
-        "height" : 40,
-        "width" : 364
-      },
-      "confidence" : 1,
-      "text" : "Mobile, Wi-Fi, hotspot"
-    },
-    {
-      "confidence" : 1,
-      "rect" : {
-        "width" : 454,
-        "x" : 184,
-        "height" : 49,
-        "y" : 1074
-      },
-      "text" : "Connected devices"
-    },
-    {
-      "text" : "Bluetooth, pairing",
-      "rect" : {
-        "y" : 1141,
-        "width" : 292,
-        "height" : 40,
-        "x" : 184
-      },
-      "confidence" : 1
-    },
-    {
-      "rect" : {
-        "width" : 76,
-        "height" : 53,
-        "x" : 85,
-        "y" : 1325
-      },
-      "confidence" : 0.5,
-      "text" : "88:"
-    },
-    {
-      "text" : "Apps",
+      "text" : "！：",
       "confidence" : 0.5,
       "rect" : {
-        "height" : 62,
-        "x" : 153,
-        "width" : 166,
-        "y" : 1303
+        "x" : 80,
+        "height" : 58,
+        "y" : 1352,
+        "width" : 77
       }
     },
     {
       "rect" : {
-        "x" : 184,
-        "y" : 1370,
-        "height" : 44,
-        "width" : 594
-      },
-      "text" : "Assistant, recent apps, default apps",
-      "confidence" : 1
-    },
-    {
-      "text" : "Notifications",
-      "rect" : {
-        "y" : 1537,
-        "x" : 189,
-        "height" : 49,
-        "width" : 301
-      },
-      "confidence" : 1
-    },
-    {
-      "text" : "Notification history, conversations",
-      "confidence" : 1,
-      "rect" : {
-        "width" : 557,
+        "y" : 1303,
         "x" : 188,
-        "y" : 1599,
-        "height" : 40
+        "height" : 58,
+        "width" : 157
+      },
+      "confidence" : 1,
+      "text" : "アプリ"
+    },
+    {
+      "confidence" : 1,
+      "text" : "アプリ",
+      "rect" : {
+        "width" : 108,
+        "height" : 40,
+        "y" : 1433,
+        "x" : 188
       }
     },
     {
-      "rect" : {
-        "width" : 189,
-        "x" : 171,
-        "y" : 1770,
-        "height" : 53
-      },
       "confidence" : 1,
-      "text" : "Battery"
+      "rect" : {
+        "y" : 1379,
+        "x" : 188,
+        "width" : 810,
+        "height" : 49
+      },
+      "text" : "アシスタント、最近使ったアプリ、デフォルトの"
     },
     {
-      "text" : "100%",
+      "confidence" : 0.5,
       "rect" : {
-        "y" : 1833,
+        "x" : 161,
+        "width" : 135,
+        "height" : 53,
+        "y" : 1582
+      },
+      "text" : "通知"
+    },
+    {
+      "text" : "通知履歴、会話",
+      "rect" : {
         "x" : 184,
-        "width" : 98,
-        "height" : 35
+        "height" : 51,
+        "width" : 265,
+        "y" : 1652
+      },
+      "confidence" : 0.5
+    },
+    {
+      "text" : "■ バッテリー",
+      "rect" : {
+        "width" : 365,
+        "height" : 113,
+        "x" : 91,
+        "y" : 1786
       },
       "confidence" : 1
     },
     {
       "rect" : {
-        "y" : 2003,
-        "width" : 212,
-        "x" : 161,
-        "height" : 50
-      },
-      "confidence" : 1,
-      "text" : "Storage"
-    },
-    {
-      "confidence" : 1,
-      "rect" : {
-        "x" : 184,
         "height" : 40,
-        "width" : 400,
-        "y" : 2062
-      },
-      "text" : "57% used - 6.82 GB free"
-    },
-    {
-      "text" : "Sound & vibration",
-      "confidence" : 1,
-      "rect" : {
-        "height" : 49,
         "x" : 184,
-        "width" : 418,
-        "y" : 2229
-      }
+        "y" : 1887,
+        "width" : 99
+      },
+      "confidence" : 1,
+      "text" : "100%"
     },
     {
       "rect" : {
-        "y" : 2296,
-        "width" : 522,
-        "x" : 184,
-        "height" : 40
+        "y" : 2067,
+        "width" : 63,
+        "x" : 85,
+        "height" : 58
       },
-      "confidence" : 1,
-      "text" : "Volume, haptics, Do Not Disturb"
+      "confidence" : 0.5,
+      "text" : "="
+    },
+    {
+      "text" : "ストレージ",
+      "rect" : {
+        "height" : 59,
+        "x" : 192,
+        "width" : 262,
+        "y" : 2042
+      },
+      "confidence" : 1
+    },
+    {
+      "rect" : {
+        "height" : 44,
+        "width" : 549,
+        "x" : 184,
+        "y" : 2116
+      },
+      "text" : "使用済み 38%-空き容量 9.96 GB",
+      "confidence" : 1
+    },
+    {
+      "rect" : {
+        "x" : 85,
+        "height" : 76,
+        "y" : 2278,
+        "width" : 630
+      },
+      "confidence" : 0.5,
+      "text" : "4） 音とバイブレーション"
+    },
+    {
+      "rect" : {
+        "height" : 44,
+        "x" : 188,
+        "y" : 2350,
+        "width" : 670
+      },
+      "text" : "音量、ハプティクス、サイレント モード",
+      "confidence" : 0.5
     }
-  ]
+  ],
+  "language" : "ja"
 }
 ```
 
@@ -282,25 +315,22 @@ TestResults ディレクトリ(デフォルトは`~/Downloads/TestResults`)に�
 の精度に依存します。精度は将来のバージョンで改善される可能性があります。
 <br>
 
-![](_images/text_recognition_errors.png)
+![](_images/text_recognition_errors_ja.png)
 
-![](_images/text_recognition_errors_2.png)
+![](_images/text_recognition_errors_2_ja.png)
 
 `detect`関数で部分文字列を指定することでテキストを検出することができます。
 
 ```kotlin
-// works
-detect("Search settings")
-detect("App security, device lock, permissions")
-detect("Location")
-detect("controls")
+// 正しく動作します
+detect("設定を検索")
+detect("位置情報")
+detect("使用制限")
 detect("Google")
-detect("System")
+detect("システム")
 ```
 
-一方、テキスト認識が正しく機能せず文字化けのような結果になる場合は期待したテキストは検出できません。
-But you **can not** detect the followings because text recognition does not work properly because of **garbled
-characters**.
+一方、テキスト認識が正しく機能せず**文字化け**のような結果になる場合は期待したテキストは検出できません。
 
 ```kotlin
 // does not work
@@ -317,7 +347,7 @@ detect("Tips & support")    // "® ips & support" does not match
 
 **CSV Editor**プラグインが便利です。
 
-### 再実行
+### 再実行(英語版サンプルのみ)
 
 テストを再実行します。
 文字化けが訂正され、以下のようなログが出力されます。

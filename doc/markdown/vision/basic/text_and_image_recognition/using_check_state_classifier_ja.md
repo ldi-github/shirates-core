@@ -17,22 +17,22 @@ Shirates/Visionは画像のチェック状態(`[ON]`/`[OFF]`)を認識します�
         scenario {
             case(1) {
                 condition {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }.action {
-                    it.tap("Network & internet")
+                    it.tap("ネットワークとインターネット")
                 }.expectation {
-                    it.screenIs("[Network & internet Screen]")
+                    it.screenIs("[ネットワークとインターネット画面]")
                 }
             }
             case(2) {
                 condition {
-                    it.detect("Airplane mode")
+                    it.detect("機内モード")
                         .rightItem()
                         .checkIsOFF()
                 }.action {
                     it.tap()
                 }.expectation {
-                    it.detect("Airplane mode")
+                    it.detect("機内モード")
                         .rightItem()
                         .checkIsON()
                 }
@@ -41,7 +41,7 @@ Shirates/Visionは画像のチェック状態(`[ON]`/`[OFF]`)を認識します�
                 action {
                     it.tap()
                 }.expectation {
-                    it.detect("Airplane mode")
+                    it.detect("機内モード")
                         .rightItem()
                         .checkIsOFF()
                 }
@@ -68,7 +68,7 @@ TestResults ディレクトリ(デフォルトは`~/Downloads/TestResults`)に�
 
 ### _Report(Simple).html
 
-![](_images/using_check_state_classifier_report.png)
+![](_images/using_check_state_classifier_report_ja.png)
 
 ### checkIsON, checkIsOFF
 

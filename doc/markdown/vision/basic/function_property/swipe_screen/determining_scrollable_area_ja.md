@@ -28,22 +28,22 @@ scroll, swipe, flickなどのような関数を呼び出す場合はスクロー
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[マップトップ画面]")
                 }.action {
-                    it.detect("Restaurants").onLine {
+                    it.detect("レストラン").onLine {
                         it.scrollToRightEdge()
                     }
                 }.expectation {
-                    it.exist("More")
+                    it.exist("もっと見る")
                 }
             }
             case(2) {
                 action {
-                    it.detect("More").onLine {
+                    it.detect("もっと見る").onLine {
                         it.scrollToLeftEdge()
                     }
                 }.expectation {
-                    it.dontExist("More")
+                    it.dontExist("もっと見る")
                 }
             }
         }
@@ -52,7 +52,7 @@ scroll, swipe, flickなどのような関数を呼び出す場合はスクロー
 
 `onLine()` 関数は"Restaurants"を含む水平ラインに作業領域を作成します。
 
-![](_images/scrollable_area.png)
+![](_images/scrollable_area_ja.png)
 
 ### Link
 

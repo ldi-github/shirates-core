@@ -29,9 +29,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.exist("Network & internet")
+                    it.exist("ネットワークとインターネット")
                 }
             }
         }
@@ -44,9 +44,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.exist("System")
+                    it.exist("システム")
                 }
             }
         }
@@ -59,9 +59,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.existWithScrollDown("System")
+                    it.existWithScrollDown("システム")
                 }
             }
         }
@@ -74,9 +74,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.existWithScrollDown("Network business")
+                    it.existWithScrollDown("ネットワークビジネス")
                 }
             }
         }
@@ -89,10 +89,10 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                         .flickAndGoDown()
                 }.expectation {
-                    it.existWithScrollUp("Network & internet")
+                    it.existWithScrollUp("ネットワークとインターネット")
                 }
             }
         }
@@ -105,10 +105,10 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                         .flickAndGoDown()
                 }.expectation {
-                    it.existWithScrollUp("Network business")
+                    it.existWithScrollUp("ネットワークビジネス")
                 }
             }
         }
@@ -121,9 +121,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.dontExist("System")
+                    it.dontExist("システム")
                 }
             }
         }
@@ -136,9 +136,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.dontExist("Network & internet")
+                    it.dontExist("ネットワークとインターネット")
                 }
             }
         }
@@ -151,10 +151,10 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
-                        it.dontExist("Network business")
+                        it.dontExist("ネットワークビジネス")
                     }
                 }
             }
@@ -168,10 +168,10 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
-                        it.dontExist("System")
+                        it.dontExist("システム")
                     }
                 }
             }
@@ -185,11 +185,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                         .flickAndGoDown()
                 }.expectation {
                     withScrollUp {
-                        it.dontExist("Network business")
+                        it.dontExist("ネットワークビジネス")
                     }
                 }
             }
@@ -203,11 +203,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                         .flickAndGoDown()
                 }.expectation {
                     withScrollUp {
-                        it.dontExist("System")
+                        it.dontExist("システム")
                     }
                 }
             }
@@ -221,11 +221,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
-                        it.existWithoutScroll("Network & internet")    // OK
-                        it.existWithoutScroll("System")    // NG
+                        it.existWithoutScroll("ネットワークとインターネット")    // OK
+                        it.existWithoutScroll("システム")    // NG
                     }
                 }
             }
@@ -239,12 +239,12 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                         .flickAndGoDown()
                 }.expectation {
                     withScrollUp {
-                        it.dontExistWithoutScroll("Display")    // OK
-                        it.dontExistWithoutScroll("System")    // NG
+                        it.dontExistWithoutScroll("ディスプレイ")    // OK
+                        it.dontExistWithoutScroll("システム")    // NG
                     }
                 }
             }

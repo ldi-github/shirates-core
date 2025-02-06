@@ -24,7 +24,7 @@ it.detect("*text1*")
 
 it.detect("text1||text2")
 
-it.findImage("[Display Icon]")
+it.findImage("[ディスプレイアイコン]")
 ```
 
 ### Classicモード

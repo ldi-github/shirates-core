@@ -24,12 +24,12 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
-                    v1 = it.detect("Network & internet")
+                    v1 = it.detect("ネットワークとインターネット")
                         .leftItem()
                 }.expectation {
-                    v1.imageIs("[Network & internet Icon]")
+                    v1.imageIs("[ネットワークとインターネットアイコン]")
                 }
             }
         }

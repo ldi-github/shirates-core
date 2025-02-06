@@ -5,7 +5,7 @@ verify関数を使用して任意の内容の検証を行うことができま�
 ### 任意の検証ロジックの実装
 
 ```kotlin
-it.verify("The packageName is \"com.android.settings\"") {
+it.verify("パッケージ名が\"com.android.settings\"であること") {
     if (rootElement.packageName == "com.android.settings") {
         OK()
     } else {
@@ -20,9 +20,9 @@ verify関数内で任意の検証ロジックを実装します。
 ### 既存の検証関数の組み合わせ
 
 ```kotlin
-it.verify("The app is Settings and the screen is [Android Settings Top Screen]") {
-    it.appIs("Settings")
-    it.screenIs("[Android Settings Top Screen]")
+it.verify("アプリが[設定]で画面が[Android設定トップ画面]であること") {
+    it.appIs("[設定]")
+    it.screenIs("[Android設定トップ画面]")
 }
 ```
 
@@ -32,8 +32,8 @@ verify関数内で既存の検証関数を使用する場合はOK関数、NG関�
 
 ```
 141	[00:00:18]	2024/04/12 02:46:17.832	{ok1-1}	0	-	[EXPECTATION]	+196	C	()	expectation
-142	[00:00:18]	2024/04/12 02:46:17.835	{ok1-1}	0	-	[OK]	+3	C	(verify)	The packageName is "com.android.settings"
-143	[00:00:18]	2024/04/12 02:46:17.840	{ok1-1}	0	-	[OK]	+5	C	(verify)	The app is Settings and the screen is [Android Settings Top Screen]
+142	[00:00:18]	2024/04/12 02:46:17.835	{ok1-1}	0	-	[OK]	+3	C	(verify)	パッケージ名が"com.android.settings"であること
+143	[00:00:18]	2024/04/12 02:46:17.840	{ok1-1}	0	-	[OK]	+5	C	(verify)	アプリが[設定]で画面が[Android設定トップ画面]であること
 ```
 
 ### サンプルコード
@@ -52,18 +52,18 @@ verify関数内で既存の検証関数を使用する場合はOK関数、NG関�
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.verify("The packageName is \"com.android.settings\"") {
+                    it.verify("パッケージが\"com.android.settings\"であること") {
                         if (packageName == "com.android.settings") {
                             OK()
                         } else {
                             NG()
                         }
                     }
-                    it.verify("The app is 'Settings' and the screen is [Android Settings Top Screen]") {
-                        it.appIs("Settings")
-                        it.screenIs("[Android Settings Top Screen]")
+                    it.verify("アプリが[設定]かつ画面が[Android設定画面]であること") {
+                        it.appIs("設定")
+                        it.screenIs("[Android設定トップ画面]")
                     }
                 }
             }
@@ -77,11 +77,11 @@ verify関数内で既存の検証関数を使用する場合はOK関数、NG関�
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.verify("The app is 'Settings2' and the screen is [Android Settings Top Screen]") {
+                    it.verify("アプリが[Settings2]かつ画面が[Android設定画面]であること") {
                         it.appIs("Settings2")
-                        it.screenIs("[Android Settings Top Screen]")
+                        it.screenIs("[Android設定画面]")
                     }
                 }
             }
@@ -95,9 +95,9 @@ verify関数内で既存の検証関数を使用する場合はOK関数、NG関�
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.verify("The app is 'Settings' and the screen is [Android Settings Top Screen]") {
+                    it.verify("アプリが[設定]かつ画面が[Android設定トップ画面]であること") {
                     }
                 }
             }
@@ -105,7 +105,7 @@ verify関数内で既存の検証関数を使用する場合はOK関数、NG関�
     }
 ```
 
-![](_images/verify.png)
+![](_images/verify_ja.png)
 
 ### Link
 

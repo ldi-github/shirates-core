@@ -12,6 +12,8 @@
 
 ## Performance and stability(Android)
 
+- [Wipe Data on Android emulator](performance_and_stability_android/wipe_data.md)
+- [Cannot set the device locale to ...](performance_and_stability_android/cannot_set_the_device_locale_to.md)
 - [No response to mouse action](performance_and_stability_android/android_no_response_to_mouse_action.md)
 - [App isn't responding](performance_and_stability_android/android_app_isnt_responding.md)
 

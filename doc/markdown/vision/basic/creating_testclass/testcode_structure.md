@@ -13,16 +13,6 @@ In Shirates, a JUnit 5 test method is an autotest session that includes a scenar
 (`kotlin/tutorial_vision/basic/TestScenarioAndTestCase1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.vision.driver.commandextension.screenIs
-import shirates.core.vision.driver.commandextension.tap
-import shirates.core.vision.testcode.VisionTest
-
-class TestScenarioAndTestCase1 : VisionTest() {
-
     @Test
     @Order(10)
     fun scenarioAndCase() {
@@ -54,7 +44,6 @@ class TestScenarioAndTestCase1 : VisionTest() {
             }
         }
     }
-}
 ```
 
 ### Running test

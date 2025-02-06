@@ -29,9 +29,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.existImage("[Apps Icon]")
+                    it.existImage("[アプリアイコン]")
                 }
             }
         }
@@ -44,10 +44,10 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
-                        it.existImage("[System Icon]")
+                        it.existImage("[システムアイコン]")
                     }
                 }
             }
@@ -61,12 +61,12 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
-                        .existImage("[Network & internet Icon]")
+                    it.macro("[Android設定トップ画面]")
+                        .existImage("[ネットワークとインターネットアイコン]")
                         .scrollDown()
                 }.expectation {
                     withScrollDown {
-                        it.existImage("[Network & internet Icon]")
+                        it.existImage("[ネットワークとインターネットアイコン]")
                     }
                 }
             }
@@ -80,11 +80,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
-                        it.existImageWithoutScroll("[Network & internet Icon]")     // OK
-                        it.existImageWithoutScroll("[System Icon]")     // NG
+                        it.existImageWithoutScroll("[ネットワークとインターネットアイコン]")     // OK
+                        it.existImageWithoutScroll("[システムアイコン]")     // NG
                     }
                 }
             }
@@ -98,9 +98,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.dontExistImage("[System Icon]")
+                    it.dontExistImage("[システムアイコン]")
                 }
             }
         }
@@ -113,10 +113,10 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
-                        it.dontExistImage("[VPN Icon]")
+                        it.dontExistImage("[VPNアイコン]")
                     }
                 }
             }
@@ -130,10 +130,10 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
-                        it.dontExistImage("[System Icon]")
+                        it.dontExistImage("[システムアイコン]")
                     }
                 }
             }
@@ -147,11 +147,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     withScrollDown {
-                        it.dontExistWithoutScroll("Accessibility")    // OK
-                        it.dontExistWithoutScroll("Notifications")    // NG
+                        it.dontExistWithoutScroll("ユーザー補助")    // OK
+                        it.dontExistWithoutScroll("通知")    // NG
                     }
                 }
             }

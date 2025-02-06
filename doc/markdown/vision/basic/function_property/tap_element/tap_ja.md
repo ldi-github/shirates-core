@@ -33,16 +33,16 @@
         scenario {
             case(1) {
                 action {
-                    it.tap("Network & internet")
-                        .tap("Internet")
+                    it.tap("ネットワークとインターネット")
+                        .tap("AndroidWifi")
                     it.pressBack()
                         .pressBack()
                 }
             }
             case(2) {
                 action {
-                    it.tapWithScrollDown("Display")
-                        .tapWithScrollDown("Colors")
+                    it.tapWithScrollDown("ディスプレイ")
+                        .tapWithScrollDown("カラー")
                     it.pressBack()
                         .pressBack()
                 }
@@ -56,10 +56,10 @@
         scenario {
             case(1) {
                 action {
-                    val v = detect("Network & internet")
+                    val v = detect("ネットワークとインターネット")
                     it.tap(x = v.bounds.centerX, y = v.bounds.centerY)
                 }.expectation {
-                    it.screenIs("[Network & internet Screen]")
+                    it.screenIs("[ネットワークとインターネット画面]")
                 }
             }
         }

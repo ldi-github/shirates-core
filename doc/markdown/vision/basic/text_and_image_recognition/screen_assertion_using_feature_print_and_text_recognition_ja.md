@@ -35,7 +35,7 @@ FeaturePrintはインデックス作成のようにパフォーマンス改善�
 
 ```vision/screens```を確認します。
 
-![](_images/screen_image_templates.png)
+![](_images/screen_image_templates_ja.png)
 
 `vision/screens`ディレクトリ配下にテンプレート画像を追加することができます。
 

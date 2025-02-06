@@ -97,8 +97,6 @@ See [Setting up screen image templates](../../text_and_image_recognition/setting
     }
 ```
 
-## Example
-
 ### ScreenIsOfAndIsScreenOf1.kt
 
 (`src/test/kotlin/tutorial/basic/ScreenIsOfAndIsScreenOf1.kt`)

@@ -27,11 +27,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Network & internet Screen]")
+                    it.macro("[ネットワークとインターネット画面]")
                 }.action {
-                    v1 = detect("Airplane mode")
+                    v1 = detect("機内モード")
                 }.expectation {
-                    v1.belowText().textIs("Hotspot & tethering")
+                    v1.belowText().textIs("アクセスポイントとテザリング")
                     v1.aboveText().textIs("T-Mobile")
                 }
             }
@@ -40,7 +40,7 @@
     }
 ```
 
-![](_images/above_text_below_text.png)
+![](_images/above_text_below_text_ja.png)
 
 ```kotlin
     @Test
@@ -50,19 +50,19 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[マップトップ画面]")
                 }.action {
-                    v1 = detect("You")
+                    v1 = detect("保存済み")
                 }.expectation {
-                    v1.rightText().textIs("Contribute")
-                    v1.leftText().textIs("Explore")
+                    v1.rightText().textIs("投稿")
+                    v1.leftText().textIs("経路")
                 }
             }
         }
     }
 ```
 
-![](_images/right_text_left_text.png)
+![](_images/right_text_left_text_ja.png)
 
 ### Link
 

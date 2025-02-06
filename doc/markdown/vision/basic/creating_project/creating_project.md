@@ -27,8 +27,8 @@ plugins {
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
-val shiratesCoreVersion = "8.0.6"
-val appiumClientVersion = "9.1.0"
+val shiratesCoreVersion = "8.0.10"
+val appiumClientVersion = "9.4.0"
 
 repositories {
     mavenCentral()

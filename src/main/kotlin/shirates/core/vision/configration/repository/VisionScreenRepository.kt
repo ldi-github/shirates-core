@@ -32,6 +32,7 @@ object VisionScreenRepository {
      * isRegistered
      */
     fun isRegistered(screenName: String): Boolean {
-        return screenMap.containsKey(screenName)
+
+        return screenMap.keys.filter { it.contains(screenName) }.any()
     }
 }

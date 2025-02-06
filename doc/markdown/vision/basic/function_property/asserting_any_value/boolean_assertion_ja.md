@@ -25,7 +25,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     true.thisIsTrue()
                     false.thisIsFalse()
@@ -36,8 +36,8 @@
             }
             case(2) {
                 expectation {
-                    it.isApp("Settings")
-                        .thisIsTrue("This app is <Settings>")
+                    it.isApp("設定")
+                        .thisIsTrue("This app is <設定>")
                     it.isApp("Chrome")
                         .thisIsFalse("This app is not <Chrome>")
                 }
@@ -52,7 +52,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
                     false.thisIsTrue()
                 }
@@ -61,9 +61,9 @@
     }
 ```
 
-![](_images/asserting_boolean_value.png)
+![](_images/asserting_boolean_value_ja.png)
 
 ### Link
 
-- [index](../../../../index.md)
+- [index](../../../../index_ja.md)
 
