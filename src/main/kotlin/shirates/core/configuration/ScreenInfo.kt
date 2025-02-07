@@ -9,6 +9,7 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.getJSONArrayOrEmpty
+import shirates.core.utility.string.normalize
 import shirates.core.utility.toPath
 import shirates.spec.utilily.removeBrackets
 import java.io.File
@@ -19,6 +20,12 @@ import java.io.File
 class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo? = null) {
 
     var key: String = ""
+        get() {
+            return field
+        }
+        set(value) {
+            field = value.normalize(java.text.Normalizer.Form.NFKC)
+        }
     val includes = mutableListOf<String>()
     val identityElements = mutableListOf<String>()
     var weight: String? = null
@@ -135,6 +142,7 @@ class ScreenInfo(val screenFile: String? = null, val screenBaseInfo: ScreenInfo?
      */
     fun getKeyFromFileName(): String {
         val result = screenFile.toPath().fileName.toString().substringBefore(".json")
+            .normalize(java.text.Normalizer.Form.NFKC)
         return result
     }
 
