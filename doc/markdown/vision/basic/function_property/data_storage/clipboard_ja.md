@@ -27,23 +27,23 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
-                    it.detect("Settings")
+                    it.detect("設定")
                         .clipboardText()
                 }.expectation {
                     readClipboard()
-                        .thisIs("Settings")
+                        .thisIs("設定")
                 }
             }
             case(2) {
                 condition {
-                    it.exist("[Network & internet]")
+                    it.exist("ネットワークとインターネット")
                 }.action {
                     it.clipboardText()
                 }.expectation {
                     readClipboard()
-                        .thisIs("Network & internet")
+                        .thisIs("ネットワークとインターネット")
                 }
             }
         }
@@ -57,7 +57,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
                     "String1".writeToClipboard()
                 }.expectation {

@@ -23,24 +23,23 @@
         scenario {
             case(1) {
                 action {
-                    info("Nickname is one of key concepts of Shirates that makes test codes readable and easy to understand. You can define nicknames in nickname files for screens, elements, apps, and test data items, then use them in test codes. Messages using nickname are so user-friendly that you can read them as natural language. Especially for screen elements, nickname hides complexity of implementation of finding elements, and absorbs the difference of Android platform and iOS platform. As a result, after you wrote a test code for one platform, you can add or modify to fill gaps to another platform with a little effort.")
-                    warn("Nickname is one of key concepts of Shirates that makes test codes readable and easy to understand. You can define nicknames in nickname files for screens, elements, apps, and test data items, then use them in test codes. Messages using nickname are so user-friendly that you can read them as natural language. Especially for screen elements, nickname hides complexity of implementation of finding elements, and absorbs the difference of Android platform and iOS platform. As a result, after you wrote a test code for one platform, you can add or modify to fill gaps to another platform with a little effort.")
+                    info("ニックネームは、テスト コードを読みやすく理解しやすくする Shirates の重要な概念の 1 つです。画面、要素、アプリ、テスト データ項目のニックネーム ファイルでニックネームを定義し、テスト コードで使用できます。ニックネームを使ったメッセージは、自然言語として読めるのでとても使いやすいです。特に画面要素の場合、ニックネームは要素検索の実装の複雑さを隠し、Android プラットフォームと iOS プラットフォームの違いを吸収します。その結果、あるプラットフォーム用のテスト コードを作成した後、少しの労力で別のプラットフォームに追加または変更してギャップを埋めることができます。")
+                    warn("ニックネームは、テスト コードを読みやすく理解しやすくする Shirates の重要な概念の 1 つです。画面、要素、アプリ、テスト データ項目のニックネーム ファイルでニックネームを定義し、テスト コードで使用できます。ニックネームを使ったメッセージは、自然言語として読めるのでとても使いやすいです。特に画面要素の場合、ニックネームは要素検索の実装の複雑さを隠し、Android プラットフォームと iOS プラットフォームの違いを吸収します。その結果、あるプラットフォーム用のテスト コードを作成した後、少しの労力で別のプラットフォームに追加または変更してギャップを埋めることができます。")
                 }
             }
         }
     }
-
 ```
 
 ### Html-Report(detail)
 
-![](_images/info_and_warn_detail.png)
+![](_images/info_and_warn_detail_ja.png)
 
 infoとwarnの両方のメッセージが出力されます。
 
 ### Html-Report(simple)
 
-![](_images/info_and_warn_simple.png)
+![](_images/info_and_warn_simple_ja.png)
 
 warnのメッセージのみが出力されます。
 

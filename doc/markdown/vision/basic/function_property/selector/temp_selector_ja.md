@@ -15,16 +15,16 @@
     @Order(10)
     fun tempSelector1() {
 
-        tempSelector("[First Item]", "Network & internet")
+        tempSelector("[最初のアイテム]", "ネットワークとインターネット")
 
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
-                    it.tap("[First Item]")
+                    it.tap("[最初のアイテム]")
                 }.expectation {
-                    it.screenIs("[Network & internet Screen]")
+                    it.screenIs("[ネットワークとインターネット画面]")
                 }
             }
         }

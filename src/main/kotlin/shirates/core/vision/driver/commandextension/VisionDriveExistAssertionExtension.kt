@@ -23,7 +23,7 @@ import shirates.core.vision.driver.lastElement
 fun VisionDrive.exist(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double = testContext.shortWaitSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     removeRedundantText: Boolean = true,
@@ -64,15 +64,25 @@ internal fun VisionDrive.existCore(
     removeRedundantText: Boolean,
 ): VisionElement {
 
-    val v = detectCore(
-        selector = selector,
-        language = language,
-        allowScroll = null,
-        waitSeconds = waitSeconds,
-        swipeToSafePosition = swipeToSafePosition,
-        removeRedundantText = removeRedundantText,
-        throwsException = false,
-    )
+    fun detectAction(): VisionElement {
+
+        return detectCore(
+            selector = selector,
+            language = language,
+            allowScroll = null,
+            waitSeconds = waitSeconds,
+            swipeToSafePosition = swipeToSafePosition,
+            removeRedundantText = removeRedundantText,
+            throwsException = false,
+        )
+    }
+
+    var v = detectAction()
+    if (v.isEmpty) {
+        screenshot(force = true)
+    }
+    v = detectAction()
+
     lastVisionElement = v
 
     if (v.isFound) {

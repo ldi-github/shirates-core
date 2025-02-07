@@ -20,15 +20,15 @@
         scenario {
             case(1) {
                 condition {
-                    macro("[Android Settings Top Screen]")
+                    macro("[Android設定トップ画面]")
                 }.action {
-                    describe("Tap [System]")
+                    describe("<システム>をタップする")
                     silent {
                         it.scrollToBottom()
-                            .tap("[System]")
+                            .tap("システム")
                     }
                 }.expectation {
-                    it.screenIs("[System Screen]")
+                    it.screenIs("[システム画面]")
                 }
             }
         }
@@ -37,14 +37,14 @@
 
 ### Html-Report
 
-![](_images/silent_and_procedure_2.png )
+![](_images/silent_and_procedure_1_ja.png )
 
 `describe`は出力されています。<br>
 `scrollToEnd`と`tap`は出力されていません。
 
 <br>
 
-# procedure関数
+## procedure関数
 
 **procedure**関数を使用するとdescribe関数 と silent関数を組み合わせることなく代用できます。
 
@@ -58,14 +58,14 @@
         scenario {
             case(1) {
                 condition {
-                    macro("[Android Settings Top Screen]")
+                    macro("[Android設定トップ画面]")
                 }.action {
-                    procedure("Tap [System]") {
+                    procedure("<System>をタップする") {
                         it.scrollToBottom()
-                            .tap("[System]")
+                            .tap("システム")
                     }
                 }.expectation {
-                    it.screenIs("[System Screen]")
+                    it.screenIs("[システム画面]")
                 }
             }
         }
@@ -74,7 +74,7 @@
 
 ### Html-Report
 
-![](_images/silent_and_procedure_2.png)
+![](_images/silent_and_procedure_2_ja.png)
 
 `procedure` は出力されています。<br>
 `scrollToEnd` と `tap`は出力されていません。

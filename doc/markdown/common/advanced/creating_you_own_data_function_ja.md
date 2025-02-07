@@ -2,10 +2,6 @@
 
 `DatasetRepositoryManager`を使用すると独自のデータ関数を作成することができます。
 
-### サンプルコード
-
-[サンプルの入手](../../../getting_samples_ja.md)
-
 customerに関するデータ関数を作成したい場合
 
 1. `dataset`ディレクトリの下に`customers.json`という名前のデータセットjsonファイルを作成します。

@@ -18,18 +18,18 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Search Screen]")
+                    it.macro("[Android設定検索画面]")
                 }.action {
-                    it.sendKeys("clock")
+                    it.sendKeys("時計")
                 }.expectation {
-                    it.textIs("clock")
+                    it.textIs("時計")
                 }
             }
             case(2) {
                 action {
                     it.clearInput()
                 }.expectation {
-                    it.textIs("Search settings")
+                    it.textIs("設定を検索")
                 }
             }
         }
@@ -50,7 +50,7 @@
                 condition {
                     it.pressHome()
                         .swipeCenterToBottom()
-                        .tap("Search")
+                        .tap("検索")
                         .clearInput()
                 }.action {
                     it.sendKeys("safari")
@@ -62,7 +62,7 @@
                 action {
                     it.clearInput()
                 }.expectation {
-                    it.textIs("Search")
+                    it.textIs("検索")
                 }
             }
         }

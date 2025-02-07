@@ -15,7 +15,7 @@ capabilitiesを設定するとデバイスの言語を指定できます。
 
 ### Link
 
-- [LanguageHelper](../helper/language_helper/language_helper.md)
+- [言語ヘルパー](../helper/language_helper/language_helper_ja.md)
 
 
 - [index(Vision)](../../index_ja.md)

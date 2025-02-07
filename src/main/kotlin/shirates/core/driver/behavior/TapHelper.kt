@@ -1,4 +1,4 @@
-package shirates.core.driver.befavior
+package shirates.core.driver.behavior
 
 import org.openqa.selenium.StaleElementReferenceException
 import shirates.core.driver.TapMethod

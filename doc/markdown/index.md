@@ -21,7 +21,7 @@
 
 ### Samples
 
-- [Gettings samples](vision/getting_samples.md)
+- [Getting samples](vision/getting_samples.md)
 
 ### Recommended settings
 
@@ -162,6 +162,7 @@
 ### Helper
 
 - [LanguageHelper](common/helper/language_helper/language_helper.md)
+- [LanguageHelperAndroid](common/helper/language_helper/language_helper_android.md)
 
 ### Report
 
@@ -178,12 +179,6 @@
 
 ## Tutorial(In action)
 
-- Message and language
-    - [Log language](common/message_and_language/log_language.md)
-    - [Device language](common/message_and_language/device_language.md)
-- Log and screenshot
-    - [Configuring log](vision/in_action/log_and_screenshot/configuring_log.md)
-    - [Configuring screenshot](vision/in_action/log_and_screenshot/configuring_screenshot.md)
 - Debugging
     - [Watching recognizeText.json](vision/in_action/debugging/watching_recognize_text_json.md)
     - [Watching image in debugger](vision/in_action/debugging/watching_image_in_debugger.md)

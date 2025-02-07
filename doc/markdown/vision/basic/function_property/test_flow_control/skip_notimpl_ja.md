@@ -31,17 +31,17 @@
                         SKIP_CASE("case(1) skipped.")   // Skip execution of commands (log only)
                     }
                 }.action {
-                    it.tap("Settings")  // Skipped
+                    it.tap("設定")  // Skipped
                 }.expectation {
-                    it.textIs("Settings")    // Skipped
+                    it.textIs("設定")    // Skipped
                 }
             }
 
             case(2) {
                 action {
-                    it.tap("Settings")  // Executed
+                    it.tap("設定")  // Executed
                 }.expectation {
-                    it.textIs("Settings")    // Executed
+                    it.textIs("設定")    // Executed
                 }
             }
         }
@@ -50,7 +50,7 @@
 
 ### Spec-Report
 
-![](_images/skip_case_spec_report.png)
+![](_images/skip_case_spec_report_ja.png)
 
 ```kotlin
     @Test
@@ -65,17 +65,17 @@
                         SKIP_SCENARIO()     // Skip execution of commands (log only)
                     }
                 }.action {
-                    it.tap("Settings")  // Skipped
+                    it.tap("設定")  // Skipped
                 }.expectation {
-                    it.textIs("Settings")    // Skipped
+                    it.textIs("設定")    // Skipped
                 }
             }
 
             case(2) {
                 action {
-                    it.tap("Settings")  // Skipped
+                    it.tap("設定")  // Skipped
                 }.expectation {
-                    it.textIs("Settings")    // Skipped
+                    it.textIs("設定")    // Skipped
                 }
             }
         }
@@ -84,7 +84,7 @@
 
 #### Spec-Report
 
-![](_images/skip_scenario_spec_report.png)
+![](_images/skip_scenario_spec_report_ja.png)
 
 ```kotlin
     @Test
@@ -94,9 +94,9 @@
         scenario {
             case(1) {
                 action {
-                    it.tap("Settings")  // Executed
+                    it.tap("設定")  // Executed
                 }.expectation {
-                    it.textIs("Settings")    // Executed
+                    it.textIs("設定")    // Executed
                 }
             }
 
@@ -104,17 +104,17 @@
                 condition {
                     NOTIMPL()   // Abort this test
                 }.action {
-                    it.tap("Settings")  // Not reached
+                    it.tap("設定")  // Not reached
                 }.expectation {
-                    it.textIs("Settings")   // Not reached
+                    it.textIs("設定")   // Not reached
                 }
             }
 
             case(3) {
                 action {
-                    it.tap("Settings")  // Not reached
+                    it.tap("設定")  // Not reached
                 }.expectation {
-                    it.textIs("Settings")    // Not reached
+                    it.textIs("設定")    // Not reached
                     NOTIMPL("To be implement.")     // Not reached
                 }
             }
@@ -124,7 +124,7 @@
 
 ### Spec-Report
 
-![](_images/notimpl_case_spec_report.png)
+![](_images/notimpl_case_spec_report_ja.png)
 
 ```kotlin
     @Test
@@ -136,17 +136,17 @@
 
             case(1) {   // Not reached
                 action {
-                    it.tap("Settings")
+                    it.tap("設定")
                 }.expectation {
-                    it.textIs("Settings")
+                    it.textIs("設定")
                 }
             }
 
             case(2) {   // Not reached
                 action {
-                    it.tap("Settings")
+                    it.tap("設定")
                 }.expectation {
-                    it.textIs("Settings")
+                    it.textIs("設定")
                 }
             }
         }
@@ -155,7 +155,7 @@
 
 ### Spec-Report
 
-![](_images/notimpl_scenario_spec_report.png)
+![](_images/notimpl_scenario_spec_report_ja.png)
 
 ### Link
 

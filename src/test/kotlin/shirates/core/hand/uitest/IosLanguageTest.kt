@@ -1,7 +1,7 @@
 package shirates.core.hand.uitest
 
 import org.junit.jupiter.api.Test
-import shirates.core.driver.befavior.LanguageHelper
+import shirates.core.driver.behavior.LanguageHelper
 import shirates.core.testcode.ios
 import shirates.core.vision.driver.commandextension.exist
 import shirates.core.vision.driver.commandextension.launchApp

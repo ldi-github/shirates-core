@@ -19,6 +19,16 @@ import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
 
 /**
+ * setOCRLanguage
+ */
+fun VisionDrive.setOCRLanguage(ocrLanguage: String): VisionElement {
+
+    PropertiesManager.visionOCRLanguage = ocrLanguage
+
+    return lastElement
+}
+
+/**
  * detect
  */
 fun VisionDrive.detect(

@@ -34,5 +34,5 @@ noLoadRun=true
 
 ### Link
 
-- [index(Vision)](../../index.md)
-- [index(Classic)](../../classic/index.md)
+- [index(Vision)](../../index_ja.md)
+- [index(Classic)](../../classic/index_ja.md)
