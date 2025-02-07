@@ -44,7 +44,7 @@ You can suppress logging using **silent** function.
 
 <br>
 
-# procedure function
+## procedure function
 
 You can use **procedure** function instead of describe + silent.
 

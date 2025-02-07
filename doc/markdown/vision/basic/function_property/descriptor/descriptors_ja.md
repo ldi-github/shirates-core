@@ -70,4 +70,4 @@
 
 ### Link
 
-- [index](../../../index_ja.md)
+- [index](../../../../index_ja.md)

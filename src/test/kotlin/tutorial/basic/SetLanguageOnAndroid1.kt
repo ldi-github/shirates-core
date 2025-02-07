@@ -2,7 +2,7 @@ package tutorial.basic
 
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.befavior.LanguageHelper
+import shirates.core.driver.behavior.LanguageHelper
 import shirates.core.driver.commandextension.exist
 import shirates.core.testcode.UITest
 

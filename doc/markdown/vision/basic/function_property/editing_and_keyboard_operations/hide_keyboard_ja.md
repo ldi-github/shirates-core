@@ -18,10 +18,10 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
-                        .isKeyboardShown.thisIsFalse("Keyboard is not shown")
+                    it.macro("[Android設定トップ画面]")
+                        .isKeyboardShown.thisIsFalse("キーボードが表示されています")
                 }.action {
-                    it.tap("Search settings")
+                    it.tap("設定を検索")
                 }.expectation {
                     it.keyboardIsShown()
                 }
@@ -37,7 +37,7 @@
     }
 ```
 
-####                         
+####                           
 
 ### iOSKeyboard1.kt
 
@@ -52,7 +52,7 @@
             case(1) {
                 condition {
                     it.pressHome()
-                        .isKeyboardShown.thisIsFalse("Keyboard is not shown")
+                        .isKeyboardShown.thisIsFalse("キーボードは表示されていません")
                 }.action {
                     it.swipeCenterToBottom()
                 }.expectation {
@@ -70,7 +70,7 @@
     }
 ```
 
-####              
+####                
 
 ### Link
 

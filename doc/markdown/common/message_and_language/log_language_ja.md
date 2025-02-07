@@ -18,57 +18,46 @@
 
 ### AndroidSettingsDemo.kt
 
-(`kotlin/demo/AndroidSettingsDemo.kt`)
+(`kotlin/demo/AndroidSettingsVisionDemo.kt`)
 
 ```kotlin
-package demo
-
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class AndroidSettingsDemo : UITest() {
-
     @Test
     fun airplaneModeSwitch() {
 
         scenario {
             case(1) {
                 condition {
-                    it.launchApp("Settings")
-                        .screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }.action {
-                    it.tap("[Network & internet]")
+                    it.tap("ネットワークとインターネット")
                 }.expectation {
-                    it.screenIs("[Network & internet Screen]")
+                    it.screenIs("[ネットワークとインターネット画面]")
                 }
             }
-
             case(2) {
                 condition {
-                    it.select("{Airplane mode switch}")
+                    it.detect("機内モード")
+                        .rightItem()
                         .checkIsOFF()
                 }.action {
-                    it.tap("{Airplane mode switch}")
+                    it.tap()
                 }.expectation {
-                    it.select("{Airplane mode switch}")
+                    it.detect("機内モード")
+                        .rightItem()
                         .checkIsON()
                 }
             }
-
             case(3) {
                 action {
-                    it.tap("{Airplane mode switch}")
+                    it.tap()
                 }.expectation {
-                    it.select("{Airplane mode switch}")
+                    it.detect("機内モード")
+                        .rightItem()
                         .checkIsOFF()
                 }
             }
         }
     }
-}
 ```
 
 ### testrun.properties (default)
@@ -79,7 +68,7 @@ class AndroidSettingsDemo : UITest() {
 
 ### 実行結果 (default)
 
-![](_images/log_language_en.png)
+![](_images/log_language_en_ja.png)
 
 ### testrun.properties (ja)
 
@@ -89,7 +78,7 @@ logLanguage=ja
 
 ### 実行結果 (ja)
 
-![](_images/log_language_jp.png)
+![](_images/log_language_ja_ja.png)
 
 ### Link
 

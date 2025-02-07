@@ -13,7 +13,7 @@
 
 [サンプルの入手](../../../getting_samples_ja.md)
 
-### IfCanSelect1.kt
+### IfCanDetect1.kt
 
 (`src/test/kotlin/tutorial/basic/IfCanDetect1.kt`)
 
@@ -25,15 +25,15 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    ifCanDetect("Network & internet") {
+                    ifCanDetect("ネットワークとインターネット") {
                         OK("ifCanSelect called")
                     }.ifElse {
                         NG()
                     }
 
-                    ifCanDetectNot("System") {
+                    ifCanDetectNot("システム") {
                         OK("ifCanSelectNot called")
                     }.ifElse {
                         NG()
@@ -44,13 +44,13 @@
                 action {
                     it.scrollToBottom()
                 }.expectation {
-                    ifCanDetect("Network & internet") {
+                    ifCanDetect("ネットワークとインターネット") {
                         NG()
                     }.ifElse {
                         OK("ifElse called")
                     }
 
-                    ifCanDetectNot("System") {
+                    ifCanDetectNot("システム") {
                         NG()
                     }.ifElse {
                         OK("ifElse called")

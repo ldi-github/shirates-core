@@ -28,15 +28,15 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
-                        .tap("Storage")
+                    it.macro("[Android設定トップ画面]")
+                        .tap("ストレージ")
                         .waitForDisplay("GB")
                 }.action {
-                    writeMemo("System", it.detect("System").rightText().text)
-                    writeMemo("Apps", it.detect("Apps").rightText().text)
+                    writeMemo("システム", it.detect("システム").rightText().text)
+                    writeMemo("アプリ", it.detect("アプリ").rightText().text)
                 }.expectation {
-                    readMemo("System").printInfo()
-                    readMemo("Apps").printInfo()
+                    readMemo("システム").printInfo()
+                    readMemo("アプリ").printInfo()
                 }
             }
         }
@@ -49,13 +49,13 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Network & internet Screen]")
+                    it.macro("[ネットワークとインターネット画面]")
                 }.action {
-                    it.detect("SIMs").belowText().memoTextAs("SIMs")
+                    it.detect("SIM").belowText().memoTextAs("SIM")
                     it.detect("VPN").belowText().memoTextAs("VPN")
                 }.expectation {
-                    it.readMemo("SIMs").thisIs("T-Mobile")
-                    it.readMemo("VPN").thisIs("None")
+                    it.readMemo("SIM").thisIs("T-Mobile")
+                    it.readMemo("VPN").thisIs("なし")
                 }
             }
         }

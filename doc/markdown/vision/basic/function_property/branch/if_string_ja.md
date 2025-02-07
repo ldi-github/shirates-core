@@ -27,18 +27,6 @@
 (`kotlin/tutorial/basic/IfStringIs1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.branchextension.ifStringIs
-import shirates.core.driver.commandextension.describe
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class IfStringIs1 : UITest() {
-
     @Test
     @Order(10)
     fun ifStringIsTest() {
@@ -87,8 +75,6 @@ class IfStringIs1 : UITest() {
             }
         }
     }
-
-}
 ```
 
 ### Link

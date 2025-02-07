@@ -75,4 +75,5 @@ Shirates はテスト実行が完了した時にテスト結果ファイルを�
 
 ### Link
 
-- [index](../../classic/index_ja.md)
+- [index(Vision)](../../index_ja.md)
+- [index(Classic)](../../classic/index_ja.md)

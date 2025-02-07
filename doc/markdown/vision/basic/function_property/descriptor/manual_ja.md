@@ -20,9 +20,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.manual("Animation should be displayed on start up.")
+                    it.manual("開始時にアニメーションが表示されること")
                 }
             }
         }
@@ -32,11 +32,11 @@
 
 ### Html-Report
 
-![](_images/manual_html_report.png)
+![](_images/manual_html_report_ja.png)
 
 ### Spec-Report
 
-![](_images/manual_spec_report.png)
+![](_images/manual_spec_report_ja.png)
 
 ### Link
 

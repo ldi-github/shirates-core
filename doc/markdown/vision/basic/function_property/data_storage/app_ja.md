@@ -12,31 +12,37 @@
 
 ```
 {
-  "[Settings]": {
-    "packageOrBundleId": "com.android.settings"
+  "[設定]": {
+    "packageOrBundleId": "com.android.settings",
+    "appIconName": "設定"
   },
-  "[Calculator]": {
-    "packageOrBundleId": "com.google.android.calculator"
+  "[電卓]": {
+    "packageOrBundleId": "com.google.android.calculator",
+    "appIconName": "Calculator"
   },
   "[Chrome]": {
-    "packageOrBundleId": "com.android.chrome"
-  }
+    "packageOrBundleId": "com.android.chrome",
+    "appIconName": "Chrome"
+  },
 }
 ```
 
-### androidSettingsConfig.json (testConfig.json)
+### testConfig.json
 
 使用する`apps.json`ファイルのパスを`testConfig.json`ファイルの**dataset**セクションの"**apps**"で指定します。
 
 ```
 {
-  "testConfigName": "androidSettingsConfig",
+  "testConfigName": "testConfig@a",
+
+...
 
   "dataset": {
-    "apps": "testConfig/android/androidSettings/dataset/apps.json"
+    "apps": "testConfig/android/dataset/apps.json",
   },
 
 ...
+}
 ```
 
 ### App1.kt
@@ -53,14 +59,14 @@ Use app function.
         scenario {
             case(1) {
                 condition {
-                    it.launchApp("[Settings]")
-                        .tap("Search settings")
-                        .screenIs("[Android Settings Search Screen]")
-                        .tap("Search settings")
+                    it.launchApp("[設定]")
+                        .tap("設定を検索")
+                        .screenIs("[Android設定検索画面]")
+                        .tap("設定を検索")
                 }.action {
-                    it.sendKeys(app("[Settings].packageOrBundleId"))
+                    it.sendKeys(app("[設定].packageOrBundleId"))
                 }.expectation {
-                    it.textIs(app("[Settings].packageOrBundleId"))
+                    it.textIs(app("[設定].packageOrBundleId"))
                 }
             }
         }

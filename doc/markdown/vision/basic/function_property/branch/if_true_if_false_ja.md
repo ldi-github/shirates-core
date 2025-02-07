@@ -25,26 +25,26 @@ Kotlinのif-elseステートメントの代わりにこれらの関数を使用�
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
                     isEmulator
                         .ifTrue {
                             it.caption("on emulator")
-                                .tapWithScrollDown("About emulated device")
+                                .tapWithScrollDown("エミュレートされた")
                         }
                         .ifElse {
                             it.caption("on real device")
-                                .tapWithScrollDown("About phone")
+                                .tapWithScrollDown("デバイス情報")
                         }
                 }.expectation {
                     isEmulator
                         .ifTrue {
                             it.caption("on emulator")
-                                .exist("*About emulated device*")
+                                .exist("*エミュレートされたデバイスについて*")
                         }
                         .ifElse {
                             it.caption("on real device")
-                                .exist("About phone")
+                                .exist("デバイス情報")
                         }
                 }
             }
@@ -58,22 +58,22 @@ Kotlinのif-elseステートメントの代わりにこれらの関数を使用�
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.action {
                     isEmulator
                         .ifTrue("on emulator") {
-                            it.tapWithScrollDown("About emulated device")
+                            it.tapWithScrollDown("エミュレートされた")
                         }
                         .ifElse("on real device") {
-                            it.tapWithScrollDown("About phone")
+                            it.tapWithScrollDown("デバイス情報")
                         }
                 }.expectation {
                     isEmulator
                         .ifTrue("on emulator") {
-                            it.exist("About emulated device")
+                            it.exist("*エミュレートされたデバイスについて*")
                         }
                         .ifElse("on real device") {
-                            it.exist("About phone")
+                            it.exist("デバイス情報")
                         }
                 }
             }

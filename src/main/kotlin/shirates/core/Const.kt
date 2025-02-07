@@ -99,6 +99,7 @@ object Const {
     const val EMULATOR_OPTIONS = "-no-boot-anim -no-snapshot"
     const val DEVICE_STARTUP_TIMEOUT_SECONDS: Double = 60.0
     const val DEVICE_WAIT_SECONDS_AFTER_STARTUP: Double = 0.0
+    const val ANDROID_LANGUAGE_AND_REGION = ""
 
     // Appium server
     const val APPIUM_SERVER_ADDRESS = "http://127.0.0.1:4723/"
@@ -128,6 +129,7 @@ object Const {
     const val RETRY_TIMEOUT_SECONDS: Double = 15.0
     const val RETRY_INTERVAL_SECONDS: Double = 2.0
     const val SHORT_WAIT_SECONDS = 1.5
+    const val WAIT_SECONDS_FOR_EXIST = 0.5
     const val WAIT_SECONDS_FOR_LAUNCH_APP_COMPLETE = 15.0
     const val WAIT_SECONDS_FOR_ANIMATION_COMPLETE = 0.5
     const val WAIT_SECONDS_ON_ISSCREEN = 15.0

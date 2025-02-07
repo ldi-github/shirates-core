@@ -25,9 +25,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    ifScreenIs("[Android Settings Top Screen]") {
+                    ifScreenIs("[Android設定トップ画面]") {
                         OK("ifScreenIs called")
                     }.ifElse {
                         NG()
@@ -36,9 +36,9 @@
             }
             case(2) {
                 action {
-                    it.tap("Network & internet")
+                    it.tap("ネットワークとインターネット")
                 }.expectation {
-                    ifScreenIs("[Network & internet Screen]") {
+                    ifScreenIs("[ネットワークとインターネット画面]") {
                         OK("ifScreenIs called")
                     }.ifElse {
                         NG()
@@ -55,9 +55,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    ifScreenIsNot("[Android Settings Top Screen]") {
+                    ifScreenIsNot("[Android設定トップ画面]") {
                         NG()
                     }.ifElse {
                         OK("ifElse called")
@@ -66,9 +66,9 @@
             }
             case(2) {
                 action {
-                    it.tap("Network & internet")
+                    it.tap("ネットワークとインターネット")
                 }.expectation {
-                    ifScreenIsNot("[Network & internet Screen]") {
+                    ifScreenIsNot("[ネットワークとインターネット画面]") {
                         NG()
                     }.ifElse {
                         OK("ifElse called")

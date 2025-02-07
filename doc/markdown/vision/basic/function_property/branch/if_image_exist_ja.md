@@ -18,22 +18,22 @@
 (`src/test/kotlin/tutorial/basic/IfImageExist1.kt`)
 
 ```kotlin
-    @Test
+     @Test
     @Order(10)
     fun ifImageExistTest() {
 
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    ifImageExist("[Network & internet Icon]") {
+                    ifImageExist("[ネットワークとインターネットアイコン]") {
                         OK("ifImageExist called")
                     }.ifElse {
                         NG()
                     }
 
-                    ifImageExistNot("[System Icon]") {
+                    ifImageExistNot("[システムアイコン]") {
                         OK("ifImageExistNot called")
                     }.ifElse {
                         NG()
@@ -44,13 +44,13 @@
                 action {
                     it.scrollToBottom()
                 }.expectation {
-                    ifImageExist("[Network & internet Icon]") {
+                    ifImageExist("[ネットワークとインターネットアイコン]") {
                         NG()
                     }.ifElse {
                         OK("ifElse called")
                     }
 
-                    ifImageExistNot("[System Icon]") {
+                    ifImageExistNot("[システムアイコン]") {
                         NG()
                     }.ifElse {
                         OK("ifElse called")

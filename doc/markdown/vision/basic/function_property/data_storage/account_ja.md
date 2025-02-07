@@ -53,9 +53,9 @@ Use account function.
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
-                        .tap("Search settings")
-                        .screenIs("[Android Settings Search Screen]")
+                    it.macro("[Android設定トップ画面]")
+                        .tap("設定を検索")
+                        .screenIs("[Android設定検索画面]")
                 }.action {
                     it.sendKeys(account("[account1].id"))
                 }.expectation {

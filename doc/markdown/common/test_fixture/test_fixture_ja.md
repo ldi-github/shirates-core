@@ -25,13 +25,12 @@ package tutorial.basic
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
-import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
-import shirates.core.driver.commandextension.exist
-import shirates.core.testcode.UITest
+import shirates.core.driver.driver
+import shirates.core.vision.driver.commandextension.exist
+import shirates.core.vision.testcode.VisionTest
 
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class TestFixtureEvent1 : UITest() {
+class TestFixtureEvent1 : VisionTest() {
 
     private fun printEvent(eventName: String) {
 
@@ -81,7 +80,7 @@ class TestFixtureEvent1 : UITest() {
         scenario {
             case(1) {
                 expectation {
-                    it.exist("Network & internet")
+                    it.exist("ネットワークとインターネット")
                 }
             }
         }
@@ -94,7 +93,7 @@ class TestFixtureEvent1 : UITest() {
         scenario {
             case(1) {
                 expectation {
-                    it.exist("Connected devices")
+                    it.exist("接続設定")
                 }
             }
         }
@@ -127,21 +126,17 @@ AppiumDriver: available
 ...
 [afterAll] --------------------------------------------------
 AppiumDriver: available
-...
-202	2023/04/04 22:20:07.238	{}	[info]	()	Logging to file:////Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1/
-Copying _ReportScript.js to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1
-Copying _ReportStyle.css to /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1
-Loading: /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1/TestLog(commandList)_20230404221948.log
-Saved: /Users/wave1008/Downloads/TestResults/androidSettingsConfig/2023-04-04_221948/UITestEvent1/UITestEvent1@a.xlsx
+139	[00:00:25]	2025/02/07 16:39:05.030	{}	0	-	[info]	+1009	C	()	ログは次の場所に出力します。 file:////Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1/
+Copying jar content _ReportScript.js to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1
+Copying jar content _ReportStyle.css to /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1
+Loading: /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1/TestLog(commandList)_20250207163839.log
+Saved: /Users/wave1008/Downloads/TestResults/testConfig@a/2025-02-07_163839/TestFixtureEvent1/TestFixtureEvent1@a.xlsx
 
-Cleaning up unclosed ZipFile for archive /Users/wave1008/Downloads/TestResults/androidSettingsConfig/TestList_androidSettingsConfig.xlsx
-203	2023/04/04 22:20:07.664	{}	[info]	()	Quitting TestDriver.
-204	2023/04/04 22:20:07.766	{}	[info]	()	Test class executed. (duration: 19.1 sec)
-...
+140	[00:00:26]	2025/02/07 16:39:05.958	{}	0	-	[info]	+928	C	()	Quitting TestDriver.
+141	[00:00:26]	2025/02/07 16:39:06.091	{}	0	-	[info]	+133	C	()	テストクラスの実行が完了しました。(処理時間: 26.6 sec)
 [finally] --------------------------------------------------
 AppiumDriver: NOT available
-...
-Disconnected from the target VM, address: '127.0.0.1:49896', transport: 'socket'
+Disconnected from the target VM, address: '127.0.0.1:55727', transport: 'socket'
 
 Process finished with exit code 0
 ```

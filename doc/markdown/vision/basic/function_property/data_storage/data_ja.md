@@ -12,27 +12,27 @@
 
 ```
 {
-  "[product1]": {
-    "product_name": "Super Liquid",
-    "product_code": "P001",
-    "unit_price": "100"
+  "[製品1]": {
+    "製品名": "スーパーハイテンション",
+    "製品コード": "P001",
+    "単価": "100"
   },
 
-  "[product2]": {
-    "product_name": "Ultra High",
-    "product_code": "P002",
-    "unit_price": "200"
+  "[製品2]": {
+    "製品名": "ウルトラハイ",
+    "製品コード": "P002",
+    "単価": "200"
   }
 }
 ```
 
-### androidSettingsConfig.json (testConfig.json)
+### testConfig.json
 
 使用する`data.json`ファイルのパスを`testConfig.json`ファイルの**dataset**セクションの"**data**"で指定します。
 
 ```
 {
-  "testConfigName": "androidSettingsConfig",
+  "testConfigName": "testConfig@a",
 
   "dataset": {
     "data": "testConfig/android/androidSettings/dataset/data.json"
@@ -43,8 +43,6 @@
 
 ### Data1.kt
 
-Use data function.
-
 ```kotlin
     @Test
     @Order(10)
@@ -53,12 +51,12 @@ Use data function.
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Search Screen]")
-                        .tap("Search settings")
+                    it.macro("[Android設定検索画面]")
+                        .tap("設定を検索")
                 }.action {
-                    it.sendKeys(data("[product1].product_name"))
+                    it.sendKeys(data("[製品1].製品名"))
                 }.expectation {
-                    it.textIs("Super High Tension")
+                    it.textIs("スーパーハイテンション")
                 }
             }
         }

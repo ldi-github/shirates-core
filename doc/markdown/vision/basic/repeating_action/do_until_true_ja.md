@@ -19,7 +19,7 @@
 
 ### サンプルコード
 
-[サンプルの入手](../../../getting_samples_ja.md)
+[サンプルの入手](../../getting_samples_ja.md)
 
 ### DoUntilTrue1.kt
 
@@ -35,15 +35,15 @@
                 condition {
                     it.terminateApp()
                     it.launchApp()
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }.action {
                     doUntilTrue {
-                        it.swipeCenterToTop()
-                        it.canDetect("System")
+                        it.scrollDown()
+                        it.canDetect("システム")
                     }
                     it.tap()
                 }.expectation {
-                    it.screenIs("[System Screen]")
+                    it.screenIs("[システム画面]")
                 }
             }
         }
@@ -58,7 +58,7 @@
                 condition {
                     it.terminateApp()
                     it.launchApp()
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }.action {
                     doUntilTrue(
                         waitSeconds = 3.0,
@@ -67,11 +67,11 @@
                         }
                     ) {
                         it.swipeCenterToTop()
-                        it.canDetect("System")
+                        it.canDetect("システム")
                     }
                     it.tap()
                 }.expectation {
-                    it.screenIs("[System Screen]")
+                    it.screenIs("[システム画面]")
                 }
             }
         }
@@ -86,7 +86,7 @@
                 condition {
                     it.terminateApp()
                     it.launchApp()
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }.action {
                     doUntilTrue(
                         maxLoopCount = 2,
@@ -95,11 +95,11 @@
                         }
                     ) {
                         it.swipeCenterToTop()
-                        it.canDetect("System")
+                        it.canDetect("システム")
                     }
                     it.tap()
                 }.expectation {
-                    it.screenIs("[System Screen]")
+                    it.screenIs("[システム画面]")
                 }
             }
         }

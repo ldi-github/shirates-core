@@ -21,6 +21,8 @@ a) Check `language` and `locale` is correct.
 
 b) Reset user data on the emulator. See [Wipe Data](wipe_data.md).
 
+c) Consider using parameter `androidLanguageAndRegion`.
+
 ### Link
 
 - [Troubleshooting](../troubleshooting.md)

@@ -37,11 +37,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Network & internet Screen]")
+                    it.macro("[ネットワークとインターネット画面]")
                 }.action {
                     it.pressBack()
                 }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }
             }
 
@@ -55,11 +55,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Network & internet Screen]")
+                    it.macro("[ネットワークとインターネット画面]")
                 }.action {
                     it.pressHome()
                 }.expectation {
-                    it.screenIs("[Android Home Screen]")
+                    it.screenIs("[Androidホーム画面]")
                 }
             }
 
@@ -73,7 +73,7 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Files Top Screen]")
+                    it.macro("[ファイルトップ画面]")
                 }.action {
                     it.pressTab()
                         .pressTab()
@@ -86,6 +86,8 @@
                 }
             }
         }
+
+    }
 ```
 
 ### iOSPressKey1.kt
@@ -100,13 +102,13 @@
         scenario {
             case(1) {
                 condition {
-                    it.appIs("[Settings]")
-                        .launchApp("Maps")
-                        .appIs("[Maps]")
+                    it.appIs("[設定]")
+                        .launchApp("[マップ]")
+                        .appIs("[マップ]")
                 }.action {
                     it.pressBack()
                 }.expectation {
-                    it.appIs("[Settings]")
+                    it.appIs("[設定]")
                 }
             }
         }
@@ -119,11 +121,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[iOS Settings Top Screen]")
+                    it.macro("[iOS設定トップ画面]")
                 }.action {
                     it.pressHome()
                 }.expectation {
-                    it.screenIs("[iOS Home Screen]")
+                    it.screenIs("[iOSホーム画面]")
                 }
             }
         }

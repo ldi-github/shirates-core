@@ -18,11 +18,11 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.manual("Animation should be displayed on start up.")
+                    it.manual("開始時にアニメーションが表示されること")
                         .knownIssue(
-                            message = "Animation is not executed smoothly.",
+                            message = "アニメーションがスムーズに表示されない",
                             ticketUrl = "https://issues.example.com/TICKET-1234"
                         )
                 }
@@ -34,11 +34,11 @@
 
 ### HTML-Report
 
-![](_images/known_issue_html_report.png)
+![](_images/known_issue_html_report_ja.png)
 
 ### Spec-Report
 
-![](_images/known_issue_speec_report.png)
+![](_images/known_issue_speec_report_ja.png)
 
 **message** and **ticketUrl** は必須指定です。 ticketUrlが不要な場合は`ticketUrl = ""`を設定してください。
 

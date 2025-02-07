@@ -91,7 +91,7 @@ logLanguage=ja
 
 ### Result (ja)
 
-![](_images/log_language_jp.png)
+![](_images/log_language_ja.png)
 
 ### Link
 

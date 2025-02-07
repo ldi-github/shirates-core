@@ -30,41 +30,41 @@
         scenario {
             case(1) {
                 condition {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }.action {
                     android {
                         virtualDevice {
-                            describe("This is called on android emulator")
+                            describe("この処理はAndroidエミューレーターにおいて呼び出されました")
                         }
                         realDevice {
-                            describe("This is called on android real device")
+                            describe("この処理はAndroid実機において呼び出されました")
                         }
                     }
                     ios {
                         virtualDevice {
-                            describe("This is called on iOS simulator")
+                            describe("この処理はiOSシミュレーターにおいて呼び出されました")
                         }
                         realDevice {
-                            describe("This is called on iOS real device")
+                            describe("この処理はiOS実機において呼び出されました")
                         }
                     }
                 }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }
             }
             case(2) {
                 action {
                     emulator {
-                        describe("This is called on android emulator")
+                        describe("この処理はAndroidエミュレーターにおいて呼び出されました")
                     }
                     simulator {
-                        describe("This is called on iOS simulator")
+                        describe("この処理はiOSシミュレーターにおいて呼び出されました")
                     }
                     realDevice {
-                        describe("This is called on real device")
+                        describe("この処理は実機において呼び出されました")
                     }
                 }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }
             }
         }
@@ -73,11 +73,11 @@
 
 ### Spec-Report(通常モード)
 
-![](_images/branch_functions_normal.png)
+![](_images/branch_functions_normal_ja.png)
 
 ### Spec-Report(無負荷実行モード)
 
-![](_images/branch_functions_no_load_run.png)
+![](_images/branch_functions_no_load_run_ja.png)
 
 ### Link
 

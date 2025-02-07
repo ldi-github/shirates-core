@@ -789,6 +789,15 @@ object PropertiesManager {
 //            return value
 //        }
 
+    /**
+     * androidLanguageAndRegion
+     */
+    val androidLanguageAndRegion: String
+        get() {
+            return getPropertyValue(propertyName = "androidLanguageAndRegion")
+                ?: Const.ANDROID_LANGUAGE_AND_REGION
+        }
+
     // TestDriver --------------------------------------------------
 
     /**

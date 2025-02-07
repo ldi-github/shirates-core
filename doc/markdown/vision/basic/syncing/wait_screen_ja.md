@@ -8,6 +8,10 @@
 
 参照 [パラメーター](../../../common/parameter/parameters_ja.md)
 
+### サンプルコード
+
+[サンプルの入手](../../getting_samples_ja.md)
+
 ## waitScreen
 
 ### WaitScreen1.kt
@@ -15,17 +19,6 @@
 (`kotlin/tutorial/basic/WaitScreen1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-
-@Testrun("testConfig/android/androidSettings/testrun.properties")
-class WaitScreen1 : UITest() {
-
     @Test
     @Order(10)
     fun waitScreen() {
@@ -36,9 +29,9 @@ class WaitScreen1 : UITest() {
                     it.terminateApp()
                         .launchApp()
                 }.action {
-                    it.waitScreen("[Android Settings Top Screen]")
+                    it.waitScreen("[Android設定トップ画面]")
                 }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }
             }
         }
@@ -54,12 +47,11 @@ class WaitScreen1 : UITest() {
                     it.terminateApp()
                         .launchApp()
                 }.action {
-                    it.waitScreen("[Network & internet Screen]")
+                    it.waitScreen("[ネットワークとインターネット画面]")
                 }
             }
         }
     }
-
 ...
 
 }
@@ -83,13 +75,13 @@ class WaitScreen1 : UITest() {
                         .launchApp()
                 }.action {
                     it.waitScreenOf(
-                        "[Android Settings Top Screen]",
-                        "[Network & internet Screen]",
-                        "[Connected devices Screen]"
+                        "[Android設定トップ画面]",
+                        "[ネットワークとインターネット画面]",
+                        "[接続設定画面]"
                     )
                     output("screenName=${it.screenName}")
                 }.expectation {
-                    it.screenIs("[Android Settings Top Screen]")
+                    it.screenIs("[Android設定トップ画面]")
                 }
             }
         }
@@ -106,9 +98,9 @@ class WaitScreen1 : UITest() {
                         .launchApp("Chrome")
                 }.action {
                     it.waitScreenOf(
-                        "[Android Settings Top Screen]",
-                        "[Network & internet Screen]",
-                        "[Connected devices Screen]"
+                        "[Android設定トップ画面]",
+                        "[ネットワークとインターネット画面]",
+                        "[接続設定画面]"
                     )
                 }
             }

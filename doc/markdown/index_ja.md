@@ -161,6 +161,7 @@
 ### ヘルパー
 
 - [言語ヘルパー](common/helper/language_helper/language_helper_ja.md)
+- [Android用言語ヘルパー](common/helper/language_helper/language_helper_android_ja.md)
 
 ### レポート
 
@@ -177,12 +178,6 @@
 
 ## チュートリアル(In action)
 
-- メッセージと言語
-    - [ログ出力の言語](common/message_and_language/log_language_ja.md)
-    - [デバイスの言語](common/message_and_language/device_language_ja.md)
-- ログとスクリーンショット
-    - [ログ出力を構成する](vision/in_action/log_and_screenshot/configuring_log_ja.md)
-    - [スクリーンショットを構成する](vision/in_action/log_and_screenshot/configuring_screenshot_ja.md)
 - デバッグ
     - [recognizeText.jsonを確認する](vision/in_action/debugging/watching_recognize_text_json_ja.md)
     - [デバッガで画像をウォッチする](vision/in_action/debugging/watching_image_in_debugger_ja.md)

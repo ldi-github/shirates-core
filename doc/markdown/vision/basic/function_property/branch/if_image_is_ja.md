@@ -25,18 +25,18 @@
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Android設定トップ画面]")
                 }.expectation {
-                    it.detect("Network & internet")
+                    it.detect("ネットワークとインターネット")
                         .leftItem()
-                        .ifImageIs("[Network & internet Icon]") {
+                        .ifImageIs("[ネットワークとインターネットアイコン]") {
                             OK("ifImageIs called")
                         }.ifElse {
                             NG()
                         }
-                    it.detect("Network & internet")
+                    it.detect("ネットワークとインターネット")
                         .leftItem()
-                        .ifImageIsNot("[Network & internet Icon]") {
+                        .ifImageIsNot("[ネットワークとインターネットアイコン]") {
                             NG()
                         }.ifElse {
                             OK("ifElse called")
@@ -45,16 +45,16 @@
             }
             case(2) {
                 expectation {
-                    it.detect("Network & internet")
+                    it.detect("ネットワークとインターネット")
                         .leftItem()
-                        .ifImageIs("[App Icon]") {
+                        .ifImageIs("[アプリアイコン]") {
                             NG()
                         }.ifElse {
                             OK("ifElse called")
                         }
-                    it.detect("Network & internet")
+                    it.detect("ネットワークとインターネット")
                         .leftItem()
-                        .ifImageIsNot("[App Icon]") {
+                        .ifImageIsNot("[アプリアイコン]") {
                             OK("ifImageIsNot called")
                         }.ifElse {
                             NG()
