@@ -10,14 +10,12 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
-import shirates.core.utility.string.normalize
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.lastElement
-import java.text.Normalizer
 
 /**
  * screenName
@@ -45,7 +43,7 @@ fun VisionDrive.isScreen(
 
     updateCurrentScreen()
 
-    val r = (TestDriver.currentScreen == screenName.normalize(Normalizer.Form.NFKC))
+    val r = (TestDriver.currentScreen == screenName)
     return r
 }
 
@@ -80,8 +78,7 @@ fun VisionDrive.isScreenOf(
     invalidateScreen()
     screenshot()
     updateCurrentScreen()
-    val screenName = TestDriver.currentScreen
-    return screenNames.map { it.normalize(Normalizer.Form.NFKC) }.contains(screenName)
+    return screenNames.contains(screenName)
 }
 
 /**

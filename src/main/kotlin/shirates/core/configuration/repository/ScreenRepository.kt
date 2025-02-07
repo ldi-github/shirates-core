@@ -8,11 +8,9 @@ import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.utility.file.exists
-import shirates.core.utility.string.normalize
 import shirates.core.utility.toPath
 import java.io.File
 import java.nio.file.Files
-import java.text.Normalizer
 
 /**
  * ScreenRepository
@@ -55,11 +53,10 @@ object ScreenRepository {
      * get
      */
     operator fun get(key: String): ScreenInfo {
-        val normalizedKey = key.normalize(Normalizer.Form.NFKC)
-        if (screenInfoMap.containsKey(normalizedKey)) {
-            return screenInfoMap[normalizedKey]!!
+        if (screenInfoMap.containsKey(key)) {
+            return screenInfoMap[key]!!
         } else {
-            throw TestConfigException("key is not registered.(key='$normalizedKey')")
+            throw TestConfigException("key is not registered.(key='$key')")
         }
     }
 
@@ -67,16 +64,14 @@ object ScreenRepository {
      * set
      */
     operator fun set(repositoryKey: String, value: ScreenInfo) {
-        val normalizedKey = repositoryKey.normalize(Normalizer.Form.NFKC)
-        screenInfoMap[normalizedKey] = value
+        screenInfoMap[repositoryKey] = value
     }
 
     /**
      * has
      */
     fun has(repositoryKey: String): Boolean {
-        val normalizedKey = repositoryKey.normalize(Normalizer.Form.NFKC)
-        return screenInfoMap.containsKey(normalizedKey)
+        return screenInfoMap.containsKey(repositoryKey)
     }
 
     /**
@@ -84,12 +79,11 @@ object ScreenRepository {
      */
     fun getScreenInfo(screenName: String): ScreenInfo {
 
-        val normalizedKey = screenName.normalize(Normalizer.Form.NFKC)
         if (has(screenName).not()) {
-            throw TestConfigException(message(id = "screenNotRegistered", subject = normalizedKey))
+            throw TestConfigException(message(id = "screenNotRegistered", subject = screenName))
         }
 
-        return get(normalizedKey)
+        return get(screenName)
     }
 
     /**
@@ -97,8 +91,7 @@ object ScreenRepository {
      */
     fun getSelector(screenName: String, nickName: String): Selector {
 
-        val normalizedKey = screenName.normalize(Normalizer.Form.NFKC)
-        val screenInfo = getScreenInfo(screenName = normalizedKey)
+        val screenInfo = getScreenInfo(screenName = screenName)
         return screenInfo.getSelector(expression = nickName)
     }
 
@@ -189,8 +182,7 @@ object ScreenRepository {
          */
         for (screenInfo in screenInfoMap.values) {
             for (includedScreenName in screenInfo.includes) {
-                val normalizedKey = includedScreenName.normalize(Normalizer.Form.NFKC)
-                if (screenInfoMap.containsKey(normalizedKey).not()) {
+                if (screenInfoMap.containsKey(includedScreenName).not()) {
                     val msg = message(
                         id = "failedToIncludeNoneRegisteredScreen",
                         key = includedScreenName,
@@ -198,7 +190,7 @@ object ScreenRepository {
                     )
                     throw TestConfigException(msg)
                 }
-                val includedScreenInfo = screenInfoMap[normalizedKey]!!
+                val includedScreenInfo = screenInfoMap[includedScreenName]!!
                 includeScreen(screenInfo = screenInfo, includedScreenInfo = includedScreenInfo)
             }
         }

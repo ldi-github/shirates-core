@@ -435,7 +435,7 @@ object TestDriver {
             }
         }
         set(value) {
-            val screenName = value.getNicknameWithoutSuffix().normalize(Normalizer.Form.NFKC)
+            val screenName = value.getNicknameWithoutSuffix().normalize(Normalizer.Form.NFC)
             if (screenName.isNotBlank() && field != screenName) {
                 field = screenName
                 if (testContext.enableCache) {
