@@ -78,7 +78,7 @@ fun VisionDrive.isScreenOf(
     invalidateScreen()
     screenshot()
     updateCurrentScreen()
-    return screenNames.contains(screenName)
+    return screenNames.any { screenName.contains(it) }
 }
 
 /**
