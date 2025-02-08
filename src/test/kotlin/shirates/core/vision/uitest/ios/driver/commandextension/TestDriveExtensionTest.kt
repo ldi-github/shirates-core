@@ -15,12 +15,12 @@ import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.testcode.Want
 import shirates.core.utility.toPath
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.ifScreenIsNot
 import shirates.core.vision.driver.commandextension.macro
 import shirates.core.vision.driver.commandextension.screenIs
 import shirates.core.vision.driver.commandextension.screenshot
 import shirates.core.vision.driver.isApp
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -80,7 +80,7 @@ class TestDriveExtensionTest : VisionTest() {
 
         // The function is for iOS.
 
-        testDriveScope {
+        classicScope {
             // Act, Assert
             assertThat(it.getCurrentAppIconName()).isEqualTo("Settings")
         }
@@ -92,7 +92,7 @@ class TestDriveExtensionTest : VisionTest() {
 
         // The function is for iOS.
 
-        testDriveScope {
+        classicScope {
             assertThat(it.getCurrentAppName()).isEqualTo("Settings")
         }
     }
@@ -116,7 +116,7 @@ class TestDriveExtensionTest : VisionTest() {
                         it.macro("[General Screen]")
                     }
                 }.action {
-                    testDriveScope {
+                    classicScope {
                         it.tapDefault()
                     }
                 }.expectation {

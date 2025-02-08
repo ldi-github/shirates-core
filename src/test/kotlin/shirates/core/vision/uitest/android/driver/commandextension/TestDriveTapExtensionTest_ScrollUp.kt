@@ -6,7 +6,7 @@ import shirates.core.driver.commandextension.flickBottomToTop
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.tapWithScrollUp
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
@@ -15,7 +15,7 @@ class TestDriveTapExtensionTest_ScrollUp : VisionTest() {
     @Test
     fun tapWithScrollUp_accessStartsWith() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -33,7 +33,7 @@ class TestDriveTapExtensionTest_ScrollUp : VisionTest() {
     @Test
     fun tapWithScrollUp_xpath() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

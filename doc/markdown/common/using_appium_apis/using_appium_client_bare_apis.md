@@ -1,4 +1,4 @@
-# Using Appium Client bare APIs
+# Using Appium Client bare APIs (Vision/Classic)
 
 You can access APIs of UiAutomator2 Driver or iOS Driver via these properties. Common interfaces are implemented in
 appiumDriver, but you can use driver specific interface on androidDriver/iosDriver. For more detail see appium client

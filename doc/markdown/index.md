@@ -182,6 +182,8 @@
 - Debugging
     - [Watching recognizeText.json](vision/in_action/debugging/watching_recognize_text_json.md)
     - [Watching image in debugger](vision/in_action/debugging/watching_image_in_debugger.md)
+- Interoperability between classic mode and vision mode
+    - [Using classic APIs in VisionTest (classicScope, visionScrope)](vision/in_action/hybrid_scripting/using_classic_apis_in_vision_test.md)
 - Test Fixture
     - [Test fixture](common/test_fixture/test_fixture.md)
 - Using Appium APIs

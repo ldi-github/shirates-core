@@ -9,10 +9,10 @@ import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.scanElements
 import shirates.core.exception.TestNGException
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.existAll
 import shirates.core.vision.driver.commandextension.flickAndGoUp
 import shirates.core.vision.driver.commandextension.macro
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
@@ -64,7 +64,7 @@ class TestDriveAssertionExtensionTest2 : VisionTest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.expectation {
-                    testDriveScope {
+                    classicScope {
                         it.existAllWithScrollDown(
                             "Network & internet",
                             "Connected devices",
@@ -94,7 +94,7 @@ class TestDriveAssertionExtensionTest2 : VisionTest() {
                     it.flickAndGoUp(repeat = 2)
                 }.expectation {
                     assertThatThrownBy {
-                        testDriveScope {
+                        classicScope {
                             it.existAllWithScrollDown(
                                 "Network & internet",
                                 "Connected devices",
@@ -113,7 +113,7 @@ class TestDriveAssertionExtensionTest2 : VisionTest() {
     @Test
     fun existAllInScanResults() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

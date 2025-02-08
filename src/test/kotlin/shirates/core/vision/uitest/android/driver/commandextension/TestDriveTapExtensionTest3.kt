@@ -7,7 +7,7 @@ import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.tap
 import shirates.core.testcode.Want
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -18,7 +18,7 @@ class TestDriveTapExtensionTest3 : VisionTest() {
     @Test
     fun tap_accessStartsWith() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -37,7 +37,7 @@ class TestDriveTapExtensionTest3 : VisionTest() {
     @Test
     fun tap_xpath() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

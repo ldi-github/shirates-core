@@ -9,7 +9,7 @@ import shirates.core.driver.branchextension.ifCanSelect
 import shirates.core.driver.commandextension.*
 import shirates.core.logging.printInfo
 import shirates.core.testcode.Want
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -26,7 +26,7 @@ class TestDriveScrollExtensionTest1 : VisionTest() {
     @Order(10)
     fun getScrollableElementsInDescendants() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -72,7 +72,7 @@ class TestDriveScrollExtensionTest1 : VisionTest() {
     @Order(20)
     fun getScrollableElement() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

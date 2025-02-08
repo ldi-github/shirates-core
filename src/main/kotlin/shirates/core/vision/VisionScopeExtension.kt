@@ -25,9 +25,28 @@ fun TestDrive.visionScope(
 }
 
 /**
- * testDriveScope
+ * visionScope
  */
-fun VisionDrive.testDriveScope(
+fun VisionDrive.visionScope(
+    func: (VisionElement) -> Unit
+): VisionElement {
+    val originalEnableCache = testContext.enableCache
+    try {
+        testContext.enableCache = false
+        visionDrive.apply {
+            func(lastVisionElement)
+        }
+    } finally {
+        testContext.enableCache = originalEnableCache
+    }
+
+    return lastElement
+}
+
+/**
+ * classicScope
+ */
+fun VisionDrive.classicScope(
     useCache: Boolean = true,
     func: (TestElement) -> Unit
 ): VisionElement {

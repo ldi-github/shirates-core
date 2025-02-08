@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/android/androidSettings/testrun.properties")
@@ -14,7 +14,7 @@ class TestDriveTapExtensionTest_DownUpTest4 : VisionTest() {
     @Test
     fun tapWithScrollDown_tapWithScrollUp_access() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 /**
                  * access

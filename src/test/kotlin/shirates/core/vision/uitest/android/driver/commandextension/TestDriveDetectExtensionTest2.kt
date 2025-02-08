@@ -6,9 +6,9 @@ import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.readMemo
 import shirates.core.vision.driver.commandextension.writeMemo
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -18,7 +18,7 @@ class TestDriveDetectExtensionTest2 : VisionTest() {
     @Test
     fun selectInScanResults_withScrollRight_withScrollLeft() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1, "right, endSelector") {
                     condition {

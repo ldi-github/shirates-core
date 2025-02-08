@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -38,7 +38,7 @@ class TestDriveTapExtensionTest5 : VisionTest() {
     @Order(20)
     fun tapWithScrollUp_textEndsWith() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -82,7 +82,7 @@ class TestDriveTapExtensionTest5 : VisionTest() {
     @Order(40)
     fun tapWithScrollUp_id() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -117,7 +117,7 @@ class TestDriveTapExtensionTest5 : VisionTest() {
     @Order(50)
     fun tapWithScrollUp_xpath() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

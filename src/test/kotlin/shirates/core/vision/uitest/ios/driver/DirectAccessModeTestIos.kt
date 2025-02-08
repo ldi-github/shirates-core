@@ -8,9 +8,9 @@ import shirates.core.driver.appiumDriver
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.testContext
 import shirates.core.driver.toTestElement
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.enableCache
 import shirates.core.vision.driver.wait
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
@@ -20,7 +20,7 @@ class DirectAccessModeTestIos : VisionTest() {
     @Order(10)
     fun enableCacheTest() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -42,7 +42,7 @@ class DirectAccessModeTestIos : VisionTest() {
     @Order(20)
     fun disableCacheTest() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -113,7 +113,7 @@ class DirectAccessModeTestIos : VisionTest() {
 
         printUseCache("testMethod")
 
-        testDriveScope {
+        classicScope {
             scenario(useCache = true) {
                 printUseCache("scenario")
 

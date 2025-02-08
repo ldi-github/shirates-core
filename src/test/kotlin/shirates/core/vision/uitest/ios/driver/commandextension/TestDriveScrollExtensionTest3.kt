@@ -8,8 +8,8 @@ import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.scanElements
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -63,7 +63,7 @@ class TestDriveScrollExtensionTest3 : VisionTest() {
         it.macro("[Developer Screen]")
         TestElementCache.scanResults.clear()
         assertThat(TestElementCache.scanResults.count() == 0).isTrue()
-        testDriveScope {
+        classicScope {
             // Act
             it.scanElements()
             // Assert

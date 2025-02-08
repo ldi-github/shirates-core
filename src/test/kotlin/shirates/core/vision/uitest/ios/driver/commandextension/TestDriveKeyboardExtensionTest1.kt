@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriverEventContext
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 import utility.handleIrregulars
 
@@ -16,7 +16,7 @@ class TestDriveKeyboardExtensionTest1 : VisionTest() {
 
     override fun setEventHandlers(context: TestDriverEventContext) {
         context.irregularHandler = {
-            testDriveScope {
+            classicScope {
                 it.handleIrregulars()
             }
         }

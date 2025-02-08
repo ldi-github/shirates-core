@@ -9,8 +9,8 @@ import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.describe
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Unstable("Direct mode")
@@ -23,7 +23,7 @@ class TestDriveSelectExtensionTest6 : VisionTest() {
     @Order(10)
     fun canSelectWithScrollDown_canSelectWithScrollUp5() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     expectation {

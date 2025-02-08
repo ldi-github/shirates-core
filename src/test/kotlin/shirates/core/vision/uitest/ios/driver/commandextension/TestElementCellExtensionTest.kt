@@ -3,7 +3,7 @@ package shirates.core.vision.uitest.ios.driver.commandextension
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
@@ -12,7 +12,7 @@ class TestElementCellExtensionTest : VisionTest() {
     @Test
     fun cellOfTest() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

@@ -10,8 +10,8 @@ import shirates.core.driver.commandextension.*
 import shirates.core.driver.rootElement
 import shirates.core.driver.scrollFrame
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -50,7 +50,7 @@ class TestElementExtensionTest : VisionTest() {
     @Order(20)
     fun getWebElement() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 var e1 = TestElement.emptyElement
                 var e2 = TestElement.emptyElement
@@ -84,7 +84,7 @@ class TestElementExtensionTest : VisionTest() {
     @Order(30)
     fun scrollableFrame() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -176,7 +176,7 @@ class TestElementExtensionTest : VisionTest() {
     @Order(60)
     fun getUniqueXpath() {
 
-        testDriveScope {
+        classicScope {
             var e1 = TestElement.emptyElement
             scenario {
                 case(1) {

@@ -10,8 +10,8 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
 import shirates.core.testcode.Must
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -129,7 +129,7 @@ class TestDriveDetectExtensionTest1 : VisionTest() {
                     it.macro("[Android Settings Top Screen]")
                     testDrive.scanElements()
                 }.expectation {
-                    testDriveScope {
+                    classicScope {
                         it.canSelectInScanResults("[Network & internet]").thisIsTrue()
                         it.canSelectInScanResults("[Display]").thisIsTrue()
                         it.canSelectInScanResults("[Tips & support]").thisIsTrue()

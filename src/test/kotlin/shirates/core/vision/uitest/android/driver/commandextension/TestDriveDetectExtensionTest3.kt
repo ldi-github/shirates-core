@@ -9,7 +9,7 @@ import shirates.core.driver.commandextension.*
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message
 import shirates.core.testcode.Want
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -19,7 +19,7 @@ class TestDriveDetectExtensionTest3 : VisionTest() {
     @Test
     fun selectInScanResults_withScrollDown_withScrollUp() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1, "down, end-elements in screen nickname file") {
                     condition {

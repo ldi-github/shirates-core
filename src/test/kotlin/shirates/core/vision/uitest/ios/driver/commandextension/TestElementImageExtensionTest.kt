@@ -8,7 +8,7 @@ import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.selectWithScrollDown
 import shirates.core.testcode.Want
 import shirates.core.utility.image.saveImage
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -19,7 +19,7 @@ class TestElementImageExtensionTest : VisionTest() {
     @Order(10)
     fun cropImage() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

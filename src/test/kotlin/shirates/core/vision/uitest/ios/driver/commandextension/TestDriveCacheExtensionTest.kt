@@ -10,7 +10,7 @@ import shirates.core.driver.commandextension.refreshCache
 import shirates.core.driver.commandextension.refreshCacheOnInvalidated
 import shirates.core.driver.commandextension.syncCache
 import shirates.core.driver.testContext
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 
@@ -20,7 +20,7 @@ class TestDriveCacheExtensionTest : VisionTest() {
     @Test
     fun refreshCache() {
 
-        testDriveScope {
+        classicScope {
             // Arrange
             TestElementCache.sourceXml = ""
             val xml1 = TestElementCache.sourceXml
@@ -41,7 +41,7 @@ class TestDriveCacheExtensionTest : VisionTest() {
     @Test
     fun invalidateCache_refreshCacheOnInvalidated() {
 
-        testDriveScope {
+        classicScope {
             // Arrange
             TestElementCache.sourceXml = ""
             TestElementCache.synced = true
@@ -62,7 +62,7 @@ class TestDriveCacheExtensionTest : VisionTest() {
     @Test
     fun syncCache() {
 
-        testDriveScope {
+        classicScope {
             testContext.forceUseCache = true
 
             run {

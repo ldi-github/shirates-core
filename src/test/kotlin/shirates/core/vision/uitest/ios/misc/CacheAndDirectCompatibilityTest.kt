@@ -8,7 +8,7 @@ import shirates.core.driver.TestElement
 import shirates.core.driver.commandextension.select
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.testcode.Want
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -19,7 +19,7 @@ class CacheAndDirectCompatibilityTest : VisionTest() {
     @Order(10)
     fun labelAndCell() {
 
-        testDriveScope {
+        classicScope {
             var e1 = TestElement.emptyElement
             var e2 = TestElement.emptyElement
 
@@ -50,7 +50,7 @@ class CacheAndDirectCompatibilityTest : VisionTest() {
     @Order(20)
     fun pos() {
 
-        testDriveScope {
+        classicScope {
             var e1 = TestElement.emptyElement
             var e2 = TestElement.emptyElement
 
