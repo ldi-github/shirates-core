@@ -4,10 +4,12 @@ import boofcv.io.image.UtilImageIO
 import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
 import shirates.core.utility.file.toFile
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
 import shirates.core.vision.RecognizeTextObservation
 import shirates.core.vision.VisionElement
@@ -319,7 +321,9 @@ class SegmentContainer(
     /**
      * split
      */
-    fun split(): SegmentContainer {
+    fun split(splitUnit: Int = skinThickness): SegmentContainer {
+
+        val sw = StopWatch("SegmentContainer")
 
         /**
          * setup image
@@ -354,16 +358,16 @@ class SegmentContainer(
             else null
 
         /**
-         * add segments bit by bit
+         * add segments unit by unit
          * adjacent segments are merged
          */
-        for (y in 0 until b.height) {
-            for (x in 0 until b.width) {
+        for (y in 0 until b.height step splitUnit) {
+            for (x in 0 until b.width step splitUnit) {
                 val v = b.get(x, y)
                 if (v > 0) {
                     val sx = (x / scale).toInt()
                     val sy = (y / scale).toInt()
-                    addSegment(left = sx, top = sy, width = 0, height = 0)
+                    addSegment(left = sx, top = sy, width = splitUnit, height = splitUnit)
                 }
             }
         }
@@ -390,6 +394,8 @@ class SegmentContainer(
 
         val drawImage = draw()
         drawImage.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
+
+        sw.printInfo()
 
         return this
     }

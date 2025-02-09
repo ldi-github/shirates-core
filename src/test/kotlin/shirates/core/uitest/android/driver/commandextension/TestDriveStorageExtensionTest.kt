@@ -8,7 +8,7 @@ import shirates.core.testcode.Want
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class TestElementStorageExtensionTest : UITest() {
+class TestDriveStorageExtensionTest : UITest() {
 
     @Test
     fun memoTest() {

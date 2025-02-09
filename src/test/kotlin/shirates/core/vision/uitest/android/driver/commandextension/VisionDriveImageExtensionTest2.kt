@@ -11,11 +11,11 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("testConfig/android/files/testrun.properties")
-class VisionElementImageExtensionTest2 : VisionTest() {
+class VisionDriveImageExtensionTest2 : VisionTest() {
 
     @Test
     @Order(10)
-    fun findImage() {
+    fun findImage_canFindImage() {
 
         scenario {
             case(1) {
@@ -35,6 +35,14 @@ class VisionElementImageExtensionTest2 : VisionTest() {
                 }
             }
             case(2) {
+                expectation {
+                    it.canFindImage("[Apps Icon]")
+                        .thisIsFalse("canFindImage([Apps Icon]) is false")
+                    it.canFindImage("[Images Button]")
+                        .thisIsTrue("canFIndImage([Images Button]) is true")
+                }
+            }
+            case(3) {
                 expectation {
                     withScrollRight {
                         it.findImage("[This week Button]").isFound.thisIsTrue()
@@ -102,29 +110,5 @@ class VisionElementImageExtensionTest2 : VisionTest() {
             }
         }
     }
-
-//    @Test
-//    @Order(30)
-//    fun imageSelector() {
-//
-//        scenario {
-//            case(1) {
-//                condition {
-//                    it.macro("[Calendar Week Screen]")
-//                }.action {
-//                    v1 = it.detect("[Day1-1].png")
-//                }.expectation {
-//                    assertThat(v1.isFound).isTrue()
-//                }
-//            }
-//            case(2) {
-//                action {
-//                    b1 = it.canDetect("[Day1-1].png")
-//                }.expectation {
-//                    assertThat(b1).isTrue()
-//                }
-//            }
-//        }
-//    }
 
 }

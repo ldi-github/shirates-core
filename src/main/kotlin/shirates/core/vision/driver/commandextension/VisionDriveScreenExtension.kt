@@ -55,6 +55,7 @@ fun VisionDrive.updateCurrentScreen() {
     screenshot(force = true)
 
     val oldScreenName = TestDriver.currentScreen
+    TestDriver.currentScreen = ""
     TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(
         screenImageFile = CodeExecutionContext.lastScreenshotFile!!,
         withTextMatching = true

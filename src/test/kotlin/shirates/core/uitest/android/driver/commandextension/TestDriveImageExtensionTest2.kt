@@ -11,7 +11,7 @@ import shirates.helper.ImageSetupHelper
 
 @Want
 @Testrun("testConfig/android/calendar/testrun.properties")
-class TestElementImageExtensionTest2 : UITest() {
+class TestDriveImageExtensionTest2 : UITest() {
 
     @Test
     @Order(0)

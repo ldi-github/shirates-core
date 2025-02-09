@@ -20,7 +20,7 @@ import java.io.FileNotFoundException
 
 @Want
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class TestElementImageExtensionTest : UITest() {
+class TestDriveImageExtensionTest : UITest() {
 
     @Test
     @Order(0)

@@ -9,7 +9,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/android/androidSettings/testrun.properties")
-class VisionElementStorageExtensionTest : VisionTest() {
+class VisionDriveStorageExtensionTest : VisionTest() {
 
     @Test
     fun memoTest() {

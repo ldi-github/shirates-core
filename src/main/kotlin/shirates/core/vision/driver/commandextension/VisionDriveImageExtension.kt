@@ -410,3 +410,36 @@ fun VisionDrive.findImageWithScrollLeft(
     }
     return v
 }
+
+/**
+ * canFindImage
+ */
+fun VisionDrive.canFindImage(
+    label: String,
+    threshold: Double? = PropertiesManager.visionFindImageThreshold,
+    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
+    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    mergeIncluded: Boolean = false,
+    skinThickness: Int = 2,
+    waitSeconds: Double = 0.0,
+    intervalSeconds: Double = testContext.syncIntervalSeconds,
+    allowScroll: Boolean? = null,
+    swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
+): Boolean {
+
+    val v = findImage(
+        label = label,
+        threshold = threshold,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        mergeIncluded = mergeIncluded,
+        skinThickness = skinThickness,
+        waitSeconds = waitSeconds,
+        intervalSeconds = intervalSeconds,
+        allowScroll = allowScroll,
+        throwsException = false,
+        swipeToSafePosition = swipeToSafePosition,
+    )
+    return v.isFound
+}
+

@@ -516,11 +516,11 @@ fun VisionDrive.canDetect(
         throw NotImplementedError("Not implemented yet.")
     }
 
-    var found = false
+    var v = VisionElement.emptyElement
     val context = TestDriverCommandContext(null)
     val logLine = context.execBooleanCommand(subject = selector.toString()) {
 
-        found = detectCore(
+        v = detectCore(
             selector = selector,
             language = language,
             allowScroll = allowScroll,
@@ -528,12 +528,13 @@ fun VisionDrive.canDetect(
             swipeToSafePosition = false,
             removeRedundantText = removeRedundantText,
             throwsException = false,
-        ).isFound
+        )
     }
+    lastElement = v
     if (logLine != null) {
-        logLine.message += " (result=$found)"
+        logLine.message += " (result=${v.isFound})"
     }
-    return found
+    return v.isFound
 }
 
 internal fun VisionDrive.canDetectCore(

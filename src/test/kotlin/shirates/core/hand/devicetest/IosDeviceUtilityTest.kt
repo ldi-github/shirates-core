@@ -3,6 +3,8 @@ package shirates.core.hand.devicetest
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.TestProfile
+import shirates.core.exception.TestEnvironmentException
+import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.ios.IosDeviceUtility
 
@@ -128,5 +130,25 @@ class IosDeviceUtilityTest : UnitTest() {
 
         val dir = IosDeviceUtility.getWebDriverAgentDirectory()
         println(dir)
+    }
+
+    @Test
+    @Order(15)
+    fun getScreenshot() {
+
+        run {
+            val file = "screenshottest1.png"
+            val udid = IosDeviceUtility.getBootedSimulatorDeviceList().firstOrNull()?.udid
+                ?: throw TestEnvironmentException("iOS simulator not found.")
+            val savedFile = IosDeviceUtility.getScreenshot(udid = udid, file = file)
+            println("saved: $savedFile")
+        }
+        run {
+            val file = TestLog.directoryForLog.resolve("screenshottest2.png").toString()
+            val udid = IosDeviceUtility.getBootedSimulatorDeviceList().firstOrNull()?.udid
+                ?: throw TestEnvironmentException("iOS simulator not found.")
+            val savedFile = IosDeviceUtility.getScreenshot(udid = udid, file = file)
+            println("saved: $savedFile")
+        }
     }
 }

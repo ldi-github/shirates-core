@@ -3,9 +3,11 @@ package shirates.core.vision.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
+import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.string.forVisionComparison
+import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.helper.HorizontalBand
 import shirates.core.vision.driver.commandextension.helper.VerticalBand
@@ -62,6 +64,10 @@ internal fun VisionElement.rightLeftCore(
     mergeIncluded: Boolean,
 ): VisionElement {
 
+    val sw = StopWatch("rightLeftCore")
+
+    val sw1 = StopWatch("split screenshot into segments")
+
     /**
      * get baseElement
      */
@@ -73,11 +79,16 @@ internal fun VisionElement.rightLeftCore(
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
     ).split()
+
+    sw1.printInfo()
+
     val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumHeight <= it.rect.height }
         .sortedBy { it.rect.left }
     val baseElement =
         if (relative.isLeft) visionElements.firstOrNull() ?: this
         else visionElements.lastOrNull() ?: this
+
+    val sw2 = StopWatch()
 
     /**
      * split screenshot into segments
@@ -88,6 +99,8 @@ internal fun VisionElement.rightLeftCore(
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
     ).split()
+    val count = thisSegmentContainer.visionElements.count()
+    sw2.printInfo("split screenshot into segments. visionElements:$count")
 
     /**
      * filter items
@@ -127,6 +140,8 @@ internal fun VisionElement.rightLeftCore(
     val relativeExpression = if (relative.isLeft) ":leftItem($pos)" else ":rightItem($pos)"
     v.selector = this.selector?.getChainedSelector(relativeExpression)
     lastElement = v
+
+    sw.printInfo()
 
     return v
 }

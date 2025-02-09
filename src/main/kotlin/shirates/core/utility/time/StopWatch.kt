@@ -1,5 +1,9 @@
 package shirates.core.utility.time
 
+import shirates.core.driver.TestDriver.lastElement
+import shirates.core.driver.TestElement
+import shirates.core.logging.TestLog
+import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.debugLabel
 import java.time.Duration
 
@@ -148,4 +152,19 @@ class StopWatch(var title: String = "") {
         }
         return "[$title] in ${duration.debugLabel}"
     }
+
+    /**
+     * printLap
+     */
+    fun printLap(label: String): TestElement {
+
+        val lapEntry = lap(label = label)
+
+        if (CodeExecutionContext.shouldOutputLog) {
+            val message = "[$title][$label] in ${lapEntry.duration.debugLabel}"
+            TestLog.info(message = message)
+        }
+        return lastElement
+    }
+
 }

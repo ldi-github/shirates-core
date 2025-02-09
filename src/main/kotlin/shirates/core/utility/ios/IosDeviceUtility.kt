@@ -8,11 +8,16 @@ import shirates.core.configuration.TestProfile
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.utility.exists
+import shirates.core.utility.file.exists
 import shirates.core.utility.misc.ProcessUtility
 import shirates.core.utility.misc.ShellUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
+import java.io.FileNotFoundException
 import java.nio.file.Files
+import java.nio.file.Path
+import kotlin.io.path.createDirectories
 
 object IosDeviceUtility {
 
@@ -456,5 +461,33 @@ object IosDeviceUtility {
             return ""
         }
         return dir
+    }
+
+    /**
+     * getScreenshot
+     */
+    fun getScreenshot(udid: String, file: String): String {
+
+        var path = Path.of(file)
+        if (path.isAbsolute.not()) {
+            path = TestLog.directoryForLog.resolve(file)
+        }
+        if (path.parent.exists().not()) {
+            path.parent.createDirectories()
+        }
+        val savedFile = path.toString()
+        val r = ShellUtility.executeCommand(
+            "xcrun",
+            "simctl",
+            "io",
+            udid,
+            "screenshot",
+            savedFile
+        )
+        val resultString = r.waitForResultString()
+        if (savedFile.exists().not()) {
+            throw FileNotFoundException("Saving file failed.\n$resultString")
+        }
+        return savedFile
     }
 }

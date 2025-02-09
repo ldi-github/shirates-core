@@ -11,7 +11,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("testConfig/android/androidSettings/testrun.properties")
-class VisionElementImageExtensionTest : VisionTest() {
+class VisionDriveImageExtensionTest : VisionTest() {
 
     @Test
     @Order(10)
