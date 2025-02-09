@@ -11,8 +11,8 @@ import shirates.core.driver.commandextension.scanElements
 import shirates.core.driver.testDrive
 import shirates.core.exception.TestNGException
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -163,7 +163,7 @@ class TestDriveAssertionExtensionTest3 : VisionTest() {
     @Order(160)
     fun dontExistInScanResults() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

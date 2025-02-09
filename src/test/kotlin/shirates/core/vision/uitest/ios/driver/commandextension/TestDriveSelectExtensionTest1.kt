@@ -11,8 +11,8 @@ import shirates.core.logging.Message.message
 import shirates.core.testcode.Must
 import shirates.core.testcode.Want
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -106,7 +106,7 @@ class TestDriveSelectExtensionTest1 : VisionTest() {
     @Order(30)
     fun selectInScanResults() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

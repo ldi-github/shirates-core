@@ -33,7 +33,7 @@ object VisionTemplateImageRepository {
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
-        ).split()
+        ).split(splitUnit = 1)
 
         val image = segmentContainer.segments.sortedByDescending { it.toRect().area }.firstOrNull()?.segmentImage
             ?: return null

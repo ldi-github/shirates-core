@@ -6,10 +6,10 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.tap
 import shirates.core.driver.commandextension.tapWithScrollDown
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.macro
 import shirates.core.vision.driver.commandextension.screenIs
 import shirates.core.vision.driver.commandextension.tapWithScrollDown
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -25,7 +25,7 @@ class TestDriveTapExtensionTest2 : VisionTest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    testDriveScope {
+                    classicScope {
                         it.tap("#General")
                     }
                 }.expectation {
@@ -57,7 +57,7 @@ class TestDriveTapExtensionTest2 : VisionTest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    testDriveScope {
+                    classicScope {
                         it.tap("xpath=//*[@label='General']")
                     }
                 }.expectation {
@@ -77,7 +77,7 @@ class TestDriveTapExtensionTest2 : VisionTest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    testDriveScope {
+                    classicScope {
                         it.tapWithScrollDown("[Developer]")
                     }
                 }.expectation {
@@ -115,7 +115,7 @@ class TestDriveTapExtensionTest2 : VisionTest() {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
                 }.action {
-                    testDriveScope {
+                    classicScope {
                         it.tapWithScrollDown("Dev*")
                     }
                 }.expectation {

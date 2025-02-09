@@ -30,6 +30,11 @@ class LapEntry(
             return (durationMilliSeconds / 1000).toDouble()
         }
 
+    val duration: Duration
+        get() {
+            return Duration.ofMillis(durationMilliSeconds)
+        }
+
     override fun toString(): String {
 
         val date = Date(lapTime)

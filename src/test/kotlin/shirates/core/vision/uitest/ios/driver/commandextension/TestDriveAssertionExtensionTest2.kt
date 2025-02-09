@@ -10,8 +10,8 @@ import shirates.core.driver.commandextension.scanElements
 import shirates.core.exception.TestNGException
 import shirates.core.testcode.Unstable
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.*
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -54,7 +54,7 @@ class TestDriveAssertionExtensionTest2 : VisionTest() {
     @Order(80)
     fun existInScanResults() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

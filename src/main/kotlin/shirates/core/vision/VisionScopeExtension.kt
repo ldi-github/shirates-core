@@ -1,22 +1,20 @@
 package shirates.core.vision
 
 import shirates.core.driver.*
-import shirates.core.driver.TestDriver.lastVisionElement
 import shirates.core.driver.commandextension.syncCache
+import shirates.core.vision.driver.VisionDriveObject
 import shirates.core.vision.driver.lastElement
 
 /**
  * visionScope
  */
 fun TestDrive.visionScope(
-    func: (VisionElement) -> Unit
+    func: (VisionDrive) -> Unit
 ): TestElement {
     val originalEnableCache = testContext.enableCache
     try {
         testContext.enableCache = false
-        visionDrive.apply {
-            func(lastVisionElement)
-        }
+        func(VisionDriveObject)
     } finally {
         testContext.enableCache = originalEnableCache
     }
@@ -25,19 +23,34 @@ fun TestDrive.visionScope(
 }
 
 /**
- * testDriveScope
+ * visionScope
  */
-fun VisionDrive.testDriveScope(
+fun VisionDrive.visionScope(
+    func: (VisionDrive) -> Unit
+): VisionElement {
+    val originalEnableCache = testContext.enableCache
+    try {
+        testContext.enableCache = false
+        func(VisionDriveObject)
+    } finally {
+        testContext.enableCache = originalEnableCache
+    }
+
+    return lastElement
+}
+
+/**
+ * classicScope
+ */
+fun VisionDrive.classicScope(
     useCache: Boolean = true,
-    func: (TestElement) -> Unit
+    func: (TestDrive) -> Unit
 ): VisionElement {
     testDrive.syncCache(force = true)
     val originalEnableCache = testContext.enableCache
     try {
         testContext.enableCache = useCache
-        testDrive.apply {
-            func(testDrive.lastElement)
-        }
+        func(TestDriveObject)
     } finally {
         testContext.enableCache = originalEnableCache
     }

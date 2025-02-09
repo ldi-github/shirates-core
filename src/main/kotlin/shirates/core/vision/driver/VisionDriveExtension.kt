@@ -7,7 +7,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.testDriveScope
+import shirates.core.vision.classicScope
 
 /**
  * it
@@ -62,7 +62,7 @@ fun VisionDrive.isApp(
 ): Boolean {
 
     var r = false
-    testDriveScope {
+    classicScope {
         r = testDrive.isApp(appNameOrAppId = appNameOrAppId)
     }
     return r

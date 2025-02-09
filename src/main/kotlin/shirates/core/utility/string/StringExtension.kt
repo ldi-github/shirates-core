@@ -2,6 +2,7 @@ package shirates.core.utility.string
 
 import com.ibm.icu.text.Transliterator
 import shirates.core.configuration.PropertiesManager
+import shirates.core.customobject.CustomFunctionRepository
 import shirates.core.logging.printInfo
 import shirates.core.utility.misc.StringUtility
 import shirates.core.vision.configration.repository.VisionTextReplacementRepository
@@ -40,6 +41,21 @@ fun String?.forVisionComparison(
     ignoreFullWidthHalfWidth: Boolean = true,
 ): String {
 
+    val functionName = "normalizeForComparison"
+    if (CustomFunctionRepository.hasFunction(functionName)) {
+        val normalized =
+            CustomFunctionRepository.call(functionName = functionName, ignoreCase, ignoreFullWidthHalfWidth)
+                ?.toString() ?: ""
+        return normalized
+    }
+
+    return forVisionComparisonDefault(
+        ignoreCase = ignoreCase,
+        ignoreFullWidthHalfWidth = ignoreFullWidthHalfWidth
+    )
+}
+
+internal fun String?.forVisionComparisonDefault(ignoreCase: Boolean, ignoreFullWidthHalfWidth: Boolean): String {
     var s = this?.normalize(Normalizer.Form.NFC) ?: return ""
     s = s.removeSpaces()
     if (ignoreCase) {

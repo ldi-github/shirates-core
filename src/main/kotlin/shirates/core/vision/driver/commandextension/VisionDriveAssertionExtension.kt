@@ -11,9 +11,9 @@ import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.classicScope
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.*
-import shirates.core.vision.testDriveScope
 
 internal fun VisionDrive.checkImageLabelContains(
     containedText: String,
@@ -166,7 +166,7 @@ fun VisionDrive.appIs(
     useCache: Boolean = testContext.useCache,
 ): VisionElement {
 
-    testDriveScope {
+    classicScope {
         testDrive.appIs(
             appNameOrAppId = appNameOrAppId,
             waitSeconds = waitSeconds,

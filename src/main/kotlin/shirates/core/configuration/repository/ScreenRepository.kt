@@ -92,7 +92,6 @@ object ScreenRepository {
     fun getSelector(screenName: String, nickName: String): Selector {
 
         val screenInfo = getScreenInfo(screenName = screenName)
-
         return screenInfo.getSelector(expression = nickName)
     }
 

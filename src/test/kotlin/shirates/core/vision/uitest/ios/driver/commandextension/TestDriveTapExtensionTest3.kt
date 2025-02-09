@@ -7,10 +7,10 @@ import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.screenIs
 import shirates.core.driver.commandextension.tapWithScrollDown
 import shirates.core.testcode.Want
+import shirates.core.vision.classicScope
 import shirates.core.vision.driver.commandextension.macro
 import shirates.core.vision.driver.commandextension.screenIs
 import shirates.core.vision.driver.commandextension.tapWithScrollDown
-import shirates.core.vision.testDriveScope
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -39,7 +39,7 @@ class TestDriveTapExtensionTest3 : VisionTest() {
     @Order(20)
     fun tapWithScrollDown_textEndsWith() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -76,7 +76,7 @@ class TestDriveTapExtensionTest3 : VisionTest() {
     @Order(40)
     fun tapWithScrollDown_id() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {
@@ -107,7 +107,7 @@ class TestDriveTapExtensionTest3 : VisionTest() {
     @Order(50)
     fun tapWithScrollDown_xpath() {
 
-        testDriveScope {
+        classicScope {
             scenario {
                 case(1) {
                     condition {

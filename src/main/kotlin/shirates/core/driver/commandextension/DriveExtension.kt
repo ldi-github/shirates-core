@@ -17,7 +17,9 @@ fun Drive.getSelector(expression: String): Selector {
     } else {
         var sel: Selector? = null
         try {
-            WaitUtility.doUntilTrue {
+            WaitUtility.doUntilTrue(
+                waitSeconds = testContext.waitSecondsOnIsScreen
+            ) {
                 try {
                     sel = getSelectorCore(expression = expression)
                     true
