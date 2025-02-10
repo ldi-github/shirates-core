@@ -73,6 +73,10 @@ internal fun String?.forVisionComparisonDefault(ignoreCase: Boolean, ignoreFullW
         compressWhitespaceCharacters = true,
         trimString = true,
     )
+    for (key in VisionTextReplacementRepository.convertMap.keys) {
+        val value = VisionTextReplacementRepository.convertMap[key]!!
+        s = s.replace(key, value)
+    }
     return s
 }
 
