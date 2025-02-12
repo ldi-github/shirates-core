@@ -36,8 +36,8 @@ open class VisionObservation(
         get() {
             val rect = rectOnLocalRegion ?: return null
             return Rectangle(
-                x = localRegionX + rect.left,
-                y = localRegionY + rect.top,
+                left = localRegionX + rect.left,
+                top = localRegionY + rect.top,
                 width = rect.width,
                 height = rect.height
             )

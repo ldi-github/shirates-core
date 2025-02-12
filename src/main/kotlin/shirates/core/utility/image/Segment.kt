@@ -13,15 +13,15 @@ import java.awt.image.BufferedImage
 import java.nio.file.Files
 
 class Segment(
-    var left: Int = 0,
-    var top: Int = 0,
-    var width: Int,
-    var height: Int,
+    override var left: Int = 0,
+    override var top: Int = 0,
+    override var width: Int,
+    override var height: Int,
     var container: SegmentContainer? = null,
     var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
     var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
     var saveWithMargin: Boolean = true,
-) : IRect {
+) : IRect, RectangleInterface {
     var recognizeTextObservation: RecognizeTextObservation? = null
 
     val text: String
@@ -83,36 +83,6 @@ class Segment(
         }
 
     /**
-     * right
-     */
-    val right: Int
-        get() {
-            if (width == 0) {
-                return left
-            }
-            return left + width - 1
-        }
-
-    /**
-     * bottom
-     */
-    val bottom: Int
-        get() {
-            if (height == 0) {
-                return top
-            }
-            return top + height - 1
-        }
-
-    /**
-     * area
-     */
-    val area: Int
-        get() {
-            return width * height
-        }
-
-    /**
      * aspectRatio
      */
     val aspectRatio: Float
@@ -138,26 +108,26 @@ class Segment(
         mergeIncluded: Boolean = false,
     ): Boolean {
 
-        val thisBounds = this.boundsOnSegmentContainer.copy()
-        val thatBounds = segment.boundsOnSegmentContainer.copy()
+        val thisRect = this
+        val thatRect = segment.rectOnSegmentContainer
 
         // Margin offset
-        thatBounds.left = thatBounds.left - marginHorizontal - 1
-        if (thatBounds.left <= 0) thatBounds.left = 0
+        thatRect.left = thatRect.left - marginHorizontal - 1
+        if (thatRect.left <= 0) thatRect.left = 0
 
-        thatBounds.top = thatBounds.top - marginVertical - 1
-        if (thatBounds.top <= 0) thatBounds.top = 0
+        thatRect.top = thatRect.top - marginVertical - 1
+        if (thatRect.top <= 0) thatRect.top = 0
 
         if (mergeIncluded.not()) {
-            if (thisBounds.isIncludedIn(thatBounds) || thatBounds.isIncludedIn(thisBounds)) {
+            if (thisRect.isIncludedIn(thatRect) || thatRect.isIncludedIn(thisRect)) {
                 return false
             }
         }
 
-        thatBounds.width += (marginHorizontal + 1) * 2
-        thatBounds.height += (marginVertical + 1) * 2
+        thatRect.width += (marginHorizontal + 1) * 2
+        thatRect.height += (marginVertical + 1) * 2
 
-        if (thisBounds.isOverlapping(thatBounds)) {
+        if (thisRect.isOverlapping(thatRect)) {
             return true
         }
 
@@ -169,7 +139,7 @@ class Segment(
      */
     val rectOnSegmentContainer: Rectangle
         get() {
-            return Rectangle(x = left, y = top, width = width, height = height)
+            return Rectangle(left = left, top = top, width = width, height = height)
         }
 
     /**
@@ -185,14 +155,14 @@ class Segment(
      */
     val rectOnScreen: Rectangle
         get() {
-            return Rectangle(x = containerX + left, y = containerY + top, width = width, height = height)
+            return Rectangle(left = containerX + left, top = containerY + top, width = width, height = height)
         }
 
     /**
      * toRect
      */
     fun toRect(): Rectangle {
-        return Rectangle(x = left, y = top, width = width, height = height)
+        return Rectangle(left = left, top = top, width = width, height = height)
     }
 
     /**

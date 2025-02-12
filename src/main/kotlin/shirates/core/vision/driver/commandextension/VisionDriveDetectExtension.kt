@@ -34,6 +34,7 @@ fun VisionDrive.setOCRLanguage(ocrLanguage: String): VisionElement {
 fun VisionDrive.detect(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    last: Boolean = false,
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitSeconds: Double = 0.0,
@@ -48,6 +49,7 @@ fun VisionDrive.detect(
         val v = detectCore(
             selector = sel,
             language = language,
+            last = last,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = waitSeconds,
@@ -73,15 +75,20 @@ internal fun removeRedundantText(
     val segmentContainer = SegmentContainer(
         mergeIncluded = true,
         containerImage = visionElement.image,
-        containerX = visionElement.rect.x,
-        containerY = visionElement.rect.y,
+        containerX = visionElement.rect.left,
+        containerY = visionElement.rect.top,
         screenshotFile = visionElement.screenshotFile,
         screenshotImage = visionElement.screenshotImage,
         segmentMarginHorizontal = visionElement.rect.height / 2,
         segmentMarginVertical = PropertiesManager.segmentMarginVertical,
         minimumHeight = visionElement.rect.height / 2,
     ).split()
+        .saveImages()
     val elements = segmentContainer.visionElements.sortedBy { it.rect.left }.toMutableList()
+    if (elements.isEmpty()) {
+        return visionElement
+    }
+
     var offsetRect = Rectangle()
     if (elements.count() > 1) {
         val firstElement = elements[0]
@@ -105,7 +112,7 @@ internal fun removeRedundantText(
     v2.recognizeTextLocal(language = language)
     if (v2.recognizeTextObservation != null) {
         v2.recognizeTextObservation!!.text = expectedText
-        v2.recognizeTextObservation!!.localRegionX = offsetRect.x
+        v2.recognizeTextObservation!!.localRegionX = offsetRect.left
     }
     v2.selector = visionElement.selector
     return v2
@@ -117,6 +124,7 @@ internal fun removeRedundantText(
 internal fun VisionDrive.detectCore(
     selector: Selector,
     language: String,
+    last: Boolean,
     allowScroll: Boolean?,
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
@@ -129,6 +137,7 @@ internal fun VisionDrive.detectCore(
         v = detectCoreCore(
             selector = selector,
             language = language,
+            last = last,
             allowScroll = allowScroll,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
@@ -153,6 +162,7 @@ internal fun VisionDrive.detectCore(
 private fun VisionDrive.detectCoreCore(
     selector: Selector,
     language: String,
+    last: Boolean,
     allowScroll: Boolean?,
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
@@ -197,6 +207,7 @@ private fun VisionDrive.detectCoreCore(
         v = CodeExecutionContext.workingRegionElement.visionContext.detect(
             selector = selector,
             language = language,
+            last = last,
             removeRedundantText = removeRedundantText,
         )
         v.isFound
@@ -213,6 +224,7 @@ private fun VisionDrive.detectCoreCore(
         v = detectWithScrollCore(
             selector = selector,
             language = language,
+            last = last,
             direction = CodeExecutionContext.scrollDirection ?: ScrollDirection.Down,
             throwsException = false,
             swipeToSafePosition = swipeToSafePosition,
@@ -238,6 +250,7 @@ private fun VisionDrive.detectCoreCore(
 internal fun VisionDrive.detectWithScrollCore(
     selector: Selector,
     language: String,
+    last: Boolean,
     direction: ScrollDirection,
     scrollDurationSeconds: Double = CodeExecutionContext.scrollDurationSeconds,
     scrollIntervalSeconds: Double = CodeExecutionContext.scrollIntervalSeconds,
@@ -255,6 +268,7 @@ internal fun VisionDrive.detectWithScrollCore(
         v = detectCore(
             selector = selector,
             language = language,
+            last = last,
             allowScroll = false,
             waitSeconds = 0.0,
             swipeToSafePosition = swipeToSafePosition,
@@ -507,6 +521,7 @@ fun VisionDrive.canDetect(
 fun VisionDrive.canDetect(
     selector: Selector,
     language: String = PropertiesManager.visionOCRLanguage,
+    last: Boolean = false,
     waitSeconds: Double = 0.0,
     allowScroll: Boolean = true,
     removeRedundantText: Boolean = true,
@@ -523,6 +538,7 @@ fun VisionDrive.canDetect(
         v = detectCore(
             selector = selector,
             language = language,
+            last = last,
             allowScroll = allowScroll,
             waitSeconds = waitSeconds,
             swipeToSafePosition = false,
@@ -540,6 +556,7 @@ fun VisionDrive.canDetect(
 internal fun VisionDrive.canDetectCore(
     selector: Selector,
     language: String,
+    last: Boolean,
     waitSeconds: Double,
     allowScroll: Boolean?,
     removeRedundantText: Boolean,
@@ -548,6 +565,7 @@ internal fun VisionDrive.canDetectCore(
     val v = detectCore(
         selector = selector,
         language = language,
+        last = last,
         allowScroll = allowScroll,
         waitSeconds = waitSeconds,
         swipeToSafePosition = false,
@@ -696,6 +714,7 @@ fun VisionDrive.canDetectWithScrollLeft(
 internal fun VisionDrive.canDetectAllCore(
     selectors: Iterable<Selector>,
     language: String,
+    last: Boolean,
     allowScroll: Boolean?,
 ): Boolean {
 
@@ -707,6 +726,7 @@ internal fun VisionDrive.canDetectAllCore(
             foundAll = canDetectCore(
                 selector = selector,
                 language = language,
+                last = last,
                 waitSeconds = 0.0,
                 allowScroll = allowScroll,
                 removeRedundantText = false,
@@ -739,6 +759,7 @@ fun VisionDrive.canDetectAll(
         foundAll = canDetectAllCore(
             selectors = selectors,
             language = language,
+            last = false,
             allowScroll = allowScroll,
         )
     }

@@ -1,5 +1,6 @@
 package shirates.core.vision.configration.repository
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.utility.file.exists
 import shirates.core.utility.image.SegmentContainer
 import java.awt.image.BufferedImage
@@ -16,6 +17,7 @@ object VisionTemplateImageRepository {
         segmentMarginHorizontal: Int,
         segmentMarginVertical: Int,
         skinThickness: Int = 2,
+        binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
     ): BufferedImage? {
 
         if (imageFile.exists().not()) {
@@ -33,7 +35,9 @@ object VisionTemplateImageRepository {
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
-        ).split(splitUnit = 1)
+            binaryThreshold = binaryThreshold,
+        ).split()
+            .saveImages()
 
         val image = segmentContainer.segments.sortedByDescending { it.toRect().area }.firstOrNull()?.segmentImage
             ?: return null

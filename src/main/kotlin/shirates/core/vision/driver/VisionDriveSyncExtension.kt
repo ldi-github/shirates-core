@@ -119,6 +119,7 @@ fun VisionDrive.waitForClose(
         val found = canDetectCore(
             selector = sel,
             language = language,
+            last = false,
             waitSeconds = waitSeconds,
             allowScroll = false,
             removeRedundantText = removeRedundantText,
@@ -157,6 +158,7 @@ fun VisionDrive.waitForDisplay(
         val found = canDetectCore(
             selector = sel,
             language = language,
+            last = false,
             waitSeconds = waitSeconds,
             allowScroll = false,
             removeRedundantText = removeRedundantText

@@ -26,8 +26,8 @@ class DetectRectanglesIncludingRectResult(
         rectangles = jso.getJSONArray("rectangles")
             .map { it as JSONObject }.map {
                 Rectangle(
-                    x = it.getInt("x"),
-                    y = it.getInt("y"),
+                    left = it.getInt("x"),
+                    top = it.getInt("y"),
                     width = it.getInt("width"),
                     height = it.getInt("height")
                 )

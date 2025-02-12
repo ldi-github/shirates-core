@@ -17,6 +17,14 @@ The function returns `VisionElement` object.
 | detectWithScrollLeft  | Finds the first element that matches the selector with scrolling left.                                              |
 | detectWithoutScroll   | Finds the first element that matches the selector **without** scrolling.                                            |
 
+## Key arguments
+
+| argument   | description                                                                 |
+|:-----------|:----------------------------------------------------------------------------|
+| expression | [Selector expression](../../selector_and_nickname/selector_expression.md)   |
+| language   | [AI-OCR language](../../switching_environment/switching_ai_ocr_language.md) |
+| last       | true: Finds the last element.<br>false: Finds the first element(default).   |
+
 ## Sample code
 
 [Getting samples](../../../getting_samples.md)

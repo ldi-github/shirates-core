@@ -1880,6 +1880,42 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionFindImageThreshold() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionFindImageThreshold).isEqualTo(Const.VISION_FIND_IMAGE_THRESHOLD)
+        }
+        run {
+            // Arrange
+            val value = 0.5
+            PropertiesManager.setPropertyValue("visionFindImageThreshold", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionFindImageThreshold).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionFindImageBinaryThreshold() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionFindImageBinaryThreshold).isEqualTo(Const.VISION_FIND_IMAGE_BINARY_THRESHOLD)
+        }
+        run {
+            // Arrange
+            val value = 100
+            PropertiesManager.setPropertyValue("visionFindImageBinaryThreshold", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionFindImageBinaryThreshold).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun specReportExcludeIDetail() {
 
         run {

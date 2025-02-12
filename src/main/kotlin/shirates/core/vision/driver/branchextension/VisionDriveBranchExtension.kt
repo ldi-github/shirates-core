@@ -22,6 +22,7 @@ fun VisionDrive.ifImageExist(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
+    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
     waitSeconds: Double = 0.0,
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
@@ -35,6 +36,7 @@ fun VisionDrive.ifImageExist(
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
+        binaryThreshold = binaryThreshold,
         waitSeconds = waitSeconds,
         throwsException = false
     )
@@ -62,6 +64,7 @@ fun VisionDrive.ifImageExistNot(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
+    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
     waitSeconds: Double = 0.0,
     onTrue: () -> Unit
 ): BooleanCompareResult {
@@ -75,6 +78,7 @@ fun VisionDrive.ifImageExistNot(
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
+        binaryThreshold = binaryThreshold,
         waitSeconds = waitSeconds,
         throwsException = false
     )

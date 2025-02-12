@@ -5,6 +5,7 @@ import boofcv.io.image.ConvertBufferedImage
 import boofcv.struct.image.GrayF32
 import boofcv.struct.image.GrayU8
 import java.awt.image.BufferedImage
+import kotlin.math.abs
 
 object BinarizationUtility {
 
@@ -14,10 +15,12 @@ object BinarizationUtility {
     fun getBinaryAsBufferedImage(
         image: BufferedImage,
         invert: Boolean = false,
-        skinThickness: Int = 0
+        skinThickness: Int = 0,
+        threshold: Int = 1,
     ): BufferedImage {
 
-        val binary = getBinaryAsGrayU8(image = image, invert = invert, skinThickness = skinThickness)
+        val binary =
+            getBinaryAsGrayU8(image = image, invert = invert, skinThickness = skinThickness, threshold = threshold)
         val bufferedImage = BufferedImage(binary.width, binary.height, BufferedImage.TYPE_BYTE_GRAY)
         VisualizeBinaryData.renderBinary(binary, false, bufferedImage)
         return bufferedImage
@@ -29,7 +32,8 @@ object BinarizationUtility {
     fun getBinaryAsGrayU8(
         image: BufferedImage,
         invert: Boolean = false,
-        skinThickness: Int = 0
+        skinThickness: Int = 0,
+        threshold: Int = 1
     ): GrayU8 {
 
         val input = ConvertBufferedImage.convertFromSingle(image, null, GrayF32::class.java)
@@ -42,10 +46,12 @@ object BinarizationUtility {
         for (y in 0 until input.height) {
             for (x in 0 until input.width) {
                 val v = image.getRGB(x, y)
-                val bv = if (lastImageValue == null || v == lastImageValue)
+                val d = if (lastImageValue == null) 0 else abs(lastImageValue - v)
+                val bv = if (d < threshold)
                     notSetValue
-                else
+                else {
                     setValue
+                }
                 binary.setWithSkinThickness(x, y, bv, skinThickness)
                 lastImageValue = v
             }

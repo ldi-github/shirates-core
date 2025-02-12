@@ -85,6 +85,7 @@
     - [canDetect](vision/basic/function_property/detect_text/can_detect.md)
 - Find image
     - [findImage](vision/basic/function_property/getting_image/find_image.md)
+    - [canFindImage](vision/basic/function_property/getting_image/can_find_image.md)
 - Tap element
     - [tap](vision/basic/function_property/tap_element/tap.md)
     - [tapAppIcon](vision/basic/function_property/tap_element/tap_app_icon.md)

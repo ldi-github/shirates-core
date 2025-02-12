@@ -36,30 +36,35 @@ class TrimObject(
             0 -> {
                 // NOP
             }
+
             1 -> {
                 top = trimMethods[0]
                 right = trimMethods[0]
                 bottom = trimMethods[0]
                 left = trimMethods[0]
             }
+
             2 -> {
                 top = trimMethods[0]
                 right = trimMethods[1]
                 bottom = trimMethods[0]
                 left = trimMethods[1]
             }
+
             3 -> {
                 top = trimMethods[0]
                 right = trimMethods[1]
                 bottom = trimMethods[2]
                 left = trimMethods[1]
             }
+
             4 -> {
                 top = trimMethods[0]
                 right = trimMethods[1]
                 bottom = trimMethods[2]
                 left = trimMethods[3]
             }
+
             else -> {
                 throw IllegalArgumentException("TrimObject format error. (expression=$expression)")
             }
@@ -73,8 +78,8 @@ class TrimObject(
         val height = rect.height
 
         val trimmedRect = Rectangle(
-            rect.x + left.getPixel(width),
-            rect.y + top.getPixel(height),
+            rect.left + left.getPixel(width),
+            rect.top + top.getPixel(height),
             width - (left.getPixel(width) + right.getPixel(width)),
             height - (top.getPixel(height) + bottom.getPixel(height))
         )

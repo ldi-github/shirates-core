@@ -21,7 +21,8 @@ fun VisionElement.rightItem(
     segmentMarginHhorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     segmentMinimumHeight: Int = this.rect.height / 2,
-    include: Boolean = false
+    include: Boolean = false,
+    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
 ): VisionElement {
 
     return rightLeftCore(
@@ -31,6 +32,7 @@ fun VisionElement.rightItem(
         segmentMarginVertical = segmentMarginVertical,
         segmentMinimumHeight = segmentMinimumHeight,
         mergeIncluded = include,
+        binaryThreshold = binaryThreshold,
     )
 }
 
@@ -43,6 +45,7 @@ fun VisionElement.leftItem(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     segmentMinimumHeight: Int = this.rect.height / 2,
     include: Boolean = false,
+    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
 ): VisionElement {
 
     return rightLeftCore(
@@ -52,6 +55,7 @@ fun VisionElement.leftItem(
         segmentMarginVertical = segmentMarginVertical,
         segmentMinimumHeight = segmentMinimumHeight,
         mergeIncluded = include,
+        binaryThreshold = binaryThreshold,
     )
 }
 
@@ -62,6 +66,7 @@ internal fun VisionElement.rightLeftCore(
     segmentMarginVertical: Int,
     segmentMinimumHeight: Int,
     mergeIncluded: Boolean,
+    binaryThreshold: Int,
 ): VisionElement {
 
     val sw = StopWatch("rightLeftCore")
@@ -74,11 +79,13 @@ internal fun VisionElement.rightLeftCore(
     val thisSegmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
         containerImage = this.image,
-        containerX = this.rect.x,
-        containerY = this.rect.y,
+        containerX = this.rect.left,
+        containerY = this.rect.top,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        binaryThreshold = binaryThreshold,
     ).split()
+        .saveImages()
 
     sw1.printInfo()
 
@@ -98,7 +105,9 @@ internal fun VisionElement.rightLeftCore(
         containerImage = CodeExecutionContext.lastScreenshotImage,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        binaryThreshold = binaryThreshold,
     ).split()
+        .saveImages()
     val count = thisSegmentContainer.visionElements.count()
     sw2.printInfo("split screenshot into segments. visionElements:$count")
 
@@ -120,6 +129,7 @@ internal fun VisionElement.rightLeftCore(
         containerImage = CodeExecutionContext.lastScreenshotImage,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        binaryThreshold = binaryThreshold,
     )
     for (e in elms) {
         mergeContainer.addSegment(rect = e.rect)
@@ -155,6 +165,7 @@ fun VisionElement.aboveItem(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     segmentMinimumWidth: Int = this.rect.width / 2,
     include: Boolean = false,
+    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
 ): VisionElement {
 
     return aboveBelowCore(
@@ -164,6 +175,7 @@ fun VisionElement.aboveItem(
         segmentMarginVertical = segmentMarginVertical,
         segmentMinimumWidth = segmentMinimumWidth,
         mergeIncluded = include,
+        binaryThreshold = binaryThreshold,
     )
 }
 
@@ -176,6 +188,7 @@ fun VisionElement.belowItem(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     segmentMinimumWidth: Int = this.rect.width / 2,
     include: Boolean = false,
+    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
 ): VisionElement {
 
     return aboveBelowCore(
@@ -185,6 +198,7 @@ fun VisionElement.belowItem(
         segmentMarginVertical = segmentMarginVertical,
         segmentMinimumWidth = segmentMinimumWidth,
         mergeIncluded = include,
+        binaryThreshold = binaryThreshold,
     )
 }
 
@@ -195,6 +209,7 @@ internal fun VisionElement.aboveBelowCore(
     segmentMarginVertical: Int,
     segmentMinimumWidth: Int,
     mergeIncluded: Boolean,
+    binaryThreshold: Int,
 ): VisionElement {
 
     /**
@@ -203,11 +218,13 @@ internal fun VisionElement.aboveBelowCore(
     val thisSegmentContainer = SegmentContainer(
         mergeIncluded = mergeIncluded,
         containerImage = this.image,
-        containerX = this.rect.x,
-        containerY = this.rect.y,
+        containerX = this.rect.left,
+        containerY = this.rect.top,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        binaryThreshold = binaryThreshold,
     ).split()
+        .saveImages()
     val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumWidth <= it.rect.width }
     val baseElement =
         if (relative.isAbove) visionElements.firstOrNull() ?: this
@@ -221,7 +238,9 @@ internal fun VisionElement.aboveBelowCore(
         containerImage = CodeExecutionContext.lastScreenshotImage,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        binaryThreshold = binaryThreshold,
     ).split()
+        .saveImages()
     var elms = segmentContainer.visionElements.filter {
         (it.rect.left <= baseElement.rect.right && baseElement.rect.left <= it.rect.right)
     }
@@ -237,6 +256,7 @@ internal fun VisionElement.aboveBelowCore(
         containerImage = CodeExecutionContext.lastScreenshotImage,
         segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
+        binaryThreshold = binaryThreshold,
     )
     for (e in elms) {
         mergeContainer.addSegment(rect = e.rect)

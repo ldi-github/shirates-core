@@ -68,8 +68,8 @@ class FindImagesWithTemplateResult(
                             localRegionX = localRegionX,
                             localRegionY = localRegionY,
                             rectOnLocalRegion = Rectangle(
-                                x = rectangle.x,
-                                y = rectangle.y,
+                                left = rectangle.left,
+                                top = rectangle.top,
                                 width = rectangle.width,
                                 height = rectangle.height
                             ),

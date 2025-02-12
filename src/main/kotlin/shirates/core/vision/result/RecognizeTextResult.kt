@@ -28,8 +28,8 @@ class RecognizeTextResult(
                 val jso = it as JSONObject
                 val rectObj = jso.getJSONObject("rect")
                 val rect = Rectangle(
-                    x = rectObj.getInt("x"),
-                    y = rectObj.getInt("y"),
+                    left = rectObj.getInt("x"),
+                    top = rectObj.getInt("y"),
                     width = rectObj.getInt("width"),
                     height = rectObj.getInt("height")
                 )

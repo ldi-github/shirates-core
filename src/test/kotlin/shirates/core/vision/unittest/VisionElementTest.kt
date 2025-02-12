@@ -37,7 +37,7 @@ class VisionElementTest {
         )
         CodeExecutionContext.lastScreenshotName = imageFileName
         CodeExecutionContext.lastScreenshotImage = BufferedImageUtility.getBufferedImage(imageFilePath)
-        val baseRect = Rectangle(x = 239, y = 759, width = 99, height = 41) // VPN
+        val baseRect = Rectangle(left = 239, top = 759, width = 99, height = 41) // VPN
         // Act
         val v = baseRect.toVisionElement()
         val cell = v.getCell(horizontalMargin = 20, verticalMargin = 20)

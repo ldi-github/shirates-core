@@ -26,6 +26,7 @@ import shirates.core.vision.driver.wait
 fun VisionDrive.tap(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    last: Boolean = false,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     waitSeconds: Double = 0.0,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
@@ -59,6 +60,7 @@ fun VisionDrive.tap(
         v = detectCore(
             selector = sel,
             language = language,
+            last = last,
             allowScroll = null,
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
@@ -116,6 +118,7 @@ internal fun VisionDrive.waitForElementFocused(
 internal fun VisionDrive.detectWithAdjustingPosition(
     selector: Selector,
     language: String,
+    last: Boolean,
     waitSeconds: Double,
     removeRedundantText: Boolean,
     throwsException: Boolean,
@@ -125,6 +128,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
         return detectCore(
             selector = selector,
             language = language,
+            last = last,
             allowScroll = null,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
@@ -219,6 +223,7 @@ fun VisionDrive.tap(
 private fun VisionDrive.tapWithScrollCommandCore(
     expression: String,
     language: String,
+    last: Boolean,
     command: String,
     direction: ScrollDirection,
     scrollDurationSeconds: Double,
@@ -240,6 +245,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
         v = detectWithScrollCore(
             selector = selector,
             language = language,
+            last = last,
             direction = direction,
             scrollDurationSeconds = scrollDurationSeconds,
             startMarginRatio = scrollStartMarginRatio,
@@ -266,6 +272,7 @@ fun VisionDrive.tapImage(
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
+    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
     waitSeconds: Double = 0.0,
     holdSeconds: Double = testContext.tapHoldSeconds,
     throwsException: Boolean = true,
@@ -278,6 +285,7 @@ fun VisionDrive.tapImage(
         segmentMarginVertical = segmentMarginVertical,
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
+        binaryThreshold = binaryThreshold,
         waitSeconds = waitSeconds,
         throwsException = throwsException,
     )
@@ -310,6 +318,7 @@ fun VisionDrive.tapWithScrollDown(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
+        last = false,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -347,6 +356,7 @@ fun VisionDrive.tapWithScrollUp(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
+        last = false,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -383,6 +393,7 @@ fun VisionDrive.tapWithScrollRight(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
+        last = false,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
@@ -419,6 +430,7 @@ fun VisionDrive.tapWithScrollLeft(
     val v = tapWithScrollCommandCore(
         expression = expression,
         language = language,
+        last = false,
         command = command,
         direction = direction,
         scrollDurationSeconds = scrollDurationSeconds,
