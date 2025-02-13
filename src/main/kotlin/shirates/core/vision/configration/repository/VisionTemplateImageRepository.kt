@@ -36,8 +36,8 @@ object VisionTemplateImageRepository {
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
-        ).split()
-            .saveImages()
+        ).split(segmentationPng = false)
+//            .saveImages()
 
         val image = segmentContainer.segments.sortedByDescending { it.toRect().area }.firstOrNull()?.segmentImage
             ?: return null

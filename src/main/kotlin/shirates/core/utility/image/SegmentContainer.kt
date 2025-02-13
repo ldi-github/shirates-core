@@ -198,7 +198,7 @@ class SegmentContainer(
     fun filterByAspectRatio(
         imageWidth: Int,
         imageHeight: Int,
-        tolerance: Float = 0.3f
+        tolerance: Float = 0.1f
     ) {
         if (tolerance <= 0 || 0.5 < tolerance) {
             throw IllegalArgumentException("Tolerance must be between 0 and 0.5.")
@@ -330,6 +330,7 @@ class SegmentContainer(
     fun split(
         splitUnit: Int = this.skinThickness,
         binaryThreshold: Int = this.binaryThreshold,
+        segmentationPng: Boolean = true,
     ): SegmentContainer {
 
         val sw = StopWatch("SegmentContainer")
@@ -391,11 +392,6 @@ class SegmentContainer(
          */
         mergeBlocks()
 
-        run {
-            val drawImage = draw()
-            drawImage.saveImage(file = outputDirectory.resolve("segmentation_before_filter.png"), log = false)
-        }
-
         /**
          * filter
          */
@@ -411,7 +407,7 @@ class SegmentContainer(
             mergeIncluded()
         }
 
-        run {
+        if (segmentationPng) {
             val drawImage = draw()
             drawImage.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
         }
