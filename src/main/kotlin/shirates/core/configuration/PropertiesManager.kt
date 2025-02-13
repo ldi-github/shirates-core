@@ -1064,6 +1064,15 @@ object PropertiesManager {
                 ?: Const.VISION_FIND_IMAGE_THRESHOLD
         }
 
+    /**
+     * visionFindImageBinaryThreshold
+     */
+    val visionFindImageBinaryThreshold: Int
+        get() {
+            return getPropertyValue(propertyName = "visionFindImageBinaryThreshold")?.toIntOrNull()
+                ?: Const.VISION_FIND_IMAGE_BINARY_THRESHOLD
+        }
+
     // Custom --------------------------------------------------
 
     /**

@@ -177,19 +177,19 @@ fun BufferedImage.cropImage(rect: Rectangle, horizontalMargin: Int, verticalMarg
         return null
     }
 
-    var x1 = rect.x - horizontalMargin
+    var x1 = rect.left - horizontalMargin
     if (x1 < 0) x1 = 0
     if (x1 > originalImage.rect.right) x1 = originalImage.rect.right
 
-    var y1 = rect.y - verticalMargin
+    var y1 = rect.top - verticalMargin
     if (y1 < 0) y1 = 0
     if (y1 > originalImage.rect.bottom) y1 = originalImage.rect.bottom
 
-    var x2 = rect.x + rect.width - 1 + horizontalMargin * 2
+    var x2 = rect.left + rect.width - 1 + horizontalMargin * 2
     if (x2 < 0) x2 = 0
     if (x2 > originalImage.rect.right) x2 = originalImage.rect.right
 
-    var y2 = rect.y + rect.height - 1 + verticalMargin * 2
+    var y2 = rect.top + rect.height - 1 + verticalMargin * 2
     if (y2 < 0) y2 = 0
     if (y2 > originalImage.rect.bottom) y2 = originalImage.rect.bottom
 

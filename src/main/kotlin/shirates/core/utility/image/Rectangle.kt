@@ -5,72 +5,25 @@ import shirates.core.driver.testContext
 import shirates.core.vision.VisionElement
 
 class Rectangle(
-    var x: Int = 0,
-    var y: Int = 0,
-    var width: Int = 0,
-    var height: Int = 0
-) {
-    val left: Int
-        get() {
-            return x
-        }
-
-    val top: Int
-        get() {
-            return y
-        }
-
-    val right: Int
-        get() {
-            if (width == 0) {
-                return x
-            }
-            return x + width - 1
-        }
-
-    val bottom: Int
-        get() {
-            if (height == 0) {
-                return y
-            }
-            return y + height - 1
-        }
-
-    /**
-     * centerX
-     */
-    val centerX: Int
-        get() {
-            return x + width / 2
-        }
-
-    /**
-     * centerY
-     */
-    val centerY: Int
-        get() {
-            return y + height / 2
-        }
+    override var left: Int = 0,
+    override var top: Int = 0,
+    override var width: Int = 0,
+    override var height: Int = 0,
+) : RectangleInterface {
 
     val isEmpty: Boolean
         get() {
             return area == 0
         }
 
-    val area: Int
-        get() {
-            return width * height
-        }
-
-
     constructor(leftTopRightBottom: String) : this() {
 
         try {
             val r = leftTopRightBottom.removePrefix("[").split("]").first().split(",").map { it.trim().toInt() }
-            this.x = r[0]
-            this.y = r[1]
-            this.width = r[2] - x + 1
-            this.height = r[3] - y + 1
+            this.left = r[0]
+            this.top = r[1]
+            this.width = r[2] - left + 1
+            this.height = r[3] - top + 1
         } catch (t: Throwable) {
             throw IllegalArgumentException(leftTopRightBottom, t)
         }
@@ -81,7 +34,7 @@ class Rectangle(
         fun createFrom(left: Int, top: Int, right: Int, bottom: Int): Rectangle {
             val width = right - left + 1
             val height = bottom - top + 1
-            return Rectangle(x = left, y = top, width = width, height = height)
+            return Rectangle(left = left, top = top, width = width, height = height)
         }
     }
 
@@ -109,8 +62,8 @@ class Rectangle(
     ): Rectangle {
 
         return Rectangle(
-            x = this.x + offsetX,
-            y = this.y + offsetY,
+            left = this.left + offsetX,
+            top = this.top + offsetY,
             width = width,
             height = height
         )
@@ -121,7 +74,7 @@ class Rectangle(
      */
     fun localRegionRect(): Rectangle {
 
-        return Rectangle(x = 0, y = 0, width = width, height = height)
+        return Rectangle(left = 0, top = 0, width = width, height = height)
     }
 
     /**
@@ -145,14 +98,12 @@ class Rectangle(
 
         val v = VisionElement(capture = true)
         val c = v.visionContext
-        c.localRegionX = this.x
-        c.localRegionY = this.y
-        c.rectOnLocalRegion = Rectangle(x = 0, y = 0, width = this.width, this.height)
+        c.localRegionX = this.left
+        c.localRegionY = this.top
+        c.rectOnLocalRegion = Rectangle(left = 0, top = 0, width = this.width, this.height)
         c.localRegionImage = c.screenshotImage?.cropImage(rect = this)
         c.localRegionFile = null
 
-//        val fileName = TestLog.getNextScreenshotFileName(suffix = "_cropRegion_$this")
-//        c.localRegionFile = c.localRegionImage!!.saveImage(TestLog.directoryForLog.resolve(fileName).toString())
         return v
     }
 
@@ -165,6 +116,6 @@ class Rectangle(
         val minTop = Math.min(this.top, other.top)
         val maxRight = Math.max(this.right, other.right)
         val maxBottom = Math.max(this.bottom, other.bottom)
-        return Rectangle.createFrom(left = minLeft, top = minTop, right = maxRight, bottom = maxBottom)
+        return createFrom(left = minLeft, top = minTop, right = maxRight, bottom = maxBottom)
     }
 }

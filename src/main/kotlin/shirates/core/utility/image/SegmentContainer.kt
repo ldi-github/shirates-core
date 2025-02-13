@@ -36,6 +36,7 @@ class SegmentContainer(
     var segmentMarginVertical: Int,
     var scale: Double = 1.0,
     var skinThickness: Int = 2,
+    var binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
     var minimumWidth: Int = 5,
     var minimumHeight: Int = 5,
     var outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
@@ -63,7 +64,7 @@ class SegmentContainer(
                 this.containerImage = UtilImageIO.loadImageNotNull(containerImageFile)
             }
             val imageRect = this.containerImage!!.rect
-            return Rectangle(x = containerX, y = containerY, width = imageRect.width, height = imageRect.height)
+            return Rectangle(left = containerX, top = containerY, width = imageRect.width, height = imageRect.height)
         }
 
     override fun toString(): String {
@@ -80,7 +81,7 @@ class SegmentContainer(
         merge: Boolean = true
     ): Segment {
         return addSegment(
-            rect.x, rect.y, rect.width, rect.height,
+            rect.left, rect.top, rect.width, rect.height,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             merge = merge
@@ -98,7 +99,7 @@ class SegmentContainer(
     ): Segment {
         val rect = recognizeTextObservation.rectOnScreen!!
         val segment = addSegment(
-            rect.x, rect.y, rect.width, rect.height,
+            rect.left, rect.top, rect.width, rect.height,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             merge = merge
@@ -147,10 +148,15 @@ class SegmentContainer(
             }
         }
 
-        val newLeft = canMergeSegments.minOfOrNull { it.left } ?: 0
-        val newTop = canMergeSegments.minOfOrNull { it.top } ?: 0
-        val newRight = canMergeSegments.maxOfOrNull { it.right } ?: 0
-        val newBottom = canMergeSegments.maxOfOrNull { it.bottom } ?: 0
+        val newLeft = canMergeSegments.minOf { it.left }
+        val newTop = canMergeSegments.minOf { it.top }
+        val newRight = canMergeSegments.maxOf { it.right }
+        val newBottom = canMergeSegments.maxOf { it.bottom }
+
+        if (canMergeSegments.size == 1) {
+            segments.add(newSegment)
+            return newSegment
+        }
 
         val mergedSegment = Segment(
             left = newLeft,
@@ -192,7 +198,7 @@ class SegmentContainer(
     fun filterByAspectRatio(
         imageWidth: Int,
         imageHeight: Int,
-        tolerance: Float = 0.3f
+        tolerance: Float = 0.1f
     ) {
         if (tolerance <= 0 || 0.5 < tolerance) {
             throw IllegalArgumentException("Tolerance must be between 0 and 0.5.")
@@ -321,7 +327,11 @@ class SegmentContainer(
     /**
      * split
      */
-    fun split(splitUnit: Int = skinThickness): SegmentContainer {
+    fun split(
+        splitUnit: Int = this.skinThickness,
+        binaryThreshold: Int = this.binaryThreshold,
+        segmentationPng: Boolean = true,
+    ): SegmentContainer {
 
         val sw = StopWatch("SegmentContainer")
 
@@ -341,8 +351,12 @@ class SegmentContainer(
          * setup binary image
          */
         val image = containerImage!!.resize(scale = scale)
-        binary =
-            BinarizationUtility.getBinaryAsGrayU8(image = image, invert = false, skinThickness = skinThickness)
+        binary = BinarizationUtility.getBinaryAsGrayU8(
+            image = image,
+            invert = false,
+            skinThickness = skinThickness,
+            threshold = binaryThreshold
+        )
         val b = binary!!
 
         /**
@@ -353,7 +367,8 @@ class SegmentContainer(
                 imageFile = templateImageFile!!,
                 segmentMarginHorizontal = segmentMarginHorizontal,
                 segmentMarginVertical = segmentMarginVertical,
-                skinThickness = skinThickness
+                skinThickness = skinThickness,
+                binaryThreshold = binaryThreshold
             )
             else null
 
@@ -392,8 +407,10 @@ class SegmentContainer(
             mergeIncluded()
         }
 
-        val drawImage = draw()
-        drawImage.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
+        if (segmentationPng) {
+            val drawImage = draw()
+            drawImage.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
+        }
 
         sw.printInfo()
 
@@ -488,7 +505,7 @@ class SegmentContainer(
         g2d.color = Color.LIGHT_GRAY
         for (seg in originalSegments) {
             val rect = seg.toRect()
-            g2d.fillRect(rect.x, rect.y, rect.width, rect.height)
+            g2d.fillRect(rect.left, rect.top, rect.width, rect.height)
             image.drawRect(rect = rect, color = g2d.color, stroke = 1f)
         }
         /**

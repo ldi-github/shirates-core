@@ -48,10 +48,9 @@
         scenario {
             case(1) {
                 condition {
-                    it.pressHome()
-                        .swipeCenterToBottom()
-                        .tap("検索")
-                        .clearInput()
+                    it.launchApp("[マップ]")
+                        .waitForDisplay("マップで検索")
+                        .tap()
                 }.action {
                     it.sendKeys("safari")
                 }.expectation {
@@ -62,7 +61,7 @@
                 action {
                     it.clearInput()
                 }.expectation {
-                    it.textIs("検索")
+                    it.textIs("マップで検索")
                 }
             }
         }

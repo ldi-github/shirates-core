@@ -16,6 +16,7 @@ import shirates.core.vision.driver.branchextension.lastScreenshotImage
 fun VisionElement.swipeTo(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
+    last: Boolean = false,
     waitSeconds: Double = 0.0,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
@@ -35,6 +36,7 @@ fun VisionElement.swipeTo(
         v = detectCore(
             selector = sel,
             language = language,
+            last = last,
             allowScroll = false,
             waitSeconds = waitSeconds,
             throwsException = false,

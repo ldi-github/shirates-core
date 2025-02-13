@@ -221,6 +221,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
             // print config
             if (TestLog.configPrinted.not()) {
+                val testMode = if (TestMode.isVisionTest) "Vision" else "Classic"
+                ParameterRepository.write("testMode", testMode)
                 val profile = uiTestBase!!.testProfile
                 val testConfig = profile.testConfig
                 ParameterRepository.write("testrun", PropertiesManager.testrunFile)

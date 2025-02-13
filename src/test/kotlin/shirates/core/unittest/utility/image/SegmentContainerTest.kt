@@ -22,7 +22,7 @@ class SegmentContainerTest {
         val image = this.draw()
         val g2d = image.createGraphics()
         g2d.color = Color.GREEN!!
-        g2d.drawRect(newRect.x, newRect.y, newRect.width, newRect.height)
+        g2d.drawRect(newRect.left, newRect.top, newRect.width, newRect.height)
 
         val path = TestLog.directoryForLog.resolve(count.toString()).toString()
         image.saveImage(path)

@@ -193,8 +193,7 @@ open class VisionElement(
      */
     val text: String
         get() {
-            val t = testElement?.textOrLabelOrValue
-                ?: recognizeTextObservation?.text ?: ""
+            val t = recognizeTextObservation?.text ?: ""
             return t
         }
 
@@ -276,7 +275,7 @@ open class VisionElement(
     }
 
     override fun toString(): String {
-        return "text: \"$text\", bounds: $bounds, rect: ${bounds.toRectWithRatio()}"
+        return "text: \"$text\", bounds: $bounds, rect: $rect"
     }
 
     /**

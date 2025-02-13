@@ -164,6 +164,7 @@ object Const {
     const val VISION_SEGMENT_MARGIN_VERTICAL = 5
     const val VISION_SEGMENT_MARGIN_HORIZONTAL = 5
     const val VISION_FIND_IMAGE_THRESHOLD = 0.1
+    const val VISION_FIND_IMAGE_BINARY_THRESHOLD = 1
 
     /**
      * internal

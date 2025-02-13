@@ -17,6 +17,14 @@
 | detectWithScrollLeft  | セレクターにマッチする最初の要素を取得します。（左方向スクロールあり）                             |
 | detectWithoutScroll   | セレクターにマッチする最初の要素を取得します。（スクロールなし）                                |
 
+## 主要な引数
+
+| 引数         | 説明                                                                      |
+|:-----------|:------------------------------------------------------------------------|
+| expression | [セレクター式](../../selector_and_nickname/selector_expression_ja.md)         |
+| language   | [AI-OCR言語](../../switching_environment/switching_ai_ocr_language_ja.md) |
+| last       | true: 最後の要素を取得します。<br>false: 最初の要素を取得します(デフォルト)。                        |
+
 ### サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)

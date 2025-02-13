@@ -321,11 +321,11 @@ class BoundsTest : UnitTest() {
         // Assert
         run {
             val expected = (10 * PropertiesManager.screenshotScale).toInt()
-            assertThat(rect.x).isEqualTo(expected)
+            assertThat(rect.left).isEqualTo(expected)
         }
         run {
             val expected = (20 * PropertiesManager.screenshotScale).toInt()
-            assertThat(rect.y).isEqualTo(expected)
+            assertThat(rect.top).isEqualTo(expected)
         }
         run {
             val expected = (11 * PropertiesManager.screenshotScale).toInt()

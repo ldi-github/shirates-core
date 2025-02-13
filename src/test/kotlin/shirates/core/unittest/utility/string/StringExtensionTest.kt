@@ -13,15 +13,15 @@ class StringExtensionTest : UnitTest() {
 
         run {
             // Act
-            val actual = "abcABCアイウ123１２３".forVisionComparison()
+            val actual = "abcABCアイウエオヤユヨツワカケ123１２３".forVisionComparison()
             // Assert
-            assertThat(actual).isEqualTo("abcabcｱｲｳ123123")
+            assertThat(actual).isEqualTo("abcabcｱｲｳｴｵﾔﾕﾖﾂﾜｶｹ123123")
         }
         run {
             // Act
-            val actual = "abcABCアイウ123１２３".forVisionComparison(ignoreCase = false)
+            val actual = "abcABCアイウエオヤユヨツワカケ123１２３".forVisionComparison(ignoreCase = false)
             // Assert
-            assertThat(actual).isEqualTo("abcABCｱｲｳ123123")
+            assertThat(actual).isEqualTo("abcABCｱｲｳｴｵﾔﾕﾖﾂﾜｶｹ123123")
         }
         run {
             // Act
@@ -34,6 +34,21 @@ class StringExtensionTest : UnitTest() {
             val actual = "abcABCアイウ123１２３".forVisionComparison(ignoreCase = true, ignoreFullWidthHalfWidth = false)
             // Assert
             assertThat(actual).isEqualTo("abcabcアイウ123１２３")
+        }
+        run {
+            // Act
+            val actual = "ぁぃぅぇぉゃゅょっゎゕゖ_あいうえおやゆよつわかけ".forVisionComparison()
+            assertThat(actual).isEqualTo("あいうえおやゆよつわかけ_あいうえおやゆよつわかけ")
+        }
+        run {
+            // Act
+            val actual = "ｧｨｩｪｫｬｭｮｯ_ｱｲｳｴｵﾔﾕﾖﾂ_ァィゥェォャュョッヮヵヶ_アイウエオヤユヨツワカケ".forVisionComparison()
+            assertThat(actual).isEqualTo("ｱｲｳｴｵﾔﾕﾖﾂ_ｱｲｳｴｵﾔﾕﾖﾂ_ｱｲｳｴｵﾔﾕﾖﾂﾜｶｹ_ｱｲｳｴｵﾔﾕﾖﾂﾜｶｹ")
+        }
+        run {
+            // Act
+            val actual = "く＜＞<>".forVisionComparison()
+            assertThat(actual).isEqualTo("<<><>")
         }
     }
 

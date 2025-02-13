@@ -274,7 +274,7 @@ class VisionContext(
                 language = language,
                 visionContext = rootVisionContext,
             )
-            CodeExecutionContext.lastRecognizedFile = recognizedFile
+            CodeExecutionContext.lastRecognizedFileName = recognizedFile
         }
         this.language = language
 
@@ -316,7 +316,7 @@ class VisionContext(
             language = language,
             visionContext = this,
         )
-        CodeExecutionContext.lastRecognizedFile = imageFile
+        CodeExecutionContext.lastRecognizedFileName = imageFile!!.toFile().name
         this.language = language
 
         return this
@@ -336,7 +336,7 @@ class VisionContext(
             recognizeTextResult = recognizeTextResult
         )
         visionContext.language = language
-        if (inputFile != CodeExecutionContext.lastRecognizedFile) {
+        if (inputFile != CodeExecutionContext.lastRecognizedFileName) {
             /**
              * Save screenshotImageWithTextRegion
              */
@@ -402,6 +402,7 @@ class VisionContext(
     fun detect(
         text: String,
         language: String = this.language,
+        last: Boolean,
         inJoinedText: Boolean = false,
         removeRedundantText: Boolean,
     ): VisionElement {
@@ -421,7 +422,10 @@ class VisionContext(
             val candidates = detectCandidates(
                 text = text,
             )
-            var v = candidates.firstOrNull() ?: VisionElement.emptyElement
+            var v =
+                (if (last) candidates.lastOrNull()
+                else candidates.firstOrNull())
+                    ?: VisionElement.emptyElement
             if (removeRedundantText && v.text.indexOf(text) > 0) {
                 val v2 = removeRedundantText(
                     visionElement = v,
@@ -440,6 +444,7 @@ class VisionContext(
     fun detect(
         selector: Selector,
         language: String = this.language,
+        last: Boolean,
         removeRedundantText: Boolean = true,
     ): VisionElement {
 
@@ -460,6 +465,7 @@ class VisionContext(
                 val v = detect(
                     text = text,
                     language = language,
+                    last = last,
                     inJoinedText = inJoinedText,
                     removeRedundantText = removeRedundantText,
                 )
@@ -517,6 +523,11 @@ class VisionContext(
             it.bounds.isCenterIncludedIn(localBounds)
         }
         list = list.sortedBy { Math.abs(normalizedText.length - it.text.length) }
+        val nearestItem = list.firstOrNull()
+        if (nearestItem != null) {
+            list = list.filter { it.text.length == nearestItem.text.length }
+        }
+        list = list.sortedWith(compareBy<VisionElement> { it.bounds.top }.thenBy { it.bounds.left })
         return list
     }
 
@@ -544,7 +555,7 @@ class VisionContext(
             g2d.stroke = BasicStroke(3f)
             for (o in recognizeTextObservations) {
                 val rect = o.rectOnScreen!!
-                g2d.drawRect(rect.x, rect.y, rect.width, rect.height)
+                g2d.drawRect(rect.left, rect.top, rect.width, rect.height)
             }
             return newImage
         }

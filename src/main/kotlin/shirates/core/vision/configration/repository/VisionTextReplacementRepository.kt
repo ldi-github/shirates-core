@@ -6,6 +6,64 @@ import java.nio.file.Files
 
 object VisionTextReplacementRepository {
 
+    internal val convertMap = mapOf(
+        /**
+         * Full-width kana small to normal
+         */
+        "ぁ" to "あ",
+        "ぃ" to "い",
+        "ぅ" to "う",
+        "ぇ" to "え",
+        "ぉ" to "お",
+        "ゃ" to "や",
+        "ゅ" to "ゆ",
+        "ょ" to "よ",
+        "っ" to "つ",
+        "ゎ" to "わ",
+        "ゕ" to "か",
+        "ゖ" to "け",
+        /**
+         * Full-width katakana small to Half-Width katakana normal
+         */
+        "ァ" to "ｱ",
+        "ィ" to "ｲ",
+        "ゥ" to "ｳ",
+        "ェ" to "ｴ",
+        "ォ" to "ｵ",
+        "ャ" to "ﾔ",
+        "ュ" to "ﾕ",
+        "ョ" to "ﾖ",
+        "ッ" to "ﾂ",
+        /**
+         * Full-width katakana to Half-Width katakana
+         */
+        "ワ" to "ﾜ",
+        "カ" to "ｶ",
+        "ケ" to "ｹ",
+        /**
+         * Full-width katakana small to Half-Width katakana normal
+         */
+        "ヮ" to "ﾜ",
+        "ヵ" to "ｶ",
+        "ヶ" to "ｹ",
+        /**
+         * Half-width katakana small to normal
+         */
+        "ｧ" to "ｱ",
+        "ｨ" to "ｲ",
+        "ｩ" to "ｳ",
+        "ｪ" to "ｴ",
+        "ｫ" to "ｵ",
+        "ｬ" to "ﾔ",
+        "ｭ" to "ﾕ",
+        "ｮ" to "ﾖ",
+        "ｯ" to "ﾂ",
+        /**
+         * misc
+         */
+        "く" to "<"  // U+304 to U+003C
+    )
+
     val replaceMap = mutableMapOf<String, String>()
 
     /**
