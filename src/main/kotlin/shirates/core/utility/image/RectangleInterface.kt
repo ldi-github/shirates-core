@@ -49,6 +49,9 @@ interface RectangleInterface {
      */
     val right: Int
         get() {
+            if (width == 0) {
+                return left
+            }
             return left + width - 1;
         }
 
@@ -57,6 +60,9 @@ interface RectangleInterface {
      */
     val bottom: Int
         get() {
+            if (height == 0) {
+                return top
+            }
             return top + height - 1;
         }
 

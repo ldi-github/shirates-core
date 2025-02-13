@@ -276,7 +276,7 @@ open class VisionElement(
     }
 
     override fun toString(): String {
-        return "text: \"$text\", bounds: $bounds, rect: ${bounds.toRectWithRatio()}"
+        return "text: \"$text\", bounds: $bounds, rect: $rect"
     }
 
     /**
