@@ -193,8 +193,7 @@ open class VisionElement(
      */
     val text: String
         get() {
-            val t = testElement?.textOrLabelOrValue
-                ?: recognizeTextObservation?.text ?: ""
+            val t = recognizeTextObservation?.text ?: ""
             return t
         }
 

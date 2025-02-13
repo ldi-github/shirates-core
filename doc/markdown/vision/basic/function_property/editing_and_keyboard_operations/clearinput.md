@@ -48,10 +48,9 @@ You can clear value of input widget using **clearInput** function.
         scenario {
             case(1) {
                 condition {
-                    it.pressHome()
-                        .swipeCenterToBottom()
-                        .tap("Search")
-                        .clearInput()
+                    it.launchApp("[Maps]")
+                        .waitForDisplay("Search Maps")
+                        .tap()
                 }.action {
                     it.sendKeys("safari")
                 }.expectation {
@@ -62,7 +61,7 @@ You can clear value of input widget using **clearInput** function.
                 action {
                     it.clearInput()
                 }.expectation {
-                    it.textIs("Search")
+                    it.textIs("Search Maps")
                 }
             }
         }

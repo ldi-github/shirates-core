@@ -20,7 +20,7 @@ fun VisionElement.clearInput(): VisionElement {
         we.clear()
         invalidateScreen()
         screenshot()
-        lastElement = v.newVisionElement()
+        lastElement = getFocusedElement(throwsException = true)
     }
 
     return lastElement
