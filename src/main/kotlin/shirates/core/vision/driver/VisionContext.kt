@@ -274,7 +274,7 @@ class VisionContext(
                 language = language,
                 visionContext = rootVisionContext,
             )
-            CodeExecutionContext.lastRecognizedFile = recognizedFile
+            CodeExecutionContext.lastRecognizedFileName = recognizedFile
         }
         this.language = language
 
@@ -316,7 +316,7 @@ class VisionContext(
             language = language,
             visionContext = this,
         )
-        CodeExecutionContext.lastRecognizedFile = imageFile
+        CodeExecutionContext.lastRecognizedFileName = imageFile!!.toFile().name
         this.language = language
 
         return this
@@ -336,7 +336,7 @@ class VisionContext(
             recognizeTextResult = recognizeTextResult
         )
         visionContext.language = language
-        if (inputFile != CodeExecutionContext.lastRecognizedFile) {
+        if (inputFile != CodeExecutionContext.lastRecognizedFileName) {
             /**
              * Save screenshotImageWithTextRegion
              */

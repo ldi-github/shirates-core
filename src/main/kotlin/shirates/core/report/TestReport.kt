@@ -159,6 +159,8 @@ class TestReport(
         if (targets.count() > 1) {
             fullClassName = targets[1]
         }
+        var testMode = lines.firstOrNull() { it.message.startsWith("testMode:") }?.message ?: ""
+        testMode = testMode.replace("testMode: ", "").trim()
 
         val screenshotLines = lines.filter { it.screenshot.isNotBlank() }
 
@@ -171,6 +173,7 @@ class TestReport(
         <br>
         <div class='class-name'>$className</div>
         <div class='full-class-name'>$fullClassName</div>
+        <div class='test-mode' data-test-mode="$testMode">Test mode:$testMode</div>
         <br>
 """
         )

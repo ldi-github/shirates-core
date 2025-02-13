@@ -301,8 +301,13 @@ $(function () {
     // openPictureXml
     function openPictureXml(fileName) {
         if (fileName.endsWith(".png")) {
-            fileName = fileName.substring(0, fileName.length - 4) + ".xml"
-            window.open(fileName)
+            if ($(".test-mode").attr("data-test-mode") === "Vision") {
+                fileName = fileName.substring(0, fileName.length - 4) + "_recognizeText.json"
+                window.open(fileName)
+            } else {
+                fileName = fileName.substring(0, fileName.length - 4) + ".xml"
+                window.open(fileName)
+            }
         }
     }
 

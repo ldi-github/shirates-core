@@ -13,6 +13,7 @@ import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.file.copyFileTo
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
+import shirates.core.utility.file.toFile
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.image.saveImage
 import shirates.core.utility.time.StopWatch
@@ -161,10 +162,13 @@ object VisionServerProxy {
             TestLog.directoryForLog.toFile().mkdirs()
         }
         val baseFile = inputFile.toPath().toFile().name
-        if (CodeExecutionContext.lastRecognizedFile != baseFile) {
-            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_[$baseFile]_TextRecognizer_recognizeText.json")
-                .toFile()
+        if (CodeExecutionContext.lastRecognizedFileName != baseFile) {
+            val jsonFile =
+                TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_recognizeText.json")
+                    .toString()
+            jsonFile.toFile()
                 .writeText(result)
+            CodeExecutionContext.lastRecognizedJsonFile = jsonFile
         }
 
         sw.printInfo()

@@ -296,9 +296,14 @@ object CodeExecutionContext {
         internal set
 
     /**
-     * lastRecognizedFile
+     * lastRecognizedFileName
      */
-    var lastRecognizedFile: String? = null
+    var lastRecognizedFileName: String? = null
+
+    /**
+     * lastRecognizedJsonFile
+     */
+    var lastRecognizedJsonFile: String? = null
 
     /**
      * lastCropInfo
