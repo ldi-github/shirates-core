@@ -206,6 +206,8 @@ class VisionContext(
 
         c.recognizeTextObservations = recognizeTextObservations.toMutableList()
 
+        c._image = null
+
         return c
     }
 

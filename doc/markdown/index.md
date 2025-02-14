@@ -92,6 +92,8 @@
 - Install and launch app
     - [installApp, removeApp](vision/basic/function_property/install_and_launch_app/install_app.md)
     - [launchApp, terminateApp](vision/basic/function_property/install_and_launch_app/launch_app.md)
+- Setting working region
+    - [onTopRegion, onBottomRegion, onMiddleRegion, onRegion, onUpperHalfRegion, onLowerHalfRegion](vision/basic/function_property/setting_working_region/setting_working_region.md)
 - Swipe/Scroll screen
     - [swipe, flick](vision/basic/function_property/swipe_screen/swipe_flick.md)
     - [scroll](vision/basic/function_property/swipe_screen/scroll.md)

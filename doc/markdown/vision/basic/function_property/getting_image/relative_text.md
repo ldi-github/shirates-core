@@ -50,12 +50,12 @@ You can find a text relatively using these functions.
         scenario {
             case(1) {
                 condition {
-                    it.macro("[Maps Top Screen]")
+                    it.macro("[Files Top Screen]")
                 }.action {
-                    v1 = detect("You")
+                    v1 = detect("Audio")
                 }.expectation {
-                    v1.rightText().textIs("Contribute")
-                    v1.leftText().textIs("Explore")
+                    v1.rightText().textIs("Videos")
+                    v1.leftText().textIs("Images")
                 }
             }
         }

@@ -103,6 +103,7 @@ class Rectangle(
         c.rectOnLocalRegion = Rectangle(left = 0, top = 0, width = this.width, this.height)
         c.localRegionImage = c.screenshotImage?.cropImage(rect = this)
         c.localRegionFile = null
+        c.resetImage()
 
         return v
     }

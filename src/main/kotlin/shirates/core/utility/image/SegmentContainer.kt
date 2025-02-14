@@ -18,6 +18,7 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileNotFoundException
 import java.nio.file.Files
+import kotlin.io.path.name
 
 class SegmentContainer(
     var mergeIncluded: Boolean = false,
@@ -371,6 +372,10 @@ class SegmentContainer(
                 binaryThreshold = binaryThreshold
             )
             else null
+        if (templateImage != null) {
+            val savedTemplateFile = outputDirectory.resolve("template_${templateImageFile.toPath().name}")
+            templateImage.saveImage(savedTemplateFile)
+        }
 
         /**
          * add segments unit by unit

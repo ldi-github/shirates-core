@@ -27,7 +27,7 @@ open class VisionObservation(
 
     open var imageFile: String? = null
 ) : IRect {
-    private var _image: BufferedImage? = null
+    internal var _image: BufferedImage? = null
 
     /**
      * rectOnScreen
@@ -77,6 +77,14 @@ open class VisionObservation(
 
             return null
         }
+
+    /**
+     * resetImage
+     */
+    fun resetImage() {
+
+        _image = null
+    }
 
     /**
      * toVisionContext
