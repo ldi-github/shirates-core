@@ -66,6 +66,20 @@ class VisionDriveRegionExtensionTest : VisionTest() {
                     }
                 }
             }
+            case(7) {
+                expectation {
+                    onLeftHalfRegion {
+                        it.existImage("[Network & internet Icon]")
+                    }
+                }
+            }
+            case(8) {
+                expectation {
+                    onRightHalfRegion {
+                        it.dontExistImage("[Network & internet Icon]")
+                    }
+                }
+            }
         }
     }
 }

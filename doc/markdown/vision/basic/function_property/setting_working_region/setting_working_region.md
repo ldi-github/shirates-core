@@ -11,6 +11,8 @@ You can set working region to get better performance with reducing size of the i
 | onRegion          | Cut the screen image with specified rectangle and set it as a working region. |
 | onUpperHalfRegion | Cut the screen image of upper half region and set it as a working region.     |
 | onLowerHalfRegion | Cut the screen image of lower half region and set it as a working region.     |
+| onLeftHalfRegion  | Cut the screen image of left half region and set it as a working region.      |
+| onRightHalfRegion | Cut the screen image of right half region and set it as a working region.     |
 
 ## Sample code
 

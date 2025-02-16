@@ -248,6 +248,7 @@ object VisionServerProxy {
         segmentMarginVertical: Int,
         skinThickness: Int = 2,
         binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+        aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
         log: Boolean = false,
     ): FindImagesWithTemplateResult {
 
@@ -270,6 +271,7 @@ object VisionServerProxy {
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
         ).split()
             .saveImages()
         if (segmentContainer.segments.isEmpty()) {

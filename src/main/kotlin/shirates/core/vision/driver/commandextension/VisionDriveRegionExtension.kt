@@ -164,3 +164,35 @@ fun VisionDrive.onLowerHalfRegion(
     regionCore(regionElement = regionElement, func = func)
     return regionElement
 }
+
+/**
+ * onLeftHalfRegion
+ */
+fun VisionDrive.onLeftHalfRegion(
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val r = rootElement.rect
+    val regionElement = Rectangle(left = 0, top = 0, width = (r.width * 0.5).toInt(), height = r.height)
+        .toVisionElement()
+    regionCore(regionElement = regionElement, func = func)
+    return regionElement
+}
+
+/**
+ * onRightHalfRegion
+ */
+fun VisionDrive.onRightHalfRegion(
+    func: (VisionElement.() -> Unit)
+): VisionElement {
+
+    val r = rootElement.rect
+    val regionElement = Rectangle(
+        left = (r.width * 0.5).toInt(),
+        top = 0,
+        width = (r.width * 0.5).toInt(),
+        height = r.height
+    ).toVisionElement()
+    regionCore(regionElement = regionElement, func = func)
+    return regionElement
+}

@@ -1056,6 +1056,15 @@ object PropertiesManager {
         }
 
     /**
+     * segmentCroppingMargin
+     */
+    val segmentCroppingMargin: Int
+        get() {
+            return getPropertyValue(propertyName = "segmentCroppingMargin")?.toIntOrNull()
+                ?: Const.VISION_SEGMENT_CROPPING_MARGIN
+        }
+
+    /**
      * visionFindImageThreshold
      */
     val visionFindImageThreshold: Double
@@ -1071,6 +1080,15 @@ object PropertiesManager {
         get() {
             return getPropertyValue(propertyName = "visionFindImageBinaryThreshold")?.toIntOrNull()
                 ?: Const.VISION_FIND_IMAGE_BINARY_THRESHOLD
+        }
+
+    /**
+     * visionFindImageAspectRatioTolerance
+     */
+    val visionFindImageAspectRatioTolerance: Double
+        get() {
+            return getPropertyValue(propertyName = "visionFindImageAspectRatioTolerance")?.toDoubleOrNull()
+                ?: Const.VISION_FIND_IMAGE_ASPECT_RATIO_TOLERANCE
         }
 
     // Custom --------------------------------------------------

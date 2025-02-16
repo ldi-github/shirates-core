@@ -52,7 +52,7 @@ fun VisionDrive.isScreen(
  */
 fun VisionDrive.updateCurrentScreen() {
 
-    screenshot(force = true)
+    screenshot(force = true, onChangedOnly = true)
 
     val oldScreenName = TestDriver.currentScreen
     TestDriver.currentScreen = ""

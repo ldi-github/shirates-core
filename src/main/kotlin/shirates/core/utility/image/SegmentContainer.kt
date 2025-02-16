@@ -38,10 +38,11 @@ class SegmentContainer(
     var scale: Double = 1.0,
     var skinThickness: Int = 2,
     var binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    var aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     var minimumWidth: Int = 5,
     var minimumHeight: Int = 5,
     var outputDirectory: String = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString(),
-    var saveWithMargin: Boolean = true,
+    var croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
 ) {
     val segments = mutableListOf<Segment>()
     val originalSegments = mutableListOf<Segment>()
@@ -117,8 +118,8 @@ class SegmentContainer(
         top: Int,
         width: Int,
         height: Int,
-        segmentMarginHorizontal: Int = PropertiesManager.segmentMarginVertical,
-        segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+        segmentMarginHorizontal: Int = this.segmentMarginVertical,
+        segmentMarginVertical: Int = this.segmentMarginVertical,
         merge: Boolean = true
     ): Segment {
         val newSegment = Segment(
@@ -167,7 +168,7 @@ class SegmentContainer(
             container = this,
             screenshotImage = screenshotImage,
             screenshotFile = screenshotFile,
-            saveWithMargin = saveWithMargin,
+            croppingMargin = croppingMargin,
         )
         segments.clear()
         segments.addAll(cannotMergeSegments)
@@ -199,7 +200,7 @@ class SegmentContainer(
     fun filterByAspectRatio(
         imageWidth: Int,
         imageHeight: Int,
-        tolerance: Float = 0.1f
+        tolerance: Double
     ) {
         if (tolerance <= 0 || 0.5 < tolerance) {
             throw IllegalArgumentException("Tolerance must be between 0 and 0.5.")
@@ -331,6 +332,7 @@ class SegmentContainer(
     fun split(
         splitUnit: Int = this.skinThickness,
         binaryThreshold: Int = this.binaryThreshold,
+        aspectRatioTolerance: Double = this.aspectRatioTolerance,
         segmentationPng: Boolean = true,
     ): SegmentContainer {
 
@@ -402,7 +404,7 @@ class SegmentContainer(
          */
         filterByWidthAndHeight()
         if (templateImage != null) {
-            filterByAspectRatio(templateImage.width, templateImage.height)
+            filterByAspectRatio(templateImage.width, templateImage.height, tolerance = aspectRatioTolerance)
         }
 //        filterByCutOffPiece()
         /**
@@ -458,7 +460,7 @@ class SegmentContainer(
                         container = this,
                         screenshotImage = screenshotImage,
                         screenshotFile = screenshotFile,
-                        saveWithMargin = saveWithMargin,
+                        croppingMargin = croppingMargin,
                     )
                     segments.add(mergedSegment)
                     break

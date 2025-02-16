@@ -622,7 +622,7 @@ fun VisionDrive.withScrollDown(
     val scrollVisionElement = getScrollColumnElement(
         expression = expression,
     )
-    if (scrollVisionElement.isEmpty) {
+    if (TestMode.isNoLoadRun.not() && scrollVisionElement.isEmpty) {
         throw TestDriverException("Could not find scroll element.")
     }
     return withScroll(

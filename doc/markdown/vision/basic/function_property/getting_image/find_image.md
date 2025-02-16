@@ -14,7 +14,7 @@ You can find an image using these functions.
 
 ### Tuning threshold
 
-You may encounter an error in spite of the image is accually existing,
+You may encounter an error in spite of the image is actually existing,
 and see message as follows.
 
 ```
@@ -70,7 +70,7 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    v1 = findImageWithScrollDown("[Location Icon]", threshold = 0.5)
+                    v1 = findImageWithScrollDown("[Location Icon]")
                 }.expectation {
                     v1.imageIs("[Location Icon]")
                 }
