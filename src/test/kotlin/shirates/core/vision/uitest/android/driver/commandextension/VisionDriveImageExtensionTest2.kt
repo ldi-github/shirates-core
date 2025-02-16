@@ -22,7 +22,7 @@ class VisionDriveImageExtensionTest2 : VisionTest() {
                 condition {
                     it.macro("[Files Top Screen]")
                 }.expectation {
-                    var imagesIcon = it.findImage("[Images Button]")
+                    var imagesIcon = it.findImage("[Images Button]", segmentMarginHorizontal = 10)
                     imagesIcon.isFound.thisIsTrue()
 
                     imagesIcon.onLine {

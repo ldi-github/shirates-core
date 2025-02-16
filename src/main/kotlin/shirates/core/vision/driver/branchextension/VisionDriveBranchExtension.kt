@@ -135,6 +135,7 @@ fun VisionDrive.ifFalse(
  */
 fun VisionDrive.ifCanDetect(
     expression: String,
+    waitSeconds: Double = 0.0,
     onTrue: (VisionElement) -> Unit = {}
 ): BooleanCompareResult {
 
@@ -142,6 +143,7 @@ fun VisionDrive.ifCanDetect(
 
     val v = detect(
         expression = expression,
+        waitSeconds = waitSeconds,
         throwsException = false
     )
     val matched = v.isFound

@@ -1944,7 +1944,7 @@ class PropertiesManagerTest : UnitTest() {
         }
         run {
             // Arrange
-            val value = 100.0f
+            val value = 100.0
             PropertiesManager.setPropertyValue("visionFindImageAspectRatioTolerance", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.visionFindImageAspectRatioTolerance).isEqualTo(value)

@@ -81,7 +81,7 @@ object CreateMLUtility {
         if (accuracy100.not()) {
             printInfo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             printInfo("!!                                                                  !!")
-            printWarn("!! CAUTION!  Learning has a problem. Accuracy is not 100%.          !!")
+            printInfo("!! CAUTION!  Learning has a problem. Accuracy is not 100%.          !!")
             printInfo("!!                                                                  !!")
             printInfo("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         }
