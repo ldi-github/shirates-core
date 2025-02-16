@@ -1,7 +1,10 @@
 package shirates.core.vision.driver.commandextension
 
+import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.Rectangle
+import shirates.core.utility.image.saveImage
+import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
 
@@ -88,12 +91,15 @@ fun VisionElement.belowRegionElement(
     return v
 }
 
-internal fun VisionElement.regionCore(
+internal fun VisionDrive.regionCore(
     regionElement: VisionElement,
     func: (VisionElement.() -> Unit)
 ): VisionElement {
 
     lastElement = regionElement
+    regionElement.image?.saveImage(
+        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_region_${regionElement.rect}").toString()
+    )
 
     val originalRegionElement = CodeExecutionContext.workingRegionElement
     val originalScrollVisionElement = CodeExecutionContext.scrollVisionElement

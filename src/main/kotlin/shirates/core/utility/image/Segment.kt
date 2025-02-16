@@ -1,6 +1,7 @@
 package shirates.core.utility.image
 
 import boofcv.io.image.UtilImageIO
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.Bounds
 import shirates.core.logging.TestLog
 import shirates.core.logging.printWarn
@@ -20,7 +21,7 @@ class Segment(
     var container: SegmentContainer? = null,
     var screenshotImage: BufferedImage? = CodeExecutionContext.lastScreenshotImage,
     var screenshotFile: String? = CodeExecutionContext.lastScreenshotFile,
-    var saveWithMargin: Boolean = true,
+    var croppingMargin: Int = PropertiesManager.segmentCroppingMargin,
 ) : IRect, RectangleInterface {
     var recognizeTextObservation: RecognizeTextObservation? = null
 
@@ -195,9 +196,7 @@ class Segment(
      */
     fun captureAndSave(outputDirectory: String? = TestLog.directoryForLog.toString()) {
 
-        if (saveWithMargin) {
-            captureImageWithMargin()
-        }
+        captureImageWithMargin()
 
         this.segmentImageFile = outputDirectory.toPath()
             .resolve("${this}_hmargin=${segmentMarginHorizontal}_vmargin=${segmentMarginVertical}.png").toString()
@@ -217,22 +216,20 @@ class Segment(
             throw IllegalStateException("containerImage is null")
         }
 
-        if (saveWithMargin.not()) return
-
         val cImage = containerImage!!
 
-        var left = left - segmentMarginHorizontal
+        var left = left - croppingMargin
         if (left < 0) left = 0
 
-        var top = top - segmentMarginVertical
+        var top = top - croppingMargin
         if (top < 0) top = 0
 
-        var right = left + width + segmentMarginHorizontal * 2
+        var right = left + width + croppingMargin * 2
         if (right > cImage.width - 1) {
             right = cImage.width - 1
         }
 
-        var bottom = top + height + segmentMarginVertical * 2
+        var bottom = top + height + croppingMargin * 2
         if (bottom > cImage.height - 1) {
             bottom = cImage.height - 1
         }

@@ -18,6 +18,7 @@ object VisionTemplateImageRepository {
         segmentMarginVertical: Int,
         skinThickness: Int = 2,
         binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+        aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     ): BufferedImage? {
 
         if (imageFile.exists().not()) {
@@ -36,6 +37,7 @@ object VisionTemplateImageRepository {
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance
         ).split(segmentationPng = false)
 //            .saveImages()
 

@@ -1880,6 +1880,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun segmentCroppingMargin() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.segmentCroppingMargin).isEqualTo(Const.VISION_SEGMENT_CROPPING_MARGIN)
+        }
+        run {
+            // Arrange
+            val value = 15
+            PropertiesManager.setPropertyValue("segmentCroppingMargin", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.segmentCroppingMargin).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun visionFindImageThreshold() {
 
         run {
@@ -1912,6 +1930,24 @@ class PropertiesManagerTest : UnitTest() {
             PropertiesManager.setPropertyValue("visionFindImageBinaryThreshold", value.toString())
             // Act, Assert
             assertThat(PropertiesManager.visionFindImageBinaryThreshold).isEqualTo(value)
+        }
+    }
+
+    @Test
+    fun visionFindImageAspectRatioTolerance() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionFindImageAspectRatioTolerance).isEqualTo(Const.VISION_FIND_IMAGE_ASPECT_RATIO_TOLERANCE)
+        }
+        run {
+            // Arrange
+            val value = 100.0
+            PropertiesManager.setPropertyValue("visionFindImageAspectRatioTolerance", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionFindImageAspectRatioTolerance).isEqualTo(value)
         }
     }
 

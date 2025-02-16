@@ -17,6 +17,7 @@ import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.configration.repository.VisionMLModelRepository
+import shirates.core.vision.driver.classify
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.silent
 import shirates.core.vision.result.FindImagesWithTemplateResult
@@ -71,6 +72,7 @@ fun VisionDrive.findImage(
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     allowScroll: Boolean? = null,
@@ -95,6 +97,7 @@ fun VisionDrive.findImage(
             binaryThreshold = binaryThreshold,
             waitSeconds = waitSeconds,
             intervalSeconds = intervalSeconds,
+            aspectRatioTolerance = aspectRatioTolerance,
         )
         return v2
     }
@@ -152,6 +155,7 @@ private fun VisionDrive.findImageCore(
     mergeIncluded: Boolean,
     skinThickness: Int,
     binaryThreshold: Int,
+    aspectRatioTolerance: Double,
     waitSeconds: Double,
     intervalSeconds: Double,
 ): VisionElement {
@@ -187,9 +191,15 @@ private fun VisionDrive.findImageCore(
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
         )
 
         found = threshold == null || r!!.primaryCandidate.distance <= threshold
+        if (found.not()) {
+            val candidateLabel = r?.primaryCandidate?.toVisionElement()?.classify()
+            found = candidateLabel == label
+        }
+
         found
     }
     if (waitContext.hasError && waitContext.isTimeout.not()) {
@@ -200,8 +210,8 @@ private fun VisionDrive.findImageCore(
         return v
     }
     val v = VisionElement.emptyElement
-    v.lastError =
-        TestDriverException("findImage(\"$label\") not found. (distance:${r!!.primaryCandidate.distance} > threshold:$threshold)")
+    val subMessage = if (r == null) "" else " (distance:${r!!.primaryCandidate.distance} > threshold:$threshold)"
+    v.lastError = TestDriverException("findImage(\"$label\") not found.$subMessage")
     TestLog.info(v.lastError!!.message!!)
     return v
 }
@@ -257,6 +267,7 @@ fun VisionDrive.findImageWithScrollDown(
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     threshold: Double? = PropertiesManager.visionFindImageThreshold,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
@@ -283,6 +294,7 @@ fun VisionDrive.findImageWithScrollDown(
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
             waitSeconds = waitSeconds,
             threshold = threshold,
             throwsException = throwsException,
@@ -302,6 +314,7 @@ fun VisionDrive.findImageWithScrollUp(
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -328,6 +341,7 @@ fun VisionDrive.findImageWithScrollUp(
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
         )
@@ -346,6 +360,7 @@ fun VisionDrive.findImageWithScrollRight(
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -372,6 +387,7 @@ fun VisionDrive.findImageWithScrollRight(
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
             waitSeconds = waitSeconds,
             throwsException = throwsException,
         )
@@ -390,6 +406,7 @@ fun VisionDrive.findImageWithScrollLeft(
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = testContext.syncWaitSeconds,
     scrollDurationSeconds: Double = testContext.swipeDurationSeconds,
     scrollIntervalSeconds: Double = testContext.scrollIntervalSeconds,
@@ -415,6 +432,7 @@ fun VisionDrive.findImageWithScrollLeft(
             mergeIncluded = mergeIncluded,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
             waitSeconds = waitSeconds,
             threshold = threshold,
             throwsException = throwsException,
@@ -434,6 +452,7 @@ fun VisionDrive.canFindImage(
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     allowScroll: Boolean? = null,
@@ -448,6 +467,7 @@ fun VisionDrive.canFindImage(
         mergeIncluded = mergeIncluded,
         skinThickness = skinThickness,
         binaryThreshold = binaryThreshold,
+        aspectRatioTolerance = aspectRatioTolerance,
         waitSeconds = waitSeconds,
         intervalSeconds = intervalSeconds,
         allowScroll = allowScroll,

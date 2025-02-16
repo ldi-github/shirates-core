@@ -7,7 +7,7 @@ the scrollable area is determined and operations are performed on that area.
 
 You can determine the scrollable area explicitly using these functions.
 
-| 関数                     | 説明                                                                                                                 |
+| function               | description                                                                                                        |
 |:-----------------------|:-------------------------------------------------------------------------------------------------------------------|
 | onLine                 | Set the horizontal line including current selected element as scrollable area.                                     |
 | onColumn               | Set the Vertical line including current selected element as scrollable area.                                       |

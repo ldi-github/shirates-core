@@ -273,24 +273,36 @@ fun VisionDrive.tapImage(
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     holdSeconds: Double = testContext.tapHoldSeconds,
     throwsException: Boolean = true,
 ): VisionElement {
 
-    val v = findImage(
-        label = label,
-        threshold = threshold,
-        segmentMarginHorizontal = segmentMarginHorizontal,
-        segmentMarginVertical = segmentMarginVertical,
-        mergeIncluded = mergeIncluded,
-        skinThickness = skinThickness,
-        binaryThreshold = binaryThreshold,
-        waitSeconds = waitSeconds,
-        throwsException = throwsException,
-    )
+    val sel = Selector(expression = label)
 
-    v.tap(holdSeconds = holdSeconds)
+    val command = "tapImage"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    var v = VisionElement.emptyElement
+    v.selector = sel
+    context.execOperateCommand(command = command, message = message, subject = "$sel") {
+        v = findImage(
+            label = label,
+            threshold = threshold,
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+            mergeIncluded = mergeIncluded,
+            skinThickness = skinThickness,
+            binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
+            waitSeconds = waitSeconds,
+            throwsException = throwsException,
+        )
+
+        v.tap(holdSeconds = holdSeconds)
+    }
 
     lastElement = v.newVisionElement()
     return lastElement

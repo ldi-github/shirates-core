@@ -90,6 +90,8 @@
 - インストールとアプリの起動
     - [installApp, removeApp](vision/basic/function_property/install_and_launch_app/install_app_ja.md)
     - [launchApp, terminateApp](vision/basic/function_property/install_and_launch_app/launch_app_ja.md)
+- 作業領域を指定する
+    - [onTopRegion, onBottomRegion, onMiddleRegion, onRegion, onUpperHalfRegion, onLowerHalfRegion](vision/basic/function_property/setting_working_region/setting_working_region_ja.md)
 - 画面をスワイプ/スクロールする
     - [swipe, flick](vision/basic/function_property/swipe_screen/swipe_flick_ja.md)
     - [scroll](vision/basic/function_property/swipe_screen/scroll_ja.md)

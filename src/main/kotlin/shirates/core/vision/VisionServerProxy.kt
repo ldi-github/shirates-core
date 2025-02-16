@@ -15,10 +15,8 @@ import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
 import shirates.core.utility.file.toFile
 import shirates.core.utility.image.SegmentContainer
-import shirates.core.utility.image.saveImage
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toPath
-import shirates.core.vision.configration.repository.VisionTemplateImageRepository
 import shirates.core.vision.result.*
 import java.io.FileNotFoundException
 import java.nio.file.Files
@@ -250,6 +248,7 @@ object VisionServerProxy {
         segmentMarginVertical: Int,
         skinThickness: Int = 2,
         binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
+        aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
         log: Boolean = false,
     ): FindImagesWithTemplateResult {
 
@@ -257,17 +256,6 @@ object VisionServerProxy {
 
         val outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}").toString()
 
-        /**
-         * Get normalized template image file
-         */
-        val normalizedTemplateImage = VisionTemplateImageRepository.getNormalizedTemplateImage(
-            imageFile = templateImageFile,
-            segmentMarginHorizontal = segmentMarginHorizontal,
-            segmentMarginVertical = segmentMarginVertical,
-            skinThickness = skinThickness
-        )
-        val normalizedTemplateImageFile = outputDirectory.resolve("normalized_template_img.png")
-        normalizedTemplateImage?.saveImage(file = normalizedTemplateImageFile)
         /**
          * Get segments in imageFile.
          * Save segment image files in outputDirectory.
@@ -278,11 +266,12 @@ object VisionServerProxy {
             containerX = imageX,
             containerY = imageY,
             outputDirectory = outputDirectory,
-            templateImageFile = normalizedTemplateImageFile,
+            templateImageFile = templateImageFile,
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
             skinThickness = skinThickness,
             binaryThreshold = binaryThreshold,
+            aspectRatioTolerance = aspectRatioTolerance,
         ).split()
             .saveImages()
         if (segmentContainer.segments.isEmpty()) {
@@ -312,10 +301,6 @@ object VisionServerProxy {
          */
         val workingRegionFile = outputDirectory.resolve("workingRegion_${segmentContainer.rect}.png")
         imageFile.copyFileTo(workingRegionFile)
-        /**
-         * Save template image as template.png
-         */
-        normalizedTemplateImageFile.copyFileTo(outputDirectory.resolve("template_${templateImageFile.toPath().name}"))
         /**
          * Save primary candidate of segment image as candidate_[x, y, width, height].png
          */

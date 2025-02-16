@@ -69,7 +69,7 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
                 condition {
                     it.macro("[Android設定トップ画面]")
                 }.action {
-                    v1 = findImageWithScrollDown("[位置情報アイコン]", threshold = 0.5)
+                    v1 = findImageWithScrollDown("[位置情報アイコン]")
                 }.expectation {
                     v1.imageIs("[位置情報アイコン]")
                 }
