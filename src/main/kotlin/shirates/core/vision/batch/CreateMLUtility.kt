@@ -97,11 +97,11 @@ object CreateMLUtility {
         force: Boolean = false,
         createBinary: Boolean? = null
     ) {
+        if (visionDirectory.exists().not()) {
+            return
+        }
         if (TestMode.isRunningOnMacOS.not()) {
             throw NotImplementedError("CreateMLUtility is for only MacOS.")
-        }
-        if (visionDirectory.exists().not()) {
-            throw IllegalArgumentException("visionDirectory does not exist. (visionDirectory=$visionDirectory)")
         }
         this.visionDirectory = visionDirectory
         this.visionDirectoryInWork = visionDirectoryInWork
