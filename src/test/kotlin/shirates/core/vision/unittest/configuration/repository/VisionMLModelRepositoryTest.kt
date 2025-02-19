@@ -12,8 +12,9 @@ class VisionMLModelRepositoryTest {
         // Act
         VisionMLModelRepository.setup()
         // Assert
-        assertThat(VisionMLModelRepository.mlmodelClassifiers.count()).isEqualTo(2)
+        assertThat(VisionMLModelRepository.mlmodelClassifiers.count()).isEqualTo(3)
         assertThat(VisionMLModelRepository.mlmodelClassifiers.containsKey("CheckStateClassifier")).isTrue()
         assertThat(VisionMLModelRepository.mlmodelClassifiers.containsKey("DefaultClassifier")).isTrue()
+        assertThat(VisionMLModelRepository.mlmodelClassifiers.containsKey("ScreenClassifier")).isTrue()
     }
 }

@@ -17,7 +17,7 @@ fun VisionElement.swipeTo(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     last: Boolean = false,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,

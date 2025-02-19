@@ -1,6 +1,7 @@
 package shirates.core.vision.configration.repository
 
 import shirates.core.driver.TestDriver
+import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.printInfo
@@ -111,6 +112,16 @@ class VisionClassifierRepository {
     class LabelFileInfo(
         val label: String,
         val imageClassifierDirectory: String,
-        val files: MutableList<String> = mutableListOf()
-    )
+        val files: MutableList<String> = mutableListOf(),
+    ) {
+        val primaryFile: String?
+            get() {
+                val annotation = TestMode.platformAnnotation
+                val annotatedFile = files.firstOrNull() { it.toPath().name.contains(annotation) }
+                if (annotatedFile != null) {
+                    return annotatedFile
+                }
+                return files.firstOrNull()
+            }
+    }
 }

@@ -1116,7 +1116,12 @@ class TestElement(
 
             if (isCacheMode) {
                 if (selector != null) {
-                    if (canSelectCore(selector = selector!!, safeElementOnly = false)) {
+                    if (canSelectCore(
+                            selector = selector!!,
+                            waitSeconds = 0.0,
+                            safeElementOnly = false
+                        )
+                    ) {
                         e = TestElementCache.select(selector = selector!!)
                         return@execOperateCommand
                     }

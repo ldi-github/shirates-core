@@ -15,6 +15,7 @@ import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.image.getMatchRate
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.commandextension.helper.IRect
 import java.awt.image.BufferedImage
@@ -195,6 +196,14 @@ open class VisionElement(
         get() {
             val t = recognizeTextObservation?.text ?: ""
             return t
+        }
+
+    /**
+     * textForComparison
+     */
+    val textForComparison: String
+        get() {
+            return text.forVisionComparison()
         }
 
     /**

@@ -70,54 +70,93 @@ object VisionServerProxy {
     }
 
     /**
-     * classifyWithImageFeaturePrintOrText
+     * classifyScreen
      */
-    fun classifyWithImageFeaturePrintOrText(
+    fun classifyScreen(
         inputFile: String,
-        withTextMatching: Boolean = false,
-        language: String = PropertiesManager.visionOCRLanguage,
-    ): ClassifyWithImageFeaturePrintOrTextResult {
+        mlmodelFile: String = PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/ScreenClassifier/ScreenClassifier.mlmodel")
+    ): ClassifyScreenResult {
 
         if (Files.exists(inputFile.toPath()).not()) {
             throw IllegalArgumentException("file not found: $inputFile.")
         }
 
-        val sw = StopWatch("ImageFeaturePrintClassifier/classifyWithImageFeaturePrintOrText")
+        val sw = StopWatch("ScreenClassifier/classifyScreen")
 
         val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
-                "/ImageFeaturePrintClassifier/classifyWithImageFeaturePrintOrText").toHttpUrlOrNull()!!.newBuilder()
-        urlBuilder.addQueryParameter(
-            name = "project",
-            value = UserVar.project.toString()
-        )
+                "/ScreenClassifier/classifyScreen").toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter(
             name = "inputFile",
             value = inputFile.toPath().toString()
         )
         urlBuilder.addQueryParameter(
-            name = "language",
-            value = language
+            name = "mlmodel",
+            value = mlmodelFile.toPath().toString()
         )
-        if (withTextMatching) {
-            urlBuilder.addQueryParameter(
-                name = "withTextMatching",
-                value = withTextMatching.toString()
-            )
-        }
         val url = urlBuilder.build()
         val jsonString = getResponseBody(url)
         lastJsonString = jsonString
 
         val file =
-            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_ImageFeaturePrintClassifier_classifyWithImageFeaturePrintOrText.json")
+            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_ScreenClassifier_classifyScreen.json")
         file.parent.toFile().mkdirs()
         file.toFile().writeText(jsonString)
 
         if (CodeExecutionContext.shouldOutputLog) {
             sw.printInfo()
         }
-        return ClassifyWithImageFeaturePrintOrTextResult(jsonString)
+        return ClassifyScreenResult(jsonString)
     }
+
+//    /**
+//     * classifyWithImageFeaturePrintOrText
+//     */
+//    fun classifyWithImageFeaturePrintOrText(
+//        inputFile: String,
+//        withTextMatching: Boolean = false,
+//        language: String = PropertiesManager.visionOCRLanguage,
+//    ): ClassifyWithImageFeaturePrintOrTextResult {
+//
+//        if (Files.exists(inputFile.toPath()).not()) {
+//            throw IllegalArgumentException("file not found: $inputFile.")
+//        }
+//
+//        val sw = StopWatch("ImageFeaturePrintClassifier/classifyWithImageFeaturePrintOrText")
+//
+//        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+//                "/ImageFeaturePrintClassifier/classifyWithImageFeaturePrintOrText").toHttpUrlOrNull()!!.newBuilder()
+//        urlBuilder.addQueryParameter(
+//            name = "project",
+//            value = UserVar.project.toString()
+//        )
+//        urlBuilder.addQueryParameter(
+//            name = "inputFile",
+//            value = inputFile.toPath().toString()
+//        )
+//        urlBuilder.addQueryParameter(
+//            name = "language",
+//            value = language
+//        )
+//        if (withTextMatching) {
+//            urlBuilder.addQueryParameter(
+//                name = "withTextMatching",
+//                value = withTextMatching.toString()
+//            )
+//        }
+//        val url = urlBuilder.build()
+//        val jsonString = getResponseBody(url)
+//        lastJsonString = jsonString
+//
+//        val file =
+//            TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_ImageFeaturePrintClassifier_classifyWithImageFeaturePrintOrText.json")
+//        file.parent.toFile().mkdirs()
+//        file.toFile().writeText(jsonString)
+//
+//        if (CodeExecutionContext.shouldOutputLog) {
+//            sw.printInfo()
+//        }
+//        return ClassifyWithImageFeaturePrintOrTextResult(jsonString)
+//    }
 
     /**
      * recognizeText

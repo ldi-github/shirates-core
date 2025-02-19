@@ -27,12 +27,12 @@ fun VisionDrive.tap(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     last: Boolean = false,
-    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
-    waitSeconds: Double = 0.0,
+    holdSeconds: Double = testContext.tapHoldSeconds,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
-    removeRedundantText: Boolean = false,
+    removeRedundantText: Boolean = true,
 ): VisionElement {
 
     if (directAccess) {
@@ -274,7 +274,7 @@ fun VisionDrive.tapImage(
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     holdSeconds: Double = testContext.tapHoldSeconds,
     throwsException: Boolean = true,
 ): VisionElement {

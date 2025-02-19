@@ -5,6 +5,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.utility.file.resolve
 import shirates.core.vision.VisionElement
 import shirates.core.vision.VisionServerProxy
+import shirates.core.vision.utility.label.LabelUtility
 
 /**
  * classifyFull
@@ -39,10 +40,5 @@ fun VisionElement.classify(
 ): String {
 
     val fullLabel = classifyFull(classifierName = classifierName)
-    val lastIndex = fullLabel.lastIndexOf('[')
-    if (lastIndex == -1) {
-        return fullLabel
-    }
-    val label = fullLabel.substring(lastIndex)
-    return label
+    return LabelUtility.getShortLabel(fullLabel)
 }

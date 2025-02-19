@@ -445,7 +445,7 @@ fun VisionDrive.existImage(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
 ): VisionElement {

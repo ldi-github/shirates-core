@@ -58,8 +58,7 @@
 - [Learning images](vision/basic/text_and_image_recognition/learning_images.md)
 - [Using CheckStateClassifier](vision/basic/text_and_image_recognition/using_check_state_classifier.md)
 - [Using DefaultClassifier](vision/basic/text_and_image_recognition/using_default_classifier.md)
-- [Screen identification using FeaturePrint and text recognition](vision/basic/text_and_image_recognition/screen_assertion_using_feature_print_and_text_recognition.md)
-- [Setting up screen image_templates](vision/basic/text_and_image_recognition/setting_up_screen_image_templates.md)
+- [Using ScreenClassifier](vision/basic/text_and_image_recognition/using_screen_classifier.md)
 
 ### Macro
 

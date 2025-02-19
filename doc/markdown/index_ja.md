@@ -56,8 +56,7 @@
 - [画像の学習](vision/basic/text_and_image_recognition/learning_images_ja.md)
 - [CheckStateClassifierを使用する](vision/basic/text_and_image_recognition/using_check_state_classifier_ja.md)
 - [DefaultClassifierを使用する](vision/basic/text_and_image_recognition/using_default_classifier_ja.md)
-- [FeaturePrintとテキスト認識による画面の識別](vision/basic/text_and_image_recognition/screen_assertion_using_feature_print_and_text_recognition_ja.md)
-- [画面イメージテンプレートのセットアップ](vision/basic/text_and_image_recognition/setting_up_screen_image_templates_ja.md)
+- [ScreenClassifierを使用する](vision/basic/text_and_image_recognition/using_screen_classifier_ja.md)
 
 ### マクロ
 

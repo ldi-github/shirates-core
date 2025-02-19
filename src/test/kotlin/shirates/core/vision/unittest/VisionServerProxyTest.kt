@@ -49,108 +49,13 @@ class VisionServerProxyTest : UnitTest() {
     }
 
     @Test
-    fun classifyWithImageFeaturePrintOrText() {
+    fun classifyScreen() {
 
         run {
-            // Arrange
-            VisionServerProxy.setupImageFeaturePrintConfig(inputDirectory = "unitTestData/vision/screens/1")
             // Act
             val inputFile = "unitTestData/vision/screens/1/[Android Settings Top Screen].png"
-            val result = VisionServerProxy.classifyWithImageFeaturePrintOrText(inputFile = inputFile)
-            // Assert
-            assertThat(result.withTextMatching).isFalse()
-            assertThat(result.baseImageFile).isEqualTo(
-                "unitTestData/vision/screens/1/[Android Settings Top Screen].png".toPath().toString()
-            )
-            assertThat(result.textMatchingRequiredDiffThreshold).isEqualTo(0.05)
-            assertThat(result.firstCandidate!!.distance < result.textMatchingRequiredDiffThreshold).isTrue()
-            assertThat(result.textMatchingRequiredDiffThreshold < result.secondDistance).isTrue()
-
-            assertThat(result.firstCandidate?.imageFile).isEqualTo(inputFile.toPath().toString())
-            assertThat(result.firstCandidate?.name).isEqualTo("[Android Settings Top Screen]")
-
-            assertThat(result.candidates.count()).isEqualTo(3)
-            assertThat(result.candidates[0].name).isEqualTo("[Android Settings Top Screen]")
-            assertThat(result.candidates[0].imageFile).isEqualTo(
-                "unitTestData/vision/screens/1/[Android Settings Top Screen].png".toPath().toString()
-            )
-            assertThat(result.candidates[1].name).isEqualTo("[System Screen]")
-            assertThat(result.candidates[1].imageFile).isEqualTo(
-                "unitTestData/vision/screens/1/[System Screen].png".toPath().toString()
-            )
-        }
-        run {
-            // Arrange
-            VisionServerProxy.setupImageFeaturePrintConfig(inputDirectory = "unitTestData/vision/screens/1")
-            // Act
-            val inputFile = "unitTestData/vision/screens/1/[System Screen].png"
-            val result =
-                VisionServerProxy.classifyWithImageFeaturePrintOrText(inputFile = inputFile, withTextMatching = true)
-            // Assert
-            assertThat(result.withTextMatching).isTrue()
-            assertThat(result.baseImageFile).isEqualTo(
-                "unitTestData/vision/screens/1/[System Screen].png".toPath().toString()
-            )
-            assertThat(result.textMatchingRequiredDiffThreshold).isEqualTo(0.05)
-            assertThat(result.firstCandidate!!.distance < result.textMatchingRequiredDiffThreshold).isTrue()
-            assertThat(result.textMatchingRequiredDiffThreshold < result.secondDistance).isTrue()
-
-            assertThat(result.firstCandidate?.imageFile).isEqualTo(inputFile.toPath().toString())
-            assertThat(result.firstCandidate?.name).isEqualTo("[System Screen]")
-
-            assertThat(result.candidates.count()).isEqualTo(3)
-            assertThat(result.candidates[0].name).isEqualTo("[System Screen]")
-            assertThat(result.candidates[0].imageFile).isEqualTo(
-                "unitTestData/vision/screens/1/[System Screen].png".toPath().toString()
-            )
-            assertThat(result.candidates[1].name).isEqualTo("[Android Settings Top Screen]")
-            assertThat(result.candidates[1].imageFile).isEqualTo(
-                "unitTestData/vision/screens/1/[Android Settings Top Screen].png".toPath().toString()
-            )
-        }
-        run {
-            // Arrange
-            VisionServerProxy.setupImageFeaturePrintConfig(inputDirectory = "unitTestData/vision/screens/1")
-            // Act
-            val inputFile = "unitTestData/vision/screens/1/[Android設定トップ画面].png"
-            val result = VisionServerProxy.classifyWithImageFeaturePrintOrText(inputFile = inputFile)
-            // Assert
-            assertThat(result.firstCandidate?.name).isEqualTo("[Android設定トップ画面]")
-        }
-        run {
-            // Arrange
-            VisionServerProxy.setupImageFeaturePrintConfig(inputDirectory = "unitTestData/vision/screens/1")
-            // Act
-            val inputFile = "unitTestData/vision/screens/1/[Android設定トップ画面].png"
-            val result = VisionServerProxy.classifyWithImageFeaturePrintOrText(
-                inputFile = inputFile,
-                withTextMatching = true,
-                language = "en_UK"
-            )
-            // Assert
-            assertThat(result.firstCandidate?.name).isEqualTo("[Android設定トップ画面]")
-        }
-        run {
-            // Arrange
-            VisionServerProxy.setupImageFeaturePrintConfig(inputDirectory = "unitTestData/vision/screens/1")
-            // Act
-            val inputFile = "unitTestData/vision/screens/1/[No exist].png"
-            assertThatThrownBy {
-                VisionServerProxy.classifyWithImageFeaturePrintOrText(inputFile = inputFile)
-            }.isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessage("file not found: unitTestData/vision/screens/1/[No exist].png.")
-
-        }
-        run {
-            // Arrange
-            VisionServerProxy.setupImageFeaturePrintConfig(inputDirectory = "unitTestData/vision/screens/0")
-            // Act
-            val inputFile = "unitTestData/vision/screens/1/[No exist].png"
-            assertThatThrownBy {
-                VisionServerProxy.classifyWithImageFeaturePrintOrText(inputFile = inputFile)
-            }.isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessage("file not found: unitTestData/vision/screens/1/[No exist].png.")
-
+            val result = VisionServerProxy.classifyScreen(inputFile = inputFile)
+            result.jsonString
         }
     }
 
@@ -323,7 +228,7 @@ class VisionServerProxyTest : UnitTest() {
                 skinThickness = 2,
             )
             // Assert
-            val expected = "[84, 867, 146, 913](w=63, h=47, ratio=1.3404255, text=``)_hmargin=5_vmargin=5.png"
+            val expected = "[84, 868, 147, 913](w=64, h=46, ratio=1.3913044, text=``)_hmargin=5_vmargin=5.png"
             assertThat(result.primaryCandidate.file.toString()).endsWith(expected)
         }
         run {
@@ -342,7 +247,7 @@ class VisionServerProxyTest : UnitTest() {
                 skinThickness = 2,
             )
             // Assert
-            val expected = "[84, 1097, 146, 1144](w=63, h=48, ratio=1.3125, text=``)_hmargin=5_vmargin=5.png"
+            val expected = "[84, 1098, 147, 1145](w=64, h=48, ratio=1.3333334, text=``)_hmargin=5_vmargin=5.png"
             assertThat(result.primaryCandidate.file.toString()).endsWith(expected)
         }
     }

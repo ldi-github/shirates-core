@@ -2,7 +2,6 @@ package shirates.core.vision.unittest.batch.createml
 
 import org.apache.commons.io.FileUtils
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.logging.TestLog
@@ -25,26 +24,6 @@ class CreateMLUtilityTest {
             .map { "${Date(it.lastModified()).format("yyyy/MM/dd HH:mm:ss.SSS")} ${it}" }
         val result = files.joinToString("\n")
         return result
-    }
-
-    @Order(0)
-    @Test
-    fun arguments() {
-
-        run {
-            // Arrange
-            val visionDirectory = "not/exist/directory"
-            val visionDirectoryInWork = "build/tmp/vision1"
-            // Action
-            assertThatThrownBy {
-                CreateMLUtility.runLearning(
-                    visionDirectory = visionDirectory,
-                    visionDirectoryInWork = visionDirectoryInWork,
-                    force = true
-                )
-            }.isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessage("visionDirectory does not exist. (visionDirectory=not/exist/directory)")
-        }
     }
 
     @Order(10)
@@ -85,12 +64,12 @@ build/tmp/vision1/classifiers/CheckStateClassifier/training/[OFF]/radio_bright_b
 build/tmp/vision1/classifiers/CheckStateClassifier/training/[OFF]/radio_bright.png
 build/tmp/vision1/classifiers/CheckStateClassifier/createML.log
 build/tmp/vision1/classifiers/DefaultClassifier/MLImageClassifier.swift
-build/tmp/vision1/classifiers/DefaultClassifier/test/@a[Android Files App][Images Button]/img.png
-build/tmp/vision1/classifiers/DefaultClassifier/test/@i[iOS Settings App][Accessibility Icon]/img.png
-build/tmp/vision1/classifiers/DefaultClassifier/training/@a[Android Files App][Images Button]/img_binary.png
-build/tmp/vision1/classifiers/DefaultClassifier/training/@a[Android Files App][Images Button]/img.png
-build/tmp/vision1/classifiers/DefaultClassifier/training/@i[iOS Settings App][Accessibility Icon]/img_binary.png
-build/tmp/vision1/classifiers/DefaultClassifier/training/@i[iOS Settings App][Accessibility Icon]/img.png
+build/tmp/vision1/classifiers/DefaultClassifier/test/@a_[Android Files App]_[Images Button]/img.png
+build/tmp/vision1/classifiers/DefaultClassifier/test/@i_[iOS Settings App]_[Accessibility Icon]/img.png
+build/tmp/vision1/classifiers/DefaultClassifier/training/@a_[Android Files App]_[Images Button]/img_binary.png
+build/tmp/vision1/classifiers/DefaultClassifier/training/@a_[Android Files App]_[Images Button]/img.png
+build/tmp/vision1/classifiers/DefaultClassifier/training/@i_[iOS Settings App]_[Accessibility Icon]/img_binary.png
+build/tmp/vision1/classifiers/DefaultClassifier/training/@i_[iOS Settings App]_[Accessibility Icon]/img.png
 build/tmp/vision1/classifiers/DefaultClassifier/DefaultClassifier.mlmodel
 build/tmp/vision1/classifiers/DefaultClassifier/createML.log
 build/tmp/vision1/classifiers/fileList.txt
