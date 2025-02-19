@@ -356,7 +356,7 @@ fun TestDrive.selectInScanResults(
 internal fun TestDrive.canSelectCore(
     selector: Selector,
     allowScroll: Boolean = true,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double,
     safeElementOnly: Boolean,
     frame: Bounds? = null
 ): Boolean {
@@ -457,6 +457,7 @@ fun TestDrive.canSelectWithScrollDown(
         ) {
             found = canSelectCore(
                 selector = sel,
+                waitSeconds = 0.0,
                 safeElementOnly = true
             )
         }
@@ -499,6 +500,7 @@ fun TestDrive.canSelectWithScrollUp(
         ) {
             found = canSelectCore(
                 selector = sel,
+                waitSeconds = 0.0,
                 safeElementOnly = true
             )
         }
@@ -541,6 +543,7 @@ fun TestDrive.canSelectWithScrollRight(
         ) {
             found = canSelectCore(
                 selector = sel,
+                waitSeconds = 0.0,
                 safeElementOnly = true
             )
         }
@@ -583,6 +586,7 @@ fun TestDrive.canSelectWithScrollLeft(
         ) {
             found = canSelectCore(
                 selector = sel,
+                waitSeconds = 0.0,
                 safeElementOnly = true
             )
         }
@@ -665,6 +669,7 @@ internal fun TestDrive.canSelectAll(
             foundAll = canSelectCore(
                 selector = selector,
                 allowScroll = allowScroll,
+                waitSeconds = 0.0,
                 frame = frame,
                 safeElementOnly = safeElementOnly
             )

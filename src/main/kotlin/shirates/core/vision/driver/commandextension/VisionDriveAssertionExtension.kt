@@ -199,7 +199,7 @@ fun VisionDrive.screenIs(
     }
 
     if (TestMode.isNoLoadRun.not() && VisionScreenRepository.isRegistered(screenName).not()) {
-        throw TestConfigException("screenName $screenName is not registered in directory ${VisionScreenRepository.directory}.")
+        throw TestConfigException("screenName $screenName is not registered in ScreenClassifier.")
     }
 
     val command = "screenIs"

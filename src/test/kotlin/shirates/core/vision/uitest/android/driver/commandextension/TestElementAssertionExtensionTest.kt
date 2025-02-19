@@ -55,7 +55,7 @@ class TestElementAssertionExtensionTest : VisionTest() {
             }
             case(2) {
                 expectation {
-                    v1.imageFullLabelIs("@a[Android Settings App][Android Settings Top Screen][Network & internet Icon]")
+                    v1.imageFullLabelIs("@a_Android Settings_Android Settings Top Screen_[Network & internet Icon]")
                 }
             }
             case(3) {
@@ -69,9 +69,9 @@ class TestElementAssertionExtensionTest : VisionTest() {
             case(4) {
                 expectation {
                     assertThatThrownBy {
-                        v1.imageFullLabelIs("@a[Android Settings App][Android Settings Top Screen][Apps Icon]")
+                        v1.imageFullLabelIs("@a_Android Settings_Android Settings Top Screen_[Apps Icon]")
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("Image fullLabel of <Network & internet>:leftItem is @a[Android Settings App][Android Settings Top Screen][Apps Icon] (actual=false)")
+                        .hasMessage("Image fullLabel of <Network & internet>:leftItem is @a_Android Settings_Android Settings Top Screen_[Apps Icon] (actual=false)")
                 }
             }
         }

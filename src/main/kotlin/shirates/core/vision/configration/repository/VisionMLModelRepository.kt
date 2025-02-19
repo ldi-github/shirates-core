@@ -54,13 +54,13 @@ object VisionMLModelRepository {
             return getRepository("DefaultClassifier")
         }
 
-//    /**
-//     * screenClassifierRepository
-//     */
-//    val screenClassifierRepository: VisionClassifierRepository
-//        get() {
-//            return getRepository("ScreenClassifier")
-//        }
+    /**
+     * screenClassifierRepository
+     */
+    val screenClassifierRepository: VisionClassifierRepository
+        get() {
+            return getRepository("ScreenClassifier")
+        }
 
     /**
      * buttonStateClassifierRepository

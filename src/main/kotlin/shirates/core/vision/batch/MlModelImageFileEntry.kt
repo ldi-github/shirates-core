@@ -39,7 +39,7 @@ class MlModelImageFileEntry(
             val imageFileName = imageFileInVision.toPath().name
             val classifierDirectoryPath = classifierDirectoryInVision.toPath().toString()
             val combinedLabel = imageFilePath.replace(classifierDirectoryPath, "").removeSuffix(imageFileName)
-                .replace("/", "").replace("\\", "")
+                .replace("/", "_").replace("\\", "_").trim('_')
             return combinedLabel
         }
 

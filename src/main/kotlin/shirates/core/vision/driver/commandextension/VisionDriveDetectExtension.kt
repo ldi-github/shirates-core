@@ -37,7 +37,7 @@ fun VisionDrive.detect(
     last: Boolean = false,
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     removeRedundantText: Boolean = true,
     throwsException: Boolean = true,
 ): VisionElement {

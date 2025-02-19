@@ -32,7 +32,7 @@ Shirates/Vision classifies the image using DefaultClassifier.
                     s2 = v1.classifyFull()
                 }.expectation {
                     s2.thisIs(
-                        "@a[Android Settings App][Android Settings Top Screen][Network & internet Icon]",
+                        "@a_Android Settings_Android Settings Top Screen_[Network & internet Icon]",
                         message = "fullLabel is $s2"
                     )
                 }
@@ -46,19 +46,24 @@ Right-click on `classify()` and select `debug` to run test.
 ### Console output
 
 ```
-136	[00:00:21]	2025/01/28 15:05:21.579	{classify-1}	0	-	[info]	+241	!	()	135_[134.png]_recognized_text_rectangles.png
-137	[00:00:21]	2025/01/28 15:05:21.760	{classify-1}	0	-	[info]	+181	!	()	[detect] in 1.706 sec
-2025-01-28 15:05:21.780 java[5081:84512] +[IMKClient subclass]: chose IMKClient_Modern
-2025-01-28 15:05:21.780 java[5081:84512] +[IMKInputSession subclass]: chose IMKInputSession_Modern
-138	[00:00:22]	2025/01/28 15:05:22.906	{classify-1}	0	-	[info]	+1146	!	()	<Network & internet>_leftItem.png
-139	[00:00:22]	2025/01/28 15:05:22.958	{classify-1}	0	-	[info]	+52	!	()	[ImageClassifier/classifyImage] in 0.049 sec
-140	[00:00:22]	2025/01/28 15:05:22.960	{classify-1}	0	-	[EXPECTATION]	+2	!	()	expectation
-141	[00:00:22]	2025/01/28 15:05:22.962	{classify-1}	0	-	[OK]	+2	!	(thisIs)	label is [Network & internet Icon]
-142	[00:00:22]	2025/01/28 15:05:22.962	{classify-2}	0	-	[CASE]	+0	!	()	(2)
-143	[00:00:22]	2025/01/28 15:05:22.963	{classify-2}	0	-	[ACTION]	+1	!	()	action
-144	[00:00:22]	2025/01/28 15:05:22.992	{classify-2}	0	-	[info]	+29	!	()	[ImageClassifier/classifyImage] in 0.029 sec
-145	[00:00:22]	2025/01/28 15:05:22.994	{classify-2}	0	-	[EXPECTATION]	+2	!	()	expectation
-146	[00:00:22]	2025/01/28 15:05:22.994	{classify-2}	0	-	[OK]	+0	!	(thisIs)	fullLabel is @a[Android Settings App][Android Settings Top Screen][Network & internet Icon]
+140	[00:00:19]	2025/02/19 23:20:48.261	{classify-1}	0	-	[info]	+246	!	()	139_[138.png]_recognized_text_rectangles.png
+141	[00:00:19]	2025/02/19 23:20:48.444	{classify-1}	0	-	[info]	+183	!	()	[detect] in 1.874 sec
+2025-02-19 23:20:48.464 java[31276:424563] +[IMKClient subclass]: chose IMKClient_Modern
+2025-02-19 23:20:48.464 java[31276:424563] +[IMKInputSession subclass]: chose IMKInputSession_Modern
+142	[00:00:19]	2025/02/19 23:20:48.490	{classify-1}	0	-	[info]	+46	!	()	[SegmentContainer] in 0.043 sec
+143	[00:00:19]	2025/02/19 23:20:48.502	{classify-1}	0	-	[info]	+12	!	()	[split screenshot into segments] in 0.056 sec
+144	[00:00:20]	2025/02/19 23:20:49.012	{classify-1}	0	-	[info]	+510	!	()	[SegmentContainer] in 0.507 sec
+145	[00:00:20]	2025/02/19 23:20:49.088	{classify-1}	0	-	[info]	+76	!	()	split screenshot into segments. visionElements:1
+146	[00:00:20]	2025/02/19 23:20:49.091	{classify-1}	0	-	[info]	+3	!	()	[rightLeftCore] in 0.645 sec
+147	[00:00:20]	2025/02/19 23:20:49.093	{classify-1}	0	-	[info]	+2	!	()	<Network & internet>_leftItem.png
+148	[00:00:20]	2025/02/19 23:20:49.168	{classify-1}	0	-	[info]	+75	!	()	[ImageClassifier/classifyImage] in 0.072 sec
+149	[00:00:20]	2025/02/19 23:20:49.170	{classify-1}	0	-	[EXPECTATION]	+2	!	()	expectation
+150	[00:00:20]	2025/02/19 23:20:49.172	{classify-1}	0	-	[OK]	+2	!	(thisIs)	label is [Network & internet Icon]
+151	[00:00:20]	2025/02/19 23:20:49.173	{classify-2}	0	-	[CASE]	+1	!	()	(2)
+152	[00:00:20]	2025/02/19 23:20:49.187	{classify-2}	0	-	[ACTION]	+14	!	()	action
+153	[00:00:20]	2025/02/19 23:20:49.252	{classify-2}	0	-	[info]	+65	!	()	[ImageClassifier/classifyImage] in 0.063 sec
+154	[00:00:20]	2025/02/19 23:20:49.253	{classify-2}	0	-	[EXPECTATION]	+1	!	()	expectation
+155	[00:00:20]	2025/02/19 23:20:49.255	{classify-2}	0	-	[OK]	+2	!	(thisIs)	fullLabel is @a_Android Settings_Android Settings Top Screen_[Network & internet Icon]
 ```
 
 ### TestResults
@@ -74,7 +79,7 @@ Open the directory `build/vision/classifiers/DefaultClassifier/training`.
 `fullLabel` is the full description of the label.
 
 ```
-@a[Android Settings App][Android Settings Top Screen][Network & internet Icon]
+@a_Android Settings_Android Settings Top Screen_[Network & internet Icon]
 ```
 
 `label` is the short description.
@@ -108,7 +113,7 @@ Open the directory `build/vision/classifiers/DefaultClassifier/training`.
             }
             case(2) {
                 expectation {
-                    v1.imageFullLabelIs("@a[Android Settings App][Android Settings Top Screen][Network & internet Icon]")
+                    v1.imageFullLabelIs("@a_Android Settings_Android Settings Top Screen_[Network & internet Icon]")
                 }
             }
         }
@@ -120,18 +125,18 @@ Right-click on `imageIs()` and select `debug` to run test.
 ### Console output
 
 ```
-141	[00:00:26]	2025/02/04 18:16:18.529	{imageIs-1}	0	-	[EXPECTATION]	+975	!	()	expectation
-142	[00:00:26]	2025/02/04 18:16:18.532	{imageIs-1}	0	-	[info]	+3	!	(imageIs)	<Network & internet>_leftItem.png
-143	[00:00:26]	2025/02/04 18:16:18.603	{imageIs-1}	0	-	[info]	+71	!	(imageIs)	[ImageClassifier/classifyImage] in 0.069 sec
-144	[00:00:26]	2025/02/04 18:16:18.604	{imageIs-1}	0	-	[info]	+1	!	(imageIs)	label: [Network & internet Icon]
-145	[00:00:26]	2025/02/04 18:16:18.608	{imageIs-1}	0	-	[info]	+4	!	(imageIs)	144_text_ "", bounds_ [84,867][146,913] width=63, height=47, centerX=115, centerY=890, rect_ [84, 867, 146, 913](w=63, h=47).png
-146	[00:00:26]	2025/02/04 18:16:18.611	{imageIs-1}	0	-	[OK]	+3	!	(imageIs)	Image of <Network & internet>:leftItem is [Network & internet Icon]
-147	[00:00:26]	2025/02/04 18:16:18.612	{imageIs-2}	0	-	[CASE]	+1	!	()	(2)
-148	[00:00:26]	2025/02/04 18:16:18.613	{imageIs-2}	0	-	[EXPECTATION]	+1	!	()	expectation
-149	[00:00:26]	2025/02/04 18:16:18.655	{imageIs-2}	0	-	[info]	+42	!	(imageFullLabelIs)	[ImageClassifier/classifyImage] in 0.041 sec
-150	[00:00:26]	2025/02/04 18:16:18.656	{imageIs-2}	0	-	[info]	+1	!	(imageFullLabelIs)	fullLabel: @a[Android Settings App][Android Settings Top Screen][Network & internet Icon]
-151	[00:00:26]	2025/02/04 18:16:18.659	{imageIs-2}	0	-	[info]	+3	!	(imageFullLabelIs)	150_text_ "", bounds_ [84,867][146,913] width=63, height=47, centerX=115, centerY=890, rect_ [84, 867, 146, 913](w=63, h=47).png
-152	[00:00:26]	2025/02/04 18:16:18.661	{imageIs-2}	0	-	[OK]	+2	!	(imageFullLabelIs)	Image fullLabel of <Network & internet>:leftItem is @a[Android Settings App][Android Settings Top Screen][Network & internet Icon]
+156	[00:01:06]	2025/02/19 23:28:28.452	{imageIs-1}	0	-	[EXPECTATION]	+1	!	()	expectation
+157	[00:01:06]	2025/02/19 23:28:28.455	{imageIs-1}	0	-	[info]	+3	!	(imageIs)	<Network & internet>_leftItem.png
+158	[00:01:06]	2025/02/19 23:28:28.521	{imageIs-1}	0	-	[info]	+66	!	(imageIs)	[ImageClassifier/classifyImage] in 0.063 sec
+159	[00:01:06]	2025/02/19 23:28:28.524	{imageIs-1}	0	-	[info]	+3	!	(imageIs)	label: [Network & internet Icon]
+160	[00:01:06]	2025/02/19 23:28:28.526	{imageIs-1}	0	-	[info]	+2	!	(imageIs)	159_text_ "", bounds_ [84,868][147,913] width=64, height=46, centerX=116, centerY=891, rect_ [84, 868, 147, 913](w=64, h=46).png
+161	[00:01:06]	2025/02/19 23:28:28.532	{imageIs-1}	0	-	[OK]	+6	!	(imageIs)	Image of <Network & internet>:leftItem is [Network & internet Icon]
+162	[00:01:06]	2025/02/19 23:28:28.532	{imageIs-2}	0	-	[CASE]	+0	!	()	(2)
+163	[00:01:06]	2025/02/19 23:28:28.533	{imageIs-2}	0	-	[EXPECTATION]	+1	!	()	expectation
+164	[00:01:06]	2025/02/19 23:28:28.580	{imageIs-2}	0	-	[info]	+47	!	(imageFullLabelIs)	[ImageClassifier/classifyImage] in 0.046 sec
+165	[00:01:06]	2025/02/19 23:28:28.583	{imageIs-2}	0	-	[info]	+3	!	(imageFullLabelIs)	fullLabel: @a_Android Settings_Android Settings Top Screen_[Network & internet Icon]
+166	[00:01:06]	2025/02/19 23:28:28.587	{imageIs-2}	0	-	[info]	+4	!	(imageFullLabelIs)	165_text_ "", bounds_ [84,868][147,913] width=64, height=46, centerX=116, centerY=891, rect_ [84, 868, 147, 913](w=64, h=46).png
+167	[00:01:06]	2025/02/19 23:28:28.589	{imageIs-2}	0	-	[OK]	+2	!	(imageFullLabelIs)	Image fullLabel of <Network & internet>:leftItem is @a_Android Settings_Android Settings Top Screen_[Network & internet Icon]
 ```
 
 <br>

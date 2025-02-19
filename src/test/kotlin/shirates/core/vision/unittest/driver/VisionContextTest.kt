@@ -7,6 +7,7 @@ import shirates.core.driver.TestDriver
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.*
+import shirates.core.utility.string.forVisionComparison
 import shirates.core.utility.toPath
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.VisionContext
@@ -55,6 +56,7 @@ class VisionContextTest {
         run {
             val v = c.getVisionElements()[0]
             assertThat(v.text).isEqualTo("1:10 GO •:")
+            assertThat(v.textForComparison).isEqualTo("1:10 GO •:".forVisionComparison())
             assertThat(v.rect.toString()).isEqualTo(Rectangle(40, 49, 252, 44).toString())
             assertThat(v.recognizeTextObservation?.text).isEqualTo("1:10 GO •:")
             assertThat(v.recognizeTextObservation?.jsonString).isEqualTo(json)

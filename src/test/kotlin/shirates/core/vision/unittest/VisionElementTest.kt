@@ -43,6 +43,6 @@ class VisionElementTest {
         val cell = v.getCell(horizontalMargin = 20, verticalMargin = 20)
         cell.saveImage()
         // Assert
-        assertThat(cell.rect.toString()).isEqualTo("[46, 500, 1132, 847](w=1087, h=348)")
+        assertThat(cell.rect.toString()).isEqualTo("[46, 500, 1133, 847](w=1088, h=348)")
     }
 }
