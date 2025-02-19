@@ -8,6 +8,7 @@ import shirates.core.exception.TestDriverException
 import shirates.core.testcode.Want
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.waitForDisplay
 import shirates.core.vision.testcode.VisionTest
 
 @Want
@@ -19,6 +20,7 @@ class TestDriveScreenExtensionTest : VisionTest() {
 
         // Arrange
         it.restartApp()
+            .waitForDisplay("General")
         // Act, Assert
         assertThat(it.screenName).isEqualTo("[iOS Settings Top Screen]")
     }
@@ -28,6 +30,7 @@ class TestDriveScreenExtensionTest : VisionTest() {
 
         // Arrange
         it.restartApp()
+            .waitForDisplay("General")
         // Assert
         assertThat(it.isScreen("[iOS Settings Top Screen]")).isTrue()
 
@@ -41,6 +44,7 @@ class TestDriveScreenExtensionTest : VisionTest() {
 
         // Arrange
         it.restartApp()
+            .waitForDisplay("General")
         // Assert
         assertThat(it.isScreenOf("[iOS Settings Top Screen]", "[About Screen]")).isTrue()
 
@@ -54,6 +58,7 @@ class TestDriveScreenExtensionTest : VisionTest() {
 
         // Arramge
         it.restartApp()
+            .waitForDisplay("General")
         // Assert
         it.waitScreenOf("[iOS Settings Top Screen]", "[About Screen]", waitSeconds = 1.1)
 
@@ -70,7 +75,7 @@ class TestDriveScreenExtensionTest : VisionTest() {
         // Arrange
         it.restartApp()
         // Assert
-        it.waitScreen("[iOS Settings Top Screen]", waitSeconds = 1.1)
+        it.waitScreen("[iOS Settings Top Screen]", waitSeconds = 10.0)
 
         run {
             // Arrange
