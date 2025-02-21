@@ -405,7 +405,7 @@ class VisionContext(
 
         recognizeText(language = language)
 
-        var targetText =
+        val targetText =
             selector.text ?: selector.textStartsWith ?: selector.textContains ?: selector.textEndsWith ?: ""
         if (targetText.isBlank()) {
             return VisionElement.emptyElement
@@ -414,21 +414,20 @@ class VisionContext(
 
         var candidates = detectCandidates(containedText = targetTextForComparison)
         if (selector.text != null) {
-            val filteredByLength =
-                candidates.filter { it.textForComparison.length <= targetTextForComparison.length * 2 }
+            val length = targetTextForComparison.length
+            val maxLength = (if (length <= 6) (length + 3) else (length * 1.5)).toInt()
+            val filteredByLength = candidates.filter { it.textForComparison.length <= maxLength }
             candidates = filteredByLength
             if (candidates.count() >= 2) {
-                var list =
-                    candidates.filter { it.textForComparison.length == targetTextForComparison.length }   // exact match
+                var list = candidates.filter { it.textForComparison.length == length }   // exact match
                 if (list.any()) {
                     candidates = list
                 } else {
-                    list =
-                        candidates.filter { it.textForComparison.length <= targetTextForComparison.length + 1 }   // near match
+                    list = candidates.filter { it.textForComparison.length <= length + 1 }   // near match
                     if (list.any()) {
                         candidates = list
                     } else {
-                        // targetTextForComparison.length * 2
+                        //
                     }
                 }
             }
