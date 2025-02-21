@@ -410,27 +410,29 @@ class VisionContext(
         if (targetText.isBlank()) {
             return VisionElement.emptyElement
         }
-        targetText = targetText.forVisionComparison()
+        val targetTextForComparison = targetText.forVisionComparison()
 
-        var candidates = detectCandidates(containedText = targetText)
+        var candidates = detectCandidates(containedText = targetTextForComparison)
         if (selector.text != null) {
-            candidates = candidates.filter { it.textForComparison.length <= targetText.length * 1.5 }
+            candidates = candidates.filter { it.textForComparison.length <= targetTextForComparison.length * 1.5 }
             if (candidates.count() >= 2) {
-                var list = candidates.filter { it.textForComparison.length == targetText.length }   // exact match
+                var list =
+                    candidates.filter { it.textForComparison.length == targetTextForComparison.length }   // exact match
                 if (list.any()) {
                     candidates = list
                 } else {
-                    list = candidates.filter { it.textForComparison.length <= targetText.length + 1 }   // near match
+                    list =
+                        candidates.filter { it.textForComparison.length <= targetTextForComparison.length + 1 }   // near match
                     if (list.any()) {
                         candidates = list
                     } else {
-                        // targetText.length * 1.5
+                        // targetTextForComparison.length * 1.5
                     }
                 }
             }
         } else if (selector.textStartsWith != null) {
             val list = candidates.filter {
-                val ix = it.textForComparison.indexOf(targetText)
+                val ix = it.textForComparison.indexOf(targetTextForComparison)
                 0 <= ix && ix <= 1
             }
             if (list.any()) {
@@ -438,9 +440,9 @@ class VisionContext(
             }
         } else if (selector.textEndsWith != null) {
             val list = candidates.filter {
-                val ix = it.textForComparison.indexOf(targetText)
+                val ix = it.textForComparison.indexOf(targetTextForComparison)
                 val subtext = it.text.substring(ix)
-                val lengthDiff = subtext.length - targetText.length
+                val lengthDiff = subtext.length - targetTextForComparison.length
                 lengthDiff <= 1
             }
             if (list.any()) {
@@ -452,7 +454,7 @@ class VisionContext(
             (if (last) candidates.lastOrNull()
             else candidates.firstOrNull())
                 ?: VisionElement.emptyElement
-        if (removeRedundantText && v.textForComparison.indexOf(targetText) > 0) {
+        if (removeRedundantText && v.isMerged.not() && v.textForComparison.indexOf(targetTextForComparison) > 0) {
             val v2 = removeRedundantText(
                 visionElement = v,
                 expectedText = targetText,

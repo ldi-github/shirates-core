@@ -3,7 +3,6 @@ package shirates.core.vision.uitest.android.driver.commandextension
 import org.junit.jupiter.api.Test
 import shirates.core.driver.commandextension.thisContains
 import shirates.core.driver.commandextension.thisIs
-import shirates.core.driver.commandextension.thisIsNot
 import shirates.core.testcode.ios
 import shirates.core.vision.driver.commandextension.exist
 import shirates.core.vision.driver.commandextension.screenIs
@@ -40,9 +39,7 @@ class VisionDriveDetectExtensionTest7 : VisionTest() {
                     val expected =
                         " will turn on when iPhone is placed on its side while charging to show information like widgets, photo frames, or clocks."
                     it.exist(expected)
-                    it.text.thisIsNot(expected)
                     it.text.thisContains(expected)
-                    it.joinedText.thisIsNot(expected)
                     it.joinedText.thisContains(expected)
                 }
             }

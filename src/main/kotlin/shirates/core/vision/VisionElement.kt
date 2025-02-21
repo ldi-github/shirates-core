@@ -128,6 +128,14 @@ open class VisionElement(
     var mergedElements = mutableListOf<VisionElement>()
 
     /**
+     * isMerged
+     */
+    val isMerged: Boolean
+        get() {
+            return mergedElements.any()
+        }
+
+    /**
      * rect
      */
     val rect: Rectangle
