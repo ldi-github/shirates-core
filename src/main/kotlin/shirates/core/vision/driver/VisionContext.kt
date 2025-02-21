@@ -452,7 +452,7 @@ class VisionContext(
             (if (last) candidates.lastOrNull()
             else candidates.firstOrNull())
                 ?: VisionElement.emptyElement
-        if (removeRedundantText && v.text.indexOf(targetText) > 0) {
+        if (removeRedundantText && v.textForComparison.indexOf(targetText) > 0) {
             val v2 = removeRedundantText(
                 visionElement = v,
                 expectedText = targetText,
