@@ -265,7 +265,7 @@ class VisionContext(
         }
 
         if (rootElement == null) {
-            rootElement = VisionElement(capture = true)
+            rootElement = visionDrive.rootElement
         }
 
         val rootVisionContext = rootElement!!.visionContext

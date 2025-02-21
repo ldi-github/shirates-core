@@ -24,7 +24,6 @@ import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isVirtualDevice
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.behavior.LanguageHelperAndroid
 import shirates.core.driver.behavior.TapHelper
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.eventextension.TestDriveOnScreenContext
@@ -623,15 +622,6 @@ object TestDriver {
 
         ms.end()
         TestLog.info("AppiumDriver initialized.")
-
-        /**
-         * Bug workaround
-         * Android emulator often fails to change language and locale.
-         * Try using LanguageHelperForAndroid if androidLanguageAndRegion is set on android emulator.
-         */
-        if (TestMode.isAndroid && TestMode.isEmulator && PropertiesManager.androidLanguageAndRegion.isNotBlank()) {
-            LanguageHelperAndroid.setLanguageAndRegion(PropertiesManager.androidLanguageAndRegion)
-        }
     }
 
     private fun wdaInstallOptimization(profile: TestProfile) {
@@ -830,6 +820,13 @@ object TestDriver {
             val e = context.exception
             if (e != null) {
                 val message = e.message ?: ""
+                if (message.contains("Cannot set the device locale to ")) {
+                    /**
+                     * Workaround for unstable language setting on Appium app.
+                     * Remove Appium app to clear data.
+                     */
+                    AdbUtility.uninstall(packageName = "io.appium.settings", udid = profile.udid)
+                }
                 /**
                  * Throw exception on critical error
                  * Exit retrying loop immediately

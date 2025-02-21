@@ -1,6 +1,5 @@
 package shirates.core.driver.behavior
 
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.*
 import shirates.core.vision.driver.commandextension.setOCRLanguage
 
@@ -19,11 +18,7 @@ object LanguageHelper : TestDrive {
         if (TestMode.isVisionTest) {
             visionDrive.setOCRLanguage(ocrLanguage)
         }
-        if (TestMode.isAndroid && TestMode.isEmulator && PropertiesManager.androidLanguageAndRegion.isNotBlank()) {
-            LanguageHelperAndroid.setLanguageAndRegion(PropertiesManager.androidLanguageAndRegion)
-        } else {
-            TestDriver.createAppiumDriver(profile = testProfile)
-        }
+        TestDriver.createAppiumDriver(profile = testProfile)
     }
 
 }

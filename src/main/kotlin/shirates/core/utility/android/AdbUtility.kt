@@ -2,6 +2,7 @@ package shirates.core.utility.android
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestMode
+import shirates.core.driver.testProfile
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
 
@@ -149,5 +150,22 @@ object AdbUtility {
 
         val list2 = list.filter { it.startsWith("[x]") && it.endsWith(name) }
         return list2.any()
+    }
+
+    /**
+     * uninstall
+     */
+    fun uninstall(
+        packageName: String,
+        udid: String = testProfile.udid
+    ): ShellUtility.ShellResult {
+        val result = ShellUtility.executeCommand(
+            "adb",
+            "-s",
+            udid,
+            "uninstall",
+            packageName
+        )
+        return result
     }
 }
