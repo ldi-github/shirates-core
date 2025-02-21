@@ -414,7 +414,9 @@ class VisionContext(
 
         var candidates = detectCandidates(containedText = targetTextForComparison)
         if (selector.text != null) {
-            candidates = candidates.filter { it.textForComparison.length <= targetTextForComparison.length * 1.5 }
+            val filteredByLength =
+                candidates.filter { it.textForComparison.length <= targetTextForComparison.length * 2 }
+            candidates = filteredByLength
             if (candidates.count() >= 2) {
                 var list =
                     candidates.filter { it.textForComparison.length == targetTextForComparison.length }   // exact match
@@ -426,7 +428,7 @@ class VisionContext(
                     if (list.any()) {
                         candidates = list
                     } else {
-                        // targetTextForComparison.length * 1.5
+                        // targetTextForComparison.length * 2
                     }
                 }
             }

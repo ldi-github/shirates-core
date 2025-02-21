@@ -51,7 +51,7 @@ class TestDriveScrollExtensionTest3 : VisionTest() {
             }
         )
         // Assert
-        val lastItem = it.detect("sandbox")
+        val lastItem = it.detect("sandbox apple account")
         assertThat(lastItem.isFound).isTrue()
     }
 
