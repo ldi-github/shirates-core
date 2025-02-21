@@ -31,7 +31,7 @@ class VisionDriveDetectExtensionTest7 : VisionTest() {
                     val expected =
                         "StandBy will turn on when iPhone is placed on its side while charging to show information like widgets, photo frames, or clocks."
                     it.exist(expected)
-                    it.text.thisIs("StandBy will turn on when iPhone is placed on its")
+                    it.text.thisIs(expected)
                     it.joinedText.thisIs(expected)
                 }
             }
@@ -40,7 +40,8 @@ class VisionDriveDetectExtensionTest7 : VisionTest() {
                     val expected =
                         " will turn on when iPhone is placed on its side while charging to show information like widgets, photo frames, or clocks."
                     it.exist(expected)
-                    it.text.thisIs("StandBy will turn on when iPhone is placed on its")
+                    it.text.thisIsNot(expected)
+                    it.text.thisContains(expected)
                     it.joinedText.thisIsNot(expected)
                     it.joinedText.thisContains(expected)
                 }
