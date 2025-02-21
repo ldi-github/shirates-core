@@ -110,7 +110,7 @@ internal fun removeRedundantText(
     }
 
     v2.recognizeTextLocal(language = language)
-    if (v2.recognizeTextObservation != null) {
+    if (v2.visionContext.recognizeTextObservations.isNotEmpty()) {
         v2.recognizeTextObservation!!.text = expectedText
         v2.recognizeTextObservation!!.localRegionX = offsetRect.left
     }

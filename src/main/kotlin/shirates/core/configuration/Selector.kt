@@ -89,7 +89,8 @@ class Selector(
             for (sel in selectors) {
                 filters.addAll(sel.filterMap.values)
             }
-            val textFilters = filters.filter { it.name == "text" || it.name == "textContains" }
+            val textFilters =
+                filters.filter { it.name == "text" || it.name == "textStartsWith" || it.name == "textContains" || it.name == "textEndsWith" }
             return textFilters
         }
 

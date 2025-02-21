@@ -84,8 +84,8 @@ internal fun VisionDrive.existCore(
     var v = detectAction()
     if (v.isEmpty) {
         screenshot(force = true)
+        v = detectAction()
     }
-    v = detectAction()
 
     lastVisionElement = v
 

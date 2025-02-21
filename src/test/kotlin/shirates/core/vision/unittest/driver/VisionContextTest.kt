@@ -3,6 +3,7 @@ package shirates.core.vision.unittest.driver
 import com.google.common.io.Files
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.Selector
 import shirates.core.driver.TestDriver
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
@@ -89,10 +90,10 @@ class VisionContextTest {
             )
         run {
             // Arrange
-            TestDriver.visionRootElement = VisionElement()
+            TestDriver.visionRootElement = VisionElement(capture = true)
             CodeExecutionContext.workingRegionElement = TestDriver.visionRootElement
             // Act
-            val v = c.detect(text = "SIMs", last = false, removeRedundantText = true)
+            val v = c.detect(selector = Selector("SIMs"), last = false, removeRedundantText = true)
             // Assert
             assertThat(v.isFound).isTrue()
         }

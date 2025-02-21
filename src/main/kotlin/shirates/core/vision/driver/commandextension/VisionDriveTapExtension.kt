@@ -567,6 +567,7 @@ fun VisionDrive.tapBelow(
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = 0.0,
             throwsException = true,
         )
         v = labelElement.belowItem(
@@ -621,6 +622,7 @@ fun VisionDrive.tapRight(
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = 0.0,
             throwsException = true,
         )
         v = labelElement.rightItem(

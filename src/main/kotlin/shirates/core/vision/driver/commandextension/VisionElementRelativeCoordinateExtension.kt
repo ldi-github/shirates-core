@@ -558,10 +558,10 @@ fun VisionElement.leftImage(
             skinThickness = skinThickness,
         )
     }
+    imageElements = imageElements.filter { it.rect.left <= this.rect.left }
     if (imageElements.isEmpty() || imageElements.count() < pos) {
         return VisionElement.emptyElement
     }
-    imageElements = imageElements.filter { it.rect.left <= this.rect.left }
     imageElements = imageElements.sortedByDescending { it.rect.left }
     val v = imageElements[pos - 1]
     v.selector = Selector(":leftImage(\"$label\", $pos)")
@@ -596,10 +596,10 @@ fun VisionElement.rightImage(
             skinThickness = skinThickness,
         )
     }
+    imageElements = imageElements.filter { this.rect.left < it.rect.left }
     if (imageElements.isEmpty() || imageElements.count() < pos) {
         return VisionElement.emptyElement
     }
-    imageElements = imageElements.filter { this.rect.left < it.rect.left }
     imageElements = imageElements.sortedBy { it.rect.left }
     val v = imageElements[pos - 1]
     v.selector = Selector(":rightImage(\"$label\", $pos)")
@@ -634,10 +634,10 @@ fun VisionElement.aboveImage(
             skinThickness = skinThickness,
         )
     }
+    imageElements = imageElements.filter { it.rect.top <= this.rect.top }
     if (imageElements.isEmpty() || imageElements.count() < pos) {
         return VisionElement.emptyElement
     }
-    imageElements = imageElements.filter { it.rect.top <= this.rect.top }
     imageElements = imageElements.sortedByDescending { it.rect.top }
     val v = imageElements[pos - 1]
     v.selector = Selector(":aboveImage(\"$label\", $pos)")
@@ -672,10 +672,10 @@ fun VisionElement.belowImage(
             skinThickness = skinThickness,
         )
     }
+    imageElements = imageElements.filter { this.rect.top < it.rect.top }
     if (imageElements.isEmpty() || imageElements.count() < pos) {
         return VisionElement.emptyElement
     }
-    imageElements = imageElements.filter { this.rect.top < it.rect.top }
     imageElements = imageElements.sortedBy { it.rect.top }
     val v = imageElements[pos - 1]
     v.selector = Selector(":belowImage(\"$label\", $pos)")
@@ -710,10 +710,10 @@ fun VisionElement.leftRadioButton(
             skinThickness = skinThickness,
         )
     }
+    imageElements = imageElements.filter { it.rect.left <= this.rect.left }
     if (imageElements.isEmpty() || imageElements.count() < pos) {
         return VisionElement.emptyElement
     }
-    imageElements = imageElements.filter { it.rect.left <= this.rect.left }
     imageElements = imageElements.sortedByDescending { it.rect.left }
     val v = imageElements[pos - 1]
     v.selector = Selector(":leftRadioButton($pos)")

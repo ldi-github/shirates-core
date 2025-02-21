@@ -6,14 +6,11 @@ import shirates.core.configuration.Selector
 import shirates.core.driver.Bounds
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElement
-import shirates.core.driver.TestMode
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.logging.LogType
-import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.Rectangle
 import shirates.core.utility.image.Segment
-import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.image.getMatchRate
 import shirates.core.utility.string.forVisionComparison
 import shirates.core.vision.driver.VisionContext
@@ -126,6 +123,11 @@ open class VisionElement(
     var lastResult: LogType = LogType.NONE
 
     /**
+     * mergedElements
+     */
+    var mergedElements = mutableListOf<VisionElement>()
+
+    /**
      * rect
      */
     val rect: Rectangle
@@ -194,8 +196,12 @@ open class VisionElement(
      */
     val text: String
         get() {
-            val t = recognizeTextObservation?.text ?: ""
-            return t
+            visionContext.recognizeText()
+            if (mergedElements.isEmpty()) {
+                val t = recognizeTextObservation?.text ?: ""
+                return t
+            }
+            return joinedText
         }
 
     /**
@@ -350,40 +356,6 @@ open class VisionElement(
 
         visionContext.saveImage(fileName = fileName ?: selector?.toString())
         return this
-    }
-
-    /**
-     * getCell
-     */
-    fun getCell(
-        horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
-        verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    ): VisionElement {
-
-        if (TestMode.isNoLoadRun) {
-            return this
-        }
-
-        val segmentContainer = SegmentContainer(
-            mergeIncluded = false,
-            containerImageFile = visionContext.screenshotFile!!,
-            outputDirectory = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_segments").toString(),
-            segmentMarginHorizontal = horizontalMargin,
-            segmentMarginVertical = verticalMargin,
-        ).split()
-        val rects = segmentContainer.segments.map { it.rectOnScreen }
-        val includingRects = mutableListOf<Rectangle>()
-        for (rect in rects) {
-            if (visionContext.rectOnScreen!!.toBoundsWithRatio().isIncludedIn(rect.toBoundsWithRatio())) {
-                includingRects.add(rect)
-            }
-        }
-        includingRects.sortByDescending { it.area }
-
-        val first = includingRects.firstOrNull() ?: Rectangle()
-        val cell = first.toVisionElement()
-
-        return cell
     }
 
     /**
