@@ -65,7 +65,7 @@ class RetryUtility {
                 }
             }
 
-            val stopWatch = StopWatch()
+            val stopWatch = StopWatch("execWithContext")
 
             execute()
             if (context.exception == null) {

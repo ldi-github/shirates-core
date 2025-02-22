@@ -79,7 +79,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
 
         run {
             // Arrange
-            val sw = StopWatch()
+            val sw = StopWatch("1")
             // Assert
             assertThatThrownBy {
                 sw.start()
@@ -93,7 +93,7 @@ class VisionDriveScreenExtensionTest : VisionTest() {
 
         run {
             // Arrange
-            val sw = StopWatch()
+            val sw = StopWatch("2")
             // Assert
             assertThatThrownBy {
                 sw.start()

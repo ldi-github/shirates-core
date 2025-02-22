@@ -1955,9 +1955,7 @@ object TestDriver {
 
             val sw = StopWatch("syncScreenshot")
             visionDrive.syncScreen()
-            if (CodeExecutionContext.shouldOutputLog) {
-                sw.printInfo()
-            }
+            sw.stop()
 
             val newImage = CodeExecutionContext.lastScreenshotImage
             val changed = newImage.isSame(oldImage).not()
@@ -2328,7 +2326,6 @@ object TestDriver {
             val context = TestDriverCommandContext(lastElement)
             context.execSilentCommand() {
                 var lastXml = TestElementCache.sourceXml
-                val sw2 = StopWatch().start()
                 val enableSyncLog = PropertiesManager.enableSyncLog || TestLog.enableTrace
 
                 for (i in 1..maxLoopCount) {
@@ -2354,17 +2351,17 @@ object TestDriver {
                         /**
                          * Synced
                          */
-                        TestLog.info(
-                            "Synced. (elapsed=${sw2.elapsedSeconds})",
-                            log = enableSyncLog
-                        )
+//                        TestLog.info(
+//                            "Synced. (elapsed=${sw.elapsedSeconds})",
+//                            log = enableSyncLog
+//                        )
                         refreshCurrentScreen()
                         return@execSilentCommand
                     }
 
                     lastXml = TestElementCache.sourceXml
 
-                    if (sw2.elapsedSeconds > syncWaitSeconds) {
+                    if (sw.elapsedSeconds > syncWaitSeconds) {
                         if (syncOnTimeout) {
                             /**
                              * Synced(Timeout)
@@ -2373,19 +2370,19 @@ object TestDriver {
                             refreshCurrentScreen()
                             val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
                             TestLog.info(
-                                "Synchronization timed out (elapsed=${sw2.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
+                                "Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
                                 log = enableSyncLog
                             )
                             return@execSilentCommand
                         } else {
-                            throw TestDriverException("Synchronization timed out (elapsed=${sw2.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
+                            throw TestDriverException("Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
                         }
                     }
 
                     /**
                      * Before next loop
                      */
-                    TestLog.info("elapsed=${sw2.elapsedSeconds}, syncWaitSeconds=$syncWaitSeconds", log = enableSyncLog)
+                    TestLog.info("elapsed=${sw.elapsedSeconds}, syncWaitSeconds=$syncWaitSeconds", log = enableSyncLog)
                     if (isAndroid) {
                         Thread.sleep((syncIntervalSeconds * 1000).toLong())
                         // Wait is required for Android because getSource of AndroidDriver is too fast.
@@ -2394,13 +2391,13 @@ object TestDriver {
                 TestElementCache.synced = true
                 refreshCurrentScreen()
                 TestLog.info(
-                    "Loop count has been exceeded. (maxLoopCount=$maxLoopCount, elapsed=${sw2.elapsedSeconds}, currentScreen=$currentScreen)",
+                    "Loop count has been exceeded. (maxLoopCount=$maxLoopCount, elapsed=${sw.elapsedSeconds}, currentScreen=$currentScreen)",
                     log = enableSyncLog
                 )
             }
         } finally {
             isSyncing = false
-            sw.printInfo()
+            sw.stop()
         }
 
         return this

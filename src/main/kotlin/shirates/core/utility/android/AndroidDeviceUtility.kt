@@ -510,7 +510,7 @@ object AndroidDeviceUtility {
         timeoutSeconds: Double,
         intervalMilliseconds: Long
     ): AndroidDeviceInfo {
-        val sw = StopWatch().start()
+        val sw = StopWatch("waitEmulatorStatus").start()
         while (true) {
             val device = getDevice()
             if (device != null && device.status == status) {

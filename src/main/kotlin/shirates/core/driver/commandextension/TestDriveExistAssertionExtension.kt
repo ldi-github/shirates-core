@@ -737,7 +737,7 @@ fun TestDrive.existAll(
 
     var wsec = waitSeconds
 
-    val sw = StopWatch()
+    val sw = StopWatch("existAll")
     sw.start()
 
     for (expression in expressions) {

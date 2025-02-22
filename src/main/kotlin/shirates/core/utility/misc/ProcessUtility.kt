@@ -9,7 +9,7 @@ object ProcessUtility {
     /**
      * getPid
      */
-    fun getPid(port: Int): Int? {
+    fun getPid(port: Int, log: Boolean = false): Int? {
 
         try {
             if (TestMode.isRunningOnWindows) {
@@ -19,7 +19,7 @@ object ProcessUtility {
                 val pid = line.split(" ").lastOrNull()?.toIntOrNull()
                 return pid
             } else {
-                val r = ShellUtility.executeCommandCore("lsof", "-t", "-i:$port", "-sTCP:LISTEN")
+                val r = ShellUtility.executeCommandCore("lsof", "-t", "-i:$port", "-sTCP:LISTEN", log = log)
                 val pid = r.resultString.trim().toIntOrNull()
                 return pid
             }

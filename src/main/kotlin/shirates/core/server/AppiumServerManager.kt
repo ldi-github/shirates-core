@@ -183,8 +183,7 @@ object AppiumServerManager {
         Thread.sleep(2000)
 
         // Wait for listening to the port
-        val sw = StopWatch()
-        sw.start()
+        val sw = StopWatch("startAppiumProcess")
         while (true) {
             if (sw.elapsedSeconds > appiumServerStartupTimeoutSeconds) {
                 throw TestDriverException(

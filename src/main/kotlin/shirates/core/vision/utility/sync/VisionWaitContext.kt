@@ -12,7 +12,7 @@ open class VisionWaitContext(
     override var error: Throwable? = null,
     override var retryOnError: Boolean,
     override var throwOnFinally: Boolean,
-    override var stopWatch: StopWatch = StopWatch(),
+    override var stopWatch: StopWatch = StopWatch("VisionWaitContext"),
     override var count: Int = 0,
     override var isTimeout: Boolean = false,
     override var onTimeout: (VisionWaitContext) -> Unit,

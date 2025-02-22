@@ -326,7 +326,7 @@ class VisionServerProxyTest : UnitTest() {
 //
 //            // Assert
 ////            assertThat(result).contains("[Android Settings Top Screen(misaligned)]")
-//            sw.printInfo()
+//            sw.stop()
 //        }
 //    }
 //

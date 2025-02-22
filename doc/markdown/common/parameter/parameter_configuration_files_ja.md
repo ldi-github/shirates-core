@@ -138,6 +138,7 @@ ios.profile=iOS *
 #enableGetSourceLog=true
 #enableTrace=true
 #enableTimeMeasureLog=true
+#enableStopWatchLog=false
 #enableShellExecLog=true
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true

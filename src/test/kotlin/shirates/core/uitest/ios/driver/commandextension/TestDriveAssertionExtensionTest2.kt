@@ -91,10 +91,9 @@ class TestDriveAssertionExtensionTest2 : UITest() {
             case(2) {
                 expectation {
                     // Arrange
-                    val sw = StopWatch()
+                    val sw = StopWatch("case(2)")
                     // Act, Assert
                     assertThatThrownBy {
-                        sw.start()
                         it.existAll(
                             "Settings",
                             "General",
@@ -107,16 +106,14 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                         )
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
-                    val millisec = sw.elapsedMillis
-                    println("millisec=$millisec")
-                    assertThat(millisec >= 1000).isTrue()
+                    sw.stop()
+                    assertThat(sw.elapsedMillis >= 1000).isTrue()
                 }
             }
             case(3) {
                 expectation {
-                    val sw = StopWatch()
+                    val sw = StopWatch("case(3)")
                     assertThatThrownBy {
-                        sw.start()
                         it.existAll(
                             "Settings",
                             "General",
@@ -129,9 +126,8 @@ class TestDriveAssertionExtensionTest2 : UITest() {
                         )
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
-                    val millisec = sw.elapsedMillis
-                    println("millisec=$millisec")
-                    assertThat(millisec >= 2000).isTrue()
+                    sw.stop()
+                    assertThat(sw.elapsedMillis >= 2000).isTrue()
                 }
             }
         }

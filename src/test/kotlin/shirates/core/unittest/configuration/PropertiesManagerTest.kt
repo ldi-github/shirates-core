@@ -838,6 +838,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun enableStopWatchLog() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.enableStopWatchLog).isEqualTo(Const.ENABLE_STOP_WATCH_LOG)
+        }
+        run {
+            // Arrange
+            val value = Const.ENABLE_STOP_WATCH_LOG.not()
+            PropertiesManager.setPropertyValue("enableStopWatchLog", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.enableStopWatchLog).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun imageMatchDetailLog() {
 
         run {

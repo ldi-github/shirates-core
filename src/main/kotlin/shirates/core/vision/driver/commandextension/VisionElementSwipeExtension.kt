@@ -23,6 +23,7 @@ fun VisionElement.swipeTo(
     adjust: Boolean = false,
     repeat: Int = 1,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "swipeTo"
@@ -42,6 +43,7 @@ fun VisionElement.swipeTo(
             throwsException = false,
             swipeToSafePosition = false,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
 
         v = swipeElementToElement(

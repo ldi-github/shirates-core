@@ -7,7 +7,6 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.exception.TestDriverException
 import shirates.core.exception.TestEnvironmentException
 import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
 import shirates.core.proxy.HttpProxy
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.file.copyFileTo
@@ -61,7 +60,7 @@ object VisionServerProxy {
         val jsonString = getResponseBody(url)
         lastJsonString = jsonString
 
-        sw.printInfo()
+        sw.stop()
         val result = SetupImageFeaturePrintConfigResult(jsonString)
         if (result.message.contains("image count: 0")) {
             TestLog.warn("ImageFeaturePrintRepository could not be initialized. Image file not found in ${inputDirectory.toPath()}")
@@ -102,9 +101,7 @@ object VisionServerProxy {
         file.parent.toFile().mkdirs()
         file.toFile().writeText(jsonString)
 
-        if (CodeExecutionContext.shouldOutputLog) {
-            sw.printInfo()
-        }
+        sw.stop()
         return ClassifyScreenResult(jsonString)
     }
 
@@ -152,9 +149,7 @@ object VisionServerProxy {
 //        file.parent.toFile().mkdirs()
 //        file.toFile().writeText(jsonString)
 //
-//        if (CodeExecutionContext.shouldOutputLog) {
-//            sw.printInfo()
-//        }
+//        sw.stop()
 //        return ClassifyWithImageFeaturePrintOrTextResult(jsonString)
 //    }
 
@@ -208,7 +203,7 @@ object VisionServerProxy {
             CodeExecutionContext.lastRecognizedJsonFile = jsonFile
         }
 
-        sw.printInfo()
+        sw.stop()
         return RecognizeTextResult(result)
     }
 
@@ -237,9 +232,7 @@ object VisionServerProxy {
             log = log,
         )
 
-        if (log) {
-            sw.printInfo()
-        }
+        sw.stop()
         return lastJsonString
     }
 
@@ -269,8 +262,8 @@ object VisionServerProxy {
             inputDirectory.toPath().resolve("${TestLog.currentLineNo}_ImageFeaturePrintMatcher_matchWithTemplate.json")
                 .toFile()
                 .writeText(result)
-            sw.printInfo()
         }
+        sw.stop()
         return lastJsonString
     }
 
@@ -348,9 +341,6 @@ object VisionServerProxy {
         val candidateFile = outputDirectory.resolve("candidate_${pc.rectangle}_distance=${pc.distance}.png")
         primaryCandidateImageFile.copyFileTo(candidateFile)
         sw.stop()
-        if (log) {
-            sw.printInfo()
-        }
         return result
     }
 
@@ -386,9 +376,7 @@ object VisionServerProxy {
         val result = getResponseBody(url)
         lastJsonString = result
 
-        if (log) {
-            sw.printInfo()
-        }
+        sw.stop()
         return ClassifyImageResult(jsonString = result)
     }
 
@@ -417,9 +405,7 @@ object VisionServerProxy {
 //        val jsonString = getResponseBody(url)
 //        lastJsonString = jsonString
 //
-//        if (log) {
-//            sw.printInfo()
-//        }
+//        sw.stop()
 //        return jsonString
 //    }
 //
@@ -459,9 +445,7 @@ object VisionServerProxy {
 //        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_RectangleDetector_detectRectanglesIncludingRect.json")
 //            .toFile().writeText(jsonString)
 //
-//        if (log) {
-//            sw.printInfo()
-//        }
+//        sw.stop()
 //        return DetectRectanglesIncludingRectResult(jsonString = jsonString)
 //    }
 //
@@ -512,9 +496,7 @@ object VisionServerProxy {
 //        TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_RectangleDetector_detectRectanglesIncludingText.json")
 //            .toFile().writeText(result)
 //
-//        if (log) {
-//            sw.printInfo()
-//        }
+//        sw.stop()
 //        return result
 //    }
 }

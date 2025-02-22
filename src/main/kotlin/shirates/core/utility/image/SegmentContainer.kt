@@ -4,7 +4,6 @@ import boofcv.io.image.UtilImageIO
 import boofcv.struct.image.GrayU8
 import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.file.exists
 import shirates.core.utility.file.resolve
@@ -334,6 +333,7 @@ class SegmentContainer(
         binaryThreshold: Int = this.binaryThreshold,
         aspectRatioTolerance: Double = this.aspectRatioTolerance,
         segmentationPng: Boolean = true,
+        log: Boolean = CodeExecutionContext.shouldOutputLog
     ): SegmentContainer {
 
         val sw = StopWatch("SegmentContainer")
@@ -419,7 +419,7 @@ class SegmentContainer(
             drawImage.saveImage(file = outputDirectory.resolve("segmentation.png"), log = false)
         }
 
-        sw.printInfo()
+        sw.stop()
 
         return this
     }

@@ -9,7 +9,6 @@ import shirates.core.driver.*
 import shirates.core.driver.TestDriver.appiumDriver
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.rect
 import shirates.core.utility.load.CpuLoadService
@@ -245,7 +244,7 @@ fun VisionDrive.swipeCenterToTop(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -270,7 +269,7 @@ fun VisionDrive.flickCenterToTop(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -300,7 +299,7 @@ fun VisionDrive.swipeCenterToBottom(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -325,7 +324,7 @@ fun VisionDrive.flickCenterToBottom(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -355,7 +354,7 @@ fun VisionDrive.swipeCenterToLeft(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -380,7 +379,7 @@ fun VisionDrive.flickCenterToLeft(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -410,7 +409,7 @@ fun VisionDrive.swipeCenterToRight(
             repeat = repeat,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -435,7 +434,7 @@ fun VisionDrive.flickCenterToRight(
             repeat = repeat,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -467,7 +466,7 @@ fun VisionDrive.swipeLeftToRight(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -494,7 +493,7 @@ fun VisionDrive.flickLeftToRight(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -526,7 +525,7 @@ fun VisionDrive.swipeRightToLeft(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -553,7 +552,7 @@ fun VisionDrive.flickRightToLeft(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -586,7 +585,7 @@ fun VisionDrive.swipeBottomToTop(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -613,7 +612,7 @@ fun VisionDrive.flickBottomToTop(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -648,7 +647,7 @@ fun VisionDrive.flickAndGoDown(
             testContext.onScrolling = originalOnScrolling
         }
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -706,7 +705,7 @@ fun VisionDrive.flickAndGoRight(
             CodeExecutionContext.scrollVisionElement = originalScrollVisionElement
         }
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -741,7 +740,7 @@ fun VisionDrive.flickAndGoLeft(
             testContext.onScrolling = originalOnScrolling
         }
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -774,7 +773,7 @@ fun VisionDrive.swipeTopToBottom(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -809,7 +808,7 @@ fun VisionDrive.flickAndGoUp(
             testContext.onScrolling = originalOnScrolling
         }
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -854,7 +853,7 @@ fun VisionDrive.flickTopToBottom(
             intervalSeconds = intervalSeconds,
         )
     }
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 
@@ -937,7 +936,7 @@ fun VisionDrive.swipeElementToElement(
 
     if (TestMode.isSkippingScenario || TestMode.isSkippingCase || TestMode.isManualingScenario || TestMode.isManualingCase)
         lastElement = startElement
-    sw.printInfo()
+    sw.stop()
     return lastElement
 }
 

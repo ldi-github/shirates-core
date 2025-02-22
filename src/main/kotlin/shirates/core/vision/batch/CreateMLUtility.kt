@@ -143,7 +143,7 @@ object CreateMLUtility {
             logFile.toFile().writeText(r.resultString)
 
             checkAccuracy(content = r.resultString)
-            sw.printInfo()
+            sw.stop()
         }
 
         val dir = fileListFile.toPath().parent

@@ -108,6 +108,7 @@ fun VisionDrive.waitForClose(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -123,6 +124,7 @@ fun VisionDrive.waitForClose(
             waitSeconds = waitSeconds,
             allowScroll = false,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
         if (throwsException && found) {
             throw TestDriverException(
@@ -146,6 +148,7 @@ fun VisionDrive.waitForDisplay(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -161,7 +164,8 @@ fun VisionDrive.waitForDisplay(
             last = false,
             waitSeconds = waitSeconds,
             allowScroll = false,
-            removeRedundantText = removeRedundantText
+            removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
         if (found.not() && throwsException) {
             throw TestDriverException(

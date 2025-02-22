@@ -156,6 +156,7 @@ ios.profile=iPhone 16(iOS 18.2)
 #enableGetSourceLog=true
 #enableTrace=true
 #enableTimeMeasureLog=true
+#enableStopWatchLog=false
 #enableShellExecLog=true
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true

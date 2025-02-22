@@ -106,11 +106,9 @@ class DirectAccessModeIos : UITest() {
     fun performanceComparison() {
 
         fun process(count: Int) {
-            val sw1 = StopWatch()
-            val sw2 = StopWatch()
             invalidateCache()
 
-            sw1.start()
+            val sw1 = StopWatch("cache mode")
             useCache {
                 for (i in 1..count) {
                     it.select("General")  // cache mode
@@ -118,7 +116,7 @@ class DirectAccessModeIos : UITest() {
             }
             sw1.stop()
 
-            sw2.start()
+            val sw2 = StopWatch("direct access mode")
             suppressCache {
                 for (i in 1..count) {
                     it.select("General")  // direct access mode

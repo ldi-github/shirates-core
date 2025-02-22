@@ -10,7 +10,6 @@ import shirates.core.exception.TestNGException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.VisionDrive
@@ -28,6 +27,7 @@ fun VisionDrive.exist(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -48,6 +48,7 @@ fun VisionDrive.exist(
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
     }
 
@@ -65,6 +66,7 @@ internal fun VisionDrive.existCore(
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
     removeRedundantText: Boolean,
+    mergeBoundingBox: Boolean,
 ): VisionElement {
 
     fun detectAction(): VisionElement {
@@ -77,6 +79,7 @@ internal fun VisionDrive.existCore(
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
             throwsException = false,
         )
     }
@@ -91,8 +94,16 @@ internal fun VisionDrive.existCore(
 
     if (v.isFound) {
         TestLog.ok(message = message)
-        if (v != rootElement && v.text != selector.text) {
-            TestLog.info(message = "There are differences in text.  (expected: \"${selector.text}\", actual: \"${v.text}\")")
+        if (v != rootElement) {
+            if (selector.text != null && v.text != selector.text) {
+                TestLog.info(message = "There are differences in text.  (expected: \"${selector.text}\", actual: \"${v.text}\")")
+            } else if (selector.textStartsWith != null && v.text.contains(selector.textStartsWith!!).not()) {
+                TestLog.info(message = "There are differences in text.  (expected to be contained: \"${selector.textStartsWith}\", actual: \"${v.text}\")")
+            } else if (selector.textEndsWith != null && v.text.contains(selector.textEndsWith!!).not()) {
+                TestLog.info(message = "There are differences in text.  (expected to be contained: \"${selector.textEndsWith}\", actual: \"${v.text}\")")
+            } else if (selector.textContains != null && v.text.contains(selector.textContains!!).not()) {
+                TestLog.info(message = "There are differences in text.  (expected to be contained: \"${selector.textContains}\", actual: \"${v.text}\")")
+            }
         }
     } else {
         val error = TestNGException(message = message)
@@ -171,6 +182,7 @@ fun VisionDrive.existWithScrollDown(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -197,6 +209,7 @@ fun VisionDrive.existWithScrollDown(
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = mergeBoundingBox,
             )
         }
     }
@@ -221,6 +234,7 @@ fun VisionDrive.existWithScrollUp(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -247,6 +261,7 @@ fun VisionDrive.existWithScrollUp(
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = mergeBoundingBox,
             )
         }
     }
@@ -271,6 +286,7 @@ fun VisionDrive.existWithScrollRight(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -297,6 +313,7 @@ fun VisionDrive.existWithScrollRight(
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = mergeBoundingBox,
             )
         }
     }
@@ -321,6 +338,7 @@ fun VisionDrive.existWithScrollLeft(
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -347,6 +365,7 @@ fun VisionDrive.existWithScrollLeft(
                 waitSeconds = 0.0,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = mergeBoundingBox,
             )
         }
     }
@@ -365,6 +384,7 @@ fun VisionDrive.dontExist(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = 0.0,
     message: String? = null,
+    mergeBoundingBox: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
 
@@ -388,6 +408,7 @@ fun VisionDrive.dontExist(
             throwsException = false,
             swipeToSafePosition = false,
             removeRedundantText = false,
+            mergeBoundingBox = mergeBoundingBox,
         )
     }
     if (v.isFound) {
@@ -405,7 +426,7 @@ fun VisionDrive.dontExist(
         func(v)
     }
 
-    sw.printInfo()
+    sw.stop()
 
     return v
 }

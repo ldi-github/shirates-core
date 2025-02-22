@@ -351,7 +351,7 @@ object IosDeviceUtility {
         intervalMilliseconds: Long = 1000
     ): IosDeviceInfo {
 
-        val sw = StopWatch().start()
+        val sw = StopWatch("waitEmulatorStatus").start()
         while (true) {
             val deviceList = getIosDeviceList()
             val device = deviceList.firstOrNull() { it.udid == udid }

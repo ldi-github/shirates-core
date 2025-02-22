@@ -74,30 +74,28 @@ class TestDriveScreenExtensionTest : UITest() {
 
         run {
             // Arrange
-            val sw = StopWatch()
+            val sw = StopWatch("1")
             // Assert
             assertThatThrownBy {
                 sw.start()
                 it.waitScreen("[About Screen]", waitSeconds = 1.0)
             }.isInstanceOf(TestDriverException::class.java)
-            val sec = sw.elapsedSeconds
-            println("sec=$sec")
+            sw.stop()
 
-            assertThat(sec >= 1).isTrue()
+            assertThat(sw.elapsedSeconds >= 1).isTrue()
         }
 
         run {
             // Arrange
-            val sw = StopWatch()
+            val sw = StopWatch("2")
             // Assert
             assertThatThrownBy {
                 sw.start()
                 it.waitScreen("[About Screen]", waitSeconds = 5.0)
             }.isInstanceOf(TestDriverException::class.java)
-            val sec = sw.elapsedSeconds
-            println("sec=$sec")
+            sw.stop()
 
-            assertThat(sec >= 5).isTrue()
+            assertThat(sw.elapsedSeconds >= 5).isTrue()
         }
     }
 

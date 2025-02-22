@@ -46,9 +46,9 @@ internal fun AppiumDriver.installApp(appPackageFile: String = testContext.profil
     if (Files.exists(appPackageFile.toPath()).not()) {
         throw TestConfigException("app file not found(${appPackageFile})")
     }
+    val sw = StopWatch("installApp")
     if (isAndroid) {
         if (appPackageFile.endsWith(".apks")) {
-            val sw = StopWatch()
             val r = ShellUtility.executeCommand(
                 "bundletool",
                 "install-apks",
@@ -62,7 +62,6 @@ internal fun AppiumDriver.installApp(appPackageFile: String = testContext.profil
             }
             printInfo("Installed. (${sw.elapsedSeconds} sec)")
         } else {
-            val sw = StopWatch()
             val r = ShellUtility.executeCommand(
                 "adb",
                 "-s",
@@ -78,10 +77,9 @@ internal fun AppiumDriver.installApp(appPackageFile: String = testContext.profil
             printInfo("Installed. (${sw.elapsedSeconds} sec)")
         }
     } else {
-        val sw = StopWatch()
         TestDriver.iosDriver.installApp(appPackageFile)
         sw.stop()
-        printInfo("Installed. (${sw.elapsedSeconds} sec)")
+//        printInfo("Installed. (${sw.elapsedSeconds} sec)")
     }
 }
 

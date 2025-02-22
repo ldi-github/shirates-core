@@ -226,6 +226,7 @@ fun VisionElement.existOnLine(
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = false,
+                mergeBoundingBox = false,
             )
         }
     }
@@ -272,6 +273,7 @@ fun VisionElement.existOnColumn(
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = false,
             )
         }
     }
@@ -318,6 +320,7 @@ fun VisionElement.existOnRight(
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = false,
             )
         }
     }
@@ -364,6 +367,7 @@ fun VisionElement.existOnLeft(
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = false,
             )
         }
     }
@@ -410,6 +414,7 @@ fun VisionElement.existOnAbove(
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = false,
             )
         }
     }
@@ -456,6 +461,7 @@ fun VisionElement.existOnBelow(
                 waitSeconds = waitSeconds,
                 swipeToSafePosition = swipeToSafePosition,
                 removeRedundantText = removeRedundantText,
+                mergeBoundingBox = false,
             )
         }
     }

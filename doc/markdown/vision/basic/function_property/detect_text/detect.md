@@ -34,18 +34,6 @@ The function returns `VisionElement` object.
 (`kotlin/tutorial/basic/Detect1.kt`)
 
 ```kotlin
-package tutorial.basic
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.vision.driver.commandextension.detect
-import shirates.core.vision.driver.commandextension.detectWithScrollDown
-import shirates.core.vision.driver.commandextension.detectWithScrollUp
-import shirates.core.vision.driver.commandextension.output
-import shirates.core.vision.testcode.VisionTest
-
-class Detect1 : VisionTest() {
-
     @Test
     @Order(10)
     fun detect() {
@@ -53,6 +41,9 @@ class Detect1 : VisionTest() {
         scenario {
             case(1) {
                 action {
+                    it.detect("Search settings")
+                    output(it)
+
                     it.detect("Network & internet")
                     output(it)
                 }
@@ -67,20 +58,38 @@ class Detect1 : VisionTest() {
         scenario {
             case(1) {
                 action {
-                    it.detectWithScrollDown("System")
-                    output(it)
-                }
-            }
-            case(2) {
-                action {
-                    it.detectWithScrollUp("Settings")
+                    it.detectWithScrollDown("Tips & support")
                     output(it)
                 }
             }
         }
     }
 
-}
+    @Test
+    @Order(30)
+    fun detect_patterns() {
+
+        scenario {
+            case(1) {
+                action {
+                    it.detect("Search settings")
+                    output(it)
+
+                    it.detect("*arch sett*")
+                    output(it)
+
+                    it.detect("Search*")
+                    output(it)
+
+                    it.detect("*settings")
+                    output(it)
+
+                    it.detect("Search*&&*settings")
+                    output(it)
+                }
+            }
+        }
+    }
 ```
 
 ### Link

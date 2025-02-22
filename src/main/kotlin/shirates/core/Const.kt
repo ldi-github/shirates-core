@@ -49,6 +49,7 @@ object Const {
     const val ENABLE_XMLSOURCE_DUMP = true
     const val ENABLE_SHELL_EXEC_LOG = false
     const val ENABLE_TIME_MEASURE_LOG = false
+    const val ENABLE_STOP_WATCH_LOG = true
     const val ENABLE_IMAGE_MATCH_DEBUG_LOG = false
     const val ENABLE_IS_IN_VIEW_LOG = false
     const val ENABLE_IS_SAFE_LOG = true

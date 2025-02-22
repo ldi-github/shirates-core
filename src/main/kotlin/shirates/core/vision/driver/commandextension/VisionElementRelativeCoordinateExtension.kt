@@ -3,7 +3,6 @@ package shirates.core.vision.driver.commandextension
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.*
-import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.SegmentContainer
 import shirates.core.utility.string.forVisionComparison
@@ -76,8 +75,6 @@ internal fun VisionElement.rightLeftCore(
 
     val sw = StopWatch("rightLeftCore")
 
-    val sw1 = StopWatch("split screenshot into segments")
-
     /**
      * get baseElement
      */
@@ -93,7 +90,7 @@ internal fun VisionElement.rightLeftCore(
     ).split()
         .saveImages()
 
-    sw1.printInfo()
+    sw.lap("get baseElement")
 
     val visionElements = thisSegmentContainer.visionElements.filter { segmentMinimumHeight <= it.rect.height }
         .sortedBy { it.rect.left }
@@ -101,7 +98,6 @@ internal fun VisionElement.rightLeftCore(
         if (relative.isLeft) visionElements.firstOrNull() ?: this
         else visionElements.lastOrNull() ?: this
 
-    val sw2 = StopWatch()
 
     /**
      * split screenshot into segments
@@ -115,7 +111,7 @@ internal fun VisionElement.rightLeftCore(
     ).split()
         .saveImages()
     val count = thisSegmentContainer.visionElements.count()
-    sw2.printInfo("split screenshot into segments. visionElements:$count")
+    sw.lap("split screenshot into segments. visionElements:$count")
 
     /**
      * filter items
@@ -157,7 +153,7 @@ internal fun VisionElement.rightLeftCore(
     v.selector = this.selector?.getChainedSelector(relativeExpression)
     lastElement = v
 
-    sw.printInfo()
+    sw.stop()
 
     return v
 }
