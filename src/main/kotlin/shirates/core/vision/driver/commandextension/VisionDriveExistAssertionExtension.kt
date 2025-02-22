@@ -23,7 +23,7 @@ fun VisionDrive.exist(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     last: Boolean = false,
-    waitSeconds: Double = testContext.shortWaitSeconds,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     removeRedundantText: Boolean = true,
@@ -120,7 +120,7 @@ internal fun VisionDrive.existCore(
 fun VisionDrive.existWithoutScroll(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
     func: (VisionElement.() -> Unit)? = null
@@ -518,7 +518,7 @@ fun VisionDrive.existImageWithoutScroll(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
 ): VisionElement {

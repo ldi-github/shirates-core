@@ -489,7 +489,7 @@ fun VisionDrive.detectWithoutScroll(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = 0.0,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -531,7 +531,6 @@ fun VisionDrive.canDetect(
     selector: Selector,
     language: String = PropertiesManager.visionOCRLanguage,
     last: Boolean = false,
-    waitSeconds: Double = 0.0,
     allowScroll: Boolean = true,
     removeRedundantText: Boolean = true,
     mergeBoundingBox: Boolean = true,
@@ -550,7 +549,7 @@ fun VisionDrive.canDetect(
             language = language,
             last = last,
             allowScroll = allowScroll,
-            waitSeconds = waitSeconds,
+            waitSeconds = 0.0,
             swipeToSafePosition = false,
             removeRedundantText = removeRedundantText,
             mergeBoundingBox = mergeBoundingBox,
