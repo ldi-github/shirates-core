@@ -468,7 +468,7 @@ class VisionContext(
                     /**
                      * Additional filter
                      */
-                    list = candidates.filter { it.textForComparison.length <= length + 1 }
+                    list = candidates.filter { it.textForComparison.length <= length + 2 }
                     if (list.any()) {
                         candidates = list
                     }
@@ -479,7 +479,7 @@ class VisionContext(
                 val textStartsWith = selector.textStartsWith!!.forVisionComparison()
                 val list = candidates.filter {
                     val ix = it.textForComparison.indexOf(textStartsWith)
-                    0 <= ix && ix <= 1
+                    0 <= ix && ix <= 2
                 }
                 candidates = list
             }
@@ -494,7 +494,7 @@ class VisionContext(
                     val ix = it.textForComparison.indexOf(textEndsWith)
                     val subtext = it.textForComparison.substring(ix + 1)
                     val lengthDiff = subtext.length - textEndsWith.length
-                    lengthDiff <= 1
+                    lengthDiff <= 2
                 }
                 candidates = list
             }
