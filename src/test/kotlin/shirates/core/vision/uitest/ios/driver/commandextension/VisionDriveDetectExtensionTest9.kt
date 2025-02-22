@@ -1,15 +1,15 @@
 package shirates.core.vision.uitest.ios.driver.commandextension
 
 import org.junit.jupiter.api.Test
+import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisContains
 import shirates.core.driver.commandextension.thisIs
-import shirates.core.testcode.ios
 import shirates.core.vision.driver.commandextension.exist
 import shirates.core.vision.driver.commandextension.screenIs
 import shirates.core.vision.driver.commandextension.tap
 import shirates.core.vision.testcode.VisionTest
 
-@ios
+@Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
 class VisionDriveDetectExtensionTest9 : VisionTest() {
 
     @Test
