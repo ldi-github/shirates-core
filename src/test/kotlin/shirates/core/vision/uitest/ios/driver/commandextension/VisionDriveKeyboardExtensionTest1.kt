@@ -12,7 +12,7 @@ import utility.handleIrregulars
 
 @Want
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
-class TestDriveKeyboardExtensionTest1 : VisionTest() {
+class VisionDriveKeyboardExtensionTest1 : VisionTest() {
 
     override fun setEventHandlers(context: TestDriverEventContext) {
         context.irregularHandler = {

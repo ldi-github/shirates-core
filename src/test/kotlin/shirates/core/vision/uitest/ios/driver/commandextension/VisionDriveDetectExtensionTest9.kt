@@ -1,4 +1,4 @@
-package shirates.core.vision.uitest.android.driver.commandextension
+package shirates.core.vision.uitest.ios.driver.commandextension
 
 import org.junit.jupiter.api.Test
 import shirates.core.driver.commandextension.thisContains
@@ -10,7 +10,7 @@ import shirates.core.vision.driver.commandextension.tap
 import shirates.core.vision.testcode.VisionTest
 
 @ios
-class VisionDriveDetectExtensionTest7 : VisionTest() {
+class VisionDriveDetectExtensionTest9 : VisionTest() {
 
     @Test
     fun detectMultiline() {

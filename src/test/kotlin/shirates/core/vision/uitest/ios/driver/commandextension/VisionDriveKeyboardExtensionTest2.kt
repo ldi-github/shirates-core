@@ -8,7 +8,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveKeyboardExtensionTest2 : VisionTest() {
+class VisionDriveKeyboardExtensionTest2 : VisionTest() {
 
     @Test
     fun tap_search() {

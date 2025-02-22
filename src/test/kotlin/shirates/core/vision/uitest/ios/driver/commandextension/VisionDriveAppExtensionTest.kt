@@ -13,7 +13,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("testConfig/ios/iOSSettings/testrun.properties")
-class TestDriveAppExtensionTest : VisionTest() {
+class VisionDriveAppExtensionTest : VisionTest() {
 
     @Test
     fun isAppInstalled() {

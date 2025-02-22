@@ -11,7 +11,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveSelectExtensionTest8 : VisionTest() {
+class VisionDriveDetectExtensionTest8 : VisionTest() {
 
     @Test
     @Order(10)

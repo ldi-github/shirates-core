@@ -11,7 +11,7 @@ import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveSwipeExtensionTest : VisionTest() {
+class VisionDriveSwipeExtensionTest : VisionTest() {
 
     @Order(10)
     @Test

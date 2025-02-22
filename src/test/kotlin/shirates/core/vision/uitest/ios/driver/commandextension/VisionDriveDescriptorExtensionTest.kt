@@ -9,7 +9,7 @@ import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveDescriptorExtensionTest : VisionTest() {
+class VisionDriveDescriptorExtensionTest : VisionTest() {
 
     @Test
     fun caption() {

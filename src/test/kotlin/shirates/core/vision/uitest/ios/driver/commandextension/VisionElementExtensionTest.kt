@@ -16,7 +16,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestElementExtensionTest : VisionTest() {
+class VisionElementExtensionTest : VisionTest() {
 
     @Test
     @Order(10)
