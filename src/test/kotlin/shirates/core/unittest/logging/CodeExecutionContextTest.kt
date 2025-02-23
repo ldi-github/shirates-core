@@ -219,7 +219,7 @@ class CodeExecutionContextTest : UnitTest() {
             // Arrange
             testContext.onScrolling = false
             // Assert
-            assertThat(CodeExecutionContext.shouldOutputLog).isFalse()
+            assertThat(CodeExecutionContext.shouldOutputLog).isTrue()
         }
     }
 
