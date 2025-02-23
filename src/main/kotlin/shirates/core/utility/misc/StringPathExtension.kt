@@ -5,6 +5,7 @@ import shirates.core.UserVar
 import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
 import java.io.File
+import java.io.FileNotFoundException
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -59,6 +60,10 @@ internal fun String.replaceDirectoryForLog(): String {
  * toPath
  */
 fun String?.toPath(): Path {
+
+    if (this == null) {
+        throw FileNotFoundException("null can not be converted to a path.")
+    }
 
     var text = (this ?: "").replaceUserHome()
         .replace("\u00A5", "/")     // Replace YEN

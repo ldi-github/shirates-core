@@ -57,7 +57,7 @@
             case(5) {
                 expectation {
                     withScrollUp {
-                        it.canDetectAll("設定", "システム")
+                        it.canDetectAll("システム", "設定")
                             .thisIsTrue("<設定>が見つかりました（上方向スクロールあり）")
                     }
                 }

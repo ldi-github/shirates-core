@@ -35,7 +35,7 @@ You can change AI-OCR language dynamically using `setOCRLanguage` function.
 it.setOCRLanguage("ja")
 ```
 
-### 関連情報
+### Reference
 
 [supportedRecognitionLanguages()](https://developer.apple.com/documentation/vision/vnrecognizetextrequest/supportedrecognitionlanguages())
 

@@ -1,14 +1,15 @@
 package shirates.core.vision.uitest.ios.driver.commandextension
 
+import goPreviousApp
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.testDrive
 import shirates.core.vision.driver.commandextension.appIs
 import shirates.core.vision.driver.commandextension.launchApp
-import shirates.core.vision.driver.commandextension.tap
 import shirates.core.vision.testcode.VisionTest
 
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveNavigationExtensionTest : VisionTest() {
+class VisionDriveNavigationExtensionTest : VisionTest() {
 
     @Test
     fun goLeftTaskTest() {
@@ -30,7 +31,7 @@ class TestDriveNavigationExtensionTest : VisionTest() {
             }
             case(3) {
                 action {
-                    it.tap("Settings")
+                    testDrive.goPreviousApp()
                 }.expectation {
                     it.appIs("[Settings]")
                 }

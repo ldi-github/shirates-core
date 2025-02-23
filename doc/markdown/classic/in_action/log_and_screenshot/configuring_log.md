@@ -22,6 +22,7 @@ See also [parameters](../../basic/parameter/parameters.md).
 #enableGetSourceLog=true
 #enableTrace=true
 #enableTimeMeasureLog=true
+#enableStopWatchLog=true
 #enableShellExecLog=true
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true

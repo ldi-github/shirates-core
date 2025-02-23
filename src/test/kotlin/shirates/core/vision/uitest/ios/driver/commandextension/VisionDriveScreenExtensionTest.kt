@@ -13,7 +13,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveScreenExtensionTest : VisionTest() {
+class VisionDriveScreenExtensionTest : VisionTest() {
 
     @Test
     fun screenName() {
@@ -79,7 +79,7 @@ class TestDriveScreenExtensionTest : VisionTest() {
 
         run {
             // Arrange
-            val sw = StopWatch()
+            val sw = StopWatch("1")
             // Assert
             assertThatThrownBy {
                 sw.start()
@@ -93,7 +93,7 @@ class TestDriveScreenExtensionTest : VisionTest() {
 
         run {
             // Arrange
-            val sw = StopWatch()
+            val sw = StopWatch("2")
             // Assert
             assertThatThrownBy {
                 sw.start()

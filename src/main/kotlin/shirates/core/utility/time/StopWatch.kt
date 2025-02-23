@@ -1,8 +1,8 @@
 package shirates.core.utility.time
 
-import shirates.core.driver.TestDriver.lastElement
-import shirates.core.driver.TestElement
+import shirates.core.configuration.PropertiesManager
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.debugLabel
 import java.time.Duration
@@ -10,7 +10,7 @@ import java.time.Duration
 /**
  * StopWatch
  */
-class StopWatch(var title: String = "") {
+class StopWatch(var title: String) {
 
     var startTime: Long = System.currentTimeMillis()
     var endTime: Long? = null
@@ -109,13 +109,15 @@ class StopWatch(var title: String = "") {
     /**
      * stop
      */
-    fun stop(): LapEntry {
+    fun stop(
+        log: Boolean = CodeExecutionContext.shouldOutputLog
+    ): LapEntry {
 
         endTime = System.currentTimeMillis()
 
         val last = laps.lastOrNull()
         if (last?.label == "end") {
-            last.lapTime = endTime!!
+            // NOP
         } else {
             val entry = LapEntry(
                 label = "end",
@@ -124,6 +126,9 @@ class StopWatch(var title: String = "") {
                 lapTime = endTime!!
             )
             laps.add(entry)
+            if (log && PropertiesManager.enableStopWatchLog) {
+                this.printInfo()
+            }
         }
 
         return lastLap!!
@@ -156,15 +161,14 @@ class StopWatch(var title: String = "") {
     /**
      * printLap
      */
-    fun printLap(label: String): TestElement {
+    fun printLap(label: String) {
 
         val lapEntry = lap(label = label)
 
-        if (CodeExecutionContext.shouldOutputLog) {
+        if (CodeExecutionContext.shouldOutputLog && PropertiesManager.enableTimeMeasureLog) {
             val message = "[$title][$label] in ${lapEntry.duration.debugLabel}"
             TestLog.info(message = message)
         }
-        return lastElement
     }
 
 }

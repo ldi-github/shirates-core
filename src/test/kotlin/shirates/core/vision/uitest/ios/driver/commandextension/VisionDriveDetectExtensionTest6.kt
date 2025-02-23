@@ -16,7 +16,7 @@ import shirates.core.vision.testcode.VisionTest
 @Unstable("Direct mode")
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveSelectExtensionTest6 : VisionTest() {
+class VisionDriveDetectExtensionTest6 : VisionTest() {
 
     @Unstable("Direct mode")
     @Test

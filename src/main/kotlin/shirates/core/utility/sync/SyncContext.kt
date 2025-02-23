@@ -12,7 +12,7 @@ class SyncContext(
     override var retryOnError: Boolean,
     override var throwOnFinally: Boolean,
     override var refreshCache: Boolean,
-    override var stopWatch: StopWatch = StopWatch(),
+    override var stopWatch: StopWatch = StopWatch("SyncContext"),
     override var count: Int = 0,
     override var isTimeout: Boolean = false,
     override var onTimeout: (SyncContext) -> Unit,

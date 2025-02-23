@@ -17,12 +17,13 @@ fun VisionElement.swipeTo(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     last: Boolean = false,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     durationSeconds: Double = testContext.swipeDurationSeconds,
     marginRatio: Double = testContext.swipeMarginRatio,
     adjust: Boolean = false,
     repeat: Int = 1,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "swipeTo"
@@ -42,6 +43,7 @@ fun VisionElement.swipeTo(
             throwsException = false,
             swipeToSafePosition = false,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
 
         v = swipeElementToElement(

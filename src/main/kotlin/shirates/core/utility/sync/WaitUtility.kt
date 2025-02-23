@@ -102,7 +102,7 @@ object WaitUtility {
         }
 
         val result = loopAction()
-        context.stopWatch.stop()
+        context.stopWatch.stop(log = false)
         if (context.throwOnFinally) {
             context.throwIfError()
         }

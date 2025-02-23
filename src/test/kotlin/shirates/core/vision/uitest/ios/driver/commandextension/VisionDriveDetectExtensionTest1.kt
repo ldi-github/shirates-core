@@ -17,7 +17,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveSelectExtensionTest1 : VisionTest() {
+class VisionDriveDetectExtensionTest1 : VisionTest() {
 
     @Test
     @Order(10)
@@ -27,7 +27,7 @@ class TestDriveSelectExtensionTest1 : VisionTest() {
         it.macro("[iOS Settings Top Screen]")
         // Act
         run {
-            val sw = StopWatch()
+            val sw = StopWatch("1")
             sw.start()
             val e = it.detect("no exist", waitSeconds = 0.0, throwsException = false)
             val t = sw.elapsedMillis
@@ -39,7 +39,7 @@ class TestDriveSelectExtensionTest1 : VisionTest() {
         }
 
         run {
-            val sw = StopWatch()
+            val sw = StopWatch("2")
             sw.start()
             val e = it.detect("no exist", waitSeconds = 1.2, throwsException = false)
             val t = sw.elapsedMillis
@@ -51,7 +51,7 @@ class TestDriveSelectExtensionTest1 : VisionTest() {
         }
 
         run {
-            val sw = StopWatch()
+            val sw = StopWatch("3")
             sw.start()
             val e = it.detect("no exist", waitSeconds = 2.3, throwsException = false)
             val t = sw.elapsedMillis

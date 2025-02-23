@@ -577,6 +577,16 @@ object PropertiesManager {
         }
 
     /**
+     * enableStopWatchLog
+     */
+    val enableStopWatchLog: Boolean
+        get() {
+            val value = getPropertyValue(propertyName = "enableStopWatchLog")
+                ?: return Const.ENABLE_STOP_WATCH_LOG
+            return value == "true"
+        }
+
+    /**
      * enableImageMatchDebugLog
      */
     val enableImageMatchDebugLog: Boolean

@@ -268,7 +268,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
     ): LogLine? {
         callerName = command
 
-        val sw = StopWatch()
+        val sw = StopWatch("execOperateCommandCore($command)")
 
         val outputLog = CodeExecutionContext.shouldOutputLog
 
@@ -400,7 +400,7 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         val commandText = getCommandText(command = command, subject = subject, arg1 = arg1, arg2 = arg2)
         val ms = Measure(commandText)
         try {
-            val sw = StopWatch()
+            val sw = StopWatch("execCheckCommand($command)")
 
             if (fireEvent) {
                 TestDriver.fireIrregularHandler()

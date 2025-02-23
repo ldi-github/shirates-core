@@ -3,6 +3,7 @@ package shirates.core.vision.uitest.android.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.driver.syncScreen
@@ -188,8 +189,8 @@ class VisionDriveSwipeExtensionTest : VisionTest() {
                     val v = it.detect("Display")
                     v.swipeToTopOfScreen(durationSeconds = 3.0)
                 }.expectation {
-                    val v = detect("Display", throwsException = false)
-                    v.isFound.thisIsTrue("Display is not shown. (Under `Search settings`)")
+                    val v = detect("Display", throwsException = false, waitSeconds = 0.0)
+                    v.isFound.thisIsFalse("Display is not shown. (Under `Search settings`)")
                 }
             }
             case(3) {

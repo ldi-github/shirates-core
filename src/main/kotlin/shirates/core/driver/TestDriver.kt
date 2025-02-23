@@ -24,7 +24,6 @@ import shirates.core.driver.TestMode.isRealDevice
 import shirates.core.driver.TestMode.isSimulator
 import shirates.core.driver.TestMode.isVirtualDevice
 import shirates.core.driver.TestMode.isiOS
-import shirates.core.driver.behavior.LanguageHelperAndroid
 import shirates.core.driver.behavior.TapHelper
 import shirates.core.driver.commandextension.*
 import shirates.core.driver.eventextension.TestDriveOnScreenContext
@@ -623,15 +622,6 @@ object TestDriver {
 
         ms.end()
         TestLog.info("AppiumDriver initialized.")
-
-        /**
-         * Bug workaround
-         * Android emulator often fails to change language and locale.
-         * Try using LanguageHelperForAndroid if androidLanguageAndRegion is set on android emulator.
-         */
-        if (TestMode.isAndroid && TestMode.isEmulator && PropertiesManager.androidLanguageAndRegion.isNotBlank()) {
-            LanguageHelperAndroid.setLanguageAndRegion(PropertiesManager.androidLanguageAndRegion)
-        }
     }
 
     private fun wdaInstallOptimization(profile: TestProfile) {
@@ -830,6 +820,13 @@ object TestDriver {
             val e = context.exception
             if (e != null) {
                 val message = e.message ?: ""
+                if (message.contains("Cannot set the device locale to ")) {
+                    /**
+                     * Workaround for unstable language setting on Appium app.
+                     * Remove Appium app to clear data.
+                     */
+                    AdbUtility.uninstall(packageName = "io.appium.settings", udid = profile.udid)
+                }
                 /**
                  * Throw exception on critical error
                  * Exit retrying loop immediately
@@ -1955,21 +1952,12 @@ object TestDriver {
             CpuLoadService.waitForCpuLoadUnder()
 
             val oldImage = CodeExecutionContext.lastScreenshotImage
-
-            val sw = StopWatch("syncScreenshot")
             visionDrive.syncScreen()
-            if (CodeExecutionContext.shouldOutputLog) {
-                sw.printInfo()
-            }
-
             val newImage = CodeExecutionContext.lastScreenshotImage
             val changed = newImage.isSame(oldImage).not()
-
             if (changed.not() && onChangedOnly) {
-//                TestLog.printInfo("Saving screenshot skipped. (no change)")
                 return this
             }
-//            printInfo("screenshotSynced=${CodeExecutionContext.screenshotSynced}")
 
             screenshotFileName = filename ?: (TestLog.nextLineNo).toString()
             if (screenshotFileName.lowercase().contains(".png").not()) {
@@ -1995,7 +1983,7 @@ object TestDriver {
             TestDriver.visionRootElement = VisionElement(visionContext = vc)
             CodeExecutionContext.workingRegionElement = oldWorkingRegionElement.newVisionElement()
 
-            if (log) {
+            if (changed) {
                 val screenshotLine = TestLog.write(
                     message = "screenshot: $screenshotFileName",
                     logType = LogType.SCREENSHOT,
@@ -2331,7 +2319,6 @@ object TestDriver {
             val context = TestDriverCommandContext(lastElement)
             context.execSilentCommand() {
                 var lastXml = TestElementCache.sourceXml
-                val sw2 = StopWatch().start()
                 val enableSyncLog = PropertiesManager.enableSyncLog || TestLog.enableTrace
 
                 for (i in 1..maxLoopCount) {
@@ -2357,17 +2344,17 @@ object TestDriver {
                         /**
                          * Synced
                          */
-                        TestLog.info(
-                            "Synced. (elapsed=${sw2.elapsedSeconds})",
-                            log = enableSyncLog
-                        )
+//                        TestLog.info(
+//                            "Synced. (elapsed=${sw.elapsedSeconds})",
+//                            log = enableSyncLog
+//                        )
                         refreshCurrentScreen()
                         return@execSilentCommand
                     }
 
                     lastXml = TestElementCache.sourceXml
 
-                    if (sw2.elapsedSeconds > syncWaitSeconds) {
+                    if (sw.elapsedSeconds > syncWaitSeconds) {
                         if (syncOnTimeout) {
                             /**
                              * Synced(Timeout)
@@ -2376,19 +2363,19 @@ object TestDriver {
                             refreshCurrentScreen()
                             val screenName = if (currentScreen.isNotBlank()) currentScreen else "?"
                             TestLog.info(
-                                "Synchronization timed out (elapsed=${sw2.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
+                                "Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds, currentScreen=$screenName)",
                                 log = enableSyncLog
                             )
                             return@execSilentCommand
                         } else {
-                            throw TestDriverException("Synchronization timed out (elapsed=${sw2.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
+                            throw TestDriverException("Synchronization timed out (elapsed=${sw.elapsedSeconds} > syncWaitSeconds=$syncWaitSeconds)")
                         }
                     }
 
                     /**
                      * Before next loop
                      */
-                    TestLog.info("elapsed=${sw2.elapsedSeconds}, syncWaitSeconds=$syncWaitSeconds", log = enableSyncLog)
+                    TestLog.info("elapsed=${sw.elapsedSeconds}, syncWaitSeconds=$syncWaitSeconds", log = enableSyncLog)
                     if (isAndroid) {
                         Thread.sleep((syncIntervalSeconds * 1000).toLong())
                         // Wait is required for Android because getSource of AndroidDriver is too fast.
@@ -2397,13 +2384,13 @@ object TestDriver {
                 TestElementCache.synced = true
                 refreshCurrentScreen()
                 TestLog.info(
-                    "Loop count has been exceeded. (maxLoopCount=$maxLoopCount, elapsed=${sw2.elapsedSeconds}, currentScreen=$currentScreen)",
+                    "Loop count has been exceeded. (maxLoopCount=$maxLoopCount, elapsed=${sw.elapsedSeconds}, currentScreen=$currentScreen)",
                     log = enableSyncLog
                 )
             }
         } finally {
             isSyncing = false
-            sw.printInfo()
+            sw.stop()
         }
 
         return this

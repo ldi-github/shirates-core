@@ -2,6 +2,7 @@ package shirates.core.vision.configration.repository
 
 import shirates.core.driver.TestMode
 import shirates.core.exception.TestConfigException
+import shirates.core.vision.configration.repository.VisionMLModelRepository.mlmodelClassifiers
 import shirates.core.vision.result.RecognizeTextResult
 
 object VisionScreenRepository {
@@ -17,10 +18,21 @@ object VisionScreenRepository {
         }
 
     /**
+     * hasRepository
+     */
+    val hasRepository: Boolean
+        get() {
+            return mlmodelClassifiers.containsKey("ScreenClassifier")
+        }
+
+    /**
      * labelMap
      */
     val labelMap: Map<String, VisionClassifierRepository.LabelFileInfo>
         get() {
+            if (hasRepository.not()) {
+                return mapOf()
+            }
             return VisionMLModelRepository.screenClassifierRepository.labelMap
         }
 
@@ -29,6 +41,9 @@ object VisionScreenRepository {
      */
     fun setup() {
 
+        if (hasRepository.not()) {
+            return
+        }
         screenMap.clear()
         for (key in labelMap.keys) {
             val labelFileInfo = labelMap[key]!!

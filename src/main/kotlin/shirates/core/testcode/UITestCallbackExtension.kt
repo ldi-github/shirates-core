@@ -35,8 +35,8 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
 
     var beforeAllExecuted = false
     var beforeAllAfterSetupExecuted = false
-    var testClassWatch = StopWatch()
-    var testFunctionWatch = StopWatch()
+    var testClassWatch = StopWatch("testClassWatch")
+    var testFunctionWatch = StopWatch("testFunctionWatch")
 
     companion object {
         var uiTestBase: UITestBase? = null

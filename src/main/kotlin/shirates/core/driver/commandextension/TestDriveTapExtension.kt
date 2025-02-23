@@ -99,7 +99,7 @@ private fun TestElement.tapCore(
     val ms = Measure()
 
     fun click() {
-        val msClick = Measure()
+
         val sw = StopWatch("click")
         try {
             val me = this.getWebElement()
@@ -109,14 +109,11 @@ private fun TestElement.tapCore(
             TestLog.info(message = t.toString())
             throw t
         }
-        if (PropertiesManager.enableTimeMeasureLog) {
-            TestLog.write(sw.toString())
-        }
-        msClick.end()
+
+        sw.stop()
     }
 
     fun touchAction() {
-        val msTouch = Measure()
         val sw = StopWatch("touchAction")
         val b = this.bounds
         // tap by swipe
@@ -130,10 +127,7 @@ private fun TestElement.tapCore(
             scrollDurationSeconds = holdSeconds,
         )
         swipePointToPointCore(swipeContext = sc)
-        if (PropertiesManager.enableTimeMeasureLog) {
-            TestLog.write(sw.toString())
-        }
-        msTouch.end()
+        sw.stop()
     }
 
     if (PropertiesManager.enableTapElementImageLog) {

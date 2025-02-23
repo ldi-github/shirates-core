@@ -31,7 +31,7 @@ class VisionDriveAssertionExtensionTest2 : VisionTest() {
             }
             case(2) {
                 expectation {
-                    val sw = StopWatch()
+                    val sw = StopWatch("case(2)")
                     assertThatThrownBy {
                         sw.start()
                         it.existAll("Network & internet", "Connected devices", "Apps", "no exist")
@@ -43,7 +43,7 @@ class VisionDriveAssertionExtensionTest2 : VisionTest() {
             }
             case(3) {
                 expectation {
-                    val sw = StopWatch()
+                    val sw = StopWatch("case(3)")
                     assertThatThrownBy {
                         sw.start()
                         it.existAll("Network & internet", "Connected devices", "Apps", "no exist")

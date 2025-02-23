@@ -142,41 +142,38 @@ class TestDriveAssertionExtensionTest1 : UITest() {
                 }.expectation {
                     // Arrange
                     it.syncCache()
-                    val sw = StopWatch()
+                    val sw = StopWatch("case(1)")
                     // Act, Assert
                     assertThatThrownBy {
                         sw.start()
                         it.exist("no exist", waitSeconds = 1.0)
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
-                    val millisec = sw.elapsedMillis
-                    println(millisec)
-                    assertThat(millisec >= 1000).isTrue()
+                    sw.stop()
+                    assertThat(sw.elapsedMillis >= 1000).isTrue()
                 }
 
             }
             case(2, "waitSeconds = 2.0") {
                 expectation {
-                    val sw = StopWatch()
+                    val sw = StopWatch("case(2)")
                     assertThatThrownBy {
                         sw.start()
                         it.exist("no exist", waitSeconds = 2.0)
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
-                    val millisec = sw.elapsedMillis
-                    println(millisec)
-                    assertThat(millisec >= 2000).isTrue()
+                    sw.stop()
+                    assertThat(sw.elapsedMillis >= 2000).isTrue()
                 }
             }
             case(3, "waitSeconds = 2.0") {
                 condition {
                     it.syncCache()
                 }.expectation {
-                    val sw = StopWatch().start()
+                    val sw = StopWatch("case(3)")
                     it.exist("!no exist", waitSeconds = 2.0)
-                    val millisec = sw.elapsedMillis
-                    println(millisec)
-                    assertThat(millisec < 2000).isTrue()
+                    sw.stop()
+                    assertThat(sw.elapsedMillis < 2000).isTrue()
                 }
             }
         }

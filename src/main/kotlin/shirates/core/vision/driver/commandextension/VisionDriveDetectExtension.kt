@@ -37,8 +37,9 @@ fun VisionDrive.detect(
     last: Boolean = false,
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -54,12 +55,13 @@ fun VisionDrive.detect(
             swipeToSafePosition = swipeToSafePosition,
             waitSeconds = waitSeconds,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
             throwsException = throwsException,
         )
         lastElement = v
         return v
     } finally {
-        swDetect.printInfo()
+        swDetect.stop()
     }
 }
 
@@ -110,7 +112,7 @@ internal fun removeRedundantText(
     }
 
     v2.recognizeTextLocal(language = language)
-    if (v2.recognizeTextObservation != null) {
+    if (v2.visionContext.recognizeTextObservations.isNotEmpty()) {
         v2.recognizeTextObservation!!.text = expectedText
         v2.recognizeTextObservation!!.localRegionX = offsetRect.left
     }
@@ -129,6 +131,7 @@ internal fun VisionDrive.detectCore(
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
     removeRedundantText: Boolean,
+    mergeBoundingBox: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -142,6 +145,7 @@ internal fun VisionDrive.detectCore(
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
             throwsException = throwsException,
         )
     }
@@ -167,6 +171,7 @@ private fun VisionDrive.detectCoreCore(
     waitSeconds: Double,
     swipeToSafePosition: Boolean,
     removeRedundantText: Boolean,
+    mergeBoundingBox: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -209,6 +214,7 @@ private fun VisionDrive.detectCoreCore(
             language = language,
             last = last,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
         v.isFound
     }
@@ -229,6 +235,7 @@ private fun VisionDrive.detectCoreCore(
             throwsException = false,
             swipeToSafePosition = swipeToSafePosition,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
     }
 
@@ -259,6 +266,7 @@ internal fun VisionDrive.detectWithScrollCore(
     scrollMaxCount: Int = CodeExecutionContext.scrollMaxCount,
     swipeToSafePosition: Boolean,
     removeRedundantText: Boolean,
+    mergeBoundingBox: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -273,6 +281,7 @@ internal fun VisionDrive.detectWithScrollCore(
             waitSeconds = 0.0,
             swipeToSafePosition = swipeToSafePosition,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
             throwsException = false,
         )
         val stopScroll = v.isFound
@@ -349,6 +358,7 @@ fun VisionDrive.detectWithScrollDown(
             language = language,
             allowScroll = true,
             swipeToSafePosition = false,
+            waitSeconds = 0.0,
             throwsException = throwsException,
         )
     }
@@ -387,6 +397,7 @@ fun VisionDrive.detectWithScrollUp(
             language = language,
             allowScroll = true,
             swipeToSafePosition = false,
+            waitSeconds = 0.0,
             throwsException = throwsException,
         )
     }
@@ -425,6 +436,7 @@ fun VisionDrive.detectWithScrollRight(
             language = language,
             allowScroll = true,
             swipeToSafePosition = false,
+            waitSeconds = 0.0,
             throwsException = throwsException,
         )
     }
@@ -463,6 +475,7 @@ fun VisionDrive.detectWithScrollLeft(
             language = language,
             allowScroll = true,
             swipeToSafePosition = false,
+            waitSeconds = 0.0,
             throwsException = throwsException,
         )
     }
@@ -522,9 +535,9 @@ fun VisionDrive.canDetect(
     selector: Selector,
     language: String = PropertiesManager.visionOCRLanguage,
     last: Boolean = false,
-    waitSeconds: Double = 0.0,
     allowScroll: Boolean = true,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
 ): Boolean {
     if (CodeExecutionContext.isInCell && this is VisionElement) {
 //        return this.innerWidget(expression = expression).isFound
@@ -540,9 +553,10 @@ fun VisionDrive.canDetect(
             language = language,
             last = last,
             allowScroll = allowScroll,
-            waitSeconds = waitSeconds,
+            waitSeconds = 0.0,
             swipeToSafePosition = false,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
             throwsException = false,
         )
     }
@@ -560,6 +574,7 @@ internal fun VisionDrive.canDetectCore(
     waitSeconds: Double,
     allowScroll: Boolean?,
     removeRedundantText: Boolean,
+    mergeBoundingBox: Boolean,
 ): Boolean {
 
     val v = detectCore(
@@ -570,6 +585,7 @@ internal fun VisionDrive.canDetectCore(
         waitSeconds = waitSeconds,
         swipeToSafePosition = false,
         removeRedundantText = removeRedundantText,
+        mergeBoundingBox = mergeBoundingBox,
         throwsException = false,
     )
     lastElement = v
@@ -716,6 +732,7 @@ internal fun VisionDrive.canDetectAllCore(
     language: String,
     last: Boolean,
     allowScroll: Boolean?,
+    mergeBoundingBox: Boolean,
 ): Boolean {
 
     val subject = selectors.joinToString()
@@ -729,6 +746,7 @@ internal fun VisionDrive.canDetectAllCore(
                 last = last,
                 waitSeconds = 0.0,
                 allowScroll = allowScroll,
+                mergeBoundingBox = mergeBoundingBox,
                 removeRedundantText = false,
             )
             if (foundAll.not()) {
@@ -749,6 +767,7 @@ fun VisionDrive.canDetectAll(
     vararg expressions: String,
     language: String = PropertiesManager.visionOCRLanguage,
     allowScroll: Boolean? = null,
+    mergeBoundingBox: Boolean = true,
 ): Boolean {
 
     val selectors = expressions.map { getSelector(expression = it) }
@@ -761,6 +780,7 @@ fun VisionDrive.canDetectAll(
             language = language,
             last = false,
             allowScroll = allowScroll,
+            mergeBoundingBox = mergeBoundingBox,
         )
     }
     if (logLine != null) {

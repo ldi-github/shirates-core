@@ -31,16 +31,15 @@ object ShellUtility {
 
     internal fun executeCommandCore(
         vararg args: String,
-        log: Boolean = PropertiesManager.enableShellExecLog
+        log: Boolean
     ): ShellResult {
 
         val outputStream = ByteArrayOutputStream()
         var error: Throwable? = null
         val executor = DefaultExecutor()
-        val sw = StopWatch()
+        val message = args.joinToString(" ")
+        val sw = StopWatch(message)
         try {
-            TestLog.execute(message = args.joinToString(" "), log = log)
-
             val command = args.firstOrNull() ?: throw IllegalArgumentException("args")
             val args2 = args.toMutableList()
             args2.removeAt(0)
@@ -67,7 +66,7 @@ object ShellUtility {
                 }
             }
         } finally {
-            sw.stop()
+            sw.stop(log = log)
         }
 
         return ShellResult(
@@ -86,7 +85,8 @@ object ShellUtility {
         vararg args: String,
         log: Boolean = PropertiesManager.enableShellExecLog
     ): ShellResult {
-        TestLog.execute(message = args.joinToString(" "), log = log)
+        val message = args.joinToString(" ")
+        TestLog.execute(message = message, log = log)
 
         val command = args.firstOrNull() ?: throw IllegalArgumentException("args")
         val args2 = args.toMutableList()
@@ -99,9 +99,8 @@ object ShellUtility {
         executor.streamHandler = PumpStreamHandler(outputStream)
         val resultHandler = DefaultExecuteResultHandler();
         val env = EnvironmentUtils.getProcEnvironment();
-        val sw = StopWatch()
+        val sw = StopWatch(message)
         try {
-            sw.start()
             executor.execute(commandLine, env, resultHandler);
         } catch (t: Throwable) {
             throw t

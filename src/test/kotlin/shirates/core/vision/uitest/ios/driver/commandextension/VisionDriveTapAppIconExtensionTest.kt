@@ -10,7 +10,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveTapAppIconExtensionTest : VisionTest() {
+class VisionDriveTapAppIconExtensionTest : VisionTest() {
 
     @Test
     fun tapAppIcon() {

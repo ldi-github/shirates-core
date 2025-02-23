@@ -24,11 +24,6 @@ class VisionDriveScrollExtensionTest4 : VisionTest() {
                     withScrollRight("Restaurants") {
                         exist("More")
                     }
-//                    it.detect("Restaurants").onLine {
-//                        withScrollRight {
-//                            exist("More")
-//                        }
-//                    }
                 }
             }
             case(2) {

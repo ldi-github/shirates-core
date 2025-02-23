@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.PropertiesManager
+import shirates.core.configuration.Selector
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
@@ -325,7 +326,7 @@ class VisionServerProxyTest : UnitTest() {
 //
 //            // Assert
 ////            assertThat(result).contains("[Android Settings Top Screen(misaligned)]")
-//            sw.printInfo()
+//            sw.stop()
 //        }
 //    }
 //
@@ -355,7 +356,7 @@ class VisionServerProxyTest : UnitTest() {
         val context = VisionContext(screenshotFile = inputFile)
         context.recognizeText(language = "ja")
 
-        val v = context.detect(text = "男性", language = "ja", last = false, removeRedundantText = true)
+        val v = context.detect(selector = Selector("男性"), language = "ja", last = false, removeRedundantText = true)
 
         v.text.printInfo()
     }

@@ -33,6 +33,7 @@ fun VisionDrive.tap(
     waitForElementFocused: Boolean = false,
     directAccess: Boolean = false,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     if (directAccess) {
@@ -65,6 +66,7 @@ fun VisionDrive.tap(
             waitSeconds = waitSeconds,
             swipeToSafePosition = swipeToSafePosition,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
             throwsException = true,
         )
         val tapFunc = {
@@ -121,6 +123,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
     last: Boolean,
     waitSeconds: Double,
     removeRedundantText: Boolean,
+    mergeBoundingBox: Boolean,
     throwsException: Boolean,
 ): VisionElement {
 
@@ -134,6 +137,7 @@ internal fun VisionDrive.detectWithAdjustingPosition(
             throwsException = throwsException,
             swipeToSafePosition = true,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
     }
 
@@ -234,6 +238,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
     holdSeconds: Double,
     swipeToSafePosition: Boolean,
     removeRedundantText: Boolean,
+    mergeBoundingBox: Boolean,
 ): VisionElement {
 
     val selector = getSelector(expression = expression)
@@ -255,6 +260,7 @@ private fun VisionDrive.tapWithScrollCommandCore(
             throwsException = true,
             swipeToSafePosition = swipeToSafePosition,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
         TestDriver.autoScreenshot(force = testContext.onExecOperateCommand)
         v = v.tap(holdSeconds = holdSeconds)
@@ -322,6 +328,7 @@ fun VisionDrive.tapWithScrollDown(
     holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollDown"
@@ -341,6 +348,7 @@ fun VisionDrive.tapWithScrollDown(
         holdSeconds = holdSeconds,
         swipeToSafePosition = swipeToSafePosition,
         removeRedundantText = removeRedundantText,
+        mergeBoundingBox = mergeBoundingBox,
     )
 
     return v
@@ -360,6 +368,7 @@ fun VisionDrive.tapWithScrollUp(
     holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollUp"
@@ -379,6 +388,7 @@ fun VisionDrive.tapWithScrollUp(
         holdSeconds = holdSeconds,
         swipeToSafePosition = swipeToSafePosition,
         removeRedundantText = removeRedundantText,
+        mergeBoundingBox = mergeBoundingBox,
     )
 
     return v
@@ -397,6 +407,7 @@ fun VisionDrive.tapWithScrollRight(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollRight"
@@ -416,6 +427,7 @@ fun VisionDrive.tapWithScrollRight(
         holdSeconds = holdSeconds,
         swipeToSafePosition = false,
         removeRedundantText = removeRedundantText,
+        mergeBoundingBox = mergeBoundingBox,
     )
 
     return v
@@ -434,6 +446,7 @@ fun VisionDrive.tapWithScrollLeft(
     scrollMaxCount: Int = testContext.scrollMaxCount,
     holdSeconds: Double = testContext.tapHoldSeconds,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
 ): VisionElement {
 
     val command = "tapWithScrollLeft"
@@ -453,6 +466,7 @@ fun VisionDrive.tapWithScrollLeft(
         holdSeconds = holdSeconds,
         swipeToSafePosition = false,
         removeRedundantText = removeRedundantText,
+        mergeBoundingBox = mergeBoundingBox,
     )
 
     return v
@@ -567,6 +581,7 @@ fun VisionDrive.tapBelow(
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = 0.0,
             throwsException = true,
         )
         v = labelElement.belowItem(
@@ -621,6 +636,7 @@ fun VisionDrive.tapRight(
             language = language,
             allowScroll = allowScroll,
             swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = 0.0,
             throwsException = true,
         )
         v = labelElement.rightItem(

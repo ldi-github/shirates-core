@@ -11,7 +11,7 @@ open class WaitContext(
     override var error: Throwable? = null,
     override var retryOnError: Boolean,
     override var throwOnFinally: Boolean,
-    override var stopWatch: StopWatch = StopWatch(),
+    override var stopWatch: StopWatch = StopWatch("WaitContext"),
     override var count: Int = 0,
     override var isTimeout: Boolean = false,
     override var onTimeout: (WaitContext) -> Unit,

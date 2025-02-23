@@ -3,135 +3,122 @@ package shirates.core.vision.uitest.ios.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.*
+import shirates.core.driver.commandextension.macro
+import shirates.core.driver.commandextension.screenIs
+import shirates.core.driver.commandextension.tapWithScrollDown
 import shirates.core.testcode.Want
 import shirates.core.vision.classicScope
-import shirates.core.vision.driver.commandextension.*
+import shirates.core.vision.driver.commandextension.macro
+import shirates.core.vision.driver.commandextension.screenIs
+import shirates.core.vision.driver.commandextension.tapWithScrollDown
 import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveTapExtensionTest5 : VisionTest() {
+class VisionDriveTapExtensionTest3 : VisionTest() {
 
     @Test
     @Order(10)
-    fun tapWithScrollUp_textContains() {
+    fun tapWithScrollDown_textContains() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
-                        .flickBottomToTop()
                 }.action {
-                    it.tapWithScrollUp("enera")
+                    it.tapWithScrollDown("evelop")  // Developer
                 }.expectation {
-                    it.screenIs("[General Screen]")
+                    it.screenIs("[Developer Screen]")
                 }
             }
         }
 
-        it.tap("Settings")
-            .flickTopToBottom()
     }
 
     @Test
     @Order(20)
-    fun tapWithScrollUp_textEndsWith() {
+    fun tapWithScrollDown_textEndsWith() {
 
         classicScope {
             scenario {
                 case(1) {
                     condition {
                         it.macro("[iOS Settings Top Screen]")
-                            .flickBottomToTop()
                     }.action {
-                        it.tapWithScrollUp("*eneral")
+                        it.tapWithScrollDown("*eveloper")
                     }.expectation {
-                        it.screenIs("[General Screen]")
+                        it.screenIs("[Developer Screen]")
                     }
                 }
             }
-
-            it.tap("[<Settings]")
-                .flickTopToBottom()
         }
     }
 
     @Test
     @Order(30)
-    fun tapWithScrollUp_textMatches() {
+    fun tapWithScrollDown_textMatches() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
-                        .flickBottomToTop()
                 }.action {
-                    it.tapWithScrollUp("textMatches=^Gen.*al$")
+                    it.tapWithScrollDown("textMatches=^Dev.*per$")
                 }.expectation {
-                    it.screenIs("[General Screen]")
+                    it.screenIs("[Developer Screen]")
                 }
             }
         }
 
-        it.tap("Settings")
-            .flickTopToBottom()
     }
 
     @Test
     @Order(40)
-    fun tapWithScrollUp_id() {
+    fun tapWithScrollDown_id() {
 
         classicScope {
             scenario {
                 case(1) {
                     condition {
                         it.macro("[iOS Settings Top Screen]")
-                            .flickBottomToTop()
                     }.action {
-                        it.tapWithScrollUp("#General")
+                        it.tapWithScrollDown("Developer")
                     }.expectation {
-                        it.screenIs("[General Screen]")
+                        it.screenIs("[Developer Screen]")
                     }
                 }
             }
-
-            it.tap("[<Settings]")
-                .flickTopToBottom()
         }
     }
 
 //    @Test
-//    @Order(3)
-//    fun tapWithScrollUp_access() {
+//    @Order(2)
+//    fun tapWithScrollDown_access() {
 //
 //    }
 //
 //    @Test
-//    @Order(3)
-//    fun tapWithScrollUp_accessStartsWith() {
+//    @Order(2)
+//    fun tapWithScrollDown_accessStartsWith() {
 //
 //    }
 
     @Test
     @Order(50)
-    fun tapWithScrollUp_xpath() {
+    fun tapWithScrollDown_xpath() {
 
         classicScope {
             scenario {
                 case(1) {
                     condition {
-                        it.macro("[iOS Settings Top Screen]")
-                            .flickBottomToTop()
+                        it.macro("[Developer Screen]")
                     }.action {
-                        it.tapWithScrollUp("xpath=//*[@label='General' and @visible='true']")
+                        it.tapWithScrollDown("xpath=//*[@label='Developer']")
                     }.expectation {
-                        it.screenIs("[General Screen]")
+                        it.screenIs("[Developer Screen]")
                     }
                 }
             }
-
-            it.pressBack()
         }
     }
 

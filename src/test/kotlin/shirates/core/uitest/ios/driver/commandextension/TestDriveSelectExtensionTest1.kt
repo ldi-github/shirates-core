@@ -25,39 +25,33 @@ class TestDriveSelectExtensionTest1 : UITest() {
         it.macro("[iOS Settings Top Screen]")
         // Act
         run {
-            val sw = StopWatch()
-            sw.start()
+            val sw = StopWatch("1")
             val e = it.select("no exist", waitSeconds = 0.0, throwsException = false)
-            val t = sw.elapsedMillis
-            println(t)
+            sw.stop()
             // Assert
             assertThat(e.isEmpty).isTrue()
-            assertThat(t >= 0)
-            assertThat(t < 1 * 1000)
+            assertThat(sw.elapsedMillis >= 0)
+            assertThat(sw.elapsedMillis < 1 * 1000)
         }
 
         run {
-            val sw = StopWatch()
-            sw.start()
+            val sw = StopWatch("2")
             val e = it.select("no exist", waitSeconds = 1.2, throwsException = false)
-            val t = sw.elapsedMillis
-            println(t)
+            sw.stop()
             // Assert
             assertThat(e.isEmpty).isTrue()
-            assertThat(t >= 1.2 * 1000)
-            assertThat(t < 2 * 1000)
+            assertThat(sw.elapsedMillis >= 1.2 * 1000)
+            assertThat(sw.elapsedMillis < 2 * 1000)
         }
 
         run {
-            val sw = StopWatch()
-            sw.start()
+            val sw = StopWatch("3")
             val e = it.select("no exist", waitSeconds = 2.3, throwsException = false)
-            val t = sw.elapsedMillis
-            println(t)
+            sw.stop()
             // Assert
             assertThat(e.isEmpty).isTrue()
-            assertThat(t >= 2.3 * 1000)
-            assertThat(t < 3 * 1000)
+            assertThat(sw.elapsedMillis >= 2.3 * 1000)
+            assertThat(sw.elapsedMillis < 3 * 1000)
         }
     }
 

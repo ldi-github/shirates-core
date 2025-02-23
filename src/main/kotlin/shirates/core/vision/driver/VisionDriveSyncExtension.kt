@@ -13,6 +13,7 @@ import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.isSame
+import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toBufferedImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -27,6 +28,7 @@ fun VisionDrive.syncScreen(): VisionElement {
     if (TestDriver.isScreenshotSyncing) {
         return lastElement
     }
+    val sw = StopWatch("syncScreen")
     try {
         TestDriver.isScreenshotSyncing = true
 
@@ -58,6 +60,7 @@ fun VisionDrive.syncScreen(): VisionElement {
         return lastElement
     } finally {
         TestDriver.isScreenshotSyncing = false
+        sw.stop()
     }
 }
 
@@ -108,6 +111,7 @@ fun VisionDrive.waitForClose(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true
 ): VisionElement {
 
@@ -123,6 +127,7 @@ fun VisionDrive.waitForClose(
             waitSeconds = waitSeconds,
             allowScroll = false,
             removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
         if (throwsException && found) {
             throw TestDriverException(
@@ -146,6 +151,7 @@ fun VisionDrive.waitForDisplay(
     language: String = PropertiesManager.visionOCRLanguage,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     removeRedundantText: Boolean = true,
+    mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true,
 ): VisionElement {
 
@@ -161,7 +167,8 @@ fun VisionDrive.waitForDisplay(
             last = false,
             waitSeconds = waitSeconds,
             allowScroll = false,
-            removeRedundantText = removeRedundantText
+            removeRedundantText = removeRedundantText,
+            mergeBoundingBox = mergeBoundingBox,
         )
         if (found.not() && throwsException) {
             throw TestDriverException(

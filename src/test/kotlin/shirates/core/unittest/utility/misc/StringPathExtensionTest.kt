@@ -8,6 +8,7 @@ import shirates.core.driver.TestMode
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.*
+import java.io.FileNotFoundException
 import java.nio.file.Path
 
 class StringPathExtensionTest : UnitTest() {
@@ -130,6 +131,13 @@ class StringPathExtensionTest : UnitTest() {
     @Test
     fun toPath() {
 
+        run {
+            val p: String? = null
+            assertThatThrownBy {
+                p.toPath()
+            }.isInstanceOf(FileNotFoundException::class.java)
+                .hasMessage("null can not be converted to a path.")
+        }
         run {
             // Arrange
             val expected = UserVar.project

@@ -14,7 +14,7 @@ import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("unitTestConfig/ios/iOSSettings/testrun.properties")
-class TestDriveSelectExtensionTest4 : VisionTest() {
+class VisionDriveDetectExtensionTest4 : VisionTest() {
 
     @Unstable("false is true (actual=false)")
     @Test

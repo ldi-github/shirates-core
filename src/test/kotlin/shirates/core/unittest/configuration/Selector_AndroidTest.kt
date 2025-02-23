@@ -9,6 +9,7 @@ import shirates.core.configuration.Selector.Companion.orValueToList
 import shirates.core.configuration.repository.ImageFileRepository
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestMode
+import shirates.core.logging.printInfo
 import shirates.core.testcode.Manual
 import shirates.core.testcode.UnitTest
 import shirates.core.utility.image.BufferedImageUtility
@@ -523,7 +524,7 @@ class Selector_AndroidTest : UnitTest() {
             assertThat(sel.relativeSelectors.count()).isEqualTo(0)
 
             run {
-                val sw = StopWatch()
+                val sw = StopWatch("1")
                 // Arrange
                 val image = ImageFileRepository.getBufferedImage("tower_of_the_sun_face.png")
                 // Act
@@ -532,10 +533,10 @@ class Selector_AndroidTest : UnitTest() {
                 assertThat(r.result).isTrue()
                 assertThat(r.score).isEqualTo(0.0)
 
-                println("evaluateImageEqualsTo: ${sw.elapsedMillis} ms, $r")
+                printInfo("evaluateImageEqualsTo: ${sw.elapsedMillis} ms, $r")
             }
             run {
-                val sw = StopWatch()
+                val sw = StopWatch("2")
 
                 // Arrange
                 val image = ImageFileRepository.getBufferedImage("tower_of_the_golden_face.png")
@@ -544,12 +545,12 @@ class Selector_AndroidTest : UnitTest() {
                 // Assert
                 assertThat(r.result).isFalse()
 
-                println("evaluateImageEqualsTo: ${sw.elapsedMillis} ms, $r")
+                printInfo("evaluateImageEqualsTo: ${sw.elapsedMillis} ms, $r")
             }
 
 
             run {
-                val sw = StopWatch()
+                val sw = StopWatch("3")
 
                 // Arrange
                 val image = ImageFileRepository.getBufferedImage("tower_of_the_sun.png")
@@ -559,10 +560,10 @@ class Selector_AndroidTest : UnitTest() {
                 // Assert
                 assertThat(r.result).isTrue()
 
-                println("evaluateImageContainedIn: ${sw.elapsedMillis} ms, $r")
+                printInfo("evaluateImageContainedIn: ${sw.elapsedMillis} ms, $r")
             }
             run {
-                val sw = StopWatch()
+                val sw = StopWatch("4")
 
                 // Arrange
                 val image = ImageFileRepository.getBufferedImage("tower_of_the_sun.png")
@@ -572,10 +573,10 @@ class Selector_AndroidTest : UnitTest() {
                 // Assert
                 assertThat(r.result).isTrue()
 
-                println("evaluateImageContainedIn: ${sw.elapsedMillis} ms, $r")
+                printInfo("evaluateImageContainedIn: ${sw.elapsedMillis} ms, $r")
             }
             run {
-                val sw = StopWatch()
+                val sw = StopWatch("5")
 
                 // Arrange
                 val image = ImageFileRepository.getBufferedImage("tower_of_the_sun.png")
@@ -586,7 +587,7 @@ class Selector_AndroidTest : UnitTest() {
                 // Assert
                 assertThat(r.result).isTrue()
 
-                println("evaluateImageContainedIn: ${sw.elapsedMillis} ms, $r")
+                printInfo("evaluateImageContainedIn: ${sw.elapsedMillis} ms, $r")
             }
         }
     }
