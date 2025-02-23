@@ -1952,19 +1952,12 @@ object TestDriver {
             CpuLoadService.waitForCpuLoadUnder()
 
             val oldImage = CodeExecutionContext.lastScreenshotImage
-
-            val sw = StopWatch("syncScreenshot")
             visionDrive.syncScreen()
-            sw.stop()
-
             val newImage = CodeExecutionContext.lastScreenshotImage
             val changed = newImage.isSame(oldImage).not()
-
             if (changed.not() && onChangedOnly) {
-//                TestLog.printInfo("Saving screenshot skipped. (no change)")
                 return this
             }
-//            printInfo("screenshotSynced=${CodeExecutionContext.screenshotSynced}")
 
             screenshotFileName = filename ?: (TestLog.nextLineNo).toString()
             if (screenshotFileName.lowercase().contains(".png").not()) {
@@ -1990,7 +1983,7 @@ object TestDriver {
             TestDriver.visionRootElement = VisionElement(visionContext = vc)
             CodeExecutionContext.workingRegionElement = oldWorkingRegionElement.newVisionElement()
 
-            if (log) {
+            if (changed) {
                 val screenshotLine = TestLog.write(
                     message = "screenshot: $screenshotFileName",
                     logType = LogType.SCREENSHOT,

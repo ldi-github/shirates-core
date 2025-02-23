@@ -73,7 +73,7 @@ fun VisionDrive.findImage(
     skinThickness: Int = 2,
     binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     intervalSeconds: Double = testContext.syncIntervalSeconds,
     allowScroll: Boolean? = null,
     throwsException: Boolean = true,
@@ -143,7 +143,7 @@ fun VisionDrive.findImage(
         return v
     } finally {
         v.selector = Selector(label)
-        swDetect.printInfo()
+        swDetect.stop()
     }
 }
 

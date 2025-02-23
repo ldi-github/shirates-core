@@ -9,17 +9,17 @@ object ProcessUtility {
     /**
      * getPid
      */
-    fun getPid(port: Int, log: Boolean = false): Int? {
+    fun getPid(port: Int): Int? {
 
         try {
             if (TestMode.isRunningOnWindows) {
-                val r = ShellUtility.executeCommandCore("netstat", "-ano")
+                val r = ShellUtility.executeCommand("netstat", "-ano")
                 val line = r.resultString.split("\r\n")
                     .firstOrNull { it.contains("TCP") && it.contains("LISTEN") && it.contains(":$port") } ?: ""
                 val pid = line.split(" ").lastOrNull()?.toIntOrNull()
                 return pid
             } else {
-                val r = ShellUtility.executeCommandCore("lsof", "-t", "-i:$port", "-sTCP:LISTEN", log = log)
+                val r = ShellUtility.executeCommand("lsof", "-t", "-i:$port", "-sTCP:LISTEN")
                 val pid = r.resultString.trim().toIntOrNull()
                 return pid
             }

@@ -22,7 +22,7 @@ testrunファイルでログ出力を構成することができます。
 #enableGetSourceLog=true
 #enableTrace=true
 #enableTimeMeasureLog=true
-#enableStopWatchLog=false
+#enableStopWatchLog=true
 #enableShellExecLog=true
 #enableImageMatchDebugLog=true
 #enableIsInViewLog=true

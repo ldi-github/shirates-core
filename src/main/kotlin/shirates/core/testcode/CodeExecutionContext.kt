@@ -407,23 +407,17 @@ object CodeExecutionContext {
      */
     val shouldOutputLog: Boolean
         get() {
-            if (isInSilentCommand) {
-                if (PropertiesManager.enableSilentLog.not()) {
-                    return false
-                }
+            if (isInSilentCommand && PropertiesManager.enableSilentLog.not()) {
+                return false
             }
-            if (isInMacro) {
-                return PropertiesManager.enableInnerMacroLog
+            if (isInMacro && PropertiesManager.enableInnerMacroLog.not()) {
+                return false
             }
-            if (isInOperationCommand) {
-                if (PropertiesManager.enableInnerCommandLog.not()) {
-                    return false
-                }
+            if (isScrolling && testContext.onScrolling) {
+                return true
             }
-            if (isScrolling) {
-                if (testContext.onScrolling.not()) {
-                    return false
-                }
+            if (isInOperationCommand && PropertiesManager.enableInnerCommandLog.not()) {
+                return false
             }
 
             return true

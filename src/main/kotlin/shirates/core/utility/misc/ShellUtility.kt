@@ -31,7 +31,7 @@ object ShellUtility {
 
     internal fun executeCommandCore(
         vararg args: String,
-        log: Boolean = PropertiesManager.enableShellExecLog
+        log: Boolean
     ): ShellResult {
 
         val outputStream = ByteArrayOutputStream()
@@ -40,8 +40,6 @@ object ShellUtility {
         val message = args.joinToString(" ")
         val sw = StopWatch(message)
         try {
-            TestLog.execute(message = args.joinToString(" "), log = log)
-
             val command = args.firstOrNull() ?: throw IllegalArgumentException("args")
             val args2 = args.toMutableList()
             args2.removeAt(0)
@@ -68,7 +66,7 @@ object ShellUtility {
                 }
             }
         } finally {
-            sw.stop()
+            sw.stop(log = log)
         }
 
         return ShellResult(

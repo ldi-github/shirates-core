@@ -200,7 +200,7 @@ fun VisionElement.existOnLine(
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
     func: (VisionElement.() -> Unit)? = null
 ): VisionElement {
@@ -246,7 +246,7 @@ fun VisionElement.existOnColumn(
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
     removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
@@ -293,7 +293,7 @@ fun VisionElement.existOnRight(
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
     removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
@@ -340,7 +340,7 @@ fun VisionElement.existOnLeft(
     last: Boolean = false,
     lineHeight: Int = this.rect.height * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
     removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
@@ -387,7 +387,7 @@ fun VisionElement.existOnAbove(
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
     removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
@@ -434,7 +434,7 @@ fun VisionElement.existOnBelow(
     last: Boolean = false,
     columnWidth: Int = this.rect.width * 2,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     message: String? = null,
     removeRedundantText: Boolean = true,
     func: (VisionElement.() -> Unit)? = null
@@ -486,7 +486,7 @@ fun VisionElement.existImageOnLine(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
 ): VisionElement {
@@ -547,7 +547,7 @@ fun VisionElement.existImageOnColumn(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
 ): VisionElement {
@@ -608,7 +608,7 @@ fun VisionElement.existImageOnLeft(
     segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
     segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
     mergeIncluded: Boolean = false,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
     message: String? = null,
 ): VisionElement {

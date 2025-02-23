@@ -37,7 +37,7 @@ fun VisionDrive.detect(
     last: Boolean = false,
     allowScroll: Boolean? = null,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = testContext.waitSecondsForAnimationComplete,
     removeRedundantText: Boolean = true,
     mergeBoundingBox: Boolean = true,
     throwsException: Boolean = true,
@@ -61,7 +61,7 @@ fun VisionDrive.detect(
         lastElement = v
         return v
     } finally {
-        swDetect.printInfo()
+        swDetect.stop()
     }
 }
 
@@ -358,6 +358,7 @@ fun VisionDrive.detectWithScrollDown(
             language = language,
             allowScroll = true,
             swipeToSafePosition = false,
+            waitSeconds = 0.0,
             throwsException = throwsException,
         )
     }
@@ -396,6 +397,7 @@ fun VisionDrive.detectWithScrollUp(
             language = language,
             allowScroll = true,
             swipeToSafePosition = false,
+            waitSeconds = 0.0,
             throwsException = throwsException,
         )
     }
@@ -434,6 +436,7 @@ fun VisionDrive.detectWithScrollRight(
             language = language,
             allowScroll = true,
             swipeToSafePosition = false,
+            waitSeconds = 0.0,
             throwsException = throwsException,
         )
     }
@@ -472,6 +475,7 @@ fun VisionDrive.detectWithScrollLeft(
             language = language,
             allowScroll = true,
             swipeToSafePosition = false,
+            waitSeconds = 0.0,
             throwsException = throwsException,
         )
     }
@@ -489,7 +493,7 @@ fun VisionDrive.detectWithoutScroll(
     expression: String,
     language: String = PropertiesManager.visionOCRLanguage,
     swipeToSafePosition: Boolean = CodeExecutionContext.swipeToSafePosition,
-    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    waitSeconds: Double = 0.0,
     throwsException: Boolean = true,
 ): VisionElement {
 
