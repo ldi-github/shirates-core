@@ -32,6 +32,7 @@
             case(2) {
                 action {
                     it.launchApp("[Chrome]")
+                        .waitForDisplay("*検索*")
                 }.expectation {
                     it.packageIs("com.android.chrome")
                 }
