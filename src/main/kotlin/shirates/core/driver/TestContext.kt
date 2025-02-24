@@ -1,6 +1,7 @@
 package shirates.core.driver
 
 import shirates.core.Const
+import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.TestProfile
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.eventextension.TestDriveOnScreenContext
@@ -258,6 +259,29 @@ class TestContext(
 
     @SaveTarget
     var enableScreenHandler = true
+
+    // vision --------------------------------------------------
+
+    @SaveTarget
+    var visionOCRLanguage: String = PropertiesManager.visionOCRLanguage
+
+    @SaveTarget
+    var segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal
+
+    @SaveTarget
+    var segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical
+
+    @SaveTarget
+    var segmentCroppingMargin: Int = PropertiesManager.segmentCroppingMargin
+
+    @SaveTarget
+    var visionFindImageThreshold: Double = PropertiesManager.visionFindImageThreshold
+
+    @SaveTarget
+    var visionFindImageBinaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold
+
+    @SaveTarget
+    var visionFindImageAspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance
 
     internal val saveTargetProperties = this::class.memberProperties.filterIsInstance<KMutableProperty<*>>()
         .filter {

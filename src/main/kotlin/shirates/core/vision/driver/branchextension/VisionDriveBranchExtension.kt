@@ -1,4 +1,3 @@
-import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
@@ -6,6 +5,7 @@ import shirates.core.driver.branchextension.ifFalse
 import shirates.core.driver.branchextension.ifTrue
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.commandextension.getSelector
+import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -17,13 +17,13 @@ import shirates.core.vision.driver.commandextension.findImage
  */
 fun VisionDrive.ifImageExist(
     label: String,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    threshold: Double? = testContext.visionFindImageThreshold,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     onTrue: (() -> Unit)
 ): BooleanCompareResult {
@@ -61,13 +61,13 @@ fun VisionDrive.ifImageExist(
  */
 fun VisionDrive.ifImageExistNot(
     label: String,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    threshold: Double? = testContext.visionFindImageThreshold,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = 0.0,
     onTrue: () -> Unit
 ): BooleanCompareResult {

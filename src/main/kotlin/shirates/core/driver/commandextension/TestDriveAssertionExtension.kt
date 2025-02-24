@@ -64,7 +64,10 @@ fun TestDrive.keyboardIsNotShown(): TestElement {
 /**
  * packageIs
  */
-fun TestDrive.packageIs(expected: String): TestElement {
+fun TestDrive.packageIs(
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    expected: String
+): TestElement {
 
     val testElement = TestDriver.it
 
@@ -82,7 +85,17 @@ fun TestDrive.packageIs(expected: String): TestElement {
             throw NotImplementedError("packageIs function is for Android.")
         }
 
-        val actual = rootElement.packageName
+        var actual = rootElement.packageName
+        if (actual != expected) {
+            doUntilTrue(
+                waitSeconds = waitSeconds,
+                throwOnError = false
+            ) {
+                actual = rootElement.packageName
+                actual == expected
+            }
+        }
+
         if (actual == expected) {
             TestLog.ok(
                 message = assertMessage,

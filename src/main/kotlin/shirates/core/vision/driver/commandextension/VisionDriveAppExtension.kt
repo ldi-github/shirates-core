@@ -11,6 +11,8 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
+import shirates.core.vision.driver.doUntilTrue
+import shirates.core.vision.driver.isApp
 import shirates.core.vision.driver.lastElement
 
 /**
@@ -137,6 +139,7 @@ fun VisionDrive.restartApp(
  */
 fun VisionDrive.launchApp(
     appNameOrAppIdOrActivityName: String = testContext.appIconName,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     launchAppMethod: String = PropertiesManager.launchAppMethod,
     fallBackToTapAppIcon: Boolean = true,
     onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,
@@ -187,6 +190,11 @@ fun VisionDrive.launchApp(
             launchAppByShellAction()
         }
 
+        doUntilTrue(
+            waitSeconds = waitSeconds,
+        ) {
+            it.isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+        }
     }
 
     return lastElement
