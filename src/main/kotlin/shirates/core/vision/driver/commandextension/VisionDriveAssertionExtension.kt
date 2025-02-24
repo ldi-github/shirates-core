@@ -331,7 +331,11 @@ internal fun VisionDrive.screenIsOfCore(
     checkScreen()
 
     if (isScreenResult.not()) {
-        SyncUtility.doUntilTrue(waitSeconds = waitSeconds) {
+        SyncUtility.doUntilTrue(
+            waitSeconds = waitSeconds,
+            throwOnError = false,
+            throwOnOverMaxLoopCount = false
+        ) {
             checkScreen()
             if (isScreenResult.not()) {
                 onIrregular?.invoke()

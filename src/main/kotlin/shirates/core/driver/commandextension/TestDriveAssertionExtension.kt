@@ -65,8 +65,8 @@ fun TestDrive.keyboardIsNotShown(): TestElement {
  * packageIs
  */
 fun TestDrive.packageIs(
+    expected: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
-    expected: String
 ): TestElement {
 
     val testElement = TestDriver.it
