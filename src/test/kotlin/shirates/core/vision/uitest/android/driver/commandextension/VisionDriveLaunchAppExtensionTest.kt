@@ -55,4 +55,28 @@ class VisionDriveLaunchAppExtensionTest : VisionTest() {
         }
     }
 
+    @Test
+    fun launchApp2() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.terminateApp("com.android.chrome")
+                    it.terminateApp("com.android.settings")
+                }.action {
+                    it.launchApp("com.android.chrome")
+                }.expectation {
+                    it.appIs("Chrome")
+                }
+            }
+            case(2) {
+                action {
+                    it.launchApp("com.android.settings", waitSeconds = 0.0)
+                }.expectation {
+                    it.appIs("Settings", waitSeconds = 0.0)
+                }
+            }
+        }
+    }
+
 }

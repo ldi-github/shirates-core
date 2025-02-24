@@ -11,8 +11,6 @@ import shirates.core.logging.TestLog
 import shirates.core.utility.misc.AppNameUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
-import shirates.core.vision.driver.doUntilTrue
-import shirates.core.vision.driver.isApp
 import shirates.core.vision.driver.lastElement
 
 /**
@@ -190,11 +188,6 @@ fun VisionDrive.launchApp(
             launchAppByShellAction()
         }
 
-        doUntilTrue(
-            waitSeconds = waitSeconds,
-        ) {
-            it.isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
-        }
     }
 
     return lastElement
