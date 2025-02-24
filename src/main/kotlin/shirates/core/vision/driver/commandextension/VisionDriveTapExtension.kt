@@ -273,13 +273,13 @@ private fun VisionDrive.tapWithScrollCommandCore(
  */
 fun VisionDrive.tapImage(
     label: String,
-    threshold: Double? = PropertiesManager.visionFindImageThreshold,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    threshold: Double? = testContext.visionFindImageThreshold,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
     mergeIncluded: Boolean = false,
     skinThickness: Int = 2,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     holdSeconds: Double = testContext.tapHoldSeconds,
     throwsException: Boolean = true,
@@ -553,9 +553,9 @@ fun VisionDrive.tapCenterOf(
  */
 fun VisionDrive.tapBelow(
     expression: String? = null,
-    horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
-    verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    language: String = PropertiesManager.visionOCRLanguage,
+    horizontalMargin: Int = testContext.segmentMarginHorizontal,
+    verticalMargin: Int = testContext.segmentMarginVertical,
+    language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
@@ -608,11 +608,11 @@ fun VisionDrive.tapBelow(
  */
 fun VisionDrive.tapRight(
     expression: String? = null,
-    horizontalMargin: Int = PropertiesManager.segmentMarginHorizontal,
-    verticalMargin: Int = PropertiesManager.segmentMarginVertical,
-    language: String = PropertiesManager.visionOCRLanguage,
+    horizontalMargin: Int = testContext.segmentMarginHorizontal,
+    verticalMargin: Int = testContext.segmentMarginVertical,
+    language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
-    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+    holdSeconds: Double = testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
 ): VisionElement {
 

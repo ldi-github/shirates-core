@@ -57,7 +57,7 @@ You can know whether you can select the element or not using these functions tha
             case(5) {
                 expectation {
                     withScrollUp {
-                        it.canDetectAll("Settings", "System")
+                        it.canDetectAll("System", "Settings")
                             .thisIsTrue("<Settings> found with scroll up.")
                     }
                 }

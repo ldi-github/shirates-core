@@ -93,7 +93,7 @@
                         .swipeToTopOfScreen(durationSeconds = 5.0)
                 }.expectation {
                     it.dontExist("通知")
-                        .exist("ストレージ")
+                        .exist("音とバイブレーション")
                 }
             }
             case(2) {

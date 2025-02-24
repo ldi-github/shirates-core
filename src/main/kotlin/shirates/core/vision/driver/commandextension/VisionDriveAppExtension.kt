@@ -137,6 +137,7 @@ fun VisionDrive.restartApp(
  */
 fun VisionDrive.launchApp(
     appNameOrAppIdOrActivityName: String = testContext.appIconName,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     launchAppMethod: String = PropertiesManager.launchAppMethod,
     fallBackToTapAppIcon: Boolean = true,
     onLaunchHandler: (() -> Unit)? = testContext.onLaunchHandler,

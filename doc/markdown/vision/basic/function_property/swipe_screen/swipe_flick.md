@@ -93,7 +93,7 @@ You can swipe or flick screen using these functions.
                         .swipeToTopOfScreen(durationSeconds = 5.0)
                 }.expectation {
                     it.dontExist("Notifications")
-                        .exist("Storage")
+                        .exist("Sound & vibration")
                 }
             }
             case(2) {

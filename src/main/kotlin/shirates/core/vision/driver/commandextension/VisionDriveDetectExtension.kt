@@ -24,6 +24,7 @@ import shirates.core.vision.driver.silent
 fun VisionDrive.setOCRLanguage(ocrLanguage: String): VisionElement {
 
     PropertiesManager.visionOCRLanguage = ocrLanguage
+    testContext.visionOCRLanguage = ocrLanguage
 
     return lastElement
 }
@@ -201,7 +202,9 @@ private fun VisionDrive.detectCoreCore(
      */
     var v = VisionElement.emptyElement
     doUntilTrue(
-        waitSeconds = waitSeconds,
+        waitSeconds =
+            if (CodeExecutionContext.withScroll == false) waitSeconds
+            else Math.min(testContext.waitSecondsForAnimationComplete, waitSeconds),
         intervalSeconds = 1.0,
         retryOnError = false,
         throwOnFinally = false,

@@ -17,12 +17,12 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionElement.rightItem(
     pos: Int = 1,
-    segmentMarginHhorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    segmentMarginHhorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
     segmentMinimumHeight: Int = this.rect.height / 2,
     include: Boolean = false,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
 ): VisionElement {
 
     return rightLeftCore(
@@ -42,12 +42,12 @@ fun VisionElement.rightItem(
  */
 fun VisionElement.leftItem(
     pos: Int = 1,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
     segmentMinimumHeight: Int = this.rect.height / 2,
     include: Boolean = false,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
 ): VisionElement {
 
     return rightLeftCore(
@@ -163,12 +163,12 @@ internal fun VisionElement.rightLeftCore(
  */
 fun VisionElement.aboveItem(
     pos: Int = 1,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
     segmentMinimumWidth: Int = this.rect.width / 2,
     include: Boolean = false,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
 ): VisionElement {
 
     return aboveBelowCore(
@@ -188,12 +188,12 @@ fun VisionElement.aboveItem(
  */
 fun VisionElement.belowItem(
     pos: Int = 1,
-    segmentMarginHorizontal: Int = PropertiesManager.segmentMarginHorizontal,
-    segmentMarginVertical: Int = PropertiesManager.segmentMarginVertical,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
     segmentMinimumWidth: Int = this.rect.width / 2,
     include: Boolean = false,
-    binaryThreshold: Int = PropertiesManager.visionFindImageBinaryThreshold,
-    aspectRatioTolerance: Double = PropertiesManager.visionFindImageAspectRatioTolerance,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
 ): VisionElement {
 
     return aboveBelowCore(

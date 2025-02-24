@@ -47,19 +47,6 @@ You can specify useCache argument with these functions of UITest.
 (`kotlin/tutorial/inaction/DirectAccessModeIos.kt`)
 
 ```kotlin
-package tutorial.inaction
-
-import org.junit.jupiter.api.Order
-import org.junit.jupiter.api.Test
-import shirates.core.configuration.Testrun
-import shirates.core.driver.DisableCache
-import shirates.core.driver.commandextension.*
-import shirates.core.testcode.UITest
-import shirates.core.utility.time.StopWatch
-
-@Testrun("testConfig/ios/iOSSettings/testrun.properties")
-class DirectAccessModeIos : UITest() {
-
     @Test
     @Order(10)
     fun enableCacheTest() {
@@ -105,6 +92,27 @@ class DirectAccessModeIos : UITest() {
     }
 
     @Test
+    @Order(25)
+    fun appiumDriverTest() {
+
+        disableCache()
+
+        scenario {
+            case(1) {
+                condition {
+                    appiumDriver.findElement(By.id("General")).click()
+                }.action {
+                    appiumDriver.findElement(By.id("About")).click()
+                }.expectation {
+                    appiumDriver.findElement(By.id("Name"))
+                        .toTestElement().isFound.thisIsTrue("<Name > exists")
+                }
+            }
+        }
+
+    }
+
+    @Test
     @DisableCache
     @Order(30)
     fun disableCacheTest2() {
@@ -130,11 +138,9 @@ class DirectAccessModeIos : UITest() {
     fun performanceComparison() {
 
         fun process(count: Int) {
-            val sw1 = StopWatch()
-            val sw2 = StopWatch()
             invalidateCache()
 
-            sw1.start()
+            val sw1 = StopWatch("cache mode")
             useCache {
                 for (i in 1..count) {
                     it.select("General")  // cache mode
@@ -142,7 +148,7 @@ class DirectAccessModeIos : UITest() {
             }
             sw1.stop()
 
-            sw2.start()
+            val sw2 = StopWatch("direct access mode")
             suppressCache {
                 for (i in 1..count) {
                     it.select("General")  // direct access mode
@@ -178,7 +184,39 @@ class DirectAccessModeIos : UITest() {
             }
         }
     }
-}
+
+    @Test
+    @Order(50)
+    fun useCacheArgument() {
+
+        // useCache argument can be specified with these functions
+
+        printUseCache("testMethod")
+
+        scenario(useCache = true) {
+            printUseCache("scenario")
+
+            case(1, useCache = false) {
+                printUseCache("case")
+
+                condition(useCache = true) {
+                    printUseCache("condition")
+
+                }.action(useCache = false) {
+                    printUseCache("action")
+
+                }.expectation(useCache = true) {
+                    printUseCache("expectation")
+
+                }
+            }
+        }
+    }
+
+    private fun printUseCache(funcName: String) {
+
+        println("($funcName) testContext.useCache=${testContext.useCache}")
+    }
 ```
 
 ### Link
