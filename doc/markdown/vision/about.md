@@ -1,6 +1,6 @@
 # What is Shirates/Vision?
 
-Shirates/Vision is Computer Vision(CV) driven mobile testing framework powered by Vision Framework on macOS.<br>
+**Shirates/Vision** is Computer Vision(CV) driven mobile testing framework powered by Vision Framework on macOS.<br>
 
 ### True multi-platform
 

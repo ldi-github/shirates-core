@@ -1,4 +1,4 @@
-# Shirates/Vision [Beta]
+# Shirates/Vision
 
 [in Japanese(日本語)](index_ja.md)
 
