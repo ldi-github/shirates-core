@@ -662,7 +662,7 @@ class VisionContext(
         if (tempText.isEmpty()) {
             return confirmedElements
         }
-        filteredElements = filteredElements.filter { it.textForComparison.contains(tempText) }.toMutableList()
+        filteredElements = filteredElements.filter { it.textForComparison.startsWith(tempText) }.toMutableList()
         confirmedElements.addAll(filteredElements)
         searchElements.removeAll(filteredElements)
 
