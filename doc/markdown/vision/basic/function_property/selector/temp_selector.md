@@ -1,6 +1,6 @@
 # tempSelector (Vision)
 
-You can register selector on demand using `tempSelector` function.
+You can register selector(nickname) on demand using `tempSelector` function.
 
 ## Sample code
 
@@ -15,14 +15,14 @@ You can register selector on demand using `tempSelector` function.
     @Order(10)
     fun tempSelector1() {
 
-        tempSelector("[First Item]", "Network & internet")
+        tempSelector("{First Item}", "Network & internet")
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
-                    it.tap("[First Item]")
+                    it.tap("{First Item}")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                 }
@@ -30,6 +30,10 @@ You can register selector on demand using `tempSelector` function.
         }
     }
 ```
+
+### See also
+
+[Nickname](../../selector_and_nickname/nickname.md)
 
 ### Link
 

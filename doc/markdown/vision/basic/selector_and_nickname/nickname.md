@@ -16,12 +16,12 @@ Nickname is defined in nickname file.
 
 These are types of nickname.
 
-- [Selector nickname (for classic mode)](../../../../classic/basic/selector_and_nickname/nickname/selector_nickname.md)
-- [Screen nickname (for classic mode)](../../../../classic/basic/selector_and_nickname/nickname/screen_nickname.md)
-- [Dataset nickname](../../../../classic/basic/selector_and_nickname/nickname/dataset_nickname.md)
+- [Selector nickname](../../../classic/basic/selector_and_nickname/nickname/selector_nickname.md)
+- [Screen nickname (for classic mode)](../../../classic/basic/selector_and_nickname/nickname/screen_nickname.md)
+- [Dataset nickname](../../../classic/basic/selector_and_nickname/nickname/dataset_nickname.md)
 
-**Selector nickname** and **Screen nickname** is designed for classic mode.<br>
-**Dataset nickname** can be used in both vision mode/classic mode.
+**Screen nickname** is designed for classic mode.<br>
+**Selector nickname** and **Dataset nickname** can be used in both vision mode/classic mode.
 
 ## Nickname declaration (General format)
 

@@ -38,6 +38,12 @@ capabilitiesはtestConfig.jsonで設定できます。
 }
 ```
 
+#### 注意
+
+Androidエミュレーターはしばらく使用するとAppiumから言語設定することができなくなる場合があります。言語設定に失敗する場合は
+[Cannot set the device locale to '(locale)'](../../../common/troubleshooting/performance_and_stability_android/cannot_set_the_device_locale_to.md)
+をチェックしてください。
+
 ### iOS
 
 `testConfig/ios/testConfig@i.json`

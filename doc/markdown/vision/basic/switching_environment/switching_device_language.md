@@ -38,6 +38,12 @@ You can set capabilities in testConfig.json.
 }
 ```
 
+#### Note
+
+After using the Android emulator for a while, you may not be able to set the language from Appium. If language setting
+fails, please check
+[Cannot set the device locale to '(locale)'](../../../common/troubleshooting/performance_and_stability_android/cannot_set_the_device_locale_to.md) .
+
 ### iOS
 
 `testConfig/ios/testConfig@i.json`
