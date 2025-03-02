@@ -18,6 +18,7 @@ import shirates.core.utility.toBufferedImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.canDetectCore
+import shirates.core.vision.driver.commandextension.screenshot
 
 
 /**
@@ -120,15 +121,25 @@ fun VisionDrive.waitForClose(
     val context = TestDriverCommandContext(null)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
-        val found = canDetectCore(
-            selector = sel,
-            language = language,
-            last = false,
+        var found = false
+        doUntilTrue(
             waitSeconds = waitSeconds,
-            allowScroll = false,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
-        )
+            throwOnFinally = false,
+            onBeforeRetry = {
+                screenshot(force = true, onChangedOnly = true)
+            }
+        ) {
+            found = canDetectCore(
+                selector = sel,
+                language = language,
+                last = false,
+                waitSeconds = 0.0,
+                allowScroll = false,
+                removeRedundantText = removeRedundantText,
+                mergeBoundingBox = mergeBoundingBox,
+            )
+            found.not()
+        }
         if (throwsException && found) {
             throw TestDriverException(
                 message = message(
@@ -161,15 +172,25 @@ fun VisionDrive.waitForDisplay(
     val context = TestDriverCommandContext(testElement)
     context.execSelectCommand(selector = sel, subject = sel.nickname) {
 
-        val found = canDetectCore(
-            selector = sel,
-            language = language,
-            last = false,
+        var found = false
+        doUntilTrue(
             waitSeconds = waitSeconds,
-            allowScroll = false,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
-        )
+            throwOnFinally = false,
+            onBeforeRetry = {
+                screenshot(force = true, onChangedOnly = true)
+            }
+        ) {
+            found = canDetectCore(
+                selector = sel,
+                language = language,
+                last = false,
+                waitSeconds = waitSeconds,
+                allowScroll = false,
+                removeRedundantText = removeRedundantText,
+                mergeBoundingBox = mergeBoundingBox,
+            )
+            found
+        }
         if (found.not() && throwsException) {
             throw TestDriverException(
                 message = message(
