@@ -301,11 +301,6 @@ object CodeExecutionContext {
     var lastRecognizedFileName: String? = null
 
     /**
-     * lastRecognizedJsonFile
-     */
-    var lastRecognizedJsonFile: String? = null
-
-    /**
      * lastCropInfo
      */
     var lastCropInfo: CropInfo? = null

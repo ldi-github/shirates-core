@@ -300,6 +300,20 @@ object CreateMLUtility {
 
         val binaryImageFile = p.resolve("${imageFile.toPath().toFile().nameWithoutExtension}_binary.png").toString()
         visualBinary.saveImage(binaryImageFile, log = false)
+
+        /**
+         * Create reversed
+         */
+        for (y in 0 until binary.height) {
+            for (x in 0 until binary.width) {
+                var v = binary.get(x, y)
+                v = if (v == 0) 255 else 0
+                binary.set(x, y, v)
+            }
+        }
+        val visualBinary2 = VisualizeBinaryData.renderBinary(binary, false, null)
+        val binaryImageFile2 = p.resolve("${imageFile.toPath().toFile().nameWithoutExtension}_binary2.png").toString()
+        visualBinary2.saveImage(binaryImageFile2, log = false)
     }
 
 }

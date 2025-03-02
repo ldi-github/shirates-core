@@ -17,12 +17,12 @@
 
 以下の種類のニックネームを使用することができます。
 
-- [セレクターニックネーム (classicモード用)](../../../classic/basic/selector_and_nickname/nickname/selector_nickname_ja.md)
+- [セレクターニックネーム](../../../classic/basic/selector_and_nickname/nickname/selector_nickname_ja.md)
 - [画面ニックネーム (classicモード用)](../../../classic/basic/selector_and_nickname/nickname/screen_nickname_ja.md)
 - [データセットニックネーム](../../../classic/basic/selector_and_nickname/nickname/dataset_nickname_ja.md)
 
-**セレクターニックネーム** と **画面ニックネーム** はClassicモードで使用するためのものです。<br>
-**データセットニックネーム** はClassicモード/Visionモードの両方で使用できます。
+**画面ニックネーム** はClassicモードで使用するためのものです。<br>
+**セレクターニックネーム** と **データセットニックネーム** はClassicモード/Visionモードの両方で使用できます。
 
 ## ニックネーム宣言 (一般形)
 

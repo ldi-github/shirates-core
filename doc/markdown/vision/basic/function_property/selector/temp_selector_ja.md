@@ -1,6 +1,6 @@
 # tempSelector
 
-`tempSelector`関数を使用してセレクターをオンデマンドで登録することができます。
+`tempSelector`関数を使用してセレクター(ニックネーム)をオンデマンドで登録することができます。
 
 ### サンプルコード
 
@@ -30,6 +30,10 @@
         }
     }
 ```
+
+### 参照
+
+[ニックネーム](../../selector_and_nickname/nickname_ja.md)
 
 ### Link
 

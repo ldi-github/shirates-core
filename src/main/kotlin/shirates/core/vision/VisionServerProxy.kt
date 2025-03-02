@@ -187,24 +187,26 @@ object VisionServerProxy {
             )
         }
         val url = urlBuilder.build()
-        val result = getResponseBody(url)
-        lastJsonString = result
+        val jsonString = getResponseBody(url)
+        lastJsonString = jsonString
+        val result = RecognizeTextResult(jsonString)
 
         if (Files.exists(TestLog.directoryForLog).not()) {
             TestLog.directoryForLog.toFile().mkdirs()
         }
         val baseFile = inputFile.toPath().toFile().name
         if (CodeExecutionContext.lastRecognizedFileName != baseFile) {
-            val jsonFile =
-                TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_recognizeText.json")
-                    .toString()
-            jsonFile.toFile()
-                .writeText(result)
-            CodeExecutionContext.lastRecognizedJsonFile = jsonFile
+            val sb = StringBuilder()
+            sb.append("x\ty\twidth\theight\tconfidence\ttext\n")
+            for (c in result.candidates) {
+                sb.append("${c.rect.x1}\t${c.rect.y1}\t${c.rect.width}\t${c.rect.height}\t${c.confidence}\t${c.text}\n")
+            }
+            val tsvString = sb.toString()
+            val tsvFile = TestLog.directoryForLog.resolve("${TestLog.currentLineNo}_recognizeText.txt").toString()
+            tsvFile.toFile().writeText(tsvString)
         }
-
         sw.stop()
-        return RecognizeTextResult(result)
+        return result
     }
 
     /**
