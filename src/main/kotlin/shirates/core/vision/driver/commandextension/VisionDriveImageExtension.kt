@@ -86,7 +86,9 @@ fun VisionDrive.findImage(
         v.selector = Selector(label)
         return v
     }
-    fun action(): VisionElement {
+    fun action(
+        waitSeconds: Double,
+    ): VisionElement {
         val v2 = findImageCore(
             label = label,
             threshold = threshold,
@@ -113,16 +115,19 @@ fun VisionDrive.findImage(
              */
             printInfo("Trying to find image with scroll. (label=\"$label\")")
             v = getElementWithScroll(action = {
-                action()
+                action(waitSeconds = 0.0)
             })
         } else {
-            v = action()
+            /**
+             * Try to find image without scroll
+             */
+            v = action(waitSeconds = waitSeconds)
         }
         if (v.isFound && swipeToSafePosition && CodeExecutionContext.withScroll != false) {
             silent {
                 v.swipeToSafePosition()
             }
-            action()
+            action(waitSeconds = 0.0)
         }
         lastElement = v
         if (v.isEmpty) {
