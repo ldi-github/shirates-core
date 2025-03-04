@@ -644,6 +644,13 @@ class VisionContext(
         confirmedElements: MutableList<VisionElement> = mutableListOf(),
     ): List<VisionElement> {
         var filteredElements = searchElements.toMutableList()
+        val lastConfirmedElement = confirmedElements.lastOrNull()
+        if (lastConfirmedElement != null) {
+            val ix = filteredElements.indexOf(lastConfirmedElement)
+            if (ix >= 0) {
+                filteredElements = filteredElements.slice(ix + 1 until filteredElements.size).toMutableList()
+            }
+        }
         val normalizedText = containedText.forVisionComparison()
         var tempText = ""
 
@@ -668,7 +675,6 @@ class VisionContext(
             filteredElements = filteredElements.filter { it.textForComparison.startsWith(tempText) }.toMutableList()
         }
         confirmedElements.addAll(filteredElements)
-        searchElements.removeAll(filteredElements)
 
         /**
          * detect recursively
