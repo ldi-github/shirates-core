@@ -3,89 +3,93 @@ package shirates.core.vision.uitest.android.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.tap
 import shirates.core.testcode.Want
-import shirates.core.vision.classicScope
-import shirates.core.vision.driver.commandextension.macro
-import shirates.core.vision.driver.commandextension.restartApp
-import shirates.core.vision.driver.commandextension.screenIs
-import shirates.core.vision.driver.commandextension.tap
+import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class VisionDriveTapExtensionTest2 : VisionTest() {
 
-    @Order(50)
+    @Order(10)
     @Test
-    fun tap_textContains() {
+    fun tapBelowOf() {
 
         scenario {
             case(1) {
-                condition {
-                    it.macro("[Android Settings Top Screen]")
-                }.action {
-                    it.tap("*onnected*")
+                action {
+                    it.tapBelowOf("Mobile, Wi-Fi, hotspot")
                 }.expectation {
                     it.screenIs("[Connected devices Screen]")
                 }
             }
+            case(2) {
+                condition {
+                    it.pressBack()
+                }.action {
+                    withScrollDown {
+                        it.tapBelowOf("Services & preferences")
+                    }
+                }.expectation {
+                    it.screenIs("[System Screen]")
+                }
+            }
         }
     }
 
-    @Order(60)
+    @Order(20)
     @Test
-    fun tap_textMatches() {
+    fun tapAboveOf() {
+
+        scenario {
+            case(1) {
+                action {
+                    it.tapAboveOf("Connected devices")
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
+                }
+            }
+            case(2) {
+                condition {
+                    it.pressBack()
+                }.action {
+                    withScrollDown {
+                        it.tapAboveOf("Safety & emergency")
+                    }
+                }.expectation {
+                    it.screenIs("[Location Screen]")
+                }
+            }
+        }
+    }
+
+    @Order(30)
+    @Test
+    fun tapRightOf() {
 
         scenario {
             case(1) {
                 condition {
-                    it.restartApp()
-                    it.macro("[Android Settings Top Screen]")
+                    it.macro("[Internet Screen]")
                 }.action {
-                    it.tap("textMatches=^Connected devices$")
+                    it.tapRightOf("AndroidWifi")
                 }.expectation {
-                    it.screenIs("[Connected devices Screen]")
+                    it.exist("Network details")
                 }
             }
         }
     }
 
-    @Order(70)
+    @Order(40)
     @Test
-    fun tap_id() {
+    fun tapLeftOf() {
 
-        classicScope {
-            scenario {
-                case(1) {
-                    condition {
-                        it.macro("[Android Settings Top Screen]")
-                    }.action {
-                        it.tap("#search_action_bar_title")
-                    }.expectation {
-                        it.screenIs("[Android Settings Search Screen]")
-                    }
-                }
-            }
-        }
-    }
-
-    @Order(80)
-    @Test
-    fun tap_access() {
-
-        classicScope {
-            scenario {
-                case(1) {
-                    condition {
-                        it.macro("[Network & internet Screen]")
-                    }.action {
-                        it.tap("@Navigate up")
-                    }.expectation {
-                        it.screenIs("[Android Settings Top Screen]")
-                    }
+        scenario {
+            case(1) {
+                action {
+                    it.tapLeftOf("Network & internet")
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
                 }
             }
         }

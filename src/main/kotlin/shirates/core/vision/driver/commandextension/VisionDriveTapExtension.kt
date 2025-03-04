@@ -549,27 +549,21 @@ fun VisionDrive.tapCenterOf(
 }
 
 /**
- * tapBelow
+ * tapBelowOf
  */
-fun VisionDrive.tapBelow(
-    expression: String? = null,
-    horizontalMargin: Int = testContext.segmentMarginHorizontal,
-    verticalMargin: Int = testContext.segmentMarginVertical,
+fun VisionDrive.tapBelowOf(
+    expression: String,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
     language: String = testContext.visionOCRLanguage,
     allowScroll: Boolean? = null,
     holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
     swipeToSafePosition: Boolean = true,
 ): VisionElement {
 
-    if (expression == null) {
-        var v = getThisOrIt().belowItem()
-        v = v.tap(holdSeconds = holdSeconds)
-        return v
-    }
-
     val sel = getSelector(expression = expression)
 
-    val command = "tapBelow"
+    val command = "tapBelowOf"
     val message = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
@@ -585,6 +579,104 @@ fun VisionDrive.tapBelow(
             throwsException = true,
         )
         v = labelElement.belowItem(
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+        )
+        val tapFunc = {
+            silent {
+                v = v.tap(holdSeconds = holdSeconds)
+            }
+        }
+
+        tapFunc()
+    }
+    if (TestMode.isNoLoadRun) {
+        lastElement = v
+    }
+
+    return v
+}
+
+/**
+ * tapAboveOf
+ */
+fun VisionDrive.tapAboveOf(
+    expression: String,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    language: String = testContext.visionOCRLanguage,
+    allowScroll: Boolean? = null,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+    swipeToSafePosition: Boolean = true,
+): VisionElement {
+
+    val sel = getSelector(expression = expression)
+
+    val command = "tapAboveOf"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    var v = VisionElement.emptyElement
+    context.execOperateCommand(command = command, message = message, subject = "$sel") {
+
+        val labelElement = detect(
+            expression = expression,
+            language = language,
+            allowScroll = allowScroll,
+            swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = 0.0,
+            throwsException = true,
+        )
+        v = labelElement.aboveItem(
+            segmentMarginHorizontal = segmentMarginHorizontal,
+            segmentMarginVertical = segmentMarginVertical,
+        )
+        val tapFunc = {
+            silent {
+                v = v.tap(holdSeconds = holdSeconds)
+            }
+        }
+
+        tapFunc()
+    }
+    if (TestMode.isNoLoadRun) {
+        lastElement = v
+    }
+
+    return v
+}
+
+/**
+ * tapRightOf
+ */
+fun VisionDrive.tapRightOf(
+    expression: String,
+    horizontalMargin: Int = testContext.segmentMarginHorizontal,
+    verticalMargin: Int = testContext.segmentMarginVertical,
+    language: String = testContext.visionOCRLanguage,
+    allowScroll: Boolean? = null,
+    holdSeconds: Double = testContext.tapHoldSeconds,
+    swipeToSafePosition: Boolean = true,
+): VisionElement {
+
+    val sel = getSelector(expression = expression)
+
+    val command = "tapRightOf"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    var v = VisionElement.emptyElement
+    context.execOperateCommand(command = command, message = message, subject = "$sel") {
+
+        val labelElement = detect(
+            expression = expression,
+            language = language,
+            allowScroll = allowScroll,
+            swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = 0.0,
+            throwsException = true,
+        )
+        v = labelElement.rightItem(
             segmentMarginHorizontal = horizontalMargin,
             segmentMarginVertical = verticalMargin,
         )
@@ -604,10 +696,10 @@ fun VisionDrive.tapBelow(
 }
 
 /**
- * tapRight
+ * tapLeftOf
  */
-fun VisionDrive.tapRight(
-    expression: String? = null,
+fun VisionDrive.tapLeftOf(
+    expression: String,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
     language: String = testContext.visionOCRLanguage,
@@ -616,15 +708,9 @@ fun VisionDrive.tapRight(
     swipeToSafePosition: Boolean = true,
 ): VisionElement {
 
-    if (expression == null) {
-        var v = getThisOrIt().rightItem()
-        v = v.tap(holdSeconds = holdSeconds)
-        return v
-    }
-
     val sel = getSelector(expression = expression)
 
-    val command = "tapRight"
+    val command = "tapLeftOf"
     val message = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
@@ -639,8 +725,8 @@ fun VisionDrive.tapRight(
             waitSeconds = 0.0,
             throwsException = true,
         )
-        v = labelElement.rightItem(
-            segmentMarginHhorizontal = horizontalMargin,
+        v = labelElement.leftItem(
+            segmentMarginHorizontal = horizontalMargin,
             segmentMarginVertical = verticalMargin,
         )
         val tapFunc = {
