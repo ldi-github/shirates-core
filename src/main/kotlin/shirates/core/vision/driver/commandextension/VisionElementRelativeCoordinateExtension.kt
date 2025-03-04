@@ -17,23 +17,25 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionElement.rightItem(
     pos: Int = 1,
-    segmentMarginHhorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
     segmentMinimumHeight: Int = this.rect.height / 2,
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
+    centerBase: Boolean = false,
 ): VisionElement {
 
     return rightLeftCore(
         relative = RelativeDirection.right,
         pos = pos,
-        segmentMarginHorizontal = segmentMarginHhorizontal,
+        segmentMarginHorizontal = segmentMarginHorizontal,
         segmentMarginVertical = segmentMarginVertical,
         segmentMinimumHeight = segmentMinimumHeight,
         mergeIncluded = include,
         binaryThreshold = binaryThreshold,
         aspectRatioTolerance = aspectRatioTolerance,
+        centerBase = centerBase,
     )
 }
 
@@ -48,6 +50,7 @@ fun VisionElement.leftItem(
     include: Boolean = false,
     binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
     aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
+    centerBase: Boolean = true,
 ): VisionElement {
 
     return rightLeftCore(
@@ -59,6 +62,7 @@ fun VisionElement.leftItem(
         mergeIncluded = include,
         binaryThreshold = binaryThreshold,
         aspectRatioTolerance = aspectRatioTolerance,
+        centerBase = centerBase,
     )
 }
 
@@ -71,6 +75,7 @@ internal fun VisionElement.rightLeftCore(
     mergeIncluded: Boolean,
     binaryThreshold: Int,
     aspectRatioTolerance: Double,
+    centerBase: Boolean,
 ): VisionElement {
 
     val sw = StopWatch("rightLeftCore")
@@ -139,12 +144,15 @@ internal fun VisionElement.rightLeftCore(
     val mergedElements = mergeContainer.visionElements
 
     val sortedElements =
-        if (relative.isRight)
-            mergedElements.filter { it.isSameRect(baseElement).not() && baseElement.rect.centerX <= it.rect.left }
+        if (relative.isRight) {
+            val minLeft = if (centerBase) baseElement.rect.centerX else baseElement.rect.right
+            mergedElements.filter { it.isSameRect(baseElement).not() && minLeft <= it.rect.left }
                 .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
-        else
-            mergedElements.filter { it.isSameRect(baseElement).not() && it.rect.right <= baseElement.rect.centerX }
+        } else {
+            val maxRight = if (centerBase) baseElement.rect.centerX else baseElement.rect.left
+            mergedElements.filter { it.isSameRect(baseElement).not() && it.rect.right <= maxRight }
                 .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
+        }
     val v =
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
         else sortedElements[pos - 1]

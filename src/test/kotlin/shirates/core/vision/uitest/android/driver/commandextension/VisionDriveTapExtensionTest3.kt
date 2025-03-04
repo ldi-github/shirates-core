@@ -3,50 +3,95 @@ package shirates.core.vision.uitest.android.driver.commandextension
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.commandextension.macro
-import shirates.core.driver.commandextension.screenIs
-import shirates.core.driver.commandextension.tap
 import shirates.core.testcode.Want
-import shirates.core.vision.classicScope
+import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.testcode.VisionTest
 
 @Want
 @Testrun("testConfig/android/androidSettings/testrun.properties")
 class VisionDriveTapExtensionTest3 : VisionTest() {
 
-    @Order(90)
+    @Order(10)
     @Test
-    fun tap_accessStartsWith() {
+    fun tapBelow() {
 
-        classicScope {
-            scenario {
-                case(1) {
-                    condition {
-                        it.macro("[Network & internet Screen]")
-                    }.action {
-                        it.tap("@Navi*")
-                    }.expectation {
-                        it.screenIs("[Android Settings Top Screen]")
-                    }
+        scenario {
+            case(1) {
+                action {
+                    it.detect("Mobile, Wi-Fi, hotspot")
+                        .tapBelow()
+                }.expectation {
+                    it.screenIs("[Connected devices Screen]")
+                }
+            }
+            case(2) {
+                condition {
+                    it.pressBack()
+                }.action {
+                    it.detect("Apps")
+                        .tapBelow(2)
+                }.expectation {
+                    it.screenIs("[Notifications Screen]")
                 }
             }
         }
     }
 
-    @Order(100)
+    @Order(20)
     @Test
-    fun tap_xpath() {
+    fun tapAbove() {
 
-        classicScope {
-            scenario {
-                case(1) {
-                    condition {
-                        it.macro("[Android Settings Top Screen]")
-                    }.action {
-                        it.tap("xpath=//*[@text='Connected devices']")
-                    }.expectation {
-                        it.screenIs("[Connected devices Screen]")
-                    }
+        scenario {
+            case(1) {
+                action {
+                    it.detect("Connected devices")
+                        .tapAbove()
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
+                }
+            }
+            case(2) {
+                condition {
+                    it.pressBack()
+                }.action {
+                    it.detect("Bluetooth, pairing")
+                        .tapAbove(2)
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
+                }
+            }
+        }
+    }
+
+    @Order(30)
+    @Test
+    fun tapRight() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.macro("[Internet Screen]")
+                }.action {
+                    it.detect("AndroidWifi")
+                        .tapRight()
+                }.expectation {
+                    it.exist("Network details")
+                }
+            }
+        }
+    }
+
+    @Order(40)
+    @Test
+    fun tapLeft() {
+
+        scenario {
+            case(1) {
+                action {
+                    it.detect("Network & internet")
+                        .tapLeft()
+                }.expectation {
+                    it.screenIs("[Network & internet Screen]")
                 }
             }
         }
