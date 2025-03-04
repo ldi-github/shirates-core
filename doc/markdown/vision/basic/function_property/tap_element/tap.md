@@ -4,17 +4,21 @@ You can tap an element on the screen using these functions.
 
 ## Functions
 
-| function           | description                                                                                                     |
-|:-------------------|:----------------------------------------------------------------------------------------------------------------|
-| tap(expression)    | Tap the first element that matches the selector in current screen. Scrolling occurs within withScroll function. |
-| tap(x, y)          | Tap the coordinates (x, y).                                                                                     |
-| tapWithScrollDown  | Tap the first element that matches the selector with scrolling down.                                            |
-| tapWithScrollUp    | Tap the first element that matches the selector with scrolling up.                                              |
-| tapWithScrollRight | Tap the first element that matches the selector with scrolling right.                                           |
-| tapWithScrollLeft  | Tap the first element that matches the selector with scrolling left.                                            |
-| tapWithoutScroll   | Tap the first element that matches the selector **without** scrolling.                                          |
-| tapCenterOfScreen  | Tap the center of the screen.                                                                                   |
-| tapCenterOf        | Tap the center of the element.                                                                                  |
+| function               | description                                                                                                     |
+|:-----------------------|:----------------------------------------------------------------------------------------------------------------|
+| tap(expression)        | Tap the first element that matches the selector in current screen. Scrolling occurs within withScroll function. |
+| tap(x, y)              | Tap the coordinates (x, y).                                                                                     |
+| tapWithScrollDown      | Tap the first element that matches the selector with scrolling down.                                            |
+| tapWithScrollUp        | Tap the first element that matches the selector with scrolling up.                                              |
+| tapWithScrollRight     | Tap the first element that matches the selector with scrolling right.                                           |
+| tapWithScrollLeft      | Tap the first element that matches the selector with scrolling left.                                            |
+| tapWithoutScroll       | Tap the first element that matches the selector **without** scrolling.                                          |
+| tapCenterOfScreen      | Tap the center of the screen.                                                                                   |
+| tapCenterOf            | Tap the center of the element.                                                                                  |
+| tapBelowOf(expression) | Tap the element below of the element of expression.                                                             |
+| tapAboveOf(expression) | Tap the element above of the element of expression.                                                             |
+| tapRightOf(expression) | Tap the element right of the element of expression.                                                             |
+| tapLeftOf(expression)  | Tap the element left of the element of expression.                                                              |
 
 ## Sample code
 

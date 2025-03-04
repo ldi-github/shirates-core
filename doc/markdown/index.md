@@ -87,6 +87,7 @@
     - [canFindImage](vision/basic/function_property/getting_image/can_find_image.md)
 - Tap element
     - [tap](vision/basic/function_property/tap_element/tap.md)
+    - [tapImage](vision/basic/function_property/tap_element/tap_image.md)
     - [tapAppIcon](vision/basic/function_property/tap_element/tap_app_icon.md)
 - Install and launch app
     - [installApp, removeApp](vision/basic/function_property/install_and_launch_app/install_app.md)

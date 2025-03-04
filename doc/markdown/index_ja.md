@@ -85,6 +85,7 @@
     - [canFindImage](vision/basic/function_property/getting_image/can_find_image_ja.md)
 - 要素をタップする
     - [tap](vision/basic/function_property/tap_element/tap_ja.md)
+    - [tapImage](vision/basic/function_property/tap_element/tap_image_ja.md)
     - [tapAppIcon](vision/basic/function_property/tap_element/tap_app_icon_ja.md)
 - インストールとアプリの起動
     - [installApp, removeApp](vision/basic/function_property/install_and_launch_app/install_app_ja.md)
