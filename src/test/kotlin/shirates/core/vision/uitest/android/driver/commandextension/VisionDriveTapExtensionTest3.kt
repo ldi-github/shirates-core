@@ -54,7 +54,7 @@ class VisionDriveTapExtensionTest3 : VisionTest() {
                 condition {
                     it.pressBack()
                 }.action {
-                    it.detect("Bluetooth, paring")
+                    it.detect("Bluetooth, pairing")
                         .tapAbove(2)
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
