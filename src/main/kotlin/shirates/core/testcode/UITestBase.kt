@@ -74,22 +74,32 @@ abstract class UITestBase : Drive {
     var b1 = false
     var b2 = false
     var b3 = false
+    var b4 = false
+    var b5 = false
 
     var i1: Int? = null
     var i2: Int? = null
     var i3: Int? = null
+    var i4: Int? = null
+    var i5: Int? = null
 
     var d1: Date? = null
     var d2: Date? = null
     var d3: Date? = null
+    var d4: Date? = null
+    var d5: Date? = null
 
     var s1: String? = null
     var s2: String? = null
     var s3: String? = null
+    var s4: String? = null
+    var s5: String? = null
 
     var o1: Any? = null
     var o2: Any? = null
     var o3: Any? = null
+    var o4: Any? = null
+    var o5: Any? = null
 
     val TestFunctionDescription: String
         get() {
