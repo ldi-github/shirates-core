@@ -4,17 +4,21 @@
 
 ## 関数
 
-| 関数                 | 説明                                     |
-|:-------------------|:---------------------------------------|
-| tap(expression)    | selectorにマッチする最初の要素をタップします（現在の画面）      |
-| tap(x, y)          | (x, y)座標をタップします                        |
-| tapWithScrollDown  | selectorにマッチする最初の要素をタップします（下方向スクロールあり） |
-| tapWithScrollUp    | selectorにマッチする最初の要素をタップします（上方向スクロールあり） |
-| tapWithScrollRight | selectorにマッチする最初の要素をタップします（右方向スクロールあり） |
-| tapWithScrollLeft  | selectorにマッチする最初の要素をタップします（左方向スクロールあり） |
-| tapWithoutScroll   | selectorにマッチする最初の要素をタップします（スクロールなし）    |
-| tapCenterOfScreen  | 画面の中心をタップします                           |
-| tapCenterOf        | 要素の中心をタップします                           |
+| 関数                               | 説明                                                                  |
+|:---------------------------------|:--------------------------------------------------------------------|
+| tap(_expression_)                | _expression_ にマッチする最初の要素をタップします。**withScroll** 関数内で使用するとスクロールが発生します |
+| tap(_x, y_)                      | (_x, y_)座標をタップします                                                   |
+| tapWithScrollDown(_expression_)  | _expression_ にマッチする最初の要素をタップします（下方向スクロールあり）                         |
+| tapWithScrollUp(_expression_)    | _expression_ にマッチする最初の要素をタップします（上方向スクロールあり）                         |
+| tapWithScrollRight(_expression_) | _expression_ にマッチする最初の要素をタップします（右方向スクロールあり）                         |
+| tapWithScrollLeft(_expression_)  | _expression_ にマッチする最初の要素をタップします（左方向スクロールあり）                         |
+| tapWithoutScroll(_expression_)   | _expression_ にマッチする最初の要素をタップします（スクロールなし）                            |
+| tapCenterOfScreen                | 画面の中心をタップします                                                        |
+| tapCenterOf(_expression_)        | 要素の中心をタップします                                                        |
+| tapItemUnder(_expression_)       | _expression_ にマッチする要素の下の要素をタップします                                   |
+| tapItemOver(_expression_)        | _expression_ にマッチする要素の上の要素をタップします                                   |
+| tapItemRightOf(_expression_)     | _expression_ にマッチする要素の右の要素をタップします                                   |
+| tapItemLeftOf(_expression_)      | _expression_ にマッチする要素の左の要素をタップします                                   |
 
 ### サンプルコード
 

@@ -229,7 +229,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
    ![](_images/create_avd_2.png)
 
 
-5. Select `UsideDownCake 34 Android 14.0 (Google Play)` and click `Next` (Google Play Store is required for
+5. Select `UpsideDownCake 34 Android 14.0 (Google Play)` and click `Next` (Google Play Store is required for
    demonstration using **Calculator** app). Select **arm64** image for M1 Mac, otherwise select **x86_64** image.<br>
    ![](_images/create_avd_3.png)
 

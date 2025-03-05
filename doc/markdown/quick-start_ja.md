@@ -173,11 +173,11 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 1. **Android Studio**を開きます。
 2. メニューから `Tools > Device Manager` を選択します。
-3. `[+]`をクリックします。 <br>
+3. `[+]`をクリックし、`Create Virtual Device`を選択します。 <br>
    ![](classic/_images/create_avd_1.png)
 4. `Pixcel 8`を選択して`Next`をクリックします。<br>
    ![](classic/_images/create_avd_2.png)
-5. `UsideDownCake 34 Android 14.0 (Google Play)`を選択して`Next`をクリックします。 (**電卓アプリ** を使用したデモではGoogle
+5. `UpsideDownCake 34 Android 14.0 (Google Play)`を選択して`Next`をクリックします。 (**電卓アプリ** を使用したデモではGoogle
    Play Storeが必要となります). Macでは**arm64**のイメージを選択します。<br>
    ![](classic/_images/create_avd_3.png)
 6. AVD名を`Pixel 8(Android 14)`に設定します。<br>
