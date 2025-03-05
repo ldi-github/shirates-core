@@ -8,7 +8,7 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.testcode.UnitTest
 import shirates.core.testdata.XmlDataAndroid
 
@@ -1655,7 +1655,7 @@ class TestElementRelativeCoordinateExtension_AndroidTest1 : UnitTest() {
          *   |Scrollable2-1  |Scrollable2-2  |               |
          */
 
-        testDrive.enableCache()
+        classic.enableCache()
 
         run {
             // Arrange

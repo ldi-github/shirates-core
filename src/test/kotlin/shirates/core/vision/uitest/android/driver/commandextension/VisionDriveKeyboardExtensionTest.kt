@@ -3,10 +3,10 @@ package shirates.core.vision.uitest.android.driver.commandextension
 import io.appium.java_client.android.nativekey.AndroidKey
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.pressEnter
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
-import shirates.core.driver.testDrive
 import shirates.core.testcode.Want
 import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.vision.driver.commandextension.*
@@ -89,7 +89,7 @@ class VisionDriveKeyboardExtensionTest : VisionTest() {
                     it.macro("[Network & internet Screen]")
                         .pressTab()
                 }.action {
-                    testDrive.pressEnter()
+                    classic.pressEnter()
                 }.expectation {
                     it.screenIs("[Internet Screen]")
                 }
@@ -130,7 +130,7 @@ class VisionDriveKeyboardExtensionTest : VisionTest() {
                     it.macro("[Network & internet Screen]")
                         .pressTab()
                 }.action {
-                    testDrive.pressEnter()
+                    classic.pressEnter()
                 }.expectation {
                     it.screenIs("[Internet Screen]")
                 }

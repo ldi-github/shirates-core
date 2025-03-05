@@ -115,7 +115,7 @@ internal fun AppiumDriver.removeApp(packageOrBundleId: String? = testContext.pro
         }
         isAppInstalled(packageOrBundleId = packageOrBundleId).not()
     }
-    testDrive.waitForClose(testContext.appIconName)
+    classic.waitForClose(testContext.appIconName)
 }
 
 internal fun AppiumDriver.terminateApp(packageOrBundleId: String?) {

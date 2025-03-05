@@ -46,7 +46,7 @@ fun VisionDrive.classicScope(
     useCache: Boolean = true,
     func: (TestDrive) -> Unit
 ): VisionElement {
-    testDrive.syncCache(force = true)
+    classic.syncCache(force = true)
     val originalEnableCache = testContext.enableCache
     try {
         testContext.enableCache = useCache

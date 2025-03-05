@@ -16,13 +16,13 @@ class TestDrivePropertyExtensionTest : UITest() {
     fun parameters() {
 
         // Act, Assert
-        assertThat(testDrive.parameters).isNotEmpty
+        assertThat(classic.parameters).isNotEmpty
     }
 
     @Test
     fun parameters2() {
 
-        assertThat(testDrive.parameter("sheetName")).isEqualTo("TestDrivePropertyExtensionTest")
+        assertThat(classic.parameter("sheetName")).isEqualTo("TestDrivePropertyExtensionTest")
     }
 
     @Test
@@ -49,28 +49,28 @@ class TestDrivePropertyExtensionTest : UITest() {
     fun deviceManufacturer() {
 
         val deviceManufacturer = capabilityRelaxed("deviceManufacturer")
-        assertThat(testDrive.deviceManufacturer).isEqualTo(deviceManufacturer)
+        assertThat(classic.deviceManufacturer).isEqualTo(deviceManufacturer)
     }
 
     @Test
     fun deviceModel() {
 
         val deviceModel = capabilityRelaxed("deviceModel")
-        assertThat(testDrive.deviceModel).isEqualTo(deviceModel)
+        assertThat(classic.deviceModel).isEqualTo(deviceModel)
     }
 
     @Test
     fun deviceName() {
 
         val deviceName = capabilityRelaxed("deviceName")
-        assertThat(testDrive.deviceName).isEqualTo(deviceName)
+        assertThat(classic.deviceName).isEqualTo(deviceName)
     }
 
     @Test
     fun isEmulator() {
 
         val isEmulator = capabilityRelaxed("deviceName").startsWith("emulator")
-        assertThat(testDrive.isEmulator).isEqualTo(isEmulator)
+        assertThat(classic.isEmulator).isEqualTo(isEmulator)
     }
 
     @Test

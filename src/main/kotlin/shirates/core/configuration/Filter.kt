@@ -347,8 +347,8 @@ class Filter(
             if (id.contains(":id/")) return id
 
             val pkg = packageName
-                ?: if (testContext.useCache) testDrive.rootElement.packageName
-                else visionDrive.rootElement.packageName
+                ?: if (testContext.useCache) classic.rootElement.packageName
+                else vision.rootElement.packageName
             if (pkg.isBlank()) return id
 
             return "${pkg}:id/${id}"

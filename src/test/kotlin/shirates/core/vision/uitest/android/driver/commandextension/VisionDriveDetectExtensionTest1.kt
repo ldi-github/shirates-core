@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.printInfo
 import shirates.core.testcode.Must
@@ -127,7 +127,7 @@ class VisionDriveDetectExtensionTest1 : VisionTest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                    testDrive.scanElements()
+                    classic.scanElements()
                 }.expectation {
                     classicScope {
                         it.canSelectInScanResults("[Network & internet]").thisIsTrue()

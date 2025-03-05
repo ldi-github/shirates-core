@@ -44,7 +44,7 @@ fun TestDrive.hideKeyboard(
     context.execOperateCommand(command = command, message = message) {
         if (isiOS) {
             // hideKeyboard() fails in iOS. https://github.com/appium/appium/issues/15073
-            val keyboard = testDrive.getKeyboardInIos()
+            val keyboard = classic.getKeyboardInIos()
             if (keyboard.isFound) {
                 swipePointToPoint(
                     startX = 0,

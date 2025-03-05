@@ -2,7 +2,7 @@ package shirates.core.vision.driver.commandextension
 
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.commandextension.*
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
@@ -13,7 +13,7 @@ import shirates.core.vision.driver.lastElement
  */
 fun VisionDrive.useCache(func: () -> Unit): VisionElement {
 
-    testDrive.useCache(func = func)
+    classic.useCache(func = func)
     return lastElement
 }
 
@@ -22,7 +22,7 @@ fun VisionDrive.useCache(func: () -> Unit): VisionElement {
  */
 fun VisionDrive.suppressCache(func: () -> Unit): VisionElement {
 
-    testDrive.suppressCache(func = func)
+    classic.suppressCache(func = func)
     return lastElement
 }
 
@@ -31,7 +31,7 @@ fun VisionDrive.suppressCache(func: () -> Unit): VisionElement {
  */
 fun VisionDrive.enableCache(): VisionElement {
 
-    testDrive.enableCache()
+    classic.enableCache()
     return lastElement
 }
 
@@ -40,7 +40,7 @@ fun VisionDrive.enableCache(): VisionElement {
  */
 fun VisionDrive.disableCache(): VisionElement {
 
-    testDrive.disableCache()
+    classic.disableCache()
     return lastElement
 }
 
@@ -49,7 +49,7 @@ fun VisionDrive.disableCache(): VisionElement {
  */
 fun VisionDrive.switchScreen(screenName: String): VisionElement {
 
-    testDrive.switchScreen(screenName = screenName)
+    classic.switchScreen(screenName = screenName)
     return lastElement
 }
 
@@ -60,7 +60,7 @@ fun VisionDrive.onCache(
     func: () -> Unit
 ): BooleanCompareResult {
 
-    return testDrive.onCache(func = func)
+    return classic.onCache(func = func)
 }
 
 /**
@@ -70,7 +70,7 @@ fun VisionDrive.onDirectAccess(
     func: () -> Unit
 ): BooleanCompareResult {
 
-    return testDrive.onDirectAccess(func = func)
+    return classic.onDirectAccess(func = func)
 }
 
 /**

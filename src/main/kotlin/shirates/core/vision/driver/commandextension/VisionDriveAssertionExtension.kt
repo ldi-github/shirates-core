@@ -167,7 +167,7 @@ fun VisionDrive.appIs(
 ): VisionElement {
 
     classicScope {
-        testDrive.appIs(
+        classic.appIs(
             appNameOrAppId = appNameOrAppId,
             waitSeconds = waitSeconds,
             useCache = useCache,
@@ -189,7 +189,7 @@ fun VisionDrive.screenIs(
 ): VisionElement {
 
     if (testContext.useCache) {
-        val e = testDrive.screenIs(
+        val e = classic.screenIs(
             screenName = screenName,
             waitSeconds = waitSeconds,
             onIrregular = onIrregular,

@@ -124,7 +124,7 @@ class TestElement(
             }
 
             val xpath = this.getUniqueXpath() + "/parent::*"
-            _parentElement = testDrive.findWebElementBy(locator = By.xpath(xpath), timeoutMilliseconds = 0)
+            _parentElement = classic.findWebElementBy(locator = By.xpath(xpath), timeoutMilliseconds = 0)
             return _parentElement!!
         }
         set(value) {

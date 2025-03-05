@@ -148,7 +148,7 @@ fun VisionElement.swipeToTop(
     var v = VisionElement.emptyElement
 
     val navigationBar =
-        if (TestMode.isiOS) testDrive.select(".XCUIElementTypeNavigationBar", throwsException = false)
+        if (TestMode.isiOS) classic.select(".XCUIElementTypeNavigationBar", throwsException = false)
         else TestElement.emptyElement
     val top =
         if (topOffsetRatio != 0.0 && navigationBar.isFound) navigationBar.bounds.bottom + 1

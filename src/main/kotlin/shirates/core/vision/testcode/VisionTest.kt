@@ -23,6 +23,8 @@ abstract class VisionTest : UITestBase(), VisionDrive {
     var v1 = VisionElement(capture = false)
     var v2 = VisionElement(capture = false)
     var v3 = VisionElement(capture = false)
+    var v4 = VisionElement(capture = false)
+    var v5 = VisionElement(capture = false)
 
 
     /**

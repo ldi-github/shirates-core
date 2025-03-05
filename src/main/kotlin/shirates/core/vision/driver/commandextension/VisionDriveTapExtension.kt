@@ -37,7 +37,7 @@ fun VisionDrive.tap(
 ): VisionElement {
 
     if (directAccess) {
-        val e = testDrive.tap(
+        val e = classic.tap(
             expression = expression,
             holdSeconds = holdSeconds,
             safeElementOnly = false,
@@ -549,9 +549,9 @@ fun VisionDrive.tapCenterOf(
 }
 
 /**
- * tapBelowOf
+ * tapItemUnder
  */
-fun VisionDrive.tapBelowOf(
+fun VisionDrive.tapItemUnder(
     expression: String,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
@@ -563,7 +563,7 @@ fun VisionDrive.tapBelowOf(
 
     val sel = getSelector(expression = expression)
 
-    val command = "tapBelowOf"
+    val command = "tapItemUnder"
     val message = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
@@ -598,9 +598,9 @@ fun VisionDrive.tapBelowOf(
 }
 
 /**
- * tapAboveOf
+ * tapItemOver
  */
-fun VisionDrive.tapAboveOf(
+fun VisionDrive.tapItemOver(
     expression: String,
     segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
     segmentMarginVertical: Int = testContext.segmentMarginVertical,
@@ -612,7 +612,7 @@ fun VisionDrive.tapAboveOf(
 
     val sel = getSelector(expression = expression)
 
-    val command = "tapAboveOf"
+    val command = "tapItemOver"
     val message = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
@@ -647,9 +647,9 @@ fun VisionDrive.tapAboveOf(
 }
 
 /**
- * tapRightOf
+ * tapItemRightOf
  */
-fun VisionDrive.tapRightOf(
+fun VisionDrive.tapItemRightOf(
     expression: String,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
@@ -661,7 +661,7 @@ fun VisionDrive.tapRightOf(
 
     val sel = getSelector(expression = expression)
 
-    val command = "tapRightOf"
+    val command = "tapItemRightOf"
     val message = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
@@ -696,9 +696,9 @@ fun VisionDrive.tapRightOf(
 }
 
 /**
- * tapLeftOf
+ * tapItemLeftOf
  */
-fun VisionDrive.tapLeftOf(
+fun VisionDrive.tapItemLeftOf(
     expression: String,
     horizontalMargin: Int = testContext.segmentMarginHorizontal,
     verticalMargin: Int = testContext.segmentMarginVertical,
@@ -710,7 +710,7 @@ fun VisionDrive.tapLeftOf(
 
     val sel = getSelector(expression = expression)
 
-    val command = "tapLeftOf"
+    val command = "tapItemLeftOf"
     val message = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)

@@ -113,7 +113,7 @@ object TestElementCache {
                 /**
                  * Keyboard overlapping check
                  */
-                val keyboard = testDrive.getKeyboardInIos()
+                val keyboard = classic.getKeyboardInIos()
                 if (keyboard.isFound) {
                     targetElements = targetElements.filter { it.bounds.isOverlapping(keyboard.bounds).not() }
                 }
@@ -242,7 +242,7 @@ object TestElementCache {
             return lastElement
         }
 
-        val sel = testDrive.getSelector(expression = expression)
+        val sel = classic.getSelector(expression = expression)
 
         val e = select(
             selector = sel,

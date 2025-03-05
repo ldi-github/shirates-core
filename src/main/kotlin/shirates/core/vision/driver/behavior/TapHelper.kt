@@ -1,8 +1,8 @@
 package shirates.core.vision.driver.behavior
 
 import org.openqa.selenium.StaleElementReferenceException
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.select
-import shirates.core.driver.testDrive
 import shirates.core.exception.TestNGException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -103,7 +103,7 @@ object TapHelper : VisionDrive {
      * getPagerInfo(for iOS)
      */
     fun getPagerInfo(): PagerInfo {
-        val pager = testDrive.select(".XCUIElementTypePageIndicator", useCache = false)
+        val pager = classic.select(".XCUIElementTypePageIndicator", useCache = false)
         return PagerInfo(pager.value)
     }
 

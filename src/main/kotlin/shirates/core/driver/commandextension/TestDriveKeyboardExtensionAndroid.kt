@@ -3,7 +3,7 @@ package shirates.core.driver.commandextension
 import io.appium.java_client.android.nativekey.AndroidKey
 import shirates.core.driver.TestDriveObjectAndroid
 import shirates.core.driver.TestMode
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 
 /**
  * getAndroidKey
@@ -85,6 +85,6 @@ internal fun TestDriveObjectAndroid.pressKeys(keys: String) {
     val list = keys.toList().map { "$it" }
     for (key in list) {
         val androidKey = getAndroidKey(key = key)
-        testDrive.pressAndroid(key = androidKey)
+        classic.pressAndroid(key = androidKey)
     }
 }

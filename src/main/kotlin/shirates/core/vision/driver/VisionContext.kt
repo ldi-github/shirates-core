@@ -3,7 +3,7 @@ package shirates.core.vision.driver
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestMode
-import shirates.core.driver.visionDrive
+import shirates.core.driver.vision
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
@@ -82,7 +82,7 @@ class VisionContext(
      */
     fun getVisionElements(): MutableList<VisionElement> {
 
-        val list = mutableListOf<VisionElement>()
+        var list = mutableListOf<VisionElement>()
         for (o in recognizeTextObservations) {
             o.toVisionElement()
             val v = o.toVisionElement()
@@ -90,6 +90,7 @@ class VisionContext(
             v.visionContext.screenshotImage = this.screenshotImage
             list.add(v)
         }
+        list = list.sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { it.rect.left }).toMutableList()
         return list
     }
 
@@ -118,7 +119,7 @@ class VisionContext(
      */
     init {
         if (capture) {
-            this.rootElement = visionDrive.rootElement
+            this.rootElement = vision.rootElement
             this.screenshotFile = CodeExecutionContext.lastScreenshotFile
             this.screenshotImage = CodeExecutionContext.lastScreenshotImage
 
@@ -228,7 +229,7 @@ class VisionContext(
             this.localRegionImage = this.screenshotImage
             this.localRegionFile = this.screenshotFile
         }
-        this.rootElement = visionDrive.rootElement
+        this.rootElement = vision.rootElement
     }
 
     /**
@@ -265,7 +266,7 @@ class VisionContext(
         }
 
         if (rootElement == null) {
-            rootElement = visionDrive.rootElement
+            rootElement = vision.rootElement
         }
 
         val rootVisionContext = rootElement!!.visionContext

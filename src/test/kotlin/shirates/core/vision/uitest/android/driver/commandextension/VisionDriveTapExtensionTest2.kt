@@ -13,12 +13,12 @@ class VisionDriveTapExtensionTest2 : VisionTest() {
 
     @Order(10)
     @Test
-    fun tapBelowOf() {
+    fun tapItemUnder() {
 
         scenario {
             case(1) {
                 action {
-                    it.tapBelowOf("Mobile, Wi-Fi, hotspot")
+                    it.tapItemUnder("Mobile, Wi-Fi, hotspot")
                 }.expectation {
                     it.screenIs("[Connected devices Screen]")
                 }
@@ -28,7 +28,7 @@ class VisionDriveTapExtensionTest2 : VisionTest() {
                     it.pressBack()
                 }.action {
                     withScrollDown {
-                        it.tapBelowOf("Services & preferences")
+                        it.tapItemUnder("Services & preferences")
                     }
                 }.expectation {
                     it.screenIs("[System Screen]")
@@ -39,12 +39,12 @@ class VisionDriveTapExtensionTest2 : VisionTest() {
 
     @Order(20)
     @Test
-    fun tapAboveOf() {
+    fun tapItemOver() {
 
         scenario {
             case(1) {
                 action {
-                    it.tapAboveOf("Connected devices")
+                    it.tapItemOver("Connected devices")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                 }
@@ -54,7 +54,7 @@ class VisionDriveTapExtensionTest2 : VisionTest() {
                     it.pressBack()
                 }.action {
                     withScrollDown {
-                        it.tapAboveOf("Safety & emergency")
+                        it.tapItemOver("Safety & emergency")
                     }
                 }.expectation {
                     it.screenIs("[Location Screen]")
@@ -65,14 +65,14 @@ class VisionDriveTapExtensionTest2 : VisionTest() {
 
     @Order(30)
     @Test
-    fun tapRightOf() {
+    fun tapItemRightOf() {
 
         scenario {
             case(1) {
                 condition {
                     it.macro("[Internet Screen]")
                 }.action {
-                    it.tapRightOf("AndroidWifi")
+                    it.tapItemRightOf("AndroidWifi")
                 }.expectation {
                     it.exist("Network details")
                 }
@@ -82,12 +82,12 @@ class VisionDriveTapExtensionTest2 : VisionTest() {
 
     @Order(40)
     @Test
-    fun tapLeftOf() {
+    fun tapItemLeftOf() {
 
         scenario {
             case(1) {
                 action {
-                    it.tapLeftOf("Network & internet")
+                    it.tapItemLeftOf("Network & internet")
                 }.expectation {
                     it.screenIs("[Network & internet Screen]")
                 }

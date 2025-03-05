@@ -4,11 +4,11 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.dontExistInScanResults
 import shirates.core.driver.commandextension.existAllInScanResults
 import shirates.core.driver.commandextension.macro
 import shirates.core.driver.commandextension.scanElements
-import shirates.core.driver.testDrive
 import shirates.core.exception.TestNGException
 import shirates.core.testcode.Want
 import shirates.core.vision.classicScope
@@ -27,9 +27,9 @@ class VisionDriveAssertionExtensionTest3 : VisionTest() {
             case(1) {
                 condition {
                     it.macro("[iOS Settings Top Screen]")
-                    testDrive.scanElements()
+                    classic.scanElements()
                 }.expectation {
-                    testDrive.existAllInScanResults(
+                    classic.existAllInScanResults(
                         "Settings",
                         "General",
                         "Accessibility",
@@ -43,7 +43,7 @@ class VisionDriveAssertionExtensionTest3 : VisionTest() {
             case(2) {
                 expectation {
                     assertThatThrownBy {
-                        testDrive.existAllInScanResults(
+                        classic.existAllInScanResults(
                             "Settings",
                             "General",
                             "Accessibility",

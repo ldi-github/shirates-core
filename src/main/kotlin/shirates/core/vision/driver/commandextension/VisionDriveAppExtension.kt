@@ -21,7 +21,7 @@ fun VisionDrive.isAppInstalled(
     packageOrBundleId: String? = testContext.profile.packageOrBundleId
 ): Boolean {
 
-    return testDrive.isAppInstalled(appNickname = appNickname, packageOrBundleId = packageOrBundleId)
+    return classic.isAppInstalled(appNickname = appNickname, packageOrBundleId = packageOrBundleId)
 }
 
 /**
@@ -45,7 +45,7 @@ fun VisionDrive.installApp(
         }
 
         invalidateScreen()
-        testDrive.invalidateCache()
+        classic.invalidateCache()
     }
 
     return lastElement
@@ -66,7 +66,7 @@ fun VisionDrive.removeApp(
         TestDriver.appiumDriver.removeApp(packageOrBundleId)
 
         invalidateScreen()
-        testDrive.invalidateCache()
+        classic.invalidateCache()
     }
 
     return lastElement
@@ -97,7 +97,7 @@ fun VisionDrive.terminateApp(
         }
 
         invalidateScreen()
-        testDrive.invalidateCache()
+        classic.invalidateCache()
     }
 
     return lastElement

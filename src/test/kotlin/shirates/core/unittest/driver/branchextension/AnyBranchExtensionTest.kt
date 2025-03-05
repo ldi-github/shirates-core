@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.driver.TestElement
 import shirates.core.driver.TestMode
 import shirates.core.driver.branchextension.*
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.testcode.UnitTest
 
 class AnyBranchExtensionTest : UnitTest() {
@@ -67,7 +67,7 @@ class AnyBranchExtensionTest : UnitTest() {
         TestMode.runAsVirtualDevice {
             TestMode.runAsAndroid {
                 reset()
-                testDrive
+                classic
                     .emulator {
                         e = true
                     }.simulator {
@@ -84,7 +84,7 @@ class AnyBranchExtensionTest : UnitTest() {
             }
             TestMode.runAsIos {
                 reset()
-                testDrive
+                classic
                     .emulator {
                         e = true
                     }.simulator {
@@ -121,7 +121,7 @@ class AnyBranchExtensionTest : UnitTest() {
         TestMode.runAsRealDevice {
             TestMode.runAsAndroid {
                 reset()
-                testDrive
+                classic
                     .emulator {
                         e = true
                     }.simulator {
@@ -138,7 +138,7 @@ class AnyBranchExtensionTest : UnitTest() {
             }
             TestMode.runAsIos {
                 reset()
-                testDrive
+                classic
                     .emulator {
                         e = true
                     }.simulator {
@@ -163,7 +163,7 @@ class AnyBranchExtensionTest : UnitTest() {
         var osaifuNot = false
 
         TestMode.runAsOsaifuKeitai {
-            testDrive
+            classic
                 .osaifuKeitai {
                     osaifu = true
                 }.osaifuKeitaiNot {

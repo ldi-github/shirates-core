@@ -18,17 +18,17 @@ val drive: Drive
     }
 
 /**
- * testDrive
+ * classic
  */
-val testDrive: TestDrive
+val classic: TestDrive
     get() {
         return TestDriveObject
     }
 
 /**
- * visionDrive
+ * vision
  */
-val visionDrive: VisionDrive
+val vision: VisionDrive
     get() {
         return VisionDriveObject
     }
@@ -71,9 +71,9 @@ val testProfile: TestProfile
 val packageName: String
     get() {
         if (testContext.useCache) {
-            return testDrive.rootElement.packageName
+            return classic.rootElement.packageName
         } else {
-            return visionDrive.rootElement.packageName
+            return vision.rootElement.packageName
         }
     }
 
@@ -84,8 +84,8 @@ val rootBounds: Bounds
     get() {
         return if (isAndroid) TestElementCache.hierarchyBounds
         else {
-            if (testContext.useCache) testDrive.rootElement.bounds
-            else visionDrive.rootElement.bounds
+            if (testContext.useCache) classic.rootElement.bounds
+            else vision.rootElement.bounds
         }
     }
 

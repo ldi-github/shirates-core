@@ -7,7 +7,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
 import shirates.core.driver.commandextension.existInScanResults
 import shirates.core.driver.commandextension.scanElements
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.exception.TestNGException
 import shirates.core.logging.TestLog
 import shirates.core.vision.driver.commandextension.*
@@ -250,12 +250,12 @@ class VisionDriveAssertionExtensionTest1 : VisionTest() {
             case(1) {
                 condition {
                     it.macro("[Android Settings Top Screen]")
-                    testDrive.scanElements()
+                    classic.scanElements()
                 }.expectation {
-                    testDrive.existInScanResults("Battery")
+                    classic.existInScanResults("Battery")
 
                     assertThatThrownBy {
-                        testDrive.existInScanResults("no exist")
+                        classic.existInScanResults("no exist")
                     }.isInstanceOf(TestNGException::class.java)
                         .hasMessage("<no exist> exists")
                 }
