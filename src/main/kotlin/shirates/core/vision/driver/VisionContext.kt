@@ -82,7 +82,7 @@ class VisionContext(
      */
     fun getVisionElements(): MutableList<VisionElement> {
 
-        val list = mutableListOf<VisionElement>()
+        var list = mutableListOf<VisionElement>()
         for (o in recognizeTextObservations) {
             o.toVisionElement()
             val v = o.toVisionElement()
@@ -90,6 +90,7 @@ class VisionContext(
             v.visionContext.screenshotImage = this.screenshotImage
             list.add(v)
         }
+        list = list.sortedWith(compareBy<VisionElement> { it.rect.top }.thenBy { it.rect.left }).toMutableList()
         return list
     }
 

@@ -145,11 +145,11 @@ internal fun VisionElement.rightLeftCore(
 
     val sortedElements =
         if (relative.isRight) {
-            val minLeft = if (centerBase) baseElement.rect.centerX else baseElement.rect.right
+            val minLeft = if (this.isMerged.not() && centerBase) baseElement.rect.centerX else baseElement.rect.right
             mergedElements.filter { it.isSameRect(baseElement).not() && minLeft <= it.rect.left }
                 .sortedWith(compareBy<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         } else {
-            val maxRight = if (centerBase) baseElement.rect.centerX else baseElement.rect.left
+            val maxRight = if (this.isMerged.not() && centerBase) baseElement.rect.centerX else baseElement.rect.left
             mergedElements.filter { it.isSameRect(baseElement).not() && it.rect.right <= maxRight }
                 .sortedWith(compareByDescending<VisionElement> { it.rect.left }.thenBy { Math.abs(it.rect.centerY - this.rect.centerY) })
         }
