@@ -179,7 +179,7 @@ object TestDriver {
             lastElement = lastElement.refreshThisElement()
         }
         if (lastElement.isEmpty) {
-            lastElement = testDrive.rootElement
+            lastElement = classic.rootElement
         }
 
         return lastElement
@@ -518,7 +518,7 @@ object TestDriver {
 
             val originalLastElement = lastElement
             try {
-                testDrive.withoutScroll {
+                classic.withoutScroll {
                     testContext.irregularHandler?.invoke()
                 }
             } catch (t: Throwable) {
@@ -555,7 +555,7 @@ object TestDriver {
                 screenshot(force = true, onChangedOnly = true)
                 handler(context)
                 if (context.keep.not()) {
-                    testDrive.removeScreenHandler(screenName)
+                    classic.removeScreenHandler(screenName)
                 }
             }
         } finally {
@@ -587,7 +587,7 @@ object TestDriver {
                 screenshot(force = true, onChangedOnly = true)
                 handler(context)
                 if (context.keep.not()) {
-                    visionDrive.removeScreenHandler(screenName)
+                    vision.removeScreenHandler(screenName)
                 }
             }
         } finally {
@@ -1006,10 +1006,10 @@ object TestDriver {
                     throw TestDriverException("Connected udid is not correct. (profile.udid=${profile.udid}, actual=$udid)")
                 }
                 syncCache(force = true, syncWaitSeconds = testContext.waitSecondsOnIsScreen)     // throws on fail
-                val tapTestElement = testDrive.select(PropertiesManager.tapTestSelector)
+                val tapTestElement = classic.select(PropertiesManager.tapTestSelector)
                 if (tapTestElement.isFound) {
                     TestLog.info("tap${tapTestElement.selector}")
-                    testDrive.silent {
+                    classic.silent {
                         tapTestElement.tap()   // throws on fail
                     }
                 }
@@ -1062,24 +1062,24 @@ object TestDriver {
                         }
                     }
                 ) { wc ->
-                    testDrive.rootElement = AppiumProxy.getSource()
+                    classic.rootElement = AppiumProxy.getSource()
                     TestElementCache.synced = (TestElementCache.sourceXml == lastXml)
 
-                    testDrive.rootElement.sourceCaptureFailed = false
+                    classic.rootElement.sourceCaptureFailed = false
                     if (hasIncompleteWebView()) {
                         if (wc.stopWatch.elapsedSeconds < wc.waitSeconds) {
                             TestLog.info("WebView is incomplete", PropertiesManager.enableSyncLog)
-                            testDrive.rootElement.sourceCaptureFailed = true
+                            classic.rootElement.sourceCaptureFailed = true
                         }
                     } else {
                         if (isiOS && TestElementCache.allElements.count() < 3) {
-                            testDrive.rootElement.sourceCaptureFailed = true
+                            classic.rootElement.sourceCaptureFailed = true
                             TestLog.warn("Source capture failed.", PropertiesManager.enableSyncLog)
                         }
                     }
-                    testDrive.rootElement.sourceCaptureFailed.not()
+                    classic.rootElement.sourceCaptureFailed.not()
                 }
-                if (testDrive.rootElement.sourceCaptureFailed) {
+                if (classic.rootElement.sourceCaptureFailed) {
                     TestLog.warn("WebView is incomplete.", PropertiesManager.enableSyncLog)
                 }
 
@@ -1092,7 +1092,7 @@ object TestDriver {
                 if (lastElement.selector != null) {
                     lastElement = lastElement.refreshLastElement()
                 } else {
-                    lastElement = testDrive.rootElement
+                    lastElement = classic.rootElement
                 }
 
             }
@@ -1200,7 +1200,7 @@ object TestDriver {
         swipeToCenter: Boolean,
         waitSeconds: Double = testContext.syncWaitSeconds,
         throwsException: Boolean = true,
-        selectContext: TestElement = testDrive.rootElement,
+        selectContext: TestElement = classic.rootElement,
         frame: Bounds? = null,
         useCache: Boolean = testContext.useCache,
         safeElementOnly: Boolean
@@ -1237,8 +1237,8 @@ object TestDriver {
                 executeSelect()
             } catch (t: Throwable) {
                 TestLog.info(t.message ?: t.stackTraceToString())
-                testDrive.suppressHandler {
-                    testDrive.withoutScroll {
+                classic.suppressHandler {
+                    classic.withoutScroll {
                         testContext.onSelectErrorHandler!!.invoke()
                     }
                 }
@@ -1253,7 +1253,7 @@ object TestDriver {
     private fun selectCore(
         selector: Selector,
         allowScroll: Boolean,
-        selectContext: TestElement = testDrive.rootElement,
+        selectContext: TestElement = classic.rootElement,
         frame: Bounds?,
         useCache: Boolean,
         swipeToCenter: Boolean,
@@ -1319,7 +1319,7 @@ object TestDriver {
                     }
                 } else if (selectedElement.isFound && selectedElement.isInView && (safeElementOnly.not() || selectedElement.isSafe())) {
                     if (swipeToCenter && CodeExecutionContext.withScroll != false) {
-                        testDrive.silent {
+                        classic.silent {
                             selectedElement = selectedElement.swipeToCenter()
                         }
                         screenshot()
@@ -1351,12 +1351,12 @@ object TestDriver {
                     throwOnError = false,
                     onBeforeRetry = {
                         if (testContext.enableIrregularHandler && testContext.onSelectErrorHandler != null) {
-                            testDrive.withoutScroll {
+                            classic.withoutScroll {
                                 testContext.onSelectErrorHandler!!.invoke()
                             }
                         }
                         val newSelectContext = currentSelectContext.refreshThisElement()
-                        currentSelectContext = if (newSelectContext.isFound) newSelectContext else testDrive.rootElement
+                        currentSelectContext = if (newSelectContext.isFound) newSelectContext else classic.rootElement
                     }
                 ) {
                     val e = if (useCache) {
@@ -1452,7 +1452,7 @@ object TestDriver {
             }
             if (elm == null) {
                 val baseElement =
-                    testDrive.findWebElement(selector = selector, widgetOnly = false)
+                    classic.findWebElement(selector = selector, widgetOnly = false)
                 if (baseElement.isEmpty) {
                     elm = baseElement
                 } else {
@@ -1483,7 +1483,7 @@ object TestDriver {
                         val exp =
                             if (expandedExps.isEmpty()) ".widget"
                             else "className=(${expandedExps.joinToString("|")})"
-                        val scopeElements = testDrive.findWebElements(expression = exp)
+                        val scopeElements = classic.findWebElements(expression = exp)
                             .filter { it.isInView }
                         elm = baseElement.getRelative(scopeElements = scopeElements)
                     } else {
@@ -1527,14 +1527,14 @@ object TestDriver {
             if (selector.pos == null || selector.pos == 1) {
                 if (isiOS) {
                     val xpath = "//*$fullXPathCondition[@visible='true']"
-                    return testDrive.findWebElementBy(
+                    return classic.findWebElementBy(
                         locator = By.xpath(xpath),
                         timeoutMilliseconds = 0,
                         frame = frame
                     )
                 } else {
                     val xpath = "//*$fullXPathCondition"
-                    return testDrive.findWebElementBy(
+                    return classic.findWebElementBy(
                         locator = By.xpath(xpath),
                         timeoutMilliseconds = 0,
                         frame = frame
@@ -1543,7 +1543,7 @@ object TestDriver {
             }
 
             val xpath = "//*$fullXPathCondition"
-            val elements = testDrive.findWebElementsBy(
+            val elements = classic.findWebElementsBy(
                 locator = By.xpath(xpath),
                 timeoutMilliseconds = 0,
                 frame = frame
@@ -1571,7 +1571,7 @@ object TestDriver {
 
         val classChain = selector.getIosClassChain()
         val ms = Measure(classChain)
-        val element = testDrive.findWebElementBy(
+        val element = classic.findWebElementBy(
             locator = AppiumBy.iOSClassChain(classChain),
             timeoutMilliseconds = 0,
             frame = frame
@@ -1644,8 +1644,8 @@ object TestDriver {
         val scroll = allowScroll && CodeExecutionContext.withScroll != false
         if (scroll.not() && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
             // Handle irregular
-            testDrive.suppressHandler {
-                testDrive.withoutScroll {
+            classic.suppressHandler {
+                classic.withoutScroll {
                     testContext.onExistErrorHandler!!.invoke()
                 }
             }
@@ -1663,7 +1663,7 @@ object TestDriver {
                 r.result
             }
 
-            testDrive.doUntilScrollStop(
+            classic.doUntilScrollStop(
                 scrollFrame = scrollFrame,
                 scrollableElement = scrollableElement,
                 repeat = 1,
@@ -1730,8 +1730,8 @@ object TestDriver {
         throwsException: Boolean = true
     ): TestElement {
 
-        if (testDrive.isKeyboardShown) {
-            testDrive.hideKeyboard(waitSeconds = 0.2)
+        if (classic.isKeyboardShown) {
+            classic.hideKeyboard(waitSeconds = 0.2)
         }
 
         var e = TestElement()
@@ -1757,7 +1757,7 @@ object TestDriver {
             stopScroll
         }
 
-        testDrive.doUntilScrollStop(
+        classic.doUntilScrollStop(
             scrollFrame = scrollFrame,
             scrollableElement = scrollableElement,
             repeat = 1,
@@ -1952,7 +1952,7 @@ object TestDriver {
             CpuLoadService.waitForCpuLoadUnder()
 
             val oldImage = CodeExecutionContext.lastScreenshotImage
-            visionDrive.syncScreen()
+            vision.syncScreen()
             val newImage = CodeExecutionContext.lastScreenshotImage
             val changed = newImage.isSame(oldImage).not()
             if (changed.not() && onChangedOnly) {
@@ -2325,7 +2325,7 @@ object TestDriver {
                     TestLog.info("Syncing ($i)", log = enableSyncLog)
                     refreshCache(currentScreenRefresh = false)
                     if (lastXml.isBlank()) {
-                        TestLog.info("imageProfile: ${testDrive.imageProfile}")
+                        TestLog.info("imageProfile: ${classic.imageProfile}")
                     }
 
                     if (isAndroid) {
@@ -2402,7 +2402,7 @@ object TestDriver {
     fun getFocusedWebElement(): TestElement {
 
         return try {
-            testDrive.implicitWaitMilliseconds((testContext.shortWaitSeconds * 1000).toInt()) {
+            classic.implicitWaitMilliseconds((testContext.shortWaitSeconds * 1000).toInt()) {
                 lastElement = (mAppiumDriver!!.switchTo().activeElement() as WebElement).toTestElement()
             }
             lastElement
@@ -2477,7 +2477,7 @@ object TestDriver {
         try {
             val packageOrBundleId = AppNameUtility.getPackageOrBundleId(appNameOrAppIdOrActivityName = appNameOrAppId)
             if (isAndroid) {
-                return testDrive.rootElement.packageName == packageOrBundleId
+                return classic.rootElement.packageName == packageOrBundleId
             }
 
             var appName = AppNameUtility.getAppNameFromPackageName(packageName = packageOrBundleId)
@@ -2562,8 +2562,8 @@ object TestDriver {
         if (testContext.isRemoteServer) {
             tapAppIconCore(appNameOrAppIdOrActivityName)
             SyncUtility.doUntilTrue {
-                testDrive.invalidateCache()
-                testDrive.isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+                classic.invalidateCache()
+                classic.isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
             }
         } else if (isAndroid) {
             launchByShellCore(
@@ -2582,8 +2582,8 @@ object TestDriver {
                 tapAppIconCore(appNameOrAppIdOrActivityName)
                 if (sync) {
                     SyncUtility.doUntilTrue {
-                        testDrive.invalidateCache()
-                        testDrive.isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
+                        classic.invalidateCache()
+                        classic.isApp(appNameOrAppId = appNameOrAppIdOrActivityName)
                     }
                 }
             }
@@ -2654,7 +2654,7 @@ object TestDriver {
             val bundleId = packageOrBundleIdOrActivity
 
             try {
-                testDrive.terminateApp(appNameOrAppId = bundleId)
+                classic.terminateApp(appNameOrAppId = bundleId)
                 TestLog.info("Launching app. (bundleId=$bundleId)")
                 TestDriveObjectIos.launchIosAppByShell(
                     udid = testContext.profile.udid,
@@ -2665,7 +2665,7 @@ object TestDriver {
                 )
                 Thread.sleep(1500)
                 refreshCache()
-                testDrive.withoutScroll {
+                classic.withoutScroll {
                     onLaunchHandler?.invoke()
                 }
             } catch (t: Throwable) {

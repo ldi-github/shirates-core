@@ -37,7 +37,7 @@ fun VisionDrive.tap(
 ): VisionElement {
 
     if (directAccess) {
-        val e = testDrive.tap(
+        val e = classic.tap(
             expression = expression,
             holdSeconds = holdSeconds,
             safeElementOnly = false,

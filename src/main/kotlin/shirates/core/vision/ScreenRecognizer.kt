@@ -1,6 +1,6 @@
 package shirates.core.vision
 
-import shirates.core.driver.visionDrive
+import shirates.core.driver.vision
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
@@ -29,7 +29,7 @@ object ScreenRecognizer {
         /**
          * Get texts from current screen image
          */
-        val rootElement = visionDrive.rootElement
+        val rootElement = vision.rootElement
         rootElement.visionContext.recognizeText()
         /**
          * Get texts of candidate screens

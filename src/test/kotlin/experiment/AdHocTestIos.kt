@@ -5,8 +5,11 @@ import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import shirates.core.configuration.Testrun
-import shirates.core.driver.*
+import shirates.core.driver.DisableCache
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.driver
+import shirates.core.driver.rootElement
 import shirates.core.logging.printInfo
 import shirates.core.testcode.UITest
 import shirates.core.vision.driver.classify
@@ -85,8 +88,8 @@ class AdHocTestIos : UITest() {
 
         scenario {
             case(1) {
-                val allElements = testDrive.allElements(useCache = true)
-                val allElements2 = testDrive.allElements(useCache = false)
+                val allElements = classic.allElements(useCache = true)
+                val allElements2 = classic.allElements(useCache = false)
                 assertThat(allElements.count()).isEqualTo(allElements2.count())
 
                 /**
@@ -116,11 +119,11 @@ class AdHocTestIos : UITest() {
                 condition {
                     disableCache()
                 }.action {
-                    visionDrive.detect("Accessibility").tap()
-                    visionDrive.detect("Display & Text Size").tap()
-                    visionDrive.detect("Larger Text").tap()
+                    vision.detect("Accessibility").tap()
+                    vision.detect("Display & Text Size").tap()
+                    vision.detect("Larger Text").tap()
                 }.expectation {
-                    val v = visionDrive.existImage(
+                    val v = vision.existImage(
                         "unitTestData/files/srvision/ios/template_switch_OFF.png",
 //                        skinThickness = 0,
 //                        margin = 10

@@ -6,7 +6,7 @@ import shirates.core.configuration.Selector
 import shirates.core.configuration.repository.ScreenRepository
 import shirates.core.driver.TestDriver
 import shirates.core.driver.commandextension.switchScreen
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.testcode.UnitTest
 
 class Selector_CopyTest : UnitTest() {
@@ -35,7 +35,7 @@ class Selector_CopyTest : UnitTest() {
         copyAndAssert(Selector("<a>:left(pos=2"))
 
         fun test(screenName: String) {
-            testDrive.switchScreen(screenName)
+            classic.switchScreen(screenName)
             for (sel in TestDriver.screenInfo.selectorMap.values) {
                 copyAndAssert(sel)
             }

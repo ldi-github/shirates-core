@@ -1,7 +1,10 @@
 package shirates.core.driver.behavior
 
-import shirates.core.driver.*
+import shirates.core.driver.TestDrive
+import shirates.core.driver.TestMode
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.*
+import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.utility.misc.ShellUtility
@@ -19,7 +22,7 @@ object LanguageHelperAndroid : TestDrive {
         }
 
         if (TestMode.isVisionTest) {
-            visionDrive.invalidateScreen()
+            vision.invalidateScreen()
         }
 
         val udid = testContext.profile.udid
@@ -27,7 +30,7 @@ object LanguageHelperAndroid : TestDrive {
         ShellUtility.executeCommand(args = args)
         invalidateCache()
         if (TestMode.isVisionTest) {
-            visionDrive.invalidateScreen()
+            vision.invalidateScreen()
         }
     }
 
@@ -41,10 +44,10 @@ object LanguageHelperAndroid : TestDrive {
         }
 
         if (TestMode.isVisionTest) {
-            visionDrive.invalidateScreen()
+            vision.invalidateScreen()
         }
 
-        testDrive.syncCache(true)
+        classic.syncCache(true)
 
         if (it.canSelect("#add_language").not()) {
             gotoLocaleSettings()
@@ -66,7 +69,7 @@ object LanguageHelperAndroid : TestDrive {
         }
 
         if (TestMode.isVisionTest) {
-            visionDrive.invalidateScreen()
+            vision.invalidateScreen()
         }
 
         gotoLocaleSettings()
@@ -108,7 +111,7 @@ object LanguageHelperAndroid : TestDrive {
         }
 
         if (TestMode.isVisionTest) {
-            visionDrive.invalidateScreen()
+            vision.invalidateScreen()
         }
 
         gotoLocaleSettings()
@@ -167,7 +170,7 @@ object LanguageHelperAndroid : TestDrive {
         }
 
         if (TestMode.isVisionTest) {
-            visionDrive.invalidateScreen()
+            vision.invalidateScreen()
         }
 
         gotoLocaleSettings()

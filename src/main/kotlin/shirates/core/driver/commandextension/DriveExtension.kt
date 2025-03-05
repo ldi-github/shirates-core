@@ -29,7 +29,7 @@ fun Drive.getSelector(expression: String): Selector {
             }
         } catch (t: Throwable) {
             throw TestDriverException(
-                message(id = "couldNotGetSelector", subject = expression, arg1 = testDrive.screenName),
+                message(id = "couldNotGetSelector", subject = expression, arg1 = classic.screenName),
                 cause = t
             )
         }

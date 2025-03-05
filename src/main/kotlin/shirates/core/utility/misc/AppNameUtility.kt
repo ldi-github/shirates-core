@@ -95,7 +95,7 @@ object AppNameUtility {
         }
 
         if (isiOS) {
-            return testDrive.rootElement.label
+            return classic.rootElement.label
         }
 
         val pkg = packageName

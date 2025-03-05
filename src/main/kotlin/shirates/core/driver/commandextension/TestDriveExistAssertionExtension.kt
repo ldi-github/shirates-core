@@ -294,8 +294,8 @@ internal fun TestDrive.actionWithOnExistErrorHandler(
          * Retrying with error handler
          */
         TestLog.info("Calling onExistErrorHandler.")
-        testDrive.suppressHandler {
-            testDrive.withoutScroll {
+        classic.suppressHandler {
+            classic.withoutScroll {
                 testContext.onExistErrorHandler!!.invoke()
             }
         }
@@ -389,7 +389,7 @@ private fun TestDrive.getSelectorForExistImage(expression: String): Selector {
     val s = runCatching { getSelector(expression = expression) }.getOrNull()
     // Handle irregular
     if (s == null && testContext.enableIrregularHandler && testContext.onExistErrorHandler != null) {
-        testDrive.withoutScroll {
+        classic.withoutScroll {
             testContext.onExistErrorHandler!!.invoke()
         }
     }

@@ -7,7 +7,7 @@ import shirates.core.driver.ScrollDirection
 import shirates.core.driver.TestElementCache
 import shirates.core.driver.commandextension.scanElements
 import shirates.core.driver.commandextension.thisIsTrue
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.branchextension.emulator
 import shirates.core.vision.driver.branchextension.realDevice
@@ -67,7 +67,7 @@ class VisionDriveScrollExtensionTest3 : VisionTest() {
                     TestElementCache.scanResults.clear()
                     (TestElementCache.scanResults.count() == 0).thisIsTrue()
                 }.action {
-                    testDrive.scanElements()
+                    classic.scanElements()
                 }.expectation {
                     (TestElementCache.scanResults.count() > 0).thisIsTrue()
                     (TestElementCache.scanResults.first().element.descendants.any() { it.text == "Search settings" }).thisIsTrue()

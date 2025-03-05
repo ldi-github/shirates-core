@@ -67,21 +67,21 @@ class TestElementCacheExtension_IosTest : UnitTest() {
             ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataIos.DateAndTime_ja)
         run {
             // Act
-            val e = testDrive.getScrollableElement("#DayViewContainerView")
+            val e = classic.getScrollableElement("#DayViewContainerView")
             // Assert
             assertThat(e.name).isEqualTo("DayViewContainerView")
         }
         run {
-            testDrive.withScrollDown(scrollFrame = "#DayViewContainerView") {
+            classic.withScrollDown(scrollFrame = "#DayViewContainerView") {
                 run {
                     // Act
-                    val e = testDrive.getScrollableElement()
+                    val e = classic.getScrollableElement()
                     // Assert
                     assertThat(e.name).isEqualTo("DayViewContainerView")
                 }
                 run {
                     // Act
-                    val e = testDrive.getScrollableElement("#scroll-view2")
+                    val e = classic.getScrollableElement("#scroll-view2")
                     // Assert
                     assertThat(e.name).isEqualTo("scroll-view2")
                 }
@@ -89,7 +89,7 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         }
         run {
             // Arrange
-            val scrollableElement = testDrive.select("#scroll-view3")
+            val scrollableElement = classic.select("#scroll-view3")
             // Act
             val e = scrollableElement.getScrollableElement()
             // Assert
@@ -115,13 +115,13 @@ class TestElementCacheExtension_IosTest : UnitTest() {
         }
         run {
             // Act
-            val e = testDrive.select("#12月10日 日曜日").getScrollableElement()
+            val e = classic.select("#12月10日 日曜日").getScrollableElement()
             // Assert
             assertThat(e.name).isEqualTo("scroll-view3") // ancestors
         }
         run {
             // Act
-            val e = testDrive.select("<#DayViewContainerView>:parent").getScrollableElement()
+            val e = classic.select("<#DayViewContainerView>:parent").getScrollableElement()
             // Assert
             assertThat(e.name).isEqualTo("scroll-view1") // descendants
         }

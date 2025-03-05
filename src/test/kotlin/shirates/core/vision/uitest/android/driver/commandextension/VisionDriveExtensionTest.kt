@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Testrun
 import shirates.core.driver.TestDriver
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.getCurrentAppIconName
 import shirates.core.driver.commandextension.getCurrentAppName
 import shirates.core.driver.driver
-import shirates.core.driver.testDrive
 import shirates.core.logging.LogType
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
@@ -77,7 +77,7 @@ class VisionDriveExtensionTest : VisionTest() {
 
         // Act, Assert
         assertThatThrownBy {
-            testDrive.getCurrentAppIconName()
+            classic.getCurrentAppIconName()
         }.isInstanceOf(NotImplementedError::class.java)
             .hasMessage("getCurrentAppIconName function is for iOS. Not supported in Android.")
     }
@@ -90,7 +90,7 @@ class VisionDriveExtensionTest : VisionTest() {
 
         // Act, Assert
         assertThatThrownBy {
-            testDrive.getCurrentAppName()
+            classic.getCurrentAppName()
         }.isInstanceOf(NotImplementedError::class.java)
             .hasMessage("getCurrentAppIconName function is for iOS. Not supported in Android.")
     }

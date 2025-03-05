@@ -2,8 +2,8 @@ package shirates.core.driver.commandextension
 
 import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriveObjectAndroid
+import shirates.core.driver.classic
 import shirates.core.driver.testContext
-import shirates.core.driver.testDrive
 import shirates.core.exception.TestConfigException
 import shirates.core.logging.Message
 import shirates.core.logging.TestLog
@@ -47,7 +47,7 @@ internal fun TestDriveObjectAndroid.launchAndroidAppByShell(
     ) {
         val running = isAndroidAppRunning(udid = udid, packageName = packageName)
         if (running.not()) {
-            testDrive.withoutScroll {
+            classic.withoutScroll {
                 onLaunchHandler?.invoke()
             }
         }

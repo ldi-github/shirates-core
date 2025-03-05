@@ -96,7 +96,7 @@ private fun TestDrive.findWebElementsCore(
     var testElements = listOf<TestElement>()
     if (isAndroid || selector.xpath != null || selector.className == "XCUIElementTypeApplication") {
         val xpath = selector.xpath ?: "//*${selector.getXPathCondition()}"
-        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+        classic.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
             testElements = appiumDriver.findElements(By.xpath(xpath))
                 .map { it.toTestElement(selector = selector) }
         }
@@ -117,7 +117,7 @@ private fun TestDrive.findWebElementsCore(
         sel.orSelectors.clear()
         sel.relativeSelectors.clear()
         val classChain = sel.getIosClassChain()
-        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+        classic.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
             testElements = appiumDriver.findElements(AppiumBy.iOSClassChain(classChain))
                 .map { it.toTestElement(selector = selector) }
         }
@@ -205,11 +205,11 @@ internal fun TestDrive.findWebElementBy(
     var e: TestElement? = null
     try {
         if (frame == null) {
-            testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+            classic.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
                 e = appiumDriver.findElement(locator).toTestElement()
             }
         } else {
-            testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+            classic.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
                 var elms = appiumDriver.findElements(locator).map { it.toTestElement() }
                 elms = elms.filter { it.bounds.isIncludedIn(frame) }
                 e = elms.firstOrNull()
@@ -235,7 +235,7 @@ internal fun TestDrive.findWebElementsBy(
     val ms = Measure("findWebElementsBy $locator")
     var elements = mutableListOf<TestElement>()
     try {
-        testDrive.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
+        classic.implicitWaitMilliseconds(timeoutMilliseconds = timeoutMilliseconds) {
             elements = appiumDriver.findElements(locator).map { it.toTestElement() }.toMutableList()
             if (frame != null) {
                 elements = elements.filter { it.bounds.isIncludedIn(frame) }.toMutableList()

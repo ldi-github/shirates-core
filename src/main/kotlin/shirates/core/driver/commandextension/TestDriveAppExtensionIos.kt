@@ -26,7 +26,7 @@ internal fun TestDriveObjectIos.launchIosAppByShell(
     if (sync) {
         val isApp = TestDriver.isAppCore(appNameOrAppId = bundleId)
         if (isApp.not()) {
-            testDrive.withoutScroll {
+            classic.withoutScroll {
                 onLaunchHandler?.invoke()
             }
             Thread.sleep(3000)
@@ -53,7 +53,7 @@ internal fun launchIosAppByShellCore(
     val args = listOf("xcrun", "simctl", "launch", udid, bundleId)
 
     val r = ShellUtility.executeCommand(args = args.toTypedArray(), log = log)
-    testDrive.invalidateCache()
+    classic.invalidateCache()
     val message = r.waitForResultString()
     if (r.hasError) {
         throw TestDriverException(

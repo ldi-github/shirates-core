@@ -91,21 +91,21 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
             ElementCacheUtility.createTestElementFromXml(sourceXml = XmlDataAndroid.SettingsTopScreen)
         run {
             // Act
-            val e = testDrive.getScrollableElement("#main_content_scrollable_container")
+            val e = classic.getScrollableElement("#main_content_scrollable_container")
             // Assert
             assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container")
         }
         run {
-            testDrive.withScrollDown(scrollFrame = "#main_content_scrollable_container") {
+            classic.withScrollDown(scrollFrame = "#main_content_scrollable_container") {
                 run {
                     // Act
-                    val e = testDrive.getScrollableElement()
+                    val e = classic.getScrollableElement()
                     // Assert
                     assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container")
                 }
                 run {
                     // Act
-                    val e = testDrive.getScrollableElement("#settings_homepage_container")
+                    val e = classic.getScrollableElement("#settings_homepage_container")
                     // Assert
                     assertThat(e.id).isEqualTo("com.android.settings:id/settings_homepage_container")
                 }
@@ -113,7 +113,7 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
         }
         run {
             // Arrange
-            val scrollableElement = testDrive.select("#main_content_scrollable_container")
+            val scrollableElement = classic.select("#main_content_scrollable_container")
             // Act
             val e = scrollableElement.getScrollableElement()
             // Assert
@@ -139,19 +139,19 @@ class TestElementCacheExtension_AndroidTest : UnitTest() {
         }
         run {
             // Act
-            val e = testDrive.select("#contextual_cards_content").getScrollableElement()
+            val e = classic.select("#contextual_cards_content").getScrollableElement()
             // Assert
             assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container") // ancestors
         }
         run {
             // Act
-            val e = testDrive.select("#settings_homepage_container").getScrollableElement()
+            val e = classic.select("#settings_homepage_container").getScrollableElement()
             // Assert
             assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container") // descendants
         }
         run {
             // Act
-            val e = testDrive.select("#search_action_bar_title").getScrollableElement()
+            val e = classic.select("#search_action_bar_title").getScrollableElement()
             // Assert
             assertThat(e.id).isEqualTo("com.android.settings:id/main_content_scrollable_container") // rootDescendants
         }

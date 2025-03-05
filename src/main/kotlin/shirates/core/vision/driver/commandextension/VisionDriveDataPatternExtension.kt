@@ -1,8 +1,8 @@
 package shirates.core.vision.driver.commandextension
 
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.resetDataPattern
-import shirates.core.driver.testDrive
-import shirates.core.driver.visionDrive
+import shirates.core.driver.vision
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.lastElement
@@ -35,6 +35,6 @@ fun VisionDrive.getDataPattern(
  */
 fun VisionDrive.resetDataPattern(): VisionElement {
 
-    testDrive.resetDataPattern()
-    return visionDrive.lastElement
+    classic.resetDataPattern()
+    return vision.lastElement
 }

@@ -15,13 +15,13 @@ class VisionDrivePropertyExtensionTest : VisionTest() {
     fun parameters() {
 
         // Act, Assert
-        assertThat(visionDrive.parameters).isNotEmpty
+        assertThat(vision.parameters).isNotEmpty
     }
 
     @Test
     fun parameters2() {
 
-        assertThat(visionDrive.parameter("sheetName")).isEqualTo("VisionDrivePropertyExtensionTest")
+        assertThat(vision.parameter("sheetName")).isEqualTo("VisionDrivePropertyExtensionTest")
     }
 
     @Test
@@ -48,28 +48,28 @@ class VisionDrivePropertyExtensionTest : VisionTest() {
     fun deviceManufacturer() {
 
         val deviceManufacturer = capabilityRelaxed("deviceManufacturer")
-        assertThat(visionDrive.deviceManufacturer).isEqualTo(deviceManufacturer)
+        assertThat(vision.deviceManufacturer).isEqualTo(deviceManufacturer)
     }
 
     @Test
     fun deviceModel() {
 
         val deviceModel = capabilityRelaxed("deviceModel")
-        assertThat(visionDrive.deviceModel).isEqualTo(deviceModel)
+        assertThat(vision.deviceModel).isEqualTo(deviceModel)
     }
 
     @Test
     fun deviceName() {
 
         val deviceName = capabilityRelaxed("deviceName")
-        assertThat(visionDrive.deviceName).isEqualTo(deviceName)
+        assertThat(vision.deviceName).isEqualTo(deviceName)
     }
 
     @Test
     fun isEmulator() {
 
         val isEmulator = capabilityRelaxed("deviceName").startsWith("emulator")
-        assertThat(visionDrive.isEmulator).isEqualTo(isEmulator)
+        assertThat(vision.isEmulator).isEqualTo(isEmulator)
     }
 
 //    @Test

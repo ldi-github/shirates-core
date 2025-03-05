@@ -62,8 +62,8 @@
     }
 ```
 
-**Note:**<br>
-`include = true` combines image pieces that are overlapped into a group. `include = false` is default.
+**メモ:**<br>
+`include = true` を指定すると重なっている画像の断片をグルーピングします。 `include = false` がデフォルトです。
 
 ![](_images/left_item_right_item_ja.png)
 

@@ -3,7 +3,7 @@ package shirates.core.vision.unittest.driver.branchextension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shirates.core.driver.TestMode
-import shirates.core.driver.visionDrive
+import shirates.core.driver.vision
 import shirates.core.testcode.UnitTest
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.branchextension.*
@@ -67,7 +67,7 @@ class AnyBranchExtensionTest : UnitTest() {
         TestMode.runAsVirtualDevice {
             TestMode.runAsAndroid {
                 reset()
-                visionDrive
+                vision
                     .emulator {
                         e = true
                     }.simulator {
@@ -84,7 +84,7 @@ class AnyBranchExtensionTest : UnitTest() {
             }
             TestMode.runAsIos {
                 reset()
-                visionDrive
+                vision
                     .emulator {
                         e = true
                     }.simulator {
@@ -121,7 +121,7 @@ class AnyBranchExtensionTest : UnitTest() {
         TestMode.runAsRealDevice {
             TestMode.runAsAndroid {
                 reset()
-                visionDrive
+                vision
                     .emulator {
                         e = true
                     }.simulator {
@@ -138,7 +138,7 @@ class AnyBranchExtensionTest : UnitTest() {
             }
             TestMode.runAsIos {
                 reset()
-                visionDrive
+                vision
                     .emulator {
                         e = true
                     }.simulator {
@@ -163,7 +163,7 @@ class AnyBranchExtensionTest : UnitTest() {
         var osaifuNot = false
 
         TestMode.runAsOsaifuKeitai {
-            visionDrive
+            vision
                 .osaifuKeitai {
                     osaifu = true
                 }.osaifuKeitaiNot {

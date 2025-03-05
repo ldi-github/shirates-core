@@ -115,7 +115,7 @@ object CodeExecutionContext {
      */
     val isWorkingRegionSet: Boolean
         get() {
-            return workingRegionRect.area != 0 && workingRegionRect.area != visionDrive.screenRect.area
+            return workingRegionRect.area != 0 && workingRegionRect.area != vision.screenRect.area
         }
 
     /**

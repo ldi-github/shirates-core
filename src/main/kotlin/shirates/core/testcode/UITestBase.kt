@@ -679,7 +679,7 @@ abstract class UITestBase : Drive {
                         TestLog.warn(message(id = "rerunningScenarioRequested", submessage = t.message ?: ""))
 
                         if (testContext.onRerunScenarioHandler != null) {
-                            testDrive.withoutScroll {
+                            classic.withoutScroll {
                                 testContext.onRerunScenarioHandler!!.invoke(t)
                             }
                         }
@@ -751,8 +751,8 @@ abstract class UITestBase : Drive {
 
         if (isAndroid) {
             val packageName =
-                if (testContext.useCache) testDrive.rootElement.packageName
-                else visionDrive.rootElement.packageName
+                if (testContext.useCache) classic.rootElement.packageName
+                else vision.rootElement.packageName
             TestLog.info("Startup package: $packageName")
         }
 
@@ -781,12 +781,12 @@ abstract class UITestBase : Drive {
                 TestLog.info("No-Load-Run mode")
             }
 
-            if (launchApp && testDrive.isAppInstalled()) {
+            if (launchApp && classic.isAppInstalled()) {
                 silent {
                     if (testContext.useCache) {
-                        testDrive.launchApp()
+                        classic.launchApp()
                     } else {
-                        visionDrive.launchApp()
+                        vision.launchApp()
                     }
                 }
             }

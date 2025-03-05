@@ -536,7 +536,7 @@ internal fun TestDrive.doUntilScrollStopCore(
     }
 
     val msLastSerialized = Measure("lastSerialized")
-    var lastSerialized = testDrive.widgets.lastOrNull()?.toString() ?: ""
+    var lastSerialized = classic.widgets.lastOrNull()?.toString() ?: ""
     msLastSerialized.end()
 
     fun isEndOfScroll(): Boolean {
@@ -560,7 +560,7 @@ internal fun TestDrive.doUntilScrollStopCore(
             val msSerialized = Measure("serialized")
             val serialized =
                 if (testContext.useCache) rootElement.descendants.serialize()
-                else testDrive.widgets.lastOrNull()?.toString() ?: ""
+                else classic.widgets.lastOrNull()?.toString() ?: ""
             msSerialized.end()
             val result = serialized == lastSerialized
             lastSerialized = serialized
@@ -894,7 +894,7 @@ internal fun TestDrive.getScrollingInfo(
         return r
     }
 
-    val keyboardElement = testDrive.getKeyboardInIos()
+    val keyboardElement = classic.getKeyboardInIos()
     val b = scrollableElement.bounds
     val height = keyboardElement.bounds.top - b.top
     val scrollBounds = Bounds(left = b.left, top = b.top, width = b.width, height = height)

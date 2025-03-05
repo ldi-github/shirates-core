@@ -3,7 +3,7 @@ package shirates.core.vision.uitest.android.driver.commandextension
 import goPreviousApp
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.vision.driver.commandextension.appIs
 import shirates.core.vision.driver.commandextension.launchApp
 import shirates.core.vision.testcode.VisionTest
@@ -31,7 +31,7 @@ class VisionDriveNavigationExtensionTest : VisionTest() {
             }
             case(3) {
                 action {
-                    testDrive.goPreviousApp()
+                    classic.goPreviousApp()
                 }.expectation {
                     it.appIs("[Settings]")
                 }

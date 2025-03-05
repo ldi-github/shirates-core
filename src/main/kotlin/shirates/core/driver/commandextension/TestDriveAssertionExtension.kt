@@ -277,13 +277,13 @@ internal fun TestDrive.doUntilActionResultTrue(
         TestDriver.refreshCurrentScreen(log = false)
         TestLog.info("currentScreen=$screenName")
         if (r.not()) {
-            testDrive.screenshot()
+            classic.screenshot()
             if (onIrregular != null) {
                 onIrregular.invoke()
                 refreshCache()
             }
             if (testContext.enableIrregularHandler && testContext.onScreenErrorHandler != null) {
-                testDrive.withoutScroll {
+                classic.withoutScroll {
                     testContext.onScreenErrorHandler!!.invoke()
                 }
                 refreshCache()

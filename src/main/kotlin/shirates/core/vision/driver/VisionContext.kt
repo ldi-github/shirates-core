@@ -3,7 +3,7 @@ package shirates.core.vision.driver
 import shirates.core.configuration.PropertiesManager
 import shirates.core.configuration.Selector
 import shirates.core.driver.TestMode
-import shirates.core.driver.visionDrive
+import shirates.core.driver.vision
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
@@ -118,7 +118,7 @@ class VisionContext(
      */
     init {
         if (capture) {
-            this.rootElement = visionDrive.rootElement
+            this.rootElement = vision.rootElement
             this.screenshotFile = CodeExecutionContext.lastScreenshotFile
             this.screenshotImage = CodeExecutionContext.lastScreenshotImage
 
@@ -228,7 +228,7 @@ class VisionContext(
             this.localRegionImage = this.screenshotImage
             this.localRegionFile = this.screenshotFile
         }
-        this.rootElement = visionDrive.rootElement
+        this.rootElement = vision.rootElement
     }
 
     /**
@@ -265,7 +265,7 @@ class VisionContext(
         }
 
         if (rootElement == null) {
-            rootElement = visionDrive.rootElement
+            rootElement = vision.rootElement
         }
 
         val rootVisionContext = rootElement!!.visionContext

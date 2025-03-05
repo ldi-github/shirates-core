@@ -451,7 +451,7 @@ internal fun VisionDrive.doUntilScrollStopCore(
 ): VisionElement {
     val scroll = scrollFunc ?: {
         val ms = Measure()
-        testDrive.suppressHandler {
+        classic.suppressHandler {
             if (direction.isDown) {
                 scrollDown(
                     scrollDurationSeconds = scrollDurationSeconds,

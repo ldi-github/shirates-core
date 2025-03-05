@@ -63,7 +63,7 @@ fun VisionDrive.isApp(
 
     var r = false
     classicScope {
-        r = testDrive.isApp(appNameOrAppId = appNameOrAppId)
+        r = classic.isApp(appNameOrAppId = appNameOrAppId)
     }
     return r
 }

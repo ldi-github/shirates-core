@@ -370,7 +370,7 @@ fun TestElement.isSafe(
              */
             val scrollableElement = this.getScrollableElementsInAncestorsAndSelf().firstOrNull()
             if (scrollableElement != null && scrollableElement.isScrollableElement) {
-                val scrollingInfo = testDrive.getScrollingInfo(scrollableElement = scrollableElement)
+                val scrollingInfo = classic.getScrollingInfo(scrollableElement = scrollableElement)
                 if (this.bounds.isIncludedIn(scrollingInfo.safeBounds).not()) {
                     info("isSafe property returns false. this is out of safe bounds. (this=$this, scrollingInfo=$scrollingInfo)")
                     return false
@@ -383,7 +383,7 @@ fun TestElement.isSafe(
              * Keyboard overlapping check
              */
             if (testContext.useCache) {
-                val keyboard = testDrive.getKeyboardInIos()
+                val keyboard = classic.getKeyboardInIos()
                 if (keyboard.isFound) {
                     if (this.bounds.isOverlapping(keyboard.bounds)) {
                         info("isSafe property returns false. keyboard is overlapping. (this=$this, keyboard=$keyboard)")

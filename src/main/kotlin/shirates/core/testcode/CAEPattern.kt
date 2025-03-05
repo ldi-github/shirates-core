@@ -1,9 +1,9 @@
 package shirates.core.testcode
 
 import shirates.core.driver.TestDriver
+import shirates.core.driver.classic
 import shirates.core.driver.commandextension.withContext
 import shirates.core.driver.testContext
-import shirates.core.driver.testDrive
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
@@ -73,7 +73,7 @@ object CAEPattern {
             CodeExecutionContext.isInCondition = true
             TestLog.condition(message(funcName))
 
-            testDrive.withContext(
+            classic.withContext(
                 useCache = useCache
             ) {
                 conditionFunc()
@@ -131,7 +131,7 @@ object CAEPattern {
             CodeExecutionContext.isInAction = true
             TestLog.action(message(funcName))
 
-            testDrive.withContext(
+            classic.withContext(
                 useCache = useCache
             ) {
                 actionFunc()
@@ -195,7 +195,7 @@ object CAEPattern {
                 TestDriver.autoScreenshot()
             }
 
-            testDrive.withContext(
+            classic.withContext(
                 useCache = useCache
             ) {
                 expectationFunc()

@@ -5,7 +5,7 @@ import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.isApp
 import shirates.core.driver.commandextension.thisIsFalse
 import shirates.core.driver.commandextension.thisIsTrue
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.commandextension.*
 import shirates.core.vision.driver.isApp
@@ -70,7 +70,7 @@ class VisionDriveAppExtensionTest : VisionTest() {
             case(3) {
                 condition {
                     it.terminateApp("com.apple.Preferences")
-                    testDrive.isApp("com.apple.Preferences").thisIsFalse()
+                    classic.isApp("com.apple.Preferences").thisIsFalse()
                 }.action {
                     it.launchApp("com.apple.Preferences")   // By BundleId
                 }.expectation {

@@ -10,7 +10,7 @@ import shirates.core.driver.commandextension.invalidateCache
 import shirates.core.driver.commandextension.refreshCache
 import shirates.core.driver.commandextension.refreshCacheOnInvalidated
 import shirates.core.driver.commandextension.syncCache
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.vision.driver.commandextension.enableCache
 import shirates.core.vision.testcode.VisionTest
 
@@ -26,13 +26,13 @@ class VisionDriveCacheExtensionTest : VisionTest() {
         TestElementCache.sourceXml = ""
         val xml1 = TestElementCache.sourceXml
         // Act
-        testDrive.refreshCache()
+        classic.refreshCache()
         val xml2 = TestElementCache.sourceXml
         // Assert
         assertThat(xml1).isNotEqualTo(xml2)
 
         // Act
-        testDrive.refreshCache()
+        classic.refreshCache()
         val xml3 = TestElementCache.sourceXml
         // Assert
         assertThat(xml2).isEqualTo(xml3)
@@ -47,14 +47,14 @@ class VisionDriveCacheExtensionTest : VisionTest() {
         TestElementCache.synced = true
         TestElementCache.sourceXml = ""
         // Act
-        testDrive.refreshCacheOnInvalidated()
+        classic.refreshCacheOnInvalidated()
         // Assert
         assertThat(TestElementCache.sourceXml).isEqualTo("")
 
         // Arrange
-        testDrive.invalidateCache()
+        classic.invalidateCache()
         // Act
-        testDrive.refreshCacheOnInvalidated()
+        classic.refreshCacheOnInvalidated()
         // Assert
         assertThat(TestElementCache.sourceXml).isNotEqualTo("")
     }
@@ -70,7 +70,7 @@ class VisionDriveCacheExtensionTest : VisionTest() {
             assertThat(TestElementCache.sourceXml).isEqualTo("<a/>")
             assertThat(TestElementCache.synced).isFalse()
             // Act
-            testDrive.syncCache()
+            classic.syncCache()
             // Assert
             assertThat(TestElementCache.sourceXml).isNotEqualTo("<a/>")
             assertThat(TestElementCache.synced).isTrue()
@@ -84,7 +84,7 @@ class VisionDriveCacheExtensionTest : VisionTest() {
             assertThat(TestElementCache.sourceXml).isEqualTo("<a/>")
             assertThat(TestElementCache.synced).isTrue()
             // Act
-            testDrive.syncCache()
+            classic.syncCache()
             // Assert
             assertThat(TestElementCache.sourceXml).isEqualTo("<a/>")
             assertThat(TestElementCache.synced).isTrue()

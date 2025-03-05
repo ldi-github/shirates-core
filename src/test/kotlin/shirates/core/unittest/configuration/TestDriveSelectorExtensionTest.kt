@@ -7,7 +7,7 @@ import shirates.core.driver.TestDriver
 import shirates.core.driver.commandextension.getSelector
 import shirates.core.driver.commandextension.switchScreen
 import shirates.core.driver.commandextension.tempSelector
-import shirates.core.driver.testDrive
+import shirates.core.driver.classic
 import shirates.core.logging.TestLog
 import shirates.core.testcode.UnitTest
 
@@ -18,25 +18,25 @@ class TestDriveSelectorExtensionTest : UnitTest() {
 
         // Arrange
         ScreenRepository.setup("unitTestData/testConfig/nicknames1/screens")
-        testDrive.switchScreen(screenName = "[A Screen]")
+        classic.switchScreen(screenName = "[A Screen]")
         run {
             // Assert
             assertThat(TestDriver.screenInfo.selectorMap.count()).isEqualTo(45)
             // Act
-            val selector = testDrive.getSelector(expression = "[Label A]")
+            val selector = classic.getSelector(expression = "[Label A]")
             // Assert
             assertThat(selector.expression).isEqualTo("text=textA")
         }
         run {
             // Act
-            testDrive.tempSelector(nickname = "[Label1]", expression = "Label1")
+            classic.tempSelector(nickname = "[Label1]", expression = "Label1")
             // Assert
             assertThat(TestDriver.screenInfo.selectorMap.count()).isEqualTo(45)
             assertThat(TestLog.lastTestLog?.message).isEqualTo("Nickname registered. (nickname=[Label1], expression=Label1)")
             assertThat(ScreenRepository.tempSelectorList.count()).isEqualTo(1)
             assertThat(ScreenRepository.getTempSelectorExpression("[Label1]")).isNotBlank()
             // Act
-            val selector = testDrive.getSelector(expression = "[Label1]")
+            val selector = classic.getSelector(expression = "[Label1]")
             // Assert
             assertThat(TestDriver.screenInfo.selectorMap.count()).isEqualTo(46)
             assertThat(selector.nickname).isEqualTo("[Label1]")
@@ -44,13 +44,13 @@ class TestDriveSelectorExtensionTest : UnitTest() {
         }
         run {
             // Act
-            testDrive.tempSelector(nickname = "[Label2]", expression = "Label2")
+            classic.tempSelector(nickname = "[Label2]", expression = "Label2")
             // Assert
             assertThat(TestLog.lastTestLog?.message).isEqualTo("Nickname registered. (nickname=[Label2], expression=Label2)")
             assertThat(ScreenRepository.tempSelectorList.count()).isEqualTo(2)
             assertThat(ScreenRepository.getTempSelectorExpression("[Label2]")).isNotBlank()
             // Act
-            val selector = testDrive.getSelector(expression = "[Label2]")
+            val selector = classic.getSelector(expression = "[Label2]")
             // Assert
             assertThat(TestDriver.screenInfo.selectorMap.count()).isEqualTo(47)
             assertThat(selector.nickname).isEqualTo("[Label2]")
@@ -58,15 +58,15 @@ class TestDriveSelectorExtensionTest : UnitTest() {
         }
         run {
             // Act
-            testDrive.tempSelector(nickname = "[Button1]", expression = "[Label1]:leftButton")
-            testDrive.tempSelector(nickname = "[Switch1]", expression = "[Button1]:belowSwitch")
+            classic.tempSelector(nickname = "[Button1]", expression = "[Label1]:leftButton")
+            classic.tempSelector(nickname = "[Switch1]", expression = "[Button1]:belowSwitch")
             // Assert
             assertThat(TestDriver.screenInfo.selectorMap.count()).isEqualTo(47)
             assertThat(ScreenRepository.getTempSelectorExpression("[Button1]")).isNotBlank()
             assertThat(ScreenRepository.getTempSelectorExpression("[Switch1]")).isNotBlank()
             run {
                 // Act
-                val selector = testDrive.getSelector(expression = "[Button1]")
+                val selector = classic.getSelector(expression = "[Button1]")
                 // Assert
                 assertThat(TestDriver.screenInfo.selectorMap.count()).isEqualTo(49)
                 assertThat(selector.nickname).isEqualTo("[Button1]")
@@ -74,7 +74,7 @@ class TestDriveSelectorExtensionTest : UnitTest() {
             }
             run {
                 // Act
-                val selector = testDrive.getSelector(expression = "[Switch1]")
+                val selector = classic.getSelector(expression = "[Switch1]")
                 // Assert
                 assertThat(TestDriver.screenInfo.selectorMap.count()).isEqualTo(49)
                 assertThat(selector.nickname).isEqualTo("[Switch1]")

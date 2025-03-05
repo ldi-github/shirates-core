@@ -17,7 +17,7 @@ object ImageSetupHelper : TestDrive {
         }
 
         val baseFileName = selector.toString()
-        val suffix = testDrive.imageProfile
+        val suffix = classic.imageProfile
         val fname = fileName ?: "$baseFileName$suffix"
         this.cropImage()
             .lastCropInfo!!.croppedImage!!

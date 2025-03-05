@@ -228,7 +228,7 @@ fun TestDrive.ifCanSelect(
 
     val command = "ifCanSelect"
     TestDriver.it
-    val e = testDrive.select(expression = expression, throwsException = false, waitSeconds = 0.0)
+    val e = classic.select(expression = expression, throwsException = false, waitSeconds = 0.0)
     val matched = e.isFound
     val result =
         if (this is BooleanCompareResult) this
@@ -262,7 +262,7 @@ fun TestDrive.ifCanSelectNot(
 
     val command = "ifCanSelectNot"
     TestDriver.it
-    val canSelect = testDrive.canSelect(
+    val canSelect = classic.canSelect(
         expression = expression,
     )
     val matched = canSelect.not()

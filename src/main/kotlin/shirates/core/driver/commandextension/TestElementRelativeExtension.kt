@@ -820,7 +820,7 @@ fun TestElement.parent(
                 e = parentElement
             } else {
                 val xpath = getUniqueXpath() + "/parent::*"
-                e = testDrive.findWebElementBy(locator = By.xpath(xpath), timeoutMilliseconds = 0)
+                e = classic.findWebElementBy(locator = By.xpath(xpath), timeoutMilliseconds = 0)
                 parentElement = e
             }
         }

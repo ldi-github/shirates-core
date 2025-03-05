@@ -283,7 +283,7 @@ internal fun imageAssertionCoreCore(
         testElement.imageMatchResult = matchResult
 
         if (r.not() && CodeExecutionContext.withScroll == true) {
-            testDrive.doUntilScrollStop(
+            classic.doUntilScrollStop(
                 edgeSelector = edgeSelector,
             ) {
                 matchResult = action()
