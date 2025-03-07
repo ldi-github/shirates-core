@@ -11,6 +11,7 @@ import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.logging.printWarn
 import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.image.isSame
 import shirates.core.utility.time.StopWatch
@@ -47,8 +48,16 @@ fun VisionDrive.syncScreen(): VisionElement {
                     TestLog.info("Syncing screen.")
                 }
                 Thread.sleep(testContext.waitSecondsForAnimationComplete.toLong())
-                CodeExecutionContext.lastScreenshotImage =
-                    appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+                try {
+                    val byteArray = appiumDriver.getScreenshotAs(OutputType.BYTES)
+                    CodeExecutionContext.lastScreenshotImage = byteArray.toBufferedImage()
+                } catch (oome: OutOfMemoryError) {
+                    printWarn("$oome")
+                    throw oome
+                } catch (t: Throwable) {
+                    printWarn("$t")
+                    throw t
+                }
             }
         } else {
             /**
