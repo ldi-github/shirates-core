@@ -137,25 +137,27 @@ internal fun VisionDrive.detectCore(
 ): VisionElement {
 
     var v = VisionElement.emptyElement
-    fun action() {
-        v = detectCoreCore(
-            selector = selector,
-            language = language,
-            last = last,
-            allowScroll = allowScroll,
-            waitSeconds = waitSeconds,
-            swipeToSafePosition = swipeToSafePosition,
-            removeRedundantText = removeRedundantText,
-            mergeBoundingBox = mergeBoundingBox,
-            throwsException = throwsException,
-        )
-    }
-    action()
-    if (v.isFound && swipeToSafePosition && CodeExecutionContext.withScroll != false) {
-        silent {
-            v.swipeToSafePosition()
+    if (TestMode.isNoLoadRun.not()) {
+        fun action() {
+            v = detectCoreCore(
+                selector = selector,
+                language = language,
+                last = last,
+                allowScroll = allowScroll,
+                waitSeconds = waitSeconds,
+                swipeToSafePosition = swipeToSafePosition,
+                removeRedundantText = removeRedundantText,
+                mergeBoundingBox = mergeBoundingBox,
+                throwsException = throwsException,
+            )
         }
         action()
+        if (v.isFound && swipeToSafePosition && CodeExecutionContext.withScroll != false) {
+            silent {
+                v.swipeToSafePosition()
+            }
+            action()
+        }
     }
     if (TestMode.isNoLoadRun) {
         v.selector = selector

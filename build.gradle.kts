@@ -122,18 +122,15 @@ configurations.all {
 }
 
 tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "17"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "17"
-    }
-
     val sourcesJar by registering(Jar::class, fun Jar.() {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
         mustRunAfter("generateBuildConfig")
     })
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 // Dokka

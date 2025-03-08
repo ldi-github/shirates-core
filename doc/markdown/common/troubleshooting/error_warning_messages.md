@@ -9,6 +9,7 @@
 - [Due to JRE encapsulation, low level data structures needed for fast conversion of BufferedImages are no longer accessible.](errors/dueToJREencapsulationLowLevelDataStructuresNeededForFastConversionOfBufferedImagesAreNoLongerAccessible.md)
 - [Could not start a new session. Response code 500](errors/could_not_start_a_new_session_response_code_500.md)
 - [Cannot set the device locale to 'en_US'](errors/cannot_set_the_device_locale_to_x.md)
+- [Could not complete execution for Gradle Test Executor (OutOfMemoryError: Java heap space)](errors/could_not_complete_execution_for_gradle_test_executor_out_of_memory_error.md)
 
 # Warning messages
 
