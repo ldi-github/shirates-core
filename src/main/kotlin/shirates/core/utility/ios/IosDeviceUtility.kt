@@ -8,6 +8,7 @@ import shirates.core.configuration.TestProfile
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
+import shirates.core.logging.printInfo
 import shirates.core.utility.exists
 import shirates.core.utility.file.exists
 import shirates.core.utility.misc.ProcessUtility
@@ -304,9 +305,31 @@ object IosDeviceUtility {
     /**
      * isWDAInstalled
      */
-    fun isWDAInstalled(iosDeviceInfo: IosDeviceInfo): Boolean {
+    fun isWDAInstalled(testProfile: TestProfile): Boolean {
 
+        val iosDeviceInfo = getIosDeviceInfo(testProfile = testProfile)
         return isInstalled(bundleId = "com.facebook.WebDriverAgentRunner.xctrunner", iosDeviceInfo = iosDeviceInfo)
+    }
+
+    /**
+     * uninstallWDA
+     */
+    fun uninstallWDA(testProfile: TestProfile) {
+
+        if (isWDAInstalled(testProfile = testProfile)) {
+            val iosDeviceInfo = getIosDeviceInfo(testProfile = testProfile)
+            val bundleId = "com.facebook.WebDriverAgentRunner.xctrunner"
+            val args = listOf(
+                "xcrun",
+                "simctl",
+                "uninstall",
+                iosDeviceInfo.udid,
+                bundleId
+            )
+            TestLog.info(args.joinToString(" "))
+            val shellResult = ShellUtility.executeCommand(args = args.toTypedArray())
+            shellResult.resultString.printInfo()
+        }
     }
 
     /**
