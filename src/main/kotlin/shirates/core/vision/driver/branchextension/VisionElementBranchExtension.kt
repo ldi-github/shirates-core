@@ -15,6 +15,11 @@ fun VisionElement.ifCheckIsON(
     onSwitchON: ((VisionElement) -> Unit)
 ): VisionElement {
 
+    if (TestMode.isNoLoadRun) {
+        onSwitchON.invoke(this)
+        return this
+    }
+
     val label = this.classify(classifierName = classifierName)
 
     if (label == "[ON]") {
@@ -30,6 +35,11 @@ fun VisionElement.ifCheckIsOFF(
     classifierName: String = "CheckStateClassifier",
     onSwitchOFF: ((VisionElement) -> Unit)
 ): VisionElement {
+
+    if (TestMode.isNoLoadRun) {
+        onSwitchOFF.invoke(this)
+        return this
+    }
 
     val label = this.classify(classifierName = classifierName)
 
@@ -49,6 +59,11 @@ fun VisionElement.ifImageIs(
 ): BooleanCompareResult {
 
     val command = "ifImageIs"
+
+    if (TestMode.isNoLoadRun) {
+        onTrue.invoke()
+        return BooleanCompareResult(value = true, command = command)
+    }
 
     val classifyResult = this.classify(classifierName = classifierName)
 
@@ -76,6 +91,11 @@ fun VisionElement.ifImageIsNot(
 ): BooleanCompareResult {
 
     val command = "ifImageIsNot"
+
+    if (TestMode.isNoLoadRun) {
+        onTrue.invoke()
+        return BooleanCompareResult(value = true, command = command)
+    }
 
     val classifyResult = this.classify(classifierName = classifierName)
 
