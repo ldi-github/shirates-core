@@ -130,7 +130,11 @@ object AppiumProxy {
             val r = validateSource()
             if (r) {
                 root = ElementCacheUtility.createTestElementFromXml(sourceXml = lastSource)
-                checkState()
+                if (isAndroid) {
+                    checkState()
+                } else {
+                    true    // skip checkState to avoid StaleElementReferenceException
+                }
             } else {
                 false
             }
