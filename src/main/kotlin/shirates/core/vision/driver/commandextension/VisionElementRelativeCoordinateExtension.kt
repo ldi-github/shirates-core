@@ -199,6 +199,31 @@ fun VisionElement.aboveItem(
 }
 
 /**
+ * aboveLineItem
+ */
+fun VisionElement.aboveLineItem(
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    segmentMinimumWidth: Int = this.rect.width / 2,
+    include: Boolean = false,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
+): VisionElement {
+
+    val belowItem = this.aboveItem(
+        pos = pos,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        segmentMinimumWidth = segmentMinimumWidth,
+        include = include,
+        binaryThreshold = binaryThreshold,
+        aspectRatioTolerance = aspectRatioTolerance,
+    )
+    return belowItem.lineRegionElement()
+}
+
+/**
  * belowItem
  */
 fun VisionElement.belowItem(
@@ -309,6 +334,31 @@ internal fun VisionElement.aboveBelowCore(
     lastElement = v
 
     return v
+}
+
+/**
+ * belowLineItem
+ */
+fun VisionElement.belowLineItem(
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    segmentMinimumWidth: Int = this.rect.width / 2,
+    include: Boolean = false,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
+): VisionElement {
+
+    val belowItem = this.belowItem(
+        pos = pos,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        segmentMinimumWidth = segmentMinimumWidth,
+        include = include,
+        binaryThreshold = binaryThreshold,
+        aspectRatioTolerance = aspectRatioTolerance,
+    )
+    return belowItem.lineRegionElement()
 }
 
 /**
