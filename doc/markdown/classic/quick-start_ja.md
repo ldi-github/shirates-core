@@ -220,23 +220,20 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 1. **Android Studio**を開きます。
 2. メニューから`Tools > Device Manager`を選択します。
-3. `[+]`をクリックします。 <br>
+3. `[+]`をクリックして`Create Virtual Device`を選択します。<br>
    ![](_images/create_avd_1.png)
-
-
-4. `Pixcel 8` を選択して `Next` をクリックします。<br>
+4. `Pixcel 8`を選択し`Next`をクリックします。<br>
    ![](_images/create_avd_2.png)
-
-
-5. `UpsideDownCake 34 Android 14.0 (Google Play)` を選択して`Next`をクリックします。 (**Calculator**アプリをデモで使用するのでGoogle
-   Play Storeが必要です)。 M1 Macの場合は**arm64** イメージを、 それ以外の場合は **x86_64** イメージを選択します。<br>
+5. 項目を設定します。<br>**Name** `Pixel 8(Android 14)`<br>**API** `API 34 "UpsideDownCake", Android 14.0`<br>**Services
+   **
+   `Google Play Store`<br>**System Image** (アイテムを選択します)
    ![](_images/create_avd_3.png)
-
-
-6. AVD名を `Pixel 8(Android 14)`に設定します。<br>
-   `Enable device frame`のチェックをOFFに設定します。<br>
-   `Finish`をクリックします。<br>
+6. `Additional settings`をクリックします。 <br>**Device skin** を`[None]`に設定します。 <br>`Finish`をクリックします。<br>
    ![](_images/create_avd_4.png)
+7. これでエミュレーターが使用できるようになりました。<br>
+   `Start`ボタンをクリックしてエミュレーターを起動してください。
+   ![](_images/create_avd_5.png)
+   ![](_images/create_avd_6.png)
 
 <br>
 
