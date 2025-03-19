@@ -56,7 +56,11 @@ fun String?.forVisionComparison(
 }
 
 internal fun String?.forVisionComparisonDefault(ignoreCase: Boolean, ignoreFullWidthHalfWidth: Boolean): String {
-    var s = this?.normalize(Normalizer.Form.NFC) ?: return ""
+    var s = this ?: return ""
+    for (key in VisionTextReplacementRepository.convertMap.keys) {
+        val value = VisionTextReplacementRepository.convertMap[key]!!
+        s = s.replace(key, value)
+    }
     s = s.removeSpaces()
     if (ignoreCase) {
         s = s.lowercase()
@@ -73,10 +77,7 @@ internal fun String?.forVisionComparisonDefault(ignoreCase: Boolean, ignoreFullW
         compressWhitespaceCharacters = true,
         trimString = true,
     )
-    for (key in VisionTextReplacementRepository.convertMap.keys) {
-        val value = VisionTextReplacementRepository.convertMap[key]!!
-        s = s.replace(key, value)
-    }
+    s = s.normalize(Normalizer.Form.NFC)
     return s
 }
 
