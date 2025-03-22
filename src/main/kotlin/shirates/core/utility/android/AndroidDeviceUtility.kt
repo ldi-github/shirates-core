@@ -145,6 +145,7 @@ object AndroidDeviceUtility {
                 break
             }
         }
+        s = s.trimEnd('_')
         return s
     }
 

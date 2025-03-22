@@ -24,6 +24,7 @@ import shirates.core.utility.android.AndroidMobileShellUtility
 import shirates.core.utility.load.CpuLoadService
 import shirates.core.utility.misc.EnvUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.VisionElement
 import shirates.core.vision.testcode.VisionTest
 import java.nio.file.Files
 
@@ -349,6 +350,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.info(message(id = "testFunctionExecuted", arg1 = duration))
         TestLog.info("End of ${uiTestBase?.TestFunctionDescription}")
 
+        TestDriver.visionRootElement.visionContext.clear()  // For avoiding memory leak
+        TestDriver.visionRootElement = VisionElement.emptyElement
+        System.gc()
+
         if (hasNoException && scenarioLines.any { it.logType == LogType.SCENARIO }.not()) {
             val ex = TestAbortedException("scenario not implemented.")
             TestLog.warn(ex.message ?: ex.stackTraceToString())
@@ -415,6 +420,10 @@ class UITestCallbackExtension : BeforeAllCallback, AfterAllCallback, BeforeEachC
         TestLog.info(message(id = "testClassExecuted", arg1 = duration))
 
         uiTestBase?.finally()
+
+        TestDriver.visionRootElement.visionContext.clear()  // For avoiding memory leak
+        TestDriver.visionRootElement = VisionElement.emptyElement
+        System.gc()
     }
 
     /**

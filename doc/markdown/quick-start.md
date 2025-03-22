@@ -177,13 +177,15 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
    ![](classic/_images/create_avd_1.png)
 4. Select `Pixcel 8` and click `Next`.<br>
    ![](classic/_images/create_avd_2.png)
-5. Select `UpsideDownCake 34 Android 14.0 (Google Play)` and click `Next` (Google Play Store is required for
-   demonstration using **Calculator** app). Select **arm64** image for Mac.<br>
+5. Set fields.<br>**Name** `Pixel 8(Android 14)`<br>**API** `API 34 "UpsideDownCake", Android 14.0`<br>**Services**
+   `Google Play Store`<br>**System Image** (Select the item)
    ![](classic/_images/create_avd_3.png)
-6. Set AVD Name to `Pixel 8(Android 14)`.<br>
-   Set `Enable device frame` off.<br>
-   Click `Finish`<br>
+6. Click `Additional settings`. <br>Set **Device skin** `[None]`. <br>Click `Finish`.<br>
    ![](classic/_images/create_avd_4.png)
+7. Now you can use the emulator.<br>
+   Click the play button to launch the emulator.
+   ![](classic/_images/create_avd_5.png)
+   ![](classic/_images/create_avd_6.png)
 
 ## Setting up shirates-vision-server
 

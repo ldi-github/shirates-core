@@ -61,7 +61,7 @@ object MapsMacro : TestDrive {
                     .ifCanSelect("Make it your map") {
                         it.tap("SKIP")
                     }
-                    .waitForDisplay("Search here")
+                    .waitForDisplay("Restaurants")
 
                 if (it.isScreen("[Maps Top Screen]")) {
                     return@visionScope

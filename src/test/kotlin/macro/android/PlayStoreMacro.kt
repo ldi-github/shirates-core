@@ -44,6 +44,9 @@ object PlayStoreMacro : TestDrive {
                 }
 
                 it.launchApp("Play Store")
+                it.ifCanDetect("Not now") {
+                    it.tap()
+                }
                 it.ifCanDetect("Meet the Search tab") {
                     val e = vision.rootElement
                     it.tap(x = e.bounds.centerX, y = e.bounds.height / 4)

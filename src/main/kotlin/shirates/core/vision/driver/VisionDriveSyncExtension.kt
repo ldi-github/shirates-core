@@ -47,8 +47,8 @@ fun VisionDrive.syncScreen(): VisionElement {
                     TestLog.info("Syncing screen.")
                 }
                 Thread.sleep(testContext.waitSecondsForAnimationComplete.toLong())
-                CodeExecutionContext.lastScreenshotImage =
-                    appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+                val byteArray = appiumDriver.getScreenshotAs(OutputType.BYTES)
+                CodeExecutionContext.lastScreenshotImage = byteArray.toBufferedImage()
             }
         } else {
             /**

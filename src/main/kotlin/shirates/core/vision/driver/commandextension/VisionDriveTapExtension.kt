@@ -530,17 +530,18 @@ fun VisionDrive.tapCenterOf(
     repeat: Int = 1,
 ): VisionElement {
 
-    val testElement = detect(
-        expression = expression,
-        language = language,
-    )
+    val sel = getSelector(expression = expression)
 
     val command = "tapCenterOf"
-    val message = message(id = command, subject = testElement.subject)
+    val message = message(id = command, subject = "$sel")
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
 
+        val testElement = detect(
+            expression = expression,
+            language = language,
+        )
         val bounds = testElement.bounds
         tap(x = bounds.centerX, y = bounds.centerY, holdSeconds = holdSeconds, repeat = repeat)
     }

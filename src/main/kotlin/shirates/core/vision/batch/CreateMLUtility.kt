@@ -16,6 +16,7 @@ import shirates.core.logging.TestLog
 import shirates.core.logging.printInfo
 import shirates.core.logging.printWarn
 import shirates.core.utility.file.*
+import shirates.core.utility.file.FileLockUtility.lockFile
 import shirates.core.utility.format
 import shirates.core.utility.image.saveImage
 import shirates.core.utility.misc.ShellUtility
@@ -96,6 +97,22 @@ object CreateMLUtility {
         visionDirectoryInWork: String = VISION_DIRECTORY_IN_WORK,
         force: Boolean = false,
         createBinary: Boolean? = null
+    ) {
+        lockFile(filePath = visionDirectory.toPath()) {
+            runLearningCore(
+                visionDirectory = visionDirectory,
+                visionDirectoryInWork = visionDirectoryInWork,
+                force = force,
+                createBinary = createBinary
+            )
+        }
+    }
+
+    private fun runLearningCore(
+        visionDirectory: String,
+        visionDirectoryInWork: String,
+        force: Boolean,
+        createBinary: Boolean?
     ) {
         if (visionDirectory.exists().not()) {
             return

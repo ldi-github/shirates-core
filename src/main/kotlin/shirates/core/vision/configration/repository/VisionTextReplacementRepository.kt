@@ -64,6 +64,7 @@ object VisionTextReplacementRepository {
         "く" to "<",     // U+304 to U+003C
         "〜" to "~",     // U+301C(WAVE DASH) to U+007E
         "～" to "~",     // U+FF5E(FULLWIDTH TILDE) to U+007E
+        "｜" to "I",     // U+FF5C to U+0049
     )
 
     val replaceMap = mutableMapOf<String, String>()

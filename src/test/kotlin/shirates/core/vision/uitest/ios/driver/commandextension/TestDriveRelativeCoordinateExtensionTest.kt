@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
 import shirates.core.driver.commandextension.thisIs
 import shirates.core.driver.commandextension.thisIsTrue
+import shirates.core.driver.commandextension.thisStartsWith
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.classify
 import shirates.core.vision.driver.commandextension.*
@@ -14,7 +15,7 @@ import shirates.core.vision.testcode.VisionTest
 class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
 
     @Test
-    fun image() {
+    fun relative1() {
 
         scenario {
             case(1) {
@@ -117,6 +118,26 @@ class TestDriveRelativeCoordinateExtensionTest : VisionTest() {
                     v2 = it.detect("Search").rightItem()
                     v2.leftText("Search").textIs("Search")
                     v2.leftText("No exist").textIs("")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun relative2() {
+
+        scenario {
+            case(1) {
+                condition {
+                    it.screenIs("[iOS Settings Top Screen]")
+                        .tap("General")
+                        .tap("About")
+                }.action {
+                    s1 = it.detect("iOS Version").aboveLineItem().joinedText
+                    s2 = it.detect("iOS Version").belowLineItem().joinedText
+                }.expectation {
+                    s1.thisIs("Name iPhone")
+                    s2.thisStartsWith("Model Name iPhone ")
                 }
             }
         }

@@ -78,6 +78,14 @@ internal fun VisionElement.rightLeftCore(
     centerBase: Boolean,
 ): VisionElement {
 
+    val relativeExpression = if (relative.isLeft) ":leftItem($pos)" else ":rightItem($pos)"
+    val selector = this.selector?.getChainedSelector(relativeExpression)
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     val sw = StopWatch("rightLeftCore")
 
     /**
@@ -157,8 +165,7 @@ internal fun VisionElement.rightLeftCore(
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
         else sortedElements[pos - 1]
 
-    val relativeExpression = if (relative.isLeft) ":leftItem($pos)" else ":rightItem($pos)"
-    v.selector = this.selector?.getChainedSelector(relativeExpression)
+    v.selector = selector
     lastElement = v
 
     sw.stop()
@@ -189,6 +196,31 @@ fun VisionElement.aboveItem(
         binaryThreshold = binaryThreshold,
         aspectRatioTolerance = aspectRatioTolerance,
     )
+}
+
+/**
+ * aboveLineItem
+ */
+fun VisionElement.aboveLineItem(
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    segmentMinimumWidth: Int = this.rect.width / 2,
+    include: Boolean = false,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
+): VisionElement {
+
+    val belowItem = this.aboveItem(
+        pos = pos,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        segmentMinimumWidth = segmentMinimumWidth,
+        include = include,
+        binaryThreshold = binaryThreshold,
+        aspectRatioTolerance = aspectRatioTolerance,
+    )
+    return belowItem.lineRegionElement()
 }
 
 /**
@@ -226,6 +258,14 @@ internal fun VisionElement.aboveBelowCore(
     binaryThreshold: Int,
     aspectRatioTolerance: Double,
 ): VisionElement {
+
+    val relativeExpression = if (relative.isAbove) ":aboveItem($pos)" else ":belowItem($pos)"
+    val selector = this.selector?.getChainedSelector(relativeExpression)
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
 
     /**
      * split screenshot into segments
@@ -290,11 +330,35 @@ internal fun VisionElement.aboveBelowCore(
         if (sortedElements.isEmpty() || sortedElements.count() < pos) VisionElement(capture = false)
         else sortedElements[pos - 1]
 
-    val relativeExpression = if (relative.isAbove) ":aboveItem($pos)" else ":belowItem($pos)"
-    v.selector = this.selector?.getChainedSelector(relativeExpression)
+    v.selector = selector
     lastElement = v
 
     return v
+}
+
+/**
+ * belowLineItem
+ */
+fun VisionElement.belowLineItem(
+    pos: Int = 1,
+    segmentMarginHorizontal: Int = testContext.segmentMarginHorizontal,
+    segmentMarginVertical: Int = testContext.segmentMarginVertical,
+    segmentMinimumWidth: Int = this.rect.width / 2,
+    include: Boolean = false,
+    binaryThreshold: Int = testContext.visionFindImageBinaryThreshold,
+    aspectRatioTolerance: Double = testContext.visionFindImageAspectRatioTolerance,
+): VisionElement {
+
+    val belowItem = this.belowItem(
+        pos = pos,
+        segmentMarginHorizontal = segmentMarginHorizontal,
+        segmentMarginVertical = segmentMarginVertical,
+        segmentMinimumWidth = segmentMinimumWidth,
+        include = include,
+        binaryThreshold = binaryThreshold,
+        aspectRatioTolerance = aspectRatioTolerance,
+    )
+    return belowItem.lineRegionElement()
 }
 
 /**
@@ -304,7 +368,13 @@ fun VisionElement.rightText(
     pos: Int = 1,
 ): VisionElement {
 
-    val v: VisionElement
+    val selector = this.selector?.getChainedSelector(":rightText($pos)")
+    var v = VisionElement.emptyElement
+    v.selector = selector
+    if (TestMode.isNoLoadRun) {
+        return v
+    }
+
     if (pos == 0) return this
     else if (pos < 0) {
         v = this.rightText(pos = -pos)
@@ -318,7 +388,7 @@ fun VisionElement.rightText(
         VisionElement(capture = false)
     else elements[pos - 1]
 
-    v.selector = this.selector?.getChainedSelector(":rightText($pos)")
+    v.selector = selector
     lastElement = v
 
     return v
@@ -331,13 +401,20 @@ fun VisionElement.rightText(
     expression: String,
 ): VisionElement {
 
+    val selector = this.selector?.getChainedSelector(":rightText($expression)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     val elements = getHorizontalElements()
         .filter { this.rect.right < it.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.left }
     val v = elements.firstOrNull() ?: VisionElement(capture = false)
 
-    v.selector = this.selector?.getChainedSelector(":rightText($expression)")
+    v.selector = selector
     lastElement = v
 
     return v
@@ -349,6 +426,13 @@ fun VisionElement.rightText(
 fun VisionElement.leftText(
     pos: Int = 1,
 ): VisionElement {
+
+    val selector = this.selector?.getChainedSelector(":leftText($pos)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
 
     val v: VisionElement
     if (pos == 0) return this
@@ -364,7 +448,7 @@ fun VisionElement.leftText(
         VisionElement(capture = false)
     else elements[elements.count() - pos]
 
-    v.selector = this.selector?.getChainedSelector(":leftText($pos)")
+    v.selector = selector
     lastElement = v
 
     return v
@@ -377,13 +461,20 @@ fun VisionElement.leftText(
     expression: String,
 ): VisionElement {
 
+    val selector = this.selector?.getChainedSelector(":leftText($expression)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     val elements = getHorizontalElements()
         .filter { it.rect.right < this.rect.left && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.left }
     val v = elements.lastOrNull() ?: VisionElement(capture = false)
 
-    v.selector = this.selector?.getChainedSelector(":leftText($expression)")
+    v.selector = selector
     lastElement = v
 
     return v
@@ -420,6 +511,13 @@ fun VisionElement.aboveText(
     pos: Int = 1,
 ): VisionElement {
 
+    val selector = this.selector?.getChainedSelector(":rightText($pos)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     val v: VisionElement
     if (pos == 0) return this
     else if (pos < 0) {
@@ -433,7 +531,7 @@ fun VisionElement.aboveText(
     v = if (elements.isEmpty() || elements.count() < pos)
         VisionElement(capture = false)
     else elements[pos - 1]
-    v.selector = this.selector?.getChainedSelector(":rightText($pos)")
+    v.selector = selector
     lastElement = v
 
     return v
@@ -446,13 +544,20 @@ fun VisionElement.aboveText(
     expression: String,
 ): VisionElement {
 
+    val selector = this.selector?.getChainedSelector(":aboveText($expression)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     val elements = getVerticalElements()
         .filter { it.rect.top < this.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedByDescending { it.rect.top }
     val v = elements.lastOrNull() ?: VisionElement(capture = false)
 
-    v.selector = this.selector?.getChainedSelector(":aboveText($expression)")
+    v.selector = selector
     lastElement = v
 
     return v
@@ -464,6 +569,13 @@ fun VisionElement.aboveText(
 fun VisionElement.belowText(
     pos: Int = 1,
 ): VisionElement {
+
+    val selector = this.selector?.getChainedSelector(":belowText($pos)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
 
     val v: VisionElement
     if (pos == 0) return this
@@ -491,6 +603,13 @@ fun VisionElement.belowText(
 fun VisionElement.belowText(
     expression: String,
 ): VisionElement {
+
+    val selector = this.selector?.getChainedSelector(":belowText($expression)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
 
     val elements = getVerticalElements()
         .filter { this.rect.top < it.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
@@ -551,6 +670,13 @@ fun VisionElement.leftImage(
         throw IllegalArgumentException("pos must be greater than or equal to 0")
     }
 
+    val selector = Selector(":leftImage(\"$label\", $pos)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     var imageElements: List<VisionElement> = mutableListOf()
     onLeft {
         imageElements = findImages(
@@ -568,7 +694,7 @@ fun VisionElement.leftImage(
     }
     imageElements = imageElements.sortedByDescending { it.rect.left }
     val v = imageElements[pos - 1]
-    v.selector = Selector(":leftImage(\"$label\", $pos)")
+    v.selector = selector
     return v
 }
 
@@ -589,6 +715,13 @@ fun VisionElement.rightImage(
         throw IllegalArgumentException("pos must be greater than or equal to 0")
     }
 
+    val selector = Selector(":rightImage(\"$label\", $pos)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     var imageElements: List<VisionElement> = mutableListOf()
     onRight {
         imageElements = findImages(
@@ -606,7 +739,7 @@ fun VisionElement.rightImage(
     }
     imageElements = imageElements.sortedBy { it.rect.left }
     val v = imageElements[pos - 1]
-    v.selector = Selector(":rightImage(\"$label\", $pos)")
+    v.selector = selector
     return v
 }
 
@@ -627,6 +760,13 @@ fun VisionElement.aboveImage(
         throw IllegalArgumentException("pos must be greater than or equal to 0")
     }
 
+    val selector = Selector(":aboveImage(\"$label\", $pos)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     var imageElements: List<VisionElement> = mutableListOf()
     onAbove {
         imageElements = findImages(
@@ -644,7 +784,7 @@ fun VisionElement.aboveImage(
     }
     imageElements = imageElements.sortedByDescending { it.rect.top }
     val v = imageElements[pos - 1]
-    v.selector = Selector(":aboveImage(\"$label\", $pos)")
+    v.selector = selector
     return v
 }
 
@@ -665,6 +805,13 @@ fun VisionElement.belowImage(
         throw IllegalArgumentException("pos must be greater than or equal to 0")
     }
 
+    val selector = Selector(":belowImage(\"$label\", $pos)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     var imageElements: List<VisionElement> = mutableListOf()
     onBelow {
         imageElements = findImages(
@@ -682,7 +829,7 @@ fun VisionElement.belowImage(
     }
     imageElements = imageElements.sortedBy { it.rect.top }
     val v = imageElements[pos - 1]
-    v.selector = Selector(":belowImage(\"$label\", $pos)")
+    v.selector = selector
     return v
 }
 
@@ -703,6 +850,13 @@ fun VisionElement.leftRadioButton(
         throw IllegalArgumentException("pos must be greater than or equal to 0")
     }
 
+    val selector = Selector(":leftRadioButton($pos)")
+    if (TestMode.isNoLoadRun) {
+        val v = VisionElement.emptyElement
+        v.selector = selector
+        return v
+    }
+
     var imageElements: List<VisionElement> = mutableListOf()
     onLine {
         imageElements = findImages(
@@ -720,6 +874,6 @@ fun VisionElement.leftRadioButton(
     }
     imageElements = imageElements.sortedByDescending { it.rect.left }
     val v = imageElements[pos - 1]
-    v.selector = Selector(":leftRadioButton($pos)")
+    v.selector = selector
     return v
 }

@@ -1,6 +1,7 @@
 package shirates.core.vision.driver
 
 import shirates.core.configuration.PropertiesManager
+import shirates.core.driver.TestMode
 import shirates.core.exception.TestDriverException
 import shirates.core.utility.file.resolve
 import shirates.core.vision.VisionElement
@@ -13,6 +14,10 @@ import shirates.core.vision.utility.label.LabelUtility
 fun VisionElement.classifyFull(
     classifierName: String = "DefaultClassifier"
 ): String {
+
+    if (TestMode.isNoLoadRun) {
+        return ""
+    }
 
     if (this.image == null) {
         throw TestDriverException("Failed to classify. `image` is not set. (VisionElement:$this)")
@@ -38,6 +43,10 @@ fun VisionElement.classifyFull(
 fun VisionElement.classify(
     classifierName: String = "DefaultClassifier"
 ): String {
+
+    if (TestMode.isNoLoadRun) {
+        return ""
+    }
 
     val fullLabel = classifyFull(classifierName = classifierName)
     return LabelUtility.getShortLabel(fullLabel)

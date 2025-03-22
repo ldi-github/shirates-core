@@ -437,11 +437,11 @@ object TestDriver {
             val screenName = value.getNicknameWithoutSuffix().normalize(Normalizer.Form.NFC)
             if (screenName.isNotBlank() && field != screenName) {
                 field = screenName
-                if (testContext.enableCache) {
-                    fireTestDriveScreenHandler(screenName = screenName)
-                } else {
-                    fireVisionDriveScreenHandler(screenName = screenName)
-                }
+            }
+            if (testContext.enableCache) {
+                fireTestDriveScreenHandler(screenName = screenName)
+            } else {
+                fireVisionDriveScreenHandler(screenName = screenName)
             }
         }
 

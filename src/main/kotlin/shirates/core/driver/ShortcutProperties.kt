@@ -18,6 +18,14 @@ val drive: Drive
     }
 
 /**
+ * testDrive
+ */
+val testDrive: TestDrive
+    get() {
+        return TestDriveObject
+    }
+
+/**
  * classic
  */
 val classic: TestDrive
