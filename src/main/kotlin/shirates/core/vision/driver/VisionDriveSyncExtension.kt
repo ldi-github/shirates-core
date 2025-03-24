@@ -2,17 +2,16 @@ package shirates.core.vision.driver
 
 import org.openqa.selenium.OutputType
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.TestDriver
+import shirates.core.driver.*
 import shirates.core.driver.TestDriver.appiumDriver
-import shirates.core.driver.TestDriverCommandContext
-import shirates.core.driver.TestMode
 import shirates.core.driver.commandextension.getSelector
-import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.testcode.CodeExecutionContext
+import shirates.core.utility.image.BufferedImageUtility
 import shirates.core.utility.image.isSame
+import shirates.core.utility.ios.IosDeviceUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.utility.toBufferedImage
 import shirates.core.vision.VisionDrive
@@ -55,7 +54,14 @@ fun VisionDrive.syncScreen(): VisionElement {
              * iOS
              * has sync mechanism in itself
              */
-            CodeExecutionContext.lastScreenshotImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+            if (testContext.screenshotWithSimctl) {
+                val tempScreenshotFile = TestLog.directoryForLog.resolve("tempScreenshotFile.png").toString()
+                IosDeviceUtility.getScreenshot(udid = testProfile.udid, file = tempScreenshotFile)
+                CodeExecutionContext.lastScreenshotImage = BufferedImageUtility.getBufferedImage(tempScreenshotFile)
+            } else {
+                CodeExecutionContext.lastScreenshotImage =
+                    appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+            }
         }
         CodeExecutionContext.screenshotSynced = true
         return lastElement

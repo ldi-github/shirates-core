@@ -10,6 +10,7 @@ import shirates.core.driver.TestMode.isStub
 import shirates.core.driver.TestMode.isVirtualDevice
 import shirates.core.driver.branchextension.result.BooleanCompareResult
 import shirates.core.driver.branchextension.result.SpecialTagCompareResult
+import shirates.core.driver.testContext
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
 import shirates.core.vision.VisionDrive
@@ -172,7 +173,13 @@ fun VisionDrive.simulator(
 
     val context = TestDriverCommandContext(null)
     context.execSpecial(subject = command, condition = command) {
-        onTrue()
+        val original = testContext.screenshotWithSimctl
+        testContext.screenshotWithSimctl = true
+        try {
+            onTrue()
+        } finally {
+            testContext.screenshotWithSimctl = original
+        }
     }
     return this
 }
