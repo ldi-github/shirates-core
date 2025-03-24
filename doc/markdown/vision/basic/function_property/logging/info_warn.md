@@ -9,7 +9,7 @@ You can use info and warn function to output additional information.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### InfoAndWarn1.kt
 

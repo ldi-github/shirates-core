@@ -22,7 +22,7 @@
 | thisMatchesNot        | 指定したパターンにマッチしないことを検証します    |
 | thisMatchesDateFormat | 指定した日付書式パターンにマッチすることを検証します |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

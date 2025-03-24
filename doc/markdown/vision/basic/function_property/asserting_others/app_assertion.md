@@ -11,7 +11,7 @@ You can assert app using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### AssertingOthers1.kt
 

@@ -20,7 +20,7 @@ You can use branch functions for string.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### IfStringIs1.kt
 

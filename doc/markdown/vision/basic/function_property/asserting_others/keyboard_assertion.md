@@ -12,7 +12,7 @@ You can assert showing status of keyboard using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### AssertingOthers1.kt
 

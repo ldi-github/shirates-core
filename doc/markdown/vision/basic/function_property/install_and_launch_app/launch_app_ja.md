@@ -9,7 +9,9 @@
 | launchApp    | アプリを起動します。アプリ名 または `packageOrBundleId` を指定できます |
 | terminateApp | アプリを終了します。アプリ名 または `packageOrBundleId` を指定できます |
 
-## 例
+## サンプルコード
+
+[サンプルの入手](../../../getting_samples_ja.md)
 
 ### LaunchApp1.kt
 

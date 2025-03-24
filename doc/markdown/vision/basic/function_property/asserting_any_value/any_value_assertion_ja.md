@@ -11,7 +11,7 @@
 | thisIsTrue  | この値がtrueであることを検証します  |
 | thisIsFalse | この値がfalseであることを検証します |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

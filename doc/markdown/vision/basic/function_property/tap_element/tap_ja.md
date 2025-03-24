@@ -20,11 +20,9 @@
 | tapItemRightOf(_expression_)     | _expression_ にマッチする要素の右の要素をタップします                                   |
 | tapItemLeftOf(_expression_)      | _expression_ にマッチする要素の左の要素をタップします                                   |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
-
-## 例
 
 ### Tap1.kt
 

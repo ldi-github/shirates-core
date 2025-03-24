@@ -24,7 +24,7 @@ You can assert string value using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### AssertingAnyValue1.kt
 

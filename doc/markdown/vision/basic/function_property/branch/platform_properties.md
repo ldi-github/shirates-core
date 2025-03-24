@@ -15,7 +15,7 @@ You can get information of the platform using these properties.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### PlatformProperties1.kt
 

@@ -10,7 +10,7 @@
 | keyboardIsNotShown |
 | isKeyboardShown    |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

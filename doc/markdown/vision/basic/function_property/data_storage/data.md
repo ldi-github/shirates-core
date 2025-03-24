@@ -4,7 +4,7 @@ You can configure any data in **data.json** file, and you can get properties of 
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### data.json
 

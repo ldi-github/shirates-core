@@ -10,7 +10,7 @@ You can tap app icon and launch app using **tapAppIcon** function.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### TapAppIcon1.kt
 

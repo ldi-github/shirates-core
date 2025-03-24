@@ -29,7 +29,7 @@ findImageWithScrollDown("[Location Icon]", threshold = 0.5)
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### Template images
 

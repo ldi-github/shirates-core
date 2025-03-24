@@ -4,7 +4,7 @@ You can register selector(nickname) on demand using `tempSelector` function.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### TempSelector1.kt
 

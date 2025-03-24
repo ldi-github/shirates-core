@@ -6,7 +6,7 @@ You can suppress logging using **silent** function.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### SilentAndProcedure1.kt
 

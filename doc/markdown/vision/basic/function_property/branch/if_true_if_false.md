@@ -11,7 +11,7 @@ You can use branch functions instead of Kotlin if-else statement.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### IfTrueIfFalse1.kt
 

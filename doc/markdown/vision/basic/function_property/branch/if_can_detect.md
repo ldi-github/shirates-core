@@ -11,7 +11,7 @@ You can use special branch functions for element.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### IfCanSelect1.kt
 

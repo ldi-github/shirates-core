@@ -26,7 +26,7 @@
 findImageWithScrollDown("[Location Icon]", threshold = 0.5)
 ```
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

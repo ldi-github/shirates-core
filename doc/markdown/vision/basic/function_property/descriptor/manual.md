@@ -5,7 +5,7 @@ procedure using **manual** function.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### Manual1.kt
 

@@ -16,7 +16,7 @@ Shirates/Visionは Vision Framework のAI-OCR機能によって画面のテキ�
 
 「難点」を回避するにはclassicモードを使用してください。
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../getting_samples_ja.md)
 

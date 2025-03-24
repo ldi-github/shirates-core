@@ -25,7 +25,7 @@
 | language   | [AI-OCR言語](../../switching_environment/switching_ai_ocr_language_ja.md) |
 | last       | true: 最後の要素を取得します<br>false: 最初の要素を取得します(デフォルト)                          |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

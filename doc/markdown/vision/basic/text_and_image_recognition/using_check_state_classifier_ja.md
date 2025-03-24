@@ -2,7 +2,7 @@
 
 Shirates/Visionは画像のチェック状態(`[ON]`/`[OFF]`)を認識します。
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../getting_samples_ja.md)
 

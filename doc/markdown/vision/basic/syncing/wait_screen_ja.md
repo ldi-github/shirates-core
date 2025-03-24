@@ -8,7 +8,7 @@
 
 参照 [パラメーター](../../../common/parameter/parameters_ja.md)
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../getting_samples_ja.md)
 

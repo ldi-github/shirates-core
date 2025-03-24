@@ -9,7 +9,7 @@
 | thisIsTrue  | trueであることを検証します  |
 | thisIsFalse | falseであることを検証します |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

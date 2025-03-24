@@ -13,7 +13,7 @@ You can write to and read from clipboard using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### Clipboard1.kt
 

@@ -13,7 +13,7 @@
 | isVirtualDevice | 仮想デバイスの場合にtrue      |
 | isRealDevice    | 実デバイスの場合にtrue       |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

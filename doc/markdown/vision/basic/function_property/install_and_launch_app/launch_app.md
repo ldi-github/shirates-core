@@ -11,7 +11,7 @@ You can launch or terminate app using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### LaunchApp1.kt
 
