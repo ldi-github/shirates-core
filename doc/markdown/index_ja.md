@@ -127,6 +127,8 @@
     - [分岐関数 (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/if_string_ja.md)
     - [プラットフォーム関数 (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions_ja.md)
     - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties_ja.md)
+- イベントハンドラー
+    - [スクリーンハンドラー(onScreen)](vision/basic/function_property/event_handler/on_screen_ja.md)
 - 編集とキーボード操作を行う
     - [sendKeys](vision/basic/function_property/editing_and_keyboard_operations/sendkeys_ja.md)
     - [clearInput](vision/basic/function_property/editing_and_keyboard_operations/clearinput_ja.md)

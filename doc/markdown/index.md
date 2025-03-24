@@ -117,8 +117,8 @@
     - [App assertion](vision/basic/function_property/asserting_others/app_assertion.md)
     - [Keyboard assertion](vision/basic/function_property/asserting_others/keyboard_assertion.md)
     - [Package assertion](vision/basic/function_property/asserting_others/package_assertion.md)
-- Asserting anyting
-    - [Anyting assertion (verify)](vision/basic/function_property/asserting_anything/anything_assertion.md)
+- Asserting anything
+    - [Anything assertion (verify)](vision/basic/function_property/asserting_anything/anything_assertion.md)
 - Branch
     - [Branch function (ifTrue, ifFalse)](vision/basic/function_property/branch/if_true_if_false.md)
     - [Branch function (ifScreenIs, ifScreenIsNot)](vision/basic/function_property/branch/if_screen_is.md)
@@ -128,6 +128,8 @@
     - [Branch function (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/if_string.md)
     - [Platform function (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions.md)
     - [Platform property (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties.md)
+- Event Handler
+    - [Screen Handler(onScreen)](vision/basic/function_property/event_handler/on_screen.md)
 - Editing and Keyboard operations
     - [sendKeys](vision/basic/function_property/editing_and_keyboard_operations/sendkeys.md)
     - [clearInput](vision/basic/function_property/editing_and_keyboard_operations/clearinput.md)
