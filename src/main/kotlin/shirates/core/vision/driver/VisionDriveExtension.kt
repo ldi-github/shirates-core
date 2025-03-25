@@ -41,6 +41,15 @@ fun VisionDrive.tempSelector(nickname: String, expression: String): VisionElemen
 }
 
 /**
+ * tempValue
+ */
+fun VisionDrive.tempValue(nickname: String): String {
+
+    val pair = ScreenRepository.tempSelectorList.firstOrNull() { it.first == nickname }
+    return pair?.second ?: ""
+}
+
+/**
  * clearTempSelectors
  */
 fun VisionDrive.clearTempSelectors(): VisionElement {

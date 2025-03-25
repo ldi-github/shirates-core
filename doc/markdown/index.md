@@ -154,8 +154,8 @@
     - [knownIssue](vision/basic/function_property/descriptor/known_issue.md)
 - Test flow control
     - [SKIP/MANUAL/NOTIMPL](vision/basic/function_property/test_flow_control/skip_notimpl.md)
-- Registering selector on demand
-    - [tempSelector](vision/basic/function_property/selector/temp_selector.md)
+- Registering temporary selector on demand
+    - [tempSelector, tempValue](vision/basic/function_property/selector/temp_selector.md)
 - Logging
     - [info, warn](vision/basic/function_property/logging/info_warn.md)
     - [silent, procedure](vision/basic/function_property/logging/silent_and_procedure_function.md)

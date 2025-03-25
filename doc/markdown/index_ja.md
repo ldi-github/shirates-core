@@ -151,8 +151,8 @@
     - [describe, procedure, caption, comment, manual, knownIssue, target, output](vision/basic/function_property/descriptor/descriptors_ja.md)
     - [manual](vision/basic/function_property/descriptor/manual_ja.md)
     - [knownIssue](vision/basic/function_property/descriptor/known_issue_ja.md)
-- セレクターをオンデマンドで登録する
-    - [tempSelector](vision/basic/function_property/selector/temp_selector_ja.md)
+- 一時的なセレクターをオンデマンドで登録する
+    - [tempSelector, tempValue](vision/basic/function_property/selector/temp_selector_ja.md)
 - テストフロー制御
     - [SKIP/MANUAL/NOTIMPL](vision/basic/function_property/test_flow_control/skip_notimpl_ja.md)
 - ロギング
