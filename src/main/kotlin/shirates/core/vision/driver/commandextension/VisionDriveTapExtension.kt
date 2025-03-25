@@ -217,7 +217,20 @@ fun VisionDrive.tap(
             val fileName = "${TestLog.nextLineNo}_tap_${tappedElement.subject}_${tappedElement.bounds}"
             tappedElement.saveImage(fileName = fileName)
         }
-        v.tap(x = v.bounds.centerX, y = v.bounds.centerY, holdSeconds = holdSeconds)
+        val sel = v.selector
+        var b = v.bounds
+        if (sel != null && v.text.isNotBlank()) {
+            val searchText = sel.text ?: sel.textStartsWith ?: sel.textContains ?: sel.textEndsWith ?: ""
+            if (searchText != v.text) {
+                val p = v.text.indexOf(searchText).toDouble() / v.text.length
+                if (p >= 0.0) {
+                    val offset = (b.width * p).toInt()
+                    val width = (b.width * (searchText.length.toDouble() / v.text.length)).toInt()
+                    b = Bounds(b.left + offset, b.top, width, b.height)
+                }
+            }
+        }
+        v.tap(x = b.centerX, y = b.centerY, holdSeconds = holdSeconds)
     }
 
     lastElement = v.newVisionElement()
