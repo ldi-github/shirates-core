@@ -91,6 +91,7 @@ fun VisionDrive.isScreenOf(
 fun VisionDrive.waitScreenOf(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    throwOnError: Boolean = true,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
 ): VisionElement {
@@ -107,6 +108,7 @@ fun VisionDrive.waitScreenOf(
     waitScreenOfCore(
         screenNames = screenNames,
         waitSeconds = waitSeconds,
+        throwOnError = throwOnError,
         irregularHandler = irregularHandler,
         onTrue = onTrue
     )
@@ -117,6 +119,7 @@ fun VisionDrive.waitScreenOf(
 internal fun VisionDrive.waitScreenOfCore(
     vararg screenNames: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    throwOnError: Boolean,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
 ) {
@@ -139,7 +142,7 @@ internal fun VisionDrive.waitScreenOfCore(
         screenFound
     }
 
-    if (screenFound.not()) {
+    if (screenFound.not() && throwOnError) {
         val subject = screenNames.joinToString(" or ")
         throw TestDriverException(
             message(
@@ -160,6 +163,7 @@ internal fun VisionDrive.waitScreenOfCore(
 fun VisionDrive.waitScreen(
     screenName: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    throwOnError: Boolean = true,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
     onTrue: (() -> Unit)? = null
 ): VisionElement {
@@ -181,6 +185,7 @@ fun VisionDrive.waitScreen(
     waitScreenOfCore(
         screenName,
         waitSeconds = waitSeconds,
+        throwOnError = throwOnError,
         irregularHandler = irregularHandler,
         onTrue = onTrue
     )

@@ -15,7 +15,7 @@ Conditional branches are required on specific test situation. You can use platfo
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### BranchFunctionsOnAndroid.kt
 

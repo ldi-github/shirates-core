@@ -13,7 +13,7 @@
 | dontExist | dontExist              | 要素が存在しないことを検証します（表示中の画面）                  | 空要素(存在しない場合)<br>TestNGException(存在する場合)         |
 | dontExist | dontExistWithoutScroll | 要素が存在しないことを検証します（`withScroll`使用時はスクロールあり） | (同上)                                            |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

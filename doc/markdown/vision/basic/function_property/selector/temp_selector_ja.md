@@ -1,8 +1,15 @@
-# tempSelector
+# tempSelector, tempValue (Vision)
 
-`tempSelector`関数を使用してセレクター(ニックネーム)をオンデマンドで登録することができます。
+こららの関数を使用すると一時的な使用のために値を登録したり取得したりすることができます。
 
-### サンプルコード
+## 関数
+
+| 関数                                   | 説明                                          |
+|:-------------------------------------|---------------------------------------------|
+| tempSelector(_nickname, expression_) | _nickname_ をキーとして _expression_ を登録することができます |
+| tempValue(_nickname_)                | _nickname_ をキーとして値を取得することができます              |
+
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

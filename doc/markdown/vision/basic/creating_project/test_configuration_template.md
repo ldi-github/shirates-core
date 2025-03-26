@@ -2,7 +2,7 @@
 
 Test configuration files are required to initialize test session.
 
-### Sample code
+## Sample code
 
 [Getting samples](../../getting_samples.md)
 

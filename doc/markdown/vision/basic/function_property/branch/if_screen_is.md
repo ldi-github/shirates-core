@@ -11,7 +11,7 @@ You can use branch functions for screen.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### IfScreenIs1.kt
 

@@ -4,7 +4,7 @@ You can clear value of input widget using **clearInput** function.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### AndroidSendKeys1.kt
 

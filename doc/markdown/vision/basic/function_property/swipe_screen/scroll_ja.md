@@ -20,7 +20,7 @@
 | withScrollLeft    | 左方向にスクロールしながら要素を選択します |
 | withoutScroll     | スクロールしないで要素を選択肢ます     |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

@@ -30,7 +30,7 @@ You can swipe or flick screen using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ## swipeTo, swipeToAdjust
 

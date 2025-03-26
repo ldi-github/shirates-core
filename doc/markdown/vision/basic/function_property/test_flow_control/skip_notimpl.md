@@ -12,7 +12,7 @@ You can skip or abort test using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### SkipAndNotImpl1.kt
 

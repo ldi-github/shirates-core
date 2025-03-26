@@ -217,7 +217,20 @@ fun VisionDrive.tap(
             val fileName = "${TestLog.nextLineNo}_tap_${tappedElement.subject}_${tappedElement.bounds}"
             tappedElement.saveImage(fileName = fileName)
         }
-        v.tap(x = v.bounds.centerX, y = v.bounds.centerY, holdSeconds = holdSeconds)
+        val sel = v.selector
+        var b = v.bounds
+        if (sel != null && v.text.isNotBlank()) {
+            val searchText = sel.text ?: sel.textStartsWith ?: sel.textContains ?: sel.textEndsWith ?: ""
+            if (searchText != v.text) {
+                val p = v.text.indexOf(searchText).toDouble() / v.text.length
+                if (p >= 0.0) {
+                    val offset = (b.width * p).toInt()
+                    val width = (b.width * (searchText.length.toDouble() / v.text.length)).toInt()
+                    b = Bounds(b.left + offset, b.top, width, b.height)
+                }
+            }
+        }
+        v.tap(x = b.centerX, y = b.centerY, holdSeconds = holdSeconds)
     }
 
     lastElement = v.newVisionElement()
@@ -599,6 +612,50 @@ fun VisionDrive.tapItemUnder(
 }
 
 /**
+ * tapTextUnder
+ */
+fun VisionDrive.tapTextUnder(
+    expression: String,
+    language: String = testContext.visionOCRLanguage,
+    allowScroll: Boolean? = null,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+    swipeToSafePosition: Boolean = true,
+): VisionElement {
+
+    val sel = getSelector(expression = expression)
+
+    val command = "tapTextUnder"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    var v = VisionElement.emptyElement
+    context.execOperateCommand(command = command, message = message, subject = "$sel") {
+
+        val labelElement = detect(
+            expression = expression,
+            language = language,
+            allowScroll = allowScroll,
+            swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = 0.0,
+            throwsException = true,
+        )
+        v = labelElement.belowText()
+        val tapFunc = {
+            silent {
+                v = v.tap(holdSeconds = holdSeconds)
+            }
+        }
+
+        tapFunc()
+    }
+    if (TestMode.isNoLoadRun) {
+        lastElement = v
+    }
+
+    return v
+}
+
+/**
  * tapItemOver
  */
 fun VisionDrive.tapItemOver(
@@ -632,6 +689,50 @@ fun VisionDrive.tapItemOver(
             segmentMarginHorizontal = segmentMarginHorizontal,
             segmentMarginVertical = segmentMarginVertical,
         )
+        val tapFunc = {
+            silent {
+                v = v.tap(holdSeconds = holdSeconds)
+            }
+        }
+
+        tapFunc()
+    }
+    if (TestMode.isNoLoadRun) {
+        lastElement = v
+    }
+
+    return v
+}
+
+/**
+ * tapTextOver
+ */
+fun VisionDrive.tapTextOver(
+    expression: String,
+    language: String = testContext.visionOCRLanguage,
+    allowScroll: Boolean? = null,
+    holdSeconds: Double = TestDriver.testContext.tapHoldSeconds,
+    swipeToSafePosition: Boolean = true,
+): VisionElement {
+
+    val sel = getSelector(expression = expression)
+
+    val command = "tapTextOver"
+    val message = message(id = command, subject = "$sel")
+
+    val context = TestDriverCommandContext(null)
+    var v = VisionElement.emptyElement
+    context.execOperateCommand(command = command, message = message, subject = "$sel") {
+
+        val labelElement = detect(
+            expression = expression,
+            language = language,
+            allowScroll = allowScroll,
+            swipeToSafePosition = swipeToSafePosition,
+            waitSeconds = 0.0,
+            throwsException = true,
+        )
+        v = labelElement.aboveText()
         val tapFunc = {
             silent {
                 v = v.tap(holdSeconds = holdSeconds)

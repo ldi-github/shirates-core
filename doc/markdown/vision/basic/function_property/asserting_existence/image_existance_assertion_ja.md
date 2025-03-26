@@ -13,7 +13,7 @@
 | dontExist | dontExistImage              | 画像が現在の画面に存在しないことを検証します。 <br> `withScroll`関数内で使用するとスクロールが発生します。<br>TestNGException(if exists) | 空要素（存在しない場合）<br>TestNGException（存在する場合）　          |
 | dontExist | dontExistImageWithoutScroll | 画像が存在しないことを検証します。（スクロールなし）                                                                   | (同上)                                              |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

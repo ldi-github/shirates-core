@@ -13,7 +13,7 @@ scroll, swipe, flickなどのような関数を呼び出す場合はスクロー
 | onLineOf(expression)   | expressionにマッチするテキストを取得し、この要素を含む水平ラインをスクロール可能領域に設定する |
 | onColumnOf(expression) | expressionにマッチするテキストを取得し、この要素を含む垂直ラインをスクロール可能領域に設定する |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

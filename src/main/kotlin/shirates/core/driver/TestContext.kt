@@ -289,6 +289,9 @@ class TestContext(
                     && it.annotations.any() { a -> a is SaveTarget }
         }
 
+    @SaveTarget
+    var screenshotWithSimctl: Boolean = false
+
     internal val saveData = mutableMapOf<String, Any?>()
 
     val isVisionTest: Boolean

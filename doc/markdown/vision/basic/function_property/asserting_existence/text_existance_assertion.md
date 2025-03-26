@@ -15,7 +15,7 @@ You can check existence of text using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### ExistDontExist1.kt
 

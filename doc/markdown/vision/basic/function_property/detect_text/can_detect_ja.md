@@ -14,7 +14,7 @@
 | canDetectWithoutScroll   | セレクターにマッチする最初の要素を取得し、true または falseを返します。（スクロールなし）                               |
 | canDetectAll             | セレクターにマッチする全ての要素を取得し、true または falseを返します。 `withScroll`関数内で使用するとスクロールが発生します。      |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

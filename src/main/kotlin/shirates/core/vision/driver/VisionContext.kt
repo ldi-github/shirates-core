@@ -689,11 +689,37 @@ class VisionContext(
             searchElements = searchElements,
             confirmedElements = confirmedElements,
         )
-        val joinedText = confirmedElements.map { it.text }.joinToString("").forVisionComparison()
-        if (joinedText.contains(tempText)) {
-            return confirmedElements
+
+        /**
+         * merge
+         */
+        val sortedList = confirmedElements.sortedBy { it.rect.top }.toMutableList()
+        val meregedList = mutableListOf<VisionElement>()
+        while (sortedList.size != 0) {
+            val v1 = sortedList.first()
+            sortedList.remove(v1)
+            if (sortedList.isEmpty()) {
+                meregedList.add(v1)
+                break
+            }
+
+            val v2 = sortedList.first()
+            val distance = v2.rect.top - v1.rect.bottom
+            val canMerge = distance < v1.rect.height
+            if (canMerge) {
+                sortedList.remove(v2)
+                val vMerged = v1.mergeWith(v2)
+                sortedList.add(0, vMerged)
+            } else {
+                meregedList.add(v1)
+            }
         }
-        return listOf()
+
+        /**
+         * filter
+         */
+        val resultList = meregedList.filter { it.joinedText.forVisionComparison().contains(normalizedText) }
+        return resultList
     }
 
     /**

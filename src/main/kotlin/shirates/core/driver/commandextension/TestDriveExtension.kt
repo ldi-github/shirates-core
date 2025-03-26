@@ -100,6 +100,15 @@ fun TestDrive.tempSelector(nickname: String, expression: String): TestElement {
 }
 
 /**
+ * tempValue
+ */
+fun TestDrive.tempValue(nickname: String): String {
+
+    val pair = ScreenRepository.tempSelectorList.firstOrNull() { it.first == nickname }
+    return pair?.second ?: ""
+}
+
+/**
  * clearTempSelectors
  */
 fun TestDrive.clearTempSelectors(): TestElement {

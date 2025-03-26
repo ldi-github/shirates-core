@@ -11,7 +11,7 @@
 | writeToClipboard | クリップボードへテキストを書き込みます    |
 | clipboardText    | 要素のtextをクリップボードへ書き込みます |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

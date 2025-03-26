@@ -127,6 +127,8 @@
     - [分岐関数 (ifStringIs, ifStartsWith, etc)](vision/basic/function_property/branch/if_string_ja.md)
     - [プラットフォーム関数 (android, ios, emulator, simulator, virtualDevice, realDevice)](vision/basic/function_property/branch/platform_branch_functions_ja.md)
     - [プラットフォームプロパティ (platformName, platformVersion, isAndroid, isiOS, isVirtualDevice, isRealDevice)](vision/basic/function_property/branch/platform_properties_ja.md)
+- イベントハンドラー
+    - [スクリーンハンドラー(onScreen)](vision/basic/function_property/event_handler/on_screen_ja.md)
 - 編集とキーボード操作を行う
     - [sendKeys](vision/basic/function_property/editing_and_keyboard_operations/sendkeys_ja.md)
     - [clearInput](vision/basic/function_property/editing_and_keyboard_operations/clearinput_ja.md)
@@ -149,8 +151,8 @@
     - [describe, procedure, caption, comment, manual, knownIssue, target, output](vision/basic/function_property/descriptor/descriptors_ja.md)
     - [manual](vision/basic/function_property/descriptor/manual_ja.md)
     - [knownIssue](vision/basic/function_property/descriptor/known_issue_ja.md)
-- セレクターをオンデマンドで登録する
-    - [tempSelector](vision/basic/function_property/selector/temp_selector_ja.md)
+- 一時的なセレクターをオンデマンドで登録する
+    - [tempSelector, tempValue](vision/basic/function_property/selector/temp_selector_ja.md)
 - テストフロー制御
     - [SKIP/MANUAL/NOTIMPL](vision/basic/function_property/test_flow_control/skip_notimpl_ja.md)
 - ロギング

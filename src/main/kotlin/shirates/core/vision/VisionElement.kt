@@ -323,6 +323,18 @@ open class VisionElement(
     }
 
     /**
+     * mergeWith
+     */
+    fun mergeWith(other: VisionElement): VisionElement {
+
+        val newRect = this.rect.mergeWith(other.rect)
+        val v = newRect.toVisionElement()
+        v.mergedElements.add(this)
+        v.mergedElements.add(other)
+        return v
+    }
+
+    /**
      * newVisionElement
      */
     fun newVisionElement(): VisionElement {

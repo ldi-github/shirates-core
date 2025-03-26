@@ -19,6 +19,8 @@ You can tap an element on the screen using these functions.
 | tapItemOver(_expression_)        | Tap the element above of the element of _expression_.                                                 |
 | tapItemRightOf(_expression_)     | Tap the element right of the element of _expression_.                                                 |
 | tapItemLeftOf(_expression_)      | Tap the element left of the element of _expression_.                                                  |
+| tapTextUnder(_expression_)       | Tap the text element below of the element of _expression_.                                            |
+| tapTextOver(_expression_)        | Tap the text element above of the element of _expression_.                                            |
 
 ## Sample code
 

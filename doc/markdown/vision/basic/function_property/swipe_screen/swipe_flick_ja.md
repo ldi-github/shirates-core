@@ -28,7 +28,7 @@
 | swipeElementToElement       | 要素を他の要素の位置までスワイプします         | n/a                                                   |
 | swipeElementToElementAdjust | 要素を他の要素の位置までスワイプします（位置調整あり） | n/a                                                   |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

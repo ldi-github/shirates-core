@@ -14,7 +14,7 @@ You can assert the value of text using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### AssertingText1.kt
 

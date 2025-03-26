@@ -4,7 +4,7 @@
 
 In Shirates, a JUnit 5 test method is an autotest session that includes a scenario and one or more test cases.
 
-### Sample code
+## Sample code
 
 [Getting samples](../../getting_samples.md)
 

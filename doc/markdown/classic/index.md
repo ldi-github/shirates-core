@@ -109,8 +109,8 @@
     - [App assertion](basic/function_property/asserting_others/app_assertion.md)
     - [Keyboard assertion](basic/function_property/asserting_others/keyboard_assertion.md)
     - [Package assertion](basic/function_property/asserting_others/package_assertion.md)
-- Asserting anyting
-    - [Anyting assertion (verify)](basic/function_property/asserting_anything/anything_assertion.md)
+- Asserting anything
+    - [Anything assertion (verify)](basic/function_property/asserting_anything/anything_assertion.md)
 - Branch
     - [Branch function (ifTrue, ifFalse)](basic/function_property/branch/if_true_if_false.md)
     - [Branch function (ifScreenIs, ifScreenIsNot)](basic/function_property/branch/ifscreenis.md)

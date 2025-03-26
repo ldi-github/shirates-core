@@ -11,7 +11,7 @@ You can use special branch functions for image.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### IfImageExist1.kt
 

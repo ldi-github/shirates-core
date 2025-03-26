@@ -5,7 +5,7 @@ function.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### apps.json
 

@@ -15,7 +15,7 @@ Shirates/VisionはVision FrameworkのAI/ML機能を使用して画面内の画�
 
 ピクセル比較でイメージを検索する必要がある場合はclassicモード(Boof-CV)を使用してください。
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../getting_samples_ja.md)
 

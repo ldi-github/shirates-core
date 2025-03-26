@@ -12,7 +12,7 @@
 | readMemo(key)        | 指定したキーでメモを読み取ります           |
 | memoTextAs(key)      | 要素のtextの値を指定したキーでメモに書き込みます |
 
-### サンプルコード
+## サンプルコード
 
 [サンプルの入手](../../../getting_samples_ja.md)
 

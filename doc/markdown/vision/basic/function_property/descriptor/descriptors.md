@@ -19,7 +19,7 @@ You can describe your test procedure using these functions. These are for readab
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### Descriptor1.kt
 

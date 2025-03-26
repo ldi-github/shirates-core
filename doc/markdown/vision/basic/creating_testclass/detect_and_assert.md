@@ -2,7 +2,7 @@
 
 You can detect text in the screen by **AI-OCR text recognition** and assert its value.
 
-### Sample code
+## Sample code
 
 [Getting samples](../../getting_samples.md)
 

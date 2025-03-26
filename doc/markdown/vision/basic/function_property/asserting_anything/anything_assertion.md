@@ -38,7 +38,7 @@ Calling OK function/NG function are not necessary if existing verification funct
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### AssertingAnything1.kt
 

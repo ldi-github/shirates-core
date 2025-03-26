@@ -23,7 +23,7 @@ See [Setting up screen image templates](../../text_and_image_recognition/setting
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### ScreenIsAndIsScreen1.kt
 

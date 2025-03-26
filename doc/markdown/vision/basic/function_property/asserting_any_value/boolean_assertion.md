@@ -11,7 +11,7 @@ You can assert boolean value using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### AssertingAnyValue1.kt
 

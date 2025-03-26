@@ -14,7 +14,7 @@ You can write and read memo using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### Memo1.kt
 

@@ -10,6 +10,7 @@ import shirates.core.driver.*
 import shirates.core.driver.TestDriver.androidDriver
 import shirates.core.driver.TestMode.isAndroid
 import shirates.core.driver.TestMode.isiOS
+import shirates.core.driver.commandextension.getWebElement
 import shirates.core.driver.commandextension.hideKeyboard
 import shirates.core.driver.commandextension.pressKeys
 import shirates.core.driver.commandextension.toVisionElement
@@ -260,14 +261,11 @@ fun VisionDrive.sendKeys(
 
     val context = TestDriverCommandContext(null)
     context.execOperateCommand(command = command, message = message) {
-        val v = waitForElementFocused(
-            waitSeconds = testContext.waitSecondsOnIsScreen,
-            throwOnError = false,
-        )
-        if (v.isEmpty) {
+        val testElement = TestDriver.getFocusedElement()
+        if (testElement.isEmpty) {
             throw TestDriverException("Focused element not found.")
         }
-        val we = v.testElement?.webElement ?: throw TestDriverException("Focused element not found.")
+        val we = testElement.webElement ?: testElement.getWebElement()
         we.sendKeys(keysToSend)
 
         invalidateScreen()

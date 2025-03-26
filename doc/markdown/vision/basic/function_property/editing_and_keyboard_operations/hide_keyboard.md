@@ -4,7 +4,7 @@ To hide software keyboard, you can use **hideKeyboard** function.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### AndroidKeyboard1.kt
 
@@ -37,7 +37,7 @@ To hide software keyboard, you can use **hideKeyboard** function.
     }
 ```
 
-####                       
+####                        
 
 ### iOSKeyboard1.kt
 

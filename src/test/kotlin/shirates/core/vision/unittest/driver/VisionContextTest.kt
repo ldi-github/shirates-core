@@ -90,6 +90,7 @@ class VisionContextTest {
         run {
             // Arrange
             TestDriver.visionRootElement = VisionElement(capture = true)
+            TestDriver.visionRootElement.visionContext.screenshotFile = screenshotFile
             CodeExecutionContext.workingRegionElement = TestDriver.visionRootElement
             // Act
             val v = c.detect(selector = Selector("SIMs"), last = false, removeRedundantText = true)

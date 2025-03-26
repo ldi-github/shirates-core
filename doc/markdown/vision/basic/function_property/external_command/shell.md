@@ -11,7 +11,7 @@ You can execute shell command using these functions.
 
 ## Sample code
 
-[Getting samples](../../getting_samples.md)
+[Getting samples](../../../getting_samples.md)
 
 ### Shell1.kt
 
