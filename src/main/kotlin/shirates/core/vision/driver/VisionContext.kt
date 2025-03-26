@@ -705,7 +705,7 @@ class VisionContext(
 
             val v2 = sortedList.first()
             val distance = v2.rect.top - v1.rect.bottom
-            val canMerge = distance < v1.rect.height / 2
+            val canMerge = distance < v1.rect.height
             if (canMerge) {
                 sortedList.remove(v2)
                 val vMerged = v1.mergeWith(v2)
