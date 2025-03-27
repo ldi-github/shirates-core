@@ -226,12 +226,15 @@ fun VisionDrive.screenIs(
             TestDriver.currentScreen = screenName
             TestLog.ok(message = assertMessage, arg1 = screenName)
         } else {
-            TestDriver.currentScreen = "?"
-            lastElement.lastResult = LogType.NG
+            match = isScreen(screenName = screenName)   // Retry for timeout
+            if (match.not()) {
+                TestDriver.currentScreen = "?"
+                lastElement.lastResult = LogType.NG
 
-            val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName)"
-            val ex = TestNGException(msg, lastElement.lastError)
-            throw ex
+                val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName)"
+                val ex = TestNGException(msg, lastElement.lastError)
+                throw ex
+            }
         }
     }
     if (func != null) {
@@ -347,10 +350,13 @@ internal fun VisionDrive.screenIsOfCore(
     if (isScreenResult) {
         TestLog.ok(message = assertMessage, arg1 = matchedScreenName)
     } else {
-        lastElement.lastResult = LogType.NG
+        checkScreen()   // Retry for timeout
+        if (isScreenResult.not()) {
+            lastElement.lastResult = LogType.NG
 
-        val ex = TestNGException("${assertMessage} (actual=${currentScreen})", lastElement.lastError)
-        throw ex
+            val ex = TestNGException("${assertMessage} (actual=${currentScreen})", lastElement.lastError)
+            throw ex
+        }
     }
 }
 

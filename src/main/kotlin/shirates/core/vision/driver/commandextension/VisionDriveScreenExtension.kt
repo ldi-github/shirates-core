@@ -80,7 +80,6 @@ fun VisionDrive.isScreenOf(
     }
 
     invalidateScreen()
-    screenshot()
     updateCurrentScreen()
     return screenNames.any { screenName.contains(it) }
 }
@@ -140,6 +139,10 @@ internal fun VisionDrive.waitScreenOfCore(
             TestDriver.fireIrregularHandler()
         }
         screenFound
+    }
+
+    if (screenFound.not()) {
+        screenFound = isScreenOf(screenNames = screenNames) // Retry for timeout
     }
 
     if (screenFound.not() && throwOnError) {
