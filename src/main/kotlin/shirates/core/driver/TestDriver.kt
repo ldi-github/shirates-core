@@ -98,8 +98,22 @@ object TestDriver {
      */
     var visionRootElement: VisionElement = VisionElement(capture = false)
         internal set(value) {
+            addVisionRootElementHistory(value)
             field = value
         }
+
+    private fun addVisionRootElementHistory(value: VisionElement) {
+        visionRootElementHistory.add(value)
+        if (visionRootElementHistory.size > VISION_ROOT_ELEMENT_HISTORY_SIZE) {
+            val firstElement = visionRootElementHistory.first()
+            firstElement.visionContext.clear()   // Release references for avoiding memory leak
+            visionRootElementHistory.remove(firstElement)
+        }
+    }
+
+    internal val visionRootElementHistory = mutableListOf<VisionElement>()
+
+    const val VISION_ROOT_ELEMENT_HISTORY_SIZE = 5
 
     /**
      * isInitialized
@@ -1839,7 +1853,7 @@ object TestDriver {
     }
 
     /**
-     * screenshot(for manual)
+     * screenshot
      */
     fun screenshot(
         force: Boolean = false,
@@ -1979,8 +1993,10 @@ object TestDriver {
             CodeExecutionContext.lastScreenshotName = screenshotFileName
             CodeExecutionContext.lastScreenshotXmlSource = TestElementCache.sourceXml
             CodeExecutionContext.lastScreenshotImage = screenshotImage
-            val vc = VisionContext(capture = true)
-            TestDriver.visionRootElement = VisionElement(visionContext = vc)
+            if (TestMode.isVisionTest && testContext.useCache.not()) {
+                val vc = VisionContext(capture = true)
+                TestDriver.visionRootElement = VisionElement(visionContext = vc)
+            }
             CodeExecutionContext.workingRegionElement = oldWorkingRegionElement.newVisionElement()
 
             if (changed) {
