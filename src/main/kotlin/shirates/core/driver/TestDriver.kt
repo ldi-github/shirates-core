@@ -2065,9 +2065,10 @@ object TestDriver {
 
         var beforeImage = CodeExecutionContext.lastScreenshotImage
         var afterImage: BufferedImage?
-        var isSame: Boolean
-        var count = 0
+        var isSame = false
+        var matchRate = 0.0
         var changed = false
+        var count = 0
         try {
             vision.doUntilTrue(
                 waitSeconds = waitSeconds,
@@ -2078,7 +2079,7 @@ object TestDriver {
             ) {
                 count++
                 afterImage = getScreenshotBufferedImage()
-                val matchRate = afterImage.getMatchRate(beforeImage)
+                matchRate = afterImage.getMatchRate(beforeImage)
                 isSame = matchRate >= syncImageMatchRate
                 if (count == 1) {
                     changed = isSame.not()
@@ -2089,12 +2090,16 @@ object TestDriver {
                     beforeImage = afterImage
                     afterImage = null
                 }
-                TestLog.output("isSame: $isSame, changed: $changed, matchRate: $matchRate")
                 isSame
             }
         } finally {
             TestDriver.isScreenshotSyncing = false
             sw.stop()
+        }
+        if (isSame) {
+            TestLog.printInfo("Screen image synced. (isSame: $isSame, changed: $changed, matchRate: $matchRate)")
+        } else {
+            TestLog.printInfo("Screen image did not synced. (isSame: $isSame, changed: $changed, matchRate: $matchRate)")
         }
         return changed
     }
