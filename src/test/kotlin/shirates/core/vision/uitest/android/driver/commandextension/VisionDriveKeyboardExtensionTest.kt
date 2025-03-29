@@ -163,7 +163,7 @@ class VisionDriveKeyboardExtensionTest : VisionTest() {
                         it.pressAndroid(AndroidKey.D)
                         it.pressAndroid(AndroidKey.ENTER)
                     }.expectation {
-                        it.exist("connected")
+                        it.exist("Connected devices")
                     }
                 }
             }

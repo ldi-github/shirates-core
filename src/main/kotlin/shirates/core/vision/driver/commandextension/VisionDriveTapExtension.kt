@@ -193,6 +193,7 @@ fun VisionDrive.tap(
     }
 
     wait(waitSeconds = testContext.waitSecondsForAnimationComplete)
+    screenshot()
 
     return this
 }

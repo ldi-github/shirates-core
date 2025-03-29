@@ -217,7 +217,7 @@ fun VisionDrive.screenIs(
                     onIrregular?.invoke()
                 },
             ) {
-                match = isScreen(screenName = screenName)
+                match = isScreen(screenName = screenName, invalidateScreen = true)
                 match
             }
         }

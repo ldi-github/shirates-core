@@ -1,6 +1,8 @@
 package shirates.core.vision
 
+import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.vision
+import shirates.core.utility.file.resolve
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.commandextension.rootElement
 import shirates.core.vision.result.RecognizeTextResult
@@ -13,12 +15,19 @@ object ScreenRecognizer {
      */
     fun recognizeScreen(
         screenImageFile: String,
+        classifierName: String = "ScreenClassifier",
     ): String {
+
+        val mlmodelFile: String =
+            PropertiesManager.visionBuildDirectory.resolve("vision/classifiers/$classifierName/$classifierName.mlmodel")
 
         /**
          * Get screen candidates from current screen image
          */
-        val classifyScreenResult = VisionServerProxy.classifyScreen(inputFile = screenImageFile)
+        val classifyScreenResult = VisionServerProxy.classifyScreen(
+            inputFile = screenImageFile,
+            mlmodelFile = mlmodelFile,
+        )
         val screenCandidates = classifyScreenResult.classifications.filter { it.confidence > 0.1 }
         if (screenCandidates.isEmpty()) {
             return "?"

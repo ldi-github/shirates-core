@@ -54,11 +54,14 @@ import shirates.core.utility.sync.RetryUtility
 import shirates.core.utility.sync.SyncUtility
 import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
+import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.VisionContext
+import shirates.core.vision.driver.commandextension.invalidateScreen
+import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.eventextension.VisionDriveOnScreenContext
 import shirates.core.vision.driver.eventextension.removeScreenHandler
-import shirates.core.vision.driver.syncScreen
+import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileNotFoundException
 import java.net.URL
@@ -235,7 +238,7 @@ object TestDriver {
             if (CodeExecutionContext.lastScreenshotImage == null) {
                 return true
             }
-            if (CodeExecutionContext.screenshotSynced.not()) {
+            if (CodeExecutionContext.screenshotImageSynced.not()) {
                 return true
             }
             return CAEPattern.shouldTakeScreenshot && TestDriverCommandContext.shouldTakeScreenshot
@@ -444,6 +447,11 @@ object TestDriver {
                 fireVisionDriveScreenHandler(screenName = screenName)
             }
         }
+
+    /**
+     * currentScreenSynced
+     */
+    var currentScreenSynced = false
 
     internal fun getOverlayElements(): MutableList<TestElement> {
         val list = mutableListOf<TestElement>()
@@ -1838,7 +1846,6 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
-        withTextMatching: Boolean = true,
         log: Boolean = CodeExecutionContext.shouldOutputLog
     ): TestDriver {
 
@@ -1852,7 +1859,6 @@ object TestDriver {
             onChangedOnly = onChangedOnly,
             filename = filename,
             withXmlSource = withXmlSource,
-            withTextMatching = withTextMatching,
             log = log
         )
     }
@@ -1863,7 +1869,6 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
-        withTextMatching: Boolean = true,
         log: Boolean = CodeExecutionContext.shouldOutputLog
     ) {
         if (testContext.autoScreenshot.not()) {
@@ -1876,7 +1881,6 @@ object TestDriver {
             onChangedOnly = onChangedOnly,
             filename = filename,
             withXmlSource = withXmlSource,
-            withTextMatching = withTextMatching,
             log = log
         )
     }
@@ -1887,7 +1891,6 @@ object TestDriver {
         onChangedOnly: Boolean = testContext.onChangedOnly,
         filename: String? = null,
         withXmlSource: Boolean = TestLog.enableXmlSourceDump,
-        withTextMatching: Boolean,
         log: Boolean = CodeExecutionContext.shouldOutputLog
     ): TestDriver {
 
@@ -1897,7 +1900,7 @@ object TestDriver {
         if (isInitialized.not()) {
             return this
         }
-        if (testContext.useCache.not() && CodeExecutionContext.screenshotSynced && force.not()) {
+        if (testContext.useCache.not() && CodeExecutionContext.screenshotImageSynced && force.not()) {
             return this
         }
 
@@ -1951,10 +1954,7 @@ object TestDriver {
         try {
             CpuLoadService.waitForCpuLoadUnder()
 
-            val oldImage = CodeExecutionContext.lastScreenshotImage
-            vision.syncScreen()
-            val newImage = CodeExecutionContext.lastScreenshotImage
-            val changed = newImage.isSame(oldImage).not()
+            val changed = syncScreenshotImage()
             if (changed.not() && onChangedOnly) {
                 return this
             }
@@ -1994,17 +1994,10 @@ object TestDriver {
                 screenshotLine.subject = screenshotFileName
             }
 
-            if (testContext.useCache.not()) {
-                TestDriver.currentScreen = "?"
-//                /**
-//                 * Update currentScreen (Vision mode)
-//                 */
-//                TestDriver.currentScreen =
-//                    ScreenRecognizer.recognizeScreen(
-//                        screenImageFile = screenshotFile,
-//                        withTextMatching = withTextMatching
-//                    )
-//                TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
+            if (testContext.useCache.not() && TestDriver.currentScreenSynced.not()) {
+                TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(screenImageFile = screenshotFile)
+                TestDriver.currentScreenSynced = true
+                TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
             }
 
             if (isAndroid && PropertiesManager.enableRerunOnScreenshotBlackout && testContext.useCache) {
@@ -2038,6 +2031,72 @@ object TestDriver {
         }
 
         return this
+    }
+
+    internal fun getScreenshotBufferedImage(): BufferedImage {
+
+        if (isiOS && testContext.screenshotWithSimctl) {
+            val tempScreenshotFile = TestLog.directoryForLog.resolve("tempScreenshotFile.png").toString()
+            IosDeviceUtility.getScreenshot(udid = testProfile.udid, file = tempScreenshotFile)
+            return BufferedImageUtility.getBufferedImage(tempScreenshotFile)
+        } else {
+            return appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+        }
+    }
+
+    /**
+     * Sync screenshot image
+     *  true on image changed
+     *  false on image not changed
+     */
+    internal fun syncScreenshotImage(
+        waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+        intervalSeconds: Double = testContext.syncIntervalSeconds,
+        syncImageMatchRate: Double = testContext.syncImageMatchRate,
+        maxLoopCount: Int = 100,
+    ): Boolean {
+        if (TestDriver.isScreenshotSyncing) {
+            return false
+        }
+        val sw = StopWatch("syncScreenshotImage")
+        TestDriver.isScreenshotSyncing = true
+        TestDriver.currentScreen = ""
+        TestDriver.currentScreenSynced = false
+
+        var beforeImage = CodeExecutionContext.lastScreenshotImage
+        var afterImage: BufferedImage?
+        var isSame: Boolean
+        var count = 0
+        var changed = false
+        try {
+            vision.doUntilTrue(
+                waitSeconds = waitSeconds,
+                intervalSeconds = intervalSeconds,
+                maxLoopCount = maxLoopCount,
+                retryOnError = false,
+                throwOnFinally = false,
+            ) {
+                count++
+                afterImage = getScreenshotBufferedImage()
+                val matchRate = afterImage.getMatchRate(beforeImage)
+                isSame = matchRate >= syncImageMatchRate
+                if (count == 1) {
+                    changed = isSame.not()
+                }
+                CodeExecutionContext.lastScreenshotImage = afterImage
+                CodeExecutionContext.screenshotImageSynced = isSame
+                if (isSame.not()) {
+                    beforeImage = afterImage
+                    afterImage = null
+                }
+                TestLog.output("isSame: $isSame, changed: $changed, matchRate: $matchRate")
+                isSame
+            }
+        } finally {
+            TestDriver.isScreenshotSyncing = false
+            sw.stop()
+        }
+        return changed
     }
 
     /**
@@ -2612,6 +2671,7 @@ object TestDriver {
             /**
              * Vision mode
              */
+            vision.invalidateScreen()
             if (isAndroid) {
                 TestDriveObjectAndroid.launchAndroidAppByShell(
                     udid = testContext.profile.udid,

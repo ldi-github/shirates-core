@@ -24,22 +24,21 @@
         scenario {
             case(1) {
                 condition {
-                    onScreen("[Android設定トップ画面]") {
-                        it.tap("ネットワークとインターネット")
-                    }
+                    it.macro("[Android設定トップ画面]")
+                }.action {
                     onScreen("[ネットワークとインターネット画面]") {
                         it.tap("インターネット", last = true)
-                    }
-                }.action {
-                    it.macro("[Android設定トップ画面]")
-                    /**
-                     * onScreen("[Android設定トップ画面]") が呼ばれます
-                     */
+                    }.onScreen("[インターネット画面]") {
+                        it.tap("AndroidWifi")
+                    }.tap("ネットワークとインターネット")
                     /**
                      * onScreen("[ネットワークとインターネット画面]") が呼ばれます
                      */
+                    /**
+                     * onScreen("[インターネット画面]") が呼ばれます
+                     */
                 }.expectation {
-                    it.screenIs("[インターネット画面]")
+                    it.exist("ネットワークの詳細")
                 }
             }
         }

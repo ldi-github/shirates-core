@@ -234,6 +234,7 @@ class TestContextTest : UnitTest() {
         context.syncWaitSeconds = 999.0
         context.syncMaxLoopCount = 9
         context.syncIntervalSeconds = 99.0
+        context.syncImageMatchRate = 1.0
         // misc --------------------------------------------------
         context.boundsToRectRatio = 999
 
