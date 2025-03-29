@@ -2113,7 +2113,9 @@ object TestDriver {
             sw.stop()
         }
         if (isSame) {
-            TestLog.printInfo("Screen image synced. (isSame: $isSame, changed: $changed, matchRate: $matchRate)")
+            if (PropertiesManager.enableSyncLog) {
+                TestLog.printInfo("Screen image synced. (isSame: $isSame, changed: $changed, matchRate: $matchRate)")
+            }
         } else {
             TestLog.printInfo("Screen image did not synced. (isSame: $isSame, changed: $changed, matchRate: $matchRate)")
         }
