@@ -591,6 +591,9 @@ object TestDriver {
     private fun fireVisionDriveScreenHandler(screenName: String): VisionDriveOnScreenContext {
 
         val context = VisionDriveOnScreenContext(screenName = screenName)
+        if (screenName.isBlank()) {
+            return context
+        }
 
         if (firingScreenHandlerScreens.contains(screenName)) {
             return context

@@ -167,6 +167,9 @@ object VisionServerProxy {
         if (Files.exists(inputFile.toPath()).not()) {
             throw IllegalArgumentException("file not found: $inputFile.")
         }
+        if (inputFile.toFile().isFile.not()) {
+            throw IllegalArgumentException("file not found: $inputFile.")
+        }
 
         val sw = StopWatch("TextRecognizer/recognizeText")
 

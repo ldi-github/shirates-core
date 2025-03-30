@@ -171,6 +171,15 @@ object CodeExecutionContext {
      * scrollVisionElement
      */
     var scrollVisionElement: VisionElement? = null
+        get() {
+            if (field == null || field!!.isEmpty) {
+                return null
+            }
+            return field
+        }
+        set(value) {
+            field = value
+        }
 
     /**
      * scrollBounds
