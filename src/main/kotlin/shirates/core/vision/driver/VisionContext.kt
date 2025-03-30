@@ -270,14 +270,23 @@ class VisionContext(
         }
 
         val rootVisionContext = rootElement!!.visionContext
+        val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile()
+        if (recognizedFile.exists() && recognizedFile.isFile.not()) {
+            /**
+             * Check screenshotFile exists
+             */
+            return this
+        }
         if (rootVisionContext.recognizeTextObservations.isEmpty()) {
-            val recognizedFile = rootVisionContext.screenshotFile.toPath().toFile().name
+            /**
+             * Recognize screenshotFile
+             */
             recognizeTextAndSaveRectangleImage(
                 inputFile = rootVisionContext.screenshotFile!!,
                 language = language,
                 visionContext = rootVisionContext,
             )
-            CodeExecutionContext.lastRecognizedFileName = recognizedFile
+            CodeExecutionContext.lastRecognizedFileName = recognizedFile.name
         }
         this.language = language
 

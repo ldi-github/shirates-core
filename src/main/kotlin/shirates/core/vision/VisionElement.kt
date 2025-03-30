@@ -298,7 +298,12 @@ open class VisionElement(
     }
 
     override fun toString(): String {
-        return "text: \"$text\", bounds: $bounds, rect: $rect"
+        try {
+            return "text: \"$text\", bounds: $bounds, rect: $rect"
+        } catch (t: Throwable) {
+            println(t)
+            return ""
+        }
     }
 
     /**

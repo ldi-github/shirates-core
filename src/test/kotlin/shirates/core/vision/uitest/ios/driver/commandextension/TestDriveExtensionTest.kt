@@ -42,7 +42,7 @@ class TestDriveExtensionTest : VisionTest() {
             TestLog.clear()
             // Act
             it.screenshot()
-            val line = TestLog.lines.first { it.scriptCommand == "screenshot" }
+            val line = TestLog.lines.last() { it.logType == LogType.SCREENSHOT }
             // Assert
             assertThat(line.message).isEqualTo("screenshot: 1.png")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)
@@ -60,7 +60,7 @@ class TestDriveExtensionTest : VisionTest() {
             TestLog.clear()
             // Act
             it.screenshot(filename = "filename")
-            val line = TestLog.lines.last() { it.logType != LogType.TRACE }
+            val line = TestLog.lines.last() { it.logType == LogType.SCREENSHOT }
             // Assert
             assertThat(line.message).isEqualTo("screenshot: filename.png")
             assertThat(line.logType).isEqualTo(LogType.SCREENSHOT)

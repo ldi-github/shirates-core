@@ -72,6 +72,11 @@ object WaitUtility {
                 }
 
                 if (context.stopWatch.elapsedSeconds > context.waitSeconds) {
+                    context.onBeforeRetry(context as T)
+                    val retryResult = context.action(context as T)
+                    if (retryResult) {
+                        return context
+                    }
                     context.stopWatch.lap("timeout")
                     if (context.hasError.not()) {
                         val e = Exception()

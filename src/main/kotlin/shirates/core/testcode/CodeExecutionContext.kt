@@ -171,6 +171,15 @@ object CodeExecutionContext {
      * scrollVisionElement
      */
     var scrollVisionElement: VisionElement? = null
+        get() {
+            if (field == null || field!!.isEmpty) {
+                return null
+            }
+            return field
+        }
+        set(value) {
+            field = value
+        }
 
     /**
      * scrollBounds
@@ -313,16 +322,17 @@ object CodeExecutionContext {
         internal set
 
     /**
-     * screenshotSynced
+     * screenshotImageSynced
      */
-    var screenshotSynced = false
+    var screenshotImageSynced = false
         internal set
 
     /**
      * setScreenDirty
      */
     fun setScreenDirty() {
-        screenshotSynced = false
+        screenshotImageSynced = false
+        TestDriver.currentScreenSynced = false
     }
 
     // Misc --------------------------------------------------
@@ -383,7 +393,7 @@ object CodeExecutionContext {
         isInCondition = false
         isInAction = false
         isInExpectation = false
-        screenshotSynced = false
+        screenshotImageSynced = false
         /**
          * Screenshot
          */

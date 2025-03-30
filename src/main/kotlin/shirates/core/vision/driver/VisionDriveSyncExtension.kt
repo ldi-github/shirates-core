@@ -1,74 +1,47 @@
 package shirates.core.vision.driver
 
-import org.openqa.selenium.OutputType
 import shirates.core.configuration.PropertiesManager
-import shirates.core.driver.*
-import shirates.core.driver.TestDriver.appiumDriver
+import shirates.core.driver.TestDriver
+import shirates.core.driver.TestDriverCommandContext
 import shirates.core.driver.commandextension.getSelector
+import shirates.core.driver.testContext
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.testcode.CodeExecutionContext
-import shirates.core.utility.image.BufferedImageUtility
-import shirates.core.utility.image.isSame
-import shirates.core.utility.ios.IosDeviceUtility
-import shirates.core.utility.time.StopWatch
-import shirates.core.utility.toBufferedImage
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.driver.commandextension.canDetectCore
+import shirates.core.vision.driver.commandextension.invalidateScreen
 import shirates.core.vision.driver.commandextension.screenshot
 
 
 /**
  * syncScreen
  */
-fun VisionDrive.syncScreen(): VisionElement {
+fun VisionDrive.syncScreen(
+    invalidateScreen: Boolean = false,
+    waitSeconds: Double = testContext.waitSecondsOnIsScreen,
+    syncIntervalSeconds: Double = testContext.syncIntervalSeconds,
+    maxLoopCount: Int = 100,
+): VisionElement {
 
-    if (TestDriver.isScreenshotSyncing) {
-        return lastElement
-    }
-    val sw = StopWatch("syncScreen")
+    testContext.saveState()
     try {
-        TestDriver.isScreenshotSyncing = true
-
-        if (TestMode.isAndroid) {
-            /**
-             * Android
-             * has no sync mechanism in itself
-             */
-            val oldImage = CodeExecutionContext.lastScreenshotImage
-            val newImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
-            if (newImage.isSame(oldImage)) {
-                CodeExecutionContext.lastScreenshotImage = newImage
-            } else {
-                if (CodeExecutionContext.shouldOutputLog) {
-                    TestLog.info("Syncing screen.")
-                }
-                Thread.sleep(testContext.waitSecondsForAnimationComplete.toLong())
-                val byteArray = appiumDriver.getScreenshotAs(OutputType.BYTES)
-                CodeExecutionContext.lastScreenshotImage = byteArray.toBufferedImage()
-            }
-        } else {
-            /**
-             * iOS
-             * has sync mechanism in itself
-             */
-            if (testContext.screenshotWithSimctl) {
-                val tempScreenshotFile = TestLog.directoryForLog.resolve("tempScreenshotFile.png").toString()
-                IosDeviceUtility.getScreenshot(udid = testProfile.udid, file = tempScreenshotFile)
-                CodeExecutionContext.lastScreenshotImage = BufferedImageUtility.getBufferedImage(tempScreenshotFile)
-            } else {
-                CodeExecutionContext.lastScreenshotImage =
-                    appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
-            }
+        testContext.waitSecondsOnIsScreen = waitSeconds
+        testContext.syncIntervalSeconds = syncIntervalSeconds
+        testContext.syncMaxLoopCount = maxLoopCount
+        if (invalidateScreen) {
+            invalidateScreen()
         }
-        CodeExecutionContext.screenshotSynced = true
-        return lastElement
+        screenshot(
+            force = false,
+            onChangedOnly = true,
+        )
     } finally {
-        TestDriver.isScreenshotSyncing = false
-        sw.stop()
+        testContext.resumeState()
     }
+
+    return lastElement
 }
 
 /**
@@ -85,6 +58,7 @@ fun VisionDrive.wait(
     context.execOperateCommand(command = command, message = message, fireEvent = false) {
         TestLog.trace("waiting for ${waitSeconds} seconds")
 
+        invalidateScreen()
         Thread.sleep((waitSeconds * 1000).toLong())
     }
 

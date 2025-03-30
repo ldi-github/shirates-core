@@ -145,7 +145,6 @@ object AndroidDeviceUtility {
                 break
             }
         }
-        s = s.trimEnd('_')
         return s
     }
 
@@ -156,20 +155,19 @@ object AndroidDeviceUtility {
 
         val emulatorProfile = getEmulatorProfile(testProfile = testProfile)
         val avdList = getAvdList()
-        val a = emulatorProfile.avdName.escapeAvdName()
-        if (avdList.contains(a)) {
-            // Start avd to get device
-            val androidDeviceInfo = startEmulatorAndWaitDeviceReady(
-                emulatorProfile = emulatorProfile,
-                timeoutSeconds = testProfile.deviceStartupTimeoutSeconds?.toDoubleOrNull()
-                    ?: Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
-                waitSecondsAfterStartup = testProfile.deviceWaitSecondsAfterStartup?.toDoubleOrNull()
-                    ?: Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
-            )
-            return androidDeviceInfo
-        }
+        val a1 = emulatorProfile.avdName.escapeAvdName()
+        val a2 = a1.trimEnd('_')
+        emulatorProfile.avdName = avdList.firstOrNull() { it == a1 || it == a2 } ?: return null
 
-        return null
+        // Start avd to get device
+        val androidDeviceInfo = startEmulatorAndWaitDeviceReady(
+            emulatorProfile = emulatorProfile,
+            timeoutSeconds = testProfile.deviceStartupTimeoutSeconds?.toDoubleOrNull()
+                ?: Const.DEVICE_STARTUP_TIMEOUT_SECONDS,
+            waitSecondsAfterStartup = testProfile.deviceWaitSecondsAfterStartup?.toDoubleOrNull()
+                ?: Const.DEVICE_WAIT_SECONDS_AFTER_STARTUP
+        )
+        return androidDeviceInfo
     }
 
     /**

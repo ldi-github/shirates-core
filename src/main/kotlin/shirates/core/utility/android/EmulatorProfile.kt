@@ -6,7 +6,7 @@ class EmulatorProfile(
     val emulatorOptions: MutableList<String> = mutableListOf(),
     val emulatorPort: Int? = null
 ) {
-    val avdName: String =
+    var avdName: String =
         if (avdName.isNullOrBlank()) AndroidDeviceUtility.getAvdName(profileName = profileName)
         else avdName
     val platformVersion: String

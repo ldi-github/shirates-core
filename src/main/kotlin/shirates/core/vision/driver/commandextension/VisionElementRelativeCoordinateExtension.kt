@@ -554,7 +554,7 @@ fun VisionElement.aboveText(
     val elements = getVerticalElements()
         .filter { it.rect.top < this.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
-        .sortedByDescending { it.rect.top }
+        .sortedBy { it.rect.top }
     val v = elements.lastOrNull() ?: VisionElement(capture = false)
 
     v.selector = selector
@@ -615,7 +615,7 @@ fun VisionElement.belowText(
         .filter { this.rect.top < it.rect.top && this.bounds.isCenterIncludedIn(it.bounds).not() }
         .filter { it.text.forVisionComparison().contains(expression.forVisionComparison()) }
         .sortedBy { it.rect.top }
-    val v = elements.lastOrNull() ?: VisionElement(capture = false)
+    val v = elements.firstOrNull() ?: VisionElement(capture = false)
 
     v.selector = this.selector?.getChainedSelector(":belowText($expression)")
     lastElement = v

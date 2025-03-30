@@ -1101,6 +1101,15 @@ object PropertiesManager {
                 ?: Const.VISION_FIND_IMAGE_ASPECT_RATIO_TOLERANCE
         }
 
+    /**
+     * visionSyncImageMatchRate
+     */
+    val visionSyncImageMatchRate: Double
+        get() {
+            return getPropertyValue(propertyName = "visionSyncImageMatchRate")?.toDoubleOrNull()
+                ?: Const.VISION_SYNC_IMAGE_MATCH_RATE
+        }
+
     // Custom --------------------------------------------------
 
     /**

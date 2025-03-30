@@ -315,7 +315,9 @@ class TestDriverCommandContext(val testElementContext: TestElement?) {
         } finally {
             CodeExecutionContext.isInOperationCommand = original
             try {
-                TestDriver.autoScreenshot(sync = false)
+                if (TestMode.isClassicTest) {
+                    TestDriver.autoScreenshot(sync = false)
+                }
             } finally {
                 endCommand()
             }

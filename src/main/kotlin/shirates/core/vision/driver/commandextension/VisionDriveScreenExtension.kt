@@ -8,14 +8,12 @@ import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
 import shirates.core.logging.TestLog
-import shirates.core.logging.printInfo
-import shirates.core.testcode.CodeExecutionContext
 import shirates.core.utility.sync.WaitUtility
-import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionScreenRepository
 import shirates.core.vision.driver.lastElement
+import shirates.core.vision.driver.syncScreen
 
 /**
  * screenName
@@ -29,7 +27,8 @@ val VisionDrive.screenName: String
  * isScreen
  */
 fun VisionDrive.isScreen(
-    screenName: String
+    screenName: String,
+    invalidateScreen: Boolean = false
 ): Boolean {
 
     if (TestMode.isNoLoadRun) {
@@ -41,31 +40,10 @@ fun VisionDrive.isScreen(
         return false
     }
 
-    updateCurrentScreen()
+    syncScreen(invalidateScreen = invalidateScreen)
 
     val r = (TestDriver.currentScreen == screenName)
     return r
-}
-
-/**
- * updateCurrentScreen
- */
-fun VisionDrive.updateCurrentScreen() {
-
-    screenshot(force = true, onChangedOnly = true)
-
-    /**
-     * Recognize screen
-     */
-    val oldScreenName = TestDriver.currentScreen
-    TestDriver.currentScreen = ""
-    TestDriver.currentScreen = ScreenRecognizer.recognizeScreen(
-        screenImageFile = CodeExecutionContext.lastScreenshotFile!!,
-    )
-
-    if (TestDriver.currentScreen != oldScreenName) {
-        TestLog.printInfo("currentScreen=${TestDriver.currentScreen}")
-    }
 }
 
 /**
@@ -80,8 +58,7 @@ fun VisionDrive.isScreenOf(
     }
 
     invalidateScreen()
-    screenshot()
-    updateCurrentScreen()
+    syncScreen()
     return screenNames.any { screenName.contains(it) }
 }
 
@@ -140,6 +117,10 @@ internal fun VisionDrive.waitScreenOfCore(
             TestDriver.fireIrregularHandler()
         }
         screenFound
+    }
+
+    if (screenFound.not()) {
+        screenFound = isScreenOf(screenNames = screenNames) // Retry for timeout
     }
 
     if (screenFound.not() && throwOnError) {

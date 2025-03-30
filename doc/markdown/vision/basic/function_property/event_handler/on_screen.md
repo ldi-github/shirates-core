@@ -24,22 +24,21 @@ You can register callback that is called on screen changed.
         scenario {
             case(1) {
                 condition {
-                    onScreen("[Android Settings Top Screen]") {
-                        it.tap("Network & internet")
-                    }
+                    it.macro("[Android Settings Top Screen]")
+                }.action {
                     onScreen("[Network & internet Screen]") {
                         it.tap("Internet")
-                    }
-                }.action {
-                    it.macro("[Android Settings Top Screen]")
-                    /**
-                     * onScreen("[Android Settings Top Screen]") is called
-                     */
+                    }.onScreen("[Internet Screen]") {
+                        it.tap("AndroidWifi")
+                    }.tap("Network & internet")
                     /**
                      * onScreen("[Network & internet Screen]") is called
                      */
+                    /**
+                     * onScreen("[Internet Screen]") is called
+                     */
                 }.expectation {
-                    it.screenIs("[Internet Screen]")
+                    it.exist("Network details")
                 }
             }
         }

@@ -1970,6 +1970,24 @@ class PropertiesManagerTest : UnitTest() {
     }
 
     @Test
+    fun visionSyncImageMatchRate() {
+
+        run {
+            // Arrange
+            PropertiesManager.clear()
+            // Act, Assert
+            assertThat(PropertiesManager.visionSyncImageMatchRate).isEqualTo(Const.VISION_SYNC_IMAGE_MATCH_RATE)
+        }
+        run {
+            // Arrange
+            val value = 1.0
+            PropertiesManager.setPropertyValue("visionSyncImageMatchRate", value.toString())
+            // Act, Assert
+            assertThat(PropertiesManager.visionSyncImageMatchRate).isEqualTo(value)
+        }
+    }
+
+    @Test
     fun specReportExcludeIDetail() {
 
         run {
