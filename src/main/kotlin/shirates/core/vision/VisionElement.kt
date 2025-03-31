@@ -398,10 +398,12 @@ open class VisionElement(
         if (matchRate < imageMatchThreshold) {
             return false
         }
-        val levenshteinDistance =
-            LevenshteinDistance.getDefaultInstance().apply(oldScrollVisionElement.joinedText, this.joinedText)
-        if (levenshteinDistanceThreshold < levenshteinDistance) {
-            return false
+        if (oldScrollVisionElement.joinedText.length > 0) {
+            val levenshteinDistance =
+                LevenshteinDistance.getDefaultInstance().apply(oldScrollVisionElement.joinedText, this.joinedText)
+            if (levenshteinDistanceThreshold < levenshteinDistance) {
+                return false
+            }
         }
         return true
     }
