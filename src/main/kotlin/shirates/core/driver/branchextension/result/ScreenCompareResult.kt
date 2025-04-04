@@ -50,6 +50,9 @@ class ScreenCompareResult() : CompareResult() {
         matched: Boolean,
         func: () -> Unit
     ) {
+        if (TestMode.isNoLoadRun) {
+            return
+        }
         if (screenNames.isEmpty()) {
             throw IllegalArgumentException("screenNames is required.")
         }
