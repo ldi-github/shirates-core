@@ -12,6 +12,7 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.vision.VisionDrive
 import shirates.core.vision.VisionElement
 import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.driver.doUntilTrue
 import shirates.core.vision.driver.lastElement
 import shirates.core.vision.driver.syncScreen
 
@@ -28,6 +29,7 @@ val VisionDrive.screenName: String
  */
 fun VisionDrive.isScreen(
     screenName: String,
+    vararg texts: String,
     invalidateScreen: Boolean = false
 ): Boolean {
 
@@ -42,8 +44,17 @@ fun VisionDrive.isScreen(
 
     syncScreen(invalidateScreen = invalidateScreen)
 
-    val r = (TestDriver.currentScreen == screenName)
-    return r
+    var match = TestDriver.currentScreen == screenName
+    if (match && texts.any()) {
+        for (text in texts) {
+            match = canDetect(text)
+            if (match.not()) {
+                return false
+            }
+        }
+    }
+
+    return match
 }
 
 /**
@@ -143,6 +154,7 @@ internal fun VisionDrive.waitScreenOfCore(
  */
 fun VisionDrive.waitScreen(
     screenName: String,
+    vararg texts: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     throwOnError: Boolean = true,
     irregularHandler: (() -> Unit)? = testContext.irregularHandler,
@@ -163,13 +175,46 @@ fun VisionDrive.waitScreen(
         return lastElement
     }
 
-    waitScreenOfCore(
-        screenName,
+    fun hasAnyTexts(): Boolean {
+        for (text in texts) {
+            if (canDetect(text).not()) {
+                return false
+            }
+        }
+        return true
+    }
+
+    var found = false
+    doUntilTrue(
         waitSeconds = waitSeconds,
-        throwOnError = throwOnError,
-        irregularHandler = irregularHandler,
-        onTrue = onTrue
-    )
+        throwOnFinally = false,
+    ) {
+        waitScreenOfCore(
+            screenName,
+            waitSeconds = waitSeconds,
+            throwOnError = throwOnError,
+            irregularHandler = irregularHandler,
+            onTrue = onTrue
+        )
+        found = if (texts.any()) {
+            hasAnyTexts()
+        } else {
+            true
+        }
+        found
+    }
+    if (found.not() && throwOnError) {
+        val msgForTexts = if (texts.isEmpty()) "" else "(texts=${texts.joinToString(", ")})"
+        val subject = "$screenName$msgForTexts"
+        throw TestDriverException(
+            message(
+                id = "waitScreenOfFailed",
+                subject = subject,
+                arg1 = TestDriver.currentScreen,
+                arg2 = "$waitSeconds"
+            )
+        )
+    }
 
     return rootElement
 }
