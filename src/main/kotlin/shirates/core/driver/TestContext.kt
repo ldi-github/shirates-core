@@ -200,7 +200,7 @@ class TestContext(
         profile.syncMaxLoopCount?.toDoubleOrNull() ?: Const.SYNC_INTERVAL_SECONDS
 
     @SaveTarget
-    var syncImageMatchRate = Const.VISION_SYNC_IMAGE_MATCH_RATE
+    var syncImageMatchRate = PropertiesManager.visionSyncImageMatchRate
 
     // misc --------------------------------------------------
 
