@@ -292,6 +292,62 @@ class VisionServerProxyTest : UnitTest() {
         }
     }
 
+    @Test
+    fun getDistance() {
+
+        run {
+            // Arrange
+            val imageFile3_1 = "unitTestData/vision/files/distance/ios_home/18.3-1.png".toPath().toString()
+            val imageFile3_2 = "unitTestData/vision/files/distance/ios_home/18.3-2.png".toPath().toString()
+            val imageFile4_1 = "unitTestData/vision/files/distance/ios_home/18.4-1.png".toPath().toString()
+            val imageFile4_2 = "unitTestData/vision/files/distance/ios_home/18.4-2.png".toPath().toString()
+            run {
+                // Act
+                val r = VisionServerProxy.getDistance(imageFile3_1, imageFile3_1)
+                println("distance(18.3-1, 18.3-1): ${r.distance}")
+            }
+            run {
+                // Act
+                val r = VisionServerProxy.getDistance(imageFile3_1, imageFile3_2)
+                println("distance(18.3-1, 18.3-2): ${r.distance}")
+            }
+            run {
+                // Act
+                val r = VisionServerProxy.getDistance(imageFile3_1, imageFile4_1)
+                println("distance(18.3-1, 18.4-1): ${r.distance}")
+            }
+            run {
+                // Act
+                val r = VisionServerProxy.getDistance(imageFile3_1, imageFile4_2)
+                println("distance(18.3-1, 18.4-2): ${r.distance}")
+            }
+        }
+
+        run {
+            // Arrange
+            val imageFile1 = "unitTestData/vision/files/distance/ios_settings/1.png".toPath().toString()
+            val imageFile2 = "unitTestData/vision/files/distance/ios_settings/2.png".toPath().toString()
+            val imageFile3 = "unitTestData/vision/files/distance/ios_settings/3.png".toPath().toString()
+            run {
+                // Act
+                val r = VisionServerProxy.getDistance(imageFile1, imageFile1)
+                println("distance(1, 1): ${r.distance}")
+            }
+            run {
+                // Act
+                val r = VisionServerProxy.getDistance(imageFile1, imageFile2)
+                println("distance(1, 2): ${r.distance}")
+            }
+            run {
+                // Act
+                val r = VisionServerProxy.getDistance(imageFile1, imageFile3)
+                println("distance(1, 3): ${r.distance}")
+            }
+        }
+
+    }
+
+
 //    @Deprecated("This function is not used in framework currently.")
 //    @Test
 //    fun detectRectangles() {

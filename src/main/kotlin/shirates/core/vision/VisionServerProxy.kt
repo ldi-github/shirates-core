@@ -385,6 +385,42 @@ object VisionServerProxy {
         return ClassifyImageResult(jsonString = result)
     }
 
+    /**
+     * getDistance
+     */
+    fun getDistance(
+        imageFile1: String,
+        imageFile2: String,
+        log: Boolean = CodeExecutionContext.shouldOutputLog,
+    ): DistanceResult {
+
+        val sw = StopWatch("ImageFeaturePrintComparator/getDistance")
+
+        if (imageFile1.exists().not()) {
+            throw FileNotFoundException("Input file not found. (imageFile1=$imageFile1)")
+        }
+        if (imageFile2.exists().not()) {
+            throw FileNotFoundException("Input file not found. (imageFile2=$imageFile2)")
+        }
+
+        val urlBuilder = (PropertiesManager.visionServerUrl.trimEnd('/') +
+                "/ImageFeaturePrintComparator/getDistance").toHttpUrlOrNull()!!.newBuilder()
+        urlBuilder.addQueryParameter(
+            name = "imageFile1",
+            value = imageFile1.toPath().toString()
+        )
+        urlBuilder.addQueryParameter(
+            name = "imageFile2",
+            value = imageFile2.toPath().toString()
+        )
+        val url = urlBuilder.build()
+        val result = getResponseBody(url)
+        lastJsonString = result
+
+        sw.stop()
+        return DistanceResult(jsonString = result)
+    }
+
 //    /**
 //     * detectRectangles
 //     */

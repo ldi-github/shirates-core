@@ -182,6 +182,7 @@ fun VisionDrive.appIs(
  */
 fun VisionDrive.screenIs(
     screenName: String,
+    vararg texts: String,
     waitSeconds: Double = testContext.waitSecondsOnIsScreen,
     onIrregular: (() -> Unit)? = { TestDriver.fireIrregularHandler() },
     message: String? = null,
@@ -208,7 +209,7 @@ fun VisionDrive.screenIs(
     val context = TestDriverCommandContext(null)
     context.execCheckCommand(command = command, message = assertMessage, subject = screenName) {
 
-        var match = isScreen(screenName = screenName)
+        var match = isScreen(screenName = screenName, texts = texts)
         if (match.not()) {
             doUntilTrue(
                 waitSeconds = waitSeconds,
@@ -217,7 +218,7 @@ fun VisionDrive.screenIs(
                     onIrregular?.invoke()
                 },
             ) {
-                match = isScreen(screenName = screenName, invalidateScreen = true)
+                match = isScreen(screenName = screenName, texts = texts, invalidateScreen = true)
                 match
             }
         }
@@ -226,12 +227,13 @@ fun VisionDrive.screenIs(
             TestDriver.currentScreen = screenName
             TestLog.ok(message = assertMessage, arg1 = screenName)
         } else {
-            match = isScreen(screenName = screenName)   // Retry for timeout
+            match = isScreen(screenName = screenName, texts = texts)   // Retry for timeout
             if (match.not()) {
                 TestDriver.currentScreen = "?"
                 lastElement.lastResult = LogType.NG
 
-                val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName)"
+                val msgForTexts = if (texts.isEmpty()) "" else ", texts=${texts.joinToString(", ")}"
+                val msg = "$assertMessage(currentScreen=${TestDriver.currentScreen}, expected=$screenName$msgForTexts)"
                 val ex = TestNGException(msg, lastElement.lastError)
                 throw ex
             }
@@ -249,6 +251,7 @@ fun VisionDrive.screenIs(
  */
 fun VisionDrive.screenIs(
     screenName: String,
+    vararg texts: String,
     waitSeconds: Int,
     message: String? = null,
     func: (() -> Unit)? = null
@@ -256,6 +259,7 @@ fun VisionDrive.screenIs(
 
     return screenIs(
         screenName = screenName,
+        texts = texts,
         waitSeconds = waitSeconds.toDouble(),
         message = message,
         func = func

@@ -56,6 +56,7 @@ import shirates.core.utility.sync.WaitUtility
 import shirates.core.utility.time.StopWatch
 import shirates.core.vision.ScreenRecognizer
 import shirates.core.vision.VisionElement
+import shirates.core.vision.VisionServerProxy
 import shirates.core.vision.driver.VisionContext
 import shirates.core.vision.driver.commandextension.invalidateScreen
 import shirates.core.vision.driver.doUntilTrue
@@ -2052,16 +2053,24 @@ object TestDriver {
         return this
     }
 
-    internal fun getScreenshotBufferedImage(): BufferedImage {
+    internal fun getScreenshotBufferedImage(): ScreenshotInfo {
 
+        val tempScreenshotFile = TestLog.directoryForLog.resolve("tempScreenshotFile.png").toString()
         if (isiOS && testContext.screenshotWithSimctl) {
-            val tempScreenshotFile = TestLog.directoryForLog.resolve("tempScreenshotFile.png").toString()
             IosDeviceUtility.getScreenshot(udid = testProfile.udid, file = tempScreenshotFile)
-            return BufferedImageUtility.getBufferedImage(tempScreenshotFile)
+            val bufferedImage = BufferedImageUtility.getBufferedImage(tempScreenshotFile)
+            return ScreenshotInfo(bufferedImage, tempScreenshotFile)
         } else {
-            return appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+            val bufferedImage = appiumDriver.getScreenshotAs(OutputType.BYTES).toBufferedImage()
+            bufferedImage.saveImage(file = tempScreenshotFile)
+            return ScreenshotInfo(bufferedImage, tempScreenshotFile)
         }
     }
+
+    internal class ScreenshotInfo(
+        val bufferedImage: BufferedImage,
+        val file: String? = null
+    )
 
     /**
      * Sync screenshot image
@@ -2082,8 +2091,8 @@ object TestDriver {
         TestDriver.currentScreen = ""
         TestDriver.currentScreenSynced = false
 
-        var beforeImage = CodeExecutionContext.lastScreenshotImage
-        var afterImage: BufferedImage?
+        var beforeImageInfo: ScreenshotInfo? = null
+        var afterImageInfo: ScreenshotInfo?
         var isSame = false
         var matchRate = 0.0
         var changed = false
@@ -2097,17 +2106,27 @@ object TestDriver {
                 throwOnFinally = false,
             ) {
                 count++
-                afterImage = getScreenshotBufferedImage()
-                matchRate = afterImage.getMatchRate(beforeImage)
+                afterImageInfo = getScreenshotBufferedImage()
+
+                var distance = 1.0
+                if (beforeImageInfo != null) {
+                    val info = VisionServerProxy.getDistance(
+                        imageFile1 = afterImageInfo!!.file!!,
+                        imageFile2 = beforeImageInfo!!.file!!
+                    )
+                    distance = info.distance
+                }
+                matchRate = 1.0 - distance
+
                 isSame = matchRate >= syncImageMatchRate
                 if (count == 1) {
                     changed = isSame.not()
                 }
-                CodeExecutionContext.lastScreenshotImage = afterImage
+                CodeExecutionContext.lastScreenshotImage = afterImageInfo!!.bufferedImage
                 CodeExecutionContext.screenshotImageSynced = isSame
                 if (isSame.not()) {
-                    beforeImage = afterImage
-                    afterImage = null
+                    beforeImageInfo = afterImageInfo
+                    afterImageInfo = null
                 }
                 isSame
             }
