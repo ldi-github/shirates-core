@@ -42,6 +42,7 @@ class TestDriveSwipeExtensionTest : UITest() {
                 condition {
                     it.macro("[Android Settings Top Screen]")
                 }.action {
+                    syncCache(force = true)
                     e1 = it.select("Notifications")
                     e2 = it.select("Network & internet")
                     output("from=${e1.selector}, target=${e2.selector}")
