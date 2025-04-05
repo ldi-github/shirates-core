@@ -37,15 +37,62 @@ class VisionDriveScreenExtensionTest : VisionTest() {
         scenario {
             case(1) {
                 expectation {
-                    it.screenIs("[Android Settings Top Screen]", "Network & internet")
+                    it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices")
                 }
             }
             case(2) {
                 expectation {
                     assertThatThrownBy {
-                        it.screenIs("[Android Settings Top Screen]", "Network & internet2")
+                        it.screenIs("[Android Settings Top Screen]", "Network & internet2", "Connected devices")
                     }.isInstanceOf(TestNGException::class.java)
-                        .hasMessage("[Android Settings Top Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[Android Settings Top Screen], texts=Network & internet2)")
+                        .hasMessage("[Android Settings Top Screen] is displayed(currentScreen=[Android Settings Top Screen], expected=[Android Settings Top Screen], texts=Network & internet2, Connected devices)")
+                }
+            }
+            case(3) {
+                expectation {
+                    assertThatThrownBy {
+                        it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices") {
+                            exist("Network & internet")
+                            exist("Connected devices")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun screenIs_verifyFunc() {
+
+        scenario {
+            case(1) {
+                expectation {
+                    it.screenIs("[Android Settings Top Screen]") {
+                        exist("Network & internet")
+                        exist("Connected devices")
+                    }
+                }
+            }
+            case(2) {
+                expectation {
+                    assertThatThrownBy {
+                        it.screenIs("[Android Settings Top Screen]") {
+                            exist("Network & internet2")
+                            exist("Connected devices")
+                        }
+                    }.isInstanceOf(TestNGException::class.java)
+                        .hasMessage("[Android Settings Top Screen] is displayed")
+                }
+            }
+            case(3) {
+                expectation {
+                    assertThatThrownBy {
+                        it.screenIs("[Android Settings Top Screen]", "Network & internet", "Connected devices") {
+                            exist("Network & internet")
+                            exist("Connected devices")
+                        }
+                    }.isInstanceOf(TestDriverException::class.java)
+                        .hasMessage("You cannot specify verifyText and verifyFunction at the same time.")
                 }
             }
         }

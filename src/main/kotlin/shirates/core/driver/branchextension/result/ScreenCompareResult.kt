@@ -6,6 +6,7 @@ import shirates.core.driver.TestMode
 import shirates.core.logging.Message.message
 import shirates.core.logging.printWarn
 import shirates.core.vision.configration.repository.VisionScreenRepository
+import shirates.core.vision.driver.commandextension.isScreen
 import shirates.core.vision.driver.commandextension.isScreenOf
 
 /**
@@ -44,15 +45,12 @@ class ScreenCompareResult() : CompareResult() {
         return screenNames[0]
     }
 
-    private fun ifScreenCore(
+    private fun ifScreenIsOfCore(
         screenNames: Array<out String>,
         command: String,
         matched: Boolean,
         func: () -> Unit
     ) {
-        if (TestMode.isNoLoadRun) {
-            return
-        }
         if (screenNames.isEmpty()) {
             throw IllegalArgumentException("screenNames is required.")
         }
@@ -80,14 +78,36 @@ class ScreenCompareResult() : CompareResult() {
      * ifScreenIs
      */
     fun ifScreenIs(
+        screenName: String,
+        vararg verifyTexts: String,
+        onTrue: () -> Unit
+    ): ScreenCompareResult {
+
+        val screenNames = listOf(screenName).toTypedArray()
+        val matched = if (verifyTexts.any()) {
+            vision.isScreen(screenName = screenName, verifyTexts = verifyTexts)
+        } else {
+            anyScreenMatched(screenNames = screenNames)
+        }
+
+        val command = "ifScreenIs"
+        ifScreenIsOfCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
+
+        return this
+    }
+
+    /**
+     * ifScreenIsOf
+     */
+    fun ifScreenIsOf(
         vararg screenNames: String,
         onTrue: () -> Unit
     ): ScreenCompareResult {
 
-        val command = "ifScreenIs"
+        val command = "ifScreenIsOf"
         val matched = anyScreenMatched(screenNames = screenNames)
 
-        ifScreenCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
+        ifScreenIsOfCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
 
         return this
     }
@@ -96,14 +116,36 @@ class ScreenCompareResult() : CompareResult() {
      * ifScreenIsNot
      */
     fun ifScreenIsNot(
+        screenName: String,
+        vararg verifyTexts: String,
+        onTrue: () -> Unit
+    ): ScreenCompareResult {
+
+        val screenNames = listOf(screenName).toTypedArray()
+        val matched = if (verifyTexts.any()) {
+            vision.isScreen(screenName = screenName, verifyTexts = verifyTexts).not()
+        } else {
+            anyScreenMatched(screenNames = screenNames).not()
+        }
+
+        val command = "ifScreenIsNot"
+        ifScreenIsOfCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
+
+        return this
+    }
+
+    /**
+     * ifScreenIsNotOf
+     */
+    fun ifScreenIsNotOf(
         vararg screenNames: String,
         onTrue: () -> Unit
     ): ScreenCompareResult {
 
-        val command = "ifScreenIsNot"
+        val command = "ifScreenIsNotOf"
         val matched = anyScreenMatched(screenNames = screenNames).not()
 
-        ifScreenCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
+        ifScreenIsOfCore(screenNames = screenNames, command = command, matched = matched, func = onTrue)
 
         return this
     }

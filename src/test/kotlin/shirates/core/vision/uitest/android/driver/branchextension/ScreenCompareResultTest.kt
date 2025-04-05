@@ -1,7 +1,6 @@
 package shirates.core.vision.uitest.android.driver.branchextension
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import shirates.core.configuration.Testrun
@@ -10,7 +9,6 @@ import shirates.core.logging.TestLog
 import shirates.core.testcode.Want
 import shirates.core.vision.driver.branchextension.android
 import shirates.core.vision.driver.commandextension.describe
-import shirates.core.vision.driver.commandextension.ifScreenIsNot
 import shirates.core.vision.driver.commandextension.macro
 import shirates.core.vision.testcode.VisionTest
 
@@ -20,7 +18,7 @@ class ScreenCompareResultTest : VisionTest() {
 
     @Order(10)
     @Test
-    fun ifScreenIs_ifElse() {
+    fun ifScreenIs_ifScreenIsOf_ifElse() {
 
         scenario {
             case(1) {
@@ -35,7 +33,7 @@ class ScreenCompareResultTest : VisionTest() {
                         .ifScreenIs("[Android Settings Top Screen]") {
                             describe("called")
                         }
-                        .ifScreenIs("[Android Settings Top Screen]", "[Network & internet Screen]") {
+                        .ifScreenIsOf("[Android Settings Top Screen]", "[Network & internet Screen]") {
                             describe("called")
                         }
                         .ifElse {
@@ -45,7 +43,7 @@ class ScreenCompareResultTest : VisionTest() {
                     assertThat(result.history.count()).isEqualTo(2)
                     assertThat(result.history[0].condition).isEqualTo("if screen is [Android Settings Top Screen]")
                     assertThat(result.history[0].matched).isTrue()
-                    assertThat(result.history[1].condition).isEqualTo("if screen is ([Android Settings Top Screen] or [Network & internet Screen])")
+                    assertThat(result.history[1].condition).isEqualTo("if screen is of ([Android Settings Top Screen] or [Network & internet Screen])")
                     assertThat(result.history[1].matched).isTrue()
                 }.expectation {
                     android {
@@ -60,7 +58,7 @@ class ScreenCompareResultTest : VisionTest() {
                         .ifScreenIs("[Android Settings Top Screen]") {
                             OK("called")
                         }
-                        .ifScreenIs("[Android Settings Top Screen]", "[Network & internet Screen]") {
+                        .ifScreenIsOf("[Android Settings Top Screen]", "[Network & internet Screen]") {
                             OK("called")
                         }
                         .ifElse {
@@ -70,7 +68,7 @@ class ScreenCompareResultTest : VisionTest() {
                     assertThat(result.history.count()).isEqualTo(2)
                     assertThat(result.history[0].condition).isEqualTo("if screen is [Android Settings Top Screen]")
                     assertThat(result.history[0].matched).isTrue()
-                    assertThat(result.history[1].condition).isEqualTo("if screen is ([Android Settings Top Screen] or [Network & internet Screen])")
+                    assertThat(result.history[1].condition).isEqualTo("if screen is of ([Android Settings Top Screen] or [Network & internet Screen])")
                     assertThat(result.history[1].matched).isTrue()
                 }
             }
@@ -130,18 +128,6 @@ class ScreenCompareResultTest : VisionTest() {
             case(5) {
                 expectation {
                     val result = ScreenCompareResult()
-                    assertThatThrownBy {
-                        result
-                            .ifScreenIs {
-                                NG("never called")
-                            }
-                    }.isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("screenNames is required.")
-                }
-            }
-            case(6) {
-                expectation {
-                    val result = ScreenCompareResult()
                     result.ifScreenIs("[not exist screen]") {
                         NG("never called")
                     }
@@ -153,7 +139,7 @@ class ScreenCompareResultTest : VisionTest() {
 
     @Order(20)
     @Test
-    fun ifScreenIsNot_ifElse() {
+    fun ifScreenIsNot_ifScreenIsNotOf_ifElse() {
 
         scenario {
             case(1) {
@@ -183,7 +169,7 @@ class ScreenCompareResultTest : VisionTest() {
                 expectation {
                     val result = ScreenCompareResult()
                     result
-                        .ifScreenIsNot("[Network & internet Screen]", "[Connected devices Screen]") {
+                        .ifScreenIsNotOf("[Network & internet Screen]", "[Connected devices Screen]") {
                             OK("called")
                         }
                         .ifElse {
@@ -191,18 +177,8 @@ class ScreenCompareResultTest : VisionTest() {
                         }
                     assertThat(result.anyMatched).isTrue()
                     assertThat(result.history.count()).isEqualTo(1)
-                    assertThat(result.history[0].condition).isEqualTo("if screen is not ([Network & internet Screen] or [Connected devices Screen])")
+                    assertThat(result.history[0].condition).isEqualTo("if screen is not any of ([Network & internet Screen] or [Connected devices Screen])")
                     assertThat(result.history[0].matched).isTrue()
-                }
-            }
-            case(3) {
-                expectation {
-                    assertThatThrownBy {
-                        ifScreenIsNot {
-                            NG("Never called")
-                        }
-                    }.isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("screenNames is required.")
                 }
             }
         }

@@ -4,6 +4,7 @@ import shirates.core.configuration.PropertiesManager
 import shirates.core.driver.TestDriver
 import shirates.core.driver.TestMode
 import shirates.core.driver.testContext
+import shirates.core.driver.vision
 import shirates.core.exception.TestDriverException
 import shirates.core.logging.LogType
 import shirates.core.logging.Message.message
@@ -29,7 +30,7 @@ val VisionDrive.screenName: String
  */
 fun VisionDrive.isScreen(
     screenName: String,
-    vararg texts: String,
+    vararg verifyTexts: String,
     invalidateScreen: Boolean = false
 ): Boolean {
 
@@ -44,17 +45,29 @@ fun VisionDrive.isScreen(
 
     syncScreen(invalidateScreen = invalidateScreen)
 
-    var match = TestDriver.currentScreen == screenName
-    if (match && texts.any()) {
-        for (text in texts) {
-            match = canDetect(text)
-            if (match.not()) {
-                return false
-            }
-        }
+    if (verifyTexts.any()) {
+        return isScreenCore(verifyTexts = verifyTexts.toList())
     }
 
+    val match = TestDriver.currentScreen == screenName
+
     return match
+}
+
+internal fun isScreenCore(
+    verifyTexts: List<String>
+): Boolean {
+
+    if (verifyTexts.isEmpty()) {
+        return false
+    }
+    for (text in verifyTexts) {
+        val found = vision.canDetect(expression = text)
+        if (found.not()) {
+            return false
+        }
+    }
+    return true
 }
 
 /**
