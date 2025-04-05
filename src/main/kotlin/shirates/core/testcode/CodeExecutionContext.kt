@@ -335,6 +335,14 @@ object CodeExecutionContext {
         TestDriver.currentScreenSynced = false
     }
 
+    /**
+     * isScreenDirty
+     */
+    val isScreenDirty: Boolean
+        get() {
+            return screenshotImageSynced.not()
+        }
+
     // Misc --------------------------------------------------
 
     /**

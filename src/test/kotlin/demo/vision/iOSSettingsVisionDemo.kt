@@ -57,7 +57,7 @@ class iOSSettingsVisionDemo : VisionTest() {
                     it.tap("About")
                 }.expectation {
                     it.screenIs("[About Screen]")
-                        .detect("iOS Version").rightTextIs("18.3")
+                        .detect("iOS Version").rightTextIs("18.4")
                         .detect("Model Name").rightTextIs("iPhone 16", message = "[Model Name] is 'iPhone 16'")
                 }
             }
