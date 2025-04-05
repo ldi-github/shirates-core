@@ -160,13 +160,6 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 **注意:** 上記セッティングを有効にするためにログアウト/ログインを実行してください。
 
-#### 例
-
-```
-export ANDROID_SDK_ROOT=/home/$USER/Android/Sdk
-export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
-```
-
 ## AVD(Android Virtual Device)の設定
 
 ### AVD作成のデモ
@@ -177,9 +170,8 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
    ![](classic/_images/create_avd_1.png)
 4. `Pixcel 8`を選択し`Next`をクリックします。<br>
    ![](classic/_images/create_avd_2.png)
-5. 項目を設定します。<br>**Name** `Pixel 8(Android 14)`<br>**API** `API 34 "UpsideDownCake", Android 14.0`<br>**Services
-   **
-   `Google Play Store`<br>**System Image** (アイテムを選択します)
+5. 項目を設定します。<br>**Name** `Pixel 8(Android 14)`<br>**API** `API 34 "UpsideDownCake", Android 14.0`<br>
+   **Services** `Google Play Store`<br>**System Image** (アイテムを選択します)
    ![](classic/_images/create_avd_3.png)
 6. `Additional settings`をクリックします。 <br>**Device skin** を`[None]`に設定します。 <br>`Finish`をクリックします。<br>
    ![](classic/_images/create_avd_4.png)
@@ -199,7 +191,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 
 ## デモンストレーション
 
-デモンストレーションをやってみましょう。
+デモンストレーションを実行してみましょう。
 
 ### shirates-core-vision-samples を入手する
 
@@ -227,7 +219,7 @@ export PATH=$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT
 1. `shirates-core-vision-samples_ja` プロジェクトを`IntelliJ IDEA`で開き、 <br>
    `kotlin/demo/vision/AndroidSettingsVisionDemo`を右クリックして <br>
    **Debug 'AndroidSettingsVisionDemo'** 選択します<br> ![](vision/_images/android_settings_vision_demo_ja.png)
-2. コンソールにこのようなログが出力されます。 ![](vision/_images/console_android.png)
+2. コンソールに以下のようなログが出力されます。 ![](vision/_images/console_android.png)
 3. リンクをクリックしてディレクトリを開きます。<br> ![](vision/_images/log_directory.png)
 4. **_Report(simple).html**
    を開きます。 <br> ![](vision/_images/report_simple.png) <br><br>
